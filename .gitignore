@@ -1,7 +1,5 @@
 # Build and Release Folders
-squidlib/nbproject/
 build/
-libgdx libraries/
 target/
 *.class
 *.iml
@@ -9,11 +7,6 @@ target/
 .settings/
 
 *.jar
-
-# javadoc
-*.html
-*.css
-
 
 # jEdit garbage
 *~

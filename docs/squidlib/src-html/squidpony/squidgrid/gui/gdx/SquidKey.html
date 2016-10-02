@@ -1,0 +1,284 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.squidgrid.gui.gdx;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import com.badlogic.gdx.InputProcessor;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import com.badlogic.gdx.utils.IntArray;<a name="line.4"></a>
+<span class="sourceLineNo">005</span><a name="line.5"></a>
+<span class="sourceLineNo">006</span>/**<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * This wraps an InputProcessor, storing all key events and allowing them to be processed one at a time using next() or<a name="line.7"></a>
+<span class="sourceLineNo">008</span> * all at once using drain(). To have an effect, it needs to be registered by calling Input.setInputProcessor(SquidKey).<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * &lt;br&gt;<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * It does not perform the blocking functionality of the now-removed Swing SquidKey implementation, because this is<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * meant to run in an event-driven libGDX game and should not step on the toes of libGDX's input handling. To block game<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * logic until an event has been received, check hasNext() in the game's render() method and effectively "block" by not<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * running game logic if hasNext() returns false. You can get an event if hasNext() returns true by calling next().<a name="line.13"></a>
+<span class="sourceLineNo">014</span> *<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * @author Eben Howard - http://squidpony.com - howard@squidpony.com<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * @author Nathan Sweet<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * @author Tommy Ettinger<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * */<a name="line.18"></a>
+<span class="sourceLineNo">019</span>public class SquidKey implements InputProcessor {<a name="line.19"></a>
+<span class="sourceLineNo">020</span>    private static final int KEY_DOWN = 0;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>    private static final int KEY_UP = 1;<a name="line.21"></a>
+<span class="sourceLineNo">022</span>    private static final int KEY_TYPED = 2;<a name="line.22"></a>
+<span class="sourceLineNo">023</span><a name="line.23"></a>
+<span class="sourceLineNo">024</span>    private InputProcessor processor;<a name="line.24"></a>
+<span class="sourceLineNo">025</span>    private final IntArray queue = new IntArray();<a name="line.25"></a>
+<span class="sourceLineNo">026</span>    private final IntArray processingQueue = new IntArray();<a name="line.26"></a>
+<span class="sourceLineNo">027</span>    private boolean ignoreInput = false;<a name="line.27"></a>
+<span class="sourceLineNo">028</span><a name="line.28"></a>
+<span class="sourceLineNo">029</span>    /**<a name="line.29"></a>
+<span class="sourceLineNo">030</span>     * Constructs a SquidKey with no InputProcessor; for this to do anything, setProcessor() must be called.<a name="line.30"></a>
+<span class="sourceLineNo">031</span>     */<a name="line.31"></a>
+<span class="sourceLineNo">032</span>    public SquidKey () {<a name="line.32"></a>
+<span class="sourceLineNo">033</span>    }<a name="line.33"></a>
+<span class="sourceLineNo">034</span><a name="line.34"></a>
+<span class="sourceLineNo">035</span>    /**<a name="line.35"></a>
+<span class="sourceLineNo">036</span>     * Constructs a SquidKey with the given InputProcessor.<a name="line.36"></a>
+<span class="sourceLineNo">037</span>     * @param processor An InputProcessor that will handle keyDown(), keyUp(), and keyTyped() events<a name="line.37"></a>
+<span class="sourceLineNo">038</span>     */<a name="line.38"></a>
+<span class="sourceLineNo">039</span>    public SquidKey (InputProcessor processor) {<a name="line.39"></a>
+<span class="sourceLineNo">040</span>        this.processor = processor;<a name="line.40"></a>
+<span class="sourceLineNo">041</span>    }<a name="line.41"></a>
+<span class="sourceLineNo">042</span><a name="line.42"></a>
+<span class="sourceLineNo">043</span>    /**<a name="line.43"></a>
+<span class="sourceLineNo">044</span>     * Constructs a SquidKey with the given InputProcessor.<a name="line.44"></a>
+<span class="sourceLineNo">045</span>     * @param processor An InputProcessor that will handle keyDown(), keyUp(), and keyTyped() events<a name="line.45"></a>
+<span class="sourceLineNo">046</span>     * @param ignoreInput the starting value for the ignore status; true to ignore input, false to process it.<a name="line.46"></a>
+<span class="sourceLineNo">047</span>     */<a name="line.47"></a>
+<span class="sourceLineNo">048</span>    public SquidKey (InputProcessor processor, boolean ignoreInput) {<a name="line.48"></a>
+<span class="sourceLineNo">049</span>        this.processor = processor;<a name="line.49"></a>
+<span class="sourceLineNo">050</span>        this.ignoreInput = ignoreInput;<a name="line.50"></a>
+<span class="sourceLineNo">051</span>    }<a name="line.51"></a>
+<span class="sourceLineNo">052</span><a name="line.52"></a>
+<span class="sourceLineNo">053</span>    /**<a name="line.53"></a>
+<span class="sourceLineNo">054</span>     * Sets the InputProcessor that this object will use to make sense of Key events.<a name="line.54"></a>
+<span class="sourceLineNo">055</span>     * @param processor An InputProcessor that will handle keyDown(), keyUp(), and keyTyped() events<a name="line.55"></a>
+<span class="sourceLineNo">056</span>     */<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    public void setProcessor (InputProcessor processor) {<a name="line.57"></a>
+<span class="sourceLineNo">058</span>        this.processor = processor;<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    }<a name="line.59"></a>
+<span class="sourceLineNo">060</span><a name="line.60"></a>
+<span class="sourceLineNo">061</span>    /**<a name="line.61"></a>
+<span class="sourceLineNo">062</span>     * Gets this object's InputProcessor.<a name="line.62"></a>
+<span class="sourceLineNo">063</span>     * @return this object's InputProcessor<a name="line.63"></a>
+<span class="sourceLineNo">064</span>     */<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    public InputProcessor getProcessor () {<a name="line.65"></a>
+<span class="sourceLineNo">066</span>        return processor;<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    }<a name="line.67"></a>
+<span class="sourceLineNo">068</span><a name="line.68"></a>
+<span class="sourceLineNo">069</span>    /**<a name="line.69"></a>
+<span class="sourceLineNo">070</span>     * Get the status for whether this should ignore input right now or not. True means this object will ignore and not<a name="line.70"></a>
+<span class="sourceLineNo">071</span>     * queue keypresses, false means it should process them normally. Useful to pause processing or delegate it to<a name="line.71"></a>
+<span class="sourceLineNo">072</span>     * another object temporarily.<a name="line.72"></a>
+<span class="sourceLineNo">073</span>     * @return true if this object currently ignores input, false otherwise.<a name="line.73"></a>
+<span class="sourceLineNo">074</span>     */<a name="line.74"></a>
+<span class="sourceLineNo">075</span>    public boolean getIgnoreInput() {<a name="line.75"></a>
+<span class="sourceLineNo">076</span>        return ignoreInput;<a name="line.76"></a>
+<span class="sourceLineNo">077</span>    }<a name="line.77"></a>
+<span class="sourceLineNo">078</span><a name="line.78"></a>
+<span class="sourceLineNo">079</span>    /**<a name="line.79"></a>
+<span class="sourceLineNo">080</span>     * Set the status for whether this should ignore input right now or not. True means this object will ignore and not<a name="line.80"></a>
+<span class="sourceLineNo">081</span>     * queue keypresses, false means it should process them normally. Useful to pause processing or delegate it to<a name="line.81"></a>
+<span class="sourceLineNo">082</span>     * another object temporarily.<a name="line.82"></a>
+<span class="sourceLineNo">083</span>     * @param ignoreInput true if this should object should ignore and not queue input, false otherwise.<a name="line.83"></a>
+<span class="sourceLineNo">084</span>     */<a name="line.84"></a>
+<span class="sourceLineNo">085</span>    public void setIgnoreInput(boolean ignoreInput) {<a name="line.85"></a>
+<span class="sourceLineNo">086</span>        this.ignoreInput = ignoreInput;<a name="line.86"></a>
+<span class="sourceLineNo">087</span>    }<a name="line.87"></a>
+<span class="sourceLineNo">088</span><a name="line.88"></a>
+<span class="sourceLineNo">089</span>    /**<a name="line.89"></a>
+<span class="sourceLineNo">090</span>     * Processes all events queued up, passing them to this object's InputProcessor.<a name="line.90"></a>
+<span class="sourceLineNo">091</span>     */<a name="line.91"></a>
+<span class="sourceLineNo">092</span>    public void drain () {<a name="line.92"></a>
+<span class="sourceLineNo">093</span>        IntArray q = processingQueue;<a name="line.93"></a>
+<span class="sourceLineNo">094</span>        if (processor == null) {<a name="line.94"></a>
+<span class="sourceLineNo">095</span>            queue.clear();<a name="line.95"></a>
+<span class="sourceLineNo">096</span>            return;<a name="line.96"></a>
+<span class="sourceLineNo">097</span>        }<a name="line.97"></a>
+<span class="sourceLineNo">098</span>        q.addAll(queue);<a name="line.98"></a>
+<span class="sourceLineNo">099</span>        queue.clear();<a name="line.99"></a>
+<span class="sourceLineNo">100</span><a name="line.100"></a>
+<span class="sourceLineNo">101</span>        for (int i = 0, n = q.size; i &lt; n; ) {<a name="line.101"></a>
+<span class="sourceLineNo">102</span>            switch (q.get(i++)) {<a name="line.102"></a>
+<span class="sourceLineNo">103</span>                case KEY_DOWN:<a name="line.103"></a>
+<span class="sourceLineNo">104</span>                    processor.keyDown(q.get(i++));<a name="line.104"></a>
+<span class="sourceLineNo">105</span>                    break;<a name="line.105"></a>
+<span class="sourceLineNo">106</span>                case KEY_UP:<a name="line.106"></a>
+<span class="sourceLineNo">107</span>                    processor.keyUp(q.get(i++));<a name="line.107"></a>
+<span class="sourceLineNo">108</span>                    break;<a name="line.108"></a>
+<span class="sourceLineNo">109</span>                case KEY_TYPED:<a name="line.109"></a>
+<span class="sourceLineNo">110</span>                    processor.keyTyped((char) q.get(i++));<a name="line.110"></a>
+<span class="sourceLineNo">111</span>                    break;<a name="line.111"></a>
+<span class="sourceLineNo">112</span>            }<a name="line.112"></a>
+<span class="sourceLineNo">113</span>        }<a name="line.113"></a>
+<span class="sourceLineNo">114</span>        q.clear();<a name="line.114"></a>
+<span class="sourceLineNo">115</span>    }<a name="line.115"></a>
+<span class="sourceLineNo">116</span><a name="line.116"></a>
+<span class="sourceLineNo">117</span>    /**<a name="line.117"></a>
+<span class="sourceLineNo">118</span>     * Returns true if at least one event is queued.<a name="line.118"></a>
+<span class="sourceLineNo">119</span>     * @return true if there is an event queued, false otherwise.<a name="line.119"></a>
+<span class="sourceLineNo">120</span>     */<a name="line.120"></a>
+<span class="sourceLineNo">121</span>    public boolean hasNext()<a name="line.121"></a>
+<span class="sourceLineNo">122</span>    {<a name="line.122"></a>
+<span class="sourceLineNo">123</span>        return queue.size &gt;= 2;<a name="line.123"></a>
+<span class="sourceLineNo">124</span>    }<a name="line.124"></a>
+<span class="sourceLineNo">125</span><a name="line.125"></a>
+<span class="sourceLineNo">126</span>    /**<a name="line.126"></a>
+<span class="sourceLineNo">127</span>     * Processes the first event queued up, passing it to this object's InputProcessor.<a name="line.127"></a>
+<span class="sourceLineNo">128</span>     */<a name="line.128"></a>
+<span class="sourceLineNo">129</span>    public void next() {<a name="line.129"></a>
+<span class="sourceLineNo">130</span>        IntArray q = processingQueue;<a name="line.130"></a>
+<span class="sourceLineNo">131</span>        if (processor == null || queue.size &lt; 2) {<a name="line.131"></a>
+<span class="sourceLineNo">132</span>            queue.clear();<a name="line.132"></a>
+<span class="sourceLineNo">133</span>            return;<a name="line.133"></a>
+<span class="sourceLineNo">134</span>        }<a name="line.134"></a>
+<span class="sourceLineNo">135</span>        q.addAll(queue, 0, 2);<a name="line.135"></a>
+<span class="sourceLineNo">136</span>        queue.removeRange(0, 1);<a name="line.136"></a>
+<span class="sourceLineNo">137</span><a name="line.137"></a>
+<span class="sourceLineNo">138</span>        if (q.size &gt;= 2) {<a name="line.138"></a>
+<span class="sourceLineNo">139</span>            int e = q.get(0), n = q.get(1);<a name="line.139"></a>
+<span class="sourceLineNo">140</span>            switch (e) {<a name="line.140"></a>
+<span class="sourceLineNo">141</span>                case KEY_DOWN:<a name="line.141"></a>
+<span class="sourceLineNo">142</span>                    processor.keyDown(n);<a name="line.142"></a>
+<span class="sourceLineNo">143</span>                    break;<a name="line.143"></a>
+<span class="sourceLineNo">144</span>                case KEY_UP:<a name="line.144"></a>
+<span class="sourceLineNo">145</span>                    processor.keyUp(n);<a name="line.145"></a>
+<span class="sourceLineNo">146</span>                    break;<a name="line.146"></a>
+<span class="sourceLineNo">147</span>                case KEY_TYPED:<a name="line.147"></a>
+<span class="sourceLineNo">148</span>                    processor.keyTyped((char) n);<a name="line.148"></a>
+<span class="sourceLineNo">149</span>                    break;<a name="line.149"></a>
+<span class="sourceLineNo">150</span>            }<a name="line.150"></a>
+<span class="sourceLineNo">151</span>        }<a name="line.151"></a>
+<span class="sourceLineNo">152</span>        q.clear();<a name="line.152"></a>
+<span class="sourceLineNo">153</span>    }<a name="line.153"></a>
+<span class="sourceLineNo">154</span><a name="line.154"></a>
+<span class="sourceLineNo">155</span>    /**<a name="line.155"></a>
+<span class="sourceLineNo">156</span>     * Empties the backing queue of data.<a name="line.156"></a>
+<span class="sourceLineNo">157</span>     */<a name="line.157"></a>
+<span class="sourceLineNo">158</span>    public void flush()<a name="line.158"></a>
+<span class="sourceLineNo">159</span>    {<a name="line.159"></a>
+<span class="sourceLineNo">160</span>        queue.clear();<a name="line.160"></a>
+<span class="sourceLineNo">161</span>    }<a name="line.161"></a>
+<span class="sourceLineNo">162</span><a name="line.162"></a>
+<span class="sourceLineNo">163</span>    @Override<a name="line.163"></a>
+<span class="sourceLineNo">164</span>        public boolean keyDown (int keycode) {<a name="line.164"></a>
+<span class="sourceLineNo">165</span>        if(ignoreInput) return false;<a name="line.165"></a>
+<span class="sourceLineNo">166</span>        queue.add(KEY_DOWN);<a name="line.166"></a>
+<span class="sourceLineNo">167</span>        queue.add(keycode);<a name="line.167"></a>
+<span class="sourceLineNo">168</span>        return false;<a name="line.168"></a>
+<span class="sourceLineNo">169</span>    }<a name="line.169"></a>
+<span class="sourceLineNo">170</span><a name="line.170"></a>
+<span class="sourceLineNo">171</span>    @Override<a name="line.171"></a>
+<span class="sourceLineNo">172</span>        public boolean keyUp (int keycode) {<a name="line.172"></a>
+<span class="sourceLineNo">173</span>        if(ignoreInput) return false;<a name="line.173"></a>
+<span class="sourceLineNo">174</span>        queue.add(KEY_UP);<a name="line.174"></a>
+<span class="sourceLineNo">175</span>        queue.add(keycode);<a name="line.175"></a>
+<span class="sourceLineNo">176</span>        return false;<a name="line.176"></a>
+<span class="sourceLineNo">177</span>    }<a name="line.177"></a>
+<span class="sourceLineNo">178</span><a name="line.178"></a>
+<span class="sourceLineNo">179</span>    @Override<a name="line.179"></a>
+<span class="sourceLineNo">180</span>        public boolean keyTyped (char character) {<a name="line.180"></a>
+<span class="sourceLineNo">181</span>        if(ignoreInput) return false;<a name="line.181"></a>
+<span class="sourceLineNo">182</span>        queue.add(KEY_TYPED);<a name="line.182"></a>
+<span class="sourceLineNo">183</span>        queue.add(character);<a name="line.183"></a>
+<span class="sourceLineNo">184</span>        return false;<a name="line.184"></a>
+<span class="sourceLineNo">185</span>    }<a name="line.185"></a>
+<span class="sourceLineNo">186</span><a name="line.186"></a>
+<span class="sourceLineNo">187</span>    @Override<a name="line.187"></a>
+<span class="sourceLineNo">188</span>        public boolean touchDown (int screenX, int screenY, int pointer, int button) {<a name="line.188"></a>
+<span class="sourceLineNo">189</span>        return false;<a name="line.189"></a>
+<span class="sourceLineNo">190</span>    }<a name="line.190"></a>
+<span class="sourceLineNo">191</span><a name="line.191"></a>
+<span class="sourceLineNo">192</span>    @Override<a name="line.192"></a>
+<span class="sourceLineNo">193</span>        public boolean touchUp (int screenX, int screenY, int pointer, int button) {<a name="line.193"></a>
+<span class="sourceLineNo">194</span>        return false;<a name="line.194"></a>
+<span class="sourceLineNo">195</span>    }<a name="line.195"></a>
+<span class="sourceLineNo">196</span><a name="line.196"></a>
+<span class="sourceLineNo">197</span>    @Override<a name="line.197"></a>
+<span class="sourceLineNo">198</span>        public boolean touchDragged (int screenX, int screenY, int pointer) {<a name="line.198"></a>
+<span class="sourceLineNo">199</span>        return false;<a name="line.199"></a>
+<span class="sourceLineNo">200</span>    }<a name="line.200"></a>
+<span class="sourceLineNo">201</span><a name="line.201"></a>
+<span class="sourceLineNo">202</span>    @Override<a name="line.202"></a>
+<span class="sourceLineNo">203</span>        public boolean mouseMoved (int screenX, int screenY) {<a name="line.203"></a>
+<span class="sourceLineNo">204</span>        return false;<a name="line.204"></a>
+<span class="sourceLineNo">205</span>    }<a name="line.205"></a>
+<span class="sourceLineNo">206</span><a name="line.206"></a>
+<span class="sourceLineNo">207</span>    @Override<a name="line.207"></a>
+<span class="sourceLineNo">208</span>        public boolean scrolled (int amount) {<a name="line.208"></a>
+<span class="sourceLineNo">209</span>        return false;<a name="line.209"></a>
+<span class="sourceLineNo">210</span>    }<a name="line.210"></a>
+<span class="sourceLineNo">211</span><a name="line.211"></a>
+<span class="sourceLineNo">212</span>}<a name="line.212"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

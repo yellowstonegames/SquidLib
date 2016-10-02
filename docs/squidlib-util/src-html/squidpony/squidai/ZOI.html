@@ -1,0 +1,282 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.squidai;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import squidpony.squidgrid.Direction;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import squidpony.squidgrid.Radius;<a name="line.4"></a>
+<span class="sourceLineNo">005</span>import squidpony.squidmath.Coord;<a name="line.5"></a>
+<span class="sourceLineNo">006</span>import squidpony.squidmath.CoordPacker;<a name="line.6"></a>
+<span class="sourceLineNo">007</span>import squidpony.squidmath.OrderedSet;<a name="line.7"></a>
+<span class="sourceLineNo">008</span>import squidpony.squidmath.ShortVLA;<a name="line.8"></a>
+<span class="sourceLineNo">009</span><a name="line.9"></a>
+<span class="sourceLineNo">010</span>import java.util.Collections;<a name="line.10"></a>
+<span class="sourceLineNo">011</span><a name="line.11"></a>
+<span class="sourceLineNo">012</span>/**<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * Calculates the Zone of Influence, also known as Zone of Control, for different points on a map.<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * Uses CoordPacker for more efficient storage and manipulation of zones; it's recommended if you use this class to be<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * somewhat familiar with the methods for manipulating packed data in that class.<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * Created by Tommy Ettinger on 10/27/2015.<a name="line.16"></a>
+<span class="sourceLineNo">017</span> */<a name="line.17"></a>
+<span class="sourceLineNo">018</span>public class ZOI {<a name="line.18"></a>
+<span class="sourceLineNo">019</span>    private char[][] map;<a name="line.19"></a>
+<span class="sourceLineNo">020</span>    private DijkstraMap dijkstra;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>    private Coord[][] influences;<a name="line.21"></a>
+<span class="sourceLineNo">022</span>    private short[][] packedGroups;<a name="line.22"></a>
+<span class="sourceLineNo">023</span>    private boolean completed = false;<a name="line.23"></a>
+<span class="sourceLineNo">024</span>    private Radius radius;<a name="line.24"></a>
+<span class="sourceLineNo">025</span>    /**<a name="line.25"></a>
+<span class="sourceLineNo">026</span>     * Constructs a Zone of Influence map. Takes a (quite possibly jagged) array of arrays of Coord influences, where<a name="line.26"></a>
+<span class="sourceLineNo">027</span>     * the elements of the outer array represent different groups of influencing "factions" or groups that exert control<a name="line.27"></a>
+<span class="sourceLineNo">028</span>     * over nearby areas, and the Coord elements of the inner array represent individual spots that are part of those<a name="line.28"></a>
+<span class="sourceLineNo">029</span>     * groups and share influence with all Coord in the same inner array. Also takes a char[][] for a map, which can be<a name="line.29"></a>
+<span class="sourceLineNo">030</span>     * the simplified map with only '#' for walls and '.' for floors, or the final map (with chars like '~' for deep<a name="line.30"></a>
+<span class="sourceLineNo">031</span>     * water as well as walls and floors), and a Radius enum that will be used to determine how distance is calculated.<a name="line.31"></a>
+<span class="sourceLineNo">032</span>     * &lt;br&gt;<a name="line.32"></a>
+<span class="sourceLineNo">033</span>     * Call calculate() when you want information out of this.<a name="line.33"></a>
+<span class="sourceLineNo">034</span>     * @param influences an outer array containing influencing groups, each an array containing Coords that influence<a name="line.34"></a>
+<span class="sourceLineNo">035</span>     * @param map a char[][] that is used as a map; should be bounded<a name="line.35"></a>
+<span class="sourceLineNo">036</span>     * @param measurement a Radius enum that corresponds to how distance should be measured<a name="line.36"></a>
+<span class="sourceLineNo">037</span>     */<a name="line.37"></a>
+<span class="sourceLineNo">038</span>    public ZOI(Coord[][] influences, char[][] map, Radius measurement) {<a name="line.38"></a>
+<span class="sourceLineNo">039</span>        this.influences = influences;<a name="line.39"></a>
+<span class="sourceLineNo">040</span>        packedGroups = new short[influences.length][];<a name="line.40"></a>
+<span class="sourceLineNo">041</span>        this.map = map;<a name="line.41"></a>
+<span class="sourceLineNo">042</span>        radius = measurement;<a name="line.42"></a>
+<span class="sourceLineNo">043</span>        dijkstra = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));<a name="line.43"></a>
+<span class="sourceLineNo">044</span>    }<a name="line.44"></a>
+<span class="sourceLineNo">045</span>    /**<a name="line.45"></a>
+<span class="sourceLineNo">046</span>     * Constructs a Zone of Influence map. Takes an arrays of Coord influences, where each Coord is treated as both a<a name="line.46"></a>
+<span class="sourceLineNo">047</span>     * one-element group of influencing "factions" or groups that exert control over nearby areas, and the individual<a name="line.47"></a>
+<span class="sourceLineNo">048</span>     * spot that makes up one of those groups and spreads influence. Also takes a char[][] for a map, which can be the<a name="line.48"></a>
+<span class="sourceLineNo">049</span>     * simplified map with only '#' for walls and '.' for floors, or the final map (with chars like '~' for deep water<a name="line.49"></a>
+<span class="sourceLineNo">050</span>     * as well as walls and floors), and a Radius enum that will be used to determine how distance is calculated.<a name="line.50"></a>
+<span class="sourceLineNo">051</span>     * &lt;br&gt;<a name="line.51"></a>
+<span class="sourceLineNo">052</span>     * Essentially, this is the same as constructing a ZOI with a Coord[][] where each inner array has only one element.<a name="line.52"></a>
+<span class="sourceLineNo">053</span>     * &lt;br&gt;<a name="line.53"></a>
+<span class="sourceLineNo">054</span>     * Call calculate() when you want information out of this.<a name="line.54"></a>
+<span class="sourceLineNo">055</span>     * @param influences an array containing Coords that each have their own independent influence<a name="line.55"></a>
+<span class="sourceLineNo">056</span>     * @param map a char[][] that is used as a map; should be bounded<a name="line.56"></a>
+<span class="sourceLineNo">057</span>     * @param measurement a Radius enum that corresponds to how distance should be measured<a name="line.57"></a>
+<span class="sourceLineNo">058</span>     * @see squidpony.squidmath.PoissonDisk for a good way to generate evenly spaced Coords that can be used here<a name="line.58"></a>
+<span class="sourceLineNo">059</span>     */<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    public ZOI(Coord[] influences, char[][] map, Radius measurement) {<a name="line.60"></a>
+<span class="sourceLineNo">061</span>        this.influences = new Coord[influences.length][];<a name="line.61"></a>
+<span class="sourceLineNo">062</span>        for (int i = 0; i &lt; influences.length; i++) {<a name="line.62"></a>
+<span class="sourceLineNo">063</span>            this.influences[i] = new Coord[] { influences[i] };<a name="line.63"></a>
+<span class="sourceLineNo">064</span>        }<a name="line.64"></a>
+<span class="sourceLineNo">065</span>        packedGroups = new short[influences.length][];<a name="line.65"></a>
+<span class="sourceLineNo">066</span>        this.map = map;<a name="line.66"></a>
+<span class="sourceLineNo">067</span>        radius = measurement;<a name="line.67"></a>
+<span class="sourceLineNo">068</span>        dijkstra = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    }<a name="line.69"></a>
+<span class="sourceLineNo">070</span><a name="line.70"></a>
+<span class="sourceLineNo">071</span>    /**<a name="line.71"></a>
+<span class="sourceLineNo">072</span>     * Finds the zones of influence for each of the influences (inner arrays of Coord) this was constructed with, and<a name="line.72"></a>
+<span class="sourceLineNo">073</span>     * returns them as packed data (using CoordPacker, which can also be used to unpack the data, merge zones, get<a name="line.73"></a>
+<span class="sourceLineNo">074</span>     * shared borders, and all sorts of other tricks). This has each zone of influence overlap with its neighbors; this<a name="line.74"></a>
+<span class="sourceLineNo">075</span>     * is useful to find borders using CoordPacker.intersectPacked(), and borders are typically between 1 and 2 cells<a name="line.75"></a>
+<span class="sourceLineNo">076</span>     * wide. You can get a different region as packed data if you want region A without the overlapping areas it shares<a name="line.76"></a>
+<span class="sourceLineNo">077</span>     * with region B by using {@code short[] different = CoordPacker.differencePacked(A, B)}. Merging two zones A and B<a name="line.77"></a>
+<span class="sourceLineNo">078</span>     * can be done with {@code short[] merged = CoordPacker.unionPacked(A, B)} . You can unpack the data<a name="line.78"></a>
+<span class="sourceLineNo">079</span>     * into a boolean[][] easily with CoordPacker.unpack(), where true is contained in the zone and false is not.<a name="line.79"></a>
+<span class="sourceLineNo">080</span>     * The CoordPacker methods fringe(), expand(), singleRandom(), randomSample(), and randomPortion() are also<a name="line.80"></a>
+<span class="sourceLineNo">081</span>     * potentially useful for this sort of data. You should save the short[][] for later use if you want to call<a name="line.81"></a>
+<span class="sourceLineNo">082</span>     * nearestInfluences() in this class.<a name="line.82"></a>
+<span class="sourceLineNo">083</span>     * &lt;br&gt;<a name="line.83"></a>
+<span class="sourceLineNo">084</span>     * The first short[] in the returned short[][] will correspond to the area influenced by the first Coord[] in the<a name="line.84"></a>
+<span class="sourceLineNo">085</span>     * nested array passed to the constructor (or the first Coord if a non-nested array was passed); the second will<a name="line.85"></a>
+<span class="sourceLineNo">086</span>     * correspond to the second, and so on. The length of the short[][] this returns will equal the number of influence<a name="line.86"></a>
+<span class="sourceLineNo">087</span>     * groups.<a name="line.87"></a>
+<span class="sourceLineNo">088</span>     * @return an array of short[] storing the zones' areas; each can be used as packed data with CoordPacker<a name="line.88"></a>
+<span class="sourceLineNo">089</span>     */<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    public short[][] calculate()<a name="line.90"></a>
+<span class="sourceLineNo">091</span>    {<a name="line.91"></a>
+<span class="sourceLineNo">092</span>        for (int i = 0; i &lt; influences.length; i++) {<a name="line.92"></a>
+<span class="sourceLineNo">093</span>            for (int j = 0; j &lt; influences[i].length; j++) {<a name="line.93"></a>
+<span class="sourceLineNo">094</span>                dijkstra.setGoal(influences[i][j]);<a name="line.94"></a>
+<span class="sourceLineNo">095</span>            }<a name="line.95"></a>
+<span class="sourceLineNo">096</span>        }<a name="line.96"></a>
+<span class="sourceLineNo">097</span>        double[][] scannedAll = dijkstra.scan(null);<a name="line.97"></a>
+<span class="sourceLineNo">098</span><a name="line.98"></a>
+<span class="sourceLineNo">099</span>        for (int i = 0; i &lt; influences.length; i++) {<a name="line.99"></a>
+<span class="sourceLineNo">100</span><a name="line.100"></a>
+<span class="sourceLineNo">101</span>            /*<a name="line.101"></a>
+<span class="sourceLineNo">102</span>            dijkstra.clearGoals();<a name="line.102"></a>
+<span class="sourceLineNo">103</span>            dijkstra.resetMap();<a name="line.103"></a>
+<span class="sourceLineNo">104</span>            for (int j = 0; j &lt; influences[i].length; j++) {<a name="line.104"></a>
+<span class="sourceLineNo">105</span>                dijkstra.setGoal(influences[i][j]);<a name="line.105"></a>
+<span class="sourceLineNo">106</span>            }<a name="line.106"></a>
+<span class="sourceLineNo">107</span>            double[][] factionScanned = dijkstra.scan(null);<a name="line.107"></a>
+<span class="sourceLineNo">108</span>            for (int y = 0; y &lt; map[0].length; y++) {<a name="line.108"></a>
+<span class="sourceLineNo">109</span>                for (int x = 0; x &lt; map.length; x++) {<a name="line.109"></a>
+<span class="sourceLineNo">110</span>                    influenced[x][y] = (scannedAll[x][y] &lt; DijkstraMap.FLOOR) &amp;&amp;<a name="line.110"></a>
+<span class="sourceLineNo">111</span>                            (factionScanned[x][y] - scannedAll[x][y] &lt;= 1);<a name="line.111"></a>
+<span class="sourceLineNo">112</span>                }<a name="line.112"></a>
+<span class="sourceLineNo">113</span>            }*/<a name="line.113"></a>
+<span class="sourceLineNo">114</span>            packedGroups[i] = CoordPacker.pack(increasing(scannedAll, influences[i]));<a name="line.114"></a>
+<span class="sourceLineNo">115</span>        }<a name="line.115"></a>
+<span class="sourceLineNo">116</span>        completed = true;<a name="line.116"></a>
+<span class="sourceLineNo">117</span>        return packedGroups;<a name="line.117"></a>
+<span class="sourceLineNo">118</span>    }<a name="line.118"></a>
+<span class="sourceLineNo">119</span>    protected boolean[][] increasing(double[][] dm, Coord[] inf) {<a name="line.119"></a>
+<span class="sourceLineNo">120</span>        OrderedSet&lt;Coord&gt; open = new OrderedSet&lt;&gt;(64), fresh = new OrderedSet&lt;&gt;(64);<a name="line.120"></a>
+<span class="sourceLineNo">121</span>        Collections.addAll(open, inf);<a name="line.121"></a>
+<span class="sourceLineNo">122</span>        Direction[] dirs = (radius.equals2D(Radius.DIAMOND)) ? Direction.CARDINALS : Direction.OUTWARDS;<a name="line.122"></a>
+<span class="sourceLineNo">123</span>        boolean[][] influenced = new boolean[map.length][map[0].length];<a name="line.123"></a>
+<span class="sourceLineNo">124</span><a name="line.124"></a>
+<span class="sourceLineNo">125</span>        final int width = dm.length;<a name="line.125"></a>
+<span class="sourceLineNo">126</span>        final int height = width == 0 ? 0 : dm[0].length;<a name="line.126"></a>
+<span class="sourceLineNo">127</span><a name="line.127"></a>
+<span class="sourceLineNo">128</span>        int numAssigned = open.size();<a name="line.128"></a>
+<span class="sourceLineNo">129</span>        double diff;<a name="line.129"></a>
+<span class="sourceLineNo">130</span>        while (numAssigned &gt; 0) {<a name="line.130"></a>
+<span class="sourceLineNo">131</span>            numAssigned = 0;<a name="line.131"></a>
+<span class="sourceLineNo">132</span>            for (Coord cell : open) {<a name="line.132"></a>
+<span class="sourceLineNo">133</span>                influenced[cell.x][cell.y] = true;<a name="line.133"></a>
+<span class="sourceLineNo">134</span>                for (int d = 0; d &lt; dirs.length; d++) {<a name="line.134"></a>
+<span class="sourceLineNo">135</span>                    Coord adj = cell.translate(dirs[d].deltaX, dirs[d].deltaY);<a name="line.135"></a>
+<span class="sourceLineNo">136</span>                    if (adj.x &lt; 0 || adj.y &lt; 0 || width &lt;= adj.x || height &lt;= adj.y)<a name="line.136"></a>
+<span class="sourceLineNo">137</span>                        /* Outside the map */<a name="line.137"></a>
+<span class="sourceLineNo">138</span>                        continue;<a name="line.138"></a>
+<span class="sourceLineNo">139</span>                    if (!open.contains(adj) &amp;&amp; dm[adj.x][adj.y] &lt; DijkstraMap.FLOOR &amp;&amp; !influenced[adj.x][adj.y]) {<a name="line.139"></a>
+<span class="sourceLineNo">140</span>                        //h = heuristic(dirs[d]);<a name="line.140"></a>
+<span class="sourceLineNo">141</span>                        diff = dm[adj.x][adj.y] - dm[cell.x][cell.y];<a name="line.141"></a>
+<span class="sourceLineNo">142</span>                        if (diff &lt;= 1.0 &amp;&amp; diff &gt;= 0) {<a name="line.142"></a>
+<span class="sourceLineNo">143</span>                            fresh.add(adj);<a name="line.143"></a>
+<span class="sourceLineNo">144</span>                            influenced[adj.x][adj.y] = true;<a name="line.144"></a>
+<span class="sourceLineNo">145</span>                            ++numAssigned;<a name="line.145"></a>
+<span class="sourceLineNo">146</span>                        }<a name="line.146"></a>
+<span class="sourceLineNo">147</span>                    }<a name="line.147"></a>
+<span class="sourceLineNo">148</span>                }<a name="line.148"></a>
+<span class="sourceLineNo">149</span>            }<a name="line.149"></a>
+<span class="sourceLineNo">150</span><a name="line.150"></a>
+<span class="sourceLineNo">151</span>            open = new OrderedSet&lt;&gt;(fresh);<a name="line.151"></a>
+<span class="sourceLineNo">152</span>            fresh.clear();<a name="line.152"></a>
+<span class="sourceLineNo">153</span>        }<a name="line.153"></a>
+<span class="sourceLineNo">154</span><a name="line.154"></a>
+<span class="sourceLineNo">155</span>        return influenced;<a name="line.155"></a>
+<span class="sourceLineNo">156</span>    }<a name="line.156"></a>
+<span class="sourceLineNo">157</span><a name="line.157"></a>
+<span class="sourceLineNo">158</span>    /**<a name="line.158"></a>
+<span class="sourceLineNo">159</span>     * Given the zones resulting from this class' calculate method and a Coord to check, finds the indices of all<a name="line.159"></a>
+<span class="sourceLineNo">160</span>     * influencing groups in zones that have the Coord in their area, and returns all such indices as an int array.<a name="line.160"></a>
+<span class="sourceLineNo">161</span>     * @param zones a short[][] returned by calculate; not a multi-packed short[][] from CoordPacker !<a name="line.161"></a>
+<span class="sourceLineNo">162</span>     * @param point the Coord to test<a name="line.162"></a>
+<span class="sourceLineNo">163</span>     * @return an int[] where each element is the index of an influencing group in zones<a name="line.163"></a>
+<span class="sourceLineNo">164</span>     */<a name="line.164"></a>
+<span class="sourceLineNo">165</span>    public int[] nearestInfluences(short[][] zones, Coord point)<a name="line.165"></a>
+<span class="sourceLineNo">166</span>    {<a name="line.166"></a>
+<span class="sourceLineNo">167</span>        ShortVLA found = new ShortVLA(4);<a name="line.167"></a>
+<span class="sourceLineNo">168</span>        for (short i = 0; i &lt; zones.length; i++) {<a name="line.168"></a>
+<span class="sourceLineNo">169</span>            if(CoordPacker.queryPacked(zones[i], point.x, point.y))<a name="line.169"></a>
+<span class="sourceLineNo">170</span>                found.add(i);<a name="line.170"></a>
+<span class="sourceLineNo">171</span>        }<a name="line.171"></a>
+<span class="sourceLineNo">172</span>        return found.asInts();<a name="line.172"></a>
+<span class="sourceLineNo">173</span>    }<a name="line.173"></a>
+<span class="sourceLineNo">174</span>    /**<a name="line.174"></a>
+<span class="sourceLineNo">175</span>     * This can be given a Coord to check in the results of the latest calculate() call. Finds the indices of all<a name="line.175"></a>
+<span class="sourceLineNo">176</span>     * influencing groups in zones that have the Coord in their area, and returns all such indices as an int array.<a name="line.176"></a>
+<span class="sourceLineNo">177</span>     * @param point the Coord to test<a name="line.177"></a>
+<span class="sourceLineNo">178</span>     * @return an int[] where each element is the index of an influencing group in zones<a name="line.178"></a>
+<span class="sourceLineNo">179</span>     */<a name="line.179"></a>
+<span class="sourceLineNo">180</span>    public int[] nearestInfluences(Coord point)<a name="line.180"></a>
+<span class="sourceLineNo">181</span>    {<a name="line.181"></a>
+<span class="sourceLineNo">182</span>        if(!completed)<a name="line.182"></a>
+<span class="sourceLineNo">183</span>            return new int[0];<a name="line.183"></a>
+<span class="sourceLineNo">184</span>        ShortVLA found = new ShortVLA(4);<a name="line.184"></a>
+<span class="sourceLineNo">185</span>        for (short i = 0; i &lt; packedGroups.length; i++) {<a name="line.185"></a>
+<span class="sourceLineNo">186</span>            if(CoordPacker.queryPacked(packedGroups[i], point.x, point.y))<a name="line.186"></a>
+<span class="sourceLineNo">187</span>                found.add(i);<a name="line.187"></a>
+<span class="sourceLineNo">188</span>        }<a name="line.188"></a>
+<span class="sourceLineNo">189</span>        return found.asInts();<a name="line.189"></a>
+<span class="sourceLineNo">190</span>    }<a name="line.190"></a>
+<span class="sourceLineNo">191</span><a name="line.191"></a>
+<span class="sourceLineNo">192</span>    /**<a name="line.192"></a>
+<span class="sourceLineNo">193</span>     * Gets the influencing groups; ideally the result should not be changed without setting it back with setInfluences.<a name="line.193"></a>
+<span class="sourceLineNo">194</span>     * @return influences a jagged array of Coord arrays, where the inner arrays are groups of influences<a name="line.194"></a>
+<span class="sourceLineNo">195</span>     */<a name="line.195"></a>
+<span class="sourceLineNo">196</span>    public Coord[][] getInfluences() {<a name="line.196"></a>
+<span class="sourceLineNo">197</span>        return influences;<a name="line.197"></a>
+<span class="sourceLineNo">198</span>    }<a name="line.198"></a>
+<span class="sourceLineNo">199</span><a name="line.199"></a>
+<span class="sourceLineNo">200</span>    /**<a name="line.200"></a>
+<span class="sourceLineNo">201</span>     * Changes the influencing groups. This also invalidates the last calculation for the purposes of nearestInfluences,<a name="line.201"></a>
+<span class="sourceLineNo">202</span>     * at least for the overload that takes only a Coord.<a name="line.202"></a>
+<span class="sourceLineNo">203</span>     * @param influences a jagged array of Coord arrays, where the inner arrays are groups of influences<a name="line.203"></a>
+<span class="sourceLineNo">204</span>     */<a name="line.204"></a>
+<span class="sourceLineNo">205</span>    public void setInfluences(Coord[][] influences) {<a name="line.205"></a>
+<span class="sourceLineNo">206</span>        this.influences = influences;<a name="line.206"></a>
+<span class="sourceLineNo">207</span>        packedGroups = new short[influences.length][];<a name="line.207"></a>
+<span class="sourceLineNo">208</span>        completed = false;<a name="line.208"></a>
+<span class="sourceLineNo">209</span>    }<a name="line.209"></a>
+<span class="sourceLineNo">210</span>}<a name="line.210"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

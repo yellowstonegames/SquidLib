@@ -1,0 +1,307 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.squidmath;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import squidpony.StringKit;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import squidpony.annotation.Beta;<a name="line.4"></a>
+<span class="sourceLineNo">005</span><a name="line.5"></a>
+<span class="sourceLineNo">006</span>import java.io.Serializable;<a name="line.6"></a>
+<span class="sourceLineNo">007</span><a name="line.7"></a>
+<span class="sourceLineNo">008</span>/**<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * Like LightRNG, but shares a lot in common with CrossHash's hashing mechanism. The name comes from its<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * similarity to the nickname for that hash, Lightning, but also to how the current version acts like LightRNG,<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * sort-of, but involves a thunder-like "echo" where the earlier results are used as additional state for the<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * next result. Why should you consider it? It appears to be the fastest RandomnessSource we have available,<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * and is the only RNG in the library that can generate 1 billion random long values in under 1 second (or<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * rather, under 900 ms) on an Intel i7-4700MQ laptop processor (second-fastest RandomnessSource depends on<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * other factors, but is effectively a tie between LightRNG and XoRoRNG at roughly 1200 ms on the same laptop).<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * Any layer on top of generating long values slows this down, which is the case for most of the<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * RandomnessSource implementations, but ThunderRNG's {@link #nextInt()} method, which gets the most<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * significant 32 bits of a random long and returns them as an int, is also the fastest way we have to generate<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * int values. This does not implement StatefulRandomness because it stores state in two parts, each a long;<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * each is incremented by a different addend with each number generated. Part B is always odd, and is<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * incremented by a large, empirically-chosen number that is even; because odd + even = odd, always, part B<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * never becomes even. Part A is always incremented by an irregular selection of the bits in Part B, but the<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * selection never causes the increment to be by an even number (this also means it never increments by 0).<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * This irregular increment seems to increase ThunderRNG's period, but by how much is not clear.<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * &lt;br&gt;<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * The reason why nextInt() uses only the most significant half of the bits, even though it requires a shift in<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * addition to a cast, is because the period of the less significant bits is lower, though by how much isn't<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * clear. One early test used a 512x512 pixel window with a call to ThunderRNG's next() method for each pixel<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * (2 to the 18 calls per render), getting only two bits at time (yes, this is wasteful and a bad idea in<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * practice). Though the seed wasn't being reset each frame, the generated 2-bit values were effectively<a name="line.30"></a>
+<span class="sourceLineNo">031</span> * identical between frames (adding one additional call to next() made the random sections move predictably<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * along one axis, one pixel at a time, which indicates they would be the same values every frame if the extra<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * call was removed). The early version that had this likely flaw always took the lowest bits, here the lowest<a name="line.33"></a>
+<span class="sourceLineNo">034</span> * two bits, in next(), but changing next() to use the same number of bits from higher in the random long<a name="line.34"></a>
+<span class="sourceLineNo">035</span> * eliminated this issue. Calls to nextLong() should still be expected to have a lower-than-normal period for<a name="line.35"></a>
+<span class="sourceLineNo">036</span> * the low bits, with the bottom 2 bits likely having a period of 4096 or less. The period of the full 64<a name="line.36"></a>
+<span class="sourceLineNo">037</span> * bits is unknown at this time, but is probably higher than 2 to the 64, and is almost certainly at least 2 to<a name="line.37"></a>
+<span class="sourceLineNo">038</span> * the 63 (which is the probable period of Part B on its own, and because Part A changes every time by a<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * random-seeming, non-zero subset of Part B where the LSB is always set, the final result can't have a lower<a name="line.39"></a>
+<span class="sourceLineNo">040</span> * period than Part B).<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * &lt;br&gt;<a name="line.41"></a>
+<span class="sourceLineNo">042</span> * The tool used for testing this RNG is PractRand, http://pracrand.sourceforge.net/ &gt; The binaries it provides<a name="line.42"></a>
+<span class="sourceLineNo">043</span> * don't seem to work as intended on Windows, so I built from source, generated 64MB files of random 64-bit<a name="line.43"></a>
+<span class="sourceLineNo">044</span> * output with various generators as "Thunder.dat", "Light.dat" and so on, then ran the executables I had<a name="line.44"></a>
+<span class="sourceLineNo">045</span> * built with the MS compilers, with the command line {@code RNG_test.exe stdin64 &lt; Thunder.dat} . For most of<a name="line.45"></a>
+<span class="sourceLineNo">046</span> * the other generators I tried, there were no or nearly-no statistical failures it could find, and as of the (second)<a name="line.46"></a>
+<span class="sourceLineNo">047</span> * commit on August 31, ThunderRNG also has no statistical failures or even anomalies. Earlier versions were<a name="line.47"></a>
+<span class="sourceLineNo">048</span> * slightly faster (at best speed, 600-700ms) but had multiple outright failures (the fastest ones failed the<a name="line.48"></a>
+<span class="sourceLineNo">049</span> * majority of tests).<a name="line.49"></a>
+<span class="sourceLineNo">050</span> * &lt;br&gt;<a name="line.50"></a>
+<span class="sourceLineNo">051</span> * Created by Tommy Ettinger on 8/23/2016.<a name="line.51"></a>
+<span class="sourceLineNo">052</span> */<a name="line.52"></a>
+<span class="sourceLineNo">053</span>@Beta<a name="line.53"></a>
+<span class="sourceLineNo">054</span>public class ThunderRNG implements RandomnessSource, Serializable {<a name="line.54"></a>
+<span class="sourceLineNo">055</span>    private static final long serialVersionUID = 3L;<a name="line.55"></a>
+<span class="sourceLineNo">056</span><a name="line.56"></a>
+<span class="sourceLineNo">057</span>    /** The state can be seeded with any value. */<a name="line.57"></a>
+<span class="sourceLineNo">058</span>    public long state;<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    protected long jumble;<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    /** Creates a new generator seeded using Math.random. */<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    public ThunderRNG() {<a name="line.61"></a>
+<span class="sourceLineNo">062</span>        this((long) Math.floor(Math.random() * Long.MAX_VALUE), (long) Math.floor(Math.random() * Long.MAX_VALUE));<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    }<a name="line.63"></a>
+<span class="sourceLineNo">064</span><a name="line.64"></a>
+<span class="sourceLineNo">065</span>    public ThunderRNG( final long seed ) {<a name="line.65"></a>
+<span class="sourceLineNo">066</span>        state = (seed + bitPermute(seed + 0xC6BC279692B5CC83L)) * 0x9E3779B97F4A7C15L + 0x632BE59BD9B4E019L;<a name="line.66"></a>
+<span class="sourceLineNo">067</span>        jumble = (state + bitPermute(state + 0x9E3779B97F4A7C15L)) * 0xC6BC279692B5CC83L + 0x632BE59BD9B4E019L | 1L;<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    }<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    public ThunderRNG(final long partA, final long partB)<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    {<a name="line.70"></a>
+<span class="sourceLineNo">071</span>        state = partA;<a name="line.71"></a>
+<span class="sourceLineNo">072</span>        jumble = partB | 1L;<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    }<a name="line.73"></a>
+<span class="sourceLineNo">074</span><a name="line.74"></a>
+<span class="sourceLineNo">075</span>    /**<a name="line.75"></a>
+<span class="sourceLineNo">076</span>     * Not needed for external use, but it may be handy in code that needs to alter a long in some random-seeming way.<a name="line.76"></a>
+<span class="sourceLineNo">077</span>     * Passing 0 to this yields 0. May actually change the number of set bits, so it isn't quite a permutation in the<a name="line.77"></a>
+<span class="sourceLineNo">078</span>     * normal way of thinking about it.<a name="line.78"></a>
+<span class="sourceLineNo">079</span>     * @param p a number that should have its bits permuted, as a long<a name="line.79"></a>
+<span class="sourceLineNo">080</span>     * @return a permuted-bits version of p, as a long<a name="line.80"></a>
+<span class="sourceLineNo">081</span>     */<a name="line.81"></a>
+<span class="sourceLineNo">082</span>    public static long bitPermute(long p)<a name="line.82"></a>
+<span class="sourceLineNo">083</span>    {<a name="line.83"></a>
+<span class="sourceLineNo">084</span>        p ^= p &gt;&gt;&gt; (5 + (p &gt;&gt;&gt; 59));<a name="line.84"></a>
+<span class="sourceLineNo">085</span>        p *= 0xAEF17502108EF2D9L;<a name="line.85"></a>
+<span class="sourceLineNo">086</span>        return p ^ (p &gt;&gt;&gt; 43);<a name="line.86"></a>
+<span class="sourceLineNo">087</span>    }<a name="line.87"></a>
+<span class="sourceLineNo">088</span><a name="line.88"></a>
+<span class="sourceLineNo">089</span>    @Override<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    public int next( int bits ) {<a name="line.90"></a>
+<span class="sourceLineNo">091</span>        //return (int)( nextLong() &amp; ( 1L &lt;&lt; bits ) - 1 );<a name="line.91"></a>
+<span class="sourceLineNo">092</span>        return (int)( nextLong() &gt;&gt;&gt; (64 - bits) );<a name="line.92"></a>
+<span class="sourceLineNo">093</span>    }<a name="line.93"></a>
+<span class="sourceLineNo">094</span><a name="line.94"></a>
+<span class="sourceLineNo">095</span>    /**<a name="line.95"></a>
+<span class="sourceLineNo">096</span>     * Can return any long, positive or negative, of any size permissible in a 64-bit signed integer.<a name="line.96"></a>
+<span class="sourceLineNo">097</span>     * @return any long, all 64 bits are random<a name="line.97"></a>
+<span class="sourceLineNo">098</span>     */<a name="line.98"></a>
+<span class="sourceLineNo">099</span>    @Override<a name="line.99"></a>
+<span class="sourceLineNo">100</span>    public long nextLong() {<a name="line.100"></a>
+<span class="sourceLineNo">101</span>        //return ((state &lt;&lt; 4L) + 0xC6BC279692B5CC83L) * ((state += 0x9E3779B97F4A7C15L) &gt;&gt;&gt; 5) + 0x632BE59BD9B4E019L;<a name="line.101"></a>
+<span class="sourceLineNo">102</span>        //return 0xD0E89D2D311E289FL * ((state += 0x9E3779B97F4A7C15L) &gt;&gt; 18L); //very fast<a name="line.102"></a>
+<span class="sourceLineNo">103</span>        //return ((state *= 0x9E3779B97F4A7C15L) * (++state &gt;&gt;&gt; 7));<a name="line.103"></a>
+<span class="sourceLineNo">104</span>        //return ((((state += 0x9E3779B97F4A7C15L) &gt;&gt; 13) * 0xD0E89D2D311E289FL) &gt;&gt; 9) * 0xC6BC279692B5CC83L;<a name="line.104"></a>
+<span class="sourceLineNo">105</span>        //return ((state += 0x9E3779B97F4A7C15L) &gt;&gt; 16) * 0xD0E89D2D311E289FL;<a name="line.105"></a>
+<span class="sourceLineNo">106</span>        //return state * ((state += 0x9E3779B97F4A7C15L) &gt;&gt; 5) * 0xD0E89D2D311E289FL;<a name="line.106"></a>
+<span class="sourceLineNo">107</span>        //return ((state += 0x9E3779B97F4A7C15L) &gt;&gt; (state &gt;&gt;&gt; 60L)) * 0xD0E89D2D311E289FL;<a name="line.107"></a>
+<span class="sourceLineNo">108</span>        //return (state * 0xD0E89D2D311E289FL) ^ (state += 0x9E3779B97F4A7C15L);<a name="line.108"></a>
+<span class="sourceLineNo">109</span>        //return ((state &gt;&gt; 5) * 0xC6BC279692B5CC83L) ^ (state += 0x9E3779B97F4A7C15L);<a name="line.109"></a>
+<span class="sourceLineNo">110</span>        //return ((state += 0x9E3779B97F4A7C15L) &gt;&gt;&gt; (state &gt;&gt;&gt; 60L)) * 0x632BE59BD9B4E019L; //pretty good quality<a name="line.110"></a>
+<span class="sourceLineNo">111</span>        //return 0xC6BC279692B5CC83L * (lag ^= 0xD0E89D2D311E289FL * ((state += 0x9E3779B97F4A7C15L) &gt;&gt; 18L));<a name="line.111"></a>
+<span class="sourceLineNo">112</span>        //return lag += 0xC6BC279692B5CC83L * ((state += 0x9E3779B97F4A7C15L) * 2862933555777941757L + 7046029254386353087L);<a name="line.112"></a>
+<span class="sourceLineNo">113</span>        //return (lag += (state += 0x9E3779B97F4A7C15L) &amp; 0xDF5DFFDADFE8FFFFL) * 2862933555777941757L + 7046029254386353087L;<a name="line.113"></a>
+<span class="sourceLineNo">114</span>        //return (lag += ((state += 0x9E3779B97F4A7C15L) &gt;&gt; 3) &amp; 0xDF5DFFDADFE8FFFFL) * 2862933555777941757L + 7046029254386353087L;<a name="line.114"></a>
+<span class="sourceLineNo">115</span>        //return state ^ ((state += 0x9E3779B97F4A7C15L) &gt;&gt; 18) * 0xC6BC279692B5CC83L;<a name="line.115"></a>
+<span class="sourceLineNo">116</span>        //return (state &gt;&gt; 18) * 0xC6BC279692B5CC83L + (state += 0x9E3779B97F4A7C15L);<a name="line.116"></a>
+<span class="sourceLineNo">117</span>        //return (state ^ ((state += 0x9E3779B97F4A7C15L) &gt;&gt; 18)) * 0xC6BC279692B5CC83L; // former best<a name="line.117"></a>
+<span class="sourceLineNo">118</span>        //return (state ^ ((state += jumble) &gt;&gt; 17)) * (jumble += 0x8D784F2D256B9906L);<a name="line.118"></a>
+<span class="sourceLineNo">119</span>        //return (state ^ ((state ^= jumble) &gt;&gt; 17)) * (jumble += 0xC6BC279692B5CC83L);<a name="line.119"></a>
+<span class="sourceLineNo">120</span>        //return (state ^ ((state += jumble) &gt;&gt; 17)) * (jumble += 0x8D784F2D256B9906L);<a name="line.120"></a>
+<span class="sourceLineNo">121</span>        //return state ^ 0xC6BC279692B5CC83L * ((state += jumble &amp; (jumble += 0xBC6EF372FEB7FC6AL)) &gt;&gt; 16); //known excellent<a name="line.121"></a>
+<span class="sourceLineNo">122</span>        //return state ^ 0xC6BC279692B5CC83L * ((state += jumble &amp; (jumble += 0x3779B97F57FF375EL)) &gt;&gt; 25);<a name="line.122"></a>
+<span class="sourceLineNo">123</span>        //BEST KNOWN<a name="line.123"></a>
+<span class="sourceLineNo">124</span>        return state ^ (0x9E3779B97F4A7C15L * ((state += jumble &amp; (jumble += 0xAB79B96DCD7FE75EL)) &gt;&gt; 20));<a name="line.124"></a>
+<span class="sourceLineNo">125</span><a name="line.125"></a>
+<span class="sourceLineNo">126</span>        //return ((state &gt;&gt; 4) * 0x9E3779B97F4A7C15L ^ (state += 0xBC6756B4A5B16C57L));<a name="line.126"></a>
+<span class="sourceLineNo">127</span>        //return ((state &gt;&gt; 16) * 0x9E3779B97F4A7C15L ^ (state += 0xC6BC279692B5CC83L));<a name="line.127"></a>
+<span class="sourceLineNo">128</span>        //return state ^ (((state += 0xC6BC279692B5CC83L) &gt;&gt; 12) * 0x9E3779B97F4A7C15L);<a name="line.128"></a>
+<span class="sourceLineNo">129</span>        //return (state += ((jumble += 0xD0E89D2D311E289FL) &gt;&gt; 28) * 0xC6BC279692B5CC83L) * 0x9E3779B97F4A7C15L;<a name="line.129"></a>
+<span class="sourceLineNo">130</span><a name="line.130"></a>
+<span class="sourceLineNo">131</span>        //return state = state * 2862933555777941757L + 7046029254386353087L; // LCG for comparison<a name="line.131"></a>
+<span class="sourceLineNo">132</span>    }<a name="line.132"></a>
+<span class="sourceLineNo">133</span><a name="line.133"></a>
+<span class="sourceLineNo">134</span>    public int nextInt()<a name="line.134"></a>
+<span class="sourceLineNo">135</span>    {<a name="line.135"></a>
+<span class="sourceLineNo">136</span>        return (int)(nextLong() &gt;&gt;&gt; 32);<a name="line.136"></a>
+<span class="sourceLineNo">137</span>    }<a name="line.137"></a>
+<span class="sourceLineNo">138</span>    /**<a name="line.138"></a>
+<span class="sourceLineNo">139</span>     * This returns a maximum of 0.9999999999999999 because that is the largest<a name="line.139"></a>
+<span class="sourceLineNo">140</span>     * Double value that is less than 1.0<a name="line.140"></a>
+<span class="sourceLineNo">141</span>     *<a name="line.141"></a>
+<span class="sourceLineNo">142</span>     * @return a value between 0 (inclusive) and 0.9999999999999999 (inclusive)<a name="line.142"></a>
+<span class="sourceLineNo">143</span>     */<a name="line.143"></a>
+<span class="sourceLineNo">144</span>    public double nextDouble() {<a name="line.144"></a>
+<span class="sourceLineNo">145</span>        return Double.longBitsToDouble(0x3FFL &lt;&lt; 52 | nextLong() &gt;&gt;&gt; 12) - 1.0;<a name="line.145"></a>
+<span class="sourceLineNo">146</span>    }<a name="line.146"></a>
+<span class="sourceLineNo">147</span><a name="line.147"></a>
+<span class="sourceLineNo">148</span>    /**<a name="line.148"></a>
+<span class="sourceLineNo">149</span>     * Get "Part A" of the current internal state of the ThunderRNG as a long. Reconstituting the state of this<a name="line.149"></a>
+<span class="sourceLineNo">150</span>     * ThunderRNG requires Part A (given by this) and Part B (given by {@link #getStatePartB()})<a name="line.150"></a>
+<span class="sourceLineNo">151</span>     *<a name="line.151"></a>
+<span class="sourceLineNo">152</span>     * @return part A of the current internal state of this object.<a name="line.152"></a>
+<span class="sourceLineNo">153</span>     */<a name="line.153"></a>
+<span class="sourceLineNo">154</span>    public long getStatePartA() {<a name="line.154"></a>
+<span class="sourceLineNo">155</span>        return state;<a name="line.155"></a>
+<span class="sourceLineNo">156</span>    }<a name="line.156"></a>
+<span class="sourceLineNo">157</span><a name="line.157"></a>
+<span class="sourceLineNo">158</span>    /**<a name="line.158"></a>
+<span class="sourceLineNo">159</span>     * Get "Part A" of the current internal state of the ThunderRNG as a long. Reconstituting the state of this<a name="line.159"></a>
+<span class="sourceLineNo">160</span>     * ThunderRNG requires Part A (given by {@link #getStatePartA()}) and Part B (given by this).<a name="line.160"></a>
+<span class="sourceLineNo">161</span>     *<a name="line.161"></a>
+<span class="sourceLineNo">162</span>     * @return part B of the current internal state of this object.<a name="line.162"></a>
+<span class="sourceLineNo">163</span>     */<a name="line.163"></a>
+<span class="sourceLineNo">164</span>    public long getStatePartB() {<a name="line.164"></a>
+<span class="sourceLineNo">165</span>        return jumble;<a name="line.165"></a>
+<span class="sourceLineNo">166</span>    }<a name="line.166"></a>
+<span class="sourceLineNo">167</span><a name="line.167"></a>
+<span class="sourceLineNo">168</span>    /**<a name="line.168"></a>
+<span class="sourceLineNo">169</span>     * Set the current internal state of this ThunderRNG with two long parts, often obtained using the previous<a name="line.169"></a>
+<span class="sourceLineNo">170</span>     * state of another ThunderRNG using {@link #getStatePartA()} and {@link #getStatePartB()}, but any values<a name="line.170"></a>
+<span class="sourceLineNo">171</span>     * are allowed for both parts. Only the upper 63 bits are used of partB; the bottom bit of partB is always<a name="line.171"></a>
+<span class="sourceLineNo">172</span>     * changed to 1 internally so the RNG works as intended.<a name="line.172"></a>
+<span class="sourceLineNo">173</span>     *<a name="line.173"></a>
+<span class="sourceLineNo">174</span>     * @param partA any 64-bit long<a name="line.174"></a>
+<span class="sourceLineNo">175</span>     * @param partB any 64-bit long, but the least significant bit will be ignored (e.g. 2 and 3 are identical)<a name="line.175"></a>
+<span class="sourceLineNo">176</span>     */<a name="line.176"></a>
+<span class="sourceLineNo">177</span>    public void setState(long partA, long partB) {<a name="line.177"></a>
+<span class="sourceLineNo">178</span>        state = partA;<a name="line.178"></a>
+<span class="sourceLineNo">179</span>        jumble = partB | 1L;<a name="line.179"></a>
+<span class="sourceLineNo">180</span>    }<a name="line.180"></a>
+<span class="sourceLineNo">181</span><a name="line.181"></a>
+<span class="sourceLineNo">182</span>    /**<a name="line.182"></a>
+<span class="sourceLineNo">183</span>     * Replicates the behavior of the constructor that takes one long, and sets both parts of the state to what that<a name="line.183"></a>
+<span class="sourceLineNo">184</span>     * constructor would assign given the same seed.<a name="line.184"></a>
+<span class="sourceLineNo">185</span>     * @param seed any long<a name="line.185"></a>
+<span class="sourceLineNo">186</span>     */<a name="line.186"></a>
+<span class="sourceLineNo">187</span>    public void reseed( final long seed ) {<a name="line.187"></a>
+<span class="sourceLineNo">188</span>        state = (seed + bitPermute(seed + 0xC6BC279692B5CC83L)) * 0x9E3779B97F4A7C15L + 0x632BE59BD9B4E019L;<a name="line.188"></a>
+<span class="sourceLineNo">189</span>        jumble = (state + bitPermute(state + 0x9E3779B97F4A7C15L)) * 0xC6BC279692B5CC83L + 0x632BE59BD9B4E019L | 1L;<a name="line.189"></a>
+<span class="sourceLineNo">190</span>        /*<a name="line.190"></a>
+<span class="sourceLineNo">191</span>        jumble = (seed ^ ((seed + 0x9E3779B97F4A7C15L) &gt;&gt; 18)) * 0xC6BC279692B5CC83L;<a name="line.191"></a>
+<span class="sourceLineNo">192</span>        jumble ^= (((seed + 0x9E3779B97F4A7C15L) ^ ((seed + 0x9E3779B97F4A7C15L + 0x9E3779B97F4A7C15L) &gt;&gt; 18)) * 0xC6BC279692B5CC83L) &gt;&gt;&gt; 32;<a name="line.192"></a>
+<span class="sourceLineNo">193</span>        jumble |= 1L;<a name="line.193"></a>
+<span class="sourceLineNo">194</span>        */<a name="line.194"></a>
+<span class="sourceLineNo">195</span>    }<a name="line.195"></a>
+<span class="sourceLineNo">196</span><a name="line.196"></a>
+<span class="sourceLineNo">197</span>    /**<a name="line.197"></a>
+<span class="sourceLineNo">198</span>     * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the<a name="line.198"></a>
+<span class="sourceLineNo">199</span>     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to<a name="line.199"></a>
+<span class="sourceLineNo">200</span>     * copy the state so it isn't shared, usually, and produces a new value with the same exact state.<a name="line.200"></a>
+<span class="sourceLineNo">201</span>     *<a name="line.201"></a>
+<span class="sourceLineNo">202</span>     * @return a copy of this RandomnessSource<a name="line.202"></a>
+<span class="sourceLineNo">203</span>     */<a name="line.203"></a>
+<span class="sourceLineNo">204</span>    @Override<a name="line.204"></a>
+<span class="sourceLineNo">205</span>    public RandomnessSource copy() {<a name="line.205"></a>
+<span class="sourceLineNo">206</span>        return new ThunderRNG(state, jumble);<a name="line.206"></a>
+<span class="sourceLineNo">207</span>    }<a name="line.207"></a>
+<span class="sourceLineNo">208</span><a name="line.208"></a>
+<span class="sourceLineNo">209</span>    @Override<a name="line.209"></a>
+<span class="sourceLineNo">210</span>    public String toString() {<a name="line.210"></a>
+<span class="sourceLineNo">211</span>        return "ThunderRNG with state parts A=0x" + StringKit.hex(state) + "L, B=0x"  + StringKit.hex(jumble)+ 'L';<a name="line.211"></a>
+<span class="sourceLineNo">212</span>    }<a name="line.212"></a>
+<span class="sourceLineNo">213</span><a name="line.213"></a>
+<span class="sourceLineNo">214</span>    public static long determine(int x)<a name="line.214"></a>
+<span class="sourceLineNo">215</span>    {<a name="line.215"></a>
+<span class="sourceLineNo">216</span>        final long a = ((x ^ 0xC6BC279692B5CC83L) &lt;&lt; 16) ^ x, b = (((x ^ 0x632BE59BD9B4E019L) &lt;&lt; 16) ^ x) | 1L;<a name="line.216"></a>
+<span class="sourceLineNo">217</span>        return a ^ (0x9E3779B97F4A7C15L * ((a + b &amp; (b + 0xAB79B96DCD7FE75EL)) &gt;&gt; 20));<a name="line.217"></a>
+<span class="sourceLineNo">218</span>    }<a name="line.218"></a>
+<span class="sourceLineNo">219</span><a name="line.219"></a>
+<span class="sourceLineNo">220</span>    public static long determine(int x, int y)<a name="line.220"></a>
+<span class="sourceLineNo">221</span>    {<a name="line.221"></a>
+<span class="sourceLineNo">222</span>        final long a = ((x ^ 0xC6BC279692B5CC83L) &lt;&lt; 16) ^ x, b = (((y ^ 0x632BE59BD9B4E019L) &lt;&lt; 16) ^ y) | 1L;<a name="line.222"></a>
+<span class="sourceLineNo">223</span>        return a ^ (0x9E3779B97F4A7C15L * ((a + b &amp; (b + 0xAB79B96DCD7FE75EL)) &gt;&gt; 20));<a name="line.223"></a>
+<span class="sourceLineNo">224</span>    }<a name="line.224"></a>
+<span class="sourceLineNo">225</span>    public static long determine(int x, int y, int z)<a name="line.225"></a>
+<span class="sourceLineNo">226</span>    {<a name="line.226"></a>
+<span class="sourceLineNo">227</span>        final long a = ((x ^ 0xC6BC279692B5CC83L) &lt;&lt; 16) ^ (z + y), b = (((y ^ 0x632BE59BD9B4E019L) &lt;&lt; 16) ^ (z + x)) | 1L;<a name="line.227"></a>
+<span class="sourceLineNo">228</span>        return a ^ (0x9E3779B97F4A7C15L * ((a + b &amp; (b + 0xAB79B96DCD7FE75EL)) &gt;&gt; 20));<a name="line.228"></a>
+<span class="sourceLineNo">229</span>    }<a name="line.229"></a>
+<span class="sourceLineNo">230</span>    public static long determine(int x, int y, int z, int w)<a name="line.230"></a>
+<span class="sourceLineNo">231</span>    {<a name="line.231"></a>
+<span class="sourceLineNo">232</span>        final long a = (((x + z) ^ 0xC6BC279692B5CC83L) &lt;&lt; 16) ^ (z + y), b = ((((y + w) ^ 0x632BE59BD9B4E019L) &lt;&lt; 16) ^ (w + x)) | 1L;<a name="line.232"></a>
+<span class="sourceLineNo">233</span>        return a ^ (0x9E3779B97F4A7C15L * ((a + b &amp; (b + 0xAB79B96DCD7FE75EL)) &gt;&gt; 20));<a name="line.233"></a>
+<span class="sourceLineNo">234</span>    }<a name="line.234"></a>
+<span class="sourceLineNo">235</span>}<a name="line.235"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

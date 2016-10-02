@@ -191,6 +191,7 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <outputDirectory>../docs/${project.name}</outputDirectory>
                     <debug>false</debug>
                     <minmemory>256m</minmemory>
                     <maxmemory>1024m</maxmemory>

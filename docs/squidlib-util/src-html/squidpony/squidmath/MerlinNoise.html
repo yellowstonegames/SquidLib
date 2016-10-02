@@ -1,0 +1,378 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.squidmath;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import squidpony.annotation.Beta;<a name="line.3"></a>
+<span class="sourceLineNo">004</span><a name="line.4"></a>
+<span class="sourceLineNo">005</span>/**<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * Simple somewhat-continuous noise functions that use int coordinates instead of the traditional double (this approach<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * works better on a grid). It's called this because it should be possible to replace PerlinNoise with MerlinNoise, and<a name="line.7"></a>
+<span class="sourceLineNo">008</span> * because working with noise functions makes me feel like a wizard.<a name="line.8"></a>
+<span class="sourceLineNo">009</span> */<a name="line.9"></a>
+<span class="sourceLineNo">010</span>@Beta<a name="line.10"></a>
+<span class="sourceLineNo">011</span>public class MerlinNoise {<a name="line.11"></a>
+<span class="sourceLineNo">012</span><a name="line.12"></a>
+<span class="sourceLineNo">013</span>    private MerlinNoise()<a name="line.13"></a>
+<span class="sourceLineNo">014</span>    {<a name="line.14"></a>
+<span class="sourceLineNo">015</span><a name="line.15"></a>
+<span class="sourceLineNo">016</span>    }<a name="line.16"></a>
+<span class="sourceLineNo">017</span><a name="line.17"></a>
+<span class="sourceLineNo">018</span>    /*<a name="line.18"></a>
+<span class="sourceLineNo">019</span>    public static int rawNoise2D(int a, int b) {<a name="line.19"></a>
+<span class="sourceLineNo">020</span>        //final int mx = x * 17 ^ ((x ^ 11) + (y ^ 13)), my = y * 29 ^ (7 + x + y),<a name="line.20"></a>
+<span class="sourceLineNo">021</span>        int out = -1;<a name="line.21"></a>
+<span class="sourceLineNo">022</span>        //final int alpha = (a + b) * 17 + (a * 19 + b * 23) * 29, beta = (a * b) * 11 + (a * 41 ^ b * 31) * 37;<a name="line.22"></a>
+<span class="sourceLineNo">023</span>        for (int x = (a ^ 0x7C15) * 0x7F4A - 4; x &lt;= (a ^ 0x7C15) * 0x7F4A + 4; x++) {<a name="line.23"></a>
+<span class="sourceLineNo">024</span>            for (int y = (b ^ 0x79B9) * 0x9E37 - 4; y &lt;= (b ^ 0x79B9) * 0x9E37 + 4; y++) {<a name="line.24"></a>
+<span class="sourceLineNo">025</span>                //final int<a name="line.25"></a>
+<span class="sourceLineNo">026</span>                //        gx = x ^ (x &gt;&gt;&gt; 1), gy = y ^ (y &gt;&gt;&gt; 1),<a name="line.26"></a>
+<span class="sourceLineNo">027</span>                //        z = gx + gy, w = gx ^ -gy,<a name="line.27"></a>
+<span class="sourceLineNo">028</span>                //        gz = z ^ (z &gt;&gt;&gt; 1), gw = w ^ (w &gt;&gt;&gt; 1),<a name="line.28"></a>
+<span class="sourceLineNo">029</span>                //        p = ~gx &amp; gw + gz * gy, q = gw * gz ^ ~gy - gx,<a name="line.29"></a>
+<span class="sourceLineNo">030</span>                //        gp = p ^ (p &gt;&gt;&gt; 1), gq = q ^ (q &gt;&gt;&gt; 1);<a name="line.30"></a>
+<span class="sourceLineNo">031</span>                out += (x &gt;&gt;&gt; 2 &amp; 7) + (y &gt;&gt;&gt; 2 &amp; 7) - ((x + y) &gt;&gt;&gt; 3 &amp; 3);<a name="line.31"></a>
+<span class="sourceLineNo">032</span>            }<a name="line.32"></a>
+<span class="sourceLineNo">033</span>        }<a name="line.33"></a>
+<span class="sourceLineNo">034</span>        //mx = (x * 127 ^ y * 113) ^ (x * 131 + y * 119), my = (x * 119 ^ y * 127) ^ (x * 113 + y * 131),<a name="line.34"></a>
+<span class="sourceLineNo">035</span>        //final int mx = (x ^ y) * 0x7C15 + (y + x) * 0x9E37, my = (y ^ x) * 0xA47F ^ (x + y) * 0x79B9,<a name="line.35"></a>
+<span class="sourceLineNo">036</span>        //gx = mx ^ (x &gt;&gt; 1), gy = my ^ (y &gt;&gt; 1),<a name="line.36"></a>
+<span class="sourceLineNo">037</span>        //sx = (x + 16) &gt;&gt; 1, sy = (y + 16) &gt;&gt; 1,<a name="line.37"></a>
+<span class="sourceLineNo">038</span>        //mx = x * 127 + (x &gt;&gt; 1) * 353 ^ (31 + (x &lt;&lt; 1) - y), my = y * 131 + (y &gt;&gt; 1) * 301 ^ (37 + (y &lt;&lt; 1) - x),<a name="line.38"></a>
+<span class="sourceLineNo">039</span>        //out = ((sx * sy * mx * my) &gt;&gt;&gt; 8 &amp; 0x1ff); //((Integer.bitCount(gx) + Integer.bitCount(gy) &amp; 63) &lt;&lt; 3) ^<a name="line.39"></a>
+<span class="sourceLineNo">040</span>        out &amp;= 0x1ff;<a name="line.40"></a>
+<span class="sourceLineNo">041</span>        return ((out &amp; 0x100) != 0) ? ~out &amp; 0xff : out &amp; 0xff;<a name="line.41"></a>
+<span class="sourceLineNo">042</span>    }<a name="line.42"></a>
+<span class="sourceLineNo">043</span>    */<a name="line.43"></a>
+<span class="sourceLineNo">044</span><a name="line.44"></a>
+<span class="sourceLineNo">045</span>    /*<a name="line.45"></a>
+<span class="sourceLineNo">046</span>    public static int rawNoise2D(int x, int y) {<a name="line.46"></a>
+<span class="sourceLineNo">047</span>        //final int mx = x * 17 ^ ((x ^ 11) + (y ^ 13)), my = y * 29 ^ (7 + x + y),<a name="line.47"></a>
+<span class="sourceLineNo">048</span>        final int<a name="line.48"></a>
+<span class="sourceLineNo">049</span>                gx = x ^ (x &gt;&gt;&gt; 1), gy = y ^ (y &gt;&gt;&gt; 1),<a name="line.49"></a>
+<span class="sourceLineNo">050</span>                z = gx + gy, w = gx ^ -gy,<a name="line.50"></a>
+<span class="sourceLineNo">051</span>                gz = z ^ (z &gt;&gt;&gt; 1), gw = w ^ (w &gt;&gt;&gt; 1),<a name="line.51"></a>
+<span class="sourceLineNo">052</span>                p = ~gx &amp; gw * gx + gz * gy, q = gz * gw ^ ~gy - gx,<a name="line.52"></a>
+<span class="sourceLineNo">053</span>                gp = p ^ (p &gt;&gt;&gt; 1), gq = q ^ (q &gt;&gt;&gt; 1),<a name="line.53"></a>
+<span class="sourceLineNo">054</span>                //gcz = Long.bitCount(gz * 0x9E3779B97F4A7C15L), gcw = Long.bitCount(gw * 0x9E3779B97F4A7C15L),<a name="line.54"></a>
+<span class="sourceLineNo">055</span>                //gcp = Long.bitCount(gp * 0x9E3779B97F4A7C15L), gcq = Long.bitCount(gq * 0x9E3779B97F4A7C15L),<a name="line.55"></a>
+<span class="sourceLineNo">056</span>                //mx = (x * 127 ^ y * 113) ^ (x * 131 + y * 119), my = (x * 119 ^ y * 127) ^ (x * 113 + y * 131),<a name="line.56"></a>
+<span class="sourceLineNo">057</span>                //final int mx = (x ^ y) * 0x7C15 + (y + x) * 0x9E37, my = (y ^ x) * 0xA47F ^ (x + y) * 0x79B9,<a name="line.57"></a>
+<span class="sourceLineNo">058</span>                //gx = mx ^ (x &gt;&gt; 1), gy = my ^ (y &gt;&gt; 1),<a name="line.58"></a>
+<span class="sourceLineNo">059</span>                //sx = (x + 16) &gt;&gt; 1, sy = (y + 16) &gt;&gt; 1,<a name="line.59"></a>
+<span class="sourceLineNo">060</span>                //mx = x * 127 + (x &gt;&gt; 1) * 353 ^ (31 + (x &lt;&lt; 1) - y), my = y * 131 + (y &gt;&gt; 1) * 301 ^ (37 + (y &lt;&lt; 1) - x),<a name="line.60"></a>
+<span class="sourceLineNo">061</span>                //out = ((sx * sy * mx * my) &gt;&gt;&gt; 8 &amp; 0x1ff); //((Integer.bitCount(gx) + Integer.bitCount(gy) &amp; 63) &lt;&lt; 3) ^<a name="line.61"></a>
+<span class="sourceLineNo">062</span>                out = ((gz * 19) ^ (gw * 11) ^ (gp * 13) ^ (gq * 17)) &amp; 0x1ff;<a name="line.62"></a>
+<span class="sourceLineNo">063</span>        return ((out &amp; 0x100) != 0) ? ~out &amp; 0xff : out &amp; 0xff;<a name="line.63"></a>
+<span class="sourceLineNo">064</span>    }*/<a name="line.64"></a>
+<span class="sourceLineNo">065</span><a name="line.65"></a>
+<span class="sourceLineNo">066</span>    public static int rawNoise2D(int x, int y) {<a name="line.66"></a>
+<span class="sourceLineNo">067</span>        return ((x * 0x9E3779B9 ^ 0xC6BC2796) * (y * 0x92B5CC83 + 0xD9B4E019) - (x ^ ~y) * 0x632BE59B * (~x + y) * 0x7F4A7C15) &gt;&gt;&gt; 8 &amp; 0xff;<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    }<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    public static int rawNoise3D(int x, int y, int z) {<a name="line.69"></a>
+<span class="sourceLineNo">070</span>        return ((z * 0xD0E89D2D + (x * 0x9E3779B9 ^ 0xC6BC2796) * (y * 0x92B5CC83 + 0xD9B4E019)) +<a name="line.70"></a>
+<span class="sourceLineNo">071</span>                (x ^ ~y + z) * 0x632BE59B * (z ^ ~x + y) * 0x7F4A7C15 * (~z + x ^ y) * 0x311E289F) &gt;&gt;&gt; 8 &amp; 0xff;<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    }<a name="line.72"></a>
+<span class="sourceLineNo">073</span><a name="line.73"></a>
+<span class="sourceLineNo">074</span>    /**<a name="line.74"></a>
+<span class="sourceLineNo">075</span>     * 2D merlin noise.<a name="line.75"></a>
+<span class="sourceLineNo">076</span>     *<a name="line.76"></a>
+<span class="sourceLineNo">077</span>     * @param x x input<a name="line.77"></a>
+<span class="sourceLineNo">078</span>     * @param y y input<a name="line.78"></a>
+<span class="sourceLineNo">079</span>     * @return noise from 0 to 255, inclusive<a name="line.79"></a>
+<span class="sourceLineNo">080</span>     */<a name="line.80"></a>
+<span class="sourceLineNo">081</span>    public static int noise2D(int x, int y) {<a name="line.81"></a>
+<span class="sourceLineNo">082</span>        return (rawNoise2D(x-1,y-1) &amp; 43) + (rawNoise2D(x-1,y+1) &amp; 43) +<a name="line.82"></a>
+<span class="sourceLineNo">083</span>                (rawNoise2D(x+1,y-1) &amp; 43) + (rawNoise2D(x+1,y+1) &amp; 43) +<a name="line.83"></a>
+<span class="sourceLineNo">084</span>                (rawNoise2D(x-1,y) &amp; 53) + (rawNoise2D(x+1,y) &amp; 53) +<a name="line.84"></a>
+<span class="sourceLineNo">085</span>                (rawNoise2D(x,y-1) &amp; 53) + (rawNoise2D(x,y-1) &amp; 53) +<a name="line.85"></a>
+<span class="sourceLineNo">086</span>                (rawNoise2D(x,y) &amp; 127) &gt;&gt;&gt; 1;<a name="line.86"></a>
+<span class="sourceLineNo">087</span>    }<a name="line.87"></a>
+<span class="sourceLineNo">088</span>    /**<a name="line.88"></a>
+<span class="sourceLineNo">089</span>     * 3D merlin noise.<a name="line.89"></a>
+<span class="sourceLineNo">090</span>     *<a name="line.90"></a>
+<span class="sourceLineNo">091</span>     * @param x x input<a name="line.91"></a>
+<span class="sourceLineNo">092</span>     * @param y y input<a name="line.92"></a>
+<span class="sourceLineNo">093</span>     * @param z z input<a name="line.93"></a>
+<span class="sourceLineNo">094</span>     * @return noise from 0 to 255, inclusive<a name="line.94"></a>
+<span class="sourceLineNo">095</span>     */<a name="line.95"></a>
+<span class="sourceLineNo">096</span>    public static int noise3D(int x, int y, int z) {<a name="line.96"></a>
+<span class="sourceLineNo">097</span>        return (rawNoise3D(x-1,y-1,z-1) &amp; 12) + (rawNoise3D(x-1,y+1,z-1) &amp; 12) +<a name="line.97"></a>
+<span class="sourceLineNo">098</span>                (rawNoise3D(x+1,y-1,z-1) &amp; 12) + (rawNoise3D(x+1,y+1,z-1) &amp; 12) +<a name="line.98"></a>
+<span class="sourceLineNo">099</span>                (rawNoise3D(x-1,y-1,z+1) &amp; 12) + (rawNoise3D(x-1,y+1,z+1) &amp; 12) +<a name="line.99"></a>
+<span class="sourceLineNo">100</span>                (rawNoise3D(x+1,y-1,z+1) &amp; 12) + (rawNoise3D(x+1,y+1,z+1) &amp; 12) +<a name="line.100"></a>
+<span class="sourceLineNo">101</span><a name="line.101"></a>
+<span class="sourceLineNo">102</span>                (rawNoise3D(x-1,y-1,z) &amp; 25) + (rawNoise3D(x+1,y-1,z) &amp; 25) +<a name="line.102"></a>
+<span class="sourceLineNo">103</span>                (rawNoise3D(x-1,y+1,z) &amp; 25) + (rawNoise3D(x+1,y+1,z) &amp; 25) +<a name="line.103"></a>
+<span class="sourceLineNo">104</span>                (rawNoise3D(x-1,y,z-1) &amp; 25) + (rawNoise3D(x+1,y,z-1) &amp; 25) +<a name="line.104"></a>
+<span class="sourceLineNo">105</span>                (rawNoise3D(x-1,y,z+1) &amp; 25) + (rawNoise3D(x+1,y,z+1) &amp; 25) +<a name="line.105"></a>
+<span class="sourceLineNo">106</span>                (rawNoise3D(x,y-1,z-1) &amp; 25) + (rawNoise3D(x,y+1,z-1) &amp; 25) +<a name="line.106"></a>
+<span class="sourceLineNo">107</span>                (rawNoise3D(x,y-1,z+1) &amp; 25) + (rawNoise3D(x,y+1,z+1) &amp; 25) +<a name="line.107"></a>
+<span class="sourceLineNo">108</span><a name="line.108"></a>
+<span class="sourceLineNo">109</span>                (rawNoise3D(x-1,y,z) &amp; 62) + (rawNoise3D(x+1,y,z) &amp; 62) +<a name="line.109"></a>
+<span class="sourceLineNo">110</span>                (rawNoise3D(x,y-1,z) &amp; 62) + (rawNoise3D(x,y+1,z) &amp; 62) +<a name="line.110"></a>
+<span class="sourceLineNo">111</span>                (rawNoise3D(x,y,z-1) &amp; 62) + (rawNoise3D(x,y,z+1) &amp; 62) +<a name="line.111"></a>
+<span class="sourceLineNo">112</span>                (rawNoise3D(x,y,z)) &gt;&gt;&gt; 2;<a name="line.112"></a>
+<span class="sourceLineNo">113</span>    }<a name="line.113"></a>
+<span class="sourceLineNo">114</span>                        /*(<a name="line.114"></a>
+<span class="sourceLineNo">115</span>                                cellA * (0.5 + absA - absB) +// * (1 - aCoreBias) +<a name="line.115"></a>
+<span class="sourceLineNo">116</span>                                cellB * (0.5 + absB - absA)// * (1 - bCoreBias) +<a name="line.116"></a>
+<span class="sourceLineNo">117</span>                             //   cellAr * aCoreBias + cellBr * bCoreBias<a name="line.117"></a>
+<span class="sourceLineNo">118</span>                        ) * (mx)<a name="line.118"></a>
+<span class="sourceLineNo">119</span>                        */<a name="line.119"></a>
+<span class="sourceLineNo">120</span>                                        /*(cellAB * cornerPref * 2.0 +<a name="line.120"></a>
+<span class="sourceLineNo">121</span>                        cellA * (1.0 + absA - absB - cornerPref) * (1 - aCoreBias) +<a name="line.121"></a>
+<span class="sourceLineNo">122</span>                        cellB * (1.0 + absB - absA - cornerPref) * (1 - bCoreBias) +<a name="line.122"></a>
+<span class="sourceLineNo">123</span>                        cellAr * (1.0 - cornerPref) * aCoreBias + cellBr * bCoreBias * (1.0 - cornerPref)<a name="line.123"></a>
+<span class="sourceLineNo">124</span>                ) * mx * 0.5<a name="line.124"></a>
+<span class="sourceLineNo">125</span>                */<a name="line.125"></a>
+<span class="sourceLineNo">126</span>/*<a name="line.126"></a>
+<span class="sourceLineNo">127</span>                (cellAB * cornerPref * 2.0 +<a name="line.127"></a>
+<span class="sourceLineNo">128</span>                                cellA * (1.0 + absA - absB - cornerPref) * (1 - aCoreBias) +<a name="line.128"></a>
+<span class="sourceLineNo">129</span>                                cellB * (1.0 + absB - absA - cornerPref) * (1 - bCoreBias) +<a name="line.129"></a>
+<span class="sourceLineNo">130</span>                                cellAr * (1.0 - cornerPref) * aCoreBias + cellBr * bCoreBias * (1.0 - cornerPref)<a name="line.130"></a>
+<span class="sourceLineNo">131</span>                        ) * mx * 0.5<a name="line.131"></a>
+<span class="sourceLineNo">132</span>                */<a name="line.132"></a>
+<span class="sourceLineNo">133</span>                /*<a name="line.133"></a>
+<span class="sourceLineNo">134</span>                                cellA * (0.5 + absA - absB - cornerPref) +<a name="line.134"></a>
+<span class="sourceLineNo">135</span>                                cellB * (0.5 + absB - absA - cornerPref)) * mx<a name="line.135"></a>
+<span class="sourceLineNo">136</span><a name="line.136"></a>
+<span class="sourceLineNo">137</span>                 */<a name="line.137"></a>
+<span class="sourceLineNo">138</span><a name="line.138"></a>
+<span class="sourceLineNo">139</span>    /**<a name="line.139"></a>
+<span class="sourceLineNo">140</span>     * 2D merlin noise with a zoom factor.<a name="line.140"></a>
+<span class="sourceLineNo">141</span>     *<a name="line.141"></a>
+<span class="sourceLineNo">142</span>     * @param x x input<a name="line.142"></a>
+<span class="sourceLineNo">143</span>     * @param y y input<a name="line.143"></a>
+<span class="sourceLineNo">144</span>     * @param zoom if greater than 1.0, will make the details of the noise larger; if less, will make them smaller<a name="line.144"></a>
+<span class="sourceLineNo">145</span>     * @return noise from 0 to 255, inclusive<a name="line.145"></a>
+<span class="sourceLineNo">146</span>     */<a name="line.146"></a>
+<span class="sourceLineNo">147</span>    /*<a name="line.147"></a>
+<span class="sourceLineNo">148</span>    public static int noise2D(int x, int y, double zoom) {<a name="line.148"></a>
+<span class="sourceLineNo">149</span>        final double alef = x / (zoom * 8.0), bet = y / (zoom * 8.0);<a name="line.149"></a>
+<span class="sourceLineNo">150</span>        final int alpha = (int) ((x &gt;&gt; 3) / zoom), beta = (int) ((y &gt;&gt; 3) / zoom);<a name="line.150"></a>
+<span class="sourceLineNo">151</span>        final double aBias = (alef - alpha), bBias = (bet - beta),<a name="line.151"></a>
+<span class="sourceLineNo">152</span>                absA = Math.abs(aBias - 0.5), absB = Math.abs(bBias - 0.5),<a name="line.152"></a>
+<span class="sourceLineNo">153</span>                //cornerPref = 0.5 * (absA + absB),<a name="line.153"></a>
+<span class="sourceLineNo">154</span>                cornerPref = Math.max(absA + absB - 0.5, 0) * 0.5,<a name="line.154"></a>
+<span class="sourceLineNo">155</span>                mx = (Math.max(absA, absB))// * 0.5 + (absA + absB) * 0.5),<a name="line.155"></a>
+<span class="sourceLineNo">156</span>                //aCoreBias = Math.max(0.25 - absA, 0), bCoreBias = Math.max(0.25 - absB, 0)<a name="line.156"></a>
+<span class="sourceLineNo">157</span>                ;<a name="line.157"></a>
+<span class="sourceLineNo">158</span>        final int aCond = (aBias &lt; 0.5 ? -1 : 1), bCond = (bBias &lt; 0.5 ? -1 : 1),<a name="line.158"></a>
+<span class="sourceLineNo">159</span>                centerCell = rawNoise2D(alpha, beta),<a name="line.159"></a>
+<span class="sourceLineNo">160</span>                cellA = rawNoise2D(alpha + aCond, beta),<a name="line.160"></a>
+<span class="sourceLineNo">161</span>                cellB = rawNoise2D(alpha, beta + bCond),<a name="line.161"></a>
+<span class="sourceLineNo">162</span>                cellAr = rawNoise2D(alpha - aCond, beta),<a name="line.162"></a>
+<span class="sourceLineNo">163</span>                cellBr = rawNoise2D(alpha, beta - bCond),<a name="line.163"></a>
+<span class="sourceLineNo">164</span>                //cellAB   = (rawNoise2D(alpha + aCond, beta + bCond) + (cellA + cellB)) / 3;<a name="line.164"></a>
+<span class="sourceLineNo">165</span>                //cellArB  = (rawNoise2D(alpha - aCond, beta + bCond) * 6 + (cellAr + cellB) * 5) &gt;&gt; 4,<a name="line.165"></a>
+<span class="sourceLineNo">166</span>                //cellABr  = (rawNoise2D(alpha + aCond, beta - bCond) * 6 + (cellA + cellBr) * 5) &gt;&gt; 4,<a name="line.166"></a>
+<span class="sourceLineNo">167</span>                //cellArBr = (rawNoise2D(alpha - aCond, beta - bCond) * 6 + (cellAr + cellBr) * 5) &gt;&gt; 4;<a name="line.167"></a>
+<span class="sourceLineNo">168</span>        return (int)(((centerCell)// * (1 - aCoreBias - bCoreBias) + cellAr * aCoreBias + cellBr * bCoreBias)<a name="line.168"></a>
+<span class="sourceLineNo">169</span>                * (1 - mx) +<a name="line.169"></a>
+<span class="sourceLineNo">170</span>                ((absA &gt; absB) ? cellA * (1.4 + (absA - absB)) + cellB * (0.6 - (absA - absB)) :<a name="line.170"></a>
+<span class="sourceLineNo">171</span>                        cellB * (1.4 + (absB - absA)) + cellA * (0.6 - (absB - absA))) * mx * 0.5)<a name="line.171"></a>
+<span class="sourceLineNo">172</span>        );<a name="line.172"></a>
+<span class="sourceLineNo">173</span>    }*/<a name="line.173"></a>
+<span class="sourceLineNo">174</span><a name="line.174"></a>
+<span class="sourceLineNo">175</span><a name="line.175"></a>
+<span class="sourceLineNo">176</span>    public static int noise2D(int x, int y, int zoom) {<a name="line.176"></a>
+<span class="sourceLineNo">177</span>        if(zoom &lt; 1)<a name="line.177"></a>
+<span class="sourceLineNo">178</span>            return 0;<a name="line.178"></a>
+<span class="sourceLineNo">179</span>        int v = 0, a = x &lt;&lt; 1, b = y &lt;&lt; 1;<a name="line.179"></a>
+<span class="sourceLineNo">180</span>        for (int s = zoom; s &gt; 0; s--) {<a name="line.180"></a>
+<span class="sourceLineNo">181</span>            v += noise2D((a+=379) / s, (b+=379) / s) + noise2D((a) / s, (b+1) / s) + noise2D((a+1) / s, (b) / s);<a name="line.181"></a>
+<span class="sourceLineNo">182</span>        }<a name="line.182"></a>
+<span class="sourceLineNo">183</span>        //return v / zoom;<a name="line.183"></a>
+<span class="sourceLineNo">184</span>        /*<a name="line.184"></a>
+<span class="sourceLineNo">185</span>        double adj = Math.sin((v / (zoom * 1530.0)) * Math.PI);<a name="line.185"></a>
+<span class="sourceLineNo">186</span>        return (int)(adj * adj * 255.5);<a name="line.186"></a>
+<span class="sourceLineNo">187</span>        */<a name="line.187"></a>
+<span class="sourceLineNo">188</span>        double adj = Math.sin((v / (zoom * 1530.0)) * Math.PI);<a name="line.188"></a>
+<span class="sourceLineNo">189</span>        adj *= adj;<a name="line.189"></a>
+<span class="sourceLineNo">190</span>        return (int) (Math.pow(adj, 2.0 - 2.0 * adj) * 255.5);<a name="line.190"></a>
+<span class="sourceLineNo">191</span>    }<a name="line.191"></a>
+<span class="sourceLineNo">192</span><a name="line.192"></a>
+<span class="sourceLineNo">193</span>    public static int noise3D(int x, int y, int z, int zoom) {<a name="line.193"></a>
+<span class="sourceLineNo">194</span>        if(zoom &lt; 1)<a name="line.194"></a>
+<span class="sourceLineNo">195</span>            return 0;<a name="line.195"></a>
+<span class="sourceLineNo">196</span>        int v = 0, a = x, b = y, c = z;<a name="line.196"></a>
+<span class="sourceLineNo">197</span>        for (int s = zoom; s &gt; 0; s--) {<a name="line.197"></a>
+<span class="sourceLineNo">198</span>            v += noise3D((a+=379) / s, (b+=379) / s, (c+=379) / s)<a name="line.198"></a>
+<span class="sourceLineNo">199</span>                    + noise3D((a) / s, (b+1) / s, (c) / s)<a name="line.199"></a>
+<span class="sourceLineNo">200</span>                    + noise3D((a+1) / s, (b) / s, (c) / s)<a name="line.200"></a>
+<span class="sourceLineNo">201</span>                    + noise3D((a) / s, (b) / s, (c+1) / s);<a name="line.201"></a>
+<span class="sourceLineNo">202</span>        }<a name="line.202"></a>
+<span class="sourceLineNo">203</span>        //return v / zoom;<a name="line.203"></a>
+<span class="sourceLineNo">204</span>        /*<a name="line.204"></a>
+<span class="sourceLineNo">205</span>        double adj = Math.sin((v / (zoom * 1530.0)) * Math.PI);<a name="line.205"></a>
+<span class="sourceLineNo">206</span>        return (int)(adj * adj * 255.5);<a name="line.206"></a>
+<span class="sourceLineNo">207</span>        */<a name="line.207"></a>
+<span class="sourceLineNo">208</span>        double adj = Math.sin((v / (zoom * 2040.0)) * Math.PI);<a name="line.208"></a>
+<span class="sourceLineNo">209</span>        adj *= adj;<a name="line.209"></a>
+<span class="sourceLineNo">210</span>        return (int) (Math.pow(adj, 2.0 - 2.0 * adj) * 255.5);<a name="line.210"></a>
+<span class="sourceLineNo">211</span>    }<a name="line.211"></a>
+<span class="sourceLineNo">212</span><a name="line.212"></a>
+<span class="sourceLineNo">213</span>    /*<a name="line.213"></a>
+<span class="sourceLineNo">214</span>    public static int noise2D(int x, int y, double zoom) {<a name="line.214"></a>
+<span class="sourceLineNo">215</span>        final double alef = x / (zoom * 8.0), bet = y / (zoom * 8.0);<a name="line.215"></a>
+<span class="sourceLineNo">216</span>        final int alpha = (int) ((x &gt;&gt; 3) / zoom), beta = (int) ((y &gt;&gt; 3) / zoom);<a name="line.216"></a>
+<span class="sourceLineNo">217</span>        final double aBias = (alef - alpha), bBias = (bet - beta),<a name="line.217"></a>
+<span class="sourceLineNo">218</span>                absA = Math.abs(aBias - 0.5), absB = Math.abs(bBias - 0.5),<a name="line.218"></a>
+<span class="sourceLineNo">219</span>                cornerPref = Math.max(absA + absB - 0.5, 0),<a name="line.219"></a>
+<span class="sourceLineNo">220</span>                mx = Math.max(absA, absB) * 3.6 + (absA + absB) * 4.2;<a name="line.220"></a>
+<span class="sourceLineNo">221</span>        final int centerCell = rawNoise2D(alpha, beta),<a name="line.221"></a>
+<span class="sourceLineNo">222</span>                aCell = rawNoise2D(alpha + (aBias &lt; 0.5 ? -1 : 1), beta),<a name="line.222"></a>
+<span class="sourceLineNo">223</span>                bCell = rawNoise2D(alpha, beta + (bBias &lt; 0.5 ? -1 : 1)),<a name="line.223"></a>
+<span class="sourceLineNo">224</span>                cornerCell = (rawNoise2D(alpha + (aBias &lt; 0.5 ? -1 : 1), beta + (bBias &lt; 0.5 ? -1 : 1)) * 6 + (aCell + bCell) * 5) &gt;&gt; 4;<a name="line.224"></a>
+<span class="sourceLineNo">225</span>        return (int) ( //(centerCell * (1 - absA - absB) + aCell * absA + bCell * absB)<a name="line.225"></a>
+<span class="sourceLineNo">226</span>                centerCell * (8 - mx) +<a name="line.226"></a>
+<span class="sourceLineNo">227</span>                        (cornerCell * cornerPref * 2.0 +<a name="line.227"></a>
+<span class="sourceLineNo">228</span>                                aCell * (0.5 + absA - absB - cornerPref) +<a name="line.228"></a>
+<span class="sourceLineNo">229</span>                                bCell * (0.5 + absB - absA - cornerPref)) * mx<a name="line.229"></a>
+<span class="sourceLineNo">230</span>        ) &gt;&gt;&gt; 3;<a name="line.230"></a>
+<span class="sourceLineNo">231</span>    }<a name="line.231"></a>
+<span class="sourceLineNo">232</span>    */<a name="line.232"></a>
+<span class="sourceLineNo">233</span><a name="line.233"></a>
+<span class="sourceLineNo">234</span>    /**<a name="line.234"></a>
+<span class="sourceLineNo">235</span>     * Generates higher-quality continuous-style noise than the other methods, but requires pre-calculating a grid.<a name="line.235"></a>
+<span class="sourceLineNo">236</span>     * Does allow taking a seed because internally it uses a ThunderRNG to quickly generate initial white noise before<a name="line.236"></a>
+<span class="sourceLineNo">237</span>     * processing it into more continuous noise. This generates a lot of random numbers (at least 1 + 14 * height, or<a name="line.237"></a>
+<span class="sourceLineNo">238</span>     * more if width is greater than 64), so ThunderRNG's high speed and presumed higher-than-2-to-the-64 period are<a name="line.238"></a>
+<span class="sourceLineNo">239</span>     * both assets here.<a name="line.239"></a>
+<span class="sourceLineNo">240</span>     * &lt;br&gt;<a name="line.240"></a>
+<span class="sourceLineNo">241</span>     * The 2D int array this produces has ints ranging from 1 to 255, with extreme values very unlikely. Because 0 is<a name="line.241"></a>
+<span class="sourceLineNo">242</span>     * impossible for this to generate, it should be fine to use values from this as denominators in division.<a name="line.242"></a>
+<span class="sourceLineNo">243</span>     * @param width the width of the 2D int array to generate<a name="line.243"></a>
+<span class="sourceLineNo">244</span>     * @param height the height of the 2D int array to generate<a name="line.244"></a>
+<span class="sourceLineNo">245</span>     * @param seed the RNG seed to use when pseudo-randomly generating the initial white noise this then processes<a name="line.245"></a>
+<span class="sourceLineNo">246</span>     * @return a 2D int array where each int should be between 1 and 255, inclusive<a name="line.246"></a>
+<span class="sourceLineNo">247</span>     */<a name="line.247"></a>
+<span class="sourceLineNo">248</span>    public static int[][] preCalcNoise2D(int width, int height, long seed)<a name="line.248"></a>
+<span class="sourceLineNo">249</span>    {<a name="line.249"></a>
+<span class="sourceLineNo">250</span>        ThunderRNG random = new ThunderRNG(seed);<a name="line.250"></a>
+<span class="sourceLineNo">251</span>        int w = (width &lt;&lt; 1) + 2, h = (height &lt;&lt; 1) + 2;<a name="line.251"></a>
+<span class="sourceLineNo">252</span>        GreasedRegion[] regions = new GreasedRegion[]{<a name="line.252"></a>
+<span class="sourceLineNo">253</span>            new GreasedRegion(random, w, h).retract().expand(3), new GreasedRegion(random, w, h).retract().expand(3),<a name="line.253"></a>
+<span class="sourceLineNo">254</span>                new GreasedRegion(random, w, h).retract().expand(3), new GreasedRegion(random, w, h).retract().expand(3),<a name="line.254"></a>
+<span class="sourceLineNo">255</span>                new GreasedRegion(random, w, h).retract().expand(3), new GreasedRegion(random, w, h).retract().expand(3),<a name="line.255"></a>
+<span class="sourceLineNo">256</span>                new GreasedRegion(random, w, h).retract().expand(3)<a name="line.256"></a>
+<span class="sourceLineNo">257</span>        };<a name="line.257"></a>
+<span class="sourceLineNo">258</span>        random.reseed(random.nextLong());<a name="line.258"></a>
+<span class="sourceLineNo">259</span>        int[][] data = GreasedRegion.bitSum(regions);<a name="line.259"></a>
+<span class="sourceLineNo">260</span><a name="line.260"></a>
+<span class="sourceLineNo">261</span>        regions = new GreasedRegion[]{<a name="line.261"></a>
+<span class="sourceLineNo">262</span>                new GreasedRegion(random, w, h).retract().expand(3), new GreasedRegion(random, w, h).retract().expand(3),<a name="line.262"></a>
+<span class="sourceLineNo">263</span>                new GreasedRegion(random, w, h).retract().expand(3), new GreasedRegion(random, w, h).retract().expand(3),<a name="line.263"></a>
+<span class="sourceLineNo">264</span>                new GreasedRegion(random, w, h).retract().expand(3), new GreasedRegion(random, w, h).retract().expand(3),<a name="line.264"></a>
+<span class="sourceLineNo">265</span>                new GreasedRegion(random, w, h).retract().expand(3)<a name="line.265"></a>
+<span class="sourceLineNo">266</span>        };<a name="line.266"></a>
+<span class="sourceLineNo">267</span>        int[][] data2 = GreasedRegion.bitSum(regions), data3 = new int[width][height];<a name="line.267"></a>
+<span class="sourceLineNo">268</span>        for (int x = 0; x &lt; w; x++) {<a name="line.268"></a>
+<span class="sourceLineNo">269</span>            for (int y = 0; y &lt; h; y++) {<a name="line.269"></a>
+<span class="sourceLineNo">270</span>                data[x][y] += 128 - data2[x][y];<a name="line.270"></a>
+<span class="sourceLineNo">271</span>            }<a name="line.271"></a>
+<span class="sourceLineNo">272</span>        }<a name="line.272"></a>
+<span class="sourceLineNo">273</span>        for (int x = 0, dx = 1; x &lt; width; x++, dx+= 2) {<a name="line.273"></a>
+<span class="sourceLineNo">274</span>            for (int y = 0, dy = 1; y &lt; height; y++, dy+=2) {<a name="line.274"></a>
+<span class="sourceLineNo">275</span>                data3[x][y] = ((data[dx][dy] &lt;&lt; 2) + data[dx-1][dy] + data[dx+1][dy] + data[dx][dy+1] + data[dx][dy-1]) &gt;&gt;&gt; 3;<a name="line.275"></a>
+<span class="sourceLineNo">276</span>            }<a name="line.276"></a>
+<span class="sourceLineNo">277</span>        }<a name="line.277"></a>
+<span class="sourceLineNo">278</span>        return data3;<a name="line.278"></a>
+<span class="sourceLineNo">279</span>        /*<a name="line.279"></a>
+<span class="sourceLineNo">280</span>        int[][] data = GreasedRegion.bitSum(regions);<a name="line.280"></a>
+<span class="sourceLineNo">281</span>        return GreasedRegion.selectiveNegate(data, new GreasedRegion(random, width, height), 0xff);<a name="line.281"></a>
+<span class="sourceLineNo">282</span>        */<a name="line.282"></a>
+<span class="sourceLineNo">283</span>    }<a name="line.283"></a>
+<span class="sourceLineNo">284</span><a name="line.284"></a>
+<span class="sourceLineNo">285</span><a name="line.285"></a>
+<span class="sourceLineNo">286</span>    /*<a name="line.286"></a>
+<span class="sourceLineNo">287</span>    public static int noise2D(int x, int y, double zoom) {<a name="line.287"></a>
+<span class="sourceLineNo">288</span>        final double alef = x / zoom, bet = y / zoom;<a name="line.288"></a>
+<span class="sourceLineNo">289</span>        final int alpha = (int) (alef), beta = (int) (bet),<a name="line.289"></a>
+<span class="sourceLineNo">290</span>                north = rawNoise2D(alpha, beta - 1), south = rawNoise2D(alpha, beta + 1),<a name="line.290"></a>
+<span class="sourceLineNo">291</span>                east = rawNoise2D(alpha + 1, beta), west = rawNoise2D(alpha - 1, beta),<a name="line.291"></a>
+<span class="sourceLineNo">292</span>                center = rawNoise2D(alpha, beta);<a name="line.292"></a>
+<span class="sourceLineNo">293</span>        final double aBias = (alef - alpha), bBias = (bet - beta);<a name="line.293"></a>
+<span class="sourceLineNo">294</span>        return (((aBias - 0.75) &lt; 0 ? west : center) * 3 + ((aBias + 0.75) &gt;= 1 ? east : center) * 3 +<a name="line.294"></a>
+<span class="sourceLineNo">295</span>                ((aBias - 0.25) &lt; 0 ? west : center) * 2 + ((aBias + 0.25) &gt;= 1 ? east : center) * 2 +<a name="line.295"></a>
+<span class="sourceLineNo">296</span>                ((bBias - 0.75) &lt; 0 ? north : center) * 3 + ((bBias + 0.75) &gt;= 1 ? south : center) * 3 +<a name="line.296"></a>
+<span class="sourceLineNo">297</span>                ((bBias - 0.25) &lt; 0 ? north : center) * 2 + ((bBias + 0.25) &gt;= 1 ? south : center) * 2<a name="line.297"></a>
+<span class="sourceLineNo">298</span>        ) / 20;<a name="line.298"></a>
+<span class="sourceLineNo">299</span>    }*/<a name="line.299"></a>
+<span class="sourceLineNo">300</span>                    /*+<a name="line.300"></a>
+<span class="sourceLineNo">301</span>                ((aBias - 0.5) &lt; 0 ? west : center) * 17 + ((aBias + 0.5) &gt;= 1 ? east : center) * 17 +<a name="line.301"></a>
+<span class="sourceLineNo">302</span>                ((aBias - 0.3) &lt; 0 ? west : center) * 15 + ((aBias + 0.3) &gt;= 1 ? east : center) * 15 +<a name="line.302"></a>
+<span class="sourceLineNo">303</span>                ((bBias - 0.5) &lt; 0 ? north : center) * 17 + ((bBias + 0.5) &gt;= 1 ? south : center) * 17 +<a name="line.303"></a>
+<span class="sourceLineNo">304</span>                ((bBias - 0.3) &lt; 0 ? north : center) * 15 + ((bBias + 0.3) &gt;= 1 ? south : center) * 15*/<a name="line.304"></a>
+<span class="sourceLineNo">305</span><a name="line.305"></a>
+<span class="sourceLineNo">306</span>}<a name="line.306"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

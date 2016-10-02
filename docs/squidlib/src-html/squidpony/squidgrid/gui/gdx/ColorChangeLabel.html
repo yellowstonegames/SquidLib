@@ -1,0 +1,236 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.squidgrid.gui.gdx;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import com.badlogic.gdx.graphics.Color;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import com.badlogic.gdx.scenes.scene2d.ui.Label;<a name="line.4"></a>
+<span class="sourceLineNo">005</span>import squidpony.squidgrid.Direction;<a name="line.5"></a>
+<span class="sourceLineNo">006</span><a name="line.6"></a>
+<span class="sourceLineNo">007</span>import java.util.ArrayList;<a name="line.7"></a>
+<span class="sourceLineNo">008</span>import java.util.Collection;<a name="line.8"></a>
+<span class="sourceLineNo">009</span>import java.util.Collections;<a name="line.9"></a>
+<span class="sourceLineNo">010</span>import java.util.List;<a name="line.10"></a>
+<span class="sourceLineNo">011</span><a name="line.11"></a>
+<span class="sourceLineNo">012</span>/**<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * A Label that changes its color automatically, taking its current color from a list such as a gradient. Useful for<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * implementing a "blink" effect where a creature alternates being visible and invisible, for a magical object that has<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * all the colors of the rainbow, or for all sorts of similar uses. The color pattern loops, by default one loop per two<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * seconds (but this can be changed), so longer lists of colors will display each color for a shorter time.<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * Created by Tommy Ettinger on 3/23/2016.<a name="line.17"></a>
+<span class="sourceLineNo">018</span> */<a name="line.18"></a>
+<span class="sourceLineNo">019</span>public class ColorChangeLabel extends Label {<a name="line.19"></a>
+<span class="sourceLineNo">020</span><a name="line.20"></a>
+<span class="sourceLineNo">021</span>    private List&lt;Color&gt; colors;<a name="line.21"></a>
+<span class="sourceLineNo">022</span>    protected float progress = 0f;<a name="line.22"></a>
+<span class="sourceLineNo">023</span>    protected float loopTime = 2f;<a name="line.23"></a>
+<span class="sourceLineNo">024</span>    protected ColorChangeLabel()<a name="line.24"></a>
+<span class="sourceLineNo">025</span>    {<a name="line.25"></a>
+<span class="sourceLineNo">026</span>        this(null, null);<a name="line.26"></a>
+<span class="sourceLineNo">027</span>    }<a name="line.27"></a>
+<span class="sourceLineNo">028</span>    /**<a name="line.28"></a>
+<span class="sourceLineNo">029</span>     * Constructs a ColorChangeLabel. Used internally by TextCellFactory, but library users are unlikely to need this.<a name="line.29"></a>
+<span class="sourceLineNo">030</span>     * @param text the text to display in this ColorChangeLabel<a name="line.30"></a>
+<span class="sourceLineNo">031</span>     * @param style the LabelStyle to use for this; typically TextCellFactory handles this<a name="line.31"></a>
+<span class="sourceLineNo">032</span>     * @param colors a Collection (usually a List) of Color, such as one returned by SquidColorCenter's gradient method<a name="line.32"></a>
+<span class="sourceLineNo">033</span>     */<a name="line.33"></a>
+<span class="sourceLineNo">034</span>    public ColorChangeLabel(CharSequence text, LabelStyle style, Collection&lt;Color&gt; colors) {<a name="line.34"></a>
+<span class="sourceLineNo">035</span>        this(text, style, 2f, false, colors);<a name="line.35"></a>
+<span class="sourceLineNo">036</span>    }<a name="line.36"></a>
+<span class="sourceLineNo">037</span><a name="line.37"></a>
+<span class="sourceLineNo">038</span>    /**<a name="line.38"></a>
+<span class="sourceLineNo">039</span>     * Constructs a ColorChangeLabel. Used internally by TextCellFactory, but library users are unlikely to need this.<a name="line.39"></a>
+<span class="sourceLineNo">040</span>     * @param text the text to display in this ColorChangeLabel<a name="line.40"></a>
+<span class="sourceLineNo">041</span>     * @param style the LabelStyle to use for this; typically TextCellFactory handles this<a name="line.41"></a>
+<span class="sourceLineNo">042</span>     * @param loopTime the amount of time, in seconds, it takes to loop through all the colors in the list<a name="line.42"></a>
+<span class="sourceLineNo">043</span>     * @param colors a Collection (usually a List) of Color, such as one returned by SquidColorCenter's gradient method<a name="line.43"></a>
+<span class="sourceLineNo">044</span>     */<a name="line.44"></a>
+<span class="sourceLineNo">045</span>    public ColorChangeLabel(CharSequence text, LabelStyle style, float loopTime, Collection&lt;Color&gt; colors){<a name="line.45"></a>
+<span class="sourceLineNo">046</span>        this(text, style, loopTime, false, colors);<a name="line.46"></a>
+<span class="sourceLineNo">047</span>    }<a name="line.47"></a>
+<span class="sourceLineNo">048</span><a name="line.48"></a>
+<span class="sourceLineNo">049</span>    /**<a name="line.49"></a>
+<span class="sourceLineNo">050</span>     * Constructs a ColorChangeLabel. Used internally by TextCellFactory, but library users are unlikely to need this.<a name="line.50"></a>
+<span class="sourceLineNo">051</span>     * @param text the text to display in this ColorChangeLabel<a name="line.51"></a>
+<span class="sourceLineNo">052</span>     * @param style the LabelStyle to use for this; typically TextCellFactory handles this<a name="line.52"></a>
+<span class="sourceLineNo">053</span>     * @param loopTime the amount of time, in seconds, it takes to loop through all the colors in the list<a name="line.53"></a>
+<span class="sourceLineNo">054</span>     * @param doubleWidth true if this takes up two grid cells; only matters if you use {@link AnimatedEntity#setDirection(Direction)}<a name="line.54"></a>
+<span class="sourceLineNo">055</span>     * @param colors a Collection (usually a List) of Color, such as one returned by SquidColorCenter's gradient method<a name="line.55"></a>
+<span class="sourceLineNo">056</span>     */<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    public ColorChangeLabel(CharSequence text, LabelStyle style, float loopTime, boolean doubleWidth, Collection&lt;Color&gt; colors){<a name="line.57"></a>
+<span class="sourceLineNo">058</span>        super(text, style);<a name="line.58"></a>
+<span class="sourceLineNo">059</span>        if(colors == null || colors.isEmpty())<a name="line.59"></a>
+<span class="sourceLineNo">060</span>            this.colors = DefaultResources.getSCC().rainbow(12);<a name="line.60"></a>
+<span class="sourceLineNo">061</span>        else<a name="line.61"></a>
+<span class="sourceLineNo">062</span>            this.colors = new ArrayList&lt;&gt;(colors);<a name="line.62"></a>
+<span class="sourceLineNo">063</span>        this.loopTime = loopTime == 0 ? 1 : loopTime;<a name="line.63"></a>
+<span class="sourceLineNo">064</span>    }<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    /**<a name="line.65"></a>
+<span class="sourceLineNo">066</span>     * Constructs a ColorChangeLabel. Used internally by TextCellFactory, but library users are unlikely to need this.<a name="line.66"></a>
+<span class="sourceLineNo">067</span>     * @param text the text to display in this ColorChangeLabel<a name="line.67"></a>
+<span class="sourceLineNo">068</span>     * @param style the LabelStyle to use for this; typically TextCellFactory handles this<a name="line.68"></a>
+<span class="sourceLineNo">069</span>     * @param colors an array or vararg of Color<a name="line.69"></a>
+<span class="sourceLineNo">070</span>     */<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    public ColorChangeLabel(CharSequence text, LabelStyle style, Color... colors) {<a name="line.71"></a>
+<span class="sourceLineNo">072</span>        this(text, style, 2f, false, colors);<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    }<a name="line.73"></a>
+<span class="sourceLineNo">074</span><a name="line.74"></a>
+<span class="sourceLineNo">075</span>    /**<a name="line.75"></a>
+<span class="sourceLineNo">076</span>     * Constructs a ColorChangeLabel. Used internally by TextCellFactory, but library users are unlikely to need this.<a name="line.76"></a>
+<span class="sourceLineNo">077</span>     * @param text the text to display in this ColorChangeLabel<a name="line.77"></a>
+<span class="sourceLineNo">078</span>     * @param style the LabelStyle to use for this; typically TextCellFactory handles this<a name="line.78"></a>
+<span class="sourceLineNo">079</span>     * @param loopTime the amount of time, in seconds, it takes to loop through all the colors in the list<a name="line.79"></a>
+<span class="sourceLineNo">080</span>     * @param colors an array or vararg of Color<a name="line.80"></a>
+<span class="sourceLineNo">081</span>     */<a name="line.81"></a>
+<span class="sourceLineNo">082</span>    public ColorChangeLabel(CharSequence text, LabelStyle style, float loopTime, Color... colors){<a name="line.82"></a>
+<span class="sourceLineNo">083</span>        this(text, style, loopTime, false, colors);<a name="line.83"></a>
+<span class="sourceLineNo">084</span>    }<a name="line.84"></a>
+<span class="sourceLineNo">085</span><a name="line.85"></a>
+<span class="sourceLineNo">086</span>    /**<a name="line.86"></a>
+<span class="sourceLineNo">087</span>     * Constructs a ColorChangeLabel. Used internally by TextCellFactory, but library users are unlikely to need this.<a name="line.87"></a>
+<span class="sourceLineNo">088</span>     * @param text the text to display in this ColorChangeLabel<a name="line.88"></a>
+<span class="sourceLineNo">089</span>     * @param style the LabelStyle to use for this; typically TextCellFactory handles this<a name="line.89"></a>
+<span class="sourceLineNo">090</span>     * @param loopTime the amount of time, in seconds, it takes to loop through all the colors in the list<a name="line.90"></a>
+<span class="sourceLineNo">091</span>     * @param doubleWidth true if this takes up two grid cells; only matters if you use {@link AnimatedEntity#setDirection(Direction)}<a name="line.91"></a>
+<span class="sourceLineNo">092</span>     * @param colors an array or vararg of Color<a name="line.92"></a>
+<span class="sourceLineNo">093</span>     */<a name="line.93"></a>
+<span class="sourceLineNo">094</span>    public ColorChangeLabel(CharSequence text, LabelStyle style, float loopTime, boolean doubleWidth, Color... colors){<a name="line.94"></a>
+<span class="sourceLineNo">095</span>        super(text, style);<a name="line.95"></a>
+<span class="sourceLineNo">096</span>        if (colors == null || colors.length == 0)<a name="line.96"></a>
+<span class="sourceLineNo">097</span>            this.colors = DefaultResources.getSCC().rainbow(12);<a name="line.97"></a>
+<span class="sourceLineNo">098</span>        else {<a name="line.98"></a>
+<span class="sourceLineNo">099</span>            this.colors = new ArrayList&lt;&gt;(colors.length);<a name="line.99"></a>
+<span class="sourceLineNo">100</span>            Collections.addAll(this.colors, colors);<a name="line.100"></a>
+<span class="sourceLineNo">101</span>        }<a name="line.101"></a>
+<span class="sourceLineNo">102</span>        this.loopTime = loopTime == 0 ? 1 : loopTime;<a name="line.102"></a>
+<span class="sourceLineNo">103</span>    }<a name="line.103"></a>
+<span class="sourceLineNo">104</span><a name="line.104"></a>
+<span class="sourceLineNo">105</span>    /**<a name="line.105"></a>
+<span class="sourceLineNo">106</span>     * Returns the color the actor will be tinted when drawn. Takes the Color from the List of Color this was constructed<a name="line.106"></a>
+<span class="sourceLineNo">107</span>     * with or assigned with setColors, not the normal Actor color assigned with setColor.<a name="line.107"></a>
+<span class="sourceLineNo">108</span>     * @return the Color this will be drawn with<a name="line.108"></a>
+<span class="sourceLineNo">109</span>     */<a name="line.109"></a>
+<span class="sourceLineNo">110</span>    @Override<a name="line.110"></a>
+<span class="sourceLineNo">111</span>    public Color getColor() {<a name="line.111"></a>
+<span class="sourceLineNo">112</span>        return colors.get((int)(progress * colors.size() / loopTime));<a name="line.112"></a>
+<span class="sourceLineNo">113</span>    }<a name="line.113"></a>
+<span class="sourceLineNo">114</span><a name="line.114"></a>
+<span class="sourceLineNo">115</span>    /**<a name="line.115"></a>
+<span class="sourceLineNo">116</span>     * Sets the list of colors this uses to choose what color it draws with.<a name="line.116"></a>
+<span class="sourceLineNo">117</span>     * @param colors a Collection (usually a List) of Color, such as one returned by SquidColorCenter's gradient method<a name="line.117"></a>
+<span class="sourceLineNo">118</span>     */<a name="line.118"></a>
+<span class="sourceLineNo">119</span>    public void setColors(Collection&lt;Color&gt; colors)<a name="line.119"></a>
+<span class="sourceLineNo">120</span>    {<a name="line.120"></a>
+<span class="sourceLineNo">121</span>        if(colors == null || colors.isEmpty())<a name="line.121"></a>
+<span class="sourceLineNo">122</span>            this.colors = DefaultResources.getSCC().rainbow(12);<a name="line.122"></a>
+<span class="sourceLineNo">123</span>        else<a name="line.123"></a>
+<span class="sourceLineNo">124</span>            this.colors = new ArrayList&lt;&gt;(colors);<a name="line.124"></a>
+<span class="sourceLineNo">125</span>    }<a name="line.125"></a>
+<span class="sourceLineNo">126</span><a name="line.126"></a>
+<span class="sourceLineNo">127</span>    /**<a name="line.127"></a>
+<span class="sourceLineNo">128</span>     * Sets the list of colors this uses to choose what color it draws with.<a name="line.128"></a>
+<span class="sourceLineNo">129</span>     * @param colors an array or vararg of Color<a name="line.129"></a>
+<span class="sourceLineNo">130</span>     */<a name="line.130"></a>
+<span class="sourceLineNo">131</span>    public void setColors(Color... colors)<a name="line.131"></a>
+<span class="sourceLineNo">132</span>    {<a name="line.132"></a>
+<span class="sourceLineNo">133</span>        if (colors == null || colors.length == 0)<a name="line.133"></a>
+<span class="sourceLineNo">134</span>            this.colors = DefaultResources.getSCC().rainbow(12);<a name="line.134"></a>
+<span class="sourceLineNo">135</span>        else {<a name="line.135"></a>
+<span class="sourceLineNo">136</span>            this.colors = new ArrayList&lt;&gt;(colors.length);<a name="line.136"></a>
+<span class="sourceLineNo">137</span>            Collections.addAll(this.colors, colors);<a name="line.137"></a>
+<span class="sourceLineNo">138</span>        }<a name="line.138"></a>
+<span class="sourceLineNo">139</span>    }<a name="line.139"></a>
+<span class="sourceLineNo">140</span>    /**<a name="line.140"></a>
+<span class="sourceLineNo">141</span>     * Updates the actor based on time. Typically this is called each frame by<a name="line.141"></a>
+<span class="sourceLineNo">142</span>     * {@link com.badlogic.gdx.scenes.scene2d.Stage#act(float)}.<a name="line.142"></a>
+<span class="sourceLineNo">143</span>     * &lt;p&gt;<a name="line.143"></a>
+<span class="sourceLineNo">144</span>     * The default implementation calls<a name="line.144"></a>
+<span class="sourceLineNo">145</span>     * {@link com.badlogic.gdx.scenes.scene2d.Action#act(float)} on each action and removes actions that are complete.<a name="line.145"></a>
+<span class="sourceLineNo">146</span>     *<a name="line.146"></a>
+<span class="sourceLineNo">147</span>     * @param delta Time in seconds since the last frame.<a name="line.147"></a>
+<span class="sourceLineNo">148</span>     */<a name="line.148"></a>
+<span class="sourceLineNo">149</span>    @Override<a name="line.149"></a>
+<span class="sourceLineNo">150</span>    public void act(float delta) {<a name="line.150"></a>
+<span class="sourceLineNo">151</span>        super.act(delta);<a name="line.151"></a>
+<span class="sourceLineNo">152</span>        progress = (progress + delta) % (loopTime - 0.001f);<a name="line.152"></a>
+<span class="sourceLineNo">153</span>    }<a name="line.153"></a>
+<span class="sourceLineNo">154</span><a name="line.154"></a>
+<span class="sourceLineNo">155</span>    /**<a name="line.155"></a>
+<span class="sourceLineNo">156</span>     * Changes the amount of time this takes to loop through all colors, and also resets the current loop to its start.<a name="line.156"></a>
+<span class="sourceLineNo">157</span>     * @param loopTime the amount of time, in seconds, it takes to loop through all the colors in the list<a name="line.157"></a>
+<span class="sourceLineNo">158</span>     */<a name="line.158"></a>
+<span class="sourceLineNo">159</span>    public void resetLoopTime(float loopTime)<a name="line.159"></a>
+<span class="sourceLineNo">160</span>    {<a name="line.160"></a>
+<span class="sourceLineNo">161</span>        this.loopTime = loopTime;<a name="line.161"></a>
+<span class="sourceLineNo">162</span>        progress = 0f;<a name="line.162"></a>
+<span class="sourceLineNo">163</span>    }<a name="line.163"></a>
+<span class="sourceLineNo">164</span>}<a name="line.164"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

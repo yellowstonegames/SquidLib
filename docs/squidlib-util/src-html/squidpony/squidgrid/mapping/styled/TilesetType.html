@@ -1,0 +1,259 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.squidgrid.mapping.styled;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import squidpony.tileset.*;<a name="line.3"></a>
+<span class="sourceLineNo">004</span><a name="line.4"></a>
+<span class="sourceLineNo">005</span>/**<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * An enumeration of all the kinds of dungeon that DungeonGen<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * knows how to draw already. Each value has a Javadoc description.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> * Created by Tommy Ettinger on 3/10/2015.<a name="line.8"></a>
+<span class="sourceLineNo">009</span> */<a name="line.9"></a>
+<span class="sourceLineNo">010</span>public enum TilesetType {<a name="line.10"></a>
+<span class="sourceLineNo">011</span>    /**<a name="line.11"></a>
+<span class="sourceLineNo">012</span>     * A generally useful kind of dungeon for ruins or underground manufactured areas.<a name="line.12"></a>
+<span class="sourceLineNo">013</span>     */<a name="line.13"></a>
+<span class="sourceLineNo">014</span>    DEFAULT_DUNGEON,<a name="line.14"></a>
+<span class="sourceLineNo">015</span>    /**<a name="line.15"></a>
+<span class="sourceLineNo">016</span>     * A good general kind of cave, with long distances between merging paths.<a name="line.16"></a>
+<span class="sourceLineNo">017</span>     */<a name="line.17"></a>
+<span class="sourceLineNo">018</span>    CAVES_LIMIT_CONNECTIVITY,<a name="line.18"></a>
+<span class="sourceLineNo">019</span>    /**<a name="line.19"></a>
+<span class="sourceLineNo">020</span>     * Only usable if using Chebyshev distances; many connections are diagonal-only.<a name="line.20"></a>
+<span class="sourceLineNo">021</span>     */<a name="line.21"></a>
+<span class="sourceLineNo">022</span>    CAVES_TINY_CORRIDORS,<a name="line.22"></a>
+<span class="sourceLineNo">023</span>    /**<a name="line.23"></a>
+<span class="sourceLineNo">024</span>     * Most parts of the cave are large and open, but tiny corridors link them, providing hiding places.<a name="line.24"></a>
+<span class="sourceLineNo">025</span>     */<a name="line.25"></a>
+<span class="sourceLineNo">026</span>    CORNER_CAVES,<a name="line.26"></a>
+<span class="sourceLineNo">027</span>    /**<a name="line.27"></a>
+<span class="sourceLineNo">028</span>     * Very basic demo dungeon.<a name="line.28"></a>
+<span class="sourceLineNo">029</span>     */<a name="line.29"></a>
+<span class="sourceLineNo">030</span>    HORIZONTAL_CORRIDORS_A,<a name="line.30"></a>
+<span class="sourceLineNo">031</span>    /**<a name="line.31"></a>
+<span class="sourceLineNo">032</span>     * Slightly less basic demo dungeon.<a name="line.32"></a>
+<span class="sourceLineNo">033</span>     */<a name="line.33"></a>
+<span class="sourceLineNo">034</span>    HORIZONTAL_CORRIDORS_B,<a name="line.34"></a>
+<span class="sourceLineNo">035</span>    /**<a name="line.35"></a>
+<span class="sourceLineNo">036</span>     * A bit more complexity in this demo dungeon.<a name="line.36"></a>
+<span class="sourceLineNo">037</span>     */<a name="line.37"></a>
+<span class="sourceLineNo">038</span>    HORIZONTAL_CORRIDORS_C,<a name="line.38"></a>
+<span class="sourceLineNo">039</span>    /**<a name="line.39"></a>
+<span class="sourceLineNo">040</span>     * A reference implementation of where you can place walls; mostly floor.<a name="line.40"></a>
+<span class="sourceLineNo">041</span>     */<a name="line.41"></a>
+<span class="sourceLineNo">042</span>    LIMIT_CONNECTIVITY_FAT,<a name="line.42"></a>
+<span class="sourceLineNo">043</span>    /**<a name="line.43"></a>
+<span class="sourceLineNo">044</span>     * A reference implementation of where you can place walls; mostly wall.<a name="line.44"></a>
+<span class="sourceLineNo">045</span>     */<a name="line.45"></a>
+<span class="sourceLineNo">046</span>    LIMITED_CONNECTIVITY,<a name="line.46"></a>
+<span class="sourceLineNo">047</span>    /**<a name="line.47"></a>
+<span class="sourceLineNo">048</span>     * A generally good maze; MAZE_A and MAZE_B should both be interchangeable, but not on the same map.<a name="line.48"></a>
+<span class="sourceLineNo">049</span>     */<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    MAZE_A,<a name="line.50"></a>
+<span class="sourceLineNo">051</span>    /**<a name="line.51"></a>
+<span class="sourceLineNo">052</span>     * A generally good maze; MAZE_A and MAZE_B should both be interchangeable, but not on the same map.<a name="line.52"></a>
+<span class="sourceLineNo">053</span>     */<a name="line.53"></a>
+<span class="sourceLineNo">054</span>    MAZE_B,<a name="line.54"></a>
+<span class="sourceLineNo">055</span>    /**<a name="line.55"></a>
+<span class="sourceLineNo">056</span>     * A map that's less dungeon-like than the others, with lots of open space.<a name="line.56"></a>
+<span class="sourceLineNo">057</span>     */<a name="line.57"></a>
+<span class="sourceLineNo">058</span>    OPEN_AREAS,<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    /**<a name="line.59"></a>
+<span class="sourceLineNo">060</span>     * An excellent natural cave style that looks worn down haphazardly, as by burrowing creatures or deep rivers.<a name="line.60"></a>
+<span class="sourceLineNo">061</span>     */<a name="line.61"></a>
+<span class="sourceLineNo">062</span>    REFERENCE_CAVES,<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    /**<a name="line.63"></a>
+<span class="sourceLineNo">064</span>     * Mostly open, kinda weird.<a name="line.64"></a>
+<span class="sourceLineNo">065</span>     */<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    ROOMS_AND_CORRIDORS_A,<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    /**<a name="line.67"></a>
+<span class="sourceLineNo">068</span>     * Mostly open, but with long corridors that should be a good fit for ranged combat.<a name="line.68"></a>
+<span class="sourceLineNo">069</span>     */<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    ROOMS_AND_CORRIDORS_B,<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    /**<a name="line.71"></a>
+<span class="sourceLineNo">072</span>     * A nice old-school roguelike map, with thin corridors and rectangular rooms.<a name="line.72"></a>
+<span class="sourceLineNo">073</span>     */<a name="line.73"></a>
+<span class="sourceLineNo">074</span>    ROOMS_LIMIT_CONNECTIVITY,<a name="line.74"></a>
+<span class="sourceLineNo">075</span>    /**<a name="line.75"></a>
+<span class="sourceLineNo">076</span>     * A thing of beauty. Good for maps that need to seem otherworldly or unusual, like heavenly planes.<a name="line.76"></a>
+<span class="sourceLineNo">077</span>     */<a name="line.77"></a>
+<span class="sourceLineNo">078</span>    ROUND_ROOMS_DIAGONAL_CORRIDORS,<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    /**<a name="line.79"></a>
+<span class="sourceLineNo">080</span>     * A more open cave, but portions of this may seem artificial. Consider alternating with REFERENCE_CAVES .<a name="line.80"></a>
+<span class="sourceLineNo">081</span>     */<a name="line.81"></a>
+<span class="sourceLineNo">082</span>    SIMPLE_CAVES,<a name="line.82"></a>
+<span class="sourceLineNo">083</span>    /**<a name="line.83"></a>
+<span class="sourceLineNo">084</span>     * Kinda... not the best map. Very predictable.<a name="line.84"></a>
+<span class="sourceLineNo">085</span>     */<a name="line.85"></a>
+<span class="sourceLineNo">086</span>    SQUARE_ROOMS_WITH_RANDOM_RECTS;<a name="line.86"></a>
+<span class="sourceLineNo">087</span><a name="line.87"></a>
+<span class="sourceLineNo">088</span>        /**<a name="line.88"></a>
+<span class="sourceLineNo">089</span>         * @return The {@link Tileset} corresponding to this type.<a name="line.89"></a>
+<span class="sourceLineNo">090</span>         */<a name="line.90"></a>
+<span class="sourceLineNo">091</span>        public Tileset getTileset() {<a name="line.91"></a>
+<span class="sourceLineNo">092</span>                switch (this) {<a name="line.92"></a>
+<span class="sourceLineNo">093</span>                case CAVES_LIMIT_CONNECTIVITY:<a name="line.93"></a>
+<span class="sourceLineNo">094</span>                        return CavesLimitConnectivity.INSTANCE;<a name="line.94"></a>
+<span class="sourceLineNo">095</span>                case CAVES_TINY_CORRIDORS:<a name="line.95"></a>
+<span class="sourceLineNo">096</span>                        return CavesTinyCorridors.INSTANCE;<a name="line.96"></a>
+<span class="sourceLineNo">097</span>                case CORNER_CAVES:<a name="line.97"></a>
+<span class="sourceLineNo">098</span>                        return CornerCaves.INSTANCE;<a name="line.98"></a>
+<span class="sourceLineNo">099</span>                case DEFAULT_DUNGEON:<a name="line.99"></a>
+<span class="sourceLineNo">100</span>                        return DefaultDungeon.INSTANCE;<a name="line.100"></a>
+<span class="sourceLineNo">101</span>                case HORIZONTAL_CORRIDORS_A:<a name="line.101"></a>
+<span class="sourceLineNo">102</span>                        return HorizontalCorridorsV1.INSTANCE;<a name="line.102"></a>
+<span class="sourceLineNo">103</span>                case HORIZONTAL_CORRIDORS_B:<a name="line.103"></a>
+<span class="sourceLineNo">104</span>                        return HorizontalCorridorsV2.INSTANCE;<a name="line.104"></a>
+<span class="sourceLineNo">105</span>                case HORIZONTAL_CORRIDORS_C:<a name="line.105"></a>
+<span class="sourceLineNo">106</span>                        return HorizontalCorridorsV3.INSTANCE;<a name="line.106"></a>
+<span class="sourceLineNo">107</span>                case LIMITED_CONNECTIVITY:<a name="line.107"></a>
+<span class="sourceLineNo">108</span>                        return LimitedConnectivity.INSTANCE;<a name="line.108"></a>
+<span class="sourceLineNo">109</span>                case LIMIT_CONNECTIVITY_FAT:<a name="line.109"></a>
+<span class="sourceLineNo">110</span>                        return LimitConnectivityFat.INSTANCE;<a name="line.110"></a>
+<span class="sourceLineNo">111</span>                case MAZE_A:<a name="line.111"></a>
+<span class="sourceLineNo">112</span>                        return Maze2Wide.INSTANCE;<a name="line.112"></a>
+<span class="sourceLineNo">113</span>                case MAZE_B:<a name="line.113"></a>
+<span class="sourceLineNo">114</span>                        return MazePlus2Wide.INSTANCE;<a name="line.114"></a>
+<span class="sourceLineNo">115</span>                case OPEN_AREAS:<a name="line.115"></a>
+<span class="sourceLineNo">116</span>                        return OpenAreas.INSTANCE;<a name="line.116"></a>
+<span class="sourceLineNo">117</span>                case REFERENCE_CAVES:<a name="line.117"></a>
+<span class="sourceLineNo">118</span>                        return OpenAreas.INSTANCE;<a name="line.118"></a>
+<span class="sourceLineNo">119</span>                case ROOMS_AND_CORRIDORS_A:<a name="line.119"></a>
+<span class="sourceLineNo">120</span>                        return RoomsAndCorridors.INSTANCE;<a name="line.120"></a>
+<span class="sourceLineNo">121</span>                case ROOMS_AND_CORRIDORS_B:<a name="line.121"></a>
+<span class="sourceLineNo">122</span>                        return RoomsAndCorridors2WideDiagonalBias.INSTANCE;<a name="line.122"></a>
+<span class="sourceLineNo">123</span>                case ROOMS_LIMIT_CONNECTIVITY:<a name="line.123"></a>
+<span class="sourceLineNo">124</span>                        return RoomsLimitConnectivity.INSTANCE;<a name="line.124"></a>
+<span class="sourceLineNo">125</span>                case ROUND_ROOMS_DIAGONAL_CORRIDORS:<a name="line.125"></a>
+<span class="sourceLineNo">126</span>                        return RoundRoomsDiagonalCorridors.INSTANCE;<a name="line.126"></a>
+<span class="sourceLineNo">127</span>                case SIMPLE_CAVES:<a name="line.127"></a>
+<span class="sourceLineNo">128</span>                        return SimpleCaves2Wide.INSTANCE;<a name="line.128"></a>
+<span class="sourceLineNo">129</span>                case SQUARE_ROOMS_WITH_RANDOM_RECTS:<a name="line.129"></a>
+<span class="sourceLineNo">130</span>                        return SquareRoomsWithRandomRects.INSTANCE;<a name="line.130"></a>
+<span class="sourceLineNo">131</span>                }<a name="line.131"></a>
+<span class="sourceLineNo">132</span>                throw new IllegalStateException("Unmatched: " + this);<a name="line.132"></a>
+<span class="sourceLineNo">133</span>        }<a name="line.133"></a>
+<span class="sourceLineNo">134</span><a name="line.134"></a>
+<span class="sourceLineNo">135</span>    /**<a name="line.135"></a>
+<span class="sourceLineNo">136</span>     * Returns MixedGenerator.CAVE_FLOOR (which is 3) or MixedGenerator.ROOM_FLOOR (which is 1) based on whether this<a name="line.136"></a>
+<span class="sourceLineNo">137</span>     * TilesetType predominantly generates caves or rooms. This is relevant for certain feature placement.<a name="line.137"></a>
+<span class="sourceLineNo">138</span>     * @return 3 if this produces mostly caves, or 1 if it produces mostly rooms<a name="line.138"></a>
+<span class="sourceLineNo">139</span>     */<a name="line.139"></a>
+<span class="sourceLineNo">140</span>        public int environment() {<a name="line.140"></a>
+<span class="sourceLineNo">141</span>        int caves = 3, rooms = 1;<a name="line.141"></a>
+<span class="sourceLineNo">142</span>        switch (this) {<a name="line.142"></a>
+<span class="sourceLineNo">143</span>            case CAVES_LIMIT_CONNECTIVITY:<a name="line.143"></a>
+<span class="sourceLineNo">144</span>                return caves;<a name="line.144"></a>
+<span class="sourceLineNo">145</span>            case CAVES_TINY_CORRIDORS:<a name="line.145"></a>
+<span class="sourceLineNo">146</span>                return caves;<a name="line.146"></a>
+<span class="sourceLineNo">147</span>            case CORNER_CAVES:<a name="line.147"></a>
+<span class="sourceLineNo">148</span>                return caves;<a name="line.148"></a>
+<span class="sourceLineNo">149</span>            case DEFAULT_DUNGEON:<a name="line.149"></a>
+<span class="sourceLineNo">150</span>                return rooms;<a name="line.150"></a>
+<span class="sourceLineNo">151</span>            case HORIZONTAL_CORRIDORS_A:<a name="line.151"></a>
+<span class="sourceLineNo">152</span>                return rooms;<a name="line.152"></a>
+<span class="sourceLineNo">153</span>            case HORIZONTAL_CORRIDORS_B:<a name="line.153"></a>
+<span class="sourceLineNo">154</span>                return rooms;<a name="line.154"></a>
+<span class="sourceLineNo">155</span>            case HORIZONTAL_CORRIDORS_C:<a name="line.155"></a>
+<span class="sourceLineNo">156</span>                return rooms;<a name="line.156"></a>
+<span class="sourceLineNo">157</span>            case LIMITED_CONNECTIVITY:<a name="line.157"></a>
+<span class="sourceLineNo">158</span>                return rooms;<a name="line.158"></a>
+<span class="sourceLineNo">159</span>            case LIMIT_CONNECTIVITY_FAT:<a name="line.159"></a>
+<span class="sourceLineNo">160</span>                return rooms;<a name="line.160"></a>
+<span class="sourceLineNo">161</span>            case MAZE_A:<a name="line.161"></a>
+<span class="sourceLineNo">162</span>                return rooms;<a name="line.162"></a>
+<span class="sourceLineNo">163</span>            case MAZE_B:<a name="line.163"></a>
+<span class="sourceLineNo">164</span>                return rooms;<a name="line.164"></a>
+<span class="sourceLineNo">165</span>            case OPEN_AREAS:<a name="line.165"></a>
+<span class="sourceLineNo">166</span>                return caves;<a name="line.166"></a>
+<span class="sourceLineNo">167</span>            case REFERENCE_CAVES:<a name="line.167"></a>
+<span class="sourceLineNo">168</span>                return caves;<a name="line.168"></a>
+<span class="sourceLineNo">169</span>            case ROOMS_AND_CORRIDORS_A:<a name="line.169"></a>
+<span class="sourceLineNo">170</span>                return rooms;<a name="line.170"></a>
+<span class="sourceLineNo">171</span>            case ROOMS_AND_CORRIDORS_B:<a name="line.171"></a>
+<span class="sourceLineNo">172</span>                return rooms;<a name="line.172"></a>
+<span class="sourceLineNo">173</span>            case ROOMS_LIMIT_CONNECTIVITY:<a name="line.173"></a>
+<span class="sourceLineNo">174</span>                return rooms;<a name="line.174"></a>
+<span class="sourceLineNo">175</span>            case ROUND_ROOMS_DIAGONAL_CORRIDORS:<a name="line.175"></a>
+<span class="sourceLineNo">176</span>                return rooms;<a name="line.176"></a>
+<span class="sourceLineNo">177</span>            case SIMPLE_CAVES:<a name="line.177"></a>
+<span class="sourceLineNo">178</span>                return caves;<a name="line.178"></a>
+<span class="sourceLineNo">179</span>            case SQUARE_ROOMS_WITH_RANDOM_RECTS:<a name="line.179"></a>
+<span class="sourceLineNo">180</span>                return rooms;<a name="line.180"></a>
+<span class="sourceLineNo">181</span>        }<a name="line.181"></a>
+<span class="sourceLineNo">182</span>        throw new IllegalStateException("Unmatched: " + this);<a name="line.182"></a>
+<span class="sourceLineNo">183</span><a name="line.183"></a>
+<span class="sourceLineNo">184</span><a name="line.184"></a>
+<span class="sourceLineNo">185</span>    }<a name="line.185"></a>
+<span class="sourceLineNo">186</span>}<a name="line.186"></a>
+<span class="sourceLineNo">187</span><a name="line.187"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>
