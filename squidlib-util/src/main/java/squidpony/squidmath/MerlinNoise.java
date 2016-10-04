@@ -62,13 +62,14 @@ public class MerlinNoise {
         return ((out & 0x100) != 0) ? ~out & 0xff : out & 0xff;
     }*/
 
-    public static int rawNoise2D(int x, int y) {
+    public static int rawNoise2D(final int x, final int y) {
         return ((x * 0x9E3779B9 ^ 0xC6BC2796) * (y * 0x92B5CC83 + 0xD9B4E019) - (x ^ ~y) * 0x632BE59B * (~x + y) * 0x7F4A7C15) >>> 8 & 0xff;
     }
 
-    public static int rawNoise3D(int x, int y, int z) {
-        return ((z * 0xD0E89D2D + (x * 0x9E3779B9 ^ 0xC6BC2796) * (y * 0x92B5CC83 + 0xD9B4E019)) +
-                (x ^ ~y + z) * 0x632BE59B * (z ^ ~x + y) * 0x7F4A7C15 * (~z + x ^ y) * 0x311E289F) >>> 8 & 0xff;
+    public static int rawNoise3D(final int x, final int y, final int z) {
+        return (((z * 0xD0E89D2D + 0x311E289F) ^ (x * 0x9E3779B9 ^ 0xC6BC2796) ^ (y * 0x92B5CC83 + 0xD9B4E019)) +
+                //(z * 0xD0E89D2D ^ x * 0xC6BC2796 ^ y * 0x92B5CC83 ^
+                (x ^ ~y + z) * 0x632BE59B + (z ^ ~x + y) * 0x7F4A7C15 + (y ^ ~z + x) * 0x9E3779B9) >>> 8 & 0xff; //0x311E289F
     }
 
     /**
@@ -116,6 +117,12 @@ public class MerlinNoise {
                 (rawNoise3D(x, y, z - 1) & 55) + (rawNoise3D(x, y, z + 1) & 55) +
 
                 (rawNoise3D(x, y, z) & 181) >>> 1;
+    }
+    public static int noiseBalanced3D(int x, int y, int z) {
+        return  rawNoise3D(x - 1, y, z) + rawNoise3D(x + 1, y, z) +
+                rawNoise3D(x, y - 1, z) + rawNoise3D(x, y + 1, z) +
+                rawNoise3D(x, y, z - 1) + rawNoise3D(x, y, z + 1) +
+                (rawNoise3D(x, y, z) << 1) >>> 3;
     }
                         /*(
                                 cellA * (0.5 + absA - absB) +// * (1 - aCoreBias) +
@@ -197,17 +204,21 @@ public class MerlinNoise {
     public static int noise3D(int x, int y, int z, int zoom) {
         if (zoom < 1)
             return 0;
-        int v = 0, a = x, b = y, c = z, t;
-        for (int s = zoom; s > 0; s--) {
-            v += noise3D((a += 379) / s, (b += 379) / s, (c += 379) / s);
-            v += noise3D((a+(v&1)) / s, (b+(v>>1&1)) / s, (c+(v>>2&1)) / s) +
-                    noise3D((a-(v>>3&1)) / s, (b-(v>>4&1)) / s, (c-(v>>5&1)) / s);
+        int v = 0, a = x, b = y, c = z, t = 0;
+        for (int s = zoom, u = zoom; s > 0; s--, u++) {
+            v += (noiseBalanced3D((a += 379) / s, (b += 379) / s, (c += 379) / s) + noiseBalanced3D((a+1) / s, (b+1) / s, (c+1) / s)) * u;
+            //
+
+            //v += noise3D((a+(v&1)) / s, (b+(v>>1&1)) / s, (c+(v>>2&1)) / s) +
+            //        noise3D((a-(v>>3&1)) / s, (b-(v>>4&1)) / s, (c-(v>>5&1)) / s);
             //v += t + noise3D((a + (t & 3)) / s, (b + (t >> 2 & 3)) / s, (c + (t >> 4 & 3)) / s);
                     //+ noise3D((a - (t >> 3 & 1)) / s, (b - (t >> 4 & 1)) / s, (c - (t >> 5 & 1)) / s);
                     /*
                     + noise3D((a) / s, (b+1) / s, (c) / s)
                     + noise3D((a+1) / s, (b) / s, (c) / s)
                     + noise3D((a) / s, (b) / s, (c+1) / s);*/
+            //v += noise3D((a+(v&3)) / s, (b+(v>>2&3)) / s, (c+(v>>4&3)) / s);
+            t += u;
         }
         //return v / zoom;
         /*
@@ -215,9 +226,10 @@ public class MerlinNoise {
         return (int)(adj * adj * 255.5);
         */
 
-        double adj = Math.sin((v / (zoom * 1530.0)) * Math.PI);
-        return (int)(adj * adj * 255.5);
-        //return (int) (Math.pow(adj, 2.0 - 2.0 * adj) * 255.5);
+        double adj = Math.sin((v / (1020.0 * t)) * Math.PI);
+        //return (int)(adj * adj * 255.5);
+        adj *= adj;
+        return (int) (Math.pow(adj, 2.0 - 2.0 * adj) * 255.5);
     }
 
     /*
