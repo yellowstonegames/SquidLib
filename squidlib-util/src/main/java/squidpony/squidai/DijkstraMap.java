@@ -64,6 +64,13 @@ public class DijkstraMap implements Serializable {
             }
             return 1.0;
         }
+
+        public int directionCount() {
+            switch (this) {
+                case MANHATTAN: return 4;
+                default: return 8;
+            }
+        }
     }
 
     /**
@@ -1037,9 +1044,9 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(dirs.length);
+            int choice = rng.nextInt(measurement.directionCount() + 1);
 
-            for (int d = 0; d < dirs.length; d++) {
+            for (int d = 0; d < measurement.directionCount() + 1; d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
                 if (gradientMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
@@ -1330,9 +1337,9 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(dirs.length);
+            int choice = rng.nextInt(measurement.directionCount() + 1);
 
-            for (int d = 0; d < dirs.length; d++) {
+            for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
                 if (gradientMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
@@ -1489,9 +1496,9 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(dirs.length);
+            int choice = rng.nextInt(measurement.directionCount() + 1);
 
-            for (int d = 0; d < dirs.length; d++) {
+            for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
                 if (gradientMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
@@ -1691,9 +1698,9 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(dirs.length);
+            int choice = rng.nextInt(measurement.directionCount() + 1);
 
-            for (int d = 0; d < dirs.length; d++) {
+            for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
                 if (gradientMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
@@ -1852,9 +1859,9 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(dirs.length);
+            int choice = rng.nextInt(measurement.directionCount() + 1);
 
-            for (int d = 0; d < dirs.length; d++) {
+            for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
                 if (gradientMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
@@ -2018,9 +2025,9 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(dirs.length);
+            int choice = rng.nextInt(measurement.directionCount() + 1);
 
-            for (int d = 0; d < dirs.length; d++) {
+            for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
                 if (gradientMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
@@ -2245,9 +2252,9 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(dirs.length);
+            int choice = rng.nextInt(measurement.directionCount() + 1);
 
-            for (int d = 0; d < dirs.length; d++) {
+            for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
                 if (gradientMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
@@ -2473,9 +2480,9 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(dirs.length);
+            int choice = rng.nextInt(measurement.directionCount() + 1);
 
-            for (int d = 0; d < dirs.length; d++) {
+            for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
                 if (gradientMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
@@ -2676,9 +2683,9 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(dirs.length);
+            int choice = rng.nextInt(measurement.directionCount() + 1);
 
-            for (int d = 0; d < dirs.length; d++) {
+            for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
                 if (gradientMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
@@ -2803,9 +2810,9 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(dirs.length);
+            int choice = rng.nextInt(measurement.directionCount() + 1);
 
-            for (int d = 0; d < dirs.length; d++) {
+            for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
                 if (gradientMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
@@ -2897,9 +2904,9 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(dirs.length);
+            int choice = rng.nextInt(measurement.directionCount() + 1);
 
-            for (int d = 0; d < dirs.length; d++) {
+            for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
                 if (gradientMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
@@ -3033,9 +3040,9 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(dirs.length);
+            int choice = rng.nextInt(measurement.directionCount() + 1);
 
-            for (int d = 0; d < dirs.length; d++) {
+            for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
                 if (gradientMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
@@ -3172,9 +3179,9 @@ public class DijkstraMap implements Serializable {
 
             double best = gradientMap[currentPos.x][currentPos.y];
             final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(dirs.length);
+            int choice = rng.nextInt(measurement.directionCount() + 1);
 
-            for (int d = 0; d < dirs.length; d++) {
+            for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
                 if (gradientMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
@@ -3290,9 +3297,9 @@ public class DijkstraMap implements Serializable {
 
             double best = gradientMap[currentPos.x][currentPos.y];
             final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(dirs.length);
+            int choice = rng.nextInt(measurement.directionCount() + 1);
 
-            for (int d = 0; d < dirs.length; d++) {
+            for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
                 if (gradientMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
@@ -3353,9 +3360,9 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             final Direction[] dirs = appendDirToShuffle(rng2);
-            int choice = rng2.nextInt(dirs.length);
+            int choice = rng2.nextInt(measurement.directionCount() + 1);
 
-            for (int d = 0; d < dirs.length; d++) {
+            for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
                 if (gradientMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
@@ -3469,8 +3476,7 @@ public class DijkstraMap implements Serializable {
     private Direction[] appendDirToShuffle(RNG rng) {
         //appendDir(shuffleDirs(rng),  Direction.NONE)
         shuffleDirs(rng);
-        reuse[measurement == Measurement.MANHATTAN
-                ? 4 : 8] = Direction.NONE;
+        reuse[measurement.directionCount()] = Direction.NONE;
         return reuse;
 	}
 }
