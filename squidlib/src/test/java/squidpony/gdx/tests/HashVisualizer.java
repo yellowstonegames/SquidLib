@@ -840,10 +840,10 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 4:
-                        Gdx.graphics.setTitle("Merlin Noise 3D, x6 smooth zoom");
+                        Gdx.graphics.setTitle("Merlin Noise 3D, x4 smooth zoom");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = MerlinNoise.noise3D(x, y, ctr, 3);
+                                iBright = MerlinNoise.noise3D(x, y, ctr, 4);
                                 display.put(x, y, colorFactory.get(iBright, iBright, iBright));
                             }
                         }
@@ -869,14 +869,14 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 7:
-                        Gdx.graphics.setTitle("Perlin 3D Noise, x8 zoom");
+                        Gdx.graphics.setTitle("Perlin 3D Noise, x4 zoom");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)
-                                        (PerlinNoise.noise(x / 8.0, y / 8.0, ctr) * 8 +
-                                                PerlinNoise.noise(x / 4.0, y / 4.0, ctr) * 4 +
-                                                PerlinNoise.noise(x / 2.0, y / 2.0, ctr) * 2 +
-                                                PerlinNoise.noise(x, y, ctr)
+                                        (PerlinNoise.noise(x / 8.0, y / 8.0, ctr * 0.125) * 8 +
+                                                PerlinNoise.noise(x / 4.0, y / 4.0, ctr * 0.125) * 4 +
+                                                PerlinNoise.noise(x / 2.0, y / 2.0, ctr * 0.125) * 2 +
+                                                PerlinNoise.noise(x, y, ctr * 0.125)
                                                 + 15.0f) / 30f;
                                 display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
                             }
@@ -1509,6 +1509,7 @@ public class HashVisualizer extends ApplicationAdapter {
         config.title = "SquidLib Test: Hash Visualization";
         config.width = 512;
         config.height = 512;
+        config.foregroundFPS = 15;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);
         config.addIcon("Tentacle-128.png", Files.FileType.Internal);

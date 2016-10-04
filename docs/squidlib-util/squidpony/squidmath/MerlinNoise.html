@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -164,6 +164,12 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
        int&nbsp;zoom)</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MerlinNoise.html#noiseBalanced3D-int-int-int-">noiseBalanced3D</a></span>(int&nbsp;x,
+               int&nbsp;y,
+               int&nbsp;z)</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static int[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MerlinNoise.html#preCalcNoise2D-int-int-long-">preCalcNoise2D</a></span>(int&nbsp;width,
               int&nbsp;height,
@@ -171,12 +177,12 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <div class="block">Generates higher-quality continuous-style noise than the other methods, but requires pre-calculating a grid.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MerlinNoise.html#rawNoise2D-int-int-">rawNoise2D</a></span>(int&nbsp;x,
           int&nbsp;y)</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MerlinNoise.html#rawNoise3D-int-int-int-">rawNoise3D</a></span>(int&nbsp;x,
           int&nbsp;y,
@@ -231,7 +237,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>noise2D</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MerlinNoise.html#line.81">noise2D</a>(int&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MerlinNoise.html#line.82">noise2D</a>(int&nbsp;x,
                           int&nbsp;y)</pre>
 <div class="block">2D merlin noise.</div>
 <dl>
@@ -249,7 +255,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>noise3D</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MerlinNoise.html#line.97">noise3D</a>(int&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MerlinNoise.html#line.98">noise3D</a>(int&nbsp;x,
                           int&nbsp;y,
                           int&nbsp;z)</pre>
 <div class="block">3D merlin noise.</div>
@@ -263,13 +269,24 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
+<a name="noiseBalanced3D-int-int-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>noiseBalanced3D</h4>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MerlinNoise.html#line.121">noiseBalanced3D</a>(int&nbsp;x,
+                                  int&nbsp;y,
+                                  int&nbsp;z)</pre>
+</li>
+</ul>
 <a name="noise2D-int-int-int-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>noise2D</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MerlinNoise.html#line.180">noise2D</a>(int&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MerlinNoise.html#line.187">noise2D</a>(int&nbsp;x,
                           int&nbsp;y,
                           int&nbsp;zoom)</pre>
 <div class="block">2D merlin noise with a zoom factor.</div>
@@ -289,7 +306,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>noise3D</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MerlinNoise.html#line.197">noise3D</a>(int&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MerlinNoise.html#line.204">noise3D</a>(int&nbsp;x,
                           int&nbsp;y,
                           int&nbsp;z,
                           int&nbsp;zoom)</pre>
@@ -301,7 +318,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>preCalcNoise2D</h4>
-<pre>public static&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/MerlinNoise.html#line.259">preCalcNoise2D</a>(int&nbsp;width,
+<pre>public static&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/MerlinNoise.html#line.271">preCalcNoise2D</a>(int&nbsp;width,
                                      int&nbsp;height,
                                      long&nbsp;seed)</pre>
 <div class="block">Generates higher-quality continuous-style noise than the other methods, but requires pre-calculating a grid.

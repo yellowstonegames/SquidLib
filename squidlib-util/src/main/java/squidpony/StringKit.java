@@ -50,9 +50,61 @@ public class StringKit {
         return mask8.substring(4, 8 - h.length()) + h;
     }
 
+    public static String hex(char number) {
+        String h = Integer.toHexString(number & 0xffff);
+        return mask8.substring(4, 8 - h.length()) + h;
+    }
+
     public static String hex(byte number) {
         String h = Integer.toHexString(number & 0xff);
         return mask8.substring(6, 8 - h.length()) + h;
+    }
+
+    public static String hex(long[] numbers) {
+        int len;
+        if(numbers == null || (len = numbers.length) <= 0) return "";
+        StringBuilder sb = new StringBuilder(numbers.length << 4);
+        for (int i = 0; i < len; i++) {
+            sb.append(hex(numbers[i]));
+        }
+        return sb.toString();
+    }
+
+    public static String hex(int[] numbers) {
+        int len;
+        if(numbers == null || (len = numbers.length) <= 0) return "";
+        StringBuilder sb = new StringBuilder(numbers.length << 3);
+        for (int i = 0; i < len; i++) {
+            sb.append(hex(numbers[i]));
+        }
+        return sb.toString();
+    }
+    public static String hex(short[] numbers) {
+        int len;
+        if(numbers == null || (len = numbers.length) <= 0) return "";
+        StringBuilder sb = new StringBuilder(numbers.length << 2);
+        for (int i = 0; i < len; i++) {
+            sb.append(hex(numbers[i]));
+        }
+        return sb.toString();
+    }
+    public static String hex(char[] numbers) {
+        int len;
+        if(numbers == null || (len = numbers.length) <= 0) return "";
+        StringBuilder sb = new StringBuilder(numbers.length << 2);
+        for (int i = 0; i < len; i++) {
+            sb.append(hex(numbers[i]));
+        }
+        return sb.toString();
+    }
+    public static String hex(byte[] numbers) {
+        int len;
+        if(numbers == null || (len = numbers.length) <= 0) return "";
+        StringBuilder sb = new StringBuilder(numbers.length << 1);
+        for (int i = 0; i < len; i++) {
+            sb.append(hex(numbers[i]));
+        }
+        return sb.toString();
     }
     public static String bin(long number) {
         String h = Long.toBinaryString(number);
@@ -65,6 +117,11 @@ public class StringKit {
     }
 
     public static String bin(short number) {
+        String h = Integer.toHexString(number & 0xffff);
+        return mask16.substring(0, 16 - h.length()) + h;
+    }
+
+    public static String bin(char number) {
         String h = Integer.toHexString(number & 0xffff);
         return mask16.substring(0, 16 - h.length()) + h;
     }
