@@ -21,7 +21,6 @@ import squidpony.squidmath.StatefulRNG;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Set;
 
 /**
  * Displays text and images in a grid pattern. Supports basic animations.
@@ -1446,7 +1445,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         return animationCount != 0;
     }
 
-    public Set<AnimatedEntity> getAnimatedEntities() {
+    public OrderedSet<AnimatedEntity> getAnimatedEntities() {
         return animatedEntities;
     }
 

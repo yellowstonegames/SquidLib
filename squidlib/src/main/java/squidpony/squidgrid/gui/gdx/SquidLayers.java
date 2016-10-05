@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import squidpony.IColorCenter;
 import squidpony.squidgrid.Direction;
+import squidpony.squidmath.OrderedSet;
 
 import java.util.*;
 
@@ -1375,11 +1376,11 @@ public class SquidLayers extends Group {
         return animateActor(x, y, tr, Color.WHITE, doubleWidth, stretch);
     }
 
-    public Set<AnimatedEntity> getAnimatedEntities(int layer) {
+    public OrderedSet<AnimatedEntity> getAnimatedEntities(int layer) {
         return getLayer(layer).getAnimatedEntities();
     }
 
-    public Set<AnimatedEntity> getAnimatedEntities() {
+    public OrderedSet<AnimatedEntity> getAnimatedEntities() {
         return foregroundPanel.getAnimatedEntities();
     }
 
