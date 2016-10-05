@@ -755,8 +755,9 @@ public class DijkstraMap implements Serializable {
         int enc;
 
         for (IntDoubleOrderedMap.MapEntry entry : goals.mapEntrySet()) {
-            if (closed.containsKey(entry.getIntKey()))
-                closed.remove(entry.getIntKey());
+            //if (closed.containsKey(entry.getIntKey()))
+            //    continue;
+            //    closed.remove(entry.getIntKey());
             dec = Coord.decode(entry.getIntKey());
             gradientMap[dec.x][dec.y] = entry.getDoubleValue();
         }
@@ -857,8 +858,8 @@ public class DijkstraMap implements Serializable {
         int enc;
 
         for (IntDoubleOrderedMap.MapEntry entry : goals.mapEntrySet()) {
-            if (closed.containsKey(entry.getIntKey()))
-                closed.remove(entry.getIntKey());
+            //if (closed.containsKey(entry.getIntKey()))
+            //    closed.remove(entry.getIntKey());
             dec = Coord.decode(entry.getIntKey());
             gradientMap[dec.x][dec.y] = entry.getDoubleValue();
         }
@@ -1179,9 +1180,7 @@ public class DijkstraMap implements Serializable {
             blocking.put(pt.encode(), WALL);
             for (int x = 0; x < size; x++) {
                 for (int y = 0; y < size; y++) {
-                    if (x + y == 0)
-                        continue;
-                    if (gradientMap[pt.x - x][pt.y - y] <= FLOOR)
+                    if (x + y != 0 && gradientMap[pt.x - x][pt.y - y] <= FLOOR)
                         blocking.put(Coord.pureEncode(pt.x - x, pt.y - y), DARK);
                 }
             }
@@ -1190,8 +1189,8 @@ public class DijkstraMap implements Serializable {
         Coord dec, cen, adj;
         int enc;
         for (IntDoubleOrderedMap.MapEntry entry : goals.mapEntrySet()) {
-            if (closed.containsKey(entry.getIntKey()))
-                closed.remove(entry.getIntKey());
+            //if (closed.containsKey(entry.getIntKey()))
+            //    closed.remove(entry.getIntKey());
             dec = Coord.decode(entry.getIntKey());
             gradientMap[dec.x][dec.y] = entry.getDoubleValue();
         }
@@ -1341,7 +1340,7 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
-                if (gradientMap[pt.x][pt.y] < best) {
+                if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
                         choice = d;
@@ -1500,7 +1499,7 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
-                if (gradientMap[pt.x][pt.y] < best) {
+                if (gradientMap[pt.x][pt.y] < best  && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
                         choice = d;
@@ -1673,7 +1672,8 @@ public class DijkstraMap implements Serializable {
             goals.clear();
             gradientMap[start.x][start.y] = moveLength;
             Coord dec;
-            for (int g : g_arr) {
+            for (int g, ig = 0; ig < g_arr.length; ig++) {
+                g = g_arr[ig];
                 dec = Coord.decode(g);
                 if (gradientMap[dec.x][dec.y] <= moveLength && worthMap[dec.x][dec.y] > 0) {
                     goals.put(g, 0.0 - worthMap[dec.x][dec.y]);
@@ -1702,7 +1702,7 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
-                if (gradientMap[pt.x][pt.y] < best) {
+                if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
                         choice = d;
@@ -1863,7 +1863,7 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
-                if (gradientMap[pt.x][pt.y] < best) {
+                if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
                         choice = d;
@@ -2029,7 +2029,7 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
-                if (gradientMap[pt.x][pt.y] < best) {
+                if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
                         choice = d;
@@ -2256,7 +2256,7 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
-                if (gradientMap[pt.x][pt.y] < best) {
+                if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
                         choice = d;
@@ -2484,7 +2484,7 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
-                if (gradientMap[pt.x][pt.y] < best) {
+                if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
                         choice = d;
@@ -2687,7 +2687,7 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
-                if (gradientMap[pt.x][pt.y] < best) {
+                if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
                         choice = d;
@@ -2814,7 +2814,7 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
-                if (gradientMap[pt.x][pt.y] < best) {
+                if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
                         choice = d;
@@ -2908,7 +2908,7 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
-                if (gradientMap[pt.x][pt.y] < best) {
+                if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
                         choice = d;
@@ -3044,7 +3044,7 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
-                if (gradientMap[pt.x][pt.y] < best) {
+                if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
                         choice = d;
@@ -3183,7 +3183,7 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
-                if (gradientMap[pt.x][pt.y] < best) {
+                if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
                         choice = d;
@@ -3301,7 +3301,7 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
-                if (gradientMap[pt.x][pt.y] < best) {
+                if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
                         choice = d;
