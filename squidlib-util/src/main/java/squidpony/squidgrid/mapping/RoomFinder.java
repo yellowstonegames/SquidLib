@@ -85,8 +85,10 @@ public class RoomFinder {
         allFloors = new GreasedRegion(basic, '.');
         allRooms = allFloors.copy().retract8way().flood(allFloors, 2);
         allCorridors = allFloors.copy().andNot(allRooms);
-        allRooms.writeInts(environment, MixedGenerator.ROOM_FLOOR);
-        allCorridors.writeInts(environment, MixedGenerator.CORRIDOR_FLOOR);
+
+        environment = allCorridors.writeInts(
+                allRooms.writeInts(environment, MixedGenerator.ROOM_FLOOR),
+                MixedGenerator.CORRIDOR_FLOOR);
 
         allCaves = new GreasedRegion(width, height);
         GreasedRegion d = allCorridors.copy().fringe().and(allRooms);
@@ -137,8 +139,12 @@ public class RoomFinder {
             allFloors = new GreasedRegion(basic, '.');
             allRooms = allFloors.copy().retract8way().flood(allFloors, 2);
             allCorridors = allFloors.copy().andNot(allRooms);
-            allRooms.writeInts(environment, MixedGenerator.ROOM_FLOOR);
-            allCorridors.writeInts(environment, MixedGenerator.CORRIDOR_FLOOR);
+            allCaves = new GreasedRegion(width, height);
+
+            environment = allCorridors.writeInts(
+                    allRooms.writeInts(environment, MixedGenerator.ROOM_FLOOR),
+                    MixedGenerator.CORRIDOR_FLOOR);
+
 
             GreasedRegion d = allCorridors.copy().fringe().and(allRooms);
             connections = doorways = d.asCoords();
@@ -167,11 +173,14 @@ public class RoomFinder {
         }
         else
         {
-            GreasedRegion floors = new GreasedRegion(basic, '.');
-            caves.put(floors, new ArrayList<GreasedRegion>());
-            connections = mouths = floors.copy().andNot(floors.copy().retract8way()).retract().asCoords();
+            allCaves = new GreasedRegion(basic, '.');
+            allFloors = new GreasedRegion(width, height);
+            allRooms = new GreasedRegion(width, height);
+            allCorridors = new GreasedRegion(width, height);
+            caves.put(allCaves, new ArrayList<GreasedRegion>());
+            connections = mouths = allCaves.copy().andNot(allCaves.copy().retract8way()).retract().asCoords();
             doorways = new Coord[0];
-            floors.writeInts(environment, MixedGenerator.CAVE_FLOOR);
+            environment = allCaves.writeInts(environment, MixedGenerator.CAVE_FLOOR);
 
         }
     }
