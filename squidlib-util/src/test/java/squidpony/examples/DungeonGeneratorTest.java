@@ -387,7 +387,7 @@ public class DungeonGeneratorTest {
 
         System.out.println("------------------------------------------------------------");
         */
-/*
+        /*
         rng.setState(2252637788195L);
         SerpentDeepMapGenerator deepSerpent = new SerpentDeepMapGenerator(width, height, depth, rng, 0.15);
         deepSerpent.putWalledBoxRoomCarvers(2);
@@ -465,7 +465,6 @@ public class DungeonGeneratorTest {
         sdg.setDungeon(DungeonUtility.hashesToLines(sdungeon, true));
         System.out.println(sdg);
         */
-
     }
     // Generates a preview webpage when given the right images.
     // See the following for generated images with different parameters (scroll down and right to see the map)
