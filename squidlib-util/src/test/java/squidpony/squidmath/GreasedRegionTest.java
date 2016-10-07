@@ -1,9 +1,12 @@
 package squidpony.squidmath;
 
 import org.junit.Test;
+import regexodus.Category;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertTrue;
 import static squidpony.squidmath.CoordPacker.*;
@@ -23,11 +26,31 @@ public class GreasedRegionTest {
     public static DungeonGenerator dungeonGen = new DungeonGenerator(64, 64, srng);
     public static char[][] dungeon = dungeonGen.generate();
     public static GreasedRegion dataDungeon = new GreasedRegion(dungeon, '.');
+    public static final char[] letters = Category.L.contents();
+    public static final int maxLetter = letters.length;
     static {
         //printRegion(dataCross);
         //printRegion(dataCross2);
     }
     public static final boolean PRINTING = false;
+    public static void print2D(int[][] data)
+    {
+        if(!PRINTING)
+            return;
+        if(data == null || data.length <= 0 || data[0] == null || data[0].length <= 0)
+            System.out.println("null");
+        else
+        {
+            int d = 0;
+            for (int y = 0; y < data[0].length; y++) {
+                for (int x = 0; x < data.length; x++) {
+                    d = (data[x][y] & 0xFFFF) % maxLetter;
+                    System.out.print(letters[d]);
+                }
+                System.out.println();
+            }
+        }
+    }
     @Test
     public void testBasics() {
         //printPacked(dataCross, 64, 64);
@@ -181,5 +204,19 @@ public class GreasedRegionTest {
         GreasedRegion shrunk2 = new GreasedRegion(dataCross2).retract8way();
         printRegion(shrunk2);
         assertTrue(new GreasedRegion(shrunk2).or(surf2).equals(dataCross2));
+        ArrayList<GreasedRegion> toLimit = new GreasedRegion(dataCross).retractSeriesToLimit8way();
+        for(GreasedRegion gr : toLimit)
+            printRegion(gr);
+    }
+    @Test
+    public void testFitting()
+    {
+        GreasedRegion wrecked = new GreasedRegion(dataCross);
+        int[][] numbers = GreasedRegion.bitSum(new GreasedRegion(64, 64).not().retractSeries8way(8));
+        print2D(numbers);
+        System.out.println();
+        printRegion(wrecked);
+        System.out.println();
+        print2D(wrecked.fit(numbers, 0));
     }
 }

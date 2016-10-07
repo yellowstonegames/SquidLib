@@ -1,5 +1,6 @@
 package squidpony.squidmath;
 
+import squidpony.GwtCompatibility;
 import squidpony.annotation.Beta;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.zone.Zone;
@@ -780,6 +781,16 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         return regions;
     }
 
+    public ArrayList<GreasedRegion> expandSeriesToLimit()
+    {
+        ArrayList<GreasedRegion> regions = new ArrayList<>();
+        GreasedRegion temp = new GreasedRegion(this);
+        while (temp.size() != temp.expand().size()) {
+            regions.add(new GreasedRegion(temp));
+        }
+        return regions;
+    }
+
     public GreasedRegion fringe()
     {
         GreasedRegion cpy = new GreasedRegion(this);
@@ -808,7 +819,15 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         regions[amount - 1].fringe();
         return regions;
     }
-
+    public ArrayList<GreasedRegion> fringeSeriesToLimit()
+    {
+        ArrayList<GreasedRegion> regions = expandSeriesToLimit();
+        for (int i = 0; i < regions.size() - 1; i++) {
+            regions.get(i).xor(regions.get(i+1));
+        }
+        regions.get(regions.size()-1).fringe();
+        return regions;
+    }
     public GreasedRegion retract()
     {
         if(width <= 2 || ySections <= 0)
@@ -876,6 +895,16 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         return regions;
     }
 
+    public ArrayList<GreasedRegion> retractSeriesToLimit()
+    {
+        ArrayList<GreasedRegion> regions = new ArrayList<>();
+        GreasedRegion temp = new GreasedRegion(this);
+        while (!temp.retract().isEmpty()) {
+            regions.add(new GreasedRegion(temp));
+        }
+        return regions;
+    }
+
     public GreasedRegion surface()
     {
         GreasedRegion cpy = new GreasedRegion(this).retract();
@@ -903,6 +932,15 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         return regions;
     }
 
+    public ArrayList<GreasedRegion> surfaceSeriesToLimit()
+    {
+        ArrayList<GreasedRegion> regions = retractSeriesToLimit();
+        for (int i = 0; i < regions.size() - 1; i++) {
+            regions.get(i).xor(regions.get(i+1));
+        }
+        //regions.get(regions.size()-1).surface();
+        return regions;
+    }
     public GreasedRegion expand8way()
     {
         if(width < 2 || ySections <= 0)
@@ -966,6 +1004,15 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         }
         return regions;
     }
+    public ArrayList<GreasedRegion> expandSeriesToLimit8way()
+    {
+        ArrayList<GreasedRegion> regions = new ArrayList<>();
+        GreasedRegion temp = new GreasedRegion(this);
+        while (temp.size() != temp.expand8way().size()) {
+            regions.add(new GreasedRegion(temp));
+        }
+        return regions;
+    }
 
     public GreasedRegion fringe8way()
     {
@@ -993,6 +1040,15 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
             regions[i].xor(regions[i + 1]);
         }
         regions[amount - 1].fringe8way();
+        return regions;
+    }
+    public ArrayList<GreasedRegion> fringeSeriesToLimit8way()
+    {
+        ArrayList<GreasedRegion> regions = expandSeriesToLimit8way();
+        for (int i = 0; i < regions.size() - 1; i++) {
+            regions.get(i).xor(regions.get(i+1));
+        }
+        regions.get(regions.size()-1).fringe8way();
         return regions;
     }
 
@@ -1083,6 +1139,16 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         return regions;
     }
 
+    public ArrayList<GreasedRegion> retractSeriesToLimit8way()
+    {
+        ArrayList<GreasedRegion> regions = new ArrayList<>();
+        GreasedRegion temp = new GreasedRegion(this);
+        while (!temp.retract8way().isEmpty()) {
+            regions.add(new GreasedRegion(temp));
+        }
+        return regions;
+    }
+
     public GreasedRegion surface8way()
     {
         GreasedRegion cpy = new GreasedRegion(this).retract8way();
@@ -1110,7 +1176,15 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         regions[amount - 1].surface8way();
         return regions;
     }
-
+    public ArrayList<GreasedRegion> surfaceSeriesToLimit8way()
+    {
+        ArrayList<GreasedRegion> regions = retractSeriesToLimit8way();
+        for (int i = 0; i < regions.size() - 1; i++) {
+            regions.get(i).xor(regions.get(i+1));
+        }
+        //regions.get(regions.size()-1).surface();
+        return regions;
+    }
     public GreasedRegion flood(GreasedRegion bounds)
     {
         if(width < 2 || ySections <= 0 || bounds == null || bounds.width < 2 || bounds.ySections <= 0)
@@ -1200,6 +1274,21 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
             }
         }
         return regions;
+    }
+
+    public ArrayList<GreasedRegion> floodSeriesToLimit(GreasedRegion bounds) {
+        int ct = size(), ct2;
+        ArrayList<GreasedRegion> regions = new ArrayList<>();
+        GreasedRegion temp = new GreasedRegion(this);
+        while (true) {
+            temp.flood(bounds);
+            if (ct == (ct2 = temp.size()))
+                return regions;
+            else {
+                ct = ct2;
+                regions.add(new GreasedRegion(temp));
+            }
+        }
     }
 
     public GreasedRegion flood8way(GreasedRegion bounds)
@@ -1300,7 +1389,20 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         }
         return regions;
     }
-
+    public ArrayList<GreasedRegion> floodSeriesToLimit8way(GreasedRegion bounds) {
+        int ct = size(), ct2;
+        ArrayList<GreasedRegion> regions = new ArrayList<>();
+        GreasedRegion temp = new GreasedRegion(this);
+        while (true) {
+            temp.flood8way(bounds);
+            if (ct == (ct2 = temp.size()))
+                return regions;
+            else {
+                ct = ct2;
+                regions.add(new GreasedRegion(temp));
+            }
+        }
+    }
     public GreasedRegion spill(GreasedRegion bounds, int volume, RNG rng)
     {
         if(width < 2 || ySections <= 0 || bounds == null || bounds.width < 2 || bounds.ySections <= 0)
@@ -1452,9 +1554,70 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         }
 
         return new Coord(-1, -1);
-
     }
 
+    public int[][] fit(int[][] basis, int defaultValue)
+    {
+        int[][] next = GwtCompatibility.fill2D(defaultValue, width, height);
+        if(basis == null || basis.length <= 0 || basis[0] == null || basis[0].length <= 0)
+            return next;
+        int tmp, xTotal = 0, yTotal = 0, xTarget, yTarget, bestX = -1, oX = basis.length, oY = basis[0].length, ao;
+        long t;
+        int[] xCounts = new int[width];
+        for (int x = 0; x < width; x++) {
+            for (int s = 0; s < ySections; s++) {
+                t = data[x * ySections + s];
+                if (t != 0) {
+                    tmp = Long.bitCount(t);
+                    xCounts[x] += tmp;
+                    xTotal += tmp;
+                }
+            }
+        }
+        if(xTotal <= 0)
+            return next;
+        for (int aX = 0; aX < oX; aX++) {
+            CELL_WISE:
+            for (int aY = 0; aY < oY; aY++) {
+                if((ao = basis[aX][aY]) == defaultValue)
+                    continue;
+                xTarget = xTotal * aX / oX;
+                for (int x = 0; x < width; x++) {
+                    if((xTarget -= xCounts[x]) < 0)
+                    {
+                        bestX = x;
+                        yTotal = xCounts[x];
+                        yTarget = yTotal * aY / oY;
+                        for (int s = 0, y = 0; s < ySections; s++) {
+                            t = data[bestX * ySections + s];
+                            for (long cy = 1; cy != 0 && y < height; y++, cy <<= 1) {
+                                if((t & cy) != 0 && --yTarget < 0)
+                                {
+                                    next[bestX][y] = ao;
+                                    continue CELL_WISE;
+                                }
+                            }
+                        }
+                        continue CELL_WISE;
+                    }
+                }
+
+            }
+        }
+
+        return next;
+    }
+
+    /*
+    public int[][] edgeFit(int[][] basis, int defaultValue)
+    {
+        int[][] next = GwtCompatibility.fill2D(defaultValue, width, height);
+        if(basis == null || basis.length <= 0 || basis[0] == null || basis[0].length <= 0)
+            return next;
+
+        return next;
+    }
+    */
     public Coord[] separatedPortion(double fraction)
     {
         if(fraction < 0)
