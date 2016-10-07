@@ -341,6 +341,7 @@ public class GwtCompatibility {
         }
         return next;
     }
+
     /**
      * Rearranges an ArrayList to use the given ordering, returning a copy; random orderings can be produced with
      * {@link squidpony.squidmath.RNG#randomOrdering(int)} or
