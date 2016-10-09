@@ -204,7 +204,11 @@ public class GreasedRegionTest {
         GreasedRegion shrunk2 = new GreasedRegion(dataCross2).retract8way();
         printRegion(shrunk2);
         assertTrue(new GreasedRegion(shrunk2).or(surf2).equals(dataCross2));
-        ArrayList<GreasedRegion> toLimit = new GreasedRegion(dataCross).retractSeriesToLimit8way();
+        System.out.println();
+        GreasedRegion littleBox = new GreasedRegion(32, 32).insertRectangle(12, 12, 8, 8);
+        printRegion(littleBox);
+        System.out.println();
+        ArrayList<GreasedRegion> toLimit = littleBox.fringeSeriesToLimit8way();
         for(GreasedRegion gr : toLimit)
             printRegion(gr);
     }
