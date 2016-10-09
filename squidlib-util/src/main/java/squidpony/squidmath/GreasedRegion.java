@@ -822,10 +822,10 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
     public ArrayList<GreasedRegion> fringeSeriesToLimit()
     {
         ArrayList<GreasedRegion> regions = expandSeriesToLimit();
-        for (int i = 0; i < regions.size() - 1; i++) {
-            regions.get(i).xor(regions.get(i+1));
+        for (int i = regions.size() - 1; i > 0; i--) {
+            regions.get(i).xor(regions.get(i-1));
         }
-        regions.get(regions.size()-1).fringe();
+        regions.get(0).xor(this);
         return regions;
     }
     public GreasedRegion retract()
@@ -935,10 +935,12 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
     public ArrayList<GreasedRegion> surfaceSeriesToLimit()
     {
         ArrayList<GreasedRegion> regions = retractSeriesToLimit();
-        for (int i = 0; i < regions.size() - 1; i++) {
+        if(regions.isEmpty())
+            return regions;
+        regions.add(0, regions.get(0).copy().xor(this));
+        for (int i = 1; i < regions.size() - 1; i++) {
             regions.get(i).xor(regions.get(i+1));
         }
-        //regions.get(regions.size()-1).surface();
         return regions;
     }
     public GreasedRegion expand8way()
@@ -1045,10 +1047,10 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
     public ArrayList<GreasedRegion> fringeSeriesToLimit8way()
     {
         ArrayList<GreasedRegion> regions = expandSeriesToLimit8way();
-        for (int i = 0; i < regions.size() - 1; i++) {
-            regions.get(i).xor(regions.get(i+1));
+        for (int i = regions.size() - 1; i > 0; i--) {
+            regions.get(i).xor(regions.get(i-1));
         }
-        regions.get(regions.size()-1).fringe8way();
+        regions.get(0).xor(this);
         return regions;
     }
 
@@ -1179,10 +1181,12 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
     public ArrayList<GreasedRegion> surfaceSeriesToLimit8way()
     {
         ArrayList<GreasedRegion> regions = retractSeriesToLimit8way();
-        for (int i = 0; i < regions.size() - 1; i++) {
+        if(regions.isEmpty())
+            return regions;
+        regions.add(0, regions.get(0).copy().xor(this));
+        for (int i = 1; i < regions.size() - 1; i++) {
             regions.get(i).xor(regions.get(i+1));
         }
-        //regions.get(regions.size()-1).surface();
         return regions;
     }
     public GreasedRegion flood(GreasedRegion bounds)
