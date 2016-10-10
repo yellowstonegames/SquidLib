@@ -1740,10 +1740,10 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
     public double rateRegularity()
     {
         GreasedRegion me2 = copy().surface8way();
-        double irregularCount = me2.size(), regularCount = me2.remake(this).surface().size();
+        double irregularCount = me2.size();
         if(irregularCount == 0)
             return 0;
-        return regularCount / irregularCount;
+        return me2.remake(this).surface().size() / irregularCount;
     }
 
     /*

@@ -207,7 +207,7 @@ public class DijkstraBenchmark {
         return scanned;
     }
 
-    //@Benchmark
+    @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measurePathAStar() throws InterruptedException {
