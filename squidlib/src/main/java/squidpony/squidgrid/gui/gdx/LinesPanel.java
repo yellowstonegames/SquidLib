@@ -20,7 +20,7 @@ import java.util.ListIterator;
 /**
  * An actor capable of drawing {@link IColoredString}s. It is lines-oriented:
  * putting a line may erase a line put before. It is designed to write text with
- * a serif font (as opposed to {@link SquidPanel}). It performs line wrapping by
+ * a variable-width font (as opposed to {@link SquidPanel}). It performs line wrapping by
  * default. It can write from top to bottom or from bottom to top (the default).
  * 
  * <p>

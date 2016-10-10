@@ -102,6 +102,8 @@ public class TextCellFactory implements Disposable {
     {
         TextCellFactory next = new TextCellFactory(assetManager);
         //next.bmpFont = bmpFont;
+        if(bmpFont == null)
+            bmpFont = DefaultResources.getIncludedFont();
         next.bmpFont = new BitmapFont(new BitmapFont.BitmapFontData(bmpFont.getData().getFontFile(), false),
                 bmpFont.getRegions(), bmpFont.usesIntegerPositions());
         next.block = block;
@@ -137,6 +139,8 @@ public class TextCellFactory implements Disposable {
      * @return this for method chaining
      */
     public TextCellFactory initByFont() {
+        if(bmpFont == null)
+            bmpFont = DefaultResources.getIncludedFont();
         bmpFont.setFixedWidthGlyphs(fitting);
         width = (int)bmpFont.getSpaceWidth();
         lineHeight = bmpFont.getLineHeight();
@@ -171,6 +175,9 @@ public class TextCellFactory implements Disposable {
      * @return this for method chaining
      */
     public TextCellFactory initBySize() {
+        if(bmpFont == null)
+            bmpFont = DefaultResources.getIncludedFont();
+
         //bmpFont.setFixedWidthGlyphs(fitting);
         Pixmap temp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         temp.setColor(Color.WHITE);
@@ -268,7 +275,7 @@ public class TextCellFactory implements Disposable {
             else if (Gdx.files.classpath(fontpath).exists())
                 bmpFont = new BitmapFont(Gdx.files.classpath(fontpath));
             else
-                bmpFont = DefaultResources.getDefaultFont();
+                bmpFont = DefaultResources.getIncludedFont();
         }
         else {
             assetManager.load(new AssetDescriptor<>(fontpath, BitmapFont.class));
@@ -321,7 +328,7 @@ public class TextCellFactory implements Disposable {
      */
     public TextCellFactory font(BitmapFont bitmapFont) {
         if (bitmapFont == null) {
-            bmpFont = DefaultResources.getDefaultFont();
+            bmpFont = DefaultResources.getIncludedFont();
         }
         else {
             bmpFont = bitmapFont;
@@ -363,7 +370,7 @@ public class TextCellFactory implements Disposable {
             tex = new Texture(Gdx.files.classpath(texturePath), true);
             tex.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.Linear);
         } else {
-			bmpFont = DefaultResources.getDefaultFont();
+			bmpFont = DefaultResources.getIncludedFont();
 			Gdx.app.error("TextCellFactory", "Could not find font file: " + texturePath + ", using defaults");
 			return this;
         }
@@ -376,7 +383,7 @@ public class TextCellFactory implements Disposable {
             bmpFont = new BitmapFont(Gdx.files.classpath(fontPath), new TextureRegion(tex), false);
             distanceField = true;
         } else {
-            bmpFont = DefaultResources.getDefaultFont();
+            bmpFont = DefaultResources.getIncludedFont();
 			Gdx.app.error("TextCellFactory", "Could not find font file: " + fontPath + ", using defaults");
 		}
         //bmpFont.getData().padBottom = bmpFont.getDescent();
@@ -385,6 +392,20 @@ public class TextCellFactory implements Disposable {
         return this;
     }
     /**
+     * Sets this factory to use the one font included with libGDX, which is Arial at size 15 px. Does it correctly
+     * display when used in a grid? Probably not as well as you'd hope. You should probably get some of the assets that
+     * accompany SquidLib, and can be downloaded directly from GitHub (not available as one monolithic jar via Maven
+     * Central, but that lets you pick and choose individual assets). Get a .fnt and its matching .png file from
+     * https://github.com/SquidPony/SquidLib/tree/master/assets and you can pass them to {@link #font(String)} or
+     * {@link #fontDistanceField(String, String)}.
+     *
+     * @return this factory for method chaining
+     */
+    public TextCellFactory includedFont()
+    {
+        bmpFont = DefaultResources.getIncludedFont();
+        return this;
+    }/**
      * Sets this factory to use a default 12x24 font that supports Latin, Greek, Cyrillic, and many more, including
      * box-drawing characters, zodiac signs, playing-card suits, and chess piece symbols. This is enough to support the
      * output of anything that DungeonUtility can make for a dungeon or FakeLanguageGen can make for text with its
