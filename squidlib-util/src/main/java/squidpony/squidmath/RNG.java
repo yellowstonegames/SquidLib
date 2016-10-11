@@ -142,7 +142,7 @@ public class RNG implements Serializable {
     }
 
     /**
-     * Returns a value from a even distribution from min (inclusive) to max
+     * Returns a value from an even distribution from min (inclusive) to max
      * (exclusive).
      *
      * @param min the minimum bound on the return value (inclusive)
