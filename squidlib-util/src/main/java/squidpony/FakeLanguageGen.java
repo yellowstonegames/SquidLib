@@ -1,7 +1,12 @@
 package squidpony;
 
 import regexodus.*;
-import squidpony.squidmath.*;
+import squidpony.squidmath.CrossHash;
+import squidpony.squidmath.IntDoubleOrderedMap;
+import squidpony.squidmath.OrderedMap;
+import squidpony.squidmath.OrderedSet;
+import squidpony.squidmath.RNG;
+import squidpony.squidmath.StatefulRNG;
 
 import java.io.Serializable;
 import java.util.*;
@@ -1466,8 +1471,8 @@ public class FakeLanguageGen implements Serializable {
         this.modifiers = new ArrayList<>(modifiers);
     }
 
-    private static String[] processParts(OrderedMap<String, String> parts, OrderedSet<String> missingSounds,
-                                         OrderedSet<String> forbidden, RNG rng, double repeatSingleChance,
+    private static String[] processParts(OrderedMap<String, String> parts, Set<String> missingSounds,
+                                         Set<String> forbidden, RNG rng, double repeatSingleChance,
                                          int preferredLimit) {
         int l, sz = parts.size();
         List<String> working = new ArrayList<>(sz * 24);
@@ -2276,11 +2281,15 @@ public class FakeLanguageGen implements Serializable {
         }
 
         if(endPunctuation != null && endPunctuation.length > 0)
-            sb.append(rng.getRandomElement(endPunctuation));
+        {
 
-        if (sb.length() + next.length() >= maxChars)
-            next = ".";
-        sb.append(next);
+            next = rng.getRandomElement(endPunctuation);
+            if (sb.length() + next.length() >= maxChars)
+                sb.append('.');
+            else
+                sb.append(next);
+        }
+
         if (sb.length() > maxChars)
             return "!";
         return sb.toString();
