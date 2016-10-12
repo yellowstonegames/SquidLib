@@ -30,6 +30,11 @@
  */
 
 package squidpony.performance;
+import com.badlogic.gdx.ai.pfa.*;
+import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
+import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectIntMap;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Mode;
@@ -39,6 +44,7 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import squidpony.squidai.DijkstraMap;
+import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.SerpentMapGenerator;
@@ -47,24 +53,22 @@ import squidpony.squidmath.*;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
-import static squidpony.squidmath.CoordPacker.count;
-
 public class DijkstraBenchmark {
 
-    public static final int DIMENSION = 100, PATH_LENGTH = (DIMENSION - 2) * (DIMENSION - 2);
+    public static final int DIMENSION = 40, PATH_LENGTH = (DIMENSION - 2) * (DIMENSION - 2);
     public static DungeonGenerator dungeonGen =
             new DungeonGenerator(DIMENSION, DIMENSION, new StatefulRNG(0x1337BEEFDEAL));
     public static SerpentMapGenerator serpent = new SerpentMapGenerator(DIMENSION, DIMENSION,
             new StatefulRNG(0x1337BEEFDEAL));
     public static char[][] map;
     public static double[][] astarMap;
-    public static short[] floors;
+    public static GreasedRegion floors;
     static {
         serpent.putWalledBoxRoomCarvers(1);
         map = dungeonGen.generate(serpent.generate());
-        floors = CoordPacker.pack(map, '.');
-        System.out.println("Floors: " + count(floors));
-        System.out.println("Percentage walkable: " + count(floors) * 100.0 / (DIMENSION * DIMENSION) + "%");
+        floors = new GreasedRegion(map, '.');
+        System.out.println("Floors: " + floors.size());
+        System.out.println("Percentage walkable: " + floors.size() * 100.0 / (DIMENSION * DIMENSION) + "%");
         astarMap = DungeonUtility.generateAStarCostMap(map, Collections.<Character, Double>emptyMap(), 1);
     }
     public long doScanDijkstra()
@@ -110,11 +114,11 @@ public class DijkstraBenchmark {
                 // this should ensure no blatant correlation between R and W
                 utility.rng.setState((x << 22) | (y << 16) | (x * y));
                 ((StatefulRNG) dijkstra.rng).setState((x << 20) | (y << 14) | (x * y));
-                r = utility.randomCell(floors);
+                r = floors.singleRandom(utility.rng);
                 dijkstra.findPath(PATH_LENGTH, null, null, r, Coord.get(x, y));
                 dijkstra.clearGoals();
                 dijkstra.resetMap();
-                scanned++;
+                scanned += dijkstra.path.size();
             }
         }
         return scanned;
@@ -147,7 +151,7 @@ public class DijkstraBenchmark {
         return scanned;
     }
 
-    @Benchmark
+    //@Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureScanBoxedDijkstra() throws InterruptedException {
@@ -168,7 +172,7 @@ public class DijkstraBenchmark {
                 // this should ensure no blatant correlation between R and W
                 utility.rng.setState((x << 22) | (y << 16) | (x * y));
                 ((StatefulRNG) dijkstra.rng).setState((x << 20) | (y << 14) | (x * y));
-                r = utility.randomCell(floors);
+                r = floors.singleRandom(utility.rng);
                 dijkstra.findPath(PATH_LENGTH, null, null, r, Coord.get(x, y));
                 dijkstra.clearGoals();
                 dijkstra.resetMap();
@@ -177,7 +181,7 @@ public class DijkstraBenchmark {
         }
         return scanned;
     }
-    @Benchmark
+    //@Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measurePathBoxedDijkstra() throws InterruptedException {
@@ -199,7 +203,7 @@ public class DijkstraBenchmark {
                     continue;
                 // this should ensure no blatant correlation between R and W
                 utility.rng.setState((x << 22) | (y << 16) | (x * y));
-                r = utility.randomCell(floors);
+                r = floors.singleRandom(utility.rng);
                 astar.path(r, Coord.get(x, y));
                 scanned++;
             }
@@ -207,16 +211,58 @@ public class DijkstraBenchmark {
         return scanned;
     }
 
-    @Benchmark
+    //@Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measurePathAStar() throws InterruptedException {
         System.out.println(doPathAStar());
     }
-    /*
-    public long doPathPlannedAStar()
+
+    class GridGraph implements IndexedGraph<Coord>
     {
-        PlannedAStar astar = new PlannedAStar(astarMap, AStarSearch.SearchType.CHEBYSHEV);
+        public ObjectIntMap<Coord> points = new ObjectIntMap<>(DIMENSION * DIMENSION);
+
+        public GridGraph(Coord[] pts)
+        {
+            for (int i = 0; i < pts.length; i++) {
+                points.put(pts[i], i);
+            }
+        }
+        @Override
+        public int getIndex(Coord node) {
+            return points.get(node, -1);
+        }
+
+        @Override
+        public int getNodeCount() {
+            return points.size;
+        }
+
+        @Override
+        public Array<Connection<Coord>> getConnections(Coord fromNode) {
+            Array<Connection<Coord>> conn = new Array<>(false, 8);
+            if(map[fromNode.x][fromNode.y] != '.')
+                return conn;
+            Coord t;
+            for (int i = 0; i < 8; i++) {
+                t = fromNode.translate(Direction.OUTWARDS[i]);
+                if (t.isWithin(DIMENSION, DIMENSION) && map[t.x][t.y] == '.')
+                    conn.add(new DefaultConnection<>(fromNode, t));
+            }
+            return conn;
+        }
+    }
+
+    public long doPathGDXAStar()
+    {
+        IndexedAStarPathFinder<Coord> astar = new IndexedAStarPathFinder<Coord>(new GridGraph(floors.asCoords()));
+        GraphPath<Coord> dgp = new DefaultGraphPath<Coord>(PATH_LENGTH);
+        Heuristic<Coord> heu = new Heuristic<Coord>() {
+            @Override
+            public float estimate(Coord node, Coord endNode) {
+                return Math.abs(node.x - endNode.x) + Math.abs(node.y - endNode.y);
+            }
+        };
         Coord r;
         long scanned = 0;
         DungeonUtility utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
@@ -226,20 +272,21 @@ public class DijkstraBenchmark {
                     continue;
                 // this should ensure no blatant correlation between R and W
                 utility.rng.setState((x << 22) | (y << 16) | (x * y));
-                r = utility.randomCell(floors);
-                astar.path(r, Coord.get(x, y));
-                scanned++;
+                r = floors.singleRandom(utility.rng);
+                dgp.clear();
+                if(astar.searchNodePath(r, Coord.get(x, y), heu, dgp))
+                scanned+= dgp.getCount();
             }
         }
         return scanned;
     }
-    //@Benchmark
+
+    @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measurePathPlannedAStar() throws InterruptedException {
-        System.out.println(doPathPlannedAStar());
+    public void measurePathGDXAStar() throws InterruptedException {
+        System.out.println(doPathGDXAStar());
     }
-    */
     /*
      * ============================== HOW TO RUN THIS TEST: ====================================
      *
@@ -272,3 +319,32 @@ public class DijkstraBenchmark {
 
 
 }
+
+/*
+    public long doPathPlannedAStar()
+    {
+        PlannedAStar astar = new PlannedAStar(astarMap, AStarSearch.SearchType.CHEBYSHEV);
+        Coord r;
+        long scanned = 0;
+        DungeonUtility utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
+        for (int x = 1; x < DIMENSION - 1; x++) {
+            for (int y = 1; y < DIMENSION - 1; y++) {
+                if (map[x][y] == '#')
+                    continue;
+                // this should ensure no blatant correlation between R and W
+                utility.rng.setState((x << 22) | (y << 16) | (x * y));
+                r = utility.randomCell(floors);
+                astar.path(r, Coord.get(x, y));
+                scanned++;
+            }
+        }
+        return scanned;
+    }
+    //@Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measurePathPlannedAStar() throws InterruptedException {
+        System.out.println(doPathPlannedAStar());
+    }
+    */
+

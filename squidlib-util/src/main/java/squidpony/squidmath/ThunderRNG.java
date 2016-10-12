@@ -59,13 +59,25 @@ public class ThunderRNG implements RandomnessSource, Serializable {
     protected long jumble;
     /** Creates a new generator seeded using Math.random. */
     public ThunderRNG() {
-        this((long) Math.floor(Math.random() * Long.MAX_VALUE), (long) Math.floor(Math.random() * Long.MAX_VALUE));
+        this((long) (Math.random() * Integer.MAX_VALUE) << 32 | (int)(Math.random() * Integer.MAX_VALUE));
     }
 
+    /**
+     * Creates a new generator given only 64 bits of state, and uses that to fill out 127 bits of less-random state.
+     * @param seed any long; 0 is permitted
+     */
     public ThunderRNG( final long seed ) {
         state = (seed + bitPermute(seed + 0xC6BC279692B5CC83L)) * 0x9E3779B97F4A7C15L + 0x632BE59BD9B4E019L;
         jumble = (state + bitPermute(state + 0x9E3779B97F4A7C15L)) * 0xC6BC279692B5CC83L + 0x632BE59BD9B4E019L | 1L;
+        state += jumble & (jumble += 0xAB79B96DCD7FE75EL);
     }
+
+    /**
+     * Creates a new generator using exactly the values of partA and partB for this ThunderRNG's two-part state, with
+     * the exception that the least significant bit of partB will always be set to 1.
+     * @param partA any long; all 64 bits will be used
+     * @param partB any long; the most significant 63 bits will be used and the "1's place" bit will be disregarded
+     */
     public ThunderRNG(final long partA, final long partB)
     {
         state = partA;
@@ -187,6 +199,7 @@ public class ThunderRNG implements RandomnessSource, Serializable {
     public void reseed( final long seed ) {
         state = (seed + bitPermute(seed + 0xC6BC279692B5CC83L)) * 0x9E3779B97F4A7C15L + 0x632BE59BD9B4E019L;
         jumble = (state + bitPermute(state + 0x9E3779B97F4A7C15L)) * 0xC6BC279692B5CC83L + 0x632BE59BD9B4E019L | 1L;
+        state += jumble & (jumble += 0xAB79B96DCD7FE75EL);
         /*
         jumble = (seed ^ ((seed + 0x9E3779B97F4A7C15L) >> 18)) * 0xC6BC279692B5CC83L;
         jumble ^= (((seed + 0x9E3779B97F4A7C15L) ^ ((seed + 0x9E3779B97F4A7C15L + 0x9E3779B97F4A7C15L) >> 18)) * 0xC6BC279692B5CC83L) >>> 32;
@@ -211,25 +224,29 @@ public class ThunderRNG implements RandomnessSource, Serializable {
         return "ThunderRNG with state parts A=0x" + StringKit.hex(state) + "L, B=0x"  + StringKit.hex(jumble)+ 'L';
     }
 
-    public static long determine(int x)
+    public static long determine(final int x)
     {
-        final long a = ((x ^ 0xC6BC279692B5CC83L) << 16) ^ x, b = (((x ^ 0x632BE59BD9B4E019L) << 16) ^ x) | 1L;
+        long a = ((x ^ 0xC6BC279692B5CC83L) << 16) ^ x, b = (((x ^ 0x632BE59BD9B4E019L) << 16) ^ x) | 1L;
+        a += b & (b += 0xAB79B96DCD7FE75EL);
         return a ^ (0x9E3779B97F4A7C15L * ((a + b & (b + 0xAB79B96DCD7FE75EL)) >> 20));
     }
 
-    public static long determine(int x, int y)
+    public static long determine(final int x, final int y)
     {
-        final long a = ((x ^ 0xC6BC279692B5CC83L) << 16) ^ x, b = (((y ^ 0x632BE59BD9B4E019L) << 16) ^ y) | 1L;
+        long a = ((x ^ 0xC6BC279692B5CC83L) << 16) ^ x, b = (((y ^ 0x632BE59BD9B4E019L) << 16) ^ y) | 1L;
+        a += b & (b += 0xAB79B96DCD7FE75EL);
         return a ^ (0x9E3779B97F4A7C15L * ((a + b & (b + 0xAB79B96DCD7FE75EL)) >> 20));
     }
-    public static long determine(int x, int y, int z)
+    public static long determine(final int x, final int y, final int z)
     {
-        final long a = ((x ^ 0xC6BC279692B5CC83L) << 16) ^ (z + y), b = (((y ^ 0x632BE59BD9B4E019L) << 16) ^ (z + x)) | 1L;
+        long a = ((x ^ 0xC6BC279692B5CC83L) << 16) ^ (z + y), b = (((y ^ 0x632BE59BD9B4E019L) << 16) ^ (z + x)) | 1L;
+        a += b & (b += 0xAB79B96DCD7FE75EL);
         return a ^ (0x9E3779B97F4A7C15L * ((a + b & (b + 0xAB79B96DCD7FE75EL)) >> 20));
     }
-    public static long determine(int x, int y, int z, int w)
+    public static long determine(final int x, final int y, final int z, final int w)
     {
-        final long a = (((x + z) ^ 0xC6BC279692B5CC83L) << 16) ^ (z + y), b = ((((y + w) ^ 0x632BE59BD9B4E019L) << 16) ^ (w + x)) | 1L;
+        long a = (((x + z) ^ 0xC6BC279692B5CC83L) << 16) ^ (z + y), b = ((((y + w) ^ 0x632BE59BD9B4E019L) << 16) ^ (w + x)) | 1L;
+        a += b & (b += 0xAB79B96DCD7FE75EL);
         return a ^ (0x9E3779B97F4A7C15L * ((a + b & (b + 0xAB79B96DCD7FE75EL)) >> 20));
     }
 }

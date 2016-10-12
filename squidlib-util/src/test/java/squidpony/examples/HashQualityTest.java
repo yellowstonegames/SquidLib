@@ -245,13 +245,23 @@ public class HashQualityTest {
         }
 
 
+        for (int i = 0; i < len; i++) {
+            System.out.println(Arrays.toString(longs[i]));
+            System.out.println("Falcon bytes: " + CrossHash.Falcon.hash(bytes[i]));
+            System.out.println("Falcon shorts: " + CrossHash.Falcon.hash(shorts[i]));
+            System.out.println("Falcon ints: " + CrossHash.Falcon.hash(ints[i]));
+            System.out.println("Falcon longs: " + CrossHash.Falcon.hash(longs[i]));
+            System.out.println("Falcon objects: " + CrossHash.Falcon.hash(objects[i]));
+        }
+
         int longHashLength = 0x100000, stringHashLength = 0xC0000;
         System.out.println("Long Hashing:");
         System.out.println("---------------------------------");
         IntDoubleOrderedMap colliderJDK = new IntDoubleOrderedMap(longHashLength, 0.75f),
                 colliderFNV = new IntDoubleOrderedMap(longHashLength, 0.75f),
                 colliderLit = new IntDoubleOrderedMap(longHashLength, 0.75f),
-                colliderSto = new IntDoubleOrderedMap(longHashLength, 0.75f);
+                colliderSto = new IntDoubleOrderedMap(longHashLength, 0.75f),
+                colliderFal = new IntDoubleOrderedMap(longHashLength, 0.75f);
         LongPeriodRNG lprng = new LongPeriodRNG();
 
         for (int bits = 16, mask = 0xFFFF; bits < 33; mask |= 1 << bits++) {
@@ -262,16 +272,19 @@ public class HashQualityTest {
                 colliderFNV.put(CrossHash.hash(lprng.state) & mask, i);
                 colliderLit.put(CrossHash.Lightning.hash(lprng.state) & mask, i);
                 colliderSto.put(storm.hash(lprng.state) & mask, i);
+                colliderFal.put(CrossHash.Falcon.hash(lprng.state) & mask, i);
             }
             System.out.println("JDK collisions, " + bits + "-bit: " + (longHashLength - colliderJDK.size()));
             System.out.println("FNV collisions, " + bits + "-bit: " + (longHashLength - colliderFNV.size()));
             System.out.println("Lit collisions, " + bits + "-bit: " + (longHashLength - colliderLit.size()));
             System.out.println("Sto collisions, " + bits + "-bit: " + (longHashLength - colliderSto.size()));
+            System.out.println("Fal collisions, " + bits + "-bit: " + (longHashLength - colliderFal.size()));
             System.out.println();
             colliderJDK.clear();
             colliderFNV.clear();
             colliderLit.clear();
             colliderSto.clear();
+            colliderFal.clear();
 
         }
 
@@ -291,16 +304,19 @@ public class HashQualityTest {
             colliderFNV.put(CrossHash.hash(massive, s, s+e+32), i);
             colliderLit.put(CrossHash.Lightning.hash(massive, s, s+e+32), i);
             colliderSto.put(storm.hash(massive, s, s+e+32), i);
+            colliderFal.put(CrossHash.Falcon.hash(massive, s, s+e+32), i);
             if(e >= 0x1fd)
                 s += 7;
         }
         System.out.println("FNV collisions, 32-bit: " + (stringHashLength - colliderFNV.size()));
         System.out.println("Lit collisions, 32-bit: " + (stringHashLength - colliderLit.size()));
         System.out.println("Sto collisions, 32-bit: " + (stringHashLength - colliderSto.size()));
+        System.out.println("Fal collisions, 32-bit: " + (stringHashLength - colliderFal.size()));
         System.out.println();
         colliderFNV.clear();
         colliderLit.clear();
         colliderSto.clear();
+        colliderFal.clear();
 
         srng.setState(0x1337CAFE);
         oddLang = FakeLanguageGen.JAPANESE_ROMANIZED;
@@ -310,17 +326,19 @@ public class HashQualityTest {
             colliderFNV.put(CrossHash.hash(massive, s, s+e+32), i);
             colliderLit.put(CrossHash.Lightning.hash(massive, s, s+e+32), i);
             colliderSto.put(storm.hash(massive, s, s+e+32), i);
+            colliderFal.put(CrossHash.Falcon.hash(massive, s, s+e+32), i);
             if(e >= 0x1fd)
                 s += 7;
         }
         System.out.println("FNV collisions, 32-bit: " + (stringHashLength - colliderFNV.size()));
         System.out.println("Lit collisions, 32-bit: " + (stringHashLength - colliderLit.size()));
         System.out.println("Sto collisions, 32-bit: " + (stringHashLength - colliderSto.size()));
+        System.out.println("Fal collisions, 32-bit: " + (stringHashLength - colliderFal.size()));
         System.out.println();
         colliderFNV.clear();
         colliderLit.clear();
         colliderSto.clear();
-
+        colliderFal.clear();
 
         oddLang = FakeLanguageGen.FANCY_FANTASY_NAME.mix(FakeLanguageGen.GREEK_AUTHENTIC, 0.67).mix(FakeLanguageGen.RUSSIAN_AUTHENTIC, 0.45);
         massive = oddLang.sentence(srng, 0x50000,0x50100, midPunct, endPunct, 0.3).toCharArray();
@@ -329,17 +347,19 @@ public class HashQualityTest {
             colliderFNV.put(CrossHash.hash(massive, s, s+e+32), i);
             colliderLit.put(CrossHash.Lightning.hash(massive, s, s+e+32), i);
             colliderSto.put(storm.hash(massive, s, s+e+32), i);
+            colliderFal.put(CrossHash.Falcon.hash(massive, s, s+e+32), i);
             if(e >= 0x1fd)
                 s += 7;
         }
         System.out.println("FNV collisions, 32-bit: " + (stringHashLength - colliderFNV.size()));
         System.out.println("Lit collisions, 32-bit: " + (stringHashLength - colliderLit.size()));
         System.out.println("Sto collisions, 32-bit: " + (stringHashLength - colliderSto.size()));
+        System.out.println("Fal collisions, 32-bit: " + (stringHashLength - colliderFal.size()));
         System.out.println();
         colliderFNV.clear();
         colliderLit.clear();
         colliderSto.clear();
-
+        colliderFal.clear();
 
         oddLang = FakeLanguageGen.ENGLISH;
         massive = oddLang.sentence(srng, 0x50000,0x50100, midPunct, endPunct, 0.3).toCharArray();
@@ -348,15 +368,18 @@ public class HashQualityTest {
             colliderFNV.put(CrossHash.hash(massive, s, s+e+32), i);
             colliderLit.put(CrossHash.Lightning.hash(massive, s, s+e+32), i);
             colliderSto.put(storm.hash(massive, s, s+e+32), i);
+            colliderFal.put(CrossHash.Falcon.hash(massive, s, s+e+32), i);
             if(e >= 0x1fd)
                 s += 7;
         }
         System.out.println("FNV collisions, 32-bit: " + (stringHashLength - colliderFNV.size()));
         System.out.println("Lit collisions, 32-bit: " + (stringHashLength - colliderLit.size()));
         System.out.println("Sto collisions, 32-bit: " + (stringHashLength - colliderSto.size()));
+        System.out.println("Fal collisions, 32-bit: " + (stringHashLength - colliderFal.size()));
         System.out.println();
         colliderFNV.clear();
         colliderLit.clear();
         colliderSto.clear();
+        colliderFal.clear();
     }
 }

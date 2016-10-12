@@ -2,6 +2,7 @@ package squidpony.examples;
 
 import squidpony.FakeLanguageGen;
 import squidpony.NaturalLanguageCipher;
+import squidpony.squidmath.CrossHash;
 import squidpony.squidmath.StatefulRNG;
 
 import java.util.HashMap;
@@ -264,7 +265,12 @@ public class LanguageGenTest {
                         FakeLanguageGen.modifier("cc", "ch"),
                         FakeLanguageGen.modifier("[^aeiou]([^aeiou][^aeiou])", "$1"),
                         FakeLanguageGen.Modifier.NO_DOUBLES
-                )
+                ),
+                FakeLanguageGen.randomLanguage(CrossHash.Lightning.hash64("Kittenish")),
+                FakeLanguageGen.randomLanguage(CrossHash.Lightning.hash64("Puppyspeak")),
+                FakeLanguageGen.randomLanguage(CrossHash.Lightning.hash64("Rabbitese")),
+                FakeLanguageGen.randomLanguage(CrossHash.Lightning.hash64("Rabbit Language")),
+                FakeLanguageGen.randomLanguage(CrossHash.Lightning.hash64("The Roar Of That Slumbering Shadow That Mankind Wills Itself To Forget")),
                 //FakeLanguageGen.RUSSIAN_ROMANIZED.mix(FakeLanguageGen.GREEK_ROMANIZED, 0.4),
                 //FakeLanguageGen.LOVECRAFT.mix(FakeLanguageGen.RUSSIAN_ROMANIZED, 0.4),
                 //FakeLanguageGen.randomLanguage(new StatefulRNG(2252637788195L)),

@@ -1651,14 +1651,14 @@ public class FakeLanguageGen implements Serializable {
             Collections.addAll(forbidden, parts0.getAt(0).split(" "));
             parts0.removeFirst();
         }
-        sz0 = Math.max(rng.between(1, parts0.size()+1), rng.between(1, parts0.size()+1));
+        p0s = parts0.size();
+        sz0 = Math.max(rng.between(1, p0s+1), rng.between(1, p0s+1));
         char[] nextAccents = new char[sz0], unaccented = new char[sz0];
         int vowelAccent = rng.between(1, 7);
         for (int i = 0; i < sz0; i++) {
             nextAccents[i] = accentedVowels[vOrd[i + mn]][vowelAccent];
             unaccented[i] = accentedVowels[vOrd[i + mn]][0];
         }
-        p0s = parts0.size();
         if(rng.nextDouble() < 0.8)
         {
             for (int i = 0; i < sz0; i++) {
@@ -1675,7 +1675,7 @@ public class FakeLanguageGen implements Serializable {
                         String current = parts0.getAt(j);
                         String[] splits = current.split(" ");
                         for (int s = 0; s < splits.length; s++) {
-                            if(forbidden.contains(uas))
+                            if(forbidden.contains(uas) && splits[s].contains(uas))
                                 forbidden.add(splits[s].replace(ua, ac));
                         }
                         parts0.put(k, rep.replace(current));
