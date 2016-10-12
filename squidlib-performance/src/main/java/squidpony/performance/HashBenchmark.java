@@ -75,6 +75,18 @@ import java.util.concurrent.TimeUnit;
  * HashBenchmark.measureSipInt        avgt    3   77.797 ±  5.196  ms/op
  * HashBenchmark.measureStorm         avgt    3   24.542 ±  2.893  ms/op
  * HashBenchmark.measureStormInt      avgt    3   25.070 ±  3.274  ms/op
+ *
+ * Benchmark                          Mode  Cnt    Score   Error  Units
+ * HashBenchmark.measureControl       avgt    8    1.980 ± 0.015  ms/op
+ * HashBenchmark.measureFNV           avgt    8  136.929 ± 1.341  ms/op
+ * HashBenchmark.measureFNVInt        avgt    8  150.062 ± 1.248  ms/op
+ * HashBenchmark.measureFalcon        avgt    8   15.653 ± 0.249  ms/op
+ * HashBenchmark.measureFalconInt     avgt    8   14.999 ± 0.199  ms/op <-- This is important!
+ * HashBenchmark.measureJVMInt        avgt    8   15.030 ± 0.111  ms/op <-- Because this is the collision-prone default!
+ * HashBenchmark.measureLightning     avgt    8   19.643 ± 0.109  ms/op
+ * HashBenchmark.measureLightningInt  avgt    8   19.332 ± 0.154  ms/op
+ * HashBenchmark.measureStorm         avgt    8   24.422 ± 0.185  ms/op
+ * HashBenchmark.measureStormInt      avgt    8   25.002 ± 0.306  ms/op
  */
 public class HashBenchmark {
 
@@ -251,6 +263,66 @@ public class HashBenchmark {
         iseed = 9000;
         doStormInt();
     }
+
+
+    public long doFalcon()
+    {
+        LongPeriodRNG rng = new LongPeriodRNG(seed);
+
+        for (int i = 0; i < 1000000; i++) {
+            rng.nextLong();
+            seed += CrossHash.Falcon.hash64(rng.state);
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureFalcon() throws InterruptedException {
+        seed = 9000;
+        doFalcon();
+    }
+
+    public long doFalconInt()
+    {
+        LongPeriodRNG rng = new LongPeriodRNG(iseed);
+
+        for (int i = 0; i < 1000000; i++) {
+            rng.nextLong();
+            iseed += CrossHash.Falcon.hash(rng.state);
+        }
+        return iseed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureFalconInt() throws InterruptedException {
+        iseed = 9000;
+        doFalconInt();
+    }
+
+    public long doControl()
+    {
+        LongPeriodRNG rng = new LongPeriodRNG(iseed);
+
+        for (int i = 0; i < 1000000; i++) {
+            iseed += rng.nextLong();
+        }
+        return iseed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureControl() throws InterruptedException {
+        iseed = 9000;
+        doControl();
+    }
+
+
+
     /*
      * ============================== HOW TO RUN THIS TEST: ====================================
      *

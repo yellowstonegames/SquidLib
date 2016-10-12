@@ -349,70 +349,71 @@
 <span class="sourceLineNo">341</span>        }<a name="line.341"></a>
 <span class="sourceLineNo">342</span>        return next;<a name="line.342"></a>
 <span class="sourceLineNo">343</span>    }<a name="line.343"></a>
-<span class="sourceLineNo">344</span>    /**<a name="line.344"></a>
-<span class="sourceLineNo">345</span>     * Rearranges an ArrayList to use the given ordering, returning a copy; random orderings can be produced with<a name="line.345"></a>
-<span class="sourceLineNo">346</span>     * {@link squidpony.squidmath.RNG#randomOrdering(int)} or<a name="line.346"></a>
-<span class="sourceLineNo">347</span>     * {@link squidpony.squidmath.RNG#randomOrdering(int, int[])}. These orderings will never repeat an earlier element,<a name="line.347"></a>
-<span class="sourceLineNo">348</span>     * and the returned ArrayList may be shorter than the original if {@code ordering} isn't as long as {@code list}.<a name="line.348"></a>
-<span class="sourceLineNo">349</span>     * Using a random ordering is like shuffling, but allows you to repeat the shuffle exactly on other collections of<a name="line.349"></a>
-<span class="sourceLineNo">350</span>     * the same size. A reordering can also be inverted with {@link #invertOrdering(int[])} or<a name="line.350"></a>
-<span class="sourceLineNo">351</span>     * {@link #invertOrdering(int[], int[])}, getting the change that will undo another ordering.<a name="line.351"></a>
-<span class="sourceLineNo">352</span>     * @param list an ArrayList that you want a reordered version of; will not be modified.<a name="line.352"></a>
-<span class="sourceLineNo">353</span>     * @param ordering an ordering, typically produced by one of RNG's randomOrdering methods.<a name="line.353"></a>
-<span class="sourceLineNo">354</span>     * @param &lt;T&gt; any generic type<a name="line.354"></a>
-<span class="sourceLineNo">355</span>     * @return a modified copy of {@code list} with its ordering changed to match {@code ordering}.<a name="line.355"></a>
-<span class="sourceLineNo">356</span>     */<a name="line.356"></a>
-<span class="sourceLineNo">357</span>    public static &lt;T&gt; ArrayList&lt;T&gt; reorder (ArrayList&lt;T&gt; list, int... ordering) {<a name="line.357"></a>
-<span class="sourceLineNo">358</span>        int ol;<a name="line.358"></a>
-<span class="sourceLineNo">359</span>        if (list == null || ordering == null || (ol = Math.min(list.size(), ordering.length)) == 0)<a name="line.359"></a>
-<span class="sourceLineNo">360</span>            return list;<a name="line.360"></a>
-<span class="sourceLineNo">361</span>        ArrayList&lt;T&gt; alt = new ArrayList&lt;T&gt;(ol);<a name="line.361"></a>
-<span class="sourceLineNo">362</span>        for (int i = 0; i &lt; ol; i++) {<a name="line.362"></a>
-<span class="sourceLineNo">363</span>            alt.add(list.get((ordering[i] % ol + ol) % ol));<a name="line.363"></a>
-<span class="sourceLineNo">364</span>        }<a name="line.364"></a>
-<span class="sourceLineNo">365</span>        return alt;<a name="line.365"></a>
-<span class="sourceLineNo">366</span>    }<a name="line.366"></a>
-<span class="sourceLineNo">367</span><a name="line.367"></a>
-<span class="sourceLineNo">368</span>    /**<a name="line.368"></a>
-<span class="sourceLineNo">369</span>     * Given an ordering such as one produced by {@link squidpony.squidmath.RNG#randomOrdering(int, int[])}, this finds<a name="line.369"></a>
-<span class="sourceLineNo">370</span>     * its inverse, able to reverse the reordering and vice versa.<a name="line.370"></a>
-<span class="sourceLineNo">371</span>     * @param ordering the ordering to find the inverse for<a name="line.371"></a>
-<span class="sourceLineNo">372</span>     * @return the inverse of ordering<a name="line.372"></a>
-<span class="sourceLineNo">373</span>     */<a name="line.373"></a>
-<span class="sourceLineNo">374</span>    public static int[] invertOrdering(int[] ordering)<a name="line.374"></a>
-<span class="sourceLineNo">375</span>    {<a name="line.375"></a>
-<span class="sourceLineNo">376</span>        int ol = 0;<a name="line.376"></a>
-<span class="sourceLineNo">377</span>        if(ordering == null || (ol = ordering.length) == 0) return ordering;<a name="line.377"></a>
-<span class="sourceLineNo">378</span>        int[] next = new int[ol];<a name="line.378"></a>
-<span class="sourceLineNo">379</span>        for (int i = 0; i &lt; ol; i++) {<a name="line.379"></a>
-<span class="sourceLineNo">380</span>            if(ordering[i] &lt; 0 || ordering[i] &gt;= ol) return next;<a name="line.380"></a>
-<span class="sourceLineNo">381</span>            next[ordering[i]] = i;<a name="line.381"></a>
-<span class="sourceLineNo">382</span>        }<a name="line.382"></a>
-<span class="sourceLineNo">383</span>        return next;<a name="line.383"></a>
-<span class="sourceLineNo">384</span>    }<a name="line.384"></a>
-<span class="sourceLineNo">385</span><a name="line.385"></a>
-<span class="sourceLineNo">386</span>    /**<a name="line.386"></a>
-<span class="sourceLineNo">387</span>     * Given an ordering such as one produced by {@link squidpony.squidmath.RNG#randomOrdering(int, int[])}, this finds<a name="line.387"></a>
-<span class="sourceLineNo">388</span>     * its inverse, able to reverse the reordering and vice versa. This overload doesn't allocate a new int<a name="line.388"></a>
-<span class="sourceLineNo">389</span>     * array, and instead relies on having an int array of the same size as ordering passed to it as an<a name="line.389"></a>
-<span class="sourceLineNo">390</span>     * additional argument.<a name="line.390"></a>
-<span class="sourceLineNo">391</span>     * @param ordering the ordering to find the inverse for<a name="line.391"></a>
-<span class="sourceLineNo">392</span>     * @param dest the int array to put the inverse reordering into; should have the same length as ordering<a name="line.392"></a>
-<span class="sourceLineNo">393</span>     * @return the inverse of ordering; will have the same value as dest<a name="line.393"></a>
-<span class="sourceLineNo">394</span>     */<a name="line.394"></a>
-<span class="sourceLineNo">395</span>    public static int[] invertOrdering(int[] ordering, int[] dest)<a name="line.395"></a>
-<span class="sourceLineNo">396</span>    {<a name="line.396"></a>
-<span class="sourceLineNo">397</span>        int ol = 0;<a name="line.397"></a>
-<span class="sourceLineNo">398</span>        if(ordering == null || dest == null || (ol = Math.min(ordering.length, dest.length)) == 0)<a name="line.398"></a>
-<span class="sourceLineNo">399</span>            return ordering;<a name="line.399"></a>
-<span class="sourceLineNo">400</span>        for (int i = 0; i &lt; ol; i++) {<a name="line.400"></a>
-<span class="sourceLineNo">401</span>            if(ordering[i] &lt; 0 || ordering[i] &gt;= ol) return dest;<a name="line.401"></a>
-<span class="sourceLineNo">402</span>            dest[ordering[i]] = i;<a name="line.402"></a>
-<span class="sourceLineNo">403</span>        }<a name="line.403"></a>
-<span class="sourceLineNo">404</span>        return dest;<a name="line.404"></a>
-<span class="sourceLineNo">405</span>    }<a name="line.405"></a>
-<span class="sourceLineNo">406</span><a name="line.406"></a>
-<span class="sourceLineNo">407</span>}<a name="line.407"></a>
+<span class="sourceLineNo">344</span><a name="line.344"></a>
+<span class="sourceLineNo">345</span>    /**<a name="line.345"></a>
+<span class="sourceLineNo">346</span>     * Rearranges an ArrayList to use the given ordering, returning a copy; random orderings can be produced with<a name="line.346"></a>
+<span class="sourceLineNo">347</span>     * {@link squidpony.squidmath.RNG#randomOrdering(int)} or<a name="line.347"></a>
+<span class="sourceLineNo">348</span>     * {@link squidpony.squidmath.RNG#randomOrdering(int, int[])}. These orderings will never repeat an earlier element,<a name="line.348"></a>
+<span class="sourceLineNo">349</span>     * and the returned ArrayList may be shorter than the original if {@code ordering} isn't as long as {@code list}.<a name="line.349"></a>
+<span class="sourceLineNo">350</span>     * Using a random ordering is like shuffling, but allows you to repeat the shuffle exactly on other collections of<a name="line.350"></a>
+<span class="sourceLineNo">351</span>     * the same size. A reordering can also be inverted with {@link #invertOrdering(int[])} or<a name="line.351"></a>
+<span class="sourceLineNo">352</span>     * {@link #invertOrdering(int[], int[])}, getting the change that will undo another ordering.<a name="line.352"></a>
+<span class="sourceLineNo">353</span>     * @param list an ArrayList that you want a reordered version of; will not be modified.<a name="line.353"></a>
+<span class="sourceLineNo">354</span>     * @param ordering an ordering, typically produced by one of RNG's randomOrdering methods.<a name="line.354"></a>
+<span class="sourceLineNo">355</span>     * @param &lt;T&gt; any generic type<a name="line.355"></a>
+<span class="sourceLineNo">356</span>     * @return a modified copy of {@code list} with its ordering changed to match {@code ordering}.<a name="line.356"></a>
+<span class="sourceLineNo">357</span>     */<a name="line.357"></a>
+<span class="sourceLineNo">358</span>    public static &lt;T&gt; ArrayList&lt;T&gt; reorder (ArrayList&lt;T&gt; list, int... ordering) {<a name="line.358"></a>
+<span class="sourceLineNo">359</span>        int ol;<a name="line.359"></a>
+<span class="sourceLineNo">360</span>        if (list == null || ordering == null || (ol = Math.min(list.size(), ordering.length)) == 0)<a name="line.360"></a>
+<span class="sourceLineNo">361</span>            return list;<a name="line.361"></a>
+<span class="sourceLineNo">362</span>        ArrayList&lt;T&gt; alt = new ArrayList&lt;T&gt;(ol);<a name="line.362"></a>
+<span class="sourceLineNo">363</span>        for (int i = 0; i &lt; ol; i++) {<a name="line.363"></a>
+<span class="sourceLineNo">364</span>            alt.add(list.get((ordering[i] % ol + ol) % ol));<a name="line.364"></a>
+<span class="sourceLineNo">365</span>        }<a name="line.365"></a>
+<span class="sourceLineNo">366</span>        return alt;<a name="line.366"></a>
+<span class="sourceLineNo">367</span>    }<a name="line.367"></a>
+<span class="sourceLineNo">368</span><a name="line.368"></a>
+<span class="sourceLineNo">369</span>    /**<a name="line.369"></a>
+<span class="sourceLineNo">370</span>     * Given an ordering such as one produced by {@link squidpony.squidmath.RNG#randomOrdering(int, int[])}, this finds<a name="line.370"></a>
+<span class="sourceLineNo">371</span>     * its inverse, able to reverse the reordering and vice versa.<a name="line.371"></a>
+<span class="sourceLineNo">372</span>     * @param ordering the ordering to find the inverse for<a name="line.372"></a>
+<span class="sourceLineNo">373</span>     * @return the inverse of ordering<a name="line.373"></a>
+<span class="sourceLineNo">374</span>     */<a name="line.374"></a>
+<span class="sourceLineNo">375</span>    public static int[] invertOrdering(int[] ordering)<a name="line.375"></a>
+<span class="sourceLineNo">376</span>    {<a name="line.376"></a>
+<span class="sourceLineNo">377</span>        int ol = 0;<a name="line.377"></a>
+<span class="sourceLineNo">378</span>        if(ordering == null || (ol = ordering.length) == 0) return ordering;<a name="line.378"></a>
+<span class="sourceLineNo">379</span>        int[] next = new int[ol];<a name="line.379"></a>
+<span class="sourceLineNo">380</span>        for (int i = 0; i &lt; ol; i++) {<a name="line.380"></a>
+<span class="sourceLineNo">381</span>            if(ordering[i] &lt; 0 || ordering[i] &gt;= ol) return next;<a name="line.381"></a>
+<span class="sourceLineNo">382</span>            next[ordering[i]] = i;<a name="line.382"></a>
+<span class="sourceLineNo">383</span>        }<a name="line.383"></a>
+<span class="sourceLineNo">384</span>        return next;<a name="line.384"></a>
+<span class="sourceLineNo">385</span>    }<a name="line.385"></a>
+<span class="sourceLineNo">386</span><a name="line.386"></a>
+<span class="sourceLineNo">387</span>    /**<a name="line.387"></a>
+<span class="sourceLineNo">388</span>     * Given an ordering such as one produced by {@link squidpony.squidmath.RNG#randomOrdering(int, int[])}, this finds<a name="line.388"></a>
+<span class="sourceLineNo">389</span>     * its inverse, able to reverse the reordering and vice versa. This overload doesn't allocate a new int<a name="line.389"></a>
+<span class="sourceLineNo">390</span>     * array, and instead relies on having an int array of the same size as ordering passed to it as an<a name="line.390"></a>
+<span class="sourceLineNo">391</span>     * additional argument.<a name="line.391"></a>
+<span class="sourceLineNo">392</span>     * @param ordering the ordering to find the inverse for<a name="line.392"></a>
+<span class="sourceLineNo">393</span>     * @param dest the int array to put the inverse reordering into; should have the same length as ordering<a name="line.393"></a>
+<span class="sourceLineNo">394</span>     * @return the inverse of ordering; will have the same value as dest<a name="line.394"></a>
+<span class="sourceLineNo">395</span>     */<a name="line.395"></a>
+<span class="sourceLineNo">396</span>    public static int[] invertOrdering(int[] ordering, int[] dest)<a name="line.396"></a>
+<span class="sourceLineNo">397</span>    {<a name="line.397"></a>
+<span class="sourceLineNo">398</span>        int ol = 0;<a name="line.398"></a>
+<span class="sourceLineNo">399</span>        if(ordering == null || dest == null || (ol = Math.min(ordering.length, dest.length)) == 0)<a name="line.399"></a>
+<span class="sourceLineNo">400</span>            return ordering;<a name="line.400"></a>
+<span class="sourceLineNo">401</span>        for (int i = 0; i &lt; ol; i++) {<a name="line.401"></a>
+<span class="sourceLineNo">402</span>            if(ordering[i] &lt; 0 || ordering[i] &gt;= ol) return dest;<a name="line.402"></a>
+<span class="sourceLineNo">403</span>            dest[ordering[i]] = i;<a name="line.403"></a>
+<span class="sourceLineNo">404</span>        }<a name="line.404"></a>
+<span class="sourceLineNo">405</span>        return dest;<a name="line.405"></a>
+<span class="sourceLineNo">406</span>    }<a name="line.406"></a>
+<span class="sourceLineNo">407</span><a name="line.407"></a>
+<span class="sourceLineNo">408</span>}<a name="line.408"></a>
 
 
 
