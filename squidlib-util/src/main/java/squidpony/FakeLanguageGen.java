@@ -283,7 +283,7 @@ public class FakeLanguageGen implements Serializable {
         openCons.put("j", "j j");
         openCons.put("k", "k kr kl ky kn sk skl shk");
         openCons.put("kh", "kh khl khw");
-        openCons.put("l", "bl cl fl gl kl khl l pl phl scl skl spl sl shl shpl tl thl zl");
+        openCons.put("l", "bl cl fl gl kl khl l pl phl scl skl spl sl shl shpl tl thl vl zl");
         openCons.put("m", "hm m mr mw my sm smr shm");
         openCons.put("n", "gn kn n nw ny pn sn shn");
         openCons.put("p", "p pl pr py pw pn sp spr spl shp shpl ph phl phr");
@@ -296,41 +296,41 @@ public class FakeLanguageGen implements Serializable {
         openCons.put("t", "st str t ts tr tl ty tw tl");
         openCons.put("th", "cth th thr thl thw");
         openCons.put("tl", "tl");
-        openCons.put("v", "v vr vy zv zvr");
+        openCons.put("v", "v vr vy zv zvr vl");
         openCons.put("w", "bw chw dw fw gw hw khw mw nw pw sw shw tw thw w wr zw");
         openCons.put("x", "x");
         openCons.put("y", "by dy fy gy hy ky my ny py sy ty vy y zy");
         openCons.put("z", "cz dz z zv zvr zl zy zw");
 
-        midCons.put("b", "lb lb rb rb bl br bl br bl br lbr rbl skbr scbr zb lbh rbh bb");
-        midCons.put("bh", "lbh rbh");
-        midCons.put("c", "lc lc lsc rc rc rsc cl cr cl cr cl cr lcr rcl sctr scdr scbr scpr msc mscr nsc nscr ngscr ndscr cc");
-        midCons.put("ch", "lch lch rch rch");
-        midCons.put("d", "ld ld rd rd skdr scdr dr dr dr rdr ldr zd zdr ndr ndscr ndskr ndst ldh rdh dd");
-        midCons.put("dh", "ldh rdh");
-        midCons.put("f", "lf lf rf rf fl fr fl fr fl fr lfr rfl ff");
-        midCons.put("g", "lg lg rg rg gl gr gl gr gl gr lgr rgl zg zgr ngr ngl ngscr ngskr gg");
-        midCons.put("h", "lch lph lth lsh rch rph rsh rth phl phr lphr rphl shl shr lshr rshl msh mshr zth ");
-        midCons.put("j", "lj lj rj rj");
-        midCons.put("k", "lk lsk rk rsk kl kr lkr rkl sktr skdr skbr skpr zk zkr msk mskr nsk nskr ngskr ndskr kk");
+        midCons.put("b", "lb rb bj bl br lbr rbl skbr scbr zb bq bdh dbh bbh lbh rbh bb");
+        midCons.put("bh", "bbh dbh lbh rbh");
+        midCons.put("c", "lc lsc rc rsc cl cqu cr ct lcr rcl sctr scdr scbr scpr msc mscr nsc nscr ngscr ndscr cc");
+        midCons.put("ch", "lch rch rch");
+        midCons.put("d", "ld ld rd rd skdr scdr dr dr dr rdr ldr zd zdr ndr ndscr ndskr ndst dq ldh rdh dbh bdh ddh dd");
+        midCons.put("dh", "bdh ddh ldh rdh");
+        midCons.put("f", "lf rf fl fr fl fr fl fr lfr rfl ft ff");
+        midCons.put("g", "lg lg rg rg gl gr gl gr gl gr lgr rgl zg zgr ngr ngl ngscr ngskr gq gg");
+        midCons.put("h", "lch lph lth lsh rch rph rsh rth phl phr lphr rphl shl shr lshr rshl msh mshr zth bbh dbh lbh rbh bdh ddh ldh rdh");
+        midCons.put("j", "bj lj rj");
+        midCons.put("k", "lk lsk rk rsk kl kr lkr rkl sktr skdr skbr skpr tk zk zkr msk mskr nsk nskr ngskr ndskr kq kk");
         midCons.put("kh", "lkh rkh");
-        midCons.put("l", "lb lc lch ld lf lg lj lk lm ln lp lph ls lst lt lth lsc lsk lsp lv lz lsh bl lbr rbl cl lcr rcl fl lfr rfl gl lgr rgl kl lkr rkl pl lpr rpl phl lphr rphl shl lshr rshl sl rsl lsl ldr ltr lx ngl nsl msl nsl ll");
-        midCons.put("m", "lm lm rm rm zm msl msc mscr msh mshr mst msp msk mskr mm");
-        midCons.put("n", "ln ln rn rn nx zn zn ntr ntr ndr ngr ngl nsl nsl nsc nscr ngscr ndscr nsk nskr ngskr ndskr nst ndst nsp nn");
-        midCons.put("p", "lp lsp rp rsp pl pr lpr rpl skpr scpr zp msp nsp lph rph phl phr lphr rphl pp");
+        midCons.put("l", "lb lc lch ld lf lg lj lk lm ln lp lph ls lst lt lth lsc lsk lsp lv lz lsh bl lbr rbl cl lcr rcl fl lfr rfl gl lgr rgl kl lkr rkl pl lpr rpl phl lphr rphl shl lshr rshl sl rsl lsl ldr ltr lx ngl nsl msl nsl ll lth tl ltl rtl vl");
+        midCons.put("m", "lm rm zm msl msc mscr msh mshr mst msp msk mskr mm");
+        midCons.put("n", "ln rn nx zn zn ndr nj ntr ntr ngr ngl nsl nsl nsc nscr ngscr ndscr nsk nskr ngskr ndskr nst ndst nsp nn");
+        midCons.put("p", "lp lsp rp rsp pl pr lpr rpl skpr scpr zp msp nsp lph rph phl phr lphr rphl pq pp");
         midCons.put("ph", "lph lph rph rph phl phr lphr rphl");
-        midCons.put("q", "");
-        midCons.put("qu", "lqu rqu");
-        midCons.put("r", "rb rc rch rd rf rg rj rk rm rn rp rph rs rsh rst rt rth rsc rsk rsp rv rz br br br lbr rbl cr cr cr lcr rcl fr fr fr lfr rfl gr gr gr lgr rgl kr kr kr lkr rkl pr pr pr lpr rpl phr phr phr lphr rphl shr shr shr lshr rshl rsl sktr sctr skdr scdr skbr scbr skpr scpr dr dr dr rdr ldr tr tr tr rtr ltr rx zr zdr ztr zgr zkr ntr ntr ndr ngr mscr mshr mskr nscr ngscr ndscr nskr ngskr ndskr rr");
+        midCons.put("q", "bq dq gq kq pq tq");
+        midCons.put("qu", "cqu lqu rqu");
+        midCons.put("r", "rb rc rch rd rf rg rj rk rm rn rp rph rs rsh rst rt rth rsc rsk rsp rv rz br br br lbr rbl cr cr cr lcr rcl fr fr fr lfr rfl gr gr gr lgr rgl kr kr kr lkr rkl pr pr pr lpr rpl phr phr phr lphr rphl shr shr shr lshr rshl rsl sktr sctr skdr scdr skbr scbr skpr scpr dr dr dr rdr ldr tr tr tr rtr ltr vr rx zr zdr ztr zgr zkr ntr ntr ndr ngr mscr mshr mskr nscr ngscr ndscr nskr ngskr ndskr rr");
         midCons.put("s", "ls lst lsc lsk lsp rs rst rsc rsk rsp sl rsl lsl sktr sctr skdr scdr skbr scbr skpr scpr nsl msl msc mscr mst msp msk mskr nsl nsc nscr ngscr ndscr nsk nskr ngskr ndskr nst ndst nsp lsh rsh sh shl shqu shk shp shm shn shr shw shpl lshr rshl msh mshr ss");
         midCons.put("sh", "lsh rsh sh shl shqu shk shp shm shn shr shw shpl lshr rshl msh mshr");
-        midCons.put("t", "lst lt rst rt sktr sctr tr rtr ltr zt ztr ntr ntr mst nst ndst ltl rtl tt");
+        midCons.put("t", "ct ft lst lt rst rt sktr sctr tk tr rtr ltr zt ztr ntr ntr mst nst ndst tq ltl rtl tt");
         midCons.put("th", "lth rth zth cth");
         midCons.put("tl", "ltl rtl");
-        midCons.put("v", "lv rv vv");
-        midCons.put("w", "bw chw dw fw gw hw khw mw nw pw sw shw tw thw w wr zw");
+        midCons.put("v", "lv rv vv vl vr");
+        midCons.put("w", "bw chw dw fw gw hw khw mw nw pw sw shw tw thw w wr wy zw");
         midCons.put("x", "nx rx lx");
-        midCons.put("y", "by dy fy gy hy ky my ny py sy ty vy y zy");
+        midCons.put("y", "by dy fy gy hy ky my ny py sy ty vy wy zy");
         midCons.put("z", "lz rz zn zd zt zg zk zm zn zp zb zr zdr ztr zgr zkr zth zz");
 
         closeCons.put("b", "b lb rb bs bz mb mbs bh bh lbh rbh mbh bb");
@@ -339,7 +339,7 @@ public class FakeLanguageGen implements Serializable {
         closeCons.put("ch", "ch lch rch tch pch kch mch nch");
         closeCons.put("d", "d ld rd ds dz dt dsh dth gd nd nds dh dh ldh rdh ndh dd");
         closeCons.put("dh", "dh ldh rdh ndh");
-        closeCons.put("f", "f lf rf fs fz ft fsh fth ff");
+        closeCons.put("f", "f lf rf fs fz ft fsh ft fth ff");
         closeCons.put("g", "g lg rg gs gz gd gsh gth ng ngs gg");
         closeCons.put("h", "cth ch lch rch tch pch kch mch nch dsh dth fsh fth gsh gth h hs ksh kth psh pth ph ph ph ph ph ph lph rph phs pht phth");
         closeCons.put("j", "j");
@@ -355,15 +355,14 @@ public class FakeLanguageGen implements Serializable {
         closeCons.put("r", "rb rc rch rd rf rg rk rp rph r rs rz");
         closeCons.put("s", "bs cks cs ds fs gs hs ks ls ms mbs mps ns nds nks ngs ps phs rs s st sp st sp sc sk sm ts lsh rsh sh shk shp msh ss");
         closeCons.put("sh", "lsh rsh sh shk shp msh");
-        closeCons.put("t", "ct tch dt ft kt mt nt pt pht st st t ts tz tt");
+        closeCons.put("t", "ct ft tch dt ft kt mt nt pt pht st st t ts tz tt");
         closeCons.put("th", "cth dth fth gth kth pth phth th ths");
-        closeCons.put("tl", "");
+        closeCons.put("tl", "tl");
         closeCons.put("v", "v");
         closeCons.put("w", "");
         closeCons.put("x", "x");
         closeCons.put("y", "");
         closeCons.put("z", "bz cz dz fz gz kz lz mz nz pz rz tz z zz");
-
     }
 
     /*
@@ -1476,6 +1475,7 @@ public class FakeLanguageGen implements Serializable {
                                          int preferredLimit) {
         int l, sz = parts.size();
         List<String> working = new ArrayList<>(sz * 24);
+        String pair;
         for (int e = 0; e < parts.size(); e++) {
             Map.Entry<String, String> sn = parts.entryAt(e);
             if(missingSounds.contains(sn.getKey()))
@@ -1492,59 +1492,64 @@ public class FakeLanguageGen implements Serializable {
                     case 1:
                         working.add(t);
                         working.add(t);
+                        working.add(t);
                         c = t.charAt(0);
                         num = 0;
                         boolean repeat = true;
                         switch (c) {
                             case 'w':
-                                num++;
+                                num+= 2;
                             case 'y':
                             case 'h':
-                                num++;
-                            case 'j':
-                                num++;
+                                num+= 4;
                             case 'q':
                             case 'x':
-                                num+=2;
+                                num += 4;
                                 repeat = false;
                                 break;
                             case 'i':
                             case 'u':
                                 repeat = false;
-                                num = 5;
+                                num = 13;
                                 break;
                             case 'z':
                             case 'v':
-                                num = 2;
+                                num = 4;
+                                break;
+                            case 'j':
+                                num = 7;
                                 break;
                             default:
-                                if(e >= preferredLimit)
-                                    num = 2;
+                                if (e >= preferredLimit)
+                                    num = 6;
                                 else
-                                    num = 5;
+                                    num = 13;
                         }
                         for (int i = 0; i < num * 3; i++) {
-                            if (rng.nextDouble() < 0.7) {
+                            if (rng.nextDouble() < 0.75) {
                                 working.add(t);
                             }
                         }
 
                         if (repeat && rng.nextDouble() < repeatSingleChance) {
-                            working.add(t + t);
-                            working.add(t + t);
-                            working.add(t + t);
-                            if (rng.nextDouble() < 0.8) {
-                                working.add(t + t);
-                                working.add(t + t);
+                            pair = t + t;
+                            if(missingSounds.contains(pair))
+                                continue;
+                            working.add(pair);
+                            working.add(pair);
+                            working.add(pair);
+                            if (rng.nextDouble() < 0.7) {
+                                working.add(pair);
+                                working.add(pair);
                             }
-                            if (rng.nextDouble() < 0.8) {
-                                working.add(t + t);
+                            if (rng.nextDouble() < 0.7) {
+                                working.add(pair);
                             }
                         }
 
                         break;
                     case 2:
-                        if (rng.nextDouble() < 0.75) {
+                        if (rng.nextDouble() < 0.65) {
                             c = t.charAt(1);
                             num = 0;
                             switch (c) {
@@ -1559,42 +1564,43 @@ public class FakeLanguageGen implements Serializable {
                                     break;
                                 default:
 
-                                    if(e >= preferredLimit)
+                                    if (e >= preferredLimit)
+                                        num = 2;
+                                    else
+                                        num = 7;
+                            }
+                            working.add(t);
+                            for (int i = 0; i < num; i++) {
+                                if (rng.nextDouble() < 0.25) {
+                                    working.add(t);
+                                }
+                            }
+                        }
+                        break;
+                    case 3:
+                        if(rng.nextDouble() < 0.5) {
+                            c = t.charAt(0);
+                            switch (c) {
+                                case 'z':
+                                    num = 1;
+                                    break;
+                                case 'w':
+                                    num = 3;
+                                    break;
+                                case 'n':
+                                    num = 4;
+                                    break;
+                                default:
+                                    if (e >= preferredLimit)
                                         num = 2;
                                     else
                                         num = 6;
                             }
                             working.add(t);
                             for (int i = 0; i < num; i++) {
-                                    if (rng.nextDouble() < 0.3) {
-                                        working.add(t);
-                                    }
+                                if (rng.nextDouble() < 0.2) {
+                                    working.add(t);
                                 }
-                            }
-                        break;
-                    case 3:
-                        c = t.charAt(0);
-                        num = 0;
-                        switch (c) {
-                            case 'z':
-                                num = 1;
-                                break;
-                            case 'w':
-                                num = 3;
-                                break;
-                            case 'n':
-                                num = 4;
-                                break;
-                            default:
-                                if(e >= preferredLimit)
-                                    num = 2;
-                                else
-                                    num = 6;
-                        }
-                        working.add(t);
-                        for (int i = 0; i < num; i++) {
-                            if (rng.nextDouble() < 0.2) {
-                                working.add(t);
                             }
                         }
                         break;
@@ -1629,9 +1635,9 @@ public class FakeLanguageGen implements Serializable {
         System.arraycopy(new double[]{
                 5 + rng.nextDouble(4), 13 + rng.nextDouble(9), 3 + rng.nextDouble(3), 1 + rng.nextDouble(2)
         }, 0, chances, 0, chances.length);
-        double vowelHeavy = rng.between(0.2, 0.5), diversity = rng.between(0.4, 0.8);
+        double vowelHeavy = rng.between(0.2, 0.5), removalRate = rng.between(0.15, 0.65);
         int sz = openCons.size();
-        int[] reordering = rng.randomOrdering(sz), vOrd = rng.randomOrdering(5);
+        int[] reordering = rng.randomOrdering(sz), vOrd = rng.randomOrdering(openVowels.size());
             OrderedMap<String, String>
                     parts0 = new OrderedMap<>(openVowels),
                     parts1 = new OrderedMap<>(openCons),
@@ -1664,7 +1670,7 @@ public class FakeLanguageGen implements Serializable {
             for (int i = 0; i < sz0; i++) {
                 char ac = nextAccents[i], ua = unaccented[i];
                 String v = "", uas = String.valueOf(ua);
-                Pattern pat = Pattern.compile("\\b([a-z]*)(" + ua + ")([a-z]*)\\b");
+                Pattern pat = Pattern.compile("\\b([aeiou]*)(" + ua + ")([aeiou]*)\\b");
                 Replacer rep = pat.replacer("$1$2$3 $1" + ac + "$3"), repLess = pat.replacer("$1" + ac + "$3");
                 for (int j = 0; j < p0s; j++) {
                     String k = parts0.keyAt(j);
@@ -1748,7 +1754,7 @@ public class FakeLanguageGen implements Serializable {
             n++;
         }
 
-        for (; n < sz * diversity; n++) {
+        for (; n < sz * removalRate; n++) {
             missingSounds.add(parts1.keyAt(n));
             missingSounds.add(parts2.keyAt(n));
             missingSounds.add(parts3.keyAt(n));
@@ -1760,9 +1766,9 @@ public class FakeLanguageGen implements Serializable {
         return new FakeLanguageGen(
                 processParts(parts0, missingSounds, forbidden, rng, 0.0, p0s),
                 new String[]{"y", "y"},
-                processParts(openCons, missingSounds, forbidden, rng, 0.0, 9999),
-                processParts(midCons, missingSounds, forbidden, rng, (rng.nextDouble() * 3 - 0.75) / 2.25, 9999),
-                processParts(closeCons, missingSounds, forbidden, rng, (rng.nextDouble() * 3 - 0.75) / 3.5, 9999),
+                processParts(openCons, missingSounds, forbidden, rng, 0.0, 4096),
+                processParts(midCons, missingSounds, forbidden, rng, (rng.nextDouble() * 3 - 0.75) / 2.25, 4096),
+                processParts(closeCons, missingSounds, forbidden, rng, (rng.nextDouble() * 3 - 0.75) / 3.5, 4096),
                 new String[]{},
                 new String[]{}, lengths, chances, vowelHeavy, vowelHeavy * 1.8, 0.0, 0.0, genericSanityChecks, true).summarize("0#" + seed + "@1");
     }
