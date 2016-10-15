@@ -33,9 +33,9 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 0, rngMode = 0, noiseMode = 1;
+    private int hashMode = 28, rngMode = 0, noiseMode = 1;
     private CrossHash.Storm storm, stormA, stormB, stormC;
-    private int testType = 4;
+    private int testType = 1;
     private RandomnessSource fuzzy, random;
     private Random jreRandom;
     private RandomXS128 gdxRandom;
@@ -143,11 +143,11 @@ public class HashVisualizer extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        width = 256;
-        height = 256;
-        cellWidth = 2;
-        cellHeight = 2;
-        display = new SquidPanel(width, height, 2, 2);
+        width = 512;
+        height = 512;
+        cellWidth = 1;
+        cellHeight = 1;
+        display = new SquidPanel(width, height, cellWidth, cellHeight);
         overlay = new SquidPanel(16, 8, DefaultResources.getStretchableFont().width(32).height(64).initBySize());
         IFilter<Color> filter0 = new Filters.PaletteFilter(
                 new float[]{0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0.125f, 0.25f, 0.375f, 0.5f, 0.625f, 0.75f, 0.875f, 1f},
@@ -183,7 +183,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             rngMode %= 18;
                         } else {
                             hashMode++;
-                            hashMode %= 28;
+                            hashMode &= 31;
                         }
                         putMap();
                         //Gdx.graphics.requestRendering();
@@ -517,6 +517,45 @@ public class HashVisualizer extends ApplicationAdapter {
                             }
                         }
                         break;
+                    case 28:
+                        for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
+                            for (int y = 0; y < height; y++) {
+                                coordinates[1] = y;
+                                code = CrossHash.Falcon.hash(coordinates) & 0xFFFFFF00 | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        break;
+                    case 29:
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                coordinate[0] = (x << 9) | y;
+                                code = CrossHash.Falcon.hash(coordinate) & 0xFFFFFF00 | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        break;
+                    case 30:
+                        for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
+                            for (int y = 0; y < height; y++) {
+                                coordinates[1] = y;
+                                code = CrossHash.Falcon.hash64(coordinates) & 0xFFFFFF00 | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        break;
+                    case 31:
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                coordinate[0] = (x << 9) | y;
+                                code = CrossHash.Falcon.hash64(coordinate) & 0xFFFFFF00 | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        break;
+
                 }
             }
             break;
@@ -784,6 +823,44 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.Lightning.hash64(coordinate) & 0xFFFFFF00 | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        break;
+                    case 28:
+                        for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
+                            for (int y = 0; y < height; y++) {
+                                coordinates[1] = y;
+                                code = CrossHash.Falcon.hash(coordinates) & 0xFFFFFF00 | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        break;
+                    case 29:
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                coordinate[0] = (x << 9) | y;
+                                code = CrossHash.Falcon.hash(coordinate) & 0xFFFFFF00 | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        break;
+                    case 30:
+                        for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
+                            for (int y = 0; y < height; y++) {
+                                coordinates[1] = y;
+                                code = CrossHash.Falcon.hash64(coordinates) & 0xFFFFFF00 | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        break;
+                    case 31:
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                coordinate[0] = (x << 9) | y;
+                                code = CrossHash.Falcon.hash64(coordinate) & 0xFFFFFF00 | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
