@@ -19,8 +19,8 @@ public class SquidStorageTest extends ApplicationAdapter{
     @Override
     public void create() {
         super.create();
-        SquidStorage store = new SquidStorage("StorageTest");
-        if(true) {
+        if(false) {
+            SquidStorage store = new SquidStorage("StorageTest");
             store.compress = true;
             System.out.println(store.preferences.get().values());
             StatefulRNG srng = new StatefulRNG("Hello, Storage!"), r2;
@@ -55,8 +55,12 @@ public class SquidStorageTest extends ApplicationAdapter{
             Gdx.app.exit();
         }
         else {
-            store.compress = false;
-            System.out.println(store.preferences.get().values());
+
+            SquidStorage noCompression = new SquidStorage("StorageTest"), yesCompression = new SquidStorage("StorageCompressed");
+            noCompression.compress = false;
+            yesCompression.compress = true;
+            System.out.println(noCompression.preferences.get().values());
+            System.out.println(yesCompression.preferences.get().values());
             StatefulRNG srng = new StatefulRNG("Hello, Storage!");
 
             FakeLanguageGen randomLanguage = FakeLanguageGen.randomLanguage(0x1337BEEFCAFEBABEL).mix(4, FakeLanguageGen.ARABIC_ROMANIZED, 5, FakeLanguageGen.JAPANESE_ROMANIZED, 3);
@@ -64,19 +68,37 @@ public class SquidStorageTest extends ApplicationAdapter{
             SpillWorldMap world = new SpillWorldMap(120, 80, "FutureLandXtreme");
             world.generate(15, true);
             GreasedRegion grease = new GreasedRegion(new ThunderRNG(75L), 75, 75);
-            store.put("rng", srng);
+            String text = randomLanguage.sentence(srng.copy(), 5, 8);
+            noCompression.put("rng", srng);
+            noCompression.put("language", randomLanguage);
+            noCompression.put("generated", text);
+            noCompression.put("world", world);
+            noCompression.put("grease", grease);
 
-            store.put("language", randomLanguage);
+            yesCompression.put("rng", srng);
+            yesCompression.put("language", randomLanguage);
+            yesCompression.put("generated", text);
+            yesCompression.put("world", world);
+            yesCompression.put("grease", grease);
 
-            store.put("world", world);
-            store.put("grease", grease);
+            System.out.println(text);
 
-            String shown = store.show();
+            String shown = noCompression.show();
             System.out.println(shown);
             System.out.println("Uncompressed preference bytes: " + shown.length() * 2);
+            shown = yesCompression.show();
+            System.out.println();
+            System.out.println(shown);
+            System.out.println("Compressed preference bytes: " + shown.length() * 2);
+            noCompression.preferences.clear();
+            noCompression.preferences.flush();
+            yesCompression.store("Compressed");
 
-            store.preferences.clear();
-            store.preferences.flush();
+            System.out.println(yesCompression.get("Compressed", "language", FakeLanguageGen.class).sentence(srng.copy(), 5, 8));
+
+            yesCompression.preferences.clear();
+            yesCompression.preferences.flush();
+
             Gdx.app.exit();
         }
     }
