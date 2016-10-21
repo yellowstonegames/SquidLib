@@ -1910,6 +1910,30 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
     }
 
     /**
+     * Generates a 2D int array from an array or vararg of GreasedRegions, starting at all 0 and adding 1 to the int at
+     * a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
+     * this method, it can produce any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
+     * produce number between 0 and 16 in a cell.
+     * @param regions an array or vararg of GreasedRegions; must all have the same width and height
+     * @return a 2D int array with the same width and height as the regions, where an int cell equals the number of given GreasedRegions that had an "on" cell at that position
+     */
+    public static int[][] sum(GreasedRegion... regions)
+    {
+        if(regions == null || regions.length <= 0)
+            return new int[0][0];
+        int w = regions[0].width, h = regions[0].height, l = Math.min(32, regions.length), ys = regions[0].ySections;
+        int[][] numbers = new int[w][h];
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                for (int i = 0; i < l; i++) {
+                    numbers[x][y] += (regions[i].data[x * ys + (y >> 6)] & (1L << (y & 63))) != 0 ? 1 : 0;
+                }
+            }
+        }
+        return numbers;
+    }
+
+    /**
      * Generates a 2D int array from an array or vararg of GreasedRegions, treating each cell in the nth region as the
      * nth bit of the int at the corresponding x,y cell in the int array. This means if you give 8 GreasedRegions to
      * this method, it can produce any 8-bit number in a cell (0-255); if you give 16 GreasedRegions, then it can

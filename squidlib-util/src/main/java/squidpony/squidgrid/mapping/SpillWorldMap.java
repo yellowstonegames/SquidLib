@@ -1,6 +1,6 @@
 package squidpony.squidgrid.mapping;
 
-import regexodus.Category;
+import squidpony.GwtCompatibility;
 import squidpony.Thesaurus;
 import squidpony.annotation.Beta;
 import squidpony.squidgrid.MultiSpill;
@@ -23,7 +23,7 @@ public class SpillWorldMap {
     public StatefulRNG rng;
     public String name;
     public char[][] politicalMap;
-    protected static final char[] letters = Category.L.contents();
+    public static final char[] letters = GwtCompatibility.letterSpan(255);
     public final OrderedMap<Character, String> atlas = new OrderedMap<>(16);
 
     public SpillWorldMap()
@@ -61,11 +61,12 @@ public class SpillWorldMap {
      * equal to 256, but if you expect to be using maps that are especially large (which makes sense for world maps),
      * expanding the pool will use more memory initially and then (possibly) much less over time, easing pressure on
      * the garbage collector as well, as re-allocations of large Coords that would otherwise be un-cached are avoided.
-     * @param factionCount the number of factions to have claiming land
+     * @param factionCount the number of factions to have claiming land, cannot be negative or more than 255
      * @param makeAtlas if true, this will assign random names to factions, accessible via {@link #atlas}
      * @return a 2D char array where letters represent the claiming faction, '~' is water, and '%' is unclaimed
      */
     public char[][] generate(int factionCount, boolean makeAtlas) {
+        factionCount &= 255;
         //, extra = 25 + (height * width >>> 4);
         MultiSpill spreader = new MultiSpill(new short[width][height], Spill.Measurement.MANHATTAN, rng);
         GreasedRegion bounds = new GreasedRegion(width, height).not().retract(4),
@@ -158,7 +159,7 @@ public class SpillWorldMap {
         politicalMap = new char[width][height];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                politicalMap[x][y] = (sm[x][y] == -1) ? '~' : (sm[x][y] == 0) ? '%' : letters[(sm[x][y] - 1) & 511];
+                politicalMap[x][y] = (sm[x][y] == -1) ? '~' : (sm[x][y] == 0) ? '%' : letters[(sm[x][y] - 1) & 255];
             }
         }
         if (makeAtlas) {

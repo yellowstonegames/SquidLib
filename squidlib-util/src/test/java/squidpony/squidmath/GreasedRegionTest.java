@@ -1,7 +1,7 @@
 package squidpony.squidmath;
 
 import org.junit.Test;
-import regexodus.Category;
+import squidpony.GwtCompatibility;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
@@ -26,13 +26,13 @@ public class GreasedRegionTest {
     public static DungeonGenerator dungeonGen = new DungeonGenerator(64, 64, srng);
     public static char[][] dungeon = dungeonGen.generate();
     public static GreasedRegion dataDungeon = new GreasedRegion(dungeon, '.');
-    public static final char[] letters = Category.L.contents();
-    public static final int maxLetter = letters.length;
+    public static final char[] letters = GwtCompatibility.letterSpan(256);
+    public static final int maxLetter = 256;
     static {
         //printRegion(dataCross);
         //printRegion(dataCross2);
     }
-    public static final boolean PRINTING = false;
+    public static final boolean PRINTING = true;
     public static void print2D(int[][] data)
     {
         if(!PRINTING)
@@ -44,7 +44,7 @@ public class GreasedRegionTest {
             int d = 0;
             for (int y = 0; y < data[0].length; y++) {
                 for (int x = 0; x < data.length; x++) {
-                    d = (data[x][y] & 0xFFFF) % maxLetter;
+                    d = data[x][y]& 255;
                     System.out.print(letters[d]);
                 }
                 System.out.println();
@@ -216,7 +216,7 @@ public class GreasedRegionTest {
     public void testFitting()
     {
         GreasedRegion wrecked = new GreasedRegion(dataCross);
-        int[][] numbers = GreasedRegion.bitSum(new GreasedRegion(64, 64).not().retractSeries8way(8));
+        int[][] numbers = GreasedRegion.sum(new GreasedRegion(64, 64).not().retractSeries8way(30));
         print2D(numbers);
         System.out.println();
         printRegion(wrecked);

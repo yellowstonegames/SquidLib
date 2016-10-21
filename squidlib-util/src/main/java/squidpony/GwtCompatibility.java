@@ -76,6 +76,19 @@ public class GwtCompatibility {
         return r;
     }
 
+    private static final char[] letters = {
+            'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a',
+            'b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','À','Á',
+            'Â','Ã','Ä','Å','Æ','Ç','È','É','Ê','Ë','Ì','Í','Î','Ï','Ð','Ñ','Ò','Ó','Ô','Õ','Ö','Ø','Ù','Ú','Û','Ü','Ý',
+            'Þ','ß','à','á','â','ã','ä','å','æ','ç','è','é','ê','ë','ì','í','î','ï','ð','ñ','ò','ó','ô','õ','ö','ø','ù',
+            'ú','û','ü','ý','þ','ÿ','Ā','ā','Ă','ă','Ą','ą','Ć','ć','Ĉ','ĉ','Ċ','ċ','Č','č','Ď','ď','Đ','đ','Ē','ē','Ĕ',
+            'ĕ','Ė','ė','Ę','ę','Ě','ě','Ĝ','ĝ','Ğ','ğ','Ġ','ġ','Ģ','ģ','Ĥ','ĥ','Ħ','ħ','Ĩ','ĩ','Ī','ī','Ĭ','ĭ','Į','į',
+            'İ','ı','Ĵ','ĵ','Ķ','ķ','ĸ','Ĺ','ĺ','Ļ','ļ','Ľ','ľ','Ŀ','ŀ','Ł','ł','Ń','ń','Ņ','ņ','Ň','ň','ŉ','Ō','ō','Ŏ',
+            'ŏ','Ő','ő','Œ','œ','Ŕ','ŕ','Ŗ','ŗ','Ř','ř','Ś','ś','Ŝ','ŝ','Ş','ş','Š','š','Ţ','ţ','Ť','ť','Ŧ','ŧ','Ũ','ũ',
+            'Ū','ū','Ŭ','ŭ','Ů','ů','Ű','ű','Ų','ų','Ŵ','ŵ','Ŷ','ŷ','Ÿ','Ź','ź','Ż','ż','Ž','ž','Ǿ','ǿ','Ș','ș','Ț','ț',
+            'Γ','Δ','Θ','Λ','Ξ','Π','Σ','Φ','Ψ','Ω','α','β','γ'},
+            empty = new char[0];
+
     /**
      * Stupidly simple convenience method that produces a char range from start to end, including end, as a char array.
      * @param start the inclusive lower bound on the range, such as 'a'
@@ -85,7 +98,7 @@ public class GwtCompatibility {
     public static char[] charSpan(char start, char end)
     {
         if(end - start <= 0)
-            return new char[0];
+            return empty;
         if(end == 0xffff)
         {
 
@@ -100,6 +113,21 @@ public class GwtCompatibility {
         for (char i = 0, n = start; n <= end; i++, n++) {
             r[i] = n;
         }
+        return r;
+    }
+    /**
+     * Stupidly simple convenience method that produces a char array containing only letters that can be reasonably
+     * displayed (with SquidLib's default text display assets, at least). The letters are copied from a single source
+     * of 256 chars; if you need more chars or you don't need pure letters, you can use {@link #charSpan(char, char)}.
+     * @param charCount the number of letters to return in an array
+     * @return the range of chars as a char array
+     */
+    public static char[] letterSpan(int charCount)
+    {
+        if(charCount <= 0)
+            return empty;
+        char[] r = new char[Math.min(charCount, 256)];
+        System.arraycopy(letters, 0, r, 0, r.length);
         return r;
     }
 
