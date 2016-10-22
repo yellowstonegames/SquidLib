@@ -119,8 +119,8 @@ public class GwtCompatibility {
      * Stupidly simple convenience method that produces a char array containing only letters that can be reasonably
      * displayed (with SquidLib's default text display assets, at least). The letters are copied from a single source
      * of 256 chars; if you need more chars or you don't need pure letters, you can use {@link #charSpan(char, char)}.
-     * @param charCount the number of letters to return in an array
-     * @return the range of chars as a char array
+     * @param charCount the number of letters to return in an array; the maximum this will produce is 256
+     * @return the range of letters as a char array
      */
     public static char[] letterSpan(int charCount)
     {
