@@ -317,7 +317,7 @@ public class MixedGenerator {
         else
             allCarvings = rng.shuffle(allCarvings, new CarverType[allCarvings.length]);
 
-        for (int p = 0, c = 0; p < totalPoints; p++, c = (++c) % totalLength) {
+        for (int p = 0, c = 0; p < totalPoints; p++, c = ++c % totalLength) {
             long pair = points.get(p);
             Coord start = Coord.get((int)(pair >> 24) & 0xff, (int)(pair >> 16) & 0xff),
                   end   = Coord.get((int)(pair >> 8) & 0xff, (int)pair & 0xff);
@@ -349,7 +349,7 @@ public class MixedGenerator {
                     markRectangle(end, rng.between(1, 5), rng.between(1, 5));
                     markRectangle(start, rng.between(1, 4), rng.between(1, 4));
                     store();
-                    dir = Direction.getDirection(end.x - start.x, (end.y - start.y));
+                    dir = Direction.getDirection(end.x - start.x, end.y - start.y);
                     if(dir.isDiagonal())
                         dir = rng.nextBoolean() ? Direction.getCardinalDirection(dir.deltaX, 0)
                                 : Direction.getCardinalDirection(0, -dir.deltaY);
@@ -372,7 +372,7 @@ public class MixedGenerator {
                     markRectangleWalled(end, rng.between(1, 5), rng.between(1, 5));
                     markRectangleWalled(start, rng.between(1, 4), rng.between(1, 4));
                     store();
-                    dir = Direction.getDirection(end.x - start.x, (end.y - start.y));
+                    dir = Direction.getDirection(end.x - start.x, end.y - start.y);
                     if(dir.isDiagonal())
                         dir = rng.nextBoolean() ? Direction.getCardinalDirection(dir.deltaX, 0)
                                 : Direction.getCardinalDirection(0, -dir.deltaY);
@@ -395,7 +395,7 @@ public class MixedGenerator {
                     markCircle(end, rng.between(2, 6));
                     markCircle(start, rng.between(2, 6));
                     store();
-                    dir = Direction.getDirection(end.x - start.x, (end.y - start.y));
+                    dir = Direction.getDirection(end.x - start.x, end.y - start.y);
                     if(dir.isDiagonal())
                         dir = rng.nextBoolean() ? Direction.getCardinalDirection(dir.deltaX, 0)
                                 : Direction.getCardinalDirection(0, -dir.deltaY);
@@ -418,7 +418,7 @@ public class MixedGenerator {
                     markCircleWalled(end, rng.between(2, 6));
                     markCircleWalled(start, rng.between(2, 6));
                     store();
-                    dir = Direction.getDirection(end.x - start.x, (end.y - start.y));
+                    dir = Direction.getDirection(end.x - start.x, end.y - start.y);
                     if(dir.isDiagonal())
                         dir = rng.nextBoolean() ? Direction.getCardinalDirection(dir.deltaX, 0)
                                 : Direction.getCardinalDirection(0, -dir.deltaY);

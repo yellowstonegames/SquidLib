@@ -383,7 +383,7 @@ public class DungeonBoneGen {
             for (j = -1; ypos < h; ++j) {
                 // a general herringbone row consists of:
                 //    horizontal left block, the bottom of a previous vertical, the top of a new vertical
-                int phase = (j & 3);
+                int phase = j & 3;
                 // displace horizontally according to pattern
                 if (phase == 0) {
                     i = 0;
@@ -438,7 +438,7 @@ public class DungeonBoneGen {
             for (j = -1; ypos < h; ++j) {
                 // a general herringbone row consists of:
                 //    horizontal left block, the bottom of a previous vertical, the top of a new vertical
-                int phase = (j & 3);
+                int phase = j & 3;
                 // displace horizontally according to pattern
                 if (phase == 0) {
                     i = 0;

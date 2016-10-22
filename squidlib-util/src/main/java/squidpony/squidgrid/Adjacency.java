@@ -446,8 +446,8 @@ public abstract class Adjacency implements Serializable {
             if(rotations <= 4 || (direction & 1) == 0)
                 return !validate(start);
 
-            return (neighbors[1][0][start] < 0 || map[neighbors[1][0][start]] >= wall)
-                            || (neighbors[1][2][start] < 0 || map[neighbors[1][2][start]] >= wall);
+            return neighbors[1][0][start] < 0 || map[neighbors[1][0][start]] >= wall
+                    || neighbors[1][2][start] < 0 || map[neighbors[1][2][start]] >= wall;
         }
 
         @Override

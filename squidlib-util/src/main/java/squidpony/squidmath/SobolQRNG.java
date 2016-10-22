@@ -303,7 +303,7 @@ public class SobolQRNG implements RandomnessSource {
     private void initDirectionVector(final int d, final int a, final int[] m) {
         final int s = m.length - 1;
         for (int i = 1; i <= s; i++) {
-            direction[d][i] = ((long) m[i]) << (BITS - i);
+            direction[d][i] = (long) m[i] << (BITS - i);
         }
         for (int i = s + 1; i <= BITS; i++) {
             direction[d][i] = direction[d][i - s] ^ (direction[d][i - s] >> s);
@@ -320,7 +320,7 @@ public class SobolQRNG implements RandomnessSource {
     private void initDirectionVector(final int[] m) {
         final int s = m.length - 2, d = m[0] - 1, a = m[1];
         for (int i = 1; i <= s; i++) {
-            direction[d][i] = ((long) m[i+1]) << (BITS - i);
+            direction[d][i] = (long) m[i+1] << (BITS - i);
         }
         for (int i = s + 1; i <= BITS; i++) {
             direction[d][i] = direction[d][i - s] ^ (direction[d][i - s] >> s);
@@ -585,9 +585,9 @@ public class SobolQRNG implements RandomnessSource {
     public long nextLong() {
         if (dimension > 1) {
             long[] l = nextLongVector();
-            return (l[0] << 32) ^ (l[1]);
+            return (l[0] << 32) ^ l[1];
         }
-        return ((long)(nextIntVector()[0]) << 32) ^ (nextIntVector()[0]);
+        return ((long) nextIntVector()[0] << 32) ^ nextIntVector()[0];
     }
     public double nextDouble() {
         return nextVector()[0];

@@ -144,9 +144,9 @@ public class ConeAOE implements AOE {
 
     public void setAngle(double angle) {
         if (reach.limit == null || reach.limit == AimLimit.FREE ||
-                (reach.limit == AimLimit.EIGHT_WAY && (int)(angle) % 45 == 0) ||
-                (reach.limit == AimLimit.DIAGONAL && (int)(angle) % 90 == 45) ||
-                (reach.limit == AimLimit.ORTHOGONAL && (int)(angle) % 90 == 0)) {
+                (reach.limit == AimLimit.EIGHT_WAY && (int) angle % 45 == 0) ||
+                (reach.limit == AimLimit.DIAGONAL && (int) angle % 90 == 45) ||
+                (reach.limit == AimLimit.ORTHOGONAL && (int) angle % 90 == 0)) {
             this.angle = angle;
 //            this.startAngle = Math.abs((angle - span / 2.0) % 360.0);
 //            this.endAngle = Math.abs((angle + span / 2.0) % 360.0);
@@ -189,7 +189,7 @@ public class ConeAOE implements AOE {
     public boolean mayContainTarget(Set<Coord> targets) {
         for (Coord p : targets) {
             if (radiusType.radius(origin.x, origin.y, p.x, p.y) <= radius) {
-                double d = ((angle - Math.toDegrees(Math.atan2(p.y - origin.y, p.x - origin.x)) % 360.0 + 360.0) % 360.0);
+                double d = (angle - Math.toDegrees(Math.atan2(p.y - origin.y, p.x - origin.x)) % 360.0 + 360.0) % 360.0;
                 if(d > 180)
                     d = 360 - d;
                 if(d < span / 2.0)

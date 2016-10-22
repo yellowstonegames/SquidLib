@@ -2503,12 +2503,12 @@ public class FakeLanguageGen implements Serializable {
         String[] ov = merge1000(rng, openingVowels, other.openingVowels, otherInfluence),
                 mv = merge1000(rng, midVowels, other.midVowels, otherInfluence),
                 oc = merge1000(rng, openingConsonants, other.openingConsonants, otherInfluence *
-                        Math.max(0.0, Math.min(1.0, (1.0 - other.vowelStartFrequency + vowelStartFrequency)))),
+                        Math.max(0.0, Math.min(1.0, 1.0 - other.vowelStartFrequency + vowelStartFrequency))),
                 mc = merge1000(rng, midConsonants, other.midConsonants, otherInfluence),
                 cc = merge1000(rng, closingConsonants, other.closingConsonants, otherInfluence *
-                        Math.max(0.0, Math.min(1.0, (1.0 - other.vowelEndFrequency + vowelEndFrequency)))),
+                        Math.max(0.0, Math.min(1.0, 1.0 - other.vowelEndFrequency + vowelEndFrequency))),
                 cs = merge1000(rng, closingSyllables, other.closingSyllables, otherInfluence *
-                        Math.max(0.0, Math.min(1.0, (other.syllableEndFrequency - syllableEndFrequency)))),
+                        Math.max(0.0, Math.min(1.0, other.syllableEndFrequency - syllableEndFrequency))),
                 splitters = merge1000(rng, vowelSplitters, other.vowelSplitters, otherInfluence);
 
         IntDoubleOrderedMap freqs = new IntDoubleOrderedMap(syllableFrequencies);
@@ -2532,12 +2532,12 @@ public class FakeLanguageGen implements Serializable {
     private static double readDouble(Object o)
     {
         if(o instanceof Double) return (Double) o;
-        else if(o instanceof Float) return ((Float) o);
+        else if(o instanceof Float) return (Float) o;
         else if(o instanceof Long) return ((Long) o).doubleValue();
-        else if(o instanceof Integer) return ((Integer) o);
-        else if(o instanceof Short) return ((Short) o);
-        else if(o instanceof Byte) return ((Byte) o);
-        else if(o instanceof Character) return ((Character) o);
+        else if(o instanceof Integer) return (Integer) o;
+        else if(o instanceof Short) return (Short) o;
+        else if(o instanceof Byte) return (Byte) o;
+        else if(o instanceof Character) return (Character) o;
         return 0.0;
     }
     /**
@@ -2578,17 +2578,17 @@ public class FakeLanguageGen implements Serializable {
         boolean summarize = true;
         double total = 0.0, current, weight;
         languages[0] = mixer;
-        total += (weights[0] = myWeight);
+        total += weights[0] = myWeight;
         if((summaries[0] = mixer.summary) == null) summarize = false;
         mods.addAll(other1.modifiers);
         languages[1] = other1.removeModifiers();
-        total += (weights[1] = weight1);
+        total += weights[1] = weight1;
         if(summarize && (summaries[1] = languages[1].summary) == null) summarize = false;
         for (int i = 1, p = 2; i < pairs.length; i+=2, p++) {
             if(pairs[i] == null || pairs[i-1] == null)
                 continue;
-            languages[p] = ((FakeLanguageGen) (pairs[i-1])).removeModifiers();
-            total += (weights[p] = readDouble(pairs[i]));
+            languages[p] = ((FakeLanguageGen) pairs[i-1]).removeModifiers();
+            total += weights[p] = readDouble(pairs[i]);
             if(summarize && (summaries[p] = languages[p].summary) == null) summarize = false;
         }
         if(total == 0)
@@ -2596,7 +2596,7 @@ public class FakeLanguageGen implements Serializable {
         current = myWeight / total;
         for (int i = 1; i < languages.length; i++) {
             if((weight = weights[i]) > 0)
-                mixer = mixer.mix(languages[i], (weight / total) / (current += weight / total));
+                mixer = mixer.mix(languages[i], weight / total / (current += weight / total));
         }
         if(summarize) {
             StringBuilder brief = new StringBuilder(64);
@@ -2644,7 +2644,7 @@ public class FakeLanguageGen implements Serializable {
         if(pairs == null || (len = pairs.length) <= 0)
             return ENGLISH.copy();
         if(len < 4)
-            return ((FakeLanguageGen) (pairs[0])).copy();
+            return ((FakeLanguageGen) pairs[0]).copy();
         Object[] pairs2 = new Object[len - 4];
         if(len > 4)
             System.arraycopy(pairs, 4, pairs2, 0, len - 4);
@@ -3072,7 +3072,7 @@ public class FakeLanguageGen implements Serializable {
             }
             Alteration[] alts = new Alteration[matches];
             for (int i = 0; i < matches; i++) {
-                alts[i] = Alteration.deserializeFromString(data.substring(altIdx+1, (altIdx = data.indexOf(6, altIdx+1))));
+                alts[i] = Alteration.deserializeFromString(data.substring(altIdx+1, altIdx = data.indexOf(6, altIdx+1)));
             }
             return new Modifier(alts);
         }

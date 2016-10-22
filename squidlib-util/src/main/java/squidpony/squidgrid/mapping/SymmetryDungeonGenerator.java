@@ -84,7 +84,7 @@ public class SymmetryDungeonGenerator extends MixedGenerator {
      * @see SerpentMapGenerator a class that uses this technique
      */
     public SymmetryDungeonGenerator(int width, int height, RNG rng, List<Coord> sequence) {
-        this(width, height, rng, listToMap((sequence)), 1f);
+        this(width, height, rng, listToMap(sequence), 1f);
     }
 
     /**

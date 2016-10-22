@@ -85,7 +85,7 @@ public class NaturalLanguageCipher implements Serializable{
          */
         @Override
         public long nextLong() {
-            return (state += 0x41041041041041L);
+            return state += 0x41041041041041L;
         }
 
         public double nextDouble()
@@ -450,11 +450,11 @@ se$->z
             //b <<= 3;
             got = bigrams[27 * current + next];
             i += got & 1L;
-            h |= (got >>= 1);
+            h |= got >>= 1;
             used++;
             //used += 5;
             if(count == 0) {
-                vowelStream = (got > 0 && got < 12);
+                vowelStream = got > 0 && got < 12;
             }else if (vowelStream != (got > 0 && got < 12)) {
                 vc+= vowelStream ? 1 : 0;
                 vowelStream = !vowelStream;
@@ -603,7 +603,7 @@ se$->z
                     endO--;
                 }
             }
-            if(end >= 5 && endO >= 5 && (sc[end - 2] == 'l' && sc[end-1] == 'y'))
+            if(end >= 5 && endO >= 5 && sc[end - 2] == 'l' && sc[end-1] == 'y')
             {
                 mods |= ADJECTIVELY;
                 end -= 2;
@@ -622,57 +622,57 @@ se$->z
                 end-=3;
                 endO -= 3;
             }
-            if(end >= 4 && endO >= 4 && ((scO[endO-3] == 'a' || scO[endO-3] == 'o') && scO[endO-2] == 'd' && scO[endO-1]=='e'))
+            if(end >= 4 && endO >= 4 && (scO[endO-3] == 'a' || scO[endO-3] == 'o') && scO[endO-2] == 'd' && scO[endO-1]=='e')
             {
                 mods |= VERBED;
                 end-=3;
                 endO-=3;
             }
-            else if(end >= 4 && endO >= 4 && (scO[endO-2] == 'e' && scO[endO-1] == 'd'))
+            else if(end >= 4 && endO >= 4 && scO[endO-2] == 'e' && scO[endO-1] == 'd')
             {
                 mods |= VERBED;
                 end-=2;
                 endO-=2;
             }
-            else if(end >= 5 && endO >= 5 && (sc[end - 3] == 'e' && sc[end - 2] == 's' && sc[end-1] == 't'))
+            else if(end >= 5 && endO >= 5 && sc[end - 3] == 'e' && sc[end - 2] == 's' && sc[end-1] == 't')
             {
                 mods |= ADJECTIVEST;
                 end -= 3;
                 endO -= 3;
             }
-            if(end >= 5 && endO >= 5 && (scO[endO-2] == 'i' && scO[endO-1] == 'c'))
+            if(end >= 5 && endO >= 5 && scO[endO-2] == 'i' && scO[endO-1] == 'c')
             {
                 mods |=NOUNIC;
                 end -= 2;
                 endO-=2;
             }
-            else if(end >= 6 && endO >= 6 && (scO[endO-3] == 'i' && scO[endO-2] == 'v' && scO[endO-1] == 'e')) {
+            else if(end >= 6 && endO >= 6 && scO[endO-3] == 'i' && scO[endO-2] == 'v' && scO[endO-1] == 'e') {
                 mods |= NOUNIVE;
                 end -= 3;
                 endO -= 3;
-                if (end >= 4 && endO >= 4 && ((scO[endO - 2] == 'a' || scO[endO - 2] == 'i') && scO[endO - 1] == 't')) {
+                if (end >= 4 && endO >= 4 && (scO[endO - 2] == 'a' || scO[endO - 2] == 'i') && scO[endO - 1] == 't') {
                     end -= 2;
                     endO -= 2;
                 }
             }
-            if(end >= 5 && (sc[end-3] == 'i' && sc[end-2] == 's' && sc[end-1] == 't'))
+            if(end >= 5 && sc[end-3] == 'i' && sc[end-2] == 's' && sc[end-1] == 't')
             {
                 mods |=NOUNIST;
                 end -= 3;
                 endO-=3;
-                if(endO >= 5 && (scO[endO-2] == 'i' && scO[endO-1] == 'v'))
+                if(endO >= 5 && scO[endO-2] == 'i' && scO[endO-1] == 'v')
                 {
                     mods |= NOUNIVE;
                     end-=2;
                     endO-=2;
                 }
             }
-            if(end >= 5 && (sc[end-3] == 'i' && sc[end-2] == 's' && sc[end-1] == 'm'))
+            if(end >= 5 && sc[end-3] == 'i' && sc[end-2] == 's' && sc[end-1] == 'm')
             {
                 mods |=NOUNISM;
                 end -= 3;
                 endO -= 3;
-                if(endO >= 5 && (scO[endO-2] == 'i' && scO[endO-1] == 'v'))
+                if(endO >= 5 && scO[endO-2] == 'i' && scO[endO-1] == 'v')
                 {
                     mods |= NOUNIVE;
                     end-=2;
@@ -680,76 +680,76 @@ se$->z
                 }
 
             }
-            if(end >= 8 && endO >= 8 && ((scO[endO - 4] == 't' || scO[endO - 4] == 's' || scO[endO - 4] == 'c') && scO[endO-3] == 'i' && scO[endO-2] == 'o' && scO[endO-1]=='n'))
+            if(end >= 8 && endO >= 8 && (scO[endO - 4] == 't' || scO[endO - 4] == 's' || scO[endO - 4] == 'c') && scO[endO-3] == 'i' && scO[endO-2] == 'o' && scO[endO-1]=='n')
             {
                 mods |=VERBATION;
                 end-=4;
                 endO -= 4;
             }
-            if(end >= 6 && (sc[end-4] == 'm' && sc[end-3] == 'e' && sc[end-2] == 'n' && sc[end-1] == 't'))
+            if(end >= 6 && sc[end-4] == 'm' && sc[end-3] == 'e' && sc[end-2] == 'n' && sc[end-1] == 't')
             {
                 mods |=VERBMENT;
                 end-=4;
                 endO -= 4;
             }
-            if(end >= 7 && endO >= 7 && (scO[endO-3] == 'i' && scO[endO-2] == 'a' && scO[endO-1]=='n'))
+            if(end >= 7 && endO >= 7 && scO[endO-3] == 'i' && scO[endO-2] == 'a' && scO[endO-1]=='n')
             {
                 mods |=VERBER;
                 end-=3;
                 endO-=3;
             }
-            else if(end >= 4 && endO >= 4 && ((sc[end-2] == 'e' || sc[end-2] == 'o') && sc[end-1] == 'r'))
+            else if(end >= 4 && endO >= 4 && (sc[end-2] == 'e' || sc[end-2] == 'o') && sc[end-1] == 'r')
             {
                 mods |= VERBER;
                 end-=2;
             }
-            if(end >= 4 && (sc[end-2] == 'e' && sc[end-1]=='n'))
+            if(end >= 4 && sc[end-2] == 'e' && sc[end-1]=='n')
             {
                 mods |=NOUNEN;
                 end-=2;
             }
-            if(end - start >= 5 && (sc[start] == 'p' && sc[start+1] == 'r' && sc[start+2] == 'e'))
+            if(end - start >= 5 && sc[start] == 'p' && sc[start+1] == 'r' && sc[start+2] == 'e')
             {
                 mods |=PREVERB;
                 start += 3;
             }
-            if(end - start >= 6 && (sc[start] == 'p' && sc[start+1] == 'o' && sc[start+2] == 's' && sc[start+3] == 't'))
+            if(end - start >= 6 && sc[start] == 'p' && sc[start+1] == 'o' && sc[start+2] == 's' && sc[start+3] == 't')
             {
                 mods |= POSTVERB;
                 start += 4;
             }
 
-            if(end - start >= 5 && (sc[start] == 'p' && sc[start+1] == 'r' && sc[start+2] == 'o'))
+            if(end - start >= 5 && sc[start] == 'p' && sc[start+1] == 'r' && sc[start+2] == 'o')
             {
                 mods |= PROVERB;
                 start += 3;
             }
             else {
-                if (end - start >= 6 && (sc[start] == 'a' && sc[start + 1] == 'n' && sc[start + 2] == 't' && sc[start + 3] == 'i')) {
+                if (end - start >= 6 && sc[start] == 'a' && sc[start + 1] == 'n' && sc[start + 2] == 't' && sc[start + 3] == 'i') {
                     mods |= ANTIVERB;
                     start += 4;
                 }
-                else if (end - start >= 8 && (sc[start] == 'c' && sc[start + 1] == 'o' && sc[start + 2] == 'n' && sc[start + 3] == 't' && sc[start + 4] == 'r' && sc[start + 5] == 'a')) {
+                else if (end - start >= 8 && sc[start] == 'c' && sc[start + 1] == 'o' && sc[start + 2] == 'n' && sc[start + 3] == 't' && sc[start + 4] == 'r' && sc[start + 5] == 'a') {
                     mods |= ANTIVERB;
                     start += 6;
                 }
             }
-            if(end - start >= 4 && (sc[start] == 'r' && sc[start+1] == 'e'))
+            if(end - start >= 4 && sc[start] == 'r' && sc[start+1] == 'e')
             {
                 mods |= REVERB;
                 start += 2;
             }
-            if(end - start >= 5 && (sc[start] == 'd' && sc[start+1] == 'i' && sc[start+2] == 's'))
+            if(end - start >= 5 && sc[start] == 'd' && sc[start+1] == 'i' && sc[start+2] == 's')
             {
                 mods |= DISNOUN;
                 start += 3;
             }
-            if(end - start >= 4 && (sc[start] == 'u' && sc[start+1] == 'n'))
+            if(end - start >= 4 && sc[start] == 'u' && sc[start+1] == 'n')
             {
                 mods |= ANTIVERB;
                 start += 2;
             }
-            if(end - start >= 4 && ((sc[start] == 'e' || sc[start] == 'i') && sc[start+1] == 'n'))
+            if(end - start >= 4 && (sc[start] == 'e' || sc[start] == 'i') && sc[start+1] == 'n')
             {
                 mods |= ENNOUN;
                 start += 2;

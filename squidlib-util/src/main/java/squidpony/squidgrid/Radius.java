@@ -410,12 +410,12 @@ public enum Radius {
         {
             case CIRCLE:
             case SPHERE:
-                return (other == CIRCLE || other == SPHERE);
+                return other == CIRCLE || other == SPHERE;
             case SQUARE:
             case CUBE:
-                return (other == SQUARE || other == CUBE);
+                return other == SQUARE || other == CUBE;
             default:
-                return (other == DIAMOND || other == OCTAHEDRON);
+                return other == DIAMOND || other == OCTAHEDRON;
         }
     }
     public boolean inRange(int startx, int starty, int endx, int endy, int minRange, int maxRange)

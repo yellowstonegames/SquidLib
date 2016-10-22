@@ -76,7 +76,7 @@ public class SpillWorldMap {
         Coord[] pts = smallerBounds.randomPortion(rng, rng.between(24, 48));
         int aLen = pts.length;
         short[][] sm = new short[width][height], tmpSM;
-        Arrays.fill(sm[0], (short) (-1));
+        Arrays.fill(sm[0], (short) -1);
         for (int i = 1; i < width; i++) {
             System.arraycopy(sm[0], 0, sm[i], 0, height);
         }

@@ -121,7 +121,7 @@ public class AreaUtils {
             switch (limit) {
                 case EIGHT_WAY:
                     if(Math.abs(end.x - origin.x) == Math.abs(end.y - origin.y) ||
-                            (end.x == origin.x || end.y == origin.y))
+                            end.x == origin.x || end.y == origin.y)
                     {
                         return true;
                     }
@@ -163,7 +163,7 @@ public class AreaUtils {
             switch (reach.limit) {
                 case EIGHT_WAY:
                     if(Math.abs(end.x - origin.x) == Math.abs(end.y - origin.y) ||
-                            (end.x == origin.x || end.y == origin.y))
+                            end.x == origin.x || end.y == origin.y)
                     {
                         return reach.metric.inRange(origin.x, origin.y, end.x, end.y,
                                 reach.minDistance, reach.maxDistance);

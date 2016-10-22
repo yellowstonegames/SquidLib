@@ -571,7 +571,7 @@ public class CustomDijkstraMap implements Serializable {
                     }
                     else
                     {
-                        cs = lowest.get(costMap[near] | ((adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000)));
+                        cs = lowest.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000));
                         //double h = adjacency.measurement.heuristic(adjacency.directions[d]);
                         if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[cen] + cs < gradientMap[near]) {
                             setFresh(near, cell.getDoubleValue() + cs);
@@ -675,7 +675,7 @@ public class CustomDijkstraMap implements Serializable {
                     }
                     else
                     {
-                        cs = lowest.get(costMap[near] | ((adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000)));
+                        cs = lowest.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000));
                         //double h = adjacency.measurement.heuristic(adjacency.directions[d]);
                         if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[cen] + cs < gradientMap[near]) {
                             setFresh(near, cell.getDoubleValue() + cs);
@@ -1064,7 +1064,7 @@ public class CustomDijkstraMap implements Serializable {
                     }
                     else
                     {
-                        cs = lowest.get(costMap[near] | ((adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000)));
+                        cs = lowest.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000));
                         //double h = adjacency.measurement.heuristic(adjacency.directions[d]);
                         if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[cen] + cs < gradientMap[near]) {
                             setFresh(near, cell.getDoubleValue() + cs);
@@ -1282,7 +1282,7 @@ public class CustomDijkstraMap implements Serializable {
             }
             currentPos = toNeighbors[choice][pt = currentPos];
             path.add(currentPos);
-            paidLength += adjacency.costRules.get(costMap[currentPos] | ((adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000)));
+            paidLength += adjacency.costRules.get(costMap[currentPos] | (adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000));
             frustration++;
             if (paidLength > length - 1.0) {
                 if (onlyPassable.contains(currentPos)) {
@@ -1530,7 +1530,7 @@ public class CustomDijkstraMap implements Serializable {
             scan(scanArray);
 
             for (int l = 0; l < gradientMap.length; l++) {
-                gradientMap[l] *= (gradientMap[l] >= FLOOR) ? 1.0 : (- preferLongerPaths);
+                gradientMap[l] *= (gradientMap[l] >= FLOOR) ? 1.0 : - preferLongerPaths;
             }
             cachedFleeMap = scan(scanArray);
         }
@@ -1562,7 +1562,7 @@ public class CustomDijkstraMap implements Serializable {
             }
             currentPos = toNeighbors[choice][pt = currentPos];
             path.add(currentPos);
-            paidLength += adjacency.costRules.get(costMap[currentPos] | ((adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000)));
+            paidLength += adjacency.costRules.get(costMap[currentPos] | (adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000));
             frustration++;
             if (paidLength > length - 1.0) {
                 if (onlyPassable.contains(currentPos)) {
@@ -1649,7 +1649,7 @@ public class CustomDijkstraMap implements Serializable {
             }
             currentPos = toNeighbors[choice][pt = currentPos];
             path.add(currentPos);
-            paidLength += adjacency.costRules.get(costMap[currentPos] | ((adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000)));
+            paidLength += adjacency.costRules.get(costMap[currentPos] | (adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000));
             frustration++;
             if (paidLength > length - 1.0) {
                 if (onlyPassable.contains(currentPos)) {
@@ -2076,7 +2076,7 @@ public class CustomDijkstraMap implements Serializable {
             scan(size, scanArray);
 
             for (int l = 0; l < gradientMap.length; l++) {
-                gradientMap[l] *= (gradientMap[l] >= FLOOR) ? 1.0 : (-preferLongerPaths);
+                gradientMap[l] *= (gradientMap[l] >= FLOOR) ? 1.0 : -preferLongerPaths;
             }
             cachedFleeMap = scan(size, scanArray);
         }
@@ -2108,7 +2108,7 @@ public class CustomDijkstraMap implements Serializable {
             }
             currentPos = toNeighbors[choice][pt = currentPos];
             path.add(currentPos);
-            paidLength += adjacency.costRules.get(costMap[currentPos] | ((adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000)));
+            paidLength += adjacency.costRules.get(costMap[currentPos] | (adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000));
             frustration++;
             if (paidLength > length - 1.0) {
                 if (onlyPassable.contains(currentPos)) {

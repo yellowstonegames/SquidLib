@@ -387,21 +387,21 @@ public class CrossHash {
             return 0;
         long h = -3750763034362895579L, len = data.length;
         for (int i = 0; i < len; i++) {
-            h ^= (data[i] & 0xff);
+            h ^= data[i] & 0xff;
             h *= 1099511628211L;
-            h ^= ((data[i] >>> 8) & 0xff);
+            h ^= (data[i] >>> 8) & 0xff;
             h *= 1099511628211L;
-            h ^= ((data[i] >>> 16) & 0xff);
+            h ^= (data[i] >>> 16) & 0xff;
             h *= 1099511628211L;
-            h ^= ((data[i] >>> 24) & 0xff);
+            h ^= (data[i] >>> 24) & 0xff;
             h *= 1099511628211L;
-            h ^= ((data[i] >>> 32) & 0xff);
+            h ^= (data[i] >>> 32) & 0xff;
             h *= 1099511628211L;
-            h ^= ((data[i] >>> 40) & 0xff);
+            h ^= (data[i] >>> 40) & 0xff;
             h *= 1099511628211L;
-            h ^= ((data[i] >>> 48) & 0xff);
+            h ^= (data[i] >>> 48) & 0xff;
             h *= 1099511628211L;
-            h ^= (data[i] >>> 56);
+            h ^= data[i] >>> 56;
             h *= 1099511628211L;
         }
         return h;
@@ -431,21 +431,21 @@ public class CrossHash {
         long h = -3750763034362895579L, len = data.length, t;
         for (int i = 0; i < len; i++) {
             t = Double.doubleToLongBits(data[i]);
-            h ^= (t & 0xff);
+            h ^= t & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 8) & 0xff);
+            h ^= (t >>> 8) & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 16) & 0xff);
+            h ^= (t >>> 16) & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 24) & 0xff);
+            h ^= (t >>> 24) & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 32) & 0xff);
+            h ^= (t >>> 32) & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 40) & 0xff);
+            h ^= (t >>> 40) & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 48) & 0xff);
+            h ^= (t >>> 48) & 0xff;
             h *= 1099511628211L;
-            h ^= (t >>> 56);
+            h ^= t >>> 56;
             h *= 1099511628211L;
         }
         return h;
@@ -470,21 +470,21 @@ public class CrossHash {
         long h = -3750763034362895579L, len = data.length, t;
         for (int i = 0; i < len; i++) {
             t = hash64(data[i]);
-            h ^= (t & 0xff);
+            h ^= t & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 8) & 0xff);
+            h ^= (t >>> 8) & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 16) & 0xff);
+            h ^= (t >>> 16) & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 24) & 0xff);
+            h ^= (t >>> 24) & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 32) & 0xff);
+            h ^= (t >>> 32) & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 40) & 0xff);
+            h ^= (t >>> 40) & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 48) & 0xff);
+            h ^= (t >>> 48) & 0xff;
             h *= 1099511628211L;
-            h ^= (t >>> 56);
+            h ^= t >>> 56;
             h *= 1099511628211L;
         }
         return h;
@@ -496,21 +496,21 @@ public class CrossHash {
         long h = -3750763034362895579L, len = data.length, t;
         for (int i = 0; i < len; i++) {
             t = hash64(data[i]);
-            h ^= (t & 0xff);
+            h ^= t & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 8) & 0xff);
+            h ^= (t >>> 8) & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 16) & 0xff);
+            h ^= (t >>> 16) & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 24) & 0xff);
+            h ^= (t >>> 24) & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 32) & 0xff);
+            h ^= (t >>> 32) & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 40) & 0xff);
+            h ^= (t >>> 40) & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 48) & 0xff);
+            h ^= (t >>> 48) & 0xff;
             h *= 1099511628211L;
-            h ^= (t >>> 56);
+            h ^= t >>> 56;
             h *= 1099511628211L;
         }
         return h;
@@ -522,21 +522,21 @@ public class CrossHash {
         long h = -3750763034362895579L, t;
         for (String datum : data) {
             t = hash64(datum);
-            h ^= (t & 0xff);
+            h ^= t & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 8) & 0xff);
+            h ^= (t >>> 8) & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 16) & 0xff);
+            h ^= (t >>> 16) & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 24) & 0xff);
+            h ^= (t >>> 24) & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 32) & 0xff);
+            h ^= (t >>> 32) & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 40) & 0xff);
+            h ^= (t >>> 40) & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 48) & 0xff);
+            h ^= (t >>> 48) & 0xff;
             h *= 1099511628211L;
-            h ^= (t >>> 56);
+            h ^= t >>> 56;
             h *= 1099511628211L;
         }
         return h;
@@ -548,21 +548,21 @@ public class CrossHash {
         long h = -3750763034362895579L, len = data.length, t;
         for (int i = 0; i < len; i++) {
             t = hash64(data[i]);
-            h ^= (t & 0xff);
+            h ^= t & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 8) & 0xff);
+            h ^= (t >>> 8) & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 16) & 0xff);
+            h ^= (t >>> 16) & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 24) & 0xff);
+            h ^= (t >>> 24) & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 32) & 0xff);
+            h ^= (t >>> 32) & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 40) & 0xff);
+            h ^= (t >>> 40) & 0xff;
             h *= 1099511628211L;
-            h ^= ((t >>> 48) & 0xff);
+            h ^= (t >>> 48) & 0xff;
             h *= 1099511628211L;
-            h ^= (t >>> 56);
+            h ^= t >>> 56;
             h *= 1099511628211L;
         }
         return h;
@@ -1156,11 +1156,11 @@ public class CrossHash {
         }
         public Storm(final long alteration)
         {
-            long s = (alteration + 0x9E3779B97F4A7C15L);
+            long s = alteration + 0x9E3779B97F4A7C15L;
             s = (s ^ (s >>> 30)) * 0xBF58476D1CE4E5B9L;
             s = (s ^ (s >>> 27)) * 0x94D049BB133111EBL;
-            s ^= (s >>> 31);
-            $alt = (s += (191 - Long.bitCount(s)));
+            s ^= s >>> 31;
+            $alt = s += 191 - Long.bitCount(s);
         }
 
         public static final Storm alpha = new Storm("alpha"), beta = new Storm("beta"), gamma = new Storm("gamma"),

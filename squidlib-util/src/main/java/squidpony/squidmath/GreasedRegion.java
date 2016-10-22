@@ -40,7 +40,7 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         width = bits.length;
         height = bits[0].length;
         ySections = (height + 63) >> 6;
-        yEndMask = (-1L >>> (64 - (height & 63)));
+        yEndMask = -1L >>> (64 - (height & 63));
         data = new long[width * ySections];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -54,7 +54,7 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         width = map.length;
         height = map[0].length;
         ySections = (height + 63) >> 6;
-        yEndMask = (-1L >>> (64 - (height & 63)));
+        yEndMask = -1L >>> (64 - (height & 63));
         data = new long[width * ySections];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -68,7 +68,7 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         width = map.length;
         height = map[0].length;
         ySections = (height + 63) >> 6;
-        yEndMask = (-1L >>> (64 - (height & 63)));
+        yEndMask = -1L >>> (64 - (height & 63));
         data = new long[width * ySections];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -89,7 +89,7 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         width = map.length;
         height = map[0].length;
         ySections = (height + 63) >> 6;
-        yEndMask = (-1L >>> (64 - (height & 63)));
+        yEndMask = -1L >>> (64 - (height & 63));
         data = new long[width * ySections];
         int[] column;
         for (int x = 0; x < width; x++) {
@@ -112,7 +112,7 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         width = map.length;
         height = map[0].length;
         ySections = (height + 63) >> 6;
-        yEndMask = (-1L >>> (64 - (height & 63)));
+        yEndMask = -1L >>> (64 - (height & 63));
         data = new long[width * ySections];
         short[] column;
         for (int x = 0; x < width; x++) {
@@ -135,7 +135,7 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         width = map.length;
         height = map[0].length;
         ySections = (height + 63) >> 6;
-        yEndMask = (-1L >>> (64 - (height & 63)));
+        yEndMask = -1L >>> (64 - (height & 63));
         data = new long[width * ySections];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -159,7 +159,7 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         width = map.length;
         height = map[0].length;
         ySections = (height + 63) >> 6;
-        yEndMask = (-1L >>> (64 - (height & 63)));
+        yEndMask = -1L >>> (64 - (height & 63));
         data = new long[width * ySections];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -174,7 +174,7 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         this.width = width;
         this.height = height;
         ySections = (height + 63) >> 6;
-        yEndMask = (-1L >>> (64 - (height & 63)));
+        yEndMask = -1L >>> (64 - (height & 63));
         data = new long[width * ySections];
         for (int a = 0, x = 0, y = 0; a < bits.length; a++, x = a / height, y = a % height) {
             if(bits[a]) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
@@ -192,7 +192,7 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         this.width = width;
         this.height = height;
         ySections = (height + 63) >> 6;
-        yEndMask = (-1L >>> (64 - (height & 63)));
+        yEndMask = -1L >>> (64 - (height & 63));
         data = new long[width * ySections];
     }
 
@@ -209,7 +209,7 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         this.width = width;
         this.height = height;
         ySections = (height + 63) >> 6;
-        yEndMask = (-1L >>> (64 - (height & 63)));
+        yEndMask = -1L >>> (64 - (height & 63));
         data = new long[width * ySections];
 
         if(single.x < width && single.y < height && single.x >= 0 && single.y >= 0)
@@ -229,7 +229,7 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         this.width = width;
         this.height = height;
         ySections = (height + 63) >> 6;
-        yEndMask = (-1L >>> (64 - (height & 63)));
+        yEndMask = -1L >>> (64 - (height & 63));
         data = new long[width * ySections];
         if(points != null)
         {
@@ -254,7 +254,7 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         this.width = width;
         this.height = height;
         ySections = (height + 63) >> 6;
-        yEndMask = (-1L >>> (64 - (height & 63)));
+        yEndMask = -1L >>> (64 - (height & 63));
         data = new long[width * ySections];
         for (int i = 0; i < width * ySections; i++) {
             data[i] = random.nextLong();
@@ -288,7 +288,7 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         this.width = width;
         this.height = height;
         ySections = (height + 63) >> 6;
-        yEndMask = (-1L >>> (64 - (height & 63)));
+        yEndMask = -1L >>> (64 - (height & 63));
         data = new long[width * ySections];
         System.arraycopy(data2, 0, data, 0, width * ySections);
     }
@@ -356,11 +356,11 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
             startY = height - 1;
         int endX = Math.min(width, startX + rectangleWidth) - 1,
                 endY = Math.min(height, startY + rectangleHeight) - 1,
-                startSection = (startY >> 6), endSection = (endY >> 6);
+                startSection = startY >> 6, endSection = endY >> 6;
         if(startSection < endSection)
         {
-            long startMask = (-1L << (startY & 63)),
-                    endMask = (-1L >>> (~endY & 63));
+            long startMask = -1L << (startY & 63),
+                    endMask = -1L >>> (~endY & 63);
             for (int a = startX * ySections + startSection; a <= endX * ySections; a += ySections) {
                 data[a] |= startMask;
             }
@@ -445,7 +445,7 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
             startY = height - 1;
         int endX = Math.min(width, startX + rectangleWidth) - 1,
                 endY = Math.min(height, startY + rectangleHeight) - 1,
-                startSection = (startY >> 6), endSection = (endY >> 6);
+                startSection = startY >> 6, endSection = endY >> 6;
         if(startSection < endSection)
         {
             long startMask = ~(-1L << (startY & 63)),
@@ -733,11 +733,11 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         long[] next = new long[width * ySections];
         System.arraycopy(data, 0, next, 0, width * ySections);
         for (int a = 0; a < ySections; a++) {
-            next[a] |= (data[a] << 1) | (data[a] >>> 1) | (data[a+ySections]);
-            next[(width-1)*ySections+a] |= (data[(width-1)*ySections+a] << 1) | (data[(width-1)*ySections+a] >>> 1) | (data[(width-2)*ySections+a]);
+            next[a] |= (data[a] << 1) | (data[a] >>> 1) | data[a+ySections];
+            next[(width-1)*ySections+a] |= (data[(width-1)*ySections+a] << 1) | (data[(width-1)*ySections+a] >>> 1) | data[(width-2) *ySections+a];
 
             for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
-                next[i] |= (data[i] << 1) | (data[i] >>> 1) | (data[i - ySections]) | (data[i + ySections]);
+                next[i] |= (data[i] << 1) | (data[i] >>> 1) | data[i - ySections] | data[i + ySections];
             }
 
             if(a > 0) {
@@ -840,30 +840,30 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
                 for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
                     next[i] &= ((data[i] << 1) | ((data[i - 1] & 0x8000000000000000L) >>> 63))
                             & ((data[i] >>> 1) | ((data[i + 1] & 1L) << 63))
-                            & (data[i - ySections])
-                            & (data[i + ySections]);
+                            & data[i - ySections]
+                            & data[i + ySections];
                 }
             }
             else if(a > 0) {
                 for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
                     next[i] &= ((data[i] << 1) | ((data[i - 1] & 0x8000000000000000L) >>> 63))
                             & (data[i] >>> 1)
-                            & (data[i - ySections])
-                            & (data[i + ySections]);
+                            & data[i - ySections]
+                            & data[i + ySections];
                 }
             }
             else if(a < ySections - 1) {
                 for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
                     next[i] &= (data[i] << 1)
                             & ((data[i] >>> 1) | ((data[i + 1] & 1L) << 63))
-                            & (data[i - ySections])
-                            & (data[i + ySections]);
+                            & data[i - ySections]
+                            & data[i + ySections];
                 }
             }
             else // only the case when ySections == 1
             {
                 for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
-                    next[i] &= (data[i] << 1) & (data[i] >>> 1) & (data[i - ySections]) & (data[i + ySections]);
+                    next[i] &= (data[i] << 1) & (data[i] >>> 1) & data[i - ySections] & data[i + ySections];
                 }
             }
         }
@@ -952,14 +952,14 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         System.arraycopy(data, 0, next, 0, width * ySections);
         for (int a = 0; a < ySections; a++) {
             next[a] |= (data[a] << 1) | (data[a] >>> 1)
-                    | (data[a+ySections]) | (data[a+ySections] << 1) | (data[a+ySections] >>> 1);
+                    | data[a+ySections] | (data[a+ySections] << 1) | (data[a+ySections] >>> 1);
             next[(width-1)*ySections+a] |= (data[(width-1)*ySections+a] << 1) | (data[(width-1)*ySections+a] >>> 1)
-                    | (data[(width-2)*ySections+a]) | (data[(width-2)*ySections+a] << 1) | (data[(width-2)*ySections+a] >>> 1);
+                    | data[(width-2) *ySections+a] | (data[(width-2)*ySections+a] << 1) | (data[(width-2)*ySections+a] >>> 1);
 
             for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
                 next[i] |= (data[i] << 1) | (data[i] >>> 1)
-                        | (data[i - ySections]) | (data[i - ySections] << 1) | (data[i - ySections] >>> 1)
-                        | (data[i + ySections]) | (data[i + ySections] << 1) | (data[i + ySections] >>> 1);
+                        | data[i - ySections] | (data[i - ySections] << 1) | (data[i - ySections] >>> 1)
+                        | data[i + ySections] | (data[i + ySections] << 1) | (data[i + ySections] >>> 1);
             }
 
             if(a > 0) {
@@ -1066,8 +1066,8 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
                 for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
                     next[i] &= ((data[i] << 1) | ((data[i - 1] & 0x8000000000000000L) >>> 63))
                             & ((data[i] >>> 1) | ((data[i + 1] & 1L) << 63))
-                            & (data[i - ySections])
-                            & (data[i + ySections])
+                            & data[i - ySections]
+                            & data[i + ySections]
                             & ((data[i - ySections] << 1) | ((data[i - 1 - ySections] & 0x8000000000000000L) >>> 63))
                             & ((data[i + ySections] << 1) | ((data[i - 1 + ySections] & 0x8000000000000000L) >>> 63))
                             & ((data[i - ySections] >>> 1) | ((data[i + 1 - ySections] & 1L) << 63))
@@ -1078,8 +1078,8 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
                 for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
                     next[i] &= ((data[i] << 1) | ((data[i - 1] & 0x8000000000000000L) >>> 63))
                             & (data[i] >>> 1)
-                            & (data[i - ySections])
-                            & (data[i + ySections])
+                            & data[i - ySections]
+                            & data[i + ySections]
                             & ((data[i - ySections] << 1) | ((data[i - 1 - ySections] & 0x8000000000000000L) >>> 63))
                             & ((data[i + ySections] << 1) | ((data[i - 1 + ySections] & 0x8000000000000000L) >>> 63))
                             & (data[i - ySections] >>> 1)
@@ -1090,8 +1090,8 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
                 for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
                     next[i] &= (data[i] << 1)
                             & ((data[i] >>> 1) | ((data[i + 1] & 1L) << 63))
-                            & (data[i - ySections])
-                            & (data[i + ySections])
+                            & data[i - ySections]
+                            & data[i + ySections]
                             & (data[i - ySections] << 1)
                             & (data[i + ySections] << 1)
                             & ((data[i - ySections] >>> 1) | ((data[i + 1 - ySections] & 1L) << 63))
@@ -1103,8 +1103,8 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
                 for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
                     next[i] &= (data[i] << 1)
                             & (data[i] >>> 1)
-                            & (data[i - ySections])
-                            & (data[i + ySections])
+                            & data[i - ySections]
+                            & data[i + ySections]
                             & (data[i - ySections] << 1)
                             & (data[i + ySections] << 1)
                             & (data[i - ySections] >>> 1)
@@ -1196,13 +1196,13 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
 
         long[] next = new long[width * ySections];
         for (int a = 0; a < ySections && a < bounds.ySections; a++) {
-            next[a] |= (data[a] |(data[a] << 1) | (data[a] >>> 1) | (data[a+ySections])) & bounds.data[a];
+            next[a] |= (data[a] |(data[a] << 1) | (data[a] >>> 1) | data[a+ySections]) & bounds.data[a];
             next[(width-1)*ySections+a] |= (data[(width-1)*ySections+a] | (data[(width-1)*ySections+a] << 1)
-                    | (data[(width-1)*ySections+a] >>> 1) | (data[(width-2)*ySections+a])) & bounds.data[(width-1)*bounds.ySections+a];
+                    | (data[(width-1)*ySections+a] >>> 1) | data[(width-2) *ySections+a]) & bounds.data[(width-1)*bounds.ySections+a];
 
             for (int i = ySections+a, j = bounds.ySections+a; i < (width - 1) * ySections &&
                     j < (bounds.width - 1) * bounds.ySections; i+= ySections, j+= bounds.ySections) {
-                next[i] |= (data[i] | (data[i] << 1) | (data[i] >>> 1) | (data[i - ySections]) | (data[i + ySections])) & bounds.data[j];
+                next[i] |= (data[i] | (data[i] << 1) | (data[i] >>> 1) | data[i - ySections] | data[i + ySections]) & bounds.data[j];
             }
 
             if(a > 0) {
@@ -1303,17 +1303,17 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         long[] next = new long[width * ySections];
         for (int a = 0; a < ySections && a < bounds.ySections; a++) {
             next[a] |= (data[a] | (data[a] << 1) | (data[a] >>> 1)
-                    | (data[a+ySections]) | (data[a+ySections] << 1) | (data[a+ySections] >>> 1)) & bounds.data[a];
+                    | data[a+ySections] | (data[a+ySections] << 1) | (data[a+ySections] >>> 1)) & bounds.data[a];
             next[(width-1)*ySections+a] |= (data[(width-1)*ySections+a]
                     | (data[(width-1)*ySections+a] << 1) | (data[(width-1)*ySections+a] >>> 1)
-                    | (data[(width-2)*ySections+a]) | (data[(width-2)*ySections+a] << 1) | (data[(width-2)*ySections+a] >>> 1))
+                    | data[(width-2) *ySections+a] | (data[(width-2)*ySections+a] << 1) | (data[(width-2)*ySections+a] >>> 1))
                     & bounds.data[(width-1)*bounds.ySections+a];
 
             for (int i = ySections+a, j = bounds.ySections+a; i < (width - 1) * ySections &&
                     j < (bounds.width - 1) * bounds.ySections; i+= ySections, j+= bounds.ySections) {
                 next[i] |= (data[i] | (data[i] << 1) | (data[i] >>> 1)
-                        | (data[i - ySections]) | (data[i - ySections] << 1) | (data[i - ySections] >>> 1)
-                        | (data[i + ySections]) | (data[i + ySections] << 1) | (data[i + ySections] >>> 1))
+                        | data[i - ySections] | (data[i - ySections] << 1) | (data[i - ySections] >>> 1)
+                        | data[i + ySections] | (data[i + ySections] << 1) | (data[i + ySections] >>> 1))
                         & bounds.data[j];
             }
 

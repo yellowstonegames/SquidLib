@@ -272,7 +272,7 @@ public class Spill {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 spillMap[x][y] = false;
-                physicalMap[x][y] = (level[x][y] != '#');
+                physicalMap[x][y] = level[x][y] != '#';
             }
         }
         initialized = true;
@@ -297,7 +297,7 @@ public class Spill {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 spillMap[x][y] = false;
-                physicalMap[x][y] = (level[x][y] != alternateWall);
+                physicalMap[x][y] = level[x][y] != alternateWall;
             }
         }
         initialized = true;

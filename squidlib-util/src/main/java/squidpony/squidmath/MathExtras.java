@@ -177,7 +177,7 @@ public final class MathExtras
      */
     public static int restrictRange(int value, int min, int max)
     {
-        return Math.min((Math.max(value, min)), max);
+        return Math.min(Math.max(value, min), max);
     }
 
 
@@ -193,7 +193,7 @@ public final class MathExtras
      */
     public static long restrictRange(long value, long min, long max)
     {
-        return Math.min((Math.max(value, min)), max);
+        return Math.min(Math.max(value, min), max);
     }
 
 
@@ -209,7 +209,7 @@ public final class MathExtras
      */
     public static double restrictRange(double value, double min, double max)
     {
-        return Math.min((Math.max(value, min)), max);
+        return Math.min(Math.max(value, min), max);
     }
 
 

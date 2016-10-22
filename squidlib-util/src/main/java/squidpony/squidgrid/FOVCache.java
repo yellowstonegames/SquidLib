@@ -491,7 +491,7 @@ public class FOVCache extends FOV {
                 y = hilbertY[i];
                 if (x >= width || y >= height) {
                     if ((on & (1L << l)) != 0L) {
-                        on ^= (1L << l);
+                        on ^= 1L << l;
                         packing[l].add((short) skip[l]);
                         skip[l] = 0;
                     }
@@ -906,7 +906,7 @@ public class FOVCache extends FOV {
                 if(cx < width && cx >= 0 && cy < height && cy >= 0)
                 {
                     theta = atan2Cache[pt.x][pt.y];
-                    dist = (byte)(distanceCache[pt.x][pt.y ]);
+                    dist = (byte) distanceCache[pt.x][pt.y ];
 
                     if(w <= 0)
                     {

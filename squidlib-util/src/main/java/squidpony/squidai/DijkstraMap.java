@@ -3462,7 +3462,7 @@ public class DijkstraMap implements Serializable {
      * @param blockingRequirement the desired level of blocking required to stop a diagonal move
      */
     public void setBlockingRequirement(int blockingRequirement) {
-        this.blockingRequirement = (blockingRequirement > 2 ? 2 : blockingRequirement < 0 ? 0 : blockingRequirement);
+        this.blockingRequirement = blockingRequirement > 2 ? 2 : blockingRequirement < 0 ? 0 : blockingRequirement;
     }
 
     /* For Gwt compatibility */

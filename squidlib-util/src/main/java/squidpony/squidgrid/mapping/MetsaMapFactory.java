@@ -220,7 +220,7 @@ public class MetsaMapFactory {
                     weightedMap[i][j] = 2 + (map[i * 4][j * 4] - PLAINSLEVEL) * 8;
                 }
                 if (map[i][j] <= BEACHLEVEL && map[i * 4][j * 4] >= SEALEVEL) {
-                    weightedMap[i][j] = 2 - (map[i * 4][j * 4]) * 2;
+                    weightedMap[i][j] = 2 - map[i * 4][j * 4] * 2;
                 }
             }
         }
