@@ -218,7 +218,7 @@ public class StringKit {
                         | ((0xf & data[offset + 12] - 65L) << 12)
                         | ((0xf & data[offset + 13] - 65L) << 8)
                         | ((0xf & data[offset + 14] - 65L) << 4)
-                        | ((0xf & data[offset + 15] - 65L));
+                        | (0xf & data[offset + 15] - 65L);
     }
     public static double apDecodeDouble(char[] data, int offset)
     {
@@ -238,7 +238,7 @@ public class StringKit {
                         | ((0xf & data[offset + 12] - 65L) << 12)
                         | ((0xf & data[offset + 13] - 65L) << 8)
                         | ((0xf & data[offset + 14] - 65L) << 4)
-                        | ((0xf & data[offset + 15] - 65L)));
+                        | (0xf & data[offset + 15] - 65L));
     }
     public static int apDecodeInt(char[] data, int offset)
     {
@@ -250,7 +250,7 @@ public class StringKit {
                         | ((0xf & data[offset + 4] - 65) << 12)
                         | ((0xf & data[offset + 5] - 65) << 8)
                         | ((0xf & data[offset + 6] - 65) << 4)
-                        | ((0xf & data[offset + 7] - 65));
+                        | (0xf & data[offset + 7] - 65);
     }
     public static float apDecodeFloat(char[] data, int offset)
     {
@@ -262,7 +262,7 @@ public class StringKit {
                         | ((0xf & data[offset + 4] - 65) << 12)
                         | ((0xf & data[offset + 5] - 65) << 8)
                         | ((0xf & data[offset + 6] - 65) << 4)
-                        | ((0xf & data[offset + 7] - 65)));
+                        | (0xf & data[offset + 7] - 65));
     }
     public static short apDecodeShort(char[] data, int offset)
     {
@@ -270,13 +270,13 @@ public class StringKit {
                 ((0xf & data[offset] - 65) << 12)
                         | ((0xf & data[offset + 1] - 65) << 8)
                         | ((0xf & data[offset + 2] - 65) << 4)
-                        | ((0xf & data[offset + 3] - 65)));
+                        | (0xf & data[offset + 3] - 65));
     }
     public static byte apDecodeByte(char[] data, int offset)
     {
         return (byte) ((data == null || data.length < 2 + offset) ? 0 :
                 ((0xf & data[offset] - 65) << 4)
-                        | ((0xf & data[offset + 1] - 65)));
+                        | (0xf & data[offset + 1] - 65));
     }
 
     public static String hexHash(boolean... array) {

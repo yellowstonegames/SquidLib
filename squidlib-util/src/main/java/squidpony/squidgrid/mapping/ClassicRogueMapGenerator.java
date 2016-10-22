@@ -129,7 +129,7 @@ public class ClassicRogueMapGenerator {
         minRoomWidth = Math.max(minRoomWidth, 2);
         minRoomWidth = Math.min(minRoomWidth, maxRoomWidth);
 
-        test = (dungeonHeight - 3 * verticalRooms) / (verticalRooms);//have to leave space for hallways
+        test = (dungeonHeight - 3 * verticalRooms) / verticalRooms;//have to leave space for hallways
         maxRoomHeight = Math.min(test, maxRoomHeight);
         minRoomHeight = Math.max(minRoomHeight, 2);
         minRoomHeight = Math.min(minRoomHeight, maxRoomHeight);

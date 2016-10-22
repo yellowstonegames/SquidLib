@@ -521,8 +521,8 @@ public class LOS {
         int testX = startx,
                 testY = starty;
 
-        int maxX = (deltaX),
-                maxY = (deltaY);
+        int maxX = deltaX,
+                maxY = deltaY;
 
         while (testX >= 0 && testX < width && testY >= 0 && testY < height && (testX != targetx || testY != targety)) {
             lastPath.add(Coord.get(testX, testY));

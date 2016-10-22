@@ -190,52 +190,52 @@ public class DDALine {
             case 0:
                 move = (ny << 16)/nx;
                 for (int i = 0, primary = startX; primary <= endX; primary++, frac+=move, i++) {
-                    drawn[i] = (Coord.get(primary, startY + ((frac+modifierY)>>16)));
+                    drawn[i] = Coord.get(primary, startY + ((frac+modifierY)>>16));
                 }
                 break;
             case 1:
                 move = (nx << 16)/ny;
                 for (int i = 0, primary = startY; primary <= endY; primary++, frac+=move, i++) {
-                    drawn[i] = (Coord.get(startX + ((frac+modifierX)>>16), primary));
+                    drawn[i] = Coord.get(startX + ((frac+modifierX)>>16), primary);
                 }
                 break;
             // x negative, y positive
             case 2:
                 move = (ny << 16)/nx;
                 for (int i = 0, primary = startX; primary >= endX; primary--, frac+=move, i++) {
-                    drawn[i] = (Coord.get(primary, startY + ((frac+modifierY)>>16)));
+                    drawn[i] = Coord.get(primary, startY + ((frac+modifierY)>>16));
                 }
                 break;
             case 3:
                 move = (nx << 16)/ny;
                 for (int i = 0, primary = startY; primary <= endY; primary++, frac+=move, i++) {
-                    drawn[i] = (Coord.get(startX - ((frac+modifierX)>>16), primary));
+                    drawn[i] = Coord.get(startX - ((frac+modifierX)>>16), primary);
                 }
                 break;
             // x negative, y negative
             case 6:
                 move = (ny << 16)/nx;
                 for (int i = 0, primary = startX; primary >= endX; primary--, frac+=move, i++) {
-                    drawn[i] = (Coord.get(primary, startY - ((frac+modifierY)>>16)));
+                    drawn[i] = Coord.get(primary, startY - ((frac+modifierY)>>16));
                 }
                 break;
             case 7:
                 move = (nx << 16)/ny;
                 for (int i = 0, primary = startY; primary >= endY; primary--, frac+=move, i++) {
-                    drawn[i] = (Coord.get(startX - ((frac+modifierX)>>16), primary));
+                    drawn[i] = Coord.get(startX - ((frac+modifierX)>>16), primary);
                 }
                 break;
             // x positive, y negative
             case 4:
                 move = (ny << 16)/nx;
                 for (int i = 0, primary = startX; primary <= endX; primary++, frac+=move, i++) {
-                    drawn[i] = (Coord.get(primary, startY - ((frac+modifierY)>>16)));
+                    drawn[i] = Coord.get(primary, startY - ((frac+modifierY)>>16));
                 }
                 break;
             case 5:
                 move = (nx << 16)/ny;
                 for (int i = 0, primary = startY; primary >= endY; primary--, frac+=move, i++) {
-                    drawn[i] = (Coord.get(startX + ((frac+modifierX)>>16), primary));
+                    drawn[i] = Coord.get(startX + ((frac+modifierX)>>16), primary);
                 }
                 break;
         }

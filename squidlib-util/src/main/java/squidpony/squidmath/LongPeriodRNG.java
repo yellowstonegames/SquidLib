@@ -206,7 +206,7 @@ public class LongPeriodRNG implements RandomnessSource {
     {
         long[] state = new long[16];
         for (int i = 0; i < 16; i++) {
-            long z = ( seed += 0x9E3779B97F4A7C15L );
+            long z = seed += 0x9E3779B97F4A7C15L;
             z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
             z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
             state[i] = z ^ (z >>> 31);

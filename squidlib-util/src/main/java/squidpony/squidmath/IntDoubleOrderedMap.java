@@ -253,7 +253,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
 
 
     public boolean containsKey(final Object ok) {
-        return containsKey(((((Integer) (ok)).intValue())));
+        return containsKey(((Integer) ok).intValue());
     }
 
     /**
@@ -266,8 +266,8 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
      */
     @Deprecated
     public Double get(final Object ok) {
-        final int k = ((((Integer) (ok)).intValue()));
-        return containsKey(k) ? (Double.valueOf(get(k))) : null;
+        final int k = (Integer) ok;
+        return containsKey(k) ? get(k) : null;
     }
 
     private int realSize() {
@@ -340,7 +340,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
 
     private int insert(final int k, final double v) {
         int pos;
-        if (((k) == (0))) {
+        if (k == 0) {
             if (containsNullKey) return n;
             containsNullKey = true;
             pos = n;
@@ -348,10 +348,10 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             int curr;
             final int[] key = this.key;
             // The starting point.
-            if (!((curr = key[pos = (HashCommon.mix((k))) & mask]) == (0))) {
-                if (((curr) == (k))) return pos;
-                while (!((curr = key[pos = (pos + 1) & mask]) == (0)))
-                    if (((curr) == (k))) return pos;
+            if (!((curr = key[pos = HashCommon.mix(k) & mask]) == 0)) {
+                if (curr == k) return pos;
+                while (!((curr = key[pos = (pos + 1) & mask]) == 0))
+                    if (curr == k) return pos;
             }
         }
         key[pos] = k;
@@ -361,8 +361,8 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             // Special case of SET_UPPER_LOWER( link[ pos ], -1, -1 );
             link[pos] = -1L;
         } else {
-            link[last] ^= ((link[last] ^ (pos & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-            link[pos] = ((last & 0xFFFFFFFFL) << 32) | (0xFFFFFFFFL);
+            link[last] ^= (link[last] ^ (pos & 0xFFFFFFFFL)) & 0xFFFFFFFFL;
+            link[pos] = ((last & 0xFFFFFFFFL) << 32) | 0xFFFFFFFFL;
             last = pos;
         }
         if (size++ >= maxFill) rehash(arraySize(size + 1, f));
@@ -385,12 +385,12 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
     @Deprecated
     @Override
     public Double put(final Integer ok, final Double ov) {
-        final double v = ((ov).doubleValue());
-        final int pos = insert(((ok).intValue()), v);
-        if (pos < 0) return (null);
+        final double v = ov;
+        final int pos = insert(ok, v);
+        if (pos < 0) return null;
         final double oldValue = value[pos];
         value[pos] = v;
-        return (Double.valueOf(oldValue));
+        return oldValue;
     }
 
     private double addToValue(final int pos, final double incr) {
@@ -411,7 +411,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
      */
     public double addTo(final int k, final double incr) {
         int pos;
-        if (((k) == (0))) {
+        if (k == 0) {
             if (containsNullKey) return addToValue(n, incr);
             pos = n;
             containsNullKey = true;
@@ -419,10 +419,10 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             int curr;
             final int[] key = this.key;
             // The starting point.
-            if (!((curr = key[pos = (HashCommon.mix((k))) & mask]) == (0))) {
-                if (((curr) == (k))) return addToValue(pos, incr);
-                while (!((curr = key[pos = (pos + 1) & mask]) == (0)))
-                    if (((curr) == (k))) return addToValue(pos, incr);
+            if (!((curr = key[pos = HashCommon.mix(k) & mask]) == 0)) {
+                if (curr == k) return addToValue(pos, incr);
+                while (!((curr = key[pos = (pos + 1) & mask]) == 0))
+                    if (curr == k) return addToValue(pos, incr);
             }
         }
         key[pos] = k;
@@ -432,8 +432,8 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             // Special case of SET_UPPER_LOWER( link[ pos ], -1, -1 );
             link[pos] = -1L;
         } else {
-            link[last] ^= ((link[last] ^ (pos & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-            link[pos] = ((last & 0xFFFFFFFFL) << 32) | (-1 & 0xFFFFFFFFL);
+            link[last] ^= (link[last] ^ (pos & 0xFFFFFFFFL)) & 0xFFFFFFFFL;
+            link[pos] = ((last & 0xFFFFFFFFL) << 32) | 0xFFFFFFFFL;
             last = pos;
         }
         if (size++ >= maxFill) rehash(arraySize(size + 1, f));
@@ -453,11 +453,11 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         for (; ; ) {
             pos = ((last = pos) + 1) & mask;
             for (; ; ) {
-                if (((curr = key[pos]) == (0))) {
-                    key[last] = (0);
+                if ((curr = key[pos]) == 0) {
+                    key[last] = 0;
                     return;
                 }
-                slot = (HashCommon.mix((curr))) & mask;
+                slot = HashCommon.mix(curr) & mask;
                 if (last <= pos ? last >= slot || slot > pos : last >= slot && slot > pos) break;
                 pos = (pos + 1) & mask;
             }
@@ -468,7 +468,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
     }
 
     public double remove(final int k) {
-        if (((k) == (0))) {
+        if (k == 0) {
             if (containsNullKey) return removeNullEntry();
             return defRetValue;
         }
@@ -476,11 +476,11 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         final int[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix((k))) & mask]) == (0))) return defRetValue;
-        if (((k) == (curr))) return removeEntry(pos);
+        if ((curr = key[pos = HashCommon.mix(k) & mask]) == 0) return defRetValue;
+        if (k == curr) return removeEntry(pos);
         while (true) {
-            if (((curr = key[pos = (pos + 1) & mask]) == (0))) return defRetValue;
-            if (((k) == (curr))) return removeEntry(pos);
+            if ((curr = key[pos = (pos + 1) & mask]) == 0) return defRetValue;
+            if (k == curr) return removeEntry(pos);
         }
     }
 
@@ -492,20 +492,20 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
     @Deprecated
     @Override
     public Double remove(final Object ok) {
-        final int k = ((((Integer) (ok)).intValue()));
-        if (((k) == (0))) {
-            if (containsNullKey) return (Double.valueOf(removeNullEntry()));
-            return (null);
+        final int k = (Integer) ok;
+        if (k == 0) {
+            if (containsNullKey) return removeNullEntry();
+            return null;
         }
         int curr;
         final int[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix((k))) & mask]) == (0))) return (null);
-        if (((curr) == (k))) return (Double.valueOf(removeEntry(pos)));
+        if ((curr = key[pos = HashCommon.mix(k) & mask]) == 0) return null;
+        if (curr == k) return removeEntry(pos);
         while (true) {
-            if (((curr = key[pos = (pos + 1) & mask]) == (0))) return (null);
-            if (((curr) == (k))) return (Double.valueOf(removeEntry(pos)));
+            if ((curr = key[pos = (pos + 1) & mask]) == 0) return null;
+            if (curr == k) return removeEntry(pos);
         }
     }
 
@@ -528,7 +528,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         first = (int) link[pos];
         if (0 <= first) {
             // Special case of SET_PREV( link[ first ], -1 )
-            link[first] |= (-1 & 0xFFFFFFFFL) << 32;
+            link[first] |= 0xFFFFFFFFL << 32;
         }
         size--;
         final double v = value[pos];
@@ -552,7 +552,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         last = (int) (link[pos] >>> 32);
         if (0 <= last) {
             // Special case of SET_NEXT( link[ last ], -1 )
-            link[last] |= -1 & 0xFFFFFFFFL;
+            link[last] |= 0xFFFFFFFFL;
         }
         size--;
         final double v = value[pos];
@@ -568,16 +568,16 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         if (last == i) {
             last = (int) (link[i] >>> 32);
             // Special case of SET_NEXT( link[ last ], -1 );
-            link[last] |= -1 & 0xFFFFFFFFL;
+            link[last] |= 0xFFFFFFFFL;
         } else {
             final long linki = link[i];
             final int prev = (int) (linki >>> 32);
             final int next = (int) linki;
-            link[prev] ^= ((link[prev] ^ (linki & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-            link[next] ^= ((link[next] ^ (linki & 0xFFFFFFFF00000000L)) & 0xFFFFFFFF00000000L);
+            link[prev] ^= (link[prev] ^ (linki & 0xFFFFFFFFL)) & 0xFFFFFFFFL;
+            link[next] ^= (link[next] ^ (linki & 0xFFFFFFFF00000000L)) & 0xFFFFFFFF00000000L;
         }
-        link[first] ^= ((link[first] ^ ((i & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
-        link[i] = ((-1 & 0xFFFFFFFFL) << 32) | (first & 0xFFFFFFFFL);
+        link[first] ^= (link[first] ^ ((i & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L;
+        link[i] = (0xFFFFFFFFL << 32) | (first & 0xFFFFFFFFL);
         first = i;
     }
 
@@ -586,16 +586,16 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         if (first == i) {
             first = (int) link[i];
             // Special case of SET_PREV( link[ first ], -1 );
-            link[first] |= (-1 & 0xFFFFFFFFL) << 32;
+            link[first] |= 0xFFFFFFFFL << 32;
         } else {
             final long linki = link[i];
             final int prev = (int) (linki >>> 32);
             final int next = (int) linki;
-            link[prev] ^= ((link[prev] ^ (linki & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-            link[next] ^= ((link[next] ^ (linki & 0xFFFFFFFF00000000L)) & 0xFFFFFFFF00000000L);
+            link[prev] ^= (link[prev] ^ (linki & 0xFFFFFFFFL)) & 0xFFFFFFFFL;
+            link[next] ^= (link[next] ^ (linki & 0xFFFFFFFF00000000L)) & 0xFFFFFFFF00000000L;
         }
-        link[last] ^= ((link[last] ^ (i & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-        link[i] = ((last & 0xFFFFFFFFL) << 32) | (-1 & 0xFFFFFFFFL);
+        link[last] ^= (link[last] ^ (i & 0xFFFFFFFFL)) & 0xFFFFFFFFL;
+        link[i] = ((last & 0xFFFFFFFFL) << 32) | 0xFFFFFFFFL;
         last = i;
     }
 
@@ -606,7 +606,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
      * @return the corresponding value, or the {@linkplain #defaultReturnValue() default return value} if no value was present for the given key.
      */
     public double getAndMoveToFirst(final int k) {
-        if (((k) == (0))) {
+        if (k == 0) {
             if (containsNullKey) {
                 moveIndexToFirst(n);
                 return value[n];
@@ -617,15 +617,15 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         final int[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix((k))) & mask]) == (0))) return defRetValue;
-        if (((k) == (curr))) {
+        if ((curr = key[pos = HashCommon.mix(k) & mask]) == 0) return defRetValue;
+        if (k == curr) {
             moveIndexToFirst(pos);
             return value[pos];
         }
         // There's always an unused entry.
         while (true) {
-            if (((curr = key[pos = (pos + 1) & mask]) == (0))) return defRetValue;
-            if (((k) == (curr))) {
+            if ((curr = key[pos = (pos + 1) & mask]) == 0) return defRetValue;
+            if (k == curr) {
                 moveIndexToFirst(pos);
                 return value[pos];
             }
@@ -639,7 +639,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
      * @return the corresponding value, or the {@linkplain #defaultReturnValue() default return value} if no value was present for the given key.
      */
     public double getAndMoveToLast(final int k) {
-        if (((k) == (0))) {
+        if (k == 0) {
             if (containsNullKey) {
                 moveIndexToLast(n);
                 return value[n];
@@ -650,15 +650,15 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         final int[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix((k))) & mask]) == (0))) return defRetValue;
-        if (((k) == (curr))) {
+        if ((curr = key[pos = HashCommon.mix(k) & mask]) == 0) return defRetValue;
+        if (k == curr) {
             moveIndexToLast(pos);
             return value[pos];
         }
         // There's always an unused entry.
         while (true) {
-            if (((curr = key[pos = (pos + 1) & mask]) == (0))) return defRetValue;
-            if (((k) == (curr))) {
+            if ((curr = key[pos = (pos + 1) & mask]) == 0) return defRetValue;
+            if (k == curr) {
                 moveIndexToLast(pos);
                 return value[pos];
             }
@@ -674,7 +674,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
      */
     public double putAndMoveToFirst(final int k, final double v) {
         int pos;
-        if (((k) == (0))) {
+        if (k == 0) {
             if (containsNullKey) {
                 moveIndexToFirst(n);
                 return setValue(n, v);
@@ -685,13 +685,13 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             int curr;
             final int[] key = this.key;
             // The starting point.
-            if (!((curr = key[pos = (HashCommon.mix((k))) & mask]) == (0))) {
-                if (((curr) == (k))) {
+            if (!((curr = key[pos = HashCommon.mix(k) & mask]) == 0)) {
+                if (curr == k) {
                     moveIndexToFirst(pos);
                     return setValue(pos, v);
                 }
-                while (!((curr = key[pos = (pos + 1) & mask]) == (0)))
-                    if (((curr) == (k))) {
+                while (!((curr = key[pos = (pos + 1) & mask]) == 0))
+                    if (curr == k) {
                         moveIndexToFirst(pos);
                         return setValue(pos, v);
                     }
@@ -704,8 +704,8 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             // Special case of SET_UPPER_LOWER( link[ pos ], -1, -1 );
             link[pos] = -1L;
         } else {
-            link[first] ^= ((link[first] ^ ((pos & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
-            link[pos] = ((-1 & 0xFFFFFFFFL) << 32) | (first & 0xFFFFFFFFL);
+            link[first] ^= (link[first] ^ ((pos & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L;
+            link[pos] = (0xFFFFFFFFL << 32) | (first & 0xFFFFFFFFL);
             first = pos;
         }
         if (size++ >= maxFill) rehash(arraySize(size, f));
@@ -721,7 +721,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
      */
     public double putAndMoveToLast(final int k, final double v) {
         int pos;
-        if (((k) == (0))) {
+        if (k == 0) {
             if (containsNullKey) {
                 moveIndexToLast(n);
                 return setValue(n, v);
@@ -732,13 +732,13 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             int curr;
             final int[] key = this.key;
             // The starting point.
-            if (!((curr = key[pos = (HashCommon.mix((k))) & mask]) == (0))) {
-                if (((curr) == (k))) {
+            if (!((curr = key[pos = HashCommon.mix(k) & mask]) == 0)) {
+                if (curr == k) {
                     moveIndexToLast(pos);
                     return setValue(pos, v);
                 }
-                while (!((curr = key[pos = (pos + 1) & mask]) == (0)))
-                    if (((curr) == (k))) {
+                while (!((curr = key[pos = (pos + 1) & mask]) == 0))
+                    if (curr == k) {
                         moveIndexToLast(pos);
                         return setValue(pos, v);
                     }
@@ -751,8 +751,8 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             // Special case of SET_UPPER_LOWER( link[ pos ], -1, -1 );
             link[pos] = -1L;
         } else {
-            link[last] ^= ((link[last] ^ (pos & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-            link[pos] = ((last & 0xFFFFFFFFL) << 32) | (-1 & 0xFFFFFFFFL);
+            link[last] ^= (link[last] ^ (pos & 0xFFFFFFFFL)) & 0xFFFFFFFFL;
+            link[pos] = ((last & 0xFFFFFFFFL) << 32) | 0xFFFFFFFFL;
             last = pos;
         }
         if (size++ >= maxFill) rehash(arraySize(size, f));
@@ -760,57 +760,57 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
     }
 
     public Double get(final Integer ok) {
-        final int k = ((ok).intValue());
-        if (((k) == (0))) return containsNullKey ? (Double.valueOf(value[n])) : (null);
+        final int k = ok;
+        if (k == 0) return containsNullKey ? value[n] : null;
         int curr;
         final int[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix((k))) & mask]) == (0))) return (null);
-        if (((k) == (curr))) return (Double.valueOf(value[pos]));
+        if ((curr = key[pos = HashCommon.mix(k) & mask]) == 0) return null;
+        if (k == curr) return value[pos];
         // There's always an unused entry.
         while (true) {
-            if (((curr = key[pos = (pos + 1) & mask]) == (0))) return (null);
-            if (((k) == (curr))) return (Double.valueOf(value[pos]));
+            if ((curr = key[pos = (pos + 1) & mask]) == 0) return null;
+            if (k == curr) return value[pos];
         }
     }
 
     public double get(final int k) {
-        if (((k) == (0))) return containsNullKey ? value[n] : defRetValue;
+        if (k == 0) return containsNullKey ? value[n] : defRetValue;
         int curr;
         final int[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix((k))) & mask]) == (0))) return defRetValue;
-        if (((k) == (curr))) return value[pos];
+        if ((curr = key[pos = HashCommon.mix(k) & mask]) == 0) return defRetValue;
+        if (k == curr) return value[pos];
         // There's always an unused entry.
         while (true) {
-            if (((curr = key[pos = (pos + 1) & mask]) == (0))) return defRetValue;
-            if (((k) == (curr))) return value[pos];
+            if ((curr = key[pos = (pos + 1) & mask]) == 0) return defRetValue;
+            if (k == curr) return value[pos];
         }
     }
 
     public boolean containsKey(final int k) {
-        if (((k) == (0))) return containsNullKey;
+        if (k == 0) return containsNullKey;
         int curr;
         final int[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix((k))) & mask]) == (0))) return false;
-        if (((k) == (curr))) return true;
+        if ((curr = key[pos = HashCommon.mix(k) & mask]) == 0) return false;
+        if (k == curr) return true;
         // There's always an unused entry.
         while (true) {
-            if (((curr = key[pos = (pos + 1) & mask]) == (0))) return false;
-            if (((k) == (curr))) return true;
+            if ((curr = key[pos = (pos + 1) & mask]) == 0) return false;
+            if (k == curr) return true;
         }
     }
 
     public boolean containsValue(final double v) {
         final double value[] = this.value;
         final int key[] = this.key;
-        if (containsNullKey && ((value[n]) == (v))) return true;
+        if (containsNullKey && (value[n] == v)) return true;
         for (int i = n; i-- != 0; )
-            if (!((key[i]) == (0)) && ((value[i]) == (v))) return true;
+            if (!(key[i] == 0) && (value[i] == v)) return true;
         return false;
     }
 
@@ -821,7 +821,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         if (size == 0) return;
         size = 0;
         containsNullKey = false;
-        Arrays.fill(key, (0));
+        Arrays.fill(key, 0);
         first = last = -1;
     }
 
@@ -877,7 +877,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
          */
         @Deprecated
         public Integer getKey() {
-            return (Integer.valueOf(key[index]));
+            return key[index];
         }
 
         public int getIntKey() {
@@ -891,7 +891,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
          */
         @Deprecated
         public Double getValue() {
-            return (Double.valueOf(value[index]));
+            return value[index];
         }
 
         public double getDoubleValue() {
@@ -905,18 +905,18 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         }
 
         public Double setValue(final Double v) {
-            return (Double.valueOf(setValue(((v).doubleValue()))));
+            return setValue(v.doubleValue());
         }
 
         @SuppressWarnings("unchecked")
         public boolean equals(final Object o) {
             if (!(o instanceof Map.Entry)) return false;
             Map.Entry<Integer, Double> e = (Map.Entry<Integer, Double>) o;
-            return ((key[index]) == (((e.getKey()).intValue()))) && ((value[index]) == (((e.getValue()).doubleValue())));
+            return (key[index] == e.getKey()) && (value[index] == e.getValue());
         }
 
         public int hashCode() {
-            return (key[index]) ^ HashCommon.double2int(value[index]);
+            return key[index] ^ HashCommon.double2int(value[index]);
         }
 
         public String toString() {
@@ -938,7 +938,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             first = (int) link[i];
             if (0 <= first) {
                 // Special case of SET_PREV( link[ first ], -1 )
-                link[first] |= (-1 & 0xFFFFFFFFL) << 32;
+                link[first] |= 0xFFFFFFFFL << 32;
             }
             return;
         }
@@ -946,15 +946,15 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             last = (int) (link[i] >>> 32);
             if (0 <= last) {
                 // Special case of SET_NEXT( link[ last ], -1 )
-                link[last] |= -1 & 0xFFFFFFFFL;
+                link[last] |= 0xFFFFFFFFL;
             }
             return;
         }
         final long linki = link[i];
         final int prev = (int) (linki >>> 32);
         final int next = (int) linki;
-        link[prev] ^= ((link[prev] ^ (linki & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-        link[next] ^= ((link[next] ^ (linki & 0xFFFFFFFF00000000L)) & 0xFFFFFFFF00000000L);
+        link[prev] ^= (link[prev] ^ (linki & 0xFFFFFFFFL)) & 0xFFFFFFFFL;
+        link[next] ^= (link[next] ^ (linki & 0xFFFFFFFF00000000L)) & 0xFFFFFFFF00000000L;
     }
 
     /**
@@ -972,21 +972,21 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         }
         if (first == s) {
             first = d;
-            link[(int) link[s]] ^= ((link[(int) link[s]] ^ ((d & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
+            link[(int) link[s]] ^= (link[(int) link[s]] ^ ((d & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L;
             link[d] = link[s];
             return;
         }
         if (last == s) {
             last = d;
-            link[(int) (link[s] >>> 32)] ^= ((link[(int) (link[s] >>> 32)] ^ (d & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+            link[(int) (link[s] >>> 32)] ^= (link[(int) (link[s] >>> 32)] ^ (d & 0xFFFFFFFFL)) & 0xFFFFFFFFL;
             link[d] = link[s];
             return;
         }
         final long links = link[s];
         final int prev = (int) (links >>> 32);
         final int next = (int) links;
-        link[prev] ^= ((link[prev] ^ (d & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-        link[next] ^= ((link[next] ^ ((d & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
+        link[prev] ^= (link[prev] ^ (d & 0xFFFFFFFFL)) & 0xFFFFFFFFL;
+        link[next] ^= (link[next] ^ ((d & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L;
         link[d] = links;
     }
 
@@ -1067,23 +1067,23 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         }
 
         private MapIterator(final int from) {
-            if (((from) == (0))) {
+            if (from == 0) {
                 if (IntDoubleOrderedMap.this.containsNullKey) {
                     next = (int) link[n];
                     prev = n;
                     return;
                 } else throw new NoSuchElementException("The key " + from + " does not belong to this map.");
             }
-            if (((key[last]) == (from))) {
+            if (key[last] == from) {
                 prev = last;
                 index = size;
                 return;
             }
             // The starting point.
-            int pos = (HashCommon.mix((from))) & mask;
+            int pos = HashCommon.mix(from) & mask;
             // There's always an unused entry.
-            while (!((key[pos]) == (0))) {
-                if (((key[pos]) == (from))) {
+            while (!(key[pos] == 0)) {
+                if (key[pos] == from) {
                     // Note: no valid index known.
                     next = (int) link[pos];
                     prev = pos;
@@ -1161,9 +1161,9 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
 			/*
 			 * Now we manually fix the pointers. Because of our knowledge of next and prev, this is going to be faster than calling fixPointers(). */
             if (prev == -1) first = next;
-            else link[prev] ^= ((link[prev] ^ (next & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+            else link[prev] ^= (link[prev] ^ (next & 0xFFFFFFFFL)) & 0xFFFFFFFFL;
             if (next == -1) last = prev;
-            else link[next] ^= ((link[next] ^ ((prev & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
+            else link[next] ^= (link[next] ^ ((prev & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L;
             int last, slot, pos = curr;
             curr = -1;
             if (pos == n) {
@@ -1175,11 +1175,11 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
                 for (; ; ) {
                     pos = ((last = pos) + 1) & mask;
                     for (; ; ) {
-                        if (((curr = key[pos]) == (0))) {
-                            key[last] = (0);
+                        if ((curr = key[pos]) == 0) {
+                            key[last] = 0;
                             return;
                         }
-                        slot = (HashCommon.mix((curr))) & mask;
+                        slot = HashCommon.mix(curr) & mask;
                         if (last <= pos ? last >= slot || slot > pos : last >= slot && slot > pos) break;
                         pos = (pos + 1) & mask;
                     }
@@ -1305,19 +1305,19 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         public boolean contains(final Object o) {
             if (!(o instanceof Map.Entry)) return false;
             final Map.Entry<Integer, Double> e = (Map.Entry<Integer, Double>) o;
-            final int k = ((e.getKey()).intValue());
-            if (((k) == (0)))
-                return (IntDoubleOrderedMap.this.containsNullKey && ((value[n]) == (((e.getValue()).doubleValue()))));
+            final int k = e.getKey();
+            if (k == 0)
+                return IntDoubleOrderedMap.this.containsNullKey && (value[n] == e.getValue());
             int curr;
             final int[] key = IntDoubleOrderedMap.this.key;
             int pos;
             // The starting point.
-            if (((curr = key[pos = (HashCommon.mix((k))) & mask]) == (0))) return false;
-            if (((k) == (curr))) return ((value[pos]) == (((e.getValue()).doubleValue())));
+            if ((curr = key[pos = HashCommon.mix(k) & mask]) == 0) return false;
+            if (k == curr) return value[pos] == e.getValue();
             // There's always an unused entry.
             while (true) {
-                if (((curr = key[pos = (pos + 1) & mask]) == (0))) return false;
-                if (((k) == (curr))) return ((value[pos]) == (((e.getValue()).doubleValue())));
+                if ((curr = key[pos = (pos + 1) & mask]) == 0) return false;
+                if (k == curr) return value[pos] == e.getValue();
             }
         }
 
@@ -1325,10 +1325,10 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         public boolean remove(final Object o) {
             if (!(o instanceof Map.Entry)) return false;
             final Map.Entry<Integer, Double> e = (Map.Entry<Integer, Double>) o;
-            final int k = ((e.getKey()).intValue());
-            final double v = ((e.getValue()).doubleValue());
-            if (((k) == (0))) {
-                if (containsNullKey && ((value[n]) == (v))) {
+            final int k = e.getKey();
+            final double v = e.getValue();
+            if (k == 0) {
+                if (containsNullKey && (value[n] == v)) {
                     removeNullEntry();
                     return true;
                 }
@@ -1338,18 +1338,18 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             final int[] key = IntDoubleOrderedMap.this.key;
             int pos;
             // The starting point.
-            if (((curr = key[pos = (HashCommon.mix((k))) & mask]) == (0))) return false;
-            if (((curr) == (k))) {
-                if (((value[pos]) == (v))) {
+            if ((curr = key[pos = HashCommon.mix(k) & mask]) == 0) return false;
+            if (curr == k) {
+                if (value[pos] == v) {
                     removeEntry(pos);
                     return true;
                 }
                 return false;
             }
             while (true) {
-                if (((curr = key[pos = (pos + 1) & mask]) == (0))) return false;
-                if (((curr) == (k))) {
-                    if (((value[pos]) == (v))) {
+                if ((curr = key[pos = (pos + 1) & mask]) == 0) return false;
+                if (curr == k) {
+                    if (value[pos] == v) {
                         removeEntry(pos);
                         return true;
                     }
@@ -1390,7 +1390,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             MapEntry k;
             while (n-- != 0) {
                 k = i.next(); // We need k because KEY2JAVAHASH() is a macro with repeated evaluation.
-                h += ((k) == null ? 0 : (k).hashCode());
+                h += k == null ? 0 : k.hashCode();
             }
             return h;
         }
@@ -1569,7 +1569,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         }
 
         public Integer previous() {
-            return (Integer.valueOf(key[previousEntry()]));
+            return key[previousEntry()];
         }
 
         public void set(Integer ok) {
@@ -1589,7 +1589,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         }
 
         public Integer next() {
-            return (Integer.valueOf(key[nextEntry()]));
+            return key[nextEntry()];
         }
     }
 
@@ -1660,7 +1660,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
          */
         @Deprecated
         public Integer first() {
-            return (Integer.valueOf(firstInt()));
+            return firstInt();
         }
 
         /**
@@ -1670,7 +1670,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
          */
         @Deprecated
         public Integer last() {
-            return (Integer.valueOf(lastInt()));
+            return lastInt();
         }
 
 
@@ -1692,7 +1692,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
          * Delegates to the type-specific <code>rem()</code> method.
          */
         public boolean remove(Object ok) {
-            return rem(((((Integer) (ok)).intValue())));
+            return rem((Integer) ok);
         }
 
         /**
@@ -1706,14 +1706,14 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
          * Delegates to the corresponding type-specific method.
          */
         public boolean rem(final Object o) {
-            return rem(((((Integer) (o)).intValue())));
+            return rem((Integer) o);
         }
 
         /**
          * Delegates to the corresponding type-specific method.
          */
         public boolean contains(final Object o) {
-            return contains(((((Integer) (o)).intValue())));
+            return contains(((Integer) o).intValue());
         }
 
         /**
@@ -1870,7 +1870,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         }
 
         public Double previous() {
-            return (Double.valueOf(value[previousEntry()]));
+            return value[previousEntry()];
         }
 
         public void set(Double ok) {
@@ -1904,7 +1904,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
          */
         @Deprecated
         public Double next() {
-            return (Double.valueOf(value[nextEntry()]));
+            return value[nextEntry()];
         }
     }
 
@@ -1992,17 +1992,17 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         final long newLink[] = new long[newN + 1];
         first = -1;
         for (int j = size; j-- != 0; ) {
-            if (((key[i]) == (0))) pos = newN;
+            if (key[i] == 0) pos = newN;
             else {
-                pos = (HashCommon.mix((key[i]))) & mask;
-                while (!((newKey[pos]) == (0)))
+                pos = HashCommon.mix(key[i]) & mask;
+                while (!(newKey[pos] == 0))
                     pos = (pos + 1) & mask;
             }
             newKey[pos] = key[i];
             newValue[pos] = value[i];
             if (prev != -1) {
-                newLink[newPrev] ^= ((newLink[newPrev] ^ (pos & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-                newLink[pos] ^= ((newLink[pos] ^ ((newPrev & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
+                newLink[newPrev] ^= (newLink[newPrev] ^ (pos & 0xFFFFFFFFL)) & 0xFFFFFFFFL;
+                newLink[pos] ^= (newLink[pos] ^ ((newPrev & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L;
                 newPrev = pos;
             } else {
                 newPrev = first = pos;
@@ -2017,7 +2017,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         this.last = newPrev;
         if (newPrev != -1)
             // Special case of SET_NEXT( newLink[ newPrev ], -1 );
-            newLink[newPrev] |= -1 & 0xFFFFFFFFL;
+            newLink[newPrev] |= 0xFFFFFFFFL;
         n = newN;
         this.mask = mask;
         maxFill = maxFill(n, f);
@@ -2045,9 +2045,9 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
     public int hashCode() {
         int h = 0;
         for (int j = realSize(), i = 0, t = 0; j-- != 0; ) {
-            while (((key[i]) == (0)))
+            while (key[i] == 0)
                 i++;
-            t = (key[i]);
+            t = key[i];
             t ^= HashCommon.double2int(value[i]);
             h += t;
             i++;
@@ -2077,7 +2077,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
      */
     @Deprecated
     public Integer firstKey() {
-        return (Integer.valueOf(firstIntKey()));
+        return firstIntKey();
     }
 
     /**
@@ -2087,7 +2087,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
      */
     @Deprecated
     public Integer lastKey() {
-        return (Integer.valueOf(lastIntKey()));
+        return lastIntKey();
     }
 
 
@@ -2449,7 +2449,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
          * Delegates to the type-specific <code>rem()</code> method.
          */
         public boolean remove(Object ok) {
-            return rem(((((Double) (ok)).doubleValue())));
+            return rem(((Double) ok).doubleValue());
         }
 
         /**
@@ -2463,14 +2463,14 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
          * Delegates to the corresponding type-specific method.
          */
         public boolean rem(final Object o) {
-            return rem(((((Double) (o)).doubleValue())));
+            return rem(((Double) o).doubleValue());
         }
 
         /**
          * Delegates to the corresponding type-specific method.
          */
         public boolean contains(final Object o) {
-            return contains(((((Double) (o)).doubleValue())));
+            return contains(((Double) o).doubleValue());
         }
 
         public boolean rem(final double k) {
@@ -2579,7 +2579,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
     }
 
     public boolean containsValue(Object ov) {
-        return containsValue(((((Double) (ov)).doubleValue())));
+        return containsValue(((Double) ov).doubleValue());
     }
 
     /**

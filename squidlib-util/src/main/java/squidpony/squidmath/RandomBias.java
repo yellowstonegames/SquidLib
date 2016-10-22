@@ -362,7 +362,7 @@ public class RandomBias implements Serializable {
         Double d = biases.get(kind);
         if(d == null)
             return rng.nextFloat();
-        return (float)(quantile(d));
+        return (float) quantile(d);
     }
 
     /**
@@ -548,7 +548,7 @@ public class RandomBias implements Serializable {
     {
         if(expectedAverage <= 0) expectedAverage = 0.001;
         if(expectedAverage >= 1) expectedAverage = 0.999;
-        return (float)(quantile(expectedAverage));
+        return (float) quantile(expectedAverage);
     }
 
     /**

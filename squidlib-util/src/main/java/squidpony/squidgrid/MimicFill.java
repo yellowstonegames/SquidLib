@@ -36,7 +36,7 @@ public class MimicFill {
         for (int x = 0; x < map.length; x++) {
             for (int y = 0; y < map[0].length; y++) {
                 for (int c = 0; c < yes.length; c++) {
-                    if(sample[x][y] = (map[x][y] == yes[c]))
+                    if(sample[x][y] = map[x][y] == yes[c])
                         break;
                 }
             }

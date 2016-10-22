@@ -65,9 +65,9 @@ public class DenseRoomMapGenerator {
             nx = Math.max(0, Math.min(width - 2 - hnw, center.x - hnw));
             ny = Math.max(0, Math.min(height - 2 - hnh, center.y - hnh));
             if (center.x - hnw != nx)
-                nw -= Math.abs((center.x - hnw) - nx);
+                nw -= Math.abs(center.x - hnw - nx);
             if (center.y - hnh != ny)
-                nh -= Math.abs((center.y - hnh) - ny);
+                nh -= Math.abs(center.y - hnh - ny);
             if (nw >= 0 && nh >= 0) {
                 GwtCompatibility.insert2D(DungeonUtility.wallWrap(GwtCompatibility.fill2D('.', nw, nh)),
                         map, nx, ny);

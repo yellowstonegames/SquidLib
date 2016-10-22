@@ -30,7 +30,7 @@ public class HeightMapFactory {
                 double xi = width * 1.1, yi = height * 1.1;//Math.max(width, height);
 
                 for (int p = 0; p < perldivisors.length; p++) {
-                    n += (PerlinNoise.noise((x + offset) / xi, (y + offset) / yi)) / perldivisors[p];
+                    n += PerlinNoise.noise((x + offset) / xi, (y + offset) / yi) / perldivisors[p];
                     xi /= 2;
                     yi /= 2;
                 }

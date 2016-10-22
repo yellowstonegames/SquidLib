@@ -67,7 +67,7 @@ public class MerlinNoise {
     }
 
     public static int rawNoise3D(final int x, final int y, final int z) {
-        return (((z * 0xD0E89D2D + 0x311E289F) ^ (x * 0x9E3779B9 ^ 0xC6BC2796) ^ (y * 0x92B5CC83 + 0xD9B4E019)) +
+        return (((z * 0xD0E89D2D + 0x311E289F) ^ x * 0x9E3779B9 ^ 0xC6BC2796 ^ (y * 0x92B5CC83 + 0xD9B4E019)) +
                 //(z * 0xD0E89D2D ^ x * 0xC6BC2796 ^ y * 0x92B5CC83 ^
                 (x ^ ~y + z) * 0x632BE59B + (z ^ ~x + y) * 0x7F4A7C15 + (y ^ ~z + x) * 0x9E3779B9) >>> 8 & 0xff; //0x311E289F
     }
@@ -189,7 +189,7 @@ public class MerlinNoise {
             return 0;
         int v = 0, a = x << 1, b = y << 1;
         for (int s = zoom; s > 0; s--) {
-            v += noise2D((a += 379) / s, (b += 379) / s) + noise2D((a) / s, (b + 1) / s) + noise2D((a + 1) / s, (b) / s);
+            v += noise2D((a += 379) / s, (b += 379) / s) + noise2D(a / s, (b + 1) / s) + noise2D((a + 1) / s, b / s);
         }
         //return v / zoom;
         /*

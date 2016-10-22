@@ -488,7 +488,7 @@ public class Coord implements Serializable {
      */
     public static void expandPool(int xIncrease, int yIncrease)
     {
-        if((xIncrease < 0 || yIncrease < 0) || (xIncrease | yIncrease) == 0 )
+        if(xIncrease < 0 || yIncrease < 0 || (xIncrease | yIncrease) == 0 )
             return;
         int width = POOL.length, height = POOL[0].length;
         Coord[][] POOL2 = new Coord[width + xIncrease][height + yIncrease];

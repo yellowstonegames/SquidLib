@@ -351,7 +351,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
     }
     private int removeEntry(final int pos) {
         size--;
-        fixPointers(pos);
+        fixOrder(pos);
         shiftKeys(pos);
         final int oldValue = value[pos];
         fixValues(oldValue);
@@ -364,7 +364,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
         key[n] = null;
         final int oldValue = value[n];
         size--;
-        fixPointers(n);
+        fixOrder(n);
         fixValues(oldValue);
         if (size < (maxFill >>> 2) && n > DEFAULT_INITIAL_SIZE)
             rehash(n / 2);
@@ -419,12 +419,12 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
             K curr;
             final K[] key = this.key;
             // The starting point.
-            if ((curr = key[pos = (HashCommon.mix(hasher.hash(k))) & mask]) != null) {
+            if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) != null) {
                 if (curr.equals(k)) {
                     return pos;
                 }
                 while ((curr = key[pos = (pos + 1) & mask]) != null)
-                    if (((curr).equals(k))) {
+                    if (curr.equals(k)) {
                         return pos;
                     }
             }
@@ -436,6 +436,42 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
             last = pos;
         }
         order.add(pos);
+        if (size++ >= maxFill)
+            rehash(arraySize(size + 1, f));
+        return -1;
+    }
+    private int insertAt(final K k, final int at) {
+        int pos;
+        if (k == null) {
+            if (containsNullKey)
+                return n;
+            containsNullKey = true;
+            pos = n;
+        } else {
+            K curr;
+            final K[] key = this.key;
+            // The starting point.
+            if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) != null) {
+                if (curr.equals(k)) {
+                    order.removeIndex(value[pos]);
+                    order.insert(at, pos);
+                    return pos;
+                }
+                while ((curr = key[pos = (pos + 1) & mask]) != null)
+                    if (curr.equals(k)) {
+                        order.removeIndex(value[pos]);
+                        order.insert(at, pos);
+                        return pos;
+                    }
+            }
+        }
+        key[pos] = k;
+        if (size == 0) {
+            first = last = pos;
+        } else {
+            last = pos;
+        }
+        order.insert(at, pos);
         if (size++ >= maxFill)
             rehash(arraySize(size + 1, f));
         return -1;
@@ -497,11 +533,11 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
         for (;;) {
             pos = ((last = pos) + 1) & mask;
             for (;;) {
-                if (((curr = key[pos]) == null)) {
+                if ((curr = key[pos]) == null) {
                     key[last] = null;
                     return;
                 }
-                slot = (HashCommon.mix(hasher.hash(curr)))
+                slot = HashCommon.mix(hasher.hash(curr))
                         & mask;
                 if (last <= pos ? last >= slot || slot > pos : last >= slot
                         && slot > pos)
@@ -509,12 +545,12 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
                 pos = (pos + 1) & mask;
             }
             key[last] = curr;
-            fixPointers(pos, last);
+            fixOrder(pos, last);
         }
     }
     @SuppressWarnings("unchecked")
     public Integer remove(final Object k) {
-        if ((((K) k) == null)) {
+        if ((K) k == null) {
             if (containsNullKey)
                 return removeNullEntry();
             return defRetValue;
@@ -523,7 +559,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix(hasher.hash(k))) & mask]) == null))
+        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
             return defRetValue;
         if (k.equals(curr))
             return removeEntry(pos);
@@ -536,7 +572,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
     }
     @SuppressWarnings("unchecked")
     public int removeInt(final Object k) {
-        if ((((K) k) == null)) {
+        if ((K) k == null) {
             if (containsNullKey)
                 return removeNullEntry();
             return defRetValue;
@@ -545,7 +581,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix(hasher.hash(k))) & mask]) == null))
+        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
             return defRetValue;
         if (k.equals(curr))
             return removeEntry(pos);
@@ -579,7 +615,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
             first = order.get(0);
         else
             first = -1;
-        // Abbreviated version of fixPointers(pos)
+        // Abbreviated version of fixOrder(pos)
         /*first = (int) link[pos];
         if (0 <= first) {
             // Special case of SET_PREV( link[ first ], -1 )
@@ -616,7 +652,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
         else
             last = -1;
 
-        // Abbreviated version of fixPointers(pos)
+        // Abbreviated version of fixOrder(pos)
         /*
         last = (int) (link[pos] >>> 32);
         if (0 <= last) {
@@ -688,7 +724,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
      * @return the corresponding value, or -1 if no value was present for the given key.
      */
     public int getAndMoveToFirst(final K k) {
-        if (((k) == null)) {
+        if (k == null) {
             if (containsNullKey) {
                 moveIndexToFirst(n);
                 return value[n];
@@ -699,17 +735,17 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix(hasher.hash(k))) & mask]) == null))
+        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
             return defRetValue;
-        if (((k).equals(curr))) {
+        if (k.equals(curr)) {
             moveIndexToFirst(pos);
             return value[pos];
         }
         // There's always an unused entry.
         while (true) {
-            if (((curr = key[pos = (pos + 1) & mask]) == null))
+            if ((curr = key[pos = (pos + 1) & mask]) == null)
                 return defRetValue;
-            if (((k).equals(curr))) {
+            if (k.equals(curr)) {
                 moveIndexToFirst(pos);
                 return value[pos];
             }
@@ -724,7 +760,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
      * @return the corresponding value, or -1 if no value was present for the given key.
      */
     public int getAndMoveToLast(final K k) {
-        if (((k) == null)) {
+        if (k == null) {
             if (containsNullKey) {
                 moveIndexToLast(n);
                 return value[n];
@@ -735,17 +771,17 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix(hasher.hash(k))) & mask]) == null))
+        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
             return defRetValue;
-        if (((k).equals(curr))) {
+        if (k.equals(curr)) {
             moveIndexToLast(pos);
             return value[pos];
         }
         // There's always an unused entry.
         while (true) {
-            if (((curr = key[pos = (pos + 1) & mask]) == null))
+            if ((curr = key[pos = (pos + 1) & mask]) == null)
                 return defRetValue;
-            if (((k).equals(curr))) {
+            if (k.equals(curr)) {
                 moveIndexToLast(pos);
                 return value[pos];
             }
@@ -763,7 +799,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
      */
     public int putAndMoveToFirst(final K k, final int v) {
         int pos;
-        if (((k) == null)) {
+        if (k == null) {
             if (containsNullKey) {
                 moveIndexToFirst(n);
                 return setValue(n, v);
@@ -774,20 +810,19 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
             K curr;
             final K[] key = this.key;
             // The starting point.
-            if (!((curr = key[pos = (HashCommon.mix(hasher.hash(k))) & mask]) == null)) {
-                if (((curr).equals(k))) {
+            if (!((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)) {
+                if (curr.equals(k)) {
                     moveIndexToFirst(pos);
                     return setValue(pos, v);
                 }
                 while (!((curr = key[pos = (pos + 1) & mask]) == null))
-                    if (((curr).equals(k))) {
+                    if (curr.equals(k)) {
                         moveIndexToFirst(pos);
                         return setValue(pos, v);
                     }
             }
         }
         key[pos] = k;
-        value[pos] = v;
         if (size == 0) {
             first = last = pos;
             // Special case of SET_UPPER_LOWER( link[ pos ], -1, -1 );
@@ -798,6 +833,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
             first = pos;
         }
         order.insert(0, pos);
+        fixValues(0);
         if (size++ >= maxFill)
             rehash(arraySize(size, f));
         return defRetValue;
@@ -814,7 +850,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
      */
     public int putAndMoveToLast(final K k, final int v) {
         int pos;
-        if (((k) == null)) {
+        if (k == null) {
             if (containsNullKey) {
                 moveIndexToLast(n);
                 return setValue(n, v);
@@ -825,20 +861,20 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
             K curr;
             final K[] key = this.key;
             // The starting point.
-            if (!((curr = key[pos = (HashCommon.mix(hasher.hash(k))) & mask]) == null)) {
-                if (((curr).equals(k))) {
+            if (!((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)) {
+                if (curr.equals(k)) {
                     moveIndexToLast(pos);
                     return setValue(pos, v);
                 }
                 while (!((curr = key[pos = (pos + 1) & mask]) == null))
-                    if (((curr).equals(k))) {
+                    if (curr.equals(k)) {
                         moveIndexToLast(pos);
                         return setValue(pos, v);
                     }
             }
         }
         key[pos] = k;
-        value[pos] = v;
+        value[pos] = size;
         if (size == 0) {
             first = last = pos;
             // Special case of SET_UPPER_LOWER( link[ pos ], -1, -1 );
@@ -860,15 +896,15 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix(hasher.hash(k))) & mask]) == null))
+        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
             return defRetValue;
-        if ((k.equals(curr)))
+        if (k.equals(curr))
             return value[pos];
         // There's always an unused entry.
         while (true) {
-            if (((curr = key[pos = (pos + 1) & mask]) == null))
+            if ((curr = key[pos = (pos + 1) & mask]) == null)
                 return defRetValue;
-            if ((k.equals(curr)))
+            if (k.equals(curr))
                 return value[pos];
         }
     }
@@ -879,15 +915,15 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix(hasher.hash(k))) & mask]) == null))
+        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
             return defRetValue;
-        if ((k.equals(curr)))
+        if (k.equals(curr))
             return value[pos];
         // There's always an unused entry.
         while (true) {
-            if (((curr = key[pos = (pos + 1) & mask]) == null))
+            if ((curr = key[pos = (pos + 1) & mask]) == null)
                 return defRetValue;
-            if ((k.equals(curr)))
+            if (k.equals(curr))
                 return value[pos];
         }
     }
@@ -899,15 +935,15 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix(hasher.hash(k))) & mask]) == null))
+        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
             return false;
-        if ((k.equals(curr)))
+        if (k.equals(curr))
             return true;
         // There's always an unused entry.
         while (true) {
-            if (((curr = key[pos = (pos + 1) & mask]) == null))
+            if ((curr = key[pos = (pos + 1) & mask]) == null)
                 return false;
-            if ((k.equals(curr)))
+            if (k.equals(curr))
                 return true;
         }
     }
@@ -916,9 +952,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
     }
     @Override
     public boolean containsValue(final Object ov) {
-        if (ov == null)
-            return false;
-        return containsValue(((Integer) ov).intValue());
+        return ov != null && containsValue(((Integer) ov).intValue());
     }
     /*
      * Removes all elements from this map.
@@ -931,7 +965,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
             return;
         size = 0;
         containsNullKey = false;
-        Arrays.fill(key, (null));
+        Arrays.fill(key, null);
         Arrays.fill(value, -1);
         first = last = -1;
         order.clear();
@@ -963,7 +997,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
         MapEntry() {
         }
         public K getKey() {
-            return (key[index]);
+            return key[index];
         }
         /**
          * {@inheritDoc}
@@ -984,7 +1018,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
             return oldValue;
         }
         public Integer setValue(final Integer v) {
-            return (setValue(((v).intValue())));
+            return setValue(v.intValue());
         }
 
         @SuppressWarnings("unchecked")
@@ -992,14 +1026,14 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
             if (!(o instanceof Map.Entry))
                 return false;
             Map.Entry<K, Integer> e = (Map.Entry<K, Integer>) o;
-            return ((key[index]) == null
-                    ? (e.getKey()) == null
-                    : (key[index]).equals(e.getKey()))
-                    && ((value[index]) == (e.getValue()));
+            return (key[index] == null
+                    ? e.getKey() == null
+                    : key[index].equals(e.getKey()))
+                    && (value[index] == e.getValue());
         }
         public int hashCode() {
-            return ((key[index]) == null ? 0 : hasher.hash(key[index]))
-                    ^ (value[index]);
+            return (key[index] == null ? 0 : hasher.hash(key[index]))
+                    ^ value[index];
         }
         public String toString() {
             return key[index] + "=>" + value[index];
@@ -1011,7 +1045,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
      *
      * @param i the index of an entry.
      */
-    protected void fixPointers(final int i) {
+    protected void fixOrder(final int i) {
         if (size == 0) {
             first = last = -1;
             return;
@@ -1055,7 +1089,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
      * @param s the source position.
      * @param d the destination position.
      */
-    protected void fixPointers(int s, int d) {
+    protected void fixOrder(int s, int d) {
         if (size == 1) {
             first = last = d;
             // Special case of SET_UPPER_LOWER( link[ d ], -1, -1 )
@@ -1264,7 +1298,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
             /*
 			 * Now we manually fix the pointers. Because of our knowledge of
 			 * next and prev, this is going to be faster than calling
-			 * fixPointers().
+			 * fixOrder().
 			 */
             if (prev == -1)
                 first = next;
@@ -1285,12 +1319,12 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
                 for (;;) {
                     pos = ((last = pos) + 1) & mask;
                     for (;;) {
-                        if (((curr = key[pos]) == null)) {
+                        if ((curr = key[pos]) == null) {
                             key[last] = null;
                             fixValues(index);
                             return;
                         }
-                        slot = (HashCommon.mix(hasher.hash(curr))) & mask;
+                        slot = HashCommon.mix(hasher.hash(curr)) & mask;
                         if (last <= pos
                                 ? last >= slot || slot > pos
                                 : last >= slot && slot > pos)
@@ -1302,7 +1336,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
                         next = last;
                     if (prev == pos)
                         prev = last;
-                    fixPointers(pos, last);
+                    fixOrder(pos, last);
                 }
             }
         }
@@ -1405,24 +1439,24 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
             if (!(o instanceof Map.Entry))
                 return false;
             final Entry<?, ?> e = (Entry<?, ?>) o;
-            final K k = ((K) e.getKey());
-            final int v = ((Integer) e.getValue());
-            if (((k) == null))
+            final K k = (K) e.getKey();
+            final int v = (Integer) e.getValue();
+            if (k == null)
                 return containsNullKey
                         && (value[n] == v);
             K curr;
             final K[] key = Arrangement.this.key;
             int pos;
             // The starting point.
-            if (((curr = key[pos = (HashCommon.mix(hasher.hash(k))) & mask]) == null))
+            if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
                 return false;
-            if (((k).equals(curr)))
+            if (k.equals(curr))
                 return value[pos] == v;
             // There's always an unused entry.
             while (true) {
-                if (((curr = key[pos = (pos + 1) & mask]) == null))
+                if ((curr = key[pos = (pos + 1) & mask]) == null)
                     return false;
-                if (((k).equals(curr)))
+                if (k.equals(curr))
                     return value[pos] == v;
             }
         }
@@ -1431,8 +1465,8 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
             if (!(o instanceof Map.Entry))
                 return false;
             final Entry<?, ?> e = (Entry<?, ?>) o;
-            final K k = ((K) e.getKey());
-            final int v = ((Integer) e.getValue());
+            final K k = (K) e.getKey();
+            final int v = (Integer) e.getValue();
             if (k == null) {
                 if (containsNullKey
                         && value[n] == v) {
@@ -1445,7 +1479,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
             final K[] key = Arrangement.this.key;
             int pos;
             // The starting point.
-            if (((curr = key[pos = (HashCommon.mix(hasher.hash(k))) & mask]) == null))
+            if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
                 return false;
             if (curr.equals(k)) {
                 if (value[pos] == v) {
@@ -1455,7 +1489,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
                 return false;
             }
             while (true) {
-                if (((curr = key[pos = (pos + 1) & mask]) == null))
+                if ((curr = key[pos = (pos + 1) & mask]) == null)
                     return false;
                 if (curr.equals(k)) {
                     if (value[pos] == v) {
@@ -1992,11 +2026,11 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
         int i, pos, sz = order.size, originalFirst = first, originalLast = last;
         for (int q = 0; q < sz; q++) {
             i = order.get(q);
-            if (((key[i]) == null))
+            if (key[i] == null)
                 pos = newN;
             else {
-                pos = (HashCommon.mix(hasher.hash(key[i]))) & mask;
-                while (!((newKey[pos]) == null))
+                pos = HashCommon.mix(hasher.hash(key[i])) & mask;
+                while (!(newKey[pos] == null))
                     pos = (pos + 1) & mask;
             }
             newKey[pos] = key[i];
@@ -2054,17 +2088,17 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
     public int hashCode() {
         int h = 0;
         for (int j = realSize(), i = 0, t = 0; j-- != 0;) {
-            while (((key[i]) == null))
+            while (key[i] == null)
                 i++;
             if (this != key[i])
                 t = hasher.hash(key[i]);
-            t ^= (value[i]);
+            t ^= value[i];
             h += t;
             i++;
         }
         // Zero / null keys have hash zero.
         if (containsNullKey)
-            h += (value[n]);
+            h += value[n];
         return h;
     }
     /**
@@ -2403,13 +2437,13 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
         for (int i = size, pos; i-- != 0;) {
             k = (K) s.readObject();
             v = s.readInt();
-            if (((k) == null)) {
+            if (k == null) {
                 pos = n;
                 containsNullKey = true;
             } else {
-                pos = (HashCommon.mix(hasher.hash(k)))
+                pos = HashCommon.mix(hasher.hash(k))
                         & mask;
-                while (!((key[pos]) == null))
+                while (!(key[pos] == null))
                     pos = (pos + 1) & mask;
             }
 
@@ -2435,7 +2469,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
         if (idx < 0 || idx >= order.size)
             return defRetValue;
         // The starting point.
-        if ((key[pos = order.get(idx)]) == null)
+        if (key[pos = order.get(idx)] == null)
             return containsNullKey ? value[n] : defRetValue;
         return value[pos];
     }
@@ -2484,6 +2518,23 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
         removeEntry(pos);
         return k;
     }
+
+    /**
+     * Equivalent to {@link #add(Object)}, except that it can place k at any point in the ordering (shifting up later
+     * entries and changing their values to match their new positions in the ordering).
+     * @param idx the position in the ordering to place k at; will not be used if negative or greater than the current size (it can be equal to the current size)
+     * @param k the key to add into this Arrangement; its value will be idx
+     * @return the previous position in the ordering that k had if already present, the previous size of the Arrangement if k was just added now, or -1 if idx is invalid
+     */
+    public int addAt(final int idx, final K k) {
+        if(idx < 0 || idx > size)
+            return -1;
+        final int pos = insertAt(k, idx), oldValue = value[pos];
+        fixValues(idx);
+        if (pos < 0)
+            return size - 1;
+        return oldValue;
+    }
     /**
      * Gets a random value from this Arrangement in constant time, using the given RNG to generate a random number.
      * @param rng used to generate a random index for a value
@@ -2526,6 +2577,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
         order.shuffle(rng);
         first = order.get(0);
         last = order.peek();
+        fixValues(0);
         return this;
     }
 
@@ -2547,9 +2599,12 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
      */
     public Arrangement<K> reorder(int... ordering)
     {
+        if(ordering == null || ordering.length <= 0)
+            return this;
         order.reorder(ordering);
         first = order.get(0);
         last = order.peek();
+        fixValues(0);
         return this;
     }
     private int alterEntry(final int pos, final K replacement) {
@@ -2560,7 +2615,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
         value[pos] = -1;
 
         int rep;
-        if ((replacement == null)) {
+        if (replacement == null) {
             if (containsNullKey)
                 return v;
             rep = n;
@@ -2580,7 +2635,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
             key[rep] = replacement;
             value[rep] = v;
         }
-        fixPointers(pos, rep);
+        fixOrder(pos, rep);
         return v;
     }
     private int alterNullEntry(final K replacement) {
@@ -2609,7 +2664,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
             value[rep] = v;
 
         }
-        fixPointers(n, rep);
+        fixOrder(n, rep);
         return v;
     }
 
@@ -2639,7 +2694,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Serializable, Clon
         if (original.equals(curr))
             return alterEntry(pos, replacement);
         while (true) {
-            if (((curr = key[pos = (pos + 1) & mask]) == null))
+            if ((curr = key[pos = (pos + 1) & mask]) == null)
                 return add(replacement);
             if (original.equals(curr))
                 return alterEntry(pos, replacement);

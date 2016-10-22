@@ -86,8 +86,8 @@ public class SerpentDeepMapGenerator {
             rows[i] = rsum + (int)(rowBase * 0.5f * (1 + Long.bitCount(rowAlterations & b)));
             rsum += (int)(rowBase * (1 + Long.bitCount(rowAlterations & b)));
         }
-        int cs = (width - csum);
-        int rs = (height - rsum);
+        int cs = width - csum;
+        int rs = height - rsum;
         int cs2 = cs, rs2 = rs, cs3 = cs, rs3 = rs;
         for (int i = 0; i <= 7; i++) {
             cs2= cs2 * i / 7;
