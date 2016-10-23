@@ -1,12 +1,7 @@
 package squidpony;
 
 import regexodus.*;
-import squidpony.squidmath.CrossHash;
-import squidpony.squidmath.IntDoubleOrderedMap;
-import squidpony.squidmath.OrderedMap;
-import squidpony.squidmath.OrderedSet;
-import squidpony.squidmath.RNG;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.*;
 
 import java.io.Serializable;
 import java.util.*;
@@ -31,7 +26,7 @@ public class FakeLanguageGen implements Serializable {
     public final Pattern[] sanityChecks;
     public ArrayList<Modifier> modifiers;
     public static final StatefulRNG srng = new StatefulRNG();
-    private static final OrderedMap<FakeLanguageGen, Integer> registry = new OrderedMap<>(32, 0.5f);
+    private static final OrderedSet<FakeLanguageGen> registry = new OrderedSet<>(32);
     protected String summary = null;
     static final Pattern repeats = Pattern.compile("(.)\\1+"),
             vowelClusters = Pattern.compile(
@@ -263,7 +258,7 @@ public class FakeLanguageGen implements Serializable {
 
     static {
 
-        registry.put(null, 0);
+        registry.add(null);
 
         openVowels.put("a", "a aa ae ai au ea ia oa ua");
         openVowels.put("e", "e ae ea ee ei eo eu ie ue");
@@ -401,7 +396,7 @@ public class FakeLanguageGen implements Serializable {
     private FakeLanguageGen register()
     {
         summary = registry.size() + "@1";
-        registry.put(this, registry.size());
+        registry.add(this);
         return copy();
     }
     private FakeLanguageGen summarize(String brief)
@@ -2877,7 +2872,7 @@ public class FakeLanguageGen implements Serializable {
             }
             else
             {
-                pairs.add(registry.keyAt(Integer.parseInt(data.substring(prevTildeIndex+1, snailIndex))));
+                pairs.add(registry.getAt(Integer.parseInt(data.substring(prevTildeIndex+1, snailIndex))));
                 pairs.add(Double.valueOf(data.substring(snailIndex+1, tildeIndex)));
             }
             snailIndex = data.indexOf('@', snailIndex+1);
