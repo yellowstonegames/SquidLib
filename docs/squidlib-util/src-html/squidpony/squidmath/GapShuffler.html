@@ -22,7 +22,7 @@
 <span class="sourceLineNo">014</span> * Created by Tommy Ettinger on 5/21/2016.<a name="line.14"></a>
 <span class="sourceLineNo">015</span> * @param &lt;T&gt; the type of items to iterate over; ideally, the items are unique<a name="line.15"></a>
 <span class="sourceLineNo">016</span> */<a name="line.16"></a>
-<span class="sourceLineNo">017</span>public class GapShuffler&lt;T&gt; implements Iterable&lt;T&gt;, Serializable {<a name="line.17"></a>
+<span class="sourceLineNo">017</span>public class GapShuffler&lt;T&gt; implements Iterator&lt;T&gt;, Iterable&lt;T&gt;, Serializable {<a name="line.17"></a>
 <span class="sourceLineNo">018</span>    private static final long serialVersionUID = 1277543974688106290L;<a name="line.18"></a>
 <span class="sourceLineNo">019</span>    public RNG rng;<a name="line.19"></a>
 <span class="sourceLineNo">020</span>    private ArrayList&lt;T&gt; elements;<a name="line.20"></a>
@@ -96,11 +96,11 @@
 <span class="sourceLineNo">088</span>    }<a name="line.88"></a>
 <span class="sourceLineNo">089</span><a name="line.89"></a>
 <span class="sourceLineNo">090</span>    /**<a name="line.90"></a>
-<span class="sourceLineNo">091</span>     * Gets the next element of the infinite sequence of T this shuffles through. The same as calling next() on an<a name="line.91"></a>
-<span class="sourceLineNo">092</span>     * iterator returned by this class' iterator() method.<a name="line.92"></a>
+<span class="sourceLineNo">091</span>     * Gets the next element of the infinite sequence of T this shuffles through. This class can be used as an<a name="line.91"></a>
+<span class="sourceLineNo">092</span>     * Iterator or Iterable of type T.<a name="line.92"></a>
 <span class="sourceLineNo">093</span>     * @return the next element in the infinite sequence<a name="line.93"></a>
 <span class="sourceLineNo">094</span>     */<a name="line.94"></a>
-<span class="sourceLineNo">095</span>    public T getNext() {<a name="line.95"></a>
+<span class="sourceLineNo">095</span>    public T next() {<a name="line.95"></a>
 <span class="sourceLineNo">096</span>        if(index &gt;= size)<a name="line.96"></a>
 <span class="sourceLineNo">097</span>        {<a name="line.97"></a>
 <span class="sourceLineNo">098</span>            index = 0;<a name="line.98"></a>
@@ -124,79 +124,37 @@
 <span class="sourceLineNo">116</span>        return elements.get(indexSections[ii][ij]);<a name="line.116"></a>
 <span class="sourceLineNo">117</span>    }<a name="line.117"></a>
 <span class="sourceLineNo">118</span>    /**<a name="line.118"></a>
-<span class="sourceLineNo">119</span>     * Returns an &lt;b&gt;infinite&lt;/b&gt; iterator over elements of type {@code T}. You should be prepared to break out of any<a name="line.119"></a>
-<span class="sourceLineNo">120</span>     * for loops that use this once you've gotten enough elements! The remove() method is not supported by this iterator<a name="line.120"></a>
-<span class="sourceLineNo">121</span>     * and hasNext() will always return true.<a name="line.121"></a>
-<span class="sourceLineNo">122</span>     *<a name="line.122"></a>
-<span class="sourceLineNo">123</span>     * @return an infinite Iterator over elements of type T.<a name="line.123"></a>
-<span class="sourceLineNo">124</span>     */<a name="line.124"></a>
-<span class="sourceLineNo">125</span>    @Override<a name="line.125"></a>
-<span class="sourceLineNo">126</span>    public Iterator&lt;T&gt; iterator() {<a name="line.126"></a>
-<span class="sourceLineNo">127</span>        return new GapIterator();<a name="line.127"></a>
-<span class="sourceLineNo">128</span>    }<a name="line.128"></a>
-<span class="sourceLineNo">129</span><a name="line.129"></a>
-<span class="sourceLineNo">130</span>    private class GapIterator implements Iterator&lt;T&gt;, Serializable<a name="line.130"></a>
-<span class="sourceLineNo">131</span>    {<a name="line.131"></a>
-<span class="sourceLineNo">132</span>        private static final long serialVersionUID = 3167045364623458470L;<a name="line.132"></a>
-<span class="sourceLineNo">133</span>        private int innerIndex;<a name="line.133"></a>
-<span class="sourceLineNo">134</span>        private RNG innerRNG;<a name="line.134"></a>
-<span class="sourceLineNo">135</span>        GapIterator() {<a name="line.135"></a>
-<span class="sourceLineNo">136</span>            innerIndex = 0;<a name="line.136"></a>
-<span class="sourceLineNo">137</span>            innerRNG = rng.copy();<a name="line.137"></a>
-<span class="sourceLineNo">138</span>        }<a name="line.138"></a>
-<span class="sourceLineNo">139</span>        /**<a name="line.139"></a>
-<span class="sourceLineNo">140</span>         * Returns {@code true} if the iteration has more elements.<a name="line.140"></a>
-<span class="sourceLineNo">141</span>         * This is always the case for this Iterator.<a name="line.141"></a>
-<span class="sourceLineNo">142</span>         *<a name="line.142"></a>
-<span class="sourceLineNo">143</span>         * @return {@code true} always<a name="line.143"></a>
-<span class="sourceLineNo">144</span>         */<a name="line.144"></a>
-<span class="sourceLineNo">145</span>        @Override<a name="line.145"></a>
-<span class="sourceLineNo">146</span>        public boolean hasNext() {<a name="line.146"></a>
-<span class="sourceLineNo">147</span>            return true;<a name="line.147"></a>
-<span class="sourceLineNo">148</span>        }<a name="line.148"></a>
-<span class="sourceLineNo">149</span><a name="line.149"></a>
-<span class="sourceLineNo">150</span>        /**<a name="line.150"></a>
-<span class="sourceLineNo">151</span>         * Returns the next element in the iteration.<a name="line.151"></a>
-<span class="sourceLineNo">152</span>         *<a name="line.152"></a>
-<span class="sourceLineNo">153</span>         * @return the next element in the iteration<a name="line.153"></a>
-<span class="sourceLineNo">154</span>         */<a name="line.154"></a>
-<span class="sourceLineNo">155</span>        @Override<a name="line.155"></a>
-<span class="sourceLineNo">156</span>        public T next() {<a name="line.156"></a>
-<span class="sourceLineNo">157</span>            if(innerIndex &gt;= size)<a name="line.157"></a>
-<span class="sourceLineNo">158</span>            {<a name="line.158"></a>
-<span class="sourceLineNo">159</span>                innerIndex = 0;<a name="line.159"></a>
-<span class="sourceLineNo">160</span>                int build = 0, inner, rotated;<a name="line.160"></a>
-<span class="sourceLineNo">161</span>                for (int i = 0; i &lt; indexSections.length; i++) {<a name="line.161"></a>
-<span class="sourceLineNo">162</span><a name="line.162"></a>
-<span class="sourceLineNo">163</span>                    if(indexSections.length &lt;= 2)<a name="line.163"></a>
-<span class="sourceLineNo">164</span>                        rotated = (indexSections.length + 2 - i) % indexSections.length;<a name="line.164"></a>
-<span class="sourceLineNo">165</span>                    else<a name="line.165"></a>
-<span class="sourceLineNo">166</span>                        rotated = (indexSections.length + 1 - i) % indexSections.length;<a name="line.166"></a>
-<span class="sourceLineNo">167</span>                    inner = indexSections[rotated].length;<a name="line.167"></a>
-<span class="sourceLineNo">168</span>                    indexSections[rotated] =<a name="line.168"></a>
-<span class="sourceLineNo">169</span>                            PermutationGenerator.decodePermutation(<a name="line.169"></a>
-<span class="sourceLineNo">170</span>                                    innerRNG.nextLong(PermutationGenerator.getTotalPermutations(inner)),<a name="line.170"></a>
-<span class="sourceLineNo">171</span>                                    inner,<a name="line.171"></a>
-<span class="sourceLineNo">172</span>                                    build);<a name="line.172"></a>
-<span class="sourceLineNo">173</span>                    build += inner;<a name="line.173"></a>
-<span class="sourceLineNo">174</span>                }<a name="line.174"></a>
-<span class="sourceLineNo">175</span>            }<a name="line.175"></a>
-<span class="sourceLineNo">176</span>            int ilen = indexSections[0].length, ii = innerIndex / ilen, ij = innerIndex - ilen * ii;<a name="line.176"></a>
-<span class="sourceLineNo">177</span>            ++innerIndex;<a name="line.177"></a>
-<span class="sourceLineNo">178</span>            return elements.get(indexSections[ii][ij]);<a name="line.178"></a>
-<span class="sourceLineNo">179</span>        }<a name="line.179"></a>
-<span class="sourceLineNo">180</span><a name="line.180"></a>
-<span class="sourceLineNo">181</span>        /**<a name="line.181"></a>
-<span class="sourceLineNo">182</span>         * Not supported.<a name="line.182"></a>
-<span class="sourceLineNo">183</span>         *<a name="line.183"></a>
-<span class="sourceLineNo">184</span>         * @throws UnsupportedOperationException always throws this exception<a name="line.184"></a>
-<span class="sourceLineNo">185</span>         */<a name="line.185"></a>
-<span class="sourceLineNo">186</span>        @Override<a name="line.186"></a>
-<span class="sourceLineNo">187</span>        public void remove() {<a name="line.187"></a>
-<span class="sourceLineNo">188</span>            throw new UnsupportedOperationException("remove() is not supported");<a name="line.188"></a>
-<span class="sourceLineNo">189</span>        }<a name="line.189"></a>
-<span class="sourceLineNo">190</span>    }<a name="line.190"></a>
-<span class="sourceLineNo">191</span>}<a name="line.191"></a>
+<span class="sourceLineNo">119</span>     * Returns {@code true} if the iteration has more elements.<a name="line.119"></a>
+<span class="sourceLineNo">120</span>     * This is always the case for GapShuffler.<a name="line.120"></a>
+<span class="sourceLineNo">121</span>     *<a name="line.121"></a>
+<span class="sourceLineNo">122</span>     * @return {@code true} always<a name="line.122"></a>
+<span class="sourceLineNo">123</span>     */<a name="line.123"></a>
+<span class="sourceLineNo">124</span>    @Override<a name="line.124"></a>
+<span class="sourceLineNo">125</span>    public boolean hasNext() {<a name="line.125"></a>
+<span class="sourceLineNo">126</span>        return true;<a name="line.126"></a>
+<span class="sourceLineNo">127</span>    }<a name="line.127"></a>
+<span class="sourceLineNo">128</span>    /**<a name="line.128"></a>
+<span class="sourceLineNo">129</span>     * Not supported.<a name="line.129"></a>
+<span class="sourceLineNo">130</span>     *<a name="line.130"></a>
+<span class="sourceLineNo">131</span>     * @throws UnsupportedOperationException always throws this exception<a name="line.131"></a>
+<span class="sourceLineNo">132</span>     */<a name="line.132"></a>
+<span class="sourceLineNo">133</span>    @Override<a name="line.133"></a>
+<span class="sourceLineNo">134</span>    public void remove() {<a name="line.134"></a>
+<span class="sourceLineNo">135</span>        throw new UnsupportedOperationException("remove() is not supported");<a name="line.135"></a>
+<span class="sourceLineNo">136</span>    }<a name="line.136"></a>
+<span class="sourceLineNo">137</span><a name="line.137"></a>
+<span class="sourceLineNo">138</span>    /**<a name="line.138"></a>
+<span class="sourceLineNo">139</span>     * Returns an &lt;b&gt;infinite&lt;/b&gt; iterator over elements of type {@code T}; the returned iterator is this object.<a name="line.139"></a>
+<span class="sourceLineNo">140</span>     * You should be prepared to break out of any for loops that use this once you've gotten enough elements!<a name="line.140"></a>
+<span class="sourceLineNo">141</span>     * The remove() method is not supported by this iterator and hasNext() will always return true.<a name="line.141"></a>
+<span class="sourceLineNo">142</span>     *<a name="line.142"></a>
+<span class="sourceLineNo">143</span>     * @return an infinite Iterator over elements of type T.<a name="line.143"></a>
+<span class="sourceLineNo">144</span>     */<a name="line.144"></a>
+<span class="sourceLineNo">145</span>    @Override<a name="line.145"></a>
+<span class="sourceLineNo">146</span>    public Iterator&lt;T&gt; iterator() {<a name="line.146"></a>
+<span class="sourceLineNo">147</span>        return this;<a name="line.147"></a>
+<span class="sourceLineNo">148</span>    }<a name="line.148"></a>
+<span class="sourceLineNo">149</span>}<a name="line.149"></a>
 
 
 

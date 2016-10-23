@@ -48,7 +48,7 @@
 <span class="sourceLineNo">040</span>        width = bits.length;<a name="line.40"></a>
 <span class="sourceLineNo">041</span>        height = bits[0].length;<a name="line.41"></a>
 <span class="sourceLineNo">042</span>        ySections = (height + 63) &gt;&gt; 6;<a name="line.42"></a>
-<span class="sourceLineNo">043</span>        yEndMask = (-1L &gt;&gt;&gt; (64 - (height &amp; 63)));<a name="line.43"></a>
+<span class="sourceLineNo">043</span>        yEndMask = -1L &gt;&gt;&gt; (64 - (height &amp; 63));<a name="line.43"></a>
 <span class="sourceLineNo">044</span>        data = new long[width * ySections];<a name="line.44"></a>
 <span class="sourceLineNo">045</span>        for (int x = 0; x &lt; width; x++) {<a name="line.45"></a>
 <span class="sourceLineNo">046</span>            for (int y = 0; y &lt; height; y++) {<a name="line.46"></a>
@@ -62,7 +62,7 @@
 <span class="sourceLineNo">054</span>        width = map.length;<a name="line.54"></a>
 <span class="sourceLineNo">055</span>        height = map[0].length;<a name="line.55"></a>
 <span class="sourceLineNo">056</span>        ySections = (height + 63) &gt;&gt; 6;<a name="line.56"></a>
-<span class="sourceLineNo">057</span>        yEndMask = (-1L &gt;&gt;&gt; (64 - (height &amp; 63)));<a name="line.57"></a>
+<span class="sourceLineNo">057</span>        yEndMask = -1L &gt;&gt;&gt; (64 - (height &amp; 63));<a name="line.57"></a>
 <span class="sourceLineNo">058</span>        data = new long[width * ySections];<a name="line.58"></a>
 <span class="sourceLineNo">059</span>        for (int x = 0; x &lt; width; x++) {<a name="line.59"></a>
 <span class="sourceLineNo">060</span>            for (int y = 0; y &lt; height; y++) {<a name="line.60"></a>
@@ -76,7 +76,7 @@
 <span class="sourceLineNo">068</span>        width = map.length;<a name="line.68"></a>
 <span class="sourceLineNo">069</span>        height = map[0].length;<a name="line.69"></a>
 <span class="sourceLineNo">070</span>        ySections = (height + 63) &gt;&gt; 6;<a name="line.70"></a>
-<span class="sourceLineNo">071</span>        yEndMask = (-1L &gt;&gt;&gt; (64 - (height &amp; 63)));<a name="line.71"></a>
+<span class="sourceLineNo">071</span>        yEndMask = -1L &gt;&gt;&gt; (64 - (height &amp; 63));<a name="line.71"></a>
 <span class="sourceLineNo">072</span>        data = new long[width * ySections];<a name="line.72"></a>
 <span class="sourceLineNo">073</span>        for (int x = 0; x &lt; width; x++) {<a name="line.73"></a>
 <span class="sourceLineNo">074</span>            for (int y = 0; y &lt; height; y++) {<a name="line.74"></a>
@@ -97,7 +97,7 @@
 <span class="sourceLineNo">089</span>        width = map.length;<a name="line.89"></a>
 <span class="sourceLineNo">090</span>        height = map[0].length;<a name="line.90"></a>
 <span class="sourceLineNo">091</span>        ySections = (height + 63) &gt;&gt; 6;<a name="line.91"></a>
-<span class="sourceLineNo">092</span>        yEndMask = (-1L &gt;&gt;&gt; (64 - (height &amp; 63)));<a name="line.92"></a>
+<span class="sourceLineNo">092</span>        yEndMask = -1L &gt;&gt;&gt; (64 - (height &amp; 63));<a name="line.92"></a>
 <span class="sourceLineNo">093</span>        data = new long[width * ySections];<a name="line.93"></a>
 <span class="sourceLineNo">094</span>        int[] column;<a name="line.94"></a>
 <span class="sourceLineNo">095</span>        for (int x = 0; x &lt; width; x++) {<a name="line.95"></a>
@@ -120,7 +120,7 @@
 <span class="sourceLineNo">112</span>        width = map.length;<a name="line.112"></a>
 <span class="sourceLineNo">113</span>        height = map[0].length;<a name="line.113"></a>
 <span class="sourceLineNo">114</span>        ySections = (height + 63) &gt;&gt; 6;<a name="line.114"></a>
-<span class="sourceLineNo">115</span>        yEndMask = (-1L &gt;&gt;&gt; (64 - (height &amp; 63)));<a name="line.115"></a>
+<span class="sourceLineNo">115</span>        yEndMask = -1L &gt;&gt;&gt; (64 - (height &amp; 63));<a name="line.115"></a>
 <span class="sourceLineNo">116</span>        data = new long[width * ySections];<a name="line.116"></a>
 <span class="sourceLineNo">117</span>        short[] column;<a name="line.117"></a>
 <span class="sourceLineNo">118</span>        for (int x = 0; x &lt; width; x++) {<a name="line.118"></a>
@@ -143,7 +143,7 @@
 <span class="sourceLineNo">135</span>        width = map.length;<a name="line.135"></a>
 <span class="sourceLineNo">136</span>        height = map[0].length;<a name="line.136"></a>
 <span class="sourceLineNo">137</span>        ySections = (height + 63) &gt;&gt; 6;<a name="line.137"></a>
-<span class="sourceLineNo">138</span>        yEndMask = (-1L &gt;&gt;&gt; (64 - (height &amp; 63)));<a name="line.138"></a>
+<span class="sourceLineNo">138</span>        yEndMask = -1L &gt;&gt;&gt; (64 - (height &amp; 63));<a name="line.138"></a>
 <span class="sourceLineNo">139</span>        data = new long[width * ySections];<a name="line.139"></a>
 <span class="sourceLineNo">140</span>        for (int x = 0; x &lt; width; x++) {<a name="line.140"></a>
 <span class="sourceLineNo">141</span>            for (int y = 0; y &lt; height; y++) {<a name="line.141"></a>
@@ -167,7 +167,7 @@
 <span class="sourceLineNo">159</span>        width = map.length;<a name="line.159"></a>
 <span class="sourceLineNo">160</span>        height = map[0].length;<a name="line.160"></a>
 <span class="sourceLineNo">161</span>        ySections = (height + 63) &gt;&gt; 6;<a name="line.161"></a>
-<span class="sourceLineNo">162</span>        yEndMask = (-1L &gt;&gt;&gt; (64 - (height &amp; 63)));<a name="line.162"></a>
+<span class="sourceLineNo">162</span>        yEndMask = -1L &gt;&gt;&gt; (64 - (height &amp; 63));<a name="line.162"></a>
 <span class="sourceLineNo">163</span>        data = new long[width * ySections];<a name="line.163"></a>
 <span class="sourceLineNo">164</span>        for (int x = 0; x &lt; width; x++) {<a name="line.164"></a>
 <span class="sourceLineNo">165</span>            for (int y = 0; y &lt; height; y++) {<a name="line.165"></a>
@@ -182,7 +182,7 @@
 <span class="sourceLineNo">174</span>        this.width = width;<a name="line.174"></a>
 <span class="sourceLineNo">175</span>        this.height = height;<a name="line.175"></a>
 <span class="sourceLineNo">176</span>        ySections = (height + 63) &gt;&gt; 6;<a name="line.176"></a>
-<span class="sourceLineNo">177</span>        yEndMask = (-1L &gt;&gt;&gt; (64 - (height &amp; 63)));<a name="line.177"></a>
+<span class="sourceLineNo">177</span>        yEndMask = -1L &gt;&gt;&gt; (64 - (height &amp; 63));<a name="line.177"></a>
 <span class="sourceLineNo">178</span>        data = new long[width * ySections];<a name="line.178"></a>
 <span class="sourceLineNo">179</span>        for (int a = 0, x = 0, y = 0; a &lt; bits.length; a++, x = a / height, y = a % height) {<a name="line.179"></a>
 <span class="sourceLineNo">180</span>            if(bits[a]) data[x * ySections + (y &gt;&gt; 6)] |= 1L &lt;&lt; (y &amp; 63);<a name="line.180"></a>
@@ -200,7 +200,7 @@
 <span class="sourceLineNo">192</span>        this.width = width;<a name="line.192"></a>
 <span class="sourceLineNo">193</span>        this.height = height;<a name="line.193"></a>
 <span class="sourceLineNo">194</span>        ySections = (height + 63) &gt;&gt; 6;<a name="line.194"></a>
-<span class="sourceLineNo">195</span>        yEndMask = (-1L &gt;&gt;&gt; (64 - (height &amp; 63)));<a name="line.195"></a>
+<span class="sourceLineNo">195</span>        yEndMask = -1L &gt;&gt;&gt; (64 - (height &amp; 63));<a name="line.195"></a>
 <span class="sourceLineNo">196</span>        data = new long[width * ySections];<a name="line.196"></a>
 <span class="sourceLineNo">197</span>    }<a name="line.197"></a>
 <span class="sourceLineNo">198</span><a name="line.198"></a>
@@ -217,7 +217,7 @@
 <span class="sourceLineNo">209</span>        this.width = width;<a name="line.209"></a>
 <span class="sourceLineNo">210</span>        this.height = height;<a name="line.210"></a>
 <span class="sourceLineNo">211</span>        ySections = (height + 63) &gt;&gt; 6;<a name="line.211"></a>
-<span class="sourceLineNo">212</span>        yEndMask = (-1L &gt;&gt;&gt; (64 - (height &amp; 63)));<a name="line.212"></a>
+<span class="sourceLineNo">212</span>        yEndMask = -1L &gt;&gt;&gt; (64 - (height &amp; 63));<a name="line.212"></a>
 <span class="sourceLineNo">213</span>        data = new long[width * ySections];<a name="line.213"></a>
 <span class="sourceLineNo">214</span><a name="line.214"></a>
 <span class="sourceLineNo">215</span>        if(single.x &lt; width &amp;&amp; single.y &lt; height &amp;&amp; single.x &gt;= 0 &amp;&amp; single.y &gt;= 0)<a name="line.215"></a>
@@ -237,7 +237,7 @@
 <span class="sourceLineNo">229</span>        this.width = width;<a name="line.229"></a>
 <span class="sourceLineNo">230</span>        this.height = height;<a name="line.230"></a>
 <span class="sourceLineNo">231</span>        ySections = (height + 63) &gt;&gt; 6;<a name="line.231"></a>
-<span class="sourceLineNo">232</span>        yEndMask = (-1L &gt;&gt;&gt; (64 - (height &amp; 63)));<a name="line.232"></a>
+<span class="sourceLineNo">232</span>        yEndMask = -1L &gt;&gt;&gt; (64 - (height &amp; 63));<a name="line.232"></a>
 <span class="sourceLineNo">233</span>        data = new long[width * ySections];<a name="line.233"></a>
 <span class="sourceLineNo">234</span>        if(points != null)<a name="line.234"></a>
 <span class="sourceLineNo">235</span>        {<a name="line.235"></a>
@@ -262,7 +262,7 @@
 <span class="sourceLineNo">254</span>        this.width = width;<a name="line.254"></a>
 <span class="sourceLineNo">255</span>        this.height = height;<a name="line.255"></a>
 <span class="sourceLineNo">256</span>        ySections = (height + 63) &gt;&gt; 6;<a name="line.256"></a>
-<span class="sourceLineNo">257</span>        yEndMask = (-1L &gt;&gt;&gt; (64 - (height &amp; 63)));<a name="line.257"></a>
+<span class="sourceLineNo">257</span>        yEndMask = -1L &gt;&gt;&gt; (64 - (height &amp; 63));<a name="line.257"></a>
 <span class="sourceLineNo">258</span>        data = new long[width * ySections];<a name="line.258"></a>
 <span class="sourceLineNo">259</span>        for (int i = 0; i &lt; width * ySections; i++) {<a name="line.259"></a>
 <span class="sourceLineNo">260</span>            data[i] = random.nextLong();<a name="line.260"></a>
@@ -296,7 +296,7 @@
 <span class="sourceLineNo">288</span>        this.width = width;<a name="line.288"></a>
 <span class="sourceLineNo">289</span>        this.height = height;<a name="line.289"></a>
 <span class="sourceLineNo">290</span>        ySections = (height + 63) &gt;&gt; 6;<a name="line.290"></a>
-<span class="sourceLineNo">291</span>        yEndMask = (-1L &gt;&gt;&gt; (64 - (height &amp; 63)));<a name="line.291"></a>
+<span class="sourceLineNo">291</span>        yEndMask = -1L &gt;&gt;&gt; (64 - (height &amp; 63));<a name="line.291"></a>
 <span class="sourceLineNo">292</span>        data = new long[width * ySections];<a name="line.292"></a>
 <span class="sourceLineNo">293</span>        System.arraycopy(data2, 0, data, 0, width * ySections);<a name="line.293"></a>
 <span class="sourceLineNo">294</span>    }<a name="line.294"></a>
@@ -364,11 +364,11 @@
 <span class="sourceLineNo">356</span>            startY = height - 1;<a name="line.356"></a>
 <span class="sourceLineNo">357</span>        int endX = Math.min(width, startX + rectangleWidth) - 1,<a name="line.357"></a>
 <span class="sourceLineNo">358</span>                endY = Math.min(height, startY + rectangleHeight) - 1,<a name="line.358"></a>
-<span class="sourceLineNo">359</span>                startSection = (startY &gt;&gt; 6), endSection = (endY &gt;&gt; 6);<a name="line.359"></a>
+<span class="sourceLineNo">359</span>                startSection = startY &gt;&gt; 6, endSection = endY &gt;&gt; 6;<a name="line.359"></a>
 <span class="sourceLineNo">360</span>        if(startSection &lt; endSection)<a name="line.360"></a>
 <span class="sourceLineNo">361</span>        {<a name="line.361"></a>
-<span class="sourceLineNo">362</span>            long startMask = (-1L &lt;&lt; (startY &amp; 63)),<a name="line.362"></a>
-<span class="sourceLineNo">363</span>                    endMask = (-1L &gt;&gt;&gt; (~endY &amp; 63));<a name="line.363"></a>
+<span class="sourceLineNo">362</span>            long startMask = -1L &lt;&lt; (startY &amp; 63),<a name="line.362"></a>
+<span class="sourceLineNo">363</span>                    endMask = -1L &gt;&gt;&gt; (~endY &amp; 63);<a name="line.363"></a>
 <span class="sourceLineNo">364</span>            for (int a = startX * ySections + startSection; a &lt;= endX * ySections; a += ySections) {<a name="line.364"></a>
 <span class="sourceLineNo">365</span>                data[a] |= startMask;<a name="line.365"></a>
 <span class="sourceLineNo">366</span>            }<a name="line.366"></a>
@@ -453,7 +453,7 @@
 <span class="sourceLineNo">445</span>            startY = height - 1;<a name="line.445"></a>
 <span class="sourceLineNo">446</span>        int endX = Math.min(width, startX + rectangleWidth) - 1,<a name="line.446"></a>
 <span class="sourceLineNo">447</span>                endY = Math.min(height, startY + rectangleHeight) - 1,<a name="line.447"></a>
-<span class="sourceLineNo">448</span>                startSection = (startY &gt;&gt; 6), endSection = (endY &gt;&gt; 6);<a name="line.448"></a>
+<span class="sourceLineNo">448</span>                startSection = startY &gt;&gt; 6, endSection = endY &gt;&gt; 6;<a name="line.448"></a>
 <span class="sourceLineNo">449</span>        if(startSection &lt; endSection)<a name="line.449"></a>
 <span class="sourceLineNo">450</span>        {<a name="line.450"></a>
 <span class="sourceLineNo">451</span>            long startMask = ~(-1L &lt;&lt; (startY &amp; 63)),<a name="line.451"></a>
@@ -741,11 +741,11 @@
 <span class="sourceLineNo">733</span>        long[] next = new long[width * ySections];<a name="line.733"></a>
 <span class="sourceLineNo">734</span>        System.arraycopy(data, 0, next, 0, width * ySections);<a name="line.734"></a>
 <span class="sourceLineNo">735</span>        for (int a = 0; a &lt; ySections; a++) {<a name="line.735"></a>
-<span class="sourceLineNo">736</span>            next[a] |= (data[a] &lt;&lt; 1) | (data[a] &gt;&gt;&gt; 1) | (data[a+ySections]);<a name="line.736"></a>
-<span class="sourceLineNo">737</span>            next[(width-1)*ySections+a] |= (data[(width-1)*ySections+a] &lt;&lt; 1) | (data[(width-1)*ySections+a] &gt;&gt;&gt; 1) | (data[(width-2)*ySections+a]);<a name="line.737"></a>
+<span class="sourceLineNo">736</span>            next[a] |= (data[a] &lt;&lt; 1) | (data[a] &gt;&gt;&gt; 1) | data[a+ySections];<a name="line.736"></a>
+<span class="sourceLineNo">737</span>            next[(width-1)*ySections+a] |= (data[(width-1)*ySections+a] &lt;&lt; 1) | (data[(width-1)*ySections+a] &gt;&gt;&gt; 1) | data[(width-2) *ySections+a];<a name="line.737"></a>
 <span class="sourceLineNo">738</span><a name="line.738"></a>
 <span class="sourceLineNo">739</span>            for (int i = ySections+a; i &lt; (width - 1) * ySections; i+= ySections) {<a name="line.739"></a>
-<span class="sourceLineNo">740</span>                next[i] |= (data[i] &lt;&lt; 1) | (data[i] &gt;&gt;&gt; 1) | (data[i - ySections]) | (data[i + ySections]);<a name="line.740"></a>
+<span class="sourceLineNo">740</span>                next[i] |= (data[i] &lt;&lt; 1) | (data[i] &gt;&gt;&gt; 1) | data[i - ySections] | data[i + ySections];<a name="line.740"></a>
 <span class="sourceLineNo">741</span>            }<a name="line.741"></a>
 <span class="sourceLineNo">742</span><a name="line.742"></a>
 <span class="sourceLineNo">743</span>            if(a &gt; 0) {<a name="line.743"></a>
@@ -848,30 +848,30 @@
 <span class="sourceLineNo">840</span>                for (int i = ySections+a; i &lt; (width - 1) * ySections; i+= ySections) {<a name="line.840"></a>
 <span class="sourceLineNo">841</span>                    next[i] &amp;= ((data[i] &lt;&lt; 1) | ((data[i - 1] &amp; 0x8000000000000000L) &gt;&gt;&gt; 63))<a name="line.841"></a>
 <span class="sourceLineNo">842</span>                            &amp; ((data[i] &gt;&gt;&gt; 1) | ((data[i + 1] &amp; 1L) &lt;&lt; 63))<a name="line.842"></a>
-<span class="sourceLineNo">843</span>                            &amp; (data[i - ySections])<a name="line.843"></a>
-<span class="sourceLineNo">844</span>                            &amp; (data[i + ySections]);<a name="line.844"></a>
+<span class="sourceLineNo">843</span>                            &amp; data[i - ySections]<a name="line.843"></a>
+<span class="sourceLineNo">844</span>                            &amp; data[i + ySections];<a name="line.844"></a>
 <span class="sourceLineNo">845</span>                }<a name="line.845"></a>
 <span class="sourceLineNo">846</span>            }<a name="line.846"></a>
 <span class="sourceLineNo">847</span>            else if(a &gt; 0) {<a name="line.847"></a>
 <span class="sourceLineNo">848</span>                for (int i = ySections+a; i &lt; (width - 1) * ySections; i+= ySections) {<a name="line.848"></a>
 <span class="sourceLineNo">849</span>                    next[i] &amp;= ((data[i] &lt;&lt; 1) | ((data[i - 1] &amp; 0x8000000000000000L) &gt;&gt;&gt; 63))<a name="line.849"></a>
 <span class="sourceLineNo">850</span>                            &amp; (data[i] &gt;&gt;&gt; 1)<a name="line.850"></a>
-<span class="sourceLineNo">851</span>                            &amp; (data[i - ySections])<a name="line.851"></a>
-<span class="sourceLineNo">852</span>                            &amp; (data[i + ySections]);<a name="line.852"></a>
+<span class="sourceLineNo">851</span>                            &amp; data[i - ySections]<a name="line.851"></a>
+<span class="sourceLineNo">852</span>                            &amp; data[i + ySections];<a name="line.852"></a>
 <span class="sourceLineNo">853</span>                }<a name="line.853"></a>
 <span class="sourceLineNo">854</span>            }<a name="line.854"></a>
 <span class="sourceLineNo">855</span>            else if(a &lt; ySections - 1) {<a name="line.855"></a>
 <span class="sourceLineNo">856</span>                for (int i = ySections+a; i &lt; (width - 1) * ySections; i+= ySections) {<a name="line.856"></a>
 <span class="sourceLineNo">857</span>                    next[i] &amp;= (data[i] &lt;&lt; 1)<a name="line.857"></a>
 <span class="sourceLineNo">858</span>                            &amp; ((data[i] &gt;&gt;&gt; 1) | ((data[i + 1] &amp; 1L) &lt;&lt; 63))<a name="line.858"></a>
-<span class="sourceLineNo">859</span>                            &amp; (data[i - ySections])<a name="line.859"></a>
-<span class="sourceLineNo">860</span>                            &amp; (data[i + ySections]);<a name="line.860"></a>
+<span class="sourceLineNo">859</span>                            &amp; data[i - ySections]<a name="line.859"></a>
+<span class="sourceLineNo">860</span>                            &amp; data[i + ySections];<a name="line.860"></a>
 <span class="sourceLineNo">861</span>                }<a name="line.861"></a>
 <span class="sourceLineNo">862</span>            }<a name="line.862"></a>
 <span class="sourceLineNo">863</span>            else // only the case when ySections == 1<a name="line.863"></a>
 <span class="sourceLineNo">864</span>            {<a name="line.864"></a>
 <span class="sourceLineNo">865</span>                for (int i = ySections+a; i &lt; (width - 1) * ySections; i+= ySections) {<a name="line.865"></a>
-<span class="sourceLineNo">866</span>                    next[i] &amp;= (data[i] &lt;&lt; 1) &amp; (data[i] &gt;&gt;&gt; 1) &amp; (data[i - ySections]) &amp; (data[i + ySections]);<a name="line.866"></a>
+<span class="sourceLineNo">866</span>                    next[i] &amp;= (data[i] &lt;&lt; 1) &amp; (data[i] &gt;&gt;&gt; 1) &amp; data[i - ySections] &amp; data[i + ySections];<a name="line.866"></a>
 <span class="sourceLineNo">867</span>                }<a name="line.867"></a>
 <span class="sourceLineNo">868</span>            }<a name="line.868"></a>
 <span class="sourceLineNo">869</span>        }<a name="line.869"></a>
@@ -960,14 +960,14 @@
 <span class="sourceLineNo">952</span>        System.arraycopy(data, 0, next, 0, width * ySections);<a name="line.952"></a>
 <span class="sourceLineNo">953</span>        for (int a = 0; a &lt; ySections; a++) {<a name="line.953"></a>
 <span class="sourceLineNo">954</span>            next[a] |= (data[a] &lt;&lt; 1) | (data[a] &gt;&gt;&gt; 1)<a name="line.954"></a>
-<span class="sourceLineNo">955</span>                    | (data[a+ySections]) | (data[a+ySections] &lt;&lt; 1) | (data[a+ySections] &gt;&gt;&gt; 1);<a name="line.955"></a>
+<span class="sourceLineNo">955</span>                    | data[a+ySections] | (data[a+ySections] &lt;&lt; 1) | (data[a+ySections] &gt;&gt;&gt; 1);<a name="line.955"></a>
 <span class="sourceLineNo">956</span>            next[(width-1)*ySections+a] |= (data[(width-1)*ySections+a] &lt;&lt; 1) | (data[(width-1)*ySections+a] &gt;&gt;&gt; 1)<a name="line.956"></a>
-<span class="sourceLineNo">957</span>                    | (data[(width-2)*ySections+a]) | (data[(width-2)*ySections+a] &lt;&lt; 1) | (data[(width-2)*ySections+a] &gt;&gt;&gt; 1);<a name="line.957"></a>
+<span class="sourceLineNo">957</span>                    | data[(width-2) *ySections+a] | (data[(width-2)*ySections+a] &lt;&lt; 1) | (data[(width-2)*ySections+a] &gt;&gt;&gt; 1);<a name="line.957"></a>
 <span class="sourceLineNo">958</span><a name="line.958"></a>
 <span class="sourceLineNo">959</span>            for (int i = ySections+a; i &lt; (width - 1) * ySections; i+= ySections) {<a name="line.959"></a>
 <span class="sourceLineNo">960</span>                next[i] |= (data[i] &lt;&lt; 1) | (data[i] &gt;&gt;&gt; 1)<a name="line.960"></a>
-<span class="sourceLineNo">961</span>                        | (data[i - ySections]) | (data[i - ySections] &lt;&lt; 1) | (data[i - ySections] &gt;&gt;&gt; 1)<a name="line.961"></a>
-<span class="sourceLineNo">962</span>                        | (data[i + ySections]) | (data[i + ySections] &lt;&lt; 1) | (data[i + ySections] &gt;&gt;&gt; 1);<a name="line.962"></a>
+<span class="sourceLineNo">961</span>                        | data[i - ySections] | (data[i - ySections] &lt;&lt; 1) | (data[i - ySections] &gt;&gt;&gt; 1)<a name="line.961"></a>
+<span class="sourceLineNo">962</span>                        | data[i + ySections] | (data[i + ySections] &lt;&lt; 1) | (data[i + ySections] &gt;&gt;&gt; 1);<a name="line.962"></a>
 <span class="sourceLineNo">963</span>            }<a name="line.963"></a>
 <span class="sourceLineNo">964</span><a name="line.964"></a>
 <span class="sourceLineNo">965</span>            if(a &gt; 0) {<a name="line.965"></a>
@@ -1074,8 +1074,8 @@
 <span class="sourceLineNo">1066</span>                for (int i = ySections+a; i &lt; (width - 1) * ySections; i+= ySections) {<a name="line.1066"></a>
 <span class="sourceLineNo">1067</span>                    next[i] &amp;= ((data[i] &lt;&lt; 1) | ((data[i - 1] &amp; 0x8000000000000000L) &gt;&gt;&gt; 63))<a name="line.1067"></a>
 <span class="sourceLineNo">1068</span>                            &amp; ((data[i] &gt;&gt;&gt; 1) | ((data[i + 1] &amp; 1L) &lt;&lt; 63))<a name="line.1068"></a>
-<span class="sourceLineNo">1069</span>                            &amp; (data[i - ySections])<a name="line.1069"></a>
-<span class="sourceLineNo">1070</span>                            &amp; (data[i + ySections])<a name="line.1070"></a>
+<span class="sourceLineNo">1069</span>                            &amp; data[i - ySections]<a name="line.1069"></a>
+<span class="sourceLineNo">1070</span>                            &amp; data[i + ySections]<a name="line.1070"></a>
 <span class="sourceLineNo">1071</span>                            &amp; ((data[i - ySections] &lt;&lt; 1) | ((data[i - 1 - ySections] &amp; 0x8000000000000000L) &gt;&gt;&gt; 63))<a name="line.1071"></a>
 <span class="sourceLineNo">1072</span>                            &amp; ((data[i + ySections] &lt;&lt; 1) | ((data[i - 1 + ySections] &amp; 0x8000000000000000L) &gt;&gt;&gt; 63))<a name="line.1072"></a>
 <span class="sourceLineNo">1073</span>                            &amp; ((data[i - ySections] &gt;&gt;&gt; 1) | ((data[i + 1 - ySections] &amp; 1L) &lt;&lt; 63))<a name="line.1073"></a>
@@ -1086,8 +1086,8 @@
 <span class="sourceLineNo">1078</span>                for (int i = ySections+a; i &lt; (width - 1) * ySections; i+= ySections) {<a name="line.1078"></a>
 <span class="sourceLineNo">1079</span>                    next[i] &amp;= ((data[i] &lt;&lt; 1) | ((data[i - 1] &amp; 0x8000000000000000L) &gt;&gt;&gt; 63))<a name="line.1079"></a>
 <span class="sourceLineNo">1080</span>                            &amp; (data[i] &gt;&gt;&gt; 1)<a name="line.1080"></a>
-<span class="sourceLineNo">1081</span>                            &amp; (data[i - ySections])<a name="line.1081"></a>
-<span class="sourceLineNo">1082</span>                            &amp; (data[i + ySections])<a name="line.1082"></a>
+<span class="sourceLineNo">1081</span>                            &amp; data[i - ySections]<a name="line.1081"></a>
+<span class="sourceLineNo">1082</span>                            &amp; data[i + ySections]<a name="line.1082"></a>
 <span class="sourceLineNo">1083</span>                            &amp; ((data[i - ySections] &lt;&lt; 1) | ((data[i - 1 - ySections] &amp; 0x8000000000000000L) &gt;&gt;&gt; 63))<a name="line.1083"></a>
 <span class="sourceLineNo">1084</span>                            &amp; ((data[i + ySections] &lt;&lt; 1) | ((data[i - 1 + ySections] &amp; 0x8000000000000000L) &gt;&gt;&gt; 63))<a name="line.1084"></a>
 <span class="sourceLineNo">1085</span>                            &amp; (data[i - ySections] &gt;&gt;&gt; 1)<a name="line.1085"></a>
@@ -1098,8 +1098,8 @@
 <span class="sourceLineNo">1090</span>                for (int i = ySections+a; i &lt; (width - 1) * ySections; i+= ySections) {<a name="line.1090"></a>
 <span class="sourceLineNo">1091</span>                    next[i] &amp;= (data[i] &lt;&lt; 1)<a name="line.1091"></a>
 <span class="sourceLineNo">1092</span>                            &amp; ((data[i] &gt;&gt;&gt; 1) | ((data[i + 1] &amp; 1L) &lt;&lt; 63))<a name="line.1092"></a>
-<span class="sourceLineNo">1093</span>                            &amp; (data[i - ySections])<a name="line.1093"></a>
-<span class="sourceLineNo">1094</span>                            &amp; (data[i + ySections])<a name="line.1094"></a>
+<span class="sourceLineNo">1093</span>                            &amp; data[i - ySections]<a name="line.1093"></a>
+<span class="sourceLineNo">1094</span>                            &amp; data[i + ySections]<a name="line.1094"></a>
 <span class="sourceLineNo">1095</span>                            &amp; (data[i - ySections] &lt;&lt; 1)<a name="line.1095"></a>
 <span class="sourceLineNo">1096</span>                            &amp; (data[i + ySections] &lt;&lt; 1)<a name="line.1096"></a>
 <span class="sourceLineNo">1097</span>                            &amp; ((data[i - ySections] &gt;&gt;&gt; 1) | ((data[i + 1 - ySections] &amp; 1L) &lt;&lt; 63))<a name="line.1097"></a>
@@ -1111,8 +1111,8 @@
 <span class="sourceLineNo">1103</span>                for (int i = ySections+a; i &lt; (width - 1) * ySections; i+= ySections) {<a name="line.1103"></a>
 <span class="sourceLineNo">1104</span>                    next[i] &amp;= (data[i] &lt;&lt; 1)<a name="line.1104"></a>
 <span class="sourceLineNo">1105</span>                            &amp; (data[i] &gt;&gt;&gt; 1)<a name="line.1105"></a>
-<span class="sourceLineNo">1106</span>                            &amp; (data[i - ySections])<a name="line.1106"></a>
-<span class="sourceLineNo">1107</span>                            &amp; (data[i + ySections])<a name="line.1107"></a>
+<span class="sourceLineNo">1106</span>                            &amp; data[i - ySections]<a name="line.1106"></a>
+<span class="sourceLineNo">1107</span>                            &amp; data[i + ySections]<a name="line.1107"></a>
 <span class="sourceLineNo">1108</span>                            &amp; (data[i - ySections] &lt;&lt; 1)<a name="line.1108"></a>
 <span class="sourceLineNo">1109</span>                            &amp; (data[i + ySections] &lt;&lt; 1)<a name="line.1109"></a>
 <span class="sourceLineNo">1110</span>                            &amp; (data[i - ySections] &gt;&gt;&gt; 1)<a name="line.1110"></a>
@@ -1204,13 +1204,13 @@
 <span class="sourceLineNo">1196</span><a name="line.1196"></a>
 <span class="sourceLineNo">1197</span>        long[] next = new long[width * ySections];<a name="line.1197"></a>
 <span class="sourceLineNo">1198</span>        for (int a = 0; a &lt; ySections &amp;&amp; a &lt; bounds.ySections; a++) {<a name="line.1198"></a>
-<span class="sourceLineNo">1199</span>            next[a] |= (data[a] |(data[a] &lt;&lt; 1) | (data[a] &gt;&gt;&gt; 1) | (data[a+ySections])) &amp; bounds.data[a];<a name="line.1199"></a>
+<span class="sourceLineNo">1199</span>            next[a] |= (data[a] |(data[a] &lt;&lt; 1) | (data[a] &gt;&gt;&gt; 1) | data[a+ySections]) &amp; bounds.data[a];<a name="line.1199"></a>
 <span class="sourceLineNo">1200</span>            next[(width-1)*ySections+a] |= (data[(width-1)*ySections+a] | (data[(width-1)*ySections+a] &lt;&lt; 1)<a name="line.1200"></a>
-<span class="sourceLineNo">1201</span>                    | (data[(width-1)*ySections+a] &gt;&gt;&gt; 1) | (data[(width-2)*ySections+a])) &amp; bounds.data[(width-1)*bounds.ySections+a];<a name="line.1201"></a>
+<span class="sourceLineNo">1201</span>                    | (data[(width-1)*ySections+a] &gt;&gt;&gt; 1) | data[(width-2) *ySections+a]) &amp; bounds.data[(width-1)*bounds.ySections+a];<a name="line.1201"></a>
 <span class="sourceLineNo">1202</span><a name="line.1202"></a>
 <span class="sourceLineNo">1203</span>            for (int i = ySections+a, j = bounds.ySections+a; i &lt; (width - 1) * ySections &amp;&amp;<a name="line.1203"></a>
 <span class="sourceLineNo">1204</span>                    j &lt; (bounds.width - 1) * bounds.ySections; i+= ySections, j+= bounds.ySections) {<a name="line.1204"></a>
-<span class="sourceLineNo">1205</span>                next[i] |= (data[i] | (data[i] &lt;&lt; 1) | (data[i] &gt;&gt;&gt; 1) | (data[i - ySections]) | (data[i + ySections])) &amp; bounds.data[j];<a name="line.1205"></a>
+<span class="sourceLineNo">1205</span>                next[i] |= (data[i] | (data[i] &lt;&lt; 1) | (data[i] &gt;&gt;&gt; 1) | data[i - ySections] | data[i + ySections]) &amp; bounds.data[j];<a name="line.1205"></a>
 <span class="sourceLineNo">1206</span>            }<a name="line.1206"></a>
 <span class="sourceLineNo">1207</span><a name="line.1207"></a>
 <span class="sourceLineNo">1208</span>            if(a &gt; 0) {<a name="line.1208"></a>
@@ -1311,17 +1311,17 @@
 <span class="sourceLineNo">1303</span>        long[] next = new long[width * ySections];<a name="line.1303"></a>
 <span class="sourceLineNo">1304</span>        for (int a = 0; a &lt; ySections &amp;&amp; a &lt; bounds.ySections; a++) {<a name="line.1304"></a>
 <span class="sourceLineNo">1305</span>            next[a] |= (data[a] | (data[a] &lt;&lt; 1) | (data[a] &gt;&gt;&gt; 1)<a name="line.1305"></a>
-<span class="sourceLineNo">1306</span>                    | (data[a+ySections]) | (data[a+ySections] &lt;&lt; 1) | (data[a+ySections] &gt;&gt;&gt; 1)) &amp; bounds.data[a];<a name="line.1306"></a>
+<span class="sourceLineNo">1306</span>                    | data[a+ySections] | (data[a+ySections] &lt;&lt; 1) | (data[a+ySections] &gt;&gt;&gt; 1)) &amp; bounds.data[a];<a name="line.1306"></a>
 <span class="sourceLineNo">1307</span>            next[(width-1)*ySections+a] |= (data[(width-1)*ySections+a]<a name="line.1307"></a>
 <span class="sourceLineNo">1308</span>                    | (data[(width-1)*ySections+a] &lt;&lt; 1) | (data[(width-1)*ySections+a] &gt;&gt;&gt; 1)<a name="line.1308"></a>
-<span class="sourceLineNo">1309</span>                    | (data[(width-2)*ySections+a]) | (data[(width-2)*ySections+a] &lt;&lt; 1) | (data[(width-2)*ySections+a] &gt;&gt;&gt; 1))<a name="line.1309"></a>
+<span class="sourceLineNo">1309</span>                    | data[(width-2) *ySections+a] | (data[(width-2)*ySections+a] &lt;&lt; 1) | (data[(width-2)*ySections+a] &gt;&gt;&gt; 1))<a name="line.1309"></a>
 <span class="sourceLineNo">1310</span>                    &amp; bounds.data[(width-1)*bounds.ySections+a];<a name="line.1310"></a>
 <span class="sourceLineNo">1311</span><a name="line.1311"></a>
 <span class="sourceLineNo">1312</span>            for (int i = ySections+a, j = bounds.ySections+a; i &lt; (width - 1) * ySections &amp;&amp;<a name="line.1312"></a>
 <span class="sourceLineNo">1313</span>                    j &lt; (bounds.width - 1) * bounds.ySections; i+= ySections, j+= bounds.ySections) {<a name="line.1313"></a>
 <span class="sourceLineNo">1314</span>                next[i] |= (data[i] | (data[i] &lt;&lt; 1) | (data[i] &gt;&gt;&gt; 1)<a name="line.1314"></a>
-<span class="sourceLineNo">1315</span>                        | (data[i - ySections]) | (data[i - ySections] &lt;&lt; 1) | (data[i - ySections] &gt;&gt;&gt; 1)<a name="line.1315"></a>
-<span class="sourceLineNo">1316</span>                        | (data[i + ySections]) | (data[i + ySections] &lt;&lt; 1) | (data[i + ySections] &gt;&gt;&gt; 1))<a name="line.1316"></a>
+<span class="sourceLineNo">1315</span>                        | data[i - ySections] | (data[i - ySections] &lt;&lt; 1) | (data[i - ySections] &gt;&gt;&gt; 1)<a name="line.1315"></a>
+<span class="sourceLineNo">1316</span>                        | data[i + ySections] | (data[i + ySections] &lt;&lt; 1) | (data[i + ySections] &gt;&gt;&gt; 1))<a name="line.1316"></a>
 <span class="sourceLineNo">1317</span>                        &amp; bounds.data[j];<a name="line.1317"></a>
 <span class="sourceLineNo">1318</span>            }<a name="line.1318"></a>
 <span class="sourceLineNo">1319</span><a name="line.1319"></a>
@@ -1918,14 +1918,14 @@
 <span class="sourceLineNo">1910</span>    }<a name="line.1910"></a>
 <span class="sourceLineNo">1911</span><a name="line.1911"></a>
 <span class="sourceLineNo">1912</span>    /**<a name="line.1912"></a>
-<span class="sourceLineNo">1913</span>     * Generates a 2D int array from an array or vararg of GreasedRegions, treating each cell in the nth region as the<a name="line.1913"></a>
-<span class="sourceLineNo">1914</span>     * nth bit of the int at the corresponding x,y cell in the int array. This means if you give 8 GreasedRegions to<a name="line.1914"></a>
-<span class="sourceLineNo">1915</span>     * this method, it can produce any 8-bit number in a cell (0-255); if you give 16 GreasedRegions, then it can<a name="line.1915"></a>
-<span class="sourceLineNo">1916</span>     * produce any 16-bit number (0-65535).<a name="line.1916"></a>
+<span class="sourceLineNo">1913</span>     * Generates a 2D int array from an array or vararg of GreasedRegions, starting at all 0 and adding 1 to the int at<a name="line.1913"></a>
+<span class="sourceLineNo">1914</span>     * a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to<a name="line.1914"></a>
+<span class="sourceLineNo">1915</span>     * this method, it can produce any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can<a name="line.1915"></a>
+<span class="sourceLineNo">1916</span>     * produce number between 0 and 16 in a cell.<a name="line.1916"></a>
 <span class="sourceLineNo">1917</span>     * @param regions an array or vararg of GreasedRegions; must all have the same width and height<a name="line.1917"></a>
-<span class="sourceLineNo">1918</span>     * @return a 2D int array with the same width and height as the regions, with bits per int taken from the regions<a name="line.1918"></a>
+<span class="sourceLineNo">1918</span>     * @return a 2D int array with the same width and height as the regions, where an int cell equals the number of given GreasedRegions that had an "on" cell at that position<a name="line.1918"></a>
 <span class="sourceLineNo">1919</span>     */<a name="line.1919"></a>
-<span class="sourceLineNo">1920</span>    public static int[][] bitSum(GreasedRegion... regions)<a name="line.1920"></a>
+<span class="sourceLineNo">1920</span>    public static int[][] sum(GreasedRegion... regions)<a name="line.1920"></a>
 <span class="sourceLineNo">1921</span>    {<a name="line.1921"></a>
 <span class="sourceLineNo">1922</span>        if(regions == null || regions.length &lt;= 0)<a name="line.1922"></a>
 <span class="sourceLineNo">1923</span>            return new int[0][0];<a name="line.1923"></a>
@@ -1934,52 +1934,76 @@
 <span class="sourceLineNo">1926</span>        for (int x = 0; x &lt; w; x++) {<a name="line.1926"></a>
 <span class="sourceLineNo">1927</span>            for (int y = 0; y &lt; h; y++) {<a name="line.1927"></a>
 <span class="sourceLineNo">1928</span>                for (int i = 0; i &lt; l; i++) {<a name="line.1928"></a>
-<span class="sourceLineNo">1929</span>                    numbers[x][y] |= (regions[i].data[x * ys + (y &gt;&gt; 6)] &amp; (1L &lt;&lt; (y &amp; 63))) != 0 ? 1 &lt;&lt; i : 0;<a name="line.1929"></a>
+<span class="sourceLineNo">1929</span>                    numbers[x][y] += (regions[i].data[x * ys + (y &gt;&gt; 6)] &amp; (1L &lt;&lt; (y &amp; 63))) != 0 ? 1 : 0;<a name="line.1929"></a>
 <span class="sourceLineNo">1930</span>                }<a name="line.1930"></a>
 <span class="sourceLineNo">1931</span>            }<a name="line.1931"></a>
 <span class="sourceLineNo">1932</span>        }<a name="line.1932"></a>
 <span class="sourceLineNo">1933</span>        return numbers;<a name="line.1933"></a>
 <span class="sourceLineNo">1934</span>    }<a name="line.1934"></a>
 <span class="sourceLineNo">1935</span><a name="line.1935"></a>
-<span class="sourceLineNo">1936</span>    /*<a name="line.1936"></a>
-<span class="sourceLineNo">1937</span>    public static int[][] selectiveNegate(int[][] numbers, GreasedRegion region, int mask)<a name="line.1937"></a>
-<span class="sourceLineNo">1938</span>    {<a name="line.1938"></a>
-<span class="sourceLineNo">1939</span>        if(region == null)<a name="line.1939"></a>
-<span class="sourceLineNo">1940</span>            return numbers;<a name="line.1940"></a>
-<span class="sourceLineNo">1941</span>        int w = region.width, h = region.height, ys = region.ySections;<a name="line.1941"></a>
-<span class="sourceLineNo">1942</span>        for (int x = 0; x &lt; w; x++) {<a name="line.1942"></a>
-<span class="sourceLineNo">1943</span>            for (int y = 0; y &lt; h; y++) {<a name="line.1943"></a>
-<span class="sourceLineNo">1944</span>                if((region.data[x * ys + (y &gt;&gt; 6)] &amp; (1L &lt;&lt; (y &amp; 63))) != 0) numbers[x][y] = (~numbers[x][y] &amp; mask);<a name="line.1944"></a>
-<span class="sourceLineNo">1945</span>            }<a name="line.1945"></a>
-<span class="sourceLineNo">1946</span>        }<a name="line.1946"></a>
-<span class="sourceLineNo">1947</span>        return numbers;<a name="line.1947"></a>
-<span class="sourceLineNo">1948</span>    }<a name="line.1948"></a>
-<span class="sourceLineNo">1949</span>    */<a name="line.1949"></a>
-<span class="sourceLineNo">1950</span><a name="line.1950"></a>
-<span class="sourceLineNo">1951</span>    @Override<a name="line.1951"></a>
-<span class="sourceLineNo">1952</span>    public boolean equals(Object o) {<a name="line.1952"></a>
-<span class="sourceLineNo">1953</span>        if (this == o) return true;<a name="line.1953"></a>
-<span class="sourceLineNo">1954</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.1954"></a>
-<span class="sourceLineNo">1955</span><a name="line.1955"></a>
-<span class="sourceLineNo">1956</span>        GreasedRegion that = (GreasedRegion) o;<a name="line.1956"></a>
-<span class="sourceLineNo">1957</span><a name="line.1957"></a>
-<span class="sourceLineNo">1958</span>        if (height != that.height) return false;<a name="line.1958"></a>
-<span class="sourceLineNo">1959</span>        if (width != that.width) return false;<a name="line.1959"></a>
-<span class="sourceLineNo">1960</span>        if (ySections != that.ySections) return false;<a name="line.1960"></a>
-<span class="sourceLineNo">1961</span>        if (yEndMask != that.yEndMask) return false;<a name="line.1961"></a>
-<span class="sourceLineNo">1962</span>        return Arrays.equals(data, that.data);<a name="line.1962"></a>
-<span class="sourceLineNo">1963</span>    }<a name="line.1963"></a>
-<span class="sourceLineNo">1964</span><a name="line.1964"></a>
-<span class="sourceLineNo">1965</span>    @Override<a name="line.1965"></a>
-<span class="sourceLineNo">1966</span>    public int hashCode() {<a name="line.1966"></a>
-<span class="sourceLineNo">1967</span>        int result = CrossHash.hash(data);<a name="line.1967"></a>
-<span class="sourceLineNo">1968</span>        result = 31 * result + height;<a name="line.1968"></a>
-<span class="sourceLineNo">1969</span>        result = 31 * result + width;<a name="line.1969"></a>
-<span class="sourceLineNo">1970</span>        result = 31 * result + ySections;<a name="line.1970"></a>
-<span class="sourceLineNo">1971</span>        result = 31 * result + (int) (yEndMask ^ (yEndMask &gt;&gt;&gt; 32));<a name="line.1971"></a>
-<span class="sourceLineNo">1972</span>        return result;<a name="line.1972"></a>
-<span class="sourceLineNo">1973</span>    }<a name="line.1973"></a>
-<span class="sourceLineNo">1974</span>}<a name="line.1974"></a>
+<span class="sourceLineNo">1936</span>    /**<a name="line.1936"></a>
+<span class="sourceLineNo">1937</span>     * Generates a 2D int array from an array or vararg of GreasedRegions, treating each cell in the nth region as the<a name="line.1937"></a>
+<span class="sourceLineNo">1938</span>     * nth bit of the int at the corresponding x,y cell in the int array. This means if you give 8 GreasedRegions to<a name="line.1938"></a>
+<span class="sourceLineNo">1939</span>     * this method, it can produce any 8-bit number in a cell (0-255); if you give 16 GreasedRegions, then it can<a name="line.1939"></a>
+<span class="sourceLineNo">1940</span>     * produce any 16-bit number (0-65535).<a name="line.1940"></a>
+<span class="sourceLineNo">1941</span>     * @param regions an array or vararg of GreasedRegions; must all have the same width and height<a name="line.1941"></a>
+<span class="sourceLineNo">1942</span>     * @return a 2D int array with the same width and height as the regions, with bits per int taken from the regions<a name="line.1942"></a>
+<span class="sourceLineNo">1943</span>     */<a name="line.1943"></a>
+<span class="sourceLineNo">1944</span>    public static int[][] bitSum(GreasedRegion... regions)<a name="line.1944"></a>
+<span class="sourceLineNo">1945</span>    {<a name="line.1945"></a>
+<span class="sourceLineNo">1946</span>        if(regions == null || regions.length &lt;= 0)<a name="line.1946"></a>
+<span class="sourceLineNo">1947</span>            return new int[0][0];<a name="line.1947"></a>
+<span class="sourceLineNo">1948</span>        int w = regions[0].width, h = regions[0].height, l = Math.min(32, regions.length), ys = regions[0].ySections;<a name="line.1948"></a>
+<span class="sourceLineNo">1949</span>        int[][] numbers = new int[w][h];<a name="line.1949"></a>
+<span class="sourceLineNo">1950</span>        for (int x = 0; x &lt; w; x++) {<a name="line.1950"></a>
+<span class="sourceLineNo">1951</span>            for (int y = 0; y &lt; h; y++) {<a name="line.1951"></a>
+<span class="sourceLineNo">1952</span>                for (int i = 0; i &lt; l; i++) {<a name="line.1952"></a>
+<span class="sourceLineNo">1953</span>                    numbers[x][y] |= (regions[i].data[x * ys + (y &gt;&gt; 6)] &amp; (1L &lt;&lt; (y &amp; 63))) != 0 ? 1 &lt;&lt; i : 0;<a name="line.1953"></a>
+<span class="sourceLineNo">1954</span>                }<a name="line.1954"></a>
+<span class="sourceLineNo">1955</span>            }<a name="line.1955"></a>
+<span class="sourceLineNo">1956</span>        }<a name="line.1956"></a>
+<span class="sourceLineNo">1957</span>        return numbers;<a name="line.1957"></a>
+<span class="sourceLineNo">1958</span>    }<a name="line.1958"></a>
+<span class="sourceLineNo">1959</span><a name="line.1959"></a>
+<span class="sourceLineNo">1960</span>    /*<a name="line.1960"></a>
+<span class="sourceLineNo">1961</span>    public static int[][] selectiveNegate(int[][] numbers, GreasedRegion region, int mask)<a name="line.1961"></a>
+<span class="sourceLineNo">1962</span>    {<a name="line.1962"></a>
+<span class="sourceLineNo">1963</span>        if(region == null)<a name="line.1963"></a>
+<span class="sourceLineNo">1964</span>            return numbers;<a name="line.1964"></a>
+<span class="sourceLineNo">1965</span>        int w = region.width, h = region.height, ys = region.ySections;<a name="line.1965"></a>
+<span class="sourceLineNo">1966</span>        for (int x = 0; x &lt; w; x++) {<a name="line.1966"></a>
+<span class="sourceLineNo">1967</span>            for (int y = 0; y &lt; h; y++) {<a name="line.1967"></a>
+<span class="sourceLineNo">1968</span>                if((region.data[x * ys + (y &gt;&gt; 6)] &amp; (1L &lt;&lt; (y &amp; 63))) != 0) numbers[x][y] = (~numbers[x][y] &amp; mask);<a name="line.1968"></a>
+<span class="sourceLineNo">1969</span>            }<a name="line.1969"></a>
+<span class="sourceLineNo">1970</span>        }<a name="line.1970"></a>
+<span class="sourceLineNo">1971</span>        return numbers;<a name="line.1971"></a>
+<span class="sourceLineNo">1972</span>    }<a name="line.1972"></a>
+<span class="sourceLineNo">1973</span>    */<a name="line.1973"></a>
+<span class="sourceLineNo">1974</span><a name="line.1974"></a>
+<span class="sourceLineNo">1975</span>    @Override<a name="line.1975"></a>
+<span class="sourceLineNo">1976</span>    public boolean equals(Object o) {<a name="line.1976"></a>
+<span class="sourceLineNo">1977</span>        if (this == o) return true;<a name="line.1977"></a>
+<span class="sourceLineNo">1978</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.1978"></a>
+<span class="sourceLineNo">1979</span><a name="line.1979"></a>
+<span class="sourceLineNo">1980</span>        GreasedRegion that = (GreasedRegion) o;<a name="line.1980"></a>
+<span class="sourceLineNo">1981</span><a name="line.1981"></a>
+<span class="sourceLineNo">1982</span>        if (height != that.height) return false;<a name="line.1982"></a>
+<span class="sourceLineNo">1983</span>        if (width != that.width) return false;<a name="line.1983"></a>
+<span class="sourceLineNo">1984</span>        if (ySections != that.ySections) return false;<a name="line.1984"></a>
+<span class="sourceLineNo">1985</span>        if (yEndMask != that.yEndMask) return false;<a name="line.1985"></a>
+<span class="sourceLineNo">1986</span>        return Arrays.equals(data, that.data);<a name="line.1986"></a>
+<span class="sourceLineNo">1987</span>    }<a name="line.1987"></a>
+<span class="sourceLineNo">1988</span><a name="line.1988"></a>
+<span class="sourceLineNo">1989</span>    @Override<a name="line.1989"></a>
+<span class="sourceLineNo">1990</span>    public int hashCode() {<a name="line.1990"></a>
+<span class="sourceLineNo">1991</span>        int result = CrossHash.hash(data);<a name="line.1991"></a>
+<span class="sourceLineNo">1992</span>        result = 31 * result + height;<a name="line.1992"></a>
+<span class="sourceLineNo">1993</span>        result = 31 * result + width;<a name="line.1993"></a>
+<span class="sourceLineNo">1994</span>        result = 31 * result + ySections;<a name="line.1994"></a>
+<span class="sourceLineNo">1995</span>        result = 31 * result + (int) (yEndMask ^ (yEndMask &gt;&gt;&gt; 32));<a name="line.1995"></a>
+<span class="sourceLineNo">1996</span>        return result;<a name="line.1996"></a>
+<span class="sourceLineNo">1997</span>    }<a name="line.1997"></a>
+<span class="sourceLineNo">1998</span>}<a name="line.1998"></a>
 
 
 

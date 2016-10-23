@@ -579,7 +579,7 @@
 <span class="sourceLineNo">571</span>                    }<a name="line.571"></a>
 <span class="sourceLineNo">572</span>                    else<a name="line.572"></a>
 <span class="sourceLineNo">573</span>                    {<a name="line.573"></a>
-<span class="sourceLineNo">574</span>                        cs = lowest.get(costMap[near] | ((adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000)));<a name="line.574"></a>
+<span class="sourceLineNo">574</span>                        cs = lowest.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000));<a name="line.574"></a>
 <span class="sourceLineNo">575</span>                        //double h = adjacency.measurement.heuristic(adjacency.directions[d]);<a name="line.575"></a>
 <span class="sourceLineNo">576</span>                        if (!closed.containsKey(near) &amp;&amp; !open.containsKey(near) &amp;&amp; gradientMap[cen] + cs &lt; gradientMap[near]) {<a name="line.576"></a>
 <span class="sourceLineNo">577</span>                            setFresh(near, cell.getDoubleValue() + cs);<a name="line.577"></a>
@@ -683,7 +683,7 @@
 <span class="sourceLineNo">675</span>                    }<a name="line.675"></a>
 <span class="sourceLineNo">676</span>                    else<a name="line.676"></a>
 <span class="sourceLineNo">677</span>                    {<a name="line.677"></a>
-<span class="sourceLineNo">678</span>                        cs = lowest.get(costMap[near] | ((adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000)));<a name="line.678"></a>
+<span class="sourceLineNo">678</span>                        cs = lowest.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000));<a name="line.678"></a>
 <span class="sourceLineNo">679</span>                        //double h = adjacency.measurement.heuristic(adjacency.directions[d]);<a name="line.679"></a>
 <span class="sourceLineNo">680</span>                        if (!closed.containsKey(near) &amp;&amp; !open.containsKey(near) &amp;&amp; gradientMap[cen] + cs &lt; gradientMap[near]) {<a name="line.680"></a>
 <span class="sourceLineNo">681</span>                            setFresh(near, cell.getDoubleValue() + cs);<a name="line.681"></a>
@@ -1072,7 +1072,7 @@
 <span class="sourceLineNo">1064</span>                    }<a name="line.1064"></a>
 <span class="sourceLineNo">1065</span>                    else<a name="line.1065"></a>
 <span class="sourceLineNo">1066</span>                    {<a name="line.1066"></a>
-<span class="sourceLineNo">1067</span>                        cs = lowest.get(costMap[near] | ((adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000)));<a name="line.1067"></a>
+<span class="sourceLineNo">1067</span>                        cs = lowest.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000));<a name="line.1067"></a>
 <span class="sourceLineNo">1068</span>                        //double h = adjacency.measurement.heuristic(adjacency.directions[d]);<a name="line.1068"></a>
 <span class="sourceLineNo">1069</span>                        if (!closed.containsKey(near) &amp;&amp; !open.containsKey(near) &amp;&amp; gradientMap[cen] + cs &lt; gradientMap[near]) {<a name="line.1069"></a>
 <span class="sourceLineNo">1070</span>                            setFresh(near, cell.getDoubleValue() + cs);<a name="line.1070"></a>
@@ -1290,7 +1290,7 @@
 <span class="sourceLineNo">1282</span>            }<a name="line.1282"></a>
 <span class="sourceLineNo">1283</span>            currentPos = toNeighbors[choice][pt = currentPos];<a name="line.1283"></a>
 <span class="sourceLineNo">1284</span>            path.add(currentPos);<a name="line.1284"></a>
-<span class="sourceLineNo">1285</span>            paidLength += adjacency.costRules.get(costMap[currentPos] | ((adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000)));<a name="line.1285"></a>
+<span class="sourceLineNo">1285</span>            paidLength += adjacency.costRules.get(costMap[currentPos] | (adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000));<a name="line.1285"></a>
 <span class="sourceLineNo">1286</span>            frustration++;<a name="line.1286"></a>
 <span class="sourceLineNo">1287</span>            if (paidLength &gt; length - 1.0) {<a name="line.1287"></a>
 <span class="sourceLineNo">1288</span>                if (onlyPassable.contains(currentPos)) {<a name="line.1288"></a>
@@ -1538,7 +1538,7 @@
 <span class="sourceLineNo">1530</span>            scan(scanArray);<a name="line.1530"></a>
 <span class="sourceLineNo">1531</span><a name="line.1531"></a>
 <span class="sourceLineNo">1532</span>            for (int l = 0; l &lt; gradientMap.length; l++) {<a name="line.1532"></a>
-<span class="sourceLineNo">1533</span>                gradientMap[l] *= (gradientMap[l] &gt;= FLOOR) ? 1.0 : (- preferLongerPaths);<a name="line.1533"></a>
+<span class="sourceLineNo">1533</span>                gradientMap[l] *= (gradientMap[l] &gt;= FLOOR) ? 1.0 : - preferLongerPaths;<a name="line.1533"></a>
 <span class="sourceLineNo">1534</span>            }<a name="line.1534"></a>
 <span class="sourceLineNo">1535</span>            cachedFleeMap = scan(scanArray);<a name="line.1535"></a>
 <span class="sourceLineNo">1536</span>        }<a name="line.1536"></a>
@@ -1570,7 +1570,7 @@
 <span class="sourceLineNo">1562</span>            }<a name="line.1562"></a>
 <span class="sourceLineNo">1563</span>            currentPos = toNeighbors[choice][pt = currentPos];<a name="line.1563"></a>
 <span class="sourceLineNo">1564</span>            path.add(currentPos);<a name="line.1564"></a>
-<span class="sourceLineNo">1565</span>            paidLength += adjacency.costRules.get(costMap[currentPos] | ((adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000)));<a name="line.1565"></a>
+<span class="sourceLineNo">1565</span>            paidLength += adjacency.costRules.get(costMap[currentPos] | (adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000));<a name="line.1565"></a>
 <span class="sourceLineNo">1566</span>            frustration++;<a name="line.1566"></a>
 <span class="sourceLineNo">1567</span>            if (paidLength &gt; length - 1.0) {<a name="line.1567"></a>
 <span class="sourceLineNo">1568</span>                if (onlyPassable.contains(currentPos)) {<a name="line.1568"></a>
@@ -1657,7 +1657,7 @@
 <span class="sourceLineNo">1649</span>            }<a name="line.1649"></a>
 <span class="sourceLineNo">1650</span>            currentPos = toNeighbors[choice][pt = currentPos];<a name="line.1650"></a>
 <span class="sourceLineNo">1651</span>            path.add(currentPos);<a name="line.1651"></a>
-<span class="sourceLineNo">1652</span>            paidLength += adjacency.costRules.get(costMap[currentPos] | ((adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000)));<a name="line.1652"></a>
+<span class="sourceLineNo">1652</span>            paidLength += adjacency.costRules.get(costMap[currentPos] | (adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000));<a name="line.1652"></a>
 <span class="sourceLineNo">1653</span>            frustration++;<a name="line.1653"></a>
 <span class="sourceLineNo">1654</span>            if (paidLength &gt; length - 1.0) {<a name="line.1654"></a>
 <span class="sourceLineNo">1655</span>                if (onlyPassable.contains(currentPos)) {<a name="line.1655"></a>
@@ -2084,7 +2084,7 @@
 <span class="sourceLineNo">2076</span>            scan(size, scanArray);<a name="line.2076"></a>
 <span class="sourceLineNo">2077</span><a name="line.2077"></a>
 <span class="sourceLineNo">2078</span>            for (int l = 0; l &lt; gradientMap.length; l++) {<a name="line.2078"></a>
-<span class="sourceLineNo">2079</span>                gradientMap[l] *= (gradientMap[l] &gt;= FLOOR) ? 1.0 : (-preferLongerPaths);<a name="line.2079"></a>
+<span class="sourceLineNo">2079</span>                gradientMap[l] *= (gradientMap[l] &gt;= FLOOR) ? 1.0 : -preferLongerPaths;<a name="line.2079"></a>
 <span class="sourceLineNo">2080</span>            }<a name="line.2080"></a>
 <span class="sourceLineNo">2081</span>            cachedFleeMap = scan(size, scanArray);<a name="line.2081"></a>
 <span class="sourceLineNo">2082</span>        }<a name="line.2082"></a>
@@ -2116,7 +2116,7 @@
 <span class="sourceLineNo">2108</span>            }<a name="line.2108"></a>
 <span class="sourceLineNo">2109</span>            currentPos = toNeighbors[choice][pt = currentPos];<a name="line.2109"></a>
 <span class="sourceLineNo">2110</span>            path.add(currentPos);<a name="line.2110"></a>
-<span class="sourceLineNo">2111</span>            paidLength += adjacency.costRules.get(costMap[currentPos] | ((adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000)));<a name="line.2111"></a>
+<span class="sourceLineNo">2111</span>            paidLength += adjacency.costRules.get(costMap[currentPos] | (adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000));<a name="line.2111"></a>
 <span class="sourceLineNo">2112</span>            frustration++;<a name="line.2112"></a>
 <span class="sourceLineNo">2113</span>            if (paidLength &gt; length - 1.0) {<a name="line.2113"></a>
 <span class="sourceLineNo">2114</span>                if (onlyPassable.contains(currentPos)) {<a name="line.2114"></a>

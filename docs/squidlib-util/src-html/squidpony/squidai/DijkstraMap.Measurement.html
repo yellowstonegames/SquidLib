@@ -3470,7 +3470,7 @@
 <span class="sourceLineNo">3462</span>     * @param blockingRequirement the desired level of blocking required to stop a diagonal move<a name="line.3462"></a>
 <span class="sourceLineNo">3463</span>     */<a name="line.3463"></a>
 <span class="sourceLineNo">3464</span>    public void setBlockingRequirement(int blockingRequirement) {<a name="line.3464"></a>
-<span class="sourceLineNo">3465</span>        this.blockingRequirement = (blockingRequirement &gt; 2 ? 2 : blockingRequirement &lt; 0 ? 0 : blockingRequirement);<a name="line.3465"></a>
+<span class="sourceLineNo">3465</span>        this.blockingRequirement = blockingRequirement &gt; 2 ? 2 : blockingRequirement &lt; 0 ? 0 : blockingRequirement;<a name="line.3465"></a>
 <span class="sourceLineNo">3466</span>    }<a name="line.3466"></a>
 <span class="sourceLineNo">3467</span><a name="line.3467"></a>
 <span class="sourceLineNo">3468</span>    /* For Gwt compatibility */<a name="line.3468"></a>

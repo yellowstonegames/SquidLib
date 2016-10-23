@@ -129,7 +129,7 @@
 <span class="sourceLineNo">121</span>            switch (limit) {<a name="line.121"></a>
 <span class="sourceLineNo">122</span>                case EIGHT_WAY:<a name="line.122"></a>
 <span class="sourceLineNo">123</span>                    if(Math.abs(end.x - origin.x) == Math.abs(end.y - origin.y) ||<a name="line.123"></a>
-<span class="sourceLineNo">124</span>                            (end.x == origin.x || end.y == origin.y))<a name="line.124"></a>
+<span class="sourceLineNo">124</span>                            end.x == origin.x || end.y == origin.y)<a name="line.124"></a>
 <span class="sourceLineNo">125</span>                    {<a name="line.125"></a>
 <span class="sourceLineNo">126</span>                        return true;<a name="line.126"></a>
 <span class="sourceLineNo">127</span>                    }<a name="line.127"></a>
@@ -171,7 +171,7 @@
 <span class="sourceLineNo">163</span>            switch (reach.limit) {<a name="line.163"></a>
 <span class="sourceLineNo">164</span>                case EIGHT_WAY:<a name="line.164"></a>
 <span class="sourceLineNo">165</span>                    if(Math.abs(end.x - origin.x) == Math.abs(end.y - origin.y) ||<a name="line.165"></a>
-<span class="sourceLineNo">166</span>                            (end.x == origin.x || end.y == origin.y))<a name="line.166"></a>
+<span class="sourceLineNo">166</span>                            end.x == origin.x || end.y == origin.y)<a name="line.166"></a>
 <span class="sourceLineNo">167</span>                    {<a name="line.167"></a>
 <span class="sourceLineNo">168</span>                        return reach.metric.inRange(origin.x, origin.y, end.x, end.y,<a name="line.168"></a>
 <span class="sourceLineNo">169</span>                                reach.minDistance, reach.maxDistance);<a name="line.169"></a>

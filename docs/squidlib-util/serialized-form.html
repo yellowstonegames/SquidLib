@@ -1153,6 +1153,181 @@
 <li class="blockList">
 <h2 title="Package">Package&nbsp;squidpony.squidmath</h2>
 <ul class="blockList">
+<li class="blockList"><a name="squidpony.squidmath.Arrangement">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">squidpony.squidmath.Arrangement</a> extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialization Methods</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>readObject</h4>
+<pre>private&nbsp;void&nbsp;<a href="src-html/squidpony/squidmath/Arrangement.html#line.2423">readObject</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/io/ObjectInputStream.html?is-external=true" title="class or interface in java.io">ObjectInputStream</a>&nbsp;s)
+                 throws <a href="http://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                        <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/ClassNotFoundException.html?is-external=true" title="class or interface in java.lang">ClassNotFoundException</a></pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/ClassNotFoundException.html?is-external=true" title="class or interface in java.lang">ClassNotFoundException</a></code></dd>
+</dl>
+</li>
+<li class="blockListLast">
+<h4>writeObject</h4>
+<pre>private&nbsp;void&nbsp;<a href="src-html/squidpony/squidmath/Arrangement.html#line.2408">writeObject</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/io/ObjectOutputStream.html?is-external=true" title="class or interface in java.io">ObjectOutputStream</a>&nbsp;s)
+                  throws <a href="http://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+</dl>
+</li>
+</ul>
+</li>
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>key</h4>
+<pre><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[] key</pre>
+<div class="block">The array of keys.</div>
+</li>
+<li class="blockList">
+<h4>value</h4>
+<pre>int[] value</pre>
+<div class="block">The array of values.</div>
+</li>
+<li class="blockList">
+<h4>mask</h4>
+<pre>int mask</pre>
+<div class="block">The mask for wrapping a position counter.</div>
+</li>
+<li class="blockList">
+<h4>containsNullKey</h4>
+<pre>boolean containsNullKey</pre>
+<div class="block">Whether this set contains the key zero.</div>
+</li>
+<li class="blockList">
+<h4>first</h4>
+<pre>int first</pre>
+<div class="block">The index of the first entry in iteration order. It is valid iff <a href="squidpony/squidmath/Arrangement.html#size"><code>Arrangement.size</code></a> is nonzero; otherwise, it contains -1.</div>
+</li>
+<li class="blockList">
+<h4>last</h4>
+<pre>int last</pre>
+<div class="block">The index of the last entry in iteration order. It is valid iff <a href="squidpony/squidmath/Arrangement.html#size"><code>Arrangement.size</code></a> is nonzero; otherwise, it contains -1.</div>
+</li>
+<li class="blockList">
+<h4>order</h4>
+<pre><a href="squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a> order</pre>
+</li>
+<li class="blockList">
+<h4>n</h4>
+<pre>int n</pre>
+<div class="block">The current table size.</div>
+</li>
+<li class="blockList">
+<h4>maxFill</h4>
+<pre>int maxFill</pre>
+<div class="block">Threshold after which we rehash. It must be the table size times <a href="squidpony/squidmath/Arrangement.html#f"><code>Arrangement.f</code></a>.</div>
+</li>
+<li class="blockList">
+<h4>size</h4>
+<pre>int size</pre>
+<div class="block">Number of entries in the set (including the key zero, if present).</div>
+</li>
+<li class="blockList">
+<h4>f</h4>
+<pre>float f</pre>
+<div class="block">The acceptable load factor.</div>
+</li>
+<li class="blockList">
+<h4>entries</h4>
+<pre>squidpony.squidmath.Arrangement.MapEntrySet entries</pre>
+<div class="block">Cached set of entries.</div>
+</li>
+<li class="blockList">
+<h4>keys</h4>
+<pre><a href="squidpony/squidmath/Arrangement.KeySet.html" title="class in squidpony.squidmath">Arrangement.KeySet</a> keys</pre>
+<div class="block">Cached set of keys.</div>
+</li>
+<li class="blockList">
+<h4>values</h4>
+<pre><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">E</a>&gt; values</pre>
+<div class="block">Cached collection of values.</div>
+</li>
+<li class="blockList">
+<h4>defRetValue</h4>
+<pre>int defRetValue</pre>
+<div class="block">Default return value.</div>
+</li>
+<li class="blockListLast">
+<h4>hasher</h4>
+<pre><a href="squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> hasher</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Arrangement.FastEntryIterator">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/Arrangement.FastEntryIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.Arrangement.FastEntryIterator</a> extends squidpony.squidmath.Arrangement.MapIterator implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>entry</h4>
+<pre>squidpony.squidmath.Arrangement.MapEntry entry</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Arrangement.KeyIterator">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/Arrangement.KeyIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.Arrangement.KeyIterator</a> extends squidpony.squidmath.Arrangement.MapIterator implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Arrangement.KeySet">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/Arrangement.KeySet.html" title="class in squidpony.squidmath">squidpony.squidmath.Arrangement.KeySet</a> extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Arrangement.ValueCollection">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/Arrangement.ValueCollection.html" title="class in squidpony.squidmath">squidpony.squidmath.Arrangement.ValueCollection</a> extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractCollection.html?is-external=true" title="class or interface in java.util">AbstractCollection</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt; implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Arrangement.ValueIterator">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/Arrangement.ValueIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.Arrangement.ValueIterator</a> extends squidpony.squidmath.Arrangement.MapIterator implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+</li>
 <li class="blockList"><a name="squidpony.squidmath.AStarSearch">
 <!--   -->
 </a>
@@ -1840,7 +2015,7 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>readObject</h4>
-<pre>private&nbsp;void&nbsp;<a href="src-html/squidpony/squidmath/OrderedMap.html#line.2383">readObject</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/io/ObjectInputStream.html?is-external=true" title="class or interface in java.io">ObjectInputStream</a>&nbsp;s)
+<pre>private&nbsp;void&nbsp;<a href="src-html/squidpony/squidmath/OrderedMap.html#line.2372">readObject</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/io/ObjectInputStream.html?is-external=true" title="class or interface in java.io">ObjectInputStream</a>&nbsp;s)
                  throws <a href="http://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
                         <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/ClassNotFoundException.html?is-external=true" title="class or interface in java.lang">ClassNotFoundException</a></pre>
 <dl>
@@ -1851,7 +2026,7 @@
 </li>
 <li class="blockListLast">
 <h4>writeObject</h4>
-<pre>private&nbsp;void&nbsp;<a href="src-html/squidpony/squidmath/OrderedMap.html#line.2368">writeObject</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/io/ObjectOutputStream.html?is-external=true" title="class or interface in java.io">ObjectOutputStream</a>&nbsp;s)
+<pre>private&nbsp;void&nbsp;<a href="src-html/squidpony/squidmath/OrderedMap.html#line.2357">writeObject</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/io/ObjectOutputStream.html?is-external=true" title="class or interface in java.io">ObjectOutputStream</a>&nbsp;s)
                   throws <a href="http://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -2015,7 +2190,7 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>readObject</h4>
-<pre>private&nbsp;void&nbsp;<a href="src-html/squidpony/squidmath/OrderedSet.html#line.1733">readObject</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/io/ObjectInputStream.html?is-external=true" title="class or interface in java.io">ObjectInputStream</a>&nbsp;s)
+<pre>private&nbsp;void&nbsp;<a href="src-html/squidpony/squidmath/OrderedSet.html#line.1735">readObject</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/io/ObjectInputStream.html?is-external=true" title="class or interface in java.io">ObjectInputStream</a>&nbsp;s)
                  throws <a href="http://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
                         <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/ClassNotFoundException.html?is-external=true" title="class or interface in java.lang">ClassNotFoundException</a></pre>
 <dl>
@@ -2026,7 +2201,7 @@
 </li>
 <li class="blockListLast">
 <h4>writeObject</h4>
-<pre>private&nbsp;void&nbsp;<a href="src-html/squidpony/squidmath/OrderedSet.html#line.1723">writeObject</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/io/ObjectOutputStream.html?is-external=true" title="class or interface in java.io">ObjectOutputStream</a>&nbsp;s)
+<pre>private&nbsp;void&nbsp;<a href="src-html/squidpony/squidmath/OrderedSet.html#line.1725">writeObject</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/io/ObjectOutputStream.html?is-external=true" title="class or interface in java.io">ObjectOutputStream</a>&nbsp;s)
                   throws <a href="http://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>

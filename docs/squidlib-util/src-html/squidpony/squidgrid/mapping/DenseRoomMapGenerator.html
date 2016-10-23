@@ -73,9 +73,9 @@
 <span class="sourceLineNo">065</span>            nx = Math.max(0, Math.min(width - 2 - hnw, center.x - hnw));<a name="line.65"></a>
 <span class="sourceLineNo">066</span>            ny = Math.max(0, Math.min(height - 2 - hnh, center.y - hnh));<a name="line.66"></a>
 <span class="sourceLineNo">067</span>            if (center.x - hnw != nx)<a name="line.67"></a>
-<span class="sourceLineNo">068</span>                nw -= Math.abs((center.x - hnw) - nx);<a name="line.68"></a>
+<span class="sourceLineNo">068</span>                nw -= Math.abs(center.x - hnw - nx);<a name="line.68"></a>
 <span class="sourceLineNo">069</span>            if (center.y - hnh != ny)<a name="line.69"></a>
-<span class="sourceLineNo">070</span>                nh -= Math.abs((center.y - hnh) - ny);<a name="line.70"></a>
+<span class="sourceLineNo">070</span>                nh -= Math.abs(center.y - hnh - ny);<a name="line.70"></a>
 <span class="sourceLineNo">071</span>            if (nw &gt;= 0 &amp;&amp; nh &gt;= 0) {<a name="line.71"></a>
 <span class="sourceLineNo">072</span>                GwtCompatibility.insert2D(DungeonUtility.wallWrap(GwtCompatibility.fill2D('.', nw, nh)),<a name="line.72"></a>
 <span class="sourceLineNo">073</span>                        map, nx, ny);<a name="line.73"></a>

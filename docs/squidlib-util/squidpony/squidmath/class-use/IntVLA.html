@@ -260,6 +260,10 @@
 <td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
 <td class="colLast"><span class="typeNameLabel">OrderedMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrderedMap.html#order">order</a></span></code>&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
+<td class="colLast"><span class="typeNameLabel">Arrangement.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Arrangement.html#order">order</a></span></code>&nbsp;</td>
+</tr>
 </tbody>
 </table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
@@ -275,17 +279,25 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
+<td class="colLast"><span class="typeNameLabel">Arrangement.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Arrangement.html#getMany-java.lang.Iterable-">getMany</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;keys)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
 <td class="colLast"><span class="typeNameLabel">IntVLA.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntVLA.html#reorder-int...-">reorder</a></span>(int...&nbsp;ordering)</code>
 <div class="block">Given an array or varargs of replacement indices for the values of this IntVLA, reorders this so the first item
  in the returned version is the same as <code>get(ordering[0])</code> (with some care taken for negative or too-large
  indices), the second item in the returned version is the same as <code>get(ordering[1])</code>, etc.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
 <td class="colLast"><span class="typeNameLabel">IntVLA.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntVLA.html#shuffle-squidpony.squidmath.RNG-">shuffle</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</code>
 <div class="block">Shuffles this IntVLA in place using the given RNG.</div>
 </td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
+<td class="colLast"><span class="typeNameLabel">Arrangement.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Arrangement.html#valuesAsIntVLA--">valuesAsIntVLA</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
@@ -311,6 +323,10 @@
       int&nbsp;length)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">Arrangement.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Arrangement.html#keysAt-squidpony.squidmath.IntVLA-">keysAt</a></span>(<a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;positions)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><span class="typeNameLabel">IntVLA.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntVLA.html#removeAll-squidpony.squidmath.IntVLA-">removeAll</a></span>(<a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;array)</code>
 <div class="block">Removes from this array all of elements contained in the specified array.</div>

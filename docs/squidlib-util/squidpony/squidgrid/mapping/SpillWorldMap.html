@@ -144,7 +144,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SpillWorldMap.html#height">height</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected static char[]</code></td>
+<td class="colFirst"><code>static char[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SpillWorldMap.html#letters">letters</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -291,7 +291,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>letters</h4>
-<pre>protected static final&nbsp;char[] <a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.26">letters</a></pre>
+<pre>public static final&nbsp;char[] <a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.26">letters</a></pre>
 </li>
 </ul>
 <a name="atlas">
@@ -369,7 +369,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  the garbage collector as well, as re-allocations of large Coords that would otherwise be un-cached are avoided.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>factionCount</code> - the number of factions to have claiming land</dd>
+<dd><code>factionCount</code> - the number of factions to have claiming land, cannot be negative or more than 255</dd>
 <dd><code>makeAtlas</code> - if true, this will assign random names to factions, accessible via <a href="../../../squidpony/squidgrid/mapping/SpillWorldMap.html#atlas"><code>atlas</code></a></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a 2D char array where letters represent the claiming faction, '~' is water, and '%' is unclaimed</dd>
@@ -382,7 +382,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>generate</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.185">generate</a>(int&nbsp;factionCount)</pre>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.186">generate</a>(int&nbsp;factionCount)</pre>
 <div class="block">Generates a basic physical map for this world, then overlays a more involved political map with the given number
  of factions trying to take land in the world (essentially, nations). The output is a 2D char array where each
  letter char is tied to a different faction, while '~' is always water, and '%' is always wilderness or unclaimed

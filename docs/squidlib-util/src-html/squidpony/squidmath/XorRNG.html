@@ -58,7 +58,7 @@
 <span class="sourceLineNo">050</span>        final long s0 = state1;<a name="line.50"></a>
 <span class="sourceLineNo">051</span>        state0 = s0;<a name="line.51"></a>
 <span class="sourceLineNo">052</span>        s1 ^= s1 &lt;&lt; 23; // a<a name="line.52"></a>
-<span class="sourceLineNo">053</span>        return ( state1 = ( s1 ^ s0 ^ ( s1 &gt;&gt;&gt; 17 ) ^ ( s0 &gt;&gt;&gt; 26 ) ) ) + s0; // b, c<a name="line.53"></a>
+<span class="sourceLineNo">053</span>        return ( state1 = s1 ^ s0 ^ ( s1 &gt;&gt;&gt; 17 ) ^ ( s0 &gt;&gt;&gt; 26 )) + s0; // b, c<a name="line.53"></a>
 <span class="sourceLineNo">054</span>    }<a name="line.54"></a>
 <span class="sourceLineNo">055</span><a name="line.55"></a>
 <span class="sourceLineNo">056</span>    public int nextInt() {<a name="line.56"></a>

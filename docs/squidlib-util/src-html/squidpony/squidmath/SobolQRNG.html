@@ -311,7 +311,7 @@
 <span class="sourceLineNo">303</span>    private void initDirectionVector(final int d, final int a, final int[] m) {<a name="line.303"></a>
 <span class="sourceLineNo">304</span>        final int s = m.length - 1;<a name="line.304"></a>
 <span class="sourceLineNo">305</span>        for (int i = 1; i &lt;= s; i++) {<a name="line.305"></a>
-<span class="sourceLineNo">306</span>            direction[d][i] = ((long) m[i]) &lt;&lt; (BITS - i);<a name="line.306"></a>
+<span class="sourceLineNo">306</span>            direction[d][i] = (long) m[i] &lt;&lt; (BITS - i);<a name="line.306"></a>
 <span class="sourceLineNo">307</span>        }<a name="line.307"></a>
 <span class="sourceLineNo">308</span>        for (int i = s + 1; i &lt;= BITS; i++) {<a name="line.308"></a>
 <span class="sourceLineNo">309</span>            direction[d][i] = direction[d][i - s] ^ (direction[d][i - s] &gt;&gt; s);<a name="line.309"></a>
@@ -328,7 +328,7 @@
 <span class="sourceLineNo">320</span>    private void initDirectionVector(final int[] m) {<a name="line.320"></a>
 <span class="sourceLineNo">321</span>        final int s = m.length - 2, d = m[0] - 1, a = m[1];<a name="line.321"></a>
 <span class="sourceLineNo">322</span>        for (int i = 1; i &lt;= s; i++) {<a name="line.322"></a>
-<span class="sourceLineNo">323</span>            direction[d][i] = ((long) m[i+1]) &lt;&lt; (BITS - i);<a name="line.323"></a>
+<span class="sourceLineNo">323</span>            direction[d][i] = (long) m[i+1] &lt;&lt; (BITS - i);<a name="line.323"></a>
 <span class="sourceLineNo">324</span>        }<a name="line.324"></a>
 <span class="sourceLineNo">325</span>        for (int i = s + 1; i &lt;= BITS; i++) {<a name="line.325"></a>
 <span class="sourceLineNo">326</span>            direction[d][i] = direction[d][i - s] ^ (direction[d][i - s] &gt;&gt; s);<a name="line.326"></a>
@@ -593,9 +593,9 @@
 <span class="sourceLineNo">585</span>    public long nextLong() {<a name="line.585"></a>
 <span class="sourceLineNo">586</span>        if (dimension &gt; 1) {<a name="line.586"></a>
 <span class="sourceLineNo">587</span>            long[] l = nextLongVector();<a name="line.587"></a>
-<span class="sourceLineNo">588</span>            return (l[0] &lt;&lt; 32) ^ (l[1]);<a name="line.588"></a>
+<span class="sourceLineNo">588</span>            return (l[0] &lt;&lt; 32) ^ l[1];<a name="line.588"></a>
 <span class="sourceLineNo">589</span>        }<a name="line.589"></a>
-<span class="sourceLineNo">590</span>        return ((long)(nextIntVector()[0]) &lt;&lt; 32) ^ (nextIntVector()[0]);<a name="line.590"></a>
+<span class="sourceLineNo">590</span>        return ((long) nextIntVector()[0] &lt;&lt; 32) ^ nextIntVector()[0];<a name="line.590"></a>
 <span class="sourceLineNo">591</span>    }<a name="line.591"></a>
 <span class="sourceLineNo">592</span>    public double nextDouble() {<a name="line.592"></a>
 <span class="sourceLineNo">593</span>        return nextVector()[0];<a name="line.593"></a>

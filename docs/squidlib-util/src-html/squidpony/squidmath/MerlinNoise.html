@@ -75,7 +75,7 @@
 <span class="sourceLineNo">067</span>    }<a name="line.67"></a>
 <span class="sourceLineNo">068</span><a name="line.68"></a>
 <span class="sourceLineNo">069</span>    public static int rawNoise3D(final int x, final int y, final int z) {<a name="line.69"></a>
-<span class="sourceLineNo">070</span>        return (((z * 0xD0E89D2D + 0x311E289F) ^ (x * 0x9E3779B9 ^ 0xC6BC2796) ^ (y * 0x92B5CC83 + 0xD9B4E019)) +<a name="line.70"></a>
+<span class="sourceLineNo">070</span>        return (((z * 0xD0E89D2D + 0x311E289F) ^ x * 0x9E3779B9 ^ 0xC6BC2796 ^ (y * 0x92B5CC83 + 0xD9B4E019)) +<a name="line.70"></a>
 <span class="sourceLineNo">071</span>                //(z * 0xD0E89D2D ^ x * 0xC6BC2796 ^ y * 0x92B5CC83 ^<a name="line.71"></a>
 <span class="sourceLineNo">072</span>                (x ^ ~y + z) * 0x632BE59B + (z ^ ~x + y) * 0x7F4A7C15 + (y ^ ~z + x) * 0x9E3779B9) &gt;&gt;&gt; 8 &amp; 0xff; //0x311E289F<a name="line.72"></a>
 <span class="sourceLineNo">073</span>    }<a name="line.73"></a>
@@ -197,7 +197,7 @@
 <span class="sourceLineNo">189</span>            return 0;<a name="line.189"></a>
 <span class="sourceLineNo">190</span>        int v = 0, a = x &lt;&lt; 1, b = y &lt;&lt; 1;<a name="line.190"></a>
 <span class="sourceLineNo">191</span>        for (int s = zoom; s &gt; 0; s--) {<a name="line.191"></a>
-<span class="sourceLineNo">192</span>            v += noise2D((a += 379) / s, (b += 379) / s) + noise2D((a) / s, (b + 1) / s) + noise2D((a + 1) / s, (b) / s);<a name="line.192"></a>
+<span class="sourceLineNo">192</span>            v += noise2D((a += 379) / s, (b += 379) / s) + noise2D(a / s, (b + 1) / s) + noise2D((a + 1) / s, b / s);<a name="line.192"></a>
 <span class="sourceLineNo">193</span>        }<a name="line.193"></a>
 <span class="sourceLineNo">194</span>        //return v / zoom;<a name="line.194"></a>
 <span class="sourceLineNo">195</span>        /*<a name="line.195"></a>

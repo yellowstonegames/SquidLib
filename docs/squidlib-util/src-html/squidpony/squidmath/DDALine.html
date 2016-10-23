@@ -198,52 +198,52 @@
 <span class="sourceLineNo">190</span>            case 0:<a name="line.190"></a>
 <span class="sourceLineNo">191</span>                move = (ny &lt;&lt; 16)/nx;<a name="line.191"></a>
 <span class="sourceLineNo">192</span>                for (int i = 0, primary = startX; primary &lt;= endX; primary++, frac+=move, i++) {<a name="line.192"></a>
-<span class="sourceLineNo">193</span>                    drawn[i] = (Coord.get(primary, startY + ((frac+modifierY)&gt;&gt;16)));<a name="line.193"></a>
+<span class="sourceLineNo">193</span>                    drawn[i] = Coord.get(primary, startY + ((frac+modifierY)&gt;&gt;16));<a name="line.193"></a>
 <span class="sourceLineNo">194</span>                }<a name="line.194"></a>
 <span class="sourceLineNo">195</span>                break;<a name="line.195"></a>
 <span class="sourceLineNo">196</span>            case 1:<a name="line.196"></a>
 <span class="sourceLineNo">197</span>                move = (nx &lt;&lt; 16)/ny;<a name="line.197"></a>
 <span class="sourceLineNo">198</span>                for (int i = 0, primary = startY; primary &lt;= endY; primary++, frac+=move, i++) {<a name="line.198"></a>
-<span class="sourceLineNo">199</span>                    drawn[i] = (Coord.get(startX + ((frac+modifierX)&gt;&gt;16), primary));<a name="line.199"></a>
+<span class="sourceLineNo">199</span>                    drawn[i] = Coord.get(startX + ((frac+modifierX)&gt;&gt;16), primary);<a name="line.199"></a>
 <span class="sourceLineNo">200</span>                }<a name="line.200"></a>
 <span class="sourceLineNo">201</span>                break;<a name="line.201"></a>
 <span class="sourceLineNo">202</span>            // x negative, y positive<a name="line.202"></a>
 <span class="sourceLineNo">203</span>            case 2:<a name="line.203"></a>
 <span class="sourceLineNo">204</span>                move = (ny &lt;&lt; 16)/nx;<a name="line.204"></a>
 <span class="sourceLineNo">205</span>                for (int i = 0, primary = startX; primary &gt;= endX; primary--, frac+=move, i++) {<a name="line.205"></a>
-<span class="sourceLineNo">206</span>                    drawn[i] = (Coord.get(primary, startY + ((frac+modifierY)&gt;&gt;16)));<a name="line.206"></a>
+<span class="sourceLineNo">206</span>                    drawn[i] = Coord.get(primary, startY + ((frac+modifierY)&gt;&gt;16));<a name="line.206"></a>
 <span class="sourceLineNo">207</span>                }<a name="line.207"></a>
 <span class="sourceLineNo">208</span>                break;<a name="line.208"></a>
 <span class="sourceLineNo">209</span>            case 3:<a name="line.209"></a>
 <span class="sourceLineNo">210</span>                move = (nx &lt;&lt; 16)/ny;<a name="line.210"></a>
 <span class="sourceLineNo">211</span>                for (int i = 0, primary = startY; primary &lt;= endY; primary++, frac+=move, i++) {<a name="line.211"></a>
-<span class="sourceLineNo">212</span>                    drawn[i] = (Coord.get(startX - ((frac+modifierX)&gt;&gt;16), primary));<a name="line.212"></a>
+<span class="sourceLineNo">212</span>                    drawn[i] = Coord.get(startX - ((frac+modifierX)&gt;&gt;16), primary);<a name="line.212"></a>
 <span class="sourceLineNo">213</span>                }<a name="line.213"></a>
 <span class="sourceLineNo">214</span>                break;<a name="line.214"></a>
 <span class="sourceLineNo">215</span>            // x negative, y negative<a name="line.215"></a>
 <span class="sourceLineNo">216</span>            case 6:<a name="line.216"></a>
 <span class="sourceLineNo">217</span>                move = (ny &lt;&lt; 16)/nx;<a name="line.217"></a>
 <span class="sourceLineNo">218</span>                for (int i = 0, primary = startX; primary &gt;= endX; primary--, frac+=move, i++) {<a name="line.218"></a>
-<span class="sourceLineNo">219</span>                    drawn[i] = (Coord.get(primary, startY - ((frac+modifierY)&gt;&gt;16)));<a name="line.219"></a>
+<span class="sourceLineNo">219</span>                    drawn[i] = Coord.get(primary, startY - ((frac+modifierY)&gt;&gt;16));<a name="line.219"></a>
 <span class="sourceLineNo">220</span>                }<a name="line.220"></a>
 <span class="sourceLineNo">221</span>                break;<a name="line.221"></a>
 <span class="sourceLineNo">222</span>            case 7:<a name="line.222"></a>
 <span class="sourceLineNo">223</span>                move = (nx &lt;&lt; 16)/ny;<a name="line.223"></a>
 <span class="sourceLineNo">224</span>                for (int i = 0, primary = startY; primary &gt;= endY; primary--, frac+=move, i++) {<a name="line.224"></a>
-<span class="sourceLineNo">225</span>                    drawn[i] = (Coord.get(startX - ((frac+modifierX)&gt;&gt;16), primary));<a name="line.225"></a>
+<span class="sourceLineNo">225</span>                    drawn[i] = Coord.get(startX - ((frac+modifierX)&gt;&gt;16), primary);<a name="line.225"></a>
 <span class="sourceLineNo">226</span>                }<a name="line.226"></a>
 <span class="sourceLineNo">227</span>                break;<a name="line.227"></a>
 <span class="sourceLineNo">228</span>            // x positive, y negative<a name="line.228"></a>
 <span class="sourceLineNo">229</span>            case 4:<a name="line.229"></a>
 <span class="sourceLineNo">230</span>                move = (ny &lt;&lt; 16)/nx;<a name="line.230"></a>
 <span class="sourceLineNo">231</span>                for (int i = 0, primary = startX; primary &lt;= endX; primary++, frac+=move, i++) {<a name="line.231"></a>
-<span class="sourceLineNo">232</span>                    drawn[i] = (Coord.get(primary, startY - ((frac+modifierY)&gt;&gt;16)));<a name="line.232"></a>
+<span class="sourceLineNo">232</span>                    drawn[i] = Coord.get(primary, startY - ((frac+modifierY)&gt;&gt;16));<a name="line.232"></a>
 <span class="sourceLineNo">233</span>                }<a name="line.233"></a>
 <span class="sourceLineNo">234</span>                break;<a name="line.234"></a>
 <span class="sourceLineNo">235</span>            case 5:<a name="line.235"></a>
 <span class="sourceLineNo">236</span>                move = (nx &lt;&lt; 16)/ny;<a name="line.236"></a>
 <span class="sourceLineNo">237</span>                for (int i = 0, primary = startY; primary &gt;= endY; primary--, frac+=move, i++) {<a name="line.237"></a>
-<span class="sourceLineNo">238</span>                    drawn[i] = (Coord.get(startX + ((frac+modifierX)&gt;&gt;16), primary));<a name="line.238"></a>
+<span class="sourceLineNo">238</span>                    drawn[i] = Coord.get(startX + ((frac+modifierX)&gt;&gt;16), primary);<a name="line.238"></a>
 <span class="sourceLineNo">239</span>                }<a name="line.239"></a>
 <span class="sourceLineNo">240</span>                break;<a name="line.240"></a>
 <span class="sourceLineNo">241</span>        }<a name="line.241"></a>

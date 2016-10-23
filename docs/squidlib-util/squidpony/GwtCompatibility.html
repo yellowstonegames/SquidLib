@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -288,19 +288,26 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </td>
 </tr>
 <tr id="i18" class="altColor">
+<td class="colFirst"><code>static char[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/GwtCompatibility.html#letterSpan-int-">letterSpan</a></span>(int&nbsp;charCount)</code>
+<div class="block">Stupidly simple convenience method that produces a char array containing only letters that can be reasonably
+ displayed (with SquidLib's default text display assets, at least).</div>
+</td>
+</tr>
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>static int[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/GwtCompatibility.html#range-int-">range</a></span>(int&nbsp;end)</code>
 <div class="block">Stupidly simple convenience method that produces a range from 0 to end, not including end, as an int array.</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>static int[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/GwtCompatibility.html#range-int-int-">range</a></span>(int&nbsp;start,
      int&nbsp;end)</code>
 <div class="block">Stupidly simple convenience method that produces a range from start to end, not including end, as an int array.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>static &lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/GwtCompatibility.html#reorder-java.util.ArrayList-int...-">reorder</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;&nbsp;list,
        int...&nbsp;ordering)</code>
@@ -424,7 +431,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>charSpan</h4>
-<pre>public static&nbsp;char[]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.85">charSpan</a>(char&nbsp;start,
+<pre>public static&nbsp;char[]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.98">charSpan</a>(char&nbsp;start,
                               char&nbsp;end)</pre>
 <div class="block">Stupidly simple convenience method that produces a char range from start to end, including end, as a char array.</div>
 <dl>
@@ -436,13 +443,31 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
+<a name="letterSpan-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>letterSpan</h4>
+<pre>public static&nbsp;char[]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.125">letterSpan</a>(int&nbsp;charCount)</pre>
+<div class="block">Stupidly simple convenience method that produces a char array containing only letters that can be reasonably
+ displayed (with SquidLib's default text display assets, at least). The letters are copied from a single source
+ of 256 chars; if you need more chars or you don't need pure letters, you can use <a href="../squidpony/GwtCompatibility.html#charSpan-char-char-"><code>charSpan(char, char)</code></a>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>charCount</code> - the number of letters to return in an array; the maximum this will produce is 256</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the range of letters as a char array</dd>
+</dl>
+</li>
+</ul>
 <a name="first-java.lang.Iterable-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>first</h4>
-<pre>public static&nbsp;&lt;T&gt;&nbsp;T&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.115">first</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;T&gt;&nbsp;collection)</pre>
+<pre>public static&nbsp;&lt;T&gt;&nbsp;T&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.143">first</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;T&gt;&nbsp;collection)</pre>
 <div class="block">Gets the first item in an Iterable of T, or null if it is empty. Meant for collections like LinkedHashSet, which
  can promise a stable first element but don't provide a way to access it. Not exactly a GWT compatibility method,
  but more of a Java standard library stand-in. Even though LinkedHashSet does not support this out-of-the-box,
@@ -463,7 +488,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>copy2D</h4>
-<pre>public static&nbsp;char[][]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.130">copy2D</a>(char[][]&nbsp;source)</pre>
+<pre>public static&nbsp;char[][]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.158">copy2D</a>(char[][]&nbsp;source)</pre>
 <div class="block">Gets a copy of the 2D char array, source, that has the same data but shares no references with source.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -479,7 +504,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>copy2D</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.148">copy2D</a>(double[][]&nbsp;source)</pre>
+<pre>public static&nbsp;double[][]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.176">copy2D</a>(double[][]&nbsp;source)</pre>
 <div class="block">Gets a copy of the 2D double array, source, that has the same data but shares no references with source.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -495,7 +520,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>copy2D</h4>
-<pre>public static&nbsp;int[][]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.166">copy2D</a>(int[][]&nbsp;source)</pre>
+<pre>public static&nbsp;int[][]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.194">copy2D</a>(int[][]&nbsp;source)</pre>
 <div class="block">Gets a copy of the 2D int array, source, that has the same data but shares no references with source.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -511,7 +536,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>copy2D</h4>
-<pre>public static&nbsp;boolean[][]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.184">copy2D</a>(boolean[][]&nbsp;source)</pre>
+<pre>public static&nbsp;boolean[][]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.212">copy2D</a>(boolean[][]&nbsp;source)</pre>
 <div class="block">Gets a copy of the 2D boolean array, source, that has the same data but shares no references with source.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -527,7 +552,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>insert2D</h4>
-<pre>public static&nbsp;char[][]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.207">insert2D</a>(char[][]&nbsp;source,
+<pre>public static&nbsp;char[][]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.235">insert2D</a>(char[][]&nbsp;source,
                                 char[][]&nbsp;target,
                                 int&nbsp;x,
                                 int&nbsp;y)</pre>
@@ -551,7 +576,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>insert2D</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.228">insert2D</a>(double[][]&nbsp;source,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.256">insert2D</a>(double[][]&nbsp;source,
                                   double[][]&nbsp;target,
                                   int&nbsp;x,
                                   int&nbsp;y)</pre>
@@ -575,7 +600,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>insert2D</h4>
-<pre>public static&nbsp;int[][]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.249">insert2D</a>(int[][]&nbsp;source,
+<pre>public static&nbsp;int[][]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.277">insert2D</a>(int[][]&nbsp;source,
                                int[][]&nbsp;target,
                                int&nbsp;x,
                                int&nbsp;y)</pre>
@@ -599,7 +624,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>insert2D</h4>
-<pre>public static&nbsp;boolean[][]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.270">insert2D</a>(boolean[][]&nbsp;source,
+<pre>public static&nbsp;boolean[][]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.298">insert2D</a>(boolean[][]&nbsp;source,
                                    boolean[][]&nbsp;target,
                                    int&nbsp;x,
                                    int&nbsp;y)</pre>
@@ -623,7 +648,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>fill2D</h4>
-<pre>public static&nbsp;char[][]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.289">fill2D</a>(char&nbsp;contents,
+<pre>public static&nbsp;char[][]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.317">fill2D</a>(char&nbsp;contents,
                               int&nbsp;width,
                               int&nbsp;height)</pre>
 <div class="block">Creates a 2D array of the given width and height, filled with entirely with the value contents.</div>
@@ -643,7 +668,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>fill2D</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.304">fill2D</a>(double&nbsp;contents,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.332">fill2D</a>(double&nbsp;contents,
                                 int&nbsp;width,
                                 int&nbsp;height)</pre>
 <div class="block">Creates a 2D array of the given width and height, filled with entirely with the value contents.</div>
@@ -663,7 +688,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>fill2D</h4>
-<pre>public static&nbsp;int[][]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.319">fill2D</a>(int&nbsp;contents,
+<pre>public static&nbsp;int[][]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.347">fill2D</a>(int&nbsp;contents,
                              int&nbsp;width,
                              int&nbsp;height)</pre>
 <div class="block">Creates a 2D array of the given width and height, filled with entirely with the value contents.</div>
@@ -683,7 +708,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>fill2D</h4>
-<pre>public static&nbsp;boolean[][]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.334">fill2D</a>(boolean&nbsp;contents,
+<pre>public static&nbsp;boolean[][]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.362">fill2D</a>(boolean&nbsp;contents,
                                  int&nbsp;width,
                                  int&nbsp;height)</pre>
 <div class="block">Creates a 2D array of the given width and height, filled with entirely with the value contents.</div>
@@ -703,7 +728,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>reorder</h4>
-<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.358">reorder</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;&nbsp;list,
+<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.386">reorder</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;&nbsp;list,
                                        int...&nbsp;ordering)</pre>
 <div class="block">Rearranges an ArrayList to use the given ordering, returning a copy; random orderings can be produced with
  <a href="../squidpony/squidmath/RNG.html#randomOrdering-int-"><code>RNG.randomOrdering(int)</code></a> or
@@ -729,7 +754,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>invertOrdering</h4>
-<pre>public static&nbsp;int[]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.375">invertOrdering</a>(int[]&nbsp;ordering)</pre>
+<pre>public static&nbsp;int[]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.403">invertOrdering</a>(int[]&nbsp;ordering)</pre>
 <div class="block">Given an ordering such as one produced by <a href="../squidpony/squidmath/RNG.html#randomOrdering-int-int:A-"><code>RNG.randomOrdering(int, int[])</code></a>, this finds
  its inverse, able to reverse the reordering and vice versa.</div>
 <dl>
@@ -746,7 +771,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>invertOrdering</h4>
-<pre>public static&nbsp;int[]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.396">invertOrdering</a>(int[]&nbsp;ordering,
+<pre>public static&nbsp;int[]&nbsp;<a href="../src-html/squidpony/GwtCompatibility.html#line.424">invertOrdering</a>(int[]&nbsp;ordering,
                                    int[]&nbsp;dest)</pre>
 <div class="block">Given an ordering such as one produced by <a href="../squidpony/squidmath/RNG.html#randomOrdering-int-int:A-"><code>RNG.randomOrdering(int, int[])</code></a>, this finds
  its inverse, able to reverse the reordering and vice versa. This overload doesn't allocate a new int

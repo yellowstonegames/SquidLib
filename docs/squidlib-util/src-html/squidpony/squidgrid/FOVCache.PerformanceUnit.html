@@ -499,7 +499,7 @@
 <span class="sourceLineNo">491</span>                y = hilbertY[i];<a name="line.491"></a>
 <span class="sourceLineNo">492</span>                if (x &gt;= width || y &gt;= height) {<a name="line.492"></a>
 <span class="sourceLineNo">493</span>                    if ((on &amp; (1L &lt;&lt; l)) != 0L) {<a name="line.493"></a>
-<span class="sourceLineNo">494</span>                        on ^= (1L &lt;&lt; l);<a name="line.494"></a>
+<span class="sourceLineNo">494</span>                        on ^= 1L &lt;&lt; l;<a name="line.494"></a>
 <span class="sourceLineNo">495</span>                        packing[l].add((short) skip[l]);<a name="line.495"></a>
 <span class="sourceLineNo">496</span>                        skip[l] = 0;<a name="line.496"></a>
 <span class="sourceLineNo">497</span>                    }<a name="line.497"></a>
@@ -914,7 +914,7 @@
 <span class="sourceLineNo">906</span>                if(cx &lt; width &amp;&amp; cx &gt;= 0 &amp;&amp; cy &lt; height &amp;&amp; cy &gt;= 0)<a name="line.906"></a>
 <span class="sourceLineNo">907</span>                {<a name="line.907"></a>
 <span class="sourceLineNo">908</span>                    theta = atan2Cache[pt.x][pt.y];<a name="line.908"></a>
-<span class="sourceLineNo">909</span>                    dist = (byte)(distanceCache[pt.x][pt.y ]);<a name="line.909"></a>
+<span class="sourceLineNo">909</span>                    dist = (byte) distanceCache[pt.x][pt.y ];<a name="line.909"></a>
 <span class="sourceLineNo">910</span><a name="line.910"></a>
 <span class="sourceLineNo">911</span>                    if(w &lt;= 0)<a name="line.911"></a>
 <span class="sourceLineNo">912</span>                    {<a name="line.912"></a>

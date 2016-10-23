@@ -370,7 +370,7 @@
 <span class="sourceLineNo">362</span>        Double d = biases.get(kind);<a name="line.362"></a>
 <span class="sourceLineNo">363</span>        if(d == null)<a name="line.363"></a>
 <span class="sourceLineNo">364</span>            return rng.nextFloat();<a name="line.364"></a>
-<span class="sourceLineNo">365</span>        return (float)(quantile(d));<a name="line.365"></a>
+<span class="sourceLineNo">365</span>        return (float) quantile(d);<a name="line.365"></a>
 <span class="sourceLineNo">366</span>    }<a name="line.366"></a>
 <span class="sourceLineNo">367</span><a name="line.367"></a>
 <span class="sourceLineNo">368</span>    /**<a name="line.368"></a>
@@ -556,7 +556,7 @@
 <span class="sourceLineNo">548</span>    {<a name="line.548"></a>
 <span class="sourceLineNo">549</span>        if(expectedAverage &lt;= 0) expectedAverage = 0.001;<a name="line.549"></a>
 <span class="sourceLineNo">550</span>        if(expectedAverage &gt;= 1) expectedAverage = 0.999;<a name="line.550"></a>
-<span class="sourceLineNo">551</span>        return (float)(quantile(expectedAverage));<a name="line.551"></a>
+<span class="sourceLineNo">551</span>        return (float) quantile(expectedAverage);<a name="line.551"></a>
 <span class="sourceLineNo">552</span>    }<a name="line.552"></a>
 <span class="sourceLineNo">553</span><a name="line.553"></a>
 <span class="sourceLineNo">554</span>    /**<a name="line.554"></a>

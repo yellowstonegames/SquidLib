@@ -529,8 +529,8 @@
 <span class="sourceLineNo">521</span>        int testX = startx,<a name="line.521"></a>
 <span class="sourceLineNo">522</span>                testY = starty;<a name="line.522"></a>
 <span class="sourceLineNo">523</span><a name="line.523"></a>
-<span class="sourceLineNo">524</span>        int maxX = (deltaX),<a name="line.524"></a>
-<span class="sourceLineNo">525</span>                maxY = (deltaY);<a name="line.525"></a>
+<span class="sourceLineNo">524</span>        int maxX = deltaX,<a name="line.524"></a>
+<span class="sourceLineNo">525</span>                maxY = deltaY;<a name="line.525"></a>
 <span class="sourceLineNo">526</span><a name="line.526"></a>
 <span class="sourceLineNo">527</span>        while (testX &gt;= 0 &amp;&amp; testX &lt; width &amp;&amp; testY &gt;= 0 &amp;&amp; testY &lt; height &amp;&amp; (testX != targetx || testY != targety)) {<a name="line.527"></a>
 <span class="sourceLineNo">528</span>            lastPath.add(Coord.get(testX, testY));<a name="line.528"></a>

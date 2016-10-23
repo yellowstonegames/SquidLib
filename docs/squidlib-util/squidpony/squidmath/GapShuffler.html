@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -113,13 +113,13 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;T&gt;</dd>
+<dd><a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;T&gt;, <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;T&gt;</dd>
 </dl>
 <hr>
 <br>
 <pre>public class <a href="../../src-html/squidpony/squidmath/GapShuffler.html#line.17">GapShuffler</a>&lt;T&gt;
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;T&gt;, <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
+implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;T&gt;, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;T&gt;, <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">Meant to take a fixed-size set of items and produce a shuffled stream of them such that an element is never chosen in
  quick succession; that is, there should always be a gap between the same item's occurrences. This is an Iterable of
  T, not a Collection, because it can iterate without stopping, infinitely, unless you break out of a foreach loop that
@@ -195,15 +195,27 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../squidpony/squidmath/GapShuffler.html" title="type parameter in GapShuffler">T</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/GapShuffler.html#getNext--">getNext</a></span>()</code>
-<div class="block">Gets the next element of the infinite sequence of T this shuffles through.</div>
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/GapShuffler.html#hasNext--">hasNext</a></span>()</code>
+<div class="block">Returns <code>true</code> if the iteration has more elements.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../squidpony/squidmath/GapShuffler.html" title="type parameter in GapShuffler">T</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/GapShuffler.html#iterator--">iterator</a></span>()</code>
-<div class="block">Returns an <b>infinite</b> iterator over elements of type <code>T</code>.</div>
+<div class="block">Returns an <b>infinite</b> iterator over elements of type <code>T</code>; the returned iterator is this object.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="../../squidpony/squidmath/GapShuffler.html" title="type parameter in GapShuffler">T</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/GapShuffler.html#next--">next</a></span>()</code>
+<div class="block">Gets the next element of the infinite sequence of T this shuffles through.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/GapShuffler.html#remove--">remove</a></span>()</code>
+<div class="block">Not supported.</div>
 </td>
 </tr>
 </table>
@@ -213,6 +225,13 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
 <code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#clone--" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#getClass--" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#notify--" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#notifyAll--" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait--" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait-long-" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait-long-int-" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.java.util.Iterator">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;java.util.<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a></h3>
+<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true#forEachRemaining-java.util.function.Consumer-" title="class or interface in java.util">forEachRemaining</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Iterable">
@@ -302,18 +321,53 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getNext--">
+<a name="next--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getNext</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GapShuffler.html" title="type parameter in GapShuffler">T</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GapShuffler.html#line.95">getNext</a>()</pre>
-<div class="block">Gets the next element of the infinite sequence of T this shuffles through. The same as calling next() on an
- iterator returned by this class' iterator() method.</div>
+<h4>next</h4>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GapShuffler.html" title="type parameter in GapShuffler">T</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GapShuffler.html#line.95">next</a>()</pre>
+<div class="block">Gets the next element of the infinite sequence of T this shuffles through. This class can be used as an
+ Iterator or Iterable of type T.</div>
 <dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true#next--" title="class or interface in java.util">next</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../squidpony/squidmath/GapShuffler.html" title="type parameter in GapShuffler">T</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the next element in the infinite sequence</dd>
+</dl>
+</li>
+</ul>
+<a name="hasNext--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hasNext</h4>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GapShuffler.html#line.125">hasNext</a>()</pre>
+<div class="block">Returns <code>true</code> if the iteration has more elements.
+ This is always the case for GapShuffler.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true#hasNext--" title="class or interface in java.util">hasNext</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../squidpony/squidmath/GapShuffler.html" title="type parameter in GapShuffler">T</a>&gt;</code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd><code>true</code> always</dd>
+</dl>
+</li>
+</ul>
+<a name="remove--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>remove</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/GapShuffler.html#line.134">remove</a>()</pre>
+<div class="block">Not supported.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true#remove--" title="class or interface in java.util">remove</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../squidpony/squidmath/GapShuffler.html" title="type parameter in GapShuffler">T</a>&gt;</code></dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang">UnsupportedOperationException</a></code> - always throws this exception</dd>
 </dl>
 </li>
 </ul>
@@ -323,10 +377,10 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockListLast">
 <li class="blockList">
 <h4>iterator</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../squidpony/squidmath/GapShuffler.html" title="type parameter in GapShuffler">T</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GapShuffler.html#line.126">iterator</a>()</pre>
-<div class="block">Returns an <b>infinite</b> iterator over elements of type <code>T</code>. You should be prepared to break out of any
- for loops that use this once you've gotten enough elements! The remove() method is not supported by this iterator
- and hasNext() will always return true.</div>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../squidpony/squidmath/GapShuffler.html" title="type parameter in GapShuffler">T</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GapShuffler.html#line.146">iterator</a>()</pre>
+<div class="block">Returns an <b>infinite</b> iterator over elements of type <code>T</code>; the returned iterator is this object.
+ You should be prepared to break out of any for loops that use this once you've gotten enough elements!
+ The remove() method is not supported by this iterator and hasNext() will always return true.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true#iterator--" title="class or interface in java.lang">iterator</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../squidpony/squidmath/GapShuffler.html" title="type parameter in GapShuffler">T</a>&gt;</code></dd>

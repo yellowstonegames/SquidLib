@@ -79,7 +79,7 @@
 <span class="sourceLineNo">071</span>        results = new long[SIZE];<a name="line.71"></a>
 <span class="sourceLineNo">072</span>        long z;<a name="line.72"></a>
 <span class="sourceLineNo">073</span>        for (int i = 0; i &lt; 256; i++) {<a name="line.73"></a>
-<span class="sourceLineNo">074</span>            z = ( seed += 0x9E3779B97F4A7C15L );<a name="line.74"></a>
+<span class="sourceLineNo">074</span>            z = seed += 0x9E3779B97F4A7C15L;<a name="line.74"></a>
 <span class="sourceLineNo">075</span>            z = (z ^ (z &gt;&gt;&gt; 30)) * 0xBF58476D1CE4E5B9L;<a name="line.75"></a>
 <span class="sourceLineNo">076</span>            z = (z ^ (z &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.76"></a>
 <span class="sourceLineNo">077</span>            results[i] = z ^ (z &gt;&gt;&gt; 31);<a name="line.77"></a>

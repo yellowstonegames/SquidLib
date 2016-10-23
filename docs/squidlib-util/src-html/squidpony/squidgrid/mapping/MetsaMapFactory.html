@@ -228,7 +228,7 @@
 <span class="sourceLineNo">220</span>                    weightedMap[i][j] = 2 + (map[i * 4][j * 4] - PLAINSLEVEL) * 8;<a name="line.220"></a>
 <span class="sourceLineNo">221</span>                }<a name="line.221"></a>
 <span class="sourceLineNo">222</span>                if (map[i][j] &lt;= BEACHLEVEL &amp;&amp; map[i * 4][j * 4] &gt;= SEALEVEL) {<a name="line.222"></a>
-<span class="sourceLineNo">223</span>                    weightedMap[i][j] = 2 - (map[i * 4][j * 4]) * 2;<a name="line.223"></a>
+<span class="sourceLineNo">223</span>                    weightedMap[i][j] = 2 - map[i * 4][j * 4] * 2;<a name="line.223"></a>
 <span class="sourceLineNo">224</span>                }<a name="line.224"></a>
 <span class="sourceLineNo">225</span>            }<a name="line.225"></a>
 <span class="sourceLineNo">226</span>        }<a name="line.226"></a>

@@ -81,7 +81,7 @@
 <span class="sourceLineNo">073</span>     */<a name="line.73"></a>
 <span class="sourceLineNo">074</span>    @Override<a name="line.74"></a>
 <span class="sourceLineNo">075</span>    public long nextLong() {<a name="line.75"></a>
-<span class="sourceLineNo">076</span>        long z = ( state += 0x9E3779B97F4A7C15L );<a name="line.76"></a>
+<span class="sourceLineNo">076</span>        long z = state += 0x9E3779B97F4A7C15L;<a name="line.76"></a>
 <span class="sourceLineNo">077</span>        z = (z ^ (z &gt;&gt;&gt; 30)) * 0xBF58476D1CE4E5B9L;<a name="line.77"></a>
 <span class="sourceLineNo">078</span>        z = (z ^ (z &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.78"></a>
 <span class="sourceLineNo">079</span>        return z ^ (z &gt;&gt;&gt; 31);<a name="line.79"></a>

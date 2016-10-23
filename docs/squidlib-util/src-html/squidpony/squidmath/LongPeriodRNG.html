@@ -214,7 +214,7 @@
 <span class="sourceLineNo">206</span>    {<a name="line.206"></a>
 <span class="sourceLineNo">207</span>        long[] state = new long[16];<a name="line.207"></a>
 <span class="sourceLineNo">208</span>        for (int i = 0; i &lt; 16; i++) {<a name="line.208"></a>
-<span class="sourceLineNo">209</span>            long z = ( seed += 0x9E3779B97F4A7C15L );<a name="line.209"></a>
+<span class="sourceLineNo">209</span>            long z = seed += 0x9E3779B97F4A7C15L;<a name="line.209"></a>
 <span class="sourceLineNo">210</span>            z = (z ^ (z &gt;&gt;&gt; 30)) * 0xBF58476D1CE4E5B9L;<a name="line.210"></a>
 <span class="sourceLineNo">211</span>            z = (z ^ (z &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.211"></a>
 <span class="sourceLineNo">212</span>            state[i] = z ^ (z &gt;&gt;&gt; 31);<a name="line.212"></a>

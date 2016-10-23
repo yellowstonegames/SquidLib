@@ -391,7 +391,7 @@
 <span class="sourceLineNo">383</span>            for (j = -1; ypos &lt; h; ++j) {<a name="line.383"></a>
 <span class="sourceLineNo">384</span>                // a general herringbone row consists of:<a name="line.384"></a>
 <span class="sourceLineNo">385</span>                //    horizontal left block, the bottom of a previous vertical, the top of a new vertical<a name="line.385"></a>
-<span class="sourceLineNo">386</span>                int phase = (j &amp; 3);<a name="line.386"></a>
+<span class="sourceLineNo">386</span>                int phase = j &amp; 3;<a name="line.386"></a>
 <span class="sourceLineNo">387</span>                // displace horizontally according to pattern<a name="line.387"></a>
 <span class="sourceLineNo">388</span>                if (phase == 0) {<a name="line.388"></a>
 <span class="sourceLineNo">389</span>                    i = 0;<a name="line.389"></a>
@@ -446,7 +446,7 @@
 <span class="sourceLineNo">438</span>            for (j = -1; ypos &lt; h; ++j) {<a name="line.438"></a>
 <span class="sourceLineNo">439</span>                // a general herringbone row consists of:<a name="line.439"></a>
 <span class="sourceLineNo">440</span>                //    horizontal left block, the bottom of a previous vertical, the top of a new vertical<a name="line.440"></a>
-<span class="sourceLineNo">441</span>                int phase = (j &amp; 3);<a name="line.441"></a>
+<span class="sourceLineNo">441</span>                int phase = j &amp; 3;<a name="line.441"></a>
 <span class="sourceLineNo">442</span>                // displace horizontally according to pattern<a name="line.442"></a>
 <span class="sourceLineNo">443</span>                if (phase == 0) {<a name="line.443"></a>
 <span class="sourceLineNo">444</span>                    i = 0;<a name="line.444"></a>

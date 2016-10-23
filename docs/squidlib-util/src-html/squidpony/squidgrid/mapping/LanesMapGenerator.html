@@ -103,8 +103,8 @@
 <span class="sourceLineNo">095</span>            rows[i] = rsum + (int)(rowBase * 0.5f * (3 + Long.bitCount(rowAlterations &amp; b)));<a name="line.95"></a>
 <span class="sourceLineNo">096</span>            rsum += (int)(rowBase * (3 + Long.bitCount(rowAlterations &amp; b)));<a name="line.96"></a>
 <span class="sourceLineNo">097</span>        }<a name="line.97"></a>
-<span class="sourceLineNo">098</span>        int cs = (width - csum);<a name="line.98"></a>
-<span class="sourceLineNo">099</span>        int rs = (height - rsum);<a name="line.99"></a>
+<span class="sourceLineNo">098</span>        int cs = width - csum;<a name="line.98"></a>
+<span class="sourceLineNo">099</span>        int rs = height - rsum;<a name="line.99"></a>
 <span class="sourceLineNo">100</span>        int cs2 = cs, rs2 = rs, cs3 = cs, rs3 = rs;<a name="line.100"></a>
 <span class="sourceLineNo">101</span>        for (int i = 0; i &lt;= 7; i++) {<a name="line.101"></a>
 <span class="sourceLineNo">102</span>            cs2= cs2 * i / 7;<a name="line.102"></a>

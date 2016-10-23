@@ -156,6 +156,29 @@ public class SquidStorage {
                         json.readValue(ArrayList.class, jsonData.get("v")), jsonData.getFloat("f"));
             }
         });
+
+        json.setSerializer(Arrangement.class, new Json.Serializer<Arrangement>() {
+            @Override
+            public void write(Json json, Arrangement object, Class knownType) {
+                if(object == null)
+                {
+                    json.writeValue(null);
+                    return;
+                }
+                json.writeObjectStart();
+                json.writeValue("k", object.keysAsOrderedSet(), OrderedSet.class);
+                json.writeValue("f", object.f);
+                json.writeObjectEnd();
+            }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public Arrangement read(Json json, JsonValue jsonData, Class type) {
+                if(jsonData == null || jsonData.isNull()) return null;
+                return new Arrangement(json.readValue(OrderedSet.class, jsonData.get("k")), jsonData.getFloat("f"));
+            }
+        });
+
         json.setSerializer(char[][].class, new Json.Serializer<char[][]>() {
             @Override
             public void write(Json json, char[][] object, Class knownType) {
@@ -227,6 +250,7 @@ public class SquidStorage {
         json.addClassTag("#LnMd", FakeLanguageGen.Modifier.class);
         json.addClassTag("#OMap", OrderedMap.class);
         json.addClassTag("#OSet", OrderedSet.class);
+        json.addClassTag("#Aran", Arrangement.class);
         json.addClassTag("#IVLA", IntVLA.class);
         json.addClassTag("#SVLA", ShortVLA.class);
         json.addClassTag("#RNG", RNG.class);
