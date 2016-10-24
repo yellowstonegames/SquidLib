@@ -205,7 +205,7 @@ public class EditRNG extends StatefulRNG implements Serializable{
                 scatter = scatter * (1.0 - expected) * 2 + expected - (1.0 - expected);
             else
                 scatter *= expected * 2;
-            gen = (gen * 100 + scatter * -centrality) / (100 - centrality);
+            gen = (gen * 100 - scatter * centrality) / (100 - centrality);
         }
 
         return gen;
