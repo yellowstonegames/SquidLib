@@ -13,6 +13,7 @@ import static org.junit.Assert.assertTrue;
  * Created by Tommy Ettinger on 10/8/2015.
  */
 public class FOVCacheTest {
+    public static final boolean PRINTING = false;
     @Test
     public void testCache()
     {
@@ -64,7 +65,8 @@ public class FOVCacheTest {
             }
             */
             cache.awaitCache();
-            System.out.println("Memory used by FOVCache: " + cache.approximateMemoryUsage());
+            if(PRINTING)
+                System.out.println("Memory used by FOVCache: " + cache.approximateMemoryUsage());
             boolean[][] mutual = CoordPacker.unpack(cache.getCacheEntry(walkable.x, walkable.y)[0], width, height);
             for (int i = 0; i < mutual.length; i++) {
                 for (int j = 0; j < mutual[i].length; j++) {

@@ -12,6 +12,7 @@ import squidpony.squidmath.*;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.SortedSet;
 
 /**
  * Helps games store information in libGDX's Preferences class as Strings, then get it back out.
@@ -179,6 +180,28 @@ public class SquidStorage {
             }
         });
 
+        json.setSerializer(TwoKey.class, new Json.Serializer<TwoKey>() {
+            @Override
+            public void write(Json json, TwoKey object, Class knownType) {
+                if(object == null)
+                {
+                    json.writeValue(null);
+                    return;
+                }
+                json.writeObjectStart();
+                json.writeValue("a", object.getSetA(), SortedSet.class);
+                json.writeValue("b", object.getSetB(), SortedSet.class);
+                json.writeObjectEnd();
+            }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public TwoKey read(Json json, JsonValue jsonData, Class type) {
+                if(jsonData == null || jsonData.isNull()) return null;
+                return new TwoKey(json.readValue(SortedSet.class, jsonData.get("a")), json.readValue(SortedSet.class, jsonData.get("b")));
+            }
+        });
+
         json.setSerializer(char[][].class, new Json.Serializer<char[][]>() {
             @Override
             public void write(Json json, char[][] object, Class knownType) {
@@ -243,6 +266,13 @@ public class SquidStorage {
         json.addClassTag("#l", long.class);
         json.addClassTag("#D", Double.class);
         json.addClassTag("#d", double.class);
+        json.addClassTag("#SSet", SortedSet.class);
+        json.addClassTag("#Patt", Pattern.class);
+        /*
+        json.addClassTag("#Mtch", Matcher.class);
+        json.addClassTag("#Rplc", Replacer.class);
+        json.addClassTag("#Sbst", Substitution.class);
+        */
         json.addClassTag("#Grea", GreasedRegion.class);
         json.addClassTag("#IDOM", IntDoubleOrderedMap.class);
         json.addClassTag("#Lang", FakeLanguageGen.class);
@@ -251,6 +281,7 @@ public class SquidStorage {
         json.addClassTag("#OMap", OrderedMap.class);
         json.addClassTag("#OSet", OrderedSet.class);
         json.addClassTag("#Aran", Arrangement.class);
+        json.addClassTag("#Key2", TwoKey.class);
         json.addClassTag("#IVLA", IntVLA.class);
         json.addClassTag("#SVLA", ShortVLA.class);
         json.addClassTag("#RNG", RNG.class);

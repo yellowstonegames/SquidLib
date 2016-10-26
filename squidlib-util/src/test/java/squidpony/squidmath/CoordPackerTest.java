@@ -88,6 +88,7 @@ public class CoordPackerTest {
         assertEquals(posToHilbert(255, 255), coordToHilbert(Coord.get(255, 255)));
         assertEquals(Coord.get(255, 255), hilbertToCoord(coordToHilbert(Coord.get(255, 255))));
     }
+    //@Test
     public void testHilbertCurve3D() {
         for(int i : new int[]{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,31,32,33,63,64,255,256,4092,4093,4094,4095})
             System.out.println("index " + i + ", x:" + hilbert3X[i] +

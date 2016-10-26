@@ -102,6 +102,10 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedSet.html#tailSet-K-">tailSet(K)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#take-int-">take(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
+<dd>
+<div class="block">Produces a copy of this Arrangement, but only using up to the given amount of items to take.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/AStarSearch.html#target">target</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/AStarSearch.html" title="class in squidpony.squidmath">AStarSearch</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#targetMap">targetMap</a></span> - Variable in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
@@ -569,6 +573,35 @@
 <dd>
 <div class="block">A constant for a distribution that linearly increases in probability from a 0.0 chance of 0.0.</div>
 </dd>
+<dt><a href="../squidpony/squidmath/TwoKey.html" title="class in squidpony.squidmath"><span class="typeNameLink">TwoKey</span></a>&lt;<a href="../squidpony/squidmath/TwoKey.html" title="type parameter in TwoKey">A</a>,<a href="../squidpony/squidmath/TwoKey.html" title="type parameter in TwoKey">B</a>&gt; - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
+<dd>
+<div class="block">An ordered bidirectional map-like data structure, with unique A items and unique B items updated together like a map
+ that can be queried by A keys, B keys, or int indices.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TwoKey.html#TwoKey--">TwoKey()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TwoKey.html" title="class in squidpony.squidmath">TwoKey</a></dt>
+<dd>
+<div class="block">Constructs an empty TwoKey.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TwoKey.html#TwoKey-int-">TwoKey(int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TwoKey.html" title="class in squidpony.squidmath">TwoKey</a></dt>
+<dd>
+<div class="block">Constructs a TwoKey with the expected number of indices to hold (the number of A and number of B items is always
+ the same, and this will be more efficient if expected is greater than that number).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TwoKey.html#TwoKey-int-float-">TwoKey(int, float)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TwoKey.html" title="class in squidpony.squidmath">TwoKey</a></dt>
+<dd>
+<div class="block">Constructs a TwoKey with the expected number of indices to hold (the number of A and number of B items is always
+ the same, and this will be more efficient if expected is greater than that number) and the load factor to use,
+ between 0.1f and 0.8f usually (using load factors higher than 0.8f can cause problems).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TwoKey.html#TwoKey-java.lang.Iterable-java.lang.Iterable-">TwoKey(Iterable&lt;A&gt;, Iterable&lt;B&gt;)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TwoKey.html" title="class in squidpony.squidmath">TwoKey</a></dt>
+<dd>
+<div class="block">Constructs a TwoKey from a pair of Iterables that will be processed in pairs, adding a unique A from aKeys if and
+ only if it can also add a unique B from bKeys, otherwise skipping that pair.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TwoKey.html#TwoKey-squidpony.squidmath.TwoKey-">TwoKey(TwoKey&lt;A, B&gt;)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TwoKey.html" title="class in squidpony.squidmath">TwoKey</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TwoKey.html#TwoKey-squidpony.squidmath.Arrangement-squidpony.squidmath.Arrangement-">TwoKey(Arrangement&lt;A&gt;, Arrangement&lt;B&gt;)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TwoKey.html" title="class in squidpony.squidmath">TwoKey</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Adjacency.html#twoStepRule">twoStepRule</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a></dt>
 <dd>
 <div class="block">Only needed for thin-wall maps; this requires two steps in the same direction to both be valid moves

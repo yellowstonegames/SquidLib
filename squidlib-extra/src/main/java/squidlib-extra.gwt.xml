@@ -10,4 +10,15 @@
     <inherits name="squidlib-util" />
     <inherits name="regexodus"/>
     <inherits name="blazing.chain"/>
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.FakeLanguageGen" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.IntVLA" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.Coord" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.GreasedRegion" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.OrderedMap" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.OrderedSet" />
+    <extend-configuration-property name="gdx.reflect.include" value="java.util.SortedSet" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.Arrangement" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.TwoKey" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.IntDoubleOrderedMap" />
+
 </module>

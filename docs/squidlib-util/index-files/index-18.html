@@ -147,6 +147,14 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/RNG.html#random">random</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TwoKey.html#randomA-squidpony.squidmath.RNG-">randomA(RNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/TwoKey.html" title="class in squidpony.squidmath">TwoKey</a></dt>
+<dd>
+<div class="block">Gets a random A from this TwoKey using the given RNG.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TwoKey.html#randomB-squidpony.squidmath.RNG-">randomB(RNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/TwoKey.html" title="class in squidpony.squidmath">TwoKey</a></dt>
+<dd>
+<div class="block">Gets a random B from this TwoKey using the given RNG.</div>
+</dd>
 <dt><a href="../squidpony/squidmath/RandomBias.html" title="class in squidpony.squidmath"><span class="typeNameLink">RandomBias</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
 <dd>
 <div class="block">A class that wraps an RNG and allows different String keys to be associated with biases toward low or high results
@@ -412,7 +420,11 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/MerlinNoise.html#rawNoise2D-int-int-">rawNoise2D(int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/MerlinNoise.html" title="class in squidpony.squidmath">MerlinNoise</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MerlinNoise.html#rawNoise2D_alt-int-int-">rawNoise2D_alt(int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/MerlinNoise.html" title="class in squidpony.squidmath">MerlinNoise</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/MerlinNoise.html#rawNoise3D-int-int-int-">rawNoise3D(int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/MerlinNoise.html" title="class in squidpony.squidmath">MerlinNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MerlinNoise.html#rawNoise3D_alt-int-int-int-">rawNoise3D_alt(int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/MerlinNoise.html" title="class in squidpony.squidmath">MerlinNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/LOS.html#RAY">RAY</a></span> - Static variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/LOS.html" title="class in squidpony.squidgrid">LOS</a></dt>
 <dd>
@@ -766,6 +778,11 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortSet.ShortSetIterator.html#remove--">remove()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ShortSet.ShortSetIterator.html" title="class in squidpony.squidmath">ShortSet.ShortSetIterator</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TwoKey.html#removeA-A-">removeA(A)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/TwoKey.html" title="class in squidpony.squidmath">TwoKey</a></dt>
+<dd>
+<div class="block">Removes a given A key, if <code>removing</code> exists in this TwoKey's A keys, and also removes any keys
+ associated with its point in the ordering.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.html#removeAccents-java.lang.CharSequence-">removeAccents(CharSequence)</a></span> - Static method in class squidpony.<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></dt>
 <dd>
 <div class="block">Removes accented Latin-script characters from a string; if the "base" characters are non-English anyway then the
@@ -839,6 +856,15 @@
 <dd>
 <div class="block">Removes the item at the given index in the iteration order in not-exactly constant time (though it still should
  be efficient).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TwoKey.html#removeAt-int-">removeAt(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/TwoKey.html" title="class in squidpony.squidmath">TwoKey</a></dt>
+<dd>
+<div class="block">Removes a given point in the ordering, if <code>index</code> is at least 0 and less than <a href="../squidpony/squidmath/TwoKey.html#size--"><code>TwoKey.size()</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TwoKey.html#removeB-B-">removeB(B)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/TwoKey.html" title="class in squidpony.squidmath">TwoKey</a></dt>
+<dd>
+<div class="block">Removes a given B key, if <code>removing</code> exists in this TwoKey's B keys, and also removes any keys
+ associated with its point in the ordering.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#removeCircle-squidpony.squidmath.Coord-int-">removeCircle(Coord, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>&nbsp;</dd>
@@ -995,6 +1021,13 @@
 <div class="block">Given an array or varargs of replacement indices for this OrderedSet's iteration order, reorders this so the
  first item in the returned version is the same as <code>getAt(ordering[0])</code> (with some care taken for negative
  or too-large indices), the second item in the returned version is the same as <code>getAt(ordering[1])</code>, etc.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TwoKey.html#reorder-int...-">reorder(int...)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/TwoKey.html" title="class in squidpony.squidmath">TwoKey</a></dt>
+<dd>
+<div class="block">Reorders this TwoKey using <code>ordering</code>, which have the same length as this TwoKey's <a href="../squidpony/squidmath/TwoKey.html#size--"><code>TwoKey.size()</code></a>
+ and can be generated with <a href="../squidpony/GwtCompatibility.html#range-int-"><code>GwtCompatibility.range(int)</code></a> (which, if applied, would produce no
+ change to the current ordering), <a href="../squidpony/squidmath/RNG.html#randomOrdering-int-"><code>RNG.randomOrdering(int)</code></a> (which gives a random ordering, and if
+ applied immediately would be the same as calling <a href="../squidpony/squidmath/TwoKey.html#shuffle-squidpony.squidmath.RNG-"><code>TwoKey.shuffle(RNG)</code></a>), or made in some other way.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/ColoredStringList.html#replaceColor-T-T-">replaceColor(T, T)</a></span> - Method in class squidpony.<a href="../squidpony/ColoredStringList.html" title="class in squidpony">ColoredStringList</a></dt>
 <dd>
@@ -1162,6 +1195,10 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.KeySet.html#retainAll-java.util.Collection-">retainAll(Collection&lt;?&gt;)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.KeySet.html" title="class in squidpony.squidmath">Arrangement.KeySet</a></dt>
 <dd>
 <div class="block">Retains in this collection only elements from the given type-specific collection.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#retainAll-java.util.Collection-">retainAll(Collection&lt;?&gt;)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
+<dd>
+<div class="block">Retains in this collection only elements from the given collection.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html#retainAll-squidpony.squidmath.IntDoubleOrderedMap.DoubleCollection-">retainAll(IntDoubleOrderedMap.DoubleCollection)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.DoubleCollection</a></dt>
 <dd>

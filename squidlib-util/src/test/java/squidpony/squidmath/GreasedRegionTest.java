@@ -32,7 +32,7 @@ public class GreasedRegionTest {
         //printRegion(dataCross);
         //printRegion(dataCross2);
     }
-    public static final boolean PRINTING = true;
+    public static final boolean PRINTING = false;
     public static void print2D(int[][] data)
     {
         if(!PRINTING)
