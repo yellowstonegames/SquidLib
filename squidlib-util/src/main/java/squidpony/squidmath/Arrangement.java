@@ -2774,4 +2774,20 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         }
         return ks;
     }
+
+    /**
+     * Produces a copy of this Arrangement, but only using up to the given amount of items to take. Does a shallow copy
+     * of individual keys, so the references will be shared.
+     * @param amount the number of items to copy from this Arrangement; will copy all items if greater than size
+     * @return a new Arrangement with up to amount items copied from this into it.
+     */
+    public Arrangement<K> take(int amount)
+    {
+        amount = Math.min(size, Math.max(0, amount));
+        Arrangement<K> nx = new Arrangement<>(amount, f);
+        for (int i = 0; i < amount; i++) {
+            nx.add(keyAt(i));
+        }
+        return nx;
+    }
 }

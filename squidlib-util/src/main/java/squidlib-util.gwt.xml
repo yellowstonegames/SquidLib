@@ -8,15 +8,6 @@
 <module>
     <source path="squidpony"/>
     <inherits name="regexodus"/>
-    <extend-configuration-property name="gdx.reflect.include" value="squidpony.FakeLanguageGen" />
-    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.IntVLA" />
-    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.Coord" />
-    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.GreasedRegion" />
-    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.OrderedMap" />
-    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.OrderedSet" />
-    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.Arrangement" />
-    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.IntDoubleOrderedMap" />
-
     <!--
     <extend-configuration-property name="gdx.reflect.include" value="squidpony" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath" />
