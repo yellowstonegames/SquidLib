@@ -147,13 +147,21 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/RNG.html#random">random</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TwoKey.html#randomA-squidpony.squidmath.RNG-">randomA(RNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/TwoKey.html" title="class in squidpony.squidmath">TwoKey</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/K2.html#randomA-squidpony.squidmath.RNG-">randomA(RNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a></dt>
 <dd>
-<div class="block">Gets a random A from this TwoKey using the given RNG.</div>
+<div class="block">Gets a random A from this K2 using the given RNG.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TwoKey.html#randomB-squidpony.squidmath.RNG-">randomB(RNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/TwoKey.html" title="class in squidpony.squidmath">TwoKey</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/K2V1.html#randomA-squidpony.squidmath.RNG-">randomA(RNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/K2V1.html" title="class in squidpony.squidmath">K2V1</a></dt>
 <dd>
-<div class="block">Gets a random B from this TwoKey using the given RNG.</div>
+<div class="block">Gets a random A from this K2V1 using the given RNG.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/K2.html#randomB-squidpony.squidmath.RNG-">randomB(RNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a></dt>
+<dd>
+<div class="block">Gets a random B from this K2 using the given RNG.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/K2V1.html#randomB-squidpony.squidmath.RNG-">randomB(RNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/K2V1.html" title="class in squidpony.squidmath">K2V1</a></dt>
+<dd>
+<div class="block">Gets a random B from this K2V1 using the given RNG.</div>
 </dd>
 <dt><a href="../squidpony/squidmath/RandomBias.html" title="class in squidpony.squidmath"><span class="typeNameLink">RandomBias</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
 <dd>
@@ -334,6 +342,10 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/SpatialMap.html#randomPosition-squidpony.squidmath.RNG-">randomPosition(RNG)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/SpatialMap.html" title="class in squidpony.squidgrid">SpatialMap</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/K2V1.html#randomQ-squidpony.squidmath.RNG-">randomQ(RNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/K2V1.html" title="class in squidpony.squidmath">K2V1</a></dt>
+<dd>
+<div class="block">Gets a random Q from this K2V1 using the given RNG.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/DeckRNG.html#randomRange-int-int-int-">randomRange(int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DeckRNG.html" title="class in squidpony.squidmath">DeckRNG</a></dt>
 <dd>
 <div class="block">Gets a random subrange of the non-negative ints from start (inclusive) to end (exclusive), using count elements.</div>
@@ -778,9 +790,14 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortSet.ShortSetIterator.html#remove--">remove()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ShortSet.ShortSetIterator.html" title="class in squidpony.squidmath">ShortSet.ShortSetIterator</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TwoKey.html#removeA-A-">removeA(A)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/TwoKey.html" title="class in squidpony.squidmath">TwoKey</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/K2.html#removeA-A-">removeA(A)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a></dt>
 <dd>
-<div class="block">Removes a given A key, if <code>removing</code> exists in this TwoKey's A keys, and also removes any keys
+<div class="block">Removes a given A key, if <code>removing</code> exists in this K2's A keys, and also removes any keys
+ associated with its point in the ordering.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/K2V1.html#removeA-A-">removeA(A)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/K2V1.html" title="class in squidpony.squidmath">K2V1</a></dt>
+<dd>
+<div class="block">Removes a given A key, if <code>removing</code> exists in this K2V1's A keys, and also removes any B key or Q value
  associated with its point in the ordering.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.html#removeAccents-java.lang.CharSequence-">removeAccents(CharSequence)</a></span> - Static method in class squidpony.<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></dt>
@@ -847,6 +864,14 @@
 <div class="block">Removes the key and value at the given index in the iteration order in not-exactly constant time (though it still
  should be efficient).</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/K2.html#removeAt-int-">removeAt(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a></dt>
+<dd>
+<div class="block">Removes a given point in the ordering, if <code>index</code> is at least 0 and less than <a href="../squidpony/squidmath/K2.html#size--"><code>K2.size()</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/K2V1.html#removeAt-int-">removeAt(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/K2V1.html" title="class in squidpony.squidmath">K2V1</a></dt>
+<dd>
+<div class="block">Removes a given point in the ordering, if <code>index</code> is at least 0 and less than <a href="../squidpony/squidmath/K2V1.html#size--"><code>K2V1.size()</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedMap.html#removeAt-int-">removeAt(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a></dt>
 <dd>
 <div class="block">Removes the key and value at the given index in the iteration order in not-exactly constant time (though it still
@@ -857,13 +882,14 @@
 <div class="block">Removes the item at the given index in the iteration order in not-exactly constant time (though it still should
  be efficient).</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TwoKey.html#removeAt-int-">removeAt(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/TwoKey.html" title="class in squidpony.squidmath">TwoKey</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/K2.html#removeB-B-">removeB(B)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a></dt>
 <dd>
-<div class="block">Removes a given point in the ordering, if <code>index</code> is at least 0 and less than <a href="../squidpony/squidmath/TwoKey.html#size--"><code>TwoKey.size()</code></a>.</div>
+<div class="block">Removes a given B key, if <code>removing</code> exists in this K2's B keys, and also removes any keys
+ associated with its point in the ordering.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TwoKey.html#removeB-B-">removeB(B)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/TwoKey.html" title="class in squidpony.squidmath">TwoKey</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/K2V1.html#removeB-B-">removeB(B)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/K2V1.html" title="class in squidpony.squidmath">K2V1</a></dt>
 <dd>
-<div class="block">Removes a given B key, if <code>removing</code> exists in this TwoKey's B keys, and also removes any keys
+<div class="block">Removes a given B key, if <code>removing</code> exists in this K2V1's B keys, and also removes any A key or Q value
  associated with its point in the ordering.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#removeCircle-squidpony.squidmath.Coord-int-">removeCircle(Coord, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
@@ -1010,6 +1036,20 @@
  in the returned version is the same as <code>get(ordering[0])</code> (with some care taken for negative or too-large
  indices), the second item in the returned version is the same as <code>get(ordering[1])</code>, etc.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/K2.html#reorder-int...-">reorder(int...)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a></dt>
+<dd>
+<div class="block">Reorders this K2 using <code>ordering</code>, which have the same length as this K2's <a href="../squidpony/squidmath/K2.html#size--"><code>K2.size()</code></a>
+ and can be generated with <a href="../squidpony/GwtCompatibility.html#range-int-"><code>GwtCompatibility.range(int)</code></a> (which, if applied, would produce no
+ change to the current ordering), <a href="../squidpony/squidmath/RNG.html#randomOrdering-int-"><code>RNG.randomOrdering(int)</code></a> (which gives a random ordering, and if
+ applied immediately would be the same as calling <a href="../squidpony/squidmath/K2.html#shuffle-squidpony.squidmath.RNG-"><code>K2.shuffle(RNG)</code></a>), or made in some other way.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/K2V1.html#reorder-int...-">reorder(int...)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/K2V1.html" title="class in squidpony.squidmath">K2V1</a></dt>
+<dd>
+<div class="block">Reorders this K2V1 using <code>ordering</code>, which have the same length as this K2V1's <a href="../squidpony/squidmath/K2V1.html#size--"><code>K2V1.size()</code></a>
+ and can be generated with <a href="../squidpony/GwtCompatibility.html#range-int-"><code>GwtCompatibility.range(int)</code></a> (which, if applied, would produce no
+ change to the current ordering), <a href="../squidpony/squidmath/RNG.html#randomOrdering-int-"><code>RNG.randomOrdering(int)</code></a> (which gives a random ordering, and if
+ applied immediately would be the same as calling <a href="../squidpony/squidmath/K2V1.html#shuffle-squidpony.squidmath.RNG-"><code>K2V1.shuffle(RNG)</code></a>), or made in some other way.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedMap.html#reorder-int...-">reorder(int...)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a></dt>
 <dd>
 <div class="block">Given an array or varargs of replacement indices for this OrderedMap's iteration order, reorders this so the
@@ -1021,13 +1061,6 @@
 <div class="block">Given an array or varargs of replacement indices for this OrderedSet's iteration order, reorders this so the
  first item in the returned version is the same as <code>getAt(ordering[0])</code> (with some care taken for negative
  or too-large indices), the second item in the returned version is the same as <code>getAt(ordering[1])</code>, etc.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TwoKey.html#reorder-int...-">reorder(int...)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/TwoKey.html" title="class in squidpony.squidmath">TwoKey</a></dt>
-<dd>
-<div class="block">Reorders this TwoKey using <code>ordering</code>, which have the same length as this TwoKey's <a href="../squidpony/squidmath/TwoKey.html#size--"><code>TwoKey.size()</code></a>
- and can be generated with <a href="../squidpony/GwtCompatibility.html#range-int-"><code>GwtCompatibility.range(int)</code></a> (which, if applied, would produce no
- change to the current ordering), <a href="../squidpony/squidmath/RNG.html#randomOrdering-int-"><code>RNG.randomOrdering(int)</code></a> (which gives a random ordering, and if
- applied immediately would be the same as calling <a href="../squidpony/squidmath/TwoKey.html#shuffle-squidpony.squidmath.RNG-"><code>TwoKey.shuffle(RNG)</code></a>), or made in some other way.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/ColoredStringList.html#replaceColor-T-T-">replaceColor(T, T)</a></span> - Method in class squidpony.<a href="../squidpony/ColoredStringList.html" title="class in squidpony">ColoredStringList</a></dt>
 <dd>
