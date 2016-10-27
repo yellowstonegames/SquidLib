@@ -872,18 +872,19 @@ public class HashVisualizer extends ApplicationAdapter {
             case 4: { //Noise mode
                 switch (noiseMode) {
                     case 0:
-                        Gdx.graphics.setTitle("Perlin Noise, x5 zoom at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        Gdx.graphics.setTitle("Perlin Noise, x3 zoom at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
                                 bright = (float)
-                                        (PerlinNoise.noise(xx / 16.0, yy / 16.0) * 16 +
-                                        PerlinNoise.noise(xx / 8.0, yy / 8.0) * 8 +
+                                        (//PerlinNoise.noise(xx / 16.0, yy / 16.0) * 16 +
+                                        //PerlinNoise.noise(xx / 8.0, yy / 8.0) * 8 +
                                         PerlinNoise.noise(xx / 4.0, yy / 4.0) * 4 +
                                         PerlinNoise.noise(xx / 2.0, yy / 2.0) * 2 +
                                         PerlinNoise.noise(xx, yy)
-                                        + 31.0f) / 62f;
+                                        + 7f) / 14f;
+                                        //+ 15f) / 30f;
                                 display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
                             }
                         }
@@ -900,18 +901,18 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 2:
-                        Gdx.graphics.setTitle("Merlin Noise, x5 smooth zoom at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        Gdx.graphics.setTitle("Merlin Noise, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                iBright = MerlinNoise.noise2D(xx, yy, 5);
+                                iBright = MerlinNoise.noise2D(xx, yy, 3);
                                 display.put(x, y, colorFactory.get(iBright, iBright, iBright));
                             }
                         }
                         break;
                     case 3:
-                        Gdx.graphics.setTitle("Merlin Noise Alt, x5 smooth zoom at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        Gdx.graphics.setTitle("Merlin Noise Alt, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
@@ -921,34 +922,34 @@ public class HashVisualizer extends ApplicationAdapter {
                                         + MerlinNoise.noise2D(x + 333 * 3, y + 333 * 3, 5) * 3
                                         + MerlinNoise.noise2D(x + 333 * 4, y + 333 * 4, 3) * 2
                                         + MerlinNoise.noise2D(x + 333 * 5, y + 333 * 5)) >> 4;*/
-                                iBright = MerlinNoise.noise2D_alt(xx, yy, 5);
+                                iBright = MerlinNoise.noise2D_alt(xx, yy, 3);
                                 display.put(x, y, colorFactory.get(iBright, iBright, iBright));
                             }
                         }
                         break;
                     case 4:
-                        Gdx.graphics.setTitle("Merlin Noise 3D, x5 smooth zoom at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        Gdx.graphics.setTitle("Merlin Noise 3D, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = MerlinNoise.noise3D(x, y, ctr, 5);
+                                iBright = MerlinNoise.noise3D(x, y, ctr, 3);
                                 display.put(x, y, colorFactory.get(iBright, iBright, iBright));
                             }
                         }
                         break;
                     case 5:
-                        Gdx.graphics.setTitle("Merlin Noise Alt 3D, x5 smooth zoom at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        Gdx.graphics.setTitle("Merlin Noise Alt 3D, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = MerlinNoise.noise3D_alt(x, y, ctr, 5);
+                                iBright = MerlinNoise.noise3D_alt(x, y, ctr, 3);
                                 display.put(x, y, colorFactory.get(iBright, iBright, iBright));
                             }
                         }
                         break;
                     case 6:
-                        Gdx.graphics.setTitle("Merlin Noise Alt 3D Emphasized, x5 smooth zoom at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        Gdx.graphics.setTitle("Merlin Noise Alt 3D Emphasized, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = MerlinNoise.noise3D_emphasized(x, y, ctr, 5);
+                                iBright = MerlinNoise.noise3D_emphasized(x, y, ctr, 3);
                                 display.put(x, y, colorFactory.get(iBright, iBright, iBright));
                             }
                         }
@@ -976,15 +977,17 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;*/
                     case 7:
-                        Gdx.graphics.setTitle("Perlin 3D Noise, x5 zoom at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        Gdx.graphics.setTitle("Perlin 3D Noise, x3 zoom at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)
-                                        (PerlinNoise.noise(x / 8.0, y / 8.0, ctr * 0.125) * 8 +
+                                        (//PerlinNoise.noise(x / 8.0, y / 8.0, ctr * 0.125) * 8 +
                                                 PerlinNoise.noise(x / 4.0, y / 4.0, ctr * 0.125) * 4 +
                                                 PerlinNoise.noise(x / 2.0, y / 2.0, ctr * 0.125) * 2 +
                                                 PerlinNoise.noise(x, y, ctr * 0.125)
-                                                + 15.0f) / 30f;
+                                        + 7f) / 14f;
+                                //+ 15.0f) / 30f;
+
                                 display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
                             }
                         }

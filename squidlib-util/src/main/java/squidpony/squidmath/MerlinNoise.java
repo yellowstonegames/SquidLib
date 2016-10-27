@@ -75,16 +75,16 @@ public class MerlinNoise {
 
         int s,
                 result = (s = 0x632BE5AB ^ x * 0x85157AF5) + 0xC5C5581A // equal to 0x62E2AC0D + 0x62E2AC0D
-                        + (s ^= y * 0x85157AF5);
+                        + (s ^= y * 0xA1687A2F);
         return (result ^ ((s ^ result) >>> 8) * 0x9E3779B9) >>> 24;
     }
     public static int rawNoise3D_alt(final int x, final int y, final int z) {
 
         int s,
                 result = (s = 0x632BE5AB ^ x * 0x85157AF5) + 0x28A80427 // equal to 0x62E2AC0D + 0x62E2AC0D + 0x62E2AC0D
-                        + (s ^= y * 0x85157AF5)
-                        + (s ^= z * 0x85157AF5);
-        return (result ^ ((s ^ result) >>> 8) * 0x9E3779B9) >>> 24;
+                        + (s ^= y * 0x92B5CC85)
+                        + (s ^= z * 0xA1687A2F); //0x7F4A7C1F
+        return (result ^ ((s ^ result) >>> 8) * 0x9E3779B9) & 255; // >>> 24
     }
     /**
      * 2D merlin noise.
@@ -165,7 +165,7 @@ public class MerlinNoise {
                 rawNoise3D_alt(x, y - 1, z + 1) + rawNoise3D_alt(x, y + 1, z + 1) +
                 rawNoise3D_alt(x + 1, y, z - 1) + rawNoise3D_alt(x + 1, y, z + 1) << 4) +
                 */
-                (rawNoise3D_alt(x, y, z) << 1) >>> 3;
+                (rawNoise3D_alt(x, y, z) << 1);
     }
                         /*(
                                 cellA * (0.5 + absA - absB) +// * (1 - aCoreBias) +
@@ -255,6 +255,18 @@ public class MerlinNoise {
         }
         return lookup[(v / (t << 1))];
     }
+    public static int noise2D_emphasized(final int x, final int y, final int zoom) {
+        if (zoom < 1)
+            return 0;
+        int v = 0, a = x, b = y, t = 0, m;
+        for (int s = zoom, u = 1; s > 0; s--, u++) {
+            v += ((m = noise2D_alt((a += 76379) >>> s, (b += 76379) >>> s))
+                    + noise2D_alt((a+(m&2)-1) >>> s, (b+((m&1)<<1)-1) >>> s)
+            ) << u;
+            t += 1 << u;
+        }
+        return lookup_extreme[(v / (t << 1))];
+    }
     public static int noise3D(int x, int y, int z, int zoom) {
         if (zoom < 1)
             return 0;
@@ -317,7 +329,7 @@ public class MerlinNoise {
             21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 11, 10, 9, 9, 8, 7, 7, 6,
             6, 5, 5, 5, 4, 4, 3, 3, 3, 3, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
             },
             lookup = {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3,
@@ -352,33 +364,40 @@ public class MerlinNoise {
             48, 47, 45, 44, 43, 42, 41, 40, 38, 37, 36, 35, 34, 33, 32, 31, 30,
             29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 20, 19, 18, 17, 16, 15, 15,
             14, 13, 13, 12, 11, 11, 10, 9, 9, 8, 8, 7, 7, 6, 6, 5, 5, 4, 4, 3, 3,
-            3, 2, 2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0
+            3, 2, 2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
             };
 
     public static int noise3D_alt(final int x, final int y, final int z, final int zoom) {
         if (zoom < 1)
             return 0;
         int v = 0, a = x, b = y, c = z, t = 0, m;
-        for (int s = zoom, u = 0; s > 0; s--, u++) {
-            v += ((m = noiseBalanced3D_alt((a += 76379) >>> s, (b += 76379) >>> s, (c += 76379) >>> s))
-                    + noiseBalanced3D_alt((a+(m&2)-1) >>> s, (b+((m&1)<<1)-1) >>> s, (c+((m&4)>>>1)-1) >>> s)
+        for (int s = zoom, u = 1; s > 0; s--, u++) {
+            v += ((m = noiseBalanced3D_alt((a += 76379) >>> s, (b += 76379) >>> s, (c += 76379) >>> s)) * 5
+                    + noiseBalanced3D_alt((a+((m&2))-1) >>> s, (b+((m&1)<<1)-1) >>> s, (c+((m&4)>>>1)-1) >>> s) * 3
+                    >>> 5
+                    //+ (noiseBalanced3D_alt((a+((m&2048)>>>10)-1) >>> s, (b+((m&4096)>>>11)-1) >>> s, (c+((m&8192)>>>12)-1) >>> s) & 127)
             ) << u;
-            t += 1 << u;
+            t += 2 << u;
         }
-        return lookup[v / (t << 1)];
+        return lookup[v / t];
     }
     public static int noise3D_emphasized(final int x, final int y, final int z, final int zoom) {
         if (zoom < 1)
             return 0;
         int v = 0, a = x, b = y, c = z, t = 0, m;
-        for (int s = zoom, u = 0; s > 0; s--, u++) {
-            v += ((m = noiseBalanced3D_alt((a += 76379) >>> s, (b += 76379) >>> s, (c += 76379) >>> s))
-                    + noiseBalanced3D_alt((a+(m&2)-1) >>> s, (b+((m&1)<<1)-1) >>> s, (c+((m&4)>>>1)-1) >>> s)
+        for (int s = zoom, u = 1; s > 0; s--, u++) {
+            v += ((m = noiseBalanced3D_alt((a += 76379) >>> s, (b += 76379) >>> s, (c += 76379) >>> s)) * 5
+                    + noiseBalanced3D_alt((a+((m&2))-1) >>> s, (b+((m&1)<<1)-1) >>> s, (c+((m&4)>>>1)-1) >>> s) * 3
+                    >>> 5
+            /*
+            v += (((m = noiseBalanced3D_alt((a += 76379) >>> s, (b += 76379) >>> s, (c += 76379) >>> s)) & 255)
+                    + (noiseBalanced3D_alt((a+((m&2))-1) >>> s, (b+((m&4)>>>1)-1) >>> s, (c+((m&8)>>>2)-1) >>> s) & 255)
+                    */
+                    //+ (noiseBalanced3D_alt((a+((m&2048)>>>10)-1) >>> s, (b+((m&4096)>>>11)-1) >>> s, (c+((m&8192)>>>12)-1) >>> s) & 127)
             ) << u;
-            t += 1 << u;
+            t += 2 << u;
         }
-        return lookup_extreme[v / (t << 1)];
+        return lookup_extreme[v / t];
     }
 
     /*
