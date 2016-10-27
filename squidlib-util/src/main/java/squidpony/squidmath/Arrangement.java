@@ -491,7 +491,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      * Puts the key k into this Arrangement with a value equal to the current number of keys; v is disregarded.
      * @param k any K type, including null
      * @param v any Integer, doesn't matter what it is and will be disregarded. Only here for compatibility
-     * @return the Integer that was previously
+     * @return the Integer that was previously associated with k, or -1 if there was none
      */
     @Deprecated
     public Integer put(final K k, final Integer v) {
@@ -1803,16 +1803,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
          * @return <code>true</code> if this collection changed as a result of the call.
          */
         public boolean retainAll(Collection<?> c) {
-            boolean retVal = false;
-            int n = size();
-            final Iterator<?> i = iterator();
-            while (n-- != 0) {
-                if (!c.contains(i.next())) {
-                    i.remove();
-                    retVal = true;
-                }
-            }
-            return retVal;
+            throw new UnsupportedOperationException("Cannot remove from the key set directly");
         }
 
         /**
@@ -1822,15 +1813,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
          * @return <code>true</code> if this collection changed as a result of the call.
          */
         public boolean removeAll(Collection<?> c) {
-            boolean retVal = false;
-            int n = c.size();
-            final Iterator<?> i = c.iterator();
-            while (n-- != 0) {
-                i.next();
-                i.remove();
-                retVal = true;
-            }
-            return retVal;
+            throw new UnsupportedOperationException("Cannot remove from the key set directly");
         }
 
         public Object[] toArray() {
@@ -2577,20 +2560,24 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     /**
      * Gets a random value from this Arrangement in constant time, using the given RNG to generate a random number.
      * @param rng used to generate a random index for a value
-     * @return a random value from this Arrangement
+     * @return a random value from this Arrangement, or -1 if this is empty
      */
     public int randomValue(RNG rng)
     {
+        if(rng == null)
+            return defRetValue;
         return getAt(rng.nextInt(order.size));
     }
 
     /**
      * Gets a random key from this Arrangement in constant time, using the given RNG to generate a random number.
      * @param rng used to generate a random index for a key
-     * @return a random key from this Arrangement
+     * @return a random key from this Arrangement, or null if this is empty
      */
     public K randomKey(RNG rng)
     {
+        if(rng == null)
+            return null;
         return keyAt(rng.nextInt(order.size));
     }
 

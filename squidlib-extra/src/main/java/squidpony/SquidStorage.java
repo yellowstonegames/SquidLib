@@ -61,6 +61,53 @@ public class SquidStorage {
         storageName = fileName;
         preferences = Gdx.app.getPreferences(storageName);
         json = new Json(JsonWriter.OutputType.minimal);
+        json.addClassTag("#St", String.class);
+        json.addClassTag("#Z", Boolean.class);
+        json.addClassTag("#z", boolean.class);
+        json.addClassTag("#B", Byte.class);
+        json.addClassTag("#b", byte.class);
+        json.addClassTag("#S", Short.class);
+        json.addClassTag("#s", short.class);
+        json.addClassTag("#C", Character.class);
+        json.addClassTag("#c", char.class);
+        json.addClassTag("#I", Integer.class);
+        json.addClassTag("#i", int.class);
+        json.addClassTag("#F", Float.class);
+        json.addClassTag("#f", float.class);
+        json.addClassTag("#L", Long.class);
+        json.addClassTag("#l", long.class);
+        json.addClassTag("#D", Double.class);
+        json.addClassTag("#d", double.class);
+        json.addClassTag("#SSet", SortedSet.class);
+        json.addClassTag("#Patt", Pattern.class);
+        /*
+        json.addClassTag("#Mtch", Matcher.class);
+        json.addClassTag("#Rplc", Replacer.class);
+        json.addClassTag("#Sbst", Substitution.class);
+        */
+        json.addClassTag("#Grea", GreasedRegion.class);
+        json.addClassTag("#IDOM", IntDoubleOrderedMap.class);
+        json.addClassTag("#Lang", FakeLanguageGen.class);
+        json.addClassTag("#LnAl", FakeLanguageGen.Alteration.class);
+        json.addClassTag("#LnMd", FakeLanguageGen.Modifier.class);
+        json.addClassTag("#OMap", OrderedMap.class);
+        json.addClassTag("#OSet", OrderedSet.class);
+        json.addClassTag("#Aran", Arrangement.class);
+        json.addClassTag("#K2", K2.class);
+        json.addClassTag("#K2V1", K2V1.class);
+        json.addClassTag("#IVLA", IntVLA.class);
+        json.addClassTag("#SVLA", ShortVLA.class);
+        json.addClassTag("#RNG", RNG.class);
+        json.addClassTag("#SRNG", StatefulRNG.class);
+        json.addClassTag("#EdiR", EditRNG.class);
+        json.addClassTag("#DhaR", DharmaRNG.class);
+        json.addClassTag("#DecR", DeckRNG.class);
+        json.addClassTag("#Ligh", LightRNG.class);
+        json.addClassTag("#LonP", LongPeriodRNG.class);
+        json.addClassTag("#Thun", ThunderRNG.class);
+        json.addClassTag("#XoRo", XoRoRNG.class);
+        json.addClassTag("#XorR", XorRNG.class);
+        json.addClassTag("#Strm", CrossHash.Storm.class);
 
         json.setSerializer(Pattern.class, new Json.Serializer<Pattern>() {
             @Override
@@ -180,9 +227,9 @@ public class SquidStorage {
             }
         });
 
-        json.setSerializer(TwoKey.class, new Json.Serializer<TwoKey>() {
+        json.setSerializer(K2.class, new Json.Serializer<K2>() {
             @Override
-            public void write(Json json, TwoKey object, Class knownType) {
+            public void write(Json json, K2 object, Class knownType) {
                 if(object == null)
                 {
                     json.writeValue(null);
@@ -196,9 +243,35 @@ public class SquidStorage {
 
             @Override
             @SuppressWarnings("unchecked")
-            public TwoKey read(Json json, JsonValue jsonData, Class type) {
+            public K2 read(Json json, JsonValue jsonData, Class type) {
                 if(jsonData == null || jsonData.isNull()) return null;
-                return new TwoKey(json.readValue(SortedSet.class, jsonData.get("a")), json.readValue(SortedSet.class, jsonData.get("b")));
+                return new K2(json.readValue(SortedSet.class, jsonData.get("a")), json.readValue(SortedSet.class, jsonData.get("b")));
+            }
+        });
+
+        json.setSerializer(K2V1.class, new Json.Serializer<K2V1>() {
+            @Override
+            public void write(Json json, K2V1 object, Class knownType) {
+                if(object == null)
+                {
+                    json.writeValue(null);
+                    return;
+                }
+                json.writeObjectStart();
+                json.writeValue("a", object.getSetA(), SortedSet.class);
+                json.writeValue("b", object.getSetB(), SortedSet.class);
+                json.writeValue("q", object.getListQ(), ArrayList.class);
+                json.writeObjectEnd();
+            }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public K2V1 read(Json json, JsonValue jsonData, Class type) {
+                if(jsonData == null || jsonData.isNull()) return null;
+                return new K2V1(
+                        json.readValue(SortedSet.class, jsonData.get("a")),
+                        json.readValue(SortedSet.class, jsonData.get("b")),
+                        json.readValue(ArrayList.class, jsonData.get("q")));
             }
         });
 
@@ -249,52 +322,6 @@ public class SquidStorage {
                 return FakeLanguageGen.deserializeFromString(jsonData.asString());
             }
         });
-        json.addClassTag("#St", String.class);
-        json.addClassTag("#Z", Boolean.class);
-        json.addClassTag("#z", boolean.class);
-        json.addClassTag("#B", Byte.class);
-        json.addClassTag("#b", byte.class);
-        json.addClassTag("#S", Short.class);
-        json.addClassTag("#s", short.class);
-        json.addClassTag("#C", Character.class);
-        json.addClassTag("#c", char.class);
-        json.addClassTag("#I", Integer.class);
-        json.addClassTag("#i", int.class);
-        json.addClassTag("#F", Float.class);
-        json.addClassTag("#f", float.class);
-        json.addClassTag("#L", Long.class);
-        json.addClassTag("#l", long.class);
-        json.addClassTag("#D", Double.class);
-        json.addClassTag("#d", double.class);
-        json.addClassTag("#SSet", SortedSet.class);
-        json.addClassTag("#Patt", Pattern.class);
-        /*
-        json.addClassTag("#Mtch", Matcher.class);
-        json.addClassTag("#Rplc", Replacer.class);
-        json.addClassTag("#Sbst", Substitution.class);
-        */
-        json.addClassTag("#Grea", GreasedRegion.class);
-        json.addClassTag("#IDOM", IntDoubleOrderedMap.class);
-        json.addClassTag("#Lang", FakeLanguageGen.class);
-        json.addClassTag("#LnAl", FakeLanguageGen.Alteration.class);
-        json.addClassTag("#LnMd", FakeLanguageGen.Modifier.class);
-        json.addClassTag("#OMap", OrderedMap.class);
-        json.addClassTag("#OSet", OrderedSet.class);
-        json.addClassTag("#Aran", Arrangement.class);
-        json.addClassTag("#Key2", TwoKey.class);
-        json.addClassTag("#IVLA", IntVLA.class);
-        json.addClassTag("#SVLA", ShortVLA.class);
-        json.addClassTag("#RNG", RNG.class);
-        json.addClassTag("#SRNG", StatefulRNG.class);
-        json.addClassTag("#EdiR", EditRNG.class);
-        json.addClassTag("#DhaR", DharmaRNG.class);
-        json.addClassTag("#DecR", DeckRNG.class);
-        json.addClassTag("#Ligh", LightRNG.class);
-        json.addClassTag("#LonP", LongPeriodRNG.class);
-        json.addClassTag("#Thun", ThunderRNG.class);
-        json.addClassTag("#XoRo", XoRoRNG.class);
-        json.addClassTag("#XorR", XorRNG.class);
-        json.addClassTag("#Strm", CrossHash.Storm.class);
 
         contents = new OrderedMap<>(16, 0.2f);
     }
