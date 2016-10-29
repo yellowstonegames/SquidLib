@@ -446,6 +446,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             last = pos;
         }
         order.add(pos);
+        value[pos] = size;
         if (size++ >= maxFill)
             rehash(arraySize(size + 1, f));
         return -1;
@@ -482,6 +483,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             last = pos;
         }
         order.insert(at, pos);
+        value[pos] = at;
         if (size++ >= maxFill)
             rehash(arraySize(size + 1, f));
         return -1;
