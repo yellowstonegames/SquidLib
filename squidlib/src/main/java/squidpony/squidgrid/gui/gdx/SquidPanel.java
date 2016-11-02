@@ -485,8 +485,8 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         for (int x = gridOffsetX; x < gridWidth; x += inc) {
             for (int y = gridOffsetY; y < gridHeight; y += inc) {
                 tmp = scc.filter(colors[x][y]);
-                textFactory.draw(batch, contents[x][y], tmp, xOffset + /*- getX() + */1f * x * cellWidth,
-                        yOffset + /*- getY() + */1f * (gridHeight - y) * cellHeight + 1f);
+                textFactory.draw(batch, contents[x][y], tmp, xOffset + /*- getX() + 1f * */ x * cellWidth,
+                        yOffset + /*- getY() + 1f * */ (gridHeight - y) * cellHeight + 1f);
             }
         }
         super.draw(batch, parentAlpha);
