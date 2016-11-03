@@ -387,7 +387,7 @@ public class TextCellFactory implements Disposable {
 			Gdx.app.error("TextCellFactory", "Could not find font file: " + fontPath + ", using defaults");
 		}
         //bmpFont.getData().padBottom = bmpFont.getDescent();
-        distanceFieldScaleX = bmpFont.getData().getGlyph(' ').xadvance - 1f;
+        distanceFieldScaleX = bmpFont.getSpaceWidth() - 1f;
         distanceFieldScaleY = bmpFont.getLineHeight() - 1f;
         return this;
     }

@@ -33,6 +33,7 @@ public class ZoneDemo extends ApplicationAdapter {
     private int[][] lights;
     private Color[][] bgColors;
     private Color[] influenceColors;
+    private float[] influenceH, influenceS, influenceV;
     private ZOI zoi;
     private short[][] packedInfluences;
     private int width, height, screenWidth, screenHeight;
@@ -87,13 +88,18 @@ public class ZoneDemo extends ApplicationAdapter {
         centers = CoordPacker.apartPacked(CoordPacker.pack(bareDungeon, '.'), 8);
         shiftedCenters = GwtCompatibility.cloneCoords(centers);
         colorCenter = DefaultResources.getSCC();
+        influenceH = new float[centers.length];
+        influenceS = new float[centers.length];
+        influenceV = new float[centers.length];
         influenceColors = new Color[centers.length];
         centerEntities = new AnimatedEntity[centers.length];
         for (int i = 0; i < centers.length; i++) {
-            float hue = i * 1.0f / centers.length, sat = rng.nextFloat() * 0.3f + 0.7f,
-                    val = rng.nextFloat() * 0.4f + 0.6f;
+            float hue = i * 1.0f / centers.length, sat = rng.nextFloat() * 0.2f + 0.8f,
+                    val = rng.nextFloat() * 0.3f + 0.7f;
+            influenceH[i] = hue;
+            influenceS[i] = sat;
+            influenceV[i] = val;
             influenceColors[i] = colorCenter.getHSV(hue, sat, val);
-
             centerEntities[i] = display.animateActor(centers[i].x, centers[i].y, '@',
                     colorCenter.getHSV(hue, sat - 0.3f, val - 0.4f), false); //, true);
         }
@@ -162,6 +168,7 @@ public class ZoneDemo extends ApplicationAdapter {
         zoi = new ZOI(shiftedCenters, bareDungeon, Radius.DIAMOND);
         packedInfluences = zoi.calculate();
         Coord c;
+        int inf0;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 c = Coord.get(x, y);
@@ -175,17 +182,16 @@ public class ZoneDemo extends ApplicationAdapter {
                 }
                 else
                 {
-                    float hue = colorCenter.getHue(influenceColors[inf[0]]) + 1f,
-                            sat = colorCenter.getSaturation(influenceColors[inf[0]]),
-                            val = colorCenter.getValue(influenceColors[inf[0]]),
-                            tempHue;
+                    inf0 = inf[0];
+                    float hue = influenceH[inf0] + 1f,
+                            sat = influenceS[inf0],
+                            val = influenceV[inf0];
                     //if(hue < 0.5) hue += 1f;
                     for (int i = 1; i < inf.length; i++) {
-                        tempHue = colorCenter.getHue(influenceColors[inf[i]]) + 1f;
                         //if(tempHue < 0.5) tempHue += 1f;
-                        hue += tempHue;
-                        sat += colorCenter.getSaturation(influenceColors[inf[i]]);
-                        val += colorCenter.getValue(influenceColors[inf[i]]);
+                        hue += influenceH[inf[i]] + 1f;
+                        sat += influenceS[inf[i]];
+                        val += influenceV[inf[i]];
                     }
                     bgColors[x][y] = colorCenter.getHSV((hue / inf.length) % 1.0f, sat / inf.length, val / inf.length);
                 }

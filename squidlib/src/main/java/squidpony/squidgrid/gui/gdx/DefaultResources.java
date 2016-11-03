@@ -533,7 +533,7 @@ public class DefaultResources implements LifecycleListener {
         if (instance.distancePrint == null) {
             try {
                 instance.distancePrint = new TextCellFactory().fontDistanceField(distanceFieldPrint, distanceFieldPrintTexture)
-                        .setSmoothingMultiplier(0.4f).height(30).width(7);
+                        /* .setSmoothingMultiplier(0.4f) */.height(30).width(7);
             } catch (Exception e) {
                 e.printStackTrace();
             }
