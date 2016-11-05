@@ -1749,5 +1749,90 @@ public class CrossHash {
             return result ^ ((z ^ result) >>> 8) * 0x9E3779B9;
         }
     }
+    @Beta
+    public static class Wisp
+    {
+
+        public static long hash64(final int[] data) {
+            if (data == null)
+                return 0;
+            long result = 0x632BE59BD9B4E019L;
+            for (int i = 0; i < data.length;) {
+                result ^= 0x8329C6EB9E6AD3E3L * (data[i] * ++i);
+            }
+            return (result ^ 0xC6BC25963AB56C93L * data.length);
+        }
+
+        public static long hash64(final long[] data) {
+            if (data == null)
+                return 0;
+            long result = 0x632BE59BD9B4E019L;
+            for (int i = 0; i < data.length;) {
+                result ^= 0x8329C6EB9E6AD3E3L * (data[i] * ++i);
+            }
+            return (result ^ 0xC6BC25963AB56C93L * data.length);
+        }
+
+        public static long hash64(final CharSequence data) {
+            if (data == null)
+                return 0;
+            long result = 0x632BE59BD9B4E019L;
+            for (int i = 0; i < data.length();) {
+                result ^= 0x8329C6EB9E6AD3E3L * (data.charAt(i) * ++i);
+            }
+            return (result ^ 0xC6BC25963AB56C93L * data.length());
+        }
+
+        public static long hash64(final char[] data, int start, int end) {
+            if (data == null || start >= end)
+                return 0;
+            long result = 0x632BE59BD9B4E019L;
+            for (int i = start; i < end && i < data.length;) {
+                result ^= 0x8329C6EB9E6AD3E3L * (data[i] * ++i);
+            }
+            return (result ^ 0xC6BC25963AB56C93L * (end - start));
+        }
+
+        public static int hash(final int[] data) {
+            if (data == null)
+                return 0;
+            int result = 0x7360C6EB;
+            for (int i = 0; i < data.length;) {
+                result ^= 0x85157AF5 * (data[i] * ++i);
+            }
+            return (result ^ 0x62E2AC0D * data.length); //0x7360C6EBL
+        }
+
+        public static int hash(final long[] data) {
+            if (data == null)
+                return 0;
+            long result = 0x632BE59BD9B4E019L;
+            for (int i = 0; i < data.length;) {
+                result ^= 0x8329C6EB9E6AD3E3L * (data[i] * ++i);
+            }
+            return (int)(result ^ 0xC6BC25963AB56C93L * data.length);
+        }
+
+        public static int hash(final CharSequence data) {
+            if (data == null)
+                return 0;
+            int result = 0x7360C6EB;
+            for (int i = 0; i < data.length();) {
+                result ^= 0x85157AF5 * (data.charAt(i) * ++i);
+            }
+            return (result ^ 0x62E2AC0D * data.length());
+        }
+
+        public static int hash(final char[] data, int start, int end) {
+            if (data == null || start >= end)
+                return 0;
+            int result = 0x7360C6EB;
+            for (int i = start; i < end && i < data.length;) {
+                result ^= 0x85157AF5 * (data[i] * ++i);
+            }
+            return (result ^ 0x62E2AC0D * (end - start)); //0x632BE5AB
+        }
+
+    }
 }
 

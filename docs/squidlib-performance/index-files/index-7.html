@@ -103,7 +103,34 @@
  HashBenchmark.measureSip           avgt    3   78.889 ± 21.236  ms/op
  HashBenchmark.measureSipInt        avgt    3   77.797 ±  5.196  ms/op
  HashBenchmark.measureStorm         avgt    3   24.542 ±  2.893  ms/op
- HashBenchmark.measureStormInt      avgt    3   25.070 ±  3.274  ms/op</div>
+ HashBenchmark.measureStormInt      avgt    3   25.070 ±  3.274  ms/op
+
+ Benchmark                          Mode  Cnt    Score   Error  Units
+ HashBenchmark.measureControl       avgt    8    1.980 ± 0.015  ms/op
+ HashBenchmark.measureFNV           avgt    8  136.929 ± 1.341  ms/op
+ HashBenchmark.measureFNVInt        avgt    8  150.062 ± 1.248  ms/op
+ HashBenchmark.measureFalcon        avgt    8   15.653 ± 0.249  ms/op
+ HashBenchmark.measureFalconInt     avgt    8   14.999 ± 0.199  ms/op <-- This is important!
+ HashBenchmark.measureJVMInt        avgt    8   15.030 ± 0.111  ms/op <-- Because this is the collision-prone default!
+ HashBenchmark.measureLightning     avgt    8   19.643 ± 0.109  ms/op
+ HashBenchmark.measureLightningInt  avgt    8   19.332 ± 0.154  ms/op
+ HashBenchmark.measureStorm         avgt    8   24.422 ± 0.185  ms/op
+ HashBenchmark.measureStormInt      avgt    8   25.002 ± 0.306  ms/op
+
+
+ Benchmark                          Mode  Cnt    Score   Error  Units
+ HashBenchmark.a_measureWisp        avgt    8   12.745 ± 0.094  ms/op
+ HashBenchmark.a_measureWispInt     avgt    8   13.022 ± 0.173  ms/op
+ HashBenchmark.measureControl       avgt    8    2.074 ± 0.005  ms/op
+ HashBenchmark.measureFNV           avgt    8  143.291 ± 0.713  ms/op
+ HashBenchmark.measureFNVInt        avgt    8  157.604 ± 0.453  ms/op
+ HashBenchmark.measureFalcon        avgt    8   17.084 ± 0.054  ms/op
+ HashBenchmark.measureFalconInt     avgt    8   15.455 ± 0.353  ms/op
+ HashBenchmark.measureJVMInt        avgt    8   15.631 ± 0.103  ms/op
+ HashBenchmark.measureLightning     avgt    8   20.567 ± 0.096  ms/op
+ HashBenchmark.measureLightningInt  avgt    8   20.230 ± 0.116  ms/op
+ HashBenchmark.measureStorm         avgt    8   25.610 ± 0.078  ms/op
+ HashBenchmark.measureStormInt      avgt    8   26.258 ± 0.100  ms/op</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/HashBenchmark.html#HashBenchmark--">HashBenchmark()</a></span> - Constructor for class squidpony.performance.<a href="../squidpony/performance/HashBenchmark.html" title="class in squidpony.performance">HashBenchmark</a></dt>
 <dd>&nbsp;</dd>

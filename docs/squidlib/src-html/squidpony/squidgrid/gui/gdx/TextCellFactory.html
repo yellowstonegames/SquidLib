@@ -395,7 +395,7 @@
 <span class="sourceLineNo">387</span>                        Gdx.app.error("TextCellFactory", "Could not find font file: " + fontPath + ", using defaults");<a name="line.387"></a>
 <span class="sourceLineNo">388</span>                }<a name="line.388"></a>
 <span class="sourceLineNo">389</span>        //bmpFont.getData().padBottom = bmpFont.getDescent();<a name="line.389"></a>
-<span class="sourceLineNo">390</span>        distanceFieldScaleX = bmpFont.getData().getGlyph(' ').xadvance - 1f;<a name="line.390"></a>
+<span class="sourceLineNo">390</span>        distanceFieldScaleX = bmpFont.getSpaceWidth() - 1f;<a name="line.390"></a>
 <span class="sourceLineNo">391</span>        distanceFieldScaleY = bmpFont.getLineHeight() - 1f;<a name="line.391"></a>
 <span class="sourceLineNo">392</span>        return this;<a name="line.392"></a>
 <span class="sourceLineNo">393</span>    }<a name="line.393"></a>

@@ -296,64 +296,66 @@
 <span class="sourceLineNo">288</span>        System.out.println(doPathGDXAStar());<a name="line.288"></a>
 <span class="sourceLineNo">289</span>    }<a name="line.289"></a>
 <span class="sourceLineNo">290</span>    /*<a name="line.290"></a>
-<span class="sourceLineNo">291</span>    public long doPathPlannedAStar()<a name="line.291"></a>
-<span class="sourceLineNo">292</span>    {<a name="line.292"></a>
-<span class="sourceLineNo">293</span>        PlannedAStar astar = new PlannedAStar(astarMap, AStarSearch.SearchType.CHEBYSHEV);<a name="line.293"></a>
-<span class="sourceLineNo">294</span>        Coord r;<a name="line.294"></a>
-<span class="sourceLineNo">295</span>        long scanned = 0;<a name="line.295"></a>
-<span class="sourceLineNo">296</span>        DungeonUtility utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));<a name="line.296"></a>
-<span class="sourceLineNo">297</span>        for (int x = 1; x &lt; DIMENSION - 1; x++) {<a name="line.297"></a>
-<span class="sourceLineNo">298</span>            for (int y = 1; y &lt; DIMENSION - 1; y++) {<a name="line.298"></a>
-<span class="sourceLineNo">299</span>                if (map[x][y] == '#')<a name="line.299"></a>
-<span class="sourceLineNo">300</span>                    continue;<a name="line.300"></a>
-<span class="sourceLineNo">301</span>                // this should ensure no blatant correlation between R and W<a name="line.301"></a>
-<span class="sourceLineNo">302</span>                utility.rng.setState((x &lt;&lt; 22) | (y &lt;&lt; 16) | (x * y));<a name="line.302"></a>
-<span class="sourceLineNo">303</span>                r = utility.randomCell(floors);<a name="line.303"></a>
-<span class="sourceLineNo">304</span>                astar.path(r, Coord.get(x, y));<a name="line.304"></a>
-<span class="sourceLineNo">305</span>                scanned++;<a name="line.305"></a>
-<span class="sourceLineNo">306</span>            }<a name="line.306"></a>
-<span class="sourceLineNo">307</span>        }<a name="line.307"></a>
-<span class="sourceLineNo">308</span>        return scanned;<a name="line.308"></a>
-<span class="sourceLineNo">309</span>    }<a name="line.309"></a>
-<span class="sourceLineNo">310</span>    //@Benchmark<a name="line.310"></a>
-<span class="sourceLineNo">311</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.311"></a>
-<span class="sourceLineNo">312</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.312"></a>
-<span class="sourceLineNo">313</span>    public void measurePathPlannedAStar() throws InterruptedException {<a name="line.313"></a>
-<span class="sourceLineNo">314</span>        System.out.println(doPathPlannedAStar());<a name="line.314"></a>
-<span class="sourceLineNo">315</span>    }<a name="line.315"></a>
-<span class="sourceLineNo">316</span>    */<a name="line.316"></a>
-<span class="sourceLineNo">317</span>    /*<a name="line.317"></a>
-<span class="sourceLineNo">318</span>     * ============================== HOW TO RUN THIS TEST: ====================================<a name="line.318"></a>
-<span class="sourceLineNo">319</span>     *<a name="line.319"></a>
-<span class="sourceLineNo">320</span>     * You are expected to see the different run modes for the same benchmark.<a name="line.320"></a>
-<span class="sourceLineNo">321</span>     * Note the units are different, scores are consistent with each other.<a name="line.321"></a>
-<span class="sourceLineNo">322</span>     *<a name="line.322"></a>
-<span class="sourceLineNo">323</span>     * You can run this test:<a name="line.323"></a>
-<span class="sourceLineNo">324</span>     *<a name="line.324"></a>
-<span class="sourceLineNo">325</span>     * a) Via the command line from the squidlib-performance module's root folder:<a name="line.325"></a>
-<span class="sourceLineNo">326</span>     *    $ mvn clean install<a name="line.326"></a>
-<span class="sourceLineNo">327</span>     *    $ java -jar target/benchmarks.jar DijkstraBenchmark -wi 3 -i 3 -f 1<a name="line.327"></a>
-<span class="sourceLineNo">328</span>     *<a name="line.328"></a>
-<span class="sourceLineNo">329</span>     *    (we requested 3 warmup/measurement iterations, single fork)<a name="line.329"></a>
-<span class="sourceLineNo">330</span>     *<a name="line.330"></a>
-<span class="sourceLineNo">331</span>     * b) Via the Java API:<a name="line.331"></a>
-<span class="sourceLineNo">332</span>     *    (see the JMH homepage for possible caveats when running from IDE:<a name="line.332"></a>
-<span class="sourceLineNo">333</span>     *      http://openjdk.java.net/projects/code-tools/jmh/)<a name="line.333"></a>
-<span class="sourceLineNo">334</span>     */<a name="line.334"></a>
-<span class="sourceLineNo">335</span><a name="line.335"></a>
-<span class="sourceLineNo">336</span>    public static void main(String[] args) throws RunnerException {<a name="line.336"></a>
-<span class="sourceLineNo">337</span>        Options opt = new OptionsBuilder()<a name="line.337"></a>
-<span class="sourceLineNo">338</span>                .include(DijkstraBenchmark.class.getSimpleName())<a name="line.338"></a>
-<span class="sourceLineNo">339</span>                .warmupIterations(3)<a name="line.339"></a>
-<span class="sourceLineNo">340</span>                .measurementIterations(3)<a name="line.340"></a>
-<span class="sourceLineNo">341</span>                .forks(1)<a name="line.341"></a>
-<span class="sourceLineNo">342</span>                .build();<a name="line.342"></a>
-<span class="sourceLineNo">343</span><a name="line.343"></a>
-<span class="sourceLineNo">344</span>        new Runner(opt).run();<a name="line.344"></a>
-<span class="sourceLineNo">345</span>    }<a name="line.345"></a>
-<span class="sourceLineNo">346</span><a name="line.346"></a>
-<span class="sourceLineNo">347</span><a name="line.347"></a>
-<span class="sourceLineNo">348</span>}<a name="line.348"></a>
+<span class="sourceLineNo">291</span>     * ============================== HOW TO RUN THIS TEST: ====================================<a name="line.291"></a>
+<span class="sourceLineNo">292</span>     *<a name="line.292"></a>
+<span class="sourceLineNo">293</span>     * You are expected to see the different run modes for the same benchmark.<a name="line.293"></a>
+<span class="sourceLineNo">294</span>     * Note the units are different, scores are consistent with each other.<a name="line.294"></a>
+<span class="sourceLineNo">295</span>     *<a name="line.295"></a>
+<span class="sourceLineNo">296</span>     * You can run this test:<a name="line.296"></a>
+<span class="sourceLineNo">297</span>     *<a name="line.297"></a>
+<span class="sourceLineNo">298</span>     * a) Via the command line from the squidlib-performance module's root folder:<a name="line.298"></a>
+<span class="sourceLineNo">299</span>     *    $ mvn clean install<a name="line.299"></a>
+<span class="sourceLineNo">300</span>     *    $ java -jar target/benchmarks.jar DijkstraBenchmark -wi 3 -i 3 -f 1<a name="line.300"></a>
+<span class="sourceLineNo">301</span>     *<a name="line.301"></a>
+<span class="sourceLineNo">302</span>     *    (we requested 3 warmup/measurement iterations, single fork)<a name="line.302"></a>
+<span class="sourceLineNo">303</span>     *<a name="line.303"></a>
+<span class="sourceLineNo">304</span>     * b) Via the Java API:<a name="line.304"></a>
+<span class="sourceLineNo">305</span>     *    (see the JMH homepage for possible caveats when running from IDE:<a name="line.305"></a>
+<span class="sourceLineNo">306</span>     *      http://openjdk.java.net/projects/code-tools/jmh/)<a name="line.306"></a>
+<span class="sourceLineNo">307</span>     */<a name="line.307"></a>
+<span class="sourceLineNo">308</span><a name="line.308"></a>
+<span class="sourceLineNo">309</span>    public static void main(String[] args) throws RunnerException {<a name="line.309"></a>
+<span class="sourceLineNo">310</span>        Options opt = new OptionsBuilder()<a name="line.310"></a>
+<span class="sourceLineNo">311</span>                .include(DijkstraBenchmark.class.getSimpleName())<a name="line.311"></a>
+<span class="sourceLineNo">312</span>                .warmupIterations(3)<a name="line.312"></a>
+<span class="sourceLineNo">313</span>                .measurementIterations(3)<a name="line.313"></a>
+<span class="sourceLineNo">314</span>                .forks(1)<a name="line.314"></a>
+<span class="sourceLineNo">315</span>                .build();<a name="line.315"></a>
+<span class="sourceLineNo">316</span><a name="line.316"></a>
+<span class="sourceLineNo">317</span>        new Runner(opt).run();<a name="line.317"></a>
+<span class="sourceLineNo">318</span>    }<a name="line.318"></a>
+<span class="sourceLineNo">319</span><a name="line.319"></a>
+<span class="sourceLineNo">320</span><a name="line.320"></a>
+<span class="sourceLineNo">321</span>}<a name="line.321"></a>
+<span class="sourceLineNo">322</span><a name="line.322"></a>
+<span class="sourceLineNo">323</span>/*<a name="line.323"></a>
+<span class="sourceLineNo">324</span>    public long doPathPlannedAStar()<a name="line.324"></a>
+<span class="sourceLineNo">325</span>    {<a name="line.325"></a>
+<span class="sourceLineNo">326</span>        PlannedAStar astar = new PlannedAStar(astarMap, AStarSearch.SearchType.CHEBYSHEV);<a name="line.326"></a>
+<span class="sourceLineNo">327</span>        Coord r;<a name="line.327"></a>
+<span class="sourceLineNo">328</span>        long scanned = 0;<a name="line.328"></a>
+<span class="sourceLineNo">329</span>        DungeonUtility utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));<a name="line.329"></a>
+<span class="sourceLineNo">330</span>        for (int x = 1; x &lt; DIMENSION - 1; x++) {<a name="line.330"></a>
+<span class="sourceLineNo">331</span>            for (int y = 1; y &lt; DIMENSION - 1; y++) {<a name="line.331"></a>
+<span class="sourceLineNo">332</span>                if (map[x][y] == '#')<a name="line.332"></a>
+<span class="sourceLineNo">333</span>                    continue;<a name="line.333"></a>
+<span class="sourceLineNo">334</span>                // this should ensure no blatant correlation between R and W<a name="line.334"></a>
+<span class="sourceLineNo">335</span>                utility.rng.setState((x &lt;&lt; 22) | (y &lt;&lt; 16) | (x * y));<a name="line.335"></a>
+<span class="sourceLineNo">336</span>                r = utility.randomCell(floors);<a name="line.336"></a>
+<span class="sourceLineNo">337</span>                astar.path(r, Coord.get(x, y));<a name="line.337"></a>
+<span class="sourceLineNo">338</span>                scanned++;<a name="line.338"></a>
+<span class="sourceLineNo">339</span>            }<a name="line.339"></a>
+<span class="sourceLineNo">340</span>        }<a name="line.340"></a>
+<span class="sourceLineNo">341</span>        return scanned;<a name="line.341"></a>
+<span class="sourceLineNo">342</span>    }<a name="line.342"></a>
+<span class="sourceLineNo">343</span>    //@Benchmark<a name="line.343"></a>
+<span class="sourceLineNo">344</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.344"></a>
+<span class="sourceLineNo">345</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.345"></a>
+<span class="sourceLineNo">346</span>    public void measurePathPlannedAStar() throws InterruptedException {<a name="line.346"></a>
+<span class="sourceLineNo">347</span>        System.out.println(doPathPlannedAStar());<a name="line.347"></a>
+<span class="sourceLineNo">348</span>    }<a name="line.348"></a>
+<span class="sourceLineNo">349</span>    */<a name="line.349"></a>
+<span class="sourceLineNo">350</span><a name="line.350"></a>
 
 
 
