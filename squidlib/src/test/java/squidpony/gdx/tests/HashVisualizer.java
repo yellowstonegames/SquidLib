@@ -35,7 +35,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private Viewport view;
     private int hashMode = 28, rngMode = 0, noiseMode = 1;
     private CrossHash.Storm storm, stormA, stormB, stormC;
-    private int testType = 4;
+    private int testType = 1;
     private RandomnessSource fuzzy, random;
     private Random jreRandom;
     private RandomXS128 gdxRandom;
@@ -183,7 +183,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             rngMode %= 18;
                         } else {
                             hashMode++;
-                            hashMode &= 31;
+                            hashMode %= 36;
                         }
                         putMap();
                         //Gdx.graphics.requestRendering();
@@ -556,7 +556,44 @@ public class HashVisualizer extends ApplicationAdapter {
                             }
                         }
                         break;
-
+                    case 32:
+                        for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
+                            for (int y = 0; y < height; y++) {
+                                coordinates[1] = y;
+                                code = CrossHash.Wisp.hash(coordinates) & 0xFFFFFF00 | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        break;
+                    case 33:
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                coordinate[0] = (x << 9) | y;
+                                code = CrossHash.Wisp.hash(coordinate) & 0xFFFFFF00 | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        break;
+                    case 34:
+                        for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
+                            for (int y = 0; y < height; y++) {
+                                coordinates[1] = y;
+                                code = CrossHash.Wisp.hash64(coordinates) & 0xFFFFFF00 | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        break;
+                    case 35:
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                coordinate[0] = (x << 9) | y;
+                                code = CrossHash.Wisp.hash64(coordinate) & 0xFFFFFF00 | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        break;
                 }
             }
             break;
@@ -862,6 +899,45 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.Falcon.hash64(coordinate) & 0xFFFFFF00 | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        break;
+
+                    case 32:
+                        for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
+                            for (int y = 0; y < height; y++) {
+                                coordinates[1] = y;
+                                code = CrossHash.Wisp.hash(coordinates) & 0xFFFFFF00 | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        break;
+                    case 33:
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                coordinate[0] = (x << 9) | y;
+                                code = CrossHash.Wisp.hash(coordinate) & 0xFFFFFF00 | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        break;
+                    case 34:
+                        for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
+                            for (int y = 0; y < height; y++) {
+                                coordinates[1] = y;
+                                code = CrossHash.Wisp.hash64(coordinates) & 0xFFFFFF00 | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        break;
+                    case 35:
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                coordinate[0] = (x << 9) | y;
+                                code = CrossHash.Wisp.hash64(coordinate) & 0xFFFFFF00 | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }

@@ -87,6 +87,21 @@ import java.util.concurrent.TimeUnit;
  * HashBenchmark.measureLightningInt  avgt    8   19.332 ± 0.154  ms/op
  * HashBenchmark.measureStorm         avgt    8   24.422 ± 0.185  ms/op
  * HashBenchmark.measureStormInt      avgt    8   25.002 ± 0.306  ms/op
+ *
+ * Benchmark                          Mode  Cnt    Score   Error  Units
+ * HashBenchmark.measureControl       avgt    8    2.080 ± 0.009  ms/op
+ * HashBenchmark.measureFNV           avgt    8  143.730 ± 0.681  ms/op
+ * HashBenchmark.measureFNVInt        avgt    8  157.785 ± 1.505  ms/op
+ * HashBenchmark.measureFalcon        avgt    8   16.066 ± 0.205  ms/op
+ * HashBenchmark.measureFalconInt     avgt    8   15.321 ± 0.107  ms/op
+ * HashBenchmark.measureJVMInt        avgt    8   15.685 ± 0.109  ms/op
+ * HashBenchmark.measureLightning     avgt    8   20.617 ± 0.091  ms/op
+ * HashBenchmark.measureLightningInt  avgt    8   20.284 ± 0.053  ms/op
+ * HashBenchmark.measureStorm         avgt    8   26.013 ± 0.139  ms/op
+ * HashBenchmark.measureStormInt      avgt    8   26.278 ± 0.061  ms/op
+ * HashBenchmark.measureWisp          avgt    8   11.796 ± 0.034  ms/op <-- This is great! 64-bit hashes are fast!
+ * HashBenchmark.measureWispInt       avgt    8   13.046 ± 0.037  ms/op <-- Trying to figure out how to quicken this.
+ *
  */
 public class HashBenchmark {
 
@@ -303,6 +318,44 @@ public class HashBenchmark {
         doFalconInt();
     }
 
+    public long doWisp()
+    {
+        LongPeriodRNG rng = new LongPeriodRNG(seed);
+
+        for (int i = 0; i < 1000000; i++) {
+            rng.nextLong();
+            seed += CrossHash.Wisp.hash64(rng.state);
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureWisp() throws InterruptedException {
+        seed = 9000;
+        doWisp();
+    }
+
+    public long doWispInt()
+    {
+        LongPeriodRNG rng = new LongPeriodRNG(iseed);
+
+        for (int i = 0; i < 1000000; i++) {
+            rng.nextLong();
+            iseed += CrossHash.Wisp.hash(rng.state);
+        }
+        return iseed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureWispInt() throws InterruptedException {
+        iseed = 9000;
+        doWispInt();
+    }
+
     public long doControl()
     {
         LongPeriodRNG rng = new LongPeriodRNG(iseed);
@@ -333,9 +386,9 @@ public class HashBenchmark {
      *
      * a) Via the command line from the squidlib-performance module's root folder:
      *    $ mvn clean install
-     *    $ java -jar target/benchmarks.jar HashBenchmark -wi 3 -i 3 -f 1
+     *    $ java -jar target/benchmarks.jar HashBenchmark -wi 8 -i 8 -f 1
      *
-     *    (we requested 5 warmup/measurement iterations, single fork)
+     *    (we requested 8 warmup/measurement iterations, single fork)
      *
      * b) Via the Java API:
      *    (see the JMH homepage for possible caveats when running from IDE:
