@@ -109,7 +109,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/performance/HashBenchmark.html#line.107">HashBenchmark</a>
+<pre>public class <a href="../../src-html/squidpony/performance/HashBenchmark.html#line.106">HashBenchmark</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">Benchmark                          Mode  Cnt    Score    Error  Units
  HashBenchmark.measureFNV           avgt    3  138.403 ± 13.317  ms/op
@@ -152,20 +152,19 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  HashBenchmark.measureStorm         avgt    8   24.422 ± 0.185  ms/op
  HashBenchmark.measureStormInt      avgt    8   25.002 ± 0.306  ms/op
 
-
  Benchmark                          Mode  Cnt    Score   Error  Units
- HashBenchmark.a_measureWisp        avgt    8   12.745 ± 0.094  ms/op
- HashBenchmark.a_measureWispInt     avgt    8   13.022 ± 0.173  ms/op
- HashBenchmark.measureControl       avgt    8    2.074 ± 0.005  ms/op
- HashBenchmark.measureFNV           avgt    8  143.291 ± 0.713  ms/op
- HashBenchmark.measureFNVInt        avgt    8  157.604 ± 0.453  ms/op
- HashBenchmark.measureFalcon        avgt    8   17.084 ± 0.054  ms/op
- HashBenchmark.measureFalconInt     avgt    8   15.455 ± 0.353  ms/op
- HashBenchmark.measureJVMInt        avgt    8   15.631 ± 0.103  ms/op
- HashBenchmark.measureLightning     avgt    8   20.567 ± 0.096  ms/op
- HashBenchmark.measureLightningInt  avgt    8   20.230 ± 0.116  ms/op
- HashBenchmark.measureStorm         avgt    8   25.610 ± 0.078  ms/op
- HashBenchmark.measureStormInt      avgt    8   26.258 ± 0.100  ms/op</div>
+ HashBenchmark.measureControl       avgt    8    2.080 ± 0.009  ms/op
+ HashBenchmark.measureFNV           avgt    8  143.730 ± 0.681  ms/op
+ HashBenchmark.measureFNVInt        avgt    8  157.785 ± 1.505  ms/op
+ HashBenchmark.measureFalcon        avgt    8   16.066 ± 0.205  ms/op
+ HashBenchmark.measureFalconInt     avgt    8   15.321 ± 0.107  ms/op
+ HashBenchmark.measureJVMInt        avgt    8   15.685 ± 0.109  ms/op
+ HashBenchmark.measureLightning     avgt    8   20.617 ± 0.091  ms/op
+ HashBenchmark.measureLightningInt  avgt    8   20.284 ± 0.053  ms/op
+ HashBenchmark.measureStorm         avgt    8   26.013 ± 0.139  ms/op
+ HashBenchmark.measureStormInt      avgt    8   26.278 ± 0.061  ms/op
+ HashBenchmark.measureWisp          avgt    8   11.796 ± 0.034  ms/op <-- This is great! 64-bit hashes are fast!
+ HashBenchmark.measureWispInt       avgt    8   13.046 ± 0.037  ms/op <-- Trying to figure out how to quicken this.</div>
 </li>
 </ul>
 </div>
@@ -329,7 +328,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>HashBenchmark</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.107">HashBenchmark</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.106">HashBenchmark</a>()</pre>
 </li>
 </ul>
 </li>
@@ -346,7 +345,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doFNV</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.112">doFNV</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.111">doFNV</a>()</pre>
 </li>
 </ul>
 <a name="measureFNV--">
@@ -355,7 +354,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureFNV</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.126">measureFNV</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.125">measureFNV</a>()
                 throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -369,7 +368,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doFNVInt</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.131">doFNVInt</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.130">doFNVInt</a>()</pre>
 </li>
 </ul>
 <a name="measureFNVInt--">
@@ -378,7 +377,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureFNVInt</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.145">measureFNVInt</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.144">measureFNVInt</a>()
                    throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -392,7 +391,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doLightning</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.150">doLightning</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.149">doLightning</a>()</pre>
 </li>
 </ul>
 <a name="measureLightning--">
@@ -401,7 +400,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureLightning</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.164">measureLightning</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.163">measureLightning</a>()
                       throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -415,7 +414,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doLightningInt</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.169">doLightningInt</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.168">doLightningInt</a>()</pre>
 </li>
 </ul>
 <a name="measureLightningInt--">
@@ -424,7 +423,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureLightningInt</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.183">measureLightningInt</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.182">measureLightningInt</a>()
                          throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -438,7 +437,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doJVMInt</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.188">doJVMInt</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.187">doJVMInt</a>()</pre>
 </li>
 </ul>
 <a name="measureJVMInt--">
@@ -447,7 +446,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureJVMInt</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.202">measureJVMInt</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.201">measureJVMInt</a>()
                    throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -461,7 +460,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doStorm</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.245">doStorm</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.244">doStorm</a>()</pre>
 </li>
 </ul>
 <a name="measureStorm--">
@@ -470,7 +469,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureStorm</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.259">measureStorm</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.258">measureStorm</a>()
                   throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -484,7 +483,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doStormInt</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.264">doStormInt</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.263">doStormInt</a>()</pre>
 </li>
 </ul>
 <a name="measureStormInt--">
@@ -493,7 +492,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureStormInt</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.278">measureStormInt</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.277">measureStormInt</a>()
                      throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -507,7 +506,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doFalcon</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.284">doFalcon</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.283">doFalcon</a>()</pre>
 </li>
 </ul>
 <a name="measureFalcon--">
@@ -516,7 +515,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureFalcon</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.298">measureFalcon</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.297">measureFalcon</a>()
                    throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -530,7 +529,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doFalconInt</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.303">doFalconInt</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.302">doFalconInt</a>()</pre>
 </li>
 </ul>
 <a name="measureFalconInt--">
@@ -539,7 +538,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureFalconInt</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.317">measureFalconInt</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.316">measureFalconInt</a>()
                       throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -553,7 +552,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doWisp</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.322">doWisp</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.321">doWisp</a>()</pre>
 </li>
 </ul>
 <a name="measureWisp--">
@@ -562,7 +561,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureWisp</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.336">measureWisp</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.335">measureWisp</a>()
                  throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -576,7 +575,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doWispInt</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.341">doWispInt</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.340">doWispInt</a>()</pre>
 </li>
 </ul>
 <a name="measureWispInt--">
@@ -585,7 +584,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureWispInt</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.355">measureWispInt</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.354">measureWispInt</a>()
                     throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -599,7 +598,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doControl</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.360">doControl</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.359">doControl</a>()</pre>
 </li>
 </ul>
 <a name="measureControl--">
@@ -608,7 +607,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureControl</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.373">measureControl</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.372">measureControl</a>()
                     throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -622,7 +621,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>main</h4>
-<pre>public static&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.399">main</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)
+<pre>public static&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/HashBenchmark.html#line.398">main</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)
                  throws org.openjdk.jmh.runner.RunnerException</pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>

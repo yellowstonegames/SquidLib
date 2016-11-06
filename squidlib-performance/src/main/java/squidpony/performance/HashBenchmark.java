@@ -102,6 +102,20 @@ import java.util.concurrent.TimeUnit;
  * HashBenchmark.measureWisp          avgt    8   11.796 ± 0.034  ms/op <-- This is great! 64-bit hashes are fast!
  * HashBenchmark.measureWispInt       avgt    8   13.046 ± 0.037  ms/op <-- Trying to figure out how to quicken this.
  *
+ * Benchmark                          Mode  Cnt    Score   Error  Units
+ * HashBenchmark.measureControl       avgt    8    2.082 ± 0.009  ms/op
+ * HashBenchmark.measureFNV           avgt    8  143.760 ± 0.523  ms/op
+ * HashBenchmark.measureFNVInt        avgt    8  157.110 ± 1.180  ms/op
+ * HashBenchmark.measureFalcon        avgt    8   17.178 ± 0.038  ms/op
+ * HashBenchmark.measureFalconInt     avgt    8   15.367 ± 0.113  ms/op
+ * HashBenchmark.measureJVMInt        avgt    8   15.696 ± 0.071  ms/op
+ * HashBenchmark.measureLightning     avgt    8   20.323 ± 0.079  ms/op
+ * HashBenchmark.measureLightningInt  avgt    8   20.304 ± 0.101  ms/op
+ * HashBenchmark.measureStorm         avgt    8   25.699 ± 0.061  ms/op
+ * HashBenchmark.measureStormInt      avgt    8   26.352 ± 0.095  ms/op
+ * HashBenchmark.measureWisp          avgt    8   12.780 ± 0.062  ms/op <-- These numbers vary a lot, and may have
+ * HashBenchmark.measureWispInt       avgt    8   13.043 ± 0.041  ms/op <-- to do with processor cache availability
+ *
  */
 public class HashBenchmark {
 
