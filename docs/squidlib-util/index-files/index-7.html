@@ -372,6 +372,16 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/Rectangle.Utils.html#getAll4Corners-squidpony.squidgrid.mapping.Rectangle-squidpony.squidmath.Coord:A-">getAll4Corners(Rectangle, Coord[])</a></span> - Static method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/Rectangle.Utils.html" title="class in squidpony.squidgrid.mapping">Rectangle.Utils</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MultiKey.html#getAllAt-int-">getAllAt(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MultiKey.html" title="class in squidpony.squidmath">MultiKey</a></dt>
+<dd>
+<div class="block">Given an int index, finds the associated keys at all keysets (using index as a point in the ordering) and returns
+ them as a newly-allocated Object array.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MultiKey.html#getAllAt-int-java.lang.Object:A-">getAllAt(int, Object[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MultiKey.html" title="class in squidpony.squidmath">MultiKey</a></dt>
+<dd>
+<div class="block">Given an int index and an Object array to reuse, finds the associated keys at all keysets (using index as a point
+ in the ordering) and fills into with those keys, up to keyCount items.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/Placement.html#getAlongStraightWalls--">getAlongStraightWalls()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/Placement.html" title="class in squidpony.squidgrid.mapping">Placement</a></dt>
 <dd>
 <div class="block">Gets an OrderedSet of OrderedSet of Coord, where each inner OrderedSet of Coord refers to a placement
@@ -412,6 +422,11 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#getAt-int-">getAt(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
 <div class="block">Gets the value at the given index in the iteration order in constant time (random-access).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MultiKey.html#getAt-int-int-">getAt(int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MultiKey.html" title="class in squidpony.squidmath">MultiKey</a></dt>
+<dd>
+<div class="block">Given an index of a keyset (which) and an int index, finds the associated key in the keyset specified by which
+ (using index as a point in the ordering).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedMap.html#getAt-int-">getAt(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a></dt>
 <dd>
@@ -613,6 +628,12 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/DharmaRNG.html#getFortune--">getFortune()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DharmaRNG.html" title="class in squidpony.squidmath">DharmaRNG</a></dt>
 <dd>
 <div class="block">Gets the status of the fortune used when calculating fairness adjustments.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MultiKey.html#getFrom-int-int-java.lang.Object-">getFrom(int, int, Object)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MultiKey.html" title="class in squidpony.squidmath">MultiKey</a></dt>
+<dd>
+<div class="block">Given an index of the keyset to look up a key in (lookingUp), an index of the keyset to get from (getting), and
+ an Object key to look up (key), finds the Object key in the keyset specified by getting that is associated with
+ key in the keyset specified by lookingUp.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/IColorCenter.html#getGreen-T-">getGreen(T)</a></span> - Method in interface squidpony.<a href="../squidpony/IColorCenter.html" title="interface in squidpony">IColorCenter</a></dt>
 <dd>&nbsp;</dd>
@@ -842,6 +863,10 @@
 <dd>
 <div class="block">Returns the index i of the next point in the Sobol sequence that will be returned
  by calling <a href="../squidpony/squidmath/SobolQRNG.html#nextVector--"><code>SobolQRNG.nextVector()</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MultiKey.html#getOrderedSet-int-">getOrderedSet(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MultiKey.html" title="class in squidpony.squidmath">MultiKey</a></dt>
+<dd>
+<div class="block">To be called sparingly, since this allocates a new OrderedSet instead of reusing one.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/K2.html#getOrderedSetA--">getOrderedSetA()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a></dt>
 <dd>
@@ -1109,6 +1134,11 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/MersenneTwister.html#getSeed--">getSeed()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MersenneTwister.html" title="class in squidpony.squidmath">MersenneTwister</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MultiKey.html#getSet-int-">getSet(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MultiKey.html" title="class in squidpony.squidmath">MultiKey</a></dt>
+<dd>
+<div class="block">Gets and caches the keys in the keyset specified by which as a Collection that implements SortedSet (and so also
+ implements Set).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/K2.html#getSetA--">getSetA()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a></dt>
 <dd>
 <div class="block">Gets and caches the A keys as a Collection that implements SortedSet (and so also implements Set).</div>

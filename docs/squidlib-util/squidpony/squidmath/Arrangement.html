@@ -353,91 +353,94 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Arrangement.html#Arrangement--">Arrangement</a></span>()</code>
-<div class="block">Creates a new Arrangement with initial expected 16 entries and 0.75f as load factor.</div>
+<div class="block">Creates a new Arrangement with initial expected 16 entries and 0.5f as load factor.</div>
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Arrangement.html#Arrangement-squidpony.squidmath.Arrangement-">Arrangement</a></span>(<a href="../../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;? extends <a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;a)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Arrangement.html#Arrangement-java.util.Collection-">Arrangement</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;keyColl)</code>
 <div class="block">Creates a new Arrangement using the elements of an array.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Arrangement.html#Arrangement-java.util.Collection-float-">Arrangement</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;keyColl,
            float&nbsp;f)</code>
 <div class="block">Creates a new Arrangement using the given collection of keys.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Arrangement.html#Arrangement-squidpony.squidmath.CrossHash.IHasher-">Arrangement</a></span>(<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</code>
-<div class="block">Creates a new Arrangement with initial expected 16 entries and 0.75f as load factor.</div>
+<div class="block">Creates a new Arrangement with initial expected 16 entries and 0.5f as load factor.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Arrangement.html#Arrangement-int-">Arrangement</a></span>(int&nbsp;expected)</code>
+<div class="block">Creates a new Arrangement with 0.5f as load factor.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Arrangement.html#Arrangement-int-">Arrangement</a></span>(int&nbsp;expected)</code>
-<div class="block">Creates a new Arrangement with 0.75f as load factor.</div>
-</td>
-</tr>
-<tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Arrangement.html#Arrangement-int-squidpony.squidmath.CrossHash.IHasher-">Arrangement</a></span>(int&nbsp;expected,
            <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</code>
-<div class="block">Creates a new Arrangement with 0.75f as load factor.</div>
+<div class="block">Creates a new Arrangement with 0.5f as load factor.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Arrangement.html#Arrangement-int-float-">Arrangement</a></span>(int&nbsp;expected,
            float&nbsp;f)</code>
 <div class="block">Creates a new Arrangement.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Arrangement.html#Arrangement-int-float-squidpony.squidmath.CrossHash.IHasher-">Arrangement</a></span>(int&nbsp;expected,
            float&nbsp;f,
            <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</code>
 <div class="block">Creates a new Arrangement.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Arrangement.html#Arrangement-K:A-">Arrangement</a></span>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>[]&nbsp;keyArray)</code>
-<div class="block">Creates a new Arrangement with 0.75f as load factor using the elements of an array.</div>
+<div class="block">Creates a new Arrangement with 0.5f as load factor using the elements of an array.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Arrangement.html#Arrangement-K:A-squidpony.squidmath.CrossHash.IHasher-">Arrangement</a></span>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>[]&nbsp;keyArray,
+           <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</code>
+<div class="block">Creates a new Arrangement with 0.5f as load factor using the elements of two parallel arrays.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Arrangement.html#Arrangement-K:A-squidpony.squidmath.CrossHash.IHasher-">Arrangement</a></span>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>[]&nbsp;keyArray,
-           <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</code>
-<div class="block">Creates a new Arrangement with 0.75f as load factor using the elements of two parallel arrays.</div>
-</td>
-</tr>
-<tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Arrangement.html#Arrangement-K:A-float-">Arrangement</a></span>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>[]&nbsp;keyArray,
            float&nbsp;f)</code>
 <div class="block">Creates a new Arrangement using the elements of an array.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Arrangement.html#Arrangement-K:A-float-squidpony.squidmath.CrossHash.IHasher-">Arrangement</a></span>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>[]&nbsp;keyArray,
            float&nbsp;f,
            <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</code>
 <div class="block">Creates a new Arrangement using the elements of two parallel arrays.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Arrangement.html#Arrangement-java.util.Map-">Arrangement</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;m)</code>
-<div class="block">Creates a new Arrangement with 0.75f as load factor copying a given one.</div>
+<div class="block">Creates a new Arrangement with 0.5f as load factor copying a given one.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Arrangement.html#Arrangement-java.util.Map-squidpony.squidmath.CrossHash.IHasher-">Arrangement</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;m,
+           <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</code>
+<div class="block">Creates a new Arrangement with 0.5f as load factor copying a given one.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Arrangement.html#Arrangement-java.util.Map-squidpony.squidmath.CrossHash.IHasher-">Arrangement</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;m,
-           <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</code>
-<div class="block">Creates a new Arrangement with 0.75f as load factor copying a given one.</div>
-</td>
-</tr>
-<tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Arrangement.html#Arrangement-java.util.Map-float-">Arrangement</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;m,
            float&nbsp;f)</code>
 <div class="block">Creates a new Arrangement copying a given one.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Arrangement.html#Arrangement-java.util.Map-float-squidpony.squidmath.CrossHash.IHasher-">Arrangement</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;m,
            float&nbsp;f,
            <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</code>
@@ -1103,7 +1106,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <li class="blockList">
 <h4>Arrangement</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.179">Arrangement</a>(int&nbsp;expected)</pre>
-<div class="block">Creates a new Arrangement with 0.75f as load factor.</div>
+<div class="block">Creates a new Arrangement with 0.5f as load factor.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>expected</code> - the expected number of elements in the Arrangement.</dd>
@@ -1117,7 +1120,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <li class="blockList">
 <h4>Arrangement</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.186">Arrangement</a>()</pre>
-<div class="block">Creates a new Arrangement with initial expected 16 entries and 0.75f as load factor.</div>
+<div class="block">Creates a new Arrangement with initial expected 16 entries and 0.5f as load factor.</div>
 </li>
 </ul>
 <a name="Arrangement-java.util.Map-float-">
@@ -1143,11 +1146,20 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <li class="blockList">
 <h4>Arrangement</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.206">Arrangement</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;m)</pre>
-<div class="block">Creates a new Arrangement with 0.75f as load factor copying a given one.</div>
+<div class="block">Creates a new Arrangement with 0.5f as load factor copying a given one.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>m</code> - a <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util"><code>Map</code></a> to be copied into the new Arrangement.</dd>
 </dl>
+</li>
+</ul>
+<a name="Arrangement-squidpony.squidmath.Arrangement-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>Arrangement</h4>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.210">Arrangement</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;? extends <a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;a)</pre>
 </li>
 </ul>
 <a name="Arrangement-java.lang.Object:A-float-">
@@ -1158,7 +1170,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>Arrangement</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.217">Arrangement</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>[]&nbsp;keyArray,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.226">Arrangement</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>[]&nbsp;keyArray,
                    float&nbsp;f)</pre>
 <div class="block">Creates a new Arrangement using the elements of an array.</div>
 <dl>
@@ -1176,7 +1188,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>Arrangement</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.229">Arrangement</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;keyColl)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.238">Arrangement</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;keyColl)</pre>
 <div class="block">Creates a new Arrangement using the elements of an array.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1192,7 +1204,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>Arrangement</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.239">Arrangement</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;keyColl,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.248">Arrangement</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;keyColl,
                    float&nbsp;f)</pre>
 <div class="block">Creates a new Arrangement using the given collection of keys.</div>
 <dl>
@@ -1212,8 +1224,8 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>Arrangement</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.255">Arrangement</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>[]&nbsp;keyArray)</pre>
-<div class="block">Creates a new Arrangement with 0.75f as load factor using the elements of an array.</div>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.264">Arrangement</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>[]&nbsp;keyArray)</pre>
+<div class="block">Creates a new Arrangement with 0.5f as load factor using the elements of an array.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>keyArray</code> - the array of keys of the new Arrangement.</dd>
@@ -1228,7 +1240,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>Arrangement</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.269">Arrangement</a>(int&nbsp;expected,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.278">Arrangement</a>(int&nbsp;expected,
                    float&nbsp;f,
                    <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</pre>
 <div class="block">Creates a new Arrangement.
@@ -1248,9 +1260,9 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>Arrangement</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.289">Arrangement</a>(int&nbsp;expected,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.298">Arrangement</a>(int&nbsp;expected,
                    <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</pre>
-<div class="block">Creates a new Arrangement with 0.75f as load factor.</div>
+<div class="block">Creates a new Arrangement with 0.5f as load factor.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>expected</code> - the expected number of elements in the Arrangement.</dd>
@@ -1264,8 +1276,8 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>Arrangement</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.296">Arrangement</a>(<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</pre>
-<div class="block">Creates a new Arrangement with initial expected 16 entries and 0.75f as load factor.</div>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.305">Arrangement</a>(<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</pre>
+<div class="block">Creates a new Arrangement with initial expected 16 entries and 0.5f as load factor.</div>
 </li>
 </ul>
 <a name="Arrangement-java.util.Map-float-squidpony.squidmath.CrossHash.IHasher-">
@@ -1274,7 +1286,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>Arrangement</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.307">Arrangement</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;m,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.316">Arrangement</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;m,
                    float&nbsp;f,
                    <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</pre>
 <div class="block">Creates a new Arrangement copying a given one.</div>
@@ -1292,9 +1304,9 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>Arrangement</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.317">Arrangement</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;m,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.326">Arrangement</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;m,
                    <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</pre>
-<div class="block">Creates a new Arrangement with 0.75f as load factor copying a given one.</div>
+<div class="block">Creates a new Arrangement with 0.5f as load factor copying a given one.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>m</code> - a <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util"><code>Map</code></a> to be copied into the new Arrangement.</dd>
@@ -1310,7 +1322,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>Arrangement</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.329">Arrangement</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>[]&nbsp;keyArray,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.338">Arrangement</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>[]&nbsp;keyArray,
                    float&nbsp;f,
                    <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</pre>
 <div class="block">Creates a new Arrangement using the elements of two parallel arrays.</div>
@@ -1332,9 +1344,9 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Arrangement</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.342">Arrangement</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>[]&nbsp;keyArray,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.351">Arrangement</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>[]&nbsp;keyArray,
                    <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</pre>
-<div class="block">Creates a new Arrangement with 0.75f as load factor using the elements of two parallel arrays.</div>
+<div class="block">Creates a new Arrangement with 0.5f as load factor using the elements of two parallel arrays.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>keyArray</code> - the array of keys of the new Arrangement.</dd>
@@ -1358,7 +1370,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>putAll</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.384">putAll</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;m)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.393">putAll</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;m)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#putAll-java.util.Map-" title="class or interface in java.util">putAll</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></dd>
@@ -1373,7 +1385,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>putAll</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.398">putAll</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>[]&nbsp;keyArray)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.407">putAll</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>[]&nbsp;keyArray)</pre>
 </li>
 </ul>
 <a name="putAll-java.util.Collection-">
@@ -1382,7 +1394,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>putAll</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.410">putAll</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;? extends <a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;keyArray)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.419">putAll</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;? extends <a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;keyArray)</pre>
 </li>
 </ul>
 <a name="put-java.lang.Object-java.lang.Integer-">
@@ -1394,7 +1406,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <li class="blockList">
 <h4>put</h4>
 <pre><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang">@Deprecated</a>
-public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.499">put</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;k,
+public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.508">put</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;k,
                                 <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;v)</pre>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
 <div class="block">Puts the key k into this Arrangement with a value equal to the current number of keys; v is disregarded.</div>
@@ -1417,7 +1429,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.508">put</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;k,
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.517">put</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;k,
                int&nbsp;v)</pre>
 </li>
 </ul>
@@ -1429,7 +1441,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>add</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.517">add</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;k)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.526">add</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;k)</pre>
 </li>
 </ul>
 <a name="fixValues-int-">
@@ -1438,7 +1450,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>fixValues</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.526">fixValues</a>(int&nbsp;start)</pre>
+<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.535">fixValues</a>(int&nbsp;start)</pre>
 </li>
 </ul>
 <a name="shiftKeys-int-">
@@ -1447,7 +1459,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>shiftKeys</h4>
-<pre>protected final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.540">shiftKeys</a>(int&nbsp;pos)</pre>
+<pre>protected final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.549">shiftKeys</a>(int&nbsp;pos)</pre>
 <div class="block">Shifts left entries with the specified hash code, starting at the
  specified position, and empties the resulting free entry.</div>
 <dl>
@@ -1462,7 +1474,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>remove</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.564">remove</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.573">remove</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#remove-java.lang.Object-" title="class or interface in java.util">remove</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></dd>
@@ -1475,7 +1487,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>removeInt</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.586">removeInt</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.595">removeInt</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</pre>
 </li>
 </ul>
 <a name="removeFirst--">
@@ -1484,7 +1496,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>removeFirst</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.620">removeFirst</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.629">removeFirst</a>()</pre>
 <div class="block">Removes the mapping associated with the first key in iteration order.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1501,7 +1513,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>removeLast</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.656">removeLast</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.665">removeLast</a>()</pre>
 <div class="block">Removes the mapping associated with the last key in iteration order.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1520,7 +1532,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>getAndMoveToFirst</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.738">getAndMoveToFirst</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;k)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.747">getAndMoveToFirst</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;k)</pre>
 <div class="block">Returns the value to which the given key is mapped; if the key is
  present, it is moved to the first position of the iteration order.</div>
 <dl>
@@ -1539,7 +1551,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>getAndMoveToLast</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.774">getAndMoveToLast</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;k)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.783">getAndMoveToLast</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;k)</pre>
 <div class="block">Returns the value to which the given key is mapped; if the key is
  present, it is moved to the last position of the iteration order.</div>
 <dl>
@@ -1558,7 +1570,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>putAndMoveToFirst</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.812">putAndMoveToFirst</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;k,
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.821">putAndMoveToFirst</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;k,
                              int&nbsp;v)</pre>
 <div class="block">Adds a pair to the map; if the key is already present, it is moved to the
  first position of the iteration order.</div>
@@ -1579,7 +1591,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>putAndMoveToLast</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.863">putAndMoveToLast</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;k,
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.872">putAndMoveToLast</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;k,
                             int&nbsp;v)</pre>
 <div class="block">Adds a pair to the map; if the key is already present, it is moved to the
  last position of the iteration order.</div>
@@ -1598,7 +1610,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>get</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.904">get</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.913">get</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#get-java.lang.Object-" title="class or interface in java.util">get</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></dd>
@@ -1611,7 +1623,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>getInt</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.923">getInt</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.932">getInt</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</pre>
 </li>
 </ul>
 <a name="containsKey-java.lang.Object-">
@@ -1620,7 +1632,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>containsKey</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.943">containsKey</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.952">containsKey</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#containsKey-java.lang.Object-" title="class or interface in java.util">containsKey</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></dd>
@@ -1633,7 +1645,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>containsValue</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.962">containsValue</a>(int&nbsp;v)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.971">containsValue</a>(int&nbsp;v)</pre>
 </li>
 </ul>
 <a name="containsValue-java.lang.Object-">
@@ -1642,7 +1654,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>containsValue</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.966">containsValue</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;ov)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.975">containsValue</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;ov)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#containsValue-java.lang.Object-" title="class or interface in java.util">containsValue</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></dd>
@@ -1655,7 +1667,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>clear</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.975">clear</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.984">clear</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#clear--" title="class or interface in java.util">clear</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></dd>
@@ -1668,7 +1680,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>size</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.986">size</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.995">size</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#size--" title="class or interface in java.util">size</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></dd>
@@ -1681,7 +1693,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>isEmpty</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.990">isEmpty</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.999">isEmpty</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#isEmpty--" title="class or interface in java.util">isEmpty</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></dd>
@@ -1694,7 +1706,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>iterator</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1000">iterator</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1009">iterator</a>()</pre>
 <div class="block">Returns an iterator over elements of type <code>T</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -1710,7 +1722,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>fixOrder</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1070">fixOrder</a>(int&nbsp;i)</pre>
+<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1079">fixOrder</a>(int&nbsp;i)</pre>
 <div class="block">Modifies the link vector so that the given entry is removed. This method will complete in logarithmic time.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1724,7 +1736,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>fixOrder</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1114">fixOrder</a>(int&nbsp;s,
+<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1123">fixOrder</a>(int&nbsp;s,
                         int&nbsp;d)</pre>
 <div class="block">Modifies the link vector for a shift from s to d.
  <br>
@@ -1742,7 +1754,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>firstKey</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1152">firstKey</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1161">firstKey</a>()</pre>
 <div class="block">Returns the first key of this map in iteration order.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -1758,7 +1770,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>lastKey</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1162">lastKey</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1171">lastKey</a>()</pre>
 <div class="block">Returns the last key of this map in iteration order.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -1774,7 +1786,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>retainAll</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1174">retainAll</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;c)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1183">retainAll</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;c)</pre>
 <div class="block">Retains in this collection only elements from the given collection.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1791,7 +1803,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>comparator</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html?is-external=true" title="class or interface in java.util">Comparator</a>&lt;? super <a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1186">comparator</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html?is-external=true" title="class or interface in java.util">Comparator</a>&lt;? super <a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1195">comparator</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true#comparator--" title="class or interface in java.util">comparator</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true" title="class or interface in java.util">SortedMap</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></dd>
@@ -1806,7 +1818,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>tailMap</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true" title="class or interface in java.util">SortedMap</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1189">tailMap</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;from)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true" title="class or interface in java.util">SortedMap</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1198">tailMap</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;from)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true#tailMap-K-" title="class or interface in java.util">tailMap</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true" title="class or interface in java.util">SortedMap</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></dd>
@@ -1821,7 +1833,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>headMap</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true" title="class or interface in java.util">SortedMap</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1192">headMap</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;to)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true" title="class or interface in java.util">SortedMap</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1201">headMap</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;to)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true#headMap-K-" title="class or interface in java.util">headMap</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true" title="class or interface in java.util">SortedMap</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></dd>
@@ -1836,7 +1848,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>subMap</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true" title="class or interface in java.util">SortedMap</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1195">subMap</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;from,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true" title="class or interface in java.util">SortedMap</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1204">subMap</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;from,
                                    <a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;to)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -1850,7 +1862,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>entrySet</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1684">entrySet</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1693">entrySet</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#entrySet--" title="class or interface in java.util">entrySet</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></dd>
@@ -1865,7 +1877,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>mapEntrySet</h4>
-<pre>public&nbsp;squidpony.squidmath.Arrangement.MapEntrySet&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1688">mapEntrySet</a>()</pre>
+<pre>public&nbsp;squidpony.squidmath.Arrangement.MapEntrySet&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1697">mapEntrySet</a>()</pre>
 </li>
 </ul>
 <a name="keySet--">
@@ -1874,7 +1886,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>keySet</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Arrangement.KeySet.html" title="class in squidpony.squidmath">Arrangement.KeySet</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1903">keySet</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Arrangement.KeySet.html" title="class in squidpony.squidmath">Arrangement.KeySet</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1912">keySet</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#keySet--" title="class or interface in java.util">keySet</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></dd>
@@ -1889,7 +1901,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>keysAsOrderedSet</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1908">keysAsOrderedSet</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1917">keysAsOrderedSet</a>()</pre>
 </li>
 </ul>
 <a name="values--">
@@ -1898,7 +1910,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>values</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1962">values</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1971">values</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#values--" title="class or interface in java.util">values</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></dd>
@@ -1913,7 +1925,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>valuesAsList</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1967">valuesAsList</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1976">valuesAsList</a>()</pre>
 </li>
 </ul>
 <a name="valuesAsIntVLA--">
@@ -1922,7 +1934,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>valuesAsIntVLA</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1976">valuesAsIntVLA</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1985">valuesAsIntVLA</a>()</pre>
 </li>
 </ul>
 <a name="valuesAsArray--">
@@ -1931,7 +1943,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>valuesAsArray</h4>
-<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1980">valuesAsArray</a>()</pre>
+<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1989">valuesAsArray</a>()</pre>
 </li>
 </ul>
 <a name="trim--">
@@ -1940,7 +1952,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>trim</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.1995">trim</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2004">trim</a>()</pre>
 <div class="block">Rehashes the map, making the table as small as possible.
  <p>
  <P>This method rehashes the table to the smallest size satisfying the load factor. It can be used when the set will not be changed anymore, so to optimize access speed and size.
@@ -1960,7 +1972,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>trim</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2019">trim</a>(int&nbsp;n)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2028">trim</a>(int&nbsp;n)</pre>
 <div class="block">Rehashes this map if the table is too large.
  <p>
  <P>Let <var>N</var> be the smallest table size that can hold <code>max(n,<a href="../../squidpony/squidmath/Arrangement.html#size--"><code>size()</code></a>)</code> entries, still satisfying the load factor. If the current table size is smaller than or equal to
@@ -1984,7 +1996,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>rehash</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2044">rehash</a>(int&nbsp;newN)</pre>
+<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2053">rehash</a>(int&nbsp;newN)</pre>
 <div class="block">Rehashes the map.
 
  <P>
@@ -2004,7 +2016,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>clone</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2086">clone</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2095">clone</a>()</pre>
 <div class="block">Returns a deep copy of this map.
 
  <P>
@@ -2025,7 +2037,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2112">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2121">hashCode</a>()</pre>
 <div class="block">Returns a hash code for this map.
 
  This method overrides the generic method provided by the superclass.
@@ -2048,7 +2060,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>maxFill</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2135">maxFill</a>(int&nbsp;n,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2144">maxFill</a>(int&nbsp;n,
                           float&nbsp;f)</pre>
 <div class="block">Returns the maximum number of entries that can be filled before rehashing.</div>
 <dl>
@@ -2066,7 +2078,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>maxFill</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2148">maxFill</a>(long&nbsp;n,
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2157">maxFill</a>(long&nbsp;n,
                            float&nbsp;f)</pre>
 <div class="block">Returns the maximum number of entries that can be filled before rehashing.</div>
 <dl>
@@ -2084,7 +2096,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>arraySize</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2162">arraySize</a>(int&nbsp;expected,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2171">arraySize</a>(int&nbsp;expected,
                             float&nbsp;f)</pre>
 <div class="block">Returns the least power of two smaller than or equal to 2<sup>30</sup> and larger than or equal to <code>Math.ceil( expected / f )</code>.</div>
 <dl>
@@ -2104,7 +2116,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2406">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2415">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -2117,7 +2129,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2420">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2429">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.util">equals</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></dd>
@@ -2132,7 +2144,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>getAt</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2491">getAt</a>(int&nbsp;idx)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2500">getAt</a>(int&nbsp;idx)</pre>
 <div class="block">Gets the value at the given index in the iteration order in constant time (random-access).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2148,7 +2160,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>keyAt</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2505">keyAt</a>(int&nbsp;idx)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2514">keyAt</a>(int&nbsp;idx)</pre>
 <div class="block">Gets the key at the given index in the iteration order in constant time (random-access).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2164,7 +2176,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>entryAt</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2517">entryAt</a>(int&nbsp;idx)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2526">entryAt</a>(int&nbsp;idx)</pre>
 <div class="block">Gets the key-value Map.Entry at the given index in the iteration order in constant time (random-access).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2180,7 +2192,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>removeAt</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2530">removeAt</a>(int&nbsp;idx)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2539">removeAt</a>(int&nbsp;idx)</pre>
 <div class="block">Removes the key and value at the given index in the iteration order in not-exactly constant time (though it still
  should be efficient).</div>
 <dl>
@@ -2199,7 +2211,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>addAt</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2553">addAt</a>(int&nbsp;idx,
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2562">addAt</a>(int&nbsp;idx,
                  <a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;k)</pre>
 <div class="block">Equivalent to <a href="../../squidpony/squidmath/Arrangement.html#add-K-"><code>add(Object)</code></a>, except that it can place k at any point in the ordering (shifting up later
  entries and changing their values to match their new positions in the ordering).</div>
@@ -2218,7 +2230,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>randomValue</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2567">randomValue</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2576">randomValue</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 <div class="block">Gets a random value from this Arrangement in constant time, using the given RNG to generate a random number.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2234,7 +2246,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>randomKey</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2579">randomKey</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2588">randomKey</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 <div class="block">Gets a random key from this Arrangement in constant time, using the given RNG to generate a random number.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2250,7 +2262,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>randomEntry</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2591">randomEntry</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2600">randomEntry</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 <div class="block">Gets a random entry from this Arrangement in constant time, using the given RNG to generate a random number.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2266,7 +2278,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>shuffle</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2601">shuffle</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2610">shuffle</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 <div class="block">Randomly alters the iteration order for this Arrangement using the given RNG to shuffle.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2282,7 +2294,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>reorder</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2628">reorder</a>(int...&nbsp;ordering)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2637">reorder</a>(int...&nbsp;ordering)</pre>
 <div class="block">Given an array or varargs of replacement indices for this Arrangement's iteration order, reorders this so the
  first item in the returned version is the same as <code>getAt(ordering[0])</code> (with some care taken for negative
  or too-large indices), the second item in the returned version is the same as <code>getAt(ordering[1])</code>, etc.
@@ -2311,7 +2323,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>alter</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2706">alter</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;original,
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2715">alter</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;original,
                  <a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&nbsp;replacement)</pre>
 <div class="block">Swaps a key, original, for another key, replacement, while keeping replacement at the same point in the iteration
  order as original and keeping it associated with the same value (which also keeps its iteration index).</div>
@@ -2330,7 +2342,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>getMany</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2732">getMany</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;keys)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2741">getMany</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;keys)</pre>
 </li>
 </ul>
 <a name="keysAt-int...-">
@@ -2339,7 +2351,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>keysAt</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2744">keysAt</a>(int...&nbsp;positions)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2753">keysAt</a>(int...&nbsp;positions)</pre>
 </li>
 </ul>
 <a name="keysAt-squidpony.squidmath.IntVLA-">
@@ -2348,7 +2360,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>keysAt</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2755">keysAt</a>(<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;positions)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2764">keysAt</a>(<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;positions)</pre>
 </li>
 </ul>
 <a name="take-int-">
@@ -2357,7 +2369,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockListLast">
 <li class="blockList">
 <h4>take</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2773">take</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Arrangement.html#line.2782">take</a>(int&nbsp;amount)</pre>
 <div class="block">Produces a copy of this Arrangement, but only using up to the given amount of items to take. Does a shallow copy
  of individual keys, so the references will be shared.</div>
 <dl>

@@ -525,6 +525,11 @@
 <div class="block">Swaps a key, original, for another key, replacement, while keeping replacement at the same point in the iteration
  order as original and keeping it associated with the same value (which also keeps its iteration index).</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MultiKey.html#alter-int-java.lang.Object-java.lang.Object-">alter(int, Object, Object)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MultiKey.html" title="class in squidpony.squidmath">MultiKey</a></dt>
+<dd>
+<div class="block">In the keyset specified by <code>which</code>, changes an existing key, <code>past</code>, to another key, <code>future</code>,
+ if past exists in that keyset and future does not yet exist in that keyset.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedMap.html#alter-K-K-">alter(K, K)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a></dt>
 <dd>
 <div class="block">Swaps a key, original, for another key, replacement, while keeping replacement at the same point in the iteration
@@ -553,6 +558,11 @@
 <dd>
 <div class="block">Changes the A key at <code>index</code> to another A key, <code>future</code>, if index is valid and future does not
  yet exist in this K2V1.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MultiKey.html#alterAt-int-int-java.lang.Object-">alterAt(int, int, Object)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MultiKey.html" title="class in squidpony.squidmath">MultiKey</a></dt>
+<dd>
+<div class="block">In the keyset specified by <code>which</code>, changes the key at <code>index</code> to another key, <code>future</code>, if
+ index is valid and future does not yet exist in that keyset.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Alteration.html#Alteration--">Alteration()</a></span> - Constructor for class squidpony.<a href="../squidpony/FakeLanguageGen.Alteration.html" title="class in squidpony">FakeLanguageGen.Alteration</a></dt>
 <dd>&nbsp;</dd>
@@ -736,11 +746,11 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#Arrangement-int-">Arrangement(int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
-<div class="block">Creates a new Arrangement with 0.75f as load factor.</div>
+<div class="block">Creates a new Arrangement with 0.5f as load factor.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#Arrangement--">Arrangement()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
-<div class="block">Creates a new Arrangement with initial expected 16 entries and 0.75f as load factor.</div>
+<div class="block">Creates a new Arrangement with initial expected 16 entries and 0.5f as load factor.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#Arrangement-java.util.Map-float-">Arrangement(Map&lt;? extends K, ? extends Integer&gt;, float)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
@@ -748,8 +758,10 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#Arrangement-java.util.Map-">Arrangement(Map&lt;? extends K, ? extends Integer&gt;)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
-<div class="block">Creates a new Arrangement with 0.75f as load factor copying a given one.</div>
+<div class="block">Creates a new Arrangement with 0.5f as load factor copying a given one.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#Arrangement-squidpony.squidmath.Arrangement-">Arrangement(Arrangement&lt;? extends K&gt;)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#Arrangement-K:A-float-">Arrangement(K[], float)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
 <div class="block">Creates a new Arrangement using the elements of an array.</div>
@@ -764,7 +776,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#Arrangement-K:A-">Arrangement(K[])</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
-<div class="block">Creates a new Arrangement with 0.75f as load factor using the elements of an array.</div>
+<div class="block">Creates a new Arrangement with 0.5f as load factor using the elements of an array.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#Arrangement-int-float-squidpony.squidmath.CrossHash.IHasher-">Arrangement(int, float, CrossHash.IHasher)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
@@ -772,11 +784,11 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#Arrangement-int-squidpony.squidmath.CrossHash.IHasher-">Arrangement(int, CrossHash.IHasher)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
-<div class="block">Creates a new Arrangement with 0.75f as load factor.</div>
+<div class="block">Creates a new Arrangement with 0.5f as load factor.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#Arrangement-squidpony.squidmath.CrossHash.IHasher-">Arrangement(CrossHash.IHasher)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
-<div class="block">Creates a new Arrangement with initial expected 16 entries and 0.75f as load factor.</div>
+<div class="block">Creates a new Arrangement with initial expected 16 entries and 0.5f as load factor.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#Arrangement-java.util.Map-float-squidpony.squidmath.CrossHash.IHasher-">Arrangement(Map&lt;? extends K, ? extends Integer&gt;, float, CrossHash.IHasher)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
@@ -784,7 +796,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#Arrangement-java.util.Map-squidpony.squidmath.CrossHash.IHasher-">Arrangement(Map&lt;? extends K, ? extends Integer&gt;, CrossHash.IHasher)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
-<div class="block">Creates a new Arrangement with 0.75f as load factor copying a given one.</div>
+<div class="block">Creates a new Arrangement with 0.5f as load factor copying a given one.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#Arrangement-K:A-float-squidpony.squidmath.CrossHash.IHasher-">Arrangement(K[], float, CrossHash.IHasher)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
@@ -792,7 +804,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#Arrangement-K:A-squidpony.squidmath.CrossHash.IHasher-">Arrangement(K[], CrossHash.IHasher)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
-<div class="block">Creates a new Arrangement with 0.75f as load factor using the elements of two parallel arrays.</div>
+<div class="block">Creates a new Arrangement with 0.5f as load factor using the elements of two parallel arrays.</div>
 </dd>
 <dt><a href="../squidpony/squidmath/Arrangement.FastEntryIterator.html" title="class in squidpony.squidmath"><span class="typeNameLink">Arrangement.FastEntryIterator</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
 <dd>&nbsp;</dd>

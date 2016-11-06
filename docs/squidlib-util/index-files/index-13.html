@@ -687,10 +687,33 @@
 <dd>&nbsp;</dd>
 <dt><a href="../squidpony/squidmath/MultiKey.html" title="class in squidpony.squidmath"><span class="typeNameLink">MultiKey</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
 <dd>
-<div class="block">Currently, you should see <a href="../squidpony/squidmath/K2.html" title="class in squidpony.squidmath"><code>K2</code></a> for an ordered bidirectional map; this class, MultiKey, should eventually
- allow more than two keys to be used, although without generic type parameters.</div>
+<div class="block">An ordered multi-directional "map" that keeps 1 or more keysets organized so you can look up one key given a key in
+ another keyset, and do the same for the indices of keys.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/MultiKey.html#MultiKey--">MultiKey()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/MultiKey.html" title="class in squidpony.squidmath">MultiKey</a></dt>
+<dd>
+<div class="block">Constructs an empty MultiKey.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MultiKey.html#MultiKey-int-int-">MultiKey(int, int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/MultiKey.html" title="class in squidpony.squidmath">MultiKey</a></dt>
+<dd>
+<div class="block">Constructs a MultiKey with the expected number of indices to hold (the number of items in each keyset is always
+ the same, and this will be more efficient if expected is greater than that number).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MultiKey.html#MultiKey-int-int-float-">MultiKey(int, int, float)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/MultiKey.html" title="class in squidpony.squidmath">MultiKey</a></dt>
+<dd>
+<div class="block">Constructs a MultiKey with the expected number of indices to hold (the number of items in each keyset is always
+ the same, and this will be more efficient if expected is greater than that number) and the load factor to use,
+ between 0.1f and 0.8f usually (using load factors higher than 0.8f can cause problems).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MultiKey.html#MultiKey-java.util.Collection-">MultiKey(Collection&lt;Iterable&gt;)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/MultiKey.html" title="class in squidpony.squidmath">MultiKey</a></dt>
+<dd>
+<div class="block">Constructs a MultiKey from a Collection of Iterables that will be processed in tandem, adding a unique item from
+ each keyset in keysets if and only if it can also add a unique item from all other keysets, otherwise skipping
+ that iteration in each Iterable.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MultiKey.html#MultiKey-squidpony.squidmath.MultiKey-">MultiKey(MultiKey)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/MultiKey.html" title="class in squidpony.squidmath">MultiKey</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MultiKey.html#MultiKey-squidpony.squidmath.Arrangement:A-">MultiKey(Arrangement[])</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/MultiKey.html" title="class in squidpony.squidmath">MultiKey</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Coord.html#multiply-squidpony.squidmath.Coord-">multiply(Coord)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></dt>
 <dd>

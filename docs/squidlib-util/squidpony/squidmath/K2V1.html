@@ -328,15 +328,21 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i23" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../squidpony/squidmath/K2V1.html" title="type parameter in K2V1">A</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/K2V1.html#iteratorA--">iteratorA</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/K2V1.html#iteratorA--">iteratorA</a></span>()</code>
+<div class="block">Creates a new iterator over the A keys this holds.</div>
+</td>
 </tr>
 <tr id="i24" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../squidpony/squidmath/K2V1.html" title="type parameter in K2V1">B</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/K2V1.html#iteratorB--">iteratorB</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/K2V1.html#iteratorB--">iteratorB</a></span>()</code>
+<div class="block">Creates a new iterator over the B keys this holds.</div>
+</td>
 </tr>
 <tr id="i25" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../squidpony/squidmath/K2V1.html" title="type parameter in K2V1">Q</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/K2V1.html#iteratorQ--">iteratorQ</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/K2V1.html#iteratorQ--">iteratorQ</a></span>()</code>
+<div class="block">Creates a new iterator over the Q values this holds.</div>
+</td>
 </tr>
 <tr id="i26" class="altColor">
 <td class="colFirst"><code>int</code></td>
@@ -1115,7 +1121,14 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>iteratorA</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../squidpony/squidmath/K2V1.html" title="type parameter in K2V1">A</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2V1.html#line.459">iteratorA</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../squidpony/squidmath/K2V1.html" title="type parameter in K2V1">A</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2V1.html#line.465">iteratorA</a>()</pre>
+<div class="block">Creates a new iterator over the A keys this holds. This can be problematic for garbage collection if called very
+ frequently; it may be better to access items by index (which also lets you access other keys associated with that
+ index) using <a href="../../squidpony/squidmath/K2V1.html#getAAt-int-"><code>getAAt(int)</code></a> in a for(int i=0...) loop.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a newly-created iterator over this K2V1's A keys</dd>
+</dl>
 </li>
 </ul>
 <a name="iteratorB--">
@@ -1124,7 +1137,14 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>iteratorB</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../squidpony/squidmath/K2V1.html" title="type parameter in K2V1">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2V1.html#line.463">iteratorB</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../squidpony/squidmath/K2V1.html" title="type parameter in K2V1">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2V1.html#line.476">iteratorB</a>()</pre>
+<div class="block">Creates a new iterator over the B keys this holds. This can be problematic for garbage collection if called very
+ frequently; it may be better to access items by index (which also lets you access other keys associated with that
+ index) using <a href="../../squidpony/squidmath/K2V1.html#getBAt-int-"><code>getBAt(int)</code></a> in a for(int i=0...) loop.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a newly-created iterator over this K2V1's B keys</dd>
+</dl>
 </li>
 </ul>
 <a name="iteratorQ--">
@@ -1133,7 +1153,14 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>iteratorQ</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../squidpony/squidmath/K2V1.html" title="type parameter in K2V1">Q</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2V1.html#line.467">iteratorQ</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../squidpony/squidmath/K2V1.html" title="type parameter in K2V1">Q</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2V1.html#line.487">iteratorQ</a>()</pre>
+<div class="block">Creates a new iterator over the Q values this holds. This can be problematic for garbage collection if called
+ very frequently; it may be better to access values by index (which also lets you access other keys associated
+ with that index) using <a href="../../squidpony/squidmath/K2V1.html#getQAt-int-"><code>getQAt(int)</code></a> in a for(int i=0...) loop.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a newly-created iterator over this K2V1's Q values</dd>
+</dl>
 </li>
 </ul>
 <a name="getSetA--">
@@ -1142,7 +1169,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getSetA</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../squidpony/squidmath/K2V1.html" title="type parameter in K2V1">A</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2V1.html#line.477">getSetA</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../squidpony/squidmath/K2V1.html" title="type parameter in K2V1">A</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2V1.html#line.497">getSetA</a>()</pre>
 <div class="block">Gets and caches the A keys as a Collection that implements SortedSet (and so also implements Set). It retains the
  current ordering.</div>
 <dl>
@@ -1157,7 +1184,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getSetB</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../squidpony/squidmath/K2V1.html" title="type parameter in K2V1">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2V1.html#line.487">getSetB</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../squidpony/squidmath/K2V1.html" title="type parameter in K2V1">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2V1.html#line.507">getSetB</a>()</pre>
 <div class="block">Gets and caches the B keys as a Collection that implements SortedSet (and so also implements Set). It retains the
  current ordering.</div>
 <dl>
@@ -1172,7 +1199,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getListQ</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/K2V1.html" title="type parameter in K2V1">Q</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2V1.html#line.497">getListQ</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/K2V1.html" title="type parameter in K2V1">Q</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2V1.html#line.517">getListQ</a>()</pre>
 <div class="block">Gets the Q values as a freshly-copied ArrayList of Q; unlike <a href="../../squidpony/squidmath/K2V1.html#getSetA--"><code>getSetA()</code></a> or <a href="../../squidpony/squidmath/K2V1.html#getSetB--"><code>getSetB()</code></a>, this does
  not cache the value list. It retains the current ordering.</div>
 <dl>
@@ -1187,7 +1214,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>size</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/K2V1.html#line.507">size</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/K2V1.html#line.527">size</a>()</pre>
 <div class="block">Gets the size of this collection. That's the number of A keys, which is always the same as the number of B keys,
  which is always the same as the number of indices, which is also always the same as the size of the values List.</div>
 <dl>
@@ -1202,7 +1229,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>isEmpty</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/K2V1.html#line.516">isEmpty</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/K2V1.html#line.536">isEmpty</a>()</pre>
 <div class="block">I think you can guess what this does.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1216,7 +1243,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>keyCount</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/K2V1.html#line.521">keyCount</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/K2V1.html#line.541">keyCount</a>()</pre>
 </li>
 </ul>
 <a name="valueCount--">
@@ -1225,7 +1252,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>valueCount</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/K2V1.html#line.524">valueCount</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/K2V1.html#line.544">valueCount</a>()</pre>
 </li>
 </ul>
 </li>

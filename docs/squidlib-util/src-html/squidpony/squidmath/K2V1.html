@@ -464,76 +464,96 @@
 <span class="sourceLineNo">456</span>        GwtCompatibility.reorder(values, ordering);<a name="line.456"></a>
 <span class="sourceLineNo">457</span>        return this;<a name="line.457"></a>
 <span class="sourceLineNo">458</span>    }<a name="line.458"></a>
-<span class="sourceLineNo">459</span>    public Iterator&lt;A&gt; iteratorA()<a name="line.459"></a>
-<span class="sourceLineNo">460</span>    {<a name="line.460"></a>
-<span class="sourceLineNo">461</span>        return keys.iteratorA();<a name="line.461"></a>
-<span class="sourceLineNo">462</span>    }<a name="line.462"></a>
-<span class="sourceLineNo">463</span>    public Iterator&lt;B&gt; iteratorB()<a name="line.463"></a>
-<span class="sourceLineNo">464</span>    {<a name="line.464"></a>
-<span class="sourceLineNo">465</span>        return keys.iteratorB();<a name="line.465"></a>
-<span class="sourceLineNo">466</span>    }<a name="line.466"></a>
-<span class="sourceLineNo">467</span>    public Iterator&lt;Q&gt; iteratorQ()<a name="line.467"></a>
-<span class="sourceLineNo">468</span>    {<a name="line.468"></a>
-<span class="sourceLineNo">469</span>        return values.iterator();<a name="line.469"></a>
-<span class="sourceLineNo">470</span>    }<a name="line.470"></a>
-<span class="sourceLineNo">471</span><a name="line.471"></a>
-<span class="sourceLineNo">472</span>    /**<a name="line.472"></a>
-<span class="sourceLineNo">473</span>     * Gets and caches the A keys as a Collection that implements SortedSet (and so also implements Set). It retains the<a name="line.473"></a>
-<span class="sourceLineNo">474</span>     * current ordering.<a name="line.474"></a>
-<span class="sourceLineNo">475</span>     * @return the A keys as a SortedSet<a name="line.475"></a>
-<span class="sourceLineNo">476</span>     */<a name="line.476"></a>
-<span class="sourceLineNo">477</span>    public SortedSet&lt;A&gt; getSetA()<a name="line.477"></a>
-<span class="sourceLineNo">478</span>    {<a name="line.478"></a>
-<span class="sourceLineNo">479</span>        return keys.getSetA();<a name="line.479"></a>
-<span class="sourceLineNo">480</span>    }<a name="line.480"></a>
-<span class="sourceLineNo">481</span><a name="line.481"></a>
-<span class="sourceLineNo">482</span>    /**<a name="line.482"></a>
-<span class="sourceLineNo">483</span>     * Gets and caches the B keys as a Collection that implements SortedSet (and so also implements Set). It retains the<a name="line.483"></a>
-<span class="sourceLineNo">484</span>     * current ordering.<a name="line.484"></a>
-<span class="sourceLineNo">485</span>     * @return the B keys as a SortedSet<a name="line.485"></a>
+<span class="sourceLineNo">459</span>    /**<a name="line.459"></a>
+<span class="sourceLineNo">460</span>     * Creates a new iterator over the A keys this holds. This can be problematic for garbage collection if called very<a name="line.460"></a>
+<span class="sourceLineNo">461</span>     * frequently; it may be better to access items by index (which also lets you access other keys associated with that<a name="line.461"></a>
+<span class="sourceLineNo">462</span>     * index) using {@link #getAAt(int)} in a for(int i=0...) loop.<a name="line.462"></a>
+<span class="sourceLineNo">463</span>     * @return a newly-created iterator over this K2V1's A keys<a name="line.463"></a>
+<span class="sourceLineNo">464</span>     */<a name="line.464"></a>
+<span class="sourceLineNo">465</span>    public Iterator&lt;A&gt; iteratorA()<a name="line.465"></a>
+<span class="sourceLineNo">466</span>    {<a name="line.466"></a>
+<span class="sourceLineNo">467</span>        return keys.iteratorA();<a name="line.467"></a>
+<span class="sourceLineNo">468</span>    }<a name="line.468"></a>
+<span class="sourceLineNo">469</span><a name="line.469"></a>
+<span class="sourceLineNo">470</span>    /**<a name="line.470"></a>
+<span class="sourceLineNo">471</span>     * Creates a new iterator over the B keys this holds. This can be problematic for garbage collection if called very<a name="line.471"></a>
+<span class="sourceLineNo">472</span>     * frequently; it may be better to access items by index (which also lets you access other keys associated with that<a name="line.472"></a>
+<span class="sourceLineNo">473</span>     * index) using {@link #getBAt(int)} in a for(int i=0...) loop.<a name="line.473"></a>
+<span class="sourceLineNo">474</span>     * @return a newly-created iterator over this K2V1's B keys<a name="line.474"></a>
+<span class="sourceLineNo">475</span>     */<a name="line.475"></a>
+<span class="sourceLineNo">476</span>    public Iterator&lt;B&gt; iteratorB()<a name="line.476"></a>
+<span class="sourceLineNo">477</span>    {<a name="line.477"></a>
+<span class="sourceLineNo">478</span>        return keys.iteratorB();<a name="line.478"></a>
+<span class="sourceLineNo">479</span>    }<a name="line.479"></a>
+<span class="sourceLineNo">480</span><a name="line.480"></a>
+<span class="sourceLineNo">481</span>    /**<a name="line.481"></a>
+<span class="sourceLineNo">482</span>     * Creates a new iterator over the Q values this holds. This can be problematic for garbage collection if called<a name="line.482"></a>
+<span class="sourceLineNo">483</span>     * very frequently; it may be better to access values by index (which also lets you access other keys associated<a name="line.483"></a>
+<span class="sourceLineNo">484</span>     * with that index) using {@link #getQAt(int)} in a for(int i=0...) loop.<a name="line.484"></a>
+<span class="sourceLineNo">485</span>     * @return a newly-created iterator over this K2V1's Q values<a name="line.485"></a>
 <span class="sourceLineNo">486</span>     */<a name="line.486"></a>
-<span class="sourceLineNo">487</span>    public SortedSet&lt;B&gt; getSetB()<a name="line.487"></a>
+<span class="sourceLineNo">487</span>    public Iterator&lt;Q&gt; iteratorQ()<a name="line.487"></a>
 <span class="sourceLineNo">488</span>    {<a name="line.488"></a>
-<span class="sourceLineNo">489</span>        return keys.getSetB();<a name="line.489"></a>
+<span class="sourceLineNo">489</span>        return values.iterator();<a name="line.489"></a>
 <span class="sourceLineNo">490</span>    }<a name="line.490"></a>
 <span class="sourceLineNo">491</span><a name="line.491"></a>
 <span class="sourceLineNo">492</span>    /**<a name="line.492"></a>
-<span class="sourceLineNo">493</span>     * Gets the Q values as a freshly-copied ArrayList of Q; unlike {@link #getSetA()} or {@link #getSetB()}, this does<a name="line.493"></a>
-<span class="sourceLineNo">494</span>     * not cache the value list. It retains the current ordering.<a name="line.494"></a>
-<span class="sourceLineNo">495</span>     * @return the Q values as an ArrayList<a name="line.495"></a>
+<span class="sourceLineNo">493</span>     * Gets and caches the A keys as a Collection that implements SortedSet (and so also implements Set). It retains the<a name="line.493"></a>
+<span class="sourceLineNo">494</span>     * current ordering.<a name="line.494"></a>
+<span class="sourceLineNo">495</span>     * @return the A keys as a SortedSet<a name="line.495"></a>
 <span class="sourceLineNo">496</span>     */<a name="line.496"></a>
-<span class="sourceLineNo">497</span>    public ArrayList&lt;Q&gt; getListQ()<a name="line.497"></a>
+<span class="sourceLineNo">497</span>    public SortedSet&lt;A&gt; getSetA()<a name="line.497"></a>
 <span class="sourceLineNo">498</span>    {<a name="line.498"></a>
-<span class="sourceLineNo">499</span>        return new ArrayList&lt;&gt;(values);<a name="line.499"></a>
+<span class="sourceLineNo">499</span>        return keys.getSetA();<a name="line.499"></a>
 <span class="sourceLineNo">500</span>    }<a name="line.500"></a>
 <span class="sourceLineNo">501</span><a name="line.501"></a>
 <span class="sourceLineNo">502</span>    /**<a name="line.502"></a>
-<span class="sourceLineNo">503</span>     * Gets the size of this collection. That's the number of A keys, which is always the same as the number of B keys,<a name="line.503"></a>
-<span class="sourceLineNo">504</span>     * which is always the same as the number of indices, which is also always the same as the size of the values List.<a name="line.504"></a>
-<span class="sourceLineNo">505</span>     * @return the current number of indices in this K2V1, which can be thought of as the number of A keys<a name="line.505"></a>
+<span class="sourceLineNo">503</span>     * Gets and caches the B keys as a Collection that implements SortedSet (and so also implements Set). It retains the<a name="line.503"></a>
+<span class="sourceLineNo">504</span>     * current ordering.<a name="line.504"></a>
+<span class="sourceLineNo">505</span>     * @return the B keys as a SortedSet<a name="line.505"></a>
 <span class="sourceLineNo">506</span>     */<a name="line.506"></a>
-<span class="sourceLineNo">507</span>    public int size()<a name="line.507"></a>
+<span class="sourceLineNo">507</span>    public SortedSet&lt;B&gt; getSetB()<a name="line.507"></a>
 <span class="sourceLineNo">508</span>    {<a name="line.508"></a>
-<span class="sourceLineNo">509</span>        return keys.keysA.size;<a name="line.509"></a>
+<span class="sourceLineNo">509</span>        return keys.getSetB();<a name="line.509"></a>
 <span class="sourceLineNo">510</span>    }<a name="line.510"></a>
 <span class="sourceLineNo">511</span><a name="line.511"></a>
 <span class="sourceLineNo">512</span>    /**<a name="line.512"></a>
-<span class="sourceLineNo">513</span>     * I think you can guess what this does.<a name="line.513"></a>
-<span class="sourceLineNo">514</span>     * @return true if there are no items in this K2V1; false if there are items present<a name="line.514"></a>
-<span class="sourceLineNo">515</span>     */<a name="line.515"></a>
-<span class="sourceLineNo">516</span>    public boolean isEmpty()<a name="line.516"></a>
-<span class="sourceLineNo">517</span>    {<a name="line.517"></a>
-<span class="sourceLineNo">518</span>        return values.isEmpty();<a name="line.518"></a>
-<span class="sourceLineNo">519</span>    }<a name="line.519"></a>
-<span class="sourceLineNo">520</span><a name="line.520"></a>
-<span class="sourceLineNo">521</span>    public int keyCount() {<a name="line.521"></a>
-<span class="sourceLineNo">522</span>        return 2;<a name="line.522"></a>
-<span class="sourceLineNo">523</span>    }<a name="line.523"></a>
-<span class="sourceLineNo">524</span>    public int valueCount() {<a name="line.524"></a>
-<span class="sourceLineNo">525</span>        return 1;<a name="line.525"></a>
-<span class="sourceLineNo">526</span>    }<a name="line.526"></a>
-<span class="sourceLineNo">527</span><a name="line.527"></a>
-<span class="sourceLineNo">528</span>}<a name="line.528"></a>
+<span class="sourceLineNo">513</span>     * Gets the Q values as a freshly-copied ArrayList of Q; unlike {@link #getSetA()} or {@link #getSetB()}, this does<a name="line.513"></a>
+<span class="sourceLineNo">514</span>     * not cache the value list. It retains the current ordering.<a name="line.514"></a>
+<span class="sourceLineNo">515</span>     * @return the Q values as an ArrayList<a name="line.515"></a>
+<span class="sourceLineNo">516</span>     */<a name="line.516"></a>
+<span class="sourceLineNo">517</span>    public ArrayList&lt;Q&gt; getListQ()<a name="line.517"></a>
+<span class="sourceLineNo">518</span>    {<a name="line.518"></a>
+<span class="sourceLineNo">519</span>        return new ArrayList&lt;&gt;(values);<a name="line.519"></a>
+<span class="sourceLineNo">520</span>    }<a name="line.520"></a>
+<span class="sourceLineNo">521</span><a name="line.521"></a>
+<span class="sourceLineNo">522</span>    /**<a name="line.522"></a>
+<span class="sourceLineNo">523</span>     * Gets the size of this collection. That's the number of A keys, which is always the same as the number of B keys,<a name="line.523"></a>
+<span class="sourceLineNo">524</span>     * which is always the same as the number of indices, which is also always the same as the size of the values List.<a name="line.524"></a>
+<span class="sourceLineNo">525</span>     * @return the current number of indices in this K2V1, which can be thought of as the number of A keys<a name="line.525"></a>
+<span class="sourceLineNo">526</span>     */<a name="line.526"></a>
+<span class="sourceLineNo">527</span>    public int size()<a name="line.527"></a>
+<span class="sourceLineNo">528</span>    {<a name="line.528"></a>
+<span class="sourceLineNo">529</span>        return keys.keysA.size;<a name="line.529"></a>
+<span class="sourceLineNo">530</span>    }<a name="line.530"></a>
+<span class="sourceLineNo">531</span><a name="line.531"></a>
+<span class="sourceLineNo">532</span>    /**<a name="line.532"></a>
+<span class="sourceLineNo">533</span>     * I think you can guess what this does.<a name="line.533"></a>
+<span class="sourceLineNo">534</span>     * @return true if there are no items in this K2V1; false if there are items present<a name="line.534"></a>
+<span class="sourceLineNo">535</span>     */<a name="line.535"></a>
+<span class="sourceLineNo">536</span>    public boolean isEmpty()<a name="line.536"></a>
+<span class="sourceLineNo">537</span>    {<a name="line.537"></a>
+<span class="sourceLineNo">538</span>        return values.isEmpty();<a name="line.538"></a>
+<span class="sourceLineNo">539</span>    }<a name="line.539"></a>
+<span class="sourceLineNo">540</span><a name="line.540"></a>
+<span class="sourceLineNo">541</span>    public int keyCount() {<a name="line.541"></a>
+<span class="sourceLineNo">542</span>        return 2;<a name="line.542"></a>
+<span class="sourceLineNo">543</span>    }<a name="line.543"></a>
+<span class="sourceLineNo">544</span>    public int valueCount() {<a name="line.544"></a>
+<span class="sourceLineNo">545</span>        return 1;<a name="line.545"></a>
+<span class="sourceLineNo">546</span>    }<a name="line.546"></a>
+<span class="sourceLineNo">547</span><a name="line.547"></a>
+<span class="sourceLineNo">548</span>}<a name="line.548"></a>
 
 
 

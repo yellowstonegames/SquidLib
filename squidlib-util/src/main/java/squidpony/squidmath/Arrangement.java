@@ -172,7 +172,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     }
 
     /**
-     * Creates a new Arrangement with 0.75f as load factor.
+     * Creates a new Arrangement with 0.5f as load factor.
      *
      * @param expected the expected number of elements in the Arrangement.
      */
@@ -181,7 +181,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     }
 
     /**
-     * Creates a new Arrangement with initial expected 16 entries and 0.75f as load factor.
+     * Creates a new Arrangement with initial expected 16 entries and 0.5f as load factor.
      */
     public Arrangement() {
         this(DEFAULT_INITIAL_SIZE, DEFAULT_LOAD_FACTOR);
@@ -199,12 +199,21 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     }
 
     /**
-     * Creates a new Arrangement with 0.75f as load factor copying a given one.
+     * Creates a new Arrangement with 0.5f as load factor copying a given one.
      *
      * @param m a {@link Map} to be copied into the new Arrangement.
      */
     public Arrangement(final Map<? extends K, ? extends Integer> m) {
         this(m, DEFAULT_LOAD_FACTOR);
+    }
+
+    public Arrangement(final Arrangement<? extends K> a) {
+        this(a.size(), a.f);
+        ensureCapacity(a.size()); // The resulting map will be sized for
+        System.arraycopy(a.key, 0, key, 0, a.key.length);
+        System.arraycopy(a.value, 0, value, 0, a.value.length);
+        order.addAll(a.order);
+        containsNullKey = a.containsNullKey;
     }
 
     /**
@@ -247,7 +256,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     }
 
     /**
-     * Creates a new Arrangement with 0.75f as load factor using the elements of an array.
+     * Creates a new Arrangement with 0.5f as load factor using the elements of an array.
      *
      * @param keyArray the array of keys of the new Arrangement.
      * @throws IllegalArgumentException if <code>k</code> and <code>v</code> have different lengths.
@@ -281,7 +290,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         this.hasher = (hasher == null) ? CrossHash.defaultHasher : hasher;
     }
     /**
-     * Creates a new Arrangement with 0.75f as load factor.
+     * Creates a new Arrangement with 0.5f as load factor.
      *
      * @param expected the expected number of elements in the Arrangement.
      * @param hasher used to hash items; typically only needed when K is an array, where CrossHash has implementations
@@ -291,7 +300,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     }
 
     /**
-     * Creates a new Arrangement with initial expected 16 entries and 0.75f as load factor.
+     * Creates a new Arrangement with initial expected 16 entries and 0.5f as load factor.
      */
     public Arrangement(CrossHash.IHasher hasher) {
         this(DEFAULT_INITIAL_SIZE, DEFAULT_LOAD_FACTOR, hasher);
@@ -310,7 +319,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     }
 
     /**
-     * Creates a new Arrangement with 0.75f as load factor copying a given one.
+     * Creates a new Arrangement with 0.5f as load factor copying a given one.
      * @param m a {@link Map} to be copied into the new Arrangement.
      * @param hasher used to hash items; typically only needed when K is an array, where CrossHash has implementations
      */
@@ -333,7 +342,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             put(keyArray[i], i);
     }
     /**
-     * Creates a new Arrangement with 0.75f as load factor using the elements of two parallel arrays.
+     * Creates a new Arrangement with 0.5f as load factor using the elements of two parallel arrays.
      *
      * @param keyArray the array of keys of the new Arrangement.
      * @param hasher used to hash items; typically only needed when K is an array, where CrossHash has implementations
