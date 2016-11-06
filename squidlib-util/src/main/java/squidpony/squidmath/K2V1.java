@@ -456,14 +456,34 @@ public class K2V1<A, B, Q> {
         GwtCompatibility.reorder(values, ordering);
         return this;
     }
+    /**
+     * Creates a new iterator over the A keys this holds. This can be problematic for garbage collection if called very
+     * frequently; it may be better to access items by index (which also lets you access other keys associated with that
+     * index) using {@link #getAAt(int)} in a for(int i=0...) loop.
+     * @return a newly-created iterator over this K2V1's A keys
+     */
     public Iterator<A> iteratorA()
     {
         return keys.iteratorA();
     }
+
+    /**
+     * Creates a new iterator over the B keys this holds. This can be problematic for garbage collection if called very
+     * frequently; it may be better to access items by index (which also lets you access other keys associated with that
+     * index) using {@link #getBAt(int)} in a for(int i=0...) loop.
+     * @return a newly-created iterator over this K2V1's B keys
+     */
     public Iterator<B> iteratorB()
     {
         return keys.iteratorB();
     }
+
+    /**
+     * Creates a new iterator over the Q values this holds. This can be problematic for garbage collection if called
+     * very frequently; it may be better to access values by index (which also lets you access other keys associated
+     * with that index) using {@link #getQAt(int)} in a for(int i=0...) loop.
+     * @return a newly-created iterator over this K2V1's Q values
+     */
     public Iterator<Q> iteratorQ()
     {
         return values.iterator();

@@ -402,7 +402,7 @@ public class K2<A, B>
     /**
      * Creates a new iterator over the A keys this holds. This can be problematic for garbage collection if called very
      * frequently; it may be better to access items by index (which also lets you access other keys associated with that
-     * index) using {@link #getAAt(int)} in a for(int i...) loop.
+     * index) using {@link #getAAt(int)} in a for(int i=0...) loop.
      * @return a newly-created iterator over this K2's A keys
      */
     public Iterator<A> iteratorA()
@@ -412,7 +412,7 @@ public class K2<A, B>
     /**
      * Creates a new iterator over the B keys this holds. This can be problematic for garbage collection if called very
      * frequently; it may be better to access items by index (which also lets you access other keys associated with that
-     * index) using {@link #getBAt(int)} in a for(int i...) loop.
+     * index) using {@link #getBAt(int)} in a for(int i=0...) loop.
      * @return a newly-created iterator over this K2's B keys
      */
     public Iterator<B> iteratorB()
