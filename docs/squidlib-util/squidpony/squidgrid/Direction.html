@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":9,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":9,"i11":9,"i12":9};
+var methods = {"i0":10,"i1":10,"i2":9,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":9,"i12":9,"i13":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -301,26 +301,30 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html?is
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Direction.html#isDiagonal--">isDiagonal</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Direction.html#isCardinal--">isCardinal</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i9" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Direction.html#isDiagonal--">isDiagonal</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Direction.html#opposite--">opposite</a></span>()</code>
 <div class="block">Returns the direction directly opposite of this one.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>static <a href="../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Direction.html#toGoTo-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">toGoTo</a></span>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;from,
       <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;to)</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>static <a href="../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Direction.html#valueOf-java.lang.String-">valueOf</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>
 <div class="block">Returns the enum constant of this type with the specified name.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>static <a href="../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Direction.html#values--">values</a></span>()</code>
 <div class="block">Returns an array containing the constants of this enum type, in
@@ -707,13 +711,26 @@ not permitted.)</div>
 </dl>
 </li>
 </ul>
+<a name="isCardinal--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isCardinal</h4>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidgrid/Direction.html#line.269">isCardinal</a>()</pre>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>Whether this is a cardinal-direction move.</dd>
+</dl>
+</li>
+</ul>
 <a name="hasUp--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>hasUp</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidgrid/Direction.html#line.269">hasUp</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidgrid/Direction.html#line.289">hasUp</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if <code>this</code> has an upward component.</dd>
@@ -726,7 +743,7 @@ not permitted.)</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>hasDown</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidgrid/Direction.html#line.289">hasDown</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidgrid/Direction.html#line.309">hasDown</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if <code>this</code> has a downward component.</dd>
@@ -739,7 +756,7 @@ not permitted.)</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>hasLeft</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidgrid/Direction.html#line.309">hasLeft</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidgrid/Direction.html#line.329">hasLeft</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if <code>this</code> has a left component.</dd>
@@ -752,7 +769,7 @@ not permitted.)</div>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hasRight</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidgrid/Direction.html#line.329">hasRight</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidgrid/Direction.html#line.349">hasRight</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if <code>this</code> has a right component.</dd>

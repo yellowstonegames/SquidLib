@@ -100,12 +100,17 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <dl>
+<dt>All Superinterfaces:</dt>
+<dd><a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></dd>
+</dl>
+<dl>
 <dt>All Known Implementing Classes:</dt>
 <dd><a href="../../../squidpony/squidgrid/mapping/Rectangle.Impl.html" title="class in squidpony.squidgrid.mapping">Rectangle.Impl</a></dd>
 </dl>
 <hr>
 <br>
-<pre>public interface <a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.html#line.20">Rectangle</a></pre>
+<pre>public interface <a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.html#line.16">Rectangle</a>
+extends <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></pre>
 <div class="block">Rectangles in 2D grids. Checkout <a href="../../../squidpony/squidgrid/mapping/Rectangle.Utils.html" title="class in squidpony.squidgrid.mapping"><code>Rectangle.Utils</code></a> for utility methods.</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
@@ -138,10 +143,17 @@ var activeTableTab = "activeTableTab";
 <tr class="rowColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/Rectangle.Utils.html" title="class in squidpony.squidgrid.mapping">Rectangle.Utils</a></span></code>
-<div class="block">Utilities pertaining to <code>Room</code></div>
+<div class="block">Utilities pertaining to <a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping"><code>Rectangle</code></a></div>
 </td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="nested.classes.inherited.from.class.squidpony.squidgrid.zone.Zone">
+<!--   -->
+</a>
+<h3>Nested classes/interfaces inherited from interface&nbsp;squidpony.squidgrid.zone.<a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></h3>
+<code><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html" title="class in squidpony.squidgrid.zone">Zone.Skeleton</a></code></li>
+</ul>
 </li>
 </ul>
 <!-- ========== METHOD SUMMARY =========== -->
@@ -169,6 +181,13 @@ var activeTableTab = "activeTableTab";
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/Rectangle.html#getWidth--">getWidth</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.squidpony.squidgrid.zone.Zone">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;squidpony.squidgrid.zone.<a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></h3>
+<code><a href="../../../squidpony/squidgrid/zone/Zone.html#contains-squidpony.squidmath.Coord-">contains</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#contains-int-int-">contains</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#getAll--">getAll</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#isEmpty--">isEmpty</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#size--">size</a></code></li>
+</ul>
 </li>
 </ul>
 </li>
@@ -189,7 +208,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>getBottomLeft</h4>
-<pre><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.html#line.25">getBottomLeft</a>()</pre>
+<pre><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.html#line.21">getBottomLeft</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The bottom left coordinate of the room.</dd>
@@ -202,11 +221,11 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>getWidth</h4>
-<pre>int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.html#line.31">getWidth</a>()</pre>
+<pre>int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.html#line.27">getWidth</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The room's width (from {@link #getBottomLeft()). It is greater or
-         equal than 0.</dd>
+ equal than 0.</dd>
 </dl>
 </li>
 </ul>
@@ -216,11 +235,11 @@ var activeTableTab = "activeTableTab";
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getHeight</h4>
-<pre>int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.html#line.37">getHeight</a>()</pre>
+<pre>int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.html#line.33">getHeight</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The room's height (from {@link #getBottomLeft()). It is greater
-         or equal than 0.</dd>
+ or equal than 0.</dd>
 </dl>
 </li>
 </ul>

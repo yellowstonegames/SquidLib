@@ -149,6 +149,12 @@
               <a href="../../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a>&nbsp;r,
               <a href="../../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>&nbsp;d)</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a></code></td>
+<td class="colLast"><span class="typeNameLabel">Rectangle.Utils.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/Rectangle.Utils.html#shrink-squidpony.squidgrid.mapping.Rectangle-">shrink</a></span>(<a href="../../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a>&nbsp;r)</code>
+<div class="block">Creates a new Rectangle that is smaller than r by 1 cell from each of r's edges, to a minimum of a 1x1 cell.</div>
+</td>
+</tr>
 </tbody>
 </table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
@@ -195,30 +201,46 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">Rectangle.Utils.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/Rectangle.Utils.html#contains-squidpony.squidgrid.mapping.Rectangle-int-int-">contains</a></span>(<a href="../../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a>&nbsp;r,
+        int&nbsp;x,
+        int&nbsp;y)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><span class="typeNameLabel">Rectangle.Utils.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/Rectangle.Utils.html#containsAny-squidpony.squidgrid.mapping.Rectangle-java.util.Collection-">containsAny</a></span>(<a href="../../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a>&nbsp;r,
            <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;cs)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Rectangle.Utils.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/Rectangle.Utils.html#extend-squidpony.squidgrid.mapping.Rectangle-squidpony.squidgrid.Direction-">extend</a></span>(<a href="../../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a>&nbsp;r,
       <a href="../../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>&nbsp;d)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a></code></td>
 <td class="colLast"><span class="typeNameLabel">RectangleRoomFinder.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/RectangleRoomFinder.html#extendRoom-boolean:A:A-squidpony.squidgrid.mapping.Rectangle-squidpony.squidgrid.Direction-">extendRoom</a></span>(boolean[][]&nbsp;assigneds,
           <a href="../../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a>&nbsp;r,
           <a href="../../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>&nbsp;d)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a></code></td>
 <td class="colLast"><span class="typeNameLabel">RectangleRoomFinder.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/RectangleRoomFinder.html#extendRoomOnce-boolean:A:A-squidpony.squidgrid.mapping.Rectangle-squidpony.squidgrid.Direction-">extendRoomOnce</a></span>(boolean[][]&nbsp;assigneds,
               <a href="../../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a>&nbsp;r,
               <a href="../../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>&nbsp;d)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">Rectangle.Utils.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/Rectangle.Utils.html#getAll4Corners-squidpony.squidgrid.mapping.Rectangle-squidpony.squidmath.Coord:A-">getAll4Corners</a></span>(<a href="../../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a>&nbsp;r,
               <a href="../../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;buf)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">Rectangle.Utils.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/Rectangle.Utils.html#getBorder-squidpony.squidgrid.mapping.Rectangle-squidpony.squidgrid.Direction-java.util.List-">getBorder</a></span>(<a href="../../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a>&nbsp;r,
+         <a href="../../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>&nbsp;d,
+         <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;buffer)</code>
+<div class="block">Given a Rectangle, a direction, and a possibly-null List of Coord to fill into, this will add Coords to
+ <code>buffer</code> from an edge of <code>r</code> determined by <code>d</code> until every Coord on that edge has been
+ added to buffer (or re-added, if they already were present in it).</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
@@ -226,6 +248,12 @@
          <a href="../../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>&nbsp;diagonal)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a></code></td>
+<td class="colLast"><span class="typeNameLabel">Rectangle.Utils.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/Rectangle.Utils.html#shrink-squidpony.squidgrid.mapping.Rectangle-">shrink</a></span>(<a href="../../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a>&nbsp;r)</code>
+<div class="block">Creates a new Rectangle that is smaller than r by 1 cell from each of r's edges, to a minimum of a 1x1 cell.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><span class="typeNameLabel">Rectangle.Utils.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/Rectangle.Utils.html#size-squidpony.squidgrid.mapping.Rectangle-">size</a></span>(<a href="../../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a>&nbsp;r)</code>&nbsp;</td>
 </tr>
