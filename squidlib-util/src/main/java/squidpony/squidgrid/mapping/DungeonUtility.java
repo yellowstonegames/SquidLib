@@ -12,7 +12,7 @@ import java.util.*;
  * for walls and make a copy that uses unicode box drawing characters.
  *
  * @author Tommy Ettinger - https://github.com/tommyettinger
- * @see squidpony.squidgrid.mapping.DungeonGenerator
+ * @see squidpony.squidgrid.mapping.DungeonGenerator DungeonGenerator uses this class a fair amount
  * Created by Tommy Ettinger on 4/1/2015.
  */
 public class DungeonUtility {
@@ -1282,8 +1282,7 @@ public class DungeonUtility {
     /**
      * @param level dungeon/map level as 2D char array. x,y indexed
      * @param c     Coord to check
-     * @return {@code true} if {@code c} is valid in {@code level},
-     * {@code false} otherwise.
+     * @return {@code true} if {@code c} is valid in {@code level}, {@code false} otherwise.
      */
     public static boolean inLevel(char[][] level, Coord c) {
         return inLevel(level, c.x, c.y);
@@ -1293,18 +1292,35 @@ public class DungeonUtility {
      * @param level dungeon/map level as 2D char array. x,y indexed
      * @param x     x coordinate to check
      * @param y     y coordinate to check
-     * @return {@code true} if {@code c} is valid in {@code level},
-     * {@code false} otherwise.
+     * @return {@code true} if {@code c} is valid in {@code level}, {@code false} otherwise.
      */
     public static boolean inLevel(char[][] level, int x, int y) {
         return 0 <= x && x < level.length && 0 <= y && y < level[x].length;
     }
 
     /**
+     * @param level dungeon/map level as 2D double array. x,y indexed
+     * @param c     Coord to check
+     * @return {@code true} if {@code c} is valid in {@code level}, {@code false} otherwise.
+     */
+    public static boolean inLevel(double[][] level, Coord c) {
+        return inLevel(level, c.x, c.y);
+    }
+
+    /**
+     * @param level dungeon/map level as 2D double array. x,y indexed
+     * @param x     x coordinate to check
+     * @param y     y coordinate to check
+     * @return {@code true} if {@code c} is valid in {@code level}, {@code false} otherwise.
+     */
+    public static boolean inLevel(double[][] level, int x, int y) {
+        return 0 <= x && x < level.length && 0 <= y && y < level[x].length;
+    }
+
+    /**
      * @param level a dungeon/map level as 2D array. x,y indexed
      * @param c     Coord to check
-     * @return {@code true} if {@code c} is valid in {@code level},
-     * {@code false} otherwise.
+     * @return {@code true} if {@code c} is valid in {@code level}, {@code false} otherwise.
      */
     public static <T> boolean inLevel(T[][] level, Coord c) {
         return inLevel(level, c.x, c.y);
@@ -1314,20 +1330,22 @@ public class DungeonUtility {
      * @param level a dungeon/map level as 2D array. x,y indexed
      * @param x     x coordinate to check
      * @param y     y coordinate to check
-     * @return {@code true} if {@code c} is valid in {@code level},
-     * {@code false} otherwise.
+     * @return {@code true} if {@code c} is valid in {@code level}, {@code false} otherwise.
      */
     public static <T> boolean inLevel(T[][] level, int x, int y) {
         return 0 <= x && x < level.length && 0 <= y && y < level[x].length;
     }
 
     /**
-     * @param zone
+     * An easy way to get the Coord items in a List of Coord that are at the edge of the region. Not the most
+     * efficient way to do this; If you find you need to do more complicated manipulations of regions or are
+     * calling this method often, consider using {@link squidpony.squidmath.GreasedRegion}, which should be
+     * significantly faster and has better support for more intricate alterations on an area of Coords.
+     * @param zone a List of Coord representing a region
      * @param buffer The list to fill if non null (i.e. if non-null, it is
      *               returned). If null, a fresh list will be allocated and
      *               returned.
-     * @return Elements in {@code zone} that are neighbors to an element not in
-     * {@code zone}.
+     * @return Elements in {@code zone} that are neighbors to an element not in {@code zone}.
      */
     public static List<Coord> border(final List<Coord> zone, /* @Nullable */ List<Coord> buffer) {
         final int zsz = zone.size();
