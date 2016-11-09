@@ -49,6 +49,29 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         }
     }
 
+    public GreasedRegion refill(boolean[][] map) {
+        if (map != null && map.length > 0 && width == map.length && height == map[0].length) {
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    data[x * ySections + (y >> 6)] |= (map[x][y] ? 1L : 0L) << (y & 63);
+                }
+            }
+            return this;
+        } else {
+            width = (map == null) ? 0 : map.length;
+            height = (map == null || map.length <= 0) ? 0 : map[0].length;
+            ySections = (height + 63) >> 6;
+            yEndMask = -1L >>> (64 - (height & 63));
+            data = new long[width * ySections];
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    if(map[x][y]) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+                }
+            }
+            return this;
+        }
+    }
+
     public GreasedRegion(char[][] map, char yes)
     {
         width = map.length;
@@ -63,6 +86,29 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         }
     }
 
+    public GreasedRegion refill(char[][] map, char yes) {
+        if (map != null && map.length > 0 && width == map.length && height == map[0].length) {
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    data[x * ySections + (y >> 6)] |= ((map[x][y] == yes) ? 1L : 0L) << (y & 63);
+                }
+            }
+            return this;
+        } else {
+            width = (map == null) ? 0 : map.length;
+            height = (map == null || map.length <= 0) ? 0 : map[0].length;
+            ySections = (height + 63) >> 6;
+            yEndMask = -1L >>> (64 - (height & 63));
+            data = new long[width * ySections];
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    if(map[x][y] == yes) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+                }
+            }
+            return this;
+        }
+    }
+
     public GreasedRegion(int[][] map, int yes)
     {
         width = map.length;
@@ -74,6 +120,29 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
             for (int y = 0; y < height; y++) {
                 if(map[x][y] == yes) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
             }
+        }
+    }
+
+    public GreasedRegion refill(int[][] map, int yes) {
+        if (map != null && map.length > 0 && width == map.length && height == map[0].length) {
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    data[x * ySections + (y >> 6)] |= ((map[x][y] == yes) ? 1L : 0L) << (y & 63);
+                }
+            }
+            return this;
+        } else {
+            width = (map == null) ? 0 : map.length;
+            height = (map == null || map.length <= 0) ? 0 : map[0].length;
+            ySections = (height + 63) >> 6;
+            yEndMask = -1L >>> (64 - (height & 63));
+            data = new long[width * ySections];
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    if(map[x][y] == yes) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+                }
+            }
+            return this;
         }
     }
 
@@ -99,6 +168,32 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
             }
         }
     }
+    public GreasedRegion refill(int[][] map, int lower, int upper) {
+        if (map != null && map.length > 0 && width == map.length && height == map[0].length) {
+            int[] column;
+            for (int x = 0; x < width; x++) {
+                column = map[x];
+                for (int y = 0; y < height; y++) {
+                    data[x * ySections + (y >> 6)] |= ((column[y] >= lower && column[y] < upper) ? 1L : 0L) << (y & 63);
+                }
+            }
+            return this;
+        } else {
+            width = (map == null) ? 0 : map.length;
+            height = (map == null || map.length <= 0) ? 0 : map[0].length;
+            ySections = (height + 63) >> 6;
+            yEndMask = -1L >>> (64 - (height & 63));
+            data = new long[width * ySections];
+            int[] column;
+            for (int x = 0; x < width; x++) {
+                column = map[x];
+                for (int y = 0; y < height; y++) {
+                    if(column[y] >= lower && column[y] < upper) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+                }
+            }
+            return this;
+        }
+    }
 
     /**
      * Constructs this GreasedRegion using a short[][], treating cells as on if they are greater than or equal to lower
@@ -122,7 +217,32 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
             }
         }
     }
-
+    public GreasedRegion refill(short[][] map, int lower, int upper) {
+        if (map != null && map.length > 0 && width == map.length && height == map[0].length) {
+            short[] column;
+            for (int x = 0; x < width; x++) {
+                column = map[x];
+                for (int y = 0; y < height; y++) {
+                    data[x * ySections + (y >> 6)] |= ((column[y] >= lower && column[y] < upper) ? 1L : 0L) << (y & 63);
+                }
+            }
+            return this;
+        } else {
+            width = (map == null) ? 0 : map.length;
+            height = (map == null || map.length <= 0) ? 0 : map[0].length;
+            ySections = (height + 63) >> 6;
+            yEndMask = -1L >>> (64 - (height & 63));
+            data = new long[width * ySections];
+            short[] column;
+            for (int x = 0; x < width; x++) {
+                column = map[x];
+                for (int y = 0; y < height; y++) {
+                    if(column[y] >= lower && column[y] < upper) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+                }
+            }
+            return this;
+        }
+    }
     /**
      * Constructs this GreasedRegion using a double[][] (typically one generated by
      * {@link squidpony.squidai.DijkstraMap}) that only stores two relevant states:  an "on" state for values less than
@@ -144,6 +264,30 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
             }
         }
     }
+
+    public GreasedRegion refill(double[][] map, double upperBound) {
+        if (map != null && map.length > 0 && width == map.length && height == map[0].length) {
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    if(map[x][y] <= upperBound) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+                }
+            }
+            return this;
+        } else {
+            width = (map == null) ? 0 : map.length;
+            height = (map == null || map.length <= 0) ? 0 : map[0].length;
+            ySections = (height + 63) >> 6;
+            yEndMask = -1L >>> (64 - (height & 63));
+            data = new long[width * ySections];
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    if(map[x][y] <= upperBound) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+                }
+            }
+            return this;
+        }
+    }
+
     /**
      * Constructs this GreasedRegion using a double[][] (typically one generated by
      * {@link squidpony.squidai.DijkstraMap}) that only stores two relevant states:  an "on" state for values between
@@ -151,8 +295,8 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
      * @param map a double[][] that probably relates in some way to DijkstraMap.
      * @param lowerBound lower inclusive; any double lower than this will be off, any equal to or greater than this,
      *                   but less than upper, will be on
-     * @param upperBound upper exclusive; any double greater than this will be off, any doubles both less than this
-     *                   and equal to or greater than lower will be on
+     * @param upperBound upper exclusive; any double greater than or equal to this this will be off, any doubles both
+     *                   less than this and equal to or greater than lower will be on
      */
     public GreasedRegion(double[][] map, double lowerBound, double upperBound)
     {
@@ -168,6 +312,32 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
             }
         }
     }
+    public GreasedRegion refill(double[][] map, double lower, double upper) {
+        if (map != null && map.length > 0 && width == map.length && height == map[0].length) {
+            double[] column;
+            for (int x = 0; x < width; x++) {
+                column = map[x];
+                for (int y = 0; y < height; y++) {
+                    data[x * ySections + (y >> 6)] |= ((column[y] >= lower && column[y] < upper) ? 1L : 0L) << (y & 63);
+                }
+            }
+            return this;
+        } else {
+            width = (map == null) ? 0 : map.length;
+            height = (map == null || map.length <= 0) ? 0 : map[0].length;
+            ySections = (height + 63) >> 6;
+            yEndMask = -1L >>> (64 - (height & 63));
+            data = new long[width * ySections];
+            double[] column;
+            for (int x = 0; x < width; x++) {
+                column = map[x];
+                for (int y = 0; y < height; y++) {
+                    if(column[y] >= lower && column[y] < upper) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+                }
+            }
+            return this;
+        }
+    }
 
     public GreasedRegion(boolean[] bits, int width, int height)
     {
@@ -178,6 +348,25 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         data = new long[width * ySections];
         for (int a = 0, x = 0, y = 0; a < bits.length; a++, x = a / height, y = a % height) {
             if(bits[a]) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+        }
+    }
+
+    public GreasedRegion refill(boolean[] bits, int width, int height) {
+        if (bits != null && bits.length > 0 && this.width == width && this.height == height) {
+            for (int a = 0, x = 0, y = 0; a < bits.length; a++, x = a / height, y = a % height) {
+                data[x * ySections + (y >> 6)] |= (bits[a] ? 1L : 0L) << (y & 63);
+            }
+            return this;
+        } else {
+            this.width = (bits == null || width < 0) ? 0 : width;
+            this.height = (bits == null || bits.length <= 0 || height < 0) ? 0 : height;
+            ySections = (height + 63) >> 6;
+            yEndMask = -1L >>> (64 - (height & 63));
+            data = new long[width * ySections];
+            for (int a = 0, x = 0, y = 0; a < bits.length; a++, x = a / height, y = a % height) {
+                if(bits[a]) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+            }
+            return this;
         }
     }
 
