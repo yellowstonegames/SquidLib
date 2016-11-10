@@ -63,6 +63,7 @@ public class DijkstraBenchmark {
     public static char[][] map;
     public static double[][] astarMap;
     public static GreasedRegion floors;
+    public static Coord[][] nearbyMap;
     static {
         serpent.putWalledBoxRoomCarvers(1);
         map = dungeonGen.generate(serpent.generate());
@@ -70,6 +71,14 @@ public class DijkstraBenchmark {
         System.out.println("Floors: " + floors.size());
         System.out.println("Percentage walkable: " + floors.size() * 100.0 / (DIMENSION * DIMENSION) + "%");
         astarMap = DungeonUtility.generateAStarCostMap(map, Collections.<Character, Double>emptyMap(), 1);
+        nearbyMap = new Coord[DIMENSION][DIMENSION];
+        GreasedRegion tmp = new GreasedRegion(DIMENSION, DIMENSION);
+        StatefulRNG srng = new StatefulRNG(0x1337BEEF1337CA77L);
+        for (int i = 1; i < DIMENSION - 1; i++) {
+            for (int j = 1; j < DIMENSION - 1; j++) {
+                nearbyMap[i][j] = tmp.clear().insert(i, j).flood(floors, 8).remove(i, j).singleRandom(srng);
+            }
+        }
     }
     public long doScanDijkstra()
     {
@@ -128,6 +137,34 @@ public class DijkstraBenchmark {
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measurePathDijkstra() throws InterruptedException {
         System.out.println(doPathDijkstra());
+    }
+
+    public long doTinyPathDijkstra()
+    {
+        DijkstraMap dijkstra = new DijkstraMap(
+                map, DijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(new LightRNG(0x1337BEEF)));
+        dijkstra.setBlockingRequirement(0);
+        Coord r;
+        long scanned = 0;
+        for (int x = 1; x < DIMENSION - 1; x++) {
+            for (int y = 1; y < DIMENSION - 1; y++) {
+                if (map[x][y] == '#')
+                    continue;
+                ((StatefulRNG) dijkstra.rng).setState((x << 20) | (y << 14) | (x * y));
+                r = nearbyMap[x][y];
+                dijkstra.findPath(1, 9, null, null, r, Coord.get(x, y));
+                dijkstra.clearGoals();
+                dijkstra.resetMap();
+                scanned++;
+            }
+        }
+        return scanned;
+    }
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureTinyPathDijkstra() throws InterruptedException {
+        System.out.println(doTinyPathDijkstra());
     }
 
 
@@ -275,7 +312,7 @@ public class DijkstraBenchmark {
                 r = floors.singleRandom(utility.rng);
                 dgp.clear();
                 if(astar.searchNodePath(r, Coord.get(x, y), heu, dgp))
-                scanned+= dgp.getCount();
+                    scanned+= dgp.getCount();
             }
         }
         return scanned;
@@ -286,6 +323,38 @@ public class DijkstraBenchmark {
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measurePathGDXAStar() throws InterruptedException {
         System.out.println(doPathGDXAStar());
+    }
+
+    public long doTinyPathGDXAStar()
+    {
+        IndexedAStarPathFinder<Coord> astar = new IndexedAStarPathFinder<Coord>(new GridGraph(floors.asCoords()));
+        GraphPath<Coord> dgp = new DefaultGraphPath<Coord>(9);
+        Heuristic<Coord> heu = new Heuristic<Coord>() {
+            @Override
+            public float estimate(Coord node, Coord endNode) {
+                return Math.abs(node.x - endNode.x) + Math.abs(node.y - endNode.y);
+            }
+        };
+        Coord r;
+        long scanned = 0;
+        for (int x = 1; x < DIMENSION - 1; x++) {
+            for (int y = 1; y < DIMENSION - 1; y++) {
+                if (map[x][y] == '#')
+                    continue;
+                r = nearbyMap[x][y];
+                dgp.clear();
+                if(astar.searchNodePath(r, Coord.get(x, y), heu, dgp))
+                    scanned++;
+            }
+        }
+        return scanned;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureTinyPathGDXAStar() throws InterruptedException {
+        System.out.println(doTinyPathGDXAStar());
     }
     /*
      * ============================== HOW TO RUN THIS TEST: ====================================

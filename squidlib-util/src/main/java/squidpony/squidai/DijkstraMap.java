@@ -1292,12 +1292,14 @@ public class DijkstraMap implements Serializable {
     /**
      * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
      * of Coord positions (using the current measurement) needed to get closer to the closest reachable
-     * goal. The maximum length of the returned list is given by length; if moving the full length of
-     * the list would place the mover in a position shared by one of the positions in onlyPassable
-     * (which is typically filled with friendly units that can be passed through in multi-tile-
-     * movement scenarios), it will recalculate a move so that it does not pass into that cell.
-     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
-     * through, and will be ignored if there is a goal overlapping one.
+     * goal. The maximum length of the returned list is given by length, which represents movement in a system where
+     * a single move can be multiple cells if length is greater than 1 and should usually be 1 in standard roguelikes;
+     * if moving the full length of the list would place the mover in a position shared  by one of the positions in
+     * onlyPassable (which is typically filled with friendly units that can be passed through in multi-cell-movement
+     * scenarios), it will recalculate a move so that it does not pass into that cell. The keys in impassable should
+     * be the positions of enemies and obstacles that cannot be moved  through, and will be ignored if there is a goal
+     * overlapping one. This overload always scans the whole map; use
+     * {@link #findPath(int, int, Set, Set, Coord, Coord...)} to scan a smaller area for performance reasons.
      * <br>
      * This caches its result in a member field, path, which can be fetched after finding a path and will change with
      * each call to a pathfinding method.
@@ -1309,6 +1311,35 @@ public class DijkstraMap implements Serializable {
      * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.
      */
     public ArrayList<Coord> findPath(int length, Set<Coord> impassable,
+                                     Set<Coord> onlyPassable, Coord start, Coord... targets) {
+        return findPath(length, -1, impassable, onlyPassable, start, targets);
+    }
+
+    /**
+     * Scans the dungeon using DijkstraMap.scan or DijkstraMap.partialScan with the listed goals and start
+     * point, and returns a list of Coord positions (using the current measurement) needed to get closer
+     * to the closest reachable goal. The maximum length of the returned list is given by length, which represents
+     * movement in a system where a single move can be multiple cells if length is greater than 1 and should usually
+     * be 1 in standard roguelikes; if moving the full length of the list would place the mover in a position shared
+     * by one of the positions in onlyPassable (which is typically filled with friendly units that can be passed
+     * through in multi-cell-movement scenarios), it will recalculate a move so that it does not pass into that cell.
+     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+     * through, and will be ignored if there is a goal overlapping one.
+     * The full map will only be scanned if scanLimit is 0 or less; for positive scanLimit values this will scan only
+     * that distance out from each goal, which can save processing time on maps where only a small part matters.
+     * Generally, scanLimit should be significantly greater than length.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
+     * @param length       the length of the path to calculate
+     * @param scanLimit    how many cells away from a goal to actually process; negative to process whole map
+     * @param impassable   a Set of impassable Coord positions that may change (not constant like walls); can be null
+     * @param onlyPassable a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
+     * @param start        the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
+     * @param targets      a vararg or array of Coord that this will try to pathfind toward
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.
+     */
+    public ArrayList<Coord> findPath(int length, int scanLimit, Set<Coord> impassable,
                                      Set<Coord> onlyPassable, Coord start, Coord... targets) {
         if (!initialized) return null;
         path.clear();
@@ -1326,7 +1357,12 @@ public class DijkstraMap implements Serializable {
         }
         if (goals.isEmpty())
             return new ArrayList<>(path);
-        scan(impassable2);
+        if(length < 0)
+            length = 0;
+        if(scanLimit <= 0 || scanLimit < length)
+            scan(impassable2);
+        else
+            partialScan(scanLimit, impassable2);
         Coord currentPos = start;
         double paidLength = 0.0;
         while (true) {
@@ -1358,7 +1394,6 @@ public class DijkstraMap implements Serializable {
             frustration++;
             if (paidLength > length - 1.0) {
                 if (onlyPassable.contains(currentPos)) {
-
                     closed.put(currentPos.encode(), WALL);
                     impassable2.add(currentPos);
                     return findPath(length, impassable2, onlyPassable, start, targets);
@@ -2763,6 +2798,43 @@ public class DijkstraMap implements Serializable {
      */
     public ArrayList<Coord> findFleePath(int length, double preferLongerPaths, Set<Coord> impassable,
                                          Set<Coord> onlyPassable, Coord start, Coord... fearSources) {
+        return findFleePath(length, -1, preferLongerPaths, impassable, onlyPassable, start, fearSources);
+    }
+
+    /**
+     * Scans the dungeon using DijkstraMap.scan or DijkstraMap.partialScan with the listed fearSources and start
+     * point, and returns a list of Coord positions (using this DijkstraMap's metric) needed to get further from
+     * the closest fearSources, meant for running away. The maximum length of the returned list is given by length,
+     * which represents movement in a system where a single move can be multiple cells if length is greater than 1 and
+     * should usually be 1 in standard roguelikes; if moving the full length of the list would place the mover in a
+     * position shared by one of the positions in onlyPassable (which is typically filled with friendly units that can
+     * be passed through in multi-cell-movement scenarios), it will recalculate a move so that it does not pass into
+     * that cell. The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+     * through, and will be ignored if there is a fearSource overlapping one. The preferLongerPaths parameter
+     * is meant to be tweaked and adjusted; higher values should make creatures prefer to escape out of
+     * doorways instead of hiding in the closest corner, and a value of 1.2 should be typical for many maps.
+     * The parameters preferLongerPaths, impassable, and the varargs used for fearSources will be cached, and
+     * any subsequent calls that use the same values as the last values passed will avoid recalculating
+     * unnecessary scans. However, scanLimit is not cached; if you use scanLimit then it is assumed you are using some
+     * value for it that shouldn't change relative to the other parameters (like twice the length).
+     * The full map will only be scanned if scanLimit is 0 or less; for positive scanLimit values this will scan only
+     * that distance out from each goal, which can save processing time on maps where only a small part matters.
+     * Generally, scanLimit should be significantly greater than length.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
+     *
+     * @param length            the length of the path to calculate
+     * @param scanLimit         how many cells away from a fear source to calculate; negative scans the whole map
+     * @param preferLongerPaths Set this to 1.2 if you aren't sure; it will probably need tweaking for different maps.
+     * @param impassable        a Set of impassable Coord positions that may change (not constant like walls); can be null
+     * @param onlyPassable      a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
+     * @param start             the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
+     * @param fearSources       a vararg or array of Coord positions to run away from
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes away from fear sources. Copy of path.
+     */
+    public ArrayList<Coord> findFleePath(int length, int scanLimit, double preferLongerPaths, Set<Coord> impassable,
+                                         Set<Coord> onlyPassable, Coord start, Coord... fearSources) {
         if (!initialized) return null;
         path.clear();
         OrderedSet<Coord> impassable2;
@@ -2792,14 +2864,23 @@ public class DijkstraMap implements Serializable {
             if (goals.isEmpty())
                 return new ArrayList<>(path);
 
-            scan(impassable2);
+            if(length < 0) length = 0;
+            if(scanLimit <= 0 || scanLimit < length)
+                cachedFleeMap = scan(impassable2);
+            else
+                cachedFleeMap = partialScan(scanLimit, impassable2);
+
 
             for (int x = 0; x < gradientMap.length; x++) {
                 for (int y = 0; y < gradientMap[x].length; y++) {
-                    gradientMap[x][y] *= (gradientMap[x][y] >= FLOOR) ? 1.0 : (0.0 - preferLongerPaths);
+                    gradientMap[x][y] *= (gradientMap[x][y] >= FLOOR) ? 1.0 : -preferLongerPaths;
                 }
             }
-            cachedFleeMap = scan(impassable2);
+
+            if(scanLimit <= 0 || scanLimit < length)
+                cachedFleeMap = scan(impassable2);
+            else
+                cachedFleeMap = partialScan(scanLimit, impassable2);
         }
         Coord currentPos = start;
         double paidLength = 0.0;
