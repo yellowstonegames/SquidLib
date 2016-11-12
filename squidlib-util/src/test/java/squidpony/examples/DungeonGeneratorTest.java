@@ -80,7 +80,7 @@ import java.io.IOException;
  */
 public class DungeonGeneratorTest {
     public static int width = 70, height = 70, depth = 16;
-    public static void main( String[] args )
+    public static void main(String[] args )
     {
         //seed is, in base 36, the number SQUIDLIB
         StatefulRNG rng = new StatefulRNG(2252637788195L);
@@ -475,26 +475,27 @@ public class DungeonGeneratorTest {
     // them in a project, maybe ask to see if there's a newer version already made or in progress.
     public static void mainAlt(String[] args ) {
         RNG rng = new RNG(2252637788195L);
-        SectionDungeonGenerator dungeonGenerator = new SectionDungeonGenerator(120, 120, rng);
+        SectionDungeonGenerator dungeonGenerator = new SectionDungeonGenerator(width, width, rng);
         dungeonGenerator.addDoors(15, true);
-        dungeonGenerator.addWater(SectionDungeonGenerator.CAVE, 15);
+        //dungeonGenerator.addWater(SectionDungeonGenerator.CAVE, 15);
         dungeonGenerator.addGrass(SectionDungeonGenerator.CAVE, 15);
         dungeonGenerator.addBoulders(SectionDungeonGenerator.ALL, 6);
-        dungeonGenerator.addLake(20);
-        SerpentMapGenerator serpent = new SerpentMapGenerator(120, 120, rng, 0.1);
-        serpent.putWalledBoxRoomCarvers(3);
-        serpent.putWalledRoundRoomCarvers(1);
-        serpent.putCaveCarvers(6);
+        dungeonGenerator.addMaze(4);
+        dungeonGenerator.addLake(15);
+        SerpentMapGenerator serpent = new SerpentMapGenerator(width, width, rng, 0.12);
+        serpent.putWalledBoxRoomCarvers(4);
+        serpent.putWalledRoundRoomCarvers(2);
+        serpent.putCaveCarvers(5);
         //dungeonGenerator.generate(serpent.generate(), serpent.getEnvironment());
         dungeonGenerator.generate();
 
         dungeonGenerator.setDungeon(
                 DungeonUtility.hashesToLines(dungeonGenerator.getDungeon(), true));
         char[][] iso = dungeonGenerator.getDungeon();
-        int[][] water = new int[120][120];
-        for (int i = 0; i < 120; i++)
+        int[][] water = new int[width][width];
+        for (int i = 0; i < width; i++)
         {
-            for (int j = 0; j < 120; j++)
+            for (int j = 0; j < width; j++)
             {
                 water[i][j] = -1;
             }
@@ -515,22 +516,22 @@ public class DungeonGeneratorTest {
                 "palette0_Hero_Plate_Bow_Iso.gif",
                 "palette0_Hero_Plate_Dagger_Iso.gif",
                 "palette0_Hero_Plate_Mace_Iso.gif",
-                "palette0_Hero_Plate_Robe_Iso.gif",
                 "palette0_Hero_Plate_Staff_Iso.gif",
                 "palette0_Hero_Plate_Sword_Iso.gif",
                 "palette0_Hero_Robe_Bow_Iso.gif",
                 "palette0_Hero_Robe_Dagger_Iso.gif",
+                "palette0_Hero_Robe_Mace_Iso.gif",
                 "palette0_Hero_Robe_Staff_Iso.gif",
                 "palette0_Hero_Robe_Sword_Iso.gif"
         };
-        for(int row = 0, sx = -59, sy = 59; row < 240; ++row, even = (row % 2 == 0), sx += (even) ? 1 : 0, sy += (!even) ? 1 : 0)
+        for(int row = 0, sx = 1 - (width>>1), sy = (width>>1) - 1; row < (width<<1); ++row, even = (row % 2 == 0), sx += (even) ? 1 : 0, sy += (!even) ? 1 : 0)
         {
             sb.append("<div class=\"row\">\n");
-            for(int col = 0; col < 120; col++)
+            for(int col = 0; col < width; col++)
             {
                 int x = sx + col;
                 int y = sy - col;
-                if(x < 0 || y < 0 || x > 119 || y > 119)
+                if(x < 0 || y < 0 || x >= width || y >= width)
                 {
                     sb.append("<div class=\"isotile\"></div>\n");
                 }
@@ -540,11 +541,11 @@ public class DungeonGeneratorTest {
                     {
                         case '.':
                             sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Floor_Huge_face" + rng.nextInt(4) + "_0.png\" />");
-                            if(rng.nextInt(120) == 0) {
+                            /*if(rng.nextInt(120) == 0) {
                                 sb.append("<img class=\"ppl\" src=\"dungeon/");
                                 sb.append(rng.getRandomElement(people));
                                 sb.append("\" />");
-                            }
+                            }*/
                             sb.append("</div>\n");
                             break;
                         case '"':
@@ -558,8 +559,8 @@ public class DungeonGeneratorTest {
                         case ',':
                             water[x][y] = rng.nextInt(16);
                             if(water[x][y-1] > -1) water[x][y] = (water[x][y] & 14) | ((water[x][y-1] & 4) >> 2);
-                            if(water[x][y+1] > -1) water[x][y] = (water[x][y] & 11) | ((water[x][y+1] & 1) * 4);
-                            if(water[x-1][y] > -1) water[x][y] = (water[x][y] & 7)  | ((water[x-1][y] & 2) * 4);
+                            if(water[x][y+1] > -1) water[x][y] = (water[x][y] & 11) | ((water[x][y+1] & 1) << 2);
+                            if(water[x-1][y] > -1) water[x][y] = (water[x][y] & 7)  | ((water[x-1][y] & 2) << 2);
                             if(water[x+1][y] > -1) water[x][y] = (water[x][y] & 13) | ((water[x+1][y] & 8) >> 2);
 
                             sb.append("<div class=\"isotile\"><img src=\"dungeon/palette0_Water_Huge_face0_" + (Integer.toHexString(water[x][y])) + ".png\" /></div>\n");
@@ -619,7 +620,7 @@ public class DungeonGeneratorTest {
             sb.append("</div>\n");
         }
         try {
-            FileWriter fw = new FileWriter("data.html");
+            FileWriter fw = new FileWriter("Unoccupied.html");
             fw.write(sb.toString());
             fw.close();
         } catch (IOException e) {
