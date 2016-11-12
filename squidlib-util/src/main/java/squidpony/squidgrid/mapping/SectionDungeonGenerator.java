@@ -930,6 +930,8 @@ public class SectionDungeonGenerator {
         finder = new RoomFinder(dungeon, finder.environment);
         rm = finder.findRooms();
         cr = finder.findCorridors();
+        cv = finder.findCaves();
+        cv.add(lakesAndMazes[0]);
         allCaves = RoomFinder.merge(cv, width, height);
         doorMap = makeDoors(rm, cr, allCaves, allCorridors);
         for (int y = 0; y < height; y++) {
@@ -989,8 +991,8 @@ public class SectionDungeonGenerator {
                 if (doorways.contains(near)) {
                     map[near.x][near.y] = '*';
                     doorways.remove(near);
-                    i++;
                     doorways.remove(entry);
+                    i++;
                     continue BigLoop;
                 }
             }
