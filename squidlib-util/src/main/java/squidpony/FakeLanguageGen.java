@@ -54,8 +54,8 @@ public class FakeLanguageGen implements Serializable {
                     Pattern.compile("[kкκcсςСQq].{1,3}[kкκcсςxхжχqmм]", 17),
                     Pattern.compile("[bъыбвβЪЫБ].{1,3}[cсς]", 17),
                     Pattern.compile("[hн][^aаαΛeезξεЗΣiτιyуλγУ][^aаαΛeезξεЗΣiτιyуλγУ]?[rяΓ]", 17),
-                    Pattern.compile("[tтτΓгcсς]..?[tтτΓг]", 17),
-                    Pattern.compile("(?:(?:[pрρ][hн])|[f])..?[rяΓ][tтτΓг]", 17),
+                    Pattern.compile("[tтτΓгcсς][iτιyуλγУ][tтτΓг]+$", 17),
+                    Pattern.compile("(?:(?:[pрρ][hн])|f)..?[rяΓ][tтτΓг]", 17),
                     Pattern.compile("[Ssξζzcсς][hн][iτιyуλγУ].?[sξζzcсς]", 17),
                     Pattern.compile("[aаαΛ][nи]..?[Ssξlιζz]", 17),
                     Pattern.compile("[aаαΛ]([sξζz]{2})", 17),
@@ -1242,6 +1242,27 @@ public class FakeLanguageGen implements Serializable {
             },
             new String[]{}, new int[]{1, 2, 3, 4}, new double[]{6, 5, 5, 1}, 0.55, 0.65, 0.0, 0.15, arabicSanityChecks, true);
             */
+    /**
+     * Imitation text from an approximation of one of the Inuktitut languages spoken by various people of the Arctic and
+     * nearby areas. This is likely to be hard to pronounce.
+     * <br>
+     * Ugkangungait ninaaq ipkutuilluuq um aitqiinnaitunniak tillingaat.
+     */
+    public static final FakeLanguageGen INUKTITUT = new FakeLanguageGen(
+            new String[]{"a", "a", "a", "a", "a", "aa", "aa", "aa", "aa", "i", "i", "i", "ii", "ii", "u", "u", "u", "uu", "uu", "ai", "ia", "iu", "ua", "ui"},
+            new String[]{},
+            new String[]{"p", "t", "k", "q", "s", "l", "h", "v", "j", "g", "r", "m", "n",
+                    "t", "t", "t", "t", "k", "k", "q", "q", "n", "n", "n", "n", "g", "l"},
+            new String[]{"pp", "tt", "kk", "pk", "tk", "gk", "kp", "kt", "kg", "pq", "tq", "gq", "ss", "ll", "rr", "mm",
+                    "nn", "nng", "ng", "ng",
+                    "ll", "nn", "nn", "nn",},
+            new String[]{"n", "t", "q", "k", "n", "t", "q", "k", "n", "t", "q", "k", "n", "t", "q", "k", "p", "s", "m", "g", "g", "ng", "ng", "ng"},
+            new String[]{"itut", "uit", "uq", "iuq", "iaq", "aq", "it", "aat", "aak", "aan", "ait", "ik", "uut", "un", "unnun",
+                    "ung", "ang", "ing", "iin", "iit", "iik", "in",
+                    "uq", "iaq", "aq", "ik", "it", "uit", "ut", "ut", "at", "un", "in"
+            },
+            new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{3, 4, 6, 5, 4}, 0.45, 0.0, 0.0, 0.25, null, true).register();
+
     /**
      * A mix of four different languages, using only ASCII characters, that is meant for generating single words for
      * creature or place names in fantasy settings.
