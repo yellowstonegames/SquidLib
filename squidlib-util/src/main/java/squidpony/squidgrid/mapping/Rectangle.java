@@ -191,43 +191,46 @@ public interface Rectangle extends Zone {
          * @return The coord at the corner identified by {@code diagonal} in
          * {@code r}.
          */
-        public static Coord getCorner(Rectangle r, Direction diagonal) {
-            assert diagonal.isDiagonal();
-            switch (diagonal) {
-                case DOWN_LEFT:
-                    return r.getBottomLeft();
-                case DOWN_RIGHT:
-                    return r.getBottomLeft().translate(r.getWidth() - 1, 0);
-                case UP_LEFT:
-                    return r.getBottomLeft().translate(0, r.getHeight() - 1);
-                case UP_RIGHT:
-                    return r.getBottomLeft().translate(r.getWidth() - 1, r.getHeight() - 1);
-                case DOWN:
-                case LEFT:
-                case NONE:
-                case RIGHT:
-                case UP:
-                    throw new IllegalStateException(
-                            "Expected a diagonal direction in Rectangle.Utils::getCorner. Received: " + diagonal);
-            }
-            throw new IllegalStateException("Unmatched direction in Rectangle.Utils::getCorner: " + diagonal);
-        }
+		public static Coord getCorner(Rectangle r, Direction diagonal) {
+			assert diagonal.isDiagonal();
+			switch (diagonal) {
+			case DOWN_LEFT:
+				return r.getBottomLeft();
+			case DOWN_RIGHT:
+				return r.getBottomLeft().translate(r.getWidth() - 1, 0);
+			case UP_LEFT:
+				/* -y because in SquidLib higher y is smaller */
+				return r.getBottomLeft().translate(0, -(r.getHeight() - 1));
+			case UP_RIGHT:
+				/* -y because in SquidLib higher y is smaller */
+				return r.getBottomLeft().translate(r.getWidth() - 1, -(r.getHeight() - 1));
+			case DOWN:
+			case LEFT:
+			case NONE:
+			case RIGHT:
+			case UP:
+				throw new IllegalStateException(
+						"Expected a diagonal direction in Rectangle.Utils::getCorner. Received: " + diagonal);
+			}
+			throw new IllegalStateException("Unmatched direction in Rectangle.Utils::getCorner: " + diagonal);
+		}
 
-        /**
-         * @param r
-         * @param buf An array of (at least) size 4, to hold the 4 corners. It
-         *            is returned, except if {@code null} or too small, in which
-         *            case a fresh array is returned.
-         * @return
-         */
-        public static Coord[] getAll4Corners(Rectangle r, Coord[] buf) {
-            final Coord[] result = buf == null || buf.length < 4 ? new Coord[4] : buf;
-            result[0] = getCorner(r, Direction.DOWN_LEFT);
-            result[1] = getCorner(r, Direction.DOWN_RIGHT);
-            result[2] = getCorner(r, Direction.UP_RIGHT);
-            result[3] = getCorner(r, Direction.UP_LEFT);
-            return result;
-        }
+		/**
+		 * @param r
+		 * @param buf
+		 *            An array of (at least) size 4, to hold the 4 corners. It
+		 *            is returned, except if {@code null} or too small, in which
+		 *            case a fresh array is returned.
+		 * @return
+		 */
+		public static Coord[] getAll4Corners(Rectangle r, Coord[] buf) {
+			final Coord[] result = buf == null || buf.length < 4 ? new Coord[4] : buf;
+			result[0] = getCorner(r, Direction.DOWN_LEFT);
+			result[1] = getCorner(r, Direction.DOWN_RIGHT);
+			result[2] = getCorner(r, Direction.UP_RIGHT);
+			result[3] = getCorner(r, Direction.UP_LEFT);
+			return result;
+		}
 
         /**
          * Creates a new Rectangle that is smaller than r by 1 cell from each of r's edges, to a minimum of a 1x1 cell.
@@ -240,153 +243,153 @@ public interface Rectangle extends Zone {
                     Math.max(1, r.getWidth() - 2), Math.max(1, r.getHeight() - 2));
         }
 
-        /**
-         * Given a Rectangle, a direction, and a possibly-null List of Coord to fill into, this will add Coords to
-         * {@code buffer} from an edge of {@code r} determined by {@code d} until every Coord on that edge has been
-         * added to buffer (or re-added, if they already were present in it).
-         * @param r the Rectangle to find a border from
-         * @param d the Direction the border corresponds to; {@code Direction.UP} is the top border and so on
-         * @param buffer a possibly-null List of Coord to place border Coords into; if null a new List will be made
-         * @return buffer after adding border Coords to it.
-         */
-        public static List<Coord> getBorder(Rectangle r, Direction d, List<Coord> buffer)
-        {
-            if(r == null || d == null || r.getWidth() <= 0 || r.getHeight() <= 0)
-                return buffer;
-            int limit, fixed;
-            switch (d)
-            {
-                case DOWN:
-                    limit = r.getWidth();
-                    fixed = r.getBottomLeft().y;
-                    if(buffer == null)
-                        buffer = new ArrayList<>(limit);
-                    for (int i = 0, x = r.getBottomLeft().x; i < limit; i++, x++)
-                        buffer.add(Coord.get(x, fixed));
-                    break;
-                case LEFT:
-                    limit = r.getHeight();
-                    fixed = r.getBottomLeft().x;
-                    if(buffer == null)
-                        buffer = new ArrayList<>(limit);
-                    for (int i = 0, y = r.getBottomLeft().y; i < limit; i++, y++)
-                        buffer.add(Coord.get(fixed, y));
-                    break;
-                case RIGHT:
-                    limit = r.getHeight();
-                    fixed = r.getBottomLeft().x + r.getWidth() - 1;
-                    if(buffer == null)
-                        buffer = new ArrayList<>(limit);
-                    for (int i = 0, y = r.getBottomLeft().y; i < limit; i++, y++)
-                        buffer.add(Coord.get(fixed, y));
-                    break;
-                case UP:
-                    limit = r.getWidth();
-                    fixed = r.getBottomLeft().y + r.getHeight() - 1;
-                    if(buffer == null)
-                        buffer = new ArrayList<>(limit);
-                    for (int i = 0, x = r.getBottomLeft().x; i < limit; i++, x++)
-                        buffer.add(Coord.get(x, fixed));
-                    break;
-                default:
-                    throw new IllegalStateException(
-                            "Expected a cardinal direction in Rectangle.Utils::getBorder. Received: " + d);
-            }
-            return buffer;
-        }
-    }
+		/**
+		 * @param r
+		 * @param cardinal
+		 * @param buf
+		 *            The buffer to fill or {@code null} to let this method
+		 *            allocate.
+		 * @return The border of {@code r} at the position {@code cardinal},
+		 *         i.e. the lowest line if {@code r} is {@link Direction#DOWN},
+		 *         the highest line if {@code r} is {@link Direction#UP}, the
+		 *         leftest column if {@code r} is {@link Direction#LEFT}, and
+		 *         the rightest column if {@code r} is {@link Direction#RIGHT}.
+		 */
+		public static List<Coord> getBorder(Rectangle r, Direction cardinal,
+				/* @Nullable */ List<Coord> buf) {
+			Coord start = null;
+			Direction dir = null;
+			int len = -1;
+			switch (cardinal) {
+			case DOWN:
+			case UP:
+				len = r.getWidth();
+				dir = Direction.RIGHT;
+				start = cardinal == Direction.DOWN ? r.getBottomLeft() : getCorner(r, Direction.UP_LEFT);
+				break;
+			case LEFT:
+			case RIGHT:
+				len = r.getHeight();
+				dir = Direction.UP;
+				start = cardinal == Direction.LEFT ? r.getBottomLeft() : getCorner(r, Direction.DOWN_RIGHT);
+				break;
+			case DOWN_LEFT:
+			case DOWN_RIGHT:
+			case NONE:
+			case UP_LEFT:
+			case UP_RIGHT:
+				throw new IllegalStateException(
+						"Expected a cardinal direction in Rectangle.Utils::getBorder. Received: " + cardinal);
+			}
+			if (start == null || dir == null)
+				throw new IllegalStateException(
+						"Unmatched direction in Rectangle.Utils::Border: " + cardinal);
 
-    /**
-     * @author smelC
-     */
-    class Impl implements Rectangle {
+			final List<Coord> result = buf == null ? new ArrayList<Coord>(len) : buf;
+			Coord now = start;
+			for (int i = 0; i < len; i++) {
+				buf.add(now);
+				now = now.translate(dir);
+			}
+			return result;
+		}
+	}
 
-        protected final Coord bottomLeft;
-        protected final int width;
-        protected final int height;
+	/**
+	 * @author smelC
+	 */
+	class Impl implements Rectangle {
 
-        public Impl(Coord bottomLeft, int width, int height) {
-            this.bottomLeft = bottomLeft;
-            this.width = width;
-            this.height = height;
-        }
+		protected final Coord bottomLeft;
+		protected final int width;
+		protected final int height;
 
-        @Override
-        public Coord getBottomLeft() {
-            return bottomLeft;
-        }
+		private static final long serialVersionUID = -6197401003733967116L;
 
-        @Override
-        public int getWidth() {
-            return width;
-        }
+		public Impl(Coord bottomLeft, int width, int height) {
+			this.bottomLeft = bottomLeft;
+			this.width = width;
+			this.height = height;
+		}
 
-        @Override
-        public int getHeight() {
-            return height;
-        }
+		@Override
+		public Coord getBottomLeft() {
+			return bottomLeft;
+		}
 
-        @Override
-        public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + ((bottomLeft == null) ? 0 : bottomLeft.hashCode());
-            result = prime * result + height;
-            result = prime * result + width;
-            return result;
-        }
+		@Override
+		public int getWidth() {
+			return width;
+		}
 
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj)
-                return true;
-            if (obj == null)
-                return false;
-            if (getClass() != obj.getClass())
-                return false;
-            Impl other = (Impl) obj;
-            if (bottomLeft == null) {
-                if (other.bottomLeft != null)
-                    return false;
-            } else if (!bottomLeft.equals(other.bottomLeft))
-                return false;
-            if (height != other.height)
-                return false;
-            if (width != other.width)
-                return false;
-            return true;
-        }
+		@Override
+		public int getHeight() {
+			return height;
+		}
 
-        @Override
-        public String toString() {
-            return "Room at " + bottomLeft + ", width:" + width + ", height:" + height;
-        }
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((bottomLeft == null) ? 0 : bottomLeft.hashCode());
+			result = prime * result + height;
+			result = prime * result + width;
+			return result;
+		}
 
-        @Override
-        public boolean isEmpty() {
-            return width > 0 && height > 0;
-        }
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Impl other = (Impl) obj;
+			if (bottomLeft == null) {
+				if (other.bottomLeft != null)
+					return false;
+			} else if (!bottomLeft.equals(other.bottomLeft))
+				return false;
+			if (height != other.height)
+				return false;
+			if (width != other.width)
+				return false;
+			return true;
+		}
 
-        @Override
-        public int size() {
+		@Override
+		public String toString() {
+			return "Room at " + bottomLeft + ", width:" + width + ", height:" + height;
+		}
+
+		// Implementation of Zone:
+
+		@Override
+		public boolean isEmpty() {
+			return width == 0 || height == 0;
+		}
+
+		@Override
+		public int size() {
             return width * height;
-        }
+		}
 
-        @Override
-        public boolean contains(int x, int y) {
+		@Override
+		public boolean contains(int x, int y) {
             return x >= bottomLeft.x && x < bottomLeft.x + width &&
                     y >= bottomLeft.y && y < bottomLeft.y + height;
-        }
+		}
 
-        @Override
-        public boolean contains(Coord c) {
+		@Override
+		public boolean contains(Coord c) {
             return contains(c.x, c.y);
-        }
+		}
 
-        @Override
-        public List<Coord> getAll() {
+		@Override
+		public List<Coord> getAll() {
             return Utils.cellsList(this);
-        }
-    }
+		}
+	}
 
 }

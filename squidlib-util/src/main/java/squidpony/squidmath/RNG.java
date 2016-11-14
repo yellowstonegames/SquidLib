@@ -491,7 +491,27 @@ public class RNG implements Serializable {
      */
     public <T> ArrayList<T> shuffle(Collection<T> elements)
     {
-        ArrayList<T> al = new ArrayList<>(elements);
+    	return shuffle(elements, null);
+    }
+
+	/**
+     * Shuffles a {@link Collection} of T using the Fisher-Yates algorithm. The result
+     * is allocated if {@code buf} is null or if {@code buf} isn't empty,
+     * otherwise {@code elements} is poured into {@code buf}.
+     * 
+     * @param elements a Collection of T; will not be modified
+     * @param <T> can be any non-primitive type.
+     * @return a shuffled ArrayList containing the whole of elements in pseudo-random order.
+     */
+    public <T> ArrayList<T> shuffle(Collection<T> elements, /*@Nullable*/ ArrayList<T> buf)
+    {
+		final ArrayList<T> al;
+		if (buf == null || !buf.isEmpty())
+			al = new ArrayList<>(elements);
+		else {
+			al = buf;
+			al.addAll(elements);
+		}
         int n = al.size();
         for (int i = 0; i < n; i++)
         {
