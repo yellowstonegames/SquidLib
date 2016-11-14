@@ -199,16 +199,18 @@ public interface Rectangle extends Zone {
 			case DOWN_RIGHT:
 				return r.getBottomLeft().translate(r.getWidth() - 1, 0);
 			case UP_LEFT:
-				return r.getBottomLeft().translate(0, r.getHeight() - 1);
+				/* -y because in SquidLib higher y is smaller */
+				return r.getBottomLeft().translate(0, -(r.getHeight() - 1));
 			case UP_RIGHT:
-				return r.getBottomLeft().translate(r.getWidth() - 1, r.getHeight() - 1);
+				/* -y because in SquidLib higher y is smaller */
+				return r.getBottomLeft().translate(r.getWidth() - 1, -(r.getHeight() - 1));
 			case DOWN:
 			case LEFT:
 			case NONE:
 			case RIGHT:
 			case UP:
 				throw new IllegalStateException(
-						"Expected a cardinal direction in Rectangle.Utils::getCorner. Received: " + diagonal);
+						"Expected a diagonal direction in Rectangle.Utils::getCorner. Received: " + diagonal);
 			}
 			throw new IllegalStateException("Unmatched direction in Rectangle.Utils::getCorner: " + diagonal);
 		}
@@ -227,6 +229,68 @@ public interface Rectangle extends Zone {
 			result[1] = getCorner(r, Direction.DOWN_RIGHT);
 			result[2] = getCorner(r, Direction.UP_RIGHT);
 			result[3] = getCorner(r, Direction.UP_LEFT);
+			return result;
+		}
+
+        /**
+         * Creates a new Rectangle that is smaller than r by 1 cell from each of r's edges, to a minimum of a 1x1 cell.
+         * @param r a Rectangle to shrink
+         * @return the shrunken Rectangle, newly-allocated
+         */
+        public static Rectangle shrink(Rectangle r)
+        {
+            return new Rectangle.Impl(r.getBottomLeft().translate(1, 1),
+                    Math.max(1, r.getWidth() - 2), Math.max(1, r.getHeight() - 2));
+        }
+
+		/**
+		 * @param r
+		 * @param cardinal
+		 * @param buf
+		 *            The buffer to fill or {@code null} to let this method
+		 *            allocate.
+		 * @return The border of {@code r} at the position {@code cardinal},
+		 *         i.e. the lowest line if {@code r} is {@link Direction#DOWN},
+		 *         the highest line if {@code r} is {@link Direction#UP}, the
+		 *         leftest column if {@code r} is {@link Direction#LEFT}, and
+		 *         the rightest column if {@code r} is {@link Direction#RIGHT}.
+		 */
+		public static List<Coord> getBorder(Rectangle r, Direction cardinal,
+				/* @Nullable */ List<Coord> buf) {
+			Coord start = null;
+			Direction dir = null;
+			int len = -1;
+			switch (cardinal) {
+			case DOWN:
+			case UP:
+				len = r.getWidth();
+				dir = Direction.RIGHT;
+				start = cardinal == Direction.DOWN ? r.getBottomLeft() : getCorner(r, Direction.UP_LEFT);
+				break;
+			case LEFT:
+			case RIGHT:
+				len = r.getHeight();
+				dir = Direction.UP;
+				start = cardinal == Direction.LEFT ? r.getBottomLeft() : getCorner(r, Direction.DOWN_RIGHT);
+				break;
+			case DOWN_LEFT:
+			case DOWN_RIGHT:
+			case NONE:
+			case UP_LEFT:
+			case UP_RIGHT:
+				throw new IllegalStateException(
+						"Expected a cardinal direction in Rectangle.Utils::getBorder. Received: " + cardinal);
+			}
+			if (start == null || dir == null)
+				throw new IllegalStateException(
+						"Unmatched direction in Rectangle.Utils::Border: " + cardinal);
+
+			final List<Coord> result = buf == null ? new ArrayList<Coord>(len) : buf;
+			Coord now = start;
+			for (int i = 0; i < len; i++) {
+				buf.add(now);
+				now = now.translate(dir);
+			}
 			return result;
 		}
 	}
