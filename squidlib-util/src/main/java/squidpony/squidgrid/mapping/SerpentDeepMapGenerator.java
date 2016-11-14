@@ -1,12 +1,8 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.CoordPacker;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 /**
@@ -24,7 +20,7 @@ public class SerpentDeepMapGenerator {
     private MixedGenerator[] mix;
     private int[] columns, rows;
     private int width, height, depth;
-    private ArrayList<LinkedHashSet<Coord>> linksUp,linksDown;
+    private ArrayList<OrderedSet<Coord>> linksUp,linksDown;
     private RNG random;
 
     /**
@@ -79,8 +75,8 @@ public class SerpentDeepMapGenerator {
         linksUp = new ArrayList<>(depth);
         linksDown = new ArrayList<>(depth);
         for (int i = 0; i < depth; i++) {
-            linksUp.add(new LinkedHashSet<Coord>(80));
-            linksDown.add(new LinkedHashSet<Coord>(80));
+            linksUp.add(new OrderedSet<Coord>(80));
+            linksDown.add(new OrderedSet<Coord>(80));
         }
         int csum = 0, rsum = 0;
         long b = 3;
@@ -90,8 +86,8 @@ public class SerpentDeepMapGenerator {
             rows[i] = rsum + (int)(rowBase * 0.5f * (1 + Long.bitCount(rowAlterations & b)));
             rsum += (int)(rowBase * (1 + Long.bitCount(rowAlterations & b)));
         }
-        int cs = (width - csum);
-        int rs = (height - rsum);
+        int cs = width - csum;
+        int rs = height - rsum;
         int cs2 = cs, rs2 = rs, cs3 = cs, rs3 = rs;
         for (int i = 0; i <= 7; i++) {
             cs2= cs2 * i / 7;
@@ -106,9 +102,9 @@ public class SerpentDeepMapGenerator {
             rows[i] += rs3;
         }
 
-        List<LinkedHashMap<Coord, List<Coord>>> connections = new ArrayList<>(depth);
+        List<OrderedMap<Coord, List<Coord>>> connections = new ArrayList<>(depth);
         for (int i = 0; i < depth; i++) {
-            connections.add(new LinkedHashMap<Coord, List<Coord>>(80));
+            connections.add(new OrderedMap<Coord, List<Coord>>(80));
         }
         int m = random.nextInt(0x800 * numLayers);
         int x = CoordPacker.getXMoore3D(m, numLayers), y = CoordPacker.getYMoore3D(m, numLayers),
@@ -340,17 +336,17 @@ public class SerpentDeepMapGenerator {
             floors[i] = CoordPacker.pack(dungeon[i], '.');
         }
         //using actual dungeon space per layer, not row/column 3D grid space
-        ArrayList<LinkedHashSet<Coord>> ups = new ArrayList<>(depth),
+        ArrayList<OrderedSet<Coord>> ups = new ArrayList<>(depth),
                 downs = new ArrayList<>(depth);
         for (int i = 0; i < depth; i++) {
-            ups.add(new LinkedHashSet<Coord>(40));
-            downs.add(new LinkedHashSet<Coord>(40));
-            LinkedHashSet<Coord> above = null;
+            ups.add(new OrderedSet<Coord>(40));
+            downs.add(new OrderedSet<Coord>(40));
+            OrderedSet<Coord> above = null;
             if (i > 0) {
-                above = new LinkedHashSet<>(linksDown.get(i - 1));
+                above = new OrderedSet<>(linksDown.get(i - 1));
                 if(above.size() == 0)
                     continue;
-                Coord higher = random.getRandomElement(above.toArray(new Coord[above.size()]));
+                Coord higher = above.randomItem(random);//random.getRandomElement(above.toArray(new Coord[above.size()]));
                 while(above.size() > 0)
                 {
                     short[] nearAbove = CoordPacker.flood(floors[i - 1],
@@ -369,13 +365,13 @@ public class SerpentDeepMapGenerator {
                     }
                     if(above.isEmpty())
                         break;
-                    higher = random.getRandomElement(above.toArray(new Coord[above.size()]));
+                    higher = above.randomItem(random);//random.getRandomElement(above.toArray(new Coord[above.size()]));
                 }
             }
         }
 
         for (int i = 0; i < depth; i++) {
-            LinkedHashMap<Coord, Integer> used = new LinkedHashMap<>(128);
+            OrderedMap<Coord, Integer> used = new OrderedMap<>(128);
             for(Coord up : ups.get(i))
             {
                 Integer count = used.get(up);

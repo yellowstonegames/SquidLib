@@ -4,9 +4,10 @@ import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.Radius;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.CoordPacker;
+import squidpony.squidmath.OrderedSet;
 import squidpony.squidmath.ShortVLA;
 
-import java.util.*;
+import java.util.Collections;
 
 /**
  * Calculates the Zone of Influence, also known as Zone of Control, for different points on a map.
@@ -116,7 +117,7 @@ public class ZOI {
         return packedGroups;
     }
     protected boolean[][] increasing(double[][] dm, Coord[] inf) {
-        LinkedHashSet<Coord> open = new LinkedHashSet<>(64), fresh = new LinkedHashSet<>(64);
+        OrderedSet<Coord> open = new OrderedSet<>(64), fresh = new OrderedSet<>(64);
         Collections.addAll(open, inf);
         Direction[] dirs = (radius.equals2D(Radius.DIAMOND)) ? Direction.CARDINALS : Direction.OUTWARDS;
         boolean[][] influenced = new boolean[map.length][map[0].length];
@@ -147,7 +148,7 @@ public class ZOI {
                 }
             }
 
-            open = new LinkedHashSet<>(fresh);
+            open = new OrderedSet<>(fresh);
             fresh.clear();
         }
 

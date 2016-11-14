@@ -1,7 +1,8 @@
 package squidpony.examples;
 
 import squidpony.FakeLanguageGen;
-import squidpony.LanguageCipher;
+import squidpony.NaturalLanguageCipher;
+import squidpony.squidmath.CrossHash;
 import squidpony.squidmath.StatefulRNG;
 
 import java.util.HashMap;
@@ -141,6 +142,13 @@ public class LanguageGenTest {
         }
 
         rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.INUKTITUT;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 5, 12, new String[]{",", ",", ";"},
+                    new String[]{".", ".", "!", "?", "..."}, 0.15));
+        }
+
+        rng.setState(0xf00df00L);
         flg = FakeLanguageGen.FANTASY_NAME;
         System.out.print(flg.word(rng, true, rng.between(2, 4)));
         for (int i = 1; i < 10; i++) {
@@ -185,6 +193,9 @@ public class LanguageGenTest {
         flg = FakeLanguageGen.SOMALI.mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.3).mix(FakeLanguageGen.SWAHILI, 0.15);
         System.out.println('"' + flg.sentence(rng, 4, 7, new String[]{",", ",", ";"},
                 new String[]{"!", "?", ".", ".", "."}, 0.15) + "\",");
+        flg = FakeLanguageGen.INUKTITUT;
+        System.out.println('"' + flg.sentence(rng, 4, 7, new String[]{",", ",", ";"},
+                new String[]{"!", "?", ".", ".", "."}, 0.15) + "\",");
 
         rng.setState(0xf00df00L);
         flg = FakeLanguageGen.HINDI_ROMANIZED;
@@ -201,14 +212,17 @@ public class LanguageGenTest {
         System.out.println("\n-----------------------------------------------------------------------------");
         System.out.println();
         FakeLanguageGen[] languages = new FakeLanguageGen[]{
+
+                FakeLanguageGen.ENGLISH,
                 FakeLanguageGen.LOVECRAFT,
                 FakeLanguageGen.JAPANESE_ROMANIZED,
                 FakeLanguageGen.FRENCH,
                 FakeLanguageGen.GREEK_ROMANIZED,
+                FakeLanguageGen.GREEK_AUTHENTIC,
                 FakeLanguageGen.RUSSIAN_ROMANIZED,
+                FakeLanguageGen.RUSSIAN_AUTHENTIC,
                 FakeLanguageGen.SWAHILI,
                 FakeLanguageGen.SOMALI,
-                FakeLanguageGen.ENGLISH,
                 FakeLanguageGen.FANTASY_NAME,
                 FakeLanguageGen.FANCY_FANTASY_NAME,
                 FakeLanguageGen.ARABIC_ROMANIZED,
@@ -230,34 +244,61 @@ public class LanguageGenTest {
                 FakeLanguageGen.JAPANESE_ROMANIZED.addModifiers(FakeLanguageGen.Modifier.DOUBLE_VOWELS),
                 FakeLanguageGen.SOMALI.addModifiers(FakeLanguageGen.modifier("([kd])h", "$1"),
                         FakeLanguageGen.modifier("([pfsgkcb])([aeiouy])", "$1l$2", 0.35),
-                        FakeLanguageGen.modifier("a+", "á", 0.18),
+                        /*FakeLanguageGen.modifier("a+", "á", 0.18),
                         FakeLanguageGen.modifier("e+", "é", 0.18),
                         FakeLanguageGen.modifier("i+", "í", 0.18),
                         FakeLanguageGen.modifier("o+", "ó", 0.18),
-                        FakeLanguageGen.modifier("u+", "ú", 0.18),
-                        FakeLanguageGen.modifier("aa", "au"),
+                        FakeLanguageGen.modifier("u+", "ú", 0.18),*/
+                        //FakeLanguageGen.modifier("aa", "au"),
                         FakeLanguageGen.modifier("ii", "ai"),
-                        FakeLanguageGen.modifier("uu", "eu"),
-                        FakeLanguageGen.modifier("^x", "chw"),
-                        FakeLanguageGen.modifier("q$", "rk"),
+                        FakeLanguageGen.modifier("uu", "ia"),
+                        FakeLanguageGen.modifier("([aeo])\\1", "$1"),
+                        FakeLanguageGen.modifier("^x", "v"),
+                        FakeLanguageGen.modifier("([^aeiou]|^)u([^aeiou]|$)", "$1a$2", 0.6),
+                        FakeLanguageGen.modifier("([aeiou])[^aeiou]([aeiou])", "$1v$2", 0.06),
+                        FakeLanguageGen.modifier("([aeiou])[^aeiou]([aeiou])", "$1l$2", 0.07),
+                        FakeLanguageGen.modifier("([aeiou])[^aeiou]([aeiou])", "$1n$2", 0.07),
+                        FakeLanguageGen.modifier("([aeiou])[^aeiou]([aeiou])", "$1z$2", 0.08),
+                        FakeLanguageGen.modifier("([^aeiou])[aeiou]+$", "$1ia", 0.35),
+                        FakeLanguageGen.modifier("([^aeiou])[bpdtkgj]", "$1"),
+                        FakeLanguageGen.modifier("[jg]$", "th"),
+                        FakeLanguageGen.modifier("g", "c", 0.92),
+                        FakeLanguageGen.modifier("([aeiou])[wy]$", "$1l", 0.6),
+                        FakeLanguageGen.modifier("([aeiou])[wy]$", "$1n"),
+                        FakeLanguageGen.modifier("[qf]$", "l", 0.4),
+                        FakeLanguageGen.modifier("[qf]$", "n", 0.65),
+                        FakeLanguageGen.modifier("[qf]$", "s"),
+                        FakeLanguageGen.modifier("cy", "sp"),
+                        FakeLanguageGen.modifier("kl", "sk"),
                         FakeLanguageGen.modifier("qu+", "qui"),
                         FakeLanguageGen.modifier("q([^u])", "qu$1"),
-                        FakeLanguageGen.modifier("cc", "ch")),
-                FakeLanguageGen.RUSSIAN_ROMANIZED.mix(FakeLanguageGen.GREEK_ROMANIZED, 0.4),
-                FakeLanguageGen.LOVECRAFT.mix(FakeLanguageGen.RUSSIAN_ROMANIZED, 0.4),
+                        FakeLanguageGen.modifier("cc", "ch"),
+                        FakeLanguageGen.modifier("[^aeiou]([^aeiou][^aeiou])", "$1"),
+                        FakeLanguageGen.Modifier.NO_DOUBLES
+                ),
+                FakeLanguageGen.randomLanguage(CrossHash.Lightning.hash64("Kittenish")),
+                FakeLanguageGen.randomLanguage(CrossHash.Lightning.hash64("Puppyspeak")),
+                FakeLanguageGen.randomLanguage(CrossHash.Lightning.hash64("Rabbitese")),
+                FakeLanguageGen.randomLanguage(CrossHash.Lightning.hash64("Rabbit Language")),
+                FakeLanguageGen.randomLanguage(CrossHash.Lightning.hash64("The Roar Of That Slumbering Shadow That Mankind Wills Itself To Forget")),
+                FakeLanguageGen.INUKTITUT,
+                //FakeLanguageGen.RUSSIAN_ROMANIZED.mix(FakeLanguageGen.GREEK_ROMANIZED, 0.4),
+                //FakeLanguageGen.LOVECRAFT.mix(FakeLanguageGen.RUSSIAN_ROMANIZED, 0.4),
+                //FakeLanguageGen.randomLanguage(new StatefulRNG(2252637788195L)),
         };
         String[] oz = new String[]{
+                "Uncle Uncles Carbuncle Carbuncles Live Lives Lived Living Liver Livers Livery Liveries",
                 "Dorothy lived in the midst of the great Kansas prairies, with Uncle Henry, who was a ",
                 "farmer, and Aunt Em, who was the farmer's wife. Their house was small, for the ",
                 "lumber to build it had to be carried by wagon many miles. There were four walls, ",
                 "a floor and a roof, which made one room; and this room contained a rusty looking ",
                 "cookstove, a cupboard for the dishes, a table, three or four chairs, and the beds. ",
                 "Uncle Henry and Aunt Em had a big bed in one corner, and Dorothy a little bed in ",
-                "another corner. There was no garret at all, and no cellar—except a small hole dug ",
+                "another corner. There was no garret at all, and no cellar-except a small hole dug ",
                 "in the ground, called a cyclone cellar, where the family could go in case one of ",
                 "those great whirlwinds arose, mighty enough to crush any building in its path. It ",
                 "was reached by a trap door in the middle of the floor, from which a ladder led ",
-                "down into the small, dark hole."
+                "down into the small, dark hole.",
 
         }, oz2 = new String[oz.length];
         System.out.println("ORIGINAL:");
@@ -265,9 +306,11 @@ public class LanguageGenTest {
         {
             System.out.println(o);
         }
-        System.out.println("\nGENERATED:");
+        System.out.println("\n\nGENERATED:\n");
+        StatefulRNG sr = new StatefulRNG(2252637788195L);
         for(FakeLanguageGen lang : languages) {
-            LanguageCipher cipher = new LanguageCipher(lang);
+            NaturalLanguageCipher cipher = new NaturalLanguageCipher(lang, 41041041L);
+            //LanguageCipher cipher = new LanguageCipher(FakeLanguageGen.randomLanguage(sr));
             int ctr = 0;
             for (String s : oz) {
                 oz2[ctr] = cipher.cipher(s);
@@ -284,16 +327,50 @@ public class LanguageGenTest {
                 System.out.println(cipher.decipher(s, cipher.reverse));
             }
             System.out.println();
+
+            /*
+            LanguageCipher cipher = new LanguageCipher(lang, 2252637788195L);
+            //LanguageCipher cipher = new LanguageCipher(FakeLanguageGen.randomLanguage(sr));
+            int ctr = 0;
+            for (String s : oz) {
+                oz2[ctr] = cipher.cipher(s);
+                System.out.println(oz2[ctr++]);
+            }
+
+            HashMap<String, String> vocabulary = new HashMap<>(16);
+            cipher.learnTranslations(vocabulary, "Dorothy", "farmer", "the", "room", "one", "uncle", "aunt");
+            for (String s : oz2) {
+                System.out.println(cipher.decipher(s, vocabulary));
+            }
+            System.out.println();
+            for (String s : oz2) {
+                System.out.println(cipher.decipher(s, cipher.reverse));
+            }
+            System.out.println();
+            */
+            /*
+            cipher = new LanguageCipher(lang, 0x123456789L);
+            ctr = 0;
+            for (String s : oz) {
+                oz2[ctr] = cipher.cipher(s);
+                System.out.println(oz2[ctr++]);
+            }
+
+            vocabulary.clear();
+            cipher.learnTranslations(vocabulary, "Dorothy", "farmer", "the", "room", "one", "uncle", "aunt");
+            for (String s : oz2) {
+                System.out.println(cipher.decipher(s, vocabulary));
+            }
+            System.out.println();
+            for (String s : oz2) {
+                System.out.println(cipher.decipher(s, cipher.reverse));
+            }
+            System.out.println();
+            */
         }
+        /*
         StatefulRNG nrng = new StatefulRNG("SquidLib!");
-        /*for (int i = 0; i < 10; i++) {
-            System.out.println(FakeLanguageGen.ARABIC_ROMANIZED.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_ARABIC)
-                    .mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.4).word(nrng, true, 3));
-        }*/
-        /*for (int i = 0; i < 10; i++) {
-            System.out.println(FakeLanguageGen.GREEK_ROMANIZED.word(nrng, true, 2));
-        }
-        */
+
         System.out.println(nrng.getState());
         for(FakeLanguageGen lang : languages) {
             for (int n = 0; n < 20; n++) {
@@ -304,5 +381,6 @@ public class LanguageGenTest {
             }
             System.out.println();
         }
+        */
     }
 }

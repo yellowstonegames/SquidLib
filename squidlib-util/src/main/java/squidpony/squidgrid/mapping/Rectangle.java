@@ -9,52 +9,52 @@ import java.util.*;
 
 /**
  * Rectangles in 2D grids. Checkout {@link Utils} for utility methods.
- * 
+ *
  * @author smelC
  * @see RectangleRoomFinder How to find rectangles in a dungeon
  */
 public interface Rectangle extends Zone {
 
-	/**
-	 * @return The bottom left coordinate of the room.
-	 */
-	Coord getBottomLeft();
+    /**
+     * @return The bottom left coordinate of the room.
+     */
+    Coord getBottomLeft();
 
-	/**
-	 * @return The room's width (from {@link #getBottomLeft()). It is greater or
-	 *         equal than 0.
-	 */
-	int getWidth();
+    /**
+     * @return The room's width (from {@link #getBottomLeft()). It is greater or
+     * equal than 0.
+     */
+    int getWidth();
 
-	/**
-	 * @return The room's height (from {@link #getBottomLeft()). It is greater
-	 *         or equal than 0.
-	 */
-	int getHeight();
+    /**
+     * @return The room's height (from {@link #getBottomLeft()). It is greater
+     * or equal than 0.
+     */
+    int getHeight();
 
-	/**
+    /**
      * Utilities pertaining to {@link Rectangle}
-	 * 
-	 * @author smelC
-	 */
-	class Utils {
+     *
+     * @author smelC
+     */
+    class Utils {
 
         /**
          * A comparator that uses {@link #size(Rectangle)} as the measure.
          */
-		public static final Comparator<Rectangle> SIZE_COMPARATOR = new Comparator<Rectangle>() {
-			@Override
-			public int compare(Rectangle o1, Rectangle o2) {
-				return Integer.compare(size(o1), size(o2));
-			}
-		};
+        public static final Comparator<Rectangle> SIZE_COMPARATOR = new Comparator<Rectangle>() {
+            @Override
+            public int compare(Rectangle o1, Rectangle o2) {
+                return Integer.compare(size(o1), size(o2));
+            }
+        };
 
-		/**
+        /**
          * @param r a Rectangle
          * @param c a Coord to check against r for presence
-		 * @return Whether {@code r} contains {@code c}.
-		 */
-		public static boolean contains(Rectangle r, Coord c) {
+         * @return Whether {@code r} contains {@code c}.
+         */
+        public static boolean contains(Rectangle r, Coord c) {
             return c != null && contains(r, c.x, c.y);
         }
 
@@ -67,123 +67,123 @@ public interface Rectangle extends Zone {
         public static boolean contains(Rectangle r, int x, int y) {
             if (r == null)
                 return false;
-			final Coord bottomLeft = r.getBottomLeft();
-			final int width = r.getWidth();
-			final int height = r.getHeight();
+            final Coord bottomLeft = r.getBottomLeft();
+            final int width = r.getWidth();
+            final int height = r.getHeight();
             return !(x < bottomLeft.x /* Too much to the left */
                     || bottomLeft.x + width < x /* Too much to the right */
                     || bottomLeft.y < y /* Too low */
                     || y < bottomLeft.y - height); /* Too high */
-		}
+        }
 
-		/**
+        /**
          * @param r  a Rectangle
          * @param cs a Collection of Coord to check against r; returns true if r contains any items in cs
-		 * @return {@code true} if {@code r} contains a member of {@code cs}.
-		 */
-		public static boolean containsAny(Rectangle r, Collection<Coord> cs) {
-			for (Coord c : cs) {
-				if (contains(r, c))
-					return true;
-			}
-			return false;
-		}
+         * @return {@code true} if {@code r} contains a member of {@code cs}.
+         */
+        public static boolean containsAny(Rectangle r, Collection<Coord> cs) {
+            for (Coord c : cs) {
+                if (contains(r, c))
+                    return true;
+            }
+            return false;
+        }
 
-		/**
+        /**
          * @param rs an Iterable of Rectangle items to check against c
          * @param c  a Coord to try to find in any of the Rectangles in rs
-		 * @return {@code true} if a member of {@code rs}
+         * @return {@code true} if a member of {@code rs}
          * {@link #contains(Rectangle, Coord) contains} {@code c}.
-		 */
-		public static boolean contains(Iterable<? extends Rectangle> rs, Coord c) {
-			for (Rectangle r : rs) {
-				if (contains(r, c))
-					return true;
-			}
-			return false;
-		}
+         */
+        public static boolean contains(Iterable<? extends Rectangle> rs, Coord c) {
+            for (Rectangle r : rs) {
+                if (contains(r, c))
+                    return true;
+            }
+            return false;
+        }
 
-		/**
+        /**
          * @param r a Rectangle
-		 * @return The number of cells that {@code r} covers.
-		 */
-		public static int size(Rectangle r) {
-			return r.getWidth() * r.getHeight();
-		}
+         * @return The number of cells that {@code r} covers.
+         */
+        public static int size(Rectangle r) {
+            return r.getWidth() * r.getHeight();
+        }
 
-		/**
+        /**
          * @param r a Rectangle
-		 * @return The center of {@code r}.
-		 */
-		public static Coord center(Rectangle r) {
-			final Coord bl = r.getBottomLeft();
-			/*
+         * @return The center of {@code r}.
+         */
+        public static Coord center(Rectangle r) {
+            final Coord bl = r.getBottomLeft();
+            /*
 			 * bl.y - ... : because we're in SquidLib coordinates (0,0) is top
 			 * left
 			 */
-			return Coord.get(bl.x + Math.round(r.getWidth() / 2), bl.y - Math.round(r.getHeight() / 2));
-		}
+            return Coord.get(bl.x + Math.round(r.getWidth() / 2), bl.y - Math.round(r.getHeight() / 2));
+        }
 
-		/**
-		 * Use {@link #cellsList(Rectangle)} if you want them all.
-		 * 
+        /**
+         * Use {@link #cellsList(Rectangle)} if you want them all.
+         *
          * @param r a Rectangle
-		 * @return The cells that {@code r} contains, from bottom left to top
-		 *         right; lazily computed.
-		 */
-		public static Iterator<Coord> cells(Rectangle r) {
-			return new SquidIterators.RectangleFromBottomLeftToTopRight(r.getBottomLeft(), r.getWidth(),
-					r.getHeight());
-		}
+         * @return The cells that {@code r} contains, from bottom left to top
+         * right; lazily computed.
+         */
+        public static Iterator<Coord> cells(Rectangle r) {
+            return new SquidIterators.RectangleFromBottomLeftToTopRight(r.getBottomLeft(), r.getWidth(),
+                    r.getHeight());
+        }
 
-		/**
-		 * Use {@link #cellsList(Rectangle)} if you may stop before the end of
-		 * the list, you'll save some memory.
-		 * 
-		 * @param r
-		 * @return The cells that {@code r} contains, from bottom left to top
-		 *         right.
-		 */
-		public static List<Coord> cellsList(Rectangle r) {
+        /**
+         * Use {@link #cellsList(Rectangle)} if you may stop before the end of
+         * the list, you'll save some memory.
+         *
+         * @param r
+         * @return The cells that {@code r} contains, from bottom left to top
+         * right.
+         */
+        public static List<Coord> cellsList(Rectangle r) {
 			/* Allocate it with the right size, to avoid internal resizings */
-			final List<Coord> result = new ArrayList<Coord>(size(r));
-			final Iterator<Coord> it = cells(r);
-			while (it.hasNext())
-				result.add(it.next());
-			return result;
-		}
+            final List<Coord> result = new ArrayList<Coord>(size(r));
+            final Iterator<Coord> it = cells(r);
+            while (it.hasNext())
+                result.add(it.next());
+            return result;
+        }
 
-		/**
+        /**
          * @param d A direction.
-		 * @return {@code r} extended to {@code d} by one row and/or column.
-		 */
-		public static Rectangle extend(Rectangle r, Direction d) {
-			final Coord bl = r.getBottomLeft();
-			final int width = r.getWidth();
-			final int height = r.getHeight();
+         * @return {@code r} extended to {@code d} by one row and/or column.
+         */
+        public static Rectangle extend(Rectangle r, Direction d) {
+            final Coord bl = r.getBottomLeft();
+            final int width = r.getWidth();
+            final int height = r.getHeight();
 
-			switch (d) {
-			case DOWN_LEFT:
-				return new Rectangle.Impl(bl.translate(Direction.DOWN_LEFT), width + 1, height + 1);
-			case DOWN_RIGHT:
-				return new Rectangle.Impl(bl.translate(Direction.DOWN), width + 1, height + 1);
-			case NONE:
-				return r;
-			case UP_LEFT:
-				return new Rectangle.Impl(bl.translate(Direction.LEFT), width + 1, height + 1);
-			case UP_RIGHT:
-				return new Rectangle.Impl(bl, width + 1, height + 1);
-			case DOWN:
-				return new Rectangle.Impl(bl.translate(Direction.DOWN), width, height + 1);
-			case LEFT:
-				return new Rectangle.Impl(bl.translate(Direction.LEFT), width + 1, height);
-			case RIGHT:
-				return new Rectangle.Impl(bl, width + 1, height);
-			case UP:
-				return new Rectangle.Impl(bl, width, height + 1);
-			}
-			throw new IllegalStateException("Unmatched direction in Rectangle.Utils::extend: " + d);
-		}
+            switch (d) {
+                case DOWN_LEFT:
+                    return new Rectangle.Impl(bl.translate(Direction.DOWN_LEFT), width + 1, height + 1);
+                case DOWN_RIGHT:
+                    return new Rectangle.Impl(bl.translate(Direction.DOWN), width + 1, height + 1);
+                case NONE:
+                    return r;
+                case UP_LEFT:
+                    return new Rectangle.Impl(bl.translate(Direction.LEFT), width + 1, height + 1);
+                case UP_RIGHT:
+                    return new Rectangle.Impl(bl, width + 1, height + 1);
+                case DOWN:
+                    return new Rectangle.Impl(bl.translate(Direction.DOWN), width, height + 1);
+                case LEFT:
+                    return new Rectangle.Impl(bl.translate(Direction.LEFT), width + 1, height);
+                case RIGHT:
+                    return new Rectangle.Impl(bl, width + 1, height);
+                case UP:
+                    return new Rectangle.Impl(bl, width, height + 1);
+            }
+            throw new IllegalStateException("Unmatched direction in Rectangle.Utils::extend: " + d);
+        }
 
         /**
          * @param r

@@ -14,7 +14,7 @@ import java.util.Iterator;
  * Created by Tommy Ettinger on 5/21/2016.
  * @param <T> the type of items to iterate over; ideally, the items are unique
  */
-public class GapShuffler<T> implements Iterable<T>, Serializable {
+public class GapShuffler<T> implements Iterator<T>, Iterable<T>, Serializable {
     private static final long serialVersionUID = 1277543974688106290L;
     public RNG rng;
     private ArrayList<T> elements;
@@ -88,11 +88,11 @@ public class GapShuffler<T> implements Iterable<T>, Serializable {
     }
 
     /**
-     * Gets the next element of the infinite sequence of T this shuffles through. The same as calling next() on an
-     * iterator returned by this class' iterator() method.
+     * Gets the next element of the infinite sequence of T this shuffles through. This class can be used as an
+     * Iterator or Iterable of type T.
      * @return the next element in the infinite sequence
      */
-    public T getNext() {
+    public T next() {
         if(index >= size)
         {
             index = 0;
@@ -116,76 +116,34 @@ public class GapShuffler<T> implements Iterable<T>, Serializable {
         return elements.get(indexSections[ii][ij]);
     }
     /**
-     * Returns an <b>infinite</b> iterator over elements of type {@code T}. You should be prepared to break out of any
-     * for loops that use this once you've gotten enough elements! The remove() method is not supported by this iterator
-     * and hasNext() will always return true.
+     * Returns {@code true} if the iteration has more elements.
+     * This is always the case for GapShuffler.
+     *
+     * @return {@code true} always
+     */
+    @Override
+    public boolean hasNext() {
+        return true;
+    }
+    /**
+     * Not supported.
+     *
+     * @throws UnsupportedOperationException always throws this exception
+     */
+    @Override
+    public void remove() {
+        throw new UnsupportedOperationException("remove() is not supported");
+    }
+
+    /**
+     * Returns an <b>infinite</b> iterator over elements of type {@code T}; the returned iterator is this object.
+     * You should be prepared to break out of any for loops that use this once you've gotten enough elements!
+     * The remove() method is not supported by this iterator and hasNext() will always return true.
      *
      * @return an infinite Iterator over elements of type T.
      */
     @Override
     public Iterator<T> iterator() {
-        return new GapIterator();
-    }
-
-    private class GapIterator implements Iterator<T>, Serializable
-    {
-        private static final long serialVersionUID = 3167045364623458470L;
-        private int innerIndex;
-        private RNG innerRNG;
-        GapIterator() {
-            innerIndex = 0;
-            innerRNG = rng.copy();
-        }
-        /**
-         * Returns {@code true} if the iteration has more elements.
-         * This is always the case for this Iterator.
-         *
-         * @return {@code true} always
-         */
-        @Override
-        public boolean hasNext() {
-            return true;
-        }
-
-        /**
-         * Returns the next element in the iteration.
-         *
-         * @return the next element in the iteration
-         */
-        @Override
-        public T next() {
-            if(innerIndex >= size)
-            {
-                innerIndex = 0;
-                int build = 0, inner, rotated;
-                for (int i = 0; i < indexSections.length; i++) {
-
-                    if(indexSections.length <= 2)
-                        rotated = (indexSections.length + 2 - i) % indexSections.length;
-                    else
-                        rotated = (indexSections.length + 1 - i) % indexSections.length;
-                    inner = indexSections[rotated].length;
-                    indexSections[rotated] =
-                            PermutationGenerator.decodePermutation(
-                                    innerRNG.nextLong(PermutationGenerator.getTotalPermutations(inner)),
-                                    inner,
-                                    build);
-                    build += inner;
-                }
-            }
-            int ilen = indexSections[0].length, ii = innerIndex / ilen, ij = innerIndex - ilen * ii;
-            ++innerIndex;
-            return elements.get(indexSections[ii][ij]);
-        }
-
-        /**
-         * Not supported.
-         *
-         * @throws UnsupportedOperationException always throws this exception
-         */
-        @Override
-        public void remove() {
-            throw new UnsupportedOperationException("remove() is not supported");
-        }
+        return this;
     }
 }

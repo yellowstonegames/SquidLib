@@ -127,7 +127,7 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
         // multiplier = 6364136223846793005L;
 
         long p = state;
-        p ^= p >>> (5 + ((p >>> 59) & 31));
+        p ^= p >>> (5 + (p >>> 59));
         p *= -5840758589994634535L;
         state = state * 6364136223846793005L + 1442695040888963407L;
         return p ^ (p >>> 43);
@@ -147,9 +147,9 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
         return next;
     }
 
-    private static long permute(long p)
+    public static long permute(long p)
     {
-        p ^= p >>> (5 + ((p >>> 59) & 31));
+        p ^= p >>> (5 + (p >>> 59));
         p *= -5840758589994634535L;
         return p ^ (p >>> 43);
 
@@ -159,7 +159,7 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
     {
         internal = unxorshift(internal, 64, 43);
         internal *= -3437190434928431767L;
-        return unxorshift(internal, 64, 5 + ((int)(internal >>> 59) & 31));
+        return unxorshift(internal, 64, 5 + (int)(internal >>> 59));
     }
 
     /**

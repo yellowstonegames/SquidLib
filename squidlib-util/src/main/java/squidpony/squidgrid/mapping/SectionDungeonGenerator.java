@@ -1,5 +1,6 @@
 package squidpony.squidgrid.mapping;
 
+import squidpony.GwtCompatibility;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
@@ -36,9 +37,10 @@ import static squidpony.squidmath.CoordPacker.*;
  * what chars are shown by using addSwap() in TextCellFactory. After calling generate(), you can safely get the values
  * from the stairsUp and stairsDown fields, which are Coords that should be a long distance from each other but
  * connected in the dungeon. You may want to change those to staircase characters, but there's no requirement to do
- * anything with them. The DungeonUtility field of this class, utility, is a convenient way of accessing the non-static
- * methods in that class, such as randomFloor(), without needing to create another DungeonUtility (this class creates
- * one, so you don't have to).
+ * anything with them. It's recommended that you keep the resulting char[][] maps in some collection that can be saved,
+ * since SectionDungeonGenerator only stores a temporary copy of the most recently-generated map. The DungeonUtility
+ * field of this class, utility, is a convenient way of accessing the non-static methods in that class, such as
+ * randomFloor(), without needing to create another DungeonUtility (this class creates one, so you don't have to).
  * <br>
  * Example map with a custom-representation lake: https://gist.github.com/tommyettinger/0055075f9de59c452d25
  * @see DungeonUtility this class exposes a DungeonUtility member; DungeonUtility also has many useful static methods
@@ -259,7 +261,7 @@ public class SectionDungeonGenerator {
      * percentage, unless the pools encounter too much tight space. If this DungeonGenerator previously had addWater
      * called, the latest call will take precedence. No islands will be placed with this variant, but the edge of the
      * water will be shallow, represented by ','.
-     * @param env the environment to apply this to
+     * @param env the environment to apply this to; uses MixedGenerator's constants, or 0 for "all environments"
      * @param percentage the percentage of floor cells to fill with water
      * @return this DungeonGenerator; can be chained
      */
@@ -304,7 +306,7 @@ public class SectionDungeonGenerator {
      * unless the pools encounter too much tight space. If this DungeonGenerator previously had addWater called, the
      * latest call will take precedence. If islandSpacing is greater than 1, then this will place islands of floor, '.',
      * surrounded by shallow water, ',', at about the specified distance with Euclidean measurement.
-     * @param env the environment to apply this to
+     * @param env the environment to apply this to; uses MixedGenerator's constants, or 0 for "all environments"
      * @param percentage the percentage of floor cells to fill with water
      * @param islandSpacing if greater than 1, islands will be placed randomly this many cells apart.
      * @return this DungeonGenerator; can be chained
@@ -352,7 +354,7 @@ public class SectionDungeonGenerator {
      * have randomized volume that should fill or get very close to filling (two thirds of) the requested percentage,
      * unless the patches encounter too much tight space. If this DungeonGenerator previously had addGrass called, the
      * latest call will take precedence.
-     * @param env the environment to apply this to
+     * @param env the environment to apply this to; uses MixedGenerator's constants, or 0 for "all environments"
      * @param percentage the percentage of floor cells to fill with grass; this can vary quite a lot. It may be
      *                   difficult to fill very high (over 66%) percentages of map with grass, though you can do this by
      *                   giving a percentage of between 100 and 150.
@@ -395,7 +397,7 @@ public class SectionDungeonGenerator {
     /**
      * Turns the given percentage of floor cells not already adjacent to walls into wall cells, represented by '#'.
      * If this DungeonGenerator previously had addBoulders called, the latest call will take precedence.
-     * @param env the environment to apply this to
+     * @param env the environment to apply this to; uses MixedGenerator's constants, or 0 for "all environments"
      * @param percentage the percentage of floor cells not adjacent to walls to fill with boulders.
      * @return this DungeonGenerator; can be chained
      */
@@ -509,7 +511,7 @@ public class SectionDungeonGenerator {
      * Turns the given percentage of open area floor cells into trap cells, represented by '^'. Corridors that have no
      * possible way to move around a trap will not receive traps, ever. If this DungeonGenerator previously had
      * addTraps called, the latest call will take precedence.
-     * @param env the environment to apply this to
+     * @param env the environment to apply this to; uses MixedGenerator's constants, or 0 for "all environments"
      * @param percentage the percentage of valid cells to fill with traps; should be no higher than 5 unless
      *                   the dungeon floor is meant to be a kill screen or minefield.
      * @return this DungeonGenerator; can be chained
@@ -564,18 +566,17 @@ public class SectionDungeonGenerator {
         return this;
     }
 
-    protected LinkedHashSet<Coord> removeAdjacent(LinkedHashSet<Coord> coll, Coord pt)
+    protected OrderedSet<Coord> removeAdjacent(OrderedSet<Coord> coll, Coord pt)
     {
         for(Coord temp : new Coord[]{Coord.get(pt.x + 1, pt.y), Coord.get(pt.x - 1, pt.y),
                 Coord.get(pt.x, pt.y + 1), Coord.get(pt.x, pt.y - 1)})
         {
-            if(coll.contains(temp) && !(temp.x == pt.x && temp.y == pt.y))
-                coll.remove(temp);
+            coll.remove(temp);
         }
 
         return coll;
     }
-    protected LinkedHashSet<Coord> removeAdjacent(LinkedHashSet<Coord> coll, Coord pt1, Coord pt2)
+    protected OrderedSet<Coord> removeAdjacent(OrderedSet<Coord> coll, Coord pt1, Coord pt2)
     {
 
         for(Coord temp : new Coord[]{Coord.get(pt1.x + 1, pt1.y), Coord.get(pt1.x - 1, pt1.y),
@@ -583,17 +584,17 @@ public class SectionDungeonGenerator {
                 Coord.get(pt2.x + 1, pt2.y), Coord.get(pt2.x - 1, pt2.y),
                 Coord.get(pt2.x, pt2.y + 1), Coord.get(pt2.x, pt2.y - 1),})
         {
-            if(coll.contains(temp) && !(temp.x == pt1.x && temp.y == pt1.y) && !(temp.x == pt2.x && temp.y == pt2.y))
+            if(!(temp.x == pt1.x && temp.y == pt1.y) && !(temp.x == pt2.x && temp.y == pt2.y))
                 coll.remove(temp);
         }
 
         return coll;
     }
-    protected LinkedHashSet<Coord> removeNearby(LinkedHashSet<Coord> coll, char[][] disallowed)
+    protected OrderedSet<Coord> removeNearby(OrderedSet<Coord> coll, char[][] disallowed)
     {
         if(coll == null || disallowed == null || disallowed.length == 0 || disallowed[0].length == 0)
-            return new LinkedHashSet<>();
-        LinkedHashSet<Coord> next = new LinkedHashSet<>(coll.size());
+            return new OrderedSet<>();
+        OrderedSet<Coord> next = new OrderedSet<>(coll.size());
         int width = disallowed.length, height = disallowed[0].length;
         COORD_WISE:
         for(Coord c : coll)
@@ -612,10 +613,12 @@ public class SectionDungeonGenerator {
     }
 
 
-    protected LinkedHashSet<Coord> viableDoorways(boolean doubleDoors, char[][] map, char[][] allCaves,
+    protected OrderedSet<Coord> viableDoorways(boolean doubleDoors, char[][] map, char[][] allCaves,
                                                   char[][] allCorridors)
     {
-        LinkedHashSet<Coord> doors = new LinkedHashSet<>();
+        OrderedSet<Coord> doors = new OrderedSet<>();
+        OrderedSet<Coord> blocked = new OrderedSet<>(4);
+        DijkstraMap dm = new DijkstraMap(map, DijkstraMap.Measurement.EUCLIDEAN);
         for(int x = 1; x < map.length - 1; x++) {
             for (int y = 1; y < map[x].length - 1; y++) {
                 if(map[x][y] == '#' || allCorridors[x][y] != '#')
@@ -629,6 +632,14 @@ public class SectionDungeonGenerator {
                                 && map[x][y + 1] != '#' && map[x][y - 1] != '#'
                                 && map[x+1][y + 1] != '#' && map[x+1][y - 1] != '#') {
                             if (map[x + 2][y + 1] != '#' || map[x - 1][y + 1] != '#' || map[x + 2][y - 1] != '#' || map[x - 1][y - 1] != '#') {
+                                dm.resetMap();
+                                dm.clearGoals();
+                                dm.setGoal(x, y+1);
+                                blocked.clear();
+                                blocked.add(Coord.get(x, y));
+                                blocked.add(Coord.get(x + 1, y));
+                                if(dm.partialScan(16, blocked)[x][y-1] < DijkstraMap.FLOOR)
+                                    continue;
                                 doors.add(Coord.get(x, y));
                                 doors.add(Coord.get(x + 1, y));
                                 doors = removeAdjacent(doors, Coord.get(x, y), Coord.get(x + 1, y));
@@ -639,8 +650,16 @@ public class SectionDungeonGenerator {
                                 && map[x + 1][y] != '#' && map[x - 1][y] != '#'
                                 && map[x + 1][y+1] != '#' && map[x - 1][y+1] != '#') {
                             if (map[x + 1][y + 2] != '#' || map[x + 1][y - 1] != '#' || map[x - 1][y + 2] != '#' || map[x - 1][y - 1] != '#') {
+                                dm.resetMap();
+                                dm.clearGoals();
+                                dm.setGoal(x+1, y);
+                                blocked.clear();
+                                blocked.add(Coord.get(x, y));
+                                blocked.add(Coord.get(x, y+1));
+                                if(dm.partialScan(16, blocked)[x-1][y] < DijkstraMap.FLOOR)
+                                    continue;
                                 doors.add(Coord.get(x, y));
-                                doors.add(Coord.get(x, y + 1));
+                                doors.add(Coord.get(x, y+1));
                                 doors = removeAdjacent(doors, Coord.get(x, y), Coord.get(x, y + 1));
                                 continue;
                             }
@@ -649,11 +668,25 @@ public class SectionDungeonGenerator {
                 }
                 if (map[x + 1][y] == '#' && map[x - 1][y] == '#' && map[x][y + 1] != '#' && map[x][y - 1] != '#') {
                     if (map[x + 1][y + 1] != '#' || map[x - 1][y + 1] != '#' || map[x + 1][y - 1] != '#' || map[x - 1][y - 1] != '#') {
+                        dm.resetMap();
+                        dm.clearGoals();
+                        dm.setGoal(x, y+1);
+                        blocked.clear();
+                        blocked.add(Coord.get(x, y));
+                        if(dm.partialScan(16, blocked)[x][y-1] < DijkstraMap.FLOOR)
+                            continue;
                         doors.add(Coord.get(x, y));
                         doors = removeAdjacent(doors, Coord.get(x, y));
                     }
                 } else if (map[x][y + 1] == '#' && map[x][y - 1] == '#' && map[x + 1][y] != '#' && map[x - 1][y] != '#') {
                     if (map[x + 1][y + 1] != '#' || map[x + 1][y - 1] != '#' || map[x - 1][y + 1] != '#' || map[x - 1][y - 1] != '#') {
+                        dm.resetMap();
+                        dm.clearGoals();
+                        dm.setGoal(x+1, y);
+                        blocked.clear();
+                        blocked.add(Coord.get(x, y));
+                        if(dm.partialScan(16, blocked)[x-1][y] < DijkstraMap.FLOOR)
+                            continue;
                         doors.add(Coord.get(x, y));
                         doors = removeAdjacent(doors, Coord.get(x, y));
                     }
@@ -717,8 +750,8 @@ public class SectionDungeonGenerator {
                 }
             }
         }
-        stairsDown = singleRandom(pack(dijkstra.gradientMap, maxDijkstra * 0.7,
-                DijkstraMap.FLOOR), rng);
+        stairsDown = new GreasedRegion(dijkstra.gradientMap, maxDijkstra * 0.7,
+                DijkstraMap.FLOOR).singleRandom(rng);
         finder = new RoomFinder(map, environmentType);
         return innerGenerate();
     }
@@ -734,6 +767,17 @@ public class SectionDungeonGenerator {
      * that provide horizontal passage, and '/' for doors that provide vertical passage.
      * Use the addDoors, addWater, addGrass, and addTraps methods of this class to request these in the generated map.
      * Also sets the fields stairsUp and stairsDown to two randomly chosen, distant, connected, walkable cells.
+     * <br>
+     * Special behavior here: If tab characters are present in the 2D char array, they will be replaced with '.' in the
+     * final dungeon, but will also be tried first as valid staircase locations (with a high distance possible to travel
+     * away from the starting staircase). If no tab characters are present this will search for '.' floors to place
+     * stairs on, as normal. This tab-first behavior is useful in conjunction with some methods that establish a good
+     * path in an existing dungeon; an example is {@code DungeonUtility.ensurePath(dungeon, rng, '\t', '#');} then
+     * passing dungeon (which that code modifies) in as baseDungeon to this method. Because tabs will always be replaced
+     * by floors ('.'), this considers any tabs that overlap with what the environment considers a wall (cave wall, room
+     * wall, corridor wall, or untouched) to really refer to a corridor floor, but doesn't reconsider tabs that overlap
+     * with floors already (it keeps the state of actual room, cave, and corridor floors). This is useful so you only
+     * have to call ensurePath or a similar method on the 2D char array and can leave the 2D int array alone.
      * @param baseDungeon a pre-made dungeon consisting of '#' for walls and '.' for floors; may be modified in-place
      * @param environment stores whether a cell is room, corridor, or cave; getEnvironment() typically gives this
      * @return a char[][] dungeon
@@ -753,17 +797,26 @@ public class SectionDungeonGenerator {
             System.arraycopy(environment[x], 0, env2[x], 0, height);
         }
 
-        DijkstraMap dijkstra = new DijkstraMap();
-        dijkstra.measurement = DijkstraMap.Measurement.MANHATTAN;
+        DijkstraMap dijkstra = new DijkstraMap(map);
         int frustrated = 0;
         do {
-            dijkstra.initialize(map);
             dijkstra.clearGoals();
-            stairsUp = utility.randomFloor(map);
+            stairsUp = utility.randomMatchingTile(map, '\t');
+            if(stairsUp == null) {
+                stairsUp = utility.randomFloor(map);
+                if (stairsUp == null) {
+                    frustrated++;
+                    continue;
+                }
+            }
             dijkstra.setGoal(stairsUp);
             dijkstra.scan(null);
             frustrated++;
-        }while (dijkstra.getMappedCount() < width + height && frustrated < 15);
+        }while (dijkstra.getMappedCount() < width + height && frustrated < 8);
+        if(frustrated >= 8)
+        {
+            return generate();
+        }
         double maxDijkstra = 0.0;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -774,12 +827,17 @@ public class SectionDungeonGenerator {
                 else if(dijkstra.gradientMap[i][j] > maxDijkstra) {
                     maxDijkstra = dijkstra.gradientMap[i][j];
                 }
+                if (map[i][j] == '\t') {
+                    map[i][j] = '.';
+                    if((env2[i][j] & 1) == 0) // environment is a wall here
+                        env2[i][j] = MixedGenerator.CORRIDOR_FLOOR;
+                }
             }
         }
         if(maxDijkstra < 16)
             return generate(baseDungeon, environment);
-        stairsDown = singleRandom(pack(dijkstra.gradientMap, maxDijkstra * 0.7,
-                DijkstraMap.FLOOR), rng);
+        stairsDown = new GreasedRegion(dijkstra.gradientMap, maxDijkstra * 0.7,
+                DijkstraMap.FLOOR).singleRandom(rng);
         finder = new RoomFinder(map, env2);
         return innerGenerate();
     }
@@ -816,9 +874,9 @@ public class SectionDungeonGenerator {
         stairsDown = null;
 
         dijkstra.clearGoals();
-        Coord[] stairs = allPacked(pack(map, '<', '>'));
-        for (Coord s : stairs) {
-            dijkstra.setGoal(s);
+        ArrayList<Coord> stairs = DungeonUtility.allMatching(map, '<', '>');
+        for (int j = 0; j < stairs.size(); j++) {
+            dijkstra.setGoal(stairs.get(j));
         }
         dijkstra.scan(null);
         for (int i = 0; i < width; i++) {
@@ -835,7 +893,7 @@ public class SectionDungeonGenerator {
 
 
 
-    private char[][] innerGenerate() {
+    protected char[][] innerGenerate() {
         dungeon = new char[width][height];
         for (int x = 0; x < width; x++) {
             Arrays.fill(dungeon[x], '#');
@@ -848,33 +906,48 @@ public class SectionDungeonGenerator {
                 corridorMap = innerGenerate(allCorridors, corridorFX),
                 allCaves = RoomFinder.merge(cv, width, height),
                 caveMap = innerGenerate(allCaves, caveFX),
-                doorMap = makeDoors(rm, cr, allCaves, allCorridors);
+                doorMap;
         char[][][] lakesAndMazes = makeLake(rm, cv);
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                if(corridorMap[x][y] != '#' && lakesAndMazes[0][x][y] != '#')
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (corridorMap[x][y] != '#' && lakesAndMazes[0][x][y] != '#')
                     dungeon[x][y] = ':';
-                else if(doorMap[x][y] == '+' || doorMap[x][y] == '/')
-                    dungeon[x][y] = doorMap[x][y];
-                else if(doorMap[x][y] == '*')
-                    dungeon[x][y] = '#';
-                else if(roomMap[x][y] != '#')
+                else if (roomMap[x][y] != '#')
                     dungeon[x][y] = roomMap[x][y];
-                else if(lakesAndMazes[1][x][y] != '#')
+                else if (lakesAndMazes[1][x][y] != '#') {
                     dungeon[x][y] = lakesAndMazes[1][x][y];
-                else if(corridorMap[x][y] != '#')
+                    finder.environment[x][y] = MixedGenerator.CORRIDOR_FLOOR;
+                } else if (corridorMap[x][y] != '#')
                     dungeon[x][y] = corridorMap[x][y];
-                else if(caveMap[x][y] != '#')
+                else if (caveMap[x][y] != '#')
                     dungeon[x][y] = caveMap[x][y];
-                else if(lakesAndMazes[0][x][y] != '#')
+                else if (lakesAndMazes[0][x][y] != '#') {
                     dungeon[x][y] = lakesAndMazes[0][x][y];
+                    finder.environment[x][y] = MixedGenerator.CAVE_FLOOR;
+                }
+            }
+        }
+        finder = new RoomFinder(dungeon, finder.environment);
+        rm = finder.findRooms();
+        cr = finder.findCorridors();
+        cv = finder.findCaves();
+        cv.add(lakesAndMazes[0]);
+        allCaves = RoomFinder.merge(cv, width, height);
+        doorMap = makeDoors(rm, cr, allCaves, allCorridors);
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (doorMap[x][y] == '+' || doorMap[x][y] == '/')
+                    dungeon[x][y] = doorMap[x][y];
+                else if (doorMap[x][y] == '*')
+                    dungeon[x][y] = '#';
+
             }
         }
         placement = new Placement(finder);
         return dungeon;
 
     }
-    private char[][] makeDoors(ArrayList<char[][]> rooms, ArrayList<char[][]> corridors, char[][] allCaves,
+    protected char[][] makeDoors(ArrayList<char[][]> rooms, ArrayList<char[][]> corridors, char[][] allCaves,
                                char[][] allCorridors)
     {
         char[][] map = new char[width][height];
@@ -896,7 +969,7 @@ public class SectionDungeonGenerator {
 
         map = RoomFinder.merge(fused, width, height);
 
-        LinkedHashSet<Coord> doorways = viableDoorways(doubleDoors, map, allCaves, allCorridors);
+        OrderedSet<Coord> doorways = viableDoorways(doubleDoors, map, allCaves, allCorridors);
 
 
         int total = doorways.size() * doorFill / 100;
@@ -918,8 +991,8 @@ public class SectionDungeonGenerator {
                 if (doorways.contains(near)) {
                     map[near.x][near.y] = '*';
                     doorways.remove(near);
-                    i++;
                     doorways.remove(entry);
+                    i++;
                     continue BigLoop;
                 }
             }
@@ -928,7 +1001,7 @@ public class SectionDungeonGenerator {
         return map;
 
     }
-    private char[][][] makeLake(ArrayList<char[][]> rooms, ArrayList<char[][]> caves)
+    protected char[][][] makeLake(ArrayList<char[][]> rooms, ArrayList<char[][]> caves)
     {
         char[][][] maps = new char[2][width][height];
         char[][] fusedMap;
@@ -950,74 +1023,66 @@ public class SectionDungeonGenerator {
         fused.addAll(caves);
 
         fusedMap = RoomFinder.merge(fused, width, height);
-        short[] limit = rectangle(1, 1, width - 2, height - 2),
-                potential = intersectPacked(limit, pack(fusedMap, '#'));
-        int ctr = count(potential), potentialMazeSize = ctr * mazeFill / 100, potentialLakeSize = ctr * lakeFill / 100;
-        ArrayList<short[]> viable;
-        short[] chosen;
+        GreasedRegion limit = new GreasedRegion(width, height).insertRectangle(1, 1, width - 2, height - 2),
+                potential = new GreasedRegion(fusedMap, '#').and(limit),
+                flooded, chosen, tmp = new GreasedRegion(width, height);
+        int ctr = potential.size(), potentialMazeSize = ctr * mazeFill / 100, potentialLakeSize = ctr * lakeFill / 100;
+        ArrayList<GreasedRegion> viable;
         int minSize;
         Coord center;
-        short[] flooded;
         boolean[][] deep;
         if(potentialMazeSize > 0) {
-            viable = split(potential);
+            viable = potential.split();
             if (viable.isEmpty())
                 return maps;
 
             chosen = viable.get(0);
-            minSize = count(chosen);
-            for (short[] sa : viable) {
-                int sz = count(sa);
+            minSize = chosen.size();
+            for (GreasedRegion sa : viable) {
+                int sz = sa.size();
                 if (sz > minSize) {
                     chosen = sa;
                     minSize = sz;
                 }
             }
             PacMazeGenerator pac = new PacMazeGenerator(width - width % 3, height - height % 3, rng);
-            char[][] pacMap = pac.generate();
-            center = singleRandom(chosen, rng);
-            flooded = intersectPacked(limit, spill(chosen, packOne(center), potentialMazeSize, rng));
-            short[] pacEnv = removeIsolated(
-                    intersectPacked(
-                            flooded,
-                            translate(
-                                    pack(pacMap, '.'),
-                                    1, 1, width, height)));
-            deep = unpack(pacEnv, width, height);
+            char[][] pacMap = GwtCompatibility.insert2D(pac.generate(), GwtCompatibility.fill2D('#', width, height), 1, 1);
+            center = chosen.singleRandom(rng);
+            flooded = new GreasedRegion(center, width, height).spill(chosen, potentialMazeSize, rng).and(limit);
+            GreasedRegion pacEnv = new GreasedRegion(pacMap, '.').and(flooded).removeIsolated();
+            deep = pacEnv.decode();
 
             for (int x = 1; x < width - 1; x++) {
                 for (int y = 1; y < height - 1; y++) {
                     if (deep[x][y])
-                        maps[1][x][y] = pacMap[x-1][y-1];
+                        maps[1][x][y] = pacMap[x][y];
                 }
             }
-            finder.corridors.put(pacEnv, new ArrayList<short[]>());
-            potential = differencePacked(potential, flooded);
+            finder.corridors.put(pacEnv, new ArrayList<GreasedRegion>());
+            finder.allCorridors.or(pacEnv);
+            finder.allFloors.or(pacEnv);
+            potential.andNot(flooded);
         }
         if(potentialLakeSize > 0) {
-            viable = split(potential);
+            viable = potential.split();
             if (viable.isEmpty())
                 return maps;
             chosen = viable.get(0);
-            minSize = count(chosen);
-            for (short[] sa : viable) {
-                int sz = count(sa);
+            minSize = chosen.size();
+            for (GreasedRegion sa : viable) {
+                int sz = sa.size();
                 if (sz > minSize) {
                     chosen = sa;
                     minSize = sz;
                 }
             }
-            center = singleRandom(chosen, rng);
-            flooded = intersectPacked(limit, spill(chosen, packOne(center), potentialLakeSize, rng));
+            center = chosen.singleRandom(rng);
+            flooded = new GreasedRegion(center, width, height).spill(chosen, potentialLakeSize, rng).and(limit);
 
-            deep = unpack(flooded, width, height);
+            deep = flooded.decode();
+            flooded.flood(new GreasedRegion(fusedMap, '.').fringe8way(3), 3).and(limit);
 
-            short[] shore = intersectPacked(limit,
-                    flood(fringe(pack(fusedMap, '.'), 3, width, height, true, true),
-                            flooded, 3, false)),
-                    lake = unionPacked(flooded, shore);
-
-            boolean[][] shallow = unpack(shore, width, height);
+            boolean[][] shallow = flooded.decode();
 
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
@@ -1027,22 +1092,23 @@ public class SectionDungeonGenerator {
                         maps[0][x][y] = shallowLakeGlyph;
                 }
             }
-            ArrayList<short[]> change = new ArrayList<>();
-            for (short[] room : finder.rooms.keys()) {
-                if (intersects(lake, expand(room, 1, width, height)))
+            ArrayList<GreasedRegion> change = new ArrayList<>();
+            for (GreasedRegion room : finder.rooms.keySet()) {
+                if(flooded.intersects(tmp.remake(room).expand8way()))
                     change.add(room);
             }
-            for (short[] region : change) {
+            for (GreasedRegion region : change) {
                 finder.caves.put(region, finder.rooms.remove(region));
+                finder.allRooms.andNot(region);
+                finder.allCaves.or(region);
             }
-            //finder.caves.put(lake, new ArrayList<short[]>());
         }
         return maps;
     }
 
-    private char[][] innerGenerate(char[][] map, EnumMap<FillEffect, Integer> fx)
+    protected char[][] innerGenerate(char[][] map, EnumMap<FillEffect, Integer> fx)
     {
-        LinkedHashSet<Coord> hazards = new LinkedHashSet<>();
+        OrderedSet<Coord> hazards = new OrderedSet<>();
         int floorCount = DungeonUtility.countCells(map, '.'),
                 doorFill = 0,
                 waterFill = 0,
@@ -1067,11 +1133,19 @@ public class SectionDungeonGenerator {
             trapFill = fx.get(FillEffect.TRAPS);
         }
         if (boulderFill > 0.0) {
+            /*
             short[] floor = pack(map, '.');
             short[] viable = retract(floor, 1, width, height, true);
             ArrayList<Coord> boulders = randomPortion(viable, boulderFill, rng);
             for (Coord boulder : boulders) {
                 map[boulder.x][boulder.y] = '#';
+            }
+            */
+            Coord[] boulders = new GreasedRegion(map, '.').retract8way(1).randomPortion(rng, boulderFill);
+            Coord t;
+            for (int i = 0; i < boulders.length; i++) {
+                t = boulders[i];
+                map[t.x][t.y] = '#';
             }
         }
 
@@ -1226,7 +1300,7 @@ public class SectionDungeonGenerator {
                 trans[y][x] = dungeon[x][y];
             }
         }
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int row = 0; row < height; row++) {
             sb.append(trans[row]);
             sb.append('\n');

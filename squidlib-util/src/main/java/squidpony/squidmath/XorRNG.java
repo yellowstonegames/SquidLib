@@ -50,7 +50,7 @@ public class XorRNG implements RandomnessSource {
         final long s0 = state1;
         state0 = s0;
         s1 ^= s1 << 23; // a
-        return ( state1 = ( s1 ^ s0 ^ ( s1 >> 17 ) ^ ( s0 >> 26 ) ) ) + s0; // b, c
+        return ( state1 = s1 ^ s0 ^ ( s1 >>> 17 ) ^ ( s0 >>> 26 )) + s0; // b, c
     }
 
     public int nextInt() {
@@ -93,7 +93,7 @@ public class XorRNG implements RandomnessSource {
         int i = bytes.length, n = 0;
         while (i != 0) {
             n = Math.min(i, 8);
-            for (long bits = nextLong(); n-- != 0; bits >>= 8) {
+            for (long bits = nextLong(); n-- != 0; bits >>>= 8) {
                 bytes[--i] = (byte) bits;
             }
         }
@@ -101,11 +101,11 @@ public class XorRNG implements RandomnessSource {
 
     private long avalanche ( long k )
     {
-        k ^= k >> 33;
+        k ^= k >>> 33;
         k *= 0xff51afd7ed558ccdL;
-        k ^= k >> 33;
+        k ^= k >>> 33;
         k *= 0xc4ceb9fe1a85ec53L;
-        k ^= k >> 33;
+        k ^= k >>> 33;
 
         return k;
     }

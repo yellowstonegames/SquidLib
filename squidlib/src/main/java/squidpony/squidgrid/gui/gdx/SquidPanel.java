@@ -15,9 +15,12 @@ import squidpony.panel.IColoredString;
 import squidpony.panel.ISquidPanel;
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.OrderedSet;
 import squidpony.squidmath.StatefulRNG;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Displays text and images in a grid pattern. Supports basic animations.
@@ -43,8 +46,18 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     protected Color lightingColor = SColor.WHITE;
     protected final TextCellFactory textFactory;
     protected float xOffset, yOffset;
-    protected LinkedHashSet<AnimatedEntity> animatedEntities;
-    protected boolean distanceField = false;
+    public final OrderedSet<AnimatedEntity> animatedEntities;
+    /**
+     * For thin-wall maps, where only cells where x and y are both even numbers have backgrounds displayed.
+     * Should be false when using this SquidPanel for anything that isn't specifically a background of a map
+     * that uses the thin-wall method from ThinDungeonGenerator or something similar. Even the foregrounds of
+     * thin-wall maps should have this false, since ThinDungeonGenerator (in conjunction with DungeonUtility's
+     * hashesToLines method) makes thin lines for walls that should be displayed as between the boundaries of
+     * other cells. The overlap behavior needed for some "thin enough" cells to be displayed between the cells
+     * can be accomplished by using {@link #setTextSize(int, int)} to double the previously-given cell width
+     * and height.
+     */
+    public boolean onlyRenderEven = false;
 
     /**
      * Creates a bare-bones panel with all default values for text rendering.
@@ -65,7 +78,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param cellHeight the number of vertical pixels in each cell
      */
     public SquidPanel(int gridWidth, int gridHeight, int cellWidth, int cellHeight) {
-        this(gridWidth, gridHeight, new TextCellFactory().defaultSquareFont().width(cellWidth).height(cellHeight));
+        this(gridWidth, gridHeight, new TextCellFactory().defaultSquareFont().width(cellWidth).height(cellHeight).initBySize());
     }
 
     /**
@@ -148,7 +161,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         this.xOffset = xOffset;
         this.yOffset = yOffset;
         setSize(w, h);
-        animatedEntities = new LinkedHashSet<>();
+        animatedEntities = new OrderedSet<>();
     }
 
     /**
@@ -339,11 +352,14 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     public void erase() {
         for (int i = 0; i < contents.length; i++) {
+            Arrays.fill(contents[i], "\0");
+            Arrays.fill(colors[i], Color.CLEAR);
+            /*
             for (int j = 0; j < contents[i].length; j++) {
-                contents[i][j] = "";
+                contents[i][j] = "\0";
                 colors[i][j] = Color.CLEAR;
             }
-
+            */
         }
     }
 
@@ -390,7 +406,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     }
 
     /**
-     * Takes a unicode codepoint for input.
+     * Takes a unicode char for input.
      *
      * @param x
      * @param y
@@ -407,19 +423,17 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     }
 
 	/**
-	 * @throws UnsupportedOperationException
-	 *             If the backing {@link IColorCenter} isn't an instance of
-	 *             {@link SquidColorCenter}.
+     * Puts the given character at position x, y, with its color determined by the given color interpolated with
+     * this SquidPanel's lightingColor (default is white light) by the amount specified by colorMultiplier (0.0
+     * causes no change to the given color, 1.0 uses the lightingColor only, and anything between 0 and 1 will
+     * produce some tint to color, and probably cache the produced color in the IColorCenter this uses).
 	 */
 	public void put(int x, int y, char c, Color color, float colorMultiplier) {
         if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) {
             return;//skip if out of bounds
         }
         contents[x][y] = String.valueOf(c);
-		if (!(scc instanceof SquidColorCenter))
-			throw new UnsupportedOperationException("This method required the color center to be a "
-					+ SquidColorCenter.class.getSimpleName());
-		colors[x][y] = ((SquidColorCenter) scc).lerp(color, lightingColor, colorMultiplier);
+		colors[x][y] = scc.lerp(color, lightingColor, colorMultiplier);
 	}
 
     @Override
@@ -465,18 +479,14 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
     @Override
     public void draw (Batch batch, float parentAlpha) {
-        /*if(batch.isDrawing()) {
-            batch.end();
-            batch.begin();
-        }*/
         textFactory.configureShader(batch);
         Color tmp;
-
-        for (int x = gridOffsetX; x < gridWidth; x++) {
-            for (int y = gridOffsetY; y < gridHeight; y++) {
+        int inc = onlyRenderEven ? 2 : 1;
+        for (int x = gridOffsetX; x < gridWidth; x += inc) {
+            for (int y = gridOffsetY; y < gridHeight; y += inc) {
                 tmp = scc.filter(colors[x][y]);
-                textFactory.draw(batch, contents[x][y], tmp, xOffset + /*- getX() + */1f * x * cellWidth,
-                        yOffset + /*- getY() + */1f * (gridHeight - y) * cellHeight + 1f);
+                textFactory.draw(batch, contents[x][y], tmp, xOffset + /*- getX() + 1f * */ x * cellWidth,
+                        yOffset + /*- getY() + 1f * */ (gridHeight - y) * cellHeight + 1f);
             }
         }
         super.draw(batch, parentAlpha);
@@ -650,7 +660,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, String s, Collection<Color> colors, float loopTime)
     {
-        Actor a = textFactory.makeActor(s, colors, loopTime);
+        Actor a = textFactory.makeActor(s, colors, loopTime, doubleWidth);
         a.setName(s);
         a.setPosition(adjustX(x, doubleWidth), adjustY(y));
         /*
@@ -663,7 +673,35 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         animatedEntities.add(ae);
         return ae;
     }
-
+    /**
+     * Create an AnimatedEntity at position x, y, using '^' as its contents, but as an image so it can be rotated.
+     * Uses the given colors in a looping pattern, that doesn't count as an animation. If doubleWidth is true, treats
+     * the '^' as starting in the middle of a 2-char cell.
+     * @param x
+     * @param y
+     * @param doubleWidth
+     * @param colors
+     * @param loopTime
+     * @return
+     */
+    public AnimatedEntity directionMarker(int x, int y, boolean doubleWidth, Collection<Color> colors, float loopTime)
+    {
+        Actor a = textFactory.makeDirectionMarker(colors, loopTime, doubleWidth);
+        a.setName("^");
+        a.setPosition(adjustX(x, doubleWidth), adjustY(y));
+        AnimatedEntity ae = new AnimatedEntity(a, x, y, doubleWidth);
+        animatedEntities.add(ae);
+        return ae;
+    }
+    public AnimatedEntity directionMarker(int x, int y, boolean doubleWidth, Color color)
+    {
+        Actor a = textFactory.makeDirectionMarker(color);
+        a.setName("^");
+        a.setPosition(adjustX(x, doubleWidth), adjustY(y));
+        AnimatedEntity ae = new AnimatedEntity(a, x, y, doubleWidth);
+        animatedEntities.add(ae);
+        return ae;
+    }
     /**
      * Create an AnimatedEntity at position x, y, using the char c with a color looked up by index in palette.
      * @param x
@@ -913,13 +951,14 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     */
     public void recallActor(Actor a, boolean restoreSym)
     {
+        animationCount--;
         int x = Math.round((a.getX() - getX()) / cellWidth),
-             y = gridHeight - Math.round((a.getY() - getY()) / cellHeight) - 1;
+                y = gridHeight - (int)(a.getY() / cellHeight) - 1;
+//             y = gridHeight - (int)((a.getY() - getY()) / cellHeight) - 1;
         if(x < 0 || y < 0 || x >= contents.length || y >= contents[x].length)
             return;
         if (restoreSym)
         	contents[x][y] = a.getName();
-        animationCount--;
         removeActor(a);
     }
     public void recallActor(AnimatedEntity ae)
@@ -928,7 +967,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
             ae.gridX = Math.round((ae.actor.getX() - getX()) / (2 * cellWidth));
         else
             ae.gridX = Math.round((ae.actor.getX() - getX()) / cellWidth);
-        ae.gridY = gridHeight - Math.round((ae.actor.getY() - getY()) / cellHeight) - 1;
+        ae.gridY = gridHeight - (int)((ae.actor.getY() - getY()) / cellHeight) - 1;
         ae.animating = false;
         animationCount--;
     }
@@ -1034,7 +1073,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         animationCount++;
         ae.animating = true;
         a.addAction(Actions.sequence(
-                Actions.moveToAligned(nextX, nextY, Align.center, duration),
+                Actions.moveToAligned(nextX, nextY, Align.bottomLeft, duration),
                 Actions.delay(duration, Actions.run(new Runnable() {
                     @Override
                     public void run() {
@@ -1133,35 +1172,35 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     public void slide(int x, int y, final /* @Nullable */ String name, /* @Nullable */ Color color, int newX,
                       int newY, float duration, /* @Nullable */ Runnable postRunnable) {
-		final Actor a = createActor(x, y, name == null ? contents[x][y] : name,
-				color == null ? colors[x][y] : color, false);
-		if (a == null)
-			return;
+        final Actor a = createActor(x, y, name == null ? contents[x][y] : name,
+                color == null ? colors[x][y] : color, false);
+        if (a == null)
+            return;
 
-		duration = clampDuration(duration);
-		animationCount++;
-		
+        duration = clampDuration(duration);
+        animationCount++;
+
         final int nbActions = 2 + (postRunnable == null ? 0 : 1);
 
-		int index = 0;
-		final Action[] sequence = new Action[nbActions];
-		final float nextX = adjustX(newX, false);
-		final float nextY = adjustY(newY);
-		sequence[index++] = Actions.moveToAligned(nextX, nextY, Align.bottomLeft, duration);
+        int index = 0;
+        final Action[] sequence = new Action[nbActions];
+        final float nextX = adjustX(newX, false);
+        final float nextY = adjustY(newY);
+        sequence[index++] = Actions.moveToAligned(nextX, nextY, Align.bottomLeft, duration);
         if(postRunnable != null)
         {
             sequence[index++] = Actions.run(postRunnable);
-		}
-		/* Do this one last, so that hasActiveAnimations() returns true during 'postRunnable' */
+        }
+		/* Do this one last, so that hasActiveAnimations() returns true during 'postRunnables' */
         sequence[index] = Actions.delay(duration, Actions.run(new Runnable() {
-					@Override
-					public void run() {
-						recallActor(a, name == null);
-					}
-				}));
+            @Override
+            public void run() {
+                recallActor(a, name == null);
+            }
+        }));
 
-		a.addAction(Actions.sequence(sequence));
-	}
+        a.addAction(Actions.sequence(sequence));
+    }
 
 
     /**
@@ -1288,7 +1327,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     public void tint(final AnimatedEntity ae, Color color, float duration) {
         final Actor a = ae.actor;
-        if(a == null || ae.animating)
+        if(a == null)
             return;
         duration = clampDuration(duration);
         ae.animating = true;
@@ -1313,7 +1352,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param y the y-coordinate of the cell to tint
      * @param color what to transition ae's color towards, and then transition back from
      * @param duration how long the total "round-trip" transition should take in milliseconds
-	 */
+     */
     public void tint(float delay, int x, int y, Color color, float duration) {
         tint(delay, x, y, color, duration, null);
     }
@@ -1342,23 +1381,23 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         final int nbActions = 3 + (0 < delay ? 1 : 0) + (postRunnable == null ? 0 : 1);
         final Action[] sequence = new Action[nbActions];
         int index = 0;
-		if (0 < delay)
-			sequence[index++] = Actions.delay(delay);
-		sequence[index++] = Actions.color(color, duration * 0.3f);
-		sequence[index++] = Actions.color(ac, duration * 0.7f);
+        if (0 < delay)
+            sequence[index++] = Actions.delay(delay);
+        sequence[index++] = Actions.color(color, duration * 0.3f);
+        sequence[index++] = Actions.color(ac, duration * 0.7f);
         if(postRunnable != null)
         {
             sequence[index++] = Actions.run(postRunnable);
-		}
+        }
         /* Do this one last, so that hasActiveAnimations() returns true during 'postRunnable' */
         sequence[index] = Actions.run(new Runnable() {
-			@Override
-			public void run() {
-				recallActor(a, true);
-			}
-		});
+            @Override
+            public void run() {
+                recallActor(a, true);
+            }
+        });
 
-		a.addAction(Actions.sequence(sequence));
+        a.addAction(Actions.sequence(sequence));
     }
 
     /**
@@ -1368,7 +1407,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param y the y-coordinate of the cell to tint
      * @param color
      * @param duration
-	 */
+     */
     public final void tint(int x, int y, Color color, float duration) {
     	tint(0f, x, y, color, duration);
     }
@@ -1406,7 +1445,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         return animationCount != 0;
     }
 
-    public LinkedHashSet<AnimatedEntity> getAnimatedEntities() {
+    public OrderedSet<AnimatedEntity> getAnimatedEntities() {
         return animatedEntities;
     }
 
@@ -1572,5 +1611,44 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     public void setOffsets(float x, float y) {
         xOffset = x;
         yOffset = y;
+    }
+
+    /**
+     * Gets the status of a boolean flag used for rendering thin maps; it will almost always be false unless it
+     * was set to true with {@link #setOnlyRenderEven(boolean)}.
+     * <br>
+     * This is meant for thin-wall maps, where only cells where x and y are both even numbers have backgrounds
+     * displayed. Should be false when using this SquidPanel for anything that isn't specifically a background
+     * of a map that uses the thin-wall method from ThinDungeonGenerator or something similar. Even the
+     * foregrounds of thin-wall maps should have this false, since ThinDungeonGenerator (in conjunction with
+     * DungeonUtility's hashesToLines() method) makes thin lines for walls that should be displayed as between
+     * the boundaries of other cells. The overlap behavior needed for some "thin enough" cells to be displayed
+     * between the cells can be accomplished by using {@link #setTextSize(int, int)} to double the
+     * previously-given cell width and height.
+     *
+     * @return the current status of the onlyRenderEven flag, which defaults to false
+     */
+    public boolean getOnlyRenderEven() {
+        return onlyRenderEven;
+    }
+    /**
+     * Sets the status of a boolean flag used for rendering thin maps; it should almost always be the default,
+     * which is false, unless you are using a thin-wall map, and then this should be true only if this
+     * SquidPanel is used for the background layer.
+     * <br>
+     * This is meant for thin-wall maps, where only cells where x and y are both even numbers have backgrounds
+     * displayed. Should be false when using this SquidPanel for anything that isn't specifically a background
+     * of a map that uses the thin-wall method from ThinDungeonGenerator or something similar. Even the
+     * foregrounds of thin-wall maps should have this false, since ThinDungeonGenerator (in conjunction with
+     * DungeonUtility's hashesToLines() method) makes thin lines for walls that should be displayed as between
+     * the boundaries of other cells. The overlap behavior needed for some "thin enough" cells to be displayed
+     * between the cells can be accomplished by using {@link #setTextSize(int, int)} to double the
+     * previously-given cell width and height.
+     *
+     * @param onlyRenderEven generally, should only be true if this SquidPanel is a background of a thin map
+     */
+
+    public void setOnlyRenderEven(boolean onlyRenderEven) {
+        this.onlyRenderEven = onlyRenderEven;
     }
 }

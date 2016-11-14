@@ -1,8 +1,6 @@
 package squidpony;
 
-import squidpony.squidmath.CrossHash;
-import squidpony.squidmath.RNG;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.*;
 
 import java.util.*;
 
@@ -40,8 +38,8 @@ public class MonsterGen {
      */
     public static class Chimera
     {
-        public LinkedHashMap<String, List<String>> parts;
-        public LinkedHashSet<String> unsaidAdjectives, wholeAdjectives, powerAdjectives, powerPhrases;
+        public OrderedMap<String, List<String>> parts;
+        public OrderedSet<String> unsaidAdjectives, wholeAdjectives, powerAdjectives, powerPhrases;
         public String name, mainForm, unknown;
 
         /**
@@ -57,13 +55,13 @@ public class MonsterGen {
                 mainForm = unknown;
             else
                 mainForm = other.name;
-            parts = new LinkedHashMap<>(other.parts);
+            parts = new OrderedMap<>(other.parts);
             List<String> oldParts = new ArrayList<>(parts.remove(mainForm));
             parts.put(name, oldParts);
-            unsaidAdjectives = new LinkedHashSet<>(other.unsaidAdjectives);
-            wholeAdjectives = new LinkedHashSet<>(other.wholeAdjectives);
-            powerAdjectives = new LinkedHashSet<>(other.powerAdjectives);
-            powerPhrases = new LinkedHashSet<>(other.powerPhrases);
+            unsaidAdjectives = new OrderedSet<>(other.unsaidAdjectives);
+            wholeAdjectives = new OrderedSet<>(other.wholeAdjectives);
+            powerAdjectives = new OrderedSet<>(other.powerAdjectives);
+            powerPhrases = new OrderedSet<>(other.powerPhrases);
         }
 
         /**
@@ -100,11 +98,11 @@ public class MonsterGen {
                 mainForm = unknown;
             else
                 mainForm = name;
-            parts = new LinkedHashMap<>();
-            unsaidAdjectives = new LinkedHashSet<>();
-            wholeAdjectives = new LinkedHashSet<>();
-            powerAdjectives = new LinkedHashSet<>();
-            powerPhrases = new LinkedHashSet<>();
+            parts = new OrderedMap<>();
+            unsaidAdjectives = new OrderedSet<>();
+            wholeAdjectives = new OrderedSet<>();
+            powerAdjectives = new OrderedSet<>();
+            powerPhrases = new OrderedSet<>();
             ArrayList<String> selfParts = new ArrayList<>();
             int t = 0;
             for (; t < terms.length; t++) {
@@ -183,11 +181,11 @@ public class MonsterGen {
                 mainForm = unknown;
             else
                 mainForm = name;
-            this.parts = new LinkedHashMap<String, List<String>>();
-            unsaidAdjectives = new LinkedHashSet<String>(unsaid);
-            wholeAdjectives = new LinkedHashSet<String>(whole);
-            powerAdjectives = new LinkedHashSet<String>(powerAdj);
-            powerPhrases = new LinkedHashSet<String>(powerPhr);
+            this.parts = new OrderedMap<String, List<String>>();
+            unsaidAdjectives = new OrderedSet<String>(unsaid);
+            wholeAdjectives = new OrderedSet<String>(whole);
+            powerAdjectives = new OrderedSet<String>(powerAdj);
+            powerPhrases = new OrderedSet<String>(powerPhr);
             ArrayList<String> selfParts = new ArrayList<String>(parts);
             this.parts.put(name, selfParts);
         }
@@ -205,7 +203,7 @@ public class MonsterGen {
             else
                 sb.append('a');
             int i = 0;
-            LinkedHashSet<String> allAdjectives = new LinkedHashSet<>(wholeAdjectives);
+            OrderedSet<String> allAdjectives = new OrderedSet<>(wholeAdjectives);
             if(unknown != null)
                 allAdjectives.addAll(unsaidAdjectives);
             allAdjectives.addAll(powerAdjectives);
@@ -288,7 +286,7 @@ public class MonsterGen {
                 sb.append('a');
             int i = 0;
 
-            LinkedHashSet<String> allAdjectives = new LinkedHashSet<>(wholeAdjectives);
+            OrderedSet<String> allAdjectives = new OrderedSet<>(wholeAdjectives);
             if(unknown != null)
                 allAdjectives.addAll(unsaidAdjectives);
             for(String adj : allAdjectives)
@@ -539,7 +537,7 @@ public class MonsterGen {
     /**
      * Randomly add appearance and power descriptors to a new Chimera creature with random body part adjectives.
      * Produces a new Chimera with a random name using FakeLanguageGen, and adds a total of 5 appearance adjectives,
-     * power adjectives and phrases, and 5 body parts. Since this uses FakeLanguageGen, it isn't GWT-compatible.
+     * power adjectives and phrases, and 5 body parts.
      * @return a new Chimera with random traits
      */
     public Chimera randomize()
@@ -548,7 +546,7 @@ public class MonsterGen {
     }
 
     /**
-     * Gets a random name as a String using FakeLanguageGen. Since this uses FakeLanguageGen, it isn't GWT-compatible.
+     * Gets a random name as a String using FakeLanguageGen.
      * @param rng the RNG to use for random factors
      * @return a String meant to be used as a creature name
      */
@@ -558,7 +556,7 @@ public class MonsterGen {
     }
 
     /**
-     * Gets a random name as a String using FakeLanguageGen. Since this uses FakeLanguageGen, it isn't GWT-compatible.
+     * Gets a random name as a String using FakeLanguageGen.
      * @return a String meant to be used as a creature name
      */
     public String randomName()

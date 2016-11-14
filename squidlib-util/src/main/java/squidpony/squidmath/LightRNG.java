@@ -73,7 +73,7 @@ public class LightRNG implements RandomnessSource, StatefulRandomness
      */
     @Override
     public long nextLong() {
-        long z = ( state += 0x9E3779B97F4A7C15L );
+        long z = state += 0x9E3779B97F4A7C15L;
         z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
         z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
         return z ^ (z >>> 31);
@@ -193,7 +193,7 @@ public class LightRNG implements RandomnessSource, StatefulRandomness
         int i = bytes.length, n = 0;
         while( i != 0 ) {
             n = Math.min( i, 8 );
-            for ( long bits = nextLong(); n-- != 0; bits >>= 8 ) bytes[ --i ] = (byte)bits;
+            for ( long bits = nextLong(); n-- != 0; bits >>>= 8 ) bytes[ --i ] = (byte)bits;
         }
     }
 
@@ -240,4 +240,19 @@ public class LightRNG implements RandomnessSource, StatefulRandomness
         return "LightRNG with state 0x" + StringKit.hex(state) + 'L';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LightRNG lightRNG = (LightRNG) o;
+
+        return state == lightRNG.state;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (state ^ (state >>> 32));
+    }
 }

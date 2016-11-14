@@ -1,18 +1,18 @@
 package squidpony.examples;
 
+import squidpony.GwtCompatibility;
 import squidpony.squidgrid.MultiSpill;
 import squidpony.squidgrid.Spill;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
+import squidpony.squidgrid.mapping.SpillWorldMap;
 import squidpony.squidmath.Coord;
-import squidpony.squidmath.CoordPacker;
-import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.OrderedMap;
+import squidpony.squidmath.StatefulRNG;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 
 /**
  * A test for the randomized flood-fill in the Spill class. This runs the Spill twice from the same starting position,
@@ -23,8 +23,7 @@ public class SpillTest {
 
     public static void main(String[] args) {
         for (Spill.Measurement m : Spill.Measurement.values()) {
-            LightRNG lrng = new LightRNG(0x1337deadbeefc000L);
-            RNG rng = new RNG(lrng);
+            StatefulRNG rng = new StatefulRNG(0x1337deadbeefc000L);
             DungeonGenerator dg = new DungeonGenerator(40, 40, rng);
 
             char[][] dun = dg.generate();
@@ -41,7 +40,7 @@ public class SpillTest {
             ArrayList<Coord> ordered = spreader.start(entry, 20, impassable);
             ordered.addAll(spreader.start(entry, 35, impassable));
             boolean[][] sm = spreader.spillMap;
-            char[][] md = Arrays.copyOf(dun, dun.length),
+            char[][] md = GwtCompatibility.copy2D(dun),
                     hl = DungeonUtility.hashesToLines(dun);
             for (int x = 0; x < md.length; x++) {
                 for (int y = 0; y < md[x].length; y++) {
@@ -60,27 +59,22 @@ public class SpillTest {
             System.out.println();
         }
         for (Spill.Measurement m : Spill.Measurement.values()) {
-            LightRNG lrng = new LightRNG(0x1337deadbeefc000L);
-            RNG rng = new RNG(lrng);
-            DungeonGenerator dg = new DungeonGenerator(40, 40, rng);
+            StatefulRNG rng = new StatefulRNG(0x1337deadbeefc000L);
+            DungeonGenerator dg = new DungeonGenerator(80, 80, rng);
             char[][] dun = dg.generate();
             MultiSpill spreader = new MultiSpill(dun, m, rng);
 
             System.out.println(dg);
-            short[] valid = CoordPacker.pack(dun, '.');
-
-            LinkedHashMap<Coord, Double> entries = new LinkedHashMap<>(16);
-            ArrayList<Coord> section = CoordPacker.randomPortion(valid, 16, rng);
-            for (int i = 0; i < 4; i++) {
-                entries.put(section.get(i * 4    ), 1.0);
-                entries.put(section.get(i * 4 + 1), 0.75);
-                entries.put(section.get(i * 4 + 2), 0.5);
-                entries.put(section.get(i * 4 + 3), 0.25);
+            GreasedRegion valid = new GreasedRegion(dun, '.');
+            OrderedMap<Coord, Double> entries = new OrderedMap<>(16);
+            Coord[] section = valid.randomSeparated(20.0 / valid.size(), rng);
+            for (int i = 0; i < 16 && i < section.length; i++) {
+                entries.put(section[i], 1.0 - (i & 3) * 0.25);
             }
 
             ArrayList<ArrayList<Coord>> ordered = spreader.start(entries, -1, null);
             short[][] sm = spreader.spillMap;
-            char[][] md = Arrays.copyOf(dun, dun.length),
+            char[][] md = GwtCompatibility.copy2D(dun),
                     hl = DungeonUtility.hashesToLines(dun);
             for (int x = 0; x < md.length; x++) {
                 for (int y = 0; y < md[x].length; y++) {
@@ -97,6 +91,63 @@ public class SpillTest {
             dg.setDungeon(md);
             System.out.println(dg);
 
+            System.out.println();
+        }
+        char[] glyphs = "adeghjklnprstwxy".toCharArray(); //Category.IdentifierStart.contents();
+        //int gs = glyphs.length;
+        for (int i = 2; i < 3; i++) {
+            StatefulRNG rng = new StatefulRNG(); //i * 5617
+            int dim = 40 + i * 40, count = 20 + 10 * i * i;
+            char[][] blank = GwtCompatibility.fill2D('~', dim, dim);
+            MultiSpill spreader = new MultiSpill(blank, Spill.Measurement.MANHATTAN, rng);
+
+            //SobolQRNG sobol = new SobolQRNG(3);
+            //double[] filler = sobol.skipTo(rng.between(1000, 6500));
+            OrderedMap<Coord, Double> entries = new OrderedMap<>(count);
+            for (int j = 0; j < count; j++) {
+                //sobol.fillVector(filler);
+                //entries.put(Coord.get((int)(dim * filler[0]), (int)(dim * filler[1])), (filler[2] + 0.25) / 1.25);
+                entries.put(rng.nextCoord(dim - 14, dim - 14).add(7), (rng.nextDouble() + 0.25) * 0.8);
+            }
+            count = entries.size();
+            int extra = (dim - 2) * 2;
+            double edgePower = count * 0.6 / extra;
+            for (int x = 1; x < dim - 1; x+=2) {
+                entries.put(Coord.get(x, 0), edgePower);
+                entries.put(Coord.get(x, dim - 1), edgePower);
+            }
+            for (int y = 1; y < dim - 1; y+=2) {
+                entries.put(Coord.get(0, y), edgePower);
+                entries.put(Coord.get(dim - 1, y), edgePower);
+            }
+            ArrayList<ArrayList<Coord>> ordered = spreader.start(entries, -1, null);
+            short[][] sm = spreader.spillMap;
+            for (int x = 0; x < dim; x++) {
+                for (int y = 0; y < dim; y++) {
+                    //blank[x][y] = (char) ('a' + Integer.bitCount(sm[x][y] + 7) % 26);
+                    if(sm[x][y] < count && (sm[x][y] & 15) <= 10)
+                        blank[x][y] = glyphs[sm[x][y] & 15];
+                }
+            }
+            for(Coord c : entries.keySet())
+            {
+                if(sm[c.x][c.y] < count && (sm[c.x][c.y] & 15) <= 10)
+                    blank[c.x][c.y] = '@';
+            }
+            DungeonUtility.debugPrint(blank);
+            System.out.println();
+        }
+        int factions = 40;
+        int w = 100, h = 60;
+        SpillWorldMap swm;
+        for (String world : new String[]{"Ertah", "Tera", "Tarrah", "Morple", "Oruzdiam"}) {
+            swm = new SpillWorldMap(w += 20, h += 15, world);
+            System.out.println(world + '_' + w + 'x' + h);
+            DungeonUtility.debugPrint(swm.generate(factions, true));
+            System.out.println("     Atlas for the world of " + world);
+            for (int i = 0; i < factions + 2; i++) {
+                System.out.println("  " + swm.atlas.keyAt(i) + "  :  " + swm.atlas.getAt(i));
+            }
             System.out.println();
         }
     }

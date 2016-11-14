@@ -1,11 +1,8 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.CoordPacker;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -27,36 +24,38 @@ public class SerpentMapGenerator {
     private MixedGenerator mix;
     private int[] columns, rows;
     private RNG random;
+
     /**
      * This prepares a map generator that will generate a map with the given width and height, using the given RNG.
      * The intended purpose is to carve a long path that loops through the whole dungeon, while hopefully maximizing
      * the amount of rooms the player encounters. You call the different carver-adding methods to affect what the
      * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only
      * caves if none are called. You call generate() after adding carvers, which returns a char[][] for a map.
-     * @param width the width of the final map in cells
+     *
+     * @param width  the width of the final map in cells
      * @param height the height of the final map in cells
-     * @param rng an RNG object to use for random choices; this make a lot of random choices.
+     * @param rng    an RNG object to use for random choices; this make a lot of random choices.
      * @see MixedGenerator
      */
-    public SerpentMapGenerator(int width, int height, RNG rng)
-    {
+    public SerpentMapGenerator(int width, int height, RNG rng) {
         this(width, height, rng, false);
     }
+
     /**
      * This prepares a map generator that will generate a map with the given width and height, using the given RNG.
      * The intended purpose is to carve a long path that loops through the whole dungeon, while hopefully maximizing
      * the amount of rooms the player encounters. You call the different carver-adding methods to affect what the
      * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only
      * caves if none are called. You call generate() after adding carvers, which returns a char[][] for a map.
-     * @param width the width of the final map in cells
-     * @param height the height of the final map in cells
-     * @param rng an RNG object to use for random choices; this make a lot of random choices.
+     *
+     * @param width       the width of the final map in cells
+     * @param height      the height of the final map in cells
+     * @param rng         an RNG object to use for random choices; this make a lot of random choices.
      * @param symmetrical true if this should generate a bi-radially symmetric map, false for a typical map
      * @see MixedGenerator
      */
-    public SerpentMapGenerator(int width, int height, RNG rng, boolean symmetrical)
-    {
-        if(width <= 2 || height <= 2)
+    public SerpentMapGenerator(int width, int height, RNG rng, boolean symmetrical) {
+        if (width <= 2 || height <= 2)
             throw new IllegalArgumentException("width and height must be greater than 2");
         random = rng;
         long columnAlterations = random.nextLong(0x1000000000000L);
@@ -69,16 +68,16 @@ public class SerpentMapGenerator {
         int csum = 0, rsum = 0;
         long b = 7;
         for (int i = 0; i < 16; i++, b <<= 3) {
-            columns[i] = csum + (int)(columnBase * 0.5f * (3 + Long.bitCount(columnAlterations & b)));
-            csum += (int)(columnBase * (3 + Long.bitCount(columnAlterations & b)));
-            rows[i] = rsum + (int)(rowBase * 0.5f * (3 + Long.bitCount(rowAlterations & b)));
-            rsum += (int)(rowBase * (3 + Long.bitCount(rowAlterations & b)));
+            columns[i] = csum + (int) (columnBase * 0.5f * (3 + Long.bitCount(columnAlterations & b)));
+            csum += (int) (columnBase * (3 + Long.bitCount(columnAlterations & b)));
+            rows[i] = rsum + (int) (rowBase * 0.5f * (3 + Long.bitCount(rowAlterations & b)));
+            rsum += (int) (rowBase * (3 + Long.bitCount(rowAlterations & b)));
         }
-        int cs = (width - csum);
-        int rs = (height - rsum);
+        int cs = width - csum;
+        int rs = height - rsum;
         int cs2 = cs, rs2 = rs, cs3 = cs, rs3 = rs;
         for (int i = 0; i <= 7; i++) {
-            cs2= cs2 * i / 7;
+            cs2 = cs2 * i / 7;
             rs2 = rs2 * i / 7;
             columns[i] -= cs2;
             rows[i] -= rs2;
@@ -97,11 +96,10 @@ public class SerpentMapGenerator {
             points.add(Coord.get(columns[temp.x], rows[temp.y]));
         }
         points.add(points.get(0));
-        if(symmetrical) {
+        if (symmetrical) {
             mix = new SymmetryDungeonGenerator(width, height, random,
                     SymmetryDungeonGenerator.removeSomeOverlap(width, height, points));
-        }
-        else
+        } else
             mix = new MixedGenerator(width, height, random, points);
     }
 
@@ -111,32 +109,33 @@ public class SerpentMapGenerator {
      * the amount of rooms the player encounters. You call the different carver-adding methods to affect what the
      * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only
      * caves if none are called. You call generate() after adding carvers, which returns a char[][] for a map.
-     * @param width the width of the final map in cells
-     * @param height the height of the final map in cells
-     * @param rng an RNG object to use for random choices; this make a lot of random choices.
+     *
+     * @param width           the width of the final map in cells
+     * @param height          the height of the final map in cells
+     * @param rng             an RNG object to use for random choices; this make a lot of random choices.
      * @param branchingChance the chance from 0.0 to 1.0 that each room will branch at least once
      * @see MixedGenerator
      */
-    public SerpentMapGenerator(int width, int height, RNG rng, double branchingChance)
-    {
+    public SerpentMapGenerator(int width, int height, RNG rng, double branchingChance) {
         this(width, height, rng, branchingChance, false);
     }
+
     /**
      * This prepares a map generator that will generate a map with the given width and height, using the given RNG.
      * The intended purpose is to carve a long path that loops through the whole dungeon, while hopefully maximizing
      * the amount of rooms the player encounters. You call the different carver-adding methods to affect what the
      * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only
      * caves if none are called. You call generate() after adding carvers, which returns a char[][] for a map.
-     * @param width the width of the final map in cells
-     * @param height the height of the final map in cells
-     * @param rng an RNG object to use for random choices; this make a lot of random choices.
+     *
+     * @param width           the width of the final map in cells
+     * @param height          the height of the final map in cells
+     * @param rng             an RNG object to use for random choices; this make a lot of random choices.
      * @param branchingChance the chance from 0.0 to 1.0 that each room will branch at least once
-     * @param symmetrical true if this should generate a bi-radially symmetric map, false for a typical map
+     * @param symmetrical     true if this should generate a bi-radially symmetric map, false for a typical map
      * @see MixedGenerator
      */
-    public SerpentMapGenerator(int width, int height, RNG rng, double branchingChance, boolean symmetrical)
-    {
-        if(width <= 2 || height <= 2)
+    public SerpentMapGenerator(int width, int height, RNG rng, double branchingChance, boolean symmetrical) {
+        if (width <= 2 || height <= 2)
             throw new IllegalArgumentException("width and height must be greater than 2");
         random = rng;
         long columnAlterations = random.nextLong(0x1000000000000L);
@@ -149,16 +148,16 @@ public class SerpentMapGenerator {
         int csum = 0, rsum = 0;
         long b = 7;
         for (int i = 0; i < 16; i++, b <<= 3) {
-            columns[i] = csum + (int)(columnBase * 0.5f * (3 + Long.bitCount(columnAlterations & b)));
-            csum += (int)(columnBase * (3 + Long.bitCount(columnAlterations & b)));
-            rows[i] = rsum + (int)(rowBase * 0.5f * (3 + Long.bitCount(rowAlterations & b)));
-            rsum += (int)(rowBase * (3 + Long.bitCount(rowAlterations & b)));
+            columns[i] = csum + (int) (columnBase * 0.5f * (3 + Long.bitCount(columnAlterations & b)));
+            csum += (int) (columnBase * (3 + Long.bitCount(columnAlterations & b)));
+            rows[i] = rsum + (int) (rowBase * 0.5f * (3 + Long.bitCount(rowAlterations & b)));
+            rsum += (int) (rowBase * (3 + Long.bitCount(rowAlterations & b)));
         }
-        int cs = (width - csum);
-        int rs = (height - rsum);
+        int cs = width - csum;
+        int rs = height - rsum;
         int cs2 = cs, rs2 = rs, cs3 = cs, rs3 = rs;
         for (int i = 0; i <= 7; i++) {
-            cs2= cs2 * i / 7;
+            cs2 = cs2 * i / 7;
             rs2 = rs2 * i / 7;
             columns[i] -= cs2;
             rows[i] -= rs2;
@@ -170,7 +169,7 @@ public class SerpentMapGenerator {
             rows[i] += rs3;
         }
 
-        LinkedHashMap<Coord, List<Coord>> connections = new LinkedHashMap<>(80);
+        OrderedMap<Coord, List<Coord>> connections = new OrderedMap<>(80);
         Coord temp, t;
         int m = random.nextInt(64), r = random.between(4, 12);
         temp = CoordPacker.mooreToCoord(m);
@@ -191,11 +190,10 @@ public class SerpentMapGenerator {
         }
         connections.get(Coord.get(columns[temp.x], rows[temp.y])).add(
                 Coord.get(columns[starter.x], rows[starter.y]));
-        if(symmetrical) {
+        if (symmetrical) {
             mix = new SymmetryDungeonGenerator(width, height, random,
                     SymmetryDungeonGenerator.removeSomeOverlap(width, height, connections));
-        }
-        else
+        } else
             mix = new MixedGenerator(width, height, random, connections);
 
     }
@@ -206,13 +204,14 @@ public class SerpentMapGenerator {
      * caves more likely. Carvers are shuffled when used, then repeat if exhausted during generation. Since typically
      * about 30-40 rooms are carved, large totals for carver count aren't really needed; aiming for a total of 10
      * between the count of putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers() is reasonable.
-     * @see MixedGenerator
+     *
      * @param count the number of carvers making caves between rooms; only matters in relation to other carvers
+     * @see MixedGenerator
      */
-    public void putCaveCarvers(int count)
-    {
+    public void putCaveCarvers(int count) {
         mix.putCaveCarvers(count);
     }
+
     /**
      * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms
      * with a random size in a box shape at the start and end, and a small room at the corner if there is one. If count
@@ -221,14 +220,15 @@ public class SerpentMapGenerator {
      * repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver
      * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),
      * and putRoundRoomCarvers() is reasonable.
-     * @see MixedGenerator
+     *
      * @param count the number of carvers making box-shaped rooms and corridors between them; only matters in relation
      *              to other carvers
+     * @see MixedGenerator
      */
-    public void putBoxRoomCarvers(int count)
-    {
+    public void putBoxRoomCarvers(int count) {
         mix.putBoxRoomCarvers(count);
     }
+
     /**
      * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms
      * with a random size in a box shape at the start and end, and a small room at the corner if there is one. This also
@@ -238,14 +238,15 @@ public class SerpentMapGenerator {
      * repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver
      * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),
      * and putRoundRoomCarvers() is reasonable.
-     * @see MixedGenerator
+     *
      * @param count the number of carvers making box-shaped rooms and corridors between them; only matters in relation
      *              to other carvers
+     * @see MixedGenerator
      */
-    public void putWalledBoxRoomCarvers(int count)
-    {
+    public void putWalledBoxRoomCarvers(int count) {
         mix.putWalledBoxRoomCarvers(count);
     }
+
     /**
      * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms
      * with a random size in a circle shape at the start and end, and a small circular room at the corner if there is
@@ -254,12 +255,12 @@ public class SerpentMapGenerator {
      * then repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver
      * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),
      * and putRoundRoomCarvers() is reasonable.
-     * @see MixedGenerator
+     *
      * @param count the number of carvers making circular rooms and corridors between them; only matters in relation
      *              to other carvers
+     * @see MixedGenerator
      */
-    public void putRoundRoomCarvers(int count)
-    {
+    public void putRoundRoomCarvers(int count) {
         mix.putRoundRoomCarvers(count);
     }
 
@@ -272,12 +273,12 @@ public class SerpentMapGenerator {
      * then repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver
      * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),
      * and putRoundRoomCarvers() is reasonable.
-     * @see MixedGenerator
+     *
      * @param count the number of carvers making circular rooms and corridors between them; only matters in relation
      *              to other carvers
+     * @see MixedGenerator
      */
-    public void putWalledRoundRoomCarvers(int count)
-    {
+    public void putWalledRoundRoomCarvers(int count) {
         mix.putWalledRoundRoomCarvers(count);
     }
 
@@ -287,11 +288,11 @@ public class SerpentMapGenerator {
      * Moore Curve, a space-filling curve that loops around on itself, to guarantee that the rooms will always have a
      * long path through the dungeon that, if followed completely, will take you back to your starting room. Some small
      * branches are possible, and large rooms may merge with other rooms nearby. This uses MixedGenerator.
-     * @see MixedGenerator
+     *
      * @return a char[][] where '#' is a wall and '.' is a floor or corridor; x first y second
+     * @see MixedGenerator
      */
-    public char[][] generate()
-    {
+    public char[][] generate() {
         return mix.generate();
     }
 
@@ -300,18 +301,65 @@ public class SerpentMapGenerator {
      * MixedGenerator. This array will have the same size as the last char 2D array produced by generate(); the value
      * of this method if called before generate() is undefined, but probably will be a 2D array of all 0 (UNTOUCHED).
      * <ul>
-     *     <li>MixedGenerator.UNTOUCHED, equal to 0, is used for any cells that aren't near a floor.</li>
-     *     <li>MixedGenerator.ROOM_FLOOR, equal to 1, is used for floor cells inside wide room areas.</li>
-     *     <li>MixedGenerator.ROOM_WALL, equal to 2, is used for wall cells around wide room areas.</li>
-     *     <li>MixedGenerator.CAVE_FLOOR, equal to 3, is used for floor cells inside rough cave areas.</li>
-     *     <li>MixedGenerator.CAVE_WALL, equal to 4, is used for wall cells around rough cave areas.</li>
-     *     <li>MixedGenerator.CORRIDOR_FLOOR, equal to 5, is used for floor cells inside narrow corridor areas.</li>
-     *     <li>MixedGenerator.CORRIDOR_WALL, equal to 6, is used for wall cells around narrow corridor areas.</li>
+     * <li>MixedGenerator.UNTOUCHED, equal to 0, is used for any cells that aren't near a floor.</li>
+     * <li>MixedGenerator.ROOM_FLOOR, equal to 1, is used for floor cells inside wide room areas.</li>
+     * <li>MixedGenerator.ROOM_WALL, equal to 2, is used for wall cells around wide room areas.</li>
+     * <li>MixedGenerator.CAVE_FLOOR, equal to 3, is used for floor cells inside rough cave areas.</li>
+     * <li>MixedGenerator.CAVE_WALL, equal to 4, is used for wall cells around rough cave areas.</li>
+     * <li>MixedGenerator.CORRIDOR_FLOOR, equal to 5, is used for floor cells inside narrow corridor areas.</li>
+     * <li>MixedGenerator.CORRIDOR_WALL, equal to 6, is used for wall cells around narrow corridor areas.</li>
      * </ul>
+     *
      * @return a 2D int array where each element is an environment type constant in MixedGenerator
      */
-    public int[][] getEnvironment()
-    {
+    public int[][] getEnvironment() {
         return mix.getEnvironment();
+    }
+
+    public static ArrayList<Coord> pointPath(int width, int height, RNG rng) {
+        if (width <= 2 || height <= 2)
+            throw new IllegalArgumentException("width and height must be greater than 2");
+        long columnAlterations = rng.nextLong(0x1000000000000L);
+        float columnBase = width / (Long.bitCount(columnAlterations) + 48.0f);
+        long rowAlterations = rng.nextLong(0x1000000000000L);
+        float rowBase = height / (Long.bitCount(rowAlterations) + 48.0f);
+
+        int[] columns = new int[16], rows = new int[16];
+        int csum = 0, rsum = 0;
+        long b = 7;
+        for (int i = 0; i < 16; i++, b <<= 3) {
+            columns[i] = csum + (int) (columnBase * 0.5f * (3 + Long.bitCount(columnAlterations & b)));
+            csum += (int) (columnBase * (3 + Long.bitCount(columnAlterations & b)));
+            rows[i] = rsum + (int) (rowBase * 0.5f * (3 + Long.bitCount(rowAlterations & b)));
+            rsum += (int) (rowBase * (3 + Long.bitCount(rowAlterations & b)));
+        }
+        int cs = width - csum;
+        int rs = height - rsum;
+        int cs2 = cs, rs2 = rs, cs3 = cs, rs3 = rs;
+        for (int i = 0; i <= 7; i++) {
+            cs2 = cs2 * i / 7;
+            rs2 = rs2 * i / 7;
+            columns[i] -= cs2;
+            rows[i] -= rs2;
+        }
+        for (int i = 15; i >= 8; i--) {
+            cs3 = cs3 * (i - 8) / 8;
+            rs3 = rs3 * (i - 8) / 8;
+            columns[i] += cs3;
+            rows[i] += rs3;
+        }
+
+        ArrayList<Coord> points = new ArrayList<>(80);
+        int m = rng.nextInt(64);
+        Coord temp = CoordPacker.mooreToCoord(m), next;
+        temp = Coord.get(columns[temp.x], rows[temp.y]);
+        for (int i = 0, r; i < 256; r = rng.between(4, 12), i += r, m += r) {
+            next = CoordPacker.mooreToCoord(m);
+            next = Coord.get(columns[next.x], rows[next.y]);
+            points.addAll(OrthoLine.line(temp, next));
+            temp = next;
+        }
+        points.add(points.get(0));
+        return points;
     }
 }

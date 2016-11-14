@@ -2,6 +2,7 @@ package squidpony.squidmath;
 
 import squidpony.annotation.GwtIncompatible;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -54,7 +55,7 @@ import java.util.Random;
  * <br>
  * More customizations may be added in the future to the ones available currently.
  */
-public class EditRNG extends StatefulRNG {
+public class EditRNG extends StatefulRNG implements Serializable{
 
 	/** Used to tweak the generator toward high or low values. */
     private double expected = 0.5;
@@ -204,7 +205,7 @@ public class EditRNG extends StatefulRNG {
                 scatter = scatter * (1.0 - expected) * 2 + expected - (1.0 - expected);
             else
                 scatter *= expected * 2;
-            gen = (gen * 100 + scatter * -centrality) / (100 - centrality);
+            gen = (gen * 100 - scatter * centrality) / (100 - centrality);
         }
 
         return gen;
@@ -569,5 +570,101 @@ public class EditRNG extends StatefulRNG {
         EditRNG next = new EditRNG(random.copy(), expected, centrality);
         next.rawLatest = rawLatest;
         return next;
+    }
+
+    /**
+     * Get a long that can be used to reproduce the sequence of random numbers this object will generate starting now.
+     *
+     * @return a long that can be used as state.
+     */
+    @Override
+    public long getState() {
+        return super.getState();
+    }
+
+    /**
+     * Sets the state of the random number generator to a given long, which will alter future random numbers this
+     * produces based on the state.
+     *
+     * @param state a long, which typically should not be 0 (some implementations may tolerate a state of 0, however).
+     */
+    @Override
+    public void setState(long state) {
+        super.setState(state);
+    }
+
+    @Override
+    public String toString() {
+        return "EditRNG{" +
+                "expected=" + expected +
+                ", centrality=" + centrality +
+                ", Randomness Source=" + random +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EditRNG editRNG = (EditRNG) o;
+
+        if (Double.compare(editRNG.expected, expected) != 0) return false;
+        return Double.compare(editRNG.centrality, centrality) == 0 && Double.compare(editRNG.rawLatest, rawLatest) == 0;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        temp = Double.doubleToLongBits(expected);
+        result = (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(centrality);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(rawLatest);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
+    /**
+     * Shuffle an array using the Fisher-Yates algorithm. Not GWT-compatible; use the overload that takes two arrays.
+     * <br>
+     * https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
+     *
+     * @param elements an array of T; will not be modified
+     * @return a shuffled copy of elements
+     */
+    @GwtIncompatible
+    @Override
+    public <T> T[] shuffle(T[] elements) {
+        return super.shuffle(elements);
+    }
+
+    /**
+     * Generates a random permutation of the range from 0 (inclusive) to length (exclusive).
+     * Useful for passing to OrderedMap or OrderedSet's reorder() methods.
+     *
+     * @param length the size of the ordering to produce
+     * @return a random ordering containing all ints from 0 to length (exclusive)
+     */
+    @Override
+    public int[] randomOrdering(int length) {
+        return super.randomOrdering(length);
+    }
+
+    /**
+     * Returns a random non-negative integer below the given bound, or 0 if the bound is 0.
+     * Uses a slightly optimized technique. This method is considered "hasty" since
+     * it should be faster than nextInt() doesn't check for "less-valid" bounds values. It also
+     * has undefined behavior if bound is negative, though it will probably produce a negative
+     * number (just how negative is an open question).
+     *
+     * @param bound the upper bound (exclusive); behavior is undefined if bound is negative
+     * @return the found number
+     */
+    @Override
+    public int nextIntHasty(int bound) {
+        return (int)(nextDouble() * bound);
     }
 }

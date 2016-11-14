@@ -8,7 +8,6 @@ import squidpony.squidmath.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
-import java.util.LinkedHashSet;
 
 import static squidpony.squidmath.CoordPacker.*;
 
@@ -25,9 +24,11 @@ import static squidpony.squidmath.CoordPacker.*;
  * Then call generate() to get a char[][] with the desired dungeon map, using a fixed repertoire of chars to represent
  * the different features. After calling generate(), you can safely get the values from the stairsUp and stairsDown
  * fields, which are Coords that should be a long distance from each other but connected in the dungeon. You may want
- * to change those to staircase characters, but there's no requirement to do anything with them. The DungeonUtility
- * field of this class, utility, is a convenient way of accessing the non-static methods in that class, such as
- * randomFloor(), without needing to create another DungeonUtility (this class creates one, so you don't have to).
+ * to change those to staircase characters, but there's no requirement to do anything with them. It's recommended that
+ * you keep the resulting char[][] maps in some collection that can be saved, since DungeonGenerator only stores a
+ * temporary copy of the most recently-generated map. The DungeonUtility field of this class, utility, is a convenient
+ * way of accessing the non-static methods in that class, such as randomFloor(), without needing to create another
+ * DungeonUtility (this class creates one, so you don't have to).
  * <br>
  * Previews for the kinds of dungeon this generates, given a certain argument to generate():
  * <ul>
@@ -49,7 +50,6 @@ import static squidpony.squidmath.CoordPacker.*;
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
 public class DungeonGenerator {
-
     /**
      * The effects that can be applied to this dungeon. More may be added in future releases.
      */
@@ -326,7 +326,7 @@ public class DungeonGenerator {
         return this;
     }
 
-    protected LinkedHashSet<Coord> removeAdjacent(LinkedHashSet<Coord> coll, Coord pt)
+    protected OrderedSet<Coord> removeAdjacent(OrderedSet<Coord> coll, Coord pt)
     {
         for(Coord temp : new Coord[]{Coord.get(pt.x + 1, pt.y), Coord.get(pt.x - 1, pt.y),
                 Coord.get(pt.x, pt.y + 1), Coord.get(pt.x, pt.y - 1)})
@@ -337,7 +337,7 @@ public class DungeonGenerator {
 
         return coll;
     }
-    protected LinkedHashSet<Coord> removeAdjacent(LinkedHashSet<Coord> coll, Coord pt1, Coord pt2)
+    protected OrderedSet<Coord> removeAdjacent(OrderedSet<Coord> coll, Coord pt1, Coord pt2)
     {
 
         for(Coord temp : new Coord[]{Coord.get(pt1.x + 1, pt1.y), Coord.get(pt1.x - 1, pt1.y),
@@ -351,10 +351,11 @@ public class DungeonGenerator {
 
         return coll;
     }
-
-    protected LinkedHashSet<Coord> viableDoorways(boolean doubleDoors, char[][] map)
+    protected OrderedSet<Coord> viableDoorways(boolean doubleDoors, char[][] map)
     {
-        LinkedHashSet<Coord> doors = new LinkedHashSet<>();
+        OrderedSet<Coord> doors = new OrderedSet<>();
+        OrderedSet<Coord> blocked = new OrderedSet<>(4);
+        DijkstraMap dm = new DijkstraMap(map, DijkstraMap.Measurement.EUCLIDEAN);
         for(int x = 1; x < map.length - 1; x++) {
             for (int y = 1; y < map[x].length - 1; y++) {
                 if(map[x][y] == '#')
@@ -368,6 +369,14 @@ public class DungeonGenerator {
                                 && map[x][y + 1] != '#' && map[x][y - 1] != '#'
                                 && map[x+1][y + 1] != '#' && map[x+1][y - 1] != '#') {
                             if (map[x + 2][y + 1] != '#' || map[x - 1][y + 1] != '#' || map[x + 2][y - 1] != '#' || map[x - 1][y - 1] != '#') {
+                                dm.resetMap();
+                                dm.clearGoals();
+                                dm.setGoal(x, y+1);
+                                blocked.clear();
+                                blocked.add(Coord.get(x, y));
+                                blocked.add(Coord.get(x + 1, y));
+                                if(dm.partialScan(16, blocked)[x][y-1] < DijkstraMap.FLOOR)
+                                    continue;
                                 doors.add(Coord.get(x, y));
                                 doors.add(Coord.get(x + 1, y));
                                 doors = removeAdjacent(doors, Coord.get(x, y), Coord.get(x + 1, y));
@@ -378,8 +387,16 @@ public class DungeonGenerator {
                                 && map[x + 1][y] != '#' && map[x - 1][y] != '#'
                                 && map[x + 1][y+1] != '#' && map[x - 1][y+1] != '#') {
                             if (map[x + 1][y + 2] != '#' || map[x + 1][y - 1] != '#' || map[x - 1][y + 2] != '#' || map[x - 1][y - 1] != '#') {
+                                dm.resetMap();
+                                dm.clearGoals();
+                                dm.setGoal(x+1, y);
+                                blocked.clear();
+                                blocked.add(Coord.get(x, y));
+                                blocked.add(Coord.get(x, y+1));
+                                if(dm.partialScan(16, blocked)[x-1][y] < DijkstraMap.FLOOR)
+                                    continue;
                                 doors.add(Coord.get(x, y));
-                                doors.add(Coord.get(x, y + 1));
+                                doors.add(Coord.get(x, y+1));
                                 doors = removeAdjacent(doors, Coord.get(x, y), Coord.get(x, y + 1));
                                 continue;
                             }
@@ -388,11 +405,25 @@ public class DungeonGenerator {
                 }
                 if (map[x + 1][y] == '#' && map[x - 1][y] == '#' && map[x][y + 1] != '#' && map[x][y - 1] != '#') {
                     if (map[x + 1][y + 1] != '#' || map[x - 1][y + 1] != '#' || map[x + 1][y - 1] != '#' || map[x - 1][y - 1] != '#') {
+                        dm.resetMap();
+                        dm.clearGoals();
+                        dm.setGoal(x, y+1);
+                        blocked.clear();
+                        blocked.add(Coord.get(x, y));
+                        if(dm.partialScan(16, blocked)[x][y-1] < DijkstraMap.FLOOR)
+                            continue;
                         doors.add(Coord.get(x, y));
                         doors = removeAdjacent(doors, Coord.get(x, y));
                     }
                 } else if (map[x][y + 1] == '#' && map[x][y - 1] == '#' && map[x + 1][y] != '#' && map[x - 1][y] != '#') {
                     if (map[x + 1][y + 1] != '#' || map[x + 1][y - 1] != '#' || map[x - 1][y + 1] != '#' || map[x - 1][y - 1] != '#') {
+                        dm.resetMap();
+                        dm.clearGoals();
+                        dm.setGoal(x+1, y);
+                        blocked.clear();
+                        blocked.add(Coord.get(x, y));
+                        if(dm.partialScan(16, blocked)[x-1][y] < DijkstraMap.FLOOR)
+                            continue;
                         doors.add(Coord.get(x, y));
                         doors = removeAdjacent(doors, Coord.get(x, y));
                     }
@@ -400,7 +431,6 @@ public class DungeonGenerator {
 
             }
         }
-
 
         return doors;
     }
@@ -444,6 +474,13 @@ public class DungeonGenerator {
      * that provide horizontal passage, and '/' for doors that provide vertical passage.
      * Use the addDoors, addWater, addGrass, and addTraps methods of this class to request these in the generated map.
      * Also sets the fields stairsUp and stairsDown to two randomly chosen, distant, connected, walkable cells.
+     * <br>
+     * Special behavior here: If tab characters are present in the 2D char array, they will be replaced with '.' in the
+     * final dungeon, but will also be tried first as valid staircase locations (with a high distance possible to travel
+     * away from the starting staircase). If no tab characters are present this will search for '.' floors to place
+     * stairs on, as normal. This tab-first behavior is useful in conjunction with some methods that establish a good
+     * path in an existing dungeon; an example is {@code DungeonUtility.ensurePath(dungeon, rng, '\t', '#');} then
+     * passing dungeon (which that code modifies) in as baseDungeon to this method.
      * @param baseDungeon a pre-made dungeon consisting of '#' for walls and '.' for floors; may be modified in-place
      * @return a char[][] dungeon
      */
@@ -461,24 +498,37 @@ public class DungeonGenerator {
         int frustrated = 0;
         do {
             dijkstra.clearGoals();
-            stairsUp = utility.randomFloor(map);
+            stairsUp = utility.randomMatchingTile(map, '\t');
+            if(stairsUp == null) {
+                stairsUp = utility.randomFloor(map);
+                if (stairsUp == null) {
+                    frustrated++;
+                    continue;
+                }
+            }
             dijkstra.setGoal(stairsUp);
             dijkstra.scan(null);
             frustrated++;
-        }while (dijkstra.getMappedCount() < width + height && frustrated < 15);
+        }while (dijkstra.getMappedCount() < width + height && frustrated < 8);
+        if(frustrated >= 8)
+        {
+            return generate();
+        }
         double maxDijkstra = 0.0;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                if(dijkstra.gradientMap[i][j] >= DijkstraMap.FLOOR) {
+                if (dijkstra.gradientMap[i][j] >= DijkstraMap.FLOOR) {
                     map[i][j] = '#';
-                }
-                else if(dijkstra.gradientMap[i][j] > maxDijkstra) {
+                } else if (dijkstra.gradientMap[i][j] > maxDijkstra) {
                     maxDijkstra = dijkstra.gradientMap[i][j];
+                }
+                if (map[i][j] == '\t') {
+                    map[i][j] = '.';
                 }
             }
         }
-        stairsDown = singleRandom(pack(dijkstra.gradientMap, maxDijkstra * 0.7,
-                DijkstraMap.FLOOR), rng);
+        stairsDown = new GreasedRegion(dijkstra.gradientMap, maxDijkstra * 0.7,
+                DijkstraMap.FLOOR).singleRandom(rng);
 
         return innerGenerate(map);
     }
@@ -508,9 +558,9 @@ public class DungeonGenerator {
         stairsDown = null;
 
         dijkstra.clearGoals();
-        Coord[] stairs = allPacked(pack(map, '<', '>'));
-        for (Coord s : stairs) {
-            dijkstra.setGoal(s);
+        ArrayList<Coord> stairs = DungeonUtility.allMatching(map, '<', '>');
+        for (int j = 0; j < stairs.size(); j++) {
+            dijkstra.setGoal(stairs.get(j));
         }
         dijkstra.scan(null);
         for (int i = 0; i < width; i++) {
@@ -528,8 +578,8 @@ public class DungeonGenerator {
 
     private char[][] innerGenerate(char[][] map)
     {
-        LinkedHashSet<Coord> doorways;
-        LinkedHashSet<Coord> hazards = new LinkedHashSet<>();
+        OrderedSet<Coord> doorways;
+        OrderedSet<Coord> hazards = new OrderedSet<>();
         Coord temp;
         boolean doubleDoors = false;
         int floorCount = DungeonUtility.countCells(map, '.'),
@@ -566,7 +616,7 @@ public class DungeonGenerator {
 
         doorways = viableDoorways(doubleDoors, map);
 
-        LinkedHashSet<Coord> obstacles = new LinkedHashSet<>(doorways.size() * doorFill / 100);
+        OrderedSet<Coord> obstacles = new OrderedSet<>(doorways.size() * doorFill / 100);
         if(doorFill > 0)
         {
             int total = doorways.size() * doorFill / 100;
@@ -601,11 +651,19 @@ public class DungeonGenerator {
             }
         }
         if (boulderFill > 0.0) {
+            /*
             short[] floor = pack(map, '.');
             short[] viable = retract(floor, 1, width, height, true);
             ArrayList<Coord> boulders = randomPortion(viable, boulderFill, rng);
             for (Coord boulder : boulders) {
                 map[boulder.x][boulder.y] = '#';
+            }
+            */
+            Coord[] boulders = new GreasedRegion(map, '.').retract8way(1).randomPortion(rng, boulderFill);
+            Coord t;
+            for (int i = 0; i < boulders.length; i++) {
+                t = boulders[i];
+                map[t.x][t.y] = '#';
             }
         }
 

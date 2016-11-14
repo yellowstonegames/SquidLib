@@ -6,8 +6,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import squidpony.GwtCompatibility;
 import squidpony.squidai.*;
 import squidpony.squidgrid.FOVCache;
 import squidpony.squidgrid.LOS;
@@ -16,12 +17,11 @@ import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.TilesetType;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.CoordPacker;
-import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 
 public class SquidAIDemo extends ApplicationAdapter {
     private enum Phase {MOVE_ANIM, ATTACK_ANIM}
@@ -42,8 +42,10 @@ public class SquidAIDemo extends ApplicationAdapter {
 
     private SquidInput input;
     private static final Color bgColor = SColor.DARK_SLATE_GRAY;
-    private LinkedHashMap<AnimatedEntity, Integer> teamRed, teamBlue;
-    private LinkedHashSet<Coord> redPlaces, bluePlaces;
+    private Array<AnimatedEntity> teamRed, teamBlue;
+    private IntArray redHealth, blueHealth;
+    //private OrderedMap<AnimatedEntity, Integer> teamRed, teamBlue;
+    private OrderedSet<Coord> redPlaces, bluePlaces;
     private Technique redCone, redCloud, blueBlast, blueBeam;
     private DijkstraMap getToRed, getToBlue;
     private Stage stage;
@@ -80,23 +82,28 @@ public class SquidAIDemo extends ApplicationAdapter {
         short[] placement = CoordPacker.pack(bareDungeon, '.');
 
 
-        teamRed = new LinkedHashMap<>(numMonsters);
-        teamBlue = new LinkedHashMap<>(numMonsters);
+        teamRed = new Array<>(numMonsters);
+        teamBlue = new Array<>(numMonsters);
 
-        redPlaces = new LinkedHashSet<>(numMonsters);
-        bluePlaces = new LinkedHashSet<>(numMonsters);
+        redHealth = new IntArray(numMonsters);
+        blueHealth = new IntArray(numMonsters);
+
+        redPlaces = new OrderedSet<>(numMonsters);
+        bluePlaces = new OrderedSet<>(numMonsters);
         for(int i = 0; i < numMonsters; i++)
         {
             Coord monPos = dungeonGen.utility.randomCell(placement);
             placement = CoordPacker.removePacked(placement, monPos.x, monPos.y);
 
-            teamRed.put(display.animateActor(monPos.x, monPos.y, "50", 11, true), 50);
+            teamRed.add(display.animateActor(monPos.x, monPos.y, "50", 11, true));
+            redHealth.add(50);
             redPlaces.add(monPos);
 
             Coord monPosBlue = dungeonGen.utility.randomCell(placement);
             placement = CoordPacker.removePacked(placement, monPosBlue.x, monPosBlue.y);
 
-            teamBlue.put(display.animateActor(monPosBlue.x, monPosBlue.y, "50", 25, true), 50);
+            teamBlue.add(display.animateActor(monPosBlue.x, monPosBlue.y, "50", 25, true));
+            blueHealth.add(50);
             bluePlaces.add(monPosBlue);
         }
         // your choice of FOV matters here.
@@ -213,7 +220,7 @@ public class SquidAIDemo extends ApplicationAdapter {
         int i = 0;
         DijkstraMap whichDijkstra;
         Technique whichTech;
-        Set<Coord> whichFoes, whichAllies = new LinkedHashSet<>(8);
+        Set<Coord> whichFoes, whichAllies = new OrderedSet<>(8);
         AnimatedEntity ae = null;
         int health = 0;
         Coord user = null;
@@ -223,16 +230,13 @@ public class SquidAIDemo extends ApplicationAdapter {
             whichTech = (idx % 2 == 0) ? blueBeam : blueBlast;
             whichFoes = redPlaces;
             whichAllies = bluePlaces;
-            for(Map.Entry<AnimatedEntity, Integer> entry : teamBlue.entrySet())
-            {
-                if(i++ == idx)
-                {
-                    ae = entry.getKey();
-                    health = entry.getValue();
-                    user = Coord.get(ae.gridX, ae.gridY);
-                    break;
-                }
+            ae = teamBlue.get(idx);
+            health = blueHealth.get(idx);
+            if(ae == null || health <= 0) {
+                phase = Phase.MOVE_ANIM;
+                return;
             }
+            user = Coord.get(ae.gridX, ae.gridY);
         }
         else
         {
@@ -240,20 +244,13 @@ public class SquidAIDemo extends ApplicationAdapter {
             whichTech = (idx % 2 == 0) ? redCloud : redCone;
             whichFoes = bluePlaces;
             whichAllies = redPlaces;
-            for(Map.Entry<AnimatedEntity, Integer> entry : teamRed.entrySet())
-            {
-                if(i++ == idx)
-                {
-                    ae = entry.getKey();
-                    health = entry.getValue();
-                    user = Coord.get(ae.gridX, ae.gridY);
-                    break;
-                }
+            ae = teamRed.get(idx);
+            health = redHealth.get(idx);
+            if(ae == null || health <= 0) {
+                phase = Phase.MOVE_ANIM;
+                return;
             }
-        }
-        if(ae == null || health <= 0) {
-            phase = Phase.MOVE_ANIM;
-            return;
+            user = Coord.get(ae.gridX, ae.gridY);
         }
         whichAllies.remove(user);
         /*for(Coord p : whichFoes)
@@ -264,7 +261,9 @@ public class SquidAIDemo extends ApplicationAdapter {
                 visibleTargets.add(p);
             }
         }*/
-        ArrayList<Coord> path = whichDijkstra.findTechniquePath(moveLength, whichTech, bareDungeon, los, whichFoes, whichAllies, user, whichFoes);
+        ArrayList<Coord> path = whichDijkstra.findTechniquePath(moveLength, whichTech, bareDungeon, (LOS)null, whichFoes, whichAllies, user, whichFoes);
+        if(path.isEmpty())
+            path = whichDijkstra.findPath(moveLength, whichFoes, whichAllies, user, whichFoes.toArray(new Coord[whichFoes.size()]));
         /*
         System.out.println("User at (" + user.x + "," + user.y + ") using " +
                 whichTech.name);
@@ -292,12 +291,12 @@ public class SquidAIDemo extends ApplicationAdapter {
     @SuppressWarnings("unused")
 	private boolean checkOverlap(AnimatedEntity ae, int x, int y)
     {
-        for(AnimatedEntity mon : teamRed.keySet())
+        for(AnimatedEntity mon : teamRed)
         {
             if(mon.gridX == x && mon.gridY == y && !mon.equals(ae))
                 return true;
         }
-        for(AnimatedEntity mon : teamBlue.keySet())
+        for(AnimatedEntity mon : teamBlue)
         {
             if(mon.gridX == x && mon.gridY == y && !mon.equals(ae))
                 return true;
@@ -309,58 +308,57 @@ public class SquidAIDemo extends ApplicationAdapter {
 
         int i = 0;
         Technique whichTech;
-        Set<Coord> whichFoes, whichAllies, visibleTargets = new LinkedHashSet<>(8);
+        Set<Coord> whichFoes, whichAllies, visibleTargets = new OrderedSet<>(8);
         AnimatedEntity ae = null;
         int health = 0;
         Coord user = null;
         Color whichTint = Color.WHITE;
-        LinkedHashMap<AnimatedEntity, Integer> whichEnemyTeam = null;
-        LinkedHashMap<Coord, Double> effects = null;
+        Array<AnimatedEntity> whichEnemyTeam;
+        IntArray whichEnemyHealth;
+        OrderedMap<Coord, Double> effects;
         if (blueTurn) {
             whichTech = (idx % 2 == 0) ? blueBeam : blueBlast;
             whichFoes = redPlaces;
             whichAllies = bluePlaces;
             whichTint = Color.CYAN;
             whichEnemyTeam = teamRed;
-            for (Map.Entry<AnimatedEntity, Integer> entry : teamBlue.entrySet()) {
-                if (i++ == idx) {
-                    ae = entry.getKey();
-                    health = entry.getValue();
-                    user = Coord.get(ae.gridX, ae.gridY);
-                    break;
-                }
+            whichEnemyHealth = redHealth;
+            ae = teamBlue.get(idx);
+            health = blueHealth.get(idx);
+            if (ae == null || health <= 0) {
+                phase = Phase.ATTACK_ANIM;
+                return;
             }
+            user = Coord.get(ae.gridX, ae.gridY);
         } else {
             whichTech = (idx % 2 == 0) ? redCloud : redCone;
             whichFoes = bluePlaces;
             whichAllies = redPlaces;
             whichTint = Color.RED;
             whichEnemyTeam = teamBlue;
-            for (Map.Entry<AnimatedEntity, Integer> entry : teamRed.entrySet()) {
-                if (i++ == idx) {
-                    ae = entry.getKey();
-                    health = entry.getValue();
-                    user = Coord.get(ae.gridX, ae.gridY);
-                    break;
-                }
+            whichEnemyHealth = blueHealth;
+            ae = teamRed.get(idx);
+            health = redHealth.get(idx);
+            if (ae == null || health <= 0) {
+                phase = Phase.ATTACK_ANIM;
+                return;
             }
-        }
-        if (ae == null || health <= 0) {
-            phase = Phase.ATTACK_ANIM;
-            return;
+            user = Coord.get(ae.gridX, ae.gridY);
         }
         for(Coord p : whichFoes)
         {
             AnimatedEntity foe = display.getAnimatedEntityByCell(p.x, p.y);
-            if(los.isReachable(res, user.x, user.y, p.x, p.y) && foe != null && whichEnemyTeam.get(foe) != null && whichEnemyTeam.get(foe) > 0)
+            int foeIdx;
+            if(los.isReachable(res, user.x, user.y, p.x, p.y) && foe != null && (foeIdx = whichEnemyTeam.indexOf(foe, true)) >= 0
+                    && whichEnemyHealth.get(foeIdx) > 0)
             {
                 visibleTargets.add(p);
             }
         }
 
-        LinkedHashMap<Coord, ArrayList<Coord>> ideal = whichTech.idealLocations(user, visibleTargets, whichAllies);
+        OrderedMap<Coord, ArrayList<Coord>> ideal = whichTech.idealLocations(user, visibleTargets, whichAllies);
         Coord targetCell = null;
-        targetCell = GwtCompatibility.first(ideal.keySet());
+        if(!ideal.isEmpty()) targetCell = ideal.firstKey();
 
         if(targetCell != null)
         {
@@ -372,12 +370,15 @@ public class SquidAIDemo extends ApplicationAdapter {
                 whichTint.a = strength.floatValue();
                 display.tint(power.getKey().x * 2    , power.getKey().y, whichTint, 0, display.getAnimationDuration());
                 display.tint(power.getKey().x * 2 + 1, power.getKey().y, whichTint, 0, display.getAnimationDuration());
-                for(AnimatedEntity tgt : whichEnemyTeam.keySet())
+                AnimatedEntity tgt;
+                for(int tgtIdx = 0; tgtIdx < whichEnemyTeam.size; tgtIdx++)
                 {
+                    tgt = whichEnemyTeam.get(tgtIdx);
                     if(tgt.gridX == power.getKey().x && tgt.gridY == power.getKey().y)
                     {
-                        int currentHealth = Math.max(whichEnemyTeam.get(tgt) - (int) (15 * strength), 0);
-                        whichEnemyTeam.put(tgt,  currentHealth);
+                        int currentHealth = Math.max(whichEnemyHealth.get(tgtIdx) - (int) (15 * strength), 0);
+                        whichEnemyTeam.set(tgtIdx, tgt);
+                        whichEnemyHealth.set(tgtIdx, currentHealth);
                         tgt.setText(Integer.toString(currentHealth));
                     }
                 }
@@ -416,16 +417,16 @@ public class SquidAIDemo extends ApplicationAdapter {
 
         stage.act();
         boolean blueWins = false, redWins = false;
-        for(Integer blueHealth : teamBlue.values())
+        for(int bh = 0; bh < blueHealth.size; bh++)
         {
-            if(blueHealth > 0) {
+            if(blueHealth.get(bh) > 0) {
                 redWins = false;
                 break;
             }redWins = true;
         }
-        for(Integer redHealth : teamRed.values())
+        for(int rh = 0; rh < redHealth.size; rh++)
         {
-            if(redHealth > 0) {
+            if(redHealth.get(rh) > 0) {
                 blueWins = false;
                 break;
             }blueWins = true;
@@ -460,23 +461,13 @@ public class SquidAIDemo extends ApplicationAdapter {
         AnimatedEntity ae = null;
         int whichIdx = 0;
         if(blueTurn) {
-            for (Map.Entry<AnimatedEntity, Integer> entry : teamBlue.entrySet()) {
-                if (i++ == blueIdx) {
-                    ae = entry.getKey();
-                    whichIdx = blueIdx;
-                    break;
-                }
-            }
+            whichIdx = blueIdx;
+            ae = teamBlue.get(blueIdx);
         }
         else
         {
-            for (Map.Entry<AnimatedEntity, Integer> entry : teamRed.entrySet()) {
-                if (i++ == redIdx) {
-                    ae = entry.getKey();
-                    whichIdx = redIdx;
-                    break;
-                }
-            }
+            whichIdx = redIdx;
+            ae = teamRed.get(redIdx);
         }
 
         // need to display the map every frame, since we clear the screen to avoid artifacts.
@@ -514,7 +505,7 @@ public class SquidAIDemo extends ApplicationAdapter {
                         blueTurn = !blueTurn;
                         if(!blueTurn)
                         {
-                            whichIdx++;
+                            whichIdx = (whichIdx + 1) % numMonsters;
                             redIdx = (redIdx + 1) % numMonsters;
                             blueIdx = (blueIdx + 1) % numMonsters;
                         }
@@ -537,13 +528,15 @@ public class SquidAIDemo extends ApplicationAdapter {
         // stage has its own batch and must be explicitly told to draw(). this also causes it to act().
         stage.draw();
 
-        // disolay does not draw all AnimatedEntities by default.
+        OrderedSet<AnimatedEntity> entities = display.getAnimatedEntities(0);
+        // display does not draw all AnimatedEntities by default.
         batch.begin();
-        for(AnimatedEntity mon : display.getAnimatedEntities(0)) {
-            display.drawActor(batch, 1.0f, mon, 0);
+        for (int j = 0; j < entities.size(); j++) {
+            display.drawActor(batch, 1.0f, entities.getAt(j), 0);
         }
-        for(AnimatedEntity mon : display.getAnimatedEntities(2)) {
-            display.drawActor(batch, 1.0f, mon, 2);
+        entities = display.getAnimatedEntities(2);
+        for (int j = 0; j < entities.size(); j++) {
+            display.drawActor(batch, 1.0f, entities.getAt(j), 2);
         }
         /*
         for(AnimatedEntity mon : teamBlue.keySet()) {

@@ -3,7 +3,10 @@ package squidpony.examples;
 import squidpony.squidgrid.MimicFill;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.SerpentMapGenerator;
+import squidpony.squidmath.Coord;
 import squidpony.squidmath.StatefulRNG;
+
+import java.util.ArrayList;
 
 /**
  * Created by Tommy Ettinger on 5/14/2016.
@@ -41,6 +44,15 @@ public class MimicFillTest {
         //DungeonUtility.debugPrint(MimicFill.sampleToMap(result, '1', '0'));
 
         rng.setState(2252637788195L);
+
+        ArrayList<Coord> pts = SerpentMapGenerator.pointPath(60, 60, rng);
+        result = MimicFill.markSample(
+                MimicFill.fill(MimicFill.mapToSample(dungeon, '.'), 60, 0.25, 5, rng),
+                pts);
+        DungeonUtility.debugPrint(DungeonUtility.hashesToLines(
+                DungeonUtility.wallWrap(MimicFill.sampleToMap(result, '.', '#')),
+                true));
+
 
         /*
         boolean[][] sample2 = new PacMazeGenerator(33, 33, rng).create();

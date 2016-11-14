@@ -1,12 +1,11 @@
 package squidpony.squidgrid.gui.gdx;
 
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-
 import squidpony.SquidTags;
 import squidpony.panel.IColoredString;
+
+import java.util.List;
 
 /**
  * A less abstract version of {@link AbstractTextScreen} tuned for libgdx
@@ -22,6 +21,7 @@ import squidpony.panel.IColoredString;
  * 
  * @see AbstractTextScreen
  */
+@Deprecated
 public abstract class TextScreen extends AbstractTextScreen<Color> {
 
 	protected /* @Nullable */ GroupCombinedPanel<Color> gcp;

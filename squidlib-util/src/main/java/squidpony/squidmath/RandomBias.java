@@ -1,7 +1,6 @@
 package squidpony.squidmath;
 
 import java.io.Serializable;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -35,7 +34,7 @@ import java.util.Map;
  * Created by Tommy Ettinger on 3/20/2016.
  */
 public class RandomBias implements Serializable {
-    private LinkedHashMap<String, Double> biases;
+    private OrderedMap<String, Double> biases;
     public RNG rng;
     public int distribution = EXP_TRI;
 
@@ -97,13 +96,13 @@ public class RandomBias implements Serializable {
 
     public RandomBias()
     {
-        biases = new LinkedHashMap<>(32);
+        biases = new OrderedMap<>(32);
         rng = new RNG();
     }
     public RandomBias(RNG rng)
     {
         this.rng = rng;
-        biases = new LinkedHashMap<>(32);
+        biases = new OrderedMap<>(32);
     }
     public RandomBias(RNG rng, Map<String, Double> mapping)
     {
@@ -113,9 +112,9 @@ public class RandomBias implements Serializable {
         this.rng = rng;
         this.distribution = distribution;
         if (mapping == null) {
-            biases = new LinkedHashMap<>(32);
+            biases = new OrderedMap<>(32);
         } else {
-            biases = new LinkedHashMap<>(mapping.size());
+            biases = new OrderedMap<>(mapping.size());
             double exp;
             for (Map.Entry<String, Double> kv : mapping.entrySet()) {
                 exp = kv.getValue();
@@ -201,7 +200,7 @@ public class RandomBias implements Serializable {
     }
     private double exponentialQuantile(double expected)
     {
-        return 1.0 - Math.pow( rng.nextDouble(), 1.0 / (1.0 - expected) - 1.0);
+        return 0.9999999999999999 - Math.pow( rng.nextDouble(), 1.0 / (1.0 - expected) - 1.0);
     }
     private static float longToFloat(long n)
     {
@@ -363,7 +362,7 @@ public class RandomBias implements Serializable {
         Double d = biases.get(kind);
         if(d == null)
             return rng.nextFloat();
-        return (float)(quantile(d));
+        return (float) quantile(d);
     }
 
     /**
@@ -549,7 +548,7 @@ public class RandomBias implements Serializable {
     {
         if(expectedAverage <= 0) expectedAverage = 0.001;
         if(expectedAverage >= 1) expectedAverage = 0.999;
-        return (float)(quantile(expectedAverage));
+        return (float) quantile(expectedAverage);
     }
 
     /**

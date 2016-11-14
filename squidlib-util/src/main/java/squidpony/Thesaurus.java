@@ -1,18 +1,15 @@
 package squidpony;
 
 import regexodus.*;
-import squidpony.squidmath.CrossHash;
-import squidpony.squidmath.GapShuffler;
-import squidpony.squidmath.RNG;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static squidpony.Maker.*;
+import static squidpony.Maker.makeList;
+import static squidpony.Maker.makeOM;
 
 /**
  * A text processing class that can swap out occurrences of words and replace them with their synonyms.
@@ -20,16 +17,18 @@ import static squidpony.Maker.*;
  */
 public class Thesaurus implements Serializable{
     private static final long serialVersionUID = 3387639905758074640L;
-    protected static final Pattern wordMatch = Pattern.compile("([\\pL`]+)");
-    public LinkedHashMap<String, GapShuffler<String>> mappings;
+    protected static final Pattern wordMatch = Pattern.compile("([\\pL`]+)"),
+            similarFinder = Pattern.compile(".*?\\b(\\w\\w\\w\\w).*?{\\@1}.*$", "ui");
+    public OrderedMap<String, GapShuffler<String>> mappings;
     protected StatefulRNG rng;
+    public transient ArrayList<FakeLanguageGen> randomLanguages = new ArrayList<>(2);
 
     /**
      * Constructs a new Thesaurus with an unseeded RNG used to shuffle word order.
      */
     public Thesaurus()
     {
-        mappings = new LinkedHashMap<>(256);
+        mappings = new OrderedMap<>(256);
         rng = new StatefulRNG();
     }
 
@@ -39,7 +38,7 @@ public class Thesaurus implements Serializable{
      */
     public Thesaurus(RNG rng)
     {
-        mappings = new LinkedHashMap<>(256);
+        mappings = new OrderedMap<>(256);
         this.rng = new StatefulRNG(rng.nextLong());
     }
 
@@ -49,7 +48,7 @@ public class Thesaurus implements Serializable{
      */
     public Thesaurus(long shuffleSeed)
     {
-        mappings = new LinkedHashMap<>(256);
+        mappings = new OrderedMap<>(256);
         this.rng = new StatefulRNG(shuffleSeed);
     }
 
@@ -60,7 +59,7 @@ public class Thesaurus implements Serializable{
      */
     public Thesaurus(String shuffleSeed)
     {
-        mappings = new LinkedHashMap<>(256);
+        mappings = new OrderedMap<>(256);
         this.rng = new StatefulRNG(shuffleSeed);
     }
 
@@ -81,12 +80,14 @@ public class Thesaurus implements Serializable{
     {
         if(synonyms.isEmpty())
             return this;
+        long prevState = rng.getState();
         rng.setState(CrossHash.hash64(synonyms));
         GapShuffler<String> shuffler = new GapShuffler<>(synonyms, rng);
         for(String syn : synonyms)
         {
             mappings.put(syn, shuffler);
         }
+        rng.setState(prevState);
         return this;
     }
 
@@ -103,9 +104,11 @@ public class Thesaurus implements Serializable{
     {
         if(synonyms.isEmpty())
             return this;
+        long prevState = rng.getState();
         rng.setState(CrossHash.hash64(synonyms));
         GapShuffler<String> shuffler = new GapShuffler<>(synonyms, rng);
         mappings.put(keyword, shuffler);
+        rng.setState(prevState);
         return this;
     }
 
@@ -116,21 +119,63 @@ public class Thesaurus implements Serializable{
      * <br>
      * <ul>
      *     <li>"calm`adj`": harmonious, peaceful, pleasant, serene, placid, tranquil, calm</li>
-     *     <li>"calm`noun`": harmony, peace, kindness, serenity, tranquility, calmn</li>
-     *     <li>"org`noun`": fraternity, brotherhood, order, group, foundation</li>
-     *     <li>"org`nouns`": fraternities, brotherhoods, orders, groups, foundations</li>
-     *     <li>"empire`adj`": imperial, princely, kingly, regal, dominant, dynastic, royal, hegemonic, monarchic, ascendant</li>
-     *     <li>"empire`noun`": empire, emirate, kingdom, sultanate, dominion, dynasty, imperium, hegemony, triumvirate, ascendancy</li>
-     *     <li>"empire`nouns`": empires, emirates, kingdoms, sultanates, dominions, dynasties, imperia, hegemonies, triumvirates, ascendancies</li>
+     *     <li>"calm`noun`": harmony, peace, kindness, serenity, tranquility, calm</li>
+     *     <li>"org`noun`": fraternity, brotherhood, order, group, foundation, association, guild, fellowship, partnership</li>
+     *     <li>"org`nouns`": fraternities, brotherhoods, orders, groups, foundations, associations, guilds, fellowships, partnerships</li>
+     *     <li>"empire`adj`": imperial, prince's, king's, sultan's, regal, dynastic, royal, hegemonic, monarchic, ascendant, emir's, lordly</li>
+     *     <li>"empire`noun`": empire, emirate, kingdom, sultanate, dominion, dynasty, imperium, hegemony, triumvirate, ascendancy, monarchy, commonwealth</li>
+     *     <li>"empire`nouns`": empires, emirates, kingdoms, sultanates, dominions, dynasties, imperia, hegemonies, triumvirates, ascendancies, monarchies, commonwealths</li>
+     *     <li>"union`adj`": united, allied, people's, confederated, federated, congressional, independent, associated, unified, democratic</li>
+     *     <li>"union`noun`": union, alliance, coalition, confederation, federation, congress, confederacy, league, faction, republic</li>
+     *     <li>"union`nouns`": unions, alliances, coalitions, confederations, federations, congresses, confederacies, leagues, factions, republics</li>
+     *     <li>"militia`noun`": rebellion, resistance, militia, liberators, warriors, fighters, militants, front, irregulars</li>
+     *     <li>"militia`nouns`": rebellions, resistances, militias, liberators, warriors, fighters, militants, fronts, irregulars</li>
+     *     <li>"gang`noun`": gang, syndicate, mob, crew, posse, mafia, cartel</li>
+     *     <li>"gang`nouns`": gangs, syndicates, mobs, crews, posses, mafias, cartels</li>
      *     <li>"duke`noun`": duke, earl, baron, fief, lord, shogun</li>
      *     <li>"duke`nouns`": dukes, earls, barons, fiefs, lords, shoguns</li>
      *     <li>"duchy`noun`": duchy, earldom, barony, fiefdom, lordship, shogunate</li>
      *     <li>"duchy`nouns`": duchies, earldoms, baronies, fiefdoms, lordships, shogunates</li>
      *     <li>"magical`adj`": arcane, enchanted, sorcerous, ensorcelled, magical, mystical</li>
      *     <li>"holy`adj`": auspicious, divine, holy, sacred, prophetic, blessed, godly</li>
-     *     <li>"unholy`adj`": bewitched, occult, unholy, macabre, accursed, foul, vile</li>
+     *     <li>"unholy`adj`": bewitched, occult, unholy, macabre, accursed, profane, vile</li>
      *     <li>"forest`adj`": natural, primal, verdant, lush, fertile, bountiful</li>
      *     <li>"forest`noun`": nature, forest, greenery, jungle, woodland, grove, copse</li>
+     *     <li>"fancy`adj`": grand, glorious, magnificent, magnanimous, majestic, great, powerful</li>
+     *     <li>"evil`adj`": heinous, scurrilous, terrible, horrible, debased, wicked, evil, malevolent, nefarious, vile</li>
+     *     <li>"good`adj`": righteous, moral, good, pure, compassionate, flawless, perfect</li>
+     *     <li>"sinister`adj`": shadowy, silent, lethal, deadly, fatal, venomous, cutthroat, murderous, bloodstained, stalking</li>
+     *     <li>"sinister`noun`": shadow, silence, assassin, ninja, venom, poison, snake, murder, blood, razor, tiger</li>
+     *     <li>"blade`noun`": blade, knife, sword, axe, stiletto, katana, scimitar, hatchet, spear, glaive, halberd,
+     *               hammer, maul, flail, mace, sickle, scythe, whip, lance, nunchaku, saber, cutlass, trident</li>
+     *     <li>"bow`noun`": bow, longbow, shortbow, crossbow, sling, atlatl, bolas, javelin, net, shuriken, dagger</li>
+     *     <li>"weapon`noun`": blade, knife, sword, axe, stiletto, katana, scimitar, hatchet, spear, glaive, halberd,
+     *               hammer, maul, flail, mace, sickle, scythe, whip, lance, nunchaku, saber, cutlass, trident,
+     *               bow, longbow, shortbow, crossbow, sling, atlatl, bolas, javelin, net, shuriken, dagger</li>
+     *     <li>"musket`noun`": arquebus, blunderbuss, musket, matchlock, flintlock, wheellock, cannon</li>
+     *     <li>"grenade`noun`": rocket, grenade, missile, bomb, warhead, explosive, flamethrower</li>
+     *     <li>"rifle`noun`": pistol, rifle, handgun, firearm, longarm, shotgun</li>
+     *     <li>"blade`nouns`": blades, knives, swords, axes, stilettos, katana, scimitars, hatchets, spears, glaives, halberds,
+     *               hammers, mauls, flails, maces, sickles, scythes, whips, lances, nunchaku, sabers, cutlasses, tridents</li>
+     *     <li>"bow`nouns`": bows, longbows, shortbows, crossbows, slings, atlatls, bolases, javelins, nets, shuriken, daggers</li>
+     *     <li>"weapon`nouns`": blades, knives, swords, axes, stilettos, katana, scimitars, hatchets, spears, glaives, halberds,
+     *               hammers, mauls, flails, maces, sickles, scythes, whips, lances, nunchaku, sabers, cutlasses, tridents,
+     *               bows, longbows, shortbows, crossbows, slings, atlatls, bolases, javelins, nets, shuriken, daggers</li>
+     *     <li>"musket`nouns`": arquebusses, blunderbusses, muskets, matchlocks, flintlocks, wheellocks, cannons</li>
+     *     <li>"grenade`nouns`": rockets, grenades, missiles, bombs, warheads, explosives, flamethrowers</li>
+     *     <li>"rifle`nouns`": pistols, rifles, handguns, firearms, longarms, shotguns</li>
+     *     <li>"tech`adj`": cyber, digital, electronic, techno, hacker, crypto, turbo, mechanical, servo</li>
+     *     <li>"sole`adj`": sole, true, singular, total, ultimate, final, last</li>
+     *     <li>"light`adj`": bright, glowing, solar, stellar, lunar, radiant, luminous, shimmering</li>
+     *     <li>"light`noun`": light, glow, sun, star, moon, radiance, dawn, torch</li>
+     *     <li>"light`nouns`": lights, glimmers, suns, stars, moons, torches</li>
+     *     <li>"smart`adj`": brilliant, smart, genius, wise, clever, cunning, mindful, aware</li>
+     *     <li>"smart`noun`": genius, wisdom, cunning, awareness, mindfulness, acumen, smarts, knowledge</li>
+     *     <li>"bandit`noun`": thief, raider, bandit, rogue, brigand, highwayman, pirate</li>
+     *     <li>"bandit`nouns`": thieves, raiders, bandits, rogues, brigands, highwaymen, pirates</li>
+     *     <li>"guard`noun`": protector, guardian, warden, defender, guard, shield, sentinel, watchman, knight</li>
+     *     <li>"guard`nouns`": protectors, guardians, wardens, defenders, guards, shields, sentinels, watchmen, knights</li>
+     *     <li>"rage`noun`": rage, fury, anger, wrath, frenzy, vengeance</li>
      * </ul>
      * Capitalizing the first letter in the keyword where it appears in text you call process() on will capitalize the
      * first letter of the produced fake word. Capitalizing the second letter will capitalize the whole produced fake
@@ -217,12 +262,12 @@ public class Thesaurus implements Serializable{
         String word2 = word.toLowerCase();
         if(mappings.containsKey(word2))
         {
-            String nx = mappings.get(word2).getNext();
+            String nx = mappings.get(word2).next();
             if(nx.isEmpty())
                 return nx;
-            if(word.length() > 1 && Character.isUpperCase(word.charAt(1)))
+            if(word.length() > 1 && Category.Lu.contains(word.charAt(1)))
                 return nx.toUpperCase();
-            if(Character.isUpperCase(word.charAt(0)))
+            if(Category.Lu.contains(word.charAt(0)))
             {
                 return Character.toUpperCase(nx.charAt(0)) + nx.substring(1, nx.length());
             }
@@ -239,7 +284,50 @@ public class Thesaurus implements Serializable{
         }
     }
 
-    public static LinkedHashMap<String, ArrayList<String>> categories = makeLHM(
+    private class RandomLanguageSubstitution implements Substitution
+    {
+        @Override
+        public void appendSubstitution(MatchResult match, TextBuffer dest) {
+            FakeLanguageGen lang = FakeLanguageGen.randomLanguage(rng.nextLong());
+            randomLanguages.add(lang);
+            dest.append(lang.word(rng, true));
+        }
+    }
+
+    /**
+     * Generates a random possible name for a nation, such as "Iond-Gouccief Alliance" or "The Last Drayo Commonwealth".
+     * Needs {@link #addKnownCategories()} to be called on this Thesaurus first. May use accented characters, as in
+     * "Thùdshù-Hyóttiálb Hegemony" or "The Glorious Chô Empire"; if you want to strip these out and replace accented
+     * chars with their un-accented counterparts, you can use {@link FakeLanguageGen#removeAccents(CharSequence)}, which
+     * returns a CharSequence that can be converted to String if needed. Shortly after calling this method, but before
+     * calling it again, you can retrieve the generated random languages, if any were used while making nation names, by
+     * getting the FakeLanguageGen elements of this class' {@link #randomLanguages} field. Using one of these
+     * FakeLanguageGen objects, you can produce many more words with a similar style to the nation name, like "Drayo" in
+     * "The Last Drayo Commonwealth". If more than one language was used in the nation name, as in "Thùdshù-Hyóttiálb
+     * Hegemony", you will have two languages in randomLanguages, so here "Thùdshù" would be generated by the first
+     * language, and "Hyóttiálb" by the second language. Calling this method replaces the current contents of
+     * randomLanguages, so if you want to use those languages, get them while you can.
+     *
+     * @return a random name for a nation or a loose equivalent to a nation, as a String
+     */
+    public String makeNationName()
+    {
+        String working = process(rng.getRandomElement(nationTerms));
+        int frustration = 0;
+        while (frustration++ < 8 && similarFinder.matches(working))
+            working = process(rng.getRandomElement(nationTerms));
+        randomLanguages.clear();
+        RandomLanguageSubstitution sub = new RandomLanguageSubstitution();
+        Replacer replacer = Pattern.compile("@").replacer(sub);
+        return replacer.replace(working);
+    }
+
+    private static final String[] nationTerms = new String[]{
+            "Union`adj` Union`noun` of @", "Union`adj` @ Union`noun`", "@ Union`noun`", "@ Union`noun`", "@-@ Union`noun`", "Union`adj` Union`noun` of @",
+            "Union`adj` Duchy`nouns` of @",  "The @ Duchy`noun`", "The Fancy`adj` @ Duchy`noun`", "The Sole`adj` @ Empire`noun`",
+            "@ Empire`noun`", "@ Empire`noun`", "@ Empire`noun`", "@-@ Empire`noun`", "The Fancy`adj` @ Empire`noun`", "The Fancy`adj` @ Empire`noun`", "The Holy`adj` @ Empire`noun`",};
+
+    public static final OrderedMap<String, ArrayList<String>> categories = makeOM(
             "calm`adj`",
             makeList("harmonious", "peaceful", "pleasant", "serene", "placid", "tranquil", "calm"),
             "calm`noun`",
@@ -249,15 +337,17 @@ public class Thesaurus implements Serializable{
             "org`nouns`",
             makeList("fraternities", "brotherhoods", "orders", "groups", "foundations", "associations", "guilds", "fellowships", "partnerships"),
             "empire`adj`",
-            makeList("imperial", "princely", "kingly", "regal", "dominant", "dynastic", "royal", "hegemonic", "monarchic", "ascendant"),
+            makeList("imperial", "prince's", "king's", "sultan's", "regal", "dynastic", "royal", "hegemonic", "monarchic", "ascendant", "emir's", "lordly"),
             "empire`noun`",
-            makeList("empire", "emirate", "kingdom", "sultanate", "dominion", "dynasty", "imperium", "hegemony", "triumvirate", "ascendancy"),
+            makeList("empire", "emirate", "kingdom", "sultanate", "dominion", "dynasty", "imperium", "hegemony", "triumvirate", "ascendancy", "monarchy", "commonwealth"),
             "empire`nouns`",
-            makeList("empires", "emirates", "kingdoms", "sultanates", "dominions", "dynasties", "imperia", "hegemonies", "triumvirates", "ascendancies"),
+            makeList("empires", "emirates", "kingdoms", "sultanates", "dominions", "dynasties", "imperia", "hegemonies", "triumvirates", "ascendancies", "monarchies", "commonwealths"),
+            "union`adj`",
+            makeList("united", "allied", "people's", "confederated", "federated", "congressional", "independent", "associated", "unified", "democratic"),
             "union`noun`",
-            makeList("union", "alliance", "coalition", "confederation", "federation", "congress", "confederacy", "league", "faction"),
+            makeList("union", "alliance", "coalition", "confederation", "federation", "congress", "confederacy", "league", "faction", "republic"),
             "union`nouns`",
-            makeList("unions", "alliances", "coalitions", "confederations", "federations", "congresses", "confederacies", "leagues", "factions"),
+            makeList("unions", "alliances", "coalitions", "confederations", "federations", "congresses", "confederacies", "leagues", "factions", "republics"),
             "militia`noun`",
             makeList("rebellion", "resistance", "militia", "liberators", "warriors", "fighters", "militants", "front", "irregulars"),
             "militia`nouns`",
@@ -291,9 +381,9 @@ public class Thesaurus implements Serializable{
             "good`adj`",
             makeList("righteous", "moral", "good", "pure", "compassionate", "flawless", "perfect"),
             "sinister`adj`",
-            makeList("shadowy", "silent", "lethal", "deadly", "fatal", "venomous", "cutthroat", "murderous", "bloodstained"),
+            makeList("shadowy", "silent", "lethal", "deadly", "fatal", "venomous", "cutthroat", "murderous", "bloodstained", "stalking"),
             "sinister`noun`",
-            makeList("shadow", "silence", "assassin", "ninja", "venom", "poison", "snake", "murder", "blood", "razor"),
+            makeList("shadow", "silence", "assassin", "ninja", "venom", "poison", "snake", "murder", "blood", "razor", "tiger"),
             "blade`noun`",
             makeList("blade", "knife", "sword", "axe", "stiletto", "katana", "scimitar", "hatchet", "spear", "glaive", "halberd",
                     "hammer", "maul", "flail", "mace", "sickle", "scythe", "whip", "lance", "nunchaku", "saber", "cutlass", "trident"),
@@ -327,7 +417,9 @@ public class Thesaurus implements Serializable{
             "tech`adj`",
             makeList("cyber", "digital", "electronic", "techno", "hacker", "crypto", "turbo", "mechanical", "servo"),
             "sole`adj`",
-            makeList("sole", "true", "singular", "total", "ultimate", "final"),
+            makeList("sole", "true", "singular", "total", "ultimate", "final", "last"),
+            "light`adj`",
+            makeList("bright", "glowing", "solar", "stellar", "lunar", "radiant", "luminous", "shimmering"),
             "light`noun`",
             makeList("light", "glow", "sun", "star", "moon", "radiance", "dawn", "torch"),
             "light`nouns`",
@@ -347,7 +439,7 @@ public class Thesaurus implements Serializable{
             "rage`noun`",
             makeList("rage", "fury", "anger", "wrath", "frenzy", "vengeance")
             ),
-            languages = makeLHM(
+            languages = makeOM(
             "lc`gen`",
             makeList("lahatos", "iatsiltak", "hmimrekaarl", "yixaltaishk", "cthupaxa", "zvroggamraa", "ixaakran"),
             "jp`gen`",

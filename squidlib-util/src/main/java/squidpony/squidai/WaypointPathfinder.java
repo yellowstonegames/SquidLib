@@ -8,6 +8,9 @@ import squidpony.squidmath.PoissonDisk;
 import squidpony.squidmath.RNG;
 import squidpony.squidmath.StatefulRNG;
 
+import squidpony.squidmath.OrderedMap;
+import squidpony.squidmath.OrderedSet;
+
 import java.util.*;
 
 import static squidpony.squidmath.CoordPacker.*;
@@ -24,7 +27,7 @@ public class WaypointPathfinder {
     private char[][] map;
     private int[][] expansionMap;
     public RNG rng;
-    private LinkedHashMap<Coord, LinkedHashMap<Coord, Edge>> waypoints;
+    private OrderedMap<Coord, OrderedMap<Coord, Edge>> waypoints;
 
     /**
      * Calculates and stores the doors and doors-like connections ("chokepoints") on the given map as waypoints.
@@ -48,7 +51,7 @@ public class WaypointPathfinder {
                 Math.min(width, height) * 0.4f, this.rng, '#');
         int centerCount = centers.size();
         expansionMap = new int[width][height];
-        waypoints = new LinkedHashMap<>(64);
+        waypoints = new OrderedMap<>(64);
         dm = new DijkstraMap(simplified, DijkstraMap.Measurement.MANHATTAN);
 
         for (Coord center : centers) {
@@ -79,7 +82,7 @@ public class WaypointPathfinder {
             }
         }
 
-        LinkedHashSet<Coord> chokes = new LinkedHashSet<>(128);
+        OrderedSet<Coord> chokes = new OrderedSet<>(128);
         for (int i = 0; i < width; i++) {
             ELEMENT_WISE:
             for (int j = 0; j < height; j++) {
@@ -101,7 +104,7 @@ public class WaypointPathfinder {
                 if(good) {
                     Coord chk = Coord.get(i, j);
                     chokes.add(chk);
-                    waypoints.put(chk, new LinkedHashMap<Coord, Edge>());
+                    waypoints.put(chk, new OrderedMap<Coord, Edge>());
                 }
             }
         }
@@ -135,7 +138,7 @@ public class WaypointPathfinder {
         dm = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));
 
         int e = 0;
-        for(Map.Entry<Coord, LinkedHashMap<Coord, Edge>> n : waypoints.entrySet())
+        for(Map.Entry<Coord, OrderedMap<Coord, Edge>> n : waypoints.entrySet())
         {
             chokes.remove(n.getKey());
             if(chokes.isEmpty())
@@ -171,8 +174,8 @@ public class WaypointPathfinder {
         height = map[0].length;
         char[][] simplified = DungeonUtility.simplifyDungeon(map);
         expansionMap = new int[width][height];
-        waypoints = new LinkedHashMap<>(64);
-        LinkedHashSet<Coord> chokes = new LinkedHashSet<>(128);
+        waypoints = new OrderedMap<>(64);
+        OrderedSet<Coord> chokes = new OrderedSet<>(128);
 
         if(thickCorridors)
         {
@@ -183,7 +186,7 @@ public class WaypointPathfinder {
             Coord[] apart = apartPacked(doors, 1);
             Collections.addAll(chokes, apart);
             for (int i = 0; i < apart.length; i++) {
-                waypoints.put(apart[i], new LinkedHashMap<Coord, Edge>());
+                waypoints.put(apart[i], new OrderedMap<Coord, Edge>());
             }
         }
         else {
@@ -241,7 +244,7 @@ public class WaypointPathfinder {
                     if (good) {
                         Coord chk = Coord.get(i, j);
                         chokes.add(chk);
-                        waypoints.put(chk, new LinkedHashMap<Coord, Edge>());
+                        waypoints.put(chk, new OrderedMap<Coord, Edge>());
                     }
                 }
             }
@@ -250,7 +253,7 @@ public class WaypointPathfinder {
         dm = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));
 
         int e = 0;
-        for(Map.Entry<Coord, LinkedHashMap<Coord, Edge>> n : waypoints.entrySet())
+        for(Map.Entry<Coord, OrderedMap<Coord, Edge>> n : waypoints.entrySet())
         {
             chokes.remove(n.getKey());
             if(chokes.isEmpty())
@@ -292,20 +295,20 @@ public class WaypointPathfinder {
         height = map[0].length;
         char[][] simplified = DungeonUtility.simplifyDungeon(map);
         expansionMap = new int[width][height];
-        waypoints = new LinkedHashMap<>(64);
-        LinkedHashSet<Coord> chokes = new LinkedHashSet<>(128);
+        waypoints = new OrderedMap<>(64);
+        OrderedSet<Coord> chokes = new OrderedSet<>(128);
 
         short[] floors = pack(simplified, '.');
         Coord[] apart = fractionPacked(floors, fraction);
         Collections.addAll(chokes, apart);
         for (int i = 0; i < apart.length; i++) {
-            waypoints.put(apart[i], new LinkedHashMap<Coord, Edge>());
+            waypoints.put(apart[i], new OrderedMap<Coord, Edge>());
         }
 
         dm = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));
 
         int e = 0;
-        for(Map.Entry<Coord, LinkedHashMap<Coord, Edge>> n : waypoints.entrySet())
+        for(Map.Entry<Coord, OrderedMap<Coord, Edge>> n : waypoints.entrySet())
         {
             chokes.remove(n.getKey());
             if(chokes.isEmpty())
@@ -345,7 +348,7 @@ public class WaypointPathfinder {
                 Math.min(width, height) * 0.4f, this.rng, '#');
         int centerCount = centers.size();
         expansionMap = new int[width][height];
-        waypoints = new LinkedHashMap<>(64);
+        waypoints = new OrderedMap<>(64);
         dm = new DijkstraMap(simplified, DijkstraMap.Measurement.MANHATTAN);
 
         for (Coord center : centers) {
@@ -376,7 +379,7 @@ public class WaypointPathfinder {
             }
         }
 
-        LinkedHashSet<Coord> chokes = new LinkedHashSet<>(128);
+        OrderedSet<Coord> chokes = new OrderedSet<>(128);
         for (int i = 0; i < width; i++) {
             ELEMENT_WISE:
             for (int j = 0; j < height; j++) {
@@ -397,13 +400,13 @@ public class WaypointPathfinder {
                 if(good) {
                     Coord chk = Coord.get(i, j);
                     chokes.add(chk);
-                    waypoints.put(chk, new LinkedHashMap<Coord, Edge>());
+                    waypoints.put(chk, new OrderedMap<Coord, Edge>());
                 }
             }
         }
         dm = dijkstra;
         int e = 0;
-        for(Map.Entry<Coord, LinkedHashMap<Coord, Edge>> n : waypoints.entrySet())
+        for(Map.Entry<Coord, OrderedMap<Coord, Edge>> n : waypoints.entrySet())
         {
             chokes.remove(n.getKey());
             if(chokes.isEmpty())
@@ -484,9 +487,9 @@ public class WaypointPathfinder {
         return dm.findShortcutPath(currentPosition, path.toArray(new Coord[path.size()]));
     }
 
-    public LinkedHashSet<Coord> getWaypoints()
+    public OrderedSet<Coord> getWaypoints()
     {
-        return new LinkedHashSet<>(waypoints.keySet());
+        return new OrderedSet<>(waypoints.keySet());
     }
 
     private static class Edge implements Comparable<Edge>

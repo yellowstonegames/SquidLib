@@ -1,9 +1,11 @@
 package squidpony.examples;
 
+import squidpony.GwtCompatibility;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.*;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.OrderedSet;
 import squidpony.squidmath.RNG;
 import squidpony.squidmath.StatefulRNG;
 
@@ -77,8 +79,8 @@ import java.io.IOException;
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
 public class DungeonGeneratorTest {
-    public static int width = 100, height = 100, depth = 16;
-    public static void main( String[] args )
+    public static int width = 70, height = 70, depth = 16;
+    public static void main(String[] args )
     {
         //seed is, in base 36, the number SQUIDLIB
         StatefulRNG rng = new StatefulRNG(2252637788195L);
@@ -113,8 +115,8 @@ public class DungeonGeneratorTest {
         rng.setState(2252637788195L);
         SerpentMapGenerator serpent = new SerpentMapGenerator(width, height, rng, 0.2);
         serpent.putWalledBoxRoomCarvers(5);
-        serpent.putWalledRoundRoomCarvers(3);
-        serpent.putCaveCarvers(6);
+        serpent.putRoundRoomCarvers(3);
+        serpent.putCaveCarvers(3);
         char[][] map = serpent.generate();
         dungeonGenerator.generate(map);
 
@@ -133,19 +135,19 @@ public class DungeonGeneratorTest {
         //sdg.addWater(SectionDungeonGenerator.CAVE, 13);
         sdg.addBoulders(SectionDungeonGenerator.ALL, 13);
         sdg.addWater(SectionDungeonGenerator.CAVE, 9);
-        sdg.addMaze(30);
-        sdg.addLake(10, '£', '¢');
+        sdg.addMaze(15);
+        sdg.addLake(8, '£', '¢');
         rng.setState(0xFEEEEEEEEEL);
         serpent = new SerpentMapGenerator(width, height, rng, 0.2);
         serpent.putWalledBoxRoomCarvers(5);
-        serpent.putWalledRoundRoomCarvers(3);
+        serpent.putRoundRoomCarvers(3);
         serpent.putCaveCarvers(3);
         map = serpent.generate();
         int[][] env = serpent.getEnvironment();
         sdg.generate(map, env);
         //RNG rand = new RNG();
         //sdg.generate(rand.getRandomElement(TilesetType.values()));
-        sdungeon = sdg.getDungeon();
+        sdungeon = GwtCompatibility.copy2D(sdg.getDungeon());
         sdungeon[sdg.stairsUp.x][sdg.stairsUp.y] = '<';
         sdungeon[sdg.stairsDown.x][sdg.stairsDown.y] = '>';
 
@@ -168,8 +170,8 @@ public class DungeonGeneratorTest {
             }
         }
         */
-        /*
-        for(LinkedHashSet<Coord> lhs : sdg.placement.getAlongStraightWalls())
+
+        for(OrderedSet<Coord> lhs : sdg.placement.getAlongStraightWalls())
         {
             for(Coord c : lhs)
             {
@@ -177,7 +179,7 @@ public class DungeonGeneratorTest {
             }
         }
 
-        for(LinkedHashSet<Coord> lhs : sdg.placement.getCorners())
+        for(OrderedSet<Coord> lhs : sdg.placement.getCorners())
         {
             for(Coord c : lhs)
             {
@@ -185,23 +187,23 @@ public class DungeonGeneratorTest {
             }
         }
 
-        for(LinkedHashSet<Coord> lhs : sdg.placement.getCenters())
+        for(OrderedSet<Coord> lhs : sdg.placement.getCenters())
         {
             for(Coord c : lhs)
             {
                 sdungeon[c.x][c.y] = '$';
             }
         }
-        */
+
         for(Coord c : sdg.placement.getHidingPlaces(Radius.CIRCLE, 8)) {
             sdungeon[c.x][c.y] = 'h';
         }
         // Just a little fun with Java that uses no alphanumerics other than keywords to express "Hello, World!"
         //char[] __ = new char[]{'$' << (',' ^ '-'), '`' | ('-' - '('), '$' << (',' ^ '-') | '$', '$' << (',' ^ '-') | '$', '/' + '@', ',', ' ', '(' + '/', '/' + '@', '(' + '%' + '%', '$' << (',' ^ '-') | '$', '*' + ':', '!'};
 
-        sdg.setDungeon(DungeonUtility.doubleWidth(
+        dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
                 DungeonUtility.hashesToLines(sdungeon, true)));
-        System.out.println(sdg);
+        System.out.println(dungeonGenerator);
         System.out.println("------------------------------------------------------------");
 
 /*
@@ -277,6 +279,7 @@ public class DungeonGeneratorTest {
         rng.setState(0xFEEEEEEEEEL);
         DenseRoomMapGenerator dense = new DenseRoomMapGenerator(width, height, rng);
         map = dense.generate();
+        DungeonUtility.ensurePath(map, rng, '\t', '#');
         env = dense.getEnvironment();
         sdg.addDoors(80, false);
         sdg.generate(map, env);
@@ -384,7 +387,7 @@ public class DungeonGeneratorTest {
 
         System.out.println("------------------------------------------------------------");
         */
-/*
+        /*
         rng.setState(2252637788195L);
         SerpentDeepMapGenerator deepSerpent = new SerpentDeepMapGenerator(width, height, depth, rng, 0.15);
         deepSerpent.putWalledBoxRoomCarvers(2);
@@ -408,7 +411,60 @@ public class DungeonGeneratorTest {
             System.out.println("------------------------------------------------------------");
 
         }
-*/
+
+        for(int k : new int[]{ThinDungeonGenerator.CAVE_WALL_NORMAL | ThinDungeonGenerator.CORRIDOR_WALL_NORMAL | ThinDungeonGenerator.ROOM_WALL_NORMAL,
+                ThinDungeonGenerator.CAVE_WALL_RETRACT | ThinDungeonGenerator.CORRIDOR_WALL_RETRACT | ThinDungeonGenerator.ROOM_WALL_RETRACT,
+                ThinDungeonGenerator.CAVE_WALL_CHAOTIC | ThinDungeonGenerator.CORRIDOR_WALL_EXPAND | ThinDungeonGenerator.ROOM_WALL_EXPAND
+        }) {
+            ThinDungeonGenerator tdg = new ThinDungeonGenerator(width, height, rng, k, 0, 0);
+            tdg.addDoors(12, false);
+            //tdg.addWater(SectionDungeonGenerator.CAVE, 13);
+            //tdg.addBoulders(SectionDungeonGenerator.ALL, 13);
+            tdg.addWater(SectionDungeonGenerator.CAVE, 9);
+            tdg.addMaze(30);
+            tdg.addLake(10, '£', '¢');
+            rng.setState(0xFEEEEEEEEEL);
+            serpent = new SerpentMapGenerator(width, height, rng, 0.2);
+            serpent.putWalledBoxRoomCarvers(5);
+            serpent.putWalledRoundRoomCarvers(3);
+            serpent.putCaveCarvers(4);
+            map = serpent.generate();
+            env = serpent.getEnvironment();
+            tdg.generate(map, env);
+            //RNG rand = new RNG();
+            //tdg.generate(rand.getRandomElement(TilesetType.values()));
+            sdungeon = GwtCompatibility.copy2D(tdg.getDungeon());
+            sdungeon[tdg.stairsUp.x][tdg.stairsUp.y] = '<';
+            sdungeon[tdg.stairsDown.x][tdg.stairsDown.y] = '>';
+            //System.out.println(tdg);
+            tdg.setDungeon(DungeonUtility.hashesToLines(sdungeon, true));
+            System.out.println(tdg);
+        }
+
+        sdg = new SectionDungeonGenerator(width, height, rng);
+        sdg.addDoors(12, false);
+        //tdg.addWater(SectionDungeonGenerator.CAVE, 13);
+        //tdg.addBoulders(SectionDungeonGenerator.ALL, 13);
+        sdg.addWater(SectionDungeonGenerator.CAVE, 9);
+        sdg.addMaze(30);
+        sdg.addLake(10, '£', '¢');
+        rng.setState(0xFEEEEEEEEEL);
+        serpent = new SerpentMapGenerator(width, height, rng, 0.2);
+        serpent.putWalledBoxRoomCarvers(5);
+        serpent.putWalledRoundRoomCarvers(3);
+        serpent.putCaveCarvers(4);
+        map = serpent.generate();
+        env = serpent.getEnvironment();
+        sdg.generate(map, env);
+        //RNG rand = new RNG();
+        //tdg.generate(rand.getRandomElement(TilesetType.values()));
+        sdungeon = GwtCompatibility.copy2D(sdg.getDungeon());
+        sdungeon[sdg.stairsUp.x][sdg.stairsUp.y] = '<';
+        sdungeon[sdg.stairsDown.x][sdg.stairsDown.y] = '>';
+        //System.out.println(sdg);
+        sdg.setDungeon(DungeonUtility.hashesToLines(sdungeon, true));
+        System.out.println(sdg);
+        */
     }
     // Generates a preview webpage when given the right images.
     // See the following for generated images with different parameters (scroll down and right to see the map)
@@ -419,26 +475,27 @@ public class DungeonGeneratorTest {
     // them in a project, maybe ask to see if there's a newer version already made or in progress.
     public static void mainAlt(String[] args ) {
         RNG rng = new RNG(2252637788195L);
-        SectionDungeonGenerator dungeonGenerator = new SectionDungeonGenerator(120, 120, rng);
+        SectionDungeonGenerator dungeonGenerator = new SectionDungeonGenerator(width, width, rng);
         dungeonGenerator.addDoors(15, true);
-        dungeonGenerator.addWater(SectionDungeonGenerator.CAVE, 15);
+        //dungeonGenerator.addWater(SectionDungeonGenerator.CAVE, 15);
         dungeonGenerator.addGrass(SectionDungeonGenerator.CAVE, 15);
         dungeonGenerator.addBoulders(SectionDungeonGenerator.ALL, 6);
-        dungeonGenerator.addLake(20);
-        SerpentMapGenerator serpent = new SerpentMapGenerator(120, 120, rng, 0.1);
-        serpent.putWalledBoxRoomCarvers(3);
-        serpent.putWalledRoundRoomCarvers(1);
-        serpent.putCaveCarvers(6);
+        dungeonGenerator.addMaze(4);
+        dungeonGenerator.addLake(15);
+        SerpentMapGenerator serpent = new SerpentMapGenerator(width, width, rng, 0.12);
+        serpent.putWalledBoxRoomCarvers(4);
+        serpent.putWalledRoundRoomCarvers(2);
+        serpent.putCaveCarvers(5);
         //dungeonGenerator.generate(serpent.generate(), serpent.getEnvironment());
         dungeonGenerator.generate();
 
         dungeonGenerator.setDungeon(
                 DungeonUtility.hashesToLines(dungeonGenerator.getDungeon(), true));
         char[][] iso = dungeonGenerator.getDungeon();
-        int[][] water = new int[120][120];
-        for (int i = 0; i < 120; i++)
+        int[][] water = new int[width][width];
+        for (int i = 0; i < width; i++)
         {
-            for (int j = 0; j < 120; j++)
+            for (int j = 0; j < width; j++)
             {
                 water[i][j] = -1;
             }
@@ -459,22 +516,22 @@ public class DungeonGeneratorTest {
                 "palette0_Hero_Plate_Bow_Iso.gif",
                 "palette0_Hero_Plate_Dagger_Iso.gif",
                 "palette0_Hero_Plate_Mace_Iso.gif",
-                "palette0_Hero_Plate_Robe_Iso.gif",
                 "palette0_Hero_Plate_Staff_Iso.gif",
                 "palette0_Hero_Plate_Sword_Iso.gif",
                 "palette0_Hero_Robe_Bow_Iso.gif",
                 "palette0_Hero_Robe_Dagger_Iso.gif",
+                "palette0_Hero_Robe_Mace_Iso.gif",
                 "palette0_Hero_Robe_Staff_Iso.gif",
                 "palette0_Hero_Robe_Sword_Iso.gif"
         };
-        for(int row = 0, sx = -59, sy = 59; row < 240; ++row, even = (row % 2 == 0), sx += (even) ? 1 : 0, sy += (!even) ? 1 : 0)
+        for(int row = 0, sx = 1 - (width>>1), sy = (width>>1) - 1; row < (width<<1); ++row, even = (row % 2 == 0), sx += (even) ? 1 : 0, sy += (!even) ? 1 : 0)
         {
             sb.append("<div class=\"row\">\n");
-            for(int col = 0; col < 120; col++)
+            for(int col = 0; col < width; col++)
             {
                 int x = sx + col;
                 int y = sy - col;
-                if(x < 0 || y < 0 || x > 119 || y > 119)
+                if(x < 0 || y < 0 || x >= width || y >= width)
                 {
                     sb.append("<div class=\"isotile\"></div>\n");
                 }
@@ -484,11 +541,11 @@ public class DungeonGeneratorTest {
                     {
                         case '.':
                             sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Floor_Huge_face" + rng.nextInt(4) + "_0.png\" />");
-                            if(rng.nextInt(120) == 0) {
+                            /*if(rng.nextInt(120) == 0) {
                                 sb.append("<img class=\"ppl\" src=\"dungeon/");
                                 sb.append(rng.getRandomElement(people));
                                 sb.append("\" />");
-                            }
+                            }*/
                             sb.append("</div>\n");
                             break;
                         case '"':
@@ -502,8 +559,8 @@ public class DungeonGeneratorTest {
                         case ',':
                             water[x][y] = rng.nextInt(16);
                             if(water[x][y-1] > -1) water[x][y] = (water[x][y] & 14) | ((water[x][y-1] & 4) >> 2);
-                            if(water[x][y+1] > -1) water[x][y] = (water[x][y] & 11) | ((water[x][y+1] & 1) * 4);
-                            if(water[x-1][y] > -1) water[x][y] = (water[x][y] & 7)  | ((water[x-1][y] & 2) * 4);
+                            if(water[x][y+1] > -1) water[x][y] = (water[x][y] & 11) | ((water[x][y+1] & 1) << 2);
+                            if(water[x-1][y] > -1) water[x][y] = (water[x][y] & 7)  | ((water[x-1][y] & 2) << 2);
                             if(water[x+1][y] > -1) water[x][y] = (water[x][y] & 13) | ((water[x+1][y] & 8) >> 2);
 
                             sb.append("<div class=\"isotile\"><img src=\"dungeon/palette0_Water_Huge_face0_" + (Integer.toHexString(water[x][y])) + ".png\" /></div>\n");
@@ -563,7 +620,7 @@ public class DungeonGeneratorTest {
             sb.append("</div>\n");
         }
         try {
-            FileWriter fw = new FileWriter("data.html");
+            FileWriter fw = new FileWriter("Unoccupied.html");
             fw.write(sb.toString());
             fw.close();
         } catch (IOException e) {

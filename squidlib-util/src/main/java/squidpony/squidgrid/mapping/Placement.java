@@ -3,11 +3,8 @@ package squidpony.squidgrid.mapping;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
 import squidpony.squidmath.Coord;
-
-import java.util.Collections;
-import java.util.LinkedHashSet;
-
-import static squidpony.squidmath.CoordPacker.*;
+import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.OrderedSet;
 
 /**
  * Utility class for finding areas where game-specific terrain features might be suitable to place.
@@ -22,11 +19,10 @@ public class Placement {
      */
     public RoomFinder finder;
 
-    private short[] allRooms = ALL_WALL, allCaves = ALL_WALL, allCorridors = ALL_WALL, allFloors = ALL_WALL,
-            nonRoom;
-    private LinkedHashSet<LinkedHashSet<Coord>> alongStraightWalls = null,
+    private GreasedRegion allRooms, allCorridors, allCaves, allFloors, nonRoom;
+    private OrderedSet<OrderedSet<Coord>> alongStraightWalls = null,
             corners = null, centers = null;
-    private LinkedHashSet<Coord> hidingPlaces = null;
+    private OrderedSet<Coord> hidingPlaces = null;
     private Placement()
     {
 
@@ -46,85 +42,77 @@ public class Placement {
 
         this.finder = finder;
 
-        for(short[] region : finder.rooms.keys())
+        /*
+        allRooms = new GreasedRegion(finder.width, finder.height);
+        allCorridors = new GreasedRegion(finder.width, finder.height);
+        allCaves = new GreasedRegion(finder.width, finder.height);
+        allFloors = new GreasedRegion(finder.width, finder.height);
+
+        for(GreasedRegion region : finder.rooms.keySet())
         {
-            allRooms = unionPacked(allRooms, region);
+            allRooms.or(region);
         }
-        for(short[] region : finder.caves.keys())
+        for(GreasedRegion region : finder.corridors.keySet())
         {
-            allCaves = unionPacked(allCaves, region);
+            allCorridors.or(region);
         }
-        for(short[] region : finder.corridors.keys())
+        for(GreasedRegion region : finder.caves.keySet())
         {
-            allCorridors = unionPacked(allCorridors, region);
+            allCaves.or(region);
         }
-        allFloors = unionPacked(unionPacked(allRooms, allCorridors), allCaves);
-        nonRoom = expand(unionPacked(allCorridors, allCaves), 2, finder.width, finder.height, false);
+        */
+        allCorridors = finder.allCorridors;
+        allRooms = finder.allRooms;
+        allCaves = finder.allCaves;
+        allFloors = allRooms.copy().or(allCorridors).or(allCaves);
+        nonRoom = allCorridors.copy().or(allCaves).expand(2);
     }
 
     /**
-     * Gets a LinkedHashSet of LinkedHashSet of Coord, where each inner LinkedHashSet of Coord refers to a placement
+     * Gets an OrderedSet of OrderedSet of Coord, where each inner OrderedSet of Coord refers to a placement
      * region along a straight wall with length 3 or more, not including corners. Each Coord refers to a single cell
      * along the straight wall. This could be useful for placing weapon racks in armories, chalkboards in schoolrooms
      * (tutorial missions, perhaps?), or even large paintings/murals in palaces.
      * @return a set of sets of Coord where each set of Coord is a wall's viable placement for long things along it
      */
-    public LinkedHashSet<LinkedHashSet<Coord>> getAlongStraightWalls() {
+    public OrderedSet<OrderedSet<Coord>> getAlongStraightWalls() {
         if(alongStraightWalls == null)
         {
-            alongStraightWalls = new LinkedHashSet<>(32);
-            short[] working;
-            for(short[] region : finder.rooms.keys()) {
-                working =
-                        differencePacked(
-                                fringe(
-                                        retract(region, 1, finder.width, finder.height, false),
-                                        1, finder.width, finder.height, false),
-                                nonRoom);
-                for (short[] sp : split(working)) {
-                    if (count(sp) >= 3)
-                        alongStraightWalls.add(arrayToSet(allPacked(sp)));
+            alongStraightWalls = new OrderedSet<>(32);
+            GreasedRegion working = new GreasedRegion(finder.width, finder.height);
+            for(GreasedRegion region : finder.rooms.keySet()) {
+                working.remake(region).retract().fringe().andNot(nonRoom);
+                for (GreasedRegion sp : working.split()) {
+                    if (sp.size() >= 3)
+                        alongStraightWalls.add(arrayToSet(sp.asCoords()));
                 }
             }
-
         }
         return alongStraightWalls;
     }
 
     /**
-     * Gets a LinkedHashSet of LinkedHashSet of Coord, where each inner LinkedHashSet of Coord refers to a room's
+     * Gets an OrderedSet of OrderedSet of Coord, where each inner OrderedSet of Coord refers to a room's
      * corners, and each Coord is one of those corners. There are more uses for corner placement than I can list. This
      * doesn't always identify all corners, since it only finds ones in rooms, and a cave too close to a corner can
      * cause that corner to be ignored.
      * @return a set of sets of Coord where each set of Coord is a room's corners
      */
-    public LinkedHashSet<LinkedHashSet<Coord>> getCorners() {
+    public OrderedSet<OrderedSet<Coord>> getCorners() {
         if(corners == null)
         {
-            corners = new LinkedHashSet<>(32);
-            short[] working;
-            for(short[] region : finder.rooms.keys()) {
-                working =
-                        differencePacked(
-                                differencePacked(region,
-                                        retract(
-                                                expand(region, 1, finder.width, finder.height, false),
-                                                1, finder.width, finder.height, true)
-                                ),
-                                nonRoom);
-                for(Coord c : allPacked(working))
-                {
-                    LinkedHashSet<Coord> lhs = new LinkedHashSet<Coord>();
-                    lhs.add(c);
-                    corners.add(lhs);
-                }
-
+            corners = new OrderedSet<>(32);
+            GreasedRegion working = new GreasedRegion(finder.width, finder.height);
+            for(GreasedRegion region : finder.rooms.keySet()) {
+                working.remake(region).expand().retract8way().xor(region).andNot(nonRoom);
+                OrderedSet<Coord> os = new OrderedSet<>(working.asCoords());
+                corners.add(os);
             }
         }
         return corners;
     }
     /**
-     * Gets a LinkedHashSet of LinkedHashSet of Coord, where each inner LinkedHashSet of Coord refers to a room's cells
+     * Gets an OrderedSet of OrderedSet of Coord, where each inner OrderedSet of Coord refers to a room's cells
      * that are furthest from the walls, and each Coord is one of those central positions. There are many uses for this,
      * like finding a position to place a throne or shrine in a large room where it should be visible from all around.
      * This doesn't always identify all centers, since it only finds ones in rooms, and it can also find multiple
@@ -132,20 +120,20 @@ public class Placement {
      * find a 1x5 column as the centers of that room).
      * @return a set of sets of Coord where each set of Coord contains a room's cells that are furthest from the walls.
      */
-    public LinkedHashSet<LinkedHashSet<Coord>> getCenters() {
+    public OrderedSet<OrderedSet<Coord>> getCenters() {
         if(centers == null)
         {
-            centers = new LinkedHashSet<>(32);
-            short[] working, working2;
-            for(short[] region : finder.rooms.keys()) {
+            centers = new OrderedSet<>(32);
+            GreasedRegion working, working2;
+            for(GreasedRegion region : finder.rooms.keySet()) {
 
                 working = null;
-                working2 = retract(region, 1, finder.width, finder.height, false);
+                working2 = region.copy().retract();
                 for (int i = 2; i < 7; i++) {
-                    if(count(working2) <= 0)
+                    if(working2.isEmpty())
                         break;
-                    working = working2;
-                    working2 = retract(region, i, finder.width, finder.height, false);
+                    working = working2.copy();
+                    working2.retract();
                 }
                 if(working == null)
                     continue;
@@ -154,7 +142,7 @@ public class Placement {
                 //        differencePacked(
                 //                working,
                 //                nonRoom);
-                centers.add(arrayToSet(allPacked(working)));
+                centers.add(arrayToSet(working.asCoords()));
 
             }
         }
@@ -162,16 +150,16 @@ public class Placement {
     }
 
     /**
-     * Gets a LinkedHashSet of Coord, where each Coord is hidden (using the given radiusStrategy and range for FOV
+     * Gets an OrderedSet of Coord, where each Coord is hidden (using the given radiusStrategy and range for FOV
      * calculations) from any doorways or similar narrow choke-points where a character might be easily ambushed. If
      * multiple choke-points can see a cell (using shadow-casting FOV, which is asymmetrical), then the cell is very
      * unlikely to be included in the returned Coords, but if a cell is visible from one or no choke-points and is far
      * enough away, then it is more likely to be included.
      * @param radiusStrategy a Radius object that will be used to determine visibility.
      * @param range the minimum distance things are expected to hide at; often related to player FOV range
-     * @return a set of Coord where each Coord is either far away from or is concealed from a door-like area
+     * @return a Set of Coord where each Coord is either far away from or is concealed from a door-like area
      */
-    public LinkedHashSet<Coord> getHidingPlaces(Radius radiusStrategy, int range) {
+    public OrderedSet<Coord> getHidingPlaces(Radius radiusStrategy, int range) {
         if(hidingPlaces == null)
         {
             double[][] composite = new double[finder.width][finder.height],
@@ -188,15 +176,14 @@ public class Placement {
                     }
                 }
             }
-            hidingPlaces = arrayToSet(allPacked(intersectPacked(allFloors, pack(composite, 0.25))));
+
+            hidingPlaces = arrayToSet(new GreasedRegion(composite, 0.25).and(allFloors).asCoords());
         }
         return hidingPlaces;
     }
 
-    private static LinkedHashSet<Coord> arrayToSet(Coord[] arr)
+    private static OrderedSet<Coord> arrayToSet(Coord[] arr)
     {
-        LinkedHashSet<Coord> lhs = new LinkedHashSet<>(arr.length);
-        Collections.addAll(lhs, arr);
-        return lhs;
+        return new OrderedSet<> (arr);
     }
 }

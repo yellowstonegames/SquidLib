@@ -27,8 +27,8 @@ public class ModularMapGenerator {
     protected int[][] environment = null;
     //public RegionMap<MapModule> layout, modules, inverseModules;
     public RegionMap<MapModule> layout;
-    public LinkedHashMap<Integer, ArrayList<MapModule>> modules;
-    public LinkedHashMap<Coord, MapModule> displacement;
+    public OrderedMap<Integer, ArrayList<MapModule>> modules;
+    public OrderedMap<Coord, MapModule> displacement;
 
     private void putModule(short[] module) {
         char[][] unp = CoordPacker.unpackChar(module, '.', '#');
@@ -60,12 +60,12 @@ public class ModularMapGenerator {
         layout = new RegionMap<>(64);
         //modules = new RegionMap<>(64);
         //inverseModules = new RegionMap<>(64);
-        modules = new LinkedHashMap<>(64);
+        modules = new OrderedMap<>(64);
         for (int i = 1; i <= 64; i <<= 1) {
             ArrayList<MapModule> mms = new ArrayList<>(16);
             modules.put(i, mms);
         }
-        displacement = new LinkedHashMap<>(64);
+        displacement = new OrderedMap<>(64);
         float multiplier = 1;//(float) Math.sqrt(Math.max(1f, Math.min(width, height) / 24f));
         putRectangle(2, 2, multiplier);
         putRectangle(3, 3, multiplier);
@@ -144,7 +144,7 @@ public class ModularMapGenerator {
         map = GwtCompatibility.copy2D(copying.map);
         environment = GwtCompatibility.copy2D(copying.environment);
         layout = new RegionMap<>(copying.layout);
-        modules = new LinkedHashMap<>(copying.modules);
+        modules = new OrderedMap<>(copying.modules);
     }
 
     /**

@@ -2,6 +2,8 @@ package squidpony.squidmath;
 
 import squidpony.StringKit;
 
+import java.util.Arrays;
+
 /**
  * An RNG that has a drastically longer period than the other generators in SquidLib, other than MersenneTwister,
  * without sacrificing speed or HTML target compatibility. If you don't already know what the period of an RNG is, this
@@ -204,7 +206,7 @@ public class LongPeriodRNG implements RandomnessSource {
     {
         long[] state = new long[16];
         for (int i = 0; i < 16; i++) {
-            long z = ( seed += 0x9E3779B97F4A7C15L );
+            long z = seed += 0x9E3779B97F4A7C15L;
             z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
             z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
             state[i] = z ^ (z >>> 31);
@@ -234,7 +236,7 @@ public class LongPeriodRNG implements RandomnessSource {
         final long s0 = state[choice];
         long s1 = state[choice = (choice + 1) & 15];
         s1 ^= s1 << 31; // a
-        state[choice] = s1 ^ s0 ^ (s1 >> 11) ^ (s0 >> 30); // b,c
+        state[choice] = s1 ^ s0 ^ (s1 >>> 11) ^ (s0 >>> 30); // b,c
         return state[choice] * 1181783497276652981L;
     }
 
@@ -262,7 +264,7 @@ public class LongPeriodRNG implements RandomnessSource {
      * */
     public void jump() {
 
-        long[] t = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        long[] t = new long[16];
         for(int i = 0; i < 16; i++)
         for(int b = 0; b < 64; b++) {
             if ((jumpTable[i] & 1L << b) != 0) {
@@ -367,5 +369,24 @@ public class LongPeriodRNG implements RandomnessSource {
     @Override
     public String toString() {
         return "LongPeriodRNG with state hash 0x" + StringKit.hexHash(state) + "L, choice 0x" + StringKit.hex(choice);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LongPeriodRNG that = (LongPeriodRNG) o;
+
+        if (choice != that.choice) return false;
+        return Arrays.equals(state, that.state);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = CrossHash.Lightning.hash(state);
+        result = 31 * result + choice;
+        return result;
     }
 }

@@ -80,6 +80,7 @@ public class FOVCacheDemo {
                 System.out.println();
             }
             System.out.println();
+            cache.destroy();
 
         }
 /*        for (int n = 1; n < 8; n++) {

@@ -2,6 +2,7 @@ package squidpony.squidmath;
 
 import squidpony.annotation.GwtIncompatible;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -31,7 +32,7 @@ import java.util.*;
  *
  * Created by Tommy Ettinger on 5/2/2015.
  */
-public class DharmaRNG extends RNG {
+public class DharmaRNG extends RNG implements Serializable{
 
 	/** Used to tweak the generator toward high or low values. */
     private double fairness = 0.54;
@@ -412,6 +413,63 @@ public class DharmaRNG extends RNG {
         return super.shuffle(elements);
     }
 
+    /**
+     * Returns a value between min (inclusive) and max (exclusive).
+     * <p>
+     * The inclusive and exclusive behavior is to match the behavior of the
+     * similar method that deals with floating point values.
+     *
+     * @param min the minimum bound on the return value (inclusive)
+     * @param max the maximum bound on the return value (exclusive)
+     * @return the found value
+     */
+    @Override
+    public long between(long min, long max) {
+        return min + nextLong(max - min);
+    }
+
+    /**
+     * Shuffle an array using the Fisher-Yates algorithm. Not GWT-compatible; use the overload that takes two arrays.
+     * <br>
+     * https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
+     *
+     * @param elements an array of T; will not be modified
+     * @return a shuffled copy of elements
+     */
+    @GwtIncompatible
+    @Override
+    public <T> T[] shuffle(T[] elements) {
+        return super.shuffle(elements);
+    }
+
+    /**
+     * Generates a random permutation of the range from 0 (inclusive) to length (exclusive).
+     * Useful for passing to OrderedMap or OrderedSet's reorder() methods.
+     *
+     * @param length the size of the ordering to produce
+     * @return a random ordering containing all ints from 0 to length (exclusive)
+     */
+    @Override
+    public int[] randomOrdering(int length) {
+        return super.randomOrdering(length);
+    }
+
+
+    /**
+     * Returns a random non-negative integer below the given bound, or 0 if the bound is 0.
+     * Uses a slightly optimized technique. This method is considered "hasty" since
+     * it should be faster than nextInt() doesn't check for "less-valid" bounds values. It also
+     * has undefined behavior if bound is negative, though it will probably produce a negative
+     * number (just how negative is an open question).
+     *
+     * @param bound the upper bound (exclusive); behavior is undefined if bound is negative
+     * @return the found number
+     */
+    @Override
+    public int nextIntHasty(int bound) {
+        return (int)(nextDouble() * bound);
+    }
+
     @Override
     public float nextFloat() {
         return (float)nextDouble();
@@ -497,7 +555,32 @@ public class DharmaRNG extends RNG {
                 "fairness=" + fairness +
                 ", produced=" + produced +
                 ", baseline=" + baseline +
-                "Randomness Source" + random +
+                ", Randomness Source=" + random +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DharmaRNG dharmaRNG = (DharmaRNG) o;
+
+        if (Double.compare(dharmaRNG.fairness, fairness) != 0) return false;
+        return Double.compare(dharmaRNG.produced, produced) == 0 && Double.compare(dharmaRNG.baseline, baseline) == 0;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        temp = Double.doubleToLongBits(fairness);
+        result = (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(produced);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(baseline);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
     }
 }

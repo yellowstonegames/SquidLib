@@ -4,10 +4,7 @@ import squidpony.squidgrid.LOS;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.styled.TilesetType;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.CoordPacker;
-import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
 
@@ -17,29 +14,37 @@ import java.util.ArrayList;
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
 public class LOSComparisonTest {
-    public static int width = 35, height = 22;
+    public static int width = 37, height = 23;
     public static void main( String[] args )
     {
-        for(int l : new int[]{1, 3, 4, 5, 6, 7, 8, 9}) {
+        for(int l : new int[]{1, 3, 4, 5, 6, 7, 8, 9, 3}) {
             //seed is, in base 36, the number SQUIDLIB
-            StatefulRNG rng = new StatefulRNG(new LightRNG(2252637788195L));
+            StatefulRNG rng = new StatefulRNG(new ThunderRNG(2252637788195L));
             DungeonGenerator dungeonGenerator = new DungeonGenerator(width, height, rng);
 
-            char[][] dungeon = dungeonGenerator.generate(TilesetType.ROUND_ROOMS_DIAGONAL_CORRIDORS);
+            char[][] dungeon = dungeonGenerator.generate(TilesetType.OPEN_AREAS);
             char[][] bare = dungeonGenerator.getBareDungeon();
             short[] floors = CoordPacker.pack(bare, '.');
             Coord start = dungeonGenerator.utility.randomCell(floors);
-            short[] flooded = CoordPacker.flood(floors, CoordPacker.packOne(start), 10, true);
+            short[] flooded = CoordPacker.flood(floors, CoordPacker.packOne(start), 11, true);
             short[] outside = CoordPacker.differencePacked(CoordPacker.rectangle(width, height),// flooded);
                     CoordPacker.expand(flooded, 1, width, height));
-            ArrayList<Coord> allSeen = new ArrayList<>(23 * 23), targets = new ArrayList<>(5);
+            ArrayList<Coord> allSeen = new ArrayList<>(128), targets = new ArrayList<>(5);
             LOS los;
             if(l < 7) los = new LOS(l);
             else los = new LOS(6);
             los.setRadiusStrategy(Radius.SQUARE);
-            for (int i = 0; i < 4; i++) {
-                rng.nextLong();
-                Coord end = CoordPacker.singleRandom(flooded, rng);
+            rng.nextLong();
+            CoordPacker.singleRandom(
+                    CoordPacker.differencePacked(flooded,
+                            CoordPacker.flood(floors, CoordPacker.packOne(start), 3, true)),
+                    rng);
+            for (int i = 0; i < 2; i++) {
+                Coord end = CoordPacker.singleRandom(
+                        CoordPacker.differencePacked(flooded,
+                                CoordPacker.flood(floors, CoordPacker.packOne(start), 3, true)),
+                        rng);
+
                 targets.add(end);
                 if(l < 7)
                     los.isReachable(bare, start.x, start.y, end.x, end.y);

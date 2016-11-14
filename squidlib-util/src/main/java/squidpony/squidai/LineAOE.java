@@ -7,6 +7,9 @@ import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
 
+import squidpony.squidmath.OrderedMap;
+import squidpony.squidmath.OrderedSet;
+
 import java.util.*;
 
 /**
@@ -259,14 +262,14 @@ public class LineAOE implements AOE {
     }
 
     @Override
-    public LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> targets, Set<Coord> requiredExclusions) {
+    public OrderedMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> targets, Set<Coord> requiredExclusions) {
         if(targets == null)
-            return new LinkedHashMap<>();
-        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<>();
+            return new OrderedMap<>();
+        if(requiredExclusions == null) requiredExclusions = new OrderedSet<>();
 
         //requiredExclusions.remove(origin);
         int totalTargets = targets.size();
-        LinkedHashMap<Coord, ArrayList<Coord>> bestPoints = new LinkedHashMap<>(totalTargets * 8);
+        OrderedMap<Coord, ArrayList<Coord>> bestPoints = new OrderedMap<>(totalTargets * 8);
 
         if(totalTargets == 0)
             return bestPoints;
@@ -404,14 +407,14 @@ public class LineAOE implements AOE {
     }
 
     @Override
-    public LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> priorityTargets, Set<Coord> lesserTargets, Set<Coord> requiredExclusions) {
+    public OrderedMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> priorityTargets, Set<Coord> lesserTargets, Set<Coord> requiredExclusions) {
         if(priorityTargets == null)
             return idealLocations(lesserTargets, requiredExclusions);
-        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<>();
+        if(requiredExclusions == null) requiredExclusions = new OrderedSet<>();
 
         //requiredExclusions.remove(origin);
         int totalTargets = priorityTargets.size() + lesserTargets.size();
-        LinkedHashMap<Coord, ArrayList<Coord>> bestPoints = new LinkedHashMap<>(totalTargets * 8);
+        OrderedMap<Coord, ArrayList<Coord>> bestPoints = new OrderedMap<>(totalTargets * 8);
 
         if(totalTargets == 0)
             return bestPoints;
@@ -694,7 +697,7 @@ public class LineAOE implements AOE {
     }
 
     @Override
-    public LinkedHashMap<Coord, Double> findArea() {
+    public OrderedMap<Coord, Double> findArea() {
         double[][] dmap = initDijkstra();
         dmap[origin.x][origin.y] = DijkstraMap.DARK;
         dijkstra.resetMap();

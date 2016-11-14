@@ -1,19 +1,10 @@
 package squidpony.squidgrid.mapping;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Direction;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.CoordPacker;
-import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.PerlinNoise;
-import squidpony.squidmath.RNG;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.*;
+
+import java.util.*;
 
 /**
  * A static class that can be used to modify the char[][] dungeons that other generators produce.
@@ -1229,13 +1220,13 @@ public class DungeonUtility {
     }
 
     public static double[][] translateAStarToDijkstra(double[][] astar) {
-        if(astar == null) return null;
-        if(astar.length <= 0 || astar[0].length <= 0)
+        if (astar == null) return null;
+        if (astar.length <= 0 || astar[0].length <= 0)
             return new double[0][0];
         double[][] dijkstra = new double[astar.length][astar[0].length];
         for (int x = 0; x < astar.length; x++) {
             for (int y = 0; y < astar[x].length; y++) {
-                if(astar[x][y] < 0)
+                if (astar[x][y] < 0)
                     dijkstra[x][y] = DijkstraMap.WALL;
                 else
                     dijkstra[x][y] = DijkstraMap.FLOOR;
@@ -1245,13 +1236,13 @@ public class DungeonUtility {
     }
 
     public static double[][] translateDijkstraToAStar(double[][] dijkstra) {
-        if(dijkstra == null) return null;
-        if(dijkstra.length <= 0 || dijkstra[0].length <= 0)
+        if (dijkstra == null) return null;
+        if (dijkstra.length <= 0 || dijkstra[0].length <= 0)
             return new double[0][0];
         double[][] astar = new double[dijkstra.length][dijkstra[0].length];
         for (int x = 0; x < dijkstra.length; x++) {
             for (int y = 0; y < dijkstra[x].length; y++) {
-                if(dijkstra[x][y] > DijkstraMap.FLOOR)
+                if (dijkstra[x][y] > DijkstraMap.FLOOR)
                     astar[x][y] = -1;
                 else
                     astar[x][y] = 1;
@@ -1401,16 +1392,16 @@ public class DungeonUtility {
      *               returned.
      * @return Elements in {@code zone} that are neighbors to an element not in {@code zone}.
      */
-	public static List<Coord> border(final List<Coord> zone, /* @Nullable */ List<Coord> buffer) {
-		final int zsz = zone.size();
-		final List<Coord> border = buffer == null ? new ArrayList<Coord>(zsz / 4) : buffer;
-		for (int i = 0; i < zsz; i++) {
-			final Coord c = zone.get(i);
-			if (hasANeighborNotIn(c, zone))
-				border.add(c);
-		}
-		return border;
-	}
+    public static List<Coord> border(final List<Coord> zone, /* @Nullable */ List<Coord> buffer) {
+        final int zsz = zone.size();
+        final List<Coord> border = buffer == null ? new ArrayList<Coord>(zsz / 4) : buffer;
+        for (int i = 0; i < zsz; i++) {
+            final Coord c = zone.get(i);
+            if (hasANeighborNotIn(c, zone))
+                border.add(c);
+        }
+        return border;
+    }
 
     /**
      * Quickly counts the number of char elements in level that are equal to match.
@@ -1471,6 +1462,52 @@ public class DungeonUtility {
     }
 
     /**
+     * Ensures a path exists in a rough ring around the map by first creating the path (using
+     * SerpentMapGenerator.pointPath with the given RNG), then finding chars in blocking that are on that path and
+     * replacing them with replacement. Modifies map in-place (!) and returns an ArrayList of Coord points that will
+     * always be on the path.
+     *
+     * @param map         a 2D char array, x then y, etc. that will be modified directly; this is the "returned map"
+     * @param rng         used for random factors in the path choice
+     * @param replacement the char that will fill be used where a path needs to be carved out; usually '.'
+     * @param blocking    an array or vararg of char that are considered blocking for the path and will be replaced if
+     *                    they are in the way
+     * @return the ArrayList of Coord points that are on the carved path, including existing non-blocking cells; will be empty if any parameters are invalid
+     */
+    public static ArrayList<Coord> ensurePath(char[][] map, RNG rng, char replacement, char... blocking) {
+        if (map == null || map.length <= 0 || blocking == null || blocking.length <= 0)
+            return new ArrayList<Coord>(0);
+        int width = map.length, height = map[0].length;
+        ArrayList<Coord> points = SerpentMapGenerator.pointPath(width, height, rng);
+        char[] blocks = new char[blocking.length];
+        System.arraycopy(blocking, 0, blocks, 0, blocking.length);
+        Arrays.sort(blocks);
+        for (Coord c : points) {
+            if (c.x >= 0 && c.x < width && c.y >= 0 && c.y < height && Arrays.binarySearch(blocks, map[c.x][c.y]) >= 0) {
+                map[c.x][c.y] = replacement;
+            }
+        }
+        return points;
+    }
+
+    public static ArrayList<Coord> allMatching(char[][] map, char... matching) {
+        if (map == null || map.length <= 0 || matching == null || matching.length <= 0)
+            return new ArrayList<Coord>(0);
+        int width = map.length, height = map[0].length;
+        char[] matches = new char[matching.length];
+        System.arraycopy(matching, 0, matches, 0, matching.length);
+        Arrays.sort(matches);
+        ArrayList<Coord> points = new ArrayList<Coord>(map.length * 4);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (Arrays.binarySearch(matches, map[x][y]) >= 0)
+                    points.add(Coord.get(x, y));
+            }
+        }
+        return points;
+    }
+
+    /**
      * Gets a List of Coord that are within radius distance of (x,y), and appends them to buf if it is non-null or makes
      * a fresh List to append to otherwise. Returns buf if non-null, else the fresh List of Coord. May produce Coord
      * values that are not within the boundaries of a map, such as (-5,-4), if the center is too close to the edge or
@@ -1500,11 +1537,11 @@ public class DungeonUtility {
         return result;
     }
 
-	private static boolean hasANeighborNotIn(Coord c, Collection<Coord> others) {
-		for (Direction dir : Direction.OUTWARDS) {
-			if (!others.contains(c.translate(dir)))
-				return true;
-		}
-		return false;
-	}
+    private static boolean hasANeighborNotIn(Coord c, Collection<Coord> others) {
+        for (Direction dir : Direction.OUTWARDS) {
+            if (!others.contains(c.translate(dir)))
+                return true;
+        }
+        return false;
+    }
 }
