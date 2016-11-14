@@ -1,5 +1,6 @@
 package squidpony.squidmath;
 
+import squidpony.GwtCompatibility;
 import squidpony.annotation.GwtIncompatible;
 
 import java.io.Serializable;
@@ -141,7 +142,7 @@ public class RNG implements Serializable {
     }
 
     /**
-     * Returns a value from a even distribution from min (inclusive) to max
+     * Returns a value from an even distribution from min (inclusive) to max
      * (exclusive).
      *
      * @param min the minimum bound on the return value (inclusive)
@@ -412,7 +413,8 @@ public class RNG implements Serializable {
     }
 
     /**
-     * Shuffle an array using the Fisher-Yates algorithm. Not GWT-compatible; use the overload that takes two arrays.
+     * Shuffle an array using the Fisher-Yates algorithm and returns a shuffled copy.
+     * Not GWT-compatible; use the overload that takes two arrays if you use GWT.
      * <br>
      * https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
      * @param elements an array of T; will not be modified
@@ -433,7 +435,25 @@ public class RNG implements Serializable {
         }
         return array;
     }
-
+    /**
+     * Shuffles an array in place using the Fisher-Yates algorithm.
+     * If you don't want the array modified, use {@link #shuffle(Object[], Object[])}.
+     * Unlike {@link #shuffle(Object[])}, this is GWT-compatible.
+     * <br>
+     * https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
+     * @param elements an array of T; <b>will</b> be modified
+     * @param <T>      can be any non-primitive type.
+     * @return elements after shuffling it in-place
+     */
+    public <T> T[] shuffleInPlace(T[] elements) {
+        for (int i = elements.length - 1; i > 0; i--) {
+            int r = nextInt(i + 1);
+            T t = elements[r];
+            elements[r] = elements[i];
+            elements[i] = t;
+        }
+        return elements;
+    }
     /**
      * Shuffle an array using the "inside-out" Fisher-Yates algorithm. DO NOT give the same array for both elements and
      * dest, since the prior contents of dest are rearranged before elements is used, and if they refer to the same
@@ -501,6 +521,48 @@ public class RNG implements Serializable {
     }
 
     /**
+     * Generates a random permutation of the range from 0 (inclusive) to length (exclusive).
+     * Useful for passing to OrderedMap or OrderedSet's reorder() methods.
+     * @param length the size of the ordering to produce
+     * @return a random ordering containing all ints from 0 to length (exclusive)
+     */
+    public int[] randomOrdering(int length)
+    {
+        if(length <= 0)
+            return new int[0];
+        int[] dest = new int[length];
+        for (int i = 0; i < length; i++)
+        {
+            int r = nextInt(i + 1);
+            if(r != i)
+                dest[i] = dest[r];
+            dest[r] = i;
+        }
+        return dest;
+    }
+
+    /**
+     * Generates a random permutation of the range from 0 (inclusive) to length (exclusive) and stores it in
+     * the dest parameter, avoiding allocations.
+     * Useful for passing to OrderedMap or OrderedSet's reorder() methods.
+     * @param length the size of the ordering to produce
+     * @param dest the destination array; will be modified
+     * @return dest, filled with a random ordering containing all ints from 0 to length (exclusive)
+     */
+    public int[] randomOrdering(int length, int[] dest)
+    {
+        if(dest == null) return null;
+        for (int i = 0; i < length && i < dest.length; i++)
+        {
+            int r = nextIntHasty(i + 1);
+            if(r != i)
+                dest[i] = dest[r];
+            dest[r] = i;
+        }
+        return dest;
+    }
+
+    /**
      * Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as
      * it can, and then returns output. Will only use a given position in the given data at most once; does this by
      * generating random indices for data's elements, but only as much as needed, assigning the copied section to output
@@ -516,19 +578,26 @@ public class RNG implements Serializable {
      */
     public <T> T[] randomPortion(T[] data, T[] output)
     {
+        /*
         int length = data.length;
         int[] mapping = new int[length];
         for (int i = 0; i < length; i++) {
             mapping[i] = i;
         }
-
         for (int i = 0; i < output.length && length > 0; i++) {
             int r = nextInt(length);
-
             output[i] = data[mapping[r]];
-
             mapping[r] = length-1;
-            length--;
+        }
+        */
+
+        int length = data.length;
+        int n = Math.min(length, output.length);
+        int[] mapping = GwtCompatibility.range(n);
+        for (int i = 0; i < n; i++) {
+            int r = nextInt(length);
+            output[i] = data[mapping[r]];
+            mapping[r] = mapping[--length];
         }
 
         return output;
@@ -665,7 +734,7 @@ public class RNG implements Serializable {
         }
     }
     /**
-     * Returns a random integer below the given bound, or 0 if the bound is 0 or
+     * Returns a random non-negative integer below the given bound, or 0 if the bound is 0 or
      * negative.
      *
      * @param bound the upper bound (exclusive)
@@ -679,6 +748,42 @@ public class RNG implements Serializable {
             if (bits >= threshold)
                 return bits % bound;
         }
+    }
+    /**
+     * Returns a random non-negative integer below the given bound, or 0 if the bound is 0.
+     * Uses an aggressively optimized technique that has some bias, but mostly for values of
+     * bound over 1 billion. This method is considered "hasty" since it should be faster than
+     * nextInt() but gives up some statistical quality to do so. It also has undefined behavior
+     * if bound is negative, though it will probably produce a negative number (just how
+     * negative is an open question).
+     * <br>
+     * Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/
+     * @param bound the upper bound (exclusive); behavior is undefined if bound is negative
+     * @return the found number
+     */
+    public int nextIntHasty(final int bound) {
+        return (int)((bound * (random.nextLong() & 0x7FFFFFFFL)) >> 31);
+    }
+
+    /**
+     * Gets a random Coord that has x between 0 (inclusive) and width (exclusive) and y between 0 (inclusive)
+     * and height (exclusive). This makes one call to randomLong to generate (more than) 31 random bits for
+     * each axis, and should be very fast. Remember that Coord values are cached in a pool that starts able to
+     * hold up to 255 x and 255 y for positive values, and the pool should be grown with the static method
+     * Coord.expandPool() in order to efficiently use larger Coord values. If width and height are very large,
+     * greater than 100,000 for either, this particular method may show bias toward certain positions due to
+     * the "hasty" technique used to reduce the random numbers to the given size, but because most maps in
+     * tile-based games are relatively small, this technique should be fine.
+     * <br>
+     * Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/
+     * @param width the upper bound (exclusive) for x coordinates
+     * @param height the upper bound (exclusive) for y coordinates
+     * @return a random Coord between (0,0) inclusive and (width,height) exclusive
+     */
+    public Coord nextCoord(int width, int height)
+    {
+        final long n = random.nextLong();
+        return Coord.get((int)((width * (n >>> 33)) >> 31), (int)((height * (n & 0x7FFFFFFFL)) >> 31));
     }
     /**
      * Get a random integer between Integer.MIN_VALUE to Integer.MAX_VALUE (both inclusive).

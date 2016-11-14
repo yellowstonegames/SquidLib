@@ -8,11 +8,27 @@ import java.util.*;
 /**
  * Line of Sight (LOS) algorithms find if there is or is not a path between two
  * given points.
- *
+ * <br>
  * The line found between two points will end at either the target, the
  * obstruction closest to the start, or the edge of the map.
+ * <br>
+ * For normal line of sight usage, you should prefer Bresenham lines, and these
+ * are the default (they can also be specified by passing {@link #BRESENHAM} to
+ * the constructor). For more specialized usage, there are other kinds of LOS in
+ * this class, like lines that make no diagonal moves between cells (using
+ * {@link #ORTHO}, or lines that check a wide path (but these use different
+ * methods, like {@link #thickReachable(Radius)}).
+ * <br>
+ * Performance-wise, all of these methods are rather fast and about the same speed.
+ * {@link #RAY} is a tiny fraction faster than {@link #BRESENHAM} but produces
+ * rather low-quality lines in comparison. Calculating the visibility of 40,000
+ * lines in a 102x102 dungeon takes within 3% of 950ms (on an Intel i7-4700MQ laptop
+ * processor) for every one of BRESENHAM, DDA, ORTHO, and RAY, even with ORTHO
+ * finding a different kind of line by design.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
+ * @author Tommy Ettinger Added DDA, ORTHO, and the thick lines; some cleanup
+ * @author smelC optimized several methods
  */
 public class LOS {
 
@@ -27,13 +43,15 @@ public class LOS {
      * attempted paths in full.
      *
      * <p>
-     * Beware it is Gwt incompatible.
+     * Be aware, it is GWT-incompatible.
      * </p>
      */
     public static final int ELIAS = 2;
     /**
      * Uses a series of rays internal to the start and end point to
-     * determine visibility. Does not respect translucency.
+     * determine visibility. Appearance is extremely close to DDA, which
+     * is also probably a faster algorithm, so BRESENHAM (which can look
+     * a little better) and DDA are recommended instead of RAY.
      */
     public static final int RAY = 3;
     /**
@@ -45,6 +63,8 @@ public class LOS {
      * differences in many parts of the lines this draws when compared
      * to Bresenham lines, but it may also perform significantly better,
      * and may also be useful as a building block for more complex LOS.
+     * Virtually identical in results to RAY, and just a hair slower, but
+     * better-tested and more predictable.
      */
     public static final int DDA = 5;
     /**
@@ -166,8 +186,7 @@ public class LOS {
                 return bresenhamReachable(radiusStrategy);
             case ELIAS:
             	throw new IllegalStateException("Elias LOS is Gwt Incompatible");
-            	/* FIXME Find a way around that */
-            	// Required to compile with GWT:
+            	// Comment required to compile with GWT:
             	// return eliasReachable(radiusStrategy);
             case RAY:
                 return rayReachable(radiusStrategy);
@@ -270,7 +289,7 @@ public class LOS {
     public Queue<Coord> getLastPath() {
         return lastPath;
     }
-
+/*
     private boolean bresenhamReachable(Radius radiusStrategy) {
         Queue<Coord> path = Bresenham.line2D(startx, starty, targetx, targety);
         lastPath = new LinkedList<>();
@@ -292,13 +311,48 @@ public class LOS {
         }
         return false;//never got to the target point
     }
+*/
+    private boolean bresenhamReachable(Radius radiusStrategy) {
+        Coord[] path = Bresenham.line2D_(startx, starty, targetx, targety);
+        lastPath = new LinkedList<>();
+        double rad = radiusStrategy.radius(startx, starty, targetx, targety);
+        if(rad == 0.0) {
+            lastPath.add(Coord.get(startx, starty));
+            return true; // already at the point; we can see our own feet just fine!
+        }
+        double decay = 1 / rad;
+        double currentForce = 1;
+        Coord p;
+        for (int i = 0; i < path.length; i++) {
+            p = path[i];
+            lastPath.offer(p);
+            if (p.x == targetx && p.y == targety) {
+                return true;//reached the end
+            }
+            if (p.x != startx || p.y != starty) {//don't discount the start location even if on resistant cell
+                currentForce -= resistanceMap[p.x][p.y];
+            }
+            double r = radiusStrategy.radius(startx, starty, p.x, p.y);
+            if (currentForce - (r * decay) <= 0) {
+                return false;//too much resistance
+            }
+        }
+        return false;//never got to the target point
+    }
 
     private boolean orthoReachable(Radius radiusStrategy) {
-        List<Coord> path = OrthoLine.line(startx, starty, targetx, targety);
+        Coord[] path = OrthoLine.line_(startx, starty, targetx, targety);
         lastPath = new LinkedList<>();
-        double decay = 1 / radiusStrategy.radius(startx, starty, targetx, targety);
+        double rad = radiusStrategy.radius(startx, starty, targetx, targety);
+        if(rad == 0.0) {
+            lastPath.add(Coord.get(startx, starty));
+            return true; // already at the point; we can see our own feet just fine!
+        }
+        double decay = 1 / rad;
         double currentForce = 1;
-        for (Coord p : path) {
+        Coord p;
+        for (int i = 0; i < path.length; i++) {
+            p = path[i];
             lastPath.offer(p);
             if (p.x == targetx && p.y == targety) {
                 return true;//reached the end
@@ -315,11 +369,18 @@ public class LOS {
     }
 
     private boolean ddaReachable(Radius radiusStrategy) {
-        List<Coord> path = DDALine.line(startx, starty, targetx, targety);
+        Coord[] path = DDALine.line_(startx, starty, targetx, targety);
         lastPath = new LinkedList<>();
-        double decay = 1 / radiusStrategy.radius(startx, starty, targetx, targety);
+        double rad = radiusStrategy.radius(startx, starty, targetx, targety);
+        if(rad == 0.0) {
+            lastPath.add(Coord.get(startx, starty));
+            return true; // already at the point; we can see our own feet just fine!
+        }
+        double decay = 1 / rad;
         double currentForce = 1;
-        for (Coord p : path) {
+        Coord p;
+        for (int i = 0; i < path.length; i++) {
+            p = path[i];
             if (p.x == targetx && p.y == targety) {
                 lastPath.offer(p);
                 return true;//reached the end
@@ -338,8 +399,9 @@ public class LOS {
 
     private boolean thickReachable(Radius radiusStrategy) {
         lastPath = new LinkedList<>();
-        double dist = radiusStrategy.radius(startx, starty, targetx, targety), decay = 1 / dist;
-        LinkedHashSet<Coord> visited = new LinkedHashSet<>((int) dist + 3);
+        double dist = radiusStrategy.radius(startx, starty, targetx, targety);
+        double decay = 1.0 / dist; // note: decay can be positive infinity if dist is 0; this is actually OK
+        OrderedSet<Coord> visited = new OrderedSet<>((int) dist + 3);
         List<List<Coord>> paths = new ArrayList<>(4);
         /* // actual corners
         paths.add(DDALine.line(startx, starty, targetx, targety, 0, 0));
@@ -387,7 +449,7 @@ public class LOS {
     private boolean brushReachable(Radius radiusStrategy, int spread) {
         lastPath = new LinkedList<>();
         double dist = radiusStrategy.radius(startx, starty, targetx, targety) + spread * 2, decay = 1 / dist;
-        LinkedHashSet<Coord> visited = new LinkedHashSet<>((int) (dist + 3) * spread);
+        OrderedSet<Coord> visited = new OrderedSet<>((int) (dist + 3) * spread);
         List<List<Coord>> paths = new ArrayList<>((int) (radiusStrategy.volume2D(spread) * 1.25));
         int length = 0;
         List<Coord> currentPath;
@@ -439,55 +501,43 @@ public class LOS {
     }
 
     private boolean rayReachable(Radius radiusStrategy) {
-        lastPath = new LinkedList<>();//save path for later retreival
-        lastPath.add(Coord.get(startx, starty));
+        lastPath = new LinkedList<>();//save path for later retrieval
         if (startx == targetx && starty == targety) {//already there!
+            lastPath.add(Coord.get(startx, starty));
             return true;
         }
 
         int width = resistanceMap.length;
         int height = resistanceMap[0].length;
 
-        CoordDouble start = new CoordDouble(startx, starty);
-        CoordDouble end = new CoordDouble(targetx, targety);
+        Coord end = Coord.get(targetx, targety);
         //find out which direction to step, on each axis
-        int stepX = (int) Math.signum(end.x - start.x);
-        int stepY = (int) Math.signum(end.y - start.y);
+        int stepX = (int) Math.signum(targetx - startx),
+                stepY = (int) Math.signum(targety - starty);
 
-        double deltaY = end.x - start.x;
-        double deltaX = end.y - start.y;
+        int deltaY = Math.abs(targetx - startx),
+                deltaX = Math.abs(targety - starty);
 
-        deltaX = Math.abs(deltaX);
-        deltaY = Math.abs(deltaY);
+        int testX = startx,
+                testY = starty;
 
-        int testX = (int) start.x;
-        int testY = (int) start.y;
+        int maxX = deltaX,
+                maxY = deltaY;
 
-        double maxX = (float) (start.x % 1);
-        double maxY = (float) (start.y % 1);
-
-        int endTileX = (int) end.x;
-        int endTileY = (int) end.y;
-
-        CoordDouble collisionPoint = new CoordDouble();
-        while (testX >= 0 && testX < width && testY >= 0 && testY < height && (testX != endTileX || testY != endTileY)) {
+        while (testX >= 0 && testX < width && testY >= 0 && testY < height && (testX != targetx || testY != targety)) {
             lastPath.add(Coord.get(testX, testY));
-            if (maxX < maxY) {
+            if (maxY - maxX > deltaX) {
                 maxX += deltaX;
                 testX += stepX;
                 if (resistanceMap[testX][testY] >= 1f) {
-                    collisionPoint.y = testY;
-                    collisionPoint.x = testX;
-                    end = collisionPoint;
+                    end = Coord.get(testX, testY);
                     break;
                 }
-            } else if (maxY < maxX) {
+            } else if (maxX - maxY > deltaY) {
                 maxY += deltaY;
                 testY += stepY;
                 if (resistanceMap[testX][testY] >= 1f) {
-                    collisionPoint.y = testY;
-                    collisionPoint.x = testX;
-                    end = collisionPoint;
+                    end = Coord.get(testX, testY);
                     break;
                 }
             } else {//directly on diagonal, move both full step
@@ -496,22 +546,20 @@ public class LOS {
                 maxX += deltaX;
                 testX += stepX;
                 if (resistanceMap[testX][testY] >= 1f) {
-                    collisionPoint.y = testY;
-                    collisionPoint.x = testX;
-                    end = collisionPoint;
+                    end = Coord.get(testX, testY);
                     break;
                 }
             }
-            if (radiusStrategy.radius(testX, testY, start.x, start.y) > radiusStrategy.radius(startx, starty, targetx, targety)) {//went too far
+            if (radiusStrategy.radius(testX, testY, startx, starty) > radiusStrategy.radius(startx, starty, end.x, end.y)) {//went too far
                 break;
             }
         }
 
         if (end.x >= 0 && end.x < width && end.y >= 0 && end.y < height) {
-            lastPath.add(Coord.get((int) end.x, (int) end.y));
+            lastPath.add(Coord.get(end.x, end.y));
         }
 
-        return (int) end.x == targetx && (int) end.y == targety;
+        return end.x == targetx && end.y == targety;
     }
 
     @GwtIncompatible /* Because of Thread */

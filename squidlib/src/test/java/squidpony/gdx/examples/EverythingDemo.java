@@ -13,7 +13,6 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.FakeLanguageGen;
 import squidpony.panel.IColoredString;
-import squidpony.panel.ICombinedPanel;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
@@ -25,44 +24,46 @@ import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.MixedGenerator;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.CoordPacker;
+import squidpony.squidmath.OrderedSet;
 import squidpony.squidmath.StatefulRNG;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 public class EverythingDemo extends ApplicationAdapter {
     private enum Phase {WAIT, PLAYER_ANIM, MONSTER_ANIM}
+
     private static class Monster {
         public AnimatedEntity entity;
         public int state;
-        public Monster(Actor actor, int x, int y, int state)
-        {
+
+        public Monster(Actor actor, int x, int y, int state) {
             entity = new AnimatedEntity(actor, x, y);
             this.state = state;
         }
-        public Monster(AnimatedEntity ae, int state)
-        {
+
+        public Monster(AnimatedEntity ae, int state) {
             entity = ae;
             this.state = state;
         }
-        public Monster change(int state)
-        {
+
+        public Monster change(int state) {
             this.state = state;
             return this;
         }
-        public Monster change(AnimatedEntity ae)
-        {
+
+        public Monster change(AnimatedEntity ae) {
             entity = ae;
             return this;
         }
-        public Monster move(int x, int y)
-        {
+
+        public Monster move(int x, int y) {
             entity.gridX = x;
             entity.gridY = y;
             return this;
         }
     }
+
     SpriteBatch batch;
 
     private Phase phase = Phase.WAIT;
@@ -70,7 +71,9 @@ public class EverythingDemo extends ApplicationAdapter {
     private SquidLayers display;
     private SquidPanel subCell;
     private SquidMessageBox messages;
-    /** Non-{@code null} iff '?' was pressed before */
+    /**
+     * Non-{@code null} iff '?' was pressed before
+     */
     private /*Nullable*/ Actor help;
     private DungeonGenerator dungeonGen;
     private char[][] decoDungeon, bareDungeon, lineDungeon;
@@ -80,13 +83,21 @@ public class EverythingDemo extends ApplicationAdapter {
     private double[][] fovmap, pathMap;
     private AnimatedEntity player;
     private FOV fov;
-    /** In number of cells */
+    /**
+     * In number of cells
+     */
     private int width;
-    /** In number of cells */
+    /**
+     * In number of cells
+     */
     private int height;
-    /** The pixel width of a cell */
+    /**
+     * The pixel width of a cell
+     */
     private int cellWidth;
-    /** The pixel height of a cell */
+    /**
+     * The pixel height of a cell
+     */
     private int cellHeight;
     private VisualInput input;
     private double counter;
@@ -109,8 +120,9 @@ public class EverythingDemo extends ApplicationAdapter {
     public static final int INTERNAL_ZOOM = 1;
     private Viewport viewport;
     private float currentZoomX = INTERNAL_ZOOM, currentZoomY = INTERNAL_ZOOM;
+
     @Override
-    public void create () {
+    public void create() {
         // gotta have a random number generator. We seed a LightRNG with any long we want, then pass that to an RNG.
         rng = new StatefulRNG(0xBADBEEFB0BBL);
 
@@ -180,8 +192,8 @@ public class EverythingDemo extends ApplicationAdapter {
         //down when rendered, allowing certain small details to appear sharper. This _only_ works with distance field,
         //a.k.a. stretchable, fonts! INTERNAL_ZOOM is a tradeoff between rendering more pixels to increase quality (when
         // values are high) or rendering fewer pixels for speed (when values are low). Using 2 seems to work well.
-        cellWidth = 12 * INTERNAL_ZOOM;
-        cellHeight = 24 * INTERNAL_ZOOM;
+        cellWidth = 13 * INTERNAL_ZOOM;
+        cellHeight = 26 * INTERNAL_ZOOM;
         // getStretchableFont loads an embedded font, Inconsolata-LGC-Custom, that is a distance field font as mentioned
         // earlier. We set the smoothing multiplier on it only because we are using internal zoom to increase sharpness
         // on small details, but if the smoothing is incorrect some sizes look blurry or over-sharpened. This can be set
@@ -225,7 +237,7 @@ public class EverythingDemo extends ApplicationAdapter {
         counter = 0;
 
         dungeonGen = new DungeonGenerator(width, height, rng);
-        dungeonGen.addWater(8, 6);
+        dungeonGen.addWater(30, 6);
         dungeonGen.addGrass(5);
         dungeonGen.addBoulders(10);
         dungeonGen.addDoors(18, false);
@@ -246,8 +258,7 @@ public class EverythingDemo extends ApplicationAdapter {
         placement = CoordPacker.removePacked(placement, pl.x, pl.y);
         int numMonsters = 25;
         monsters = new SpatialMap<>(numMonsters);
-        for(int i = 0; i < numMonsters; i++)
-        {
+        for (int i = 0; i < numMonsters; i++) {
             Coord monPos = dungeonGen.utility.randomCell(placement);
             placement = CoordPacker.removePacked(placement, monPos.x, monPos.y);
             monsters.put(monPos, i, new Monster(display.animateActor(monPos.x, monPos.y, 'Я',
@@ -300,14 +311,12 @@ public class EverythingDemo extends ApplicationAdapter {
         input = new VisualInput(new SquidInput.KeyHandler() {
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
-                switch (key)
-                {
+                switch (key) {
                     case SquidInput.UP_ARROW:
                     case 'k':
                     case 'w':
                     case 'K':
-                    case 'W':
-                    {
+                    case 'W': {
                         move(0, -1);
                         break;
                     }
@@ -315,8 +324,7 @@ public class EverythingDemo extends ApplicationAdapter {
                     case 'j':
                     case 's':
                     case 'J':
-                    case 'S':
-                    {
+                    case 'S': {
                         move(0, 1);
                         break;
                     }
@@ -324,8 +332,7 @@ public class EverythingDemo extends ApplicationAdapter {
                     case 'h':
                     case 'a':
                     case 'H':
-                    case 'A':
-                    {
+                    case 'A': {
                         move(-1, 0);
                         break;
                     }
@@ -333,54 +340,47 @@ public class EverythingDemo extends ApplicationAdapter {
                     case 'l':
                     case 'd':
                     case 'L':
-                    case 'D':
-                    {
+                    case 'D': {
                         move(1, 0);
                         break;
                     }
 
                     case SquidInput.UP_LEFT_ARROW:
                     case 'y':
-                    case 'Y':
-                    {
+                    case 'Y': {
                         move(-1, -1);
                         break;
                     }
                     case SquidInput.UP_RIGHT_ARROW:
                     case 'u':
-                    case 'U':
-                    {
+                    case 'U': {
                         move(1, -1);
                         break;
                     }
                     case SquidInput.DOWN_RIGHT_ARROW:
                     case 'n':
-                    case 'N':
-                    {
+                    case 'N': {
                         move(1, 1);
                         break;
                     }
                     case SquidInput.DOWN_LEFT_ARROW:
                     case 'b':
-                    case 'B':
-                    {
+                    case 'B': {
                         move(-1, 1);
                         break;
                     }
                     case '?': {
-                    	toggleHelp();
+                        toggleHelp();
                         break;
                     }
                     case 'Q':
                     case 'q':
-                    case SquidInput.ESCAPE:
-                    {
+                    case SquidInput.ESCAPE: {
                         Gdx.app.exit();
                         break;
                     }
                     case 'f':
-                    case 'F':
-                    {
+                    case 'F': {
                         currentCenter = (currentCenter + 1) % 9;
                         // idx is 3 when we use the HallucinateFilter, which needs special work
                         changingColors = currentCenter == 3;
@@ -398,13 +398,14 @@ public class EverythingDemo extends ApplicationAdapter {
             // hasn't been generated already by mouseMoved, then copy it over to awaitedMoves.
             @Override
             public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-                if(fovmap[screenX][screenY] > 0.0 && awaitedMoves.isEmpty()) {
+                if (fovmap[screenX][screenY] > 0.0 && awaitedMoves.isEmpty()) {
                     if (toCursor.isEmpty()) {
                         cursor = Coord.get(screenX, screenY);
                         //Uses DijkstraMap to get a path. from the player's position to the cursor
                         toCursor = playerToCursor.findPath(30, null, null, Coord.get(player.gridX, player.gridY), cursor);
                     }
-                    awaitedMoves = new ArrayList<>(toCursor);
+                    awaitedMoves.clear();
+                    awaitedMoves.addAll(toCursor);
                 }
                 return false;
             }
@@ -418,13 +419,12 @@ public class EverythingDemo extends ApplicationAdapter {
             // receive highlighting). Uses DijkstraMap.findPath() to find the path, which is surprisingly fast.
             @Override
             public boolean mouseMoved(int screenX, int screenY) {
-                if(!awaitedMoves.isEmpty())
+                if (!awaitedMoves.isEmpty())
                     return false;
-                if(cursor.x == screenX && cursor.y == screenY)
-                {
+                if (cursor.x == screenX && cursor.y == screenY) {
                     return false;
                 }
-                if(fovmap[screenX][screenY] > 0.0) {
+                if (fovmap[screenX][screenY] > 0.0) {
                     cursor = Coord.get(screenX, screenY);
                     //Uses DijkstraMap to get a path. from the player's position to the cursor
                     toCursor = playerToCursor.findPath(30, null, null, Coord.get(player.gridX, player.gridY), cursor);
@@ -445,22 +445,22 @@ public class EverythingDemo extends ApplicationAdapter {
         stage.addActor(messages);
         viewport = input.resizeInnerStage(stage);
     }
+
     /**
      * Move the player or open closed doors, remove any monsters the player bumped, then update the DijkstraMap and
      * have the monsters that can see the player try to approach.
      * In a fully-fledged game, this would not be organized like this, but this is a one-file demo.
+     *
      * @param xmod
      * @param ymod
      */
     private void move(int xmod, int ymod) {
-    	clearHelp();
+        clearHelp();
 
-        if(health <= 0) return;
-
+        if (health <= 0) return;
         int newX = player.gridX + xmod, newY = player.gridY + ymod;
         if (newX >= 0 && newY >= 0 && newX < width && newY < height
-                && bareDungeon[newX][newY] != '#')
-        {
+                && bareDungeon[newX][newY] != '#') {
             // '+' is a door.
             if (lineDungeon[newX][newY] == '+') {
                 decoDungeon[newX][newY] = '/';
@@ -476,26 +476,22 @@ public class EverythingDemo extends ApplicationAdapter {
                 display.slide(player, newX, newY);
                 monsters.remove(Coord.get(newX, newY));
             }
-
             phase = Phase.PLAYER_ANIM;
         }
     }
 
     // check if a monster's movement would overlap with another monster.
-    private boolean checkOverlap(Monster mon, int x, int y, ArrayList<Coord> futureOccupied)
-    {
-        if(monsters.containsPosition(Coord.get(x, y)) && !mon.equals(monsters.get(Coord.get(x, y))))
+    private boolean checkOverlap(Monster mon, int x, int y, ArrayList<Coord> futureOccupied) {
+        if (monsters.containsPosition(Coord.get(x, y)) && !mon.equals(monsters.get(Coord.get(x, y))))
             return true;
-        for(Coord p : futureOccupied)
-        {
-            if(x == p.x && y == p.y)
+        for (Coord p : futureOccupied) {
+            if (x == p.x && y == p.y)
                 return true;
         }
         return false;
     }
 
-    private void postMove()
-    {
+    private void postMove() {
 
         phase = Phase.MONSTER_ANIM;
         // The next two lines are important to avoid monsters treating cells the player WAS in as goals.
@@ -506,7 +502,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // this is an important piece of DijkstraMap usage; the argument is a Set of Points for squares that
         // temporarily cannot be moved through (not walls, which are automatically known because the map char[][]
         // was passed to the DijkstraMap constructor, but things like moving creatures and objects).
-        LinkedHashSet<Coord> monplaces = monsters.positions();
+        OrderedSet<Coord> monplaces = monsters.positions();
 
         pathMap = getToPlayer.scan(monplaces);
 
@@ -514,17 +510,14 @@ public class EverythingDemo extends ApplicationAdapter {
         fovmap = fov.calculateFOV(res, player.gridX, player.gridY, 8, Radius.SQUARE);
         // handle monster turns
         ArrayList<Coord> nextMovePositions = new ArrayList<>(25);
-        for(Coord pos : monsters.positions())
-        {
+        for (Coord pos : monsters.positions()) {
             Monster mon = monsters.get(pos);
             // monster values are used to store their aggression, 1 for actively stalking the player, 0 for not.
-            if(mon.state > 0 || fovmap[pos.x][pos.y] > 0.1)
-            {
-                if(mon.state == 0)
-                {
+            if (mon.state > 0 || fovmap[pos.x][pos.y] > 0.1) {
+                if (mon.state == 0) {
                     messages.appendMessage("The AЯMED GUAЯD shouts at you, \"" +
                             FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 1, 3,
-                            new String[]{",", ",", ",", " -"}, new String[]{"!"}, 0.25) + "\"");
+                                    new String[]{",", ",", ",", " -"}, new String[]{"!"}, 0.25) + "\"");
                 }
                 // this block is used to ensure that the monster picks the best path, or a random choice if there
                 // is more than one equally good best option.
@@ -532,24 +525,22 @@ public class EverythingDemo extends ApplicationAdapter {
                 double best = 9999.0;
                 Direction[] ds = new Direction[8];
                 rng.shuffle(Direction.OUTWARDS, ds);
-                for(Direction d : ds)
-                {
+                for (Direction d : ds) {
                     Coord tmp = pos.translate(d);
-                    if(pathMap[tmp.x][tmp.y] < best &&
-                            !checkOverlap(mon, tmp.x, tmp.y, nextMovePositions))
-                    {
+                    if (pathMap[tmp.x][tmp.y] < best &&
+                            !checkOverlap(mon, tmp.x, tmp.y, nextMovePositions)) {
                         // pathMap is a 2D array of doubles where 0 is the goal (the player).
                         // we use best to store which option is closest to the goal.
                         best = pathMap[tmp.x][tmp.y];
                         choice = d;
                     }
                 }
-                if(choice != null) {
+                if (choice != null) {
                     Coord tmp = pos.translate(choice);
                     // if we would move into the player, instead damage the player and give newMons the current
                     // position of this monster.
                     if (tmp.x == player.gridX && tmp.y == player.gridY) {
-                        display.tint(player.gridX, player.gridY, SColor.PURE_CRIMSON, 0, 0.15f);
+                        display.tint(player.gridX, player.gridY, SColor.PURE_CRIMSON, 0, 0.415f);
                         health--;
                         //player.setText("" + health);
                         monsters.positionalModify(pos, mon.change(1));
@@ -565,9 +556,7 @@ public class EverythingDemo extends ApplicationAdapter {
                         display.slide(mon.entity, tmp.x, tmp.y);
 
                     }
-                }
-                else
-                {
+                } else {
                     monsters.positionalModify(pos, mon.change(1));
                 }
             }
@@ -576,16 +565,15 @@ public class EverythingDemo extends ApplicationAdapter {
     }
 
     private void toggleHelp() {
-        if(help != null)
-        {
+        if (help != null) {
             clearHelp();
             return;
         }
         final int nbMonsters = monsters.size();
 
 		/* Prepare the String to display */
-		final IColoredString<Color> cs = new IColoredString.Impl<>();
-		cs.append("Still ", null);
+        final IColoredString<Color> cs = new IColoredString.Impl<>();
+        cs.append("Still ", null);
         final Color nbColor;
         if (nbMonsters <= 1)
             /* Green */
@@ -597,7 +585,7 @@ public class EverythingDemo extends ApplicationAdapter {
             /* Red */
             nbColor = Color.RED;
         cs.appendInt(nbMonsters, nbColor);
-        cs.append(" monster"+(nbMonsters == 1 ? "" : "s")+" to kill", null);
+        cs.append(" monster" + (nbMonsters == 1 ? "" : "s") + " to kill", null);
 
         IColoredString<Color> helping1 = new IColoredString.Impl<>("Use numpad or vi-keys (hjklyubn) to move.", Color.WHITE);
         IColoredString<Color> helping2 = new IColoredString.Impl<>("Use ? for help, f to change colors, q to quit.", Color.WHITE);
@@ -607,45 +595,7 @@ public class EverythingDemo extends ApplicationAdapter {
         final Color bgColor = new Color(0.3f, 0.3f, 0.3f, 0.9f);
 
         final Actor a;
-        if (rng.nextBoolean()) {
-			/*
-			 * Use GroupCombinedPanel. See the else for a more automated way to
-			 * do the job.
-			 */
-
-			/* The panel's width */
-        	final int w = Math.max(helping3.length(), cs.length());
-        	/* The panel's height. */
-        	final int h = 5;
-        	final SquidPanel bg = new SquidPanel(w, h, display.getTextFactory());
-        	final SquidPanel fg = new SquidPanel(w, h, display.getTextFactory());
-        	final GroupCombinedPanel<Color> gcp = new GroupCombinedPanel<>();
-        	a = gcp;
-        	/*
-        	 * We're setting them late just for the demo, as it avoids giving 'w'
-        	 * and 'h' at construction time.
-        	 */
-        	gcp.setPanels(bg, fg);
-
-        	/*
-        	 * Set the position (the center), using libgdx's 'setPosition'
-        	 * method, that takes the bottom left corner as input.
-        	 */
-        	gcp.setPosition(((width / 2) - (w / 2)) * cellWidth, (height / 2) * cellHeight);
-
-        	/* Fill the background */
-        	gcp.fill(ICombinedPanel.What.BG, bgColor);
-
-        	/* Now, to set the text we have to follow SquidPanel's convention */
-        	/* First 0: align left, second 0: first line */
-        	gcp.putFG(0, 0, cs);
-
-        	/* 0: align left, 2: third line */
-        	gcp.putFG(0, 2, helping1);
-        	gcp.putFG(0, 3, helping2);
-        	gcp.putFG(0, 4, helping3);
-		} else {
-			/*
+            /*
 			 * Use TextPanel. There's less work to do than with
 			 * GroupCombinedPanel, and we can use a more legible variable-width font.
 			 * It doesn't seem like it when reading this code, but this actually does
@@ -653,66 +603,64 @@ public class EverythingDemo extends ApplicationAdapter {
 			 * justifying, without having to worry about sizes since TextPanel lays
 			 * itself out.
 			 */
-			final TextPanel<Color> tp = new TextPanel<Color>(new GDXMarkup(), DefaultResources.getStretchablePrintFont());
-            tp.backgroundColor = SColor.DARK_SLATE_GRAY;
+        final TextPanel<Color> tp = new TextPanel<Color>(new GDXMarkup(), DefaultResources.getStretchablePrintFont());
+        tp.backgroundColor = SColor.DARK_SLATE_GRAY;
 
-			final List<IColoredString<Color>> text = new ArrayList<>();
-			text.add(cs);
+        final List<IColoredString<Color>> text = new ArrayList<>();
+        text.add(cs);
 			/* No need to call IColoredString::wrap, TextPanel does it on its own */
-			text.add(helping1);
-			text.add(helping2);
-			text.add(helping3);
+        text.add(helping1);
+        text.add(helping2);
+        text.add(helping3);
 
-            final float w = width * cellWidth, aw = helping3.length() * cellWidth * 0.8f * INTERNAL_ZOOM;
-            final float h = height * cellHeight, ah = cellHeight * 9f * INTERNAL_ZOOM;
-            tp.init(aw, ah, text);
-            a = tp.getScrollPane();
-            final float x = (w - aw) / 2f;
-            final float y = (h - ah) / 2f;
-            a.setPosition(x, y);
-            stage.setScrollFocus(a);
-        }
+        final float w = width * cellWidth, aw = helping3.length() * cellWidth * 0.8f * INTERNAL_ZOOM;
+        final float h = height * cellHeight, ah = cellHeight * 9f * INTERNAL_ZOOM;
+        tp.init(aw, ah, text);
+        a = tp.getScrollPane();
+        final float x = (w - aw) / 2f;
+        final float y = (h - ah) / 2f;
+        a.setPosition(x, y);
+        stage.setScrollFocus(a);
 
         help = a;
 
-		stage.addActor(a);
-	}
+        stage.addActor(a);
+    }
 
-	private void clearHelp() {
-		if (help == null)
+    private void clearHelp() {
+        if (help == null)
 			/* Nothing to do */
-			return;
-		help.clear();
-		stage.getActors().removeValue(help, true);
+            return;
+        help.clear();
+        stage.getActors().removeValue(help, true);
         help = null;
-	}
+    }
 
-    public void putMap()
-    {
-        boolean overlapping = false;
+    public void putMap() {
+        boolean overlapping;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                overlapping = monsters.containsPosition(Coord.get(i,j)) || (player.gridX == i && player.gridY == j);
+                overlapping = monsters.containsPosition(Coord.get(i, j)) || (player.gridX == i && player.gridY == j);
                 // if we see it now, we remember the cell and show a lit cell based on the fovmap value (between 0.0
                 // and 1.0), with 1.0 being almost pure white at +215 lightness and 0.0 being rather dark at -105.
                 if (fovmap[i][j] > 0.0) {
                     seen[i][j] = true;
                     display.put(i, j, (overlapping) ? ' ' : lineDungeon[i][j], fgCenter.filter(colors[i][j]), bgCenter.filter(bgColors[i][j]),
-                            lights[i][j] + (int) (-105 + 320 * fovmap[i][j]));
+                            lights[i][j] + (int) (-105 + 180 * fovmap[i][j]));
                     // if we don't see it now, but did earlier, use a very dark background, but lighter than black.
                 } else {// if (seen[i][j]) {
                     display.put(i, j, lineDungeon[i][j], fgCenter.filter(colors[i][j]), bgCenter.filter(bgColors[i][j]), -140);
                 }
             }
         }
-        for (Coord pt : toCursor)
-        {
+        for (Coord pt : toCursor) {
             // use a brighter light to trace the path to the cursor, from 170 max lightness to 0 min.
             display.highlight(pt.x, pt.y, lights[pt.x][pt.y] + (int) (170 * fovmap[pt.x][pt.y]));
         }
     }
+
     @Override
-    public void render () {
+    public void render() {
         // standard clear the background routine for libGDX
         Gdx.gl.glClearColor(bgColor.r / 255.0f, bgColor.g / 255.0f, bgColor.b / 255.0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -730,25 +678,25 @@ public class EverythingDemo extends ApplicationAdapter {
             // still need to display the map, then write over it with a message.
             putMap();
             display.putBoxedString(width / 2 - 18, height / 2 - 10, "   THE TSAR WILL HAVE YOUR HEAD!    ");
-            display.putBoxedString(width / 2 - 18, height / 2 - 5,  "      AS THE OLD SAYING GOES,       ");
+            display.putBoxedString(width / 2 - 18, height / 2 - 5, "      AS THE OLD SAYING GOES,       ");
             display.putBoxedString(width / 2 - lang.length() / 2, height / 2, lang);
-            display.putBoxedString(width / 2 - 18, height / 2 + 5,  "             q to quit.             ");
+            display.putBoxedString(width / 2 - 18, height / 2 + 5, "             q to quit.             ");
 
             // because we return early, we still need to draw.
             stage.draw();
             // q still needs to quit.
-            if(input.hasNext())
+            if (input.hasNext())
                 input.next();
             return;
         }
         // need to display the map every frame, since we clear the screen to avoid artifacts.
         putMap();
         // if the user clicked, we have a list of moves to perform.
-        if(!awaitedMoves.isEmpty())
-        {
+        if (!awaitedMoves.isEmpty()) {
+
             // extremely similar to the block below that also checks if animations are done
             // this doesn't check for input, but instead processes and removes Points from awaitedMoves.
-            if(!display.hasActiveAnimations()) {
+            if (!display.hasActiveAnimations()) {
                 ++framesWithoutAnimation;
                 if (framesWithoutAnimation >= 3) {
                     framesWithoutAnimation = 0;
@@ -767,12 +715,12 @@ public class EverythingDemo extends ApplicationAdapter {
             }
         }
         // if we are waiting for the player's input and get input, process it.
-        else if(input.hasNext() && !display.hasActiveAnimations() && phase == Phase.WAIT) {
+        else if (input.hasNext() && !display.hasActiveAnimations() && phase == Phase.WAIT) {
             input.next();
         }
         // if the previous blocks didn't happen, and there are no active animations, then either change the phase
         // (because with no animations running the last phase must have ended), or start a new animation soon.
-        else if(!display.hasActiveAnimations()) {
+        else if (!display.hasActiveAnimations()) {
             ++framesWithoutAnimation;
             if (framesWithoutAnimation >= 3) {
                 framesWithoutAnimation = 0;
@@ -791,8 +739,7 @@ public class EverythingDemo extends ApplicationAdapter {
             }
         }
         // if we do have an animation running, then how many frames have passed with no animation needs resetting
-        else
-        {
+        else {
             framesWithoutAnimation = 0;
         }
 
@@ -803,7 +750,7 @@ public class EverythingDemo extends ApplicationAdapter {
         stage.act();
 
         subCell.erase();
-        if(help == null) {
+        if (help == null) {
             // display does not draw all AnimatedEntities by default, since FOV often changes how they need to be drawn.
             batch.begin();
             // the player needs to get drawn every frame, of course.
@@ -814,7 +761,7 @@ public class EverythingDemo extends ApplicationAdapter {
                 // monsters are only drawn if within FOV.
                 if (fovmap[mon.entity.gridX][mon.entity.gridY] > 0.0) {
                     display.drawActor(batch, 1.0f, mon.entity);
-                    if(mon.state > 0)
+                    if (mon.state > 0)
                         subCell.put(mon.entity.gridX, mon.entity.gridY, '!', SColor.DARK_RED);
                 }
             }
@@ -823,15 +770,15 @@ public class EverythingDemo extends ApplicationAdapter {
             batch.end();
         }
         // if using a filter that changes each frame, clear the known relationship between requested and actual colors
-        if(changingColors) {
+        if (changingColors) {
             fgCenter.clearCache();
             bgCenter.clearCache();
         }
     }
 
     @Override
-	public void resize(int width, int height) {
-		super.resize(width, height);
+    public void resize(int width, int height) {
+        super.resize(width, height);
 
         // message box won't respond to clicks on the far right if the stage hasn't been updated with a larger size
         currentZoomX = width * 1f / this.width;
@@ -840,10 +787,10 @@ public class EverythingDemo extends ApplicationAdapter {
         // message box should be given updated bounds since I don't think it will do this automatically
         messages.setBounds(0, 0, width, currentZoomY * messages.getGridHeight());
         // SquidMouse turns screen positions to cell positions, and needs to be told that cell sizes have changed
-		input.reinitialize(currentZoomX, currentZoomY, this.width, this.height, 0, 0, width, height);
+        input.reinitialize(currentZoomX, currentZoomY, this.width, this.height, 0, 0, width, height);
         currentZoomX = cellWidth / currentZoomX;
         currentZoomY = cellHeight / currentZoomY;
         input.update(width, height, true);
         stage.getViewport().update(width, height, true);
-	}
+    }
 }

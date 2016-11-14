@@ -1,12 +1,8 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.CoordPacker;
-import squidpony.squidmath.DDALine;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -99,8 +95,8 @@ public class LanesMapGenerator {
             rows[i] = rsum + (int)(rowBase * 0.5f * (3 + Long.bitCount(rowAlterations & b)));
             rsum += (int)(rowBase * (3 + Long.bitCount(rowAlterations & b)));
         }
-        int cs = (width - csum);
-        int rs = (height - rsum);
+        int cs = width - csum;
+        int rs = height - rsum;
         int cs2 = cs, rs2 = rs, cs3 = cs, rs3 = rs;
         for (int i = 0; i <= 7; i++) {
             cs2= cs2 * i / 7;
@@ -116,7 +112,7 @@ public class LanesMapGenerator {
         }
 
 
-        LinkedHashMap<Coord, List<Coord>> connections = new LinkedHashMap<>(80);
+        OrderedMap<Coord, List<Coord>> connections = new OrderedMap<>(80);
         Coord temp, t;
         int m = random.nextInt(32), r = random.between(8, 24);
         temp = CoordPacker.hilbertToCoord(m);

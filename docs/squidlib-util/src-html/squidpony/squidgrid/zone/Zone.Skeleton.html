@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.squidgrid.zone;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import squidpony.squidmath.Coord;<a name="line.3"></a>
+<span class="sourceLineNo">004</span><a name="line.4"></a>
+<span class="sourceLineNo">005</span>import java.io.Serializable;<a name="line.5"></a>
+<span class="sourceLineNo">006</span>import java.util.List;<a name="line.6"></a>
+<span class="sourceLineNo">007</span><a name="line.7"></a>
+<span class="sourceLineNo">008</span>/**<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * Abstraction over a list of {@link Coord}. This allows to use the short arrays<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * coming from {@link squidpony.squidmath.CoordPacker}, which are compressed for<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * better memory usage, regular {@link List lists of Coord}, which are often the<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * simplest option, or {@link squidpony.squidmath.GreasedRegion GreasedRegions},<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * which are "greasy" in the fatty-food sense (they are heavier objects, and are<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * uncompressed) but also "greased" like greased lightning (they are very fast at<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * spatial transformations on their region).<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * &lt;p&gt;<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * Zones are {@link Serializable}, but serialization doesn't change the internal<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * representation (some would want to pack {@link ListZone} into<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * {@link CoordPackerZone}s when serializing). I find that overzealous for a<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * simple interface. If you want your zones to be be packed when serialized,<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * create {@link CoordPackerZone} yourself. In squidlib-extra, GreasedRegions are<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * given slightly special treatment during that JSON-like serialization so they<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * avoid repeating certain information, but they are still going to be larger than<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * compressed short arrays from CoordPacker.<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * &lt;/p&gt;<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * &lt;p&gt;<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * While CoordPacker produces short arrays that can be wrapped in CoordPackerZone<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * objects, and a List of Coord can be similarly wrapped in a ListZone object,<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * GreasedRegion extends {@link Zone.Skeleton} and so implements Zone itself.<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * Unlike CoordPackerZone, which is immutable in practice (changing the short<a name="line.30"></a>
+<span class="sourceLineNo">031</span> * array reference is impossible and changing the elements rarely works as<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * planned), GreasedRegion is mutable for performance reasons, and may need copies<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * to be created if you want to keep around older GreasedRegions.<a name="line.33"></a>
+<span class="sourceLineNo">034</span> * &lt;/p&gt;<a name="line.34"></a>
+<span class="sourceLineNo">035</span> * @author smelC<a name="line.35"></a>
+<span class="sourceLineNo">036</span> * @see squidpony.squidmath.CoordPacker<a name="line.36"></a>
+<span class="sourceLineNo">037</span> * @see squidpony.squidmath.GreasedRegion<a name="line.37"></a>
+<span class="sourceLineNo">038</span> */<a name="line.38"></a>
+<span class="sourceLineNo">039</span>public interface Zone extends Serializable {<a name="line.39"></a>
+<span class="sourceLineNo">040</span><a name="line.40"></a>
+<span class="sourceLineNo">041</span>    /**<a name="line.41"></a>
+<span class="sourceLineNo">042</span>     * @return Whether this zone is empty.<a name="line.42"></a>
+<span class="sourceLineNo">043</span>     */<a name="line.43"></a>
+<span class="sourceLineNo">044</span>    boolean isEmpty();<a name="line.44"></a>
+<span class="sourceLineNo">045</span><a name="line.45"></a>
+<span class="sourceLineNo">046</span>    /**<a name="line.46"></a>
+<span class="sourceLineNo">047</span>     * @return The number of cells that this zone contains (the size<a name="line.47"></a>
+<span class="sourceLineNo">048</span>     * {@link #getAll()}).<a name="line.48"></a>
+<span class="sourceLineNo">049</span>     */<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    int size();<a name="line.50"></a>
+<span class="sourceLineNo">051</span><a name="line.51"></a>
+<span class="sourceLineNo">052</span>    /**<a name="line.52"></a>
+<span class="sourceLineNo">053</span>     * @param x<a name="line.53"></a>
+<span class="sourceLineNo">054</span>     * @param y<a name="line.54"></a>
+<span class="sourceLineNo">055</span>     * @return Whether this zone contains the coordinate (x,y).<a name="line.55"></a>
+<span class="sourceLineNo">056</span>     */<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    boolean contains(int x, int y);<a name="line.57"></a>
+<span class="sourceLineNo">058</span><a name="line.58"></a>
+<span class="sourceLineNo">059</span>    /**<a name="line.59"></a>
+<span class="sourceLineNo">060</span>     * @param c<a name="line.60"></a>
+<span class="sourceLineNo">061</span>     * @return Whether this zone contains {@code c}.<a name="line.61"></a>
+<span class="sourceLineNo">062</span>     */<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    boolean contains(Coord c);<a name="line.63"></a>
+<span class="sourceLineNo">064</span><a name="line.64"></a>
+<span class="sourceLineNo">065</span>    /**<a name="line.65"></a>
+<span class="sourceLineNo">066</span>     * @return All cells in this zone.<a name="line.66"></a>
+<span class="sourceLineNo">067</span>     */<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    List&lt;Coord&gt; getAll();<a name="line.68"></a>
+<span class="sourceLineNo">069</span><a name="line.69"></a>
+<span class="sourceLineNo">070</span>    /**<a name="line.70"></a>
+<span class="sourceLineNo">071</span>     * A convenience partial implementation. Please try for all new<a name="line.71"></a>
+<span class="sourceLineNo">072</span>     * implementations of {@link Zone} to be subtypes of this class. It usually<a name="line.72"></a>
+<span class="sourceLineNo">073</span>     * prove handy at some point to have a common superclass.<a name="line.73"></a>
+<span class="sourceLineNo">074</span>     *<a name="line.74"></a>
+<span class="sourceLineNo">075</span>     * @author smelC<a name="line.75"></a>
+<span class="sourceLineNo">076</span>     */<a name="line.76"></a>
+<span class="sourceLineNo">077</span>    abstract class Skeleton implements Zone {<a name="line.77"></a>
+<span class="sourceLineNo">078</span><a name="line.78"></a>
+<span class="sourceLineNo">079</span>        private static final long serialVersionUID = 4436698111716212256L;<a name="line.79"></a>
+<span class="sourceLineNo">080</span><a name="line.80"></a>
+<span class="sourceLineNo">081</span>        @Override<a name="line.81"></a>
+<span class="sourceLineNo">082</span>        /* Convenience implementation, feel free to override */<a name="line.82"></a>
+<span class="sourceLineNo">083</span>        public boolean contains(Coord c) {<a name="line.83"></a>
+<span class="sourceLineNo">084</span>            return contains(c.x, c.y);<a name="line.84"></a>
+<span class="sourceLineNo">085</span>        }<a name="line.85"></a>
+<span class="sourceLineNo">086</span><a name="line.86"></a>
+<span class="sourceLineNo">087</span>    }<a name="line.87"></a>
+<span class="sourceLineNo">088</span>}<a name="line.88"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

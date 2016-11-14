@@ -20,7 +20,7 @@ import java.util.ListIterator;
 /**
  * An actor capable of drawing {@link IColoredString}s. It is lines-oriented:
  * putting a line may erase a line put before. It is designed to write text with
- * a serif font (as opposed to {@link SquidPanel}). It performs line wrapping by
+ * a variable-width font (as opposed to {@link SquidPanel}). It performs line wrapping by
  * default. It can write from top to bottom or from bottom to top (the default).
  * 
  * <p>
@@ -263,9 +263,9 @@ public class LinesPanel<T extends Color> extends Actor {
 
 	/**
 	 * If you want to grey out "older" messages, you would do it in this method,
-	 * when {@code ydx > 0} (using an {@link IColorCenter} maybe ?).
+	 * when {@code ydx > 0} (using an {@link squidpony.IColorCenter} maybe ?).
 	 * 
-	 * @param ics
+	 * @param ics an IColorCenter with the same generic color type as this LinesPanel
 	 * @param ydx
 	 *            The index of {@code ics} within {@link #content}.
 	 * @return A variation of {@code ics}, or {@code ics} itself.

@@ -17,6 +17,7 @@ import java.util.List;
  * Created by Tommy Ettinger on 1/10/2016.
  */
 public class WobblyLine {
+    private WobblyLine(){}
     /**
      * Draws a line from (startX, startY) to (endX, endY) using the Drunkard's Walk algorithm. Returns a List of Coord
      * in order.

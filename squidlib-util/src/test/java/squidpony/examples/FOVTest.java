@@ -6,10 +6,10 @@ import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.OrganicMapGenerator;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.OrderedSet;
 import squidpony.squidmath.StatefulRNG;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 
 /**
  * Created by Tommy Ettinger on 5/13/2016.
@@ -39,7 +39,7 @@ public class FOVTest {
         short[] floors = DungeonUtility.packedFloors(dungeon);
         Coord pt = dungeonGenerator.utility.randomCell(floors);
         Coord start = pt;
-        LinkedHashSet<Coord> points = new LinkedHashSet<>(20);
+        OrderedSet<Coord> points = new OrderedSet<>(20);
         double[][] losMap = fov.calculateLOSMap(resMap, pt.x, pt.y);
         for (int i = 0; i < 20; i++) {
             points.add(pt);

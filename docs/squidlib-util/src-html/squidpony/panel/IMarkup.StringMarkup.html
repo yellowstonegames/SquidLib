@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.panel;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>/**<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * Created by Tommy Ettinger on 1/23/2016.<a name="line.4"></a>
+<span class="sourceLineNo">005</span> */<a name="line.5"></a>
+<span class="sourceLineNo">006</span>public interface IMarkup&lt;T&gt; {<a name="line.6"></a>
+<span class="sourceLineNo">007</span>    String getMarkup(T value);<a name="line.7"></a>
+<span class="sourceLineNo">008</span>    String closeMarkup();<a name="line.8"></a>
+<span class="sourceLineNo">009</span>    class StringMarkup implements IMarkup&lt;String&gt;<a name="line.9"></a>
+<span class="sourceLineNo">010</span>    {<a name="line.10"></a>
+<span class="sourceLineNo">011</span>        @Override<a name="line.11"></a>
+<span class="sourceLineNo">012</span>        public String getMarkup(String value) {<a name="line.12"></a>
+<span class="sourceLineNo">013</span>            return "[" + value + "]";<a name="line.13"></a>
+<span class="sourceLineNo">014</span>        }<a name="line.14"></a>
+<span class="sourceLineNo">015</span><a name="line.15"></a>
+<span class="sourceLineNo">016</span>        @Override<a name="line.16"></a>
+<span class="sourceLineNo">017</span>        public String closeMarkup() {<a name="line.17"></a>
+<span class="sourceLineNo">018</span>            return "[]";<a name="line.18"></a>
+<span class="sourceLineNo">019</span>        }<a name="line.19"></a>
+<span class="sourceLineNo">020</span>    }<a name="line.20"></a>
+<span class="sourceLineNo">021</span>}<a name="line.21"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

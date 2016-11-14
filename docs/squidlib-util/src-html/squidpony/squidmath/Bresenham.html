@@ -1,0 +1,373 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.squidmath;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import java.util.LinkedList;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import java.util.Queue;<a name="line.4"></a>
+<span class="sourceLineNo">005</span><a name="line.5"></a>
+<span class="sourceLineNo">006</span>/**<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * Provides a means to generate Bresenham lines in 2D and 3D.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * @author Eben Howard - http://squidpony.com - howard@squidpony.com<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * @author Lewis Potter<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * @author Tommy Ettinger<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * @author smelC<a name="line.12"></a>
+<span class="sourceLineNo">013</span> */<a name="line.13"></a>
+<span class="sourceLineNo">014</span>public class Bresenham {<a name="line.14"></a>
+<span class="sourceLineNo">015</span><a name="line.15"></a>
+<span class="sourceLineNo">016</span>    /**<a name="line.16"></a>
+<span class="sourceLineNo">017</span>     * Prevents any instances from being created<a name="line.17"></a>
+<span class="sourceLineNo">018</span>     */<a name="line.18"></a>
+<span class="sourceLineNo">019</span>    private Bresenham() {<a name="line.19"></a>
+<span class="sourceLineNo">020</span>    }<a name="line.20"></a>
+<span class="sourceLineNo">021</span><a name="line.21"></a>
+<span class="sourceLineNo">022</span>    /**<a name="line.22"></a>
+<span class="sourceLineNo">023</span>     * Generates a 2D Bresenham line between two points. If you don't need<a name="line.23"></a>
+<span class="sourceLineNo">024</span>     * the {@link Queue} interface for the returned reference, consider<a name="line.24"></a>
+<span class="sourceLineNo">025</span>     * using {@link #line2D_(Coord, Coord)} to save some memory.<a name="line.25"></a>
+<span class="sourceLineNo">026</span>     *<a name="line.26"></a>
+<span class="sourceLineNo">027</span>     * @param a the starting point<a name="line.27"></a>
+<span class="sourceLineNo">028</span>     * @param b the ending point<a name="line.28"></a>
+<span class="sourceLineNo">029</span>     * @return The path between {@code a} and {@code b}.<a name="line.29"></a>
+<span class="sourceLineNo">030</span>     */<a name="line.30"></a>
+<span class="sourceLineNo">031</span>    public static Queue&lt;Coord&gt; line2D(Coord a, Coord b) {<a name="line.31"></a>
+<span class="sourceLineNo">032</span>        return line2D(a.x, a.y, b.x, b.y);<a name="line.32"></a>
+<span class="sourceLineNo">033</span>    }<a name="line.33"></a>
+<span class="sourceLineNo">034</span><a name="line.34"></a>
+<span class="sourceLineNo">035</span>    /**<a name="line.35"></a>
+<span class="sourceLineNo">036</span>     * Generates a 2D Bresenham line between two points.<a name="line.36"></a>
+<span class="sourceLineNo">037</span>     *<a name="line.37"></a>
+<span class="sourceLineNo">038</span>     * @param a the starting point<a name="line.38"></a>
+<span class="sourceLineNo">039</span>     * @param b the ending point<a name="line.39"></a>
+<span class="sourceLineNo">040</span>     * @return The path between {@code a} and {@code b}.<a name="line.40"></a>
+<span class="sourceLineNo">041</span>     */<a name="line.41"></a>
+<span class="sourceLineNo">042</span>    public static Coord[] line2D_(Coord a, Coord b) {<a name="line.42"></a>
+<span class="sourceLineNo">043</span>        return line2D_(a.x, a.y, b.x, b.y);<a name="line.43"></a>
+<span class="sourceLineNo">044</span>    }<a name="line.44"></a>
+<span class="sourceLineNo">045</span><a name="line.45"></a>
+<span class="sourceLineNo">046</span>    /**<a name="line.46"></a>
+<span class="sourceLineNo">047</span>     * Generates a 3D Bresenham line between two points.<a name="line.47"></a>
+<span class="sourceLineNo">048</span>     *<a name="line.48"></a>
+<span class="sourceLineNo">049</span>     * @param a Coord to start from. This will be the first element of the list<a name="line.49"></a>
+<span class="sourceLineNo">050</span>     * @param b Coord to end at. This will be the last element of the list.<a name="line.50"></a>
+<span class="sourceLineNo">051</span>     * @return A list of points between a and b.<a name="line.51"></a>
+<span class="sourceLineNo">052</span>     */<a name="line.52"></a>
+<span class="sourceLineNo">053</span>    public static Queue&lt;Coord3D&gt; line3D(Coord3D a, Coord3D b) {<a name="line.53"></a>
+<span class="sourceLineNo">054</span>        return line3D(a.x, a.y, a.z, b.x, b.y, b.z);<a name="line.54"></a>
+<span class="sourceLineNo">055</span>    }<a name="line.55"></a>
+<span class="sourceLineNo">056</span><a name="line.56"></a>
+<span class="sourceLineNo">057</span>    /**<a name="line.57"></a>
+<span class="sourceLineNo">058</span>     * Generates a 3D Bresenham line between the given coordinates.<a name="line.58"></a>
+<span class="sourceLineNo">059</span>     * Uses a Coord3D for each point; keep in mind Coord3D values are not<a name="line.59"></a>
+<span class="sourceLineNo">060</span>     * pooled like ordinary 2D Coord values, and this may cause more work<a name="line.60"></a>
+<span class="sourceLineNo">061</span>     * for the garbage collector, especially on Android, if many Coord3D<a name="line.61"></a>
+<span class="sourceLineNo">062</span>     * values are produced.<a name="line.62"></a>
+<span class="sourceLineNo">063</span>     *<a name="line.63"></a>
+<span class="sourceLineNo">064</span>     * @param startx the x coordinate of the starting point<a name="line.64"></a>
+<span class="sourceLineNo">065</span>     * @param starty the y coordinate of the starting point<a name="line.65"></a>
+<span class="sourceLineNo">066</span>     * @param startz the z coordinate of the starting point<a name="line.66"></a>
+<span class="sourceLineNo">067</span>     * @param endx the x coordinate of the starting point<a name="line.67"></a>
+<span class="sourceLineNo">068</span>     * @param endy the y coordinate of the starting point<a name="line.68"></a>
+<span class="sourceLineNo">069</span>     * @param endz the z coordinate of the starting point<a name="line.69"></a>
+<span class="sourceLineNo">070</span>     * @return a Queue (internally, a LinkedList) of Coord3D points along the line<a name="line.70"></a>
+<span class="sourceLineNo">071</span>     */<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    public static Queue&lt;Coord3D&gt; line3D(int startx, int starty, int startz, int endx, int endy, int endz) {<a name="line.72"></a>
+<span class="sourceLineNo">073</span>        Queue&lt;Coord3D&gt; result = new LinkedList&lt;&gt;();<a name="line.73"></a>
+<span class="sourceLineNo">074</span><a name="line.74"></a>
+<span class="sourceLineNo">075</span>        int dx = endx - startx;<a name="line.75"></a>
+<span class="sourceLineNo">076</span>        int dy = endy - starty;<a name="line.76"></a>
+<span class="sourceLineNo">077</span>        int dz = endz - startz;<a name="line.77"></a>
+<span class="sourceLineNo">078</span><a name="line.78"></a>
+<span class="sourceLineNo">079</span>        int ax = Math.abs(dx) &lt;&lt; 1;<a name="line.79"></a>
+<span class="sourceLineNo">080</span>        int ay = Math.abs(dy) &lt;&lt; 1;<a name="line.80"></a>
+<span class="sourceLineNo">081</span>        int az = Math.abs(dz) &lt;&lt; 1;<a name="line.81"></a>
+<span class="sourceLineNo">082</span><a name="line.82"></a>
+<span class="sourceLineNo">083</span>        int signx = (int) Math.signum(dx);<a name="line.83"></a>
+<span class="sourceLineNo">084</span>        int signy = (int) Math.signum(dy);<a name="line.84"></a>
+<span class="sourceLineNo">085</span>        int signz = (int) Math.signum(dz);<a name="line.85"></a>
+<span class="sourceLineNo">086</span><a name="line.86"></a>
+<span class="sourceLineNo">087</span>        int x = startx;<a name="line.87"></a>
+<span class="sourceLineNo">088</span>        int y = starty;<a name="line.88"></a>
+<span class="sourceLineNo">089</span>        int z = startz;<a name="line.89"></a>
+<span class="sourceLineNo">090</span><a name="line.90"></a>
+<span class="sourceLineNo">091</span>        int deltax, deltay, deltaz;<a name="line.91"></a>
+<span class="sourceLineNo">092</span>        if (ax &gt;= Math.max(ay, az)) /* x dominant */ {<a name="line.92"></a>
+<span class="sourceLineNo">093</span>            deltay = ay - (ax &gt;&gt; 1);<a name="line.93"></a>
+<span class="sourceLineNo">094</span>            deltaz = az - (ax &gt;&gt; 1);<a name="line.94"></a>
+<span class="sourceLineNo">095</span>            while (true) {<a name="line.95"></a>
+<span class="sourceLineNo">096</span>                result.offer(new Coord3D(x, y, z));<a name="line.96"></a>
+<span class="sourceLineNo">097</span>                if (x == endx) {<a name="line.97"></a>
+<span class="sourceLineNo">098</span>                    return result;<a name="line.98"></a>
+<span class="sourceLineNo">099</span>                }<a name="line.99"></a>
+<span class="sourceLineNo">100</span><a name="line.100"></a>
+<span class="sourceLineNo">101</span>                if (deltay &gt;= 0) {<a name="line.101"></a>
+<span class="sourceLineNo">102</span>                    y += signy;<a name="line.102"></a>
+<span class="sourceLineNo">103</span>                    deltay -= ax;<a name="line.103"></a>
+<span class="sourceLineNo">104</span>                }<a name="line.104"></a>
+<span class="sourceLineNo">105</span><a name="line.105"></a>
+<span class="sourceLineNo">106</span>                if (deltaz &gt;= 0) {<a name="line.106"></a>
+<span class="sourceLineNo">107</span>                    z += signz;<a name="line.107"></a>
+<span class="sourceLineNo">108</span>                    deltaz -= ax;<a name="line.108"></a>
+<span class="sourceLineNo">109</span>                }<a name="line.109"></a>
+<span class="sourceLineNo">110</span><a name="line.110"></a>
+<span class="sourceLineNo">111</span>                x += signx;<a name="line.111"></a>
+<span class="sourceLineNo">112</span>                deltay += ay;<a name="line.112"></a>
+<span class="sourceLineNo">113</span>                deltaz += az;<a name="line.113"></a>
+<span class="sourceLineNo">114</span>            }<a name="line.114"></a>
+<span class="sourceLineNo">115</span>        } else if (ay &gt;= Math.max(ax, az)) /* y dominant */ {<a name="line.115"></a>
+<span class="sourceLineNo">116</span>            deltax = ax - (ay &gt;&gt; 1);<a name="line.116"></a>
+<span class="sourceLineNo">117</span>            deltaz = az - (ay &gt;&gt; 1);<a name="line.117"></a>
+<span class="sourceLineNo">118</span>            while (true) {<a name="line.118"></a>
+<span class="sourceLineNo">119</span>                result.offer(new Coord3D(x, y, z));<a name="line.119"></a>
+<span class="sourceLineNo">120</span>                if (y == endy) {<a name="line.120"></a>
+<span class="sourceLineNo">121</span>                    return result;<a name="line.121"></a>
+<span class="sourceLineNo">122</span>                }<a name="line.122"></a>
+<span class="sourceLineNo">123</span><a name="line.123"></a>
+<span class="sourceLineNo">124</span>                if (deltax &gt;= 0) {<a name="line.124"></a>
+<span class="sourceLineNo">125</span>                    x += signx;<a name="line.125"></a>
+<span class="sourceLineNo">126</span>                    deltax -= ay;<a name="line.126"></a>
+<span class="sourceLineNo">127</span>                }<a name="line.127"></a>
+<span class="sourceLineNo">128</span><a name="line.128"></a>
+<span class="sourceLineNo">129</span>                if (deltaz &gt;= 0) {<a name="line.129"></a>
+<span class="sourceLineNo">130</span>                    z += signz;<a name="line.130"></a>
+<span class="sourceLineNo">131</span>                    deltaz -= ay;<a name="line.131"></a>
+<span class="sourceLineNo">132</span>                }<a name="line.132"></a>
+<span class="sourceLineNo">133</span><a name="line.133"></a>
+<span class="sourceLineNo">134</span>                y += signy;<a name="line.134"></a>
+<span class="sourceLineNo">135</span>                deltax += ax;<a name="line.135"></a>
+<span class="sourceLineNo">136</span>                deltaz += az;<a name="line.136"></a>
+<span class="sourceLineNo">137</span>            }<a name="line.137"></a>
+<span class="sourceLineNo">138</span>        } else if (az &gt;= Math.max(ax, ay)) /* z dominant */ {<a name="line.138"></a>
+<span class="sourceLineNo">139</span>            deltax = ax - (az &gt;&gt; 1);<a name="line.139"></a>
+<span class="sourceLineNo">140</span>            deltay = ay - (az &gt;&gt; 1);<a name="line.140"></a>
+<span class="sourceLineNo">141</span>            while (true) {<a name="line.141"></a>
+<span class="sourceLineNo">142</span>                result.offer(new Coord3D(x, y, z));<a name="line.142"></a>
+<span class="sourceLineNo">143</span>                if (z == endz) {<a name="line.143"></a>
+<span class="sourceLineNo">144</span>                    return result;<a name="line.144"></a>
+<span class="sourceLineNo">145</span>                }<a name="line.145"></a>
+<span class="sourceLineNo">146</span><a name="line.146"></a>
+<span class="sourceLineNo">147</span>                if (deltax &gt;= 0) {<a name="line.147"></a>
+<span class="sourceLineNo">148</span>                    x += signx;<a name="line.148"></a>
+<span class="sourceLineNo">149</span>                    deltax -= az;<a name="line.149"></a>
+<span class="sourceLineNo">150</span>                }<a name="line.150"></a>
+<span class="sourceLineNo">151</span><a name="line.151"></a>
+<span class="sourceLineNo">152</span>                if (deltay &gt;= 0) {<a name="line.152"></a>
+<span class="sourceLineNo">153</span>                    y += signy;<a name="line.153"></a>
+<span class="sourceLineNo">154</span>                    deltay -= az;<a name="line.154"></a>
+<span class="sourceLineNo">155</span>                }<a name="line.155"></a>
+<span class="sourceLineNo">156</span><a name="line.156"></a>
+<span class="sourceLineNo">157</span>                z += signz;<a name="line.157"></a>
+<span class="sourceLineNo">158</span>                deltax += ax;<a name="line.158"></a>
+<span class="sourceLineNo">159</span>                deltay += ay;<a name="line.159"></a>
+<span class="sourceLineNo">160</span>            }<a name="line.160"></a>
+<span class="sourceLineNo">161</span>        }<a name="line.161"></a>
+<span class="sourceLineNo">162</span>        return result;<a name="line.162"></a>
+<span class="sourceLineNo">163</span>    }<a name="line.163"></a>
+<span class="sourceLineNo">164</span><a name="line.164"></a>
+<span class="sourceLineNo">165</span>    /**<a name="line.165"></a>
+<span class="sourceLineNo">166</span>     * Generates a 2D Bresenham line between two points. If you don't need<a name="line.166"></a>
+<span class="sourceLineNo">167</span>     * the {@link Queue} interface for the returned reference, consider<a name="line.167"></a>
+<span class="sourceLineNo">168</span>     * using {@link #line2D_(int, int, int, int)} to save some memory.<a name="line.168"></a>
+<span class="sourceLineNo">169</span>     *<a name="line.169"></a>
+<span class="sourceLineNo">170</span>     * Uses ordinary Coord values for points, and these can be pooled<a name="line.170"></a>
+<span class="sourceLineNo">171</span>     * if they aren't beyond what the current pool allows (it starts,<a name="line.171"></a>
+<span class="sourceLineNo">172</span>     * by default, pooling Coords with x and y between -3 and 255,<a name="line.172"></a>
+<span class="sourceLineNo">173</span>     * inclusive). If the Coords are pool-able, it can significantly<a name="line.173"></a>
+<span class="sourceLineNo">174</span>     * reduce the work the garbage collector needs to do, especially<a name="line.174"></a>
+<span class="sourceLineNo">175</span>     * on Android.<a name="line.175"></a>
+<span class="sourceLineNo">176</span>     *<a name="line.176"></a>
+<span class="sourceLineNo">177</span>     * @param startx the x coordinate of the starting point<a name="line.177"></a>
+<span class="sourceLineNo">178</span>     * @param starty the y coordinate of the starting point<a name="line.178"></a>
+<span class="sourceLineNo">179</span>     * @param endx the x coordinate of the starting point<a name="line.179"></a>
+<span class="sourceLineNo">180</span>     * @param endy the y coordinate of the starting point<a name="line.180"></a>
+<span class="sourceLineNo">181</span>     * @return a Queue (internally, a LinkedList) of Coord points along the line<a name="line.181"></a>
+<span class="sourceLineNo">182</span>     */<a name="line.182"></a>
+<span class="sourceLineNo">183</span>    public static Queue&lt;Coord&gt; line2D(int startx, int starty, int endx, int endy) {<a name="line.183"></a>
+<span class="sourceLineNo">184</span>        Queue&lt;Coord&gt; result = new LinkedList&lt;&gt;();<a name="line.184"></a>
+<span class="sourceLineNo">185</span><a name="line.185"></a>
+<span class="sourceLineNo">186</span>        int dx = endx - startx;<a name="line.186"></a>
+<span class="sourceLineNo">187</span>        int dy = endy - starty;<a name="line.187"></a>
+<span class="sourceLineNo">188</span><a name="line.188"></a>
+<span class="sourceLineNo">189</span>        int ax = Math.abs(dx) &lt;&lt; 1;<a name="line.189"></a>
+<span class="sourceLineNo">190</span>        int ay = Math.abs(dy) &lt;&lt; 1;<a name="line.190"></a>
+<span class="sourceLineNo">191</span><a name="line.191"></a>
+<span class="sourceLineNo">192</span>        int signx = (int) Math.signum(dx);<a name="line.192"></a>
+<span class="sourceLineNo">193</span>        int signy = (int) Math.signum(dy);<a name="line.193"></a>
+<span class="sourceLineNo">194</span><a name="line.194"></a>
+<span class="sourceLineNo">195</span>        int x = startx;<a name="line.195"></a>
+<span class="sourceLineNo">196</span>        int y = starty;<a name="line.196"></a>
+<span class="sourceLineNo">197</span><a name="line.197"></a>
+<span class="sourceLineNo">198</span>        int deltax, deltay;<a name="line.198"></a>
+<span class="sourceLineNo">199</span>        if (ax &gt;= ay) /* x dominant */ {<a name="line.199"></a>
+<span class="sourceLineNo">200</span>            deltay = ay - (ax &gt;&gt; 1);<a name="line.200"></a>
+<span class="sourceLineNo">201</span>            while (true) {<a name="line.201"></a>
+<span class="sourceLineNo">202</span>                result.offer(Coord.get(x, y));<a name="line.202"></a>
+<span class="sourceLineNo">203</span>                if (x == endx) {<a name="line.203"></a>
+<span class="sourceLineNo">204</span>                    return result;<a name="line.204"></a>
+<span class="sourceLineNo">205</span>                }<a name="line.205"></a>
+<span class="sourceLineNo">206</span><a name="line.206"></a>
+<span class="sourceLineNo">207</span>                if (deltay &gt;= 0) {<a name="line.207"></a>
+<span class="sourceLineNo">208</span>                    y += signy;<a name="line.208"></a>
+<span class="sourceLineNo">209</span>                    deltay -= ax;<a name="line.209"></a>
+<span class="sourceLineNo">210</span>                }<a name="line.210"></a>
+<span class="sourceLineNo">211</span><a name="line.211"></a>
+<span class="sourceLineNo">212</span>                x += signx;<a name="line.212"></a>
+<span class="sourceLineNo">213</span>                deltay += ay;<a name="line.213"></a>
+<span class="sourceLineNo">214</span>            }<a name="line.214"></a>
+<span class="sourceLineNo">215</span>        } else /* y dominant */ {<a name="line.215"></a>
+<span class="sourceLineNo">216</span>            deltax = ax - (ay &gt;&gt; 1);<a name="line.216"></a>
+<span class="sourceLineNo">217</span>            while (true) {<a name="line.217"></a>
+<span class="sourceLineNo">218</span>                result.offer(Coord.get(x, y));<a name="line.218"></a>
+<span class="sourceLineNo">219</span>                if (y == endy) {<a name="line.219"></a>
+<span class="sourceLineNo">220</span>                    return result;<a name="line.220"></a>
+<span class="sourceLineNo">221</span>                }<a name="line.221"></a>
+<span class="sourceLineNo">222</span><a name="line.222"></a>
+<span class="sourceLineNo">223</span>                if (deltax &gt;= 0) {<a name="line.223"></a>
+<span class="sourceLineNo">224</span>                    x += signx;<a name="line.224"></a>
+<span class="sourceLineNo">225</span>                    deltax -= ay;<a name="line.225"></a>
+<span class="sourceLineNo">226</span>                }<a name="line.226"></a>
+<span class="sourceLineNo">227</span><a name="line.227"></a>
+<span class="sourceLineNo">228</span><a name="line.228"></a>
+<span class="sourceLineNo">229</span>                y += signy;<a name="line.229"></a>
+<span class="sourceLineNo">230</span>                deltax += ax;<a name="line.230"></a>
+<span class="sourceLineNo">231</span>            }<a name="line.231"></a>
+<span class="sourceLineNo">232</span>        }<a name="line.232"></a>
+<span class="sourceLineNo">233</span>    }<a name="line.233"></a>
+<span class="sourceLineNo">234</span><a name="line.234"></a>
+<span class="sourceLineNo">235</span><a name="line.235"></a>
+<span class="sourceLineNo">236</span>    /**<a name="line.236"></a>
+<span class="sourceLineNo">237</span>     * Generates a 2D Bresenham line between two points. Returns an array<a name="line.237"></a>
+<span class="sourceLineNo">238</span>     * of Coord instead of a Queue.<a name="line.238"></a>
+<span class="sourceLineNo">239</span>     *<a name="line.239"></a>
+<span class="sourceLineNo">240</span>     * Uses ordinary Coord values for points, and these can be pooled<a name="line.240"></a>
+<span class="sourceLineNo">241</span>     * if they aren't beyond what the current pool allows (it starts,<a name="line.241"></a>
+<span class="sourceLineNo">242</span>     * by default, pooling Coords with x and y between -3 and 255,<a name="line.242"></a>
+<span class="sourceLineNo">243</span>     * inclusive). If the Coords are pool-able, it can significantly<a name="line.243"></a>
+<span class="sourceLineNo">244</span>     * reduce the work the garbage collector needs to do, especially<a name="line.244"></a>
+<span class="sourceLineNo">245</span>     * on Android.<a name="line.245"></a>
+<span class="sourceLineNo">246</span>     *<a name="line.246"></a>
+<span class="sourceLineNo">247</span>     * @param startx the x coordinate of the starting point<a name="line.247"></a>
+<span class="sourceLineNo">248</span>     * @param starty the y coordinate of the starting point<a name="line.248"></a>
+<span class="sourceLineNo">249</span>     * @param endx the x coordinate of the starting point<a name="line.249"></a>
+<span class="sourceLineNo">250</span>     * @param endy the y coordinate of the starting point<a name="line.250"></a>
+<span class="sourceLineNo">251</span>     * @return an array of Coord points along the line<a name="line.251"></a>
+<span class="sourceLineNo">252</span>     */<a name="line.252"></a>
+<span class="sourceLineNo">253</span>    public static Coord[] line2D_(int startx, int starty, int endx, int endy) {<a name="line.253"></a>
+<span class="sourceLineNo">254</span>        int dx = endx - startx;<a name="line.254"></a>
+<span class="sourceLineNo">255</span>        int dy = endy - starty;<a name="line.255"></a>
+<span class="sourceLineNo">256</span><a name="line.256"></a>
+<span class="sourceLineNo">257</span>        int signx = (int) Math.signum(dx);<a name="line.257"></a>
+<span class="sourceLineNo">258</span>        int signy = (int) Math.signum(dy);<a name="line.258"></a>
+<span class="sourceLineNo">259</span><a name="line.259"></a>
+<span class="sourceLineNo">260</span>        int ax = (dx = Math.abs(dx)) &lt;&lt; 1;<a name="line.260"></a>
+<span class="sourceLineNo">261</span>        int ay = (dy = Math.abs(dy)) &lt;&lt; 1;<a name="line.261"></a>
+<span class="sourceLineNo">262</span><a name="line.262"></a>
+<span class="sourceLineNo">263</span>        int x = startx;<a name="line.263"></a>
+<span class="sourceLineNo">264</span>        int y = starty;<a name="line.264"></a>
+<span class="sourceLineNo">265</span><a name="line.265"></a>
+<span class="sourceLineNo">266</span>        int deltax, deltay;<a name="line.266"></a>
+<span class="sourceLineNo">267</span>        if (ax &gt;= ay) /* x dominant */ {<a name="line.267"></a>
+<span class="sourceLineNo">268</span>            deltay = ay - (ax &gt;&gt; 1);<a name="line.268"></a>
+<span class="sourceLineNo">269</span>            Coord[] result = new Coord[dx+1];<a name="line.269"></a>
+<span class="sourceLineNo">270</span>            for (int i = 0; i &lt;= dx; i++) {<a name="line.270"></a>
+<span class="sourceLineNo">271</span>                result[i] = Coord.get(x, y);<a name="line.271"></a>
+<span class="sourceLineNo">272</span><a name="line.272"></a>
+<span class="sourceLineNo">273</span>                if (deltay &gt;= 0) {<a name="line.273"></a>
+<span class="sourceLineNo">274</span>                    y += signy;<a name="line.274"></a>
+<span class="sourceLineNo">275</span>                    deltay -= ax;<a name="line.275"></a>
+<span class="sourceLineNo">276</span>                }<a name="line.276"></a>
+<span class="sourceLineNo">277</span><a name="line.277"></a>
+<span class="sourceLineNo">278</span>                x += signx;<a name="line.278"></a>
+<span class="sourceLineNo">279</span>                deltay += ay;<a name="line.279"></a>
+<span class="sourceLineNo">280</span>            }<a name="line.280"></a>
+<span class="sourceLineNo">281</span>            return result;<a name="line.281"></a>
+<span class="sourceLineNo">282</span>        } else /* y dominant */ {<a name="line.282"></a>
+<span class="sourceLineNo">283</span>            deltax = ax - (ay &gt;&gt; 1);<a name="line.283"></a>
+<span class="sourceLineNo">284</span>            Coord[] result = new Coord[dy+1];<a name="line.284"></a>
+<span class="sourceLineNo">285</span>            for (int i = 0; i &lt;= dy; i++) {<a name="line.285"></a>
+<span class="sourceLineNo">286</span>                result[i] = Coord.get(x, y);<a name="line.286"></a>
+<span class="sourceLineNo">287</span><a name="line.287"></a>
+<span class="sourceLineNo">288</span>                if (deltax &gt;= 0) {<a name="line.288"></a>
+<span class="sourceLineNo">289</span>                    x += signx;<a name="line.289"></a>
+<span class="sourceLineNo">290</span>                    deltax -= ay;<a name="line.290"></a>
+<span class="sourceLineNo">291</span>                }<a name="line.291"></a>
+<span class="sourceLineNo">292</span><a name="line.292"></a>
+<span class="sourceLineNo">293</span><a name="line.293"></a>
+<span class="sourceLineNo">294</span>                y += signy;<a name="line.294"></a>
+<span class="sourceLineNo">295</span>                deltax += ax;<a name="line.295"></a>
+<span class="sourceLineNo">296</span>            }<a name="line.296"></a>
+<span class="sourceLineNo">297</span>            return result;<a name="line.297"></a>
+<span class="sourceLineNo">298</span>        }<a name="line.298"></a>
+<span class="sourceLineNo">299</span>    }<a name="line.299"></a>
+<span class="sourceLineNo">300</span><a name="line.300"></a>
+<span class="sourceLineNo">301</span>}<a name="line.301"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

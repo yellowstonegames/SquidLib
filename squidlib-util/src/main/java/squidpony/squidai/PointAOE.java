@@ -5,9 +5,10 @@ import squidpony.squidgrid.FOVCache;
 import squidpony.squidgrid.Radius;
 import squidpony.squidmath.Coord;
 
+import squidpony.squidmath.OrderedMap;
+import squidpony.squidmath.OrderedSet;
+
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -64,12 +65,12 @@ public class PointAOE implements AOE {
     }
 
     @Override
-    public LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> targets, Set<Coord> requiredExclusions) {
+    public OrderedMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> targets, Set<Coord> requiredExclusions) {
         if(targets == null)
-            return new LinkedHashMap<>();
+            return new OrderedMap<>();
 
         int totalTargets = targets.size();
-        LinkedHashMap<Coord, ArrayList<Coord>> bestPoints = new LinkedHashMap<>(totalTargets);
+        OrderedMap<Coord, ArrayList<Coord>> bestPoints = new OrderedMap<>(totalTargets);
 
         if(totalTargets == 0)
             return bestPoints;
@@ -92,13 +93,13 @@ public class PointAOE implements AOE {
 
 
     @Override
-    public LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> priorityTargets, Set<Coord> lesserTargets, Set<Coord> requiredExclusions) {
+    public OrderedMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> priorityTargets, Set<Coord> lesserTargets, Set<Coord> requiredExclusions) {
         if(priorityTargets == null)
             return idealLocations(lesserTargets, requiredExclusions);
-        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<>();
+        if(requiredExclusions == null) requiredExclusions = new OrderedSet<>();
 
         int totalTargets = priorityTargets.size() + lesserTargets.size();
-        LinkedHashMap<Coord, ArrayList<Coord>> bestPoints = new LinkedHashMap<>(totalTargets * 4);
+        OrderedMap<Coord, ArrayList<Coord>> bestPoints = new OrderedMap<>(totalTargets * 4);
 
         if(totalTargets == 0)
             return bestPoints;
@@ -222,8 +223,8 @@ public class PointAOE implements AOE {
     }
 
     @Override
-    public LinkedHashMap<Coord, Double> findArea() {
-        LinkedHashMap<Coord, Double> ret = new LinkedHashMap<>(1);
+    public OrderedMap<Coord, Double> findArea() {
+        OrderedMap<Coord, Double> ret = new OrderedMap<>(1);
         ret.put(Coord.get(center.x, center.y), 1.0);
         return ret;
     }

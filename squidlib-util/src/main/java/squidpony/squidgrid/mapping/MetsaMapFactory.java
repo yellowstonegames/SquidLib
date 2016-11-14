@@ -2,14 +2,11 @@ package squidpony.squidgrid.mapping;
 
 import squidpony.annotation.Beta;
 import squidpony.squidmath.Coord;
-import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.PerlinNoise;
 import squidpony.squidmath.StatefulRNG;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import static java.lang.Math.round;
 
 /**
  * A map generation factory using perlin noise to make island chain style maps.
@@ -22,11 +19,18 @@ import static java.lang.Math.round;
 public class MetsaMapFactory {
     //HEIGHT LIMITS
 
+    public static final double SEA_LEVEL = 0,
+            BEACH_LEVEL = 0.15,
+            PLAINS_LEVEL = 0.5,
+            MOUNTAIN_LEVEL = 0.73,
+            SNOW_LEVEL = 0.95,
+            DEEP_SEA_LEVEL = -0.1;
+
     //BIOMESTUFF
-    private final double POLARLIMIT = 0.5, DESERTLIMIT = 0.1;
+    private final double POLAR_LIMIT = 0.65, DESERT_LIMIT = 0.15;
 
     //SHADOW
-    private final double SHADOWLIMIT = 0.01;
+    private final double SHADOW_LIMIT = 0.01;
 //COLORORDER
 /*
      0 = deepsea
@@ -49,24 +53,26 @@ public class MetsaMapFactory {
     private List<Coord> cities = new LinkedList<>();
     private StatefulRNG rng;
     private double maxPeak = 0;
-
+    private double[][] map;
     public MetsaMapFactory()
     {
-        rng = new StatefulRNG();
-        width = 1000;
-        height = 600;
+        this(240, 120, new StatefulRNG());
     }
     public MetsaMapFactory(int width, int height)
     {
-        rng = new StatefulRNG();
-        this.width = width;
-        this.height = height;
+        this(width, height, new StatefulRNG());
     }
     public MetsaMapFactory(int width, int height, long rngSeed)
     {
-        rng = new StatefulRNG(new LightRNG(rngSeed));
+        this(width, height, new StatefulRNG(rngSeed));
+    }
+
+    public MetsaMapFactory(int width, int height, StatefulRNG rng)
+    {
+        this.rng = rng;
         this.width = width;
         this.height = height;
+        map = makeHeightMap();
     }
 
 	public int getShadow(int x, int y, double[][] map) {
@@ -81,13 +87,13 @@ public class MetsaMapFactory {
             return 0;
         }
         double slope = cur - (upRight + up + right) / 3;
-        if (slope < SHADOWLIMIT && slope > -SHADOWLIMIT) {
+        if (slope < SHADOW_LIMIT && slope > -SHADOW_LIMIT) {
             return 0;
         }
-        if (slope >= SHADOWLIMIT) {
+        if (slope >= SHADOW_LIMIT) {
             return -1; //"alpha"
         }
-        if (slope <= -SHADOWLIMIT) {
+        if (slope <= -SHADOW_LIMIT) {
             return 1;
         } else {
             return 0;
@@ -120,7 +126,7 @@ public class MetsaMapFactory {
     }
 
 	public double[][] makeHeightMap() {
-        double[][] map = MapFactory.heightMap(width, height, rng);
+        double[][] map = HeightMapFactory.heightMap(width, height, rng.nextInt());
 
         for (int x = 0; x < width / 8; x++) {
             for (int y = 0; y < height; y++) {
@@ -152,7 +158,19 @@ public class MetsaMapFactory {
         return map;
     }
 
-	public int[][] makeBiomeMap(double[][] map) {
+    public void regenerateHeightMap()
+    {
+        map = makeHeightMap();
+    }
+    public void regenerateHeightMap(int width, int height)
+    {
+        this.width = width;
+        this.height = height;
+        map = makeHeightMap();
+        cities.clear();
+    }
+
+	public int[][] makeBiomeMap() {
         //biomes 0 normal 1 snow
         int biomeMap[][] = new int[width][height];
         for (int x = 0; x < width; x++) {
@@ -160,13 +178,13 @@ public class MetsaMapFactory {
                 biomeMap[x][y] = 0;
                 double distanceFromEquator = Math.abs(y - height / 2.0) / (height / 2.0);
                 distanceFromEquator += PerlinNoise.noise(x / 32, y / 32) / 8 + map[x][y] / 32;
-                if (distanceFromEquator > POLARLIMIT) {
+                if (distanceFromEquator > POLAR_LIMIT) {
                     biomeMap[x][y] = 1;
                 }
-                if (distanceFromEquator < DESERTLIMIT) {
+                if (distanceFromEquator < DESERT_LIMIT) {
                     biomeMap[x][y] = 2;
                 }
-                if (distanceFromEquator > POLARLIMIT + 0.25) {
+                if (distanceFromEquator > POLAR_LIMIT + 0.25) {
                     biomeMap[x][y] = 3;
                 }
             }
@@ -174,7 +192,7 @@ public class MetsaMapFactory {
         return biomeMap;
     }
 
-	public int[][] makeNationMap(double[][] map) {
+	public int[][] makeNationMap() {
         // nationmap, 4 times less accurate map used for nations -1 no nation
         int nationMap[][] = new int[width][height];
         for (int i = 0; i < width / 4; i++) {
@@ -189,7 +207,7 @@ public class MetsaMapFactory {
         return nationMap;
     }
 
-	public double[][] makeWeightedMap(double[][] map) {
+	public double[][] makeWeightedMap() {
         //Weighted map for road
         double weightedMap[][] = new double[width][height];
         double SEALEVEL = 0;
@@ -202,19 +220,21 @@ public class MetsaMapFactory {
                     weightedMap[i][j] = 2 + (map[i * 4][j * 4] - PLAINSLEVEL) * 8;
                 }
                 if (map[i][j] <= BEACHLEVEL && map[i * 4][j * 4] >= SEALEVEL) {
-                    weightedMap[i][j] = 2 - (map[i * 4][j * 4]) * 2;
+                    weightedMap[i][j] = 2 - map[i * 4][j * 4] * 2;
                 }
             }
         }
 
+        CITIES:
         for (int i = 0; i < CITYAMOUNT; i++) {
-            int px = rng.between(0, width);
-            int py = rng.between(0, height);
+            int px = rng.between(0, width), py = rng.between(0, height), frustration = 0;
             while (map[px][py] < SEALEVEL || map[px][py] > BEACHLEVEL) {
                 px = rng.between(0, width);
                 py = rng.between(0, height);
+                if(frustration++ > 20)
+                    continue CITIES;
             }
-            cities.add(Coord.get(4 * round(px / 4f), 4 * round(py / 4f)));
+            cities.add(Coord.get(4 * (px >> 2), 4 * (py >> 2)));
         }
         return weightedMap;
     }
@@ -225,5 +245,17 @@ public class MetsaMapFactory {
 
     public double getMaxPeak() {
         return maxPeak;
+    }
+
+    public double[][] getHeightMap() {
+        return map;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
     }
 }

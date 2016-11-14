@@ -72,7 +72,7 @@ public class ShortVLA implements Serializable{
     public ShortVLA(int[] array) {
         this(true, array.length);
         for (int i = 0; i < array.length; i++) {
-            items[size + i] = (short)(array[i]);
+            items[size + i] = (short) array[i];
         }
         size += array.length;
 
@@ -122,7 +122,7 @@ public class ShortVLA implements Serializable{
         int sizeNeeded = size + array.length;
         if (sizeNeeded > items.length) items = resize(Math.max(8, (int)(sizeNeeded * 1.75f)));
         for (int i = 0; i < array.length; i++) {
-            items[size + i] = (short)(array[i]);
+            items[size + i] = (short) array[i];
         }
         size += array.length;
     }
@@ -144,7 +144,7 @@ public class ShortVLA implements Serializable{
         if (sizeNeeded > items.length) items = resize(Math.max(8, (int)(sizeNeeded * 1.75f)));
         for(int r = start, i = size; r < end; r = fraction * ((r / fraction) + 1), i++, size++)
         {
-            items[i] = (short)(r);
+            items[i] = (short) r;
         }
     }
 

@@ -243,25 +243,25 @@ public enum Direction {
         }
     }
 
-	/**
-	 * @return Whether this is a diagonal move.
-	 */
-	public boolean isDiagonal() {
-		switch (this) {
-		case DOWN_LEFT:
-		case DOWN_RIGHT:
-		case UP_LEFT:
-		case UP_RIGHT:
-			return true;
-		case DOWN:
-		case LEFT:
-		case NONE:
-		case RIGHT:
-		case UP:
-			return false;
-		}
-		throw new IllegalStateException("Unmatched " + getClass().getSimpleName() + ": " + this);
-	}
+    /**
+     * @return Whether this is a diagonal move.
+     */
+    public boolean isDiagonal() {
+        switch (this) {
+            case DOWN_LEFT:
+            case DOWN_RIGHT:
+            case UP_LEFT:
+            case UP_RIGHT:
+                return true;
+            case DOWN:
+            case LEFT:
+            case NONE:
+            case RIGHT:
+            case UP:
+                return false;
+        }
+        throw new IllegalStateException("Unmatched " + getClass().getSimpleName() + ": " + this);
+    }
 
     /**
      * @return Whether this is a cardinal-direction move.
@@ -363,7 +363,7 @@ public enum Direction {
 		throw new IllegalStateException("Unmatched " + getClass().getSimpleName() + ": " + this);
 	}
 
-    private Direction(int x, int y) {
+    Direction(int x, int y) {
         deltaX = x;
         deltaY = y;
     }

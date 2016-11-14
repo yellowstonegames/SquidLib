@@ -6,10 +6,7 @@ import squidpony.squidmath.StatefulRNG;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 /**
  * super class for performance related tests.<br>
@@ -57,8 +54,13 @@ abstract class AbstractPerformanceTest {
 		final List<Future<Long>> invoke = executor.invokeAll(tasks);
 
 		for (Future<Long> future : invoke) {
-			System.out.println(future.get());
+			try {
+				System.out.println(future.get(120, TimeUnit.SECONDS));
+			} catch (TimeoutException e) {
+				System.out.println("Task timed out after 120 seconds!");
+			}
 		}
+		executor.shutdown();
 	}
 
 }

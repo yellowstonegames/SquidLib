@@ -13,14 +13,12 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
-import squidpony.squidgrid.gui.gdx.DefaultResources;
-import squidpony.squidgrid.gui.gdx.SquidLayers;
-import squidpony.squidgrid.gui.gdx.TextCellFactory;
+import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.OrganicMapGenerator;
 import squidpony.squidmath.Coord;
-import squidpony.squidmath.CoordPacker;
+import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.StatefulRNG;
 
 import java.util.ArrayList;
@@ -38,9 +36,10 @@ public class SquidLayersTest extends ApplicationAdapter{
     StatefulRNG rng;
     Stage stage;
     SpriteBatch batch;
-    ArrayList<Color> colors;
+    ArrayList<Color> colors, mColors;
     int colorIndex = 0;
-    ArrayList<Coord> points;
+    Coord[] points;
+    AnimatedEntity[] markers;
     double[][] resMap;
     float ctr = 0;
     @Override
@@ -54,7 +53,10 @@ public class SquidLayersTest extends ApplicationAdapter{
         layers = new SquidLayers(gridWidth, gridHeight, cellWidth, cellHeight,
                 DefaultResources.getStretchableFont());
         layers.setTextSize(cellWidth, cellHeight+1);
-        colors = DefaultResources.getSCC().rainbow(0.2f, 1.0f, 144);
+        //colors = DefaultResources.getSCC().rainbow(0.2f, 1.0f, 144);
+        colors = DefaultResources.getSCC().loopingGradient(SColor.ATOMIC_TANGERINE, SColor.CRIMSON, 100);
+        mColors = DefaultResources.getSCC().loopingGradient(SColor.ALICE_BLUE, SColor.MAGIC_MINT, 123);
+        //colors.addAll(DefaultResources.getSCC().zigzagGradient(Color.MAGENTA, Color.RED, 200));
         layers.setLightingColor(colors.get(colorIndex));
         fov = new FOV(FOV.SHADOW);
         //PacMazeGenerator maze = new PacMazeGenerator(gridWidth, gridHeight, rng);
@@ -65,12 +67,15 @@ public class SquidLayersTest extends ApplicationAdapter{
         indicesBG = DungeonUtility.generateBGPaletteIndices(map);
         indicesFG = DungeonUtility.generatePaletteIndices(map);
         resMap = DungeonUtility.generateResistances(map);
-        short[] packed = CoordPacker.pack(gen.getBareDungeon(), '.');
-        points = CoordPacker.randomPortion(packed, 10, rng);
+        GreasedRegion packed = new GreasedRegion(gen.getBareDungeon(), '.');
+        points = packed.randomPortion(rng, 10);
+        markers = new AnimatedEntity[points.length];
         lightness = new int[gridWidth][gridHeight];
         double[][] lit;
-        for(Coord pt : points)
+        Coord pt;
+        for(int c = 0; c < points.length; c++)
         {
+            pt = points[c];
             lit = fov.calculateFOV(resMap, pt.x, pt.y, 11, Radius.CIRCLE);
             for (int x = 0; x < gridWidth; x++) {
                 for (int y = 0; y < gridHeight; y++) {
@@ -78,6 +83,7 @@ public class SquidLayersTest extends ApplicationAdapter{
                         lightness[x][y] += (int)(lit[x][y] * 200);
                 }
             }
+            markers[c] = layers.directionMarker(pt.x, pt.y, mColors, 4f, 2, false);
         }
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
@@ -100,20 +106,24 @@ public class SquidLayersTest extends ApplicationAdapter{
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         ctr += Gdx.graphics.getDeltaTime();
-        if(ctr > 0.2) {
-            ctr -= 0.2;
+        if(ctr > 0.3)
+            layers.setLightingColor(colors.get(colorIndex = (colorIndex + 1) % colors.size()));
+        if(ctr > 0.6) {
+            ctr -= 0.6;
             lightness = new int[gridWidth][gridHeight];
             double[][] lit;
             Direction[] dirs = new Direction[4];
             Coord alter;
-            for (int i = 0; i < points.size(); i++) {
-                Coord pt = points.get(i);
+            for (int i = 0; i < points.length; i++) {
+                Coord pt = points[i];
                 rng.shuffle(Direction.CARDINALS, dirs);
                 for (Direction d : dirs) {
                     alter = pt.translate(d);
                     if (map[alter.x][alter.y] == '.') {
                         pt = alter;
-                        points.set(i, pt);
+                        points[i] = pt;
+                        markers[i].setDirection(d);
+                        layers.slide(markers[i], alter.x, alter.y, 2, 0.25f);
                         break;
                     }
                 }
@@ -132,10 +142,15 @@ public class SquidLayersTest extends ApplicationAdapter{
             }
         }
 
-        layers.setLightingColor(colors.get(colorIndex = (colorIndex + 1) % colors.size()));
         layers.put(0, 0, displayedMap, indicesFG, indicesBG, lightness);
         stage.draw();
-
+        stage.act();
+        int aeLen = layers.getForegroundLayer().animatedEntities.size();
+        batch.begin();
+        for (int i = 0; i < aeLen; i++) {
+            layers.drawActor(batch, 1f, layers.getForegroundLayer().animatedEntities.getAt(i), 2);
+        }
+        batch.end();
     }
 
     public static void main (String[] arg) {

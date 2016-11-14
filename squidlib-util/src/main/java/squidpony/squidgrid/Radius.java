@@ -2,9 +2,11 @@ package squidpony.squidgrid;
 
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.Coord3D;
+import squidpony.squidmath.OrderedSet;
 import squidpony.squidmath.RNG;
 
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -229,7 +231,7 @@ public enum Radius {
 
     public Set<Coord> perimeter(Coord center, int radiusLength, boolean surpassEdges, int width, int height)
     {
-        LinkedHashSet<Coord> rim = new LinkedHashSet<>(4 * radiusLength);
+        OrderedSet<Coord> rim = new OrderedSet<>(4 * radiusLength);
         if(!surpassEdges && (center.x < 0 || center.x >= width || center.y < 0 || center.y > height))
             return rim;
         if(radiusLength < 1) {
@@ -408,12 +410,12 @@ public enum Radius {
         {
             case CIRCLE:
             case SPHERE:
-                return (other == CIRCLE || other == SPHERE);
+                return other == CIRCLE || other == SPHERE;
             case SQUARE:
             case CUBE:
-                return (other == SQUARE || other == CUBE);
+                return other == SQUARE || other == CUBE;
             default:
-                return (other == DIAMOND || other == OCTAHEDRON);
+                return other == DIAMOND || other == OCTAHEDRON;
         }
     }
     public boolean inRange(int startx, int starty, int endx, int endy, int minRange, int maxRange)
@@ -443,21 +445,31 @@ public enum Radius {
         }
     }
 
-    public Set<Coord> pointsInside(Coord center, int radiusLength, boolean surpassEdges, int width, int height)
+    public List<Coord> pointsInside(int centerX, int centerY, int radiusLength, boolean surpassEdges, int width, int height)
     {
-        LinkedHashSet<Coord> contents = new LinkedHashSet<Coord>((int)Math.ceil(volume2D(radiusLength)));
-        if(!surpassEdges && (center.x < 0 || center.x >= width || center.y < 0 || center.y >= height))
+        return pointsInside(centerX, centerY, radiusLength, surpassEdges, width, height, null);
+    }
+    public List<Coord> pointsInside(Coord center, int radiusLength, boolean surpassEdges, int width, int height)
+    {
+        if(center == null) return null;
+        return pointsInside(center.x, center.y, radiusLength, surpassEdges, width, height, null);
+    }
+
+    public List<Coord> pointsInside(int centerX, int centerY, int radiusLength, boolean surpassEdges, int width, int height, List<Coord> buf)
+    {
+        List<Coord> contents = buf == null ? new ArrayList<Coord>((int)Math.ceil(volume2D(radiusLength))) : buf;
+        if(!surpassEdges && (centerX < 0 || centerX >= width || centerY < 0 || centerY >= height))
             return contents;
         if(radiusLength < 1) {
-            contents.add(center);
+            contents.add(Coord.get(centerX, centerY));
             return contents;
         }
         switch (this) {
             case SQUARE:
             case CUBE:
             {
-                for (int i = center.x - radiusLength; i <= center.x + radiusLength; i++) {
-                    for (int j = center.y - radiusLength; j <= center.y + radiusLength; j++) {
+                for (int i = centerX - radiusLength; i <= centerX + radiusLength; i++) {
+                    for (int j = centerY - radiusLength; j <= centerY + radiusLength; j++) {
                         if(!surpassEdges && (i < 0 || j < 0 || i >= width || j >= height))
                             continue;
                         contents.add(Coord.get(i, j));
@@ -467,9 +479,9 @@ public enum Radius {
             break;
             case DIAMOND:
             case OCTAHEDRON: {
-                for (int i = center.x - radiusLength; i <= center.x + radiusLength; i++) {
-                    for (int j = center.y - radiusLength; j <= center.y + radiusLength; j++) {
-                        if ((Math.abs(center.x - i) + Math.abs(center.y- j) > radiusLength) ||
+                for (int i = centerX - radiusLength; i <= centerX + radiusLength; i++) {
+                    for (int j = centerY - radiusLength; j <= centerY + radiusLength; j++) {
+                        if ((Math.abs(centerX - i) + Math.abs(centerY- j) > radiusLength) ||
                                 (!surpassEdges && (i < 0 || j < 0 || i >= width || j >= height)))
                             continue;
                         contents.add(Coord.get(i, j));
@@ -481,17 +493,131 @@ public enum Radius {
             {
                 int high;
                 for (int dx = -radiusLength; dx <= radiusLength; ++dx) {
-                    high = (int) Math.floor(Math.sqrt(radiusLength * radiusLength - dx * dx));
+                    high = (int) Math.sqrt(radiusLength * radiusLength - dx * dx);
                     for (int dy = -high; dy <= high; ++dy) {
-                        if (!surpassEdges && (center.x + dx < 0 || center.y + dy < 0 ||
-                                center.x + dx >= width || center.y + dy >= height))
+                        if (!surpassEdges && (centerX + dx < 0 || centerY + dy < 0 ||
+                                centerX + dx >= width || centerY + dy >= height))
                             continue;
-                        contents.add(Coord.get(center.x + dx, center.y + dy));
+                        contents.add(Coord.get(centerX + dx, centerY + dy));
                     }
                 }
             }
         }
         return contents;
+    }
+
+    /**
+     * Gets a List of all Coord points within {@code radiusLength} of {@code center} using Chebyshev measurement (making
+     * a square). Appends Coords to {@code buf} if it is non-null, and returns either buf or a freshly-allocated List of
+     * Coord. If {@code surpassEdges} is false, which is the normal usage, this will not produce Coords with x or y less
+     * than 0 or greater than {@code width} or {@code height}; if surpassEdges is true, then it can produce any Coords
+     * in the actual radius.
+     * @param centerX the center Coord x
+     * @param centerY the center Coord x
+     * @param radiusLength the inclusive distance from (centerX,centerY) for Coords to use in the List
+     * @param surpassEdges usually should be false; if true, can produce Coords with negative x/y or past width/height
+     * @param width the width of the area this can place Coords (exclusive, not relative to center, usually map width)
+     * @param height the height of the area this can place Coords (exclusive, not relative to center, usually map height)
+     * @return a new List containing the points within radiusLength of the center
+
+     */
+    public static List<Coord> inSquare(int centerX, int centerY, int radiusLength, boolean surpassEdges, int width, int height)
+    {
+        return SQUARE.pointsInside(centerX, centerY, radiusLength, surpassEdges, width, height, null);
+    }
+    /**
+     * Gets a List of all Coord points within {@code radiusLength} of {@code center} using Manhattan measurement (making
+     * a diamond). Appends Coords to {@code buf} if it is non-null, and returns either buf or a freshly-allocated List
+     * of Coord. If {@code surpassEdges} is false, which is the normal usage, this will not produce Coords with x or y
+     * less than 0 or greater than {@code width} or {@code height}; if surpassEdges is true, then it can produce any
+     * Coords in the actual radius.
+     * @param centerX the center Coord x
+     * @param centerY the center Coord x
+     * @param radiusLength the inclusive distance from (centerX,centerY) for Coords to use in the List
+     * @param surpassEdges usually should be false; if true, can produce Coords with negative x/y or past width/height
+     * @param width the width of the area this can place Coords (exclusive, not relative to center, usually map width)
+     * @param height the height of the area this can place Coords (exclusive, not relative to center, usually map height)
+     * @return a new List containing the points within radiusLength of the center
+     */
+    public static List<Coord> inDiamond(int centerX, int centerY, int radiusLength, boolean surpassEdges, int width, int height)
+    {
+        return DIAMOND.pointsInside(centerX, centerY, radiusLength, surpassEdges, width, height, null);
+    }
+    /**
+     * Gets a List of all Coord points within {@code radiusLength} of {@code center} using Euclidean measurement (making
+     * a circle). Appends Coords to {@code buf} if it is non-null, and returns either buf or a freshly-allocated List of
+     * Coord. If {@code surpassEdges} is false, which is the normal usage, this will not produce Coords with x or y less
+     * than 0 or greater than {@code width} or {@code height}; if surpassEdges is true, then it can produce any Coords
+     * in the actual radius.
+     * @param centerX the center Coord x
+     * @param centerY the center Coord x
+     * @param radiusLength the inclusive distance from (centerX,centerY) for Coords to use in the List
+     * @param surpassEdges usually should be false; if true, can produce Coords with negative x/y or past width/height
+     * @param width the width of the area this can place Coords (exclusive, not relative to center, usually map width)
+     * @param height the height of the area this can place Coords (exclusive, not relative to center, usually map height)
+     * @return a new List containing the points within radiusLength of the center
+     */
+    public static List<Coord> inCircle(int centerX, int centerY, int radiusLength, boolean surpassEdges, int width, int height)
+    {
+        return CIRCLE.pointsInside(centerX, centerY, radiusLength, surpassEdges, width, height, null);
+    }
+
+    /**
+     * Gets a List of all Coord points within {@code radiusLength} of {@code center} using Chebyshev measurement (making
+     * a square). Appends Coords to {@code buf} if it is non-null, and returns either buf or a freshly-allocated List of
+     * Coord. If {@code surpassEdges} is false, which is the normal usage, this will not produce Coords with x or y less
+     * than 0 or greater than {@code width} or {@code height}; if surpassEdges is true, then it can produce any Coords
+     * in the actual radius.
+     * @param centerX the center Coord x
+     * @param centerY the center Coord x
+     * @param radiusLength the inclusive distance from (centerX,centerY) for Coords to use in the List
+     * @param surpassEdges usually should be false; if true, can produce Coords with negative x/y or past width/height
+     * @param width the width of the area this can place Coords (exclusive, not relative to center, usually map width)
+     * @param height the height of the area this can place Coords (exclusive, not relative to center, usually map height)
+     * @param buf the List of Coord to append points to; may be null to create a new List
+     * @return buf, after appending Coords to it, or a new List if buf was null
+     */
+    public static List<Coord> inSquare(int centerX, int centerY, int radiusLength, boolean surpassEdges, int width, int height, List<Coord> buf)
+    {
+        return SQUARE.pointsInside(centerX, centerY, radiusLength, surpassEdges, width, height, buf);
+    }
+    /**
+     * Gets a List of all Coord points within {@code radiusLength} of {@code center} using Manhattan measurement (making
+     * a diamond). Appends Coords to {@code buf} if it is non-null, and returns either buf or a freshly-allocated List
+     * of Coord. If {@code surpassEdges} is false, which is the normal usage, this will not produce Coords with x or y
+     * less than 0 or greater than {@code width} or {@code height}; if surpassEdges is true, then it can produce any
+     * Coords in the actual radius.
+     * @param centerX the center Coord x
+     * @param centerY the center Coord x
+     * @param radiusLength the inclusive distance from (centerX,centerY) for Coords to use in the List
+     * @param surpassEdges usually should be false; if true, can produce Coords with negative x/y or past width/height
+     * @param width the width of the area this can place Coords (exclusive, not relative to center, usually map width)
+     * @param height the height of the area this can place Coords (exclusive, not relative to center, usually map height)
+     * @param buf the List of Coord to append points to; may be null to create a new List
+     * @return buf, after appending Coords to it, or a new List if buf was null
+     */
+    public static List<Coord> inDiamond(int centerX, int centerY, int radiusLength, boolean surpassEdges, int width, int height, List<Coord> buf)
+    {
+        return DIAMOND.pointsInside(centerX, centerY, radiusLength, surpassEdges, width, height, buf);
+    }
+    /**
+     * Gets a List of all Coord points within {@code radiusLength} of {@code center} using Euclidean measurement (making
+     * a circle). Appends Coords to {@code buf} if it is non-null, and returns either buf or a freshly-allocated List of
+     * Coord. If {@code surpassEdges} is false, which is the normal usage, this will not produce Coords with x or y less
+     * than 0 or greater than {@code width} or {@code height}; if surpassEdges is true, then it can produce any Coords
+     * in the actual radius.
+     * @param centerX the center Coord x
+     * @param centerY the center Coord x
+     * @param radiusLength the inclusive distance from (centerX,centerY) for Coords to use in the List
+     * @param surpassEdges usually should be false; if true, can produce Coords with negative x/y or past width/height
+     * @param width the width of the area this can place Coords (exclusive, not relative to center, usually map width)
+     * @param height the height of the area this can place Coords (exclusive, not relative to center, usually map height)
+     * @param buf the List of Coord to append points to; may be null to create a new List
+     * @return buf, after appending Coords to it, or a new List if buf was null
+     */
+    public static List<Coord> inCircle(int centerX, int centerY, int radiusLength, boolean surpassEdges, int width, int height, List<Coord> buf)
+    {
+        return CIRCLE.pointsInside(centerX, centerY, radiusLength, surpassEdges, width, height, buf);
     }
 
     /**
@@ -509,8 +635,8 @@ public enum Radius {
      */
     public Set<Coord> expand(int distance, int width, int height, Iterable<Coord> points)
     {
-        Set<Coord> around = pointsInside(Coord.get(distance, distance), distance, false, width, height),
-                expanded = new LinkedHashSet<>(around.size() * 16);
+        List<Coord> around = pointsInside(Coord.get(distance, distance), distance, false, width, height);
+        OrderedSet<Coord> expanded = new OrderedSet<>(around.size() * 16);
         int tx, ty;
         for(Coord pt : points)
         {

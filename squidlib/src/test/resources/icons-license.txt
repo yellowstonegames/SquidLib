@@ -1,0 +1,31 @@
+Icons provided under the Creative Commons 3.0 BY license.
+
+The icons in icons.png are the work of several different contributors, and if you distribute icons.png you must give
+attribution for all of them (they're all in the same image). The contributors are:
+
+- Lorc, http://lorcblog.blogspot.com
+- Delapouite, http://delapouite.com
+- John Colburn, http://ninmunanmu.com
+- Felbrigg, http://blackdogofdoom.blogspot.co.uk
+- John Redman, http://www.uniquedicetowers.com
+- Carl Olsen, https://twitter.com/unstoppableCarl
+- Sbed, http://opengameart.org/content/95-game-icons
+- PriorBlue
+- Willdabeast, http://wjbstories.blogspot.com
+- Viscious Speed, http://viscious-speed.deviantart.com
+- Lord Berandas, http://berandas.deviantart.com
+- Irongamer, http://ecesisllc.wix.com/home
+- HeavenlyDog, http://www.gnomosygoblins.blogspot.com
+- Lucas
+- Faithtoken, http://fungustoken.deviantart.com
+- Skoll
+
+Please, include a mention "Icons made by {author}" in your derivative work.
+
+If you use them in one of your project, don't hesitate to drop a message to delapouite@gmail.com so we can add your
+creation to the showcase page.
+
+More info and icons available at http://game-icons.net
+
+These icons (the May 23, 2016 batch) have all been merged into one texture atlas, and modifications made to imitate the
+resizability of the vector version with a distance field effect.

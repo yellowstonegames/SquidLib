@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit trunk//EN"
+        "https://gwt.googlesource.com/gwt/+/master/./distro-source/core/src/gwt-module.dtd">
+<!-- To compile to Gwt, you need to reference this file in your master .gwt.xml
+     file (usually called GdxDefinition.gwt.xml) as follows:
+     <inherits name='squidlib-extra' />
+  -->
+<module>
+    <source path="squidpony"/>
+    <inherits name="squidlib-util" />
+    <inherits name="regexodus"/>
+    <inherits name="blazing.chain"/>
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.FakeLanguageGen" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.IntVLA" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.Coord" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.GreasedRegion" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.OrderedMap" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.OrderedSet" />
+    <extend-configuration-property name="gdx.reflect.include" value="java.util.SortedSet" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.Arrangement" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.K2" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.IntDoubleOrderedMap" />
+
+</module>

@@ -31,6 +31,7 @@
 
 package squidpony.performance;
 
+import com.badlogic.gdx.math.RandomXS128;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Mode;
@@ -108,11 +109,262 @@ import java.util.concurrent.TimeUnit;
  * RNGBenchmark.measureXorIntR               avgt    3    1228.443 ±  280.454  ms/op
  * RNGBenchmark.measureXorR                  avgt    3    1355.535 ±   74.150  ms/op
  *
+ * Benchmark                         Mode  Cnt     Score     Error  Units
+ * RNGBenchmark.measureLight         avgt    3  1251.677 ± 138.161  ms/op
+ * RNGBenchmark.measureLightInt      avgt    3  1245.465 ±  30.920  ms/op
+ * RNGBenchmark.measureLightIntR     avgt    3  1405.867 ±  71.977  ms/op
+ * RNGBenchmark.measureLightR        avgt    3  1249.536 ±  17.589  ms/op
+ * RNGBenchmark.measurePermuted      avgt    3  1618.965 ± 191.034  ms/op
+ * RNGBenchmark.measurePermutedInt   avgt    3  1719.651 ±  81.618  ms/op
+ * RNGBenchmark.measurePermutedIntR  avgt    3  1724.723 ± 361.353  ms/op
+ * RNGBenchmark.measurePermutedR     avgt    3  1631.643 ± 224.490  ms/op
+ * RNGBenchmark.measureXoRo          avgt    3  1215.819 ± 123.754  ms/op
+ * RNGBenchmark.measureXoRoInt       avgt    3  1377.244 ±  82.096  ms/op
+ * RNGBenchmark.measureXoRoIntR      avgt    3  1446.973 ±  61.399  ms/op
+ * RNGBenchmark.measureXoRoR         avgt    3  1274.790 ± 114.618  ms/op
+ * RNGBenchmark.measureXor           avgt    3  1362.249 ±  24.538  ms/op
+ * RNGBenchmark.measureXorInt        avgt    3  1263.790 ±  41.724  ms/op
+ * RNGBenchmark.measureXorIntR       avgt    3  1210.991 ± 105.103  ms/op
+ * RNGBenchmark.measureXorR          avgt    3  1331.630 ±  77.693  ms/op
+ *
+ * Benchmark                               Mode  Cnt     Score     Error  Units
+ * RNGBenchmark.measureLight               avgt    3  1269.143 ±  85.918  ms/op
+ * RNGBenchmark.measureLightBetweenHastyR  avgt    3  1617.676 ± 316.244  ms/op
+ * RNGBenchmark.measureLightBetweenR       avgt    3  2920.878 ± 169.583  ms/op
+ * RNGBenchmark.measureLightInt            avgt    3  1267.969 ±  47.884  ms/op
+ * RNGBenchmark.measureLightIntR           avgt    3  1425.842 ±  89.710  ms/op
+ * RNGBenchmark.measureLightR              avgt    3  1270.877 ±  62.054  ms/op
+ * RNGBenchmark.measurePermuted            avgt    3  1647.609 ±  22.511  ms/op
+ * RNGBenchmark.measurePermutedInt         avgt    3  1749.033 ± 147.920  ms/op
+ * RNGBenchmark.measurePermutedIntR        avgt    3  1744.506 ±  77.704  ms/op
+ * RNGBenchmark.measurePermutedR           avgt    3  1679.043 ± 733.835  ms/op
+ * RNGBenchmark.measureXoRo                avgt    3  1234.455 ± 112.165  ms/op
+ * RNGBenchmark.measureXoRoInt             avgt    3  1400.915 ±  12.242  ms/op
+ * RNGBenchmark.measureXoRoIntR            avgt    3  1471.615 ±  12.909  ms/op
+ * RNGBenchmark.measureXoRoR               avgt    3  1298.212 ±  13.077  ms/op
+ * RNGBenchmark.measureXor                 avgt    3  1392.523 ±  74.491  ms/op
+ * RNGBenchmark.measureXorInt              avgt    3  1286.622 ±  17.861  ms/op
+ * RNGBenchmark.measureXorIntR             avgt    3  1229.620 ±  50.388  ms/op
+ * RNGBenchmark.measureXorR                avgt    3  1356.388 ±  61.536  ms/op
+ *
+ * Benchmark                               Mode  Cnt     Score     Error  Units
+ * RNGBenchmark.measureGDX                 avgt    3  1387.068 ±  39.887  ms/op
+ * RNGBenchmark.measureGDXInt              avgt    3  1340.047 ±  12.284  ms/op
+ * RNGBenchmark.measureIsaac               avgt    3  5895.743 ± 673.415  ms/op
+ * RNGBenchmark.measureIsaacInt            avgt    3  5910.345 ± 372.230  ms/op
+ * RNGBenchmark.measureIsaacR              avgt    3  6063.574 ± 276.814  ms/op
+ * RNGBenchmark.measureLight               avgt    3  1265.901 ± 145.178  ms/op
+ * RNGBenchmark.measureLightBetweenHastyR  avgt    3  1605.859 ±  36.246  ms/op
+ * RNGBenchmark.measureLightBetweenR       avgt    3  2986.241 ± 140.256  ms/op
+ * RNGBenchmark.measureLightInt            avgt    3  1277.823 ± 199.616  ms/op
+ * RNGBenchmark.measureLightIntR           avgt    3  1424.500 ±  31.110  ms/op
+ * RNGBenchmark.measureLightR              avgt    3  1271.564 ±  73.357  ms/op\
+ * RNGBenchmark.measurePermuted            avgt    3  1647.924 ±  52.709  ms/op
+ * RNGBenchmark.measurePermutedInt         avgt    3  1747.788 ±  47.732  ms/op
+ * RNGBenchmark.measurePermutedIntR        avgt    3  1749.924 ±  85.835  ms/op
+ * RNGBenchmark.measurePermutedR           avgt    3  1649.223 ±  28.546  ms/op
+ * RNGBenchmark.measureXoRo                avgt    3  1228.254 ±  16.915  ms/op
+ * RNGBenchmark.measureXoRoInt             avgt    3  1395.978 ±  80.767  ms/op
+ * RNGBenchmark.measureXoRoIntR            avgt    3  1475.439 ±  30.060  ms/op
+ * RNGBenchmark.measureXoRoR               avgt    3  1297.531 ±  32.635  ms/op
+ * RNGBenchmark.measureXor                 avgt    3  1386.555 ±  41.859  ms/op
+ * RNGBenchmark.measureXorInt              avgt    3  1286.369 ±  45.825  ms/op
+ * RNGBenchmark.measureXorIntR             avgt    3  1227.971 ±  23.930  ms/op
+ * RNGBenchmark.measureXorR                avgt    3  1354.662 ±  83.443  ms/op
+ *
+ * Benchmark                        Mode  Cnt     Score     Error  Units
+ * RNGBenchmark.measureGDX          avgt    3  1335.200 ±  55.131  ms/op
+ * RNGBenchmark.measureGDXInt       avgt    3  1284.587 ± 115.753  ms/op
+ * RNGBenchmark.measureLight        avgt    3  1220.308 ± 152.938  ms/op
+ * RNGBenchmark.measureLightInt     avgt    3  1215.762 ±  88.660  ms/op
+ * RNGBenchmark.measureLightIntR    avgt    3  1365.114 ±  99.494  ms/op
+ * RNGBenchmark.measureLightR       avgt    3  1221.436 ±  69.999  ms/op
+ * RNGBenchmark.measurePermuted     avgt    3  1599.886 ± 628.296  ms/op
+ * RNGBenchmark.measurePermutedInt  avgt    3  1672.186 ± 110.668  ms/op
+ * RNGBenchmark.measureThunder      avgt    3   761.156 ±  26.884  ms/op
+ * RNGBenchmark.measureThunderInt   avgt    3   846.351 ± 315.138  ms/op
+ * RNGBenchmark.measureThunderIntR  avgt    3   918.034 ± 223.494  ms/op
+ * RNGBenchmark.measureThunderR     avgt    3   838.914 ±  62.472  ms/op
+ * RNGBenchmark.measureXoRo         avgt    3  1179.352 ±  44.233  ms/op
+ * RNGBenchmark.measureXoRoInt      avgt    3  1342.901 ±  21.042  ms/op
+ * RNGBenchmark.measureXoRoIntR     avgt    3  1415.585 ±  71.514  ms/op
+ * RNGBenchmark.measureXoRoR        avgt    3  1245.577 ±  39.306  ms/op
+ *
+ * Benchmark                        Mode  Cnt     Score     Error  Units
+ * RNGBenchmark.measureGDX          avgt    3  1349.265 ±  58.767  ms/op
+ * RNGBenchmark.measureGDXInt       avgt    3  1313.436 ± 275.429  ms/op
+ * RNGBenchmark.measureLight        avgt    3  1268.311 ±  54.113  ms/op
+ * RNGBenchmark.measureLightInt     avgt    3  1268.068 ±  67.096  ms/op
+ * RNGBenchmark.measureLightIntR    avgt    3  1430.136 ±  64.875  ms/op
+ * RNGBenchmark.measureLightR       avgt    3  1272.734 ±  79.132  ms/op
+ * RNGBenchmark.measurePermuted     avgt    3  1649.275 ±  55.005  ms/op
+ * RNGBenchmark.measurePermutedInt  avgt    3  1773.061 ± 973.661  ms/op
+ * RNGBenchmark.measureThunder      avgt    3   714.949 ±  41.154  ms/op
+ * RNGBenchmark.measureThunderInt   avgt    3   793.242 ±  12.410  ms/op
+ * RNGBenchmark.measureThunderIntR  avgt    3   793.398 ±  41.674  ms/op
+ * RNGBenchmark.measureThunderR     avgt    3   715.476 ±  84.131  ms/op
+ * RNGBenchmark.measureXoRo         avgt    3  1233.067 ±  17.727  ms/op
+ * RNGBenchmark.measureXoRoInt      avgt    3  1407.854 ± 111.257  ms/op
+ * RNGBenchmark.measureXoRoIntR     avgt    3  1470.919 ±  57.782  ms/op
+ * RNGBenchmark.measureXoRoR        avgt    3  1303.842 ± 116.414  ms/op
+ *
+ * Benchmark                        Mode  Cnt     Score     Error  Units
+ * RNGBenchmark.measureGDX          avgt    3  1330.069 ±  82.401  ms/op
+ * RNGBenchmark.measureGDXInt       avgt    3  1272.507 ± 103.801  ms/op
+ * RNGBenchmark.measureLight        avgt    3  1233.945 ± 653.550  ms/op
+ * RNGBenchmark.measureLightInt     avgt    3  1211.301 ±  79.526  ms/op
+ * RNGBenchmark.measureLightIntR    avgt    3  1392.179 ± 552.502  ms/op
+ * RNGBenchmark.measureLightR       avgt    3  1207.975 ± 107.328  ms/op
+ * RNGBenchmark.measureThunder      avgt    3   848.403 ±  55.360  ms/op
+ * RNGBenchmark.measureThunderInt   avgt    3   920.933 ±  55.772  ms/op
+ * RNGBenchmark.measureThunderIntR  avgt    3  1074.927 ± 119.307  ms/op
+ * RNGBenchmark.measureThunderR     avgt    3   916.797 ±  58.557  ms/op
+ * RNGBenchmark.measureXoRo         avgt    3  1182.115 ± 146.899  ms/op
+ * RNGBenchmark.measureXoRoInt      avgt    3  1382.232 ±  68.132  ms/op
+ * RNGBenchmark.measureXoRoIntR     avgt    3  1458.964 ±  10.307  ms/op
+ * RNGBenchmark.measureXoRoR        avgt    3  1249.812 ± 450.441  ms/op
  */
 public class RNGBenchmark {
 
     private static long seed = 9000;
     private static int iseed = 9000;
+
+    public long doThunder()
+    {
+        ThunderRNG rng = new ThunderRNG(seed);
+
+        for (int i = 0; i < 1000000000; i++) {
+            seed += rng.nextLong();
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureThunder() throws InterruptedException {
+        seed = 9000;
+        doThunder();
+    }
+
+    public long doThunderInt()
+    {
+        ThunderRNG rng = new ThunderRNG(iseed);
+
+        for (int i = 0; i < 1000000000; i++) {
+            iseed += rng.nextInt();
+        }
+        return iseed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureThunderInt() throws InterruptedException {
+        iseed = 9000;
+        doThunderInt();
+    }
+    public long doThunderR()
+    {
+        RNG rng = new RNG(new ThunderRNG(seed));
+
+        for (int i = 0; i < 1000000000; i++) {
+            seed += rng.nextLong();
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureThunderR() throws InterruptedException {
+        seed = 9000;
+        doThunderR();
+    }
+
+    public long doThunderIntR()
+    {
+        RNG rng = new RNG(new ThunderRNG(iseed));
+
+        for (int i = 0; i < 1000000000; i++) {
+            iseed += rng.nextInt();
+        }
+        return iseed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureThunderIntR() throws InterruptedException {
+        iseed = 9000;
+        doThunderIntR();
+    }
+
+    public long doXoRo()
+    {
+        XoRoRNG rng = new XoRoRNG(seed);
+        for (int i = 0; i < 1000000000; i++) {
+            seed += rng.nextLong();
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureXoRo() throws InterruptedException {
+        seed = 9000;
+        doXoRo();
+    }
+
+    public long doXoRoInt()
+    {
+        XoRoRNG rng = new XoRoRNG(iseed);
+        for (int i = 0; i < 1000000000; i++) {
+            iseed += rng.nextInt();
+        }
+        return iseed;
+    }
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureXoRoInt() throws InterruptedException {
+        iseed = 9000;
+        doXoRoInt();
+    }
+
+    public long doXoRoR()
+    {
+        RNG rng = new RNG(new XoRoRNG(seed));
+        for (int i = 0; i < 1000000000; i++) {
+            seed += rng.nextLong();
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureXoRoR() throws InterruptedException {
+        seed = 9000;
+        doXoRoR();
+    }
+
+    public long doXoRoIntR()
+    {
+        RNG rng = new RNG(new XoRoRNG(iseed));
+        for (int i = 0; i < 1000000000; i++) {
+            iseed += rng.nextInt();
+        }
+        return iseed;
+    }
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureXoRoIntR() throws InterruptedException {
+        iseed = 9000;
+        doXoRoIntR();
+    }
 
     public long doLight()
     {
@@ -185,79 +437,44 @@ public class RNGBenchmark {
         doLightIntR();
     }
 
-    public long doThreadLocalRandom()
+    /*
+    public long doLightBetweenR()
     {
-        ThreadLocalRandom rng = ThreadLocalRandom.current();
-        //rng.setSeed(seed);
+        RNG rng = new RNG(new LightRNG(iseed));
 
         for (int i = 0; i < 1000000000; i++) {
-            seed += rng.nextLong();
-        }
-        return seed;
-    }
-
-    //@Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureThreadLocalRandom() throws InterruptedException {
-        seed = 9000;
-        doThreadLocalRandom();
-    }
-
-    public long doThreadLocalRandomInt()
-    {
-        ThreadLocalRandom rng = ThreadLocalRandom.current();
-        //rng.setSeed(iseed);
-
-        for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.nextInt();
+            iseed += rng.nextInt(1000);
         }
         return iseed;
     }
 
-    //@Benchmark
+    @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureThreadLocalRandomInt() throws InterruptedException {
+    public void measureLightBetweenR() throws InterruptedException {
         iseed = 9000;
-        doThreadLocalRandomInt();
+        System.out.println(doLightBetweenR());
     }
-    public long doRandom()
+    public long doLightBetweenHastyR()
     {
-        Random rng = new Random(seed);
+        RNG rng = new RNG(new LightRNG(iseed));
 
         for (int i = 0; i < 1000000000; i++) {
-            seed += rng.nextLong();
-        }
-        return seed;
-    }
-
-    //@Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureRandom() throws InterruptedException {
-        seed = 9000;
-        doRandom();
-    }
-
-    public long doRandomInt()
-    {
-        Random rng = new Random(iseed);
-
-        for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.nextInt();
+            iseed += rng.nextIntHasty(1000);
         }
         return iseed;
     }
 
-    //@Benchmark
+    @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureRandomInt() throws InterruptedException {
+    public void measureLightBetweenHastyR() throws InterruptedException {
         iseed = 9000;
-        doRandomInt();
+        System.out.println(doLightBetweenHastyR());
     }
+    */
 
+    /*
     public long doPermuted()
     {
         PermutedRNG rng = new PermutedRNG(seed);
@@ -290,7 +507,7 @@ public class RNGBenchmark {
         iseed = 9000;
         doPermutedInt();
     }
-
+    /*
     public long doPermutedR()
     {
         RNG rng = new RNG(new PermutedRNG(seed));
@@ -390,9 +607,7 @@ public class RNGBenchmark {
         iseed = 9000;
         doXorIntR();
     }
-
-
-
+    */
     public long doChaosR()
     {
         RNG rng = new RNG(new ChaosRNG());
@@ -430,13 +645,121 @@ public class RNGBenchmark {
         iseed = 9000;
         doChaosRInt();
     }
-
-
-
-
-    public long doXoRo()
+    public long doThreadLocalRandom()
     {
-        XoRoRNG rng = new XoRoRNG(seed);
+        ThreadLocalRandom rng = ThreadLocalRandom.current();
+        //rng.setSeed(seed);
+
+        for (int i = 0; i < 1000000000; i++) {
+            seed += rng.nextLong();
+        }
+        return seed;
+    }
+
+    //@Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureThreadLocalRandom() throws InterruptedException {
+        seed = 9000;
+        doThreadLocalRandom();
+    }
+
+    public long doThreadLocalRandomInt()
+    {
+        ThreadLocalRandom rng = ThreadLocalRandom.current();
+        //rng.setSeed(iseed);
+
+        for (int i = 0; i < 1000000000; i++) {
+            iseed += rng.nextInt();
+        }
+        return iseed;
+    }
+
+    //@Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureThreadLocalRandomInt() throws InterruptedException {
+        iseed = 9000;
+        doThreadLocalRandomInt();
+    }
+    public long doRandom()
+    {
+        Random rng = new Random(seed);
+
+        for (int i = 0; i < 1000000000; i++) {
+            seed += rng.nextLong();
+        }
+        return seed;
+    }
+
+    //@Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureRandom() throws InterruptedException {
+        seed = 9000;
+        doRandom();
+    }
+
+    public long doRandomInt()
+    {
+        Random rng = new Random(iseed);
+
+        for (int i = 0; i < 1000000000; i++) {
+            iseed += rng.nextInt();
+        }
+        return iseed;
+    }
+
+    //@Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureRandomInt() throws InterruptedException {
+        iseed = 9000;
+        doRandomInt();
+    }
+
+
+
+    public long doGDX()
+    {
+        RandomXS128 rng = new RandomXS128(seed);
+
+        for (int i = 0; i < 1000000000; i++) {
+            seed += rng.nextLong();
+        }
+        return seed;
+    }
+
+    //@Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureGDX() throws InterruptedException {
+        seed = 9000;
+        doGDX();
+    }
+
+    public long doGDXInt()
+    {
+        RandomXS128 rng = new RandomXS128(iseed);
+
+        for (int i = 0; i < 1000000000; i++) {
+            iseed += rng.nextInt();
+        }
+        return iseed;
+    }
+
+    //@Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureGDXInt() throws InterruptedException {
+        iseed = 9000;
+        doGDXInt();
+    }
+    /*
+    public long doIsaac()
+    {
+        IsaacRNG rng = new IsaacRNG(seed);
+
         for (int i = 0; i < 1000000000; i++) {
             seed += rng.nextLong();
         }
@@ -446,30 +769,32 @@ public class RNGBenchmark {
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureXoRo() throws InterruptedException {
+    public void measureIsaac() throws InterruptedException {
         seed = 9000;
-        doXoRo();
+        doIsaac();
     }
 
-    public long doXoRoInt()
+    public long doIsaacInt()
     {
-        XoRoRNG rng = new XoRoRNG(iseed);
+        IsaacRNG rng = new IsaacRNG(iseed);
+
         for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.nextInt();
+            iseed += rng.next(32);
         }
         return iseed;
     }
+
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureXoRoInt() throws InterruptedException {
+    public void measureIsaacInt() throws InterruptedException {
         iseed = 9000;
-        doXoRoInt();
+        doIsaacInt();
     }
-
-    public long doXoRoR()
+    public long doIsaacR()
     {
-        RNG rng = new RNG(new XoRoRNG(seed));
+        RNG rng = new RNG(new IsaacRNG(seed));
+
         for (int i = 0; i < 1000000000; i++) {
             seed += rng.nextLong();
         }
@@ -479,27 +804,21 @@ public class RNGBenchmark {
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureXoRoR() throws InterruptedException {
+    public void measureIsaacR() throws InterruptedException {
         seed = 9000;
-        doXoRoR();
+        doIsaacR();
     }
 
-    public long doXoRoIntR()
+    public long doIsaacIntR()
     {
-        RNG rng = new RNG(new XoRoRNG(iseed));
+        RNG rng = new RNG(new IsaacRNG(iseed));
+
         for (int i = 0; i < 1000000000; i++) {
             iseed += rng.nextInt();
         }
         return iseed;
     }
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureXoRoIntR() throws InterruptedException {
-        iseed = 9000;
-        doXoRoIntR();
-    }
-
+    */
 
 /*
     public long doSecureRandom()

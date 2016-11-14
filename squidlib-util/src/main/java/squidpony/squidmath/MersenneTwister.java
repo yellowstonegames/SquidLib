@@ -49,7 +49,7 @@ public class MersenneTwister implements RandomnessSource {
      * Creates a new RNG and seeds it using the default seeding strategy.
      */
     public MersenneTwister() {
-        this((new SecureRandom()).generateSeed(SEED_SIZE_BYTES));
+        this(new SecureRandom().generateSeed(SEED_SIZE_BYTES));
     }
 
     /**
@@ -68,9 +68,9 @@ public class MersenneTwister implements RandomnessSource {
         // This section is translated from the init_genrand code in the C version.
         mt[0] = BOOTSTRAP_SEED;
         for (mtIndex = 1; mtIndex < N; mtIndex++) {
-            mt[mtIndex] = (BOOTSTRAP_FACTOR
+            mt[mtIndex] = BOOTSTRAP_FACTOR
                     * (mt[mtIndex - 1] ^ (mt[mtIndex - 1] >>> 30))
-                    + mtIndex);
+                    + mtIndex;
         }
 
         // This section is translated from the init_by_array code in the C version.
@@ -164,10 +164,10 @@ public class MersenneTwister implements RandomnessSource {
             lock.unlock();
         }
         // Tempering
-        y ^= (y >>> 11);
+        y ^= y >>> 11;
         y ^= (y << 7) & GENERATE_MASK1;
         y ^= (y << 15) & GENERATE_MASK2;
-        y ^= (y >>> 18);
+        y ^= y >>> 18;
 
         return y >>> (32 - bits);
     }

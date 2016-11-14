@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.squidmath;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import java.util.LinkedList;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import java.util.List;<a name="line.4"></a>
+<span class="sourceLineNo">005</span><a name="line.5"></a>
+<span class="sourceLineNo">006</span>/**<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * A simple line-drawing algorithm that only takes orthogonal steps; may be useful for LOS in games that use Manhattan<a name="line.7"></a>
+<span class="sourceLineNo">008</span> * distances for measurements.<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * Algorithm is from http://www.redblobgames.com/grids/line-drawing.html#stepping , thanks Amit!<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * Created by Tommy Ettinger on 1/10/2016.<a name="line.10"></a>
+<span class="sourceLineNo">011</span> */<a name="line.11"></a>
+<span class="sourceLineNo">012</span>public class OrthoLine {<a name="line.12"></a>
+<span class="sourceLineNo">013</span>    /**<a name="line.13"></a>
+<span class="sourceLineNo">014</span>     * Draws a line from (startX, startY) to (endX, endY) using only N/S/E/W movement. Returns a List of Coord in order.<a name="line.14"></a>
+<span class="sourceLineNo">015</span>     *<a name="line.15"></a>
+<span class="sourceLineNo">016</span>     * @param startX x of starting point<a name="line.16"></a>
+<span class="sourceLineNo">017</span>     * @param startY y of starting point<a name="line.17"></a>
+<span class="sourceLineNo">018</span>     * @param endX   x of ending point<a name="line.18"></a>
+<span class="sourceLineNo">019</span>     * @param endY   y of ending point<a name="line.19"></a>
+<span class="sourceLineNo">020</span>     * @return List of Coord, including (startX, startY) and (endX, endY) and all points walked between<a name="line.20"></a>
+<span class="sourceLineNo">021</span>     */<a name="line.21"></a>
+<span class="sourceLineNo">022</span>    public static List&lt;Coord&gt; line(int startX, int startY, int endX, int endY) {<a name="line.22"></a>
+<span class="sourceLineNo">023</span>        int dx = endX - startX, dy = endY - startY, nx = Math.abs(dx), ny = Math.abs(dy);<a name="line.23"></a>
+<span class="sourceLineNo">024</span>        int signX = (dx &gt; 0) ? 1 : -1, signY = (dy &gt; 0) ? 1 : -1, workX = startX, workY = startY;<a name="line.24"></a>
+<span class="sourceLineNo">025</span>        LinkedList&lt;Coord&gt; drawn = new LinkedList&lt;&gt;();<a name="line.25"></a>
+<span class="sourceLineNo">026</span>        drawn.add(Coord.get(startX, startY));<a name="line.26"></a>
+<span class="sourceLineNo">027</span>        for (int ix = 0, iy = 0; ix &lt; nx || iy &lt; ny; ) {<a name="line.27"></a>
+<span class="sourceLineNo">028</span>            if ((0.5f + ix) / nx &lt; (0.5 + iy) / ny) {<a name="line.28"></a>
+<span class="sourceLineNo">029</span>                workX += signX;<a name="line.29"></a>
+<span class="sourceLineNo">030</span>                ix++;<a name="line.30"></a>
+<span class="sourceLineNo">031</span>            } else {<a name="line.31"></a>
+<span class="sourceLineNo">032</span>                workY += signY;<a name="line.32"></a>
+<span class="sourceLineNo">033</span>                iy++;<a name="line.33"></a>
+<span class="sourceLineNo">034</span>            }<a name="line.34"></a>
+<span class="sourceLineNo">035</span>            drawn.add(Coord.get(workX, workY));<a name="line.35"></a>
+<span class="sourceLineNo">036</span>        }<a name="line.36"></a>
+<span class="sourceLineNo">037</span>        return drawn;<a name="line.37"></a>
+<span class="sourceLineNo">038</span>    }<a name="line.38"></a>
+<span class="sourceLineNo">039</span><a name="line.39"></a>
+<span class="sourceLineNo">040</span>    /**<a name="line.40"></a>
+<span class="sourceLineNo">041</span>     * Draws a line from start to end using only N/S/E/W movement. Returns a List of Coord in order.<a name="line.41"></a>
+<span class="sourceLineNo">042</span>     * @param start starting point<a name="line.42"></a>
+<span class="sourceLineNo">043</span>     * @param end ending point<a name="line.43"></a>
+<span class="sourceLineNo">044</span>     * @return List of Coord, including start and end and all points walked between<a name="line.44"></a>
+<span class="sourceLineNo">045</span>     */<a name="line.45"></a>
+<span class="sourceLineNo">046</span>    public static List&lt;Coord&gt; line(Coord start, Coord end)<a name="line.46"></a>
+<span class="sourceLineNo">047</span>    {<a name="line.47"></a>
+<span class="sourceLineNo">048</span>        return line(start.x, start.y, end.x, end.y);<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    }<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    /**<a name="line.50"></a>
+<span class="sourceLineNo">051</span>     * Draws a line from (startX, startY) to (endX, endY) using only N/S/E/W movement. Returns an array of Coord in order.<a name="line.51"></a>
+<span class="sourceLineNo">052</span>     *<a name="line.52"></a>
+<span class="sourceLineNo">053</span>     * @param startX x of starting point<a name="line.53"></a>
+<span class="sourceLineNo">054</span>     * @param startY y of starting point<a name="line.54"></a>
+<span class="sourceLineNo">055</span>     * @param endX   x of ending point<a name="line.55"></a>
+<span class="sourceLineNo">056</span>     * @param endY   y of ending point<a name="line.56"></a>
+<span class="sourceLineNo">057</span>     * @return array of Coord, including (startX, startY) and (endX, endY) and all points walked between<a name="line.57"></a>
+<span class="sourceLineNo">058</span>     */<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    public static Coord[] line_(int startX, int startY, int endX, int endY) {<a name="line.59"></a>
+<span class="sourceLineNo">060</span>        int dx = endX - startX, dy = endY - startY, nx = Math.abs(dx), ny = Math.abs(dy);<a name="line.60"></a>
+<span class="sourceLineNo">061</span>        int signX = (dx &gt; 0) ? 1 : -1, signY = (dy &gt; 0) ? 1 : -1, workX = startX, workY = startY;<a name="line.61"></a>
+<span class="sourceLineNo">062</span>        Coord[] drawn = new Coord[nx + ny + 1];<a name="line.62"></a>
+<span class="sourceLineNo">063</span>        drawn[0] = Coord.get(startX, startY);<a name="line.63"></a>
+<span class="sourceLineNo">064</span>        for (int i = 1, ix = 0, iy = 0; ix &lt; nx || iy &lt; ny; i++) {<a name="line.64"></a>
+<span class="sourceLineNo">065</span>            if ((0.5f + ix) / nx &lt; (0.5 + iy) / ny) {<a name="line.65"></a>
+<span class="sourceLineNo">066</span>                workX += signX;<a name="line.66"></a>
+<span class="sourceLineNo">067</span>                ix++;<a name="line.67"></a>
+<span class="sourceLineNo">068</span>            } else {<a name="line.68"></a>
+<span class="sourceLineNo">069</span>                workY += signY;<a name="line.69"></a>
+<span class="sourceLineNo">070</span>                iy++;<a name="line.70"></a>
+<span class="sourceLineNo">071</span>            }<a name="line.71"></a>
+<span class="sourceLineNo">072</span>            drawn[i] = Coord.get(workX, workY);<a name="line.72"></a>
+<span class="sourceLineNo">073</span>        }<a name="line.73"></a>
+<span class="sourceLineNo">074</span>        return drawn;<a name="line.74"></a>
+<span class="sourceLineNo">075</span>    }<a name="line.75"></a>
+<span class="sourceLineNo">076</span><a name="line.76"></a>
+<span class="sourceLineNo">077</span>    /**<a name="line.77"></a>
+<span class="sourceLineNo">078</span>     * Draws a line from start to end using only N/S/E/W movement. Returns a List of Coord in order.<a name="line.78"></a>
+<span class="sourceLineNo">079</span>     * @param start starting point<a name="line.79"></a>
+<span class="sourceLineNo">080</span>     * @param end ending point<a name="line.80"></a>
+<span class="sourceLineNo">081</span>     * @return List of Coord, including start and end and all points walked between<a name="line.81"></a>
+<span class="sourceLineNo">082</span>     */<a name="line.82"></a>
+<span class="sourceLineNo">083</span>    public static Coord[] line_(Coord start, Coord end)<a name="line.83"></a>
+<span class="sourceLineNo">084</span>    {<a name="line.84"></a>
+<span class="sourceLineNo">085</span>        return line_(start.x, start.y, end.x, end.y);<a name="line.85"></a>
+<span class="sourceLineNo">086</span>    }<a name="line.86"></a>
+<span class="sourceLineNo">087</span>}<a name="line.87"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

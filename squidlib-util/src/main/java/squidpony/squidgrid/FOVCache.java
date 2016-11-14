@@ -3,6 +3,7 @@ package squidpony.squidgrid;
 import squidpony.annotation.GwtIncompatible;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.OrderedMap;
 import squidpony.squidmath.ShortVLA;
 
 import java.util.*;
@@ -103,7 +104,7 @@ public class FOVCache extends FOV {
     protected final int NUM_THREADS;
     private ExecutorService executor;
     protected double fovPermissiveness;
-    protected LinkedHashMap<Coord, Integer> lights;
+    protected OrderedMap<Coord, Integer> lights;
     protected Coord[] lightSources;
     protected int[] lightBrightnesses;
     private double[][] levels;
@@ -145,7 +146,7 @@ public class FOVCache extends FOV {
         decay = 1.0 / maxRadius;
         this.radiusKind = radiusKind;
         fovPermissiveness = 0.9;
-        lights = new LinkedHashMap<>();
+        lights = new OrderedMap<>();
         cache = new short[mapLimit][][];
         tmpCache = new short[mapLimit][][];
         losCache = new short[mapLimit][];
@@ -214,7 +215,7 @@ public class FOVCache extends FOV {
         decay = 1.0 / maxRadius;
         this.radiusKind = radiusKind;
         fovPermissiveness = 0.9;
-        lights = new LinkedHashMap<>();
+        lights = new OrderedMap<>();
         cache = new short[mapLimit][][];
         tmpCache = new short[mapLimit][][];
         losCache = new short[mapLimit][];
@@ -286,7 +287,7 @@ public class FOVCache extends FOV {
         decay = 1.0 / maxRadius;
         this.radiusKind = radiusKind;
         fovPermissiveness = 0.9;
-        this.lights = new LinkedHashMap<>(lights);
+        this.lights = new OrderedMap<>(lights);
         cache = new short[mapLimit][][];
         tmpCache = new short[mapLimit][][];
         losCache = new short[mapLimit][];
@@ -490,7 +491,7 @@ public class FOVCache extends FOV {
                 y = hilbertY[i];
                 if (x >= width || y >= height) {
                     if ((on & (1L << l)) != 0L) {
-                        on ^= (1L << l);
+                        on ^= 1L << l;
                         packing[l].add((short) skip[l]);
                         skip[l] = 0;
                     }
@@ -905,7 +906,7 @@ public class FOVCache extends FOV {
                 if(cx < width && cx >= 0 && cy < height && cy >= 0)
                 {
                     theta = atan2Cache[pt.x][pt.y];
-                    dist = (byte)(distanceCache[pt.x][pt.y ]);
+                    dist = (byte) distanceCache[pt.x][pt.y ];
 
                     if(w <= 0)
                     {
@@ -1968,7 +1969,6 @@ public class FOVCache extends FOV {
                     e.printStackTrace();
                 }
                 symUnits.remove(p);
-                System.gc();
             }
             cache = tmpCache;
             qualityComplete = true;
@@ -2141,5 +2141,17 @@ public class FOVCache extends FOV {
         public Long call() throws Exception {
             return storeCellSymmetry(index);
         }
+    }
+
+    /**
+     * Shuts down any threads that may prevent the game from closing properly.
+     * It is recommended you call this at the end of the program to avoid threads lingering too long.
+     * You don't have to do anything special after you call this, other than not using this FOVCache any more.
+     */
+    public void destroy()
+    {
+        performanceThread.interrupt();
+        qualityThread.interrupt();
+        executor.shutdown();
     }
 }

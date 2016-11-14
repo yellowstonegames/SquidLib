@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import squidpony.IColorCenter;
+import squidpony.squidmath.OrderedMap;
 
 import java.util.*;
 
@@ -55,6 +56,7 @@ public class TextCellFactory implements Disposable {
 	protected /* Nullable */AssetManager assetManager;
     public BitmapFont bmpFont = null;
     protected Texture block = null;
+    protected TextureRegion dirMarker = null;
     protected String fitting = SQUID_FITTING;
     protected IColorCenter<Color> scc;
     protected int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;
@@ -67,7 +69,8 @@ public class TextCellFactory implements Disposable {
     protected float smoothingMultiplier = 1f;
     protected float descent, lineHeight;
     private Label.LabelStyle style;
-    protected java.util.LinkedHashMap<String, String> swap = new LinkedHashMap<>(32);
+    protected OrderedMap<String, String> swap = new OrderedMap<>(32);
+    protected char directionGlyph = '^';
 
 
     /**
@@ -92,16 +95,19 @@ public class TextCellFactory implements Disposable {
     public TextCellFactory(/* Nullable */ AssetManager assetManager) {
     	this.assetManager = assetManager;
         scc = DefaultResources.getSCC();
+        swap.put("\u0006", " ");
     }
 
     public TextCellFactory copy()
     {
         TextCellFactory next = new TextCellFactory(assetManager);
         //next.bmpFont = bmpFont;
+        if(bmpFont == null)
+            bmpFont = DefaultResources.getIncludedFont();
         next.bmpFont = new BitmapFont(new BitmapFont.BitmapFontData(bmpFont.getData().getFontFile(), false),
                 bmpFont.getRegions(), bmpFont.usesIntegerPositions());
         next.block = block;
-        next.swap = new LinkedHashMap<>(swap);
+        next.swap = new OrderedMap<>(swap);
         next.distanceField = distanceField;
         next.distanceFieldScaleX = distanceFieldScaleX;
         next.distanceFieldScaleY = distanceFieldScaleY;
@@ -133,6 +139,8 @@ public class TextCellFactory implements Disposable {
      * @return this for method chaining
      */
     public TextCellFactory initByFont() {
+        if(bmpFont == null)
+            bmpFont = DefaultResources.getIncludedFont();
         bmpFont.setFixedWidthGlyphs(fitting);
         width = (int)bmpFont.getSpaceWidth();
         lineHeight = bmpFont.getLineHeight();
@@ -149,6 +157,8 @@ public class TextCellFactory implements Disposable {
         block.draw(temp, 0, 0);
         temp.dispose();
         style = new Label.LabelStyle(bmpFont, null);
+        BitmapFont.Glyph g = bmpFont.getData().getGlyph(directionGlyph);
+        dirMarker = new TextureRegion(bmpFont.getRegion(g.page), g.srcX, g.srcY, g.width, g.height);
         initialized = true;
         initializedByFont = true;
         return this;
@@ -165,6 +175,9 @@ public class TextCellFactory implements Disposable {
      * @return this for method chaining
      */
     public TextCellFactory initBySize() {
+        if(bmpFont == null)
+            bmpFont = DefaultResources.getIncludedFont();
+
         //bmpFont.setFixedWidthGlyphs(fitting);
         Pixmap temp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         temp.setColor(Color.WHITE);
@@ -191,6 +204,8 @@ public class TextCellFactory implements Disposable {
         }
         descent = bmpFont.getDescent();
         style = new Label.LabelStyle(bmpFont, null);
+        BitmapFont.Glyph g = bmpFont.getData().getGlyph(directionGlyph);
+        dirMarker = new TextureRegion(bmpFont.getRegion(g.page), g.srcX, g.srcY, g.width, g.height);
         initialized = true;
         initializedBySize = true;
         return this;
@@ -260,7 +275,7 @@ public class TextCellFactory implements Disposable {
             else if (Gdx.files.classpath(fontpath).exists())
                 bmpFont = new BitmapFont(Gdx.files.classpath(fontpath));
             else
-                bmpFont = DefaultResources.getDefaultFont();
+                bmpFont = DefaultResources.getIncludedFont();
         }
         else {
             assetManager.load(new AssetDescriptor<>(fontpath, BitmapFont.class));
@@ -313,7 +328,7 @@ public class TextCellFactory implements Disposable {
      */
     public TextCellFactory font(BitmapFont bitmapFont) {
         if (bitmapFont == null) {
-            bmpFont = DefaultResources.getDefaultFont();
+            bmpFont = DefaultResources.getIncludedFont();
         }
         else {
             bmpFont = bitmapFont;
@@ -355,7 +370,7 @@ public class TextCellFactory implements Disposable {
             tex = new Texture(Gdx.files.classpath(texturePath), true);
             tex.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.Linear);
         } else {
-			bmpFont = DefaultResources.getDefaultFont();
+			bmpFont = DefaultResources.getIncludedFont();
 			Gdx.app.error("TextCellFactory", "Could not find font file: " + texturePath + ", using defaults");
 			return this;
         }
@@ -368,15 +383,29 @@ public class TextCellFactory implements Disposable {
             bmpFont = new BitmapFont(Gdx.files.classpath(fontPath), new TextureRegion(tex), false);
             distanceField = true;
         } else {
-            bmpFont = DefaultResources.getDefaultFont();
+            bmpFont = DefaultResources.getIncludedFont();
 			Gdx.app.error("TextCellFactory", "Could not find font file: " + fontPath + ", using defaults");
 		}
         //bmpFont.getData().padBottom = bmpFont.getDescent();
-        distanceFieldScaleX = bmpFont.getData().getGlyph(' ').xadvance - 1f;
+        distanceFieldScaleX = bmpFont.getSpaceWidth() - 1f;
         distanceFieldScaleY = bmpFont.getLineHeight() - 1f;
         return this;
     }
     /**
+     * Sets this factory to use the one font included with libGDX, which is Arial at size 15 px. Does it correctly
+     * display when used in a grid? Probably not as well as you'd hope. You should probably get some of the assets that
+     * accompany SquidLib, and can be downloaded directly from GitHub (not available as one monolithic jar via Maven
+     * Central, but that lets you pick and choose individual assets). Get a .fnt and its matching .png file from
+     * https://github.com/SquidPony/SquidLib/tree/master/assets and you can pass them to {@link #font(String)} or
+     * {@link #fontDistanceField(String, String)}.
+     *
+     * @return this factory for method chaining
+     */
+    public TextCellFactory includedFont()
+    {
+        bmpFont = DefaultResources.getIncludedFont();
+        return this;
+    }/**
      * Sets this factory to use a default 12x24 font that supports Latin, Greek, Cyrillic, and many more, including
      * box-drawing characters, zodiac signs, playing-card suits, and chess piece symbols. This is enough to support the
      * output of anything that DungeonUtility can make for a dungeon or FakeLanguageGen can make for text with its
@@ -473,7 +502,7 @@ public class TextCellFactory implements Disposable {
     /**
      * Returns the height of a single cell.
      *
-     * @return
+     * @return the height of a single cell
      */
     public int height() {
         return height;
@@ -705,8 +734,8 @@ public class TextCellFactory implements Disposable {
      * ISO Control characters, non-printing characters and invalid unicode
      * characters are all considered by definition to fit.
      *
-     * @param codepoint
-     * @return
+     * @param codepoint the codepoint of the char in question
+     * @return true if the char will fit, or if it is non-printing in some way; false otherwise
      */
     public boolean willFit(int codepoint) {
         if (!initialized) {
@@ -1046,6 +1075,7 @@ public class TextCellFactory implements Disposable {
                 lb = new Label(swap.get(s), style);
             else
                 lb = new Label(s, style);
+            //lb.setFontScale(bmpFont.getData().scaleX, bmpFont.getData().scaleY);
             lb.setSize(width * s.length(), height - descent); //+ lineTweak * 1f
             lb.setColor(scc.filter(color));
             // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
@@ -1064,40 +1094,7 @@ public class TextCellFactory implements Disposable {
      * @return the Actor, with no position set.
      */
     public Actor makeActor(String s, Collection<Color> colors) {
-        if (!initialized) {
-            throw new IllegalStateException("This factory has not yet been initialized!");
-        }
-        ArrayList<Color> colors2;
-        if(colors == null || colors.isEmpty())
-            colors2 = null;
-        else {
-            colors2 = new ArrayList<>(colors.size());
-            for (Color c : colors) {
-                colors2.add(scc.filter(c));
-            }
-        }
-        if (s == null) {
-            ColorChangeImage im = new ColorChangeImage(block, colors2);
-            //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));
-            im.setSize(actualCellWidth, actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
-            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
-            return im;
-        } else if(s.length() > 0 && s.charAt(0) == '\0') {
-            ColorChangeImage im = new ColorChangeImage(block, colors2);
-            //im.setSize(width * s.length(), height - MathUtils.ceil(bmpFont.getDescent() / 2f));
-            im.setSize(actualCellWidth * s.length(), actualCellHeight + (distanceField ? 1 : 0)); //   - lineHeight / actualCellHeight //+ lineTweak * 1f
-            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
-            return im;
-        } else {
-            ColorChangeLabel lb;
-            if(swap.containsKey(s))
-                lb = new ColorChangeLabel(swap.get(s), style, colors2);
-            else
-                lb = new ColorChangeLabel(s, style, colors2);
-            lb.setSize(width * s.length(), height - descent); //+ lineTweak * 1f
-            // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
-            return lb;
-        }
+        return makeActor(s, colors, 2f, false);
     }
     /**
      * Converts a String into a ColorChangeLabel, or if the argument s is null, creates a ColorChangeImage of a solid
@@ -1110,41 +1107,101 @@ public class TextCellFactory implements Disposable {
      * @param loopTime the amount of time, in seconds, to spend looping through all colors in the list
      * @return the Actor, with no position set.
      */
-    public Actor makeActor(String s, Collection<Color> colors, float loopTime) {
+    public Actor makeActor(String s, Collection<Color> colors, float loopTime)
+    {
+        return makeActor(s, colors, loopTime, false);
+    }
+    /**
+     * Converts a String into a ColorChangeLabel, or if the argument s is null, creates a ColorChangeImage of a solid
+     * block. Can be used for preparing glyphs for animation effects, and is used internally for this purpose. The
+     * ColorChange classes will rotate between all colors given in the List each second, and are not affected by setColor,
+     * though they are affected by their setColors methods. Their color change is not considered an animation for the
+     * purposes of things like SquidPanel.hasActiveAnimations() .
+     * @param s a String to make into an Actor, which can be null for a solid block.
+     * @param colors a List of Color to tint s with, looping through all elements in the list each second
+     * @param loopTime the amount of time, in seconds, to spend looping through all colors in the list
+     * @return the Actor, with no position set.
+     */
+    public Actor makeActor(String s, Collection<Color> colors, float loopTime, boolean doubleWidth) {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
-        ArrayList<Color> colors2;
-        if(colors == null || colors.isEmpty())
-            colors2 = null;
-        else {
+        ArrayList<Color> colors2 = null;
+        if(colors != null && !colors.isEmpty())
+        {
             colors2 = new ArrayList<>(colors.size());
             for (Color c : colors) {
                 colors2.add(scc.filter(c));
             }
         }
         if (s == null) {
-            ColorChangeImage im = new ColorChangeImage(block, loopTime, colors2);
+            ColorChangeImage im = new ColorChangeImage(block, loopTime, doubleWidth, colors2);
             //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));
-            im.setSize(actualCellWidth, actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
+            im.setSize(actualCellWidth * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
             // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
-            ColorChangeImage im = new ColorChangeImage(block, loopTime, colors2);
+            ColorChangeImage im = new ColorChangeImage(block, loopTime, doubleWidth, colors2);
             //im.setSize(width * s.length(), height - MathUtils.ceil(bmpFont.getDescent() / 2f));
-            im.setSize(actualCellWidth * s.length(), actualCellHeight + (distanceField ? 1 : 0)); //   - lineHeight / actualCellHeight //+ lineTweak * 1f
+            im.setSize(actualCellWidth * s.length() * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //   - lineHeight / actualCellHeight //+ lineTweak * 1f
             // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
         } else {
             ColorChangeLabel lb;
             if(swap.containsKey(s))
-                lb = new ColorChangeLabel(swap.get(s), style, loopTime, colors2);
+                lb = new ColorChangeLabel(swap.get(s), style, loopTime, doubleWidth, colors2);
             else
-                lb = new ColorChangeLabel(s, style, loopTime, colors2);
+                lb = new ColorChangeLabel(s, style, loopTime, doubleWidth, colors2);
             lb.setSize(width * s.length(), height - descent); //+ lineTweak * 1f
             // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return lb;
         }
+    }
+
+    /**
+     * Creates a ColorChangeImage Actor that should look like the glyph '^' in this font, but will be rotate-able. The
+     * ColorChange classes will rotate between all colors given in the List in the given amount of loopTime, and are not
+     * affected by setColor, though they are affected by their setColors methods. Their color change is not considered
+     * an animation for the purposes of things like SquidPanel.hasActiveAnimations() .
+     * @param colors a List of Color to tint s with, looping through all elements in the list each second
+     * @param loopTime the amount of time, in seconds, to spend looping through all colors in the list
+     * @return the Actor, with no position set.
+     */
+    public Actor makeDirectionMarker(Collection<Color> colors, float loopTime, boolean doubleWidth) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        ArrayList<Color> colors2 = null;
+        if (colors != null && !colors.isEmpty()) {
+            colors2 = new ArrayList<>(colors.size());
+            for (Color c : colors) {
+                colors2.add(scc.filter(c));
+            }
+        }
+        ColorChangeImage im = new ColorChangeImage(dirMarker, loopTime, doubleWidth,
+                actualCellWidth, actualCellHeight + (distanceField ? 1 : 0), colors2);
+        im.setAlign(2);
+        //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));
+        im.setSize(actualCellWidth * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
+        // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
+        return im;
+    }
+    /**
+     * Creates a Image Actor that should look like the glyph '^' in this font, but will be rotate-able.
+     * @param color a Color to tint the '^' with
+     * @return the Actor, with no position set.
+     */
+    public Actor makeDirectionMarker(Color color) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        Image im = new Image(dirMarker);
+        im.setColor(scc.filter(color));
+        //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));
+        im.setSize(actualCellWidth, actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
+        im.setOrigin(1); //center
+        // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
+        return im;
     }
 
     /**
@@ -1281,6 +1338,15 @@ public class TextCellFactory implements Disposable {
         return descent;
     }
 
+    public char getDirectionGlyph() {
+        return directionGlyph;
+    }
+
+    public TextCellFactory setDirectionGlyph(char directionGlyph) {
+        this.directionGlyph = directionGlyph;
+        return this;
+    }
+
     /**
      * Adds a pair of Strings (typically both with length 1) as a replacement pair, so when the find String is requested
      * to be drawn, the replace String is used instead. These are used when drawing text in each cell in SquidPanel and
@@ -1363,7 +1429,7 @@ public class TextCellFactory implements Disposable {
 
     /**
      * Gets the current mapping of "swaps", or replacement pairs, to replace keys requested for drawing with their
-     * values in the LinkedHashMap.
+     * values in the OrderedMap.
      * <br>
      * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep
      * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something
@@ -1373,7 +1439,7 @@ public class TextCellFactory implements Disposable {
      * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.
      * @return the mapping of replacement pairs
      */
-    public LinkedHashMap<String, String> getAllSwaps() {
+    public OrderedMap<String, String> getAllSwaps() {
         return swap;
     }
 
@@ -1390,7 +1456,7 @@ public class TextCellFactory implements Disposable {
      * @return this for chaining
      */
     public TextCellFactory setAllSwaps(Map<String, String> swaps) {
-        this.swap = new LinkedHashMap<>(swaps.size());
+        this.swap = new OrderedMap<>(swaps.size());
         for(Map.Entry<String, String> kv : swaps.entrySet())
         {
             if(!kv.getKey().startsWith("\0"))

@@ -1,13 +1,9 @@
 package squidpony.squidgrid;
 
 import squidpony.squidgrid.Spill.Measurement;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.RNG;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -46,11 +42,16 @@ public class MultiSpill {
     /**
      * The cells that are filled by the any spiller will be true, others will be false.
      */
-    public boolean[][] anySpillMap;
+    protected GreasedRegion anySpillMap,
 
     /**
-     * Each spiller in the MultiSpill corresponds to a list of points that it will randomly fill, starting with the
-     * initial point for each spiller passed to start(), in order of when they are reached.
+     * The cells that are considered fresh in any spill map will be true, others will be false.
+     */
+    anyFreshMap;
+
+    /**
+     * Each key here is an initial point for a spiller passed to start(), and each value corresponds to a list of points
+     * that the spiller will randomly fill, starting with the key, in order of when they are reached.
      */
     public ArrayList<ArrayList<Coord>> spreadPattern;
     /**
@@ -66,7 +67,7 @@ public class MultiSpill {
      * are reached on all sides and the Spill has no more room to fill.
      */
     public int filled = 0;
-    private ArrayList<LinkedHashSet<Coord>> fresh;
+    private ArrayList<OrderedSet<Coord>> fresh;
     /**
      * The StatefulRNG used to decide how to randomly fill a space; can have its state set and read.
      */
@@ -112,6 +113,22 @@ public class MultiSpill {
      */
     public MultiSpill(final short[][] level, Measurement measurement) {
         rng = new StatefulRNG();
+
+        this.measurement = measurement;
+
+        initialize(level);
+    }
+    /**
+     * Used to construct a Spill from the output of another, specifying a distance calculation and RNG.
+     * <br>
+     * This constructor allows you to specify an RNG, but only the RandomnessSource of that RNG will be used. If
+     * the RandomnessSource does not also implement StatefulRandomness, then it will be used to generate a seed for
+     * a LightRNG and that will be used instead.
+     * @param level a short[][] that should have been the spillMap of another MultiSpill
+     * @param measurement a Spill.Measurement that should usually be MANHATTAN
+     */
+    public MultiSpill(final short[][] level, Measurement measurement, RNG random) {
+        rng = new StatefulRNG(random.getRandomness());
 
         this.measurement = measurement;
 
@@ -166,11 +183,10 @@ public class MultiSpill {
      * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here. This constructor specifies a distance measurement.
-     *
-     * This constructor allows you to specify an RNG, but the actual RandomnessSource the RNG that this object uses
-     * will not be identical to the one passed as random (64 bits will be requested from the passed RNG, and that will
-     * be used to seed this class' RNG).
-     *
+     * <br>
+     * This constructor allows you to specify an RNG, but only the RandomnessSource of that RNG will be used. If
+     * the RandomnessSource does not also implement StatefulRandomness, then it will be used to generate a seed for
+     * a LightRNG and that will be used instead.
      * @param level a char[][] that should use '#' for walls and '.' for floors
      * @param measurement a Spill.Measurement that should usually be MANHATTAN
      * @param random an RNG that will be converted to a StatefulRNG if it is not one already
@@ -193,12 +209,12 @@ public class MultiSpill {
         width = level.length;
         height = level[0].length;
         spillMap = new short[width][height];
-        anySpillMap = new boolean[width][height];
+        anySpillMap = new GreasedRegion(level, 1, 0x7fff);
+        anyFreshMap = new GreasedRegion(width, height);
         physicalMap = new boolean[width][height];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 spillMap[x][y] = level[x][y];
-                anySpillMap[x][y] = level[x][y] > 0;
                 physicalMap[x][y] = level[x][y] >= 0;
             }
         }
@@ -218,13 +234,13 @@ public class MultiSpill {
         width = level.length;
         height = level[0].length;
         spillMap = new short[width][height];
-        anySpillMap = new boolean[width][height];
+        anySpillMap = new GreasedRegion(width, height);
+        anyFreshMap = new GreasedRegion(width, height);
         physicalMap = new boolean[width][height];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 spillMap[x][y] = -1;
-                anySpillMap[x][y] = false;
-                physicalMap[x][y] = (level[x][y] != '#');
+                physicalMap[x][y] = level[x][y] != '#';
             }
         }
         initialized = true;
@@ -245,13 +261,13 @@ public class MultiSpill {
         width = level.length;
         height = level[0].length;
         spillMap = new short[width][height];
-        anySpillMap = new boolean[width][height];
+        anySpillMap = new GreasedRegion(width, height);
+        anyFreshMap = new GreasedRegion(width, height);
         physicalMap = new boolean[width][height];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 spillMap[x][y] = -1;
-                anySpillMap[x][y] = false;
-                physicalMap[x][y] = (level[x][y] != alternateWall);
+                physicalMap[x][y] = level[x][y] != alternateWall;
             }
         }
         initialized = true;
@@ -263,10 +279,10 @@ public class MultiSpill {
      */
     public void resetMap() {
         if(!initialized) return;
+        anySpillMap.clear();
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 spillMap[x][y] = -1;
-                anySpillMap[x][y] = false;
             }
         }
     }
@@ -278,42 +294,42 @@ public class MultiSpill {
         resetMap();
         spreadPattern.clear();
         fresh.clear();
+        anyFreshMap.clear();
     }
 
     /**
      * Reverts a cell to an unfilled state (false in spillMap).
-     * @param x
-     * @param y
+     * @param x the x-component of the Coord to revert to an unfilled state
+     * @param y the y-component of the Coord to revert to an unfilled state
      */
     public void resetCell(int x, int y) {
         if(!initialized) return;
         spillMap[x][y] = -1;
-        anySpillMap[x][y] = false;
+        anySpillMap.remove(x, y);
     }
 
     /**
      * Reverts a cell to an unfilled state (false in spillMap).
-     * @param pt
+     * @param pt the Coord to revert to an unfilled state
      */
     public void resetCell(Coord pt) {
         if(!initialized) return;
         spillMap[pt.x][pt.y] = -1;
-        anySpillMap[pt.x][pt.y] = false;
+        anySpillMap.remove(pt);
     }
 
     protected void setFresh(int idx, int x, int y) {
         if(!initialized) return;
         fresh.get(idx).add(Coord.get(x, y));
+        anyFreshMap.insert(x, y);
     }
 
     protected void setFresh(int idx, final Coord pt) {
         if(!initialized) return;
-        for(LinkedHashSet<Coord> f : fresh)
-        {
-            if(f.contains(pt))
-                return;
-        }
+        if(anyFreshMap.contains(pt.x, pt.y))
+            return;
         fresh.get(idx).add(pt);
+        anyFreshMap.insert(pt);
     }
 
     /**
@@ -337,55 +353,53 @@ public class MultiSpill {
     public ArrayList<ArrayList<Coord>> start(List<Coord> entries, int volume, Set<Coord> impassable) {
         if(!initialized) return null;
         if(impassable == null)
-            impassable = new LinkedHashSet<>();
+            impassable = new OrderedSet<>();
         if(volume < 0)
             volume = Integer.MAX_VALUE;
         ArrayList<Coord> spillers = new ArrayList<>(entries);
         spreadPattern = new ArrayList<>(spillers.size());
         fresh.clear();
+        filled = 0;
+        boolean hasFresh = false;
         for (short i = 0; i < spillers.size(); i++) {
             spreadPattern.add(new ArrayList<Coord>(128));
-            fresh.add(new LinkedHashSet<Coord>(128));
+            OrderedSet<Coord> os = new OrderedSet<Coord>(128);
+            fresh.add(os);
             Coord c = spillers.get(i);
             spillMap[c.x][c.y] = i;
-
-        }
-        boolean hasFresh = false;
-        Coord temp;
-        for (int x = 0; x < spillMap.length; x++) {
-            for (int y = 0; y < spillMap[x].length; y++) {
-                temp = Coord.get(x, y);
-                if (spillMap[x][y] >= 0 && !impassable.contains(temp)) {
-                    fresh.get(spillMap[x][y]).add(temp);
-                    hasFresh = true;
-                }
+            if(!impassable.contains(c)) {
+                os.add(c);
+                hasFresh = true;
             }
         }
         Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
-
+        OrderedSet<Coord> currentFresh;
         while (hasFresh && filled < volume) {
             hasFresh = false;
             for (short i = 0; i < spillers.size() && filled < volume; i++) {
-                LinkedHashSet<Coord> currentFresh = fresh.get(i);
+                currentFresh = fresh.get(i);
                 if(currentFresh.isEmpty())
                     continue;
                 else
                     hasFresh = true;
-                Coord cell = currentFresh.toArray(new Coord[currentFresh.size()])[rng.nextInt(currentFresh.size())];
+                Coord cell = currentFresh.randomItem(rng);//.toArray(new Coord[currentFresh.size()])[rng.nextInt(currentFresh.size())];
 
                 spreadPattern.get(i).add(cell);
                 spillMap[cell.x][cell.y] = i;
                 filled++;
-                anySpillMap[cell.x][cell.y] = true;
+                anySpillMap.insert(cell.x, cell.y);
 
                 for (int d = 0; d < dirs.length; d++) {
                     Coord adj = cell.translate(dirs[d].deltaX, dirs[d].deltaY);
+                    if(!adj.isWithin(width, height))
+                        continue;
                     double h = heuristic(dirs[d]);
-                    if (physicalMap[adj.x][adj.y] && !anySpillMap[adj.x][adj.y] && !impassable.contains(adj) && rng.nextDouble() <= 1.0 / h) {
+                    if (physicalMap[adj.x][adj.y] && !anySpillMap.contains(adj.x, adj.y) && !impassable.contains(adj) && rng.nextDouble(h) <= 1.0) {
                         setFresh(i, adj);
                     }
                 }
                 currentFresh.remove(cell);
+                anyFreshMap.remove(cell.x, cell.y);
             }
         }
         return spreadPattern;
@@ -416,38 +430,33 @@ public class MultiSpill {
      * @return an ArrayList of Points that this will enter, in order starting with entry at index 0, until it
      * reaches its volume or fills its boundaries completely.
      */
-    public ArrayList<ArrayList<Coord>> start(LinkedHashMap<Coord, Double> entries, int volume, Set<Coord> impassable) {
-        if(!initialized) return null;
+    public ArrayList<ArrayList<Coord>> start(OrderedMap<Coord, Double> entries, int volume, Set<Coord> impassable) {
+        if(!initialized || entries == null) return null;
         if(impassable == null)
-            impassable = new LinkedHashSet<>();
+            impassable = new OrderedSet<>();
         if(volume < 0)
             volume = Integer.MAX_VALUE;
-        ArrayList<Coord> spillers0 = new ArrayList<>(entries.keySet()),
-                spillers = new ArrayList<>(spillers0.size());
-        ArrayList<Double> biases0 = new ArrayList<>(entries.values()),
-                biases = new ArrayList<>(biases0.size());
-        spreadPattern = new ArrayList<>(spillers0.size());
+        int sz = entries.size();
+        ArrayList<Coord> spillers = new ArrayList<>(entries.keySet());
+        ArrayList<Double>
+                biases = new ArrayList<>(sz);
+        spreadPattern = new ArrayList<>(sz);
         fresh.clear();
-        for (short i = 0, ctr = 0; i < spillers0.size(); i++, ctr++) {
-            spreadPattern.add(new ArrayList<Coord>(128));
-            fresh.add(new LinkedHashSet<Coord>(128));
-            Coord c = spillers0.get(i);
-            spillers.add(c);
-            biases.add(biases0.get(i));
-            if(biases0.get(i) <= 0.0001)
-                continue;
-            spillMap[c.x][c.y] = ctr;
-
-        }
+        filled = 0;
         boolean hasFresh = false;
-        Coord temp;
-        for (int x = 0; x < spillMap.length; x++) {
-            for (int y = 0; y < spillMap[x].length; y++) {
-                temp = Coord.get(x, y);
-                if (spillMap[x][y] >= 0 && !impassable.contains(temp)) {
-                    fresh.get(spillMap[x][y]).add(temp);
-                    hasFresh = true;
-                }
+        for (short i = 0; i < sz; i++) {
+            spreadPattern.add(new ArrayList<Coord>(128));
+            OrderedSet<Coord> os = new OrderedSet<Coord>(128);
+            fresh.add(os);
+            Coord c = spillers.get(i);
+            Double d = entries.getAt(i);
+            biases.add(d);
+            if (d <= 0.0001 || c.x < 0 || c.y < 0)
+                continue;
+            spillMap[c.x][c.y] = i;
+            if (!impassable.contains(c)) {
+                os.add(c);
+                hasFresh = true;
             }
         }
 
@@ -456,29 +465,32 @@ public class MultiSpill {
         while (hasFresh && filled < volume) {
             hasFresh = false;
             for (short i = 0; i < spillers.size() && filled < volume; i++) {
-                LinkedHashSet<Coord> currentFresh = fresh.get(i);
+                OrderedSet<Coord> currentFresh = fresh.get(i);
                 if(currentFresh.isEmpty())
                     continue;
                 else
                     hasFresh = true;
-                Coord cell = currentFresh.toArray(new Coord[currentFresh.size()])[rng.nextInt(currentFresh.size())];
+                Coord cell = currentFresh.randomItem(rng);//toArray(new Coord[currentFresh.size()])[rng.nextInt(currentFresh.size())];
                 if(rng.nextDouble() < biases.get(i)) {
 
                     spreadPattern.get(i).add(cell);
                     spillMap[cell.x][cell.y] = i;
                     filled++;
-                    anySpillMap[cell.x][cell.y] = true;
+                    anySpillMap.insert(cell.x, cell.y);
 
 
                     for (int d = 0; d < dirs.length; d++) {
                         Coord adj = cell.translate(dirs[d].deltaX, dirs[d].deltaY);
+                        if(!adj.isWithin(width, height))
+                            continue;
                         double h = heuristic(dirs[d]);
-                        if (physicalMap[adj.x][adj.y] && !anySpillMap[adj.x][adj.y] && !impassable.contains(adj)
-                                && rng.nextDouble() <= 1.0 / h) {
+                        if (physicalMap[adj.x][adj.y] && !anySpillMap.contains(adj.x, adj.y) && !impassable.contains(adj)
+                                && rng.nextDouble(h) <= 1.0) {
                             setFresh(i, adj);
                         }
                     }
                     currentFresh.remove(cell);
+                    anyFreshMap.remove(cell.x, cell.y);
                 }
             }
         }

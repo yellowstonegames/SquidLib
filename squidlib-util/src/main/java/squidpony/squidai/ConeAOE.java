@@ -7,6 +7,9 @@ import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
 
+import squidpony.squidmath.OrderedMap;
+import squidpony.squidmath.OrderedSet;
+
 import java.util.*;
 
 /**
@@ -141,9 +144,9 @@ public class ConeAOE implements AOE {
 
     public void setAngle(double angle) {
         if (reach.limit == null || reach.limit == AimLimit.FREE ||
-                (reach.limit == AimLimit.EIGHT_WAY && (int)(angle) % 45 == 0) ||
-                (reach.limit == AimLimit.DIAGONAL && (int)(angle) % 90 == 45) ||
-                (reach.limit == AimLimit.ORTHOGONAL && (int)(angle) % 90 == 0)) {
+                (reach.limit == AimLimit.EIGHT_WAY && (int) angle % 45 == 0) ||
+                (reach.limit == AimLimit.DIAGONAL && (int) angle % 90 == 45) ||
+                (reach.limit == AimLimit.ORTHOGONAL && (int) angle % 90 == 0)) {
             this.angle = angle;
 //            this.startAngle = Math.abs((angle - span / 2.0) % 360.0);
 //            this.endAngle = Math.abs((angle + span / 2.0) % 360.0);
@@ -186,7 +189,7 @@ public class ConeAOE implements AOE {
     public boolean mayContainTarget(Set<Coord> targets) {
         for (Coord p : targets) {
             if (radiusType.radius(origin.x, origin.y, p.x, p.y) <= radius) {
-                double d = ((angle - Math.toDegrees(Math.atan2(p.y - origin.y, p.x - origin.x)) % 360.0 + 360.0) % 360.0);
+                double d = (angle - Math.toDegrees(Math.atan2(p.y - origin.y, p.x - origin.x)) % 360.0 + 360.0) % 360.0;
                 if(d > 180)
                     d = 360 - d;
                 if(d < span / 2.0)
@@ -197,14 +200,14 @@ public class ConeAOE implements AOE {
     }
 
     @Override
-    public LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> targets, Set<Coord> requiredExclusions) {
+    public OrderedMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> targets, Set<Coord> requiredExclusions) {
         if(targets == null)
-            return new LinkedHashMap<>();
-        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<>();
+            return new OrderedMap<>();
+        if(requiredExclusions == null) requiredExclusions = new OrderedSet<>();
 
         //requiredExclusions.remove(origin);
         int totalTargets = targets.size();
-        LinkedHashMap<Coord, ArrayList<Coord>> bestPoints = new LinkedHashMap<>(totalTargets * 8);
+        OrderedMap<Coord, ArrayList<Coord>> bestPoints = new OrderedMap<>(totalTargets * 8);
 
         if(totalTargets == 0)
             return bestPoints;
@@ -327,14 +330,14 @@ public class ConeAOE implements AOE {
     }
 
     @Override
-    public LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> priorityTargets, Set<Coord> lesserTargets, Set<Coord> requiredExclusions) {
+    public OrderedMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> priorityTargets, Set<Coord> lesserTargets, Set<Coord> requiredExclusions) {
         if(priorityTargets == null)
             return idealLocations(lesserTargets, requiredExclusions);
-        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<>();
+        if(requiredExclusions == null) requiredExclusions = new OrderedSet<>();
 
         //requiredExclusions.remove(origin);
         int totalTargets = priorityTargets.size() + lesserTargets.size();
-        LinkedHashMap<Coord, ArrayList<Coord>> bestPoints = new LinkedHashMap<>(totalTargets * 8);
+        OrderedMap<Coord, ArrayList<Coord>> bestPoints = new OrderedMap<>(totalTargets * 8);
 
         if(totalTargets == 0)
             return bestPoints;
@@ -613,8 +616,8 @@ public class ConeAOE implements AOE {
     }
 
     @Override
-    public LinkedHashMap<Coord, Double> findArea() {
-        LinkedHashMap<Coord, Double> r = AreaUtils.arrayToHashMap(fov.calculateFOV(map, origin.x, origin.y, radius,
+    public OrderedMap<Coord, Double> findArea() {
+        OrderedMap<Coord, Double> r = AreaUtils.arrayToHashMap(fov.calculateFOV(map, origin.x, origin.y, radius,
                 radiusType, angle, span));
         r.remove(origin);
         return r;

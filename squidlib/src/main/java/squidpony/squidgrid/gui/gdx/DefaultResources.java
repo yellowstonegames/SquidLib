@@ -12,14 +12,22 @@ import squidpony.squidmath.StatefulRNG;
 
 /**
  * Default BitmapFonts, a sample image, "stretchable" fonts and icons, and a central RNG for use with LibGDX.
- * The fonts provided are all monospaced, with most looking rather similar (straight orthogonal lines and right-angle
- * curves), but one that looks... better than the rest (Inconsolata-LGC, accessible by getSmoothFont(),
- * getLargeSmoothFont(), or as a distance field font that smoothly scales with getStretchableFont() or a square variant
- * with getStretchableSquareFont()) also supports Greek and Cyrillic, and is one of a few to do so.
- * getStretchableTypewriterFont() is a nice alternative to the other monospaced fonts, with a chunky, ornamented style.
- * getStretchablePrintFont() and getStretchableCleanFont() are non-monospaced fonts for use in LinesPanel and other
- * places that can use variable-width fonts (you can still use fixed-width ones, but square fonts probably won't look
- * good).
+ * All but one of the resources here need to be downloaded separately, to avoid bloating the size of the dependency jar
+ * with many fonts that a game probably won't use. You can download assets in a jar with a release of SquidLib, or
+ * individually from https://github.com/SquidPony/SquidLib/tree/master/assets . The assets you choose should go in the
+ * android/assets (core/assets if you don't have an Android project) subfolder of your game if you use the normal libGDX
+ * setup tool or SquidSetup, or the assets subfolder if you use czyzby's alternate setup tool,
+ * https://github.com/czyzby/gdx-setup . They should not be placed in subdirectories of assets, otherwise this won't be
+ * able to find them.
+ * <br>
+ * The fonts provided are mostly monospaced, with most looking rather similar (straight orthogonal lines and right-angle
+ * curves), but some that look... better than the rest. For monospaced fonts that could be used on a grid in SquidPanel
+ * or SquidLayers, one good choice is Inconsolata-LGC, accessible by getSmoothFont(), getLargeSmoothFont(), (ideally for
+ * narrow glyphs) getStretchableFont(), or (ideally for square glyphs) getStretchableSquareFont(). Another is Computer
+ * Modern, accessible by getStretchableTypewriterFont(), which has a chunky, ornamented style. For variable-width fonts
+ * that can be used in TextPanel and LinesPanel, among others, you can use the high-quality serif font Gentium,
+ * accessible by getStretchablePrintFont(), or Noto Sans, a clean sans font accessible by getStretchableCleanFont(). All
+ * of the fonts so far support the Latin, Greek, and Cyrillic alphabets.
  * <br>
  * If you can't decide, go with getStretchableFont() or getStretchableSquareFont(), which return TextCellFactory
  * objects, and call their .width(int), .height(int), and .initBySize() methods to make them the size (and aspect ratio)
@@ -50,7 +58,8 @@ public class DefaultResources implements LifecycleListener {
     private BitmapFont narrow1 = null, narrow2 = null, narrow3 = null,
             smooth1 = null, smooth2 = null, smoothSquare = null, smoothSquareOld = null,
             square1 = null, square2 = null,
-            unicode1 = null, unicode2 = null;
+            unicode1 = null, unicode2 = null, arial15 = null;
+
     private TextCellFactory distanceNarrow = null, distanceSquare = null, typewriterDistanceNarrow = null,
             distancePrint = null, distanceClean = null;
     private TextureAtlas iconAtlas = null;
@@ -128,7 +137,30 @@ public class DefaultResources implements LifecycleListener {
     }
 
     /**
+     * Gets the one font guaranteed to be included in libGDX, which is Arial at size 15 px.
+     * @return the BitmapFont representing Arial.ttf at size 15 px
+     */
+    public static BitmapFont getIncludedFont()
+    {
+        initialize();
+        if(instance.arial15 == null)
+        {
+            try {
+                instance.arial15 = new BitmapFont();
+                //instance.narrow1.getData().padBottom = instance.narrow1.getDescent();
+            } catch (Exception e) {
+            }
+        }
+        return instance.arial15;
+    }
+    /**
      * Returns a 12x12px, stretched but curvaceous font as an embedded resource. Caches it for later calls.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Zodiac-Square-12x12.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Zodiac-Square-12x12.png</li>
+     * </ul>
      * @return the BitmapFont object representing Zodiac-Square.ttf at size 16 pt
      */
     public static BitmapFont getDefaultFont()
@@ -146,6 +178,12 @@ public class DefaultResources implements LifecycleListener {
     }
     /**
      * Returns a 24x24px, stretched but curvaceous font as an embedded resource. Caches it for later calls.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Zodiac-Square-24x24.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Zodiac-Square-24x24.png</li>
+     * </ul>
      * @return the BitmapFont object representing Zodiac-Square.ttf at size 32 pt
      */
     public static BitmapFont getLargeFont()
@@ -163,6 +201,12 @@ public class DefaultResources implements LifecycleListener {
     }
     /**
      * Returns a 6x12px, narrow and curving font as an embedded resource. Caches it for later calls.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Rogue-Zodiac-6x12.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Rogue-Zodiac-6x12_0.png</li>
+     * </ul>
      * @return the BitmapFont object representing Rogue-Zodiac.ttf at size 16 pt
      */
     public static BitmapFont getDefaultNarrowFont()
@@ -181,6 +225,12 @@ public class DefaultResources implements LifecycleListener {
 
     /**
      * Returns a 12x24px, narrow and curving font as an embedded resource. Caches it for later calls.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Rogue-Zodiac-12x24.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Rogue-Zodiac-12x24_0.png</li>
+     * </ul>
      * @return the BitmapFont object representing Rogue-Zodiac.ttf at size 32 pt
      */
     public static BitmapFont getLargeNarrowFont()
@@ -198,6 +248,12 @@ public class DefaultResources implements LifecycleListener {
     }
     /**
      * Returns a 12x24px, narrow and curving font as an embedded resource. Caches it for later calls.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Rogue-Zodiac-18x36.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Rogue-Zodiac-18x36_0.png</li>
+     * </ul>
      * @return the BitmapFont object representing Rogue-Zodiac.ttf at size 32 pt
      */
     public static BitmapFont getExtraLargeNarrowFont()
@@ -218,6 +274,12 @@ public class DefaultResources implements LifecycleListener {
      * Returns a 8x18px, very smooth and generally good-looking font (based on Inconsolata) as an embedded resource.
      * This font fully supports Latin, Greek, Cyrillic, and of particular interest to SquidLib, Box Drawing characters.
      * Caches the font for later calls.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-8x18.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-8x18.png</li>
+     * </ul>
      * @return the BitmapFont object representing Inconsolata-LGC.ttf at size... pretty sure it's 8x18 pixels
      */
     public static BitmapFont getSmoothFont()
@@ -237,6 +299,12 @@ public class DefaultResources implements LifecycleListener {
      * Returns a 12x24px, very smooth and generally good-looking font (based on Inconsolata) as an embedded resource.
      * This font fully supports Latin, Greek, Cyrillic, and of particular interest to SquidLib, Box Drawing characters.
      * Caches the font for later calls.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-12x24.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-12x24.png</li>
+     * </ul>
      * @return the BitmapFont object representing Inconsolata-LGC.ttf at size... not actually sure, 12x24 pixels
      */
     public static BitmapFont getLargeSmoothFont()
@@ -254,6 +322,12 @@ public class DefaultResources implements LifecycleListener {
     }
     /**
      * Returns a 6x16px, narrow and curving font with a lot of unicode chars as an embedded resource. Caches it for later calls.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Mandrill-6x16.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Mandrill-6x16.png</li>
+     * </ul>
      * @return the BitmapFont object representing Mandrill.ttf at size 16 pt
      */
     public static BitmapFont getDefaultUnicodeFont()
@@ -272,6 +346,12 @@ public class DefaultResources implements LifecycleListener {
 
     /**
      * Returns a 12x32px, narrow and curving font with a lot of unicode chars as an embedded resource. Caches it for later calls.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Mandrill-12x32.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Mandrill-12x32.png</li>
+     * </ul>
      * @return the BitmapFont object representing Mandrill.ttf at size 32 pt
      */
     public static BitmapFont getLargeUnicodeFont()
@@ -292,6 +372,12 @@ public class DefaultResources implements LifecycleListener {
      * This font fully supports Latin, Greek, Cyrillic, and of particular interest to SquidLib, Box Drawing characters.
      * This variant is (almost) perfectly square, and box drawing characters should line up at size 25x25 px, but other
      * glyphs will have much more horizontal spacing than in other fonts. Caches the font for later calls.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Square-25x25.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Square-25x25.png</li>
+     * </ul>
      * @return the BitmapFont object representing Inconsolata-LGC-Square at size 25x25 pixels
      */
     public static BitmapFont getSquareSmoothFont()
@@ -315,6 +401,12 @@ public class DefaultResources implements LifecycleListener {
      * Cyrillic, and of particular interest to SquidLib, Box Drawing characters. This variant is (almost) perfectly
      * square, and box drawing characters should line up at size 20x20 px, but other glyphs will have much more
      * horizontal spacing than in other fonts. Caches the font for later calls.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Square.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Square.png</li>
+     * </ul>
      * @return the BitmapFont object representing Inconsolata-LGC-Square at size 20x20 pixels
      */
     public static BitmapFont getSquareSmoothMediumFont()
@@ -337,6 +429,12 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Square-distance.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Square-distance.png</li>
+     * </ul>
      * @return the TextCellFactory object that can represent many sizes of the square font Inconsolata-LGC-Square.ttf
      */
     public static TextCellFactory getStretchableSquareFont()
@@ -359,6 +457,12 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.png</li>
+     * </ul>
      * @return the TextCellFactory object that can represent many sizes of the font Inconsolata-LGC-Custom.ttf
      */
     public static TextCellFactory getStretchableFont()
@@ -384,6 +488,12 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/CM-Custom-distance.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/CM-Custom-distance.png</li>
+     * </ul>
      * @return the TextCellFactory object that can represent many sizes of the font CM-Custom.ttf
      */
     public static TextCellFactory getStretchableTypewriterFont()
@@ -410,6 +520,12 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Gentium-distance.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Gentium-distance.png</li>
+     * </ul>
      * @return the TextCellFactory object that can represent many sizes of the font Gentium, by SIL
      */
     public static TextCellFactory getStretchablePrintFont() {
@@ -417,7 +533,7 @@ public class DefaultResources implements LifecycleListener {
         if (instance.distancePrint == null) {
             try {
                 instance.distancePrint = new TextCellFactory().fontDistanceField(distanceFieldPrint, distanceFieldPrintTexture)
-                        .setSmoothingMultiplier(0.4f).height(30).width(7);
+                        /* .setSmoothingMultiplier(0.4f) */.height(30).width(7);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -434,6 +550,12 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Noto-Sans-distance.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Noto-Sans-distance.png</li>
+     * </ul>
      * @return the TextCellFactory object that can represent many sizes of the font Noto Sans, by Google
      */
     public static TextCellFactory getStretchableCleanFont() {
@@ -455,6 +577,11 @@ public class DefaultResources implements LifecycleListener {
      * Gets an image of a (squid-like, for SquidLib) tentacle, 32x32px.
      * Source is public domain: http://opengameart.org/content/496-pixel-art-icons-for-medievalfantasy-rpg
      * Created by Henrique Lazarini (7Soul1, http://7soul1.deviantart.com/ )
+     * <br>
+     * Needs file:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Tentacle.png</li>
+     * </ul>
      * @return a TextureRegion containing an image of a tentacle.
      */
     public static TextureRegion getTentacle()
@@ -483,6 +610,13 @@ public class DefaultResources implements LifecycleListener {
      * The icons are CC-BY and the license is distributed with them, though the icons are not necessarily included with
      * SquidLib. If you use the icon atlas, be sure to include icons-license.txt with it and reference it with your
      * game's license and/or credits information.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/icons.atlas</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/icons.png</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/icons-license.txt Needed to credit artists</li>
+     * </ul>
      * @return a TextureAtlas containing over 2000 icons with a distance field effect
      */
     public static TextureAtlas getIconAtlas()
@@ -558,6 +692,10 @@ public class DefaultResources implements LifecycleListener {
      */
     @Override
     public void pause() {
+        if(arial15 != null) {
+            arial15.dispose();
+            arial15 = null;
+        }
         if(narrow1 != null) {
             narrow1.dispose();
             narrow1 = null;

@@ -22,7 +22,7 @@ public class GapShufflerTest {
 
             GapShuffler<String> gap = new GapShuffler<>(names, rng);
             for (int i = 0; i < 200; i++) {
-                System.out.println(gap.getNext());
+                System.out.println(gap.next());
             }
 
             // alternate API

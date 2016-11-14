@@ -9,7 +9,6 @@ import squidpony.squidgrid.Radius;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedHashSet;
 
 
 /**
@@ -178,7 +177,7 @@ public class CoordPacker {
     static {
         Coord c;
         for (int i = 0; i < 0x10000; i++) {
-            c = CoordPacker.hilbertToCoordNoLUT(i);
+            c = hilbertToCoordNoLUT(i);
             hilbertX[i] = (short) c.x;
             hilbertY[i] = (short) c.y;
             hilbertDistances[c.x + (c.y << 8)] = (short) i;
@@ -298,7 +297,7 @@ public class CoordPacker {
      * <b>To store more than two states</b>, you should use packMulti().
      *
      * @param map a double[][] that probably relates in some way to DijkstraMap.
-     * @param threshold any double greater than this will be off, any equal or less will be on
+     * @param threshold upper inclusive; any double greater than this will be off, any equal or less will be on
      * @return a packed short[] that should, in most circumstances, be passed to unpack() when it needs to be used.
      */
     public static short[] pack(double[][] map, double threshold)
@@ -371,10 +370,10 @@ public class CoordPacker {
      * <b>To store more than two states</b>, you should use packMulti().
      *
      * @param map a double[][] that probably relates in some way to DijkstraMap.
-     * @param lowerBound any double lower than this will be off, any equal to or greater than this, but less than upper,
-     *                   will be on
-     * @param upperBound any double greater than this will be off, any less than this, but equal to or greater than
-     *                   lower, will be on
+     * @param lowerBound lower inclusive; any double lower than this will be off, any equal to or greater than this,
+     *                   but less than upper, will be on
+     * @param upperBound upper exclusive; any double greater than this will be off, any doubles both less than this
+     *                   and equal to or greater than lower will be on
      * @return a packed short[] that should, in most circumstances, be passed to unpack() when it needs to be used.
      */
     public static short[] pack(double[][] map, double lowerBound, double upperBound)
@@ -1573,6 +1572,20 @@ public class CoordPacker {
         }
         return c;
     }
+
+    /**
+     * Simple utility method that constructs a GreasedRegion (a faster but more-memory-hungry way to encode regions)
+     * from a short array of packed data.
+     * @param packed a packed short array, as produced by pack()
+     * @param width the desired GreasedRegion's width
+     * @param height the desired GreasedRegion's height
+     * @return a GreasedRegion that contains the same data as packed, with the specified width and height
+     */
+    public static GreasedRegion unpackGreasedRegion(short[] packed, int width, int height)
+    {
+        return new GreasedRegion(unpack(packed, width, height));
+    }
+
     /**
      * Quickly determines if an x,y position is true or false in the given packed array, without unpacking it.
      * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti(); must
@@ -1625,11 +1638,11 @@ public class CoordPacker {
      * @param y between 0 and 255, inclusive
      * @param packed an array or vararg of short[], such as those returned by pack() or one of the sub-arrays in what is
      *               returned by packMulti(); null elements in packed will be skipped.
-     * @return an ArrayList of all packed arrays that store true at the given x,y location.
+     * @return an OrderedSet of all packed arrays that store true at the given x,y location.
      */
-    public static LinkedHashSet<short[]> findManyPacked(int x, int y, short[] ... packed)
+    public static OrderedSet<short[]> findManyPacked(int x, int y, short[] ... packed)
     {
-        LinkedHashSet<short[]> packs = new LinkedHashSet<>(packed.length);
+        OrderedSet<short[]> packs = new OrderedSet<>(packed.length, CrossHash.shortHasher);
         int hilbertDistance = posToHilbert(x, y);
         for (int a = 0; a < packed.length; a++) {
             if(packed[a] == null) continue;
@@ -1653,12 +1666,12 @@ public class CoordPacker {
      * returns true if the region checking has some overlap with any of the packed arrays, or false otherwise.
      * @param checking the packed data to check for overlap with the other regions
      * @param packed an array or vararg of short[], such as those returned by pack() or one of the sub-arrays in what is
-     *               returned by packMulti(); null elements in packed will be skipped.
-     * @return an ArrayList of all packed arrays that store true at the given x,y location.
+     *               returned by packMulti(); null elements in packed will be skipped
+     * @return true if checking overlaps with any of the packed arrays, or false otherwise
      */
     public static boolean regionsContain(short[] checking, short[] ... packed)
     {
-        LinkedHashSet<short[]> packs = new LinkedHashSet<>(packed.length);
+        OrderedSet<short[]> packs = new OrderedSet<>(packed.length, CrossHash.shortHasher);
         for (int a = 0; a < packed.length; a++) {
             if(packed[a] == null) continue;
             int total = 0;
@@ -4589,9 +4602,9 @@ public class CoordPacker {
      * aforementioned data assuming a bare dungeon called map with WIDTH and HEIGHT constants using:
      * <br>
      * {@code short[] floors = pack(map, '.'),
-     * rooms = flood(floors, retract(floors, 1, 60, 60, true), 2, false),
+     * rooms = flood(floors, retract(floors, 1, WIDTH, HEIGHT, true), 2, false),
      * corridors = differencePacked(floors, rooms),
-     * doors = intersectPacked(rooms, fringe(corridors, 1, 60, 60, false));}
+     * doors = intersectPacked(rooms, fringe(corridors, 1, WIDTH, HEIGHT, false));}
      * <br>
      * You can then get all rooms as separate regions with {@code List<short[]> apart = split(rooms);}, or substitute
      * {@code split(corridors)} to get the corridors. The room-finding technique works by shrinking floors by a radius
@@ -4623,7 +4636,9 @@ public class CoordPacker {
             }
         }
         return arrays;
-    }public static short[] removeIsolated(short[] packed)
+    }
+
+    public static short[] removeIsolated(short[] packed)
     {
         short[] remaining = new short[packed.length], viable = new short[packed.length];
         System.arraycopy(packed, 0, remaining, 0, packed.length);
@@ -5171,7 +5186,7 @@ public class CoordPacker {
         return posToMoore(pt.x, pt.y);
     }
 
-    private static int mortonEncode3D( int index1, int index2, int index3 )
+    public static int mortonEncode3D( int index1, int index2, int index3 )
     { // pack 3 5-bit indices into a 15-bit Morton code
         index1 &= 0x0000001f;
         index2 &= 0x0000001f;
@@ -5189,6 +5204,62 @@ public class CoordPacker {
         index2 &= 0x12490000;
         index3 &= 0x12490000;
         return( ( index1 >> 16 ) | ( index2 >> 15 ) | ( index3 >> 14 ) );
+    }
+    public static Coord3D mortonDecode3D( int morton )
+    { // unpack 3 5-bit indices from a 15-bit Morton code
+        int value1 = morton;
+        int value2 = ( value1 >>> 1 );
+        int value3 = ( value1 >>> 2 );
+        value1 &= 0x00001249;
+        value2 &= 0x00001249;
+        value3 &= 0x00001249;
+        value1 |= ( value1 >>> 2 );
+        value2 |= ( value2 >>> 2 );
+        value3 |= ( value3 >>> 2 );
+        value1 &= 0x000010c3;
+        value2 &= 0x000010c3;
+        value3 &= 0x000010c3;
+        value1 |= ( value1 >>> 4 );
+        value2 |= ( value2 >>> 4 );
+        value3 |= ( value3 >>> 4 );
+        value1 &= 0x0000100f;
+        value2 &= 0x0000100f;
+        value3 &= 0x0000100f;
+        value1 |= ( value1 >>> 8 );
+        value2 |= ( value2 >>> 8 );
+        value3 |= ( value3 >>> 8 );
+        value1 &= 0x0000001f;
+        value2 &= 0x0000001f;
+        value3 &= 0x0000001f;
+        return new Coord3D(value1, value2, value3);
+    }
+    public static int mortonBitDecode3D( int morton )
+    { // unpack 3 5-bit indices from a 15-bit Morton code
+        int value1 = morton;
+        int value2 = ( value1 >>> 1 );
+        int value3 = ( value1 >>> 2 );
+        value1 &= 0x00001249;
+        value2 &= 0x00001249;
+        value3 &= 0x00001249;
+        value1 |= ( value1 >>> 2 );
+        value2 |= ( value2 >>> 2 );
+        value3 |= ( value3 >>> 2 );
+        value1 &= 0x000010c3;
+        value2 &= 0x000010c3;
+        value3 &= 0x000010c3;
+        value1 |= ( value1 >>> 4 );
+        value2 |= ( value2 >>> 4 );
+        value3 |= ( value3 >>> 4 );
+        value1 &= 0x0000100f;
+        value2 &= 0x0000100f;
+        value3 &= 0x0000100f;
+        value1 |= ( value1 >>> 8 );
+        value2 |= ( value2 >>> 8 );
+        value3 |= ( value3 >>> 8 );
+        value1 &= 0x0000001f;
+        value2 &= 0x0000001f;
+        value3 &= 0x0000001f;
+        return value1 | (value2 << 5) | (value3 << 10);
     }
     private static void computeHilbert3D(int x, int y, int z)
     {
@@ -5218,8 +5289,7 @@ public class CoordPacker {
         hilbert3X[hilbert] = (short)x;
         hilbert3Y[hilbert] = (short)y;
         hilbert3Z[hilbert] = (short)z;
-        hilbert3Distances[x + (y << 3) + (z << 6)] = (short)hilbert;
-
+        hilbert3Distances[x | (y << 3) | (z << 6)] = (short)hilbert;
     }
 
     /**
