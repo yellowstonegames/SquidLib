@@ -1,6 +1,7 @@
 package squidpony.squidgrid;
 
 import squidpony.GwtCompatibility;
+import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
 
 import java.io.Serializable;
@@ -84,6 +85,18 @@ public class FOV implements Serializable {
              */
     SHADOW = 5;
     private int type = SHADOW;
+
+	/**
+	 * Data allocated in the previous calls to the public API, if any. Used to
+	 * save allocations when multiple calls are done on the same instance.
+	 */
+    private double[][] light;
+	/**
+	 * Data allocated in the previous calls to the public API, if any. Used to
+	 * save allocations when multiple calls are done on the same instance.
+	 */
+    private boolean[][] nearLight;
+
     private static final Direction[] ccw = new Direction[]
             {Direction.UP_RIGHT, Direction.UP_LEFT, Direction.DOWN_LEFT, Direction.DOWN_RIGHT, Direction.UP_RIGHT},
             ccw_full = new Direction[]{Direction.RIGHT, Direction.UP_RIGHT, Direction.UP, Direction.UP_LEFT,
@@ -166,22 +179,18 @@ public class FOV implements Serializable {
         int width = resistanceMap.length;
         int height = resistanceMap[0].length;
 
-        double[][] lightMap = new double[width][height];
-        lightMap[startX][startY] = 1;//make the starting space full power
+        initializeLightMap(width, height);
+        light[startX][startY] = 1;//make the starting space full power
+
+        initializeNearLight(width, height);
 
         boolean[][] nearLight = new boolean[width][height];
         switch (type) {
             case RIPPLE:
-                lightMap = doRippleFOV(lightMap, 2, startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, radiusTechnique);
-                break;
             case RIPPLE_LOOSE:
-                lightMap = doRippleFOV(lightMap, 3, startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, radiusTechnique);
-                break;
             case RIPPLE_TIGHT:
-                lightMap = doRippleFOV(lightMap, 1, startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, radiusTechnique);
-                break;
             case RIPPLE_VERY_LOOSE:
-                lightMap = doRippleFOV(lightMap, 6, startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, radiusTechnique);
+                doRippleFOV(light, rippleValue(type), startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, radiusTechnique);
                 break;
             case SHADOW:
                	// hotfix for too large radius -> set to longest possible straight-line Manhattan distance instead
@@ -194,17 +203,16 @@ public class FOV implements Serializable {
                 //    rad = width + height;
                 //}
                 for (Direction d : Direction.DIAGONALS) {
-                    shadowCast(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0, rad, startX, startY, decay, lightMap, resistanceMap, radiusTechnique);
-                    shadowCast(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY, rad, startX, startY, decay, lightMap, resistanceMap, radiusTechnique);
+                    shadowCast(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
+                    shadowCast(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
                 }
                 break;
         }
 
-        return lightMap;
+        return light;
     }
 
-
-    /**
+	/**
      * Calculates the Field Of View for the provided map from the given x, y
      * coordinates. Returns a light map where the values represent a percentage
      * of fully lit.
@@ -236,22 +244,17 @@ public class FOV implements Serializable {
         int width = resistanceMap.length;
         int height = resistanceMap[0].length;
 
-        double[][] lightMap = new double[width][height];
-        lightMap[startX][startY] = 1;//make the starting space full power
+        initializeLightMap(width, height);
+        light[startX][startY] = 1;//make the starting space full power
 
-        boolean[][] nearLight = new boolean[width][height];
+        initializeNearLight(width, height);
+
         switch (type) {
             case RIPPLE:
-                lightMap = doRippleFOV(lightMap, 2, startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, radiusTechnique, angle2, span2);
-                break;
             case RIPPLE_LOOSE:
-                lightMap = doRippleFOV(lightMap, 3, startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, radiusTechnique, angle2, span2);
-                break;
             case RIPPLE_TIGHT:
-                lightMap = doRippleFOV(lightMap, 1, startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, radiusTechnique, angle2, span2);
-                break;
             case RIPPLE_VERY_LOOSE:
-                lightMap = doRippleFOV(lightMap, 6, startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, radiusTechnique, angle2, span2);
+                doRippleFOV(light, rippleValue(type), startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, radiusTechnique, angle2, span2);
                 break;
             case SHADOW:
                 // hotfix for too large radius -> set to longest possible straight-line Manhattan distance instead
@@ -273,18 +276,79 @@ public class FOV implements Serializable {
                     if (started) {
                         if(ctr < 4 && angle < Math.PI / 2.0 * (ctr - 1) - span / 2.0)
                             break;
-                        lightMap = shadowCastLimited(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0, rad, startX, startY, decay, lightMap, resistanceMap, radiusTechnique, angle2, span2);
-                        lightMap = shadowCastLimited(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY, rad, startX, startY, decay, lightMap, resistanceMap, radiusTechnique, angle2, span2);
+                        light = shadowCastLimited(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique, angle2, span2);
+                        light = shadowCastLimited(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY, rad, startX, startY, decay, light, resistanceMap, radiusTechnique, angle2, span2);
                     }
                 }
                 break;
         }
 
-        return lightMap;
+        return light;
     }
 
+	/**
+	 * @param width
+	 *            The width that {@link #lightMap} should have.
+	 * @param height
+	 *            The height that {@link #lightMap} should have.
+	 */
+	private void initializeLightMap(int width, int height) {
+		if (light == null)
+			light = new double[width][height];
+		else {
+			if (light.length != width || light[0].length != height)
+				/* Size changed */
+				light = new double[width][height];
+			else {
+				/*
+				 * Size did not change, we simply need to erase the previous
+				 * result
+				 */
+				DungeonUtility.fill(light, 0d);
+			}
+		}
+	}
 
-    private double[][] doRippleFOV(double[][] lightMap, int ripple, int x, int y, int startx, int starty, double decay, double radius, double[][] map, boolean[][] indirect, Radius radiusStrategy) {
+	/**
+	 * @param width
+	 *            The width that {@link #nearLightMap} should have.
+	 * @param height
+	 *            The height that {@link #nearLightMap} should have.
+	 */
+	private void initializeNearLight(int width, int height) {
+		if (nearLight == null)
+			nearLight = new boolean[width][height];
+		else {
+			if (nearLight.length != width || nearLight[0].length != height)
+				/* Size changed */
+				nearLight = new boolean[width][height];
+			else {
+				/*
+				 * Size did not change, we simply need to erase the previous
+				 * result
+				 */
+				DungeonUtility.fill(nearLight, false);
+			}
+		}
+	}
+
+	private static int rippleValue(int type) {
+		switch (type) {
+		case RIPPLE:
+			return 2;
+		case RIPPLE_LOOSE:
+			return 3;
+		case RIPPLE_TIGHT:
+			return 1;
+		case RIPPLE_VERY_LOOSE:
+			return 6;
+		default:
+			System.err.println("Unrecognized ripple type: " + type + ". Defaulting to RIPPLE");
+			return rippleValue(RIPPLE);
+		}
+	}
+
+    private static void doRippleFOV(double[][] lightMap, int ripple, int x, int y, int startx, int starty, double decay, double radius, double[][] map, boolean[][] indirect, Radius radiusStrategy) {
     	/* Not using Deque's interface, it isn't GWT compatible */
         final LinkedList<Coord> dq = new LinkedList<>();
         int width = lightMap.length;
@@ -313,12 +377,11 @@ public class FOV implements Serializable {
                 }
             }
         }
-        return lightMap;
     }
 
 
 
-    private double[][] doRippleFOV(double[][] lightMap, int ripple, int x, int y, int startx, int starty, double decay, double radius, double[][] map, boolean[][] indirect, Radius radiusStrategy, double angle, double span) {
+    private static void doRippleFOV(double[][] lightMap, int ripple, int x, int y, int startx, int starty, double decay, double radius, double[][] map, boolean[][] indirect, Radius radiusStrategy, double angle, double span) {
     	/* Not using Deque's interface, it isn't GWT compatible */
         final LinkedList<Coord> dq = new LinkedList<>();
         int width = lightMap.length;
@@ -350,10 +413,9 @@ public class FOV implements Serializable {
                 }
             }
         }
-        return lightMap;
     }
 
-    private double nearRippleLight(int x, int y, int rippleNeighbors, int startx, int starty, double decay, double[][] lightMap, double[][] map, boolean[][] indirect, Radius radiusStrategy) {
+    private static double nearRippleLight(int x, int y, int rippleNeighbors, int startx, int starty, double decay, double[][] lightMap, double[][] map, boolean[][] indirect, Radius radiusStrategy) {
         if (x == startx && y == starty) {
             return 1;
         }
@@ -417,7 +479,7 @@ public class FOV implements Serializable {
         return light;
     }
 
-    private double[][] shadowCast(int row, double start, double end, int xx, int xy, int yx, int yy,
+    private static double[][] shadowCast(int row, double start, double end, int xx, int xy, int yx, int yy,
                                   double radius, int startx, int starty, double decay, double[][] lightMap,
                                   double[][] map, Radius radiusStrategy) {
         double newStart = 0;
@@ -466,7 +528,7 @@ public class FOV implements Serializable {
         }
         return lightMap;
     }
-    private double[][] shadowCastLimited(int row, double start, double end, int xx, int xy, int yx, int yy,
+    private static double[][] shadowCastLimited(int row, double start, double end, int xx, int xy, int yx, int yy,
                                          double radius, int startx, int starty, double decay, double[][] lightMap,
                                          double[][] map, Radius radiusStrategy, double angle, double span) {
         double newStart = 0;
