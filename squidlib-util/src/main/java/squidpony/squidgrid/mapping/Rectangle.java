@@ -1,23 +1,19 @@
 package squidpony.squidgrid.mapping;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.iterator.SquidIterators;
+import squidpony.squidgrid.zone.Zone;
 import squidpony.squidmath.Coord;
+
+import java.util.*;
 
 /**
  * Rectangles in 2D grids. Checkout {@link Utils} for utility methods.
  * 
  * @author smelC
- * 
  * @see RectangleRoomFinder How to find rectangles in a dungeon
  */
-public interface Rectangle {
+public interface Rectangle extends Zone {
 
 	/**
 	 * @return The bottom left coordinate of the room.
@@ -37,13 +33,15 @@ public interface Rectangle {
 	int getHeight();
 
 	/**
-	 * Utilities pertaining to {@link Room}
+     * Utilities pertaining to {@link Rectangle}
 	 * 
 	 * @author smelC
 	 */
 	class Utils {
 
-		/** A comparator that uses {@link #size(Rectangle)} as the measure. */
+        /**
+         * A comparator that uses {@link #size(Rectangle)} as the measure.
+         */
 		public static final Comparator<Rectangle> SIZE_COMPARATOR = new Comparator<Rectangle>() {
 			@Override
 			public int compare(Rectangle o1, Rectangle o2) {
@@ -52,32 +50,35 @@ public interface Rectangle {
 		};
 
 		/**
-		 * @param r
-		 * @param c
+         * @param r a Rectangle
+         * @param c a Coord to check against r for presence
 		 * @return Whether {@code r} contains {@code c}.
 		 */
 		public static boolean contains(Rectangle r, Coord c) {
+            return c != null && contains(r, c.x, c.y);
+        }
+
+        /**
+         * @param r a Rectangle
+         * @param x x-coordinate of a point to check against r
+         * @param y y-coordinate of a point to check against r
+         * @return Whether {@code r} contains {@code c}.
+         */
+        public static boolean contains(Rectangle r, int x, int y) {
+            if (r == null)
+                return false;
 			final Coord bottomLeft = r.getBottomLeft();
 			final int width = r.getWidth();
 			final int height = r.getHeight();
-			if (c.x < bottomLeft.x)
-				/* Too much to the left */
-				return false;
-			if (bottomLeft.x + width < c.x)
-				/* Too much to the right */
-				return false;
-			if (bottomLeft.y < c.y)
-				/* Too low */
-				return false;
-			if (c.y < bottomLeft.y - height)
-				/* Too high */
-				return false;
-			return true;
+            return !(x < bottomLeft.x /* Too much to the left */
+                    || bottomLeft.x + width < x /* Too much to the right */
+                    || bottomLeft.y < y /* Too low */
+                    || y < bottomLeft.y - height); /* Too high */
 		}
 
 		/**
-		 * @param r
-		 * @param c
+         * @param r  a Rectangle
+         * @param cs a Collection of Coord to check against r; returns true if r contains any items in cs
 		 * @return {@code true} if {@code r} contains a member of {@code cs}.
 		 */
 		public static boolean containsAny(Rectangle r, Collection<Coord> cs) {
@@ -89,10 +90,10 @@ public interface Rectangle {
 		}
 
 		/**
-		 * @param rs
-		 * @param c
+         * @param rs an Iterable of Rectangle items to check against c
+         * @param c  a Coord to try to find in any of the Rectangles in rs
 		 * @return {@code true} if a member of {@code rs}
-		 *         {@link #contains(Room, Coord) contains} {@code c}.
+         * {@link #contains(Rectangle, Coord) contains} {@code c}.
 		 */
 		public static boolean contains(Iterable<? extends Rectangle> rs, Coord c) {
 			for (Rectangle r : rs) {
@@ -103,7 +104,7 @@ public interface Rectangle {
 		}
 
 		/**
-		 * @param r
+         * @param r a Rectangle
 		 * @return The number of cells that {@code r} covers.
 		 */
 		public static int size(Rectangle r) {
@@ -111,7 +112,7 @@ public interface Rectangle {
 		}
 
 		/**
-		 * @param r
+         * @param r a Rectangle
 		 * @return The center of {@code r}.
 		 */
 		public static Coord center(Rectangle r) {
@@ -126,7 +127,7 @@ public interface Rectangle {
 		/**
 		 * Use {@link #cellsList(Rectangle)} if you want them all.
 		 * 
-		 * @param r
+         * @param r a Rectangle
 		 * @return The cells that {@code r} contains, from bottom left to top
 		 *         right; lazily computed.
 		 */
@@ -153,8 +154,7 @@ public interface Rectangle {
 		}
 
 		/**
-		 * @param d
-		 *            A direction.
+         * @param d A direction.
 		 * @return {@code r} extended to {@code d} by one row and/or column.
 		 */
 		public static Rectangle extend(Rectangle r, Direction d) {
@@ -185,13 +185,12 @@ public interface Rectangle {
 			throw new IllegalStateException("Unmatched direction in Rectangle.Utils::extend: " + d);
 		}
 
-		/**
-		 * @param r
-		 * @param diagonal
-		 *            A diagonal direction.
-		 * @return The coord at the corner identified by {@code diagonal} in
-		 *         {@code r}.
-		 */
+        /**
+         * @param r
+         * @param diagonal A diagonal direction.
+         * @return The coord at the corner identified by {@code diagonal} in
+         * {@code r}.
+         */
 		public static Coord getCorner(Rectangle r, Direction diagonal) {
 			assert diagonal.isDiagonal();
 			switch (diagonal) {
@@ -240,6 +239,8 @@ public interface Rectangle {
 		protected final Coord bottomLeft;
 		protected final int width;
 		protected final int height;
+
+		private static final long serialVersionUID = -6197401003733967116L;
 
 		public Impl(Coord bottomLeft, int width, int height) {
 			this.bottomLeft = bottomLeft;
@@ -296,6 +297,34 @@ public interface Rectangle {
 		@Override
 		public String toString() {
 			return "Room at " + bottomLeft + ", width:" + width + ", height:" + height;
+		}
+
+		// Implementation of Zone:
+
+		@Override
+		public boolean isEmpty() {
+			return width == 0 || height == 0;
+		}
+
+		@Override
+		public int size() {
+            return width * height;
+		}
+
+		@Override
+		public boolean contains(int x, int y) {
+            return x >= bottomLeft.x && x < bottomLeft.x + width &&
+                    y >= bottomLeft.y && y < bottomLeft.y + height;
+		}
+
+		@Override
+		public boolean contains(Coord c) {
+            return contains(c.x, c.y);
+		}
+
+		@Override
+		public List<Coord> getAll() {
+            return Utils.cellsList(this);
 		}
 	}
 

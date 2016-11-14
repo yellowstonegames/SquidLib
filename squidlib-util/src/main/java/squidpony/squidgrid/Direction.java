@@ -263,6 +263,26 @@ public enum Direction {
 		throw new IllegalStateException("Unmatched " + getClass().getSimpleName() + ": " + this);
 	}
 
+    /**
+     * @return Whether this is a cardinal-direction move.
+     */
+    public boolean isCardinal() {
+        switch (this) {
+            case DOWN:
+            case LEFT:
+            case RIGHT:
+            case UP:
+                return true;
+            case DOWN_LEFT:
+            case DOWN_RIGHT:
+            case UP_LEFT:
+            case UP_RIGHT:
+            case NONE:
+                return false;
+        }
+        throw new IllegalStateException("Unmatched " + getClass().getSimpleName() + ": " + this);
+    }
+
 	/**
 	 * @return {@code true} if {@code this} has an upward component.
 	 */

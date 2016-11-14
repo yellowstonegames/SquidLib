@@ -269,16 +269,16 @@ public class SquidIterators {
 
 	/**
 	 * An iterator that starts from a cell and iterates from the bottom left to
-	 * the top right, in the rectangle defined by the given width and height. Widths
-	 * and heights are like list-sizes w.r.t indexes. So a rectangle of width or height 0
-	 * is empty, a rectangle of width and height 1 has one cell, a rectangle
-	 * of width and height 2 has four cells, etc.
+	 * the top right, in the rectangle defined by the given width and height.
+	 * Widths and heights are like list-sizes w.r.t indexes. So a rectangle of
+	 * width or height 0 is empty, a rectangle of width and height 1 has one
+	 * cell, a rectangle of width and height 2 has four cells, etc.
 	 * 
 	 * <p>
 	 * Put differently, the rectangle whose bottom left is (x, y) and has width
-	 * and height 2, contains the cells (x, y), (x + 1, y),
-	 * (x, y - 1), and (x + 1, y - 1); but it does NOT contain (x + 2, y), nor
-	 * (x + 2, y - 1), nor (x + 2, y - 2).
+	 * and height 2, contains the cells (x, y), (x + 1, y), (x, y - 1), and (x +
+	 * 1, y - 1); but it does NOT contain (x + 2, y), nor (x + 2, y - 1), nor (x
+	 * + 2, y - 2).
 	 * </p>
 	 * 
 	 * @author smelC
@@ -327,12 +327,11 @@ public class SquidIterators {
 			throw new UnsupportedOperationException();
 		}
 
-		protected /*@Nullable*/ Coord next0() {
+		protected /* @Nullable */ Coord next0() {
 			if (previous == null) {
 				/* Initialization */
 				return width == 0 || height == 0 ? null : Coord.get(xstart, ystart);
-			}
-			else {
+			} else {
 				/* We're in SquidLib coordinates: (0,0) is top left */
 				assert xstart <= previous.x && previous.x < xstart + width;
 				assert previous.y <= ystart && ystart - height < previous.y;
@@ -580,5 +579,92 @@ public class SquidIterators {
 			}
 		}
 
+	}
+
+	/**
+	 * An iterator to iterate from a starting position (inclusive) and going in
+	 * one Direction. This iterator stops when reaching the map's bound.
+	 * 
+	 * @author smelC
+	 */
+	public static class Linear implements SquidIterator {
+
+		/** The current X-coordinate */
+		protected int x;
+
+		/** The Y-coordinate */
+		protected int y;
+
+		/** The grid's width */
+		protected final int width;
+		/** The grid's height */
+		protected final int height;
+		protected Direction direction;
+		protected Linear()
+		{
+			width = 0;
+			height = 0;
+		}
+		public Linear(Direction direction, int startx, int y, int width, int height) {
+			this.direction = direction;
+			this.x = startx;
+			this.y = y;
+			this.width = width;
+			this.height = height;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return next(true) != null;
+		}
+
+		@Override
+		public Coord next() {
+			return next(false);
+		}
+
+		@Override
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
+
+		private /* @Nullable */Coord next(boolean peek) {
+			if (height <= y || 0 > y || width <= x || 0 > x)
+				return null;
+			final Coord result = Coord.get(x, y);
+			if (!peek) {
+				x+= direction.deltaX;
+				y+= direction.deltaY;
+			}
+			return result;
+		}
+	}
+	public static class Right extends Linear
+	{
+		public Right(int startx, int y, int width, int height)
+		{
+			super(Direction.RIGHT, startx, y, width, height);
+		}
+	}
+	public static class Left extends Linear
+	{
+		public Left(int startx, int y, int width, int height)
+		{
+			super(Direction.LEFT, startx, y, width, height);
+		}
+	}
+	public static class Up extends Linear
+	{
+		public Up(int startx, int y, int width, int height)
+		{
+			super(Direction.UP, startx, y, width, height);
+		}
+	}
+	public static class Down extends Linear
+	{
+		public Down(int startx, int y, int width, int height)
+		{
+			super(Direction.DOWN, startx, y, width, height);
+		}
 	}
 }

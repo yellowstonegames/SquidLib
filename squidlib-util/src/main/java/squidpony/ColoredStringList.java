@@ -1,16 +1,16 @@
 package squidpony;
 
+import squidpony.panel.IColoredString;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-
-import squidpony.panel.IColoredString;
 
 /**
  * An helper class for code that deals with lists of {@link IColoredString}s. It
  * does nothing smart, its only purpose is to save you some typing for frequent
  * calls. It is particularly useful when feeding large pieces of text to classes
- * like {@link TextPanel}.
+ * like TextPanel in the display module.
  * 
  * @author smelC
  */
@@ -28,11 +28,10 @@ public class ColoredStringList<T> extends ArrayList<IColoredString<T>> {
 	public static <T> ColoredStringList<T> create() {
 		return new ColoredStringList<T>();
 	}
-
 	/**
 	 * Appends {@code text} to {@code this}, without specifying its color.
 	 * 
-	 * @param text
+	 * @param text the text to append
 	 */
 	public void addText(String text) {
 		addColoredText(text, null);
@@ -41,7 +40,7 @@ public class ColoredStringList<T> extends ArrayList<IColoredString<T>> {
 	/**
 	 * Appends {@code text} to {@code this}.
 	 * 
-	 * @param text
+	 * @param text the text to append
 	 */
 	public void addText(IColoredString<T> text) {
 		final int sz = size();
@@ -55,7 +54,7 @@ public class ColoredStringList<T> extends ArrayList<IColoredString<T>> {
 	/**
 	 * Appends colored text to {@code this}.
 	 * 
-	 * @param text
+	 * @param text the text to append
 	 */
 	public void addColoredText(String text, T c) {
 		if (isEmpty())
@@ -70,7 +69,7 @@ public class ColoredStringList<T> extends ArrayList<IColoredString<T>> {
 	 * Appends text to {@code this}, on a new line; without specifying its
 	 * color.
 	 * 
-	 * @param text
+	 * @param text the text to append
 	 */
 	public void addTextOnNewLine(String text) {
 		addColoredTextOnNewLine(text, null);
@@ -83,7 +82,7 @@ public class ColoredStringList<T> extends ArrayList<IColoredString<T>> {
 	/**
 	 * Appends colored text to {@code this}.
 	 * 
-	 * @param text
+	 * @param text the text to append
 	 */
 	public void addColoredTextOnNewLine(String text, /* @Nullable */ T color) {
 		this.add(IColoredString.Impl.<T> create(text, color));
@@ -93,7 +92,7 @@ public class ColoredStringList<T> extends ArrayList<IColoredString<T>> {
 	 * Adds {@code texts} to {@code this}, starting a new line for the first
 	 * one.
 	 * 
-	 * @param texts
+	 * @param texts the Collection of objects extending IColoredString to append
 	 */
 	public void addOnNewLine(Collection<? extends IColoredString<T>> texts) {
 		final Iterator<? extends IColoredString<T>> it = texts.iterator();
@@ -110,8 +109,8 @@ public class ColoredStringList<T> extends ArrayList<IColoredString<T>> {
 	/**
 	 * Contrary to {@link Collection#addAll(Collection)}, this method appends
 	 * text to the current text, without inserting new lines.
-	 * 
-	 * @param texts
+	 *
+	 * @param texts the Collection of objects extending IColoredString to append
 	 */
 	public void addAllText(Collection<? extends IColoredString<T>> texts) {
 		for (IColoredString<T> text : texts)
@@ -129,8 +128,7 @@ public class ColoredStringList<T> extends ArrayList<IColoredString<T>> {
 	/**
 	 * Changes a color in members of {@code this}.
 	 * 
-	 * @param old
-	 *            The color to replace. Can be {@code null}.
+	 * @param old The color to replace. Can be {@code null}.
 	 */
 	public void replaceColor(T old, T new_) {
 		final int sz = size();
