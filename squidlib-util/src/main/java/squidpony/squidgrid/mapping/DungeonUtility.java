@@ -21,7 +21,7 @@ import squidpony.squidmath.StatefulRNG;
  * for walls and make a copy that uses unicode box drawing characters.
  *
  * @author Tommy Ettinger - https://github.com/tommyettinger
- * @see squidpony.squidgrid.mapping.DungeonGenerator
+ * @see squidpony.squidgrid.mapping.DungeonGenerator DungeonGenerator uses this class a fair amount
  * Created by Tommy Ettinger on 4/1/2015.
  */
 public class DungeonUtility {
@@ -102,11 +102,11 @@ public class DungeonUtility {
      * A convenience wrapper for getting a packed-data representation of all floors ('.') in map, for randomCell().
      * If you want other chars or more chars than just the period, you can use CoordPacker.pack() with a char[][] map
      * and one or more chars to find as the parameters. This is the same as calling {@code CoordPacker.pack(map, '.')}.
+     *
      * @param map a char[][] that uses '.' to represent floors
      * @return all floors in map in packed data format (a special short array) that can be given to randomCell()
      */
-    public static short[] packedFloors(char[][] map)
-    {
+    public static short[] packedFloors(char[][] map) {
         return CoordPacker.pack(map, '.');
     }
 
@@ -1087,8 +1087,6 @@ public class DungeonUtility {
                     case ',':
                     case '~':
                     case '^':
-                        portion[i][j] = 0.0;
-                        break;
                     default:
                         portion[i][j] = 0.0;
                 }
@@ -1230,8 +1228,7 @@ public class DungeonUtility {
         return portion;
     }
 
-    public static double[][] translateAStarToDijkstra(double[][] astar)
-    {
+    public static double[][] translateAStarToDijkstra(double[][] astar) {
         if(astar == null) return null;
         if(astar.length <= 0 || astar[0].length <= 0)
             return new double[0][0];
@@ -1247,8 +1244,7 @@ public class DungeonUtility {
         return dijkstra;
     }
 
-    public static double[][] translateDijkstraToAStar(double[][] dijkstra)
-    {
+    public static double[][] translateDijkstraToAStar(double[][] dijkstra) {
         if(dijkstra == null) return null;
         if(dijkstra.length <= 0 || dijkstra[0].length <= 0)
             return new double[0][0];
@@ -1295,8 +1291,7 @@ public class DungeonUtility {
     /**
      * @param level dungeon/map level as 2D char array. x,y indexed
      * @param c     Coord to check
-     * @return {@code true} if {@code c} is valid in {@code level},
-     * {@code false} otherwise.
+     * @return {@code true} if {@code c} is valid in {@code level}, {@code false} otherwise.
      */
     public static boolean inLevel(char[][] level, Coord c) {
         return inLevel(level, c.x, c.y);
@@ -1306,18 +1301,35 @@ public class DungeonUtility {
      * @param level dungeon/map level as 2D char array. x,y indexed
      * @param x     x coordinate to check
      * @param y     y coordinate to check
-     * @return {@code true} if {@code c} is valid in {@code level},
-     * {@code false} otherwise.
+     * @return {@code true} if {@code c} is valid in {@code level}, {@code false} otherwise.
      */
     public static boolean inLevel(char[][] level, int x, int y) {
         return 0 <= x && x < level.length && 0 <= y && y < level[x].length;
     }
 
     /**
+     * @param level dungeon/map level as 2D double array. x,y indexed
+     * @param c     Coord to check
+     * @return {@code true} if {@code c} is valid in {@code level}, {@code false} otherwise.
+     */
+    public static boolean inLevel(double[][] level, Coord c) {
+        return inLevel(level, c.x, c.y);
+    }
+
+    /**
+     * @param level dungeon/map level as 2D double array. x,y indexed
+     * @param x     x coordinate to check
+     * @param y     y coordinate to check
+     * @return {@code true} if {@code c} is valid in {@code level}, {@code false} otherwise.
+     */
+    public static boolean inLevel(double[][] level, int x, int y) {
+        return 0 <= x && x < level.length && 0 <= y && y < level[x].length;
+    }
+
+    /**
      * @param level a dungeon/map level as 2D array. x,y indexed
      * @param c     Coord to check
-     * @return {@code true} if {@code c} is valid in {@code level},
-     * {@code false} otherwise.
+     * @return {@code true} if {@code c} is valid in {@code level}, {@code false} otherwise.
      */
     public static <T> boolean inLevel(T[][] level, Coord c) {
         return inLevel(level, c.x, c.y);
@@ -1327,22 +1339,68 @@ public class DungeonUtility {
      * @param level a dungeon/map level as 2D array. x,y indexed
      * @param x     x coordinate to check
      * @param y     y coordinate to check
-     * @return {@code true} if {@code c} is valid in {@code level},
-     * {@code false} otherwise.
+     * @return {@code true} if {@code c} is valid in {@code level}, {@code false} otherwise.
      */
     public static <T> boolean inLevel(T[][] level, int x, int y) {
         return 0 <= x && x < level.length && 0 <= y && y < level[x].length;
     }
 
 	/**
-	 * @param zone
-	 * @param result
-	 *            The list to fill if non null (i.e. if non-null, it is
-	 *            returned). If null, a fresh list will be allocated and
-	 *            returned.
-	 * @return Elements in {@code zone} that are neighbors to an element not in
-	 *         {@code zone}.
+	 * Fills {@code array2d} with {@code value}.
+	 * 
+	 * @param array2d
+	 * @param value
 	 */
+	public static void fill(boolean[][] array2d, boolean value) {
+		final int width = array2d.length;
+		final int height = width == 0 ? 0 : array2d[0].length;
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++)
+				array2d[x][y] = value;
+		}
+	}
+
+	/**
+	 * Fills {@code array2d} with {@code value}.
+	 * 
+	 * @param array2d
+	 * @param value
+	 */
+	public static void fill(double[][] array2d, double value) {
+		final int width = array2d.length;
+		final int height = width == 0 ? 0 : array2d[0].length;
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++)
+				array2d[x][y] = value;
+		}
+	}
+
+	/**
+	 * Fills {@code array2d} with {@code value}.
+	 * 
+	 * @param array2d
+	 * @param value
+	 */
+	public static void fill(int[][] array2d, int value) {
+		final int width = array2d.length;
+		final int height = width == 0 ? 0 : array2d[0].length;
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++)
+				array2d[x][y] = value;
+		}
+	}
+
+    /**
+     * An easy way to get the Coord items in a List of Coord that are at the edge of the region. Not the most
+     * efficient way to do this; If you find you need to do more complicated manipulations of regions or are
+     * calling this method often, consider using {@link squidpony.squidmath.GreasedRegion}, which should be
+     * significantly faster and has better support for more intricate alterations on an area of Coords.
+     * @param zone a List of Coord representing a region
+     * @param buffer The list to fill if non null (i.e. if non-null, it is
+     *               returned). If null, a fresh list will be allocated and
+     *               returned.
+     * @return Elements in {@code zone} that are neighbors to an element not in {@code zone}.
+     */
 	public static List<Coord> border(final List<Coord> zone, /* @Nullable */ List<Coord> buffer) {
 		final int zsz = zone.size();
 		final List<Coord> border = buffer == null ? new ArrayList<Coord>(zsz / 4) : buffer;
@@ -1412,26 +1470,35 @@ public class DungeonUtility {
         return map;
     }
 
-	/**
-	 * @param x
-	 * @param y
-	 * @param diameter
-	 * @param buf
-	 *            Where to add the coordinates, or null for this method to
-	 *            allocate a fresh list.
-	 * @return The coordinates of a circle centered {@code (x, y)}, whose
-	 *         diameter is {@code (radius * 2) + 1}.
-	 */
-	public static List<Coord> circle(int x, int y, int radius, /* @Nullable */ List<Coord> buf) {
-		final List<Coord> result = buf == null ? new ArrayList<Coord>() : buf;
-		for (int dx = -radius; dx <= radius; ++dx) {
-			final int high = (int) Math.floor(Math.sqrt(radius * radius - dx * dx));
-			for (int dy = -high; dy <= high; ++dy) {
-				result.add(Coord.get(x + dx, y + dy));
-			}
-		}
-		return result;
-	}
+    /**
+     * Gets a List of Coord that are within radius distance of (x,y), and appends them to buf if it is non-null or makes
+     * a fresh List to append to otherwise. Returns buf if non-null, else the fresh List of Coord. May produce Coord
+     * values that are not within the boundaries of a map, such as (-5,-4), if the center is too close to the edge or
+     * radius is too high. You can use {@link squidpony.squidgrid.Radius#inCircle(int, int, int, boolean, int, int, List)}
+     * with surpassEdges as false if you want to limit Coords to within the map, or the more general
+     * {@link squidpony.squidgrid.Radius#pointsInside(int, int, int, boolean, int, int, List)} on a Radius.SQUARE or
+     * Radius.DIAMOND enum value if you want a square or diamond shape.
+     *
+     * @param x      center x of the circle
+     * @param y      center y of the circle
+     * @param radius inclusive radius to extend from the center; radius 0 gives just the center
+     * @param buf    Where to add the coordinates, or null for this method to
+     *               allocate a fresh list.
+     * @return The coordinates of a circle centered {@code (x, y)}, whose
+     * diameter is {@code (radius * 2) + 1}.
+     * @see squidpony.squidgrid.Radius#inCircle(int, int, int, boolean, int, int, List) if you want to keep the Coords within the bounds of the map
+     */
+    public static List<Coord> circle(int x, int y, int radius, /* @Nullable */ List<Coord> buf) {
+        final List<Coord> result = buf == null ? new ArrayList<Coord>() : buf;
+        radius = Math.max(0, radius);
+        for (int dx = -radius; dx <= radius; ++dx) {
+            final int high = (int) Math.floor(Math.sqrt(radius * radius - dx * dx));
+            for (int dy = -high; dy <= high; ++dy) {
+                result.add(Coord.get(x + dx, y + dy));
+            }
+        }
+        return result;
+    }
 
 	private static boolean hasANeighborNotIn(Coord c, Collection<Coord> others) {
 		for (Direction dir : Direction.OUTWARDS) {
