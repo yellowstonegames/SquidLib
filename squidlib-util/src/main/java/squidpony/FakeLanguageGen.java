@@ -1262,6 +1262,50 @@ public class FakeLanguageGen implements Serializable {
                     "uq", "iaq", "aq", "ik", "it", "uit", "ut", "ut", "at", "un", "in"
             },
             new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{3, 4, 6, 5, 4}, 0.45, 0.0, 0.0, 0.25, null, true).register();
+    /**
+     * Somewhat close to Old Norse, which is itself very close to Icelandic, so this uses Icelandic spelling rules.
+     * <br>
+     * Leyrk tjör stomri kna snó æd ðrépdápá, prygso?
+     */
+    public static final FakeLanguageGen NORSE = new FakeLanguageGen(
+            new String[]{"a","a","a","á","á","au","e","e","e","é","é","ei","ey","i","i","í","í","y","y","ý","ý","o","o","o","ó","ó","u","u","u","ú","ú","æ","æ","æ","ö","ö",},
+            new String[]{},
+            new String[]{"b","bl","br","bj","d","dr","dj","ð","ðl","ðr","f","fl","flj","fr","fn","fj","g","gn","gj","h",
+                    "hj","hl","hr","hv","j","k","kl","kr","kn","kj","l","lj","m","mj","n","nj","p","pl","pr","pj","r",
+                    "rj","s","sj","sl","sn","sp","st","sþ","sð","t","tj","v","vl","vr","vj","þ","þl","þr",
+
+                    "d","f","fl","g","gl","gr","k","h","hr","n","k","l","m","mj","n","r","s","st","t","þ","ð",
+                    "d","f","fl","g","gl","gr","k","h","hr","n","k","l","m","mj","n","r","s","st","t","þ","ð",
+                    "d","f","fl","g","gl","gr","k","h","hr","n","k","l","m","mj","n","r","s","st","t","þ","ð",
+            },
+            new String[]{"bd","bf","bg","bk","bl","bp","br","bt","bv","bm","bn","bð","bj",
+                    "db","df","dg","dk","dl","dp","dr","dt","dv","dm","dn","dð","dþ","dj","ndk","ndb","ndg","ndl","nds","nds",
+                    "ðl","ðr","ðk","ðj","ðg","ðd","ðb","ðp","ðs",
+                    "fb","fd","fg","fk","fl","fp","fr","fs","ft","fv","fm","fn","fð","fj",
+                    "gb","gd","gf","gk","gl","gp","gr","gt","gv","gm","gn","gð","gj",
+                    "h","hj","hl","hr","hv",
+                    "kb","kd","kf","kp","kv","km","kn","kð","kl","kr","nkj","nkr","nkl",
+                    "lbr","ldr","lfr","lg","lgr","lj","lkr","ln","ls","ltr","lv","lð","lðr","lþ",
+                    "mb","md","mk","mg","ml","mp","mr","ms","mt","mv","mð","mþ","mj",
+                    "nb","nl","np","nr","nv","nð","nþ","nj",
+                    "ngl","ngb","ngd","ngk","ngp","ngt","ngv","ngm","ngð","ngþ","ngr",
+                    "mbd","mbg","mbs","mbt","ldg","ldn","ldk","lds","rðn","rðl","gðs","gðr",
+                    "pb","pd","pg","pk","pl","pr","ps","psj","pð","pj",
+                    "rl","rbr","rdr","rg","rgr","rkr","rpr","rs","rts","rtr","rv","rj",
+                    "sb","sbr","sd","sdr","sf","sfj","sg","skr","skl","sm","sn","str","sv","sð","sþ","sj",
+                    "tr","tn","tb","td","tg","tv","tf","tj","tk","tm","tp",},
+            new String[]{"kk","ll","nn","pp","tt","kk","ll","nn","pp","tt",
+                    "bs","ds","gs","x","rn","gn","gt","gs","ks","kt","nt","nd","nk","nt","ng","ngs","ns",
+                    "ps","pk","pt","pts","lb","ld","lf","lk","lm","lp","lps","lt",
+                    "rn","rb","rd","rk","rp","rt","rm","rð","rþ","sk","sp","st","ts",
+                    //"fnt","fnd",
+                    "b","d","ð","f","g","gn","h","k","kn","l","m","n","ng","p","r","s","sp","st","sþ","sð","t","v","þ",
+                    "b","d","ð","f","g","gn","h","k","kn","l","m","n","ng","p","r","s","sp","st","sþ","sð","t","v","þ",
+                    "b","d","ð","f","g","gn","h","k","kn","l","m","n","ng","p","r","s","sp","st","sþ","sð","t","v","þ",
+            },
+            new String[]{"etta","eþa","uinn","ing","ard","eign","ef","efs","eg","ir","ir","ir","ir","ír","ír","ar","ar",
+                    "ar","ár","or","or","ór","ör","on","on","ón","onn","unn","ung","ut","ett","att","ot"},
+            new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{5, 5, 4, 3, 1}, 0.25, 0.5, 0.0, 0.08, genericSanityChecks, true).register();
 
     /**
      * A mix of four different languages, using only ASCII characters, that is meant for generating single words for
