@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9,"i28":9,"i29":9,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":9,"i36":9,"i37":9,"i38":9,"i39":9,"i40":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9,"i28":9,"i29":9,"i30":9,"i31":9,"i32":9,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":9,"i39":9,"i40":9,"i41":9,"i42":9,"i43":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -246,6 +246,27 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </td>
 </tr>
 <tr id="i8" class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#fill-boolean:A:A-boolean-">fill</a></span>(boolean[][]&nbsp;array2d,
+    boolean&nbsp;value)</code>
+<div class="block">Fills <code>array2d</code> with <code>value</code>.</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#fill-double:A:A-double-">fill</a></span>(double[][]&nbsp;array2d,
+    double&nbsp;value)</code>
+<div class="block">Fills <code>array2d</code> with <code>value</code>.</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#fill-int:A:A-int-">fill</a></span>(int[][]&nbsp;array2d,
+    int&nbsp;value)</code>
+<div class="block">Fills <code>array2d</code> with <code>value</code>.</div>
+</td>
+</tr>
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>static double[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#generateAStarCostMap-char:A:A-java.util.Map-double-">generateAStarCostMap</a></span>(char[][]&nbsp;map,
                     <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;costs,
@@ -254,14 +275,14 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  a double value for unhandled characters, produces a double[][] that can be used as a map by AStarSearch.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>static int[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#generateBGPaletteIndices-char:A:A-">generateBGPaletteIndices</a></span>(char[][]&nbsp;map)</code>
 <div class="block">Produces an int[][] that can be used with any palette of your choice for methods in SquidPanel or for your own
  rendering method, but meant for the background palette.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>static int[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#generateBGPaletteIndices-char:A:A-char-int-char-int-">generateBGPaletteIndices</a></span>(char[][]&nbsp;map,
                         char&nbsp;deepChar,
@@ -272,7 +293,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  rendering method, but meant for the background palette.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>static double[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#generateCostMap-char:A:A-java.util.Map-double-">generateCostMap</a></span>(char[][]&nbsp;map,
                <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;costs,
@@ -281,13 +302,13 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  a double value for unhandled characters, produces a double[][] that can be used as a costMap by DijkstraMap.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>static int[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#generateLightnessModifiers-char:A:A-">generateLightnessModifiers</a></span>(char[][]&nbsp;map)</code>
 <div class="block">Produces an int[][] that can be used with SquidLayers to alter the background colors.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>static int[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#generateLightnessModifiers-char:A:A-double-">generateLightnessModifiers</a></span>(char[][]&nbsp;map,
                           double&nbsp;frame)</code>
@@ -295,7 +316,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  animation frame if rippling water and waving grass using Perlin Noise are desired.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>static int[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#generateLightnessModifiers-char:A:A-double-char-char-">generateLightnessModifiers</a></span>(char[][]&nbsp;map,
                           double&nbsp;frame,
@@ -305,14 +326,14 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  animation frame if rippling water and waving grass using Perlin Noise are desired.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>static int[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#generatePaletteIndices-char:A:A-">generatePaletteIndices</a></span>(char[][]&nbsp;map)</code>
 <div class="block">Produces an int[][] that can be used with any palette of your choice for methods in SquidPanel or for your own
  rendering method.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>static int[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#generatePaletteIndices-char:A:A-char-int-char-int-">generatePaletteIndices</a></span>(char[][]&nbsp;map,
                       char&nbsp;deepChar,
@@ -323,20 +344,20 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  rendering method.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>static double[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#generateResistances-char:A:A-">generateResistances</a></span>(char[][]&nbsp;map)</code>
 <div class="block">Given a char[][] for the map, produces a double[][] that can be used with FOV.calculateFOV().</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#getRandomCell-squidpony.squidmath.RNG-char:A:A-java.util.Set-int-">getRandomCell</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
              char[][]&nbsp;map,
              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>&gt;&nbsp;acceptable,
              int&nbsp;frustration)</code>&nbsp;</td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>static char[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#hashesToLines-char:A:A-">hashesToLines</a></span>(char[][]&nbsp;map)</code>
 <div class="block">Takes a char[][] dungeon map that uses '#' to represent walls, and returns a new char[][] that uses unicode box
@@ -344,7 +365,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  filled with more walls before) with space characters, ' '.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>static char[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#hashesToLines-char:A:A-boolean-">hashesToLines</a></span>(char[][]&nbsp;map,
              boolean&nbsp;keepSingleHashes)</code>
@@ -353,71 +374,71 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  filled with more walls before) with space characters, ' '.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#inLevel-char:A:A-squidpony.squidmath.Coord-">inLevel</a></span>(char[][]&nbsp;level,
        <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</code>&nbsp;</td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#inLevel-char:A:A-int-int-">inLevel</a></span>(char[][]&nbsp;level,
        int&nbsp;x,
        int&nbsp;y)</code>&nbsp;</td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#inLevel-double:A:A-squidpony.squidmath.Coord-">inLevel</a></span>(double[][]&nbsp;level,
        <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</code>&nbsp;</td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#inLevel-double:A:A-int-int-">inLevel</a></span>(double[][]&nbsp;level,
        int&nbsp;x,
        int&nbsp;y)</code>&nbsp;</td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>static &lt;T&gt;&nbsp;boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#inLevel-T:A:A-squidpony.squidmath.Coord-">inLevel</a></span>(T[][]&nbsp;level,
        <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</code>&nbsp;</td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>static &lt;T&gt;&nbsp;boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#inLevel-T:A:A-int-int-">inLevel</a></span>(T[][]&nbsp;level,
        int&nbsp;x,
        int&nbsp;y)</code>&nbsp;</td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>static char[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#linesToHashes-char:A:A-">linesToHashes</a></span>(char[][]&nbsp;map)</code>
 <div class="block">Reverses most of the effects of hashesToLines().</div>
 </td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>static char[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#openDoors-char:A:A-">openDoors</a></span>(char[][]&nbsp;map)</code>
 <div class="block">When a map is generated by DungeonGenerator with addDoors enabled, different chars are used for vertical and
  horizontal doors ('+' for vertical and '/' for horizontal).</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i32" class="altColor">
 <td class="colFirst"><code>static short[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#packedFloors-char:A:A-">packedFloors</a></span>(char[][]&nbsp;map)</code>
 <div class="block">A convenience wrapper for getting a packed-data representation of all floors ('.') in map, for randomCell().</div>
 </td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#randomCell-short:A-">randomCell</a></span>(short[]&nbsp;packed)</code>
 <div class="block">Finds a random Coord where the x and y match up to a [x][y] location that is encoded as "on" in packed.</div>
 </td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i34" class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#randomFloor-char:A:A-">randomFloor</a></span>(char[][]&nbsp;map)</code>
 <div class="block">Finds a random Coord where the x and y match up to a [x][y] location on map that has '.' as a value.</div>
 </td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i35" class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#randomFloorLarge-char:A:A-int-">randomFloorLarge</a></span>(char[][]&nbsp;map,
                 int&nbsp;size)</code>
@@ -426,7 +447,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  '.' as their values.</div>
 </td>
 </tr>
-<tr id="i33" class="rowColor">
+<tr id="i36" class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#randomMatchingTile-char:A:A-char-">randomMatchingTile</a></span>(char[][]&nbsp;map,
                   char&nbsp;tile)</code>
@@ -434,7 +455,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  parameter tile.</div>
 </td>
 </tr>
-<tr id="i34" class="altColor">
+<tr id="i37" class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#randomStep-char:A:A-squidpony.squidmath.Coord-boolean-">randomStep</a></span>(char[][]&nbsp;map,
           <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
@@ -442,36 +463,36 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <div class="block">Gets a random Coord that is adjacent to start, validating whether the position can exist on the given map.</div>
 </td>
 </tr>
-<tr id="i35" class="rowColor">
+<tr id="i38" class="altColor">
 <td class="colFirst"><code>static char[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#simplifyDungeon-char:A:A-">simplifyDungeon</a></span>(char[][]&nbsp;map)</code>
 <div class="block">Takes a char[][] dungeon map and returns a copy with all box drawing chars, special placeholder chars, or '#'
  chars changed to '#' and everything else changed to '.' .</div>
 </td>
 </tr>
-<tr id="i36" class="altColor">
+<tr id="i39" class="rowColor">
 <td class="colFirst"><code>static double[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#translateAStarToDijkstra-double:A:A-">translateAStarToDijkstra</a></span>(double[][]&nbsp;astar)</code>&nbsp;</td>
 </tr>
-<tr id="i37" class="rowColor">
+<tr id="i40" class="altColor">
 <td class="colFirst"><code>static double[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#translateDijkstraToAStar-double:A:A-">translateDijkstraToAStar</a></span>(double[][]&nbsp;dijkstra)</code>&nbsp;</td>
 </tr>
-<tr id="i38" class="altColor">
+<tr id="i41" class="rowColor">
 <td class="colFirst"><code>static char[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#transposeLines-char:A:A-">transposeLines</a></span>(char[][]&nbsp;map)</code>
 <div class="block">If you call hashesToLines() on a map that uses [y][x] conventions instead of [x][y], it will have the lines not
  connect as you expect.</div>
 </td>
 </tr>
-<tr id="i39" class="rowColor">
+<tr id="i42" class="altColor">
 <td class="colFirst"><code>static char[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#unDoubleWidth-char:A:A-">unDoubleWidth</a></span>(char[][]&nbsp;map)</code>
 <div class="block">Takes a dungeon map that uses two characters per cell, and condenses it to use only the left (lower index)
  character in each cell.</div>
 </td>
 </tr>
-<tr id="i40" class="altColor">
+<tr id="i43" class="rowColor">
 <td class="colFirst"><code>static char[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html#wallWrap-char:A:A-">wallWrap</a></span>(char[][]&nbsp;map)</code>
 <div class="block">Changes the outer edge of a char[][] to the wall char, '#'.</div>
@@ -1260,13 +1281,61 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
+<a name="fill-boolean:A:A-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>fill</h4>
+<pre>public static&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1345">fill</a>(boolean[][]&nbsp;array2d,
+                        boolean&nbsp;value)</pre>
+<div class="block">Fills <code>array2d</code> with <code>value</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>array2d</code> - </dd>
+<dd><code>value</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="fill-double:A:A-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>fill</h4>
+<pre>public static&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1360">fill</a>(double[][]&nbsp;array2d,
+                        double&nbsp;value)</pre>
+<div class="block">Fills <code>array2d</code> with <code>value</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>array2d</code> - </dd>
+<dd><code>value</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="fill-int:A:A-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>fill</h4>
+<pre>public static&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1375">fill</a>(int[][]&nbsp;array2d,
+                        int&nbsp;value)</pre>
+<div class="block">Fills <code>array2d</code> with <code>value</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>array2d</code> - </dd>
+<dd><code>value</code> - </dd>
+</dl>
+</li>
+</ul>
 <a name="border-java.util.List-java.util.List-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>border</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1350">border</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;zone,
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1395">border</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;zone,
                                  <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;buffer)</pre>
 <div class="block">An easy way to get the Coord items in a List of Coord that are at the edge of the region. Not the most
  efficient way to do this; If you find you need to do more complicated manipulations of regions or are
@@ -1289,7 +1358,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>countCells</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1368">countCells</a>(char[][]&nbsp;level,
+<pre>public static&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1413">countCells</a>(char[][]&nbsp;level,
                              char&nbsp;match)</pre>
 <div class="block">Quickly counts the number of char elements in level that are equal to match.</div>
 <dl>
@@ -1307,7 +1376,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>debugPrint</h4>
-<pre>public static&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1385">debugPrint</a>(char[][]&nbsp;level)</pre>
+<pre>public static&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1430">debugPrint</a>(char[][]&nbsp;level)</pre>
 <div class="block">For when you want to print a 2D char array. Prints on multiple lines, with a trailing newline.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1321,7 +1390,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>wallWrap</h4>
-<pre>public static&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1405">wallWrap</a>(char[][]&nbsp;map)</pre>
+<pre>public static&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1450">wallWrap</a>(char[][]&nbsp;map)</pre>
 <div class="block">Changes the outer edge of a char[][] to the wall char, '#'.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1337,7 +1406,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>ensurePath</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1432">ensurePath</a>(char[][]&nbsp;map,
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1477">ensurePath</a>(char[][]&nbsp;map,
                                           <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
                                           char&nbsp;replacement,
                                           char...&nbsp;blocking)</pre>
@@ -1363,7 +1432,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>allMatching</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1448">allMatching</a>(char[][]&nbsp;map,
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1493">allMatching</a>(char[][]&nbsp;map,
                                            char...&nbsp;matching)</pre>
 </li>
 </ul>
@@ -1373,7 +1442,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>circle</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1483">circle</a>(int&nbsp;x,
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1528">circle</a>(int&nbsp;x,
                                  int&nbsp;y,
                                  int&nbsp;radius,
                                  <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;buf)</pre>

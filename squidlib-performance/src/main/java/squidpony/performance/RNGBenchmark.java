@@ -229,6 +229,77 @@ public class RNGBenchmark {
     private static long seed = 9000;
     private static int iseed = 9000;
 
+    public long doPint()
+    {
+        PintRNG rng = new PintRNG(seed);
+
+        for (int i = 0; i < 1000000000; i++) {
+            seed += rng.nextLong();
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void a_measurePint() throws InterruptedException {
+        seed = 9000;
+        doPint();
+    }
+
+    public long doPintInt()
+    {
+        PintRNG rng = new PintRNG(iseed);
+
+        for (int i = 0; i < 1000000000; i++) {
+            iseed += rng.nextInt();
+        }
+        return iseed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void a_measurePintInt() throws InterruptedException {
+        iseed = 9000;
+        doPintInt();
+    }
+    public long doPintR()
+    {
+        RNG rng = new RNG(new PintRNG(seed));
+
+        for (int i = 0; i < 1000000000; i++) {
+            seed += rng.nextLong();
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void a_measurePintR() throws InterruptedException {
+        seed = 9000;
+        doPintR();
+    }
+
+    public long doPintIntR()
+    {
+        RNG rng = new RNG(new PintRNG(iseed));
+
+        for (int i = 0; i < 1000000000; i++) {
+            iseed += rng.nextInt();
+        }
+        return iseed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void a_measurePintIntR() throws InterruptedException {
+        iseed = 9000;
+        doPintIntR();
+    }
+
     public long doThunder()
     {
         ThunderRNG rng = new ThunderRNG(seed);
@@ -960,8 +1031,8 @@ public class RNGBenchmark {
         Options opt = new OptionsBuilder()
                 .include(RNGBenchmark.class.getSimpleName())
                 .timeout(TimeValue.seconds(30))
-                .warmupIterations(3)
-                .measurementIterations(3)
+                .warmupIterations(5)
+                .measurementIterations(5)
                 .forks(1)
                 .build();
 

@@ -573,6 +573,20 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.html#findFleePath-int-int-double-java.util.Set-java.util.Set-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findFleePath</a></span>(int&nbsp;length,
+            int&nbsp;scanLimit,
+            double&nbsp;preferLongerPaths,
+            <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable,
+            <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;onlyPassable,
+            <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+            <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;fearSources)</code>
+<div class="block">Scans the dungeon using DijkstraMap.scan or DijkstraMap.partialScan with the listed fearSources and start
+ point, and returns a list of Coord positions (using this DijkstraMap's metric) needed to get further from
+ the closest fearSources, meant for running away.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.html#findFleePathLarge-int-int-double-java.util.Set-java.util.Set-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findFleePathLarge</a></span>(int&nbsp;size,
                  int&nbsp;length,
                  double&nbsp;preferLongerPaths,
@@ -585,13 +599,26 @@
  for running away.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.html#findNearestMultiple-squidpony.squidmath.Coord-int-java.util.Set-">findNearestMultiple</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
                    int&nbsp;limit,
                    <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets)</code>
 <div class="block">Recalculate the Dijkstra map until it reaches a Coord in targets, then returns the first several targets found,
  up to limit or less if the map is fully searched without finding enough.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.html#findPath-int-int-java.util.Set-java.util.Set-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findPath</a></span>(int&nbsp;length,
+        int&nbsp;scanLimit,
+        <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable,
+        <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;onlyPassable,
+        <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+        <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;targets)</code>
+<div class="block">Scans the dungeon using DijkstraMap.scan or DijkstraMap.partialScan with the listed goals and start
+ point, and returns a list of Coord positions (using the current measurement) needed to get closer
+ to the closest reachable goal.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -1352,6 +1379,34 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.html#findFleePath-int-int-double-java.util.Set-java.util.Set-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findFleePath</a></span>(int&nbsp;length,
+            int&nbsp;scanLimit,
+            double&nbsp;preferLongerPaths,
+            <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable,
+            <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;onlyPassable,
+            <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+            <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;fearSources)</code>
+<div class="block">Scans the dungeon using DijkstraMap.scan or DijkstraMap.partialScan with the listed fearSources and start
+ point, and returns a list of Coord positions (using this DijkstraMap's metric) needed to get further from
+ the closest fearSources, meant for running away.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.html#findFleePath-int-int-double-java.util.Set-java.util.Set-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findFleePath</a></span>(int&nbsp;length,
+            int&nbsp;scanLimit,
+            double&nbsp;preferLongerPaths,
+            <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable,
+            <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;onlyPassable,
+            <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+            <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;fearSources)</code>
+<div class="block">Scans the dungeon using DijkstraMap.scan or DijkstraMap.partialScan with the listed fearSources and start
+ point, and returns a list of Coord positions (using this DijkstraMap's metric) needed to get further from
+ the closest fearSources, meant for running away.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.html#findFleePathLarge-int-int-double-java.util.Set-java.util.Set-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findFleePathLarge</a></span>(int&nbsp;size,
                  int&nbsp;length,
                  double&nbsp;preferLongerPaths,
@@ -1406,6 +1461,32 @@
                    <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets)</code>
 <div class="block">Recalculate the Dijkstra map until it reaches a Coord in targets, then returns the first several targets found,
  up to limit or less if the map is fully searched without finding enough.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.html#findPath-int-int-java.util.Set-java.util.Set-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findPath</a></span>(int&nbsp;length,
+        int&nbsp;scanLimit,
+        <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable,
+        <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;onlyPassable,
+        <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+        <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;targets)</code>
+<div class="block">Scans the dungeon using DijkstraMap.scan or DijkstraMap.partialScan with the listed goals and start
+ point, and returns a list of Coord positions (using the current measurement) needed to get closer
+ to the closest reachable goal.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.html#findPath-int-int-java.util.Set-java.util.Set-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findPath</a></span>(int&nbsp;length,
+        int&nbsp;scanLimit,
+        <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable,
+        <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;onlyPassable,
+        <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+        <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;targets)</code>
+<div class="block">Scans the dungeon using DijkstraMap.scan or DijkstraMap.partialScan with the listed goals and start
+ point, and returns a list of Coord positions (using the current measurement) needed to get closer
+ to the closest reachable goal.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -2151,6 +2232,34 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.html#findFleePath-int-int-double-java.util.Set-java.util.Set-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findFleePath</a></span>(int&nbsp;length,
+            int&nbsp;scanLimit,
+            double&nbsp;preferLongerPaths,
+            <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable,
+            <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;onlyPassable,
+            <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+            <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;fearSources)</code>
+<div class="block">Scans the dungeon using DijkstraMap.scan or DijkstraMap.partialScan with the listed fearSources and start
+ point, and returns a list of Coord positions (using this DijkstraMap's metric) needed to get further from
+ the closest fearSources, meant for running away.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.html#findFleePath-int-int-double-java.util.Set-java.util.Set-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findFleePath</a></span>(int&nbsp;length,
+            int&nbsp;scanLimit,
+            double&nbsp;preferLongerPaths,
+            <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable,
+            <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;onlyPassable,
+            <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+            <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;fearSources)</code>
+<div class="block">Scans the dungeon using DijkstraMap.scan or DijkstraMap.partialScan with the listed fearSources and start
+ point, and returns a list of Coord positions (using this DijkstraMap's metric) needed to get further from
+ the closest fearSources, meant for running away.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.html#findFleePathLarge-int-int-double-java.util.Set-java.util.Set-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findFleePathLarge</a></span>(int&nbsp;size,
                  int&nbsp;length,
                  double&nbsp;preferLongerPaths,
@@ -2191,6 +2300,32 @@
                    <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets)</code>
 <div class="block">Recalculate the Dijkstra map until it reaches a Coord in targets, then returns the first several targets found,
  up to limit or less if the map is fully searched without finding enough.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.html#findPath-int-int-java.util.Set-java.util.Set-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findPath</a></span>(int&nbsp;length,
+        int&nbsp;scanLimit,
+        <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable,
+        <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;onlyPassable,
+        <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+        <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;targets)</code>
+<div class="block">Scans the dungeon using DijkstraMap.scan or DijkstraMap.partialScan with the listed goals and start
+ point, and returns a list of Coord positions (using the current measurement) needed to get closer
+ to the closest reachable goal.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.html#findPath-int-int-java.util.Set-java.util.Set-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findPath</a></span>(int&nbsp;length,
+        int&nbsp;scanLimit,
+        <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable,
+        <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;onlyPassable,
+        <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+        <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;targets)</code>
+<div class="block">Scans the dungeon using DijkstraMap.scan or DijkstraMap.partialScan with the listed goals and start
+ point, and returns a list of Coord positions (using the current measurement) needed to get closer
+ to the closest reachable goal.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -4052,12 +4187,8 @@
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">Rectangle.Utils.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/Rectangle.Utils.html#getBorder-squidpony.squidgrid.mapping.Rectangle-squidpony.squidgrid.Direction-java.util.List-">getBorder</a></span>(<a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a>&nbsp;r,
-         <a href="../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>&nbsp;d,
-         <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;buffer)</code>
-<div class="block">Given a Rectangle, a direction, and a possibly-null List of Coord to fill into, this will add Coords to
- <code>buffer</code> from an edge of <code>r</code> determined by <code>d</code> until every Coord on that edge has been
- added to buffer (or re-added, if they already were present in it).</div>
-</td>
+         <a href="../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>&nbsp;cardinal,
+         <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;buf)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
@@ -4353,12 +4484,8 @@
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">Rectangle.Utils.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/Rectangle.Utils.html#getBorder-squidpony.squidgrid.mapping.Rectangle-squidpony.squidgrid.Direction-java.util.List-">getBorder</a></span>(<a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a>&nbsp;r,
-         <a href="../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>&nbsp;d,
-         <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;buffer)</code>
-<div class="block">Given a Rectangle, a direction, and a possibly-null List of Coord to fill into, this will add Coords to
- <code>buffer</code> from an edge of <code>r</code> determined by <code>d</code> until every Coord on that edge has been
- added to buffer (or re-added, if they already were present in it).</div>
-</td>
+         <a href="../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>&nbsp;cardinal,
+         <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;buf)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected static <a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>

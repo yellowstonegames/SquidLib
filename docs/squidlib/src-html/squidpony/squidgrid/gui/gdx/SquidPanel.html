@@ -1450,216 +1450,220 @@
 <span class="sourceLineNo">1442</span><a name="line.1442"></a>
 <span class="sourceLineNo">1443</span>        @Override<a name="line.1443"></a>
 <span class="sourceLineNo">1444</span>    public boolean hasActiveAnimations() {<a name="line.1444"></a>
-<span class="sourceLineNo">1445</span>        return animationCount != 0;<a name="line.1445"></a>
-<span class="sourceLineNo">1446</span>    }<a name="line.1446"></a>
-<span class="sourceLineNo">1447</span><a name="line.1447"></a>
-<span class="sourceLineNo">1448</span>    public OrderedSet&lt;AnimatedEntity&gt; getAnimatedEntities() {<a name="line.1448"></a>
-<span class="sourceLineNo">1449</span>        return animatedEntities;<a name="line.1449"></a>
+<span class="sourceLineNo">1445</span>        //return animationCount != 0;<a name="line.1445"></a>
+<span class="sourceLineNo">1446</span>        if (0 &lt; animationCount)<a name="line.1446"></a>
+<span class="sourceLineNo">1447</span>            return true;<a name="line.1447"></a>
+<span class="sourceLineNo">1448</span>        else<a name="line.1448"></a>
+<span class="sourceLineNo">1449</span>            return 0 &lt; getActions().size;<a name="line.1449"></a>
 <span class="sourceLineNo">1450</span>    }<a name="line.1450"></a>
 <span class="sourceLineNo">1451</span><a name="line.1451"></a>
-<span class="sourceLineNo">1452</span>    public void removeAnimatedEntity(AnimatedEntity ae)<a name="line.1452"></a>
-<span class="sourceLineNo">1453</span>    {<a name="line.1453"></a>
-<span class="sourceLineNo">1454</span>        animatedEntities.remove(ae);<a name="line.1454"></a>
-<span class="sourceLineNo">1455</span>    }<a name="line.1455"></a>
-<span class="sourceLineNo">1456</span><a name="line.1456"></a>
-<span class="sourceLineNo">1457</span>        @Override<a name="line.1457"></a>
-<span class="sourceLineNo">1458</span>        public ISquidPanel&lt;Color&gt; getBacker() {<a name="line.1458"></a>
-<span class="sourceLineNo">1459</span>                return this;<a name="line.1459"></a>
-<span class="sourceLineNo">1460</span>        }<a name="line.1460"></a>
-<span class="sourceLineNo">1461</span><a name="line.1461"></a>
-<span class="sourceLineNo">1462</span>        /**<a name="line.1462"></a>
-<span class="sourceLineNo">1463</span>         * @return The current color center. Never {@code null}.<a name="line.1463"></a>
-<span class="sourceLineNo">1464</span>         */<a name="line.1464"></a>
-<span class="sourceLineNo">1465</span>        public IColorCenter&lt;Color&gt; getColorCenter() {<a name="line.1465"></a>
-<span class="sourceLineNo">1466</span>                return scc;<a name="line.1466"></a>
-<span class="sourceLineNo">1467</span>        }<a name="line.1467"></a>
-<span class="sourceLineNo">1468</span><a name="line.1468"></a>
-<span class="sourceLineNo">1469</span>        /**<a name="line.1469"></a>
-<span class="sourceLineNo">1470</span>         * Use this method if you use your own {@link IColorCenter} and want this<a name="line.1470"></a>
-<span class="sourceLineNo">1471</span>         * panel not to allocate its own colors (or fill<a name="line.1471"></a>
-<span class="sourceLineNo">1472</span>         * {@link DefaultResources#getSCC()} but instead to the provided center.<a name="line.1472"></a>
-<span class="sourceLineNo">1473</span>         * <a name="line.1473"></a>
-<span class="sourceLineNo">1474</span>         * @param scc<a name="line.1474"></a>
-<span class="sourceLineNo">1475</span>         *            The color center to use. Should not be {@code null}.<a name="line.1475"></a>
-<span class="sourceLineNo">1476</span>         * @return {@code this}<a name="line.1476"></a>
-<span class="sourceLineNo">1477</span>         * @throws NullPointerException<a name="line.1477"></a>
-<span class="sourceLineNo">1478</span>         *             If {@code scc} is {@code null}.<a name="line.1478"></a>
-<span class="sourceLineNo">1479</span>         */<a name="line.1479"></a>
-<span class="sourceLineNo">1480</span>        @Override<a name="line.1480"></a>
-<span class="sourceLineNo">1481</span>        public SquidPanel setColorCenter(IColorCenter&lt;Color&gt; scc) {<a name="line.1481"></a>
-<span class="sourceLineNo">1482</span>                if (scc == null)<a name="line.1482"></a>
-<span class="sourceLineNo">1483</span>                        /* Better fail now than later */<a name="line.1483"></a>
-<span class="sourceLineNo">1484</span>                        throw new NullPointerException(<a name="line.1484"></a>
-<span class="sourceLineNo">1485</span>                                        "The color center should not be null in " + getClass().getSimpleName());<a name="line.1485"></a>
-<span class="sourceLineNo">1486</span>                this.scc = scc;<a name="line.1486"></a>
-<span class="sourceLineNo">1487</span>                return this;<a name="line.1487"></a>
-<span class="sourceLineNo">1488</span>        }<a name="line.1488"></a>
-<span class="sourceLineNo">1489</span><a name="line.1489"></a>
-<span class="sourceLineNo">1490</span>    public String getAt(int x, int y)<a name="line.1490"></a>
-<span class="sourceLineNo">1491</span>    {<a name="line.1491"></a>
-<span class="sourceLineNo">1492</span>        if(contents[x][y] == null)<a name="line.1492"></a>
-<span class="sourceLineNo">1493</span>            return "";<a name="line.1493"></a>
-<span class="sourceLineNo">1494</span>        return contents[x][y];<a name="line.1494"></a>
-<span class="sourceLineNo">1495</span>    }<a name="line.1495"></a>
-<span class="sourceLineNo">1496</span>    public Color getColorAt(int x, int y)<a name="line.1496"></a>
-<span class="sourceLineNo">1497</span>    {<a name="line.1497"></a>
-<span class="sourceLineNo">1498</span>        return colors[x][y];<a name="line.1498"></a>
+<span class="sourceLineNo">1452</span>    public OrderedSet&lt;AnimatedEntity&gt; getAnimatedEntities() {<a name="line.1452"></a>
+<span class="sourceLineNo">1453</span>        return animatedEntities;<a name="line.1453"></a>
+<span class="sourceLineNo">1454</span>    }<a name="line.1454"></a>
+<span class="sourceLineNo">1455</span><a name="line.1455"></a>
+<span class="sourceLineNo">1456</span>    public void removeAnimatedEntity(AnimatedEntity ae)<a name="line.1456"></a>
+<span class="sourceLineNo">1457</span>    {<a name="line.1457"></a>
+<span class="sourceLineNo">1458</span>        animatedEntities.remove(ae);<a name="line.1458"></a>
+<span class="sourceLineNo">1459</span>    }<a name="line.1459"></a>
+<span class="sourceLineNo">1460</span><a name="line.1460"></a>
+<span class="sourceLineNo">1461</span>        @Override<a name="line.1461"></a>
+<span class="sourceLineNo">1462</span>        public ISquidPanel&lt;Color&gt; getBacker() {<a name="line.1462"></a>
+<span class="sourceLineNo">1463</span>                return this;<a name="line.1463"></a>
+<span class="sourceLineNo">1464</span>        }<a name="line.1464"></a>
+<span class="sourceLineNo">1465</span><a name="line.1465"></a>
+<span class="sourceLineNo">1466</span>        /**<a name="line.1466"></a>
+<span class="sourceLineNo">1467</span>         * @return The current color center. Never {@code null}.<a name="line.1467"></a>
+<span class="sourceLineNo">1468</span>         */<a name="line.1468"></a>
+<span class="sourceLineNo">1469</span>        public IColorCenter&lt;Color&gt; getColorCenter() {<a name="line.1469"></a>
+<span class="sourceLineNo">1470</span>                return scc;<a name="line.1470"></a>
+<span class="sourceLineNo">1471</span>        }<a name="line.1471"></a>
+<span class="sourceLineNo">1472</span><a name="line.1472"></a>
+<span class="sourceLineNo">1473</span>        /**<a name="line.1473"></a>
+<span class="sourceLineNo">1474</span>         * Use this method if you use your own {@link IColorCenter} and want this<a name="line.1474"></a>
+<span class="sourceLineNo">1475</span>         * panel not to allocate its own colors (or fill<a name="line.1475"></a>
+<span class="sourceLineNo">1476</span>         * {@link DefaultResources#getSCC()} but instead to the provided center.<a name="line.1476"></a>
+<span class="sourceLineNo">1477</span>         * <a name="line.1477"></a>
+<span class="sourceLineNo">1478</span>         * @param scc<a name="line.1478"></a>
+<span class="sourceLineNo">1479</span>         *            The color center to use. Should not be {@code null}.<a name="line.1479"></a>
+<span class="sourceLineNo">1480</span>         * @return {@code this}<a name="line.1480"></a>
+<span class="sourceLineNo">1481</span>         * @throws NullPointerException<a name="line.1481"></a>
+<span class="sourceLineNo">1482</span>         *             If {@code scc} is {@code null}.<a name="line.1482"></a>
+<span class="sourceLineNo">1483</span>         */<a name="line.1483"></a>
+<span class="sourceLineNo">1484</span>        @Override<a name="line.1484"></a>
+<span class="sourceLineNo">1485</span>        public SquidPanel setColorCenter(IColorCenter&lt;Color&gt; scc) {<a name="line.1485"></a>
+<span class="sourceLineNo">1486</span>                if (scc == null)<a name="line.1486"></a>
+<span class="sourceLineNo">1487</span>                        /* Better fail now than later */<a name="line.1487"></a>
+<span class="sourceLineNo">1488</span>                        throw new NullPointerException(<a name="line.1488"></a>
+<span class="sourceLineNo">1489</span>                                        "The color center should not be null in " + getClass().getSimpleName());<a name="line.1489"></a>
+<span class="sourceLineNo">1490</span>                this.scc = scc;<a name="line.1490"></a>
+<span class="sourceLineNo">1491</span>                return this;<a name="line.1491"></a>
+<span class="sourceLineNo">1492</span>        }<a name="line.1492"></a>
+<span class="sourceLineNo">1493</span><a name="line.1493"></a>
+<span class="sourceLineNo">1494</span>    public String getAt(int x, int y)<a name="line.1494"></a>
+<span class="sourceLineNo">1495</span>    {<a name="line.1495"></a>
+<span class="sourceLineNo">1496</span>        if(contents[x][y] == null)<a name="line.1496"></a>
+<span class="sourceLineNo">1497</span>            return "";<a name="line.1497"></a>
+<span class="sourceLineNo">1498</span>        return contents[x][y];<a name="line.1498"></a>
 <span class="sourceLineNo">1499</span>    }<a name="line.1499"></a>
-<span class="sourceLineNo">1500</span><a name="line.1500"></a>
-<span class="sourceLineNo">1501</span>    public Color getLightingColor() {<a name="line.1501"></a>
-<span class="sourceLineNo">1502</span>        return lightingColor;<a name="line.1502"></a>
+<span class="sourceLineNo">1500</span>    public Color getColorAt(int x, int y)<a name="line.1500"></a>
+<span class="sourceLineNo">1501</span>    {<a name="line.1501"></a>
+<span class="sourceLineNo">1502</span>        return colors[x][y];<a name="line.1502"></a>
 <span class="sourceLineNo">1503</span>    }<a name="line.1503"></a>
 <span class="sourceLineNo">1504</span><a name="line.1504"></a>
-<span class="sourceLineNo">1505</span>    public void setLightingColor(Color lightingColor) {<a name="line.1505"></a>
-<span class="sourceLineNo">1506</span>        this.lightingColor = lightingColor;<a name="line.1506"></a>
+<span class="sourceLineNo">1505</span>    public Color getLightingColor() {<a name="line.1505"></a>
+<span class="sourceLineNo">1506</span>        return lightingColor;<a name="line.1506"></a>
 <span class="sourceLineNo">1507</span>    }<a name="line.1507"></a>
 <span class="sourceLineNo">1508</span><a name="line.1508"></a>
-<span class="sourceLineNo">1509</span>    protected float clampDuration(float duration) {<a name="line.1509"></a>
-<span class="sourceLineNo">1510</span>        if (duration &lt; 0.02f)<a name="line.1510"></a>
-<span class="sourceLineNo">1511</span>                return 0.02f;<a name="line.1511"></a>
-<span class="sourceLineNo">1512</span>        else<a name="line.1512"></a>
-<span class="sourceLineNo">1513</span>                return duration;<a name="line.1513"></a>
-<span class="sourceLineNo">1514</span>    }<a name="line.1514"></a>
-<span class="sourceLineNo">1515</span><a name="line.1515"></a>
-<span class="sourceLineNo">1516</span>    /**<a name="line.1516"></a>
-<span class="sourceLineNo">1517</span>     * The X offset that the whole panel's internals will be rendered at.<a name="line.1517"></a>
-<span class="sourceLineNo">1518</span>     * @return the current offset in cells along the x axis<a name="line.1518"></a>
-<span class="sourceLineNo">1519</span>     */<a name="line.1519"></a>
-<span class="sourceLineNo">1520</span>    public int getGridOffsetX() {<a name="line.1520"></a>
-<span class="sourceLineNo">1521</span>        return gridOffsetX;<a name="line.1521"></a>
-<span class="sourceLineNo">1522</span>    }<a name="line.1522"></a>
-<span class="sourceLineNo">1523</span><a name="line.1523"></a>
-<span class="sourceLineNo">1524</span>    /**<a name="line.1524"></a>
-<span class="sourceLineNo">1525</span>     * Sets the X offset that the whole panel's internals will be rendered at.<a name="line.1525"></a>
-<span class="sourceLineNo">1526</span>     * @param gridOffsetX the requested offset in cells; should be less than gridWidth<a name="line.1526"></a>
-<span class="sourceLineNo">1527</span>     */<a name="line.1527"></a>
-<span class="sourceLineNo">1528</span>    public void setGridOffsetX(int gridOffsetX) {<a name="line.1528"></a>
-<span class="sourceLineNo">1529</span>        if(gridOffsetX &lt; gridWidth)<a name="line.1529"></a>
-<span class="sourceLineNo">1530</span>            this.gridOffsetX = gridOffsetX;<a name="line.1530"></a>
-<span class="sourceLineNo">1531</span>    }<a name="line.1531"></a>
-<span class="sourceLineNo">1532</span><a name="line.1532"></a>
-<span class="sourceLineNo">1533</span>    /**<a name="line.1533"></a>
-<span class="sourceLineNo">1534</span>     * The Y offset that the whole panel's internals will be rendered at.<a name="line.1534"></a>
-<span class="sourceLineNo">1535</span>     * @return the current offset in cells along the y axis<a name="line.1535"></a>
-<span class="sourceLineNo">1536</span>     */<a name="line.1536"></a>
-<span class="sourceLineNo">1537</span>    public int getGridOffsetY() {<a name="line.1537"></a>
-<span class="sourceLineNo">1538</span>        return gridOffsetY;<a name="line.1538"></a>
-<span class="sourceLineNo">1539</span>    }<a name="line.1539"></a>
-<span class="sourceLineNo">1540</span><a name="line.1540"></a>
-<span class="sourceLineNo">1541</span>    /**<a name="line.1541"></a>
-<span class="sourceLineNo">1542</span>     * Sets the Y offset that the whole panel's internals will be rendered at.<a name="line.1542"></a>
-<span class="sourceLineNo">1543</span>     * @param gridOffsetY the requested offset in cells; should be less than gridHeight<a name="line.1543"></a>
-<span class="sourceLineNo">1544</span>     */<a name="line.1544"></a>
-<span class="sourceLineNo">1545</span>    public void setGridOffsetY(int gridOffsetY) {<a name="line.1545"></a>
-<span class="sourceLineNo">1546</span>        if(gridOffsetY &lt; gridHeight)<a name="line.1546"></a>
-<span class="sourceLineNo">1547</span>            this.gridOffsetY = gridOffsetY;<a name="line.1547"></a>
-<span class="sourceLineNo">1548</span><a name="line.1548"></a>
-<span class="sourceLineNo">1549</span>    }<a name="line.1549"></a>
-<span class="sourceLineNo">1550</span><a name="line.1550"></a>
-<span class="sourceLineNo">1551</span>    /**<a name="line.1551"></a>
-<span class="sourceLineNo">1552</span>     * The number of cells along the x-axis that will be rendered of this panel.<a name="line.1552"></a>
-<span class="sourceLineNo">1553</span>     * @return the number of cells along the x-axis that will be rendered of this panel<a name="line.1553"></a>
-<span class="sourceLineNo">1554</span>     */<a name="line.1554"></a>
-<span class="sourceLineNo">1555</span>    public int getGridWidth() {<a name="line.1555"></a>
-<span class="sourceLineNo">1556</span>        return gridWidth;<a name="line.1556"></a>
-<span class="sourceLineNo">1557</span>    }<a name="line.1557"></a>
-<span class="sourceLineNo">1558</span><a name="line.1558"></a>
-<span class="sourceLineNo">1559</span>    /**<a name="line.1559"></a>
-<span class="sourceLineNo">1560</span>     * Sets the number of cells along the x-axis that will be rendered of this panel to gridWidth.<a name="line.1560"></a>
-<span class="sourceLineNo">1561</span>     * @param gridWidth the requested width in cells<a name="line.1561"></a>
-<span class="sourceLineNo">1562</span>     */<a name="line.1562"></a>
-<span class="sourceLineNo">1563</span>    public void setGridWidth(int gridWidth) {<a name="line.1563"></a>
-<span class="sourceLineNo">1564</span>        this.gridWidth = gridWidth;<a name="line.1564"></a>
-<span class="sourceLineNo">1565</span>    }<a name="line.1565"></a>
-<span class="sourceLineNo">1566</span><a name="line.1566"></a>
-<span class="sourceLineNo">1567</span>    /**<a name="line.1567"></a>
-<span class="sourceLineNo">1568</span>     * The number of cells along the y-axis that will be rendered of this panel<a name="line.1568"></a>
-<span class="sourceLineNo">1569</span>     * @return the number of cells along the y-axis that will be rendered of this panel<a name="line.1569"></a>
-<span class="sourceLineNo">1570</span>     */<a name="line.1570"></a>
-<span class="sourceLineNo">1571</span>    public int getGridHeight() {<a name="line.1571"></a>
-<span class="sourceLineNo">1572</span>        return gridHeight;<a name="line.1572"></a>
-<span class="sourceLineNo">1573</span>    }<a name="line.1573"></a>
-<span class="sourceLineNo">1574</span><a name="line.1574"></a>
-<span class="sourceLineNo">1575</span>    /**<a name="line.1575"></a>
-<span class="sourceLineNo">1576</span>     * Sets the number of cells along the y-axis that will be rendered of this panel to gridHeight.<a name="line.1576"></a>
-<span class="sourceLineNo">1577</span>     * @param gridHeight the requested height in cells<a name="line.1577"></a>
-<span class="sourceLineNo">1578</span>     */<a name="line.1578"></a>
-<span class="sourceLineNo">1579</span>    public void setGridHeight(int gridHeight) {<a name="line.1579"></a>
-<span class="sourceLineNo">1580</span>        this.gridHeight = gridHeight;<a name="line.1580"></a>
-<span class="sourceLineNo">1581</span>    }<a name="line.1581"></a>
-<span class="sourceLineNo">1582</span><a name="line.1582"></a>
-<span class="sourceLineNo">1583</span>    /**<a name="line.1583"></a>
-<span class="sourceLineNo">1584</span>     * Sets the position of the actor's bottom left corner.<a name="line.1584"></a>
-<span class="sourceLineNo">1585</span>     *<a name="line.1585"></a>
-<span class="sourceLineNo">1586</span>     * @param x<a name="line.1586"></a>
-<span class="sourceLineNo">1587</span>     * @param y<a name="line.1587"></a>
-<span class="sourceLineNo">1588</span>     */<a name="line.1588"></a>
-<span class="sourceLineNo">1589</span>    @Override<a name="line.1589"></a>
-<span class="sourceLineNo">1590</span>    public void setPosition(float x, float y) {<a name="line.1590"></a>
-<span class="sourceLineNo">1591</span>        super.setPosition(x, y);<a name="line.1591"></a>
-<span class="sourceLineNo">1592</span>        setBounds(x, y, getWidth(), getHeight());<a name="line.1592"></a>
-<span class="sourceLineNo">1593</span>    }<a name="line.1593"></a>
-<span class="sourceLineNo">1594</span><a name="line.1594"></a>
-<span class="sourceLineNo">1595</span>    public float getxOffset() {<a name="line.1595"></a>
-<span class="sourceLineNo">1596</span>        return xOffset;<a name="line.1596"></a>
+<span class="sourceLineNo">1509</span>    public void setLightingColor(Color lightingColor) {<a name="line.1509"></a>
+<span class="sourceLineNo">1510</span>        this.lightingColor = lightingColor;<a name="line.1510"></a>
+<span class="sourceLineNo">1511</span>    }<a name="line.1511"></a>
+<span class="sourceLineNo">1512</span><a name="line.1512"></a>
+<span class="sourceLineNo">1513</span>    protected float clampDuration(float duration) {<a name="line.1513"></a>
+<span class="sourceLineNo">1514</span>        if (duration &lt; 0.02f)<a name="line.1514"></a>
+<span class="sourceLineNo">1515</span>                return 0.02f;<a name="line.1515"></a>
+<span class="sourceLineNo">1516</span>        else<a name="line.1516"></a>
+<span class="sourceLineNo">1517</span>                return duration;<a name="line.1517"></a>
+<span class="sourceLineNo">1518</span>    }<a name="line.1518"></a>
+<span class="sourceLineNo">1519</span><a name="line.1519"></a>
+<span class="sourceLineNo">1520</span>    /**<a name="line.1520"></a>
+<span class="sourceLineNo">1521</span>     * The X offset that the whole panel's internals will be rendered at.<a name="line.1521"></a>
+<span class="sourceLineNo">1522</span>     * @return the current offset in cells along the x axis<a name="line.1522"></a>
+<span class="sourceLineNo">1523</span>     */<a name="line.1523"></a>
+<span class="sourceLineNo">1524</span>    public int getGridOffsetX() {<a name="line.1524"></a>
+<span class="sourceLineNo">1525</span>        return gridOffsetX;<a name="line.1525"></a>
+<span class="sourceLineNo">1526</span>    }<a name="line.1526"></a>
+<span class="sourceLineNo">1527</span><a name="line.1527"></a>
+<span class="sourceLineNo">1528</span>    /**<a name="line.1528"></a>
+<span class="sourceLineNo">1529</span>     * Sets the X offset that the whole panel's internals will be rendered at.<a name="line.1529"></a>
+<span class="sourceLineNo">1530</span>     * @param gridOffsetX the requested offset in cells; should be less than gridWidth<a name="line.1530"></a>
+<span class="sourceLineNo">1531</span>     */<a name="line.1531"></a>
+<span class="sourceLineNo">1532</span>    public void setGridOffsetX(int gridOffsetX) {<a name="line.1532"></a>
+<span class="sourceLineNo">1533</span>        if(gridOffsetX &lt; gridWidth)<a name="line.1533"></a>
+<span class="sourceLineNo">1534</span>            this.gridOffsetX = gridOffsetX;<a name="line.1534"></a>
+<span class="sourceLineNo">1535</span>    }<a name="line.1535"></a>
+<span class="sourceLineNo">1536</span><a name="line.1536"></a>
+<span class="sourceLineNo">1537</span>    /**<a name="line.1537"></a>
+<span class="sourceLineNo">1538</span>     * The Y offset that the whole panel's internals will be rendered at.<a name="line.1538"></a>
+<span class="sourceLineNo">1539</span>     * @return the current offset in cells along the y axis<a name="line.1539"></a>
+<span class="sourceLineNo">1540</span>     */<a name="line.1540"></a>
+<span class="sourceLineNo">1541</span>    public int getGridOffsetY() {<a name="line.1541"></a>
+<span class="sourceLineNo">1542</span>        return gridOffsetY;<a name="line.1542"></a>
+<span class="sourceLineNo">1543</span>    }<a name="line.1543"></a>
+<span class="sourceLineNo">1544</span><a name="line.1544"></a>
+<span class="sourceLineNo">1545</span>    /**<a name="line.1545"></a>
+<span class="sourceLineNo">1546</span>     * Sets the Y offset that the whole panel's internals will be rendered at.<a name="line.1546"></a>
+<span class="sourceLineNo">1547</span>     * @param gridOffsetY the requested offset in cells; should be less than gridHeight<a name="line.1547"></a>
+<span class="sourceLineNo">1548</span>     */<a name="line.1548"></a>
+<span class="sourceLineNo">1549</span>    public void setGridOffsetY(int gridOffsetY) {<a name="line.1549"></a>
+<span class="sourceLineNo">1550</span>        if(gridOffsetY &lt; gridHeight)<a name="line.1550"></a>
+<span class="sourceLineNo">1551</span>            this.gridOffsetY = gridOffsetY;<a name="line.1551"></a>
+<span class="sourceLineNo">1552</span><a name="line.1552"></a>
+<span class="sourceLineNo">1553</span>    }<a name="line.1553"></a>
+<span class="sourceLineNo">1554</span><a name="line.1554"></a>
+<span class="sourceLineNo">1555</span>    /**<a name="line.1555"></a>
+<span class="sourceLineNo">1556</span>     * The number of cells along the x-axis that will be rendered of this panel.<a name="line.1556"></a>
+<span class="sourceLineNo">1557</span>     * @return the number of cells along the x-axis that will be rendered of this panel<a name="line.1557"></a>
+<span class="sourceLineNo">1558</span>     */<a name="line.1558"></a>
+<span class="sourceLineNo">1559</span>    public int getGridWidth() {<a name="line.1559"></a>
+<span class="sourceLineNo">1560</span>        return gridWidth;<a name="line.1560"></a>
+<span class="sourceLineNo">1561</span>    }<a name="line.1561"></a>
+<span class="sourceLineNo">1562</span><a name="line.1562"></a>
+<span class="sourceLineNo">1563</span>    /**<a name="line.1563"></a>
+<span class="sourceLineNo">1564</span>     * Sets the number of cells along the x-axis that will be rendered of this panel to gridWidth.<a name="line.1564"></a>
+<span class="sourceLineNo">1565</span>     * @param gridWidth the requested width in cells<a name="line.1565"></a>
+<span class="sourceLineNo">1566</span>     */<a name="line.1566"></a>
+<span class="sourceLineNo">1567</span>    public void setGridWidth(int gridWidth) {<a name="line.1567"></a>
+<span class="sourceLineNo">1568</span>        this.gridWidth = gridWidth;<a name="line.1568"></a>
+<span class="sourceLineNo">1569</span>    }<a name="line.1569"></a>
+<span class="sourceLineNo">1570</span><a name="line.1570"></a>
+<span class="sourceLineNo">1571</span>    /**<a name="line.1571"></a>
+<span class="sourceLineNo">1572</span>     * The number of cells along the y-axis that will be rendered of this panel<a name="line.1572"></a>
+<span class="sourceLineNo">1573</span>     * @return the number of cells along the y-axis that will be rendered of this panel<a name="line.1573"></a>
+<span class="sourceLineNo">1574</span>     */<a name="line.1574"></a>
+<span class="sourceLineNo">1575</span>    public int getGridHeight() {<a name="line.1575"></a>
+<span class="sourceLineNo">1576</span>        return gridHeight;<a name="line.1576"></a>
+<span class="sourceLineNo">1577</span>    }<a name="line.1577"></a>
+<span class="sourceLineNo">1578</span><a name="line.1578"></a>
+<span class="sourceLineNo">1579</span>    /**<a name="line.1579"></a>
+<span class="sourceLineNo">1580</span>     * Sets the number of cells along the y-axis that will be rendered of this panel to gridHeight.<a name="line.1580"></a>
+<span class="sourceLineNo">1581</span>     * @param gridHeight the requested height in cells<a name="line.1581"></a>
+<span class="sourceLineNo">1582</span>     */<a name="line.1582"></a>
+<span class="sourceLineNo">1583</span>    public void setGridHeight(int gridHeight) {<a name="line.1583"></a>
+<span class="sourceLineNo">1584</span>        this.gridHeight = gridHeight;<a name="line.1584"></a>
+<span class="sourceLineNo">1585</span>    }<a name="line.1585"></a>
+<span class="sourceLineNo">1586</span><a name="line.1586"></a>
+<span class="sourceLineNo">1587</span>    /**<a name="line.1587"></a>
+<span class="sourceLineNo">1588</span>     * Sets the position of the actor's bottom left corner.<a name="line.1588"></a>
+<span class="sourceLineNo">1589</span>     *<a name="line.1589"></a>
+<span class="sourceLineNo">1590</span>     * @param x<a name="line.1590"></a>
+<span class="sourceLineNo">1591</span>     * @param y<a name="line.1591"></a>
+<span class="sourceLineNo">1592</span>     */<a name="line.1592"></a>
+<span class="sourceLineNo">1593</span>    @Override<a name="line.1593"></a>
+<span class="sourceLineNo">1594</span>    public void setPosition(float x, float y) {<a name="line.1594"></a>
+<span class="sourceLineNo">1595</span>        super.setPosition(x, y);<a name="line.1595"></a>
+<span class="sourceLineNo">1596</span>        setBounds(x, y, getWidth(), getHeight());<a name="line.1596"></a>
 <span class="sourceLineNo">1597</span>    }<a name="line.1597"></a>
 <span class="sourceLineNo">1598</span><a name="line.1598"></a>
-<span class="sourceLineNo">1599</span>    public void setOffsetX(float xOffset) {<a name="line.1599"></a>
-<span class="sourceLineNo">1600</span>        this.xOffset = xOffset;<a name="line.1600"></a>
+<span class="sourceLineNo">1599</span>    public float getxOffset() {<a name="line.1599"></a>
+<span class="sourceLineNo">1600</span>        return xOffset;<a name="line.1600"></a>
 <span class="sourceLineNo">1601</span>    }<a name="line.1601"></a>
 <span class="sourceLineNo">1602</span><a name="line.1602"></a>
-<span class="sourceLineNo">1603</span>    public float getyOffset() {<a name="line.1603"></a>
-<span class="sourceLineNo">1604</span>        return yOffset;<a name="line.1604"></a>
+<span class="sourceLineNo">1603</span>    public void setOffsetX(float xOffset) {<a name="line.1603"></a>
+<span class="sourceLineNo">1604</span>        this.xOffset = xOffset;<a name="line.1604"></a>
 <span class="sourceLineNo">1605</span>    }<a name="line.1605"></a>
 <span class="sourceLineNo">1606</span><a name="line.1606"></a>
-<span class="sourceLineNo">1607</span>    public void setOffsetY(float yOffset) {<a name="line.1607"></a>
-<span class="sourceLineNo">1608</span>        this.yOffset = yOffset;<a name="line.1608"></a>
+<span class="sourceLineNo">1607</span>    public float getyOffset() {<a name="line.1607"></a>
+<span class="sourceLineNo">1608</span>        return yOffset;<a name="line.1608"></a>
 <span class="sourceLineNo">1609</span>    }<a name="line.1609"></a>
 <span class="sourceLineNo">1610</span><a name="line.1610"></a>
-<span class="sourceLineNo">1611</span>    public void setOffsets(float x, float y) {<a name="line.1611"></a>
-<span class="sourceLineNo">1612</span>        xOffset = x;<a name="line.1612"></a>
-<span class="sourceLineNo">1613</span>        yOffset = y;<a name="line.1613"></a>
-<span class="sourceLineNo">1614</span>    }<a name="line.1614"></a>
-<span class="sourceLineNo">1615</span><a name="line.1615"></a>
-<span class="sourceLineNo">1616</span>    /**<a name="line.1616"></a>
-<span class="sourceLineNo">1617</span>     * Gets the status of a boolean flag used for rendering thin maps; it will almost always be false unless it<a name="line.1617"></a>
-<span class="sourceLineNo">1618</span>     * was set to true with {@link #setOnlyRenderEven(boolean)}.<a name="line.1618"></a>
-<span class="sourceLineNo">1619</span>     * &lt;br&gt;<a name="line.1619"></a>
-<span class="sourceLineNo">1620</span>     * This is meant for thin-wall maps, where only cells where x and y are both even numbers have backgrounds<a name="line.1620"></a>
-<span class="sourceLineNo">1621</span>     * displayed. Should be false when using this SquidPanel for anything that isn't specifically a background<a name="line.1621"></a>
-<span class="sourceLineNo">1622</span>     * of a map that uses the thin-wall method from ThinDungeonGenerator or something similar. Even the<a name="line.1622"></a>
-<span class="sourceLineNo">1623</span>     * foregrounds of thin-wall maps should have this false, since ThinDungeonGenerator (in conjunction with<a name="line.1623"></a>
-<span class="sourceLineNo">1624</span>     * DungeonUtility's hashesToLines() method) makes thin lines for walls that should be displayed as between<a name="line.1624"></a>
-<span class="sourceLineNo">1625</span>     * the boundaries of other cells. The overlap behavior needed for some "thin enough" cells to be displayed<a name="line.1625"></a>
-<span class="sourceLineNo">1626</span>     * between the cells can be accomplished by using {@link #setTextSize(int, int)} to double the<a name="line.1626"></a>
-<span class="sourceLineNo">1627</span>     * previously-given cell width and height.<a name="line.1627"></a>
-<span class="sourceLineNo">1628</span>     *<a name="line.1628"></a>
-<span class="sourceLineNo">1629</span>     * @return the current status of the onlyRenderEven flag, which defaults to false<a name="line.1629"></a>
-<span class="sourceLineNo">1630</span>     */<a name="line.1630"></a>
-<span class="sourceLineNo">1631</span>    public boolean getOnlyRenderEven() {<a name="line.1631"></a>
-<span class="sourceLineNo">1632</span>        return onlyRenderEven;<a name="line.1632"></a>
-<span class="sourceLineNo">1633</span>    }<a name="line.1633"></a>
-<span class="sourceLineNo">1634</span>    /**<a name="line.1634"></a>
-<span class="sourceLineNo">1635</span>     * Sets the status of a boolean flag used for rendering thin maps; it should almost always be the default,<a name="line.1635"></a>
-<span class="sourceLineNo">1636</span>     * which is false, unless you are using a thin-wall map, and then this should be true only if this<a name="line.1636"></a>
-<span class="sourceLineNo">1637</span>     * SquidPanel is used for the background layer.<a name="line.1637"></a>
-<span class="sourceLineNo">1638</span>     * &lt;br&gt;<a name="line.1638"></a>
-<span class="sourceLineNo">1639</span>     * This is meant for thin-wall maps, where only cells where x and y are both even numbers have backgrounds<a name="line.1639"></a>
-<span class="sourceLineNo">1640</span>     * displayed. Should be false when using this SquidPanel for anything that isn't specifically a background<a name="line.1640"></a>
-<span class="sourceLineNo">1641</span>     * of a map that uses the thin-wall method from ThinDungeonGenerator or something similar. Even the<a name="line.1641"></a>
-<span class="sourceLineNo">1642</span>     * foregrounds of thin-wall maps should have this false, since ThinDungeonGenerator (in conjunction with<a name="line.1642"></a>
-<span class="sourceLineNo">1643</span>     * DungeonUtility's hashesToLines() method) makes thin lines for walls that should be displayed as between<a name="line.1643"></a>
-<span class="sourceLineNo">1644</span>     * the boundaries of other cells. The overlap behavior needed for some "thin enough" cells to be displayed<a name="line.1644"></a>
-<span class="sourceLineNo">1645</span>     * between the cells can be accomplished by using {@link #setTextSize(int, int)} to double the<a name="line.1645"></a>
-<span class="sourceLineNo">1646</span>     * previously-given cell width and height.<a name="line.1646"></a>
-<span class="sourceLineNo">1647</span>     *<a name="line.1647"></a>
-<span class="sourceLineNo">1648</span>     * @param onlyRenderEven generally, should only be true if this SquidPanel is a background of a thin map<a name="line.1648"></a>
-<span class="sourceLineNo">1649</span>     */<a name="line.1649"></a>
-<span class="sourceLineNo">1650</span><a name="line.1650"></a>
-<span class="sourceLineNo">1651</span>    public void setOnlyRenderEven(boolean onlyRenderEven) {<a name="line.1651"></a>
-<span class="sourceLineNo">1652</span>        this.onlyRenderEven = onlyRenderEven;<a name="line.1652"></a>
-<span class="sourceLineNo">1653</span>    }<a name="line.1653"></a>
-<span class="sourceLineNo">1654</span>}<a name="line.1654"></a>
+<span class="sourceLineNo">1611</span>    public void setOffsetY(float yOffset) {<a name="line.1611"></a>
+<span class="sourceLineNo">1612</span>        this.yOffset = yOffset;<a name="line.1612"></a>
+<span class="sourceLineNo">1613</span>    }<a name="line.1613"></a>
+<span class="sourceLineNo">1614</span><a name="line.1614"></a>
+<span class="sourceLineNo">1615</span>    public void setOffsets(float x, float y) {<a name="line.1615"></a>
+<span class="sourceLineNo">1616</span>        xOffset = x;<a name="line.1616"></a>
+<span class="sourceLineNo">1617</span>        yOffset = y;<a name="line.1617"></a>
+<span class="sourceLineNo">1618</span>    }<a name="line.1618"></a>
+<span class="sourceLineNo">1619</span><a name="line.1619"></a>
+<span class="sourceLineNo">1620</span>    /**<a name="line.1620"></a>
+<span class="sourceLineNo">1621</span>     * Gets the status of a boolean flag used for rendering thin maps; it will almost always be false unless it<a name="line.1621"></a>
+<span class="sourceLineNo">1622</span>     * was set to true with {@link #setOnlyRenderEven(boolean)}.<a name="line.1622"></a>
+<span class="sourceLineNo">1623</span>     * &lt;br&gt;<a name="line.1623"></a>
+<span class="sourceLineNo">1624</span>     * This is meant for thin-wall maps, where only cells where x and y are both even numbers have backgrounds<a name="line.1624"></a>
+<span class="sourceLineNo">1625</span>     * displayed. Should be false when using this SquidPanel for anything that isn't specifically a background<a name="line.1625"></a>
+<span class="sourceLineNo">1626</span>     * of a map that uses the thin-wall method from ThinDungeonGenerator or something similar. Even the<a name="line.1626"></a>
+<span class="sourceLineNo">1627</span>     * foregrounds of thin-wall maps should have this false, since ThinDungeonGenerator (in conjunction with<a name="line.1627"></a>
+<span class="sourceLineNo">1628</span>     * DungeonUtility's hashesToLines() method) makes thin lines for walls that should be displayed as between<a name="line.1628"></a>
+<span class="sourceLineNo">1629</span>     * the boundaries of other cells. The overlap behavior needed for some "thin enough" cells to be displayed<a name="line.1629"></a>
+<span class="sourceLineNo">1630</span>     * between the cells can be accomplished by using {@link #setTextSize(int, int)} to double the<a name="line.1630"></a>
+<span class="sourceLineNo">1631</span>     * previously-given cell width and height.<a name="line.1631"></a>
+<span class="sourceLineNo">1632</span>     *<a name="line.1632"></a>
+<span class="sourceLineNo">1633</span>     * @return the current status of the onlyRenderEven flag, which defaults to false<a name="line.1633"></a>
+<span class="sourceLineNo">1634</span>     */<a name="line.1634"></a>
+<span class="sourceLineNo">1635</span>    public boolean getOnlyRenderEven() {<a name="line.1635"></a>
+<span class="sourceLineNo">1636</span>        return onlyRenderEven;<a name="line.1636"></a>
+<span class="sourceLineNo">1637</span>    }<a name="line.1637"></a>
+<span class="sourceLineNo">1638</span>    /**<a name="line.1638"></a>
+<span class="sourceLineNo">1639</span>     * Sets the status of a boolean flag used for rendering thin maps; it should almost always be the default,<a name="line.1639"></a>
+<span class="sourceLineNo">1640</span>     * which is false, unless you are using a thin-wall map, and then this should be true only if this<a name="line.1640"></a>
+<span class="sourceLineNo">1641</span>     * SquidPanel is used for the background layer.<a name="line.1641"></a>
+<span class="sourceLineNo">1642</span>     * &lt;br&gt;<a name="line.1642"></a>
+<span class="sourceLineNo">1643</span>     * This is meant for thin-wall maps, where only cells where x and y are both even numbers have backgrounds<a name="line.1643"></a>
+<span class="sourceLineNo">1644</span>     * displayed. Should be false when using this SquidPanel for anything that isn't specifically a background<a name="line.1644"></a>
+<span class="sourceLineNo">1645</span>     * of a map that uses the thin-wall method from ThinDungeonGenerator or something similar. Even the<a name="line.1645"></a>
+<span class="sourceLineNo">1646</span>     * foregrounds of thin-wall maps should have this false, since ThinDungeonGenerator (in conjunction with<a name="line.1646"></a>
+<span class="sourceLineNo">1647</span>     * DungeonUtility's hashesToLines() method) makes thin lines for walls that should be displayed as between<a name="line.1647"></a>
+<span class="sourceLineNo">1648</span>     * the boundaries of other cells. The overlap behavior needed for some "thin enough" cells to be displayed<a name="line.1648"></a>
+<span class="sourceLineNo">1649</span>     * between the cells can be accomplished by using {@link #setTextSize(int, int)} to double the<a name="line.1649"></a>
+<span class="sourceLineNo">1650</span>     * previously-given cell width and height.<a name="line.1650"></a>
+<span class="sourceLineNo">1651</span>     *<a name="line.1651"></a>
+<span class="sourceLineNo">1652</span>     * @param onlyRenderEven generally, should only be true if this SquidPanel is a background of a thin map<a name="line.1652"></a>
+<span class="sourceLineNo">1653</span>     */<a name="line.1653"></a>
+<span class="sourceLineNo">1654</span><a name="line.1654"></a>
+<span class="sourceLineNo">1655</span>    public void setOnlyRenderEven(boolean onlyRenderEven) {<a name="line.1655"></a>
+<span class="sourceLineNo">1656</span>        this.onlyRenderEven = onlyRenderEven;<a name="line.1656"></a>
+<span class="sourceLineNo">1657</span>    }<a name="line.1657"></a>
+<span class="sourceLineNo">1658</span>}<a name="line.1658"></a>
 
 
 

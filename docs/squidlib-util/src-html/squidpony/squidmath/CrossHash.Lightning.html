@@ -304,7 +304,7 @@
 <span class="sourceLineNo">296</span>     * @param end   the end of the section to hash (exclusive)<a name="line.296"></a>
 <span class="sourceLineNo">297</span>     * @return<a name="line.297"></a>
 <span class="sourceLineNo">298</span>     */<a name="line.298"></a>
-<span class="sourceLineNo">299</span>    public static int hash(final char[] data, int start, int end) {<a name="line.299"></a>
+<span class="sourceLineNo">299</span>    public static int hash(final char[] data, int start,  int end) {<a name="line.299"></a>
 <span class="sourceLineNo">300</span>        if (data == null)<a name="line.300"></a>
 <span class="sourceLineNo">301</span>            return 0;<a name="line.301"></a>
 <span class="sourceLineNo">302</span>        int h = -2128831035, len = data.length;<a name="line.302"></a>
@@ -908,7 +908,7 @@
 <span class="sourceLineNo">900</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z &gt;&gt;&gt; 58));<a name="line.900"></a>
 <span class="sourceLineNo">901</span>        }<a name="line.901"></a>
 <span class="sourceLineNo">902</span><a name="line.902"></a>
-<span class="sourceLineNo">903</span>        public static long hash64(final char[] data, int start, int end) {<a name="line.903"></a>
+<span class="sourceLineNo">903</span>        public static long hash64(final char[] data, final int start, final int end) {<a name="line.903"></a>
 <span class="sourceLineNo">904</span>            if (data == null || start &gt;= end)<a name="line.904"></a>
 <span class="sourceLineNo">905</span>                return 0;<a name="line.905"></a>
 <span class="sourceLineNo">906</span>            long z = 0x632BE59BD9B4E019L, result = 1L;<a name="line.906"></a>
@@ -1060,7 +1060,7 @@
 <span class="sourceLineNo">1052</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1052"></a>
 <span class="sourceLineNo">1053</span>        }<a name="line.1053"></a>
 <span class="sourceLineNo">1054</span><a name="line.1054"></a>
-<span class="sourceLineNo">1055</span>        public static int hash(final char[] data, int start, int end) {<a name="line.1055"></a>
+<span class="sourceLineNo">1055</span>        public static int hash(final char[] data, final int start, final int end) {<a name="line.1055"></a>
 <span class="sourceLineNo">1056</span>            if (data == null || start &gt;= end)<a name="line.1056"></a>
 <span class="sourceLineNo">1057</span>                return 0;<a name="line.1057"></a>
 <span class="sourceLineNo">1058</span><a name="line.1058"></a>
@@ -1262,7 +1262,7 @@
 <span class="sourceLineNo">1254</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1254"></a>
 <span class="sourceLineNo">1255</span>        }<a name="line.1255"></a>
 <span class="sourceLineNo">1256</span><a name="line.1256"></a>
-<span class="sourceLineNo">1257</span>        public long hash64(final char[] data, int start, int end) {<a name="line.1257"></a>
+<span class="sourceLineNo">1257</span>        public long hash64(final char[] data, final int start, final int end) {<a name="line.1257"></a>
 <span class="sourceLineNo">1258</span>            if (data == null || start &gt;= end)<a name="line.1258"></a>
 <span class="sourceLineNo">1259</span>                return 0;<a name="line.1259"></a>
 <span class="sourceLineNo">1260</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1260"></a>
@@ -1415,7 +1415,7 @@
 <span class="sourceLineNo">1407</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1407"></a>
 <span class="sourceLineNo">1408</span>        }<a name="line.1408"></a>
 <span class="sourceLineNo">1409</span><a name="line.1409"></a>
-<span class="sourceLineNo">1410</span>        public int hash(final char[] data, int start, int end) {<a name="line.1410"></a>
+<span class="sourceLineNo">1410</span>        public int hash(final char[] data, final int start, final int end) {<a name="line.1410"></a>
 <span class="sourceLineNo">1411</span>            if (data == null || start &gt;= end)<a name="line.1411"></a>
 <span class="sourceLineNo">1412</span>                return 0;<a name="line.1412"></a>
 <span class="sourceLineNo">1413</span><a name="line.1413"></a>
@@ -1582,7 +1582,7 @@
 <span class="sourceLineNo">1574</span>            return result ^ ((z ^ result) &gt;&gt;&gt; 16) * 0x9E3779B97F4A7C15L;<a name="line.1574"></a>
 <span class="sourceLineNo">1575</span>        }<a name="line.1575"></a>
 <span class="sourceLineNo">1576</span><a name="line.1576"></a>
-<span class="sourceLineNo">1577</span>        public static long hash64(final char[] data, int start, int end) {<a name="line.1577"></a>
+<span class="sourceLineNo">1577</span>        public static long hash64(final char[] data, final int start, final int end) {<a name="line.1577"></a>
 <span class="sourceLineNo">1578</span>            if (data == null || start &gt;= end)<a name="line.1578"></a>
 <span class="sourceLineNo">1579</span>                return 0;<a name="line.1579"></a>
 <span class="sourceLineNo">1580</span>            long z = 0x632BE59BD9B4E019L, result = 1L;<a name="line.1580"></a>
@@ -1725,7 +1725,7 @@
 <span class="sourceLineNo">1717</span>            return result ^ ((z ^ result) &gt;&gt;&gt; 8) * 0x9E3779B9;<a name="line.1717"></a>
 <span class="sourceLineNo">1718</span>        }<a name="line.1718"></a>
 <span class="sourceLineNo">1719</span><a name="line.1719"></a>
-<span class="sourceLineNo">1720</span>        public static int hash(final char[] data, int start, int end) {<a name="line.1720"></a>
+<span class="sourceLineNo">1720</span>        public static int hash(final char[] data, final int start, final int end) {<a name="line.1720"></a>
 <span class="sourceLineNo">1721</span>            if (data == null || start &gt;= end)<a name="line.1721"></a>
 <span class="sourceLineNo">1722</span>                return 0;<a name="line.1722"></a>
 <span class="sourceLineNo">1723</span>            int z = 0x632BE5AB, result = 1;<a name="line.1723"></a>
@@ -1867,7 +1867,7 @@
 <span class="sourceLineNo">1859</span>            return (result ^ 0xC6BC25963AB56C93L * data.length());<a name="line.1859"></a>
 <span class="sourceLineNo">1860</span>        }<a name="line.1860"></a>
 <span class="sourceLineNo">1861</span><a name="line.1861"></a>
-<span class="sourceLineNo">1862</span>        public static long hash64(final char[] data, int start, int end) {<a name="line.1862"></a>
+<span class="sourceLineNo">1862</span>        public static long hash64(final char[] data, final int start, final int end) {<a name="line.1862"></a>
 <span class="sourceLineNo">1863</span>            if (data == null || start &gt;= end)<a name="line.1863"></a>
 <span class="sourceLineNo">1864</span>                return 0;<a name="line.1864"></a>
 <span class="sourceLineNo">1865</span>            long result = 0x632BE59BD9B4E019L;<a name="line.1865"></a>
@@ -2002,7 +2002,7 @@
 <span class="sourceLineNo">1994</span>            return (result ^ 0x62E2AC0D * data.length());<a name="line.1994"></a>
 <span class="sourceLineNo">1995</span>        }<a name="line.1995"></a>
 <span class="sourceLineNo">1996</span><a name="line.1996"></a>
-<span class="sourceLineNo">1997</span>        public static int hash(final char[] data, int start, int end) {<a name="line.1997"></a>
+<span class="sourceLineNo">1997</span>        public static int hash(final char[] data, final int start, final int end) {<a name="line.1997"></a>
 <span class="sourceLineNo">1998</span>            if (data == null || start &gt;= end)<a name="line.1998"></a>
 <span class="sourceLineNo">1999</span>                return 0;<a name="line.1999"></a>
 <span class="sourceLineNo">2000</span>            int result = 0x7360C6EB;<a name="line.2000"></a>

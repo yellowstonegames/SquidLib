@@ -227,12 +227,8 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/Rectangle.Utils.html#getBorder-squidpony.squidgrid.mapping.Rectangle-squidpony.squidgrid.Direction-java.util.List-">getBorder</a></span>(<a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a>&nbsp;r,
-         <a href="../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>&nbsp;d,
-         <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;buffer)</code>
-<div class="block">Given a Rectangle, a direction, and a possibly-null List of Coord to fill into, this will add Coords to
- <code>buffer</code> from an edge of <code>r</code> determined by <code>d</code> until every Coord on that edge has been
- added to buffer (or re-added, if they already were present in it).</div>
-</td>
+         <a href="../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>&nbsp;cardinal,
+         <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;buf)</code>&nbsp;</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
@@ -482,7 +478,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getAll4Corners</h4>
-<pre>public static&nbsp;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Utils.html#line.223">getAll4Corners</a>(<a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a>&nbsp;r,
+<pre>public static&nbsp;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Utils.html#line.226">getAll4Corners</a>(<a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a>&nbsp;r,
                                      <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;buf)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -500,7 +496,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>shrink</h4>
-<pre>public static&nbsp;<a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Utils.html#line.237">shrink</a>(<a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a>&nbsp;r)</pre>
+<pre>public static&nbsp;<a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Utils.html#line.240">shrink</a>(<a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a>&nbsp;r)</pre>
 <div class="block">Creates a new Rectangle that is smaller than r by 1 cell from each of r's edges, to a minimum of a 1x1 cell.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -516,19 +512,21 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getBorder</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Utils.html#line.252">getBorder</a>(<a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a>&nbsp;r,
-                                    <a href="../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>&nbsp;d,
-                                    <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;buffer)</pre>
-<div class="block">Given a Rectangle, a direction, and a possibly-null List of Coord to fill into, this will add Coords to
- <code>buffer</code> from an edge of <code>r</code> determined by <code>d</code> until every Coord on that edge has been
- added to buffer (or re-added, if they already were present in it).</div>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Utils.html#line.258">getBorder</a>(<a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a>&nbsp;r,
+                                    <a href="../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>&nbsp;cardinal,
+                                    <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;buf)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>r</code> - the Rectangle to find a border from</dd>
-<dd><code>d</code> - the Direction the border corresponds to; <code>Direction.UP</code> is the top border and so on</dd>
-<dd><code>buffer</code> - a possibly-null List of Coord to place border Coords into; if null a new List will be made</dd>
+<dd><code>r</code> - </dd>
+<dd><code>cardinal</code> - </dd>
+<dd><code>buf</code> - The buffer to fill or <code>null</code> to let this method
+            allocate.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>buffer after adding border Coords to it.</dd>
+<dd>The border of <code>r</code> at the position <code>cardinal</code>,
+         i.e. the lowest line if <code>r</code> is <a href="../../../squidpony/squidgrid/Direction.html#DOWN"><code>Direction.DOWN</code></a>,
+         the highest line if <code>r</code> is <a href="../../../squidpony/squidgrid/Direction.html#UP"><code>Direction.UP</code></a>, the
+         leftest column if <code>r</code> is <a href="../../../squidpony/squidgrid/Direction.html#LEFT"><code>Direction.LEFT</code></a>, and
+         the rightest column if <code>r</code> is <a href="../../../squidpony/squidgrid/Direction.html#RIGHT"><code>Direction.RIGHT</code></a>.</dd>
 </dl>
 </li>
 </ul>

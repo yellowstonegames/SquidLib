@@ -879,9 +879,21 @@
 <li class="blockList">
 <h3>Serialized Fields</h3>
 <ul class="blockList">
-<li class="blockListLast">
+<li class="blockList">
 <h4>type</h4>
 <pre>int type</pre>
+</li>
+<li class="blockList">
+<h4>light</h4>
+<pre>double[][] light</pre>
+<div class="block">Data allocated in the previous calls to the public API, if any. Used to
+ save allocations when multiple calls are done on the same instance.</div>
+</li>
+<li class="blockListLast">
+<h4>nearLight</h4>
+<pre>boolean[][] nearLight</pre>
+<div class="block">Data allocated in the previous calls to the public API, if any. Used to
+ save allocations when multiple calls are done on the same instance.</div>
 </li>
 </ul>
 </li>
@@ -1098,6 +1110,10 @@
 <!--   -->
 </a>
 <h3>Class <a href="squidpony/squidgrid/mapping/Rectangle.Impl.html" title="class in squidpony.squidgrid.mapping">squidpony.squidgrid.mapping.Rectangle.Impl</a> extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>-6197401003733967116L</dd>
+</dl>
 <ul class="blockList">
 <li class="blockList">
 <h3>Serialized Fields</h3>
@@ -2342,6 +2358,30 @@
 <h4>state</h4>
 <pre>long state</pre>
 <div class="block">The state can be seeded with any value.</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.PintRNG">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath">squidpony.squidmath.PintRNG</a> extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>-374415589203474497L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>stateA</h4>
+<pre>int stateA</pre>
+</li>
+<li class="blockListLast">
+<h4>stateB</h4>
+<pre>int stateB</pre>
 </li>
 </ul>
 </li>

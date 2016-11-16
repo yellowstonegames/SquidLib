@@ -33,9 +33,11 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 28, rngMode = 0, noiseMode = 1;
+    private int hashMode = 28, rngMode = 17, noiseMode = 1;
     private CrossHash.Storm storm, stormA, stormB, stormC;
-    private int testType = 1;
+
+    private int testType = 5;
+
     private RandomnessSource fuzzy, random;
     private Random jreRandom;
     private RandomXS128 gdxRandom;
@@ -180,7 +182,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             noiseMode &= 7;
                         } else if (testType == 5) {
                             rngMode++;
-                            rngMode %= 18;
+                            rngMode %= 20;
                         } else {
                             hashMode++;
                             hashMode %= 36;
@@ -1323,6 +1325,26 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = toFloat(gdxRandom.nextInt());
+                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 18:
+                        Gdx.graphics.setTitle("PintRNG");
+                        random = new PintRNG(seed);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = random.next(24) << 8 | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        break;
+                    case 19:
+                        Gdx.graphics.setTitle("PintRNG");
+                        random = new PintRNG(seed);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = toFloat(random.next(32));
                                 display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
                             }
                         }

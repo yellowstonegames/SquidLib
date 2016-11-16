@@ -938,383 +938,385 @@
 <span class="sourceLineNo">930</span>        finder = new RoomFinder(dungeon, finder.environment);<a name="line.930"></a>
 <span class="sourceLineNo">931</span>        rm = finder.findRooms();<a name="line.931"></a>
 <span class="sourceLineNo">932</span>        cr = finder.findCorridors();<a name="line.932"></a>
-<span class="sourceLineNo">933</span>        allCaves = RoomFinder.merge(cv, width, height);<a name="line.933"></a>
-<span class="sourceLineNo">934</span>        doorMap = makeDoors(rm, cr, allCaves, allCorridors);<a name="line.934"></a>
-<span class="sourceLineNo">935</span>        for (int y = 0; y &lt; height; y++) {<a name="line.935"></a>
-<span class="sourceLineNo">936</span>            for (int x = 0; x &lt; width; x++) {<a name="line.936"></a>
-<span class="sourceLineNo">937</span>                if (doorMap[x][y] == '+' || doorMap[x][y] == '/')<a name="line.937"></a>
-<span class="sourceLineNo">938</span>                    dungeon[x][y] = doorMap[x][y];<a name="line.938"></a>
-<span class="sourceLineNo">939</span>                else if (doorMap[x][y] == '*')<a name="line.939"></a>
-<span class="sourceLineNo">940</span>                    dungeon[x][y] = '#';<a name="line.940"></a>
-<span class="sourceLineNo">941</span><a name="line.941"></a>
-<span class="sourceLineNo">942</span>            }<a name="line.942"></a>
-<span class="sourceLineNo">943</span>        }<a name="line.943"></a>
-<span class="sourceLineNo">944</span>        placement = new Placement(finder);<a name="line.944"></a>
-<span class="sourceLineNo">945</span>        return dungeon;<a name="line.945"></a>
-<span class="sourceLineNo">946</span><a name="line.946"></a>
-<span class="sourceLineNo">947</span>    }<a name="line.947"></a>
-<span class="sourceLineNo">948</span>    protected char[][] makeDoors(ArrayList&lt;char[][]&gt; rooms, ArrayList&lt;char[][]&gt; corridors, char[][] allCaves,<a name="line.948"></a>
-<span class="sourceLineNo">949</span>                               char[][] allCorridors)<a name="line.949"></a>
-<span class="sourceLineNo">950</span>    {<a name="line.950"></a>
-<span class="sourceLineNo">951</span>        char[][] map = new char[width][height];<a name="line.951"></a>
-<span class="sourceLineNo">952</span>        for (int x = 0; x &lt; width; x++) {<a name="line.952"></a>
-<span class="sourceLineNo">953</span>            Arrays.fill(map[x], '#');<a name="line.953"></a>
-<span class="sourceLineNo">954</span>        }<a name="line.954"></a>
-<span class="sourceLineNo">955</span>        if(doorFX == 0 || (rooms.isEmpty() &amp;&amp; corridors.isEmpty()))<a name="line.955"></a>
-<span class="sourceLineNo">956</span>            return map;<a name="line.956"></a>
-<span class="sourceLineNo">957</span>        boolean doubleDoors = false;<a name="line.957"></a>
-<span class="sourceLineNo">958</span>        int doorFill = doorFX;<a name="line.958"></a>
-<span class="sourceLineNo">959</span>        if(doorFill &lt; 0)<a name="line.959"></a>
-<span class="sourceLineNo">960</span>        {<a name="line.960"></a>
-<span class="sourceLineNo">961</span>            doubleDoors = true;<a name="line.961"></a>
-<span class="sourceLineNo">962</span>            doorFill *= -1;<a name="line.962"></a>
-<span class="sourceLineNo">963</span>        }<a name="line.963"></a>
-<span class="sourceLineNo">964</span>        ArrayList&lt;char[][]&gt; fused = new ArrayList&lt;&gt;(rooms.size() + corridors.size());<a name="line.964"></a>
-<span class="sourceLineNo">965</span>        fused.addAll(rooms);<a name="line.965"></a>
-<span class="sourceLineNo">966</span>        fused.addAll(corridors);<a name="line.966"></a>
-<span class="sourceLineNo">967</span><a name="line.967"></a>
-<span class="sourceLineNo">968</span>        map = RoomFinder.merge(fused, width, height);<a name="line.968"></a>
+<span class="sourceLineNo">933</span>        cv = finder.findCaves();<a name="line.933"></a>
+<span class="sourceLineNo">934</span>        cv.add(lakesAndMazes[0]);<a name="line.934"></a>
+<span class="sourceLineNo">935</span>        allCaves = RoomFinder.merge(cv, width, height);<a name="line.935"></a>
+<span class="sourceLineNo">936</span>        doorMap = makeDoors(rm, cr, allCaves, allCorridors);<a name="line.936"></a>
+<span class="sourceLineNo">937</span>        for (int y = 0; y &lt; height; y++) {<a name="line.937"></a>
+<span class="sourceLineNo">938</span>            for (int x = 0; x &lt; width; x++) {<a name="line.938"></a>
+<span class="sourceLineNo">939</span>                if (doorMap[x][y] == '+' || doorMap[x][y] == '/')<a name="line.939"></a>
+<span class="sourceLineNo">940</span>                    dungeon[x][y] = doorMap[x][y];<a name="line.940"></a>
+<span class="sourceLineNo">941</span>                else if (doorMap[x][y] == '*')<a name="line.941"></a>
+<span class="sourceLineNo">942</span>                    dungeon[x][y] = '#';<a name="line.942"></a>
+<span class="sourceLineNo">943</span><a name="line.943"></a>
+<span class="sourceLineNo">944</span>            }<a name="line.944"></a>
+<span class="sourceLineNo">945</span>        }<a name="line.945"></a>
+<span class="sourceLineNo">946</span>        placement = new Placement(finder);<a name="line.946"></a>
+<span class="sourceLineNo">947</span>        return dungeon;<a name="line.947"></a>
+<span class="sourceLineNo">948</span><a name="line.948"></a>
+<span class="sourceLineNo">949</span>    }<a name="line.949"></a>
+<span class="sourceLineNo">950</span>    protected char[][] makeDoors(ArrayList&lt;char[][]&gt; rooms, ArrayList&lt;char[][]&gt; corridors, char[][] allCaves,<a name="line.950"></a>
+<span class="sourceLineNo">951</span>                               char[][] allCorridors)<a name="line.951"></a>
+<span class="sourceLineNo">952</span>    {<a name="line.952"></a>
+<span class="sourceLineNo">953</span>        char[][] map = new char[width][height];<a name="line.953"></a>
+<span class="sourceLineNo">954</span>        for (int x = 0; x &lt; width; x++) {<a name="line.954"></a>
+<span class="sourceLineNo">955</span>            Arrays.fill(map[x], '#');<a name="line.955"></a>
+<span class="sourceLineNo">956</span>        }<a name="line.956"></a>
+<span class="sourceLineNo">957</span>        if(doorFX == 0 || (rooms.isEmpty() &amp;&amp; corridors.isEmpty()))<a name="line.957"></a>
+<span class="sourceLineNo">958</span>            return map;<a name="line.958"></a>
+<span class="sourceLineNo">959</span>        boolean doubleDoors = false;<a name="line.959"></a>
+<span class="sourceLineNo">960</span>        int doorFill = doorFX;<a name="line.960"></a>
+<span class="sourceLineNo">961</span>        if(doorFill &lt; 0)<a name="line.961"></a>
+<span class="sourceLineNo">962</span>        {<a name="line.962"></a>
+<span class="sourceLineNo">963</span>            doubleDoors = true;<a name="line.963"></a>
+<span class="sourceLineNo">964</span>            doorFill *= -1;<a name="line.964"></a>
+<span class="sourceLineNo">965</span>        }<a name="line.965"></a>
+<span class="sourceLineNo">966</span>        ArrayList&lt;char[][]&gt; fused = new ArrayList&lt;&gt;(rooms.size() + corridors.size());<a name="line.966"></a>
+<span class="sourceLineNo">967</span>        fused.addAll(rooms);<a name="line.967"></a>
+<span class="sourceLineNo">968</span>        fused.addAll(corridors);<a name="line.968"></a>
 <span class="sourceLineNo">969</span><a name="line.969"></a>
-<span class="sourceLineNo">970</span>        OrderedSet&lt;Coord&gt; doorways = viableDoorways(doubleDoors, map, allCaves, allCorridors);<a name="line.970"></a>
+<span class="sourceLineNo">970</span>        map = RoomFinder.merge(fused, width, height);<a name="line.970"></a>
 <span class="sourceLineNo">971</span><a name="line.971"></a>
-<span class="sourceLineNo">972</span><a name="line.972"></a>
-<span class="sourceLineNo">973</span>        int total = doorways.size() * doorFill / 100;<a name="line.973"></a>
+<span class="sourceLineNo">972</span>        OrderedSet&lt;Coord&gt; doorways = viableDoorways(doubleDoors, map, allCaves, allCorridors);<a name="line.972"></a>
+<span class="sourceLineNo">973</span><a name="line.973"></a>
 <span class="sourceLineNo">974</span><a name="line.974"></a>
-<span class="sourceLineNo">975</span>        BigLoop:<a name="line.975"></a>
-<span class="sourceLineNo">976</span>        for(int i = 0; i &lt; total; i++) {<a name="line.976"></a>
-<span class="sourceLineNo">977</span>            Coord entry = rng.getRandomElement(doorways);<a name="line.977"></a>
-<span class="sourceLineNo">978</span>            if (map[entry.x][entry.y] == '&lt;' || map[entry.x][entry.y] == '&gt;')<a name="line.978"></a>
-<span class="sourceLineNo">979</span>                continue;<a name="line.979"></a>
-<span class="sourceLineNo">980</span>            if (map[entry.x - 1][entry.y] != '#' &amp;&amp; map[entry.x + 1][entry.y] != '#' &amp;&amp;<a name="line.980"></a>
-<span class="sourceLineNo">981</span>                    map[entry.x - 1][entry.y] != '*' &amp;&amp; map[entry.x + 1][entry.y] != '*') {<a name="line.981"></a>
-<span class="sourceLineNo">982</span>                map[entry.x][entry.y] = '+';<a name="line.982"></a>
-<span class="sourceLineNo">983</span>            } else {<a name="line.983"></a>
-<span class="sourceLineNo">984</span>                map[entry.x][entry.y] = '/';<a name="line.984"></a>
-<span class="sourceLineNo">985</span>            }<a name="line.985"></a>
-<span class="sourceLineNo">986</span>            Coord[] adj = new Coord[]{Coord.get(entry.x + 1, entry.y), Coord.get(entry.x - 1, entry.y),<a name="line.986"></a>
-<span class="sourceLineNo">987</span>                    Coord.get(entry.x, entry.y + 1), Coord.get(entry.x, entry.y - 1)};<a name="line.987"></a>
-<span class="sourceLineNo">988</span>            for (Coord near : adj) {<a name="line.988"></a>
-<span class="sourceLineNo">989</span>                if (doorways.contains(near)) {<a name="line.989"></a>
-<span class="sourceLineNo">990</span>                    map[near.x][near.y] = '*';<a name="line.990"></a>
-<span class="sourceLineNo">991</span>                    doorways.remove(near);<a name="line.991"></a>
-<span class="sourceLineNo">992</span>                    i++;<a name="line.992"></a>
-<span class="sourceLineNo">993</span>                    doorways.remove(entry);<a name="line.993"></a>
-<span class="sourceLineNo">994</span>                    continue BigLoop;<a name="line.994"></a>
-<span class="sourceLineNo">995</span>                }<a name="line.995"></a>
-<span class="sourceLineNo">996</span>            }<a name="line.996"></a>
-<span class="sourceLineNo">997</span>            doorways.remove(entry);<a name="line.997"></a>
-<span class="sourceLineNo">998</span>        }<a name="line.998"></a>
-<span class="sourceLineNo">999</span>        return map;<a name="line.999"></a>
-<span class="sourceLineNo">1000</span><a name="line.1000"></a>
-<span class="sourceLineNo">1001</span>    }<a name="line.1001"></a>
-<span class="sourceLineNo">1002</span>    protected char[][][] makeLake(ArrayList&lt;char[][]&gt; rooms, ArrayList&lt;char[][]&gt; caves)<a name="line.1002"></a>
-<span class="sourceLineNo">1003</span>    {<a name="line.1003"></a>
-<span class="sourceLineNo">1004</span>        char[][][] maps = new char[2][width][height];<a name="line.1004"></a>
-<span class="sourceLineNo">1005</span>        char[][] fusedMap;<a name="line.1005"></a>
-<span class="sourceLineNo">1006</span>        for (int x = 0; x &lt; width; x++) {<a name="line.1006"></a>
-<span class="sourceLineNo">1007</span>            Arrays.fill(maps[0][x], '#');<a name="line.1007"></a>
-<span class="sourceLineNo">1008</span>            Arrays.fill(maps[1][x], '#');<a name="line.1008"></a>
-<span class="sourceLineNo">1009</span>        }<a name="line.1009"></a>
-<span class="sourceLineNo">1010</span>        if((lakeFX == 0 &amp;&amp; mazeFX == 0) || (rooms.isEmpty() &amp;&amp; caves.isEmpty()))<a name="line.1010"></a>
-<span class="sourceLineNo">1011</span>            return maps;<a name="line.1011"></a>
-<span class="sourceLineNo">1012</span>        int lakeFill = lakeFX, mazeFill = mazeFX;<a name="line.1012"></a>
-<span class="sourceLineNo">1013</span>        if(lakeFX + mazeFX &gt; 100)<a name="line.1013"></a>
-<span class="sourceLineNo">1014</span>        {<a name="line.1014"></a>
-<span class="sourceLineNo">1015</span>            lakeFill -= (lakeFX + mazeFX - 100) / 2;<a name="line.1015"></a>
-<span class="sourceLineNo">1016</span>            mazeFill -= (lakeFX + mazeFX - 99) / 2;<a name="line.1016"></a>
-<span class="sourceLineNo">1017</span>        }<a name="line.1017"></a>
-<span class="sourceLineNo">1018</span><a name="line.1018"></a>
-<span class="sourceLineNo">1019</span>        ArrayList&lt;char[][]&gt; fused = new ArrayList&lt;&gt;(rooms.size() + caves.size());<a name="line.1019"></a>
-<span class="sourceLineNo">1020</span>        fused.addAll(rooms);<a name="line.1020"></a>
-<span class="sourceLineNo">1021</span>        fused.addAll(caves);<a name="line.1021"></a>
-<span class="sourceLineNo">1022</span><a name="line.1022"></a>
-<span class="sourceLineNo">1023</span>        fusedMap = RoomFinder.merge(fused, width, height);<a name="line.1023"></a>
-<span class="sourceLineNo">1024</span>        GreasedRegion limit = new GreasedRegion(width, height).insertRectangle(1, 1, width - 2, height - 2),<a name="line.1024"></a>
-<span class="sourceLineNo">1025</span>                potential = new GreasedRegion(fusedMap, '#').and(limit),<a name="line.1025"></a>
-<span class="sourceLineNo">1026</span>                flooded, chosen, tmp = new GreasedRegion(width, height);<a name="line.1026"></a>
-<span class="sourceLineNo">1027</span>        int ctr = potential.size(), potentialMazeSize = ctr * mazeFill / 100, potentialLakeSize = ctr * lakeFill / 100;<a name="line.1027"></a>
-<span class="sourceLineNo">1028</span>        ArrayList&lt;GreasedRegion&gt; viable;<a name="line.1028"></a>
-<span class="sourceLineNo">1029</span>        int minSize;<a name="line.1029"></a>
-<span class="sourceLineNo">1030</span>        Coord center;<a name="line.1030"></a>
-<span class="sourceLineNo">1031</span>        boolean[][] deep;<a name="line.1031"></a>
-<span class="sourceLineNo">1032</span>        if(potentialMazeSize &gt; 0) {<a name="line.1032"></a>
-<span class="sourceLineNo">1033</span>            viable = potential.split();<a name="line.1033"></a>
-<span class="sourceLineNo">1034</span>            if (viable.isEmpty())<a name="line.1034"></a>
-<span class="sourceLineNo">1035</span>                return maps;<a name="line.1035"></a>
-<span class="sourceLineNo">1036</span><a name="line.1036"></a>
-<span class="sourceLineNo">1037</span>            chosen = viable.get(0);<a name="line.1037"></a>
-<span class="sourceLineNo">1038</span>            minSize = chosen.size();<a name="line.1038"></a>
-<span class="sourceLineNo">1039</span>            for (GreasedRegion sa : viable) {<a name="line.1039"></a>
-<span class="sourceLineNo">1040</span>                int sz = sa.size();<a name="line.1040"></a>
-<span class="sourceLineNo">1041</span>                if (sz &gt; minSize) {<a name="line.1041"></a>
-<span class="sourceLineNo">1042</span>                    chosen = sa;<a name="line.1042"></a>
-<span class="sourceLineNo">1043</span>                    minSize = sz;<a name="line.1043"></a>
-<span class="sourceLineNo">1044</span>                }<a name="line.1044"></a>
-<span class="sourceLineNo">1045</span>            }<a name="line.1045"></a>
-<span class="sourceLineNo">1046</span>            PacMazeGenerator pac = new PacMazeGenerator(width - width % 3, height - height % 3, rng);<a name="line.1046"></a>
-<span class="sourceLineNo">1047</span>            char[][] pacMap = GwtCompatibility.insert2D(pac.generate(), GwtCompatibility.fill2D('#', width, height), 1, 1);<a name="line.1047"></a>
-<span class="sourceLineNo">1048</span>            center = chosen.singleRandom(rng);<a name="line.1048"></a>
-<span class="sourceLineNo">1049</span>            flooded = new GreasedRegion(center, width, height).spill(chosen, potentialMazeSize, rng).and(limit);<a name="line.1049"></a>
-<span class="sourceLineNo">1050</span>            GreasedRegion pacEnv = new GreasedRegion(pacMap, '.').and(flooded).removeIsolated();<a name="line.1050"></a>
-<span class="sourceLineNo">1051</span>            deep = pacEnv.decode();<a name="line.1051"></a>
-<span class="sourceLineNo">1052</span><a name="line.1052"></a>
-<span class="sourceLineNo">1053</span>            for (int x = 1; x &lt; width - 1; x++) {<a name="line.1053"></a>
-<span class="sourceLineNo">1054</span>                for (int y = 1; y &lt; height - 1; y++) {<a name="line.1054"></a>
-<span class="sourceLineNo">1055</span>                    if (deep[x][y])<a name="line.1055"></a>
-<span class="sourceLineNo">1056</span>                        maps[1][x][y] = pacMap[x][y];<a name="line.1056"></a>
-<span class="sourceLineNo">1057</span>                }<a name="line.1057"></a>
-<span class="sourceLineNo">1058</span>            }<a name="line.1058"></a>
-<span class="sourceLineNo">1059</span>            finder.corridors.put(pacEnv, new ArrayList&lt;GreasedRegion&gt;());<a name="line.1059"></a>
-<span class="sourceLineNo">1060</span>            finder.allCorridors.or(pacEnv);<a name="line.1060"></a>
-<span class="sourceLineNo">1061</span>            finder.allFloors.or(pacEnv);<a name="line.1061"></a>
-<span class="sourceLineNo">1062</span>            potential.andNot(flooded);<a name="line.1062"></a>
-<span class="sourceLineNo">1063</span>        }<a name="line.1063"></a>
-<span class="sourceLineNo">1064</span>        if(potentialLakeSize &gt; 0) {<a name="line.1064"></a>
-<span class="sourceLineNo">1065</span>            viable = potential.split();<a name="line.1065"></a>
-<span class="sourceLineNo">1066</span>            if (viable.isEmpty())<a name="line.1066"></a>
-<span class="sourceLineNo">1067</span>                return maps;<a name="line.1067"></a>
-<span class="sourceLineNo">1068</span>            chosen = viable.get(0);<a name="line.1068"></a>
-<span class="sourceLineNo">1069</span>            minSize = chosen.size();<a name="line.1069"></a>
-<span class="sourceLineNo">1070</span>            for (GreasedRegion sa : viable) {<a name="line.1070"></a>
-<span class="sourceLineNo">1071</span>                int sz = sa.size();<a name="line.1071"></a>
-<span class="sourceLineNo">1072</span>                if (sz &gt; minSize) {<a name="line.1072"></a>
-<span class="sourceLineNo">1073</span>                    chosen = sa;<a name="line.1073"></a>
-<span class="sourceLineNo">1074</span>                    minSize = sz;<a name="line.1074"></a>
-<span class="sourceLineNo">1075</span>                }<a name="line.1075"></a>
-<span class="sourceLineNo">1076</span>            }<a name="line.1076"></a>
-<span class="sourceLineNo">1077</span>            center = chosen.singleRandom(rng);<a name="line.1077"></a>
-<span class="sourceLineNo">1078</span>            flooded = new GreasedRegion(center, width, height).spill(chosen, potentialLakeSize, rng).and(limit);<a name="line.1078"></a>
-<span class="sourceLineNo">1079</span><a name="line.1079"></a>
-<span class="sourceLineNo">1080</span>            deep = flooded.decode();<a name="line.1080"></a>
-<span class="sourceLineNo">1081</span>            flooded.flood(new GreasedRegion(fusedMap, '.').fringe8way(3), 3).and(limit);<a name="line.1081"></a>
-<span class="sourceLineNo">1082</span><a name="line.1082"></a>
-<span class="sourceLineNo">1083</span>            boolean[][] shallow = flooded.decode();<a name="line.1083"></a>
+<span class="sourceLineNo">975</span>        int total = doorways.size() * doorFill / 100;<a name="line.975"></a>
+<span class="sourceLineNo">976</span><a name="line.976"></a>
+<span class="sourceLineNo">977</span>        BigLoop:<a name="line.977"></a>
+<span class="sourceLineNo">978</span>        for(int i = 0; i &lt; total; i++) {<a name="line.978"></a>
+<span class="sourceLineNo">979</span>            Coord entry = rng.getRandomElement(doorways);<a name="line.979"></a>
+<span class="sourceLineNo">980</span>            if (map[entry.x][entry.y] == '&lt;' || map[entry.x][entry.y] == '&gt;')<a name="line.980"></a>
+<span class="sourceLineNo">981</span>                continue;<a name="line.981"></a>
+<span class="sourceLineNo">982</span>            if (map[entry.x - 1][entry.y] != '#' &amp;&amp; map[entry.x + 1][entry.y] != '#' &amp;&amp;<a name="line.982"></a>
+<span class="sourceLineNo">983</span>                    map[entry.x - 1][entry.y] != '*' &amp;&amp; map[entry.x + 1][entry.y] != '*') {<a name="line.983"></a>
+<span class="sourceLineNo">984</span>                map[entry.x][entry.y] = '+';<a name="line.984"></a>
+<span class="sourceLineNo">985</span>            } else {<a name="line.985"></a>
+<span class="sourceLineNo">986</span>                map[entry.x][entry.y] = '/';<a name="line.986"></a>
+<span class="sourceLineNo">987</span>            }<a name="line.987"></a>
+<span class="sourceLineNo">988</span>            Coord[] adj = new Coord[]{Coord.get(entry.x + 1, entry.y), Coord.get(entry.x - 1, entry.y),<a name="line.988"></a>
+<span class="sourceLineNo">989</span>                    Coord.get(entry.x, entry.y + 1), Coord.get(entry.x, entry.y - 1)};<a name="line.989"></a>
+<span class="sourceLineNo">990</span>            for (Coord near : adj) {<a name="line.990"></a>
+<span class="sourceLineNo">991</span>                if (doorways.contains(near)) {<a name="line.991"></a>
+<span class="sourceLineNo">992</span>                    map[near.x][near.y] = '*';<a name="line.992"></a>
+<span class="sourceLineNo">993</span>                    doorways.remove(near);<a name="line.993"></a>
+<span class="sourceLineNo">994</span>                    doorways.remove(entry);<a name="line.994"></a>
+<span class="sourceLineNo">995</span>                    i++;<a name="line.995"></a>
+<span class="sourceLineNo">996</span>                    continue BigLoop;<a name="line.996"></a>
+<span class="sourceLineNo">997</span>                }<a name="line.997"></a>
+<span class="sourceLineNo">998</span>            }<a name="line.998"></a>
+<span class="sourceLineNo">999</span>            doorways.remove(entry);<a name="line.999"></a>
+<span class="sourceLineNo">1000</span>        }<a name="line.1000"></a>
+<span class="sourceLineNo">1001</span>        return map;<a name="line.1001"></a>
+<span class="sourceLineNo">1002</span><a name="line.1002"></a>
+<span class="sourceLineNo">1003</span>    }<a name="line.1003"></a>
+<span class="sourceLineNo">1004</span>    protected char[][][] makeLake(ArrayList&lt;char[][]&gt; rooms, ArrayList&lt;char[][]&gt; caves)<a name="line.1004"></a>
+<span class="sourceLineNo">1005</span>    {<a name="line.1005"></a>
+<span class="sourceLineNo">1006</span>        char[][][] maps = new char[2][width][height];<a name="line.1006"></a>
+<span class="sourceLineNo">1007</span>        char[][] fusedMap;<a name="line.1007"></a>
+<span class="sourceLineNo">1008</span>        for (int x = 0; x &lt; width; x++) {<a name="line.1008"></a>
+<span class="sourceLineNo">1009</span>            Arrays.fill(maps[0][x], '#');<a name="line.1009"></a>
+<span class="sourceLineNo">1010</span>            Arrays.fill(maps[1][x], '#');<a name="line.1010"></a>
+<span class="sourceLineNo">1011</span>        }<a name="line.1011"></a>
+<span class="sourceLineNo">1012</span>        if((lakeFX == 0 &amp;&amp; mazeFX == 0) || (rooms.isEmpty() &amp;&amp; caves.isEmpty()))<a name="line.1012"></a>
+<span class="sourceLineNo">1013</span>            return maps;<a name="line.1013"></a>
+<span class="sourceLineNo">1014</span>        int lakeFill = lakeFX, mazeFill = mazeFX;<a name="line.1014"></a>
+<span class="sourceLineNo">1015</span>        if(lakeFX + mazeFX &gt; 100)<a name="line.1015"></a>
+<span class="sourceLineNo">1016</span>        {<a name="line.1016"></a>
+<span class="sourceLineNo">1017</span>            lakeFill -= (lakeFX + mazeFX - 100) / 2;<a name="line.1017"></a>
+<span class="sourceLineNo">1018</span>            mazeFill -= (lakeFX + mazeFX - 99) / 2;<a name="line.1018"></a>
+<span class="sourceLineNo">1019</span>        }<a name="line.1019"></a>
+<span class="sourceLineNo">1020</span><a name="line.1020"></a>
+<span class="sourceLineNo">1021</span>        ArrayList&lt;char[][]&gt; fused = new ArrayList&lt;&gt;(rooms.size() + caves.size());<a name="line.1021"></a>
+<span class="sourceLineNo">1022</span>        fused.addAll(rooms);<a name="line.1022"></a>
+<span class="sourceLineNo">1023</span>        fused.addAll(caves);<a name="line.1023"></a>
+<span class="sourceLineNo">1024</span><a name="line.1024"></a>
+<span class="sourceLineNo">1025</span>        fusedMap = RoomFinder.merge(fused, width, height);<a name="line.1025"></a>
+<span class="sourceLineNo">1026</span>        GreasedRegion limit = new GreasedRegion(width, height).insertRectangle(1, 1, width - 2, height - 2),<a name="line.1026"></a>
+<span class="sourceLineNo">1027</span>                potential = new GreasedRegion(fusedMap, '#').and(limit),<a name="line.1027"></a>
+<span class="sourceLineNo">1028</span>                flooded, chosen, tmp = new GreasedRegion(width, height);<a name="line.1028"></a>
+<span class="sourceLineNo">1029</span>        int ctr = potential.size(), potentialMazeSize = ctr * mazeFill / 100, potentialLakeSize = ctr * lakeFill / 100;<a name="line.1029"></a>
+<span class="sourceLineNo">1030</span>        ArrayList&lt;GreasedRegion&gt; viable;<a name="line.1030"></a>
+<span class="sourceLineNo">1031</span>        int minSize;<a name="line.1031"></a>
+<span class="sourceLineNo">1032</span>        Coord center;<a name="line.1032"></a>
+<span class="sourceLineNo">1033</span>        boolean[][] deep;<a name="line.1033"></a>
+<span class="sourceLineNo">1034</span>        if(potentialMazeSize &gt; 0) {<a name="line.1034"></a>
+<span class="sourceLineNo">1035</span>            viable = potential.split();<a name="line.1035"></a>
+<span class="sourceLineNo">1036</span>            if (viable.isEmpty())<a name="line.1036"></a>
+<span class="sourceLineNo">1037</span>                return maps;<a name="line.1037"></a>
+<span class="sourceLineNo">1038</span><a name="line.1038"></a>
+<span class="sourceLineNo">1039</span>            chosen = viable.get(0);<a name="line.1039"></a>
+<span class="sourceLineNo">1040</span>            minSize = chosen.size();<a name="line.1040"></a>
+<span class="sourceLineNo">1041</span>            for (GreasedRegion sa : viable) {<a name="line.1041"></a>
+<span class="sourceLineNo">1042</span>                int sz = sa.size();<a name="line.1042"></a>
+<span class="sourceLineNo">1043</span>                if (sz &gt; minSize) {<a name="line.1043"></a>
+<span class="sourceLineNo">1044</span>                    chosen = sa;<a name="line.1044"></a>
+<span class="sourceLineNo">1045</span>                    minSize = sz;<a name="line.1045"></a>
+<span class="sourceLineNo">1046</span>                }<a name="line.1046"></a>
+<span class="sourceLineNo">1047</span>            }<a name="line.1047"></a>
+<span class="sourceLineNo">1048</span>            PacMazeGenerator pac = new PacMazeGenerator(width - width % 3, height - height % 3, rng);<a name="line.1048"></a>
+<span class="sourceLineNo">1049</span>            char[][] pacMap = GwtCompatibility.insert2D(pac.generate(), GwtCompatibility.fill2D('#', width, height), 1, 1);<a name="line.1049"></a>
+<span class="sourceLineNo">1050</span>            center = chosen.singleRandom(rng);<a name="line.1050"></a>
+<span class="sourceLineNo">1051</span>            flooded = new GreasedRegion(center, width, height).spill(chosen, potentialMazeSize, rng).and(limit);<a name="line.1051"></a>
+<span class="sourceLineNo">1052</span>            GreasedRegion pacEnv = new GreasedRegion(pacMap, '.').and(flooded).removeIsolated();<a name="line.1052"></a>
+<span class="sourceLineNo">1053</span>            deep = pacEnv.decode();<a name="line.1053"></a>
+<span class="sourceLineNo">1054</span><a name="line.1054"></a>
+<span class="sourceLineNo">1055</span>            for (int x = 1; x &lt; width - 1; x++) {<a name="line.1055"></a>
+<span class="sourceLineNo">1056</span>                for (int y = 1; y &lt; height - 1; y++) {<a name="line.1056"></a>
+<span class="sourceLineNo">1057</span>                    if (deep[x][y])<a name="line.1057"></a>
+<span class="sourceLineNo">1058</span>                        maps[1][x][y] = pacMap[x][y];<a name="line.1058"></a>
+<span class="sourceLineNo">1059</span>                }<a name="line.1059"></a>
+<span class="sourceLineNo">1060</span>            }<a name="line.1060"></a>
+<span class="sourceLineNo">1061</span>            finder.corridors.put(pacEnv, new ArrayList&lt;GreasedRegion&gt;());<a name="line.1061"></a>
+<span class="sourceLineNo">1062</span>            finder.allCorridors.or(pacEnv);<a name="line.1062"></a>
+<span class="sourceLineNo">1063</span>            finder.allFloors.or(pacEnv);<a name="line.1063"></a>
+<span class="sourceLineNo">1064</span>            potential.andNot(flooded);<a name="line.1064"></a>
+<span class="sourceLineNo">1065</span>        }<a name="line.1065"></a>
+<span class="sourceLineNo">1066</span>        if(potentialLakeSize &gt; 0) {<a name="line.1066"></a>
+<span class="sourceLineNo">1067</span>            viable = potential.split();<a name="line.1067"></a>
+<span class="sourceLineNo">1068</span>            if (viable.isEmpty())<a name="line.1068"></a>
+<span class="sourceLineNo">1069</span>                return maps;<a name="line.1069"></a>
+<span class="sourceLineNo">1070</span>            chosen = viable.get(0);<a name="line.1070"></a>
+<span class="sourceLineNo">1071</span>            minSize = chosen.size();<a name="line.1071"></a>
+<span class="sourceLineNo">1072</span>            for (GreasedRegion sa : viable) {<a name="line.1072"></a>
+<span class="sourceLineNo">1073</span>                int sz = sa.size();<a name="line.1073"></a>
+<span class="sourceLineNo">1074</span>                if (sz &gt; minSize) {<a name="line.1074"></a>
+<span class="sourceLineNo">1075</span>                    chosen = sa;<a name="line.1075"></a>
+<span class="sourceLineNo">1076</span>                    minSize = sz;<a name="line.1076"></a>
+<span class="sourceLineNo">1077</span>                }<a name="line.1077"></a>
+<span class="sourceLineNo">1078</span>            }<a name="line.1078"></a>
+<span class="sourceLineNo">1079</span>            center = chosen.singleRandom(rng);<a name="line.1079"></a>
+<span class="sourceLineNo">1080</span>            flooded = new GreasedRegion(center, width, height).spill(chosen, potentialLakeSize, rng).and(limit);<a name="line.1080"></a>
+<span class="sourceLineNo">1081</span><a name="line.1081"></a>
+<span class="sourceLineNo">1082</span>            deep = flooded.decode();<a name="line.1082"></a>
+<span class="sourceLineNo">1083</span>            flooded.flood(new GreasedRegion(fusedMap, '.').fringe8way(3), 3).and(limit);<a name="line.1083"></a>
 <span class="sourceLineNo">1084</span><a name="line.1084"></a>
-<span class="sourceLineNo">1085</span>            for (int x = 0; x &lt; width; x++) {<a name="line.1085"></a>
-<span class="sourceLineNo">1086</span>                for (int y = 0; y &lt; height; y++) {<a name="line.1086"></a>
-<span class="sourceLineNo">1087</span>                    if (deep[x][y])<a name="line.1087"></a>
-<span class="sourceLineNo">1088</span>                        maps[0][x][y] = deepLakeGlyph;<a name="line.1088"></a>
-<span class="sourceLineNo">1089</span>                    else if (shallow[x][y])<a name="line.1089"></a>
-<span class="sourceLineNo">1090</span>                        maps[0][x][y] = shallowLakeGlyph;<a name="line.1090"></a>
-<span class="sourceLineNo">1091</span>                }<a name="line.1091"></a>
-<span class="sourceLineNo">1092</span>            }<a name="line.1092"></a>
-<span class="sourceLineNo">1093</span>            ArrayList&lt;GreasedRegion&gt; change = new ArrayList&lt;&gt;();<a name="line.1093"></a>
-<span class="sourceLineNo">1094</span>            for (GreasedRegion room : finder.rooms.keySet()) {<a name="line.1094"></a>
-<span class="sourceLineNo">1095</span>                if(flooded.intersects(tmp.remake(room).expand8way()))<a name="line.1095"></a>
-<span class="sourceLineNo">1096</span>                    change.add(room);<a name="line.1096"></a>
-<span class="sourceLineNo">1097</span>            }<a name="line.1097"></a>
-<span class="sourceLineNo">1098</span>            for (GreasedRegion region : change) {<a name="line.1098"></a>
-<span class="sourceLineNo">1099</span>                finder.caves.put(region, finder.rooms.remove(region));<a name="line.1099"></a>
-<span class="sourceLineNo">1100</span>                finder.allRooms.andNot(region);<a name="line.1100"></a>
-<span class="sourceLineNo">1101</span>                finder.allCaves.or(region);<a name="line.1101"></a>
-<span class="sourceLineNo">1102</span>            }<a name="line.1102"></a>
-<span class="sourceLineNo">1103</span>        }<a name="line.1103"></a>
-<span class="sourceLineNo">1104</span>        return maps;<a name="line.1104"></a>
-<span class="sourceLineNo">1105</span>    }<a name="line.1105"></a>
-<span class="sourceLineNo">1106</span><a name="line.1106"></a>
-<span class="sourceLineNo">1107</span>    protected char[][] innerGenerate(char[][] map, EnumMap&lt;FillEffect, Integer&gt; fx)<a name="line.1107"></a>
-<span class="sourceLineNo">1108</span>    {<a name="line.1108"></a>
-<span class="sourceLineNo">1109</span>        OrderedSet&lt;Coord&gt; hazards = new OrderedSet&lt;&gt;();<a name="line.1109"></a>
-<span class="sourceLineNo">1110</span>        int floorCount = DungeonUtility.countCells(map, '.'),<a name="line.1110"></a>
-<span class="sourceLineNo">1111</span>                doorFill = 0,<a name="line.1111"></a>
-<span class="sourceLineNo">1112</span>                waterFill = 0,<a name="line.1112"></a>
-<span class="sourceLineNo">1113</span>                grassFill = 0,<a name="line.1113"></a>
-<span class="sourceLineNo">1114</span>                trapFill = 0,<a name="line.1114"></a>
-<span class="sourceLineNo">1115</span>                boulderFill = 0,<a name="line.1115"></a>
-<span class="sourceLineNo">1116</span>                islandSpacing = 0;<a name="line.1116"></a>
-<span class="sourceLineNo">1117</span><a name="line.1117"></a>
-<span class="sourceLineNo">1118</span>        if(fx.containsKey(FillEffect.GRASS)) {<a name="line.1118"></a>
-<span class="sourceLineNo">1119</span>            grassFill = fx.get(FillEffect.GRASS);<a name="line.1119"></a>
-<span class="sourceLineNo">1120</span>        }<a name="line.1120"></a>
-<span class="sourceLineNo">1121</span>        if(fx.containsKey(FillEffect.WATER)) {<a name="line.1121"></a>
-<span class="sourceLineNo">1122</span>            waterFill = fx.get(FillEffect.WATER);<a name="line.1122"></a>
-<span class="sourceLineNo">1123</span>        }<a name="line.1123"></a>
-<span class="sourceLineNo">1124</span>        if(fx.containsKey(FillEffect.BOULDERS)) {<a name="line.1124"></a>
-<span class="sourceLineNo">1125</span>            boulderFill = fx.get(FillEffect.BOULDERS) * floorCount / 100;<a name="line.1125"></a>
-<span class="sourceLineNo">1126</span>        }<a name="line.1126"></a>
-<span class="sourceLineNo">1127</span>        if(fx.containsKey(FillEffect.ISLANDS)) {<a name="line.1127"></a>
-<span class="sourceLineNo">1128</span>            islandSpacing = fx.get(FillEffect.ISLANDS);<a name="line.1128"></a>
-<span class="sourceLineNo">1129</span>        }<a name="line.1129"></a>
-<span class="sourceLineNo">1130</span>        if(fx.containsKey(FillEffect.TRAPS)) {<a name="line.1130"></a>
-<span class="sourceLineNo">1131</span>            trapFill = fx.get(FillEffect.TRAPS);<a name="line.1131"></a>
-<span class="sourceLineNo">1132</span>        }<a name="line.1132"></a>
-<span class="sourceLineNo">1133</span>        if (boulderFill &gt; 0.0) {<a name="line.1133"></a>
-<span class="sourceLineNo">1134</span>            /*<a name="line.1134"></a>
-<span class="sourceLineNo">1135</span>            short[] floor = pack(map, '.');<a name="line.1135"></a>
-<span class="sourceLineNo">1136</span>            short[] viable = retract(floor, 1, width, height, true);<a name="line.1136"></a>
-<span class="sourceLineNo">1137</span>            ArrayList&lt;Coord&gt; boulders = randomPortion(viable, boulderFill, rng);<a name="line.1137"></a>
-<span class="sourceLineNo">1138</span>            for (Coord boulder : boulders) {<a name="line.1138"></a>
-<span class="sourceLineNo">1139</span>                map[boulder.x][boulder.y] = '#';<a name="line.1139"></a>
-<span class="sourceLineNo">1140</span>            }<a name="line.1140"></a>
-<span class="sourceLineNo">1141</span>            */<a name="line.1141"></a>
-<span class="sourceLineNo">1142</span>            Coord[] boulders = new GreasedRegion(map, '.').retract8way(1).randomPortion(rng, boulderFill);<a name="line.1142"></a>
-<span class="sourceLineNo">1143</span>            Coord t;<a name="line.1143"></a>
-<span class="sourceLineNo">1144</span>            for (int i = 0; i &lt; boulders.length; i++) {<a name="line.1144"></a>
-<span class="sourceLineNo">1145</span>                t = boulders[i];<a name="line.1145"></a>
-<span class="sourceLineNo">1146</span>                map[t.x][t.y] = '#';<a name="line.1146"></a>
-<span class="sourceLineNo">1147</span>            }<a name="line.1147"></a>
-<span class="sourceLineNo">1148</span>        }<a name="line.1148"></a>
-<span class="sourceLineNo">1149</span><a name="line.1149"></a>
-<span class="sourceLineNo">1150</span><a name="line.1150"></a>
-<span class="sourceLineNo">1151</span>        if(trapFill &gt; 0) {<a name="line.1151"></a>
-<span class="sourceLineNo">1152</span>            for (int x = 1; x &lt; map.length - 1; x++) {<a name="line.1152"></a>
-<span class="sourceLineNo">1153</span>                for (int y = 1; y &lt; map[x].length - 1; y++) {<a name="line.1153"></a>
-<span class="sourceLineNo">1154</span>                    if (map[x][y] == '.') {<a name="line.1154"></a>
-<span class="sourceLineNo">1155</span>                        int ctr = 0;<a name="line.1155"></a>
-<span class="sourceLineNo">1156</span>                        if (map[x + 1][y] != '#') ++ctr;<a name="line.1156"></a>
-<span class="sourceLineNo">1157</span>                        if (map[x - 1][y] != '#') ++ctr;<a name="line.1157"></a>
-<span class="sourceLineNo">1158</span>                        if (map[x][y + 1] != '#') ++ctr;<a name="line.1158"></a>
-<span class="sourceLineNo">1159</span>                        if (map[x][y - 1] != '#') ++ctr;<a name="line.1159"></a>
-<span class="sourceLineNo">1160</span>                        if (map[x + 1][y + 1] != '#') ++ctr;<a name="line.1160"></a>
-<span class="sourceLineNo">1161</span>                        if (map[x - 1][y + 1] != '#') ++ctr;<a name="line.1161"></a>
-<span class="sourceLineNo">1162</span>                        if (map[x + 1][y - 1] != '#') ++ctr;<a name="line.1162"></a>
-<span class="sourceLineNo">1163</span>                        if (map[x - 1][y - 1] != '#') ++ctr;<a name="line.1163"></a>
-<span class="sourceLineNo">1164</span>                        if (ctr &gt;= 5) hazards.add(Coord.get(x, y));<a name="line.1164"></a>
-<span class="sourceLineNo">1165</span>                    }<a name="line.1165"></a>
-<span class="sourceLineNo">1166</span>                }<a name="line.1166"></a>
-<span class="sourceLineNo">1167</span>            }<a name="line.1167"></a>
-<span class="sourceLineNo">1168</span>        }<a name="line.1168"></a>
-<span class="sourceLineNo">1169</span>        short[] floors = pack(map, '.'), working;<a name="line.1169"></a>
-<span class="sourceLineNo">1170</span>        floorCount = count(floors);<a name="line.1170"></a>
-<span class="sourceLineNo">1171</span>        float waterRate = waterFill / 100.0f, grassRate = grassFill / 100.0f;<a name="line.1171"></a>
-<span class="sourceLineNo">1172</span>        if(waterRate + grassRate &gt; 1.0f)<a name="line.1172"></a>
-<span class="sourceLineNo">1173</span>        {<a name="line.1173"></a>
-<span class="sourceLineNo">1174</span>            waterRate /= (waterFill + grassFill) / 100.0f;<a name="line.1174"></a>
-<span class="sourceLineNo">1175</span>            grassRate /= (waterFill + grassFill) / 100.0f;<a name="line.1175"></a>
-<span class="sourceLineNo">1176</span>        }<a name="line.1176"></a>
-<span class="sourceLineNo">1177</span>        int targetWater = Math.round(floorCount * waterRate),<a name="line.1177"></a>
-<span class="sourceLineNo">1178</span>                targetGrass = Math.round(floorCount * grassRate),<a name="line.1178"></a>
-<span class="sourceLineNo">1179</span>                sizeWaterPools = targetWater / rng.between(3, 6),<a name="line.1179"></a>
-<span class="sourceLineNo">1180</span>                sizeGrassPools = targetGrass / rng.between(2, 5);<a name="line.1180"></a>
-<span class="sourceLineNo">1181</span><a name="line.1181"></a>
-<span class="sourceLineNo">1182</span>        Coord[] scatter;<a name="line.1182"></a>
-<span class="sourceLineNo">1183</span>        int remainingWater = targetWater, remainingGrass = targetGrass;<a name="line.1183"></a>
-<span class="sourceLineNo">1184</span>        if(targetWater &gt; 0) {<a name="line.1184"></a>
-<span class="sourceLineNo">1185</span>            scatter = fractionPacked(floors, 7);<a name="line.1185"></a>
-<span class="sourceLineNo">1186</span>            scatter = rng.shuffle(scatter, new Coord[scatter.length]);<a name="line.1186"></a>
-<span class="sourceLineNo">1187</span>            ArrayList&lt;Coord&gt; allWater = new ArrayList&lt;&gt;(targetWater);<a name="line.1187"></a>
-<span class="sourceLineNo">1188</span>            for (int i = 0; i &lt; scatter.length; i++) {<a name="line.1188"></a>
-<span class="sourceLineNo">1189</span>                if (remainingWater &gt; 5) //remainingWater &gt;= targetWater * 0.02 &amp;&amp;<a name="line.1189"></a>
-<span class="sourceLineNo">1190</span>                {<a name="line.1190"></a>
-<span class="sourceLineNo">1191</span>                    if(!queryPacked(floors, scatter[i].x, scatter[i].y))<a name="line.1191"></a>
-<span class="sourceLineNo">1192</span>                        continue;<a name="line.1192"></a>
-<span class="sourceLineNo">1193</span>                    working = spill(floors, packOne(scatter[i]), rng.between(4, Math.min(remainingWater, sizeWaterPools)), rng);<a name="line.1193"></a>
-<span class="sourceLineNo">1194</span><a name="line.1194"></a>
-<span class="sourceLineNo">1195</span>                    floors = differencePacked(floors, working);<a name="line.1195"></a>
-<span class="sourceLineNo">1196</span>                    Coord[] pts = allPacked(working);<a name="line.1196"></a>
-<span class="sourceLineNo">1197</span>                    remainingWater -= pts.length;<a name="line.1197"></a>
-<span class="sourceLineNo">1198</span>                    Collections.addAll(allWater, pts);<a name="line.1198"></a>
-<span class="sourceLineNo">1199</span>                } else<a name="line.1199"></a>
-<span class="sourceLineNo">1200</span>                    break;<a name="line.1200"></a>
-<span class="sourceLineNo">1201</span>            }<a name="line.1201"></a>
-<span class="sourceLineNo">1202</span><a name="line.1202"></a>
-<span class="sourceLineNo">1203</span>            for (Coord pt : allWater) {<a name="line.1203"></a>
-<span class="sourceLineNo">1204</span>                hazards.remove(pt);<a name="line.1204"></a>
-<span class="sourceLineNo">1205</span>                //obstacles.add(pt);<a name="line.1205"></a>
-<span class="sourceLineNo">1206</span>                if (map[pt.x][pt.y] != '&lt;' &amp;&amp; map[pt.x][pt.y] != '&gt;')<a name="line.1206"></a>
-<span class="sourceLineNo">1207</span>                    map[pt.x][pt.y] = '~';<a name="line.1207"></a>
-<span class="sourceLineNo">1208</span>            }<a name="line.1208"></a>
-<span class="sourceLineNo">1209</span>            for (Coord pt : allWater) {<a name="line.1209"></a>
-<span class="sourceLineNo">1210</span>                if (map[pt.x][pt.y] != '&lt;' &amp;&amp; map[pt.x][pt.y] != '&gt;' &amp;&amp;<a name="line.1210"></a>
-<span class="sourceLineNo">1211</span>                        (map[pt.x - 1][pt.y] == '.' || map[pt.x + 1][pt.y] == '.' ||<a name="line.1211"></a>
-<span class="sourceLineNo">1212</span>                                map[pt.x][pt.y - 1] == '.' || map[pt.x][pt.y + 1] == '.'))<a name="line.1212"></a>
-<span class="sourceLineNo">1213</span>                    map[pt.x][pt.y] = ',';<a name="line.1213"></a>
-<span class="sourceLineNo">1214</span>            }<a name="line.1214"></a>
-<span class="sourceLineNo">1215</span>        }<a name="line.1215"></a>
-<span class="sourceLineNo">1216</span>        if(targetGrass &gt; 0) {<a name="line.1216"></a>
-<span class="sourceLineNo">1217</span>            scatter = fractionPacked(floors, 7);<a name="line.1217"></a>
-<span class="sourceLineNo">1218</span>            scatter = rng.shuffle(scatter, new Coord[scatter.length]);<a name="line.1218"></a>
-<span class="sourceLineNo">1219</span>            Coord p;<a name="line.1219"></a>
-<span class="sourceLineNo">1220</span>            for (int i = 0; i &lt; scatter.length; i++) {<a name="line.1220"></a>
-<span class="sourceLineNo">1221</span>                if (remainingGrass &gt; 5) //remainingGrass &gt;= targetGrass * 0.02 &amp;&amp;<a name="line.1221"></a>
-<span class="sourceLineNo">1222</span>                {<a name="line.1222"></a>
-<span class="sourceLineNo">1223</span>                    working = spill(floors, packOne(scatter[i]), rng.between(4, Math.min(remainingGrass, sizeGrassPools)), rng);<a name="line.1223"></a>
-<span class="sourceLineNo">1224</span>                    if (working.length == 0)<a name="line.1224"></a>
-<span class="sourceLineNo">1225</span>                        continue;<a name="line.1225"></a>
-<span class="sourceLineNo">1226</span>                    floors = differencePacked(floors, working);<a name="line.1226"></a>
-<span class="sourceLineNo">1227</span>                    Coord[] pts = allPacked(working);<a name="line.1227"></a>
-<span class="sourceLineNo">1228</span>                    remainingGrass -= pts.length;<a name="line.1228"></a>
-<span class="sourceLineNo">1229</span>                    for (int c = 0; c &lt; pts.length; c++) {<a name="line.1229"></a>
-<span class="sourceLineNo">1230</span>                        p = pts[c];<a name="line.1230"></a>
-<span class="sourceLineNo">1231</span>                        map[p.x][p.y] = '"';<a name="line.1231"></a>
-<span class="sourceLineNo">1232</span>                    }<a name="line.1232"></a>
-<span class="sourceLineNo">1233</span>                } else<a name="line.1233"></a>
-<span class="sourceLineNo">1234</span>                    break;<a name="line.1234"></a>
-<span class="sourceLineNo">1235</span>            }<a name="line.1235"></a>
-<span class="sourceLineNo">1236</span>        }<a name="line.1236"></a>
-<span class="sourceLineNo">1237</span><a name="line.1237"></a>
-<span class="sourceLineNo">1238</span>        if(islandSpacing &gt; 1 &amp;&amp; targetWater &gt; 0) {<a name="line.1238"></a>
-<span class="sourceLineNo">1239</span>            ArrayList&lt;Coord&gt; islands = PoissonDisk.sampleMap(map, 1f * islandSpacing, rng, '#', '.', '"', '+', '/', '^', '&lt;', '&gt;');<a name="line.1239"></a>
-<span class="sourceLineNo">1240</span>            for (Coord c : islands) {<a name="line.1240"></a>
-<span class="sourceLineNo">1241</span>                map[c.x][c.y] = '.';<a name="line.1241"></a>
-<span class="sourceLineNo">1242</span>                if (map[c.x - 1][c.y] != '#' &amp;&amp; map[c.x - 1][c.y] != '&lt;' &amp;&amp; map[c.x - 1][c.y] != '&gt;')<a name="line.1242"></a>
-<span class="sourceLineNo">1243</span>                    map[c.x - 1][c.y] = ',';<a name="line.1243"></a>
-<span class="sourceLineNo">1244</span>                if (map[c.x + 1][c.y] != '#' &amp;&amp; map[c.x + 1][c.y] != '&lt;' &amp;&amp; map[c.x + 1][c.y] != '&gt;')<a name="line.1244"></a>
-<span class="sourceLineNo">1245</span>                    map[c.x + 1][c.y] = ',';<a name="line.1245"></a>
-<span class="sourceLineNo">1246</span>                if (map[c.x][c.y - 1] != '#' &amp;&amp; map[c.x][c.y - 1] != '&lt;' &amp;&amp; map[c.x][c.y - 1] != '&gt;')<a name="line.1246"></a>
-<span class="sourceLineNo">1247</span>                    map[c.x][c.y - 1] = ',';<a name="line.1247"></a>
-<span class="sourceLineNo">1248</span>                if (map[c.x][c.y + 1] != '#' &amp;&amp; map[c.x][c.y + 1] != '&lt;' &amp;&amp; map[c.x][c.y + 1] != '&gt;')<a name="line.1248"></a>
-<span class="sourceLineNo">1249</span>                    map[c.x][c.y + 1] = ',';<a name="line.1249"></a>
-<span class="sourceLineNo">1250</span>            }<a name="line.1250"></a>
-<span class="sourceLineNo">1251</span>        }<a name="line.1251"></a>
-<span class="sourceLineNo">1252</span><a name="line.1252"></a>
-<span class="sourceLineNo">1253</span>        if(trapFill &gt; 0)<a name="line.1253"></a>
-<span class="sourceLineNo">1254</span>        {<a name="line.1254"></a>
-<span class="sourceLineNo">1255</span>            int total = hazards.size() * trapFill / 100;<a name="line.1255"></a>
-<span class="sourceLineNo">1256</span><a name="line.1256"></a>
-<span class="sourceLineNo">1257</span>            for(int i = 0; i &lt; total; i++)<a name="line.1257"></a>
-<span class="sourceLineNo">1258</span>            {<a name="line.1258"></a>
-<span class="sourceLineNo">1259</span>                Coord entry = rng.getRandomElement(hazards);<a name="line.1259"></a>
-<span class="sourceLineNo">1260</span>                if(map[entry.x][entry.y] == '&lt;' || map[entry.x][entry.y] == '&lt;')<a name="line.1260"></a>
-<span class="sourceLineNo">1261</span>                    continue;<a name="line.1261"></a>
-<span class="sourceLineNo">1262</span>                map[entry.x][entry.y] = '^';<a name="line.1262"></a>
-<span class="sourceLineNo">1263</span>                hazards.remove(entry);<a name="line.1263"></a>
-<span class="sourceLineNo">1264</span>            }<a name="line.1264"></a>
-<span class="sourceLineNo">1265</span>        }<a name="line.1265"></a>
-<span class="sourceLineNo">1266</span><a name="line.1266"></a>
-<span class="sourceLineNo">1267</span>        return map;<a name="line.1267"></a>
+<span class="sourceLineNo">1085</span>            boolean[][] shallow = flooded.decode();<a name="line.1085"></a>
+<span class="sourceLineNo">1086</span><a name="line.1086"></a>
+<span class="sourceLineNo">1087</span>            for (int x = 0; x &lt; width; x++) {<a name="line.1087"></a>
+<span class="sourceLineNo">1088</span>                for (int y = 0; y &lt; height; y++) {<a name="line.1088"></a>
+<span class="sourceLineNo">1089</span>                    if (deep[x][y])<a name="line.1089"></a>
+<span class="sourceLineNo">1090</span>                        maps[0][x][y] = deepLakeGlyph;<a name="line.1090"></a>
+<span class="sourceLineNo">1091</span>                    else if (shallow[x][y])<a name="line.1091"></a>
+<span class="sourceLineNo">1092</span>                        maps[0][x][y] = shallowLakeGlyph;<a name="line.1092"></a>
+<span class="sourceLineNo">1093</span>                }<a name="line.1093"></a>
+<span class="sourceLineNo">1094</span>            }<a name="line.1094"></a>
+<span class="sourceLineNo">1095</span>            ArrayList&lt;GreasedRegion&gt; change = new ArrayList&lt;&gt;();<a name="line.1095"></a>
+<span class="sourceLineNo">1096</span>            for (GreasedRegion room : finder.rooms.keySet()) {<a name="line.1096"></a>
+<span class="sourceLineNo">1097</span>                if(flooded.intersects(tmp.remake(room).expand8way()))<a name="line.1097"></a>
+<span class="sourceLineNo">1098</span>                    change.add(room);<a name="line.1098"></a>
+<span class="sourceLineNo">1099</span>            }<a name="line.1099"></a>
+<span class="sourceLineNo">1100</span>            for (GreasedRegion region : change) {<a name="line.1100"></a>
+<span class="sourceLineNo">1101</span>                finder.caves.put(region, finder.rooms.remove(region));<a name="line.1101"></a>
+<span class="sourceLineNo">1102</span>                finder.allRooms.andNot(region);<a name="line.1102"></a>
+<span class="sourceLineNo">1103</span>                finder.allCaves.or(region);<a name="line.1103"></a>
+<span class="sourceLineNo">1104</span>            }<a name="line.1104"></a>
+<span class="sourceLineNo">1105</span>        }<a name="line.1105"></a>
+<span class="sourceLineNo">1106</span>        return maps;<a name="line.1106"></a>
+<span class="sourceLineNo">1107</span>    }<a name="line.1107"></a>
+<span class="sourceLineNo">1108</span><a name="line.1108"></a>
+<span class="sourceLineNo">1109</span>    protected char[][] innerGenerate(char[][] map, EnumMap&lt;FillEffect, Integer&gt; fx)<a name="line.1109"></a>
+<span class="sourceLineNo">1110</span>    {<a name="line.1110"></a>
+<span class="sourceLineNo">1111</span>        OrderedSet&lt;Coord&gt; hazards = new OrderedSet&lt;&gt;();<a name="line.1111"></a>
+<span class="sourceLineNo">1112</span>        int floorCount = DungeonUtility.countCells(map, '.'),<a name="line.1112"></a>
+<span class="sourceLineNo">1113</span>                doorFill = 0,<a name="line.1113"></a>
+<span class="sourceLineNo">1114</span>                waterFill = 0,<a name="line.1114"></a>
+<span class="sourceLineNo">1115</span>                grassFill = 0,<a name="line.1115"></a>
+<span class="sourceLineNo">1116</span>                trapFill = 0,<a name="line.1116"></a>
+<span class="sourceLineNo">1117</span>                boulderFill = 0,<a name="line.1117"></a>
+<span class="sourceLineNo">1118</span>                islandSpacing = 0;<a name="line.1118"></a>
+<span class="sourceLineNo">1119</span><a name="line.1119"></a>
+<span class="sourceLineNo">1120</span>        if(fx.containsKey(FillEffect.GRASS)) {<a name="line.1120"></a>
+<span class="sourceLineNo">1121</span>            grassFill = fx.get(FillEffect.GRASS);<a name="line.1121"></a>
+<span class="sourceLineNo">1122</span>        }<a name="line.1122"></a>
+<span class="sourceLineNo">1123</span>        if(fx.containsKey(FillEffect.WATER)) {<a name="line.1123"></a>
+<span class="sourceLineNo">1124</span>            waterFill = fx.get(FillEffect.WATER);<a name="line.1124"></a>
+<span class="sourceLineNo">1125</span>        }<a name="line.1125"></a>
+<span class="sourceLineNo">1126</span>        if(fx.containsKey(FillEffect.BOULDERS)) {<a name="line.1126"></a>
+<span class="sourceLineNo">1127</span>            boulderFill = fx.get(FillEffect.BOULDERS) * floorCount / 100;<a name="line.1127"></a>
+<span class="sourceLineNo">1128</span>        }<a name="line.1128"></a>
+<span class="sourceLineNo">1129</span>        if(fx.containsKey(FillEffect.ISLANDS)) {<a name="line.1129"></a>
+<span class="sourceLineNo">1130</span>            islandSpacing = fx.get(FillEffect.ISLANDS);<a name="line.1130"></a>
+<span class="sourceLineNo">1131</span>        }<a name="line.1131"></a>
+<span class="sourceLineNo">1132</span>        if(fx.containsKey(FillEffect.TRAPS)) {<a name="line.1132"></a>
+<span class="sourceLineNo">1133</span>            trapFill = fx.get(FillEffect.TRAPS);<a name="line.1133"></a>
+<span class="sourceLineNo">1134</span>        }<a name="line.1134"></a>
+<span class="sourceLineNo">1135</span>        if (boulderFill &gt; 0.0) {<a name="line.1135"></a>
+<span class="sourceLineNo">1136</span>            /*<a name="line.1136"></a>
+<span class="sourceLineNo">1137</span>            short[] floor = pack(map, '.');<a name="line.1137"></a>
+<span class="sourceLineNo">1138</span>            short[] viable = retract(floor, 1, width, height, true);<a name="line.1138"></a>
+<span class="sourceLineNo">1139</span>            ArrayList&lt;Coord&gt; boulders = randomPortion(viable, boulderFill, rng);<a name="line.1139"></a>
+<span class="sourceLineNo">1140</span>            for (Coord boulder : boulders) {<a name="line.1140"></a>
+<span class="sourceLineNo">1141</span>                map[boulder.x][boulder.y] = '#';<a name="line.1141"></a>
+<span class="sourceLineNo">1142</span>            }<a name="line.1142"></a>
+<span class="sourceLineNo">1143</span>            */<a name="line.1143"></a>
+<span class="sourceLineNo">1144</span>            Coord[] boulders = new GreasedRegion(map, '.').retract8way(1).randomPortion(rng, boulderFill);<a name="line.1144"></a>
+<span class="sourceLineNo">1145</span>            Coord t;<a name="line.1145"></a>
+<span class="sourceLineNo">1146</span>            for (int i = 0; i &lt; boulders.length; i++) {<a name="line.1146"></a>
+<span class="sourceLineNo">1147</span>                t = boulders[i];<a name="line.1147"></a>
+<span class="sourceLineNo">1148</span>                map[t.x][t.y] = '#';<a name="line.1148"></a>
+<span class="sourceLineNo">1149</span>            }<a name="line.1149"></a>
+<span class="sourceLineNo">1150</span>        }<a name="line.1150"></a>
+<span class="sourceLineNo">1151</span><a name="line.1151"></a>
+<span class="sourceLineNo">1152</span><a name="line.1152"></a>
+<span class="sourceLineNo">1153</span>        if(trapFill &gt; 0) {<a name="line.1153"></a>
+<span class="sourceLineNo">1154</span>            for (int x = 1; x &lt; map.length - 1; x++) {<a name="line.1154"></a>
+<span class="sourceLineNo">1155</span>                for (int y = 1; y &lt; map[x].length - 1; y++) {<a name="line.1155"></a>
+<span class="sourceLineNo">1156</span>                    if (map[x][y] == '.') {<a name="line.1156"></a>
+<span class="sourceLineNo">1157</span>                        int ctr = 0;<a name="line.1157"></a>
+<span class="sourceLineNo">1158</span>                        if (map[x + 1][y] != '#') ++ctr;<a name="line.1158"></a>
+<span class="sourceLineNo">1159</span>                        if (map[x - 1][y] != '#') ++ctr;<a name="line.1159"></a>
+<span class="sourceLineNo">1160</span>                        if (map[x][y + 1] != '#') ++ctr;<a name="line.1160"></a>
+<span class="sourceLineNo">1161</span>                        if (map[x][y - 1] != '#') ++ctr;<a name="line.1161"></a>
+<span class="sourceLineNo">1162</span>                        if (map[x + 1][y + 1] != '#') ++ctr;<a name="line.1162"></a>
+<span class="sourceLineNo">1163</span>                        if (map[x - 1][y + 1] != '#') ++ctr;<a name="line.1163"></a>
+<span class="sourceLineNo">1164</span>                        if (map[x + 1][y - 1] != '#') ++ctr;<a name="line.1164"></a>
+<span class="sourceLineNo">1165</span>                        if (map[x - 1][y - 1] != '#') ++ctr;<a name="line.1165"></a>
+<span class="sourceLineNo">1166</span>                        if (ctr &gt;= 5) hazards.add(Coord.get(x, y));<a name="line.1166"></a>
+<span class="sourceLineNo">1167</span>                    }<a name="line.1167"></a>
+<span class="sourceLineNo">1168</span>                }<a name="line.1168"></a>
+<span class="sourceLineNo">1169</span>            }<a name="line.1169"></a>
+<span class="sourceLineNo">1170</span>        }<a name="line.1170"></a>
+<span class="sourceLineNo">1171</span>        short[] floors = pack(map, '.'), working;<a name="line.1171"></a>
+<span class="sourceLineNo">1172</span>        floorCount = count(floors);<a name="line.1172"></a>
+<span class="sourceLineNo">1173</span>        float waterRate = waterFill / 100.0f, grassRate = grassFill / 100.0f;<a name="line.1173"></a>
+<span class="sourceLineNo">1174</span>        if(waterRate + grassRate &gt; 1.0f)<a name="line.1174"></a>
+<span class="sourceLineNo">1175</span>        {<a name="line.1175"></a>
+<span class="sourceLineNo">1176</span>            waterRate /= (waterFill + grassFill) / 100.0f;<a name="line.1176"></a>
+<span class="sourceLineNo">1177</span>            grassRate /= (waterFill + grassFill) / 100.0f;<a name="line.1177"></a>
+<span class="sourceLineNo">1178</span>        }<a name="line.1178"></a>
+<span class="sourceLineNo">1179</span>        int targetWater = Math.round(floorCount * waterRate),<a name="line.1179"></a>
+<span class="sourceLineNo">1180</span>                targetGrass = Math.round(floorCount * grassRate),<a name="line.1180"></a>
+<span class="sourceLineNo">1181</span>                sizeWaterPools = targetWater / rng.between(3, 6),<a name="line.1181"></a>
+<span class="sourceLineNo">1182</span>                sizeGrassPools = targetGrass / rng.between(2, 5);<a name="line.1182"></a>
+<span class="sourceLineNo">1183</span><a name="line.1183"></a>
+<span class="sourceLineNo">1184</span>        Coord[] scatter;<a name="line.1184"></a>
+<span class="sourceLineNo">1185</span>        int remainingWater = targetWater, remainingGrass = targetGrass;<a name="line.1185"></a>
+<span class="sourceLineNo">1186</span>        if(targetWater &gt; 0) {<a name="line.1186"></a>
+<span class="sourceLineNo">1187</span>            scatter = fractionPacked(floors, 7);<a name="line.1187"></a>
+<span class="sourceLineNo">1188</span>            scatter = rng.shuffle(scatter, new Coord[scatter.length]);<a name="line.1188"></a>
+<span class="sourceLineNo">1189</span>            ArrayList&lt;Coord&gt; allWater = new ArrayList&lt;&gt;(targetWater);<a name="line.1189"></a>
+<span class="sourceLineNo">1190</span>            for (int i = 0; i &lt; scatter.length; i++) {<a name="line.1190"></a>
+<span class="sourceLineNo">1191</span>                if (remainingWater &gt; 5) //remainingWater &gt;= targetWater * 0.02 &amp;&amp;<a name="line.1191"></a>
+<span class="sourceLineNo">1192</span>                {<a name="line.1192"></a>
+<span class="sourceLineNo">1193</span>                    if(!queryPacked(floors, scatter[i].x, scatter[i].y))<a name="line.1193"></a>
+<span class="sourceLineNo">1194</span>                        continue;<a name="line.1194"></a>
+<span class="sourceLineNo">1195</span>                    working = spill(floors, packOne(scatter[i]), rng.between(4, Math.min(remainingWater, sizeWaterPools)), rng);<a name="line.1195"></a>
+<span class="sourceLineNo">1196</span><a name="line.1196"></a>
+<span class="sourceLineNo">1197</span>                    floors = differencePacked(floors, working);<a name="line.1197"></a>
+<span class="sourceLineNo">1198</span>                    Coord[] pts = allPacked(working);<a name="line.1198"></a>
+<span class="sourceLineNo">1199</span>                    remainingWater -= pts.length;<a name="line.1199"></a>
+<span class="sourceLineNo">1200</span>                    Collections.addAll(allWater, pts);<a name="line.1200"></a>
+<span class="sourceLineNo">1201</span>                } else<a name="line.1201"></a>
+<span class="sourceLineNo">1202</span>                    break;<a name="line.1202"></a>
+<span class="sourceLineNo">1203</span>            }<a name="line.1203"></a>
+<span class="sourceLineNo">1204</span><a name="line.1204"></a>
+<span class="sourceLineNo">1205</span>            for (Coord pt : allWater) {<a name="line.1205"></a>
+<span class="sourceLineNo">1206</span>                hazards.remove(pt);<a name="line.1206"></a>
+<span class="sourceLineNo">1207</span>                //obstacles.add(pt);<a name="line.1207"></a>
+<span class="sourceLineNo">1208</span>                if (map[pt.x][pt.y] != '&lt;' &amp;&amp; map[pt.x][pt.y] != '&gt;')<a name="line.1208"></a>
+<span class="sourceLineNo">1209</span>                    map[pt.x][pt.y] = '~';<a name="line.1209"></a>
+<span class="sourceLineNo">1210</span>            }<a name="line.1210"></a>
+<span class="sourceLineNo">1211</span>            for (Coord pt : allWater) {<a name="line.1211"></a>
+<span class="sourceLineNo">1212</span>                if (map[pt.x][pt.y] != '&lt;' &amp;&amp; map[pt.x][pt.y] != '&gt;' &amp;&amp;<a name="line.1212"></a>
+<span class="sourceLineNo">1213</span>                        (map[pt.x - 1][pt.y] == '.' || map[pt.x + 1][pt.y] == '.' ||<a name="line.1213"></a>
+<span class="sourceLineNo">1214</span>                                map[pt.x][pt.y - 1] == '.' || map[pt.x][pt.y + 1] == '.'))<a name="line.1214"></a>
+<span class="sourceLineNo">1215</span>                    map[pt.x][pt.y] = ',';<a name="line.1215"></a>
+<span class="sourceLineNo">1216</span>            }<a name="line.1216"></a>
+<span class="sourceLineNo">1217</span>        }<a name="line.1217"></a>
+<span class="sourceLineNo">1218</span>        if(targetGrass &gt; 0) {<a name="line.1218"></a>
+<span class="sourceLineNo">1219</span>            scatter = fractionPacked(floors, 7);<a name="line.1219"></a>
+<span class="sourceLineNo">1220</span>            scatter = rng.shuffle(scatter, new Coord[scatter.length]);<a name="line.1220"></a>
+<span class="sourceLineNo">1221</span>            Coord p;<a name="line.1221"></a>
+<span class="sourceLineNo">1222</span>            for (int i = 0; i &lt; scatter.length; i++) {<a name="line.1222"></a>
+<span class="sourceLineNo">1223</span>                if (remainingGrass &gt; 5) //remainingGrass &gt;= targetGrass * 0.02 &amp;&amp;<a name="line.1223"></a>
+<span class="sourceLineNo">1224</span>                {<a name="line.1224"></a>
+<span class="sourceLineNo">1225</span>                    working = spill(floors, packOne(scatter[i]), rng.between(4, Math.min(remainingGrass, sizeGrassPools)), rng);<a name="line.1225"></a>
+<span class="sourceLineNo">1226</span>                    if (working.length == 0)<a name="line.1226"></a>
+<span class="sourceLineNo">1227</span>                        continue;<a name="line.1227"></a>
+<span class="sourceLineNo">1228</span>                    floors = differencePacked(floors, working);<a name="line.1228"></a>
+<span class="sourceLineNo">1229</span>                    Coord[] pts = allPacked(working);<a name="line.1229"></a>
+<span class="sourceLineNo">1230</span>                    remainingGrass -= pts.length;<a name="line.1230"></a>
+<span class="sourceLineNo">1231</span>                    for (int c = 0; c &lt; pts.length; c++) {<a name="line.1231"></a>
+<span class="sourceLineNo">1232</span>                        p = pts[c];<a name="line.1232"></a>
+<span class="sourceLineNo">1233</span>                        map[p.x][p.y] = '"';<a name="line.1233"></a>
+<span class="sourceLineNo">1234</span>                    }<a name="line.1234"></a>
+<span class="sourceLineNo">1235</span>                } else<a name="line.1235"></a>
+<span class="sourceLineNo">1236</span>                    break;<a name="line.1236"></a>
+<span class="sourceLineNo">1237</span>            }<a name="line.1237"></a>
+<span class="sourceLineNo">1238</span>        }<a name="line.1238"></a>
+<span class="sourceLineNo">1239</span><a name="line.1239"></a>
+<span class="sourceLineNo">1240</span>        if(islandSpacing &gt; 1 &amp;&amp; targetWater &gt; 0) {<a name="line.1240"></a>
+<span class="sourceLineNo">1241</span>            ArrayList&lt;Coord&gt; islands = PoissonDisk.sampleMap(map, 1f * islandSpacing, rng, '#', '.', '"', '+', '/', '^', '&lt;', '&gt;');<a name="line.1241"></a>
+<span class="sourceLineNo">1242</span>            for (Coord c : islands) {<a name="line.1242"></a>
+<span class="sourceLineNo">1243</span>                map[c.x][c.y] = '.';<a name="line.1243"></a>
+<span class="sourceLineNo">1244</span>                if (map[c.x - 1][c.y] != '#' &amp;&amp; map[c.x - 1][c.y] != '&lt;' &amp;&amp; map[c.x - 1][c.y] != '&gt;')<a name="line.1244"></a>
+<span class="sourceLineNo">1245</span>                    map[c.x - 1][c.y] = ',';<a name="line.1245"></a>
+<span class="sourceLineNo">1246</span>                if (map[c.x + 1][c.y] != '#' &amp;&amp; map[c.x + 1][c.y] != '&lt;' &amp;&amp; map[c.x + 1][c.y] != '&gt;')<a name="line.1246"></a>
+<span class="sourceLineNo">1247</span>                    map[c.x + 1][c.y] = ',';<a name="line.1247"></a>
+<span class="sourceLineNo">1248</span>                if (map[c.x][c.y - 1] != '#' &amp;&amp; map[c.x][c.y - 1] != '&lt;' &amp;&amp; map[c.x][c.y - 1] != '&gt;')<a name="line.1248"></a>
+<span class="sourceLineNo">1249</span>                    map[c.x][c.y - 1] = ',';<a name="line.1249"></a>
+<span class="sourceLineNo">1250</span>                if (map[c.x][c.y + 1] != '#' &amp;&amp; map[c.x][c.y + 1] != '&lt;' &amp;&amp; map[c.x][c.y + 1] != '&gt;')<a name="line.1250"></a>
+<span class="sourceLineNo">1251</span>                    map[c.x][c.y + 1] = ',';<a name="line.1251"></a>
+<span class="sourceLineNo">1252</span>            }<a name="line.1252"></a>
+<span class="sourceLineNo">1253</span>        }<a name="line.1253"></a>
+<span class="sourceLineNo">1254</span><a name="line.1254"></a>
+<span class="sourceLineNo">1255</span>        if(trapFill &gt; 0)<a name="line.1255"></a>
+<span class="sourceLineNo">1256</span>        {<a name="line.1256"></a>
+<span class="sourceLineNo">1257</span>            int total = hazards.size() * trapFill / 100;<a name="line.1257"></a>
+<span class="sourceLineNo">1258</span><a name="line.1258"></a>
+<span class="sourceLineNo">1259</span>            for(int i = 0; i &lt; total; i++)<a name="line.1259"></a>
+<span class="sourceLineNo">1260</span>            {<a name="line.1260"></a>
+<span class="sourceLineNo">1261</span>                Coord entry = rng.getRandomElement(hazards);<a name="line.1261"></a>
+<span class="sourceLineNo">1262</span>                if(map[entry.x][entry.y] == '&lt;' || map[entry.x][entry.y] == '&lt;')<a name="line.1262"></a>
+<span class="sourceLineNo">1263</span>                    continue;<a name="line.1263"></a>
+<span class="sourceLineNo">1264</span>                map[entry.x][entry.y] = '^';<a name="line.1264"></a>
+<span class="sourceLineNo">1265</span>                hazards.remove(entry);<a name="line.1265"></a>
+<span class="sourceLineNo">1266</span>            }<a name="line.1266"></a>
+<span class="sourceLineNo">1267</span>        }<a name="line.1267"></a>
 <span class="sourceLineNo">1268</span><a name="line.1268"></a>
-<span class="sourceLineNo">1269</span>    }<a name="line.1269"></a>
+<span class="sourceLineNo">1269</span>        return map;<a name="line.1269"></a>
 <span class="sourceLineNo">1270</span><a name="line.1270"></a>
-<span class="sourceLineNo">1271</span>    /**<a name="line.1271"></a>
-<span class="sourceLineNo">1272</span>     * Gets the seed that can be used to rebuild an identical dungeon to the latest one generated (or the seed that<a name="line.1272"></a>
-<span class="sourceLineNo">1273</span>     * will be used to generate the first dungeon if none has been made yet). You can pass the long this returns to<a name="line.1273"></a>
-<span class="sourceLineNo">1274</span>     * the setState() method on this class' rng field, which assuming all other calls to generate a dungeon are<a name="line.1274"></a>
-<span class="sourceLineNo">1275</span>     * identical, will ensure generate() or generateRespectingStairs() will produce the same dungeon output as the<a name="line.1275"></a>
-<span class="sourceLineNo">1276</span>     * dungeon originally generated with the seed this returned.<a name="line.1276"></a>
-<span class="sourceLineNo">1277</span>     * &lt;br&gt;<a name="line.1277"></a>
-<span class="sourceLineNo">1278</span>     * You can also call getState() on the rng field yourself immediately before generating a dungeon, but this method<a name="line.1278"></a>
-<span class="sourceLineNo">1279</span>     * handles some complexities of when the state is actually used to generate a dungeon; since StatefulRNG objects can<a name="line.1279"></a>
-<span class="sourceLineNo">1280</span>     * be shared between different classes that use random numbers, the state could change between when you call<a name="line.1280"></a>
-<span class="sourceLineNo">1281</span>     * getState() and when this class generates a dungeon. Using getRebuildSeed() eliminates that confusion.<a name="line.1281"></a>
-<span class="sourceLineNo">1282</span>     * @return a seed as a long that can be passed to setState() on this class' rng field to recreate a dungeon<a name="line.1282"></a>
-<span class="sourceLineNo">1283</span>     */<a name="line.1283"></a>
-<span class="sourceLineNo">1284</span>    public long getRebuildSeed() {<a name="line.1284"></a>
-<span class="sourceLineNo">1285</span>        return rebuildSeed;<a name="line.1285"></a>
-<span class="sourceLineNo">1286</span>    }<a name="line.1286"></a>
-<span class="sourceLineNo">1287</span><a name="line.1287"></a>
-<span class="sourceLineNo">1288</span>    /**<a name="line.1288"></a>
-<span class="sourceLineNo">1289</span>     * Provides a string representation of the latest generated dungeon.<a name="line.1289"></a>
-<span class="sourceLineNo">1290</span>     *<a name="line.1290"></a>
-<span class="sourceLineNo">1291</span>     * @return a printable string version of the latest generated dungeon.<a name="line.1291"></a>
-<span class="sourceLineNo">1292</span>     */<a name="line.1292"></a>
-<span class="sourceLineNo">1293</span>    @Override<a name="line.1293"></a>
-<span class="sourceLineNo">1294</span>        public String toString() {<a name="line.1294"></a>
-<span class="sourceLineNo">1295</span>        char[][] trans = new char[height][width];<a name="line.1295"></a>
-<span class="sourceLineNo">1296</span>        for (int x = 0; x &lt; width; x++) {<a name="line.1296"></a>
-<span class="sourceLineNo">1297</span>            for (int y = 0; y &lt; height; y++) {<a name="line.1297"></a>
-<span class="sourceLineNo">1298</span>                trans[y][x] = dungeon[x][y];<a name="line.1298"></a>
-<span class="sourceLineNo">1299</span>            }<a name="line.1299"></a>
-<span class="sourceLineNo">1300</span>        }<a name="line.1300"></a>
-<span class="sourceLineNo">1301</span>        StringBuilder sb = new StringBuilder();<a name="line.1301"></a>
-<span class="sourceLineNo">1302</span>        for (int row = 0; row &lt; height; row++) {<a name="line.1302"></a>
-<span class="sourceLineNo">1303</span>            sb.append(trans[row]);<a name="line.1303"></a>
-<span class="sourceLineNo">1304</span>            sb.append('\n');<a name="line.1304"></a>
-<span class="sourceLineNo">1305</span>        }<a name="line.1305"></a>
-<span class="sourceLineNo">1306</span>        return sb.toString();<a name="line.1306"></a>
-<span class="sourceLineNo">1307</span>    }<a name="line.1307"></a>
-<span class="sourceLineNo">1308</span><a name="line.1308"></a>
-<span class="sourceLineNo">1309</span>}<a name="line.1309"></a>
+<span class="sourceLineNo">1271</span>    }<a name="line.1271"></a>
+<span class="sourceLineNo">1272</span><a name="line.1272"></a>
+<span class="sourceLineNo">1273</span>    /**<a name="line.1273"></a>
+<span class="sourceLineNo">1274</span>     * Gets the seed that can be used to rebuild an identical dungeon to the latest one generated (or the seed that<a name="line.1274"></a>
+<span class="sourceLineNo">1275</span>     * will be used to generate the first dungeon if none has been made yet). You can pass the long this returns to<a name="line.1275"></a>
+<span class="sourceLineNo">1276</span>     * the setState() method on this class' rng field, which assuming all other calls to generate a dungeon are<a name="line.1276"></a>
+<span class="sourceLineNo">1277</span>     * identical, will ensure generate() or generateRespectingStairs() will produce the same dungeon output as the<a name="line.1277"></a>
+<span class="sourceLineNo">1278</span>     * dungeon originally generated with the seed this returned.<a name="line.1278"></a>
+<span class="sourceLineNo">1279</span>     * &lt;br&gt;<a name="line.1279"></a>
+<span class="sourceLineNo">1280</span>     * You can also call getState() on the rng field yourself immediately before generating a dungeon, but this method<a name="line.1280"></a>
+<span class="sourceLineNo">1281</span>     * handles some complexities of when the state is actually used to generate a dungeon; since StatefulRNG objects can<a name="line.1281"></a>
+<span class="sourceLineNo">1282</span>     * be shared between different classes that use random numbers, the state could change between when you call<a name="line.1282"></a>
+<span class="sourceLineNo">1283</span>     * getState() and when this class generates a dungeon. Using getRebuildSeed() eliminates that confusion.<a name="line.1283"></a>
+<span class="sourceLineNo">1284</span>     * @return a seed as a long that can be passed to setState() on this class' rng field to recreate a dungeon<a name="line.1284"></a>
+<span class="sourceLineNo">1285</span>     */<a name="line.1285"></a>
+<span class="sourceLineNo">1286</span>    public long getRebuildSeed() {<a name="line.1286"></a>
+<span class="sourceLineNo">1287</span>        return rebuildSeed;<a name="line.1287"></a>
+<span class="sourceLineNo">1288</span>    }<a name="line.1288"></a>
+<span class="sourceLineNo">1289</span><a name="line.1289"></a>
+<span class="sourceLineNo">1290</span>    /**<a name="line.1290"></a>
+<span class="sourceLineNo">1291</span>     * Provides a string representation of the latest generated dungeon.<a name="line.1291"></a>
+<span class="sourceLineNo">1292</span>     *<a name="line.1292"></a>
+<span class="sourceLineNo">1293</span>     * @return a printable string version of the latest generated dungeon.<a name="line.1293"></a>
+<span class="sourceLineNo">1294</span>     */<a name="line.1294"></a>
+<span class="sourceLineNo">1295</span>    @Override<a name="line.1295"></a>
+<span class="sourceLineNo">1296</span>        public String toString() {<a name="line.1296"></a>
+<span class="sourceLineNo">1297</span>        char[][] trans = new char[height][width];<a name="line.1297"></a>
+<span class="sourceLineNo">1298</span>        for (int x = 0; x &lt; width; x++) {<a name="line.1298"></a>
+<span class="sourceLineNo">1299</span>            for (int y = 0; y &lt; height; y++) {<a name="line.1299"></a>
+<span class="sourceLineNo">1300</span>                trans[y][x] = dungeon[x][y];<a name="line.1300"></a>
+<span class="sourceLineNo">1301</span>            }<a name="line.1301"></a>
+<span class="sourceLineNo">1302</span>        }<a name="line.1302"></a>
+<span class="sourceLineNo">1303</span>        StringBuilder sb = new StringBuilder();<a name="line.1303"></a>
+<span class="sourceLineNo">1304</span>        for (int row = 0; row &lt; height; row++) {<a name="line.1304"></a>
+<span class="sourceLineNo">1305</span>            sb.append(trans[row]);<a name="line.1305"></a>
+<span class="sourceLineNo">1306</span>            sb.append('\n');<a name="line.1306"></a>
+<span class="sourceLineNo">1307</span>        }<a name="line.1307"></a>
+<span class="sourceLineNo">1308</span>        return sb.toString();<a name="line.1308"></a>
+<span class="sourceLineNo">1309</span>    }<a name="line.1309"></a>
+<span class="sourceLineNo">1310</span><a name="line.1310"></a>
+<span class="sourceLineNo">1311</span>}<a name="line.1311"></a>
 
 
 
