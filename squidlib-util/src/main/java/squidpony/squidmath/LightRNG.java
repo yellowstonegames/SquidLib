@@ -10,6 +10,8 @@ package squidpony.squidmath;
 
 import squidpony.StringKit;
 
+import java.io.Serializable;
+
 /**
  * This is a SplittableRandom-style generator, meant to have a tiny state
  * that permits storing many different generators with low overhead.
@@ -38,7 +40,7 @@ import squidpony.StringKit;
  * @author Sebastiano Vigna
  * @author Tommy Ettinger
  */
-public class LightRNG implements RandomnessSource, StatefulRandomness
+public class LightRNG implements RandomnessSource, StatefulRandomness, Serializable
 {
 	/** 2 raised to the 53, - 1. */
     private static final long DOUBLE_MASK = ( 1L << 53 ) - 1;

@@ -296,7 +296,7 @@ public class CrossHash {
      * @param end   the end of the section to hash (exclusive)
      * @return
      */
-    public static int hash(final char[] data, int start, int end) {
+    public static int hash(final char[] data, int start,  int end) {
         if (data == null)
             return 0;
         int h = -2128831035, len = data.length;
@@ -900,7 +900,7 @@ public class CrossHash {
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
 
-        public static long hash64(final char[] data, int start, int end) {
+        public static long hash64(final char[] data, final int start, final int end) {
             if (data == null || start >= end)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -1052,7 +1052,7 @@ public class CrossHash {
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
 
-        public static int hash(final char[] data, int start, int end) {
+        public static int hash(final char[] data, final int start, final int end) {
             if (data == null || start >= end)
                 return 0;
 
@@ -1254,7 +1254,7 @@ public class CrossHash {
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
 
-        public long hash64(final char[] data, int start, int end) {
+        public long hash64(final char[] data, final int start, final int end) {
             if (data == null || start >= end)
                 return 0;
             final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
@@ -1407,7 +1407,7 @@ public class CrossHash {
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
 
-        public int hash(final char[] data, int start, int end) {
+        public int hash(final char[] data, final int start, final int end) {
             if (data == null || start >= end)
                 return 0;
 
@@ -1574,7 +1574,7 @@ public class CrossHash {
             return result ^ ((z ^ result) >>> 16) * 0x9E3779B97F4A7C15L;
         }
 
-        public static long hash64(final char[] data, int start, int end) {
+        public static long hash64(final char[] data, final int start, final int end) {
             if (data == null || start >= end)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -1717,7 +1717,7 @@ public class CrossHash {
             return result ^ ((z ^ result) >>> 8) * 0x9E3779B9;
         }
 
-        public static int hash(final char[] data, int start, int end) {
+        public static int hash(final char[] data, final int start, final int end) {
             if (data == null || start >= end)
                 return 0;
             int z = 0x632BE5AB, result = 1;
@@ -1859,7 +1859,7 @@ public class CrossHash {
             return (result ^ 0xC6BC25963AB56C93L * data.length());
         }
 
-        public static long hash64(final char[] data, int start, int end) {
+        public static long hash64(final char[] data, final int start, final int end) {
             if (data == null || start >= end)
                 return 0;
             long result = 0x632BE59BD9B4E019L;
@@ -1994,7 +1994,7 @@ public class CrossHash {
             return (result ^ 0x62E2AC0D * data.length());
         }
 
-        public static int hash(final char[] data, int start, int end) {
+        public static int hash(final char[] data, final int start, final int end) {
             if (data == null || start >= end)
                 return 0;
             int result = 0x7360C6EB;
