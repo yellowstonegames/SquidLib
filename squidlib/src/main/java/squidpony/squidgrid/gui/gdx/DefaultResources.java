@@ -61,7 +61,7 @@ public class DefaultResources implements LifecycleListener {
             unicode1 = null, unicode2 = null, arial15 = null;
 
     private TextCellFactory distanceNarrow = null, distanceSquare = null, typewriterDistanceNarrow = null,
-            distancePrint = null, distanceClean = null;
+            distancePrint = null, distanceClean = null, distanceCode = null;
     private TextureAtlas iconAtlas = null;
     public static final String squareName = "Zodiac-Square-12x12.fnt",
             narrowName = "Rogue-Zodiac-6x12.fnt",
@@ -81,7 +81,9 @@ public class DefaultResources implements LifecycleListener {
             distanceFieldClean = "Noto-Sans-distance.fnt",
             distanceFieldCleanTexture = "Noto-Sans-distance.png",
             distanceFieldTypewriterNarrow = "CM-Custom-distance.fnt",
-            distanceFieldTypewriterNarrowTexture = "CM-Custom-distance.png";
+            distanceFieldTypewriterNarrowTexture = "CM-Custom-distance.png",
+            distanceFieldCode = "SourceCodePro-Medium-distance.fnt",
+            distanceFieldCodeTexture = "SourceCodePro-Medium-distance.png";
     public static String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n"
             + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n"
             + "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n"
@@ -510,6 +512,42 @@ public class DefaultResources implements LifecycleListener {
         }
         if(instance.typewriterDistanceNarrow != null)
             return instance.typewriterDistanceNarrow.copy();
+        return null;
+    }
+    /**
+     * Returns a TextCellFactory already configured to use a highly-legible fixed-width font with broad Unicode support
+     * that should scale cleanly to many sizes. Caches the result for later calls. The font used is Source Code Pro, an
+     * open-source (SIL Open Font License) typeface by Adobe, and it has the best Unicode support of any fixed-width
+     * font used by SquidLib. It may be a good choice for science-fiction games because of its modern feel, but the
+     * legibility enhancements made so the font could be usable in text editors also are nice for all text-based games.
+     * The high glyph count means the part of the image for each glyph is smaller, though, so this may look slightly
+     * pixelated if it starts small and is resized to much larger. A cell width of 15 and cell height of 27 is ideal;
+     * this allows the font to resize fairly well to larger sizes using Viewports.
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/SourceCodePro-Medium-distance.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/SourceCodePro-Medium-distance.png</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font SourceCodePro-Medium.otf
+     */
+    public static TextCellFactory getStretchableCodeFont()
+    {
+        initialize();
+        if(instance.distanceCode == null)
+        {
+            try {
+                instance.distanceCode = new TextCellFactory()
+                        .fontDistanceField(distanceFieldCode, distanceFieldCodeTexture);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.distanceCode != null)
+            return instance.distanceCode.copy();
         return null;
     }
 
