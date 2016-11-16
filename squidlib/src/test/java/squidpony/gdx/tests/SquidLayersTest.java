@@ -14,9 +14,7 @@ import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.gui.gdx.*;
-import squidpony.squidgrid.mapping.DungeonGenerator;
-import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidgrid.mapping.OrganicMapGenerator;
+import squidpony.squidgrid.mapping.*;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.StatefulRNG;
@@ -46,13 +44,15 @@ public class SquidLayersTest extends ApplicationAdapter{
     public void create() {
         super.create();
         rng = new StatefulRNG(0x9876543210L);
-        gridWidth = 120;
-        gridHeight = 50;
-        cellWidth = 8;
-        cellHeight = 17;
+        gridWidth = 80;
+        gridHeight = 30;
+        cellWidth = 15;
+        cellHeight = 27;
+
         layers = new SquidLayers(gridWidth, gridHeight, cellWidth, cellHeight,
-                DefaultResources.getStretchableFont());
-        layers.setTextSize(cellWidth, cellHeight+1);
+                DefaultResources.getStretchableCodeFont());
+                //new TextCellFactory().fontDistanceField("SourceCodePro-Medium-distance.fnt", "SourceCodePro-Medium-distance.png"));
+                //DefaultResources.getStretchableFont());
         //colors = DefaultResources.getSCC().rainbow(0.2f, 1.0f, 144);
         colors = DefaultResources.getSCC().loopingGradient(SColor.ATOMIC_TANGERINE, SColor.CRIMSON, 100);
         mColors = DefaultResources.getSCC().loopingGradient(SColor.ALICE_BLUE, SColor.MAGIC_MINT, 123);
@@ -60,10 +60,17 @@ public class SquidLayersTest extends ApplicationAdapter{
         layers.setLightingColor(colors.get(colorIndex));
         fov = new FOV(FOV.SHADOW);
         //PacMazeGenerator maze = new PacMazeGenerator(gridWidth, gridHeight, rng);
-        OrganicMapGenerator org = new OrganicMapGenerator(gridWidth, gridHeight, rng);
-        DungeonGenerator gen = new DungeonGenerator(gridWidth, gridHeight, rng);
-        map = gen.generate(org.generate());
-        displayedMap = DungeonUtility.hashesToLines(map);
+        //OrganicMapGenerator org = new OrganicMapGenerator(gridWidth, gridHeight, rng);
+        SerpentMapGenerator org = new SerpentMapGenerator(gridWidth, gridHeight, rng, 0.1);
+        org.putBoxRoomCarvers(3);
+        org.putRoundRoomCarvers(1);
+        org.putCaveCarvers(1);
+        SectionDungeonGenerator gen = new SectionDungeonGenerator(gridWidth, gridHeight, rng);
+        gen.addMaze(10);
+        gen.addBoulders(0, 8);
+        map = org.generate();
+        map = gen.generate(map, org.getEnvironment());
+        displayedMap = DungeonUtility.hashesToLines(map, true);
         indicesBG = DungeonUtility.generateBGPaletteIndices(map);
         indicesFG = DungeonUtility.generatePaletteIndices(map);
         resMap = DungeonUtility.generateResistances(map);
@@ -98,6 +105,7 @@ public class SquidLayersTest extends ApplicationAdapter{
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
+        stage.getViewport().update(width, height, false);
     }
 
     @Override
@@ -143,6 +151,7 @@ public class SquidLayersTest extends ApplicationAdapter{
         }
 
         layers.put(0, 0, displayedMap, indicesFG, indicesBG, lightness);
+        stage.getViewport().apply(false);
         stage.draw();
         stage.act();
         int aeLen = layers.getForegroundLayer().animatedEntities.size();
@@ -156,8 +165,8 @@ public class SquidLayersTest extends ApplicationAdapter{
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "SquidLib Test: SquidLayers";
-        config.width = 120 * 8;
-        config.height = 50 * 17;
+        config.width = 80 * 15;
+        config.height = 30 * 27;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);
         config.addIcon("Tentacle-128.png", Files.FileType.Internal);
