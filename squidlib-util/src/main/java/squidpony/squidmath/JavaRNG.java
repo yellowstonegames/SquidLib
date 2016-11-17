@@ -10,21 +10,20 @@ import java.util.Random;
  * without using a better RNG.
  * @author Ben McLean
  */
-public class JavaRNG implements RandomnessSource, StatefulRandomness, Serializable
+public class JavaRNG implements RandomnessSource, Serializable
 {
     public Random random;
 
     /** Creates a new generator seeded using Math.random. */
     public JavaRNG() { this((long) Math.floor(Math.random() * Long.MAX_VALUE)); }
 
-    public JavaRNG( final long seed ) { setSeed(seed); }
+    public JavaRNG( final long seed ) { this.random = new Random(seed); }
 
     public JavaRNG( final Random random ) { this.random = random; }
 
-    /** Not implemented */
     @Override
     public int next( int bits ) {
-        return 0;
+        return random.nextInt() >>> (32 - bits);
         // return random.next(bits);
     }
 
@@ -69,23 +68,6 @@ public class JavaRNG implements RandomnessSource, StatefulRandomness, Serializab
      * in-place).
      */
     public void nextBytes( final byte[] bytes ) { random.nextBytes(bytes); }
-
-    /**
-     * Sets the seed of this generator (which is also the current state).
-     * @param seed the seed to use for this LightRNG, as if it was constructed with this seed.
-     */
-    public void setSeed( final long seed ) {
-        random = new Random(seed);
-    }
-
-    @Override
-    public void setState( final long seed ) {
-        random.setSeed(seed);
-    }
-
-    /** Not implemented */
-    @Override
-    public long getState() { return 0; }
 
     @Override
     public String toString() {
