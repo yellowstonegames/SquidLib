@@ -15,7 +15,7 @@
  */
 package squidpony.squidmath;
 
-import squidpony.GwtCompatibility;
+import squidpony.ArrayTools;
 import squidpony.annotation.Beta;
 import squidpony.annotation.GwtIncompatible;
 
@@ -1984,11 +1984,11 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
 
     public IntVLA valuesAsIntVLA()
     {
-        return new IntVLA(GwtCompatibility.range(size));
+        return new IntVLA(ArrayTools.range(size));
     }
     public int[] valuesAsArray()
     {
-        return GwtCompatibility.range(size);
+        return ArrayTools.range(size);
     }
 
     /**

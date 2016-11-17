@@ -1,7 +1,7 @@
 package squidpony.squidmath;
 
 import org.junit.Test;
-import squidpony.GwtCompatibility;
+import squidpony.ArrayTools;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
@@ -26,7 +26,7 @@ public class GreasedRegionTest {
     public static DungeonGenerator dungeonGen = new DungeonGenerator(64, 64, srng);
     public static char[][] dungeon = dungeonGen.generate();
     public static GreasedRegion dataDungeon = new GreasedRegion(dungeon, '.');
-    public static final char[] letters = GwtCompatibility.letterSpan(256);
+    public static final char[] letters = ArrayTools.letterSpan(256);
     public static final int maxLetter = 256;
     static {
         //printRegion(dataCross);

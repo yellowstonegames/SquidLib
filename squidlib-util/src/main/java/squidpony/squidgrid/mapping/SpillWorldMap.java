@@ -1,6 +1,6 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.GwtCompatibility;
+import squidpony.ArrayTools;
 import squidpony.Thesaurus;
 import squidpony.annotation.Beta;
 import squidpony.squidgrid.MultiSpill;
@@ -23,7 +23,7 @@ public class SpillWorldMap {
     public StatefulRNG rng;
     public String name;
     public char[][] politicalMap;
-    public static final char[] letters = GwtCompatibility.letterSpan(255);
+    public static final char[] letters = ArrayTools.letterSpan(255);
     public final OrderedMap<Character, String> atlas = new OrderedMap<>(16);
 
     public SpillWorldMap()

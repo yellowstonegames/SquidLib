@@ -1,6 +1,6 @@
 package squidpony.squidmath;
 
-import squidpony.GwtCompatibility;
+import squidpony.ArrayTools;
 import squidpony.annotation.Beta;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.zone.Zone;
@@ -12,7 +12,43 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Region encoding of 64x64 areas as a number of long arrays; uncompressed (fatty), but fast (greased lightning).
+ * Region encoding of on/off information about areas using bitsets; uncompressed (fatty), but fast (greased lightning).
+ * This can handle any size of 2D data, and is not strictly limited to 256x256 as CoordPacker is. It stores several long
+ * arrays and uses each bit in one of those numbers to represent a single point, though sometimes this does waste bits
+ * if the height of the area this encodes is not a multiple of 64 (if you store a 80x64 map, this uses 80 longs; if you
+ * store an 80x65 map, this uses 160 longs, 80 for the first 64 rows and 80 more to store the next row). It's much
+ * faster than CoordPacker at certain operations (anything that expands or retracts an area, including
+ * {@link #expand()}), {@link #retract()}), {@link #fringe()}), {@link #surface()}, and {@link #flood(GreasedRegion)},
+ * and slightly faster on others, like {@link #and(GreasedRegion)} (called intersectPacked() in CoordPacker) and
+ * {@link #or(GreasedRegion)} (called unionPacked() in CoordPacker).
+ * <br>
+ * Each GreasedRegion is mutable, and instance methods typically modify that instance and return it for chaining. There
+ * are exceptions, usually where multiple GreasedRegion values are returned and the instance is not modified.
+ * <br>
+ * Typical usage involves constructing a GreasedRegion from some input data, like a char[][] for a map or a double[][]
+ * from DijkstraMap, and modifying it spatially with expand(), retract(), flood(), etc. It's common to mix in data from
+ * other GreasedRegions with and() (which gets the intersection of two GreasedRegions and stores it in one), or() (which
+ * is like and() but for the union), xor() (like and() but for exclusive or, finding only cells that are on in exactly
+ * one of the two GreasedRegions), and andNot() (which can be considered the "subtract another region from me" method).
+ * There are 8-way (Chebyshev distance) variants on all of the spatial methods, and methods without "8way" in the name
+ * are either 4-way (Manhattan distance) or not affected by distance measurement. Once you have a GreasedRegion, you may
+ * want to get a single random point from it (use {@link #singleRandom(RNG)}), get several random points from it (use
+ * {@link #randomPortion(RNG, int)} for random sampling or {@link #randomSeparated(double, RNG)} for points that have
+ * some distance between each other), or get all points from it (use {@link #asCoords()}. You may also want to produce
+ * some 2D data from one or more GreasedRegions, such as with {@link #sum(GreasedRegion...)} or {@link #toChars()}. The
+ * most effective techniques regarding GreasedRegion involve multiple methods, like getting a few random points from an
+ * existing GreasedRegion representing floor tiles in a dungeon with {@link #randomPortion(RNG, int)}, then inserting
+ * those into a new GreasedRegion with {@link #insertSeveral(Coord...)}, and then finding a random expansion of those
+ * initial points with {@link #spill(GreasedRegion, int, RNG)}, giving the original GreasedRegion of floor tiles as the
+ * first argument. This could be used to position puddles of water or patches of mold in a dungeon level, while still
+ * keeping the starting points and finished points within the boundaries of valid (floor) cells.
+ * <br>
+ * For efficiency, you can place one GreasedRegion into another (typically a temporary value that is no longer needed
+ * and can be recycled) using {@link #remake(GreasedRegion)}, or give the information that would normally be used to
+ * construct a fresh GreasedRegion to an existing one of the same dimensions with {@link #refill(boolean[][])} or any
+ * of the overloads of refill(). These re-methods don't do as much work as a constructor does if the width and height
+ * of their argument are identical to their current width and height, and don't create more garbage for the GC.
+ * <br>
  * Created by Tommy Ettinger on 6/24/2016.
  */
 @Beta
@@ -1751,7 +1787,7 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
 
     public int[][] fit(int[][] basis, int defaultValue)
     {
-        int[][] next = GwtCompatibility.fill2D(defaultValue, width, height);
+        int[][] next = ArrayTools.fill(defaultValue, width, height);
         if(basis == null || basis.length <= 0 || basis[0] == null || basis[0].length <= 0)
             return next;
         int tmp, xTotal = 0, yTotal = 0, xTarget, yTarget, bestX = -1, oX = basis.length, oY = basis[0].length, ao;
@@ -1804,7 +1840,7 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
     /*
     public int[][] edgeFit(int[][] basis, int defaultValue)
     {
-        int[][] next = GwtCompatibility.fill2D(defaultValue, width, height);
+        int[][] next = GwtCompatibility.fill(defaultValue, width, height);
         if(basis == null || basis.length <= 0 || basis[0] == null || basis[0].length <= 0)
             return next;
 
@@ -2116,6 +2152,71 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
             for (int y = 0; y < h; y++) {
                 for (int i = 0; i < l; i++) {
                     numbers[x][y] += (regions[i].data[x * ys + (y >> 6)] & (1L << (y & 63))) != 0 ? 1 : 0;
+                }
+            }
+        }
+        return numbers;
+    }
+
+    /**
+     * Generates a 2D int array from an array or vararg of GreasedRegions, starting at all 0 and adding 1 to the int at
+     * a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
+     * this method, it can produce any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
+     * produce number between 0 and 16 in a cell.
+     * @param regions an array or vararg of GreasedRegions; must all have the same width and height
+     * @return a 2D int array with the same width and height as the regions, where an int cell equals the number of given GreasedRegions that had an "on" cell at that position
+     */
+    public static int[][] sum(List<GreasedRegion> regions)
+    {
+        if(regions == null || regions.isEmpty())
+            return new int[0][0];
+        GreasedRegion t = regions.get(0);
+        int w = t.width, h = t.height, l = regions.size(), ys = t.ySections;
+        int[][] numbers = new int[w][h];
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                for (int i = 0; i < l; i++) {
+                    numbers[x][y] += (regions.get(i).data[x * ys + (y >> 6)] & (1L << (y & 63))) != 0 ? 1 : 0;
+                }
+            }
+        }
+        return numbers;
+    }
+
+    public static double[][] dijkstraScan(char[][] map, Coord... goals)
+    {
+        if(map == null || map.length <= 0 || map[0].length <= 0 || goals == null || goals.length <= 0)
+            return new double[0][0];
+        int w = map.length, h = map[0].length, ys = (h + 63) >>> 6;
+        double[][] numbers = new double[w][h];
+        GreasedRegion walls = new GreasedRegion(map, '#'), floors = new GreasedRegion(walls).not(),
+                middle = new GreasedRegion(w, h, goals).and(floors);
+        ArrayList<GreasedRegion> regions = middle.floodSeriesToLimit(floors);
+        int l = regions.size();
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                for (int i = 0; i < l; i++) {
+                    numbers[x][y] += (regions.get(i).data[x * ys + (y >> 6)] & (1L << (y & 63))) != 0 ? 1 : 0;
+                }
+            }
+        }
+        return numbers;
+    }
+
+    public static double[][] dijkstraScan8way(char[][] map, Coord... goals)
+    {
+        if(map == null || map.length <= 0 || map[0].length <= 0 || goals == null || goals.length <= 0)
+            return new double[0][0];
+        int w = map.length, h = map[0].length, ys = (h + 63) >>> 6;
+        double[][] numbers = new double[w][h];
+        GreasedRegion walls = new GreasedRegion(map, '#'), floors = new GreasedRegion(walls).not(),
+                middle = new GreasedRegion(w, h, goals).and(floors);
+        ArrayList<GreasedRegion> regions = middle.floodSeriesToLimit8way(floors);
+        int l = regions.size();
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                for (int i = 0; i < l; i++) {
+                    numbers[x][y] += (regions.get(i).data[x * ys + (y >> 6)] & (1L << (y & 63))) != 0 ? 1 : 0;
                 }
             }
         }

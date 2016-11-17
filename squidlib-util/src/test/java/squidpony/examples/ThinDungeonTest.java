@@ -1,6 +1,6 @@
 package squidpony.examples;
 
-import squidpony.GwtCompatibility;
+import squidpony.ArrayTools;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.SectionDungeonGenerator;
 import squidpony.squidgrid.mapping.SerpentMapGenerator;
@@ -105,7 +105,7 @@ public class ThinDungeonTest {
             tdg.generate(map, env);
             //RNG rand = new RNG();
             //tdg.generate(rand.getRandomElement(TilesetType.values()));
-            sdungeon = GwtCompatibility.copy2D(tdg.getDungeon());
+            sdungeon = ArrayTools.copy(tdg.getDungeon());
             sdungeon[tdg.stairsUp.x][tdg.stairsUp.y] = '<';
             sdungeon[tdg.stairsDown.x][tdg.stairsDown.y] = '>';
             //System.out.println(tdg);

@@ -108,6 +108,28 @@ public class DijkstraBenchmark {
         doScanDijkstra();
     }
 
+    public long doScanGreased()
+    {
+        Coord[] goals = new Coord[1];
+        long scanned = 0;
+        for (int x = 1; x < DIMENSION - 1; x++) {
+            for (int y = 1; y < DIMENSION - 1; y++) {
+                if (map[x][y] == '#')
+                    continue;
+                goals[0] = Coord.get(x, y);
+                scanned += GreasedRegion.dijkstraScan8way(map, goals).length;
+            }
+        }
+        return scanned / DIMENSION;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureScanGreased() throws InterruptedException {
+        doScanGreased();
+    }
+
     public long doPathDijkstra()
     {
         DijkstraMap dijkstra = new DijkstraMap(
