@@ -1,8 +1,7 @@
 package squidpony.squidmath;
 
-import squidpony.StringKit;
-import java.util.Random;
 import java.io.Serializable;
+import java.util.Random;
 
 /**
  * This makes java.util.Random available in SquidLib.
@@ -22,8 +21,12 @@ public class JavaRNG implements RandomnessSource, StatefulRandomness, Serializab
 
     public JavaRNG( final Random random ) { this.random = random; }
 
+    /** Not implemented */
     @Override
-    public int next( int bits ) { return random.next(bits); }
+    public int next( int bits ) {
+        return 0;
+        // return random.next(bits);
+    }
 
     @Override
     public long nextLong() { return random.nextLong(); }
@@ -45,23 +48,6 @@ public class JavaRNG implements RandomnessSource, StatefulRandomness, Serializab
         return lower + nextInt(upper - lower);
     }
 
-    /**
-     * Exclusive on the upper bound. The lower bound is 0.
-     * @param bound the upper bound; should be positive
-     * @return a random long less than n
-     */
-    public long nextLong( final long bound ) { return random.nextLong(bound); }
-
-    /**
-     * Inclusive lower, exclusive upper.
-     * @param lower the lower bound, inclusive, can be positive or negative
-     * @param upper the upper bound, exclusive, should be positive, must be greater than lower
-     * @return a random long at least equal to lower and less than upper
-     */
-    public long nextLong( final long lower, final long upper ) {
-        if ( upper - lower <= 0 )  throw new IllegalArgumentException("Upper bound must be greater than lower bound");
-        return lower + nextLong(upper - lower);
-    }
     public double nextDouble() { return random.nextDouble(); }
     public double nextDouble(final double outer) {
         return nextDouble() * outer;
@@ -97,21 +83,18 @@ public class JavaRNG implements RandomnessSource, StatefulRandomness, Serializab
         random.setSeed(seed);
     }
 
+    /** Not implemented */
     @Override
-    public Random getState() { return random; }
+    public long getState() { return 0; }
 
     @Override
     public String toString() {
-        return "Java.util.Random in JavaRNG';
+        return "Java.util.Random in JavaRNG";
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        JavaRNG javaRNG = (JavaRNG) o;
-
-        return random == javaRNG.getState();
+        return false;
     }
 }
