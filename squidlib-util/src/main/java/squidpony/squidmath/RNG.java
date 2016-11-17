@@ -1,6 +1,6 @@
 package squidpony.squidmath;
 
-import squidpony.GwtCompatibility;
+import squidpony.ArrayTools;
 import squidpony.annotation.GwtIncompatible;
 
 import java.io.Serializable;
@@ -593,7 +593,7 @@ public class RNG implements Serializable {
 
         int length = data.length;
         int n = Math.min(length, output.length);
-        int[] mapping = GwtCompatibility.range(n);
+        int[] mapping = ArrayTools.range(n);
         for (int i = 0; i < n; i++) {
             int r = nextInt(length);
             output[i] = data[mapping[r]];

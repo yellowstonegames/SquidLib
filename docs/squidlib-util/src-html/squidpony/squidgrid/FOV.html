@@ -8,8 +8,8 @@
 <div class="sourceContainer">
 <pre><span class="sourceLineNo">001</span>package squidpony.squidgrid;<a name="line.1"></a>
 <span class="sourceLineNo">002</span><a name="line.2"></a>
-<span class="sourceLineNo">003</span>import squidpony.GwtCompatibility;<a name="line.3"></a>
-<span class="sourceLineNo">004</span>import squidpony.squidgrid.mapping.DungeonUtility;<a name="line.4"></a>
+<span class="sourceLineNo">003</span>import squidpony.ArrayTools;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import squidpony.GwtCompatibility;<a name="line.4"></a>
 <span class="sourceLineNo">005</span>import squidpony.squidmath.Coord;<a name="line.5"></a>
 <span class="sourceLineNo">006</span><a name="line.6"></a>
 <span class="sourceLineNo">007</span>import java.io.Serializable;<a name="line.7"></a>
@@ -312,7 +312,7 @@
 <span class="sourceLineNo">304</span>                                 * Size did not change, we simply need to erase the previous<a name="line.304"></a>
 <span class="sourceLineNo">305</span>                                 * result<a name="line.305"></a>
 <span class="sourceLineNo">306</span>                                 */<a name="line.306"></a>
-<span class="sourceLineNo">307</span>                                DungeonUtility.fill(light, 0d);<a name="line.307"></a>
+<span class="sourceLineNo">307</span>                                ArrayTools.fill(light, 0d);<a name="line.307"></a>
 <span class="sourceLineNo">308</span>                        }<a name="line.308"></a>
 <span class="sourceLineNo">309</span>                }<a name="line.309"></a>
 <span class="sourceLineNo">310</span>        }<a name="line.310"></a>
@@ -335,7 +335,7 @@
 <span class="sourceLineNo">327</span>                                 * Size did not change, we simply need to erase the previous<a name="line.327"></a>
 <span class="sourceLineNo">328</span>                                 * result<a name="line.328"></a>
 <span class="sourceLineNo">329</span>                                 */<a name="line.329"></a>
-<span class="sourceLineNo">330</span>                                DungeonUtility.fill(nearLight, false);<a name="line.330"></a>
+<span class="sourceLineNo">330</span>                                ArrayTools.fill(nearLight, false);<a name="line.330"></a>
 <span class="sourceLineNo">331</span>                        }<a name="line.331"></a>
 <span class="sourceLineNo">332</span>                }<a name="line.332"></a>
 <span class="sourceLineNo">333</span>        }<a name="line.333"></a>
@@ -600,7 +600,7 @@
 <span class="sourceLineNo">592</span>    {<a name="line.592"></a>
 <span class="sourceLineNo">593</span>        if(maps == null || maps.length == 0)<a name="line.593"></a>
 <span class="sourceLineNo">594</span>            return new double[0][0];<a name="line.594"></a>
-<span class="sourceLineNo">595</span>        double[][] map = GwtCompatibility.copy2D(maps[0]);<a name="line.595"></a>
+<span class="sourceLineNo">595</span>        double[][] map = ArrayTools.copy(maps[0]);<a name="line.595"></a>
 <span class="sourceLineNo">596</span>        for(int i = 1; i &lt; maps.length; i++)<a name="line.596"></a>
 <span class="sourceLineNo">597</span>        {<a name="line.597"></a>
 <span class="sourceLineNo">598</span>            for (int x = 0; x &lt; map.length &amp;&amp; x &lt; maps[i].length; x++) {<a name="line.598"></a>
@@ -631,7 +631,7 @@
 <span class="sourceLineNo">623</span>        Iterator&lt;double[][]&gt; it = maps.iterator();<a name="line.623"></a>
 <span class="sourceLineNo">624</span>        if(!it.hasNext())<a name="line.624"></a>
 <span class="sourceLineNo">625</span>            return new double[0][0];<a name="line.625"></a>
-<span class="sourceLineNo">626</span>        double[][] map = GwtCompatibility.copy2D(it.next()), t;<a name="line.626"></a>
+<span class="sourceLineNo">626</span>        double[][] map = ArrayTools.copy(it.next()), t;<a name="line.626"></a>
 <span class="sourceLineNo">627</span>        while (it.hasNext())<a name="line.627"></a>
 <span class="sourceLineNo">628</span>        {<a name="line.628"></a>
 <span class="sourceLineNo">629</span>            t = it.next();<a name="line.629"></a>

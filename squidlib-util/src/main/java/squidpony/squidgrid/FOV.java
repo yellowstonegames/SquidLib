@@ -1,7 +1,7 @@
 package squidpony.squidgrid;
 
+import squidpony.ArrayTools;
 import squidpony.GwtCompatibility;
-import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
 
 import java.io.Serializable;
@@ -304,7 +304,7 @@ public class FOV implements Serializable {
 				 * Size did not change, we simply need to erase the previous
 				 * result
 				 */
-				DungeonUtility.fill(light, 0d);
+				ArrayTools.fill(light, 0d);
 			}
 		}
 	}
@@ -327,7 +327,7 @@ public class FOV implements Serializable {
 				 * Size did not change, we simply need to erase the previous
 				 * result
 				 */
-				DungeonUtility.fill(nearLight, false);
+				ArrayTools.fill(nearLight, false);
 			}
 		}
 	}
@@ -592,7 +592,7 @@ public class FOV implements Serializable {
     {
         if(maps == null || maps.length == 0)
             return new double[0][0];
-        double[][] map = GwtCompatibility.copy2D(maps[0]);
+        double[][] map = ArrayTools.copy(maps[0]);
         for(int i = 1; i < maps.length; i++)
         {
             for (int x = 0; x < map.length && x < maps[i].length; x++) {
@@ -623,7 +623,7 @@ public class FOV implements Serializable {
         Iterator<double[][]> it = maps.iterator();
         if(!it.hasNext())
             return new double[0][0];
-        double[][] map = GwtCompatibility.copy2D(it.next()), t;
+        double[][] map = ArrayTools.copy(it.next()), t;
         while (it.hasNext())
         {
             t = it.next();

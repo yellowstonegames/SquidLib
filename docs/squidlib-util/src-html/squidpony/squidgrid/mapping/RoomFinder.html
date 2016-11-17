@@ -8,7 +8,7 @@
 <div class="sourceContainer">
 <pre><span class="sourceLineNo">001</span>package squidpony.squidgrid.mapping;<a name="line.1"></a>
 <span class="sourceLineNo">002</span><a name="line.2"></a>
-<span class="sourceLineNo">003</span>import squidpony.GwtCompatibility;<a name="line.3"></a>
+<span class="sourceLineNo">003</span>import squidpony.ArrayTools;<a name="line.3"></a>
 <span class="sourceLineNo">004</span>import squidpony.squidmath.*;<a name="line.4"></a>
 <span class="sourceLineNo">005</span><a name="line.5"></a>
 <span class="sourceLineNo">006</span>import java.util.ArrayList;<a name="line.6"></a>
@@ -209,7 +209,7 @@
 <span class="sourceLineNo">201</span>        width = dungeon.length;<a name="line.201"></a>
 <span class="sourceLineNo">202</span>        height = dungeon[0].length;<a name="line.202"></a>
 <span class="sourceLineNo">203</span>        map = new char[width][height];<a name="line.203"></a>
-<span class="sourceLineNo">204</span>        this.environment = GwtCompatibility.copy2D(environment);<a name="line.204"></a>
+<span class="sourceLineNo">204</span>        this.environment = ArrayTools.copy(environment);<a name="line.204"></a>
 <span class="sourceLineNo">205</span>        for (int i = 0; i &lt; width; i++) {<a name="line.205"></a>
 <span class="sourceLineNo">206</span>            System.arraycopy(dungeon[i], 0, map[i], 0, height);<a name="line.206"></a>
 <span class="sourceLineNo">207</span>        }<a name="line.207"></a>

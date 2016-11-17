@@ -272,9 +272,15 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.html#charHasher">charHasher</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.html" title="class in squidpony.squidmath">CrossHash</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/GwtCompatibility.html#charSpan-char-char-">charSpan(char, char)</a></span> - Static method in class squidpony.<a href="../squidpony/GwtCompatibility.html" title="class in squidpony">GwtCompatibility</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/ArrayTools.html#charSpan-char-char-">charSpan(char, char)</a></span> - Static method in class squidpony.<a href="../squidpony/ArrayTools.html" title="class in squidpony">ArrayTools</a></dt>
 <dd>
 <div class="block">Stupidly simple convenience method that produces a char range from start to end, including end, as a char array.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/GwtCompatibility.html#charSpan-char-char-">charSpan(char, char)</a></span> - Static method in class squidpony.<a href="../squidpony/GwtCompatibility.html" title="class in squidpony">GwtCompatibility</a></dt>
+<dd>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="block"><span class="deprecationComment">Use <a href="../squidpony/ArrayTools.html#charSpan-char-char-"><code>ArrayTools.charSpan(char, char)</code></a> instead.</span></div>
+</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.html#checkAll-java.lang.CharSequence-regexodus.Pattern:A-">checkAll(CharSequence, Pattern[])</a></span> - Method in class squidpony.<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></dt>
 <dd>&nbsp;</dd>
@@ -843,6 +849,22 @@
 <div class="block">Takes a position as a Coord called pt and returns the length to travel along the 16x16 Moore curve to reach
  that position.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/ArrayTools.html#copy-char:A:A-">copy(char[][])</a></span> - Static method in class squidpony.<a href="../squidpony/ArrayTools.html" title="class in squidpony">ArrayTools</a></dt>
+<dd>
+<div class="block">Gets a copy of the 2D char array, source, that has the same data but shares no references with source.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/ArrayTools.html#copy-double:A:A-">copy(double[][])</a></span> - Static method in class squidpony.<a href="../squidpony/ArrayTools.html" title="class in squidpony">ArrayTools</a></dt>
+<dd>
+<div class="block">Gets a copy of the 2D double array, source, that has the same data but shares no references with source.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/ArrayTools.html#copy-int:A:A-">copy(int[][])</a></span> - Static method in class squidpony.<a href="../squidpony/ArrayTools.html" title="class in squidpony">ArrayTools</a></dt>
+<dd>
+<div class="block">Gets a copy of the 2D int array, source, that has the same data but shares no references with source.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/ArrayTools.html#copy-boolean:A:A-">copy(boolean[][])</a></span> - Static method in class squidpony.<a href="../squidpony/ArrayTools.html" title="class in squidpony">ArrayTools</a></dt>
+<dd>
+<div class="block">Gets a copy of the 2D boolean array, source, that has the same data but shares no references with source.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.html#copy--">copy()</a></span> - Method in class squidpony.<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ChaosRNG.html#copy--">copy()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ChaosRNG.html" title="class in squidpony.squidmath">ChaosRNG</a></dt>
@@ -935,19 +957,27 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/GwtCompatibility.html#copy2D-char:A:A-">copy2D(char[][])</a></span> - Static method in class squidpony.<a href="../squidpony/GwtCompatibility.html" title="class in squidpony">GwtCompatibility</a></dt>
 <dd>
-<div class="block">Gets a copy of the 2D char array, source, that has the same data but shares no references with source.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/GwtCompatibility.html#copy2D-double:A:A-">copy2D(double[][])</a></span> - Static method in class squidpony.<a href="../squidpony/GwtCompatibility.html" title="class in squidpony">GwtCompatibility</a></dt>
-<dd>
-<div class="block">Gets a copy of the 2D double array, source, that has the same data but shares no references with source.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="block"><span class="deprecationComment">Use <a href="../squidpony/ArrayTools.html#copy-char:A:A-"><code>ArrayTools.copy(char[][])</code></a> instead.</span></div>
+</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/GwtCompatibility.html#copy2D-int:A:A-">copy2D(int[][])</a></span> - Static method in class squidpony.<a href="../squidpony/GwtCompatibility.html" title="class in squidpony">GwtCompatibility</a></dt>
 <dd>
-<div class="block">Gets a copy of the 2D int array, source, that has the same data but shares no references with source.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="block"><span class="deprecationComment">Use <a href="../squidpony/ArrayTools.html#copy-int:A:A-"><code>ArrayTools.copy(int[][])</code></a> instead.</span></div>
+</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/GwtCompatibility.html#copy2D-double:A:A-">copy2D(double[][])</a></span> - Static method in class squidpony.<a href="../squidpony/GwtCompatibility.html" title="class in squidpony">GwtCompatibility</a></dt>
+<dd>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="block"><span class="deprecationComment">Use <a href="../squidpony/ArrayTools.html#copy-double:A:A-"><code>ArrayTools.copy(double[][])</code></a> instead.</span></div>
+</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/GwtCompatibility.html#copy2D-boolean:A:A-">copy2D(boolean[][])</a></span> - Static method in class squidpony.<a href="../squidpony/GwtCompatibility.html" title="class in squidpony">GwtCompatibility</a></dt>
 <dd>
-<div class="block">Gets a copy of the 2D boolean array, source, that has the same data but shares no references with source.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="block"><span class="deprecationComment">Use <a href="../squidpony/ArrayTools.html#copy-boolean:A:A-"><code>ArrayTools.copy(boolean[][])</code></a> instead.</span></div>
+</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/IColorCenter.Skeleton.html#copyCache-squidpony.IColorCenter.Skeleton-">copyCache(IColorCenter.Skeleton&lt;T&gt;)</a></span> - Method in class squidpony.<a href="../squidpony/IColorCenter.Skeleton.html" title="class in squidpony">IColorCenter.Skeleton</a></dt>
 <dd>

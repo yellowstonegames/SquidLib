@@ -1,6 +1,6 @@
 package squidpony.squidgrid;
 
-import squidpony.GwtCompatibility;
+import squidpony.ArrayTools;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.RNG;
 
@@ -75,8 +75,8 @@ public class MimicFill {
     public static boolean[][] orSamples(boolean[][] left, boolean[][] right)
     {
         if(left == null && right == null) return new boolean[0][0];
-        else if(left == null || left.length <= 0) return GwtCompatibility.copy2D(right);
-        else if(right == null || right.length <= 0) return GwtCompatibility.copy2D(left);
+        else if(left == null || left.length <= 0) return ArrayTools.copy(right);
+        else if(right == null || right.length <= 0) return ArrayTools.copy(left);
 
         int width = Math.min(left.length, right.length),
                 height = Math.min(left[0].length, right[0].length);
@@ -128,7 +128,7 @@ public class MimicFill {
     {
         if(sample == null || sample.length <= 0)
             return new boolean[0][0];
-        boolean[][] sample2 = GwtCompatibility.copy2D(sample);
+        boolean[][] sample2 = ArrayTools.copy(sample);
         int width = sample2.length, height = sample2[0].length;
         for(Coord c : points)
         {

@@ -1,6 +1,6 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.GwtCompatibility;
+import squidpony.ArrayTools;
 import squidpony.squidmath.*;
 
 import java.util.ArrayList;
@@ -201,7 +201,7 @@ public class RoomFinder {
         width = dungeon.length;
         height = dungeon[0].length;
         map = new char[width][height];
-        this.environment = GwtCompatibility.copy2D(environment);
+        this.environment = ArrayTools.copy(environment);
         for (int i = 0; i < width; i++) {
             System.arraycopy(dungeon[i], 0, map[i], 0, height);
         }

@@ -694,6 +694,15 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><code>static int[][]</code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#sum-java.util.List-">sum</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;regions)</code>
+<div class="block">Generates a 2D int array from an array or vararg of GreasedRegions, starting at all 0 and adding 1 to the int at
+ a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
+ this method, it can produce any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
+ produce number between 0 and 16 in a cell.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#whichContain-int-int-java.util.Collection-">whichContain</a></span>(int&nbsp;x,
             int&nbsp;y,

@@ -18,7 +18,7 @@
 <span class="sourceLineNo">010</span>*/<a name="line.10"></a>
 <span class="sourceLineNo">011</span>package squidpony.squidgrid;<a name="line.11"></a>
 <span class="sourceLineNo">012</span><a name="line.12"></a>
-<span class="sourceLineNo">013</span>import squidpony.GwtCompatibility;<a name="line.13"></a>
+<span class="sourceLineNo">013</span>import squidpony.ArrayTools;<a name="line.13"></a>
 <span class="sourceLineNo">014</span>import squidpony.squidgrid.mapping.AestheticDifference;<a name="line.14"></a>
 <span class="sourceLineNo">015</span>import squidpony.squidmath.IntDoubleOrderedMap;<a name="line.15"></a>
 <span class="sourceLineNo">016</span>import squidpony.squidmath.IntVLA;<a name="line.16"></a>
@@ -143,7 +143,7 @@
 <span class="sourceLineNo">135</span>        {<a name="line.135"></a>
 <span class="sourceLineNo">136</span>            int x = i % OW, y = i / OW;<a name="line.136"></a>
 <span class="sourceLineNo">137</span>            IntDoubleOrderedMap candidates = new IntDoubleOrderedMap();<a name="line.137"></a>
-<span class="sourceLineNo">138</span>            GwtCompatibility.insert2D(cleanMask, mask, 0, 0);<a name="line.138"></a>
+<span class="sourceLineNo">138</span>            ArrayTools.insert(cleanMask, mask, 0, 0);<a name="line.138"></a>
 <span class="sourceLineNo">139</span><a name="line.139"></a>
 <span class="sourceLineNo">140</span>            for (int dy = -1; dy &lt;= 1; dy++){<a name="line.140"></a>
 <span class="sourceLineNo">141</span>                for (int dx = -1; dx &lt;= 1; dx++)<a name="line.141"></a>
