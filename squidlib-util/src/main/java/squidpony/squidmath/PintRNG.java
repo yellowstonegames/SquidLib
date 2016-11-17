@@ -7,13 +7,19 @@ import java.io.Serializable;
 
 /**
  * A different kind of RandomnessSource that operates internally on ints, which may have significant advantages on GWT
- * since that toolchain has to emulate longs (slowly) for almost any math with them. It is, however, expectd to be
+ * since that toolchain has to emulate longs (slowly) for almost any math with them. It is, however, expected to be
  * slower on other platforms, at least platforms with 64-bit JVMs. Running on 32-bit desktop JVMs, 32-bit Dalvik on
  * Android, or other increasingly-rare environments may benefit from this class, though.
  * <br>
- * Quality is uncertain at this point, but visual tests at least appear indistinguishable from other PRNGs. Not all
- * seeds or combinations of seeds may be ideal, and the period of certain bits could easily be lower than the optimal
- * period of 2^64 32-bit numbers that this might have.
+ * Quality is not completely certain, but should be excellent in this version since it's based almost directly on PCG-
+ * Random's choices of numerical constants. Visual tests, at least, appear indistinguishable from other PRNGs. Period is
+ * considered very low, at 2^32, but all seeds should be valid, including 0. Generating 64 bits of random data takes a
+ * little less than twice as much time as generating 32 bits, since this can avoid some overhead via inlining.
+ * <br>
+ * The name can be construed as Pint-Size, since this has a small period and uses a smaller amount of space, or as
+ * Permuted Int, since this is based on PermutedRNG, changed to use 32-bit operations on ints.
+ * <br>
+ * Based on work by Melissa E. O'Neill for PCG-Random, though no code is actually shared with PCG-Random.
  * Created by Tommy Ettinger on 11/15/2016.
  */
 @Beta
@@ -30,7 +36,7 @@ public class PintRNG implements RandomnessSource, StatefulRandomness, Serializab
 
     private static final long serialVersionUID = -374415589203474497L;
 
-    public int stateA, stateB; /* The state can be seeded with any value. */
+    public int state; /* The state can be seeded with any value. */
 
     /** Creates a new generator seeded using Math.random. */
     public PintRNG() {
@@ -41,10 +47,9 @@ public class PintRNG implements RandomnessSource, StatefulRandomness, Serializab
         setState(seed);
     }
 
-    public PintRNG(final int a, final int b)
+    public PintRNG(final int a)
     {
-        stateA = a;
-        stateB = b;
+        state = a;
     }
 
     @Override
@@ -58,7 +63,16 @@ public class PintRNG implements RandomnessSource, StatefulRandomness, Serializab
      */
     public int nextInt() {
         //return stateA += (stateB ^= (stateB + 0x62E2AC0D + 0x85157AF5 * stateA));
-        return stateB += ((stateB ^ (stateA += 0x62E2AC0D)) >>> 8) * 0x9E3779B9;
+        //return stateB += ((stateB ^ (stateA += 0x62E2AC0D)) >>> 8) * 0x9E3779B9;
+
+        // increment  = 2891336453;
+        // multiplier = 747796405;
+
+        int p = state;
+        p ^= p >>> (4 + (p >>> 28));
+        p *= 277803737;
+        state = state * 0x2C9277B5 + 0xAC564B05;
+        return p ^ (p >>> 22);
     }
 
     /**
@@ -68,19 +82,38 @@ public class PintRNG implements RandomnessSource, StatefulRandomness, Serializab
      */
     @Override
     public long nextLong() {
-        return (0x100000000L * nextInt()) | nextInt();
+        int p = state;
+        p ^= p >>> (4 + (p >>> 28));
+        p *= 277803737;
+        state = state * 0x2C9277B5 + 0xAC564B05;
+        p ^= state ^ (p >>> 22);
+        p ^= p >>> (4 + (p >>> 28));
+        p *= 277803737;
+        return p ^ (p >>> 22);
+
+        //return 0x100000000L * nextInt() | nextInt();
+        /*
+        int p = stateA, q = stateB;
+        p ^= p >>> (4 + (p >>> 28));
+        p *= 277803737;
+        stateA = stateA * 0x2C9277B5 + 0xAC564B05;
+        q ^= q >>> (4 + (q >>> 28));
+        q *= 277803737;
+        stateB = stateB * 0x2C9277B5 + (p|1);
+        return 0x100000000L * (p ^ (p >>> 22)) | (q ^ (q >>> 22));
+        */
     }
 
     /**
      * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
-     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
+     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to
      * copy the state so it isn't shared, usually, and produce a new value with the same exact state.
      *
      * @return a copy of this RandomnessSource
      */
     @Override
     public RandomnessSource copy() {
-        return new PintRNG((0x100000000L * stateA) | stateB);
+        return new PintRNG(state);
     }
 
     /**
@@ -133,16 +166,16 @@ public class PintRNG implements RandomnessSource, StatefulRandomness, Serializab
 
     /**
      * Gets a random value, true or false.
-     * Calls nextLong() once.
+     * Calls nextInt() once.
      * @return a random true or false value.
      */
     public boolean nextBoolean() {
-        return ( nextLong() & 1 ) != 0L;
+        return ( nextInt() & 1 ) != 0L;
     }
 
     /**
      * Given a byte array as a parameter, this will fill the array with random bytes (modifying it
-     * in-place). Calls nextLong() {@code Math.ceil(bytes.length / 8.0)} times.
+     * in-place). Calls nextInt() {@code Math.ceil(bytes.length / 4.0)} times.
      * @param bytes a byte array that will have its contents overwritten with random bytes.
      */
     public void nextBytes( final byte[] bytes ) {
@@ -156,13 +189,12 @@ public class PintRNG implements RandomnessSource, StatefulRandomness, Serializab
 
 
     /**
-     * Sets the current state of this generator (two ints) by splitting the given long into upper and lower values.
-     * @param seed the seed to use for this PinRNG, as if it was constructed with this seed.
+     * Sets the current state of this generator (an int) by XOR-ing the upper and lower halves of seed into one int.
+     * @param seed the seed to use for this PintRNG, as if it was constructed with this seed.
      */
     @Override
     public void setState( final long seed ) {
-        stateA = (int)(seed>>>32);
-        stateB = (int)seed;
+        state = (int)(seed>>>32 ^ seed);
     }
     /**
      * Gets the current state of this generator.
@@ -170,12 +202,12 @@ public class PintRNG implements RandomnessSource, StatefulRandomness, Serializab
      */
     @Override
     public long getState() {
-        return (0x100000000L * stateA) | stateB;
+        return state;
     }
 
     @Override
     public String toString() {
-        return "PintRNG with stateA 0x" + StringKit.hex(stateA) + " and stateB 0x" + StringKit.hex(stateB);
+        return "PintRNG with state 0x" + StringKit.hex(state);
     }
 
     @Override
@@ -185,12 +217,12 @@ public class PintRNG implements RandomnessSource, StatefulRandomness, Serializab
 
         PintRNG pintRNG = (PintRNG) o;
 
-        return stateA == pintRNG.stateA && stateB == pintRNG.stateB;
+        return state == pintRNG.state;
 
     }
 
     @Override
     public int hashCode() {
-        return 0x632BE5AB * stateA ^ stateB;
+        return 0x632BE5AB * state;
     }
 }
