@@ -130,7 +130,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // next, we populate the colorCenters array with the SquidColorCenters that will modify any colors we request
         // of them using the filter we specify. Only one SquidColorCenter will be used at any time for foreground, and
         // sometimes another will be used for background.
-        colorCenters = new SquidColorCenter[18];
+        colorCenters = new SquidColorCenter[20];
         // MultiLerpFilter here is given two colors to tint everything toward one of; this is meant to reproduce the
         // "Hollywood action movie poster" style of using primarily light orange (explosions) and gray-blue (metal).
 
@@ -180,6 +180,9 @@ public class EverythingDemo extends ApplicationAdapter {
 
         colorCenters[16] = DefaultResources.getSCC();
         colorCenters[17] = colorCenters[16];
+
+        colorCenters[18] = new SquidColorCenter(new Filters.DistinctRedGreenFilter());
+        colorCenters[19] = colorCenters[18];
 
         batch = new SpriteBatch();
         width = 90;
@@ -387,7 +390,9 @@ public class EverythingDemo extends ApplicationAdapter {
                     }
                     case 'f':
                     case 'F': {
-                        currentCenter = (currentCenter + 1) % 9;
+                        currentCenter = (currentCenter + 1) % 10;
+                        //currentCenter = (currentCenter + 1 & 1) + 8; // for testing red-green color blindness filter
+
                         // idx is 3 when we use the HallucinateFilter, which needs special work
                         changingColors = currentCenter == 3;
                         fgCenter = colorCenters[currentCenter * 2];
