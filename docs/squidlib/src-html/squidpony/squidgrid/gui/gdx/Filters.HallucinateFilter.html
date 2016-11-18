@@ -389,7 +389,7 @@
 <span class="sourceLineNo">381</span>         */<a name="line.381"></a>
 <span class="sourceLineNo">382</span>        public PaletteFilter(Color[] colors) {<a name="line.382"></a>
 <span class="sourceLineNo">383</span>            state = new float[colors.length * 4];<a name="line.383"></a>
-<span class="sourceLineNo">384</span>            for (int i = 0; i &lt; state.length / 4; i++) {<a name="line.384"></a>
+<span class="sourceLineNo">384</span>            for (int i = 0; i &lt; colors.length; i++) {<a name="line.384"></a>
 <span class="sourceLineNo">385</span>                state[i * 4] = colors[i].r;<a name="line.385"></a>
 <span class="sourceLineNo">386</span>                state[i * 4 + 1] = colors[i].g;<a name="line.386"></a>
 <span class="sourceLineNo">387</span>                state[i * 4 + 2] = colors[i].b;<a name="line.387"></a>
@@ -409,7 +409,7 @@
 <span class="sourceLineNo">401</span>                }<a name="line.401"></a>
 <span class="sourceLineNo">402</span>            }<a name="line.402"></a>
 <span class="sourceLineNo">403</span>            return new Color(state[choice], state[choice + 1], state[choice + 2],<a name="line.403"></a>
-<span class="sourceLineNo">404</span>                    state[choice + 3]);<a name="line.404"></a>
+<span class="sourceLineNo">404</span>                    a);<a name="line.404"></a>
 <span class="sourceLineNo">405</span>        }<a name="line.405"></a>
 <span class="sourceLineNo">406</span>    }<a name="line.406"></a>
 <span class="sourceLineNo">407</span><a name="line.407"></a>

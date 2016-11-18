@@ -381,7 +381,7 @@ public class Filters {
          */
         public PaletteFilter(Color[] colors) {
             state = new float[colors.length * 4];
-            for (int i = 0; i < state.length / 4; i++) {
+            for (int i = 0; i < colors.length; i++) {
                 state[i * 4] = colors[i].r;
                 state[i * 4 + 1] = colors[i].g;
                 state[i * 4 + 2] = colors[i].b;
@@ -401,7 +401,7 @@ public class Filters {
                 }
             }
             return new Color(state[choice], state[choice + 1], state[choice + 2],
-                    state[choice + 3]);
+                    a);
         }
     }
 
