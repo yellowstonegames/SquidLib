@@ -412,8 +412,35 @@
 <span class="sourceLineNo">404</span>                    a);<a name="line.404"></a>
 <span class="sourceLineNo">405</span>        }<a name="line.405"></a>
 <span class="sourceLineNo">406</span>    }<a name="line.406"></a>
-<span class="sourceLineNo">407</span><a name="line.407"></a>
-<span class="sourceLineNo">408</span>}<a name="line.408"></a>
+<span class="sourceLineNo">407</span>    /**<a name="line.407"></a>
+<span class="sourceLineNo">408</span>     * A Filter that alters primarily-red and primarily-green colors so they can be more easily be distinguished by<a name="line.408"></a>
+<span class="sourceLineNo">409</span>     * people with at least some forms of red-green color-blindness (deuteranopia should be handled well, protanopia<a name="line.409"></a>
+<span class="sourceLineNo">410</span>     * very well, and tritanopia may not benefit at all). Causes reds to be darkened and greens to be lightened if the<a name="line.410"></a>
+<span class="sourceLineNo">411</span>     * other of the pair is not present in similar quantities (which is the case for yellows and blues).<a name="line.411"></a>
+<span class="sourceLineNo">412</span>     */<a name="line.412"></a>
+<span class="sourceLineNo">413</span>    public static class DistinctRedGreenFilter implements  IFilter&lt;Color&gt; {<a name="line.413"></a>
+<span class="sourceLineNo">414</span>        /**<a name="line.414"></a>
+<span class="sourceLineNo">415</span>         * Constructs a DistinctRedGreenFilter. This class is a simple wrapper around a function that doesn't need<a name="line.415"></a>
+<span class="sourceLineNo">416</span>         * member variables, so there should be little overhead with this filter.<a name="line.416"></a>
+<span class="sourceLineNo">417</span>         */<a name="line.417"></a>
+<span class="sourceLineNo">418</span>        public DistinctRedGreenFilter() {<a name="line.418"></a>
+<span class="sourceLineNo">419</span>        }<a name="line.419"></a>
+<span class="sourceLineNo">420</span><a name="line.420"></a>
+<span class="sourceLineNo">421</span>        @Override<a name="line.421"></a>
+<span class="sourceLineNo">422</span>        public Color alter(float r, float g, float b, float a) {<a name="line.422"></a>
+<span class="sourceLineNo">423</span>            float diff = g - r;<a name="line.423"></a>
+<span class="sourceLineNo">424</span>            if(diff &gt; 0.4f)<a name="line.424"></a>
+<span class="sourceLineNo">425</span>                return new Color(Math.min(1f, r * (0.8f + diff * 0.5f)), Math.min(1f, g * (0.9f + diff * 0.5f)),<a name="line.425"></a>
+<span class="sourceLineNo">426</span>                        Math.min(1f, b * (0.8f + diff * 0.5f)), a);<a name="line.426"></a>
+<span class="sourceLineNo">427</span>            else if(diff &lt; -0.3f)<a name="line.427"></a>
+<span class="sourceLineNo">428</span>                return new Color(r * (0.6f - diff), g * (0.7f - diff),<a name="line.428"></a>
+<span class="sourceLineNo">429</span>                        b * (0.7f - diff), a);<a name="line.429"></a>
+<span class="sourceLineNo">430</span>            else<a name="line.430"></a>
+<span class="sourceLineNo">431</span>                return new Color(r, g, b, a);<a name="line.431"></a>
+<span class="sourceLineNo">432</span>        }<a name="line.432"></a>
+<span class="sourceLineNo">433</span>    }<a name="line.433"></a>
+<span class="sourceLineNo">434</span><a name="line.434"></a>
+<span class="sourceLineNo">435</span>}<a name="line.435"></a>
 
 
 
