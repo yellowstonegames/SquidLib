@@ -173,17 +173,14 @@ public class EverythingDemo extends ApplicationAdapter {
         colorCenters[12] = new SquidColorCenter(new Filters.WiggleFilter());
         colorCenters[13] = colorCenters[12];
 
-        // SaturationFilter here is used to de-saturate the colors slightly. Background is less saturated.
+        // PaletteFilter here is used to limit colors to specific sets.
 
-        colorCenters[14] = new SquidColorCenter(new Filters.PaletteFilter(SColor.BLUE_GREEN_SERIES));
-        colorCenters[15] = new SquidColorCenter(new Filters.PaletteFilter(SColor.ACHROMATIC_SERIES));
+        colorCenters[14] = new SquidColorCenter(new Filters.PaletteFilter(SColor.DAWNBRINGER_16));
+        colorCenters[15] = new SquidColorCenter(new Filters.PaletteFilter(SColor.DAWNBRINGER_16));
 
         colorCenters[16] = DefaultResources.getSCC();
         colorCenters[17] = colorCenters[16];
 
-        fgCenter = colorCenters[16];
-        bgCenter = colorCenters[17];
-        currentCenter = 8;
         batch = new SpriteBatch();
         width = 90;
         height = 30;
@@ -235,6 +232,15 @@ public class EverythingDemo extends ApplicationAdapter {
         messages.appendWrappingMessage("Use numpad or vi-keys (hjklyubn) to move. Use ? for help, f to change colors, q to quit." +
                 " Click the top or bottom border of this box to scroll.");
         counter = 0;
+
+        // The display is almost all set up, so now we can tell it to use the filtered color centers we want.
+        // 8 is unfiltered. You can change this to 0-7 to use different filters, or press 'f' in play.
+        currentCenter = 8;
+
+        fgCenter = colorCenters[currentCenter * 2];
+        bgCenter = colorCenters[currentCenter * 2 + 1];
+        display.setFGColorCenter(fgCenter);
+        display.setBGColorCenter(bgCenter);
 
         dungeonGen = new DungeonGenerator(width, height, rng);
         dungeonGen.addWater(30, 6);

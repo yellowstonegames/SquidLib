@@ -1,6 +1,7 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
+import squidpony.squidmath.CrossHash;
 
 /**
  * Allows for the use of custom colors with custom names.
@@ -5709,6 +5710,603 @@ public class SColor extends Color {
      * should not render when used in a method that respects alpha values.
      */
     public static final SColor TRANSPARENT = new SColor(0x00000000, "Transparent");
+
+    /*
+0x140C1C
+0x442434
+0x30346D
+0x4E4A4F
+0x854C30
+0x346524
+0xD04648
+0x757161
+0x597DCE
+0xD27D2C
+0x8595A1
+0x6DAA2C
+0xD2AA99
+0x6DC2CA
+0xDAD45E
+0xDEEED6
+
+     */
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #140C1C; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #140C1C; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #140C1C; color: #140C1C">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #140C1C; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #140C1C; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #140C1C; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #140C1C">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_MIDNIGHT = new SColor(0x140C1C, "DB Midnight");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #442434; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #442434; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #442434; color: #442434">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #442434; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #442434; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #442434; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #442434">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_DARK_LEATHER = new SColor(0x442434, "DB Dark Leather");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #30346D; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #30346D; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #30346D; color: #30346D">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #30346D; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #30346D; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #30346D; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #30346D">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_DEEP_OCEAN = new SColor(0x30346D, "DB Deep Ocean");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #4E4A4F; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #4E4A4F; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #4E4A4F; color: #4E4A4F">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #4E4A4F; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #4E4A4F; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #4E4A4F; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #4E4A4F">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_LEAD = new SColor(0x4E4A4F, "DB Lead");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #854C30; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #854C30; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #854C30; color: #854C30">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #854C30; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #854C30; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #854C30; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #854C30">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_EARTH = new SColor(0x854C30, "DB Earth");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #346524; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #346524; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #346524; color: #346524">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #346524; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #346524; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #346524; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #346524">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_FOREST = new SColor(0x346524, "DB Forest");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #D04648; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #D04648; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #D04648; color: #D04648">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #D04648; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #D04648; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #D04648; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #D04648">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_LOBSTER = new SColor(0xD04648, "DB Lobster");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #757161; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #757161; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #757161; color: #757161">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #757161; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #757161; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #757161; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #757161">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_DRAB = new SColor(0x757161, "DB Drab");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #597DCE; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #597DCE; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #597DCE; color: #597DCE">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #597DCE; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #597DCE; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #597DCE; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #597DCE">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_CADET_BLUE = new SColor(0x597DCE, "DB Cadet Blue");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #D27D2C; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #D27D2C; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #D27D2C; color: #D27D2C">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #D27D2C; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #D27D2C; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #D27D2C; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #D27D2C">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_TAWNY_BROWN = new SColor(0xD27D2C, "DB Tawny Brown");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #8595A1; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #8595A1; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #8595A1; color: #8595A1">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #8595A1; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #8595A1; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #8595A1; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #8595A1">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_IRON = new SColor(0x8595A1, "DB Iron");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #6DAA2C; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #6DAA2C; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #6DAA2C; color: #6DAA2C">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #6DAA2C; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #6DAA2C; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #6DAA2C; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #6DAA2C">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_PEA_SOUP = new SColor(0x6DAA2C, "DB Pea Soup");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #D2AA99; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #D2AA99; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #D2AA99; color: #D2AA99">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #D2AA99; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #D2AA99; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #D2AA99; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #D2AA99">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_PUTTY = new SColor(0xD2AA99, "DB Putty");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #6DC2CA; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #6DC2CA; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #6DC2CA; color: #6DC2CA">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #6DC2CA; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #6DC2CA; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #6DC2CA; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #6DC2CA">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_TURQUOISE = new SColor(0x6DC2CA, "DB Turquoise");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #DAD45E; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #DAD45E; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #DAD45E; color: #DAD45E">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #DAD45E; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #DAD45E; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #DAD45E; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #DAD45E">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_MUSTARD = new SColor(0xDAD45E, "DB Mustard");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #DEEED6; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #DEEED6; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #DEEED6; color: #DEEED6">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #DEEED6; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #DEEED6; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #DEEED6; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #DEEED6">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_EGGSHELL = new SColor(0xDEEED6, "DB Eggshell");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #000000; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_BLACK = new SColor(0x000000, "DB Black");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #222034; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #222034; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #222034; color: #222034">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #222034; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #222034; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #222034; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #222034">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_INK = new SColor(0x222034, "DB Ink");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #45283C; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #45283C; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #45283C; color: #45283C">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #45283C; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #45283C; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #45283C; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #45283C">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_SEAL_BROWN = new SColor(0x45283C, "DB Seal Brown");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #663931; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #663931; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #663931; color: #663931">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #663931; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #663931; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #663931; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #663931">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_CHESTNUT = new SColor(0x663931, "DB Chestnut");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #8F563B; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #8F563B; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #8F563B; color: #8F563B">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #8F563B; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #8F563B; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #8F563B; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #8F563B">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_CAPPUCCINO = new SColor(0x8F563B, "DB Cappuccino");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #DF7126; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #DF7126; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #DF7126; color: #DF7126">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #DF7126; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #DF7126; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #DF7126; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #DF7126">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_PUMPKIN = new SColor(0xDF7126, "DB Pumpkin");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #D9A066; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #D9A066; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #D9A066; color: #D9A066">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #D9A066; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #D9A066; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #D9A066; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #D9A066">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_FAWN = new SColor(0xD9A066, "DB Fawn");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #EEC39A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #EEC39A; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #EEC39A; color: #EEC39A">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #EEC39A; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #EEC39A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #EEC39A; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #EEC39A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_NUDE = new SColor(0xEEC39A, "DB Nude");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #FBF236; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FBF236; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #FBF236; color: #FBF236">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #FBF236; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #FBF236; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FBF236; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #FBF236">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_DAFFODIL = new SColor(0xFBF236, "DB Daffodil");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #99E550; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #99E550; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #99E550; color: #99E550">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #99E550; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #99E550; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #99E550; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #99E550">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_KEY_LIME = new SColor(0x99E550, "DB Key Lime");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #6ABE30; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #6ABE30; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #6ABE30; color: #6ABE30">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #6ABE30; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #6ABE30; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #6ABE30; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #6ABE30">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_SHAMROCK = new SColor(0x6ABE30, "DB Shamrock");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #37946E; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #37946E; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #37946E; color: #37946E">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #37946E; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #37946E; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #37946E; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #37946E">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_JUNGLE = new SColor(0x37946E, "DB Jungle");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #4B692F; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #4B692F; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #4B692F; color: #4B692F">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #4B692F; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #4B692F; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #4B692F; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #4B692F">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_OLIVE = new SColor(0x4B692F, "DB Olive");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #524B24; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #524B24; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #524B24; color: #524B24">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #524B24; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #524B24; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #524B24; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #524B24">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_MUD = new SColor(0x524B24, "DB Mud");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #323C39; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #323C39; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #323C39; color: #323C39">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #323C39; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #323C39; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #323C39; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #323C39">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_SHADOW = new SColor(0x323C39, "DB Shadow");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #3F3F74; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #3F3F74; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #3F3F74; color: #3F3F74">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #3F3F74; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #3F3F74; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #3F3F74; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #3F3F74">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_COBALT = new SColor(0x3F3F74, "DB Cobalt");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #306082; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #306082; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #306082; color: #306082">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #306082; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #306082; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #306082; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #306082">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_CERULEAN = new SColor(0x306082, "DB Cerulean");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #5B6EE1; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #5B6EE1; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #5B6EE1; color: #5B6EE1">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #5B6EE1; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #5B6EE1; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #5B6EE1; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #5B6EE1">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_DENIM = new SColor(0x5B6EE1, "DB Denim");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #639BFF; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #639BFF; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #639BFF; color: #639BFF">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #639BFF; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #639BFF; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #639BFF; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #639BFF">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_SKY_BLUE = new SColor(0x639BFF, "DB Sky Blue");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #5FCDE4; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #5FCDE4; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #5FCDE4; color: #5FCDE4">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #5FCDE4; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #5FCDE4; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #5FCDE4; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #5FCDE4">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_SEAFOAM = new SColor(0x5FCDE4, "DB Seafoam");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #CBDBFC; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #CBDBFC; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #CBDBFC; color: #CBDBFC">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #CBDBFC; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #CBDBFC; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #CBDBFC; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #CBDBFC">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_PLATINUM = new SColor(0xCBDBFC, "DB Platinum");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #FFFFFF; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFFFFF; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #FFFFFF; color: #FFFFFF">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #FFFFFF; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #FFFFFF; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFFFFF; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #FFFFFF">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_WHITE = new SColor(0xFFFFFF, "DB White");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #9BADB7; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #9BADB7; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #9BADB7; color: #9BADB7">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #9BADB7; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #9BADB7; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #9BADB7; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #9BADB7">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_STORM_CLOUD = new SColor(0x9BADB7, "DB Storm Cloud");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #847E87; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #847E87; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #847E87; color: #847E87">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #847E87; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #847E87; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #847E87; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #847E87">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_ELEPHANT = new SColor(0x847E87, "DB Elephant");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #696A6A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #696A6A; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #696A6A; color: #696A6A">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #696A6A; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #696A6A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #696A6A; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #696A6A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_GRAPHITE = new SColor(0x696A6A, "DB Graphite");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #595652; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #595652; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #595652; color: #595652">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #595652; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #595652; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #595652; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #595652">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_SOOT = new SColor(0x595652, "DB Soot");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #76428A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #76428A; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #76428A; color: #76428A">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #76428A; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #76428A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #76428A; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #76428A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_EGGPLANT = new SColor(0x76428A, "DB Eggplant");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #AC3232; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #AC3232; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #AC3232; color: #AC3232">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #AC3232; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #AC3232; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #AC3232; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #AC3232">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_BLOOD = new SColor(0xAC3232, "DB Blood");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #D95763; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #D95763; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #D95763; color: #D95763">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #D95763; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #D95763; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #D95763; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #D95763">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_CORAL = new SColor(0xD95763, "DB Coral");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #D77BBA; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #D77BBA; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #D77BBA; color: #D77BBA">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #D77BBA; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #D77BBA; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #D77BBA; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #D77BBA">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_LAVENDER = new SColor(0xD77BBA, "DB Lavender");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #8F974A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #8F974A; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #8F974A; color: #8F974A">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #8F974A; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #8F974A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #8F974A; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #8F974A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_ARMY_GREEN = new SColor(0x8F974A, "DB Army Green");
+
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #8A6F30; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #8A6F30; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #8A6F30; color: #8A6F30">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #8A6F30; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #8A6F30; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #8A6F30; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #8A6F30">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor DB_COMPOST = new SColor(0x8A6F30, "DB Compost");
+
+
     /**
      * This array is loaded with the colors found in the rainbow, in the
      * standard ROYGBIV order.
@@ -5805,6 +6403,30 @@ public class SColor extends Color {
     public static SColor[] ACHROMATIC_SERIES = {
         UNBLEACHED_SILK, SILVER_GREY, BROWN_RAT_GREY, BETEL_NUT_DYE, BLACK_DYE, WHITE_MOUSE, PLAIN_MOUSE,
         INDIGO_INK_BROWN, INK, INDIGO_WHITE};
+
+    /**
+     * DawnBringer's original 16-color palette, as posted on the Pixel Joint forums,
+     * http://www.pixeljoint.com/forum/forum_posts.asp?TID=12795 , and since then used in lots of pixel art.
+     * Some useful previews can be seen here https://github.com/geoffb/dawnbringer-palettes , and the order
+     * this array uses is the same as the previews at the bottom of that page.
+     */
+    public static SColor[] DAWNBRINGER_16 = { DB_MIDNIGHT, DB_DARK_LEATHER, DB_DEEP_OCEAN, DB_LEAD, DB_EARTH,
+            DB_FOREST, DB_LOBSTER, DB_DRAB, DB_CADET_BLUE, DB_TAWNY_BROWN, DB_IRON, DB_PEA_SOUP, DB_PUTTY,
+            DB_TURQUOISE, DB_MUSTARD, DB_EGGSHELL };
+
+
+    /**
+     * DawnBringer's 32-color palette, as posted on the Pixel Joint forums,
+     * http://www.pixeljoint.com/forum/forum_posts.asp?TID=16247 , and since then used in lots of pixel art.
+     * Some useful previews can be seen here https://github.com/geoffb/dawnbringer-palettes , and the order
+     * this array uses is the same as the previews at the bottom of that page.
+     */
+    public static SColor[] DAWNBRINGER_32 = {DB_BLACK, DB_INK, DB_SEAL_BROWN, DB_CHESTNUT, DB_CAPPUCCINO,
+            DB_PUMPKIN, DB_FAWN, DB_NUDE, DB_DAFFODIL, DB_KEY_LIME, DB_SHAMROCK, DB_JUNGLE, DB_OLIVE, DB_MUD,
+            DB_SHADOW, DB_COBALT, DB_CERULEAN, DB_DENIM, DB_SKY_BLUE, DB_SEAFOAM, DB_PLATINUM, DB_WHITE,
+            DB_STORM_CLOUD, DB_ELEPHANT, DB_GRAPHITE, DB_SOOT, DB_EGGPLANT, DB_BLOOD, DB_CORAL, DB_LAVENDER,
+            DB_ARMY_GREEN, DB_COMPOST};
+
     /**
      * This array is loaded with all of the colors defined in SColor, in
      * arbitrary order.
@@ -6080,7 +6702,7 @@ public class SColor extends Color {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 31 * hash + name.hashCode();
+        hash = 31 * hash + CrossHash.Falcon.hash(name);
         hash += 31 * hash + toIntBits();
         return hash;
     }
