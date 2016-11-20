@@ -7,12 +7,12 @@ import java.io.Serializable;
 /**
  * A quasi-random number generator that goes through one of many sub-random sequences found by J.G. van der Corput.
  * More specifically, this is a kind of scrambled van der Corput sequence, where the state is internally stored in a
- * simple 64-bit long that is incremented once per generated number, but the state is altered with a Gray code before
- * being used, more on this later if you want to read about it. The important things to know about this class are:
- * size of state affects speed (prefer smaller seeds, but quality is sometimes a bit poor at first if you start at 0);
- * the base (when given) should be prime and moderately small; this doesn't generate very random numbers (which can be
- * good for making points that should not overlap); and this is a StatefulRandomness with an additional method for
- * generating quasi-random doubles, {@link #nextDouble()}.
+ * simple 64-bit long that is incremented once per generated number, but the state is altered with something similar to
+ * a Gray code before being used, more on this later if you want to read about it. The important things to know about
+ * this class are: size of state affects speed (prefer smaller seeds, but quality is sometimes a bit poor at first if
+ * you start at 0);  the base (when given) should be prime and moderately small; this doesn't generate very random
+ * numbers (which can be good for making points that should not overlap); and this is a StatefulRandomness with an
+ * additional method for generating quasi-random doubles, {@link #nextDouble()}.
  * <br>
  * This generator allows a base (also called a radix) that changes the sequence significantly; a base should be prime,
  * and this performs a little better in terms of time used with larger primes, though quality is also improved by
@@ -41,35 +41,37 @@ import java.io.Serializable;
  * Using one of the many possible Halton sequences gives some more flexibility in the kinds of procedural random-like
  * points produced.
  * <br>
- * Gray codes sound much more complex than they actually are; the sequence of Gray codes for the integers from 0 to 16
- * is {@code 0, 1, 3, 2, 6, 7, 5, 4, 12, 13, 15, 14, 10, 11, 9, 8, 24}, and this can be generated efficiently with
- * {@code i ^ (i >> 1)} *see note. Gray codes, as we use them here, simply are sequences of numbers where exactly one
- * bit changes between the binary representations of successive Gray codes. There is always a unique Gray code for any
- * non-negative integer, and all non-negative integers are possible as Gray codes. Because of this, changing the state
- * via Gray code gives a moderately-good scramble without significantly reducing the total amount of numbers a
- * VanDerCorputQRNG can generate before repeating.
+ * Because just using the state in a simple incremental fashion puts some difficult requirements on the choice of base
+ * and seed, we use a technique like Gray codes to scramble the state. The sequence of these Gray-like codes for the
+ * integers from 0 to 16 is {@code 0, 9, 21, 16, 50, 51, 23, 10, 4, 28, 49, 39, 246, 198, 179, 97, 393}, and this can be
+ * generated efficiently with {@code (i * i) ^ ((i * 137) >> 4)}. No duplicate results were found in any numbers of 20
+ * bits or less, and trying to find duplicates in 24 bits exhausted the testing computer's memory, without finding a
+ * duplicate. You should be fine.
  * <br>
  * Expected output for {@link #nextDouble()} called 33 times on an instance made with {@code new VanDerCorputQRNG(11, 83L)}:
- * 0.4552967693463561, 0.546205860255447, 0.3643876784372652, 0.2734785875281743, 0.628099173553719,
- * 0.71900826446281, 0.9008264462809917, 0.8099173553719008, 0.4462809917355372, 0.5371900826446281,
- * 0.35537190082644626, 0.2644628099173554, 0.3305785123966942, 0.4214876033057851, 0.6033057851239669,
- * 0.512396694214876, 0.8760330578512396, 0.9669421487603306, 0.7851239669421488, 0.6942148760330579,
- * 0.4297520661157025, 0.5206611570247934, 0.7024793388429752, 0.6115702479338843, 0.24793388429752067,
- * 0.33884297520661155, 0.15702479338842976, 0.06611570247933884, 0.5950413223140496, 0.6859504132231405,
- * 0.8677685950413223, 0.7768595041322314, 0.1487603305785124
+ * 0.5194317328051362, 0.8590943241581859, 0.5931288846390274, 0.5045420394781778, 0.7892220476743392,
+ * 0.6645037907246772, 0.7809575848644218, 0.0725360289597705, 0.6322655556314459, 0.6998838877125879,
+ * 0.5578853903421898, 0.5969537599890717, 0.6323338569769824, 0.873505908066389, 0.09514377433235435,
+ * 0.6623864490130456, 0.4376750221979373, 0.6946929854518133, 0.4250392732736835, 0.5294720305990028,
+ * 0.4790656375930606, 0.2626869749334062, 0.056075404685472306, 0.9758213236800765, 0.676729731575712,
+ * 0.899118912642579, 0.1876237961887849, 0.652755959292398, 0.039683081756710606, 0.10504746943514787,
+ * 0.2598183184208729, 0.4078273341984837, 0.3034628782187009
  * <br>
  * Expected output for {@link #nextDouble()} called 33 times on an instance made with {@code new VanDerCorputQRNG(19, 83L)}:
- * 0.6481994459833795, 0.7008310249307479, 0.5955678670360111, 0.5429362880886427, 0.12188365650969529,
- * 0.1745152354570637, 0.27977839335180055, 0.22714681440443213, 0.01662049861495845, 0.06925207756232687,
- * 0.961218836565097, 0.9085872576177285, 0.22160664819944598, 0.2742382271468144, 0.37950138504155123,
- * 0.3268698060941828, 0.5373961218836565, 0.590027700831025, 0.48476454293628807, 0.43213296398891965,
- * 0.853185595567867, 0.9058171745152355, 0.013850415512465374, 0.9584487534626038, 0.7479224376731302,
- * 0.8005540166204986, 0.6952908587257618, 0.6426592797783933, 0.7977839335180056, 0.850415512465374,
- * 0.9556786703601108, 0.9030470914127424, 0.11634349030470914
+ * 0.8944452544102639, 0.7842327790609341, 0.4352023081468067, 0.0696971324652205, 0.5957213342439054,
+ * 0.8864342661581787, 0.0167739658228528, 0.8956192785506557, 0.26943470353972115, 0.3525371966145134,
+ * 0.09754375733765087, 0.8924118139056637, 0.3585147443619984, 0.9126771587081131, 0.28926266679967155,
+ * 0.8542138258607592, 0.8789987799356972, 0.7905019145034184, 0.1624220194749887, 0.9349836173755572,
+ * 0.48623015477167914, 0.6716799287912155, 0.8240344994283346, 0.6557883994137552, 0.4561966221867542,
+ * 0.07946532024769608, 0.15134168706501638, 0.1382202407900492, 0.7890439760284221, 0.7142517322611092,
+ * 0.3069037223471275, 0.7030256060036372, 0.01678163918324752
  * <br>
- * Note on Gray code implementation: typically the unsigned right shift would be used instead of the example code, which
- * could look like {@code i ^ (i >>> 1)}, but using the sign-extending right shift here has a useful property of making
- * this only output positive Gray codes.
+ * Note on Gray-like code implementation: This is not a typical Gray code. Normally, the operation looks like
+ * {@code i ^ (i >>> 1)}, which gives negative results for negative values of i (not wanted here), and also clusters
+ * two very similar numbers together for every pair of sequential numbers. An earlier version scrambled with a basic
+ * Gray code, but the current style, {@code (i * i) ^ ((i * 137) >> 4)}, produces much more "wild and crazy" results.
+ * This is ideal for a scramble.
+ * <br>
  * Created by Tommy Ettinger on 11/18/2016.
  */
 public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, Serializable {
@@ -121,7 +123,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      */
     @Override
     public long nextLong() {
-        long s = ++state ^ (state >> 1), // intentionally non-standard Gray code; ensures s is non-negative
+        long s = (++state * state) ^ (state * 137 >> 4), // intentionally non-standard Gray-like code
                 num = s % base, den = base;
         while (den <= s) {
             num *= base;
@@ -144,7 +146,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      * @return a quasi-random double that will always be less than 1.0 and will be no lower than 0.0
      */
     public double nextDouble() {
-        long s = ++state ^ (state >> 1), // intentionally non-standard Gray code; ensures s is non-negative
+        long s = (++state * state) ^ (state * 137 >> 4), // intentionally non-standard Gray-like code
                 num = s % base, den = base;
         while (den <= s) {
             num *= base;
