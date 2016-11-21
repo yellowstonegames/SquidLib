@@ -30,20 +30,21 @@ import java.io.Serializable;
  * than, {@link squidpony.squidmath.SobolQRNG}). So what's it good for?
  * <br>
  * A VanDerCorputSequence can be a nice building block for more complicated quasi-randomness, especially for points in
- * 2D or 3D, when scramble is false. Using a VanDerCorputQRNG with base 3 for the x-axis and another VanDerCorputQRNG
- * with base 5 for the y-axis, requesting a double from each to make points between (0.0, 0.0) and (1.0, 1.0), has an
- * interesting trait that can be desirable for many kinds of positioning in 2D: once a point has been generated, an
- * identical point will never be generated until floating-point precision runs out, but more than that, nearby points
- * will almost never be generated for many generations, and most points will stay at a comfortable distance from each
- * other if the bases are different and both prime (as well as, more technically, if they share no common denominators).
- * This is also known as a Halton sequence, which is a group of sequences of points instead of simply numbers. The
- * choices of 3 and 5 are just examples; any two different primes will technically work for 2D, but patterns can become
- * noticeable with primes larger than about 7, with 11 and 13 sometimes acceptable. Three VanDerCorputQRNG sequences
- * could be used for a Halton sequence of 3D points, using three different prime bases, four for 4D, etc. SobolQRNG can
- * be used for the same purpose, but the points it generates are typically more closely-aligned to a specific pattern,
- * the pattern is symmetrical between all four quadrants of the square between (0.0, 0.0) and (1.0, 1.0) in 2D, and it
- * probably extends into higher dimensions. Using one of the possible Halton sequences gives some more flexibility in
- * the kinds of procedural random-like points produced.
+ * 2D or 3D, when scramble is false. There's a simple way that should almost always "just work" as the static method
+ * {@link #halton(int, int, int)} here. If it doesn't meet your needs, there's a little more complexity involved. Using
+ * a VanDerCorputQRNG with base 3 for the x-axis and another VanDerCorputQRNG with base 5 for the y-axis, requesting a
+ * double from each to make points between (0.0, 0.0) and (1.0, 1.0), has an interesting trait that can be desirable for
+ * many kinds of positioning in 2D: once a point has been generated, an identical point will never be generated until
+ * floating-point precision runs out, but more than that, nearby points will almost never be generated for many
+ * generations, and most points will stay at a comfortable distance from each other if the bases are different and both
+ * prime (as well as, more technically, if they share no common denominators). This is also known as a Halton sequence,
+ * which is a group of sequences of points instead of simply numbers. The choices of 3 and 5 are just examples; any two
+ * different primes will technically work for 2D, but patterns can become noticeable with primes larger than about 7,
+ * with 11 and 13 sometimes acceptable. Three VanDerCorputQRNG sequences could be used for a Halton sequence of 3D
+ * points, using three different prime bases, four for 4D, etc. SobolQRNG can be used for the same purpose, but the
+ * points it generates are typically more closely-aligned to a specific pattern, the pattern is symmetrical between all
+ * four quadrants of the square between (0.0, 0.0) and (1.0, 1.0) in 2D, and it probably extends into higher dimensions.
+ * Using one of the possible Halton sequences gives some more flexibility in the kinds of random-like points produced.
  * <br>
  * Because just using the state in a simple incremental fashion puts some difficult requirements on the choice of base
  * and seed, we can use a technique like Gray codes to scramble the state. The sequence of these Gray-like codes for the
@@ -97,7 +98,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
     /**
      * Constructs a new van der Corput sequence generator with the given starting point in the sequence as a seed.
      * Usually seed should be at least 20 with this constructor, but not drastically larger; 2000 is probably too much.
-     * This will use a base 13 van der Corput sequence.
+     * This will use a base 13 van der Corput sequence and have scrambling enabled.
      * @param seed the seed as a long that will be used as the starting point in the sequence; ideally positive but low
      */
     public VanDerCorputQRNG(long seed)
@@ -114,6 +115,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      * and should generally be positive at construction time.
      * @param base the base or radix used for this VanDerCorputQRNG; for most uses this should be prime but small-ish
      * @param seed the seed as a long that will be used as the starting point in the sequence; ideally positive but low
+     * @param scramble if true, will produce more-random values that are better for 1D; if false, better for 2D or 3D
      */
     public VanDerCorputQRNG(int base, long seed, boolean scramble)
     {
@@ -206,5 +208,73 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
         result = 31 * result + base;
         result = 31 * result + (scramble ? 1 : 0);
         return result;
+    }
+
+    /**
+     * Convenience method that gets a quasi-random Coord between integer (0,0) inclusive and (width,height) exclusive.
+     * This is roughly equivalent to creating two VanDerCorputQRNG generators, one with
+     * {@code new VanDerCorputQRNG(2, index, false)} and the other with {@code new VanDerCorputQRNG(3, index, false)},
+     * then getting an x-coordinate from the first with {@code (int)(nextDouble() * width)} and similarly for y with the
+     * other generator. The advantage here is you don't actually create any objects using this static method, other than
+     * a (almost always shared) reference to the returned Coord. You might find an advantage in using values for index
+     * that start higher than 20 or so, but you can pass sequential values for index and generally get Coords that won't
+     * be near each other; this is not true for all parameters to Halton sequences, but it is true for this one.
+     * @param width the maximum exclusive bound for the x-positions of Coord values this can return
+     * @param height the maximum exclusive bound for the y-positions of Coord values this can return
+     * @param index an int that, if unique, positive, and not too large, will usually result in unique Coord values
+     * @return a Coord that usually will have a comfortable distance from Coords produced with close index values
+     */
+    public static Coord halton(int width, int height, int index)
+    {
+        int s = (index & 0x7fffffff)+1,
+                numX = s & 1, numY = s % 3, denX = 2, denY = 3;
+        while (denX <= s) {
+            numX *= 2;
+            numX += (s % (denX * 2)) / denX;
+            denX *= 2;
+        }
+        while (denY <= s) {
+            numY *= 3;
+            numY += (s % (denY * 3)) / denY;
+            denY *= 3;
+        }
+        return Coord.get(numX * width / denX, numY * height / denY);
+    }
+    /**
+     * Convenience method that gets a quasi-random Coord3D between integer (0,0,0) inclusive and (width,height,depth)
+     * exclusive. This is roughly equivalent to creating three VanDerCorputQRNG generators, one with
+     * {@code new VanDerCorputQRNG(2, index, false)} another with {@code new VanDerCorputQRNG(3, index, false)},
+     * and another with {@code new VanDerCorputQRNG(5, index, false)}, then getting an x-coordinate from the first with
+     * {@code (int)(nextDouble() * width)} and similarly for y and z with the other generators. The advantage here is
+     * you don't actually create any objects using this static method, other than a returned Coord3D. You might find an
+     * advantage in using values for index that start higher than 20 or so, but you can pass sequential values for index
+     * and generally get Coord3Ds that won't be near each other; this is not true for all parameters to Halton
+     * sequences, but it is true for this one.
+     * @param width the maximum exclusive bound for the x-positions of Coord3D values this can return
+     * @param height the maximum exclusive bound for the y-positions of Coord3D values this can return
+     * @param depth the maximum exclusive bound for the z-positions of Coord3D values this can return
+     * @param index an int that, if unique, positive, and not too large, will usually result in unique Coord3D values
+     * @return a Coord3D that usually will have a comfortable distance from Coord3Ds produced with close index values
+     */
+    public static Coord3D halton(int width, int height, int depth, int index)
+    {
+        int s = (index & 0x7fffffff)+1,
+                numX = s & 1, numY = s % 3, denX = 2, denY = 3, numZ = s % 5, denZ = 5;
+        while (denX <= s) {
+            numX *= 2;
+            numX += (s % (denX * 2)) / denX;
+            denX *= 2;
+        }
+        while (denY <= s) {
+            numY *= 3;
+            numY += (s % (denY * 3)) / denY;
+            denY *= 3;
+        }
+        while (denY <= s) {
+            numZ *= 5;
+            numZ += (s % (denZ * 5)) / denZ;
+            denZ *= 5;
+        }
+        return Coord3D.get(numX * width / denX, numY * height / denY, numZ * depth / denZ);
     }
 }
