@@ -8,7 +8,7 @@
 <div class="sourceContainer">
 <pre><span class="sourceLineNo">001</span>package squidpony.squidgrid.mapping;<a name="line.1"></a>
 <span class="sourceLineNo">002</span><a name="line.2"></a>
-<span class="sourceLineNo">003</span>import squidpony.GwtCompatibility;<a name="line.3"></a>
+<span class="sourceLineNo">003</span>import squidpony.ArrayTools;<a name="line.3"></a>
 <span class="sourceLineNo">004</span>import squidpony.squidmath.Coord;<a name="line.4"></a>
 <span class="sourceLineNo">005</span>import squidpony.squidmath.CoordPacker;<a name="line.5"></a>
 <span class="sourceLineNo">006</span>import squidpony.squidmath.PoissonDisk;<a name="line.6"></a>
@@ -45,7 +45,7 @@
 <span class="sourceLineNo">037</span>        this.rng = rng;<a name="line.37"></a>
 <span class="sourceLineNo">038</span>        this.width = Math.max(3, width);<a name="line.38"></a>
 <span class="sourceLineNo">039</span>        this.height = Math.max(3, height);<a name="line.39"></a>
-<span class="sourceLineNo">040</span>        map = GwtCompatibility.fill2D('#', this.width, this.height);<a name="line.40"></a>
+<span class="sourceLineNo">040</span>        map = ArrayTools.fill('#', this.width, this.height);<a name="line.40"></a>
 <span class="sourceLineNo">041</span>        environment = new int[this.width][this.height];<a name="line.41"></a>
 <span class="sourceLineNo">042</span>    }<a name="line.42"></a>
 <span class="sourceLineNo">043</span><a name="line.43"></a>
@@ -77,7 +77,7 @@
 <span class="sourceLineNo">069</span>            if (center.y - hnh != ny)<a name="line.69"></a>
 <span class="sourceLineNo">070</span>                nh -= Math.abs(center.y - hnh - ny);<a name="line.70"></a>
 <span class="sourceLineNo">071</span>            if (nw &gt;= 0 &amp;&amp; nh &gt;= 0) {<a name="line.71"></a>
-<span class="sourceLineNo">072</span>                GwtCompatibility.insert2D(DungeonUtility.wallWrap(GwtCompatibility.fill2D('.', nw, nh)),<a name="line.72"></a>
+<span class="sourceLineNo">072</span>                ArrayTools.insert(DungeonUtility.wallWrap(ArrayTools.fill('.', nw, nh)),<a name="line.72"></a>
 <span class="sourceLineNo">073</span>                        map, nx, ny);<a name="line.73"></a>
 <span class="sourceLineNo">074</span>                //regions.add(CoordPacker.rectangle(nx, ny, nw, nh));<a name="line.74"></a>
 <span class="sourceLineNo">075</span>            }<a name="line.75"></a>

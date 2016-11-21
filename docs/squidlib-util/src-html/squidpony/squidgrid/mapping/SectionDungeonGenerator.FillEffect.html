@@ -8,7 +8,7 @@
 <div class="sourceContainer">
 <pre><span class="sourceLineNo">001</span>package squidpony.squidgrid.mapping;<a name="line.1"></a>
 <span class="sourceLineNo">002</span><a name="line.2"></a>
-<span class="sourceLineNo">003</span>import squidpony.GwtCompatibility;<a name="line.3"></a>
+<span class="sourceLineNo">003</span>import squidpony.ArrayTools;<a name="line.3"></a>
 <span class="sourceLineNo">004</span>import squidpony.squidai.DijkstraMap;<a name="line.4"></a>
 <span class="sourceLineNo">005</span>import squidpony.squidgrid.mapping.styled.DungeonBoneGen;<a name="line.5"></a>
 <span class="sourceLineNo">006</span>import squidpony.squidgrid.mapping.styled.TilesetType;<a name="line.6"></a>
@@ -1054,7 +1054,7 @@
 <span class="sourceLineNo">1046</span>                }<a name="line.1046"></a>
 <span class="sourceLineNo">1047</span>            }<a name="line.1047"></a>
 <span class="sourceLineNo">1048</span>            PacMazeGenerator pac = new PacMazeGenerator(width - width % 3, height - height % 3, rng);<a name="line.1048"></a>
-<span class="sourceLineNo">1049</span>            char[][] pacMap = GwtCompatibility.insert2D(pac.generate(), GwtCompatibility.fill2D('#', width, height), 1, 1);<a name="line.1049"></a>
+<span class="sourceLineNo">1049</span>            char[][] pacMap = ArrayTools.insert(pac.generate(), ArrayTools.fill('#', width, height), 1, 1);<a name="line.1049"></a>
 <span class="sourceLineNo">1050</span>            center = chosen.singleRandom(rng);<a name="line.1050"></a>
 <span class="sourceLineNo">1051</span>            flooded = new GreasedRegion(center, width, height).spill(chosen, potentialMazeSize, rng).and(limit);<a name="line.1051"></a>
 <span class="sourceLineNo">1052</span>            GreasedRegion pacEnv = new GreasedRegion(pacMap, '.').and(flooded).removeIsolated();<a name="line.1052"></a>

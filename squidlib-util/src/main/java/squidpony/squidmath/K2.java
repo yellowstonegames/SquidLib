@@ -1,5 +1,6 @@
 package squidpony.squidmath;
 
+import squidpony.ArrayTools;
 import squidpony.annotation.Beta;
 
 import java.util.Iterator;
@@ -370,11 +371,11 @@ public class K2<A, B>
 
     /**
      * Reorders this K2 using {@code ordering}, which have the same length as this K2's {@link #size()}
-     * and can be generated with {@link squidpony.GwtCompatibility#range(int)} (which, if applied, would produce no
+     * and can be generated with {@link ArrayTools#range(int)} (which, if applied, would produce no
      * change to the current ordering), {@link RNG#randomOrdering(int)} (which gives a random ordering, and if
      * applied immediately would be the same as calling {@link #shuffle(RNG)}), or made in some other way. If you
      * already have an ordering and want to make a different ordering that can undo the change, you can use
-     * {@link squidpony.GwtCompatibility#invertOrdering(int[])} called on the original ordering.
+     * {@link ArrayTools#invertOrdering(int[])} called on the original ordering.
      * @param ordering an int array or vararg that should contain each int from 0 to {@link #size()} (or less)
      * @return this for chaining
      */

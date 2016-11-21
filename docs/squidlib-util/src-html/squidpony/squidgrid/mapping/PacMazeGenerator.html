@@ -8,7 +8,7 @@
 <div class="sourceContainer">
 <pre><span class="sourceLineNo">001</span>package squidpony.squidgrid.mapping;<a name="line.1"></a>
 <span class="sourceLineNo">002</span><a name="line.2"></a>
-<span class="sourceLineNo">003</span>import squidpony.GwtCompatibility;<a name="line.3"></a>
+<span class="sourceLineNo">003</span>import squidpony.ArrayTools;<a name="line.3"></a>
 <span class="sourceLineNo">004</span>import squidpony.squidmath.RNG;<a name="line.4"></a>
 <span class="sourceLineNo">005</span><a name="line.5"></a>
 <span class="sourceLineNo">006</span>/**<a name="line.6"></a>
@@ -150,7 +150,7 @@
 <span class="sourceLineNo">142</span>    public int[][] getEnvironment()<a name="line.142"></a>
 <span class="sourceLineNo">143</span>    {<a name="line.143"></a>
 <span class="sourceLineNo">144</span>        if(env == null)<a name="line.144"></a>
-<span class="sourceLineNo">145</span>            return GwtCompatibility.fill2D(MixedGenerator.CORRIDOR_WALL, width, height);<a name="line.145"></a>
+<span class="sourceLineNo">145</span>            return ArrayTools.fill(MixedGenerator.CORRIDOR_WALL, width, height);<a name="line.145"></a>
 <span class="sourceLineNo">146</span>        return env;<a name="line.146"></a>
 <span class="sourceLineNo">147</span>    }<a name="line.147"></a>
 <span class="sourceLineNo">148</span><a name="line.148"></a>
@@ -171,7 +171,7 @@
 <span class="sourceLineNo">163</span>     */<a name="line.163"></a>
 <span class="sourceLineNo">164</span>    public char[][] getMaze() {<a name="line.164"></a>
 <span class="sourceLineNo">165</span>        if(maze == null)<a name="line.165"></a>
-<span class="sourceLineNo">166</span>            return GwtCompatibility.fill2D('#', width, height);<a name="line.166"></a>
+<span class="sourceLineNo">166</span>            return ArrayTools.fill('#', width, height);<a name="line.166"></a>
 <span class="sourceLineNo">167</span>        return maze;<a name="line.167"></a>
 <span class="sourceLineNo">168</span>    }<a name="line.168"></a>
 <span class="sourceLineNo">169</span>}<a name="line.169"></a>

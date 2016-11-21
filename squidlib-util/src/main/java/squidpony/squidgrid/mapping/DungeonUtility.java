@@ -1,5 +1,6 @@
 package squidpony.squidgrid.mapping;
 
+import squidpony.ArrayTools;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.*;
@@ -1336,51 +1337,6 @@ public class DungeonUtility {
         return 0 <= x && x < level.length && 0 <= y && y < level[x].length;
     }
 
-	/**
-	 * Fills {@code array2d} with {@code value}.
-	 * 
-	 * @param array2d
-	 * @param value
-	 */
-	public static void fill(boolean[][] array2d, boolean value) {
-		final int width = array2d.length;
-		final int height = width == 0 ? 0 : array2d[0].length;
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++)
-				array2d[x][y] = value;
-		}
-	}
-
-	/**
-	 * Fills {@code array2d} with {@code value}.
-	 * 
-	 * @param array2d
-	 * @param value
-	 */
-	public static void fill(double[][] array2d, double value) {
-		final int width = array2d.length;
-		final int height = width == 0 ? 0 : array2d[0].length;
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++)
-				array2d[x][y] = value;
-		}
-	}
-
-	/**
-	 * Fills {@code array2d} with {@code value}.
-	 * 
-	 * @param array2d
-	 * @param value
-	 */
-	public static void fill(int[][] array2d, int value) {
-		final int width = array2d.length;
-		final int height = width == 0 ? 0 : array2d[0].length;
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++)
-				array2d[x][y] = value;
-		}
-	}
-
     /**
      * An easy way to get the Coord items in a List of Coord that are at the edge of the region. Not the most
      * efficient way to do this; If you find you need to do more complicated manipulations of regions or are
@@ -1543,5 +1499,45 @@ public class DungeonUtility {
                 return true;
         }
         return false;
+    }
+    /**
+     * Fills {@code array2d} with {@code value}; delegates to ArrayTools, and using ArrayTools is preferred.
+     * @param array2d a 2D array that will be modified in-place
+     * @param value the value to fill all of array2D with
+     * @deprecated Use {@link ArrayTools#fill(boolean[][], boolean)} instead
+     */
+    @Deprecated
+    public static void fill(boolean[][] array2d, boolean value) {
+        ArrayTools.fill(array2d, value);
+    }
+    /**
+     * Fills {@code array2d} with {@code value}; delegates to ArrayTools, and using ArrayTools is preferred.
+     * @param array2d a 2D array that will be modified in-place
+     * @param value the value to fill all of array2D with
+     * @deprecated Use {@link ArrayTools#fill(char[][], char)} instead
+     */
+    @Deprecated
+    public static void fill(char[][] array2d, char value) {
+        ArrayTools.fill(array2d, value);
+    }
+    /**
+     * Fills {@code array2d} with {@code value}; delegates to ArrayTools, and using ArrayTools is preferred.
+     * @param array2d a 2D array that will be modified in-place
+     * @param value the value to fill all of array2D with
+     * @deprecated Use {@link ArrayTools#fill(int[][], int)} instead
+     */
+    @Deprecated
+    public static void fill(int[][] array2d, int value) {
+        ArrayTools.fill(array2d, value);
+    }
+    /**
+     * Fills {@code array2d} with {@code value}; delegates to ArrayTools, and using ArrayTools is preferred.
+     * @param array2d a 2D array that will be modified in-place
+     * @param value the value to fill all of array2D with
+     * @deprecated Use {@link ArrayTools#fill(double[][], double)} instead
+     */
+    @Deprecated
+    public static void fill(double[][] array2d, double value) {
+        ArrayTools.fill(array2d, value);
     }
 }

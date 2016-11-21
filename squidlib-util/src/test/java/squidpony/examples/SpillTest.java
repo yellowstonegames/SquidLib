@@ -1,6 +1,6 @@
 package squidpony.examples;
 
-import squidpony.GwtCompatibility;
+import squidpony.ArrayTools;
 import squidpony.squidgrid.MultiSpill;
 import squidpony.squidgrid.Spill;
 import squidpony.squidgrid.mapping.DungeonGenerator;
@@ -40,7 +40,7 @@ public class SpillTest {
             ArrayList<Coord> ordered = spreader.start(entry, 20, impassable);
             ordered.addAll(spreader.start(entry, 35, impassable));
             boolean[][] sm = spreader.spillMap;
-            char[][] md = GwtCompatibility.copy2D(dun),
+            char[][] md = ArrayTools.copy(dun),
                     hl = DungeonUtility.hashesToLines(dun);
             for (int x = 0; x < md.length; x++) {
                 for (int y = 0; y < md[x].length; y++) {
@@ -74,7 +74,7 @@ public class SpillTest {
 
             ArrayList<ArrayList<Coord>> ordered = spreader.start(entries, -1, null);
             short[][] sm = spreader.spillMap;
-            char[][] md = GwtCompatibility.copy2D(dun),
+            char[][] md = ArrayTools.copy(dun),
                     hl = DungeonUtility.hashesToLines(dun);
             for (int x = 0; x < md.length; x++) {
                 for (int y = 0; y < md[x].length; y++) {
@@ -98,7 +98,7 @@ public class SpillTest {
         for (int i = 2; i < 3; i++) {
             StatefulRNG rng = new StatefulRNG(); //i * 5617
             int dim = 40 + i * 40, count = 20 + 10 * i * i;
-            char[][] blank = GwtCompatibility.fill2D('~', dim, dim);
+            char[][] blank = ArrayTools.fill('~', dim, dim);
             MultiSpill spreader = new MultiSpill(blank, Spill.Measurement.MANHATTAN, rng);
 
             //SobolQRNG sobol = new SobolQRNG(3);

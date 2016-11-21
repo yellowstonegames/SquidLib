@@ -130,7 +130,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // next, we populate the colorCenters array with the SquidColorCenters that will modify any colors we request
         // of them using the filter we specify. Only one SquidColorCenter will be used at any time for foreground, and
         // sometimes another will be used for background.
-        colorCenters = new SquidColorCenter[18];
+        colorCenters = new SquidColorCenter[20];
         // MultiLerpFilter here is given two colors to tint everything toward one of; this is meant to reproduce the
         // "Hollywood action movie poster" style of using primarily light orange (explosions) and gray-blue (metal).
 
@@ -173,17 +173,17 @@ public class EverythingDemo extends ApplicationAdapter {
         colorCenters[12] = new SquidColorCenter(new Filters.WiggleFilter());
         colorCenters[13] = colorCenters[12];
 
-        // SaturationFilter here is used to de-saturate the colors slightly. Background is less saturated.
+        // PaletteFilter here is used to limit colors to specific sets.
 
-        colorCenters[14] = new SquidColorCenter(new Filters.PaletteFilter(SColor.BLUE_GREEN_SERIES));
-        colorCenters[15] = new SquidColorCenter(new Filters.PaletteFilter(SColor.ACHROMATIC_SERIES));
+        colorCenters[14] = new SquidColorCenter(new Filters.PaletteFilter(SColor.DAWNBRINGER_16));
+        colorCenters[15] = new SquidColorCenter(new Filters.PaletteFilter(SColor.DAWNBRINGER_16));
 
         colorCenters[16] = DefaultResources.getSCC();
         colorCenters[17] = colorCenters[16];
 
-        fgCenter = colorCenters[16];
-        bgCenter = colorCenters[17];
-        currentCenter = 8;
+        colorCenters[18] = new SquidColorCenter(new Filters.DistinctRedGreenFilter());
+        colorCenters[19] = colorCenters[18];
+
         batch = new SpriteBatch();
         width = 90;
         height = 30;
@@ -235,6 +235,15 @@ public class EverythingDemo extends ApplicationAdapter {
         messages.appendWrappingMessage("Use numpad or vi-keys (hjklyubn) to move. Use ? for help, f to change colors, q to quit." +
                 " Click the top or bottom border of this box to scroll.");
         counter = 0;
+
+        // The display is almost all set up, so now we can tell it to use the filtered color centers we want.
+        // 8 is unfiltered. You can change this to 0-7 to use different filters, or press 'f' in play.
+        currentCenter = 8;
+
+        fgCenter = colorCenters[currentCenter * 2];
+        bgCenter = colorCenters[currentCenter * 2 + 1];
+        display.setFGColorCenter(fgCenter);
+        display.setBGColorCenter(bgCenter);
 
         dungeonGen = new DungeonGenerator(width, height, rng);
         dungeonGen.addWater(30, 6);
@@ -381,7 +390,9 @@ public class EverythingDemo extends ApplicationAdapter {
                     }
                     case 'f':
                     case 'F': {
-                        currentCenter = (currentCenter + 1) % 9;
+                        currentCenter = (currentCenter + 1) % 10;
+                        //currentCenter = (currentCenter + 1 & 1) + 8; // for testing red-green color blindness filter
+
                         // idx is 3 when we use the HallucinateFilter, which needs special work
                         changingColors = currentCenter == 3;
                         fgCenter = colorCenters[currentCenter * 2];

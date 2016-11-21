@@ -8,7 +8,7 @@
 <div class="sourceContainer">
 <pre><span class="sourceLineNo">001</span>package squidpony.squidgrid;<a name="line.1"></a>
 <span class="sourceLineNo">002</span><a name="line.2"></a>
-<span class="sourceLineNo">003</span>import squidpony.GwtCompatibility;<a name="line.3"></a>
+<span class="sourceLineNo">003</span>import squidpony.ArrayTools;<a name="line.3"></a>
 <span class="sourceLineNo">004</span>import squidpony.squidmath.Coord;<a name="line.4"></a>
 <span class="sourceLineNo">005</span>import squidpony.squidmath.RNG;<a name="line.5"></a>
 <span class="sourceLineNo">006</span><a name="line.6"></a>
@@ -83,8 +83,8 @@
 <span class="sourceLineNo">075</span>    public static boolean[][] orSamples(boolean[][] left, boolean[][] right)<a name="line.75"></a>
 <span class="sourceLineNo">076</span>    {<a name="line.76"></a>
 <span class="sourceLineNo">077</span>        if(left == null &amp;&amp; right == null) return new boolean[0][0];<a name="line.77"></a>
-<span class="sourceLineNo">078</span>        else if(left == null || left.length &lt;= 0) return GwtCompatibility.copy2D(right);<a name="line.78"></a>
-<span class="sourceLineNo">079</span>        else if(right == null || right.length &lt;= 0) return GwtCompatibility.copy2D(left);<a name="line.79"></a>
+<span class="sourceLineNo">078</span>        else if(left == null || left.length &lt;= 0) return ArrayTools.copy(right);<a name="line.78"></a>
+<span class="sourceLineNo">079</span>        else if(right == null || right.length &lt;= 0) return ArrayTools.copy(left);<a name="line.79"></a>
 <span class="sourceLineNo">080</span><a name="line.80"></a>
 <span class="sourceLineNo">081</span>        int width = Math.min(left.length, right.length),<a name="line.81"></a>
 <span class="sourceLineNo">082</span>                height = Math.min(left[0].length, right[0].length);<a name="line.82"></a>
@@ -136,7 +136,7 @@
 <span class="sourceLineNo">128</span>    {<a name="line.128"></a>
 <span class="sourceLineNo">129</span>        if(sample == null || sample.length &lt;= 0)<a name="line.129"></a>
 <span class="sourceLineNo">130</span>            return new boolean[0][0];<a name="line.130"></a>
-<span class="sourceLineNo">131</span>        boolean[][] sample2 = GwtCompatibility.copy2D(sample);<a name="line.131"></a>
+<span class="sourceLineNo">131</span>        boolean[][] sample2 = ArrayTools.copy(sample);<a name="line.131"></a>
 <span class="sourceLineNo">132</span>        int width = sample2.length, height = sample2[0].length;<a name="line.132"></a>
 <span class="sourceLineNo">133</span>        for(Coord c : points)<a name="line.133"></a>
 <span class="sourceLineNo">134</span>        {<a name="line.134"></a>

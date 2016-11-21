@@ -1,0 +1,266 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.squidmath;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import squidpony.StringKit;<a name="line.3"></a>
+<span class="sourceLineNo">004</span><a name="line.4"></a>
+<span class="sourceLineNo">005</span>import java.io.Serializable;<a name="line.5"></a>
+<span class="sourceLineNo">006</span><a name="line.6"></a>
+<span class="sourceLineNo">007</span>/**<a name="line.7"></a>
+<span class="sourceLineNo">008</span> * A quasi-random number generator that goes through one of many sub-random sequences found by J.G. van der Corput.<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * More specifically, this is a kind of scrambled van der Corput sequence, where the state is internally stored in a<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * simple 64-bit long that is incremented once per generated number, but the state is altered with something similar to<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * a Gray code before being used, more on this later if you want to read about it. The important things to know about<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * this class are: size of state affects speed (prefer smaller seeds, but quality is sometimes a bit poor at first if<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * you start at 0);  the base (when given) should be prime and moderately small; this doesn't generate very random<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * numbers (which can be good for making points that should not overlap); and this is a StatefulRandomness with an<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * additional method for generating quasi-random doubles, {@link #nextDouble()}.<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * &lt;br&gt;<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * This generator allows a base (also called a radix) that changes the sequence significantly; a base should be prime,<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * and this performs a little better in terms of time used with larger primes, though quality is also improved by<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * preferring primes that aren't very large relative to the quantity of numbers expected to be generated. Unfortunately,<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * performance is not especially similar to conventional PRNGs; smaller (positive) state values are processed more<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * quickly than larger ones, or most negative states. At least one 64-bit integer modulus and one 64-bit integer<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * division are required for any number to be produced, and the amount of both of these relatively-non-cheap operations<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * increases linearly with the number of digits (in the specified base, which is usually not 10) needed to represent<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * the current state. Since performance is not optimal, and the results are rather strange anyway relative to PRNGs,<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * this should not be used as a direct substitute for a typical RandomnessSource (however, it is similar to, but simpler<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * than, {@link squidpony.squidmath.SobolQRNG}). So what's it good for?<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * &lt;br&gt;<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * A VanDerCorputSequence can be a nice building block for more complicated quasi-randomness, especially for points in<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * 2D, 3D, or even higher dimensions. Using a VanDerCorputQRNG with base 11 for the x-axis and another VanDerCorputQRNG<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * with base 19 for the y-axis, requesting a double from each to make points between (0.0, 0.0) and (1.0, 1.0), has an<a name="line.30"></a>
+<span class="sourceLineNo">031</span> * interesting trait that can be desirable for many kinds of positioning in 2D: once a point has been generated, an<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * identical point will never be generated until floating-point precision runs out, but more than that, nearby points<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * will almost never be generated for many generations, and most points will stay at a comfortable distance from each<a name="line.33"></a>
+<span class="sourceLineNo">034</span> * other if the bases are different and both prime (as well as, more technically, if they share no common denominators).<a name="line.34"></a>
+<span class="sourceLineNo">035</span> * This is also known as a Halton sequence, which is a group of sequences of points instead of simply numbers. The<a name="line.35"></a>
+<span class="sourceLineNo">036</span> * choices of 11 and 19 are just examples; any two different primes will work well for 2D, especially prime numbers<a name="line.36"></a>
+<span class="sourceLineNo">037</span> * between 10 and 60 or so. Three VanDerCorputQRNG sequences could be used for a Halton sequence of 3D points, using<a name="line.37"></a>
+<span class="sourceLineNo">038</span> * three different prime bases, four for 4D, etc. SobolQRNG can be used for the same purpose, but the points it<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * generates are typically more closely-aligned to a specific pattern, the pattern is symmetrical between all four<a name="line.39"></a>
+<span class="sourceLineNo">040</span> * quadrants of the square between (0.0, 0.0) and (1.0, 1.0) in 2D, and it probably extends into higher dimensions.<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * Using one of the many possible Halton sequences gives some more flexibility in the kinds of procedural random-like<a name="line.41"></a>
+<span class="sourceLineNo">042</span> * points produced.<a name="line.42"></a>
+<span class="sourceLineNo">043</span> * &lt;br&gt;<a name="line.43"></a>
+<span class="sourceLineNo">044</span> * Because just using the state in a simple incremental fashion puts some difficult requirements on the choice of base<a name="line.44"></a>
+<span class="sourceLineNo">045</span> * and seed, we use a technique like Gray codes to scramble the state. The sequence of these Gray-like codes for the<a name="line.45"></a>
+<span class="sourceLineNo">046</span> * integers from 0 to 16 is {@code 0, 9, 21, 16, 50, 51, 23, 10, 4, 28, 49, 39, 246, 198, 179, 97, 393}, and this can be<a name="line.46"></a>
+<span class="sourceLineNo">047</span> * generated efficiently with {@code (i * i) ^ ((i * 137) &gt;&gt; 4)}. No duplicate results were found in any numbers of 20<a name="line.47"></a>
+<span class="sourceLineNo">048</span> * bits or less, and trying to find duplicates in 24 bits exhausted the testing computer's memory, without finding a<a name="line.48"></a>
+<span class="sourceLineNo">049</span> * duplicate. You should be fine.<a name="line.49"></a>
+<span class="sourceLineNo">050</span> * &lt;br&gt;<a name="line.50"></a>
+<span class="sourceLineNo">051</span> * Expected output for {@link #nextDouble()} called 33 times on an instance made with {@code new VanDerCorputQRNG(11, 83L)}:<a name="line.51"></a>
+<span class="sourceLineNo">052</span> * 0.5194317328051362, 0.8590943241581859, 0.5931288846390274, 0.5045420394781778, 0.7892220476743392,<a name="line.52"></a>
+<span class="sourceLineNo">053</span> * 0.6645037907246772, 0.7809575848644218, 0.0725360289597705, 0.6322655556314459, 0.6998838877125879,<a name="line.53"></a>
+<span class="sourceLineNo">054</span> * 0.5578853903421898, 0.5969537599890717, 0.6323338569769824, 0.873505908066389, 0.09514377433235435,<a name="line.54"></a>
+<span class="sourceLineNo">055</span> * 0.6623864490130456, 0.4376750221979373, 0.6946929854518133, 0.4250392732736835, 0.5294720305990028,<a name="line.55"></a>
+<span class="sourceLineNo">056</span> * 0.4790656375930606, 0.2626869749334062, 0.056075404685472306, 0.9758213236800765, 0.676729731575712,<a name="line.56"></a>
+<span class="sourceLineNo">057</span> * 0.899118912642579, 0.1876237961887849, 0.652755959292398, 0.039683081756710606, 0.10504746943514787,<a name="line.57"></a>
+<span class="sourceLineNo">058</span> * 0.2598183184208729, 0.4078273341984837, 0.3034628782187009<a name="line.58"></a>
+<span class="sourceLineNo">059</span> * &lt;br&gt;<a name="line.59"></a>
+<span class="sourceLineNo">060</span> * Expected output for {@link #nextDouble()} called 33 times on an instance made with {@code new VanDerCorputQRNG(19, 83L)}:<a name="line.60"></a>
+<span class="sourceLineNo">061</span> * 0.8944452544102639, 0.7842327790609341, 0.4352023081468067, 0.0696971324652205, 0.5957213342439054,<a name="line.61"></a>
+<span class="sourceLineNo">062</span> * 0.8864342661581787, 0.0167739658228528, 0.8956192785506557, 0.26943470353972115, 0.3525371966145134,<a name="line.62"></a>
+<span class="sourceLineNo">063</span> * 0.09754375733765087, 0.8924118139056637, 0.3585147443619984, 0.9126771587081131, 0.28926266679967155,<a name="line.63"></a>
+<span class="sourceLineNo">064</span> * 0.8542138258607592, 0.8789987799356972, 0.7905019145034184, 0.1624220194749887, 0.9349836173755572,<a name="line.64"></a>
+<span class="sourceLineNo">065</span> * 0.48623015477167914, 0.6716799287912155, 0.8240344994283346, 0.6557883994137552, 0.4561966221867542,<a name="line.65"></a>
+<span class="sourceLineNo">066</span> * 0.07946532024769608, 0.15134168706501638, 0.1382202407900492, 0.7890439760284221, 0.7142517322611092,<a name="line.66"></a>
+<span class="sourceLineNo">067</span> * 0.3069037223471275, 0.7030256060036372, 0.01678163918324752<a name="line.67"></a>
+<span class="sourceLineNo">068</span> * &lt;br&gt;<a name="line.68"></a>
+<span class="sourceLineNo">069</span> * Note on Gray-like code implementation: This is not a typical Gray code. Normally, the operation looks like<a name="line.69"></a>
+<span class="sourceLineNo">070</span> * {@code i ^ (i &gt;&gt;&gt; 1)}, which gives negative results for negative values of i (not wanted here), and also clusters<a name="line.70"></a>
+<span class="sourceLineNo">071</span> * two very similar numbers together for every pair of sequential numbers. An earlier version scrambled with a basic<a name="line.71"></a>
+<span class="sourceLineNo">072</span> * Gray code, but the current style, {@code (i * i) ^ ((i * 137) &gt;&gt; 4)}, produces much more "wild and crazy" results.<a name="line.72"></a>
+<span class="sourceLineNo">073</span> * This is ideal for a scramble.<a name="line.73"></a>
+<span class="sourceLineNo">074</span> * &lt;br&gt;<a name="line.74"></a>
+<span class="sourceLineNo">075</span> * Created by Tommy Ettinger on 11/18/2016.<a name="line.75"></a>
+<span class="sourceLineNo">076</span> */<a name="line.76"></a>
+<span class="sourceLineNo">077</span>public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, Serializable {<a name="line.77"></a>
+<span class="sourceLineNo">078</span>    private static final long serialVersionUID = 1;<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    public long state;<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    public final int base;<a name="line.80"></a>
+<span class="sourceLineNo">081</span><a name="line.81"></a>
+<span class="sourceLineNo">082</span>    /**<a name="line.82"></a>
+<span class="sourceLineNo">083</span>     * Constructs a new van der Corput sequence generator with base 13 and starting point 83.<a name="line.83"></a>
+<span class="sourceLineNo">084</span>     */<a name="line.84"></a>
+<span class="sourceLineNo">085</span>    public VanDerCorputQRNG()<a name="line.85"></a>
+<span class="sourceLineNo">086</span>    {<a name="line.86"></a>
+<span class="sourceLineNo">087</span>        base = 13;<a name="line.87"></a>
+<span class="sourceLineNo">088</span>        state = 83;<a name="line.88"></a>
+<span class="sourceLineNo">089</span>    }<a name="line.89"></a>
+<span class="sourceLineNo">090</span><a name="line.90"></a>
+<span class="sourceLineNo">091</span>    /**<a name="line.91"></a>
+<span class="sourceLineNo">092</span>     * Constructs a new van der Corput sequence generator with the given starting point in the sequence as a seed.<a name="line.92"></a>
+<span class="sourceLineNo">093</span>     * Usually seed should be at least 20 with this constructor, but not drastically larger; 2000 is probably too much.<a name="line.93"></a>
+<span class="sourceLineNo">094</span>     * This will use a base 13 van der Corput sequence.<a name="line.94"></a>
+<span class="sourceLineNo">095</span>     * @param seed the seed as a long that will be used as the starting point in the sequence; ideally positive but low<a name="line.95"></a>
+<span class="sourceLineNo">096</span>     */<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    public VanDerCorputQRNG(long seed)<a name="line.97"></a>
+<span class="sourceLineNo">098</span>    {<a name="line.98"></a>
+<span class="sourceLineNo">099</span>        base = 13;<a name="line.99"></a>
+<span class="sourceLineNo">100</span>        state = seed;<a name="line.100"></a>
+<span class="sourceLineNo">101</span>    }<a name="line.101"></a>
+<span class="sourceLineNo">102</span><a name="line.102"></a>
+<span class="sourceLineNo">103</span>    /**<a name="line.103"></a>
+<span class="sourceLineNo">104</span>     * Constructs a new van der Corput sequence generator with the given base (a.k.a. radix; if given a base less than<a name="line.104"></a>
+<span class="sourceLineNo">105</span>     * 2, this will use base 2 instead) and starting point in the sequence as a seed. Good choices for base are between<a name="line.105"></a>
+<span class="sourceLineNo">106</span>     * 10 and 60 or so, and should usually be prime. Good choices for seed are larger than base but not by very much,<a name="line.106"></a>
+<span class="sourceLineNo">107</span>     * and should generally be positive at construction time.<a name="line.107"></a>
+<span class="sourceLineNo">108</span>     * @param base the base or radix used for this VanDerCorputQRNG; for most uses this should be prime but small-ish<a name="line.108"></a>
+<span class="sourceLineNo">109</span>     * @param seed the seed as a long that will be used as the starting point in the sequence; ideally positive but low<a name="line.109"></a>
+<span class="sourceLineNo">110</span>     */<a name="line.110"></a>
+<span class="sourceLineNo">111</span>    public VanDerCorputQRNG(int base, long seed)<a name="line.111"></a>
+<span class="sourceLineNo">112</span>    {<a name="line.112"></a>
+<span class="sourceLineNo">113</span>        this.base = base &lt; 2 ? 2 : base;<a name="line.113"></a>
+<span class="sourceLineNo">114</span>        state = seed;<a name="line.114"></a>
+<span class="sourceLineNo">115</span>    }<a name="line.115"></a>
+<span class="sourceLineNo">116</span><a name="line.116"></a>
+<span class="sourceLineNo">117</span>    /**<a name="line.117"></a>
+<span class="sourceLineNo">118</span>     * Gets the next quasi-random long as a fraction of {@link Long#MAX_VALUE}; this can never produce a negative value.<a name="line.118"></a>
+<span class="sourceLineNo">119</span>     * It is extremely unlikely to produce two identical values unless the state is very high or is negative; state<a name="line.119"></a>
+<span class="sourceLineNo">120</span>     * increases by exactly 1 each time this, {@link #next(int)}, or {@link #nextDouble()} is called and can potentially<a name="line.120"></a>
+<span class="sourceLineNo">121</span>     * wrap around to negative values after many generations.<a name="line.121"></a>
+<span class="sourceLineNo">122</span>     * @return a quasi-random non-negative long; may return 0 rarely, probably can't return {@link Long#MAX_VALUE}<a name="line.122"></a>
+<span class="sourceLineNo">123</span>     */<a name="line.123"></a>
+<span class="sourceLineNo">124</span>    @Override<a name="line.124"></a>
+<span class="sourceLineNo">125</span>    public long nextLong() {<a name="line.125"></a>
+<span class="sourceLineNo">126</span>        long s = (++state * state) ^ (state * 137 &gt;&gt; 4), // intentionally non-standard Gray-like code<a name="line.126"></a>
+<span class="sourceLineNo">127</span>                num = s % base, den = base;<a name="line.127"></a>
+<span class="sourceLineNo">128</span>        while (den &lt;= s) {<a name="line.128"></a>
+<span class="sourceLineNo">129</span>            num *= base;<a name="line.129"></a>
+<span class="sourceLineNo">130</span>            num += (s % (den * base)) / den;<a name="line.130"></a>
+<span class="sourceLineNo">131</span>            den *= base;<a name="line.131"></a>
+<span class="sourceLineNo">132</span>        }<a name="line.132"></a>
+<span class="sourceLineNo">133</span>        return (Long.MAX_VALUE / den) * num;<a name="line.133"></a>
+<span class="sourceLineNo">134</span>    }<a name="line.134"></a>
+<span class="sourceLineNo">135</span><a name="line.135"></a>
+<span class="sourceLineNo">136</span>    @Override<a name="line.136"></a>
+<span class="sourceLineNo">137</span>    public int next(int bits) {<a name="line.137"></a>
+<span class="sourceLineNo">138</span>        return (int)(nextLong()) &gt;&gt;&gt; (32 - bits);<a name="line.138"></a>
+<span class="sourceLineNo">139</span>    }<a name="line.139"></a>
+<span class="sourceLineNo">140</span><a name="line.140"></a>
+<span class="sourceLineNo">141</span>    /**<a name="line.141"></a>
+<span class="sourceLineNo">142</span>     * Gets the next quasi-random double from between 0.0 and 1.0 (normally both exclusive; only if state is negative or<a name="line.142"></a>
+<span class="sourceLineNo">143</span>     * has wrapped around to a negative value can 0.0 ever be produced). It should be nearly impossible for this to<a name="line.143"></a>
+<span class="sourceLineNo">144</span>     * return the same number twice unless floating-point precision has been exhausted or a very large amount of numbers<a name="line.144"></a>
+<span class="sourceLineNo">145</span>     * have already been generated. Certain unusual bases may make this more likely.<a name="line.145"></a>
+<span class="sourceLineNo">146</span>     * @return a quasi-random double that will always be less than 1.0 and will be no lower than 0.0<a name="line.146"></a>
+<span class="sourceLineNo">147</span>     */<a name="line.147"></a>
+<span class="sourceLineNo">148</span>    public double nextDouble() {<a name="line.148"></a>
+<span class="sourceLineNo">149</span>        long s = (++state * state) ^ (state * 137 &gt;&gt; 4), // intentionally non-standard Gray-like code<a name="line.149"></a>
+<span class="sourceLineNo">150</span>                num = s % base, den = base;<a name="line.150"></a>
+<span class="sourceLineNo">151</span>        while (den &lt;= s) {<a name="line.151"></a>
+<span class="sourceLineNo">152</span>            num *= base;<a name="line.152"></a>
+<span class="sourceLineNo">153</span>            num += (s % (den * base)) / den;<a name="line.153"></a>
+<span class="sourceLineNo">154</span>            den *= base;<a name="line.154"></a>
+<span class="sourceLineNo">155</span>        }<a name="line.155"></a>
+<span class="sourceLineNo">156</span>        return num / ((double)den);<a name="line.156"></a>
+<span class="sourceLineNo">157</span>    }<a name="line.157"></a>
+<span class="sourceLineNo">158</span><a name="line.158"></a>
+<span class="sourceLineNo">159</span>    @Override<a name="line.159"></a>
+<span class="sourceLineNo">160</span>    public VanDerCorputQRNG copy() {<a name="line.160"></a>
+<span class="sourceLineNo">161</span>        return new VanDerCorputQRNG(base, state);<a name="line.161"></a>
+<span class="sourceLineNo">162</span>    }<a name="line.162"></a>
+<span class="sourceLineNo">163</span><a name="line.163"></a>
+<span class="sourceLineNo">164</span>    @Override<a name="line.164"></a>
+<span class="sourceLineNo">165</span>    public long getState() {<a name="line.165"></a>
+<span class="sourceLineNo">166</span>        return state;<a name="line.166"></a>
+<span class="sourceLineNo">167</span>    }<a name="line.167"></a>
+<span class="sourceLineNo">168</span><a name="line.168"></a>
+<span class="sourceLineNo">169</span>    @Override<a name="line.169"></a>
+<span class="sourceLineNo">170</span>    public void setState(long state) {<a name="line.170"></a>
+<span class="sourceLineNo">171</span>        this.state = state;<a name="line.171"></a>
+<span class="sourceLineNo">172</span>    }<a name="line.172"></a>
+<span class="sourceLineNo">173</span><a name="line.173"></a>
+<span class="sourceLineNo">174</span>    @Override<a name="line.174"></a>
+<span class="sourceLineNo">175</span>    public String toString() {<a name="line.175"></a>
+<span class="sourceLineNo">176</span>        return "VanDerCorputQRNG with base " + base +<a name="line.176"></a>
+<span class="sourceLineNo">177</span>                " and state 0x" + StringKit.hex(state);<a name="line.177"></a>
+<span class="sourceLineNo">178</span>    }<a name="line.178"></a>
+<span class="sourceLineNo">179</span><a name="line.179"></a>
+<span class="sourceLineNo">180</span>    @Override<a name="line.180"></a>
+<span class="sourceLineNo">181</span>    public boolean equals(Object o) {<a name="line.181"></a>
+<span class="sourceLineNo">182</span>        if (this == o) return true;<a name="line.182"></a>
+<span class="sourceLineNo">183</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.183"></a>
+<span class="sourceLineNo">184</span>        VanDerCorputQRNG that = (VanDerCorputQRNG) o;<a name="line.184"></a>
+<span class="sourceLineNo">185</span>        return state == that.state &amp;&amp; base == that.base;<a name="line.185"></a>
+<span class="sourceLineNo">186</span>    }<a name="line.186"></a>
+<span class="sourceLineNo">187</span><a name="line.187"></a>
+<span class="sourceLineNo">188</span>    @Override<a name="line.188"></a>
+<span class="sourceLineNo">189</span>    public int hashCode() {<a name="line.189"></a>
+<span class="sourceLineNo">190</span>        int result = (int) (state ^ (state &gt;&gt;&gt; 32));<a name="line.190"></a>
+<span class="sourceLineNo">191</span>        result = 31 * result + base;<a name="line.191"></a>
+<span class="sourceLineNo">192</span>        return result;<a name="line.192"></a>
+<span class="sourceLineNo">193</span>    }<a name="line.193"></a>
+<span class="sourceLineNo">194</span>}<a name="line.194"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

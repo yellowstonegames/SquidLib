@@ -84,7 +84,7 @@
 <span class="sourceLineNo">076</span>     * lines and some parts of other lines, but usually is 2 cells wide.<a name="line.76"></a>
 <span class="sourceLineNo">077</span>     */<a name="line.77"></a>
 <span class="sourceLineNo">078</span>    public static final int THICK = 6;<a name="line.78"></a>
-<span class="sourceLineNo">079</span>    private Queue&lt;Coord&gt; lastPath = new LinkedList&lt;&gt;();<a name="line.79"></a>
+<span class="sourceLineNo">079</span>    private LinkedList&lt;Coord&gt; lastPath = new LinkedList&lt;&gt;();<a name="line.79"></a>
 <span class="sourceLineNo">080</span>    private int type;<a name="line.80"></a>
 <span class="sourceLineNo">081</span>    private double[][] resistanceMap;<a name="line.81"></a>
 <span class="sourceLineNo">082</span>    private int startx, starty, targetx, targety;<a name="line.82"></a>
@@ -294,7 +294,7 @@
 <span class="sourceLineNo">286</span>     *<a name="line.286"></a>
 <span class="sourceLineNo">287</span>     * @return<a name="line.287"></a>
 <span class="sourceLineNo">288</span>     */<a name="line.288"></a>
-<span class="sourceLineNo">289</span>    public Queue&lt;Coord&gt; getLastPath() {<a name="line.289"></a>
+<span class="sourceLineNo">289</span>    public LinkedList&lt;Coord&gt; getLastPath() {<a name="line.289"></a>
 <span class="sourceLineNo">290</span>        return lastPath;<a name="line.290"></a>
 <span class="sourceLineNo">291</span>    }<a name="line.291"></a>
 <span class="sourceLineNo">292</span>/*<a name="line.292"></a>
@@ -577,16 +577,16 @@
 <span class="sourceLineNo">569</span>        List&lt;Coord&gt; ePath = elias.line(startx, starty, targetx, targety);<a name="line.569"></a>
 <span class="sourceLineNo">570</span>        lastPath = new LinkedList&lt;&gt;(ePath);//save path for later retreival<a name="line.570"></a>
 <span class="sourceLineNo">571</span><a name="line.571"></a>
-<span class="sourceLineNo">572</span>        HashMap&lt;eliasWorker, Thread&gt; pool = new HashMap&lt;&gt;();<a name="line.572"></a>
+<span class="sourceLineNo">572</span>        HashMap&lt;EliasWorker, Thread&gt; pool = new HashMap&lt;&gt;();<a name="line.572"></a>
 <span class="sourceLineNo">573</span><a name="line.573"></a>
 <span class="sourceLineNo">574</span>        for (Coord p : ePath) {<a name="line.574"></a>
-<span class="sourceLineNo">575</span>            eliasWorker worker = new eliasWorker(p.x, p.y, radiusStrategy);<a name="line.575"></a>
+<span class="sourceLineNo">575</span>            EliasWorker worker = new EliasWorker(p.x, p.y, radiusStrategy);<a name="line.575"></a>
 <span class="sourceLineNo">576</span>            Thread thread = new Thread(worker);<a name="line.576"></a>
 <span class="sourceLineNo">577</span>            thread.start();<a name="line.577"></a>
 <span class="sourceLineNo">578</span>            pool.put(worker, thread);<a name="line.578"></a>
 <span class="sourceLineNo">579</span>        }<a name="line.579"></a>
 <span class="sourceLineNo">580</span><a name="line.580"></a>
-<span class="sourceLineNo">581</span>        for (eliasWorker w : pool.keySet()) {<a name="line.581"></a>
+<span class="sourceLineNo">581</span>        for (EliasWorker w : pool.keySet()) {<a name="line.581"></a>
 <span class="sourceLineNo">582</span>            try {<a name="line.582"></a>
 <span class="sourceLineNo">583</span>                pool.get(w).join();<a name="line.583"></a>
 <span class="sourceLineNo">584</span>            } catch (InterruptedException ex) {<a name="line.584"></a>
@@ -600,16 +600,16 @@
 <span class="sourceLineNo">592</span>        return false;//never got to the target point<a name="line.592"></a>
 <span class="sourceLineNo">593</span>    }<a name="line.593"></a>
 <span class="sourceLineNo">594</span><a name="line.594"></a>
-<span class="sourceLineNo">595</span>    private class eliasWorker implements Runnable {<a name="line.595"></a>
+<span class="sourceLineNo">595</span>    private class EliasWorker implements Runnable {<a name="line.595"></a>
 <span class="sourceLineNo">596</span><a name="line.596"></a>
-<span class="sourceLineNo">597</span>        private Queue&lt;Coord&gt; path;<a name="line.597"></a>
+<span class="sourceLineNo">597</span>        private LinkedList&lt;Coord&gt; path;<a name="line.597"></a>
 <span class="sourceLineNo">598</span>        private boolean succeeded = false;<a name="line.598"></a>
 <span class="sourceLineNo">599</span>        private int testx, testy;<a name="line.599"></a>
-<span class="sourceLineNo">600</span>        private Radius radiusStrategy;<a name="line.600"></a>
-<span class="sourceLineNo">601</span>        eliasWorker(int testx, int testy, Radius radiusStrategy) {<a name="line.601"></a>
+<span class="sourceLineNo">600</span>        private Radius eliasRadiusStrategy;<a name="line.600"></a>
+<span class="sourceLineNo">601</span>        EliasWorker(int testx, int testy, Radius radiusStrategy) {<a name="line.601"></a>
 <span class="sourceLineNo">602</span>            this.testx = testx;<a name="line.602"></a>
 <span class="sourceLineNo">603</span>            this.testy = testy;<a name="line.603"></a>
-<span class="sourceLineNo">604</span>            this.radiusStrategy = radiusStrategy;<a name="line.604"></a>
+<span class="sourceLineNo">604</span>            this.eliasRadiusStrategy = radiusStrategy;<a name="line.604"></a>
 <span class="sourceLineNo">605</span>        }<a name="line.605"></a>
 <span class="sourceLineNo">606</span><a name="line.606"></a>
 <span class="sourceLineNo">607</span>        @Override<a name="line.607"></a>
@@ -618,9 +618,9 @@
 <span class="sourceLineNo">610</span>            LOS los2 = new LOS(BRESENHAM);<a name="line.610"></a>
 <span class="sourceLineNo">611</span>            //if a non-solid midpoint on the path can see both the start and end, consider the two ends to be able to see each other<a name="line.611"></a>
 <span class="sourceLineNo">612</span>            if (resistanceMap[testx][testy] &lt; 1<a name="line.612"></a>
-<span class="sourceLineNo">613</span>                    &amp;&amp; radiusStrategy.radius(startx, starty, testx, testy) &lt;= radiusStrategy.radius(startx, starty, targetx, targety)<a name="line.613"></a>
-<span class="sourceLineNo">614</span>                    &amp;&amp; los1.isReachable(resistanceMap, testx, testy, targetx, targety, radiusStrategy)<a name="line.614"></a>
-<span class="sourceLineNo">615</span>                    &amp;&amp; los2.isReachable(resistanceMap, startx, starty, testx, testy, radiusStrategy)) {<a name="line.615"></a>
+<span class="sourceLineNo">613</span>                    &amp;&amp; eliasRadiusStrategy.radius(startx, starty, testx, testy) &lt;= eliasRadiusStrategy.radius(startx, starty, targetx, targety)<a name="line.613"></a>
+<span class="sourceLineNo">614</span>                    &amp;&amp; los1.isReachable(resistanceMap, testx, testy, targetx, targety, eliasRadiusStrategy)<a name="line.614"></a>
+<span class="sourceLineNo">615</span>                    &amp;&amp; los2.isReachable(resistanceMap, startx, starty, testx, testy, eliasRadiusStrategy)) {<a name="line.615"></a>
 <span class="sourceLineNo">616</span><a name="line.616"></a>
 <span class="sourceLineNo">617</span>                //record actual sight path used<a name="line.617"></a>
 <span class="sourceLineNo">618</span>                path = new LinkedList&lt;&gt;(los2.lastPath);<a name="line.618"></a>

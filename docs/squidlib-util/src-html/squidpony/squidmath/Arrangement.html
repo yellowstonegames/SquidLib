@@ -23,7 +23,7 @@
 <span class="sourceLineNo">015</span> */<a name="line.15"></a>
 <span class="sourceLineNo">016</span>package squidpony.squidmath;<a name="line.16"></a>
 <span class="sourceLineNo">017</span><a name="line.17"></a>
-<span class="sourceLineNo">018</span>import squidpony.GwtCompatibility;<a name="line.18"></a>
+<span class="sourceLineNo">018</span>import squidpony.ArrayTools;<a name="line.18"></a>
 <span class="sourceLineNo">019</span>import squidpony.annotation.Beta;<a name="line.19"></a>
 <span class="sourceLineNo">020</span>import squidpony.annotation.GwtIncompatible;<a name="line.20"></a>
 <span class="sourceLineNo">021</span><a name="line.21"></a>
@@ -1992,11 +1992,11 @@
 <span class="sourceLineNo">1984</span><a name="line.1984"></a>
 <span class="sourceLineNo">1985</span>    public IntVLA valuesAsIntVLA()<a name="line.1985"></a>
 <span class="sourceLineNo">1986</span>    {<a name="line.1986"></a>
-<span class="sourceLineNo">1987</span>        return new IntVLA(GwtCompatibility.range(size));<a name="line.1987"></a>
+<span class="sourceLineNo">1987</span>        return new IntVLA(ArrayTools.range(size));<a name="line.1987"></a>
 <span class="sourceLineNo">1988</span>    }<a name="line.1988"></a>
 <span class="sourceLineNo">1989</span>    public int[] valuesAsArray()<a name="line.1989"></a>
 <span class="sourceLineNo">1990</span>    {<a name="line.1990"></a>
-<span class="sourceLineNo">1991</span>        return GwtCompatibility.range(size);<a name="line.1991"></a>
+<span class="sourceLineNo">1991</span>        return ArrayTools.range(size);<a name="line.1991"></a>
 <span class="sourceLineNo">1992</span>    }<a name="line.1992"></a>
 <span class="sourceLineNo">1993</span><a name="line.1993"></a>
 <span class="sourceLineNo">1994</span>    /**<a name="line.1994"></a>
