@@ -10,7 +10,7 @@ The software is provided "as is", without warranty of any kind, express or impli
 */
 package squidpony.squidgrid;
 
-import squidpony.GwtCompatibility;
+import squidpony.ArrayTools;
 import squidpony.squidgrid.mapping.AestheticDifference;
 import squidpony.squidmath.IntDoubleOrderedMap;
 import squidpony.squidmath.IntVLA;
@@ -135,7 +135,7 @@ public class DetailedMimic {
         {
             int x = i % OW, y = i / OW;
             IntDoubleOrderedMap candidates = new IntDoubleOrderedMap();
-            GwtCompatibility.insert2D(cleanMask, mask, 0, 0);
+            ArrayTools.insert(cleanMask, mask, 0, 0);
 
             for (int dy = -1; dy <= 1; dy++){
                 for (int dx = -1; dx <= 1; dx++)

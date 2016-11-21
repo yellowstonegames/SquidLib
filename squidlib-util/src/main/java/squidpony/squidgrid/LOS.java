@@ -76,7 +76,7 @@ public class LOS {
      * lines and some parts of other lines, but usually is 2 cells wide.
      */
     public static final int THICK = 6;
-    private Queue<Coord> lastPath = new LinkedList<>();
+    private LinkedList<Coord> lastPath = new LinkedList<>();
     private int type;
     private double[][] resistanceMap;
     private int startx, starty, targetx, targety;
@@ -286,7 +286,7 @@ public class LOS {
      *
      * @return
      */
-    public Queue<Coord> getLastPath() {
+    public LinkedList<Coord> getLastPath() {
         return lastPath;
     }
 /*
@@ -569,16 +569,16 @@ public class LOS {
         List<Coord> ePath = elias.line(startx, starty, targetx, targety);
         lastPath = new LinkedList<>(ePath);//save path for later retreival
 
-        HashMap<eliasWorker, Thread> pool = new HashMap<>();
+        HashMap<EliasWorker, Thread> pool = new HashMap<>();
 
         for (Coord p : ePath) {
-            eliasWorker worker = new eliasWorker(p.x, p.y, radiusStrategy);
+            EliasWorker worker = new EliasWorker(p.x, p.y, radiusStrategy);
             Thread thread = new Thread(worker);
             thread.start();
             pool.put(worker, thread);
         }
 
-        for (eliasWorker w : pool.keySet()) {
+        for (EliasWorker w : pool.keySet()) {
             try {
                 pool.get(w).join();
             } catch (InterruptedException ex) {
@@ -592,16 +592,16 @@ public class LOS {
         return false;//never got to the target point
     }
 
-    private class eliasWorker implements Runnable {
+    private class EliasWorker implements Runnable {
 
-        private Queue<Coord> path;
+        private LinkedList<Coord> path;
         private boolean succeeded = false;
         private int testx, testy;
-        private Radius radiusStrategy;
-        eliasWorker(int testx, int testy, Radius radiusStrategy) {
+        private Radius eliasRadiusStrategy;
+        EliasWorker(int testx, int testy, Radius radiusStrategy) {
             this.testx = testx;
             this.testy = testy;
-            this.radiusStrategy = radiusStrategy;
+            this.eliasRadiusStrategy = radiusStrategy;
         }
 
         @Override
@@ -610,9 +610,9 @@ public class LOS {
             LOS los2 = new LOS(BRESENHAM);
             //if a non-solid midpoint on the path can see both the start and end, consider the two ends to be able to see each other
             if (resistanceMap[testx][testy] < 1
-                    && radiusStrategy.radius(startx, starty, testx, testy) <= radiusStrategy.radius(startx, starty, targetx, targety)
-                    && los1.isReachable(resistanceMap, testx, testy, targetx, targety, radiusStrategy)
-                    && los2.isReachable(resistanceMap, startx, starty, testx, testy, radiusStrategy)) {
+                    && eliasRadiusStrategy.radius(startx, starty, testx, testy) <= eliasRadiusStrategy.radius(startx, starty, targetx, targety)
+                    && los1.isReachable(resistanceMap, testx, testy, targetx, targety, eliasRadiusStrategy)
+                    && los2.isReachable(resistanceMap, startx, starty, testx, testy, eliasRadiusStrategy)) {
 
                 //record actual sight path used
                 path = new LinkedList<>(los2.lastPath);

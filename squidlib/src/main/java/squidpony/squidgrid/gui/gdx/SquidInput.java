@@ -327,8 +327,8 @@ public class SquidInput extends InputAdapter {
      *
      * Top row numbers map as follows:
      *
-     * '1' to '!', '2' to '@', '3' to '#', '4' to '$', '5' to '%',
-     * '6' to '^', '7' to '&amp;', '8' to '*', '9' to '(', '0' to ')'
+     * {@literal '1' to '!', '2' to '@', '3' to '#', '4' to '$', '5' to '%',}
+     * {@literal '6' to '^', '7' to '&amp;', '8' to '*', '9' to '(', '0' to ')'}
      *
      * Numpad numbers will report a SquidInput constant such as UP_LEFT_ARROW for Numpad 7, but only if numpadDirections
      * is true; otherwise they send the number (here, 7). Numpad 0 sends VERTICAL_ARROW or 0.
@@ -338,32 +338,22 @@ public class SquidInput extends InputAdapter {
      * Mac) mapping to BACKSPACE, Delete (on PC) mapping to FORWARD_DELETE, Esc mapping to ESCAPE, and Enter (on PC) or
      * Return (on Mac) mapping to ENTER.
      *
-     * ':', '*', '#', '@', and space keys, if present, always map to themselves, regardless of Shift.
+     * {@literal ':', '*', '#', '@'}, and space keys, if present, always map to themselves, regardless of Shift.
      *
      * Other characters map as follows when Shift is held, as they would on a QWERTY keyboard:
-     *
-     * ',' to '&lt;'
-     *
-     * '.' to '&gt;'
-     *
-     * '/' to '?'
-     *
-     * ';' to ':'
-     *
-     * '\'' to '&quot;'
-     *
-     * '[' to '{'
-     *
-     * ']' to '}'
-     *
-     * '|' to '\\'
-     *
-     * '-' to '_'
-     *
-     * '+' to '='
-     *
-     * '`' to '~'
-     *
+     * <ul>
+     * <li>{@code ','} to {@code '<'}</li>
+     * <li>{@code '.'} to {@code '>'}</li>
+     * <li>{@code '/'} to {@code '?'}</li>
+     * <li>{@code ';'} to {@code ':'}</li>
+     * <li>{@code '\''} to {@code '"'}</li>
+     * <li>{@code '['} to <code>'{'</code></li>
+     * <li>{@code ']'} to <code>'}'</code></li>
+     * <li>{@code '|'} to {@code '\\'}</li>
+     * <li>{@code '-'} to {@code '_'}</li>
+     * <li>{@code '+'} to {@code '='}</li>
+     * <li>{@code '`'} to {@code '~'}</li>
+     * </ul>
      * @param keycode a keycode as passed by LibGDX
      * @param shift true if Shift key is being held.
      * @return a char appropriate to the given keycode; often uses shift to capitalize or change a char, but not for keys like the arrow keys that normally don't produce chars

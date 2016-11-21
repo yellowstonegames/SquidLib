@@ -1,6 +1,6 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.GwtCompatibility;
+import squidpony.ArrayTools;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
@@ -1046,7 +1046,7 @@ public class SectionDungeonGenerator {
                 }
             }
             PacMazeGenerator pac = new PacMazeGenerator(width - width % 3, height - height % 3, rng);
-            char[][] pacMap = GwtCompatibility.insert2D(pac.generate(), GwtCompatibility.fill2D('#', width, height), 1, 1);
+            char[][] pacMap = ArrayTools.insert(pac.generate(), ArrayTools.fill('#', width, height), 1, 1);
             center = chosen.singleRandom(rng);
             flooded = new GreasedRegion(center, width, height).spill(chosen, potentialMazeSize, rng).and(limit);
             GreasedRegion pacEnv = new GreasedRegion(pacMap, '.').and(flooded).removeIsolated();

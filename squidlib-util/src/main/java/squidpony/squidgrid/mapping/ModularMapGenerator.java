@@ -1,6 +1,6 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.GwtCompatibility;
+import squidpony.ArrayTools;
 import squidpony.annotation.Beta;
 import squidpony.squidmath.*;
 
@@ -32,8 +32,8 @@ public class ModularMapGenerator {
 
     private void putModule(short[] module) {
         char[][] unp = CoordPacker.unpackChar(module, '.', '#');
-        MapModule mm = new MapModule(GwtCompatibility.insert2D(unp,
-                GwtCompatibility.fill2D('#', unp.length + 2, unp[0].length + 2), 1, 1));
+        MapModule mm = new MapModule(ArrayTools.insert(unp,
+                ArrayTools.fill('#', unp.length + 2, unp[0].length + 2), 1, 1));
         //short[] b = CoordPacker.rectangle(1 + mm.max.x, 1 + mm.max.y);
         //modules.put(b, mm);
         //inverseModules.put(CoordPacker.negatePacked(b), mm);
@@ -141,8 +141,8 @@ public class ModularMapGenerator {
         rebuildSeed = rng.getState();
         height = copying.height;
         width = copying.width;
-        map = GwtCompatibility.copy2D(copying.map);
-        environment = GwtCompatibility.copy2D(copying.environment);
+        map = ArrayTools.copy(copying.map);
+        environment = ArrayTools.copy(copying.environment);
         layout = new RegionMap<>(copying.layout);
         modules = new OrderedMap<>(copying.modules);
     }

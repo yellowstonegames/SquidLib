@@ -1244,7 +1244,11 @@ public class FakeLanguageGen implements Serializable {
             */
     /**
      * Imitation text from an approximation of one of the Inuktitut languages spoken by various people of the Arctic and
-     * nearby areas. This is likely to be hard to pronounce.
+     * nearby areas. This is likely to be hard to pronounce. Inuktitut is the name accepted in Canada for one language
+     * family of that area, but other parts of the Arctic circle speak languages with varying levels of difference from
+     * this style of generated text. The term "Inuit language" may be acceptable, but "Eskimo language" is probably not,
+     * and when that term is not considered outright offensive it refers to a different language group anyway (more
+     * properly called Yupik or Yup'ik, and primarily spoken in Siberia instead of Canada and Alaska).
      * <br>
      * Ugkangungait ninaaq ipkutuilluuq um aitqiinnaitunniak tillingaat.
      */
@@ -1263,12 +1267,16 @@ public class FakeLanguageGen implements Serializable {
             },
             new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{3, 4, 6, 5, 4}, 0.45, 0.0, 0.0, 0.25, null, true).register();
     /**
-     * Somewhat close to Old Norse, which is itself very close to Icelandic, so this uses Icelandic spelling rules.
+     * Somewhat close to Old Norse, which is itself very close to Icelandic, so this uses Icelandic spelling rules. Not
+     * to be confused with the language(s) of Norway, where the Norwegian languages are called norsk, and are further
+     * distinguished into Bokmål and Nynorsk. This should not be likely to seem like any form of Norwegian, since it
+     * doesn't have the a-with-ring letter 'å' and has the letters eth ('Ðð') and thorn (Þþ).
      * <br>
      * Leyrk tjör stomri kna snó æd ðrépdápá, prygso?
      */
     public static final FakeLanguageGen NORSE = new FakeLanguageGen(
-            new String[]{"a","a","a","á","á","au","e","e","e","é","é","ei","ey","i","i","í","í","y","y","ý","ý","o","o","o","ó","ó","u","u","u","ú","ú","æ","æ","æ","ö","ö",},
+            new String[]{"a","a","a","á","á","au","e","e","e","é","é","ei","ey","i","i","í","í","y","y","ý","ý",
+                    "o","o","o","ó","ó","u","u","u","ú","ú","æ","æ","æ","ö","ö",},
             new String[]{},
             new String[]{"b","bl","br","bj","d","dr","dj","ð","ðl","ðr","f","fl","flj","fr","fn","fj","g","gn","gj","h",
                     "hj","hl","hr","hv","j","k","kl","kr","kn","kj","l","lj","m","mj","n","nj","p","pl","pr","pj","r",
@@ -1298,7 +1306,6 @@ public class FakeLanguageGen implements Serializable {
                     "bs","ds","gs","x","rn","gn","gt","gs","ks","kt","nt","nd","nk","nt","ng","ngs","ns",
                     "ps","pk","pt","pts","lb","ld","lf","lk","lm","lp","lps","lt",
                     "rn","rb","rd","rk","rp","rt","rm","rð","rþ","sk","sp","st","ts",
-                    //"fnt","fnd",
                     "b","d","ð","f","g","gn","h","k","kn","l","m","n","ng","p","r","s","sp","st","sþ","sð","t","v","þ",
                     "b","d","ð","f","g","gn","h","k","kn","l","m","n","ng","p","r","s","sp","st","sþ","sð","t","v","þ",
                     "b","d","ð","f","g","gn","h","k","kn","l","m","n","ng","p","r","s","sp","st","sþ","sð","t","v","þ",
