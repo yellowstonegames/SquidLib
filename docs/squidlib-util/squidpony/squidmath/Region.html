@@ -123,20 +123,26 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/squidmath/Region.html#line.20">Region</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/Region.html#line.26">Region</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractList.html?is-external=true" title="class or interface in java.util">AbstractList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;
 implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
-<div class="block">Represents an area or series of areas as one logical unit, and allows iterating over or altering that unit.
+<div class="block"><b>NOTE</b>: You should try GreasedRegion before using this class, unless you know Region does exactly what you want.
+ <br>
+ Represents an area or series of areas as one logical unit, and allows iterating over or altering that unit.
  This can be useful for getting an iterable data structure from a FOV map, Dijkstra map, or just a map from a dungeon
  generator. It can also work with some shapes (circles and rectangles).
  Regions must be no larger than 256x256 (actually, the Coords in them should fit in that), even if Coord has had its
  expandPool() method called. This is because CoordPacker relies on that maximum size to significantly improve
  efficiency, and this is really just a convenience class wrapping CoordPacker to avoid some of its complexity.
- More features are likely to be ported into Region as they are added to CoordPacker.
+ GreasedRegion allows larger maps, particularly when the Coord pool has been expanded, and should be much faster at
+ tasks that involve changing the size or shape of an area. It also is mutable by default, without needing to track
+ the "dirty" and "clean" states of this class. GreasedRegion does not implement the List interface, though.
+ <br>
  Created by Tommy Ettinger on 5/12/2016.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../serialized-form.html#squidpony.squidmath.Region">Serialized Form</a></dd>
+<dd><a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath"><code>You should prefer GreasedRegion for most usage.</code></a>, 
+<a href="../../serialized-form.html#squidpony.squidmath.Region">Serialized Form</a></dd>
 </dl>
 </li>
 </ul>
@@ -420,7 +426,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>raw</h4>
-<pre>protected&nbsp;short[] <a href="../../src-html/squidpony/squidmath/Region.html#line.24">raw</a></pre>
+<pre>protected&nbsp;short[] <a href="../../src-html/squidpony/squidmath/Region.html#line.30">raw</a></pre>
 </li>
 </ul>
 <a name="coords">
@@ -429,7 +435,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>coords</h4>
-<pre>protected&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[] <a href="../../src-html/squidpony/squidmath/Region.html#line.25">coords</a></pre>
+<pre>protected&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[] <a href="../../src-html/squidpony/squidmath/Region.html#line.31">coords</a></pre>
 </li>
 </ul>
 </li>
@@ -446,7 +452,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>Region</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.35">Region</a>(double[][]&nbsp;fovMap)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.41">Region</a>(double[][]&nbsp;fovMap)</pre>
 <div class="block">A constructor for a Region that takes a 2D double array, usually the kind produced by FOV, and stores only Coord
  positions that correspond to values greater than 0.0 (actually, greater than epsilon, which here is 0.0001).
  This won't behave as-expected if you give it a double[][] that DijkstraMap produces; there's a different
@@ -463,7 +469,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>Region</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.48">Region</a>(double[][]&nbsp;dijkstraMap,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.54">Region</a>(double[][]&nbsp;dijkstraMap,
               double&nbsp;maximum)</pre>
 <div class="block">A constructor for a Region that takes a 2D double array, usually produced by DijkstraMap, and a maximum value,
  and stores only Coord positions that correspond to values no greater than maximum.
@@ -482,7 +488,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>Region</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.61">Region</a>(char[][]&nbsp;map,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.67">Region</a>(char[][]&nbsp;map,
               char...&nbsp;using)</pre>
 <div class="block">A constructor for a Region that takes a 2D char array, the kind produced by most map/dungeon generators in this
  library, and a vararg or array of char that will have their Coord positions used where those chars appear in map.
@@ -501,7 +507,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>Region</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.70">Region</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;points)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.76">Region</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;points)</pre>
 <div class="block">A constructor for a Region that takes an array or vararg of Coord and encodes all of them in the Region.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -515,7 +521,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>Region</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.79">Region</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.85">Region</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</pre>
 <div class="block">A constructor for a Region that takes a Collection of Coord, such as a List or Set, and encodes all of them in
  the Region.</div>
 <dl>
@@ -530,7 +536,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>Region</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.91">Region</a>(<a href="../../squidpony/squidmath/Region.html" title="class in squidpony.squidmath">Region</a>&nbsp;other)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.97">Region</a>(<a href="../../squidpony/squidmath/Region.html" title="class in squidpony.squidmath">Region</a>&nbsp;other)</pre>
 <div class="block">A constructor that copies another Region so this Region will have the same contents. If the other Region is
  "dirty", this won't perform "cleanup" on it, but will ensure that this Region is "clean" at creation.
  None of the reference types in other will be used directly in this Region, so changes made to this Region won't
@@ -547,7 +553,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>Region</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.116">Region</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.122">Region</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
               int&nbsp;circleRadius,
               int&nbsp;mapWidth,
               int&nbsp;mapHeight)</pre>
@@ -568,7 +574,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>Region</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.132">Region</a>(int&nbsp;minX,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.138">Region</a>(int&nbsp;minX,
               int&nbsp;minY,
               int&nbsp;width,
               int&nbsp;height)</pre>
@@ -592,7 +598,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Region</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.148">Region</a>(short[]&nbsp;packedData)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.154">Region</a>(short[]&nbsp;packedData)</pre>
 <div class="block">A constructor for a Region that takes a specifically-formatted short array (packed data), as produced by
  CoordPacker or sometimes other classes, like RegionMap or RoomFinder. If you don't have such data, the other
  constructors are recommended instead.
@@ -622,7 +628,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getRandomCoord</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.161">getRandomCoord</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.167">getRandomCoord</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 <div class="block">Gets a single random Coord from this using the given RNG (which can be seeded); returns null if this is empty.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -638,7 +644,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>separated</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Region.html" title="class in squidpony.squidmath">Region</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.174">separated</a>(int&nbsp;separation)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Region.html" title="class in squidpony.squidmath">Region</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.180">separated</a>(int&nbsp;separation)</pre>
 <div class="block">Takes this region and walks through its Coords in chunks with length equal to separation, creating a new Region
  where one Coord in each chunk is kept and the others are discarded.</div>
 <dl>
@@ -655,7 +661,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>randomSeparated</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Region.html" title="class in squidpony.squidmath">Region</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.186">randomSeparated</a>(int&nbsp;separation,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Region.html" title="class in squidpony.squidmath">Region</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.192">randomSeparated</a>(int&nbsp;separation,
                               <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 <div class="block">Takes this region and walks through its Coords in chunks with length equal to separation, creating a new Region
  where one randomly-chosen Coord in each chunk is kept and the others are discarded.</div>
@@ -674,7 +680,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>toBooleanArray</h4>
-<pre>public&nbsp;boolean[][]&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.199">toBooleanArray</a>(int&nbsp;width,
+<pre>public&nbsp;boolean[][]&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.205">toBooleanArray</a>(int&nbsp;width,
                                   int&nbsp;height)</pre>
 <div class="block">Gets a representation of this Region as a 2D boolean array with the given width and height. If this contains a
  Coord with x and y less than width and height, that position will be true in the 2D array this returns, otherwise
@@ -694,7 +700,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>toCharArray</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.214">toCharArray</a>(int&nbsp;width,
+<pre>public&nbsp;char[][]&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.220">toCharArray</a>(int&nbsp;width,
                             int&nbsp;height,
                             char&nbsp;on,
                             char&nbsp;off)</pre>
@@ -718,7 +724,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>get</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.229">get</a>(int&nbsp;index)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.235">get</a>(int&nbsp;index)</pre>
 <div class="block">Gets the Coord stored at the given index in this Region, or null if index is out of bounds.
  The ordering this class uses may seem unusual, but it is predictable, using the pattern a Hilbert Curve takes to
  wind through a 256x256 space (at its maximum). Any two given Coords will always have the same before-after
@@ -742,7 +748,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>size</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.247">size</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.253">size</a>()</pre>
 <div class="block">Gets the size of this Region as measured in Coords stored.
  Performs "cleanup" if the Region is "dirty," even though this doesn't specifically request a Coord. As such, it
  may take longer than a call to size() might be expected to, but only just after a "dirtying" method was called.</div>
@@ -764,7 +770,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>isEmpty</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.262">isEmpty</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.268">isEmpty</a>()</pre>
 <div class="block">Returns true if there are no Coords in this Region, or false otherwise. Can be more efficient than checking if
  size() is greater than 0 because it doesn't depend on the "dirty or clean" state, and can quickly check.</div>
 <dl>
@@ -784,7 +790,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>add</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.275">add</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;coord)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.281">add</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;coord)</pre>
 <div class="block">Adds a Coord to this Region, returning false if the Coord is null or already included in this, or true otherwise.
  Causes the Region to be considered "dirty", which will make anything that gets a Coord from this to perform some
  "cleanup" on the Coords this holds when a Coord is requested. You can perform multiple "dirtying" operations in
@@ -809,7 +815,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getRaw</h4>
-<pre>public&nbsp;short[]&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.289">getRaw</a>()</pre>
+<pre>public&nbsp;short[]&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.295">getRaw</a>()</pre>
 <div class="block">Gets a direct reference to this Region's "raw packed data"; don't modify it unless you know what you're doing!
  It's fine to pass this to methods in CoordPacker, since essentially all of those methods won't modify packed data
  given as arguments.</div>
@@ -825,7 +831,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>setRaw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.302">setRaw</a>(short[]&nbsp;raw)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.308">setRaw</a>(short[]&nbsp;raw)</pre>
 <div class="block">Sets the "raw packed data" to the given short array, as generated by CoordPacker or some parts of RegionMap.
  This hopefully won't need to be consumed too much externally, but is an important bridge between this and
  CoordPacker's API, which deals mostly with these special short arrays.
@@ -844,7 +850,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getCoords</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.314">getCoords</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.320">getCoords</a>()</pre>
 <div class="block">Gets the Coords contained in this as an array, a direct reference that does permit modifying the Coords in your
  own code without altering "dirty/clean" status. This method does "cleanup" in itself if necessary, but once the
  Coords are returned you can change them at-will. The Coords may not reflect changes made by this object if it
@@ -861,7 +867,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>setCoords</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.329">setCoords</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;coords)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.335">setCoords</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;coords)</pre>
 <div class="block">Changes this Region to include the given Coords and disregard its previous contents. If any elements of coords
  are null, this Region will hold no Coords (a sort of escape hatch to avoid throwing an exception, since all other
  methods in this class fail on null entries without potentially crashing a program).</div>
@@ -877,7 +883,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>debugPrint</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.350">debugPrint</a>(int&nbsp;width,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Region.html#line.356">debugPrint</a>(int&nbsp;width,
                        int&nbsp;height)</pre>
 <div class="block">Prints this Region to System.out as a grid of chars with the given width and height, using '.' for Coords this
  contains and '#' for empty space. Consider using toCharArray() instead if you need more customization for what

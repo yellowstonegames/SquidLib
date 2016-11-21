@@ -4973,26 +4973,34 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
+<td class="colLast"><span class="typeNameLabel">VanDerCorputQRNG.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/VanDerCorputQRNG.html#halton-int-int-int-">halton</a></span>(int&nbsp;width,
+      int&nbsp;height,
+      int&nbsp;index)</code>
+<div class="block">Convenience method that gets a quasi-random Coord between integer (0,0) inclusive and (width,height) exclusive.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CoordPacker.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CoordPacker.html#hilbertToCoord-int-">hilbertToCoord</a></span>(int&nbsp;hilbert)</code>
 <div class="block">Takes a distance to travel along the 256x256 Hilbert curve and returns a Coord representing the position
  in 2D space that corresponds to that point on the Hilbert curve.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">OrthoLine.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrthoLine.html#line_-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">line_</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
      <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end)</code>
 <div class="block">Draws a line from start to end using only N/S/E/W movement.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">DDALine.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/DDALine.html#line_-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">line_</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
      <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end)</code>
 <div class="block">Draws a line from start to end using the DDA algorithm.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">OrthoLine.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrthoLine.html#line_-int-int-int-int-">line_</a></span>(int&nbsp;startX,
      int&nbsp;startY,
@@ -5001,7 +5009,7 @@
 <div class="block">Draws a line from (startX, startY) to (endX, endY) using only N/S/E/W movement.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">DDALine.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/DDALine.html#line_-int-int-int-int-">line_</a></span>(int&nbsp;startX,
      int&nbsp;startY,
@@ -5010,7 +5018,7 @@
 <div class="block">Draws a line from (startX, startY) to (endX, endY) using the DDA algorithm.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">DDALine.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/DDALine.html#line_-int-int-int-int-int-int-">line_</a></span>(int&nbsp;startX,
      int&nbsp;startY,
@@ -5021,14 +5029,14 @@
 <div class="block">Not intended for external use; prefer the overloads without a modifier argument.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">Bresenham.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Bresenham.html#line2D_-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">line2D_</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;a,
        <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;b)</code>
 <div class="block">Generates a 2D Bresenham line between two points.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">Bresenham.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Bresenham.html#line2D_-int-int-int-int-">line2D_</a></span>(int&nbsp;startx,
        int&nbsp;starty,
@@ -5037,40 +5045,44 @@
 <div class="block">Generates a 2D Bresenham line between two points.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CoordPacker.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CoordPacker.html#mooreToCoord-int-">mooreToCoord</a></span>(int&nbsp;moore)</code>
 <div class="block">Takes a distance to travel along the 16x16 Hilbert curve and returns a Coord representing the position
  in 2D space that corresponds to that point on the Hilbert curve.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CoordPacker.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CoordPacker.html#mortonDecode-int-">mortonDecode</a></span>(int&nbsp;morton)</code>
 <div class="block">Takes a Morton code, with interleaved x and y bits and x in the least significant bit, and returns the Coord
  representing the same x, y position.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Coord.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Coord.html#multiply-squidpony.squidmath.Coord-">multiply</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;other)</code>
 <div class="block">Separately multiplies the x and y positions of other from this Coord, producing a different Coord as their
  "product."</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Coord.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Coord.html#multiply-double-">multiply</a></span>(double&nbsp;operand)</code>
 <div class="block">Separately multiplies the x and y positions of this Coord by operand, rounding to the nearest int for each of x
  and y and producing a different Coord as their "product."</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Coord.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Coord.html#multiply-int-">multiply</a></span>(int&nbsp;operand)</code>
 <div class="block">Separately multiplies the x and y positions of this Coord by operand, producing a different Coord as their
  "product."</div>
 </td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.GRIterator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.GRIterator.html#next--">next</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
@@ -5249,31 +5261,35 @@
 <td class="colLast"><span class="typeNameLabel">Elias.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Elias.html#getLastPath--">getLastPath</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#iterator--">iterator</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">OrthoLine.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrthoLine.html#line-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">line</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
     <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end)</code>
 <div class="block">Draws a line from start to end using only N/S/E/W movement.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">Elias.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Elias.html#line-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">line</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
     <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">DDALine.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/DDALine.html#line-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">line</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
     <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end)</code>
 <div class="block">Draws a line from start to end using the DDA algorithm.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">Elias.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Elias.html#line-squidpony.squidmath.Coord-squidpony.squidmath.Coord-double-">line</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
     <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end,
     double&nbsp;brightnessThreshold)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">WobblyLine.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/WobblyLine.html#line-squidpony.squidmath.Coord-squidpony.squidmath.Coord-int-int-">line</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
     <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end,
@@ -5282,7 +5298,7 @@
 <div class="block">Draws a line from start to end using the Drunkard's Walk algorithm.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">Elias.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Elias.html#line-double-double-double-double-">line</a></span>(double&nbsp;startx,
     double&nbsp;starty,
@@ -5291,7 +5307,7 @@
 <div class="block">Gets the line between the two points.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">Elias.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Elias.html#line-double-double-double-double-double-">line</a></span>(double&nbsp;startx,
     double&nbsp;starty,
@@ -5301,7 +5317,7 @@
 <div class="block">Gets the line between the two points.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">OrthoLine.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrthoLine.html#line-int-int-int-int-">line</a></span>(int&nbsp;startX,
     int&nbsp;startY,
@@ -5310,7 +5326,7 @@
 <div class="block">Draws a line from (startX, startY) to (endX, endY) using only N/S/E/W movement.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">DDALine.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/DDALine.html#line-int-int-int-int-">line</a></span>(int&nbsp;startX,
     int&nbsp;startY,
@@ -5319,7 +5335,7 @@
 <div class="block">Draws a line from (startX, startY) to (endX, endY) using the DDA algorithm.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">WobblyLine.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/WobblyLine.html#line-int-int-int-int-int-int-">line</a></span>(int&nbsp;startX,
     int&nbsp;startY,
@@ -5330,7 +5346,7 @@
 <div class="block">Draws a line from (startX, startY) to (endX, endY) using the Drunkard's Walk algorithm.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">DDALine.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/DDALine.html#line-int-int-int-int-int-int-">line</a></span>(int&nbsp;startX,
     int&nbsp;startY,
@@ -5341,7 +5357,7 @@
 <div class="block">Not intended for external use; prefer the overloads without a modifier argument.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">WobblyLine.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/WobblyLine.html#line-int-int-int-int-int-int-double-squidpony.squidmath.RNG-">line</a></span>(int&nbsp;startX,
     int&nbsp;startY,
@@ -5354,14 +5370,14 @@
 <div class="block">Draws a line from (startX, startY) to (endX, endY) using the Drunkard's Walk algorithm.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Queue.html?is-external=true" title="class or interface in java.util">Queue</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">Bresenham.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Bresenham.html#line2D-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">line2D</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;a,
       <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;b)</code>
 <div class="block">Generates a 2D Bresenham line between two points.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Queue.html?is-external=true" title="class or interface in java.util">Queue</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">Bresenham.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Bresenham.html#line2D-int-int-int-int-">line2D</a></span>(int&nbsp;startx,
       int&nbsp;starty,
@@ -5370,14 +5386,14 @@
 <div class="block">Generates a 2D Bresenham line between two points.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Queue.html?is-external=true" title="class or interface in java.util">Queue</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">AStarSearch.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/AStarSearch.html#path-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">path</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
     <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target)</code>
 <div class="block">Finds an A* path to the target from the start.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Queue.html?is-external=true" title="class or interface in java.util">Queue</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">AStarSearch.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/AStarSearch.html#path-int-int-int-int-">path</a></span>(int&nbsp;startx,
     int&nbsp;starty,
@@ -5386,7 +5402,7 @@
 <div class="block">Finds an A* path to the target from the start.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">CoordPacker.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CoordPacker.html#randomPortion-short:A-int-squidpony.squidmath.RNG-">randomPortion</a></span>(short[]&nbsp;packed,
              int&nbsp;size,
@@ -5395,7 +5411,7 @@
  and returns a List of Coord with a count equal to size (or less if there aren't enough "on" cells).</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">PoissonDisk.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/PoissonDisk.html#sampleCircle-squidpony.squidmath.Coord-float-float-int-int-">sampleCircle</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
             float&nbsp;radius,
@@ -5406,7 +5422,7 @@
  Euclidean distance, so a true circle), but with the given minimum distance from any other Coord in the list.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">PoissonDisk.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/PoissonDisk.html#sampleCircle-squidpony.squidmath.Coord-float-float-int-int-int-squidpony.squidmath.RNG-">sampleCircle</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
             float&nbsp;radius,
@@ -5419,14 +5435,14 @@
  Euclidean distance, so a true circle), but with the given minimum distance from any other Coord in the list.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">PoissonDisk.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/PoissonDisk.html#sampleMap-char:A:A-float-squidpony.squidmath.RNG-java.lang.Character...-">sampleMap</a></span>(char[][]&nbsp;map,
          float&nbsp;minimumDistance,
          <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
          <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>...&nbsp;blocking)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">PoissonDisk.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/PoissonDisk.html#sampleMap-squidpony.squidmath.Coord-squidpony.squidmath.Coord-char:A:A-float-squidpony.squidmath.RNG-java.lang.Character...-">sampleMap</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;minPosition,
          <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;maxPosition,
@@ -5435,7 +5451,7 @@
          <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
          <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>...&nbsp;blocking)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">PoissonDisk.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/PoissonDisk.html#sampleRectangle-squidpony.squidmath.Coord-squidpony.squidmath.Coord-float-int-int-">sampleRectangle</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;minPosition,
                <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;maxPosition,
@@ -5446,7 +5462,7 @@
  maxPosition, but with the given minimum distance from any other Coord in the list.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">PoissonDisk.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/PoissonDisk.html#sampleRectangle-squidpony.squidmath.Coord-squidpony.squidmath.Coord-float-int-int-int-squidpony.squidmath.RNG-">sampleRectangle</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;minPosition,
                <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;maxPosition,

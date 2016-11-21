@@ -6,10 +6,7 @@ import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.zone.Zone;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Region encoding of on/off information about areas using bitsets; uncompressed (fatty), but fast (greased lightning).
@@ -52,7 +49,7 @@ import java.util.List;
  * Created by Tommy Ettinger on 6/24/2016.
  */
 @Beta
-public class GreasedRegion extends Zone.Skeleton implements Serializable {
+public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Serializable {
     private static final long serialVersionUID = 0;
     private static final SobolQRNG sobol = new SobolQRNG(2);
 
@@ -2041,7 +2038,7 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
 
     public Coord first()
     {
-        long t, w;
+        long w;
         for (int x = 0; x < width; x++) {
             for (int s = 0; s < ySections; s++) {
                 if ((w = Long.lowestOneBit(data[x * ySections + s])) != 0) {
@@ -2284,5 +2281,46 @@ public class GreasedRegion extends Zone.Skeleton implements Serializable {
         result = 31 * result + ySections;
         result = 31 * result + (int) (yEndMask ^ (yEndMask >>> 32));
         return result;
+    }
+
+    @Override
+    public Iterator<Coord> iterator() {
+        return new GRIterator();
+    }
+
+    protected class GRIterator implements Iterator<Coord>
+    {
+        public int index = 0;
+        private int limit;
+        private long w, i = 0;
+        public GRIterator()
+        {
+            limit = size();
+        }
+        @Override
+        public boolean hasNext() {
+            return index < limit;
+        }
+
+        @Override
+        public Coord next() {
+            i = 0L;
+            for (int x = 0; x < width; x++) {
+                for (int s = 0; s < ySections; s++) {
+                    if ((w = Long.lowestOneBit(data[x * ySections + s])) != 0 && i++ >= index) {
+                        if(index++ < limit)
+                            return Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
+                        else
+                            return null;
+                    }
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException("remove() is not supported on this Iterator.");
+        }
     }
 }
