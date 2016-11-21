@@ -6,13 +6,17 @@ import java.io.Serializable;
 
 /**
  * A quasi-random number generator that goes through one of many sub-random sequences found by J.G. van der Corput.
- * More specifically, this is a kind of scrambled van der Corput sequence, where the state is internally stored in a
- * simple 64-bit long that is incremented once per generated number, but the state is altered with something similar to
- * a Gray code before being used, more on this later if you want to read about it. The important things to know about
+ * More specifically, this offers both the normal van der Corput sequence, which only changes the state by incrementing
+ * it (this works better in the normal usage as part of a 2D or 3D point generator) and a kind of scrambled van der
+ * Corput sequence, where the state changes unpredictably (this works better when using this to generate 1D sequences,
+ * or when the base may be larger than 7 or non-prime). In both cases, the state is internally stored in a 64-bit long
+ * that is incremented once per generated number, but when scramble is true, the state is altered with something similar
+ * to a Gray code before being used; more on this later if you want to read about it. The important things to know about
  * this class are: size of state affects speed (prefer smaller seeds, but quality is sometimes a bit poor at first if
- * you start at 0);  the base (when given) should be prime and moderately small; this doesn't generate very random
- * numbers (which can be good for making points that should not overlap); and this is a StatefulRandomness with an
- * additional method for generating quasi-random doubles, {@link #nextDouble()}.
+ * you start at 0); the base (when given) should be prime and moderately small (or very small if scramble is false, any
+ * of 2, 3, 5, or 7 should be safe); this doesn't generate very random numbers when scramble is false (which can be good
+ * for making points that should not overlap), but it will seem much more random when scramble is true; and this is a
+ * StatefulRandomness with an additional method for generating quasi-random doubles, {@link #nextDouble()}.
  * <br>
  * This generator allows a base (also called a radix) that changes the sequence significantly; a base should be prime,
  * and this performs a little better in terms of time used with larger primes, though quality is also improved by
@@ -26,29 +30,29 @@ import java.io.Serializable;
  * than, {@link squidpony.squidmath.SobolQRNG}). So what's it good for?
  * <br>
  * A VanDerCorputSequence can be a nice building block for more complicated quasi-randomness, especially for points in
- * 2D, 3D, or even higher dimensions. Using a VanDerCorputQRNG with base 11 for the x-axis and another VanDerCorputQRNG
- * with base 19 for the y-axis, requesting a double from each to make points between (0.0, 0.0) and (1.0, 1.0), has an
+ * 2D or 3D, when scramble is false. Using a VanDerCorputQRNG with base 3 for the x-axis and another VanDerCorputQRNG
+ * with base 5 for the y-axis, requesting a double from each to make points between (0.0, 0.0) and (1.0, 1.0), has an
  * interesting trait that can be desirable for many kinds of positioning in 2D: once a point has been generated, an
  * identical point will never be generated until floating-point precision runs out, but more than that, nearby points
  * will almost never be generated for many generations, and most points will stay at a comfortable distance from each
  * other if the bases are different and both prime (as well as, more technically, if they share no common denominators).
  * This is also known as a Halton sequence, which is a group of sequences of points instead of simply numbers. The
- * choices of 11 and 19 are just examples; any two different primes will work well for 2D, especially prime numbers
- * between 10 and 60 or so. Three VanDerCorputQRNG sequences could be used for a Halton sequence of 3D points, using
- * three different prime bases, four for 4D, etc. SobolQRNG can be used for the same purpose, but the points it
- * generates are typically more closely-aligned to a specific pattern, the pattern is symmetrical between all four
- * quadrants of the square between (0.0, 0.0) and (1.0, 1.0) in 2D, and it probably extends into higher dimensions.
- * Using one of the many possible Halton sequences gives some more flexibility in the kinds of procedural random-like
- * points produced.
+ * choices of 3 and 5 are just examples; any two different primes will technically work for 2D, but patterns can become
+ * noticeable with primes larger than about 7, with 11 and 13 sometimes acceptable. Three VanDerCorputQRNG sequences
+ * could be used for a Halton sequence of 3D points, using three different prime bases, four for 4D, etc. SobolQRNG can
+ * be used for the same purpose, but the points it generates are typically more closely-aligned to a specific pattern,
+ * the pattern is symmetrical between all four quadrants of the square between (0.0, 0.0) and (1.0, 1.0) in 2D, and it
+ * probably extends into higher dimensions. Using one of the possible Halton sequences gives some more flexibility in
+ * the kinds of procedural random-like points produced.
  * <br>
  * Because just using the state in a simple incremental fashion puts some difficult requirements on the choice of base
- * and seed, we use a technique like Gray codes to scramble the state. The sequence of these Gray-like codes for the
+ * and seed, we can use a technique like Gray codes to scramble the state. The sequence of these Gray-like codes for the
  * integers from 0 to 16 is {@code 0, 9, 21, 16, 50, 51, 23, 10, 4, 28, 49, 39, 246, 198, 179, 97, 393}, and this can be
- * generated efficiently with {@code (i * i) ^ ((i * 137) >> 4)}. No duplicate results were found in any numbers of 20
+ * generated efficiently with {@code (i * i) ^ ((i * 137) >>> 4)}. No duplicate results were found in any numbers of 20
  * bits or less, and trying to find duplicates in 24 bits exhausted the testing computer's memory, without finding a
  * duplicate. You should be fine.
  * <br>
- * Expected output for {@link #nextDouble()} called 33 times on an instance made with {@code new VanDerCorputQRNG(11, 83L)}:
+ * Expected output for {@link #nextDouble()} called 33 times on an instance made with {@code new VanDerCorputQRNG(11, 83L, true)}:
  * 0.5194317328051362, 0.8590943241581859, 0.5931288846390274, 0.5045420394781778, 0.7892220476743392,
  * 0.6645037907246772, 0.7809575848644218, 0.0725360289597705, 0.6322655556314459, 0.6998838877125879,
  * 0.5578853903421898, 0.5969537599890717, 0.6323338569769824, 0.873505908066389, 0.09514377433235435,
@@ -57,7 +61,7 @@ import java.io.Serializable;
  * 0.899118912642579, 0.1876237961887849, 0.652755959292398, 0.039683081756710606, 0.10504746943514787,
  * 0.2598183184208729, 0.4078273341984837, 0.3034628782187009
  * <br>
- * Expected output for {@link #nextDouble()} called 33 times on an instance made with {@code new VanDerCorputQRNG(19, 83L)}:
+ * Expected output for {@link #nextDouble()} called 33 times on an instance made with {@code new VanDerCorputQRNG(19, 83L, true)}:
  * 0.8944452544102639, 0.7842327790609341, 0.4352023081468067, 0.0696971324652205, 0.5957213342439054,
  * 0.8864342661581787, 0.0167739658228528, 0.8956192785506557, 0.26943470353972115, 0.3525371966145134,
  * 0.09754375733765087, 0.8924118139056637, 0.3585147443619984, 0.9126771587081131, 0.28926266679967155,
@@ -69,23 +73,25 @@ import java.io.Serializable;
  * Note on Gray-like code implementation: This is not a typical Gray code. Normally, the operation looks like
  * {@code i ^ (i >>> 1)}, which gives negative results for negative values of i (not wanted here), and also clusters
  * two very similar numbers together for every pair of sequential numbers. An earlier version scrambled with a basic
- * Gray code, but the current style, {@code (i * i) ^ ((i * 137) >> 4)}, produces much more "wild and crazy" results.
- * This is ideal for a scramble.
+ * Gray code, but the current style, {@code (i * i) ^ ((i * 137) >>> 4)}, produces much more "wild and crazy" results,
+ * but never negative ones. The period of this, if it is seen as a RandomnessSource, is probably about 2^56, at least
+ * for reasonably small starting states (under 1000 or so?). This is ideal for a scramble.
  * <br>
  * Created by Tommy Ettinger on 11/18/2016.
  */
 public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, Serializable {
-    private static final long serialVersionUID = 1;
+    private static final long serialVersionUID = 5;
     public long state;
     public final int base;
-
+    public final boolean scramble;
     /**
-     * Constructs a new van der Corput sequence generator with base 13 and starting point 83.
+     * Constructs a new van der Corput sequence generator with base 13, starting point 83, and scrambling enabled.
      */
     public VanDerCorputQRNG()
     {
         base = 13;
         state = 83;
+        scramble = true;
     }
 
     /**
@@ -98,6 +104,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
     {
         base = 13;
         state = seed;
+        scramble = true;
     }
 
     /**
@@ -108,10 +115,11 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      * @param base the base or radix used for this VanDerCorputQRNG; for most uses this should be prime but small-ish
      * @param seed the seed as a long that will be used as the starting point in the sequence; ideally positive but low
      */
-    public VanDerCorputQRNG(int base, long seed)
+    public VanDerCorputQRNG(int base, long seed, boolean scramble)
     {
         this.base = base < 2 ? 2 : base;
         state = seed;
+        this.scramble = scramble;
     }
 
     /**
@@ -123,7 +131,8 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      */
     @Override
     public long nextLong() {
-        long s = (++state * state) ^ (state * 137 >> 4), // intentionally non-standard Gray-like code
+        // when scrambling the sequence, intentionally uses a non-standard Gray-like code
+        long s = (scramble) ? ++state : (++state * state) ^ (state * 137 >> 4),
                 num = s % base, den = base;
         while (den <= s) {
             num *= base;
@@ -142,11 +151,13 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      * Gets the next quasi-random double from between 0.0 and 1.0 (normally both exclusive; only if state is negative or
      * has wrapped around to a negative value can 0.0 ever be produced). It should be nearly impossible for this to
      * return the same number twice unless floating-point precision has been exhausted or a very large amount of numbers
-     * have already been generated. Certain unusual bases may make this more likely.
+     * have already been generated. Certain unusual bases may make this more likely, and similar numbers may be returned
+     * more frequently if scramble is true.
      * @return a quasi-random double that will always be less than 1.0 and will be no lower than 0.0
      */
     public double nextDouble() {
-        long s = (++state * state) ^ (state * 137 >> 4), // intentionally non-standard Gray-like code
+        // when scrambling the sequence, intentionally uses a non-standard Gray-like code
+        long s = (scramble) ? ++state : (++state * state) ^ (state * 137 >> 4),
                 num = s % base, den = base;
         while (den <= s) {
             num *= base;
@@ -158,7 +169,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
 
     @Override
     public VanDerCorputQRNG copy() {
-        return new VanDerCorputQRNG(base, state);
+        return new VanDerCorputQRNG(base, state, scramble);
     }
 
     @Override
@@ -174,21 +185,26 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
     @Override
     public String toString() {
         return "VanDerCorputQRNG with base " + base +
-                " and state 0x" + StringKit.hex(state);
+                ", scrambling " + (scramble ? "on" : "off") +
+                ", and state 0x" + StringKit.hex(state);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         VanDerCorputQRNG that = (VanDerCorputQRNG) o;
-        return state == that.state && base == that.base;
+
+        return state == that.state && base == that.base && scramble == that.scramble;
+
     }
 
     @Override
     public int hashCode() {
         int result = (int) (state ^ (state >>> 32));
         result = 31 * result + base;
+        result = 31 * result + (scramble ? 1 : 0);
         return result;
     }
 }
