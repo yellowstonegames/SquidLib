@@ -3,6 +3,7 @@ package squidpony.squidmath;
 import squidpony.ArrayTools;
 import squidpony.annotation.Beta;
 import squidpony.squidgrid.Radius;
+import squidpony.squidgrid.zone.MutableZone;
 import squidpony.squidgrid.zone.Zone;
 
 import java.io.Serializable;
@@ -49,7 +50,7 @@ import java.util.*;
  * Created by Tommy Ettinger on 6/24/2016.
  */
 @Beta
-public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Serializable {
+public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Serializable, MutableZone {
     private static final long serialVersionUID = 0;
     private static final SobolQRNG sobol = new SobolQRNG(2);
 
@@ -983,7 +984,7 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
         data = next;
         return this;
     }
-
+    @Override
     public GreasedRegion expand(int amount)
     {
         for (int i = 0; i < amount; i++) {
@@ -1210,6 +1211,7 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
         return this;
     }
 
+    @Override
     public GreasedRegion expand8way(int amount)
     {
         for (int i = 0; i < amount; i++) {

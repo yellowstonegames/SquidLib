@@ -2,7 +2,6 @@ package squidpony.squidgrid.zone;
 
 import squidpony.squidgrid.zone.Zone.Skeleton;
 import squidpony.squidmath.Coord;
-import squidpony.squidmath.OrderedSet;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -52,7 +51,7 @@ public class ListZone extends Skeleton {
 		return coords;
 	}
 
-	@Override
+	/*
 	public ListZone expand(int distance)
 	{
 		if(distance <= 0)
@@ -79,6 +78,7 @@ public class ListZone extends Skeleton {
 		}
 		return new ListZone(next);
 	}
+	*/
 
 	@Override
 	public String toString() {

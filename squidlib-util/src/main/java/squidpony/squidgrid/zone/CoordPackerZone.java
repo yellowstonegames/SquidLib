@@ -13,7 +13,7 @@ import java.util.List;
  * 
  * @author smelC
  */
-public class CoordPackerZone extends Skeleton {
+public class CoordPackerZone extends Skeleton implements ImmutableZone {
 
 	protected final short[] shorts;
 
@@ -55,10 +55,14 @@ public class CoordPackerZone extends Skeleton {
 		return unpacked;
 	}
 
-	@Override
-	public CoordPackerZone expand(int distance) {
-		return new CoordPackerZone(CoordPacker.expand(shorts, distance, 256, 256));
-	}
+    @Override
+    public CoordPackerZone expand(int distance) {
+        return new CoordPackerZone(CoordPacker.expand(shorts, distance, 256, 256));
+    }
+    @Override
+    public CoordPackerZone expand8way(int distance) {
+        return new CoordPackerZone(CoordPacker.expand(shorts, distance, 256, 256, true));
+    }
 
 	@Override
 	public String toString() {
