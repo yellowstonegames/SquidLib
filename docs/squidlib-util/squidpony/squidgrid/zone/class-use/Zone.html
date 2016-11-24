@@ -140,6 +140,27 @@
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a> in <a href="../../../../squidpony/squidgrid/zone/package-summary.html">squidpony.squidgrid.zone</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subinterfaces, and an explanation">
+<caption><span>Subinterfaces of <a href="../../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a> in <a href="../../../../squidpony/squidgrid/zone/package-summary.html">squidpony.squidgrid.zone</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Interface and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>interface&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/zone/ImmutableZone.html" title="interface in squidpony.squidgrid.zone">ImmutableZone</a></span></code>
+<div class="block">Created by Tommy Ettinger on 11/24/2016.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>interface&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/zone/MutableZone.html" title="interface in squidpony.squidgrid.zone">MutableZone</a></span></code>
+<div class="block">Created by Tommy Ettinger on 11/24/2016.</div>
+</td>
+</tr>
+</tbody>
+</table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
 <caption><span>Classes in <a href="../../../../squidpony/squidgrid/zone/package-summary.html">squidpony.squidgrid.zone</a> that implement <a href="../../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -176,7 +197,30 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></td>
-<td class="colLast"><span class="typeNameLabel">Zone.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/zone/Zone.html#expand-int-">expand</a></span>(int&nbsp;distance)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">MutableZone.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/zone/MutableZone.html#expand-int-">expand</a></span>(int&nbsp;distance)</code>
+<div class="block">Expands this Zone in the four cardinal directions, performing the expansion consecutively <code>distance</code> times.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></td>
+<td class="colLast"><span class="typeNameLabel">ImmutableZone.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/zone/ImmutableZone.html#expand-int-">expand</a></span>(int&nbsp;distance)</code>
+<div class="block">Expands the area of this Zone in the four cardinal directions, performing the expansion consecutively
+ <code>distance</code> times.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></td>
+<td class="colLast"><span class="typeNameLabel">MutableZone.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/zone/MutableZone.html#expand8way-int-">expand8way</a></span>(int&nbsp;distance)</code>
+<div class="block">Expands this Zone in the four cardinal and four diagonal directions, performing the expansion consecutively
+ <code>distance</code> times.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></td>
+<td class="colLast"><span class="typeNameLabel">ImmutableZone.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/zone/ImmutableZone.html#expand8way-int-">expand8way</a></span>(int&nbsp;distance)</code>
+<div class="block">Expands the area of this Zone in the four cardinal and four diagonal directions, performing the expansion
+ consecutively <code>distance</code> times.</div>
+</td>
 </tr>
 </tbody>
 </table>

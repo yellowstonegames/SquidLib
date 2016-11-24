@@ -312,8 +312,7 @@ public interface Rectangle extends Zone {
 			this.height = height;
 		}
 
-		@Override
-		public Impl expand(int distance) {
+		public Impl expand8way(int distance) {
 			return new Impl(bottomLeft.translate(-1,-1), width+2,height+2);
 		}
 

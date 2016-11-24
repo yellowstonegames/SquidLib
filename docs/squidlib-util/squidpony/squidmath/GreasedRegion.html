@@ -114,14 +114,14 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;, <a href="../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></dd>
+<dd><a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;, <a href="../../squidpony/squidgrid/zone/MutableZone.html" title="interface in squidpony.squidgrid.zone">MutableZone</a>, <a href="../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></dd>
 </dl>
 <hr>
 <br>
 <pre><a href="../../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.52">GreasedRegion</a>
+public class <a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.53">GreasedRegion</a>
 extends <a href="../../squidpony/squidgrid/zone/Zone.Skeleton.html" title="class in squidpony.squidgrid.zone">Zone.Skeleton</a>
-implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;, <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
+implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;, <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="../../squidpony/squidgrid/zone/MutableZone.html" title="interface in squidpony.squidgrid.zone">MutableZone</a></pre>
 <div class="block">Region encoding of on/off information about areas using bitsets; uncompressed (fatty), but fast (greased lightning).
  This can handle any size of 2D data, and is not strictly limited to 256x256 as CoordPacker is. It stores several long
  arrays and uses each bit in one of those numbers to represent a single point, though sometimes this does waste bits
@@ -394,7 +394,9 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/GreasedRegion.html#expand-int-">expand</a></span>(int&nbsp;amount)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/GreasedRegion.html#expand-int-">expand</a></span>(int&nbsp;amount)</code>
+<div class="block">Expands this Zone in the four cardinal directions, performing the expansion consecutively <code>distance</code> times.</div>
+</td>
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
@@ -402,7 +404,10 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/GreasedRegion.html#expand8way-int-">expand8way</a></span>(int&nbsp;amount)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/GreasedRegion.html#expand8way-int-">expand8way</a></span>(int&nbsp;amount)</code>
+<div class="block">Expands this Zone in the four cardinal and four diagonal directions, performing the expansion consecutively
+ <code>distance</code> times.</div>
+</td>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]</code></td>
@@ -854,6 +859,13 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <h3>Methods inherited from interface&nbsp;java.lang.<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a></h3>
 <code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true#forEach-java.util.function.Consumer-" title="class or interface in java.lang">forEach</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true#spliterator--" title="class or interface in java.lang">spliterator</a></code></li>
 </ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.squidpony.squidgrid.zone.Zone">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;squidpony.squidgrid.zone.<a href="../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></h3>
+<code><a href="../../squidpony/squidgrid/zone/Zone.html#contains-squidpony.squidmath.Coord-">contains</a></code></li>
+</ul>
 </li>
 </ul>
 </li>
@@ -874,7 +886,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>data</h4>
-<pre>public&nbsp;long[] <a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.56">data</a></pre>
+<pre>public&nbsp;long[] <a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.57">data</a></pre>
 </li>
 </ul>
 <a name="height">
@@ -883,7 +895,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>height</h4>
-<pre>public&nbsp;int <a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.57">height</a></pre>
+<pre>public&nbsp;int <a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.58">height</a></pre>
 </li>
 </ul>
 <a name="width">
@@ -892,7 +904,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockListLast">
 <li class="blockList">
 <h4>width</h4>
-<pre>public&nbsp;int <a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.58">width</a></pre>
+<pre>public&nbsp;int <a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.59">width</a></pre>
 </li>
 </ul>
 </li>
@@ -909,7 +921,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>GreasedRegion</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.62">GreasedRegion</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.63">GreasedRegion</a>()</pre>
 </li>
 </ul>
 <a name="GreasedRegion-boolean:A:A-">
@@ -918,7 +930,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>GreasedRegion</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.71">GreasedRegion</a>(boolean[][]&nbsp;bits)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.72">GreasedRegion</a>(boolean[][]&nbsp;bits)</pre>
 </li>
 </ul>
 <a name="GreasedRegion-char:A:A-char-">
@@ -927,7 +939,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>GreasedRegion</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.108">GreasedRegion</a>(char[][]&nbsp;map,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.109">GreasedRegion</a>(char[][]&nbsp;map,
                      char&nbsp;yes)</pre>
 </li>
 </ul>
@@ -937,7 +949,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>GreasedRegion</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.145">GreasedRegion</a>(int[][]&nbsp;map,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.146">GreasedRegion</a>(int[][]&nbsp;map,
                      int&nbsp;yes)</pre>
 </li>
 </ul>
@@ -947,7 +959,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>GreasedRegion</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.189">GreasedRegion</a>(int[][]&nbsp;map,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.190">GreasedRegion</a>(int[][]&nbsp;map,
                      int&nbsp;lower,
                      int&nbsp;upper)</pre>
 <div class="block">Constructs this GreasedRegion using an int[][], treating cells as on if they are greater than or equal to lower
@@ -966,7 +978,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>GreasedRegion</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.238">GreasedRegion</a>(short[][]&nbsp;map,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.239">GreasedRegion</a>(short[][]&nbsp;map,
                      int&nbsp;lower,
                      int&nbsp;upper)</pre>
 <div class="block">Constructs this GreasedRegion using a short[][], treating cells as on if they are greater than or equal to lower
@@ -985,7 +997,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>GreasedRegion</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.286">GreasedRegion</a>(double[][]&nbsp;map,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.287">GreasedRegion</a>(double[][]&nbsp;map,
                      double&nbsp;upperBound)</pre>
 <div class="block">Constructs this GreasedRegion using a double[][] (typically one generated by
  <a href="../../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai"><code>DijkstraMap</code></a>) that only stores two relevant states:  an "on" state for values less than
@@ -1003,7 +1015,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>GreasedRegion</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.334">GreasedRegion</a>(double[][]&nbsp;map,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.335">GreasedRegion</a>(double[][]&nbsp;map,
                      double&nbsp;lowerBound,
                      double&nbsp;upperBound)</pre>
 <div class="block">Constructs this GreasedRegion using a double[][] (typically one generated by
@@ -1025,7 +1037,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>GreasedRegion</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.375">GreasedRegion</a>(boolean[]&nbsp;bits,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.376">GreasedRegion</a>(boolean[]&nbsp;bits,
                      int&nbsp;width,
                      int&nbsp;height)</pre>
 </li>
@@ -1036,7 +1048,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>GreasedRegion</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.412">GreasedRegion</a>(int&nbsp;width,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.413">GreasedRegion</a>(int&nbsp;width,
                      int&nbsp;height)</pre>
 <div class="block">Constructor for an empty GreasedRegion of the given width and height.
  GreasedRegions are mutable, so you can add to this with insert() or insertSeveral(), among others.</div>
@@ -1053,7 +1065,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>GreasedRegion</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.429">GreasedRegion</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;single,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.430">GreasedRegion</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;single,
                      int&nbsp;width,
                      int&nbsp;height)</pre>
 <div class="block">Constructor for a GreasedRegion that contains a single "on" cell, and has the given width and height.
@@ -1073,7 +1085,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>GreasedRegion</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.449">GreasedRegion</a>(int&nbsp;width,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.450">GreasedRegion</a>(int&nbsp;width,
                      int&nbsp;height,
                      <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;points)</pre>
 <div class="block">Constructor for a GreasedRegion that can have several "on" cells specified, and has the given width and height.
@@ -1093,7 +1105,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>GreasedRegion</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.474">GreasedRegion</a>(<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;random,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.475">GreasedRegion</a>(<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;random,
                      int&nbsp;width,
                      int&nbsp;height)</pre>
 <div class="block">Constructor for an random GreasedRegion of the given width and height.
@@ -1112,7 +1124,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>GreasedRegion</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.499">GreasedRegion</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.500">GreasedRegion</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
 <div class="block">Copy constructor that takes another GreasedRegion and copies all of its data into this new one.
  If you find yourself frequently using this constructor and assigning it to the same variable, consider using the
  <a href="../../squidpony/squidmath/GreasedRegion.html#remake-squidpony.squidmath.GreasedRegion-"><code>remake(GreasedRegion)</code></a> method on the variable instead, which will, if it has the same width and height
@@ -1131,7 +1143,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockListLast">
 <li class="blockList">
 <h4>GreasedRegion</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.508">GreasedRegion</a>(long[]&nbsp;data2,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.509">GreasedRegion</a>(long[]&nbsp;data2,
                      int&nbsp;width,
                      int&nbsp;height)</pre>
 </li>
@@ -1150,7 +1162,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>refill</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.85">refill</a>(boolean[][]&nbsp;map)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.86">refill</a>(boolean[][]&nbsp;map)</pre>
 </li>
 </ul>
 <a name="refill-char:A:A-char-">
@@ -1159,7 +1171,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>refill</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.122">refill</a>(char[][]&nbsp;map,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.123">refill</a>(char[][]&nbsp;map,
                             char&nbsp;yes)</pre>
 </li>
 </ul>
@@ -1169,7 +1181,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>refill</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.159">refill</a>(int[][]&nbsp;map,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.160">refill</a>(int[][]&nbsp;map,
                             int&nbsp;yes)</pre>
 </li>
 </ul>
@@ -1179,7 +1191,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>refill</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.204">refill</a>(int[][]&nbsp;map,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.205">refill</a>(int[][]&nbsp;map,
                             int&nbsp;lower,
                             int&nbsp;upper)</pre>
 </li>
@@ -1190,7 +1202,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>refill</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.253">refill</a>(short[][]&nbsp;map,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.254">refill</a>(short[][]&nbsp;map,
                             int&nbsp;lower,
                             int&nbsp;upper)</pre>
 </li>
@@ -1201,7 +1213,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>refill</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.301">refill</a>(double[][]&nbsp;map,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.302">refill</a>(double[][]&nbsp;map,
                             double&nbsp;upperBound)</pre>
 </li>
 </ul>
@@ -1211,7 +1223,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>refill</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.348">refill</a>(double[][]&nbsp;map,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.349">refill</a>(double[][]&nbsp;map,
                             double&nbsp;lower,
                             double&nbsp;upper)</pre>
 </li>
@@ -1222,7 +1234,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>refill</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.387">refill</a>(boolean[]&nbsp;bits,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.388">refill</a>(boolean[]&nbsp;bits,
                             int&nbsp;width,
                             int&nbsp;height)</pre>
 </li>
@@ -1233,7 +1245,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>remake</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.518">remake</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.519">remake</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
 </li>
 </ul>
 <a name="insert-int-int-">
@@ -1242,7 +1254,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>insert</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.533">insert</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.534">insert</a>(int&nbsp;x,
                             int&nbsp;y)</pre>
 </li>
 </ul>
@@ -1252,7 +1264,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>insert</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.539">insert</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;point)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.540">insert</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;point)</pre>
 </li>
 </ul>
 <a name="insertSeveral-squidpony.squidmath.Coord...-">
@@ -1261,7 +1273,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>insertSeveral</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.544">insertSeveral</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;points)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.545">insertSeveral</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;points)</pre>
 </li>
 </ul>
 <a name="insertSeveral-java.lang.Iterable-">
@@ -1270,7 +1282,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>insertSeveral</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.555">insertSeveral</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.556">insertSeveral</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</pre>
 </li>
 </ul>
 <a name="insertRectangle-int-int-int-int-">
@@ -1279,7 +1291,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>insertRectangle</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.567">insertRectangle</a>(int&nbsp;startX,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.568">insertRectangle</a>(int&nbsp;startX,
                                      int&nbsp;startY,
                                      int&nbsp;rectangleWidth,
                                      int&nbsp;rectangleHeight)</pre>
@@ -1291,7 +1303,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>insertCircle</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.617">insertCircle</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.618">insertCircle</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
                                   int&nbsp;radius)</pre>
 </li>
 </ul>
@@ -1301,7 +1313,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>remove</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.622">remove</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.623">remove</a>(int&nbsp;x,
                             int&nbsp;y)</pre>
 </li>
 </ul>
@@ -1311,7 +1323,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>remove</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.628">remove</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;point)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.629">remove</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;point)</pre>
 </li>
 </ul>
 <a name="removeSeveral-squidpony.squidmath.Coord...-">
@@ -1320,7 +1332,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>removeSeveral</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.633">removeSeveral</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;points)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.634">removeSeveral</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;points)</pre>
 </li>
 </ul>
 <a name="removeSeveral-java.lang.Iterable-">
@@ -1329,7 +1341,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>removeSeveral</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.644">removeSeveral</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.645">removeSeveral</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</pre>
 </li>
 </ul>
 <a name="removeRectangle-int-int-int-int-">
@@ -1338,7 +1350,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>removeRectangle</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.656">removeRectangle</a>(int&nbsp;startX,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.657">removeRectangle</a>(int&nbsp;startX,
                                      int&nbsp;startY,
                                      int&nbsp;rectangleWidth,
                                      int&nbsp;rectangleHeight)</pre>
@@ -1350,7 +1362,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>removeCircle</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.700">removeCircle</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.701">removeCircle</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
                                   int&nbsp;radius)</pre>
 </li>
 </ul>
@@ -1360,7 +1372,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>clear</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.705">clear</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.706">clear</a>()</pre>
 </li>
 </ul>
 <a name="copy--">
@@ -1369,7 +1381,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.713">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.714">copy</a>()</pre>
 </li>
 </ul>
 <a name="decode--">
@@ -1378,7 +1390,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>decode</h4>
-<pre>public&nbsp;boolean[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.718">decode</a>()</pre>
+<pre>public&nbsp;boolean[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.719">decode</a>()</pre>
 </li>
 </ul>
 <a name="toChars-char-char-">
@@ -1387,7 +1399,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>toChars</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.729">toChars</a>(char&nbsp;on,
+<pre>public&nbsp;char[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.730">toChars</a>(char&nbsp;on,
                         char&nbsp;off)</pre>
 </li>
 </ul>
@@ -1397,7 +1409,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>toChars</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.740">toChars</a>()</pre>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.741">toChars</a>()</pre>
 </li>
 </ul>
 <a name="mask-char:A:A-char-">
@@ -1406,7 +1418,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>mask</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.752">mask</a>(char[][]&nbsp;map,
+<pre>public&nbsp;char[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.753">mask</a>(char[][]&nbsp;map,
                      char&nbsp;filler)</pre>
 <div class="block">Returns a copy of map where if a cell is "on" in this GreasedRegion, this keeps the value in map intact,
  and where a cell is "off", it instead writes the char filler.</div>
@@ -1425,7 +1437,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>mask</h4>
-<pre>public&nbsp;short[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.774">mask</a>(short[][]&nbsp;map,
+<pre>public&nbsp;short[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.775">mask</a>(short[][]&nbsp;map,
                       short&nbsp;filler)</pre>
 <div class="block">Returns a copy of map where if a cell is "on" in this GreasedRegion, this keeps the value in map intact,
  and where a cell is "off", it instead writes the short filler. Meant for use with MultiSpill, but may be
@@ -1445,7 +1457,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>writeInts</h4>
-<pre>public&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.795">writeInts</a>(int[][]&nbsp;map,
+<pre>public&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.796">writeInts</a>(int[][]&nbsp;map,
                          int&nbsp;toWrite)</pre>
 <div class="block">"Inverse mask for ints;" returns a copy of map where if a cell is "off" in this GreasedRegion, this keeps
  the value in map intact, and where a cell is "on", it instead writes the int toWrite.</div>
@@ -1464,7 +1476,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>or</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.809">or</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.810">or</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
 </li>
 </ul>
 <a name="and-squidpony.squidmath.GreasedRegion-">
@@ -1473,7 +1485,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>and</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.832">and</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.833">and</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
 </li>
 </ul>
 <a name="andNot-squidpony.squidmath.GreasedRegion-">
@@ -1482,7 +1494,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>andNot</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.842">andNot</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.843">andNot</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
 </li>
 </ul>
 <a name="notAnd-squidpony.squidmath.GreasedRegion-">
@@ -1491,7 +1503,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>notAnd</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.858">notAnd</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.859">notAnd</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
 <div class="block">Like andNot, but subtracts this GreasedRegion from other and stores the result in this GreasedRegion, without
  mutating other.</div>
 <dl>
@@ -1507,7 +1519,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>xor</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.868">xor</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.869">xor</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
 </li>
 </ul>
 <a name="not--">
@@ -1516,7 +1528,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>not</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.884">not</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.885">not</a>()</pre>
 </li>
 </ul>
 <a name="translate-int-int-">
@@ -1525,7 +1537,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>translate</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.899">translate</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.900">translate</a>(int&nbsp;x,
                                int&nbsp;y)</pre>
 </li>
 </ul>
@@ -1535,7 +1547,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>expand</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.950">expand</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.951">expand</a>()</pre>
 </li>
 </ul>
 <a name="expand-int-">
@@ -1544,10 +1556,17 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>expand</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.987">expand</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.988">expand</a>(int&nbsp;amount)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidgrid/zone/MutableZone.html#expand-int-">MutableZone</a></code></span></div>
+<div class="block">Expands this Zone in the four cardinal directions, performing the expansion consecutively <code>distance</code> times.
+ Modified this Zone in-place and returns it for chaining.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../squidpony/squidgrid/zone/Zone.html#expand-int-">expand</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
+<dd><code><a href="../../squidpony/squidgrid/zone/MutableZone.html#expand-int-">expand</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidgrid/zone/MutableZone.html" title="interface in squidpony.squidgrid.zone">MutableZone</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>amount</code> - the amount to expand outward using Manhattan distance (diamond shape)</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this for chaining, after being modified in-place</dd>
 </dl>
 </li>
 </ul>
@@ -1557,7 +1576,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>expandSeries</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.995">expandSeries</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.996">expandSeries</a>(int&nbsp;amount)</pre>
 </li>
 </ul>
 <a name="expandSeriesToLimit--">
@@ -1566,7 +1585,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>expandSeriesToLimit</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1006">expandSeriesToLimit</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1007">expandSeriesToLimit</a>()</pre>
 </li>
 </ul>
 <a name="fringe--">
@@ -1575,7 +1594,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>fringe</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1016">fringe</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1017">fringe</a>()</pre>
 </li>
 </ul>
 <a name="fringe-int-">
@@ -1584,7 +1603,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>fringe</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1022">fringe</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1023">fringe</a>(int&nbsp;amount)</pre>
 </li>
 </ul>
 <a name="fringeSeries-int-">
@@ -1593,7 +1612,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>fringeSeries</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1029">fringeSeries</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1030">fringeSeries</a>(int&nbsp;amount)</pre>
 </li>
 </ul>
 <a name="fringeSeriesToLimit--">
@@ -1602,7 +1621,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>fringeSeriesToLimit</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1044">fringeSeriesToLimit</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1045">fringeSeriesToLimit</a>()</pre>
 </li>
 </ul>
 <a name="retract--">
@@ -1611,7 +1630,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>retract</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1053">retract</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1054">retract</a>()</pre>
 </li>
 </ul>
 <a name="retract-int-">
@@ -1620,7 +1639,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>retract</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1101">retract</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1102">retract</a>(int&nbsp;amount)</pre>
 </li>
 </ul>
 <a name="retractSeries-int-">
@@ -1629,7 +1648,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>retractSeries</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1109">retractSeries</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1110">retractSeries</a>(int&nbsp;amount)</pre>
 </li>
 </ul>
 <a name="retractSeriesToLimit--">
@@ -1638,7 +1657,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>retractSeriesToLimit</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1120">retractSeriesToLimit</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1121">retractSeriesToLimit</a>()</pre>
 </li>
 </ul>
 <a name="surface--">
@@ -1647,7 +1666,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>surface</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1130">surface</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1131">surface</a>()</pre>
 </li>
 </ul>
 <a name="surface-int-">
@@ -1656,7 +1675,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>surface</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1135">surface</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1136">surface</a>(int&nbsp;amount)</pre>
 </li>
 </ul>
 <a name="surfaceSeries-int-">
@@ -1665,7 +1684,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>surfaceSeries</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1141">surfaceSeries</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1142">surfaceSeries</a>(int&nbsp;amount)</pre>
 </li>
 </ul>
 <a name="surfaceSeriesToLimit--">
@@ -1674,7 +1693,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>surfaceSeriesToLimit</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1157">surfaceSeriesToLimit</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1158">surfaceSeriesToLimit</a>()</pre>
 </li>
 </ul>
 <a name="expand8way--">
@@ -1683,7 +1702,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>expand8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1168">expand8way</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1169">expand8way</a>()</pre>
 </li>
 </ul>
 <a name="expand8way-int-">
@@ -1692,7 +1711,18 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>expand8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1213">expand8way</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1215">expand8way</a>(int&nbsp;amount)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidgrid/zone/MutableZone.html#expand8way-int-">MutableZone</a></code></span></div>
+<div class="block">Expands this Zone in the four cardinal and four diagonal directions, performing the expansion consecutively
+ <code>distance</code> times. Modified this Zone in-place and returns it for chaining.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../squidpony/squidgrid/zone/MutableZone.html#expand8way-int-">expand8way</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidgrid/zone/MutableZone.html" title="interface in squidpony.squidgrid.zone">MutableZone</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>amount</code> - the amount to expand outward using Chebyshev distance (square shape)</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this for chaining, after being modified in-place</dd>
+</dl>
 </li>
 </ul>
 <a name="expandSeries8way-int-">
@@ -1701,7 +1731,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>expandSeries8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1221">expandSeries8way</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1223">expandSeries8way</a>(int&nbsp;amount)</pre>
 </li>
 </ul>
 <a name="expandSeriesToLimit8way--">
@@ -1710,7 +1740,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>expandSeriesToLimit8way</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1231">expandSeriesToLimit8way</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1233">expandSeriesToLimit8way</a>()</pre>
 </li>
 </ul>
 <a name="fringe8way--">
@@ -1719,7 +1749,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>fringe8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1241">fringe8way</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1243">fringe8way</a>()</pre>
 </li>
 </ul>
 <a name="fringe8way-int-">
@@ -1728,7 +1758,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>fringe8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1247">fringe8way</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1249">fringe8way</a>(int&nbsp;amount)</pre>
 </li>
 </ul>
 <a name="fringeSeries8way-int-">
@@ -1737,7 +1767,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>fringeSeries8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1254">fringeSeries8way</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1256">fringeSeries8way</a>(int&nbsp;amount)</pre>
 </li>
 </ul>
 <a name="fringeSeriesToLimit8way--">
@@ -1746,7 +1776,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>fringeSeriesToLimit8way</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1269">fringeSeriesToLimit8way</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1271">fringeSeriesToLimit8way</a>()</pre>
 </li>
 </ul>
 <a name="retract8way--">
@@ -1755,7 +1785,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>retract8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1279">retract8way</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1281">retract8way</a>()</pre>
 </li>
 </ul>
 <a name="retract8way-int-">
@@ -1764,7 +1794,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>retract8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1347">retract8way</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1349">retract8way</a>(int&nbsp;amount)</pre>
 </li>
 </ul>
 <a name="retractSeries8way-int-">
@@ -1773,7 +1803,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>retractSeries8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1355">retractSeries8way</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1357">retractSeries8way</a>(int&nbsp;amount)</pre>
 </li>
 </ul>
 <a name="retractSeriesToLimit8way--">
@@ -1782,7 +1812,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>retractSeriesToLimit8way</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1366">retractSeriesToLimit8way</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1368">retractSeriesToLimit8way</a>()</pre>
 </li>
 </ul>
 <a name="surface8way--">
@@ -1791,7 +1821,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>surface8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1376">surface8way</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1378">surface8way</a>()</pre>
 </li>
 </ul>
 <a name="surface8way-int-">
@@ -1800,7 +1830,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>surface8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1382">surface8way</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1384">surface8way</a>(int&nbsp;amount)</pre>
 </li>
 </ul>
 <a name="surfaceSeries8way-int-">
@@ -1809,7 +1839,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>surfaceSeries8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1388">surfaceSeries8way</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1390">surfaceSeries8way</a>(int&nbsp;amount)</pre>
 </li>
 </ul>
 <a name="surfaceSeriesToLimit8way--">
@@ -1818,7 +1848,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>surfaceSeriesToLimit8way</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1403">surfaceSeriesToLimit8way</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1405">surfaceSeriesToLimit8way</a>()</pre>
 </li>
 </ul>
 <a name="flood-squidpony.squidmath.GreasedRegion-">
@@ -1827,7 +1857,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>flood</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1414">flood</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1416">flood</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</pre>
 </li>
 </ul>
 <a name="flood-squidpony.squidmath.GreasedRegion-int-">
@@ -1836,7 +1866,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>flood</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1468">flood</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1470">flood</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
                            int&nbsp;amount)</pre>
 </li>
 </ul>
@@ -1846,7 +1876,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>floodSeries</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1483">floodSeries</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1485">floodSeries</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
                                    int&nbsp;amount)</pre>
 </li>
 </ul>
@@ -1856,7 +1886,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>floodSeriesToLimit</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1505">floodSeriesToLimit</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1507">floodSeriesToLimit</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</pre>
 </li>
 </ul>
 <a name="flood8way-squidpony.squidmath.GreasedRegion-">
@@ -1865,7 +1895,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>flood8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1520">flood8way</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1522">flood8way</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</pre>
 </li>
 </ul>
 <a name="flood8way-squidpony.squidmath.GreasedRegion-int-">
@@ -1874,7 +1904,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>flood8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1584">flood8way</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1586">flood8way</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
                                int&nbsp;amount)</pre>
 </li>
 </ul>
@@ -1884,7 +1914,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>floodSeries8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1597">floodSeries8way</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1599">floodSeries8way</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
                                        int&nbsp;amount)</pre>
 </li>
 </ul>
@@ -1894,7 +1924,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>floodSeriesToLimit8way</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1618">floodSeriesToLimit8way</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1620">floodSeriesToLimit8way</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</pre>
 </li>
 </ul>
 <a name="spill-squidpony.squidmath.GreasedRegion-int-squidpony.squidmath.RNG-">
@@ -1903,7 +1933,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>spill</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1632">spill</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1634">spill</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
                            int&nbsp;volume,
                            <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 </li>
@@ -1914,7 +1944,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>split</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1671">split</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1673">split</a>()</pre>
 <div class="block">If this GreasedRegion stores multiple unconnected "on" areas, this finds each isolated area (areas that
  are only adjacent diagonally are considered separate from each other) and returns it as an element in an
  ArrayList of GreasedRegion, with one GreasedRegion per isolated area. Useful when you have, for example, all the
@@ -1948,7 +1978,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>removeIsolated</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1686">removeIsolated</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1688">removeIsolated</a>()</pre>
 </li>
 </ul>
 <a name="intersects-squidpony.squidmath.GreasedRegion-">
@@ -1957,7 +1987,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>intersects</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1700">intersects</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1702">intersects</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
 </li>
 </ul>
 <a name="whichContain-int-int-squidpony.squidmath.GreasedRegion...-">
@@ -1966,7 +1996,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>whichContain</h4>
-<pre>public static&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1711">whichContain</a>(int&nbsp;x,
+<pre>public static&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1713">whichContain</a>(int&nbsp;x,
                                                      int&nbsp;y,
                                                      <a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;packed)</pre>
 </li>
@@ -1977,7 +2007,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>whichContain</h4>
-<pre>public static&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1722">whichContain</a>(int&nbsp;x,
+<pre>public static&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1724">whichContain</a>(int&nbsp;x,
                                                      int&nbsp;y,
                                                      <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;packed)</pre>
 </li>
@@ -1988,7 +2018,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>size</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1733">size</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1735">size</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/squidgrid/zone/Zone.html#size--">size</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
@@ -2004,7 +2034,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>fit</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1742">fit</a>(double&nbsp;xFraction,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1744">fit</a>(double&nbsp;xFraction,
                  double&nbsp;yFraction)</pre>
 </li>
 </ul>
@@ -2014,7 +2044,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>fit</h4>
-<pre>public&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1785">fit</a>(int[][]&nbsp;basis,
+<pre>public&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1787">fit</a>(int[][]&nbsp;basis,
                    int&nbsp;defaultValue)</pre>
 </li>
 </ul>
@@ -2024,7 +2054,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>separatedPortion</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1847">separatedPortion</a>(double&nbsp;fraction)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1849">separatedPortion</a>(double&nbsp;fraction)</pre>
 </li>
 </ul>
 <a name="randomSeparated-double-squidpony.squidmath.RNG-">
@@ -2033,7 +2063,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>randomSeparated</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1897">randomSeparated</a>(double&nbsp;fraction,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1899">randomSeparated</a>(double&nbsp;fraction,
                                <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 </li>
 </ul>
@@ -2043,7 +2073,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>randomSeparated</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1901">randomSeparated</a>(double&nbsp;fraction,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1903">randomSeparated</a>(double&nbsp;fraction,
                                <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
                                int&nbsp;limit)</pre>
 </li>
@@ -2054,7 +2084,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>rateDensity</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1954">rateDensity</a>()</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1956">rateDensity</a>()</pre>
 </li>
 </ul>
 <a name="rateRegularity--">
@@ -2063,7 +2093,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>rateRegularity</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1962">rateRegularity</a>()</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1964">rateRegularity</a>()</pre>
 </li>
 </ul>
 <a name="asCoords--">
@@ -2072,7 +2102,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>asCoords</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1991">asCoords</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1993">asCoords</a>()</pre>
 </li>
 </ul>
 <a name="getAll--">
@@ -2081,7 +2111,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>getAll</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2019">getAll</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2021">getAll</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/squidgrid/zone/Zone.html#getAll--">getAll</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
@@ -2096,7 +2126,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>first</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2039">first</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2041">first</a>()</pre>
 </li>
 </ul>
 <a name="singleRandom-squidpony.squidmath.RNG-">
@@ -2105,7 +2135,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>singleRandom</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2052">singleRandom</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2054">singleRandom</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 </li>
 </ul>
 <a name="randomPortion-squidpony.squidmath.RNG-int-">
@@ -2114,7 +2144,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>randomPortion</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2081">randomPortion</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2083">randomPortion</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
                              int&nbsp;size)</pre>
 </li>
 </ul>
@@ -2124,7 +2154,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>contains</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2116">contains</a>(int&nbsp;x,
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2118">contains</a>(int&nbsp;x,
                         int&nbsp;y)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -2140,7 +2170,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>isEmpty</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2127">isEmpty</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2129">isEmpty</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/squidgrid/zone/Zone.html#isEmpty--">isEmpty</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
@@ -2155,7 +2185,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>sum</h4>
-<pre>public static&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2142">sum</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;regions)</pre>
+<pre>public static&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2144">sum</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;regions)</pre>
 <div class="block">Generates a 2D int array from an array or vararg of GreasedRegions, starting at all 0 and adding 1 to the int at
  a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
  this method, it can produce any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
@@ -2174,7 +2204,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>sum</h4>
-<pre>public static&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2166">sum</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;regions)</pre>
+<pre>public static&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2168">sum</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;regions)</pre>
 <div class="block">Generates a 2D int array from an array or vararg of GreasedRegions, starting at all 0 and adding 1 to the int at
  a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
  this method, it can produce any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
@@ -2193,7 +2223,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>dijkstraScan</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2183">dijkstraScan</a>(char[][]&nbsp;map,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2185">dijkstraScan</a>(char[][]&nbsp;map,
                                       <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;goals)</pre>
 </li>
 </ul>
@@ -2203,7 +2233,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>dijkstraScan8way</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2203">dijkstraScan8way</a>(char[][]&nbsp;map,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2205">dijkstraScan8way</a>(char[][]&nbsp;map,
                                           <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;goals)</pre>
 </li>
 </ul>
@@ -2213,7 +2243,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>bitSum</h4>
-<pre>public static&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2231">bitSum</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;regions)</pre>
+<pre>public static&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2233">bitSum</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;regions)</pre>
 <div class="block">Generates a 2D int array from an array or vararg of GreasedRegions, treating each cell in the nth region as the
  nth bit of the int at the corresponding x,y cell in the int array. This means if you give 8 GreasedRegions to
  this method, it can produce any 8-bit number in a cell (0-255); if you give 16 GreasedRegions, then it can
@@ -2232,7 +2262,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2263">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2265">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -2245,7 +2275,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2277">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2279">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -2258,7 +2288,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockListLast">
 <li class="blockList">
 <h4>iterator</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2297">iterator</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2299">iterator</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true#iterator--" title="class or interface in java.lang">iterator</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>

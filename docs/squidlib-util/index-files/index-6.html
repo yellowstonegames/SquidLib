@@ -350,8 +350,6 @@
 <dd>
 <div class="block">A constant for a distribution that linearly increases in probability from a 0.0 chance of 0.0.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/Rectangle.Impl.html#expand-int-">expand(int)</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/Rectangle.Impl.html" title="class in squidpony.squidgrid.mapping">Rectangle.Impl</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Radius.html#expand-int-int-int-java.lang.Iterable-">expand(int, int, int, Iterable&lt;Coord&gt;)</a></span> - Method in enum squidpony.squidgrid.<a href="../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a></dt>
 <dd>
 <div class="block">Given an Iterable of Coord (such as a List or Set), a distance to expand outward by (using this Radius), and the
@@ -360,10 +358,15 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/zone/CoordPackerZone.html#expand-int-">expand(int)</a></span> - Method in class squidpony.squidgrid.zone.<a href="../squidpony/squidgrid/zone/CoordPackerZone.html" title="class in squidpony.squidgrid.zone">CoordPackerZone</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/zone/ListZone.html#expand-int-">expand(int)</a></span> - Method in class squidpony.squidgrid.zone.<a href="../squidpony/squidgrid/zone/ListZone.html" title="class in squidpony.squidgrid.zone">ListZone</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/zone/Zone.html#expand-int-">expand(int)</a></span> - Method in interface squidpony.squidgrid.zone.<a href="../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></dt>
-<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/zone/ImmutableZone.html#expand-int-">expand(int)</a></span> - Method in interface squidpony.squidgrid.zone.<a href="../squidpony/squidgrid/zone/ImmutableZone.html" title="interface in squidpony.squidgrid.zone">ImmutableZone</a></dt>
+<dd>
+<div class="block">Expands the area of this Zone in the four cardinal directions, performing the expansion consecutively
+ <code>distance</code> times.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/zone/MutableZone.html#expand-int-">expand(int)</a></span> - Method in interface squidpony.squidgrid.zone.<a href="../squidpony/squidgrid/zone/MutableZone.html" title="interface in squidpony.squidgrid.zone">MutableZone</a></dt>
+<dd>
+<div class="block">Expands this Zone in the four cardinal directions, performing the expansion consecutively <code>distance</code> times.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordPacker.html#expand-short:A-int-int-int-">expand(short[], int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordPacker.html" title="class in squidpony.squidmath">CoordPacker</a></dt>
 <dd>
 <div class="block">Expand each "on" position in packed to cover a a square with side length equal to 1 + expansion * 2,
@@ -380,6 +383,20 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#expand-int-">expand(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/Rectangle.Impl.html#expand8way-int-">expand8way(int)</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/Rectangle.Impl.html" title="class in squidpony.squidgrid.mapping">Rectangle.Impl</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/zone/CoordPackerZone.html#expand8way-int-">expand8way(int)</a></span> - Method in class squidpony.squidgrid.zone.<a href="../squidpony/squidgrid/zone/CoordPackerZone.html" title="class in squidpony.squidgrid.zone">CoordPackerZone</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/zone/ImmutableZone.html#expand8way-int-">expand8way(int)</a></span> - Method in interface squidpony.squidgrid.zone.<a href="../squidpony/squidgrid/zone/ImmutableZone.html" title="interface in squidpony.squidgrid.zone">ImmutableZone</a></dt>
+<dd>
+<div class="block">Expands the area of this Zone in the four cardinal and four diagonal directions, performing the expansion
+ consecutively <code>distance</code> times.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/zone/MutableZone.html#expand8way-int-">expand8way(int)</a></span> - Method in interface squidpony.squidgrid.zone.<a href="../squidpony/squidgrid/zone/MutableZone.html" title="interface in squidpony.squidgrid.zone">MutableZone</a></dt>
+<dd>
+<div class="block">Expands this Zone in the four cardinal and four diagonal directions, performing the expansion consecutively
+ <code>distance</code> times.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#expand8way--">expand8way()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#expand8way-int-">expand8way(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
