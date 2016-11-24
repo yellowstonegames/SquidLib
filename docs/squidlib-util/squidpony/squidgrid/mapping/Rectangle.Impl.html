@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -226,34 +226,38 @@ implements <a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#equals-java.lang.Object-">equals</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;obj)</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidgrid/mapping/Rectangle.Impl.html" title="class in squidpony.squidgrid.mapping">Rectangle.Impl</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#expand-int-">expand</a></span>(int&nbsp;distance)</code>&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#getAll--">getAll</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#getBottomLeft--">getBottomLeft</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#getHeight--">getHeight</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#getWidth--">getWidth</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#isEmpty--">isEmpty</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#size--">size</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
@@ -333,13 +337,26 @@ implements <a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="expand-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>expand</h4>
+<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/Rectangle.Impl.html" title="class in squidpony.squidgrid.mapping">Rectangle.Impl</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Impl.html#line.316">expand</a>(int&nbsp;distance)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#expand-int-">expand</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
+</dl>
+</li>
+</ul>
 <a name="getBottomLeft--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getBottomLeft</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Impl.html#line.316">getBottomLeft</a>()</pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Impl.html#line.321">getBottomLeft</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../squidpony/squidgrid/mapping/Rectangle.html#getBottomLeft--">getBottomLeft</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a></code></dd>
@@ -354,7 +371,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="
 <ul class="blockList">
 <li class="blockList">
 <h4>getWidth</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Impl.html#line.321">getWidth</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Impl.html#line.326">getWidth</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../squidpony/squidgrid/mapping/Rectangle.html#getWidth--">getWidth</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a></code></dd>
@@ -370,7 +387,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="
 <ul class="blockList">
 <li class="blockList">
 <h4>getHeight</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Impl.html#line.326">getHeight</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Impl.html#line.331">getHeight</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../squidpony/squidgrid/mapping/Rectangle.html#getHeight--">getHeight</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a></code></dd>
@@ -386,7 +403,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Impl.html#line.331">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Impl.html#line.336">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -399,7 +416,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Impl.html#line.341">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;obj)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Impl.html#line.346">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;obj)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -412,7 +429,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Impl.html#line.362">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Impl.html#line.367">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -425,7 +442,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="
 <ul class="blockList">
 <li class="blockList">
 <h4>isEmpty</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Impl.html#line.369">isEmpty</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Impl.html#line.374">isEmpty</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#isEmpty--">isEmpty</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
@@ -440,7 +457,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="
 <ul class="blockList">
 <li class="blockList">
 <h4>size</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Impl.html#line.374">size</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Impl.html#line.379">size</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#size--">size</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
@@ -456,7 +473,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="
 <ul class="blockList">
 <li class="blockList">
 <h4>contains</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Impl.html#line.379">contains</a>(int&nbsp;x,
+<pre>public&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Impl.html#line.384">contains</a>(int&nbsp;x,
                         int&nbsp;y)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -472,7 +489,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="
 <ul class="blockList">
 <li class="blockList">
 <h4>contains</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Impl.html#line.385">contains</a>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Impl.html#line.390">contains</a>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#contains-squidpony.squidmath.Coord-">contains</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
@@ -487,7 +504,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getAll</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Impl.html#line.390">getAll</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.Impl.html#line.395">getAll</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#getAll--">getAll</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>

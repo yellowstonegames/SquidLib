@@ -313,6 +313,11 @@ public interface Rectangle extends Zone {
 		}
 
 		@Override
+		public Impl expand(int distance) {
+			return new Impl(bottomLeft.translate(-1,-1), width+2,height+2);
+		}
+
+		@Override
 		public Coord getBottomLeft() {
 			return bottomLeft;
 		}

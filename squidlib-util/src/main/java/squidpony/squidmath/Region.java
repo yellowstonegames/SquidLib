@@ -8,7 +8,8 @@ import java.util.Collection;
 
 import static squidpony.squidmath.CoordPacker.*;
 /**
- * <b>NOTE</b>: You should try GreasedRegion before using this class, unless you know Region does exactly what you want.
+ * <b>NOTE</b>: You should consider {@link GreasedRegion} before using this class, unless you know Region does exactly
+ * what you want.
  * <br>
  * Represents an area or series of areas as one logical unit, and allows iterating over or altering that unit.
  * This can be useful for getting an iterable data structure from a FOV map, Dijkstra map, or just a map from a dungeon
@@ -18,7 +19,8 @@ import static squidpony.squidmath.CoordPacker.*;
  * efficiency, and this is really just a convenience class wrapping CoordPacker to avoid some of its complexity.
  * GreasedRegion allows larger maps, particularly when the Coord pool has been expanded, and should be much faster at
  * tasks that involve changing the size or shape of an area. It also is mutable by default, without needing to track
- * the "dirty" and "clean" states of this class. GreasedRegion does not implement the List interface, though.
+ * the "dirty" and "clean" states of this class. GreasedRegion does not implement the List interface, though; it does
+ * implement {@link Iterable<Coord>}.
  * <br>
  * Created by Tommy Ettinger on 5/12/2016.
  * @see GreasedRegion You should prefer GreasedRegion for most usage.

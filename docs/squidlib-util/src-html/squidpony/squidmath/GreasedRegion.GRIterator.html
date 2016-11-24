@@ -2283,55 +2283,65 @@
 <span class="sourceLineNo">2275</span><a name="line.2275"></a>
 <span class="sourceLineNo">2276</span>    @Override<a name="line.2276"></a>
 <span class="sourceLineNo">2277</span>    public int hashCode() {<a name="line.2277"></a>
-<span class="sourceLineNo">2278</span>        int result = CrossHash.hash(data);<a name="line.2278"></a>
-<span class="sourceLineNo">2279</span>        result = 31 * result + height;<a name="line.2279"></a>
-<span class="sourceLineNo">2280</span>        result = 31 * result + width;<a name="line.2280"></a>
-<span class="sourceLineNo">2281</span>        result = 31 * result + ySections;<a name="line.2281"></a>
-<span class="sourceLineNo">2282</span>        result = 31 * result + (int) (yEndMask ^ (yEndMask &gt;&gt;&gt; 32));<a name="line.2282"></a>
-<span class="sourceLineNo">2283</span>        return result;<a name="line.2283"></a>
-<span class="sourceLineNo">2284</span>    }<a name="line.2284"></a>
-<span class="sourceLineNo">2285</span><a name="line.2285"></a>
-<span class="sourceLineNo">2286</span>    @Override<a name="line.2286"></a>
-<span class="sourceLineNo">2287</span>    public Iterator&lt;Coord&gt; iterator() {<a name="line.2287"></a>
-<span class="sourceLineNo">2288</span>        return new GRIterator();<a name="line.2288"></a>
-<span class="sourceLineNo">2289</span>    }<a name="line.2289"></a>
-<span class="sourceLineNo">2290</span><a name="line.2290"></a>
-<span class="sourceLineNo">2291</span>    protected class GRIterator implements Iterator&lt;Coord&gt;<a name="line.2291"></a>
-<span class="sourceLineNo">2292</span>    {<a name="line.2292"></a>
-<span class="sourceLineNo">2293</span>        public int index = 0;<a name="line.2293"></a>
-<span class="sourceLineNo">2294</span>        private int limit;<a name="line.2294"></a>
-<span class="sourceLineNo">2295</span>        private long w, i = 0;<a name="line.2295"></a>
-<span class="sourceLineNo">2296</span>        public GRIterator()<a name="line.2296"></a>
-<span class="sourceLineNo">2297</span>        {<a name="line.2297"></a>
-<span class="sourceLineNo">2298</span>            limit = size();<a name="line.2298"></a>
-<span class="sourceLineNo">2299</span>        }<a name="line.2299"></a>
-<span class="sourceLineNo">2300</span>        @Override<a name="line.2300"></a>
-<span class="sourceLineNo">2301</span>        public boolean hasNext() {<a name="line.2301"></a>
-<span class="sourceLineNo">2302</span>            return index &lt; limit;<a name="line.2302"></a>
-<span class="sourceLineNo">2303</span>        }<a name="line.2303"></a>
-<span class="sourceLineNo">2304</span><a name="line.2304"></a>
-<span class="sourceLineNo">2305</span>        @Override<a name="line.2305"></a>
-<span class="sourceLineNo">2306</span>        public Coord next() {<a name="line.2306"></a>
-<span class="sourceLineNo">2307</span>            i = 0L;<a name="line.2307"></a>
-<span class="sourceLineNo">2308</span>            for (int x = 0; x &lt; width; x++) {<a name="line.2308"></a>
-<span class="sourceLineNo">2309</span>                for (int s = 0; s &lt; ySections; s++) {<a name="line.2309"></a>
-<span class="sourceLineNo">2310</span>                    if ((w = Long.lowestOneBit(data[x * ySections + s])) != 0 &amp;&amp; i++ &gt;= index) {<a name="line.2310"></a>
-<span class="sourceLineNo">2311</span>                        if(index++ &lt; limit)<a name="line.2311"></a>
-<span class="sourceLineNo">2312</span>                            return Coord.get(x, (s &lt;&lt; 6) | Long.numberOfTrailingZeros(w));<a name="line.2312"></a>
-<span class="sourceLineNo">2313</span>                        else<a name="line.2313"></a>
-<span class="sourceLineNo">2314</span>                            return null;<a name="line.2314"></a>
-<span class="sourceLineNo">2315</span>                    }<a name="line.2315"></a>
-<span class="sourceLineNo">2316</span>                }<a name="line.2316"></a>
-<span class="sourceLineNo">2317</span>            }<a name="line.2317"></a>
-<span class="sourceLineNo">2318</span>            return null;<a name="line.2318"></a>
-<span class="sourceLineNo">2319</span>        }<a name="line.2319"></a>
-<span class="sourceLineNo">2320</span><a name="line.2320"></a>
-<span class="sourceLineNo">2321</span>        @Override<a name="line.2321"></a>
-<span class="sourceLineNo">2322</span>        public void remove() {<a name="line.2322"></a>
-<span class="sourceLineNo">2323</span>            throw new UnsupportedOperationException("remove() is not supported on this Iterator.");<a name="line.2323"></a>
-<span class="sourceLineNo">2324</span>        }<a name="line.2324"></a>
-<span class="sourceLineNo">2325</span>    }<a name="line.2325"></a>
-<span class="sourceLineNo">2326</span>}<a name="line.2326"></a>
+<span class="sourceLineNo">2278</span>        /*<a name="line.2278"></a>
+<span class="sourceLineNo">2279</span>        int result = CrossHash.Lightning.hash(data);<a name="line.2279"></a>
+<span class="sourceLineNo">2280</span>        result = 31 * result + height;<a name="line.2280"></a>
+<span class="sourceLineNo">2281</span>        result = 31 * result + width;<a name="line.2281"></a>
+<span class="sourceLineNo">2282</span>        result = 31 * result + ySections; //not needed; purely dependent on height<a name="line.2282"></a>
+<span class="sourceLineNo">2283</span>        result = 31 * result + (int) (yEndMask ^ (yEndMask &gt;&gt;&gt; 32)); //not needed; purely dependent on height<a name="line.2283"></a>
+<span class="sourceLineNo">2284</span>        return result;<a name="line.2284"></a>
+<span class="sourceLineNo">2285</span>        */<a name="line.2285"></a>
+<span class="sourceLineNo">2286</span>        long z = 0x632BE59BD9B4E019L, result = 1L;<a name="line.2286"></a>
+<span class="sourceLineNo">2287</span>        for (int i = 0; i &lt; data.length; i++) {<a name="line.2287"></a>
+<span class="sourceLineNo">2288</span>            result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;<a name="line.2288"></a>
+<span class="sourceLineNo">2289</span>        }<a name="line.2289"></a>
+<span class="sourceLineNo">2290</span>        result ^= (z += (height + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;<a name="line.2290"></a>
+<span class="sourceLineNo">2291</span>        result ^= (z += (width + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;<a name="line.2291"></a>
+<span class="sourceLineNo">2292</span>        return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.2292"></a>
+<span class="sourceLineNo">2293</span><a name="line.2293"></a>
+<span class="sourceLineNo">2294</span>    }<a name="line.2294"></a>
+<span class="sourceLineNo">2295</span><a name="line.2295"></a>
+<span class="sourceLineNo">2296</span>    @Override<a name="line.2296"></a>
+<span class="sourceLineNo">2297</span>    public Iterator&lt;Coord&gt; iterator() {<a name="line.2297"></a>
+<span class="sourceLineNo">2298</span>        return new GRIterator();<a name="line.2298"></a>
+<span class="sourceLineNo">2299</span>    }<a name="line.2299"></a>
+<span class="sourceLineNo">2300</span><a name="line.2300"></a>
+<span class="sourceLineNo">2301</span>    protected class GRIterator implements Iterator&lt;Coord&gt;<a name="line.2301"></a>
+<span class="sourceLineNo">2302</span>    {<a name="line.2302"></a>
+<span class="sourceLineNo">2303</span>        public int index = 0;<a name="line.2303"></a>
+<span class="sourceLineNo">2304</span>        private int limit;<a name="line.2304"></a>
+<span class="sourceLineNo">2305</span>        private long w, i = 0;<a name="line.2305"></a>
+<span class="sourceLineNo">2306</span>        public GRIterator()<a name="line.2306"></a>
+<span class="sourceLineNo">2307</span>        {<a name="line.2307"></a>
+<span class="sourceLineNo">2308</span>            limit = size();<a name="line.2308"></a>
+<span class="sourceLineNo">2309</span>        }<a name="line.2309"></a>
+<span class="sourceLineNo">2310</span>        @Override<a name="line.2310"></a>
+<span class="sourceLineNo">2311</span>        public boolean hasNext() {<a name="line.2311"></a>
+<span class="sourceLineNo">2312</span>            return index &lt; limit;<a name="line.2312"></a>
+<span class="sourceLineNo">2313</span>        }<a name="line.2313"></a>
+<span class="sourceLineNo">2314</span><a name="line.2314"></a>
+<span class="sourceLineNo">2315</span>        @Override<a name="line.2315"></a>
+<span class="sourceLineNo">2316</span>        public Coord next() {<a name="line.2316"></a>
+<span class="sourceLineNo">2317</span>            i = 0L;<a name="line.2317"></a>
+<span class="sourceLineNo">2318</span>            for (int x = 0; x &lt; width; x++) {<a name="line.2318"></a>
+<span class="sourceLineNo">2319</span>                for (int s = 0; s &lt; ySections; s++) {<a name="line.2319"></a>
+<span class="sourceLineNo">2320</span>                    if ((w = Long.lowestOneBit(data[x * ySections + s])) != 0 &amp;&amp; i++ &gt;= index) {<a name="line.2320"></a>
+<span class="sourceLineNo">2321</span>                        if(index++ &lt; limit)<a name="line.2321"></a>
+<span class="sourceLineNo">2322</span>                            return Coord.get(x, (s &lt;&lt; 6) | Long.numberOfTrailingZeros(w));<a name="line.2322"></a>
+<span class="sourceLineNo">2323</span>                        else<a name="line.2323"></a>
+<span class="sourceLineNo">2324</span>                            return null;<a name="line.2324"></a>
+<span class="sourceLineNo">2325</span>                    }<a name="line.2325"></a>
+<span class="sourceLineNo">2326</span>                }<a name="line.2326"></a>
+<span class="sourceLineNo">2327</span>            }<a name="line.2327"></a>
+<span class="sourceLineNo">2328</span>            return null;<a name="line.2328"></a>
+<span class="sourceLineNo">2329</span>        }<a name="line.2329"></a>
+<span class="sourceLineNo">2330</span><a name="line.2330"></a>
+<span class="sourceLineNo">2331</span>        @Override<a name="line.2331"></a>
+<span class="sourceLineNo">2332</span>        public void remove() {<a name="line.2332"></a>
+<span class="sourceLineNo">2333</span>            throw new UnsupportedOperationException("remove() is not supported on this Iterator.");<a name="line.2333"></a>
+<span class="sourceLineNo">2334</span>        }<a name="line.2334"></a>
+<span class="sourceLineNo">2335</span>    }<a name="line.2335"></a>
+<span class="sourceLineNo">2336</span>}<a name="line.2336"></a>
 
 
 

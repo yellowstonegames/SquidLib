@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -118,7 +118,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../../src-html/squidpony/squidgrid/zone/ListZone.html#line.13">ListZone</a>
+<pre>public class <a href="../../../src-html/squidpony/squidgrid/zone/ListZone.html#line.16">ListZone</a>
 extends <a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html" title="class in squidpony.squidgrid.zone">Zone.Skeleton</a></pre>
 <div class="block">A zone defined by a <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util"><code>List</code></a>.</div>
 <dl>
@@ -179,6 +179,9 @@ extends <a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html" title="cl
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/ListZone.html#ListZone-java.util.Collection-">ListZone</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;coordCollection)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/ListZone.html#ListZone-java.util.List-">ListZone</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;coords)</code>&nbsp;</td>
 </tr>
 </table>
@@ -206,18 +209,22 @@ extends <a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html" title="cl
         int&nbsp;y)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidgrid/zone/ListZone.html" title="class in squidpony.squidgrid.zone">ListZone</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/ListZone.html#expand-int-">expand</a></span>(int&nbsp;distance)</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/ListZone.html#getAll--">getAll</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/ListZone.html#isEmpty--">isEmpty</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/ListZone.html#size--">size</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/ListZone.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
@@ -249,7 +256,7 @@ extends <a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html" title="cl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>coords</h4>
-<pre>protected final&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt; <a href="../../../src-html/squidpony/squidgrid/zone/ListZone.html#line.15">coords</a></pre>
+<pre>protected final&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt; <a href="../../../src-html/squidpony/squidgrid/zone/ListZone.html#line.18">coords</a></pre>
 </li>
 </ul>
 </li>
@@ -263,10 +270,19 @@ extends <a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html" title="cl
 <a name="ListZone-java.util.List-">
 <!--   -->
 </a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ListZone</h4>
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/ListZone.html#line.22">ListZone</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;coords)</pre>
+</li>
+</ul>
+<a name="ListZone-java.util.Collection-">
+<!--   -->
+</a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ListZone</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/ListZone.html#line.19">ListZone</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;coords)</pre>
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/ListZone.html#line.26">ListZone</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;coordCollection)</pre>
 </li>
 </ul>
 </li>
@@ -283,7 +299,7 @@ extends <a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html" title="cl
 <ul class="blockList">
 <li class="blockList">
 <h4>isEmpty</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/ListZone.html#line.24">isEmpty</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/ListZone.html#line.31">isEmpty</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>Whether this zone is empty.</dd>
@@ -296,7 +312,7 @@ extends <a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html" title="cl
 <ul class="blockList">
 <li class="blockList">
 <h4>size</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/ListZone.html#line.29">size</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/ListZone.html#line.36">size</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The number of cells that this zone contains (the size
@@ -310,7 +326,7 @@ extends <a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html" title="cl
 <ul class="blockList">
 <li class="blockList">
 <h4>contains</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/ListZone.html#line.34">contains</a>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/ListZone.html#line.41">contains</a>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#contains-squidpony.squidmath.Coord-">contains</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
@@ -327,7 +343,7 @@ extends <a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html" title="cl
 <ul class="blockList">
 <li class="blockList">
 <h4>contains</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/ListZone.html#line.39">contains</a>(int&nbsp;x,
+<pre>public&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/ListZone.html#line.46">contains</a>(int&nbsp;x,
                         int&nbsp;y)</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -341,11 +357,20 @@ extends <a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html" title="cl
 <ul class="blockList">
 <li class="blockList">
 <h4>getAll</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/ListZone.html#line.44">getAll</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/ListZone.html#line.51">getAll</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>All cells in this zone.</dd>
 </dl>
+</li>
+</ul>
+<a name="expand-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>expand</h4>
+<pre>public&nbsp;<a href="../../../squidpony/squidgrid/zone/ListZone.html" title="class in squidpony.squidgrid.zone">ListZone</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/ListZone.html#line.56">expand</a>(int&nbsp;distance)</pre>
 </li>
 </ul>
 <a name="toString--">
@@ -354,7 +379,7 @@ extends <a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html" title="cl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/ListZone.html#line.49">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/ListZone.html#line.84">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>

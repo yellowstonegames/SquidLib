@@ -134,7 +134,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
     @Override
     public long nextLong() {
         // when scrambling the sequence, intentionally uses a non-standard Gray-like code
-        long s = (scramble) ? ++state : (++state * state) ^ (state * 137 >> 4),
+        long s = (scramble) ? (++state & 0x7fffffffffffffffL) : (++state * state) ^ (state * 137 >> 4),
                 num = s % base, den = base;
         while (den <= s) {
             num *= base;
@@ -159,7 +159,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      */
     public double nextDouble() {
         // when scrambling the sequence, intentionally uses a non-standard Gray-like code
-        long s = (scramble) ? ++state : (++state * state) ^ (state * 137 >> 4),
+        long s = (scramble) ? (++state & 0x7fffffffffffffffL) : (++state * state) ^ (state * 137 >> 4),
                 num = s % base, den = base;
         while (den <= s) {
             num *= base;
@@ -226,7 +226,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      */
     public static Coord halton(int width, int height, int index)
     {
-        int s = (index & 0x7fffffff)+1,
+        int s = (index+1 & 0x7fffffff),
                 numX = s & 1, numY = s % 3, denX = 2, denY = 3;
         while (denX <= s) {
             numX *= 2;
@@ -258,7 +258,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      */
     public static Coord3D halton(int width, int height, int depth, int index)
     {
-        int s = (index & 0x7fffffff)+1,
+        int s = (index+1 & 0x7fffffff),
                 numX = s & 1, numY = s % 3, denX = 2, denY = 3, numZ = s % 5, denZ = 5;
         while (denX <= s) {
             numX *= 2;
@@ -276,5 +276,27 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
             denZ *= 5;
         }
         return Coord3D.get(numX * width / denX, numY * height / denY, numZ * depth / denZ);
+    }
+
+    /**
+     * Convenience method to get a double from the van der Corput sequence with the given {@code base} at the requested
+     * {@code index} without needing to construct a VanDerCorputQRNG. You should use a prime number for base; 2, 3, 5,
+     * and 7 should be among the first choices. This does not perform any scrambling on index other than incrementing it
+     * and ensuring it is positive (by discarding the sign bit; for all positive index values other than 0x7FFFFFFF,
+     * this has no effect).
+     * @param base a (typically very small) prime number to use as the base/radix of the van der Corput sequence
+     * @param index the position in the sequence of the requested base
+     * @return a quasi-random double between 0.0 (inclusive) and 1.0 (exclusive).
+     */
+    public static double determine(int base, int index)
+    {
+        int s = (index+1 & 0x7fffffff),
+                num = s % base, den = base;
+        while (den <= s) {
+            num *= base;
+            num += (s % (den * base)) / den;
+            den *= base;
+        }
+        return num / (double)den;
     }
 }
