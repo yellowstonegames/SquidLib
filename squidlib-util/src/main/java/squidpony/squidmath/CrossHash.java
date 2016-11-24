@@ -1769,6 +1769,11 @@ public class CrossHash {
             return result ^ ((z ^ result) >>> 8) * 0x9E3779B9;
         }
     }
+
+    /**
+     * Lower statistical quality than other hashes, but very fast. Fails visual testing with noticeable artifacts, an
+     * issue that Falcon, Lightning, and Storm do not have.
+     */
     @Beta
     public static class Wisp
     {

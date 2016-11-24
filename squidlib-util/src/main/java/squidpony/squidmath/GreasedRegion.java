@@ -2275,12 +2275,22 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
 
     @Override
     public int hashCode() {
-        int result = CrossHash.hash(data);
+        /*
+        int result = CrossHash.Lightning.hash(data);
         result = 31 * result + height;
         result = 31 * result + width;
-        result = 31 * result + ySections;
-        result = 31 * result + (int) (yEndMask ^ (yEndMask >>> 32));
+        result = 31 * result + ySections; //not needed; purely dependent on height
+        result = 31 * result + (int) (yEndMask ^ (yEndMask >>> 32)); //not needed; purely dependent on height
         return result;
+        */
+        long z = 0x632BE59BD9B4E019L, result = 1L;
+        for (int i = 0; i < data.length; i++) {
+            result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+        }
+        result ^= (z += (height + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+        result ^= (z += (width + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+        return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
+
     }
 
     @Override

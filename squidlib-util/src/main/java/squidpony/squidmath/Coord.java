@@ -5,7 +5,36 @@ import squidpony.squidgrid.Direction;
 import java.io.Serializable;
 
 /**
- * A 2D coordinate.
+ * A 2D coordinate with (constant) x and y fields. Coord objects are immutable; a single pool of Coord values, with
+ * x and y each ranging from -3 to 255, is shared by all users of Coord. This pool helps reduce pressure on the
+ * garbage collector when many Coord values would have been created for some purpose and quickly discarded; instead
+ * of creating a new Coord with a constructor, you use the static method {@link #get(int, int)}, which retrieves an
+ * already-existing Coord from the pool if possible, and always returns a usable Coord.
+ * <br>
+ * The Coord class is a fundamental part of SquidLib; any class that uses positions on a grid makes use of it here.
+ * It finds usage naturally in classes throughout {@link squidpony.squidgrid}, with {@link squidpony.squidgrid.zone}
+ * providing an abstraction around groups of Coord and {@link squidpony.squidgrid.iterator} providing various ways to
+ * iterate through the Coords that make up a larger shape. In this package, {@link squidpony.squidmath}, a few classes
+ * should be pointed out. {@link CoordPacker} is a class with all static methods that provides various ways to compress
+ * the memory usage of regions made of many Coord values (and can be constructed in other ways but still provide Coords
+ * later), but since Coords don't use much memory anyway, the real use of the class is for manipulating the shapes and
+ * sizes of the regions those Coords are part of. {@link GreasedRegion} has similar functionality to CoordPacker, but
+ * where CoordPacker is purely static, taking and returning regions as encoded, usually-low-memory-cost arrays of
+ * {@code short} that it considers immutable, a GreasedRegion is a mutable object that allows the same region-altering
+ * techniques to be applied in-place in a way that is relatively (very) low-time-cost. If deciding between the two,
+ * GreasedRegion should usually be preferred, and CoordPacker cannot actually be used when storing regions in larger
+ * than a 256x256 space (usually when the Coord pool has been expanded; see below); GreasedRegion can store potentially
+ * large positions.
+ * <br>
+ * More on the Coord pool used by this class:  Coords can't always be retrieved from the pool; Coord.get constructs a
+ * new Coord if one of x or y is unusually large (greater than 255) or too negative (below -3). The upper limit of 255
+ * is not a hard rule; you can increase the limit on the pool by calling {@link #expandPoolTo(int, int)} or
+ * {@link #expandPool(int, int)}, which cause more memory to be spent initially on storing Coords but can save memory
+ * or ease GC pressure over the long term by preventing duplicate Coords from being created many times. The pool can
+ * never shrink because allowing that would cause completely unpredictable results if existing Coords were in use, or
+ * could easily cause crashes on Android after resuming an application that had previously shrunken the pool due to
+ * platform quirks. Long story short, you should only expand the pool size when your game needs a larger set of 2D
+ * points it will commonly use, and in most cases you shouldn't need to change it at all.
  * 
  * Created by Tommy Ettinger on 8/12/2015.
  */

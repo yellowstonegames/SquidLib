@@ -56,6 +56,11 @@ public class CoordPackerZone extends Skeleton {
 	}
 
 	@Override
+	public CoordPackerZone expand(int distance) {
+		return new CoordPackerZone(CoordPacker.expand(shorts, distance, 256, 256));
+	}
+
+	@Override
 	public String toString() {
 		return (unpacked == null ? shorts : unpacked).toString();
 	}

@@ -67,6 +67,8 @@ public interface Zone extends Serializable {
      */
     List<Coord> getAll();
 
+    Zone expand(int distance);
+
     /**
      * A convenience partial implementation. Please try for all new
      * implementations of {@link Zone} to be subtypes of this class. It usually
