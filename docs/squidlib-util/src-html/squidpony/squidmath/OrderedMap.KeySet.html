@@ -133,7 +133,7 @@
 <span class="sourceLineNo">125</span>    /**<a name="line.125"></a>
 <span class="sourceLineNo">126</span>     * The default load factor of a hash table.<a name="line.126"></a>
 <span class="sourceLineNo">127</span>     */<a name="line.127"></a>
-<span class="sourceLineNo">128</span>    public static final float DEFAULT_LOAD_FACTOR = .375f; // .1875f; // .75f;<a name="line.128"></a>
+<span class="sourceLineNo">128</span>    public static final float DEFAULT_LOAD_FACTOR = .75f; // .1875f; // .75f;<a name="line.128"></a>
 <span class="sourceLineNo">129</span>    /**<a name="line.129"></a>
 <span class="sourceLineNo">130</span>     * The load factor for a (usually small) table that is meant to be particularly fast.<a name="line.130"></a>
 <span class="sourceLineNo">131</span>     */<a name="line.131"></a>
@@ -424,10 +424,10 @@
 <span class="sourceLineNo">416</span>            final K[] key = this.key;<a name="line.416"></a>
 <span class="sourceLineNo">417</span>            // The starting point.<a name="line.417"></a>
 <span class="sourceLineNo">418</span>            if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) &amp; mask]) != null) {<a name="line.418"></a>
-<span class="sourceLineNo">419</span>                if (curr.equals(k))<a name="line.419"></a>
+<span class="sourceLineNo">419</span>                if (hasher.areEqual(curr, k))<a name="line.419"></a>
 <span class="sourceLineNo">420</span>                    return pos;<a name="line.420"></a>
 <span class="sourceLineNo">421</span>                while ((curr = key[pos = (pos + 1) &amp; mask]) != null)<a name="line.421"></a>
-<span class="sourceLineNo">422</span>                    if (curr.equals(k))<a name="line.422"></a>
+<span class="sourceLineNo">422</span>                    if (hasher.areEqual(curr, k))<a name="line.422"></a>
 <span class="sourceLineNo">423</span>                        return pos;<a name="line.423"></a>
 <span class="sourceLineNo">424</span>            }<a name="line.424"></a>
 <span class="sourceLineNo">425</span>        }<a name="line.425"></a>
@@ -496,12 +496,12 @@
 <span class="sourceLineNo">488</span>        // The starting point.<a name="line.488"></a>
 <span class="sourceLineNo">489</span>        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) &amp; mask]) == null)<a name="line.489"></a>
 <span class="sourceLineNo">490</span>            return defRetValue;<a name="line.490"></a>
-<span class="sourceLineNo">491</span>        if (k.equals(curr))<a name="line.491"></a>
+<span class="sourceLineNo">491</span>        if (hasher.areEqual(k, curr))<a name="line.491"></a>
 <span class="sourceLineNo">492</span>            return removeEntry(pos);<a name="line.492"></a>
 <span class="sourceLineNo">493</span>        while (true) {<a name="line.493"></a>
 <span class="sourceLineNo">494</span>            if ((curr = key[pos = (pos + 1) &amp; mask]) == null)<a name="line.494"></a>
 <span class="sourceLineNo">495</span>                return defRetValue;<a name="line.495"></a>
-<span class="sourceLineNo">496</span>            if (k.equals(curr))<a name="line.496"></a>
+<span class="sourceLineNo">496</span>            if (hasher.areEqual(k, curr))<a name="line.496"></a>
 <span class="sourceLineNo">497</span>                return removeEntry(pos);<a name="line.497"></a>
 <span class="sourceLineNo">498</span>        }<a name="line.498"></a>
 <span class="sourceLineNo">499</span>    }<a name="line.499"></a>
@@ -635,7 +635,7 @@
 <span class="sourceLineNo">627</span>        // The starting point.<a name="line.627"></a>
 <span class="sourceLineNo">628</span>        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) &amp; mask]) == null)<a name="line.628"></a>
 <span class="sourceLineNo">629</span>            return defRetValue;<a name="line.629"></a>
-<span class="sourceLineNo">630</span>        if (k.equals(curr)) {<a name="line.630"></a>
+<span class="sourceLineNo">630</span>        if (hasher.areEqual(k, curr)) {<a name="line.630"></a>
 <span class="sourceLineNo">631</span>            moveIndexToFirst(pos);<a name="line.631"></a>
 <span class="sourceLineNo">632</span>            return value[pos];<a name="line.632"></a>
 <span class="sourceLineNo">633</span>        }<a name="line.633"></a>
@@ -643,7 +643,7 @@
 <span class="sourceLineNo">635</span>        while (true) {<a name="line.635"></a>
 <span class="sourceLineNo">636</span>            if ((curr = key[pos = (pos + 1) &amp; mask]) == null)<a name="line.636"></a>
 <span class="sourceLineNo">637</span>                return defRetValue;<a name="line.637"></a>
-<span class="sourceLineNo">638</span>            if (k.equals(curr)) {<a name="line.638"></a>
+<span class="sourceLineNo">638</span>            if (hasher.areEqual(k, curr)) {<a name="line.638"></a>
 <span class="sourceLineNo">639</span>                moveIndexToFirst(pos);<a name="line.639"></a>
 <span class="sourceLineNo">640</span>                return value[pos];<a name="line.640"></a>
 <span class="sourceLineNo">641</span>            }<a name="line.641"></a>
@@ -672,7 +672,7 @@
 <span class="sourceLineNo">664</span>        // The starting point.<a name="line.664"></a>
 <span class="sourceLineNo">665</span>        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) &amp; mask]) == null)<a name="line.665"></a>
 <span class="sourceLineNo">666</span>            return defRetValue;<a name="line.666"></a>
-<span class="sourceLineNo">667</span>        if (k.equals(curr)) {<a name="line.667"></a>
+<span class="sourceLineNo">667</span>        if (hasher.areEqual(k, curr)) {<a name="line.667"></a>
 <span class="sourceLineNo">668</span>            moveIndexToLast(pos);<a name="line.668"></a>
 <span class="sourceLineNo">669</span>            return value[pos];<a name="line.669"></a>
 <span class="sourceLineNo">670</span>        }<a name="line.670"></a>
@@ -680,7 +680,7 @@
 <span class="sourceLineNo">672</span>        while (true) {<a name="line.672"></a>
 <span class="sourceLineNo">673</span>            if ((curr = key[pos = (pos + 1) &amp; mask]) == null)<a name="line.673"></a>
 <span class="sourceLineNo">674</span>                return defRetValue;<a name="line.674"></a>
-<span class="sourceLineNo">675</span>            if (k.equals(curr)) {<a name="line.675"></a>
+<span class="sourceLineNo">675</span>            if (hasher.areEqual(k, curr)) {<a name="line.675"></a>
 <span class="sourceLineNo">676</span>                moveIndexToLast(pos);<a name="line.676"></a>
 <span class="sourceLineNo">677</span>                return value[pos];<a name="line.677"></a>
 <span class="sourceLineNo">678</span>            }<a name="line.678"></a>
@@ -711,12 +711,12 @@
 <span class="sourceLineNo">703</span>            final K[] key = this.key;<a name="line.703"></a>
 <span class="sourceLineNo">704</span>            // The starting point.<a name="line.704"></a>
 <span class="sourceLineNo">705</span>            if (!((curr = key[pos = HashCommon.mix(hasher.hash(k)) &amp; mask]) == null)) {<a name="line.705"></a>
-<span class="sourceLineNo">706</span>                if (curr.equals(k)) {<a name="line.706"></a>
+<span class="sourceLineNo">706</span>                if (hasher.areEqual(curr, k)) {<a name="line.706"></a>
 <span class="sourceLineNo">707</span>                    moveIndexToFirst(pos);<a name="line.707"></a>
 <span class="sourceLineNo">708</span>                    return setValue(pos, v);<a name="line.708"></a>
 <span class="sourceLineNo">709</span>                }<a name="line.709"></a>
 <span class="sourceLineNo">710</span>                while (!((curr = key[pos = (pos + 1) &amp; mask]) == null))<a name="line.710"></a>
-<span class="sourceLineNo">711</span>                    if (curr.equals(k)) {<a name="line.711"></a>
+<span class="sourceLineNo">711</span>                    if (hasher.areEqual(curr, k)) {<a name="line.711"></a>
 <span class="sourceLineNo">712</span>                        moveIndexToFirst(pos);<a name="line.712"></a>
 <span class="sourceLineNo">713</span>                        return setValue(pos, v);<a name="line.713"></a>
 <span class="sourceLineNo">714</span>                    }<a name="line.714"></a>
@@ -763,12 +763,12 @@
 <span class="sourceLineNo">755</span>            final K[] key = this.key;<a name="line.755"></a>
 <span class="sourceLineNo">756</span>            // The starting point.<a name="line.756"></a>
 <span class="sourceLineNo">757</span>            if (!((curr = key[pos = HashCommon.mix(hasher.hash(k)) &amp; mask]) == null)) {<a name="line.757"></a>
-<span class="sourceLineNo">758</span>                if (curr.equals(k)) {<a name="line.758"></a>
+<span class="sourceLineNo">758</span>                if (hasher.areEqual(curr, k)) {<a name="line.758"></a>
 <span class="sourceLineNo">759</span>                    moveIndexToLast(pos);<a name="line.759"></a>
 <span class="sourceLineNo">760</span>                    return setValue(pos, v);<a name="line.760"></a>
 <span class="sourceLineNo">761</span>                }<a name="line.761"></a>
 <span class="sourceLineNo">762</span>                while (!((curr = key[pos = (pos + 1) &amp; mask]) == null))<a name="line.762"></a>
-<span class="sourceLineNo">763</span>                    if (curr.equals(k)) {<a name="line.763"></a>
+<span class="sourceLineNo">763</span>                    if (hasher.areEqual(curr, k)) {<a name="line.763"></a>
 <span class="sourceLineNo">764</span>                        moveIndexToLast(pos);<a name="line.764"></a>
 <span class="sourceLineNo">765</span>                        return setValue(pos, v);<a name="line.765"></a>
 <span class="sourceLineNo">766</span>                    }<a name="line.766"></a>
@@ -799,13 +799,13 @@
 <span class="sourceLineNo">791</span>        // The starting point.<a name="line.791"></a>
 <span class="sourceLineNo">792</span>        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) &amp; mask]) == null)<a name="line.792"></a>
 <span class="sourceLineNo">793</span>            return defRetValue;<a name="line.793"></a>
-<span class="sourceLineNo">794</span>        if (k.equals(curr))<a name="line.794"></a>
+<span class="sourceLineNo">794</span>        if (hasher.areEqual(k, curr))<a name="line.794"></a>
 <span class="sourceLineNo">795</span>            return value[pos];<a name="line.795"></a>
 <span class="sourceLineNo">796</span>        // There's always an unused entry.<a name="line.796"></a>
 <span class="sourceLineNo">797</span>        while (true) {<a name="line.797"></a>
 <span class="sourceLineNo">798</span>            if ((curr = key[pos = (pos + 1) &amp; mask]) == null)<a name="line.798"></a>
 <span class="sourceLineNo">799</span>                return defRetValue;<a name="line.799"></a>
-<span class="sourceLineNo">800</span>            if (k.equals(curr))<a name="line.800"></a>
+<span class="sourceLineNo">800</span>            if (hasher.areEqual(k, curr))<a name="line.800"></a>
 <span class="sourceLineNo">801</span>                return value[pos];<a name="line.801"></a>
 <span class="sourceLineNo">802</span>        }<a name="line.802"></a>
 <span class="sourceLineNo">803</span>    }<a name="line.803"></a>
@@ -819,13 +819,13 @@
 <span class="sourceLineNo">811</span>        // The starting point.<a name="line.811"></a>
 <span class="sourceLineNo">812</span>        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) &amp; mask]) == null)<a name="line.812"></a>
 <span class="sourceLineNo">813</span>            return false;<a name="line.813"></a>
-<span class="sourceLineNo">814</span>        if (k.equals(curr))<a name="line.814"></a>
+<span class="sourceLineNo">814</span>        if (hasher.areEqual(k, curr))<a name="line.814"></a>
 <span class="sourceLineNo">815</span>            return true;<a name="line.815"></a>
 <span class="sourceLineNo">816</span>        // There's always an unused entry.<a name="line.816"></a>
 <span class="sourceLineNo">817</span>        while (true) {<a name="line.817"></a>
 <span class="sourceLineNo">818</span>            if ((curr = key[pos = (pos + 1) &amp; mask]) == null)<a name="line.818"></a>
 <span class="sourceLineNo">819</span>                return false;<a name="line.819"></a>
-<span class="sourceLineNo">820</span>            if (k.equals(curr))<a name="line.820"></a>
+<span class="sourceLineNo">820</span>            if (hasher.areEqual(k, curr))<a name="line.820"></a>
 <span class="sourceLineNo">821</span>                return true;<a name="line.821"></a>
 <span class="sourceLineNo">822</span>        }<a name="line.822"></a>
 <span class="sourceLineNo">823</span>    }<a name="line.823"></a>
@@ -921,7 +921,7 @@
 <span class="sourceLineNo">913</span>            Map.Entry&lt;K, V&gt; e = (Map.Entry&lt;K, V&gt;) o;<a name="line.913"></a>
 <span class="sourceLineNo">914</span>            return (key[index] == null<a name="line.914"></a>
 <span class="sourceLineNo">915</span>                    ? e.getKey() == null<a name="line.915"></a>
-<span class="sourceLineNo">916</span>                    : key[index].equals(e.getKey()))<a name="line.916"></a>
+<span class="sourceLineNo">916</span>                    : hasher.areEqual(key[index], e.getKey()))<a name="line.916"></a>
 <span class="sourceLineNo">917</span>                    &amp;&amp; (value[index] == null<a name="line.917"></a>
 <span class="sourceLineNo">918</span>                    ? e.getValue() == null<a name="line.918"></a>
 <span class="sourceLineNo">919</span>                    : value[index].equals(e.getValue()));<a name="line.919"></a>
@@ -1349,14 +1349,14 @@
 <span class="sourceLineNo">1341</span>            // The starting point.<a name="line.1341"></a>
 <span class="sourceLineNo">1342</span>            if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) &amp; mask]) == null)<a name="line.1342"></a>
 <span class="sourceLineNo">1343</span>                return false;<a name="line.1343"></a>
-<span class="sourceLineNo">1344</span>            if (k.equals(curr))<a name="line.1344"></a>
+<span class="sourceLineNo">1344</span>            if (hasher.areEqual(k, curr))<a name="line.1344"></a>
 <span class="sourceLineNo">1345</span>                return value[pos] == null ? v == null : value[pos]<a name="line.1345"></a>
 <span class="sourceLineNo">1346</span>                        .equals(v);<a name="line.1346"></a>
 <span class="sourceLineNo">1347</span>            // There's always an unused entry.<a name="line.1347"></a>
 <span class="sourceLineNo">1348</span>            while (true) {<a name="line.1348"></a>
 <span class="sourceLineNo">1349</span>                if ((curr = key[pos = (pos + 1) &amp; mask]) == null)<a name="line.1349"></a>
 <span class="sourceLineNo">1350</span>                    return false;<a name="line.1350"></a>
-<span class="sourceLineNo">1351</span>                if (k.equals(curr))<a name="line.1351"></a>
+<span class="sourceLineNo">1351</span>                if (hasher.areEqual(k, curr))<a name="line.1351"></a>
 <span class="sourceLineNo">1352</span>                    return value[pos] == null ? v == null : value[pos]<a name="line.1352"></a>
 <span class="sourceLineNo">1353</span>                            .equals(v);<a name="line.1353"></a>
 <span class="sourceLineNo">1354</span>            }<a name="line.1354"></a>
@@ -1383,7 +1383,7 @@
 <span class="sourceLineNo">1375</span>            // The starting point.<a name="line.1375"></a>
 <span class="sourceLineNo">1376</span>            if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) &amp; mask]) == null)<a name="line.1376"></a>
 <span class="sourceLineNo">1377</span>                return false;<a name="line.1377"></a>
-<span class="sourceLineNo">1378</span>            if (curr.equals(k)) {<a name="line.1378"></a>
+<span class="sourceLineNo">1378</span>            if (hasher.areEqual(curr, k)) {<a name="line.1378"></a>
 <span class="sourceLineNo">1379</span>                if (value[pos] == null ? v == null : value[pos]<a name="line.1379"></a>
 <span class="sourceLineNo">1380</span>                        .equals(v)) {<a name="line.1380"></a>
 <span class="sourceLineNo">1381</span>                    removeEntry(pos);<a name="line.1381"></a>
@@ -1394,7 +1394,7 @@
 <span class="sourceLineNo">1386</span>            while (true) {<a name="line.1386"></a>
 <span class="sourceLineNo">1387</span>                if ((curr = key[pos = (pos + 1) &amp; mask]) == null)<a name="line.1387"></a>
 <span class="sourceLineNo">1388</span>                    return false;<a name="line.1388"></a>
-<span class="sourceLineNo">1389</span>                if (curr.equals(k)) {<a name="line.1389"></a>
+<span class="sourceLineNo">1389</span>                if (hasher.areEqual(curr, k)) {<a name="line.1389"></a>
 <span class="sourceLineNo">1390</span>                    if (value[pos] == null ? v == null : value[pos]<a name="line.1390"></a>
 <span class="sourceLineNo">1391</span>                            .equals(v)) {<a name="line.1391"></a>
 <span class="sourceLineNo">1392</span>                        removeEntry(pos);<a name="line.1392"></a>
@@ -2559,10 +2559,10 @@
 <span class="sourceLineNo">2551</span><a name="line.2551"></a>
 <span class="sourceLineNo">2552</span>            // The starting point.<a name="line.2552"></a>
 <span class="sourceLineNo">2553</span>            if (!((curr = key[rep = HashCommon.mix(hasher.hash(replacement)) &amp; mask]) == null)) {<a name="line.2553"></a>
-<span class="sourceLineNo">2554</span>                if (curr.equals(replacement))<a name="line.2554"></a>
+<span class="sourceLineNo">2554</span>                if (hasher.areEqual(curr, replacement))<a name="line.2554"></a>
 <span class="sourceLineNo">2555</span>                    return v;<a name="line.2555"></a>
 <span class="sourceLineNo">2556</span>                while (!((curr = key[rep = (rep + 1) &amp; mask]) == null))<a name="line.2556"></a>
-<span class="sourceLineNo">2557</span>                    if (curr.equals(replacement))<a name="line.2557"></a>
+<span class="sourceLineNo">2557</span>                    if (hasher.areEqual(curr, replacement))<a name="line.2557"></a>
 <span class="sourceLineNo">2558</span>                        return v;<a name="line.2558"></a>
 <span class="sourceLineNo">2559</span>            }<a name="line.2559"></a>
 <span class="sourceLineNo">2560</span>            key[rep] = replacement;<a name="line.2560"></a>
@@ -2587,10 +2587,10 @@
 <span class="sourceLineNo">2579</span>            final K[] key = this.key;<a name="line.2579"></a>
 <span class="sourceLineNo">2580</span>            // The starting point.<a name="line.2580"></a>
 <span class="sourceLineNo">2581</span>            if ((curr = key[rep = HashCommon.mix(hasher.hash(replacement)) &amp; mask]) != null) {<a name="line.2581"></a>
-<span class="sourceLineNo">2582</span>                if (curr.equals(replacement))<a name="line.2582"></a>
+<span class="sourceLineNo">2582</span>                if (hasher.areEqual(curr, replacement))<a name="line.2582"></a>
 <span class="sourceLineNo">2583</span>                    return v;<a name="line.2583"></a>
 <span class="sourceLineNo">2584</span>                while ((curr = key[rep = (rep + 1) &amp; mask]) != null)<a name="line.2584"></a>
-<span class="sourceLineNo">2585</span>                    if (curr.equals(replacement))<a name="line.2585"></a>
+<span class="sourceLineNo">2585</span>                    if (hasher.areEqual(curr, replacement))<a name="line.2585"></a>
 <span class="sourceLineNo">2586</span>                        return v;<a name="line.2586"></a>
 <span class="sourceLineNo">2587</span>            }<a name="line.2587"></a>
 <span class="sourceLineNo">2588</span>            key[rep] = replacement;<a name="line.2588"></a>
@@ -2616,7 +2616,7 @@
 <span class="sourceLineNo">2608</span>            else<a name="line.2608"></a>
 <span class="sourceLineNo">2609</span>                return put(replacement, null);<a name="line.2609"></a>
 <span class="sourceLineNo">2610</span>        }<a name="line.2610"></a>
-<span class="sourceLineNo">2611</span>        else if(original.equals(replacement))<a name="line.2611"></a>
+<span class="sourceLineNo">2611</span>        else if(hasher.areEqual(original, replacement))<a name="line.2611"></a>
 <span class="sourceLineNo">2612</span>            return get(original);<a name="line.2612"></a>
 <span class="sourceLineNo">2613</span>        K curr;<a name="line.2613"></a>
 <span class="sourceLineNo">2614</span>        final K[] key = this.key;<a name="line.2614"></a>
@@ -2624,12 +2624,12 @@
 <span class="sourceLineNo">2616</span>        // The starting point.<a name="line.2616"></a>
 <span class="sourceLineNo">2617</span>        if ((curr = key[pos = HashCommon.mix(hasher.hash(original)) &amp; mask]) == null)<a name="line.2617"></a>
 <span class="sourceLineNo">2618</span>            return put(replacement, null);<a name="line.2618"></a>
-<span class="sourceLineNo">2619</span>        if (original.equals(curr))<a name="line.2619"></a>
+<span class="sourceLineNo">2619</span>        if (hasher.areEqual(original, curr))<a name="line.2619"></a>
 <span class="sourceLineNo">2620</span>            return alterEntry(pos, replacement);<a name="line.2620"></a>
 <span class="sourceLineNo">2621</span>        while (true) {<a name="line.2621"></a>
 <span class="sourceLineNo">2622</span>            if ((curr = key[pos = (pos + 1) &amp; mask]) == null)<a name="line.2622"></a>
 <span class="sourceLineNo">2623</span>                return put(replacement, null);<a name="line.2623"></a>
-<span class="sourceLineNo">2624</span>            if (original.equals(curr))<a name="line.2624"></a>
+<span class="sourceLineNo">2624</span>            if (hasher.areEqual(original, curr))<a name="line.2624"></a>
 <span class="sourceLineNo">2625</span>                return alterEntry(pos, replacement);<a name="line.2625"></a>
 <span class="sourceLineNo">2626</span>        }<a name="line.2626"></a>
 <span class="sourceLineNo">2627</span>    }<a name="line.2627"></a>

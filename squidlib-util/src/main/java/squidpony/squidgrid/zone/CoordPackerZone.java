@@ -3,8 +3,10 @@ package squidpony.squidgrid.zone;
 import squidpony.squidgrid.zone.Zone.Skeleton;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.CoordPacker;
+import squidpony.squidmath.CrossHash;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -68,4 +70,19 @@ public class CoordPackerZone extends Skeleton implements ImmutableZone {
 	public String toString() {
 		return (unpacked == null ? shorts : unpacked).toString();
 	}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CoordPackerZone that = (CoordPackerZone) o;
+
+        return Arrays.equals(shorts, that.shorts);
+    }
+
+    @Override
+    public int hashCode() {
+        return CrossHash.Falcon.hash(shorts);
+    }
 }
