@@ -3,6 +3,8 @@ package squidpony.squidmath;
 import squidpony.annotation.Beta;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Simple hashing functions that we can rely on staying the same cross-platform.
@@ -595,6 +597,20 @@ public class CrossHash {
 
     public interface IHasher extends Serializable {
         int hash(final Object data);
+        boolean areEqual(final Object left, final Object right);
+    }
+
+    private static boolean equalityHelper(Object[] left, Object[] right, IHasher inner)
+    {
+        if(left == right)
+            return true;
+        if((left == null) ^ (right == null))
+            return false;
+        for (int i = 0; i < left.length && i < right.length; i++) {
+            if(!inner.areEqual(left[i], right[i]))
+                return false;
+        }
+        return true;
     }
 
     private static class BooleanHasher implements IHasher {
@@ -603,6 +619,13 @@ public class CrossHash {
 
         public int hash(final Object data) {
             return (data instanceof boolean[]) ? CrossHash.hash((boolean[]) data) : data.hashCode();
+        }
+
+        @Override
+        public boolean areEqual(Object left, Object right) {
+            if(left == right)
+                return true;
+            return (left instanceof boolean[] && right instanceof boolean[]) ? Arrays.equals((boolean[]) left, (boolean[])right) : Objects.equals(left, right);
         }
     }
 
@@ -613,7 +636,14 @@ public class CrossHash {
         }
 
         public int hash(final Object data) {
-            return (data instanceof byte[]) ? CrossHash.hash((byte[]) data) : data.hashCode();
+            return (data instanceof byte[]) ? CrossHash.Lightning.hash((byte[]) data) : data.hashCode();
+        }
+
+        @Override
+        public boolean areEqual(Object left, Object right) {
+            if(left == right)
+                return true;
+            return (left instanceof byte[] && right instanceof byte[]) ? Arrays.equals((byte[]) left, (byte[])right) : Objects.equals(left, right);
         }
     }
 
@@ -624,7 +654,14 @@ public class CrossHash {
         }
 
         public int hash(final Object data) {
-            return (data instanceof short[]) ? CrossHash.hash((short[]) data) : data.hashCode();
+            return (data instanceof short[]) ? CrossHash.Lightning.hash((short[]) data) : data.hashCode();
+        }
+
+        @Override
+        public boolean areEqual(Object left, Object right) {
+            if(left == right)
+                return true;
+            return (left instanceof short[] && right instanceof short[]) ? Arrays.equals((short[]) left, (short[])right) : Objects.equals(left, right);
         }
     }
 
@@ -635,7 +672,14 @@ public class CrossHash {
         }
 
         public int hash(final Object data) {
-            return (data instanceof char[]) ? CrossHash.hash((char[]) data) : data.hashCode();
+            return (data instanceof char[]) ? CrossHash.Lightning.hash((char[]) data) : data.hashCode();
+        }
+
+        @Override
+        public boolean areEqual(Object left, Object right) {
+            if(left == right)
+                return true;
+            return (left instanceof char[] && right instanceof char[]) ? Arrays.equals((char[]) left, (char[])right) : Objects.equals(left, right);
         }
     }
 
@@ -646,7 +690,12 @@ public class CrossHash {
         }
 
         public int hash(final Object data) {
-            return (data instanceof int[]) ? CrossHash.hash((int[]) data) : data.hashCode();
+            return (data instanceof int[]) ? CrossHash.Lightning.hash((int[]) data) : data.hashCode();
+        }
+
+        @Override
+        public boolean areEqual(Object left, Object right) {
+            return (left instanceof int[] && right instanceof int[]) ? Arrays.equals((int[]) left, (int[])right) : Objects.equals(left, right);
         }
     }
 
@@ -657,7 +706,12 @@ public class CrossHash {
         }
 
         public int hash(final Object data) {
-            return (data instanceof long[]) ? CrossHash.hash((long[]) data) : data.hashCode();
+            return (data instanceof long[]) ? CrossHash.Lightning.hash((long[]) data) : data.hashCode();
+        }
+
+        @Override
+        public boolean areEqual(Object left, Object right) {
+            return (left instanceof long[] && right instanceof long[]) ? Arrays.equals((long[]) left, (long[])right) : Objects.equals(left, right);
         }
     }
 
@@ -668,7 +722,14 @@ public class CrossHash {
         }
 
         public int hash(final Object data) {
-            return (data instanceof float[]) ? CrossHash.hash((float[]) data) : data.hashCode();
+            return (data instanceof float[]) ? CrossHash.Lightning.hash((float[]) data) : data.hashCode();
+        }
+
+        @Override
+        public boolean areEqual(Object left, Object right) {
+            if(left == right)
+                return true;
+            return (left instanceof float[] && right instanceof float[]) ? Arrays.equals((float[]) left, (float[])right) : Objects.equals(left, right);
         }
     }
 
@@ -679,7 +740,14 @@ public class CrossHash {
         }
 
         public int hash(final Object data) {
-            return (data instanceof double[]) ? CrossHash.hash((double[]) data) : data.hashCode();
+            return (data instanceof double[]) ? CrossHash.Lightning.hash((double[]) data) : data.hashCode();
+        }
+
+        @Override
+        public boolean areEqual(Object left, Object right) {
+            if(left == right)
+                return true;
+            return (left instanceof double[] && right instanceof double[]) ? Arrays.equals((double[]) left, (double[])right) : Objects.equals(left, right);
         }
     }
 
@@ -690,7 +758,14 @@ public class CrossHash {
         }
 
         public int hash(final Object data) {
-            return (data instanceof char[][]) ? CrossHash.hash((char[][]) data) : data.hashCode();
+            return (data instanceof char[][]) ? CrossHash.Lightning.hash((char[][]) data) : data.hashCode();
+        }
+
+        @Override
+        public boolean areEqual(Object left, Object right) {
+            if(left == right)
+                return true;
+            return (left instanceof char[][] && right instanceof char[][]) ? equalityHelper((char[][]) left,(char[][]) right, charHasher) : Objects.equals(left, right);
         }
     }
 
@@ -701,7 +776,12 @@ public class CrossHash {
         }
 
         public int hash(final Object data) {
-            return (data instanceof CharSequence) ? CrossHash.hash((CharSequence) data) : data.hashCode();
+            return (data instanceof CharSequence) ? CrossHash.Lightning.hash((CharSequence) data) : data.hashCode();
+        }
+
+        @Override
+        public boolean areEqual(Object left, Object right) {
+            return Objects.equals(left, right);
         }
     }
 
@@ -712,7 +792,14 @@ public class CrossHash {
         }
 
         public int hash(final Object data) {
-            return (data instanceof CharSequence[]) ? CrossHash.hash((CharSequence[]) data) : data.hashCode();
+            return (data instanceof CharSequence[]) ? CrossHash.Lightning.hash((CharSequence[]) data) : data.hashCode();
+        }
+
+        @Override
+        public boolean areEqual(Object left, Object right) {
+            if(left == right)
+                return true;
+            return (left instanceof CharSequence[] && right instanceof CharSequence[]) ? equalityHelper((CharSequence[]) left,(CharSequence[]) right, stringHasher) : Objects.equals(left, right);
         }
     }
 
@@ -724,6 +811,11 @@ public class CrossHash {
 
         public int hash(final Object data) {
             return data.hashCode();
+        }
+
+        @Override
+        public boolean areEqual(Object left, Object right) {
+            return Objects.equals(left, right);
         }
     }
 

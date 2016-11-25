@@ -479,10 +479,10 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             final K[] key = this.key;
             // The starting point.
             if (!((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)) {
-                if (curr.equals(k))
+                if (hasher.areEqual(curr, k))
                     return false;
                 while (!((curr = key[pos = (pos + 1) & mask]) == null))
-                    if (curr.equals(k))
+                    if (hasher.areEqual(curr, k))
                         return false;
             }
             key[pos] = k;
@@ -523,10 +523,10 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             final K[] key = this.key;
             // The starting point.
             if (!((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)) {
-                if (curr.equals(k))
+                if (hasher.areEqual(curr, k))
                     return curr;
                 while (!((curr = key[pos = (pos + 1) & mask]) == null))
-                    if (curr.equals(k))
+                    if (hasher.areEqual(curr, k))
                         return curr;
             }
             key[pos] = k;
@@ -605,12 +605,12 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         // The starting point.
         if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
             return false;
-        if (k.equals(curr))
+        if (hasher.areEqual(k, curr))
             return removeEntry(pos);
         while (true) {
             if ((curr = key[pos = (pos + 1) & mask]) == null)
                 return false;
-            if (k.equals(curr))
+            if (hasher.areEqual(k, curr))
                 return removeEntry(pos);
         }
     }
@@ -750,7 +750,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             final K key[] = this.key;
             pos = HashCommon.mix(hasher.hash(k)) & mask;
             while (!(key[pos] == null)) {
-                if (k.equals(key[pos])) {
+                if (hasher.areEqual(k, key[pos])) {
                     moveIndexToFirst(pos);
                     return false;
                 }
@@ -795,7 +795,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             pos = HashCommon.mix(hasher.hash(k)) & mask;
             // There's always an unused entry.
             while (!(key[pos] == null)) {
-                if (k.equals(key[pos])) {
+                if (hasher.areEqual(k, key[pos])) {
                     moveIndexToLast(pos);
                     return false;
                 }
@@ -835,13 +835,13 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         // The starting point.
         if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
             return null;
-        if (k.equals(curr))
+        if (hasher.areEqual(k, curr))
             return curr;
         // There's always an unused entry.
         while (true) {
             if ((curr = key[pos = (pos + 1) & mask]) == null)
                 return null;
-            if (k.equals(curr))
+            if (hasher.areEqual(k, curr))
                 return curr;
         }
     }
@@ -855,13 +855,13 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         // The starting point.
         if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
             return false;
-        if (k.equals(curr))
+        if (hasher.areEqual(k, curr))
             return true;
         // There's always an unused entry.
         while (true) {
             if ((curr = key[pos = (pos + 1) & mask]) == null)
                 return false;
-            if (k.equals(curr))
+            if (hasher.areEqual(k, curr))
                 return true;
         }
     }
@@ -1852,10 +1852,10 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             key[pos] = null;
             // The starting point.
             if (!((curr = key[rep = HashCommon.mix(hasher.hash(replacement)) & mask]) == null)) {
-                if (curr.equals(replacement))
+                if (hasher.areEqual(curr, replacement))
                     return false;
                 while (!((curr = key[rep = (rep + 1) & mask]) == null))
-                    if (curr.equals(replacement))
+                    if (hasher.areEqual(curr, replacement))
                         return false;
             }
             key[rep] = replacement;
@@ -1875,10 +1875,10 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             final K[] key = this.key;
             // The starting point.
             if (!((curr = key[rep = HashCommon.mix(hasher.hash(replacement)) & mask]) == null)) {
-                if (curr.equals(replacement))
+                if (hasher.areEqual(curr, replacement))
                     return false;
                 while (!((curr = key[rep = (rep + 1) & mask]) == null))
-                    if (curr.equals(replacement))
+                    if (hasher.areEqual(curr, replacement))
                         return false;
             }
             key[rep] = replacement;
@@ -1902,7 +1902,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             else
                 return add(replacement);
         }
-        else if(original.equals(replacement))
+        else if(hasher.areEqual(original, replacement))
             return false;
         K curr;
         final K[] key = this.key;
@@ -1910,12 +1910,12 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         // The starting point.
         if ((curr = key[pos = HashCommon.mix(hasher.hash(original)) & mask]) == null)
             return add(replacement);
-        if (original.equals(curr))
+        if (hasher.areEqual(original, curr))
             return alterEntry(pos, replacement);
         while (true) {
             if ((curr = key[pos = (pos + 1) & mask]) == null)
                 return add(replacement);
-            if (original.equals(curr))
+            if (hasher.areEqual(original, curr))
                 return alterEntry(pos, replacement);
         }
     }
