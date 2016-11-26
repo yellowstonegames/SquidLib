@@ -1,6 +1,7 @@
 package squidpony.squidmath;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -109,8 +110,8 @@ public class RegionMap<V> extends OrderedMap<short[], V> implements Serializable
      * @param y the y coordinate of the point in question
      * @return an ArrayList of all V values corresponding to regions containing the given x,y point.
      */
-    public OrderedSet<V> allAt(int x, int y) {
-        OrderedSet<V> found = new OrderedSet<>(size);
+    public ArrayList<V> allAt(int x, int y) {
+        ArrayList<V> found = new ArrayList<>(size);
         OrderedSet<short[]> regions = CoordPacker.findManyPacked(x, y, keySet());
         int count = regions.size;
         for (int i = 0; i < count; i++) {

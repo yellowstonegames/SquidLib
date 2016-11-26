@@ -159,8 +159,16 @@ public abstract class Adjacency implements Serializable {
     public String show(int data)
     {
         if(data < 0)
-            return "(-,-,-)";
-        return "(" + extractX(data) + ',' + extractY(data) + ',' + extractR(data) + ')';
+            return "(-)";
+        if(rotations <= 1)
+        {
+            if(depths <= 1)
+                return "(" + extractX(data) + ',' + extractY(data) + ')';
+            return "(" + extractX(data) + ',' + extractY(data) + ',' + extractN(data) + ')';
+        }
+        if(depths <= 1)
+            return "(" + extractX(data) + ',' + extractY(data) + ',' + extractR(data) + ')';
+        return "(" + extractX(data) + ',' + extractY(data) + ',' + extractR(data) + ',' + extractN(data) + ')';
     }
     public String showMap(int[] map, int r)
     {
