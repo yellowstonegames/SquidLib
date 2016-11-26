@@ -1404,7 +1404,7 @@
 <span class="sourceLineNo">1396</span>                if (onlyPassable.contains(currentPos)) {<a name="line.1396"></a>
 <span class="sourceLineNo">1397</span>                    closed.put(currentPos.encode(), WALL);<a name="line.1397"></a>
 <span class="sourceLineNo">1398</span>                    impassable2.add(currentPos);<a name="line.1398"></a>
-<span class="sourceLineNo">1399</span>                    return findPath(length, impassable2, onlyPassable, start, targets);<a name="line.1399"></a>
+<span class="sourceLineNo">1399</span>                    return findPath(length, scanLimit, impassable2, onlyPassable, start, targets);<a name="line.1399"></a>
 <span class="sourceLineNo">1400</span>                }<a name="line.1400"></a>
 <span class="sourceLineNo">1401</span>                break;<a name="line.1401"></a>
 <span class="sourceLineNo">1402</span>            }<a name="line.1402"></a>
@@ -2833,7 +2833,7 @@
 <span class="sourceLineNo">2825</span>     * each call to a pathfinding method.<a name="line.2825"></a>
 <span class="sourceLineNo">2826</span>     *<a name="line.2826"></a>
 <span class="sourceLineNo">2827</span>     * @param length            the length of the path to calculate<a name="line.2827"></a>
-<span class="sourceLineNo">2828</span>     * @param scanLimit         how many cells away from a fear source to calculate; negative scans the whole map<a name="line.2828"></a>
+<span class="sourceLineNo">2828</span>     * @param scanLimit         how many steps away from a fear source to calculate; negative scans the whole map<a name="line.2828"></a>
 <span class="sourceLineNo">2829</span>     * @param preferLongerPaths Set this to 1.2 if you aren't sure; it will probably need tweaking for different maps.<a name="line.2829"></a>
 <span class="sourceLineNo">2830</span>     * @param impassable        a Set of impassable Coord positions that may change (not constant like walls); can be null<a name="line.2830"></a>
 <span class="sourceLineNo">2831</span>     * @param onlyPassable      a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null<a name="line.2831"></a>
@@ -2928,7 +2928,7 @@
 <span class="sourceLineNo">2920</span><a name="line.2920"></a>
 <span class="sourceLineNo">2921</span>                    closed.put(currentPos.encode(), WALL);<a name="line.2921"></a>
 <span class="sourceLineNo">2922</span>                    impassable2.add(currentPos);<a name="line.2922"></a>
-<span class="sourceLineNo">2923</span>                    return findFleePath(length, preferLongerPaths, impassable2, onlyPassable, start, fearSources);<a name="line.2923"></a>
+<span class="sourceLineNo">2923</span>                    return findFleePath(length, scanLimit, preferLongerPaths, impassable2, onlyPassable, start, fearSources);<a name="line.2923"></a>
 <span class="sourceLineNo">2924</span>                }<a name="line.2924"></a>
 <span class="sourceLineNo">2925</span>                break;<a name="line.2925"></a>
 <span class="sourceLineNo">2926</span>            }<a name="line.2926"></a>

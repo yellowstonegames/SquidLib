@@ -1396,7 +1396,7 @@ public class DijkstraMap implements Serializable {
                 if (onlyPassable.contains(currentPos)) {
                     closed.put(currentPos.encode(), WALL);
                     impassable2.add(currentPos);
-                    return findPath(length, impassable2, onlyPassable, start, targets);
+                    return findPath(length, scanLimit, impassable2, onlyPassable, start, targets);
                 }
                 break;
             }
@@ -2825,7 +2825,7 @@ public class DijkstraMap implements Serializable {
      * each call to a pathfinding method.
      *
      * @param length            the length of the path to calculate
-     * @param scanLimit         how many cells away from a fear source to calculate; negative scans the whole map
+     * @param scanLimit         how many steps away from a fear source to calculate; negative scans the whole map
      * @param preferLongerPaths Set this to 1.2 if you aren't sure; it will probably need tweaking for different maps.
      * @param impassable        a Set of impassable Coord positions that may change (not constant like walls); can be null
      * @param onlyPassable      a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
@@ -2920,7 +2920,7 @@ public class DijkstraMap implements Serializable {
 
                     closed.put(currentPos.encode(), WALL);
                     impassable2.add(currentPos);
-                    return findFleePath(length, preferLongerPaths, impassable2, onlyPassable, start, fearSources);
+                    return findFleePath(length, scanLimit, preferLongerPaths, impassable2, onlyPassable, start, fearSources);
                 }
                 break;
             }

@@ -140,13 +140,13 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
-<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#findFleePathLarge-int-int-double-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findFleePathLarge</a></span>(int&nbsp;size,
-                 int&nbsp;length,
-                 double&nbsp;preferLongerPaths,
-                 <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable,
-                 <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;onlyPassable,
-                 int&nbsp;start,
-                 int...&nbsp;fearSources)</code>
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#findFleePath-int-int-double-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findFleePath</a></span>(int&nbsp;length,
+            int&nbsp;scanLimit,
+            double&nbsp;preferLongerPaths,
+            <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable,
+            <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;onlyPassable,
+            int&nbsp;start,
+            int...&nbsp;fearSources)</code>
 <div class="block">Scans the dungeon using CustomDijkstraMap.scan with the listed fearSources and start point, and returns a list
  of Coord positions (using Manhattan distance) needed to get further from the closest fearSources, meant
  for running away.</div>
@@ -154,12 +154,68 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#findFleePathLarge-int-int-double-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findFleePathLarge</a></span>(int&nbsp;size,
+                 int&nbsp;length,
+                 double&nbsp;preferLongerPaths,
+                 <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable,
+                 <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;onlyPassable,
+                 int&nbsp;start,
+                 int...&nbsp;fearSources)</code>
+<div class="block">Scans the dungeon using CustomDijkstraMap.scanLarge with the listed fearSources and start point, and returns a list
+ of Coord positions (using Manhattan distance) needed to get further from the closest fearSources, meant
+ for running away.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#findFleePathLarge-int-int-int-double-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findFleePathLarge</a></span>(int&nbsp;size,
+                 int&nbsp;length,
+                 int&nbsp;scanLimit,
+                 double&nbsp;preferLongerPaths,
+                 <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable,
+                 <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;onlyPassable,
+                 int&nbsp;start,
+                 int...&nbsp;fearSources)</code>
+<div class="block">Scans the dungeon using CustomDijkstraMap.scanLarge with the listed fearSources and start point, and returns a list
+ of Coord positions (using Manhattan distance) needed to get further from the closest fearSources, meant
+ for running away.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#findPath-int-int-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findPath</a></span>(int&nbsp;length,
+        int&nbsp;scanLimit,
+        <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable,
+        <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;onlyPassable,
+        int&nbsp;start,
+        int...&nbsp;targets)</code>
+<div class="block">Scans the dungeon using CustomDijkstraMap.scan with the listed goals and start point, and returns a list
+ of Coord positions (using the current measurement) needed to get closer to the closest reachable
+ goal.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#findPath-int-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findPath</a></span>(int&nbsp;length,
         <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable,
         <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;onlyPassable,
         int&nbsp;start,
         int...&nbsp;targets)</code>
 <div class="block">Scans the dungeon using CustomDijkstraMap.scan with the listed goals and start point, and returns a list
+ of Coord positions (using the current measurement) needed to get closer to the closest reachable
+ goal.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#findPathLarge-int-int-int-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findPathLarge</a></span>(int&nbsp;size,
+             int&nbsp;length,
+             int&nbsp;scanLimit,
+             <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable,
+             <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;onlyPassable,
+             int&nbsp;start,
+             int...&nbsp;targets)</code>
+<div class="block">Scans the dungeon using CustomDijkstraMap.scanLarge with the listed goals and start point, and returns a list
  of Coord positions (using the current measurement) needed to get closer to the closest reachable
  goal.</div>
 </td>
@@ -201,13 +257,13 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
-<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#findFleePathLarge-int-int-double-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findFleePathLarge</a></span>(int&nbsp;size,
-                 int&nbsp;length,
-                 double&nbsp;preferLongerPaths,
-                 <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable,
-                 <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;onlyPassable,
-                 int&nbsp;start,
-                 int...&nbsp;fearSources)</code>
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#findFleePath-int-int-double-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findFleePath</a></span>(int&nbsp;length,
+            int&nbsp;scanLimit,
+            double&nbsp;preferLongerPaths,
+            <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable,
+            <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;onlyPassable,
+            int&nbsp;start,
+            int...&nbsp;fearSources)</code>
 <div class="block">Scans the dungeon using CustomDijkstraMap.scan with the listed fearSources and start point, and returns a list
  of Coord positions (using Manhattan distance) needed to get further from the closest fearSources, meant
  for running away.</div>
@@ -215,12 +271,68 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#findFleePathLarge-int-int-double-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findFleePathLarge</a></span>(int&nbsp;size,
+                 int&nbsp;length,
+                 double&nbsp;preferLongerPaths,
+                 <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable,
+                 <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;onlyPassable,
+                 int&nbsp;start,
+                 int...&nbsp;fearSources)</code>
+<div class="block">Scans the dungeon using CustomDijkstraMap.scanLarge with the listed fearSources and start point, and returns a list
+ of Coord positions (using Manhattan distance) needed to get further from the closest fearSources, meant
+ for running away.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#findFleePathLarge-int-int-int-double-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findFleePathLarge</a></span>(int&nbsp;size,
+                 int&nbsp;length,
+                 int&nbsp;scanLimit,
+                 double&nbsp;preferLongerPaths,
+                 <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable,
+                 <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;onlyPassable,
+                 int&nbsp;start,
+                 int...&nbsp;fearSources)</code>
+<div class="block">Scans the dungeon using CustomDijkstraMap.scanLarge with the listed fearSources and start point, and returns a list
+ of Coord positions (using Manhattan distance) needed to get further from the closest fearSources, meant
+ for running away.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#findPath-int-int-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findPath</a></span>(int&nbsp;length,
+        int&nbsp;scanLimit,
+        <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable,
+        <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;onlyPassable,
+        int&nbsp;start,
+        int...&nbsp;targets)</code>
+<div class="block">Scans the dungeon using CustomDijkstraMap.scan with the listed goals and start point, and returns a list
+ of Coord positions (using the current measurement) needed to get closer to the closest reachable
+ goal.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#findPath-int-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findPath</a></span>(int&nbsp;length,
         <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable,
         <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;onlyPassable,
         int&nbsp;start,
         int...&nbsp;targets)</code>
 <div class="block">Scans the dungeon using CustomDijkstraMap.scan with the listed goals and start point, and returns a list
+ of Coord positions (using the current measurement) needed to get closer to the closest reachable
+ goal.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#findPathLarge-int-int-int-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findPathLarge</a></span>(int&nbsp;size,
+             int&nbsp;length,
+             int&nbsp;scanLimit,
+             <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable,
+             <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;onlyPassable,
+             int&nbsp;start,
+             int...&nbsp;targets)</code>
+<div class="block">Scans the dungeon using CustomDijkstraMap.scanLarge with the listed goals and start point, and returns a list
  of Coord positions (using the current measurement) needed to get closer to the closest reachable
  goal.</div>
 </td>
@@ -236,6 +348,38 @@
 <div class="block">Scans the dungeon using CustomDijkstraMap.scan with the listed goals and start point, and returns a list
  of Coord positions (using the current measurement) needed to get closer to the closest reachable
  goal.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>double[]</code></td>
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#partialScan-int-squidpony.squidmath.IntVLA-int-">partialScan</a></span>(int&nbsp;limit,
+           <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable,
+           int&nbsp;usablePortion)</code>
+<div class="block">Recalculate the CustomDijkstra map up to a limit and return it.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>double[]</code></td>
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#partialScanLarge-int-int-squidpony.squidmath.IntVLA-int-">partialScanLarge</a></span>(int&nbsp;size,
+                int&nbsp;limit,
+                <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable,
+                int&nbsp;usablePortion)</code>
+<div class="block">Recalculate the CustomDijkstra map up to a limit and return it.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>double[]</code></td>
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#scan-squidpony.squidmath.IntVLA-int-">scan</a></span>(<a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable,
+    int&nbsp;usablePortion)</code>
+<div class="block">Recalculate the CustomDijkstra map and return it.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>double[]</code></td>
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#scanLarge-int-squidpony.squidmath.IntVLA-int-">scanLarge</a></span>(int&nbsp;size,
+         <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable,
+         int&nbsp;usablePortion)</code>
+<div class="block">Recalculate the CustomDijkstra map for a creature that is potentially larger than 1x1 cell and return it.</div>
 </td>
 </tr>
 </tbody>
