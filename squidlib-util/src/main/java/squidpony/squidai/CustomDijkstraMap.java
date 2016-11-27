@@ -110,6 +110,7 @@ public class CustomDijkstraMap implements Serializable {
     private boolean initialized = false;
 
     private int mappedCount = 0;
+    private double[] heuristics;
 
     /**
      * Construct a CustomDijkstraMap without a level to actually scan. If you use this constructor, you must call an
@@ -271,6 +272,10 @@ public class CustomDijkstraMap implements Serializable {
         adjacency.costRules.putAndMoveToFirst('#', WALL);
 
         neighbors = adjacency.neighborMaps();
+        heuristics = new double[adjacency.directions.length];
+        for (int i = 0; i < heuristics.length; i++) {
+            heuristics[i] = adjacency.measurement.heuristic(adjacency.directions[i]);
+        }
         initialized = true;
         return this;
     }
@@ -320,7 +325,10 @@ public class CustomDijkstraMap implements Serializable {
             }
         }
         neighbors = adjacency.neighborMaps();
-        initialized = true;
+        heuristics = new double[adjacency.directions.length];
+        for (int i = 0; i < heuristics.length; i++) {
+            heuristics[i] = adjacency.measurement.heuristic(adjacency.directions[i]);
+        }initialized = true;
         return this;
     }
 
@@ -553,7 +561,7 @@ public class CustomDijkstraMap implements Serializable {
             closed.remove(entry.getIntKey());
             gradientMap[entry.getIntKey()] = entry.getDoubleValue();
         }
-        double currentLowest = 999000, cs;
+        double currentLowest = 999000, cs, csm;
         IntDoubleOrderedMap lowest = new IntDoubleOrderedMap();
         int maxLength = gradientMap.length;
         for (int l = 0; l < maxLength; l++) {
@@ -590,16 +598,18 @@ public class CustomDijkstraMap implements Serializable {
                             continue;
                         if(adjacency.isBlocked(mid, d, neighbors, gradientMap, WALL))
                             continue;
-                        cs = lowest.get(costMap[near]);
-                        if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[mid] + cs < gradientMap[near]) {
-                            setFresh(near, cell.getDoubleValue() + cs);
+                        csm = lowest.get(costMap[mid]) * heuristics[d];
+                        cs = lowest.get(costMap[near]) * heuristics[d];
+                        if (!closed.containsKey(near) && !open.containsKey(near) &&
+                                (gradientMap[mid] = cell.getDoubleValue() + csm) + cs < gradientMap[near]) {
+                            setFresh(near, cell.getDoubleValue() + cs + csm);
                             ++numAssigned;
                             ++mappedCount;
                         }
                     }
                     else
                     {
-                        cs = lowest.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000));
+                        cs = lowest.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000)) * heuristics[d];
                         //double h = adjacency.measurement.heuristic(adjacency.directions[d]);
                         if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[cen] + cs < gradientMap[near]) {
                             setFresh(near, cell.getDoubleValue() + cs);
@@ -685,7 +695,7 @@ public class CustomDijkstraMap implements Serializable {
             closed.remove(entry.getIntKey());
             gradientMap[entry.getIntKey()] = entry.getDoubleValue();
         }
-        double currentLowest = 999000, cs;
+        double currentLowest = 999000, cs, csm;
         IntDoubleOrderedMap lowest = new IntDoubleOrderedMap();
         int maxLength = gradientMap.length;
         for (int l = 0; l < maxLength; l++) {
@@ -704,7 +714,7 @@ public class CustomDijkstraMap implements Serializable {
         open.putAll(lowest);
         lowest = adjacency.costRules;
         int iter = 0;
-        while (numAssigned > 0 && iter < limit) {
+        while (numAssigned > 0 && iter++ < limit) {
             numAssigned = 0;
 
             for (IntDoubleOrderedMap.MapEntry cell : open.mapEntrySet()) {
@@ -718,21 +728,23 @@ public class CustomDijkstraMap implements Serializable {
                         continue;
                     if(adjacency.twoStepRule) {
                         near = fromNeighbors[d][mid = near];
+                        // Outside the map
                         if (!adjacency.validate(near))
-                            // Outside the map
                             continue;
                         if(adjacency.isBlocked(mid, d, neighbors, gradientMap, WALL))
                             continue;
-                        cs = lowest.get(costMap[near]);
-                        if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[mid] + cs < gradientMap[near]) {
-                            setFresh(near, cell.getDoubleValue() + cs);
+                        csm = lowest.get(costMap[mid]) * heuristics[d];
+                        cs = lowest.get(costMap[near]) * heuristics[d];
+                        if (!closed.containsKey(near) && !open.containsKey(near) &&
+                                (gradientMap[mid] = cell.getDoubleValue() + csm) + cs < gradientMap[near]) {
+                            setFresh(near, cell.getDoubleValue() + cs + csm);
                             ++numAssigned;
                             ++mappedCount;
                         }
                     }
                     else
                     {
-                        cs = lowest.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000));
+                        cs = lowest.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000)) * heuristics[d];
                         //double h = adjacency.measurement.heuristic(adjacency.directions[d]);
                         if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[cen] + cs < gradientMap[near]) {
                             setFresh(near, cell.getDoubleValue() + cs);
@@ -745,7 +757,6 @@ public class CustomDijkstraMap implements Serializable {
             open.clear();
             open.putAll(fresh);
             fresh.clear();
-            iter++;
         }
         closed.clear();
         open.clear();
@@ -1103,7 +1114,7 @@ public class CustomDijkstraMap implements Serializable {
                 }
             }
         }
-        double currentLowest = 999000, cs;
+        double currentLowest = 999000, cs, csm;
         IntDoubleOrderedMap lowest = new IntDoubleOrderedMap();
         int maxLength = gradientMap.length;
         for (int l = 0; l < maxLength; l++) {
@@ -1145,21 +1156,21 @@ public class CustomDijkstraMap implements Serializable {
                     //    continue;
                     if(adjacency.twoStepRule) {
                         near = fromNeighbors[d][mid = near];
+                        // Outside the map
                         if (!adjacency.validate(near))
-                            // Outside the map
                             continue;
-                        //if(adjacency.isBlocked(mid, d, neighbors, gradientMap, WALL))
-                        //    continue;
-                        cs = lowest.get(costMap[near]);
-                        if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[mid] + cs < gradientMap[near]) {
-                            setFresh(near, cell.getDoubleValue() + cs);
+                        csm = lowest.get(costMap[mid]) * heuristics[d];
+                        cs = lowest.get(costMap[near]) * heuristics[d];
+                        if (!closed.containsKey(near) && !open.containsKey(near) &&
+                                (gradientMap[mid] = cell.getDoubleValue() + csm) + cs < gradientMap[near]) {
+                            setFresh(near, cell.getDoubleValue() + cs + csm);
                             ++numAssigned;
                             ++mappedCount;
                         }
                     }
                     else
                     {
-                        cs = lowest.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000));
+                        cs = lowest.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000)) * heuristics[d];
                         //double h = adjacency.measurement.heuristic(adjacency.directions[d]);
                         if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[cen] + cs < gradientMap[near]) {
                             setFresh(near, cell.getDoubleValue() + cs);
@@ -1262,7 +1273,7 @@ public class CustomDijkstraMap implements Serializable {
                 }
             }
         }
-        double currentLowest = 999000, cs;
+        double currentLowest = 999000, cs, csm;
         IntDoubleOrderedMap lowest = new IntDoubleOrderedMap();
         int maxLength = gradientMap.length;
         for (int l = 0; l < maxLength; l++) {
@@ -1306,21 +1317,21 @@ public class CustomDijkstraMap implements Serializable {
                     //    continue;
                     if(adjacency.twoStepRule) {
                         near = fromNeighbors[d][mid = near];
+                        // Outside the map
                         if (!adjacency.validate(near))
-                            // Outside the map
                             continue;
-                        //if(adjacency.isBlocked(mid, d, neighbors, gradientMap, WALL))
-                        //    continue;
-                        cs = lowest.get(costMap[near]);
-                        if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[mid] + cs < gradientMap[near]) {
-                            setFresh(near, cell.getDoubleValue() + cs);
+                        csm = lowest.get(costMap[mid]) * heuristics[d];
+                        cs = lowest.get(costMap[near]) * heuristics[d];
+                        if (!closed.containsKey(near) && !open.containsKey(near) &&
+                                (gradientMap[mid] = cell.getDoubleValue() + csm) + cs < gradientMap[near]) {
+                            setFresh(near, cell.getDoubleValue() + cs + csm);
                             ++numAssigned;
                             ++mappedCount;
                         }
                     }
                     else
                     {
-                        cs = lowest.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000));
+                        cs = lowest.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000)) * heuristics[d];
                         //double h = adjacency.measurement.heuristic(adjacency.directions[d]);
                         if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[cen] + cs < gradientMap[near]) {
                             setFresh(near, cell.getDoubleValue() + cs);
@@ -1558,6 +1569,8 @@ public class CustomDijkstraMap implements Serializable {
 
             for (int d = 0; d < adjacency.maxAdjacent; d++) {
                 pt = toNeighbors[reuse[d]][currentPos];
+                if(adjacency.twoStepRule)
+                    pt = toNeighbors[reuse[d]][pt];
                 if (gradientMap[pt] < best && !path.contains(pt)) {
                     best = gradientMap[pt];
                     choice = reuse[d];// adjacency.invertAdjacent[reuse[d]];
@@ -1569,6 +1582,8 @@ public class CustomDijkstraMap implements Serializable {
                 break;
             }
             currentPos = toNeighbors[choice][pt = currentPos];
+            if(adjacency.twoStepRule)
+                currentPos = toNeighbors[choice][currentPos];
             path.add(currentPos);
             paidLength += adjacency.costRules.get(costMap[currentPos] | (adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000));
             frustration++;
