@@ -168,24 +168,25 @@ public class ThinWallDemo extends ApplicationAdapter {
         //These need to have their positions set before adding any entities if there is an offset involved.
         messages.setBounds(0, 0, cellWidth * width, cellHeight * (messageHeight+1));
         display.setPosition(0, messages.getHeight());
-        messages.appendWrappingMessage("You are the purple '^', and enemies are red. Click a cell to turn and move. " +
-                "Use ? for help, f to change colors, q to quit. " +
+        messages.appendWrappingMessage("You are the orange '@', and enemies are red. Click/tap a cell to move. " +
+                "Use ? for help, q to quit. " +
                 "Click the top or bottom border of this box to scroll.");
         counter = 0;
 
-        dungeonGen = new ThinDungeonGenerator(width, height, rng, ROOM_WALL_EXPAND, CORRIDOR_WALL_EXPAND, CAVE_WALL_CHAOTIC);
+        dungeonGen = new ThinDungeonGenerator(width, height, rng, ROOM_WALL_RETRACT, CORRIDOR_WALL_RETRACT, CAVE_WALL_RETRACT);
         dungeonGen.addWater(0, 25, 6);
         dungeonGen.addGrass(MixedGenerator.CAVE_FLOOR, 20);
         dungeonGen.addBoulders(0, 7);
-        dungeonGen.addDoors(18, false);
+        dungeonGen.addDoors(38, false);
         SerpentMapGenerator serpent = new SerpentMapGenerator(width, height, rng);
-        serpent.putCaveCarvers(3);
+        //serpent.putCaveCarvers(3);
         serpent.putWalledBoxRoomCarvers(3);
         serpent.putWalledRoundRoomCarvers(2);
         char[][] mg = serpent.generate();
         decoDungeon = dungeonGen.generate(mg, serpent.getEnvironment());
         bareDungeon = dungeonGen.getBareDungeon();
         lineDungeon = DungeonUtility.hashesToLines(dungeonGen.getDungeon(), true);
+        //lineDungeon = dungeonGen.getDungeon();
         /*
         decoDungeon = new char[][]{
                 {'#','#','#','#',},
@@ -210,7 +211,7 @@ public class ThinWallDemo extends ApplicationAdapter {
         */
 
         // it's more efficient to get random floors from a packed set containing only (compressed) floor positions.
-        final GreasedRegion placement = new GreasedRegion(bareDungeon, '.');
+        final GreasedRegion placement = new GreasedRegion(decoDungeon, '.');
         final Coord pl = placement.singleRandom(rng).makeEven();
         placement.remove(pl);
         int numMonsters = 25;
@@ -413,19 +414,39 @@ public class ThinWallDemo extends ApplicationAdapter {
         clearHelp();
 
         if (health <= 0) return;
-        int oldX = player.entity.gridX, oldY = player.entity.gridY,
-                newX = adjacency.extractX(pos), newY = adjacency.extractY(pos);
+        int currentX = player.entity.gridX, currentY = player.entity.gridY,
+                newX = adjacency.extractX(pos), newY = adjacency.extractY(pos), nearX, nearY;
         if (newX >= 0 && newY >= 0 && newX < overlapWidth && newY < overlapHeight
                 && bareDungeon[newX][newY] != '#') {
-            // '+' is a door.
+            // '+' is a closed door. '/' is an open door.
             if (lineDungeon[newX][newY] == '+') {
                 decoDungeon[newX][newY] = '/';
                 lineDungeon[newX][newY] = '/';
                 // changes to the map mean the resistances for FOV need to be regenerated.
                 res = DungeonUtility.generateResistances(decoDungeon);
                 // recalculate FOV, store it in fovmap for the render to use.
-                fovmap = fov.calculateFOV(res, player.entity.gridX, player.entity.gridY, 12, Radius.SQUARE);
+                fovmap = fov.calculateFOV(res, currentX, currentY, 12, Radius.SQUARE);
             } else {
+                if(lineDungeon[newX+1][newY] == '+' || lineDungeon[newX-1][newY] == '+'
+                        || lineDungeon[newX][newY+1] == '+' || lineDungeon[newX][newY-1] == '+') {
+                    if (lineDungeon[newX + 1][newY] == '+') {
+                        decoDungeon[newX + 1][newY] = '/';
+                        lineDungeon[newX + 1][newY] = '/';
+                    }
+                    if (lineDungeon[newX - 1][newY] == '+') {
+                        decoDungeon[newX - 1][newY] = '/';
+                        lineDungeon[newX - 1][newY] = '/';
+                    }
+                    if (lineDungeon[newX][newY + 1] == '+') {
+                        decoDungeon[newX][newY + 1] = '/';
+                        lineDungeon[newX][newY + 1] = '/';
+                    }
+                    if (lineDungeon[newX][newY - 1] == '+') {
+                        decoDungeon[newX][newY - 1] = '/';
+                        lineDungeon[newX][newY - 1] = '/';
+                    }
+                    res = DungeonUtility.generateResistances(decoDungeon);
+                }
                 // recalculate FOV, store it in fovmap for the render to use.
                 fovmap = fov.calculateFOV(res, newX, newY, 12, Radius.SQUARE);
                 //player.marker.setDirection(Direction.CLOCKWISE[adjacency.extractR(pos)]);
