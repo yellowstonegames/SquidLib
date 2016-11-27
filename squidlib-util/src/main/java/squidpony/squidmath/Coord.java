@@ -310,6 +310,27 @@ public class Coord implements Serializable {
         return (co.x - x) * (co.x - x) + (co.y - y) * (co.y - y);
     }
 
+    /**
+     * Gets a Coord based off this instance but with odd values for x and/or y decreased to the nearest even number.
+     * May be useful for thin-wall maps as produced by {@link squidpony.squidgrid.mapping.ThinDungeonGenerator} and used
+     * with {@link squidpony.squidgrid.Adjacency.ThinWallAdjacency}.
+     * @return a Coord (probably from the pool) with even x and even y, changing (decrementing) only if they are odd
+     */
+    public Coord makeEven()
+    {
+        return get(x & -2, y & -2);
+    }
+
+    /**
+     * Gets a Coord based off this instance but with even values for x and/or y increased to the nearest odd number.
+     * May be useful for thin-wall maps as produced by {@link squidpony.squidgrid.mapping.ThinDungeonGenerator} and used
+     * with {@link squidpony.squidgrid.Adjacency.ThinWallAdjacency}.
+     * @return a Coord (probably from the pool) with odd x and odd y, changing (incrementing) only if they are even
+     */
+    public Coord makeOdd() {
+        return get(x | 1, y | 1);
+    }
+
 	/**
 	 * @param c
 	 * @return Whether {@code this} is adjacent to {@code c}. Not that a cell is

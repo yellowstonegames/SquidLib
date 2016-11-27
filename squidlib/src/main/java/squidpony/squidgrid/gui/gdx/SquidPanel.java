@@ -933,7 +933,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
     public float adjustY(float y)
     {
-        return (gridHeight - y - 1) * cellHeight + getY() + 1; // - textFactory.lineHeight //textFactory.lineTweak * 3f
+        return (gridHeight - y - 1) * cellHeight + getY() + 1 + cellHeight - textFactory.actualCellHeight; // - textFactory.lineHeight //textFactory.lineTweak * 3f
         //return (gridHeight - y - 1) * cellHeight + textFactory.getDescent() * 3 / 2f + getY();
     }
 
@@ -954,6 +954,12 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         animationCount--;
         int x = Math.round((a.getX() - getX()) / cellWidth),
                 y = gridHeight - (int)(a.getY() / cellHeight) - 1;
+        if(onlyRenderEven)
+        {
+            // this just sets the least significant bit to 0, making any odd numbers even (decrementing)
+            x &= -2;
+            y &= -2;
+        }
 //             y = gridHeight - (int)((a.getY() - getY()) / cellHeight) - 1;
         if(x < 0 || y < 0 || x >= contents.length || y >= contents[x].length)
             return;
@@ -968,6 +974,12 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         else
             ae.gridX = Math.round((ae.actor.getX() - getX()) / cellWidth);
         ae.gridY = gridHeight - (int)((ae.actor.getY() - getY()) / cellHeight) - 1;
+        if(onlyRenderEven)
+        {
+            // this just sets the least significant bit to 0, making any odd numbers even (decrementing)
+            ae.gridX &= -2;
+            ae.gridY &= -2;
+        }
         ae.animating = false;
         animationCount--;
     }
