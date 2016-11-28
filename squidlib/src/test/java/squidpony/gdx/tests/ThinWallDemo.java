@@ -174,6 +174,7 @@ public class ThinWallDemo extends ApplicationAdapter {
         counter = 0;
 
         dungeonGen = new ThinDungeonGenerator(width, height, rng, ROOM_WALL_RETRACT, CORRIDOR_WALL_RETRACT, CAVE_WALL_RETRACT);
+        //dungeonGen = new ThinDungeonGenerator(width, height, rng, ROOM_WALL_EXPAND, CORRIDOR_WALL_EXPAND, CAVE_WALL_EXPAND);
         dungeonGen.addWater(0, 25, 6);
         dungeonGen.addGrass(MixedGenerator.CAVE_FLOOR, 20);
         dungeonGen.addBoulders(0, 7);
