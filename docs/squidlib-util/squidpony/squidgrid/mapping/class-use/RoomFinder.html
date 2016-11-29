@@ -88,6 +88,12 @@
 <div class="block">Tools specifically for generating maps and placing content in them, usually working with 2D char arrays.</div>
 </td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#squidpony.squidmath">squidpony.squidmath</a></td>
+<td class="colLast">
+<div class="block">A very broad package containing random number generators, geometry tools, and some classes for combinatorics.</div>
+</td>
+</tr>
 </tbody>
 </table>
 </li>
@@ -125,6 +131,43 @@
 <tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/Placement.html#Placement-squidpony.squidgrid.mapping.RoomFinder-">Placement</a></span>(<a href="../../../../squidpony/squidgrid/mapping/RoomFinder.html" title="class in squidpony.squidgrid.mapping">RoomFinder</a>&nbsp;finder)</code>
 <div class="block">Constructs a Placement using the given RoomFinder, which will have collections of rooms, corridors, and caves.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="squidpony.squidmath">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../squidpony/squidgrid/mapping/RoomFinder.html" title="class in squidpony.squidgrid.mapping">RoomFinder</a> in <a href="../../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> with parameters of type <a href="../../../../squidpony/squidgrid/mapping/RoomFinder.html" title="class in squidpony.squidgrid.mapping">RoomFinder</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../squidpony/squidmath/SectionMap.html" title="class in squidpony.squidmath">SectionMap</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SectionMap.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidmath/SectionMap.html#reinitialize-squidpony.squidgrid.mapping.RoomFinder-">reinitialize</a></span>(<a href="../../../../squidpony/squidgrid/mapping/RoomFinder.html" title="class in squidpony.squidgrid.mapping">RoomFinder</a>&nbsp;rf)</code>
+<div class="block">If this SectionMap hasn't been initialized or the map has completely changed (such as if the player went to a
+ different floor of a dungeon), then you can call this method to avoid discarding some of the state from an
+ earlier SectionMap.</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> with parameters of type <a href="../../../../squidpony/squidgrid/mapping/RoomFinder.html" title="class in squidpony.squidgrid.mapping">RoomFinder</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidmath/SectionMap.html#SectionMap-squidpony.squidgrid.mapping.RoomFinder-">SectionMap</a></span>(<a href="../../../../squidpony/squidgrid/mapping/RoomFinder.html" title="class in squidpony.squidgrid.mapping">RoomFinder</a>&nbsp;rf)</code>
+<div class="block">The preferred constructor; takes a RoomFinder (often one already created in dungeon generation and available via
+ <a href="../../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#finder"><code>SectionDungeonGenerator.finder</code></a>) and uses it to give unique String names and identifying numbers to each
+ room, corridor, and cave area that had been identified by that RoomFinder.</div>
 </td>
 </tr>
 </tbody>

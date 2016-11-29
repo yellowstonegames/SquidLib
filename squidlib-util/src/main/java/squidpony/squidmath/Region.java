@@ -20,7 +20,7 @@ import static squidpony.squidmath.CoordPacker.*;
  * GreasedRegion allows larger maps, particularly when the Coord pool has been expanded, and should be much faster at
  * tasks that involve changing the size or shape of an area. It also is mutable by default, without needing to track
  * the "dirty" and "clean" states of this class. GreasedRegion does not implement the List interface, though; it does
- * implement {@link Iterable<Coord>}.
+ * implement {@link Iterable&lt;Coord&gt;}.
  * <br>
  * Created by Tommy Ettinger on 5/12/2016.
  * @see GreasedRegion You should prefer GreasedRegion for most usage.

@@ -201,6 +201,23 @@
 <dd>
 <div class="block">The effects that can be applied to this dungeon.</div>
 </dd>
+<dt><a href="../squidpony/squidmath/SectionMap.html" title="class in squidpony.squidmath"><span class="typeNameLink">SectionMap</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
+<dd>
+<div class="block">A Map-like collection that allows storing subdivisions of a 2D array with names (always Strings) and
+ identifying numbers, then looking up <a href="../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath"><code>Coord</code></a>s to find the associated name and/or number, or or looking up
+ a subdivision with a name or number to get a <a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath"><code>GreasedRegion</code></a> back.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SectionMap.html#SectionMap--">SectionMap()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/SectionMap.html" title="class in squidpony.squidmath">SectionMap</a></dt>
+<dd>
+<div class="block">This shouldn't usually be used unless you for some reason need to construct a SectionMap before you have access
+ to a dungeon for it to map.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SectionMap.html#SectionMap-squidpony.squidgrid.mapping.RoomFinder-">SectionMap(RoomFinder)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/SectionMap.html" title="class in squidpony.squidmath">SectionMap</a></dt>
+<dd>
+<div class="block">The preferred constructor; takes a RoomFinder (often one already created in dungeon generation and available via
+ <a href="../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#finder"><code>SectionDungeonGenerator.finder</code></a>) and uses it to give unique String names and identifying numbers to each
+ room, corridor, and cave area that had been identified by that RoomFinder.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/DungeonGenerator.html#seedFixed">seedFixed</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/ModularMapGenerator.html#seedFixed">seedFixed</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/ModularMapGenerator.html" title="class in squidpony.squidgrid.mapping">ModularMapGenerator</a></dt>
