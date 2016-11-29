@@ -807,6 +807,28 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
         return ints;
     }
 
+    /**
+     * "Inverse mask for ints;" returns a copy of map where if a cell is "off" in this GreasedRegion, this keeps
+     * the value in map intact, and where a cell is "on", it instead writes the int toWrite. Modifies map in-place,
+     * unlike {@link #writeInts(int[][], int)}.
+     * @param map a 2D int array that <b>will</b> be modified
+     * @param toWrite the int to use where this GreasedRegion stores an "on" cell
+     * @return map, with the changes applied; not a copy
+     */
+    public int[][] writeIntsInto(int[][] map, int toWrite)
+    {
+        if(map == null || map.length == 0)
+            return map;
+        int width2 = Math.min(width, map.length), height2 = Math.min(height, map[0].length);
+        for (int x = 0; x < width2; x++) {
+            for (int y = 0; y < height2; y++) {
+                if((data[x * ySections + (y >> 6)] & (1L << (y & 63))) != 0)
+                    map[x][y] = toWrite;
+            }
+        }
+        return map;
+    }
+
     public GreasedRegion or(GreasedRegion other)
     {
         for (int x = 0; x < width && x < other.width; x++) {
