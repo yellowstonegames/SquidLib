@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -114,7 +114,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre><a href="../../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../src-html/squidpony/squidmath/SectionMap.html#line.17">SectionMap</a>
+public class <a href="../../src-html/squidpony/squidmath/SectionMap.html#line.19">SectionMap</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">A Map-like collection that allows storing subdivisions of a 2D array with names (always Strings) and
@@ -144,14 +144,18 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#connections">connections</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected int[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#map">map</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#names">names</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#regions">regions</a></span></code>&nbsp;</td>
 </tr>
@@ -182,6 +186,11 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
  room, corridor, and cave area that had been identified by that RoomFinder.</div>
 </td>
 </tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#SectionMap-squidpony.squidmath.SectionMap-">SectionMap</a></span>(<a href="../../squidpony/squidmath/SectionMap.html" title="class in squidpony.squidmath">SectionMap</a>&nbsp;other)</code>
+<div class="block">Copy constructor; takes an already-initialized SectionMap and deep-copies each element into this one.</div>
+</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -199,90 +208,130 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#contains-squidpony.squidmath.Coord-">contains</a></span>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;position)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#contains-squidpony.squidmath.Coord-">contains</a></span>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;position)</code>
+<div class="block">Checks if this contains the given position (that is, it is within map bounds).</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#contains-int-">contains</a></span>(int&nbsp;number)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#contains-int-">contains</a></span>(int&nbsp;number)</code>
+<div class="block">Checks if this contains the given identifying number.</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#contains-int-int-">contains</a></span>(int&nbsp;x,
-        int&nbsp;y)</code>&nbsp;</td>
+        int&nbsp;y)</code>
+<div class="block">Checks if this contains the given position (that is, x and y are within map bounds).</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#contains-java.lang.String-">contains</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#contains-java.lang.String-">contains</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>
+<div class="block">Checks if this contains the given name.</div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#nameToConnections-java.lang.String-">nameToConnections</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>
+<div class="block">Gets the list of connected sections (by their identifying numbers) given a name of a section.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#nameToNumber-java.lang.String-">nameToNumber</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>
 <div class="block">Gets the identifying number corresponding to the given name.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#nameToRegion-java.lang.String-">nameToRegion</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>
 <div class="block">Gets the GreasedRegion that has the given name.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code><a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#numberToConnections-int-">numberToConnections</a></span>(int&nbsp;number)</code>
+<div class="block">Gets the list of connected sections (by their identifying numbers) given an identifying number of a section.</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#numberToName-int-">numberToName</a></span>(int&nbsp;number)</code>
 <div class="block">Gets the name that corresponds to the given identifying number.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#numberToRegion-int-">numberToRegion</a></span>(int&nbsp;number)</code>
 <div class="block">Gets the GreasedRegion that has the given identifying number.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
+<td class="colFirst"><code><a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#positionToConnections-squidpony.squidmath.Coord-">positionToConnections</a></span>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;position)</code>
+<div class="block">Gets the list of connected sections (by their identifying numbers) given a position inside that section.</div>
+</td>
+</tr>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code><a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#positionToConnections-int-int-">positionToConnections</a></span>(int&nbsp;x,
+                     int&nbsp;y)</code>
+<div class="block">Gets the list of connected sections (by their identifying numbers) given a position inside that section.</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#positionToContaining-squidpony.squidmath.Coord-">positionToContaining</a></span>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;position)</code>
 <div class="block">Gets the GreasedRegion (a group of points as made by the constructor) that contains the given x, y point.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#positionToContaining-int-int-">positionToContaining</a></span>(int&nbsp;x,
                     int&nbsp;y)</code>
 <div class="block">Gets the GreasedRegion (a group of points as made by the constructor) that contains the given x, y point.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#positionToName-squidpony.squidmath.Coord-">positionToName</a></span>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;position)</code>
 <div class="block">Gets the name of the area that contains the given position.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#positionToName-int-int-">positionToName</a></span>(int&nbsp;x,
               int&nbsp;y)</code>
 <div class="block">Gets the name of the area that contains the given x, y position.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#positionToNumber-squidpony.squidmath.Coord-">positionToNumber</a></span>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;position)</code>
 <div class="block">Gets the identifying number of the area that contains the given position.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#positionToNumber-int-int-">positionToNumber</a></span>(int&nbsp;x,
                 int&nbsp;y)</code>
 <div class="block">Gets the identifying number of the area that contains the given x, y position.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/SectionMap.html" title="class in squidpony.squidmath">SectionMap</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#reinitialize-squidpony.squidgrid.mapping.RoomFinder-">reinitialize</a></span>(<a href="../../squidpony/squidgrid/mapping/RoomFinder.html" title="class in squidpony.squidgrid.mapping">RoomFinder</a>&nbsp;rf)</code>
 <div class="block">If this SectionMap hasn't been initialized or the map has completely changed (such as if the player went to a
  different floor of a dungeon), then you can call this method to avoid discarding some of the state from an
  earlier SectionMap.</div>
+</td>
+</tr>
+<tr id="i19" class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SectionMap.html#size--">size</a></span>()</code>
+<div class="block">The number of regions this knows about; includes an entry for "unused cells" so this may be one larger than the
+ amount of GreasedRegions present in a RoomFinder used to construct this.</div>
 </td>
 </tr>
 </table>
@@ -313,7 +362,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>map</h4>
-<pre>protected&nbsp;int[][] <a href="../../src-html/squidpony/squidmath/SectionMap.html#line.20">map</a></pre>
+<pre>protected&nbsp;int[][] <a href="../../src-html/squidpony/squidmath/SectionMap.html#line.22">map</a></pre>
 </li>
 </ul>
 <a name="names">
@@ -322,16 +371,25 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>names</h4>
-<pre>protected&nbsp;<a href="../../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt; <a href="../../src-html/squidpony/squidmath/SectionMap.html#line.21">names</a></pre>
+<pre>protected&nbsp;<a href="../../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt; <a href="../../src-html/squidpony/squidmath/SectionMap.html#line.23">names</a></pre>
 </li>
 </ul>
 <a name="regions">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>regions</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt; <a href="../../src-html/squidpony/squidmath/SectionMap.html#line.22">regions</a></pre>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt; <a href="../../src-html/squidpony/squidmath/SectionMap.html#line.24">regions</a></pre>
+</li>
+</ul>
+<a name="connections">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>connections</h4>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&gt; <a href="../../src-html/squidpony/squidmath/SectionMap.html#line.25">connections</a></pre>
 </li>
 </ul>
 </li>
@@ -348,7 +406,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>SectionMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.30">SectionMap</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.33">SectionMap</a>()</pre>
 <div class="block">This shouldn't usually be used unless you for some reason need to construct a SectionMap before you have access
  to a dungeon for it to map. If you do need this, then you must call <a href="../../squidpony/squidmath/SectionMap.html#reinitialize-squidpony.squidgrid.mapping.RoomFinder-"><code>reinitialize(RoomFinder)</code></a> to get any
  use out of this object.</div>
@@ -361,10 +419,10 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <a name="SectionMap-squidpony.squidgrid.mapping.RoomFinder-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>SectionMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.52">SectionMap</a>(<a href="../../squidpony/squidgrid/mapping/RoomFinder.html" title="class in squidpony.squidgrid.mapping">RoomFinder</a>&nbsp;rf)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.56">SectionMap</a>(<a href="../../squidpony/squidgrid/mapping/RoomFinder.html" title="class in squidpony.squidgrid.mapping">RoomFinder</a>&nbsp;rf)</pre>
 <div class="block">The preferred constructor; takes a RoomFinder (often one already created in dungeon generation and available via
  <a href="../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#finder"><code>SectionDungeonGenerator.finder</code></a>) and uses it to give unique String names and identifying numbers to each
  room, corridor, and cave area that had been identified by that RoomFinder. In the rare but possible chance that
@@ -383,6 +441,23 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 </dl>
 </li>
 </ul>
+<a name="SectionMap-squidpony.squidmath.SectionMap-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>SectionMap</h4>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.79">SectionMap</a>(<a href="../../squidpony/squidmath/SectionMap.html" title="class in squidpony.squidmath">SectionMap</a>&nbsp;other)</pre>
+<div class="block">Copy constructor; takes an already-initialized SectionMap and deep-copies each element into this one. Allows null
+ for <code>other</code>, which will make an empty SectionMap. This shouldn't be needed very often because SectionMap
+ values are immutable, though their contents can in some cases be mutated independently, and this would allow one
+ SectionMap to be copied and then have its items changed without changing the original.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>other</code> - a SectionMap to deep-copy into this one</dd>
+</dl>
+</li>
+</ul>
 </li>
 </ul>
 <!-- ============ METHOD DETAIL ========== -->
@@ -397,7 +472,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>reinitialize</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/SectionMap.html" title="class in squidpony.squidmath">SectionMap</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.74">reinitialize</a>(<a href="../../squidpony/squidgrid/mapping/RoomFinder.html" title="class in squidpony.squidgrid.mapping">RoomFinder</a>&nbsp;rf)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/SectionMap.html" title="class in squidpony.squidmath">SectionMap</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.105">reinitialize</a>(<a href="../../squidpony/squidgrid/mapping/RoomFinder.html" title="class in squidpony.squidgrid.mapping">RoomFinder</a>&nbsp;rf)</pre>
 <div class="block">If this SectionMap hasn't been initialized or the map has completely changed (such as if the player went to a
  different floor of a dungeon), then you can call this method to avoid discarding some of the state from an
  earlier SectionMap. This does all the same steps <a href="../../squidpony/squidmath/SectionMap.html#SectionMap-squidpony.squidgrid.mapping.RoomFinder-"><code>SectionMap(RoomFinder)</code></a> does, so refer to that
@@ -416,7 +491,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>positionToNumber</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.119">positionToNumber</a>(int&nbsp;x,
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.180">positionToNumber</a>(int&nbsp;x,
                             int&nbsp;y)</pre>
 <div class="block">Gets the identifying number of the area that contains the given x, y position.</div>
 <dl>
@@ -434,7 +509,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>positionToNumber</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.131">positionToNumber</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;position)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.192">positionToNumber</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;position)</pre>
 <div class="block">Gets the identifying number of the area that contains the given position.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -450,7 +525,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>positionToName</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.144">positionToName</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.205">positionToName</a>(int&nbsp;x,
                              int&nbsp;y)</pre>
 <div class="block">Gets the name of the area that contains the given x, y position.</div>
 <dl>
@@ -468,7 +543,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>positionToName</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.154">positionToName</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;position)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.215">positionToName</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;position)</pre>
 <div class="block">Gets the name of the area that contains the given position.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -484,7 +559,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>nameToNumber</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.166">nameToNumber</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.227">nameToNumber</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</pre>
 <div class="block">Gets the identifying number corresponding to the given name.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -500,7 +575,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>numberToName</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.176">numberToName</a>(int&nbsp;number)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.237">numberToName</a>(int&nbsp;number)</pre>
 <div class="block">Gets the name that corresponds to the given identifying number.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -516,7 +591,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>numberToRegion</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.186">numberToRegion</a>(int&nbsp;number)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.247">numberToRegion</a>(int&nbsp;number)</pre>
 <div class="block">Gets the GreasedRegion that has the given identifying number.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -532,7 +607,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>nameToRegion</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.198">nameToRegion</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.259">nameToRegion</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</pre>
 <div class="block">Gets the GreasedRegion that has the given name.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -548,7 +623,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>positionToContaining</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.209">positionToContaining</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.270">positionToContaining</a>(int&nbsp;x,
                                           int&nbsp;y)</pre>
 <div class="block">Gets the GreasedRegion (a group of points as made by the constructor) that contains the given x, y point.</div>
 <dl>
@@ -566,7 +641,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>positionToContaining</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.218">positionToContaining</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;position)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.279">positionToContaining</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;position)</pre>
 <div class="block">Gets the GreasedRegion (a group of points as made by the constructor) that contains the given x, y point.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -576,13 +651,101 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 </dl>
 </li>
 </ul>
+<a name="numberToConnections-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>numberToConnections</h4>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.291">numberToConnections</a>(int&nbsp;number)</pre>
+<div class="block">Gets the list of connected sections (by their identifying numbers) given an identifying number of a section.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>number</code> - an identifying number; should be non-negative and less than <a href="../../squidpony/squidmath/SectionMap.html#size--"><code>size()</code></a></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an IntVLA storing the identifying numbers of connected sections, or null if given an invalid parameter</dd>
+</dl>
+</li>
+</ul>
+<a name="nameToConnections-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>nameToConnections</h4>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.302">nameToConnections</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</pre>
+<div class="block">Gets the list of connected sections (by their identifying numbers) given a name of a section.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>name</code> - a String name; should be present in this SectionMap or this will return null</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an IntVLA storing the identifying numbers of connected sections, or null if given an invalid parameter</dd>
+</dl>
+</li>
+</ul>
+<a name="positionToConnections-int-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>positionToConnections</h4>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.313">positionToConnections</a>(int&nbsp;x,
+                                    int&nbsp;y)</pre>
+<div class="block">Gets the list of connected sections (by their identifying numbers) given a position inside that section.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>x</code> - the x-coordinate of the position to look up; should be within bounds</dd>
+<dd><code>y</code> - the y-coordinate of the position to look up; should be within bounds</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an IntVLA storing the identifying numbers of connected sections, or null if given invalid parameters</dd>
+</dl>
+</li>
+</ul>
+<a name="positionToConnections-squidpony.squidmath.Coord-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>positionToConnections</h4>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.323">positionToConnections</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;position)</pre>
+<div class="block">Gets the list of connected sections (by their identifying numbers) given a position inside that section.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>position</code> - the Coord position to look up; should be within bounds and non-null</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an IntVLA storing the identifying numbers of connected sections, or null if given an invalid parameter</dd>
+</dl>
+</li>
+</ul>
+<a name="size--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>size</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.333">size</a>()</pre>
+<div class="block">The number of regions this knows about; includes an entry for "unused cells" so this may be one larger than the
+ amount of GreasedRegions present in a RoomFinder used to construct this.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the size of this SectionMap</dd>
+</dl>
+</li>
+</ul>
 <a name="contains-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>contains</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.224">contains</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.343">contains</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</pre>
+<div class="block">Checks if this contains the given name.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>name</code> - the name to check</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if this contains the name, false otherwise</dd>
+</dl>
 </li>
 </ul>
 <a name="contains-int-">
@@ -591,7 +754,14 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>contains</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.228">contains</a>(int&nbsp;number)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.353">contains</a>(int&nbsp;number)</pre>
+<div class="block">Checks if this contains the given identifying number.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>number</code> - the number to check</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if this contains the identifying number, false otherwise</dd>
+</dl>
 </li>
 </ul>
 <a name="contains-int-int-">
@@ -600,8 +770,16 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>contains</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.232">contains</a>(int&nbsp;x,
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.364">contains</a>(int&nbsp;x,
                         int&nbsp;y)</pre>
+<div class="block">Checks if this contains the given position (that is, x and y are within map bounds).</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>x</code> - the x-coordinate of the position to check</dd>
+<dd><code>y</code> - the y-coordinate of the position to check</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if the given position is in bounds, false otherwise</dd>
+</dl>
 </li>
 </ul>
 <a name="contains-squidpony.squidmath.Coord-">
@@ -610,7 +788,14 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>contains</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.236">contains</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;position)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/SectionMap.html#line.373">contains</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;position)</pre>
+<div class="block">Checks if this contains the given position (that is, it is within map bounds).</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>position</code> - the position to check</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if position is non-null and is in bounds, false otherwise</dd>
+</dl>
 </li>
 </ul>
 </li>

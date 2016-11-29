@@ -1,11 +1,13 @@
 package squidpony.squidmath;
 
+import squidpony.ArrayTools;
 import squidpony.annotation.Beta;
 import squidpony.squidgrid.mapping.RoomFinder;
 import squidpony.squidgrid.mapping.SectionDungeonGenerator;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A Map-like collection that allows storing subdivisions of a 2D array with names (always Strings) and
@@ -20,6 +22,7 @@ public class SectionMap implements Serializable {
     protected int[][] map;
     protected Arrangement<String> names;
     protected ArrayList<GreasedRegion> regions;
+    protected ArrayList<IntVLA> connections;
 
     /**
      * This shouldn't usually be used unless you for some reason need to construct a SectionMap before you have access
@@ -32,6 +35,7 @@ public class SectionMap implements Serializable {
         map = new int[0][0];
         names = new Arrangement<>(0);
         regions = new ArrayList<>(0);
+        connections = new ArrayList<>(0);
     }
 
     /**
@@ -56,13 +60,40 @@ public class SectionMap implements Serializable {
             map = new int[0][0];
             names = new Arrangement<>(0);
             regions = new ArrayList<>(0);
+            connections = new ArrayList<>(0);
             return;
         }
         regions = new ArrayList<>(rf.rooms.size + rf.caves.size + rf.corridors.size);
         names = new Arrangement<>(regions.size());
+        connections = new ArrayList<>(regions.size());
         reinitialize(rf);
     }
 
+    /**
+     * Copy constructor; takes an already-initialized SectionMap and deep-copies each element into this one. Allows null
+     * for {@code other}, which will make an empty SectionMap. This shouldn't be needed very often because SectionMap
+     * values are immutable, though their contents can in some cases be mutated independently, and this would allow one
+     * SectionMap to be copied and then have its items changed without changing the original.
+     * @param other a SectionMap to deep-copy into this one
+     */
+    public SectionMap(SectionMap other)
+    {
+        if(other == null) {
+            map = new int[0][0];
+            names = new Arrangement<>(0);
+            regions = new ArrayList<>(0);
+            connections = new ArrayList<>(0);
+            return;
+        }
+        map = ArrayTools.copy(other.map);
+        names = new Arrangement<>(other.names);
+        regions = new ArrayList<>(other.regions.size());
+        connections = new ArrayList<>(other.connections.size());
+        for (int i = 0; i < other.connections.size(); i++) {
+            regions.add(new GreasedRegion(other.regions.get(i)));
+            connections.add(new IntVLA(other.connections.get(i)));
+        }
+    }
     /**
      * If this SectionMap hasn't been initialized or the map has completely changed (such as if the player went to a
      * different floor of a dungeon), then you can call this method to avoid discarding some of the state from an
@@ -78,20 +109,24 @@ public class SectionMap implements Serializable {
             map = new int[0][0];
             names = new Arrangement<>(0);
             regions = new ArrayList<>(0);
+            connections = new ArrayList<>(0);
             return this;
         }
         map = new int[rf.width][rf.height];
         regions.clear();
         names.clear();
+        connections.clear();
         GreasedRegion t, all = new GreasedRegion(map, 0);
         regions.add(all);
         names.add("unused0");
+        connections.add(new IntVLA(0));
         for (int i = 0; i < rf.rooms.size; i++) {
             t = rf.rooms.keyAt(i);
             regions.add(t);
             all.andNot(t);
             t.writeIntsInto(map, names.size);
             names.add("room"+names.size);
+            connections.add(new IntVLA(rf.rooms.getAt(i).size()));
         }
         for (int i = 0; i < rf.corridors.size; i++) {
             t = rf.corridors.keyAt(i);
@@ -99,6 +134,7 @@ public class SectionMap implements Serializable {
             all.andNot(t);
             t.writeIntsInto(map, names.size);
             names.add("corridor"+names.size);
+            connections.add(new IntVLA(rf.corridors.getAt(i).size()));
         }
         for (int i = 0; i < rf.caves.size; i++) {
             t = rf.caves.keyAt(i);
@@ -106,6 +142,31 @@ public class SectionMap implements Serializable {
             all.andNot(t);
             t.writeIntsInto(map, names.size);
             names.add("cave"+names.size);
+            connections.add(new IntVLA(rf.caves.getAt(i).size()));
+        }
+        int ls = 1;
+        List<GreasedRegion> connected;
+        IntVLA iv;
+        for (int i = 0; i < rf.rooms.size; i++, ls++) {
+            connected = rf.rooms.getAt(i);
+            iv = connections.get(ls);
+            for (int j = 0; j < connected.size(); j++) {
+                iv.add(positionToNumber(connected.get(j).first()));
+            }
+        }
+        for (int i = 0; i < rf.corridors.size; i++, ls++) {
+            connected = rf.corridors.getAt(i);
+            iv = connections.get(ls);
+            for (int j = 0; j < connected.size(); j++) {
+                iv.add(positionToNumber(connected.get(j).first()));
+            }
+        }
+        for (int i = 0; i < rf.caves.size; i++, ls++) {
+            connected = rf.caves.getAt(i);
+            iv = connections.get(ls);
+            for (int j = 0; j < connected.size(); j++) {
+                iv.add(positionToNumber(connected.get(j).first()));
+            }
         }
         return this;
     }
@@ -221,18 +282,94 @@ public class SectionMap implements Serializable {
             return null;
         return numberToRegion(positionToNumber(position));
     }
+
+    /**
+     * Gets the list of connected sections (by their identifying numbers) given an identifying number of a section.
+     * @param number an identifying number; should be non-negative and less than {@link #size()}
+     * @return an IntVLA storing the identifying numbers of connected sections, or null if given an invalid parameter
+     */
+    public IntVLA numberToConnections(int number)
+    {
+        if(number < 0 || number >= connections.size())
+            return null;
+        return connections.get(number);
+    }
+    /**
+     * Gets the list of connected sections (by their identifying numbers) given a name of a section.
+     * @param name a String name; should be present in this SectionMap or this will return null
+     * @return an IntVLA storing the identifying numbers of connected sections, or null if given an invalid parameter
+     */
+    public IntVLA nameToConnections(String name)
+    {
+        return numberToConnections(nameToNumber(name));
+    }
+
+    /**
+     * Gets the list of connected sections (by their identifying numbers) given a position inside that section.
+     * @param x the x-coordinate of the position to look up; should be within bounds
+     * @param y the y-coordinate of the position to look up; should be within bounds
+     * @return an IntVLA storing the identifying numbers of connected sections, or null if given invalid parameters
+     */
+    public IntVLA positionToConnections(int x, int y)
+    {
+        return numberToConnections(positionToNumber(x, y));
+    }
+
+    /**
+     * Gets the list of connected sections (by their identifying numbers) given a position inside that section.
+     * @param position the Coord position to look up; should be within bounds and non-null
+     * @return an IntVLA storing the identifying numbers of connected sections, or null if given an invalid parameter
+     */
+    public IntVLA positionToConnections(Coord position)
+    {
+        return numberToConnections(positionToNumber(position));
+    }
+
+    /**
+     * The number of regions this knows about; includes an entry for "unused cells" so this may be one larger than the
+     * amount of GreasedRegions present in a RoomFinder used to construct this.
+     * @return the size of this SectionMap
+     */
+    public int size()
+    {
+        return names.size;
+    }
+
+    /**
+     * Checks if this contains the given name.
+     * @param name the name to check
+     * @return true if this contains the name, false otherwise
+     */
     public boolean contains(String name)
     {
         return names.containsKey(name);
     }
+
+    /**
+     * Checks if this contains the given identifying number.
+     * @param number the number to check
+     * @return true if this contains the identifying number, false otherwise
+     */
     public boolean contains(int number)
     {
         return number >= 0 && number < names.size;
     }
+
+    /**
+     * Checks if this contains the given position (that is, x and y are within map bounds).
+     * @param x the x-coordinate of the position to check
+     * @param y the y-coordinate of the position to check
+     * @return true if the given position is in bounds, false otherwise
+     */
     public boolean contains(int x, int y)
     {
         return x >= 0 && x < map.length && y >= 0 && y < map[x].length;
     }
+    /**
+     * Checks if this contains the given position (that is, it is within map bounds).
+     * @param position the position to check
+     * @return true if position is non-null and is in bounds, false otherwise
+     */
     public boolean contains(Coord position)
     {
         return position != null && contains(position.x, position.y);
