@@ -1,9 +1,11 @@
-package squidpony.squidmath;
+package squidpony.squidgrid.mapping;
 
 import squidpony.ArrayTools;
 import squidpony.annotation.Beta;
-import squidpony.squidgrid.mapping.RoomFinder;
-import squidpony.squidgrid.mapping.SectionDungeonGenerator;
+import squidpony.squidmath.Arrangement;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.IntVLA;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,7 +14,25 @@ import java.util.List;
 /**
  * A Map-like collection that allows storing subdivisions of a 2D array with names (always Strings) and
  * identifying numbers, then looking up {@link Coord}s to find the associated name and/or number, or or looking up
- * a subdivision with a name or number to get a {@link GreasedRegion} back.
+ * a subdivision with a name or number to get a {@link GreasedRegion} back. This also stores connections between
+ * sections, which can be useful as part of a graph-like algorithm. It is fed the information it needs by a
+ * {@link RoomFinder} instance passed to the constructor or to {@link #reinitialize(RoomFinder)}. A RoomFinder is ready
+ * for usage after generating any dungeon with {@link SectionDungeonGenerator} or one of its subclasses; the field
+ * {@link SectionDungeonGenerator#finder} should usually be all that needs to be given to this class. If you don't use
+ * SectionDungeonGenerator, there's no reason you can't construct a RoomFinder independently and pass that (they can
+ * take a little time to construct on large or very complex maps, but shouldn't be heavy after construction).
+ * <br>
+ * If your code uses the {@link squidpony.squidgrid.zone.Zone} interface, then the {@link GreasedRegion} objects this
+ * can return do implement Zone, {@link squidpony.squidgrid.zone.MutableZone}, and {@link Iterable} of Coord.
+ * GreasedRegion is significantly faster than the alternatives ({@link squidpony.squidmath.CoordPacker} and manual
+ * Lists of Coord) for the spatial manipulations that RoomFinder needs to do to find room-like shapes, and this just
+ * gets its GreasedRegion values from RoomFinder directly.
+ * <br>
+ * Not to be confused with {@link squidpony.squidmath.RegionMap}, which has different functionality and a different
+ * pupose; RegionMap simply is a slight extension on OrderedMap to conveniently handle regions as short arrays produced
+ * by {@link squidpony.squidmath.CoordPacker}, while this class offers additional features for labeling and looking up
+ * sections of a map that were found by a {@link RoomFinder}.
+ * <br>
  * Created by Tommy Ettinger on 11/28/2016.
  */
 @Beta
@@ -63,7 +83,7 @@ public class SectionMap implements Serializable {
             connections = new ArrayList<>(0);
             return;
         }
-        regions = new ArrayList<>(rf.rooms.size + rf.caves.size + rf.corridors.size);
+        regions = new ArrayList<>(rf.rooms.size() + rf.caves.size() + rf.corridors.size());
         names = new Arrangement<>(regions.size());
         connections = new ArrayList<>(regions.size());
         reinitialize(rf);
@@ -120,48 +140,48 @@ public class SectionMap implements Serializable {
         regions.add(all);
         names.add("unused0");
         connections.add(new IntVLA(0));
-        for (int i = 0; i < rf.rooms.size; i++) {
+        for (int i = 0; i < rf.rooms.size(); i++) {
             t = rf.rooms.keyAt(i);
             regions.add(t);
             all.andNot(t);
-            t.writeIntsInto(map, names.size);
-            names.add("room"+names.size);
+            t.writeIntsInto(map, names.size());
+            names.add("room"+names.size());
             connections.add(new IntVLA(rf.rooms.getAt(i).size()));
         }
-        for (int i = 0; i < rf.corridors.size; i++) {
+        for (int i = 0; i < rf.corridors.size(); i++) {
             t = rf.corridors.keyAt(i);
             regions.add(t);
             all.andNot(t);
-            t.writeIntsInto(map, names.size);
-            names.add("corridor"+names.size);
+            t.writeIntsInto(map, names.size());
+            names.add("corridor"+names.size());
             connections.add(new IntVLA(rf.corridors.getAt(i).size()));
         }
-        for (int i = 0; i < rf.caves.size; i++) {
+        for (int i = 0; i < rf.caves.size(); i++) {
             t = rf.caves.keyAt(i);
             regions.add(t);
             all.andNot(t);
-            t.writeIntsInto(map, names.size);
-            names.add("cave"+names.size);
+            t.writeIntsInto(map, names.size());
+            names.add("cave"+names.size());
             connections.add(new IntVLA(rf.caves.getAt(i).size()));
         }
         int ls = 1;
         List<GreasedRegion> connected;
         IntVLA iv;
-        for (int i = 0; i < rf.rooms.size; i++, ls++) {
+        for (int i = 0; i < rf.rooms.size(); i++, ls++) {
             connected = rf.rooms.getAt(i);
             iv = connections.get(ls);
             for (int j = 0; j < connected.size(); j++) {
                 iv.add(positionToNumber(connected.get(j).first()));
             }
         }
-        for (int i = 0; i < rf.corridors.size; i++, ls++) {
+        for (int i = 0; i < rf.corridors.size(); i++, ls++) {
             connected = rf.corridors.getAt(i);
             iv = connections.get(ls);
             for (int j = 0; j < connected.size(); j++) {
                 iv.add(positionToNumber(connected.get(j).first()));
             }
         }
-        for (int i = 0; i < rf.caves.size; i++, ls++) {
+        for (int i = 0; i < rf.caves.size(); i++, ls++) {
             connected = rf.caves.getAt(i);
             iv = connections.get(ls);
             for (int j = 0; j < connected.size(); j++) {
@@ -332,7 +352,7 @@ public class SectionMap implements Serializable {
      */
     public int size()
     {
-        return names.size;
+        return names.size();
     }
 
     /**
@@ -352,7 +372,7 @@ public class SectionMap implements Serializable {
      */
     public boolean contains(int number)
     {
-        return number >= 0 && number < names.size;
+        return number >= 0 && number < names.size();
     }
 
     /**

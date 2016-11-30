@@ -935,6 +935,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
      */
     protected void fixOrder(final int i) {
         if (size == 0) {
+            order.clear();
             first = last = -1;
             return;
         }

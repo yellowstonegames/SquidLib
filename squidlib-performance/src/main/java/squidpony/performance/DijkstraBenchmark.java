@@ -44,6 +44,7 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
+import squidpony.performance.alternate.AStarExperiment;
 import squidpony.squidai.CustomDijkstraMap;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Adjacency;
@@ -115,7 +116,7 @@ public class DijkstraBenchmark {
         return scanned;
     }
 
-    @Benchmark
+    //@Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureScanDijkstra() throws InterruptedException {
@@ -141,7 +142,7 @@ public class DijkstraBenchmark {
         return scanned;
     }
 
-    @Benchmark
+    //@Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureScanCustomDijkstra() throws InterruptedException {
@@ -372,11 +373,39 @@ public class DijkstraBenchmark {
         return scanned;
     }
 
-    //@Benchmark
+    @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measurePathAStar() throws InterruptedException {
         System.out.println(doPathAStar());
+    }
+
+    public long doPathAStar2()
+    {
+        AStarExperiment astar = new AStarExperiment(astarMap, AStarExperiment.SearchType.CHEBYSHEV);
+        Coord r;
+        long scanned = 0;
+        DungeonUtility utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
+        Queue<Coord> latestPath;
+        for (int x = 1; x < DIMENSION - 1; x++) {
+            for (int y = 1; y < DIMENSION - 1; y++) {
+                if (map[x][y] == '#')
+                    continue;
+                // this should ensure no blatant correlation between R and W
+                utility.rng.setState((x << 22) | (y << 16) | (x * y));
+                r = floors.singleRandom(utility.rng);
+                latestPath = astar.path(r, Coord.get(x, y));
+                scanned+= latestPath.size();
+            }
+        }
+        return scanned;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measurePathAStar2() throws InterruptedException {
+        System.out.println(doPathAStar2());
     }
 
     class GridGraph implements IndexedGraph<Coord>

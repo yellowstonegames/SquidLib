@@ -951,6 +951,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      */
     protected void fixOrder(final int i) {
         if (size == 0) {
+            order.clear();
             first = last = -1;
             return;
         }
