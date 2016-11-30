@@ -89,6 +89,12 @@
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="#squidpony.squidgrid.mapping">squidpony.squidgrid.mapping</a></td>
+<td class="colLast">
+<div class="block">Tools specifically for generating maps and placing content in them, usually working with 2D char arrays.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="#squidpony.squidmath">squidpony.squidmath</a></td>
 <td class="colLast">
 <div class="block">A very broad package containing random number generators, geometry tools, and some classes for combinatorics.</div>
@@ -385,6 +391,58 @@
 </tbody>
 </table>
 </li>
+<li class="blockList"><a name="squidpony.squidgrid.mapping">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a> in <a href="../../../squidpony/squidgrid/mapping/package-summary.html">squidpony.squidgrid.mapping</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../squidpony/squidgrid/mapping/package-summary.html">squidpony.squidgrid.mapping</a> with type parameters of type <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">SectionMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SectionMap.html#connections">connections</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../squidpony/squidgrid/mapping/package-summary.html">squidpony.squidgrid.mapping</a> that return <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SectionMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SectionMap.html#nameToConnections-java.lang.String-">nameToConnections</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>
+<div class="block">Gets the list of connected sections (by their identifying numbers) given a name of a section.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SectionMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SectionMap.html#numberToConnections-int-">numberToConnections</a></span>(int&nbsp;number)</code>
+<div class="block">Gets the list of connected sections (by their identifying numbers) given an identifying number of a section.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SectionMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SectionMap.html#positionToConnections-squidpony.squidmath.Coord-">positionToConnections</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;position)</code>
+<div class="block">Gets the list of connected sections (by their identifying numbers) given a position inside that section.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SectionMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SectionMap.html#positionToConnections-int-int-">positionToConnections</a></span>(int&nbsp;x,
+                     int&nbsp;y)</code>
+<div class="block">Gets the list of connected sections (by their identifying numbers) given a position inside that section.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="squidpony.squidmath">
 <!--   -->
 </a>
@@ -410,19 +468,6 @@
 </tr>
 </tbody>
 </table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
-<caption><span>Fields in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> with type parameters of type <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Field and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">SectionMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/SectionMap.html#connections">connections</a></span></code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
 <caption><span>Methods in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> that return <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -437,31 +482,6 @@
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Arrangement.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Arrangement.html#getMany-java.lang.Iterable-">getMany</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;&nbsp;keys)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SectionMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/SectionMap.html#nameToConnections-java.lang.String-">nameToConnections</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>
-<div class="block">Gets the list of connected sections (by their identifying numbers) given a name of a section.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SectionMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/SectionMap.html#numberToConnections-int-">numberToConnections</a></span>(int&nbsp;number)</code>
-<div class="block">Gets the list of connected sections (by their identifying numbers) given an identifying number of a section.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SectionMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/SectionMap.html#positionToConnections-squidpony.squidmath.Coord-">positionToConnections</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;position)</code>
-<div class="block">Gets the list of connected sections (by their identifying numbers) given a position inside that section.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SectionMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/SectionMap.html#positionToConnections-int-int-">positionToConnections</a></span>(int&nbsp;x,
-                     int&nbsp;y)</code>
-<div class="block">Gets the list of connected sections (by their identifying numbers) given a position inside that section.</div>
-</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>

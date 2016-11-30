@@ -201,24 +201,24 @@
 <dd>
 <div class="block">The effects that can be applied to this dungeon.</div>
 </dd>
-<dt><a href="../squidpony/squidmath/SectionMap.html" title="class in squidpony.squidmath"><span class="typeNameLink">SectionMap</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
+<dt><a href="../squidpony/squidgrid/mapping/SectionMap.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">SectionMap</span></a> - Class in <a href="../squidpony/squidgrid/mapping/package-summary.html">squidpony.squidgrid.mapping</a></dt>
 <dd>
 <div class="block">A Map-like collection that allows storing subdivisions of a 2D array with names (always Strings) and
  identifying numbers, then looking up <a href="../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath"><code>Coord</code></a>s to find the associated name and/or number, or or looking up
  a subdivision with a name or number to get a <a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath"><code>GreasedRegion</code></a> back.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SectionMap.html#SectionMap--">SectionMap()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/SectionMap.html" title="class in squidpony.squidmath">SectionMap</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/SectionMap.html#SectionMap--">SectionMap()</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/SectionMap.html" title="class in squidpony.squidgrid.mapping">SectionMap</a></dt>
 <dd>
 <div class="block">This shouldn't usually be used unless you for some reason need to construct a SectionMap before you have access
  to a dungeon for it to map.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SectionMap.html#SectionMap-squidpony.squidgrid.mapping.RoomFinder-">SectionMap(RoomFinder)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/SectionMap.html" title="class in squidpony.squidmath">SectionMap</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/SectionMap.html#SectionMap-squidpony.squidgrid.mapping.RoomFinder-">SectionMap(RoomFinder)</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/SectionMap.html" title="class in squidpony.squidgrid.mapping">SectionMap</a></dt>
 <dd>
 <div class="block">The preferred constructor; takes a RoomFinder (often one already created in dungeon generation and available via
  <a href="../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#finder"><code>SectionDungeonGenerator.finder</code></a>) and uses it to give unique String names and identifying numbers to each
  room, corridor, and cave area that had been identified by that RoomFinder.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SectionMap.html#SectionMap-squidpony.squidmath.SectionMap-">SectionMap(SectionMap)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/SectionMap.html" title="class in squidpony.squidmath">SectionMap</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/SectionMap.html#SectionMap-squidpony.squidgrid.mapping.SectionMap-">SectionMap(SectionMap)</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/SectionMap.html" title="class in squidpony.squidgrid.mapping">SectionMap</a></dt>
 <dd>
 <div class="block">Copy constructor; takes an already-initialized SectionMap and deep-copies each element into this one.</div>
 </dd>
@@ -1069,6 +1069,11 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/Rectangle.Utils.html#size-squidpony.squidgrid.mapping.Rectangle-">size(Rectangle)</a></span> - Static method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/Rectangle.Utils.html" title="class in squidpony.squidgrid.mapping">Rectangle.Utils</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/SectionMap.html#size--">size()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/SectionMap.html" title="class in squidpony.squidgrid.mapping">SectionMap</a></dt>
+<dd>
+<div class="block">The number of regions this knows about; includes an entry for "unused cells" so this may be one larger than the
+ amount of GreasedRegions present in a RoomFinder used to construct this.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/SpatialMap.html#size--">size()</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/SpatialMap.html" title="class in squidpony.squidgrid">SpatialMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/zone/CoordPackerZone.html#size--">size()</a></span> - Method in class squidpony.squidgrid.zone.<a href="../squidpony/squidgrid/zone/CoordPackerZone.html" title="class in squidpony.squidgrid.zone">CoordPackerZone</a></dt>
@@ -1130,11 +1135,6 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Region.html#size--">size()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Region.html" title="class in squidpony.squidmath">Region</a></dt>
 <dd>
 <div class="block">Gets the size of this Region as measured in Coords stored.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SectionMap.html#size--">size()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SectionMap.html" title="class in squidpony.squidmath">SectionMap</a></dt>
-<dd>
-<div class="block">The number of regions this knows about; includes an entry for "unused cells" so this may be one larger than the
- amount of GreasedRegions present in a RoomFinder used to construct this.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortSet.html#size">size</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/ShortSet.html" title="class in squidpony.squidmath">ShortSet</a></dt>
 <dd>&nbsp;</dd>

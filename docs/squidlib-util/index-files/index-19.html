@@ -677,7 +677,7 @@
 <dd>
 <div class="block">Creates a new RegionMap with 0.75f as load factor using the elements of two parallel arrays.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SectionMap.html#regions">regions</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/SectionMap.html" title="class in squidpony.squidmath">SectionMap</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/SectionMap.html#regions">regions</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/SectionMap.html" title="class in squidpony.squidgrid.mapping">SectionMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/RoomFinder.html#regionsConnected-int-int-">regionsConnected(int, int)</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/RoomFinder.html" title="class in squidpony.squidgrid.mapping">RoomFinder</a></dt>
 <dd>
@@ -737,7 +737,7 @@
 <dd>
 <div class="block">Rehashes the map.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SectionMap.html#reinitialize-squidpony.squidgrid.mapping.RoomFinder-">reinitialize(RoomFinder)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SectionMap.html" title="class in squidpony.squidmath">SectionMap</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/SectionMap.html#reinitialize-squidpony.squidgrid.mapping.RoomFinder-">reinitialize(RoomFinder)</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/SectionMap.html" title="class in squidpony.squidgrid.mapping">SectionMap</a></dt>
 <dd>
 <div class="block">If this SectionMap hasn't been initialized or the map has completely changed (such as if the player went to a
  different floor of a dungeon), then you can call this method to avoid discarding some of the state from an
@@ -1515,7 +1515,10 @@
 <div class="block">Constructs a RoomFinder given a dungeon map, and finds rooms, corridors, and their connections on the map.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/RoomFinder.html#RoomFinder-char:A:A-int-">RoomFinder(char[][], int)</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/RoomFinder.html" title="class in squidpony.squidgrid.mapping">RoomFinder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Constructs a RoomFinder given a dungeon map and a general kind of environment for the whole map, then finds
+ rooms, corridors, and their connections on the map.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/RoomFinder.html#RoomFinder-char:A:A-int:A:A-">RoomFinder(char[][], int[][])</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/RoomFinder.html" title="class in squidpony.squidgrid.mapping">RoomFinder</a></dt>
 <dd>
 <div class="block">Constructs a RoomFinder given a dungeon map and an environment map (which currently is only produced by

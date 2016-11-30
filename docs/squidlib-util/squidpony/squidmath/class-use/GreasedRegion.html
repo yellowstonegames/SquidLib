@@ -196,17 +196,55 @@
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">RoomFinder.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/RoomFinder.html#rooms">rooms</a></span></code>
-<div class="block">Not likely to be used directly, but there may be things you can do with these that are cumbersome using only
- RoomFinder's simpler API.</div>
-</td>
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">SectionMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SectionMap.html#regions">regions</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">RoomFinder.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/RoomFinder.html#rooms">rooms</a></span></code>
 <div class="block">Not likely to be used directly, but there may be things you can do with these that are cumbersome using only
  RoomFinder's simpler API.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">RoomFinder.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/RoomFinder.html#rooms">rooms</a></span></code>
+<div class="block">Not likely to be used directly, but there may be things you can do with these that are cumbersome using only
+ RoomFinder's simpler API.</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../squidpony/squidgrid/mapping/package-summary.html">squidpony.squidgrid.mapping</a> that return <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SectionMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SectionMap.html#nameToRegion-java.lang.String-">nameToRegion</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>
+<div class="block">Gets the GreasedRegion that has the given name.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SectionMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SectionMap.html#numberToRegion-int-">numberToRegion</a></span>(int&nbsp;number)</code>
+<div class="block">Gets the GreasedRegion that has the given identifying number.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SectionMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SectionMap.html#positionToContaining-squidpony.squidmath.Coord-">positionToContaining</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;position)</code>
+<div class="block">Gets the GreasedRegion (a group of points as made by the constructor) that contains the given x, y point.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SectionMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SectionMap.html#positionToContaining-int-int-">positionToContaining</a></span>(int&nbsp;x,
+                    int&nbsp;y)</code>
+<div class="block">Gets the GreasedRegion (a group of points as made by the constructor) that contains the given x, y point.</div>
 </td>
 </tr>
 </tbody>
@@ -216,19 +254,6 @@
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
-<caption><span>Fields in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> with type parameters of type <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Field and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">SectionMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/SectionMap.html#regions">regions</a></span></code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
 <caption><span>Methods in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> that return <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -359,43 +384,18 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SectionMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/SectionMap.html#nameToRegion-java.lang.String-">nameToRegion</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>
-<div class="block">Gets the GreasedRegion that has the given name.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#not--">not</a></span>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#notAnd-squidpony.squidmath.GreasedRegion-">notAnd</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</code>
 <div class="block">Like andNot, but subtracts this GreasedRegion from other and stores the result in this GreasedRegion, without
  mutating other.</div>
 </td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SectionMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/SectionMap.html#numberToRegion-int-">numberToRegion</a></span>(int&nbsp;number)</code>
-<div class="block">Gets the GreasedRegion that has the given identifying number.</div>
-</td>
-</tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#or-squidpony.squidmath.GreasedRegion-">or</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SectionMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/SectionMap.html#positionToContaining-squidpony.squidmath.Coord-">positionToContaining</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;position)</code>
-<div class="block">Gets the GreasedRegion (a group of points as made by the constructor) that contains the given x, y point.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SectionMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/SectionMap.html#positionToContaining-int-int-">positionToContaining</a></span>(int&nbsp;x,
-                    int&nbsp;y)</code>
-<div class="block">Gets the GreasedRegion (a group of points as made by the constructor) that contains the given x, y point.</div>
-</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>

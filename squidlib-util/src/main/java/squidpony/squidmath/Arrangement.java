@@ -1078,6 +1078,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      */
     protected void fixOrder(final int i) {
         if (size == 0) {
+            order.clear();
             first = last = -1;
             return;
         }
