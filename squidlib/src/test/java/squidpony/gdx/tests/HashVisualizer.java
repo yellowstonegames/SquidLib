@@ -33,10 +33,15 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 28, rngMode = 17, noiseMode = 1;
+    private int hashMode = 36, rngMode = 17, noiseMode = 7;
     private CrossHash.Storm storm, stormA, stormB, stormC;
 
-    private int testType = 5;
+    // 0 commonly used hashes
+    // 1 variants on Storm and other hashes
+    // 3 artistic visualizations of hash functions
+    // 4 noise
+    // 5 RNG results
+    private int testType = 4;
 
     private RandomnessSource fuzzy, random;
     private Random jreRandom;
@@ -52,6 +57,21 @@ public class HashVisualizer extends ApplicationAdapter {
 
     public static float toFloat(int n) {
         return (Float.intBitsToFloat(0x3F800000 | n >>> 9) - 1.0f);
+    }
+
+    public static int mixHash(final int x, final int y)
+    {
+        int x2 = 0x9E3779B9 * x, y2 = 0x632BE5AB * y;
+        return ((x2 ^ y2) >>> ((x2 & 7) + (y2 & 7))) * 0x85157AF5;
+    }
+
+    public static int oldHash(final int x, final int y)
+    {
+        int hash = 7;
+        hash = 113 * hash + x;
+        hash = 113 * hash + y;
+        return hash;
+
     }
 
     /*
@@ -177,15 +197,24 @@ public class HashVisualizer extends ApplicationAdapter {
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
                 switch (key) {
                     case SquidInput.ENTER:
-                        if (testType == 4) {
-                            noiseMode++;
-                            noiseMode &= 7;
-                        } else if (testType == 5) {
-                            rngMode++;
-                            rngMode %= 20;
-                        } else {
-                            hashMode++;
-                            hashMode %= 36;
+                        switch (testType)
+                        {
+                            case 4:
+                                noiseMode++;
+                                noiseMode %= 10;
+                                break;
+                            case 5:
+                                rngMode++;
+                                rngMode %= 20;
+                                break;
+                            case 0:
+                            case 1:
+                                hashMode++;
+                                hashMode %= 38;
+                                break;
+                            default:
+                                hashMode++;
+                                hashMode %= 28;
                         }
                         putMap();
                         //Gdx.graphics.requestRendering();
@@ -255,6 +284,7 @@ public class HashVisualizer extends ApplicationAdapter {
             case 1: {
                 switch (hashMode) {
                     case 0:
+                        Gdx.graphics.setTitle("Arrays.hashCode");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -265,6 +295,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 1:
+                        Gdx.graphics.setTitle("Storm (alpha)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -275,6 +306,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 2:
+                        Gdx.graphics.setTitle("Storm (beta)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -285,6 +317,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 3:
+                        Gdx.graphics.setTitle("Storm (chi)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -295,6 +328,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 4:
+                        Gdx.graphics.setTitle("Arrays.hashCode");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -304,6 +338,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 5:
+                        Gdx.graphics.setTitle("Storm (alpha)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -313,6 +348,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 6:
+                        Gdx.graphics.setTitle("Storm (beta)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -322,6 +358,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 7:
+                        Gdx.graphics.setTitle("Storm (chi)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -331,6 +368,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 8:
+                        Gdx.graphics.setTitle("Storm (alpha)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -341,6 +379,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 9:
+                        Gdx.graphics.setTitle("Storm (beta)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -351,6 +390,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 10:
+                        Gdx.graphics.setTitle("Storm (chi)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -361,6 +401,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 11:
+                        Gdx.graphics.setTitle("Storm (alpha)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -370,6 +411,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 12:
+                        Gdx.graphics.setTitle("Storm (beta)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -379,6 +421,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 13:
+                        Gdx.graphics.setTitle("Storm (chi)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -388,6 +431,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 14:
+                        Gdx.graphics.setTitle("Arrays.hashCode");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -398,6 +442,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 15:
+                        Gdx.graphics.setTitle("Storm (alpha)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -408,6 +453,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 16:
+                        Gdx.graphics.setTitle("Storm (beta)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -418,6 +464,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 17:
+                        Gdx.graphics.setTitle("Storm (chi)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -428,6 +475,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 18:
+                        Gdx.graphics.setTitle("Arrays.hashCode");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -437,6 +485,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 19:
+                        Gdx.graphics.setTitle("Storm (alpha)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -446,6 +495,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 20:
+                        Gdx.graphics.setTitle("Storm (beta)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -455,6 +505,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 21:
+                        Gdx.graphics.setTitle("Storm (chi)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -464,6 +515,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 22:
+                        Gdx.graphics.setTitle("Storm (alpha)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -474,6 +526,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 23:
+                        Gdx.graphics.setTitle("Storm (beta)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -484,6 +537,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 24:
+                        Gdx.graphics.setTitle("Storm (chi)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -494,6 +548,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 25:
+                        Gdx.graphics.setTitle("Storm (alpha)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -503,6 +558,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 26:
+                        Gdx.graphics.setTitle("Storm (beta)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -512,6 +568,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 27:
+                        Gdx.graphics.setTitle("Storm (chi)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -521,6 +578,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 28:
+                        Gdx.graphics.setTitle("Falcon");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -531,6 +589,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 29:
+                        Gdx.graphics.setTitle("Falcon");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -540,6 +599,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 30:
+                        Gdx.graphics.setTitle("Falcon");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -550,6 +610,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 31:
+                        Gdx.graphics.setTitle("Falcon");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -559,6 +620,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 32:
+                        Gdx.graphics.setTitle("Wisp");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -569,6 +631,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 33:
+                        Gdx.graphics.setTitle("Wisp");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -578,6 +641,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 34:
+                        Gdx.graphics.setTitle("Wisp");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -588,6 +652,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 35:
+                        Gdx.graphics.setTitle("Wisp");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -595,6 +660,28 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
+                        break;
+                    case 36:
+                        colorFactory.clearCache();
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = (mixHash(x, y) << 8) | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("mixHash, " + (width * height) + " cells, "
+                                + colorFactory.cacheSize() + " colors");
+                        break;
+                    case 37:
+                        colorFactory.clearCache();
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = (oldHash(x, y) << 8) | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("old Coord hash, " + (width * height) + " cells, "
+                                + colorFactory.cacheSize() + " colors");
                         break;
                 }
             }
@@ -944,6 +1031,28 @@ public class HashVisualizer extends ApplicationAdapter {
                             }
                         }
                         break;
+                    case 36:
+                        colorFactory.clearCache();
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = (mixHash(x, y) << 8) | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("mixHash, " + (width * height) + " cells, "
+                                + colorFactory.cacheSize() + " colors");
+                        break;
+                    case 37:
+                        colorFactory.clearCache();
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = (oldHash(x, y) << 8) | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("old Coord hash, " + (width * height) + " cells, "
+                                + colorFactory.cacheSize() + " colors");
+                        break;
                 }
             }
             break;
@@ -1061,9 +1170,44 @@ public class HashVisualizer extends ApplicationAdapter {
                                 bright = (float)
                                         (//PerlinNoise.noise(x / 8.0, y / 8.0, ctr * 0.125) * 8 +
                                                 PerlinNoise.noise(x / 4.0, y / 4.0, ctr * 0.125) * 4 +
-                                                PerlinNoise.noise(x / 2.0, y / 2.0, ctr * 0.125) * 2 +
-                                                PerlinNoise.noise(x, y, ctr * 0.125)
-                                        + 7f) / 14f;
+                                                        PerlinNoise.noise(x / 2.0, y / 2.0, ctr * 0.125) * 2 +
+                                                        PerlinNoise.noise(x, y, ctr * 0.125)
+                                                        + 7f) / 14f;
+                                //+ 15.0f) / 30f;
+
+                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 8:
+                        Gdx.graphics.setTitle("Perlin Noise, one octave at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright = (float)
+                                        (//PerlinNoise.noise(xx / 16.0, yy / 16.0) * 16 +
+                                                //PerlinNoise.noise(xx / 8.0, yy / 8.0) * 8 +
+                                                //PerlinNoise.noise(xx / 4.0, yy / 4.0) * 4 +
+                                                //PerlinNoise.noise(xx / 2.0, yy / 2.0) * 2 +
+                                                PerlinNoise.noise(xx / 8.0, yy / 8.0)
+                                                        + 1f) / 2f;
+                                //+ 15f) / 30f;
+                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+
+                    case 9:
+                        Gdx.graphics.setTitle("Perlin 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float)
+                                        (//PerlinNoise.noise(x / 8.0, y / 8.0, ctr * 0.125) * 8 +
+                                                //PerlinNoise.noise(x / 4.0, y / 4.0, ctr * 0.125) * 4 +
+                                                //PerlinNoise.noise(x / 2.0, y / 2.0, ctr * 0.125) * 2 +
+                                                PerlinNoise.noise(x / 8.0, y / 8.0, ctr * 0.125)
+                                                + 1f) / 2f;
                                 //+ 15.0f) / 30f;
 
                                 display.put(x, y, colorFactory.get(bright, bright, bright, 1f));

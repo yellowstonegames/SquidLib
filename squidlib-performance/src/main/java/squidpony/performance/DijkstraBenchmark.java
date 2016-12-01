@@ -58,9 +58,22 @@ import java.util.Collections;
 import java.util.Queue;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Times:
+ * Benchmark                                        Mode  Cnt     Score     Error  Units
+ * DijkstraBenchmark.measurePathAStar               avgt    3  5083.488 ± 997.886  ms/op
+ * DijkstraBenchmark.measurePathAStar2              avgt    3   485.639 ±  21.579  ms/op
+ * DijkstraBenchmark.measurePathCustomDijkstra      avgt    3   104.302 ±  12.242  ms/op
+ * DijkstraBenchmark.measurePathDijkstra            avgt    3   113.594 ±   4.293  ms/op
+ * DijkstraBenchmark.measurePathGDXAStar            avgt    3    29.972 ±   0.370  ms/op
+ * DijkstraBenchmark.measureTinyPathAStar2          avgt    3     7.099 ±   0.192  ms/op
+ * DijkstraBenchmark.measureTinyPathCustomDijkstra  avgt    3    12.209 ±  22.552  ms/op
+ * DijkstraBenchmark.measureTinyPathDijkstra        avgt    3    25.559 ±   1.930  ms/op
+ * DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3     1.119 ±   0.100  ms/op
+ */
 public class DijkstraBenchmark {
 
-    public static final int DIMENSION = 80, PATH_LENGTH = (DIMENSION - 2) * (DIMENSION - 2);
+    public static final int DIMENSION = 40, PATH_LENGTH = (DIMENSION - 2) * (DIMENSION - 2);
     public static DungeonGenerator dungeonGen =
             new DungeonGenerator(DIMENSION, DIMENSION, new StatefulRNG(0x1337BEEFDEAL));
     public static SerpentMapGenerator serpent = new SerpentMapGenerator(DIMENSION, DIMENSION,
