@@ -1410,7 +1410,7 @@
 <h3>Class <a href="squidpony/squidmath/AStarSearch.html" title="class in squidpony.squidmath">squidpony.squidmath.AStarSearch</a> extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
-<dd>-6315495888417856297L</dd>
+<dd>1248976538417655312L</dd>
 </dl>
 <ul class="blockList">
 <li class="blockList">
@@ -1422,7 +1422,7 @@
 </li>
 <li class="blockList">
 <h4>open</h4>
-<pre><a href="http://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html?is-external=true" title="class or interface in java.util">HashSet</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html?is-external=true" title="class or interface in java.util">E</a>&gt; open</pre>
+<pre><a href="squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt; open</pre>
 </li>
 <li class="blockList">
 <h4>width</h4>
@@ -1434,19 +1434,27 @@
 </li>
 <li class="blockList">
 <h4>parent</h4>
-<pre><a href="squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[][] parent</pre>
+<pre>byte[][] parent</pre>
 </li>
 <li class="blockList">
-<h4>start</h4>
-<pre><a href="squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a> start</pre>
+<h4>gCache</h4>
+<pre>double[][] gCache</pre>
 </li>
 <li class="blockList">
-<h4>target</h4>
-<pre><a href="squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a> target</pre>
-</li>
-<li class="blockListLast">
 <h4>type</h4>
 <pre><a href="squidpony/squidmath/AStarSearch.SearchType.html" title="enum in squidpony.squidmath">AStarSearch.SearchType</a> type</pre>
+</li>
+<li class="blockList">
+<h4>dirs</h4>
+<pre><a href="squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>[] dirs</pre>
+</li>
+<li class="blockList">
+<h4>dirCount</h4>
+<pre>int dirCount</pre>
+</li>
+<li class="blockListLast">
+<h4>finished</h4>
+<pre>boolean[][] finished</pre>
 </li>
 </ul>
 </li>
