@@ -212,7 +212,11 @@ extends <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Coord3D.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Coord3D.html#hashCode--">hashCode</a></span>()</code>
+<div class="block">Gets the hash code for this Coord; does not use the standard "auto-complete" style of hash that most IDEs will
+ generate, but instead uses bit mixing (differently for x and y, with each multiplied by a different large int), a
+ XOR of the mixed x and y, a seemingly-random right shift, and an overflowing multiplication by a large prime.</div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>int</code></td>
@@ -387,9 +391,22 @@ extends <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony
 <li class="blockList">
 <h4>hashCode</h4>
 <pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Coord3D.html#line.82">hashCode</a>()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../squidpony/squidmath/Coord.html#hashCode--">Coord</a></code></span></div>
+<div class="block">Gets the hash code for this Coord; does not use the standard "auto-complete" style of hash that most IDEs will
+ generate, but instead uses bit mixing (differently for x and y, with each multiplied by a different large int), a
+ XOR of the mixed x and y, a seemingly-random right shift, and an overflowing multiplication by a large prime.
+ <br>
+ This changed at least twice in SquidLib's history. In general, you shouldn't rely on hashCodes to stay the same
+ across platforms and versions, whether for the JDK or this library. SquidLib (tries to) never depend on the
+ unpredictable ordering of some hash-based collections like HashSet and HashMap, instead using its own
+ <a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath"><code>OrderedSet</code></a> and <a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath"><code>OrderedMap</code></a>; if you use the ordered kinds, then the only things that matter about
+ this hash code are that it is fast (it's fast enough) and that it doesn't collide often (which is now much more
+ accurate than in the last version of this method).</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../squidpony/squidmath/Coord.html#hashCode--">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an int that should, for most different Coord values, be significantly different from the other hash codes</dd>
 </dl>
 </li>
 </ul>

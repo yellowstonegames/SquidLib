@@ -12,15 +12,44 @@ package squidpony.squidmath;
  * <li>http://www.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf</li>
  * <li>http://webstaff.itn.liu.se/~stegu/TNM022-2005/perlinnoiselinks/ch02.pdf</li>
  * </ul>
- *
+ * But, Gustavson's paper is not without its own issues, particularly for 2D noise.
+ * More detail is noted here,
+ * http://stackoverflow.com/questions/18885440/why-does-simplex-noise-seem-to-have-more-artifacts-than-classic-perlin-noise#21568753
+ * and some changes have been made to 2D noise generation to reduce angular artifacts.
+ * Specifically for the 2D gradient table, code based on Gustavson's paper used 12
+ * points, with some duplicates, and not all on the unit circle. In this version,
+ * points are used on the unit circle starting at (1,0) and moving along the circle
+ * in increments of 1.61803398875 radians, that is, the golden ratio phi, getting the
+ * sin and cosine of 15 points after the starting point and storing them as constants.
+ * This definitely doesn't have a noticeable 45 degree angle artifact, though it does
+ * have, to a lesser extent, some other minor artifacts.
  */
 public class PerlinNoise {
 
-    private static final int grad3[][] = {{1, 1, 0}, {-1, 1, 0}, {1, -1, 0},
-    {-1, -1, 0}, {1, 0, 1}, {-1, 0, 1},
-    {1, 0, -1}, {-1, 0, -1}, {0, 1, 1},
-    {0, -1, 1}, {0, 1, -1}, {0, -1, -1}};
-    private static final int grad4[][] = {{0, 1, 1, 1}, {0, 1, 1, -1},
+    private static final double phi = 1.61803398875;
+    /*, unit1_4 =  0.70710678118, unit1_8 = 0.38268343236, unit3_8 = 0.92387953251;*/
+    /*
+    private static final double[][] grad2 = {
+            {unit1_4, unit1_4}, {unit1_4, -unit1_4}, {-unit1_4, unit1_4}, {-unit1_4, -unit1_4},
+            {1, 0}, {-1, 0}, {0, 1}, {0, -1},
+            {unit3_8, unit1_8}, {unit3_8, -unit1_8}, {-unit3_8, unit1_8}, {-unit3_8, -unit1_8},
+            {unit1_8, unit3_8}, {unit1_8, -unit3_8}, {-unit1_8, unit3_8}, {-unit1_8, -unit3_8}};
+    */
+    private static final double[][] phiGrad2 = {
+            {1, 0}, {Math.cos(phi), Math.sin(phi)},
+            {Math.cos(phi*2), Math.sin(phi*2)}, {Math.cos(phi*3), Math.sin(phi*3)},
+            {Math.cos(phi*4), Math.sin(phi*4)}, {Math.cos(phi*5), Math.sin(phi*5)},
+            {Math.cos(phi*6), Math.sin(phi*6)}, {Math.cos(phi*7), Math.sin(phi*7)},
+            {Math.cos(phi*8), Math.sin(phi*8)}, {Math.cos(phi*9), Math.sin(phi*9)},
+            {Math.cos(phi*10), Math.sin(phi*10)}, {Math.cos(phi*11), Math.sin(phi*11)},
+            {Math.cos(phi*13), Math.sin(phi*12)}, {Math.cos(phi*13), Math.sin(phi*13)},
+            {Math.cos(phi*14), Math.sin(phi*14)}, {Math.cos(phi*15), Math.sin(phi*15)},
+    };
+    private static final int[][] grad3 = {{1, 1, 0}, {-1, 1, 0}, {1, -1, 0},
+            {-1, -1, 0}, {1, 0, 1}, {-1, 0, 1},
+            {1, 0, -1}, {-1, 0, -1}, {0, 1, 1},
+            {0, -1, 1}, {0, 1, -1}, {0, -1, -1}};
+    private static final int[][] grad4 = {{0, 1, 1, 1}, {0, 1, 1, -1},
     {0, 1, -1, 1}, {0, 1, -1, -1},
     {0, -1, 1, 1}, {0, -1, 1, -1},
     {0, -1, -1, 1}, {0, -1, -1, -1},
@@ -100,7 +129,7 @@ public class PerlinNoise {
             {2, 1, 0, 3}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0},
             {3, 1, 0, 2}, {0, 0, 0, 0}, {3, 2, 0, 1}, {3, 2, 1, 0}};
 
-    private static double dot(int g[], double x, double y) {
+    private static double dot(double g[], double x, double y) {
         return g[0] * x + g[1] * y;
     }
 
@@ -155,16 +184,16 @@ public class PerlinNoise {
         // Work out the hashed gradient indices of the three simplex corners
         int ii = i & 255;
         int jj = j & 255;
-        int gi0 = perm[ii + perm[jj]] % 12;
-        int gi1 = perm[ii + i1 + perm[jj + j1]] % 12;
-        int gi2 = perm[ii + 1 + perm[jj + 1]] % 12;
+        int gi0 = perm[ii + perm[jj]] & 15;
+        int gi1 = perm[ii + i1 + perm[jj + j1]] & 15;
+        int gi2 = perm[ii + 1 + perm[jj + 1]] & 15;
         // Calculate the contribution from the three corners
         double t0 = 0.5 - x0 * x0 - y0 * y0;
         if (t0 < 0) {
             noise0 = 0.0;
         } else {
             t0 *= t0;
-            noise0 = t0 * t0 * dot(grad3[gi0], x0, y0); // (x,y) of grad3 used
+            noise0 = t0 * t0 * dot(phiGrad2[gi0], x0, y0); // (x,y) of grad3 used
             // for 2D gradient
         }
         double t1 = 0.5 - x1 * x1 - y1 * y1;
@@ -172,14 +201,14 @@ public class PerlinNoise {
             noise1 = 0.0;
         } else {
             t1 *= t1;
-            noise1 = t1 * t1 * dot(grad3[gi1], x1, y1);
+            noise1 = t1 * t1 * dot(phiGrad2[gi1], x1, y1);
         }
         double t2 = 0.5 - x2 * x2 - y2 * y2;
         if (t2 < 0) {
             noise2 = 0.0;
         } else {
             t2 *= t2;
-            noise2 = t2 * t2 * dot(grad3[gi2], x2, y2);
+            noise2 = t2 * t2 * dot(phiGrad2[gi2], x2, y2);
         }
         // Add contributions from each corner to get the final noise value.
         // The result is scaled to return values in the interval [-1,1].

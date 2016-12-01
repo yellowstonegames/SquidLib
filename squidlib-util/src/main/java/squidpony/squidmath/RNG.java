@@ -824,4 +824,19 @@ public class RNG implements Serializable {
     public String toString() {
         return "RNG with Randomness Source " + random;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RNG)) return false;
+
+        RNG rng = (RNG) o;
+
+        return random.equals(rng.random);
+    }
+
+    @Override
+    public int hashCode() {
+        return random.hashCode();
+    }
 }

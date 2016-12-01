@@ -272,6 +272,18 @@ public interface IColorCenter<T> {
             cache.clear();
         }
 
+		/**
+		 * The actual cache is not public, but there are cases where you may want to know how many different colors are
+		 * actually used in a frame or a section of the game. If the cache was emptied (which might be from calling
+		 * {@link #clearCache()}), some colors were requested, then this is called, the returned int should be the
+		 * count of distinct colors this IColorCenter had created and cached; duplicates won't be counted twice.
+		 * @return
+		 */
+		public int cacheSize()
+		{
+			return cache.size();
+		}
+
         /**
          * You may want to copy colors between IColorCenter instances that have different create() methods -- and as
          * such, will have different values for the same keys in the cache. This allows you to copy the cache from other

@@ -832,7 +832,22 @@
 <span class="sourceLineNo">824</span>    public String toString() {<a name="line.824"></a>
 <span class="sourceLineNo">825</span>        return "RNG with Randomness Source " + random;<a name="line.825"></a>
 <span class="sourceLineNo">826</span>    }<a name="line.826"></a>
-<span class="sourceLineNo">827</span>}<a name="line.827"></a>
+<span class="sourceLineNo">827</span><a name="line.827"></a>
+<span class="sourceLineNo">828</span>    @Override<a name="line.828"></a>
+<span class="sourceLineNo">829</span>    public boolean equals(Object o) {<a name="line.829"></a>
+<span class="sourceLineNo">830</span>        if (this == o) return true;<a name="line.830"></a>
+<span class="sourceLineNo">831</span>        if (!(o instanceof RNG)) return false;<a name="line.831"></a>
+<span class="sourceLineNo">832</span><a name="line.832"></a>
+<span class="sourceLineNo">833</span>        RNG rng = (RNG) o;<a name="line.833"></a>
+<span class="sourceLineNo">834</span><a name="line.834"></a>
+<span class="sourceLineNo">835</span>        return random.equals(rng.random);<a name="line.835"></a>
+<span class="sourceLineNo">836</span>    }<a name="line.836"></a>
+<span class="sourceLineNo">837</span><a name="line.837"></a>
+<span class="sourceLineNo">838</span>    @Override<a name="line.838"></a>
+<span class="sourceLineNo">839</span>    public int hashCode() {<a name="line.839"></a>
+<span class="sourceLineNo">840</span>        return random.hashCode();<a name="line.840"></a>
+<span class="sourceLineNo">841</span>    }<a name="line.841"></a>
+<span class="sourceLineNo">842</span>}<a name="line.842"></a>
 
 
 

@@ -109,7 +109,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.17">PerlinNoise</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.27">PerlinNoise</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">This is Ken Perlin's third revision of his noise function. It is sometimes
  referred to as "Simplex Noise". Results are bound by (-1, 1) inclusive.
@@ -121,7 +121,18 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  <ul>
  <li>http://www.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf</li>
  <li>http://webstaff.itn.liu.se/~stegu/TNM022-2005/perlinnoiselinks/ch02.pdf</li>
- </ul></div>
+ </ul>
+ But, Gustavson's paper is not without its own issues, particularly for 2D noise.
+ More detail is noted here,
+ http://stackoverflow.com/questions/18885440/why-does-simplex-noise-seem-to-have-more-artifacts-than-classic-perlin-noise#21568753
+ and some changes have been made to 2D noise generation to reduce angular artifacts.
+ Specifically for the 2D gradient table, code based on Gustavson's paper used 12
+ points, with some duplicates, and not all on the unit circle. In this version,
+ points are used on the unit circle starting at (1,0) and moving along the circle
+ in increments of 1.61803398875 radians, that is, the golden ratio phi, getting the
+ sin and cosine of 15 points after the starting point and storing them as constants.
+ This definitely doesn't have a noticeable 45 degree angle artifact, though it does
+ have, to a lesser extent, some other minor artifacts.</div>
 </li>
 </ul>
 </div>
@@ -192,7 +203,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.122">noise</a>(double&nbsp;xin,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.151">noise</a>(double&nbsp;xin,
                            double&nbsp;yin)</pre>
 <div class="block">2D simplex noise.</div>
 <dl>
@@ -210,7 +221,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.197">noise</a>(double&nbsp;xin,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.226">noise</a>(double&nbsp;xin,
                            double&nbsp;yin,
                            double&nbsp;zin)</pre>
 <div class="block">3D simplex noise.</div>
@@ -230,7 +241,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.340">noise</a>(double&nbsp;x,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.369">noise</a>(double&nbsp;x,
                            double&nbsp;y,
                            double&nbsp;z,
                            double&nbsp;w)</pre>

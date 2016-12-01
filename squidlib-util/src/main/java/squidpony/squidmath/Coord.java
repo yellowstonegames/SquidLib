@@ -417,12 +417,23 @@ public class Coord implements Serializable {
         return "Coord (x " + x + ", y " + y + ")";
     }
 
+    /**
+     * Gets the hash code for this Coord; does not use the standard "auto-complete" style of hash that most IDEs will
+     * generate, but instead uses bit mixing (differently for x and y, with each multiplied by a different large int), a
+     * XOR of the mixed x and y, a seemingly-random right shift, and an overflowing multiplication by a large prime.
+     * <br>
+     * This changed at least twice in SquidLib's history. In general, you shouldn't rely on hashCodes to stay the same
+     * across platforms and versions, whether for the JDK or this library. SquidLib (tries to) never depend on the
+     * unpredictable ordering of some hash-based collections like HashSet and HashMap, instead using its own
+     * {@link OrderedSet} and {@link OrderedMap}; if you use the ordered kinds, then the only things that matter about
+     * this hash code are that it is fast (it's fast enough) and that it doesn't collide often (which is now much more
+     * accurate than in the last version of this method).
+     * @return an int that should, for most different Coord values, be significantly different from the other hash codes
+     */
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 113 * hash + x;
-        hash = 113 * hash + y;
-        return hash;
+        int x2 = 0x9E3779B9 * x, y2 = 0x632BE5AB * y;
+        return ((x2 ^ y2) >>> ((x2 & 7) + (y2 & 7))) * 0x85157AF5;
     }
 
     /**
