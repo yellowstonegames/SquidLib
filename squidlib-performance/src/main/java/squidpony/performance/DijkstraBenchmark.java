@@ -44,7 +44,7 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
-import squidpony.performance.alternate.AStarExperiment;
+import squidpony.squidmath.AStarSearch;
 import squidpony.squidai.CustomDijkstraMap;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Adjacency;
@@ -60,7 +60,7 @@ import java.util.concurrent.TimeUnit;
 
 public class DijkstraBenchmark {
 
-    public static final int DIMENSION = 40, PATH_LENGTH = (DIMENSION - 2) * (DIMENSION - 2);
+    public static final int DIMENSION = 80, PATH_LENGTH = (DIMENSION - 2) * (DIMENSION - 2);
     public static DungeonGenerator dungeonGen =
             new DungeonGenerator(DIMENSION, DIMENSION, new StatefulRNG(0x1337BEEFDEAL));
     public static SerpentMapGenerator serpent = new SerpentMapGenerator(DIMENSION, DIMENSION,
@@ -354,7 +354,7 @@ public class DijkstraBenchmark {
 
     public long doPathAStar()
     {
-        AStarSearch astar = new AStarSearch(astarMap, AStarSearch.SearchType.CHEBYSHEV);
+        squidpony.performance.alternate.AStarSearch astar = new squidpony.performance.alternate.AStarSearch(astarMap, squidpony.performance.alternate.AStarSearch.SearchType.CHEBYSHEV);
         Coord r;
         long scanned = 0;
         DungeonUtility utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
@@ -382,7 +382,7 @@ public class DijkstraBenchmark {
 
     public long doPathAStar2()
     {
-        AStarExperiment astar = new AStarExperiment(astarMap, AStarExperiment.SearchType.CHEBYSHEV);
+        AStarSearch astar = new AStarSearch(astarMap, AStarSearch.SearchType.CHEBYSHEV);
         Coord r;
         long scanned = 0;
         DungeonUtility utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
@@ -406,6 +406,34 @@ public class DijkstraBenchmark {
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measurePathAStar2() throws InterruptedException {
         System.out.println(doPathAStar2());
+    }
+
+    public long doTinyPathAStar2()
+    {
+        AStarSearch astar = new AStarSearch(astarMap, AStarSearch.SearchType.CHEBYSHEV);
+        Coord r;
+        long scanned = 0;
+        DungeonUtility utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
+        Queue<Coord> latestPath;
+        for (int x = 1; x < DIMENSION - 1; x++) {
+            for (int y = 1; y < DIMENSION - 1; y++) {
+                if (map[x][y] == '#')
+                    continue;
+                // this should ensure no blatant correlation between R and W
+                utility.rng.setState((x << 22) | (y << 16) | (x * y));
+                r = nearbyMap[x][y];
+                latestPath = astar.path(r, Coord.get(x, y));
+                scanned += latestPath.size();
+            }
+        }
+        return scanned;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureTinyPathAStar2() throws InterruptedException {
+        System.out.println(doTinyPathAStar2());
     }
 
     class GridGraph implements IndexedGraph<Coord>
