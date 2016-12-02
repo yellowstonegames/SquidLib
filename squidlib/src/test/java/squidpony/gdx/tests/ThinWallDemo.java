@@ -147,7 +147,7 @@ public class ThinWallDemo extends ApplicationAdapter {
         // Creates a layered series of text grids in a SquidLayers object, using the previously set-up textFactory and
         // SquidColorCenters.
         display = new SquidLayers(overlapWidth, overlapHeight, cellWidth>>1, cellHeight>>1,
-                textFactory.copy(), bgCenter, fgCenter).addExtraLayer();
+                textFactory.copy(), bgCenter, fgCenter);
         display.getTextFactory().width(cellWidth).height(cellHeight).initBySize();
         display.getBackgroundLayer().setOnlyRenderEven(true);
 
