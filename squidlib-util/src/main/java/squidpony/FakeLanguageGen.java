@@ -1270,7 +1270,10 @@ public class FakeLanguageGen implements Serializable {
      * Somewhat close to Old Norse, which is itself very close to Icelandic, so this uses Icelandic spelling rules. Not
      * to be confused with the language(s) of Norway, where the Norwegian languages are called norsk, and are further
      * distinguished into Bokmål and Nynorsk. This should not be likely to seem like any form of Norwegian, since it
-     * doesn't have the a-with-ring letter 'å' and has the letters eth ('Ðð') and thorn (Þþ).
+     * doesn't have the a-with-ring letter 'å' and has the letters eth ('Ðð') and thorn (Þþ). If you want to remove any
+     * letters not present on a US-ASCII keyboard, you can use {@link Modifier#SIMPLIFY_NORSE} on this language or some
+     * mix of this with other languages; it also changes some of the usage of "j" where it means the English "y" sound,
+     * making "fjord" into "fyord", which is closer to familiar uses from East Asia like "Tokyo" and "Pyongyang".
      * <br>
      * Leyrk tjör stomri kna snó æd ðrépdápá, prygso?
      */
@@ -1280,7 +1283,7 @@ public class FakeLanguageGen implements Serializable {
             new String[]{},
             new String[]{"b","bl","br","bj","d","dr","dj","ð","ðl","ðr","f","fl","flj","fr","fn","fj","g","gn","gj","h",
                     "hj","hl","hr","hv","j","k","kl","kr","kn","kj","l","lj","m","mj","n","nj","p","pl","pr","pj","r",
-                    "rj","s","sj","sl","sn","sp","st","sþ","sð","t","tj","v","vl","vr","vj","þ","þl","þr",
+                    "rj","s","sj","sl","sn","sp","st","str","skr","skj","sþ","sð","t","tj","v","vl","vr","vj","þ","þl","þr",
 
                     "d","f","fl","g","gl","gr","k","h","hr","n","k","l","m","mj","n","r","s","st","t","þ","ð",
                     "d","f","fl","g","gl","gr","k","h","hr","n","k","l","m","mj","n","r","s","st","t","þ","ð",
@@ -1982,9 +1985,12 @@ public class FakeLanguageGen implements Serializable {
      */
     public String word(RNG rng, boolean capitalize, int approxSyllables, Pattern[] additionalChecks) {
         if (approxSyllables <= 0) {
-            String finished = rng.getRandomElement(openingVowels);
-            if (capitalize) return finished.substring(0, 1).toUpperCase();
-            else return finished.substring(0, 1);
+            StringBuilder sb = new StringBuilder(rng.getRandomElement(openingVowels));
+            for (Modifier mod : modifiers) {
+                sb = mod.modify(rng, sb);
+            }
+            if (capitalize) sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
+            return sb.toString();
         }
         while (true) {
             StringBuilder sb = new StringBuilder(20), ender = new StringBuilder(12);
@@ -3062,6 +3068,21 @@ public class FakeLanguageGen implements Serializable {
          * For a language that never repeats the same letter twice in a row.
          */
         public static final Modifier NO_DOUBLES = new Modifier("(.)\\1", "$1");
+        //áéíýóúæö ðþ
+        public static final Modifier SIMPLIFY_NORSE = replacementTable(Maker.makeOM(
+                "á", "a",
+                "é", "e",
+                "í", "i",
+                "ý", "y",
+                "ó", "o",
+                "ú", "u",
+                "æ", "ae",
+                "ö", "ou",
+                "([^aeiou])jy", "$1yai",
+                "([^aeiou])j(?:[aeiouy]+)", "$1yo",
+                "s([ðþ])", "st",
+                "\\bf[ðþ]", "fr",
+                "[ðþ]", "th"));
 
         /**
          * Creates a Modifier that will replace the nth char in initial with the nth char in change. Expects initial and
@@ -3078,6 +3099,30 @@ public class FakeLanguageGen implements Serializable {
                 //literal string syntax; avoids sensitive escaping issues and also doesn't need a character class,
                 // which is slightly slower and has some odd escaping cases.
                 alts[i] = new Alteration("\\Q" + initial.charAt(i), change.substring(i, i + 1));
+            }
+            return new Modifier(alts);
+        }
+
+        /**
+         * Creates a Modifier that will replace the nth String key in map with the nth value. Because of the
+         * state of the text at the time modifiers are run, only lower-case letters need to be searched for.
+         * This overload of replacementTable allows full regex pattern strings as keys and replacement syntax,
+         * such as searching for "([aeiou])\\1+" to find repeated occurrences of the same vowel, and "$1" in
+         * this example to replace the repeated section with only the first vowel.
+         * The ordering of map matters if a later key contains an earlier key (the earlier one will be replaced
+         * first, possibly making the later key not match), or if an earlier replacement causes a later one to
+         * become valid.
+         * @param map containing String keys to replace and String values to use instead; replacements happen in order
+         * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method
+         */
+        public static Modifier replacementTable(OrderedMap<String, String> map) {
+            if (map == null)
+                return new Modifier();
+            Alteration[] alts = new Alteration[map.size()];
+            for (int i = 0; i < alts.length; i++) {
+                //literal string syntax; avoids sensitive escaping issues and also doesn't need a character class,
+                // which is slightly slower and has some odd escaping cases.
+                alts[i] = new Alteration(map.keyAt(i), map.getAt(i));
             }
             return new Modifier(alts);
         }
