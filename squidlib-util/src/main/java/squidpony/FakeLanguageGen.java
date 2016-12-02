@@ -80,6 +80,7 @@ public class FakeLanguageGen implements Serializable {
                             Pattern.compile("[Tt]t[^aeiouy]{2}"),
                             Pattern.compile("[Yy]h([^aeiouy]|$)"),
                             Pattern.compile("([dbvcxqjky])\\1$"),
+                            Pattern.compile("[qi]y$"),
                             Pattern.compile("[szSZrlRL][^aeiou][rlsz]"),
                             Pattern.compile("[UIuiYy][wy]"),
                             Pattern.compile("^[UIui][ae]")
@@ -3069,6 +3070,12 @@ public class FakeLanguageGen implements Serializable {
          */
         public static final Modifier NO_DOUBLES = new Modifier("(.)\\1", "$1");
         //áéíýóúæö ðþ
+        /**
+         * Removes accented letters and the two non-English consonants from text generated with {@link #NORSE}.
+         * Replaces á, é, í, ý, ó, æ, ú, and ö with a, e, i, y, o, ae, and ou. In some instances, replaces j
+         * with y. Replaces ð and þ with th and th, except for when preceded by s (then it replaces sð or sþ
+         * with st or st) or when the start of a word is fð or fþ, where it replaces with fr or fr.
+         */
         public static final Modifier SIMPLIFY_NORSE = replacementTable(Maker.makeOM(
                 "á", "a",
                 "é", "e",
@@ -3083,6 +3090,24 @@ public class FakeLanguageGen implements Serializable {
                 "s([ðþ])", "st",
                 "\\bf[ðþ]", "fr",
                 "[ðþ]", "th"));
+        //àáâãäåāăąǻæǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳy
+        /**
+         * Some changes that can be applied when sanity checks (which force re-generating a new word) aren't appropriate
+         * for fixing a word that isn't pronounceable.
+         */
+        //bcçćĉċčdþðďđḍfgĝğġģhĥħḥjĵȷkķlĺļľŀłḷḹmṃnñńņňŋṅṇpqrŕŗřṛṝsśŝşšșṣtţťțṭvwŵẁẃẅxyýÿŷỳzźżž
+        public static final Modifier GENERAL_CLEANUP = replacementTable(Maker.makeOM(
+                "[æǽœìíîïĩīĭįıiùúûüũūŭůűųuýÿŷỳy]([æǽœýÿŷỳy])", "$1",
+                "q([ùúûüũūŭůűųu])$", "q$1e",
+                "([ìíîïĩīĭįıi])[ìíîïĩīĭįıi]", "$1",
+                "([æǽœìíîïĩīĭįıiùúûüũūŭůűųuýÿŷỳy])[wŵẁẃẅ]$", "$1",
+                "([ùúûüũūŭůűųu])([òóôõöøōŏőǿo])", "$2$1",
+                "[àáâãäåāăąǻaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőǿoùúûüũūŭůűųuýÿŷỳy]([æǽœ])", "$1",
+                "([æǽœ])[àáâãäåāăąǻaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőǿoùúûüũūŭůűųuýÿŷỳy]", "$1",
+                "([wŵẁẃẅ])[wŵẁẃẅ]", "$1",
+                "qq", "q"));
+
+
 
         /**
          * Creates a Modifier that will replace the nth char in initial with the nth char in change. Expects initial and
