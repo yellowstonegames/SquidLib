@@ -79,7 +79,7 @@ public class FakeLanguageGen implements Serializable {
                             Pattern.compile("[Hh][tcszi]?h"),
                             Pattern.compile("[Tt]t[^aeiouy]{2}"),
                             Pattern.compile("[Yy]h([^aeiouy]|$)"),
-                            Pattern.compile("([dbvcxqjky])\\1$"),
+                            Pattern.compile("([bvcxqjky])\\1$"),
                             Pattern.compile("[qi]y$"),
                             Pattern.compile("[szSZrlRL][^aeiou][rlsz]"),
                             Pattern.compile("[UIuiYy][wy]"),
@@ -1317,6 +1317,30 @@ public class FakeLanguageGen implements Serializable {
             new String[]{"etta","eþa","uinn","ing","ard","eign","ef","efs","eg","ir","ir","ir","ir","ír","ír","ar","ar",
                     "ar","ár","or","or","ór","ör","on","on","ón","onn","unn","ung","ut","ett","att","ot"},
             new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{5, 5, 4, 3, 1}, 0.25, 0.5, 0.0, 0.08, genericSanityChecks, true).register();
+    /**
+     * Imitation text from an approximation of the language spoken by the Aztec people and also over a million
+     * contemporary people in parts of Mexico. This is may be hard to pronounce, since it uses "tl" as a normal
+     * consonant (it can start or end words), but is mostly a fairly recognizable style of language.
+     * <br>
+     * Olcoletl latl palitz ach; xatatli tzotloca amtitl, xatloatzoatl tealitozaztitli otamtax?
+     */
+    public static final FakeLanguageGen NAHUATL = new FakeLanguageGen(
+            new String[]{"a", "a", "a", "a", "a", "a", "a", "i", "i", "i", "i", "i", "o", "o", "o", "e", "e", "eo", "oa", "ea"},
+            new String[]{},
+            new String[]{"ch", "c", "h", "m", "l", "n", "p", "t", "tl", "tz", "x", "y", "z", "hu", "cu",
+                    "l", "l", "l", "p", "p", "t", "t", "t", "t", "t", "tl", "tl", "tz", "z", "x", "hu"},
+            new String[]{"zp", "ztl", "zc", "zt", "zl", "ct", "cl", "pl", "mt", "mc", "mch", "cz", "tc", "lc",
+                    "hu", "hu", "hu", "cu"},
+            new String[]{
+                    "ch", "c", "h", "m", "l", "n", "p", "t", "tl", "tz", "x", "y", "z",
+                    "l", "l", "l", "l", "p", "t", "t", "t", "tl", "tl", "tz", "tz", "z", "x"
+            },
+            new String[]{"otl", "eotl", "ili", "itl", "atl", "atli", "oca", "itli", "oatl", "al", "ico", "acual",
+                    "ote", "ope", "oli", "ili", "acan", "ato", "atotl", "ache", "oc", "aloc", "ax", "itziz", "iz"
+            },
+            new String[]{}, new int[]{1, 2, 3, 4, 5, 6}, new double[]{3, 4, 5, 4, 3, 1}, 0.3, 0.2, 0.0, 0.3, genericSanityChecks, true)
+            .addModifiers(new Modifier("c([ie])", "qu$1"),
+                    new Modifier("z([ie])", "c$1")).register();
 
     /**
      * A mix of four different languages, using only ASCII characters, that is meant for generating single words for

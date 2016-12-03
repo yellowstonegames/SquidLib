@@ -119,25 +119,38 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
+<td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.Modifier.html#GENERAL_CLEANUP">GENERAL_CLEANUP</a></span></code>
+<div class="block">Some changes that can be applied when sanity checks (which force re-generating a new word) aren't appropriate
+ for fixing a word that isn't pronounceable.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
 <td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.Modifier.html#HISS">HISS</a></span></code>
 <div class="block">For a character who always lengthens 's' and 'z' sounds not starting a word.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
 <td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.Modifier.html#LISP">LISP</a></span></code>
 <div class="block">For a character who always pronounces 's', 'ss', and 'sh' as 'th'.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
 <td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.Modifier.html#NO_DOUBLES">NO_DOUBLES</a></span></code>
 <div class="block">For a language that never repeats the same letter twice in a row.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
 <td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.Modifier.html#SIMPLIFY_ARABIC">SIMPLIFY_ARABIC</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
+<td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.Modifier.html#SIMPLIFY_NORSE">SIMPLIFY_NORSE</a></span></code>
+<div class="block">Removes accented letters and the two non-English consonants from text generated with <a href="../../squidpony/FakeLanguageGen.html#NORSE"><code>FakeLanguageGen.NORSE</code></a>.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
@@ -183,6 +196,12 @@
         double&nbsp;chance)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
+<td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.Modifier.html#replacementTable-squidpony.squidmath.OrderedMap-">replacementTable</a></span>(<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;map)</code>
+<div class="block">Creates a Modifier that will replace the nth String key in map with the nth value.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
 <td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.Modifier.html#replacementTable-java.lang.String-java.lang.String-">replacementTable</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;initial,
                 <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;change)</code>
