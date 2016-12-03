@@ -163,6 +163,13 @@ public class LanguageGenTest {
         }
 
         rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.NAHUATL;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 5, 10, new String[]{",", ",", ";"},
+                    new String[]{".", ".", "!", "?", "..."}, 0.1));
+        }
+
+        rng.setState(0xf00df00L);
         flg = FakeLanguageGen.FANTASY_NAME;
         System.out.print(flg.word(rng, true, rng.between(2, 4)));
         for (int i = 1; i < 10; i++) {
@@ -216,6 +223,9 @@ public class LanguageGenTest {
         flg = FakeLanguageGen.NORSE.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_NORSE);
         System.out.println('"' + flg.sentence(rng, 4, 7, new String[]{",", ",", ";"},
                 new String[]{"!", "?", ".", ".", "."}, 0.15) + "\",");
+        flg = FakeLanguageGen.NAHUATL;
+        System.out.println('"' + flg.sentence(rng, 3, 6, new String[]{",", ",", ";"},
+                new String[]{"!", "?", ".", ".", "."}, 0.1) + "\",");
 
         rng.setState(0xf00df00L);
         flg = FakeLanguageGen.HINDI_ROMANIZED;
@@ -303,7 +313,8 @@ public class LanguageGenTest {
                 FakeLanguageGen.randomLanguage(CrossHash.Lightning.hash64("The Roar Of That Slumbering Shadow That Mankind Wills Itself To Forget")),
                 FakeLanguageGen.INUKTITUT,
                 FakeLanguageGen.NORSE,
-                FakeLanguageGen.NORSE.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_NORSE)
+                FakeLanguageGen.NORSE.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_NORSE),
+                FakeLanguageGen.NAHUATL
                 //FakeLanguageGen.RUSSIAN_ROMANIZED.mix(FakeLanguageGen.GREEK_ROMANIZED, 0.4),
                 //FakeLanguageGen.LOVECRAFT.mix(FakeLanguageGen.RUSSIAN_ROMANIZED, 0.4),
                 //FakeLanguageGen.randomLanguage(new StatefulRNG(2252637788195L)),
