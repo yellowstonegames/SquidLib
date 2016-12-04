@@ -328,8 +328,9 @@ se$->z
             Pattern.compile("[g][hн]?[aаαΛeезξεЗΣyуλγУ]+$", 17),
             Pattern.compile("[wψшщuμυνv](?:[hн]?)[aаαΛeезξεЗΣoоюσοuμυνv]+$", 17),
     }, additionalSuffixChecks = {
-            Pattern.compile("^[aаαeезξεЗΣoоюσοuμυ]*[nи]*[tтτΓгdgkкκcсςq]", 17),
-            Pattern.compile("^[iτιyуλγУaаαΛ]*[gj]", 17),
+            Pattern.compile("^(?:[aаαeезξεЗΣoоюσοuμυ]*)(?:[nи]+)[tтτΓгdgkкκcсςq]", 17),
+            Pattern.compile("^(?:[aаαeезξεЗΣoоюσοuμυ]+)(?:[nи]*)[tтτΓгdgkкκcсςq]", 17),
+            Pattern.compile("^(?:[iτιyуλγУaаαΛ]*)[gj]", 17),
             Pattern.compile("^[nи]..?[Ssξlιζz]", 17),
             Pattern.compile("^[iτιyуλγУaаαΛ][dtтτΓг]", 17),
             Pattern.compile("^[iτιyуλγУaаαΛ][kкκcсςq][kкκcсςq]", 17),

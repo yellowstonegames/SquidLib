@@ -256,7 +256,6 @@ public class LanguageGenTest {
                 FakeLanguageGen.FANTASY_NAME,
                 FakeLanguageGen.FANCY_FANTASY_NAME,
                 FakeLanguageGen.ARABIC_ROMANIZED,
-                FakeLanguageGen.ARABIC_ROMANIZED.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_ARABIC),
                 FakeLanguageGen.HINDI_ROMANIZED.removeAccents(),
                 FakeLanguageGen.RUSSIAN_ROMANIZED.mix(FakeLanguageGen.SOMALI, 0.25),
                 FakeLanguageGen.GREEK_ROMANIZED.mix(FakeLanguageGen.HINDI_ROMANIZED.removeAccents(), 0.5),
