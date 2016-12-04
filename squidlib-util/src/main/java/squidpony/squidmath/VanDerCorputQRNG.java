@@ -227,18 +227,13 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
     public static Coord halton(int width, int height, int index)
     {
         int s = (index+1 & 0x7fffffff),
-                numX = s & 1, numY = s % 3, denX = 2, denY = 3;
-        while (denX <= s) {
-            numX *= 2;
-            numX += (s % (denX * 2)) / denX;
-            denX *= 2;
-        }
+                numY = s % 3, denY = 3;
         while (denY <= s) {
             numY *= 3;
             numY += (s % (denY * 3)) / denY;
             denY *= 3;
         }
-        return Coord.get(numX * width / denX, numY * height / denY);
+        return Coord.get((int)(width * determine2(s)), numY * height / denY);
     }
     /**
      * Convenience method that gets a quasi-random Coord3D between integer (0,0,0) inclusive and (width,height,depth)
@@ -259,12 +254,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
     public static Coord3D halton(int width, int height, int depth, int index)
     {
         int s = (index+1 & 0x7fffffff),
-                numX = s & 1, numY = s % 3, denX = 2, denY = 3, numZ = s % 5, denZ = 5;
-        while (denX <= s) {
-            numX *= 2;
-            numX += (s % (denX * 2)) / denX;
-            denX *= 2;
-        }
+                numY = s % 3, denY = 3, numZ = s % 5, denZ = 5;
         while (denY <= s) {
             numY *= 3;
             numY += (s % (denY * 3)) / denY;
@@ -275,7 +265,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
             numZ += (s % (denZ * 5)) / denZ;
             denZ *= 5;
         }
-        return Coord3D.get(numX * width / denX, numY * height / denY, numZ * depth / denZ);
+        return Coord3D.get((int)(width * determine2(s)), numY * height / denY, numZ * depth / denZ);
     }
 
     /**
@@ -284,12 +274,16 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      * and 7 should be among the first choices. This does not perform any scrambling on index other than incrementing it
      * and ensuring it is positive (by discarding the sign bit; for all positive index values other than 0x7FFFFFFF,
      * this has no effect).
+     * <br>
+     * Delegates to {@link #determine2(int)} when base is 2, which should offer some speed improvement.
      * @param base a (typically very small) prime number to use as the base/radix of the van der Corput sequence
      * @param index the position in the sequence of the requested base
      * @return a quasi-random double between 0.0 (inclusive) and 1.0 (exclusive).
      */
     public static double determine(int base, int index)
     {
+        if(base == 2)
+            return determine2(index);
         int s = (index+1 & 0x7fffffff),
                 num = s % base, den = base;
         while (den <= s) {
@@ -298,5 +292,38 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
             den *= base;
         }
         return num / (double)den;
+    }
+    /**
+     * Convenience method to get a double from the van der Corput sequence with the base 2 at the requested
+     * {@code index} without needing to construct a VanDerCorputQRNG. This does not perform any scrambling on index
+     * other than incrementing it and ensuring it is positive (by discarding the sign bit; for all positive index values
+     * other than 0x7FFFFFFF, this has no effect).
+     * <br>
+     * Because binary manipulation of numbers is easier and more efficient, this method should be somewhat faster than
+     * the alternatives, like {@link #determine(int, int)} with base 2.
+     * @param index the position in the sequence of the requested base
+     * @return a quasi-random double between 0.0 (inclusive) and 1.0 (exclusive).
+     */
+    public static double determine2(int index)
+    {
+        int s = (index+1 & 0x7fffffff), leading = Integer.numberOfLeadingZeros(s);
+        return (Integer.reverse(s) >>> leading) / (1.0 * (1 << (32 - leading)));
+    }
+
+    private static final int[] lowPrimes = {2, 3, 2, 3, 5, 2, 3, 2};
+
+    /**
+     * Chooses one sequence from the van der Corput sequences with bases 2, 3, and 5, where 5 is used 1/8 of the time,
+     * 3 is used 3/8 of the time, and 2 is used 1/2 of the time, and returns a double from the chosen sequence at the
+     * specified {@code index}. The exact setup used for the choice this makes is potentially fragile, but in certain
+     * circumstances this does better than {@link SobolQRNG} at avoiding extremely close values (the kind that overlap
+     * on actual maps). Speed is not a concern here; this should be very much fast enough for the expected usage in
+     * map generation (it's used in {@link GreasedRegion#quasiRandomSeparated(double)}.
+     * @param index the index to use from one of the sequences
+     * @return a double from 0.0 (inclusive, but extremely rare) to 1.0 (exclusive); values will tend to spread apart
+     */
+    public static double determineMixed(int index)
+    {
+        return determine(lowPrimes[index & 7], index);
     }
 }

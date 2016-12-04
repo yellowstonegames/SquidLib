@@ -27,7 +27,6 @@ public class GreasedRegionTest {
     public static char[][] dungeon = dungeonGen.generate();
     public static GreasedRegion dataDungeon = new GreasedRegion(dungeon, '.');
     public static final char[] letters = ArrayTools.letterSpan(256);
-    public static final int maxLetter = 256;
     static {
         //printRegion(dataCross);
         //printRegion(dataCross2);
@@ -76,11 +75,21 @@ public class GreasedRegionTest {
                     gr.singleRandom(srng), gr.singleRandom(srng),
                     gr.singleRandom(srng), gr.singleRandom(srng)),
                     120, 120, '@', '.'));
-            System.out.println();
-            printRegion(dataCross.copy().not().insertSeveral(dataCross.separatedPortion(0.05)));
+            System.out.println("\nSOBOL:");
+            int dcs = dataCross.copy().not().size() + dataCross.size() / 20;
+            printRegion(gr = dataCross.copy().not().insertSeveral(dataCross.separatedPortion(0.05)));
+            System.out.println("expected size: " + (dcs) + ", actual size " + gr.size());
+            System.out.println("\nVDC_2:");
+            printRegion(gr2 = dataCross.copy().not().insertSeveral(dataCross.quasiRandomSeparated(0.05)));
+            System.out.println("expected size: " + (dcs) + ", actual size " + gr2.size());
             System.out.println();
             printRegion(dataDungeon);
-            printRegion(dataDungeon.copy().clear().insertSeveral(dataDungeon.separatedPortion(0.06)));
+            System.out.println("\nSOBOL:");
+            printRegion(gr = dataDungeon.copy().clear().insertSeveral(dataDungeon.separatedPortion(0.06)));
+            System.out.println("expected size: " + (dataDungeon.size() * 3 / 50) + ", actual size " + gr.size());
+            System.out.println("\nVDC_2:");
+            printRegion(gr2 = dataDungeon.copy().clear().insertSeveral(dataDungeon.quasiRandomSeparated(0.06)));
+            System.out.println("expected size: " + (dataDungeon.size() * 3 / 50) + ", actual size " + gr2.size());
         }
         GreasedRegion g = new GreasedRegion(box);
         GreasedRegion g2 = new GreasedRegion(64, 64);
