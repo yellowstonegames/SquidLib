@@ -235,79 +235,106 @@
 <span class="sourceLineNo">227</span>    public static Coord halton(int width, int height, int index)<a name="line.227"></a>
 <span class="sourceLineNo">228</span>    {<a name="line.228"></a>
 <span class="sourceLineNo">229</span>        int s = (index+1 &amp; 0x7fffffff),<a name="line.229"></a>
-<span class="sourceLineNo">230</span>                numX = s &amp; 1, numY = s % 3, denX = 2, denY = 3;<a name="line.230"></a>
-<span class="sourceLineNo">231</span>        while (denX &lt;= s) {<a name="line.231"></a>
-<span class="sourceLineNo">232</span>            numX *= 2;<a name="line.232"></a>
-<span class="sourceLineNo">233</span>            numX += (s % (denX * 2)) / denX;<a name="line.233"></a>
-<span class="sourceLineNo">234</span>            denX *= 2;<a name="line.234"></a>
+<span class="sourceLineNo">230</span>                numY = s % 3, denY = 3;<a name="line.230"></a>
+<span class="sourceLineNo">231</span>        while (denY &lt;= s) {<a name="line.231"></a>
+<span class="sourceLineNo">232</span>            numY *= 3;<a name="line.232"></a>
+<span class="sourceLineNo">233</span>            numY += (s % (denY * 3)) / denY;<a name="line.233"></a>
+<span class="sourceLineNo">234</span>            denY *= 3;<a name="line.234"></a>
 <span class="sourceLineNo">235</span>        }<a name="line.235"></a>
-<span class="sourceLineNo">236</span>        while (denY &lt;= s) {<a name="line.236"></a>
-<span class="sourceLineNo">237</span>            numY *= 3;<a name="line.237"></a>
-<span class="sourceLineNo">238</span>            numY += (s % (denY * 3)) / denY;<a name="line.238"></a>
-<span class="sourceLineNo">239</span>            denY *= 3;<a name="line.239"></a>
-<span class="sourceLineNo">240</span>        }<a name="line.240"></a>
-<span class="sourceLineNo">241</span>        return Coord.get(numX * width / denX, numY * height / denY);<a name="line.241"></a>
-<span class="sourceLineNo">242</span>    }<a name="line.242"></a>
-<span class="sourceLineNo">243</span>    /**<a name="line.243"></a>
-<span class="sourceLineNo">244</span>     * Convenience method that gets a quasi-random Coord3D between integer (0,0,0) inclusive and (width,height,depth)<a name="line.244"></a>
-<span class="sourceLineNo">245</span>     * exclusive. This is roughly equivalent to creating three VanDerCorputQRNG generators, one with<a name="line.245"></a>
-<span class="sourceLineNo">246</span>     * {@code new VanDerCorputQRNG(2, index, false)} another with {@code new VanDerCorputQRNG(3, index, false)},<a name="line.246"></a>
-<span class="sourceLineNo">247</span>     * and another with {@code new VanDerCorputQRNG(5, index, false)}, then getting an x-coordinate from the first with<a name="line.247"></a>
-<span class="sourceLineNo">248</span>     * {@code (int)(nextDouble() * width)} and similarly for y and z with the other generators. The advantage here is<a name="line.248"></a>
-<span class="sourceLineNo">249</span>     * you don't actually create any objects using this static method, other than a returned Coord3D. You might find an<a name="line.249"></a>
-<span class="sourceLineNo">250</span>     * advantage in using values for index that start higher than 20 or so, but you can pass sequential values for index<a name="line.250"></a>
-<span class="sourceLineNo">251</span>     * and generally get Coord3Ds that won't be near each other; this is not true for all parameters to Halton<a name="line.251"></a>
-<span class="sourceLineNo">252</span>     * sequences, but it is true for this one.<a name="line.252"></a>
-<span class="sourceLineNo">253</span>     * @param width the maximum exclusive bound for the x-positions of Coord3D values this can return<a name="line.253"></a>
-<span class="sourceLineNo">254</span>     * @param height the maximum exclusive bound for the y-positions of Coord3D values this can return<a name="line.254"></a>
-<span class="sourceLineNo">255</span>     * @param depth the maximum exclusive bound for the z-positions of Coord3D values this can return<a name="line.255"></a>
-<span class="sourceLineNo">256</span>     * @param index an int that, if unique, positive, and not too large, will usually result in unique Coord3D values<a name="line.256"></a>
-<span class="sourceLineNo">257</span>     * @return a Coord3D that usually will have a comfortable distance from Coord3Ds produced with close index values<a name="line.257"></a>
-<span class="sourceLineNo">258</span>     */<a name="line.258"></a>
-<span class="sourceLineNo">259</span>    public static Coord3D halton(int width, int height, int depth, int index)<a name="line.259"></a>
-<span class="sourceLineNo">260</span>    {<a name="line.260"></a>
-<span class="sourceLineNo">261</span>        int s = (index+1 &amp; 0x7fffffff),<a name="line.261"></a>
-<span class="sourceLineNo">262</span>                numX = s &amp; 1, numY = s % 3, denX = 2, denY = 3, numZ = s % 5, denZ = 5;<a name="line.262"></a>
-<span class="sourceLineNo">263</span>        while (denX &lt;= s) {<a name="line.263"></a>
-<span class="sourceLineNo">264</span>            numX *= 2;<a name="line.264"></a>
-<span class="sourceLineNo">265</span>            numX += (s % (denX * 2)) / denX;<a name="line.265"></a>
-<span class="sourceLineNo">266</span>            denX *= 2;<a name="line.266"></a>
+<span class="sourceLineNo">236</span>        return Coord.get((int)(width * determine2(s)), numY * height / denY);<a name="line.236"></a>
+<span class="sourceLineNo">237</span>    }<a name="line.237"></a>
+<span class="sourceLineNo">238</span>    /**<a name="line.238"></a>
+<span class="sourceLineNo">239</span>     * Convenience method that gets a quasi-random Coord3D between integer (0,0,0) inclusive and (width,height,depth)<a name="line.239"></a>
+<span class="sourceLineNo">240</span>     * exclusive. This is roughly equivalent to creating three VanDerCorputQRNG generators, one with<a name="line.240"></a>
+<span class="sourceLineNo">241</span>     * {@code new VanDerCorputQRNG(2, index, false)} another with {@code new VanDerCorputQRNG(3, index, false)},<a name="line.241"></a>
+<span class="sourceLineNo">242</span>     * and another with {@code new VanDerCorputQRNG(5, index, false)}, then getting an x-coordinate from the first with<a name="line.242"></a>
+<span class="sourceLineNo">243</span>     * {@code (int)(nextDouble() * width)} and similarly for y and z with the other generators. The advantage here is<a name="line.243"></a>
+<span class="sourceLineNo">244</span>     * you don't actually create any objects using this static method, other than a returned Coord3D. You might find an<a name="line.244"></a>
+<span class="sourceLineNo">245</span>     * advantage in using values for index that start higher than 20 or so, but you can pass sequential values for index<a name="line.245"></a>
+<span class="sourceLineNo">246</span>     * and generally get Coord3Ds that won't be near each other; this is not true for all parameters to Halton<a name="line.246"></a>
+<span class="sourceLineNo">247</span>     * sequences, but it is true for this one.<a name="line.247"></a>
+<span class="sourceLineNo">248</span>     * @param width the maximum exclusive bound for the x-positions of Coord3D values this can return<a name="line.248"></a>
+<span class="sourceLineNo">249</span>     * @param height the maximum exclusive bound for the y-positions of Coord3D values this can return<a name="line.249"></a>
+<span class="sourceLineNo">250</span>     * @param depth the maximum exclusive bound for the z-positions of Coord3D values this can return<a name="line.250"></a>
+<span class="sourceLineNo">251</span>     * @param index an int that, if unique, positive, and not too large, will usually result in unique Coord3D values<a name="line.251"></a>
+<span class="sourceLineNo">252</span>     * @return a Coord3D that usually will have a comfortable distance from Coord3Ds produced with close index values<a name="line.252"></a>
+<span class="sourceLineNo">253</span>     */<a name="line.253"></a>
+<span class="sourceLineNo">254</span>    public static Coord3D halton(int width, int height, int depth, int index)<a name="line.254"></a>
+<span class="sourceLineNo">255</span>    {<a name="line.255"></a>
+<span class="sourceLineNo">256</span>        int s = (index+1 &amp; 0x7fffffff),<a name="line.256"></a>
+<span class="sourceLineNo">257</span>                numY = s % 3, denY = 3, numZ = s % 5, denZ = 5;<a name="line.257"></a>
+<span class="sourceLineNo">258</span>        while (denY &lt;= s) {<a name="line.258"></a>
+<span class="sourceLineNo">259</span>            numY *= 3;<a name="line.259"></a>
+<span class="sourceLineNo">260</span>            numY += (s % (denY * 3)) / denY;<a name="line.260"></a>
+<span class="sourceLineNo">261</span>            denY *= 3;<a name="line.261"></a>
+<span class="sourceLineNo">262</span>        }<a name="line.262"></a>
+<span class="sourceLineNo">263</span>        while (denY &lt;= s) {<a name="line.263"></a>
+<span class="sourceLineNo">264</span>            numZ *= 5;<a name="line.264"></a>
+<span class="sourceLineNo">265</span>            numZ += (s % (denZ * 5)) / denZ;<a name="line.265"></a>
+<span class="sourceLineNo">266</span>            denZ *= 5;<a name="line.266"></a>
 <span class="sourceLineNo">267</span>        }<a name="line.267"></a>
-<span class="sourceLineNo">268</span>        while (denY &lt;= s) {<a name="line.268"></a>
-<span class="sourceLineNo">269</span>            numY *= 3;<a name="line.269"></a>
-<span class="sourceLineNo">270</span>            numY += (s % (denY * 3)) / denY;<a name="line.270"></a>
-<span class="sourceLineNo">271</span>            denY *= 3;<a name="line.271"></a>
-<span class="sourceLineNo">272</span>        }<a name="line.272"></a>
-<span class="sourceLineNo">273</span>        while (denY &lt;= s) {<a name="line.273"></a>
-<span class="sourceLineNo">274</span>            numZ *= 5;<a name="line.274"></a>
-<span class="sourceLineNo">275</span>            numZ += (s % (denZ * 5)) / denZ;<a name="line.275"></a>
-<span class="sourceLineNo">276</span>            denZ *= 5;<a name="line.276"></a>
-<span class="sourceLineNo">277</span>        }<a name="line.277"></a>
-<span class="sourceLineNo">278</span>        return Coord3D.get(numX * width / denX, numY * height / denY, numZ * depth / denZ);<a name="line.278"></a>
-<span class="sourceLineNo">279</span>    }<a name="line.279"></a>
-<span class="sourceLineNo">280</span><a name="line.280"></a>
-<span class="sourceLineNo">281</span>    /**<a name="line.281"></a>
-<span class="sourceLineNo">282</span>     * Convenience method to get a double from the van der Corput sequence with the given {@code base} at the requested<a name="line.282"></a>
-<span class="sourceLineNo">283</span>     * {@code index} without needing to construct a VanDerCorputQRNG. You should use a prime number for base; 2, 3, 5,<a name="line.283"></a>
-<span class="sourceLineNo">284</span>     * and 7 should be among the first choices. This does not perform any scrambling on index other than incrementing it<a name="line.284"></a>
-<span class="sourceLineNo">285</span>     * and ensuring it is positive (by discarding the sign bit; for all positive index values other than 0x7FFFFFFF,<a name="line.285"></a>
-<span class="sourceLineNo">286</span>     * this has no effect).<a name="line.286"></a>
-<span class="sourceLineNo">287</span>     * @param base a (typically very small) prime number to use as the base/radix of the van der Corput sequence<a name="line.287"></a>
-<span class="sourceLineNo">288</span>     * @param index the position in the sequence of the requested base<a name="line.288"></a>
-<span class="sourceLineNo">289</span>     * @return a quasi-random double between 0.0 (inclusive) and 1.0 (exclusive).<a name="line.289"></a>
-<span class="sourceLineNo">290</span>     */<a name="line.290"></a>
-<span class="sourceLineNo">291</span>    public static double determine(int base, int index)<a name="line.291"></a>
-<span class="sourceLineNo">292</span>    {<a name="line.292"></a>
-<span class="sourceLineNo">293</span>        int s = (index+1 &amp; 0x7fffffff),<a name="line.293"></a>
-<span class="sourceLineNo">294</span>                num = s % base, den = base;<a name="line.294"></a>
-<span class="sourceLineNo">295</span>        while (den &lt;= s) {<a name="line.295"></a>
-<span class="sourceLineNo">296</span>            num *= base;<a name="line.296"></a>
-<span class="sourceLineNo">297</span>            num += (s % (den * base)) / den;<a name="line.297"></a>
-<span class="sourceLineNo">298</span>            den *= base;<a name="line.298"></a>
-<span class="sourceLineNo">299</span>        }<a name="line.299"></a>
-<span class="sourceLineNo">300</span>        return num / (double)den;<a name="line.300"></a>
-<span class="sourceLineNo">301</span>    }<a name="line.301"></a>
-<span class="sourceLineNo">302</span>}<a name="line.302"></a>
+<span class="sourceLineNo">268</span>        return Coord3D.get((int)(width * determine2(s)), numY * height / denY, numZ * depth / denZ);<a name="line.268"></a>
+<span class="sourceLineNo">269</span>    }<a name="line.269"></a>
+<span class="sourceLineNo">270</span><a name="line.270"></a>
+<span class="sourceLineNo">271</span>    /**<a name="line.271"></a>
+<span class="sourceLineNo">272</span>     * Convenience method to get a double from the van der Corput sequence with the given {@code base} at the requested<a name="line.272"></a>
+<span class="sourceLineNo">273</span>     * {@code index} without needing to construct a VanDerCorputQRNG. You should use a prime number for base; 2, 3, 5,<a name="line.273"></a>
+<span class="sourceLineNo">274</span>     * and 7 should be among the first choices. This does not perform any scrambling on index other than incrementing it<a name="line.274"></a>
+<span class="sourceLineNo">275</span>     * and ensuring it is positive (by discarding the sign bit; for all positive index values other than 0x7FFFFFFF,<a name="line.275"></a>
+<span class="sourceLineNo">276</span>     * this has no effect).<a name="line.276"></a>
+<span class="sourceLineNo">277</span>     * &lt;br&gt;<a name="line.277"></a>
+<span class="sourceLineNo">278</span>     * Delegates to {@link #determine2(int)} when base is 2, which should offer some speed improvement.<a name="line.278"></a>
+<span class="sourceLineNo">279</span>     * @param base a (typically very small) prime number to use as the base/radix of the van der Corput sequence<a name="line.279"></a>
+<span class="sourceLineNo">280</span>     * @param index the position in the sequence of the requested base<a name="line.280"></a>
+<span class="sourceLineNo">281</span>     * @return a quasi-random double between 0.0 (inclusive) and 1.0 (exclusive).<a name="line.281"></a>
+<span class="sourceLineNo">282</span>     */<a name="line.282"></a>
+<span class="sourceLineNo">283</span>    public static double determine(int base, int index)<a name="line.283"></a>
+<span class="sourceLineNo">284</span>    {<a name="line.284"></a>
+<span class="sourceLineNo">285</span>        if(base == 2)<a name="line.285"></a>
+<span class="sourceLineNo">286</span>            return determine2(index);<a name="line.286"></a>
+<span class="sourceLineNo">287</span>        int s = (index+1 &amp; 0x7fffffff),<a name="line.287"></a>
+<span class="sourceLineNo">288</span>                num = s % base, den = base;<a name="line.288"></a>
+<span class="sourceLineNo">289</span>        while (den &lt;= s) {<a name="line.289"></a>
+<span class="sourceLineNo">290</span>            num *= base;<a name="line.290"></a>
+<span class="sourceLineNo">291</span>            num += (s % (den * base)) / den;<a name="line.291"></a>
+<span class="sourceLineNo">292</span>            den *= base;<a name="line.292"></a>
+<span class="sourceLineNo">293</span>        }<a name="line.293"></a>
+<span class="sourceLineNo">294</span>        return num / (double)den;<a name="line.294"></a>
+<span class="sourceLineNo">295</span>    }<a name="line.295"></a>
+<span class="sourceLineNo">296</span>    /**<a name="line.296"></a>
+<span class="sourceLineNo">297</span>     * Convenience method to get a double from the van der Corput sequence with the base 2 at the requested<a name="line.297"></a>
+<span class="sourceLineNo">298</span>     * {@code index} without needing to construct a VanDerCorputQRNG. This does not perform any scrambling on index<a name="line.298"></a>
+<span class="sourceLineNo">299</span>     * other than incrementing it and ensuring it is positive (by discarding the sign bit; for all positive index values<a name="line.299"></a>
+<span class="sourceLineNo">300</span>     * other than 0x7FFFFFFF, this has no effect).<a name="line.300"></a>
+<span class="sourceLineNo">301</span>     * &lt;br&gt;<a name="line.301"></a>
+<span class="sourceLineNo">302</span>     * Because binary manipulation of numbers is easier and more efficient, this method should be somewhat faster than<a name="line.302"></a>
+<span class="sourceLineNo">303</span>     * the alternatives, like {@link #determine(int, int)} with base 2.<a name="line.303"></a>
+<span class="sourceLineNo">304</span>     * @param index the position in the sequence of the requested base<a name="line.304"></a>
+<span class="sourceLineNo">305</span>     * @return a quasi-random double between 0.0 (inclusive) and 1.0 (exclusive).<a name="line.305"></a>
+<span class="sourceLineNo">306</span>     */<a name="line.306"></a>
+<span class="sourceLineNo">307</span>    public static double determine2(int index)<a name="line.307"></a>
+<span class="sourceLineNo">308</span>    {<a name="line.308"></a>
+<span class="sourceLineNo">309</span>        int s = (index+1 &amp; 0x7fffffff), leading = Integer.numberOfLeadingZeros(s);<a name="line.309"></a>
+<span class="sourceLineNo">310</span>        return (Integer.reverse(s) &gt;&gt;&gt; leading) / (1.0 * (1 &lt;&lt; (32 - leading)));<a name="line.310"></a>
+<span class="sourceLineNo">311</span>    }<a name="line.311"></a>
+<span class="sourceLineNo">312</span><a name="line.312"></a>
+<span class="sourceLineNo">313</span>    private static final int[] lowPrimes = {2, 3, 2, 3, 5, 2, 3, 2};<a name="line.313"></a>
+<span class="sourceLineNo">314</span><a name="line.314"></a>
+<span class="sourceLineNo">315</span>    /**<a name="line.315"></a>
+<span class="sourceLineNo">316</span>     * Chooses one sequence from the van der Corput sequences with bases 2, 3, and 5, where 5 is used 1/8 of the time,<a name="line.316"></a>
+<span class="sourceLineNo">317</span>     * 3 is used 3/8 of the time, and 2 is used 1/2 of the time, and returns a double from the chosen sequence at the<a name="line.317"></a>
+<span class="sourceLineNo">318</span>     * specified {@code index}. The exact setup used for the choice this makes is potentially fragile, but in certain<a name="line.318"></a>
+<span class="sourceLineNo">319</span>     * circumstances this does better than {@link SobolQRNG} at avoiding extremely close values (the kind that overlap<a name="line.319"></a>
+<span class="sourceLineNo">320</span>     * on actual maps). Speed is not a concern here; this should be very much fast enough for the expected usage in<a name="line.320"></a>
+<span class="sourceLineNo">321</span>     * map generation (it's used in {@link GreasedRegion#quasiRandomSeparated(double)}.<a name="line.321"></a>
+<span class="sourceLineNo">322</span>     * @param index the index to use from one of the sequences<a name="line.322"></a>
+<span class="sourceLineNo">323</span>     * @return a double from 0.0 (inclusive, but extremely rare) to 1.0 (exclusive); values will tend to spread apart<a name="line.323"></a>
+<span class="sourceLineNo">324</span>     */<a name="line.324"></a>
+<span class="sourceLineNo">325</span>    public static double determineMixed(int index)<a name="line.325"></a>
+<span class="sourceLineNo">326</span>    {<a name="line.326"></a>
+<span class="sourceLineNo">327</span>        return determine(lowPrimes[index &amp; 7], index);<a name="line.327"></a>
+<span class="sourceLineNo">328</span>    }<a name="line.328"></a>
+<span class="sourceLineNo">329</span>}<a name="line.329"></a>
 
 
 

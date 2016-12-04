@@ -1803,7 +1803,7 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
             }
         }
 
-        return new Coord(-1, -1);
+        return Coord.get(-1, -1);
     }
 
     public int[][] fit(int[][] basis, int defaultValue)
@@ -1868,6 +1868,7 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
         return next;
     }
     */
+
     public Coord[] separatedPortion(double fraction)
     {
         if(fraction < 0)
@@ -1877,8 +1878,8 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
         int ct, tmp, xTotal = 0, yTotal = 0, xTarget, yTarget, bestX = -1;
         long t;
         int[] xCounts = new int[width];
-        for (int x = 0; x < width; x++) {
-            for (int s = 0; s < ySections; s++) {
+        for (int s = 0; s < ySections; s++) {
+            for (int x = 0; x < width; x++) {
                 t = data[x * ySections + s];
                 if (t != 0) {
                     tmp = Long.bitCount(t);
@@ -1975,6 +1976,53 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
 
     }
 
+    public Coord[] quasiRandomSeparated(double fraction)
+    {
+        return quasiRandomSeparated(fraction, -1);
+    }
+    public Coord[] quasiRandomSeparated(double fraction, int limit)
+    {
+        if(fraction < 0)
+            return new Coord[0];
+        if(fraction > 1)
+            fraction = 1;
+        int ct = 0, tmp, total, ic;
+        long t, w;
+        int[] counts = new int[width * ySections];
+        for (int i = 0; i < width * ySections; i++) {
+            tmp = Long.bitCount(data[i]);
+            counts[i] = tmp == 0 ? -1 : (ct += tmp);
+        }
+        total = ct;
+        ct *= fraction;// (int)(fraction * ct);
+        if(limit >= 0 && limit < ct)
+            ct = limit;
+        Coord[] vl = new Coord[ct];
+        EACH_QUASI:
+        for (int i = 0; i < ct; i++)
+        {
+            tmp = (int)(VanDerCorputQRNG.determineMixed(i) * total);
+            for (int s = 0; s < ySections; s++) {
+                for (int x = 0; x < width; x++) {
+                    if ((ic = counts[x * ySections + s]) > tmp) {
+                        t = data[x * ySections + s];
+                        w = Long.lowestOneBit(t);
+                        for (--ic; w != 0; ic--) {
+                            if (ic == tmp) {
+                                vl[i] = Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
+                                continue EACH_QUASI;
+                            }
+                            t ^= w;
+                            w = Long.lowestOneBit(t);
+                        }
+                    }
+                }
+            }
+        }
+        return vl;
+
+    }
+
     public double rateDensity()
     {
         double sz = height * width;
@@ -1997,21 +2045,19 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
     // It also produced very close-together points, unfortunately.
     public static double quasiRandomX(int idx)
     {
-        return atVDCSequence(23L + idx * 255L);
+        return atVDCSequence(26 + idx * 5);
     }
     public static double quasiRandomY(int idx)
     {
-        return atVDCSequence(20L + idx);
+        return atVDCSequence(19 + idx * 3);
     }
 
-    private static double atVDCSequence(long idx)
+    private static double atVDCSequence(int idx)
     {
-        long leading = Long.numberOfLeadingZeros(idx);
-        double t = (Long.reverse(idx) >>> leading) / (1.0 * (1L << (64L - leading)));
-        return t;
+        int leading = Integer.numberOfLeadingZeros(idx);
+        return (Integer.reverse(idx) >>> leading) / (1.0 * (1 << (32 - leading)));
     }
     */
-
     public Coord[] asCoords()
     {
         int ct = 0, idx = 0;
@@ -2070,7 +2116,62 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
                 }
             }
         }
-        return new Coord(-1, -1);
+        return Coord.get(-1, -1);
+    }
+
+    public Coord nth(final int index)
+    {
+        int ct = 0, tmp;
+        int[] counts = new int[width * ySections];
+        for (int i = 0; i < width * ySections; i++) {
+            tmp = Long.bitCount(data[i]);
+            counts[i] = tmp == 0 ? -1 : (ct += tmp);
+        }
+        if(index >= ct)
+            return Coord.get(-1, -1);
+        long t, w;
+        for (int s = 0; s < ySections; s++) {
+            for (int x = 0; x < width; x++) {
+                if ((ct = counts[x * ySections + s]) > index) {
+                    t = data[x * ySections + s];
+                    w = Long.lowestOneBit(t);
+                    for (--ct; w != 0; ct--) {
+                        if (ct == index)
+                            return Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
+                        t ^= w;
+                        w = Long.lowestOneBit(t);
+                    }
+                }
+            }
+        }
+        return Coord.get(-1, -1);
+    }
+
+    public Coord atFraction(final double fraction)
+    {
+        int ct = 0, tmp;
+        int[] counts = new int[width * ySections];
+        for (int i = 0; i < width * ySections; i++) {
+            tmp = Long.bitCount(data[i]);
+            counts[i] = tmp == 0 ? -1 : (ct += tmp);
+        }
+        tmp = Math.abs((int)(fraction * ct) % ct);
+        long t, w;
+        for (int s = 0; s < ySections; s++) {
+            for (int x = 0; x < width; x++) {
+                if ((ct = counts[x * ySections + s]) > tmp) {
+                    t = data[x * ySections + s];
+                    w = Long.lowestOneBit(t);
+                    for (--ct; w != 0; ct--) {
+                        if (ct == tmp)
+                            return Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
+                        t ^= w;
+                        w = Long.lowestOneBit(t);
+                    }
+                }
+            }
+        }
+        return Coord.get(-1, -1);
     }
 
     public Coord singleRandom(RNG rng)
@@ -2083,8 +2184,8 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
         }
         tmp = rng.nextInt(ct);
         long t, w;
-        for (int x = 0; x < width; x++) {
-            for (int s = 0; s < ySections; s++) {
+        for (int s = 0; s < ySections; s++) {
+            for (int x = 0; x < width; x++) {
                 if ((ct = counts[x * ySections + s]) > tmp) {
                     t = data[x * ySections + s];
                     w = Long.lowestOneBit(t);
@@ -2098,7 +2199,7 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
             }
         }
 
-        return new Coord(-1, -1);
+        return Coord.get(-1, -1);
     }
 
 
@@ -2117,8 +2218,8 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
         Arrays.sort(order, 0, size);
         long t, w;
         ALL:
-        for (int x = 0; x < width; x++) {
-            for (int s = 0; s < ySections; s++) {
+        for (int s = 0; s < ySections; s++) {
+            for (int x = 0; x < width; x++) {
                 if((t = data[x * ySections + s]) != 0)
                 {
                     w = Long.lowestOneBit(t);

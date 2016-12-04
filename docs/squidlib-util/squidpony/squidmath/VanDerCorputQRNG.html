@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":9,"i2":10,"i3":10,"i4":9,"i5":9,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
+var methods = {"i0":10,"i1":9,"i2":9,"i3":9,"i4":10,"i5":10,"i6":9,"i7":9,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -286,16 +286,31 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/VanDerCorputQRNG.html#determine2-int-">determine2</a></span>(int&nbsp;index)</code>
+<div class="block">Convenience method to get a double from the van der Corput sequence with the base 2 at the requested
+ <code>index</code> without needing to construct a VanDerCorputQRNG.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/VanDerCorputQRNG.html#determineMixed-int-">determineMixed</a></span>(int&nbsp;index)</code>
+<div class="block">Chooses one sequence from the van der Corput sequences with bases 2, 3, and 5, where 5 is used 1/8 of the time,
+ 3 is used 3/8 of the time, and 2 is used 1/2 of the time, and returns a double from the chosen sequence at the
+ specified <code>index</code>.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/VanDerCorputQRNG.html#equals-java.lang.Object-">equals</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/VanDerCorputQRNG.html#getState--">getState</a></span>()</code>
 <div class="block">Get the current internal state of the StatefulRandomness as a long.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/VanDerCorputQRNG.html#halton-int-int-int-">halton</a></span>(int&nbsp;width,
       int&nbsp;height,
@@ -303,7 +318,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <div class="block">Convenience method that gets a quasi-random Coord between integer (0,0) inclusive and (width,height) exclusive.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static <a href="../../squidpony/squidmath/Coord3D.html" title="class in squidpony.squidmath">Coord3D</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/VanDerCorputQRNG.html#halton-int-int-int-int-">halton</a></span>(int&nbsp;width,
       int&nbsp;height,
@@ -313,37 +328,37 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
  exclusive.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/VanDerCorputQRNG.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/VanDerCorputQRNG.html#next-int-">next</a></span>(int&nbsp;bits)</code>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/VanDerCorputQRNG.html#nextDouble--">nextDouble</a></span>()</code>
 <div class="block">Gets the next quasi-random double from between 0.0 and 1.0 (normally both exclusive; only if state is negative or
  has wrapped around to a negative value can 0.0 ever be produced).</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/VanDerCorputQRNG.html#nextLong--">nextLong</a></span>()</code>
 <div class="block">Gets the next quasi-random long as a fraction of <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Long.html?is-external=true#MAX_VALUE" title="class or interface in java.lang"><code>Long.MAX_VALUE</code></a>; this can never produce a negative value.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/VanDerCorputQRNG.html#setState-long-">setState</a></span>(long&nbsp;state)</code>
 <div class="block">Set the current internal state of this StatefulRandomness with a long.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/VanDerCorputQRNG.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
@@ -641,7 +656,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>halton</h4>
-<pre>public static&nbsp;<a href="../../squidpony/squidmath/Coord3D.html" title="class in squidpony.squidmath">Coord3D</a>&nbsp;<a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.259">halton</a>(int&nbsp;width,
+<pre>public static&nbsp;<a href="../../squidpony/squidmath/Coord3D.html" title="class in squidpony.squidmath">Coord3D</a>&nbsp;<a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.254">halton</a>(int&nbsp;width,
                              int&nbsp;height,
                              int&nbsp;depth,
                              int&nbsp;index)</pre>
@@ -668,22 +683,67 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <a name="determine-int-int-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>determine</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.291">determine</a>(int&nbsp;base,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.283">determine</a>(int&nbsp;base,
                                int&nbsp;index)</pre>
 <div class="block">Convenience method to get a double from the van der Corput sequence with the given <code>base</code> at the requested
  <code>index</code> without needing to construct a VanDerCorputQRNG. You should use a prime number for base; 2, 3, 5,
  and 7 should be among the first choices. This does not perform any scrambling on index other than incrementing it
  and ensuring it is positive (by discarding the sign bit; for all positive index values other than 0x7FFFFFFF,
- this has no effect).</div>
+ this has no effect).
+ <br>
+ Delegates to <a href="../../squidpony/squidmath/VanDerCorputQRNG.html#determine2-int-"><code>determine2(int)</code></a> when base is 2, which should offer some speed improvement.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>base</code> - a (typically very small) prime number to use as the base/radix of the van der Corput sequence</dd>
 <dd><code>index</code> - the position in the sequence of the requested base</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a quasi-random double between 0.0 (inclusive) and 1.0 (exclusive).</dd>
+</dl>
+</li>
+</ul>
+<a name="determine2-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>determine2</h4>
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.307">determine2</a>(int&nbsp;index)</pre>
+<div class="block">Convenience method to get a double from the van der Corput sequence with the base 2 at the requested
+ <code>index</code> without needing to construct a VanDerCorputQRNG. This does not perform any scrambling on index
+ other than incrementing it and ensuring it is positive (by discarding the sign bit; for all positive index values
+ other than 0x7FFFFFFF, this has no effect).
+ <br>
+ Because binary manipulation of numbers is easier and more efficient, this method should be somewhat faster than
+ the alternatives, like <a href="../../squidpony/squidmath/VanDerCorputQRNG.html#determine-int-int-"><code>determine(int, int)</code></a> with base 2.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>index</code> - the position in the sequence of the requested base</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a quasi-random double between 0.0 (inclusive) and 1.0 (exclusive).</dd>
+</dl>
+</li>
+</ul>
+<a name="determineMixed-int-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>determineMixed</h4>
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.325">determineMixed</a>(int&nbsp;index)</pre>
+<div class="block">Chooses one sequence from the van der Corput sequences with bases 2, 3, and 5, where 5 is used 1/8 of the time,
+ 3 is used 3/8 of the time, and 2 is used 1/2 of the time, and returns a double from the chosen sequence at the
+ specified <code>index</code>. The exact setup used for the choice this makes is potentially fragile, but in certain
+ circumstances this does better than <a href="../../squidpony/squidmath/SobolQRNG.html" title="class in squidpony.squidmath"><code>SobolQRNG</code></a> at avoiding extremely close values (the kind that overlap
+ on actual maps). Speed is not a concern here; this should be very much fast enough for the expected usage in
+ map generation (it's used in <a href="../../squidpony/squidmath/GreasedRegion.html#quasiRandomSeparated-double-"><code>GreasedRegion.quasiRandomSeparated(double)</code></a>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>index</code> - the index to use from one of the sequences</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a double from 0.0 (inclusive, but extremely rare) to 1.0 (exclusive); values will tend to spread apart</dd>
 </dl>
 </li>
 </ul>
