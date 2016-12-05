@@ -12,7 +12,7 @@ import squidpony.squidmath.ThunderRNG;
 import java.util.Arrays;
 
 /**
- * Just a test. //30934 4630
+ * Just a test.
  * Created by Tommy Ettinger on 9/17/2016.
  */
 public class SquidStorageTest extends ApplicationAdapter{
