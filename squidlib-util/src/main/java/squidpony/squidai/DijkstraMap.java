@@ -220,7 +220,7 @@ public class DijkstraMap implements Serializable {
     }
 
     /**
-     * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
      * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here.
@@ -232,7 +232,7 @@ public class DijkstraMap implements Serializable {
     }
 
     /**
-     * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
      * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here. Also takes an RNG that ensures predictable path choices given
@@ -246,7 +246,7 @@ public class DijkstraMap implements Serializable {
     }
 
     /**
-     * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
      * char[][] where one char means a wall and anything else is a walkable tile. If you only have
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here. You can specify the character used for walls.
@@ -265,7 +265,7 @@ public class DijkstraMap implements Serializable {
     }
 
     /**
-     * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
      * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here. This constructor specifies a distance measurement.
@@ -278,7 +278,7 @@ public class DijkstraMap implements Serializable {
     }
 
     /**
-     * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
      * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here. Also takes a distance measurement and an RNG that ensures

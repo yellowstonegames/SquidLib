@@ -33,7 +33,7 @@ public class StringKit {
         StringBuilder sb = new StringBuilder(64);
         sb.append(elements[0]);
         for (int i = 1; i < elements.length; i++) {
-            sb.append(delimiter).append(elements[i]);
+            sb.append(delimiter).append(elements[i]).append('L');
         }
         return sb.toString();
     }
@@ -99,6 +99,48 @@ public class StringKit {
             sb.append(delimiter).append(elements[i]);
         }
         return sb.toString();
+    }
+    public static int count(String source, String search)
+    {
+        if(source == null || search == null || source.isEmpty() || search.isEmpty())
+            return 0;
+        int amount = 0, idx = -1;
+        while ((idx = source.indexOf(search, idx+1)) >= 0)
+            ++amount;
+        return amount;
+    }
+
+    /**
+     * Like {@link String#substring(int, int)} but returns "" instead of throwing any sort of Exception.
+     * @param source the String to get a substring from
+     * @param beginIndex the first index, inclusive; will be treated as 0 if negative
+     * @param endIndex the index after the last character (i.e. length, so exclusive); if negative this returns ""
+     * @return the substring of source between beginIndex and endIndex, or "" if any parameters are null/invalid
+     */
+    public static String safeSubstring(String source, int beginIndex, int endIndex)
+    {
+        if(endIndex < 0 || source == null || source.isEmpty()) return "";
+        if(beginIndex < 0) beginIndex = 0;
+        if(endIndex > source.length()) endIndex = source.length();
+        if(beginIndex > endIndex) return "";
+        return source.substring(beginIndex, endIndex);
+    }
+
+    /**
+     * Like {@link String#split(String)} but doesn't use any regex for splitting (delimiter is a literal String).
+     * @param source the String to get split-up substrings from
+     * @param delimiter the literal String to split on (not a regex); will not be included in the returned String array
+     * @return a String array consisting of at least one String (all of Source if nothing was split)
+     */
+    public static String[] split(String source, String delimiter) {
+        int amount = count(source, delimiter);
+        if (amount <= 0) return new String[]{source};
+        String[] splat = new String[++amount];
+        int dl = delimiter.length(), idx = -dl;
+        for (int i = 0; i < amount; i++) {
+            splat[i] = safeSubstring(source, idx+dl, idx = source.indexOf(delimiter, idx+dl));
+        }
+        return splat;
     }
 
     public static final String mask64 = "0000000000000000000000000000000000000000000000000000000000000000",

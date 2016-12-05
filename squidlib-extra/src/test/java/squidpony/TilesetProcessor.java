@@ -8,6 +8,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import squidpony.squidgrid.mapping.styled.*;
+import squidpony.squidmath.GreasedRegion;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -77,16 +78,16 @@ public class TilesetProcessor extends ApplicationAdapter {
     }
     private static final String EOL = System.getProperty("line.separator");
 
-    private static void initializeTileArray(StringBuilder java, String fieldName, Tile[] ts_tiles) {
+    private static void initializeTileArray(StringBuilder java, String fieldName, OldTile[] ts_tiles) {
         final int len = ts_tiles.length;
 		/* Initialize array */
         appendln(java, 4, "INSTANCE." + fieldName + " = new Tile[" + len + "];");
         for (int i = 0; i < len; i++) {
-            final Tile source = ts_tiles[i];
+            final OldTile source = ts_tiles[i];
 			/* Fill temporary variable to copy Tile.data */
             appendln(java, "    /* Build " + fieldName + " #" + i + " */");
 
-            java.append("    INSTANCE.").append(fieldName).append("[").append(i).append("] = ");
+            java.append("    INSTANCE.").append(fieldName).append("[").append(i).append("] =");
             /* Build new Tile */
             java.append(" new Tile(");
             java.append(source.a_constraint);
@@ -101,11 +102,8 @@ public class TilesetProcessor extends ApplicationAdapter {
             java.append(",");
             java.append(source.f_constraint);
             java.append(EOL);
-            for (int j = 0; j < source.data.length; j++) {
-                appendln(java, 4, ",\"" + source.data[j] + "\"");
-            }
-            appendln(java, ");");
-
+            GreasedRegion gr = new GreasedRegion(source.data, '.');
+            appendln(java, 4,"," + gr.serializeToString() + ");");
         }
     }
 

@@ -1,7 +1,9 @@
 package squidpony.squidgrid.mapping.styled;
+
 import squidpony.tileset.*;
+
 /**
- * An enumeration of all the kinds of dungeon that DungeonGen
+ * An enumeration of all the kinds of dungeon that DungeonBoneGen
  * knows how to draw already. Each value has a Javadoc description.
  * Created by Tommy Ettinger on 3/10/2015.
  */

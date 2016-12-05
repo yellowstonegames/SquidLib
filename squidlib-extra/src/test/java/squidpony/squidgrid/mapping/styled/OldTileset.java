@@ -7,15 +7,15 @@ package squidpony.squidgrid.mapping.styled;
 public class OldTileset {
     public OldConfig config;
     public Maximums max_tiles;
-    public Tile[] h_tiles, v_tiles;
+    public OldTile[] h_tiles, v_tiles;
 
     /**
-     * Probably not something you will construct manually. See DungeonGen .
+     * Probably not something you will construct manually. See DungeonBoneGen .
      */
     public OldTileset() {
         config = new OldConfig();
         max_tiles = new Maximums();
-        h_tiles = new Tile[]{};
-        v_tiles = new Tile[]{};
+        h_tiles = new OldTile[]{};
+        v_tiles = new OldTile[]{};
     }
 }

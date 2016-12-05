@@ -144,6 +144,54 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
         }
     }
 
+    /**
+     * Weird constructor that takes a String array, _as it would be printed_, so each String is a row and indexing would
+     * be done with y, x instead of the normal x, y.
+     * @param map String array (as printed, not the normal storage) where each String is a row
+     * @param yes the char to consider "on" in the GreasedRegion
+     */
+    public GreasedRegion(String[] map, char yes)
+    {
+        height = map.length;
+        width = map[0].length();
+        ySections = (height + 63) >> 6;
+        yEndMask = -1L >>> (64 - (height & 63));
+        data = new long[width * ySections];
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if(map[y].charAt(x) == yes) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+            }
+        }
+    }
+
+    /**
+     * Weird refill method that takes a String array, _as it would be printed_, so each String is a row and indexing
+     * would be done with y, x instead of the normal x, y.
+     * @param map String array (as printed, not the normal storage) where each String is a row
+     * @param yes the char to consider "on" in the GreasedRegion
+     */public GreasedRegion refill(String[] map, char yes) {
+        if (map != null && map.length > 0 && height == map.length && width == map[0].length()) {
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    data[x * ySections + (y >> 6)] |= ((map[y].charAt(x) == yes) ? 1L : 0L) << (y & 63);
+                }
+            }
+            return this;
+        } else {
+            height = (map == null) ? 0 : map.length;
+            width = (map == null || map.length <= 0) ? 0 : map[0].length();
+            ySections = (height + 63) >> 6;
+            yEndMask = -1L >>> (64 - (height & 63));
+            data = new long[width * ySections];
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    if(map[y].charAt(y) == yes) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+                }
+            }
+            return this;
+        }
+    }
+
     public GreasedRegion(int[][] map, int yes)
     {
         width = map.length;
@@ -515,6 +563,17 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
         yEndMask = -1L >>> (64 - (height & 63));
         data = new long[width * ySections];
         System.arraycopy(data2, 0, data, 0, width * ySections);
+    }
+
+    public GreasedRegion(final long[] data2, final int dataWidth, final int dataHeight, final int width, final int height)
+    {
+        this.width = width;
+        this.height = height;
+        ySections = (dataHeight + 63) >> 6;
+        yEndMask = -1L >>> (64 - (height & 63));
+        data = new long[width * ySections];
+        System.arraycopy(data2, 0, data, 0, dataWidth * ySections);
+        ySections = (height + 63) >> 6;
     }
 
     public GreasedRegion remake(GreasedRegion other) {
@@ -2422,21 +2481,34 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
     public String serializeToString()
     {
         return width +
-                ";" + height +
-                ";" + StringKit.join(",",data);
+                "," + height +
+                "," + StringKit.join(",",data);
     }
     public static GreasedRegion deserializeFromString(String s)
     {
         if(s == null || s.isEmpty())
             return null;
-        int gap = s.indexOf(';'), w = Integer.parseInt(s.substring(0, gap)),
-                gap2 = s.indexOf(';', gap+1), h = Integer.parseInt(s.substring(gap+1, gap2));
-        String[] splits = s.substring(gap2+1).split(",");
+        int gap = s.indexOf(','), w = Integer.parseInt(s.substring(0, gap)),
+                gap2 = s.indexOf(',', gap+1), h = Integer.parseInt(s.substring(gap+1, gap2));
+        String[] splits = StringKit.split(s.substring(gap2+1), ",");
         long[] data = new long[splits.length];
         for (int i = 0; i < splits.length; i++) {
             data[i] = Long.parseLong(splits[i]);
         }
         return new GreasedRegion(data, w, h);
+    }
+
+    /**
+     * Constructs a GreasedRegion using a vararg for data. Primarily meant for generated code, since
+     * {@link #serializeToString()} produces a String that happens to be a valid parameter list for this method.
+     * @param width width of the GreasedRegion to produce
+     * @param height height of the GreasedRegion to produce
+     * @param data array or vararg of long containing the exact data, probably from an existing GreasedRegion
+     * @return a new GreasedRegion with the given width, height, and data
+     */
+    public static GreasedRegion of(final int width, final int height, final long... data)
+    {
+        return new GreasedRegion(data, width, height);
     }
 
     @Override

@@ -19,9 +19,9 @@ import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidgrid.mapping.MixedGenerator;
 import squidpony.squidgrid.mapping.SerpentMapGenerator;
 import squidpony.squidgrid.mapping.ThinDungeonGenerator;
+import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.*;
 
 import java.util.ArrayList;
@@ -81,16 +81,16 @@ public class ThinWallDemo extends ApplicationAdapter {
     private double[][] fovmap;
     private Creature player;
     private FOV fov;
-    public static final int INTERNAL_ZOOM = 2;
+    public static final int INTERNAL_ZOOM = 1;
 
     /**
      * In number of cells
      */
-    private static final int width = 80;
+    private static final int width = 100;
     /**
      * In number of cells
      */
-    private static final int height = 25;
+    private static final int height = 35;
 
     private static final int overlapWidth = width * 2 - 1;
 
@@ -100,11 +100,11 @@ public class ThinWallDemo extends ApplicationAdapter {
     /**
      * The pixel width of a cell
      */
-    private static final int cellWidth = 8 * INTERNAL_ZOOM;
+    private static final int cellWidth = 12 * INTERNAL_ZOOM;
     /**
      * The pixel height of a cell
      */
-    private static final int cellHeight = 15 * INTERNAL_ZOOM;
+    private static final int cellHeight = 24 * INTERNAL_ZOOM;
     private VisualInput input;
     private double counter;
     private boolean[][] seen;
@@ -168,7 +168,7 @@ public class ThinWallDemo extends ApplicationAdapter {
         //These need to have their positions set before adding any entities if there is an offset involved.
         messages.setBounds(0, 0, cellWidth * width, cellHeight * (messageHeight+1));
         display.setPosition(0, messages.getHeight());
-        messages.appendWrappingMessage("You are the orange '@', and enemies are red. Click/tap a cell to move. " +
+        messages.appendWrappingMessage("You are the purple '@', and enemies are red. Click/tap a cell to move. " +
                 "Use ? for help, q to quit. " +
                 "Click the top or bottom border of this box to scroll.");
         counter = 0;
@@ -176,15 +176,16 @@ public class ThinWallDemo extends ApplicationAdapter {
         dungeonGen = new ThinDungeonGenerator(width, height, rng, ROOM_WALL_RETRACT, CORRIDOR_WALL_RETRACT, CAVE_WALL_RETRACT);
         //dungeonGen = new ThinDungeonGenerator(width, height, rng, ROOM_WALL_EXPAND, CORRIDOR_WALL_EXPAND, CAVE_WALL_EXPAND);
         dungeonGen.addWater(0, 25, 6);
-        dungeonGen.addGrass(MixedGenerator.CAVE_FLOOR, 20);
+        dungeonGen.addGrass(0, 20);
         dungeonGen.addBoulders(0, 7);
         dungeonGen.addDoors(38, false);
         SerpentMapGenerator serpent = new SerpentMapGenerator(width, height, rng);
         //serpent.putCaveCarvers(3);
         serpent.putWalledBoxRoomCarvers(3);
         serpent.putWalledRoundRoomCarvers(2);
-        char[][] mg = serpent.generate();
-        decoDungeon = dungeonGen.generate(mg, serpent.getEnvironment());
+        //char[][] mg = serpent.generate();
+        //decoDungeon = dungeonGen.generate(mg, serpent.getEnvironment());
+        decoDungeon = dungeonGen.generate(TilesetType.DEFAULT_DUNGEON);
         bareDungeon = dungeonGen.getBareDungeon();
         lineDungeon = DungeonUtility.hashesToLines(dungeonGen.getDungeon(), true);
         //lineDungeon = dungeonGen.getDungeon();
@@ -235,7 +236,7 @@ public class ThinWallDemo extends ApplicationAdapter {
         getToPlayer = new CustomDijkstraMap(decoDungeon, adjacency, rng);
         getToPlayer.setGoal(adjacency.composite(pl.x, pl.y, 0, 0));
 
-        player = new Creature(display.animateActor(pl.x, pl.y, '@', SColor.CAPE_JASMINE, false),
+        player = new Creature(display.animateActor(pl.x, pl.y, '@', SColor.PSYCHEDELIC_PURPLE, false),
                 adjacency.composite(pl.x, pl.y, 0, 0), health);
         /*
         player = new Creature(display.animateActor(1, 1, ' ', SColor.HAN_PURPLE, false),
@@ -780,8 +781,8 @@ public class ThinWallDemo extends ApplicationAdapter {
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "SquidLib Demo: Thin Wall Dungeon and Pathfinding";
-        config.width = width * cellWidth;
-        config.height = (height+messageHeight+1) * cellHeight;
+        config.width = width * cellWidth / INTERNAL_ZOOM;
+        config.height = (height+messageHeight+1) * cellHeight / INTERNAL_ZOOM;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);
         config.addIcon("Tentacle-128.png", Files.FileType.Internal);
