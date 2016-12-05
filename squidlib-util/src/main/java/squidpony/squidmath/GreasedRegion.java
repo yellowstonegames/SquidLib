@@ -1,6 +1,7 @@
 package squidpony.squidmath;
 
 import squidpony.ArrayTools;
+import squidpony.StringKit;
 import squidpony.annotation.Beta;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.zone.MutableZone;
@@ -2416,6 +2417,26 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
         result ^= (z += (width + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
         return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
 
+    }
+
+    public String serializeToString()
+    {
+        return width +
+                ";" + height +
+                ";" + StringKit.join(",",data);
+    }
+    public static GreasedRegion deserializeFromString(String s)
+    {
+        if(s == null || s.isEmpty())
+            return null;
+        int gap = s.indexOf(';'), w = Integer.parseInt(s.substring(0, gap)),
+                gap2 = s.indexOf(';', gap+1), h = Integer.parseInt(s.substring(gap+1, gap2));
+        String[] splits = s.substring(gap2+1).split(",");
+        long[] data = new long[splits.length];
+        for (int i = 0; i < splits.length; i++) {
+            data[i] = Long.parseLong(splits[i]);
+        }
+        return new GreasedRegion(data, w, h);
     }
 
     @Override

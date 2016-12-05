@@ -34,7 +34,7 @@ public class Tile {
 	 * @param data
 	 */
 	public Tile(int a_constraint, int b_constraint, int c_constraint, int d_constraint, int e_constraint,
-			int f_constraint, String[] data) {
+			int f_constraint, String... data) {
 		this.a_constraint = a_constraint;
 		this.b_constraint = b_constraint;
 		this.c_constraint = c_constraint;

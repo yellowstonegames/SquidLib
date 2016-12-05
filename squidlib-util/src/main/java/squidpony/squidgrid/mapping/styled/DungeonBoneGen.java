@@ -342,12 +342,11 @@ public class DungeonBoneGen {
         if (ts.config.is_corner) {
             c_color = new int[ymax][xmax];
             int i = 0, j = 0, ypos = -1 * sidelen;
-            int[] cc = new int[]{ts.config.num_color_0, ts.config.num_color_1, ts.config.num_color_2, ts.config.num_color_3};
+            int[] cc = ts.config.num_colors;
 
             for (j = 0; j < ymax; ++j) {
                 for (i = 0; i < xmax; ++i) {
-                    int p = (i - j + 1) & 3; // corner type
-                    c_color[j][i] = rng.nextInt(cc[p]);
+                    c_color[j][i] = rng.nextInt(cc[(i - j + 1) & 3]); // select from cc based on corner type
                 }
             }
 

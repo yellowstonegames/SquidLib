@@ -8,19 +8,8 @@ import squidpony.squidmath.CrossHash;
  */
 public class StringKit {
 
-    public static String join(CharSequence delimiter, CharSequence... elements)
-    {
-        if(elements == null || elements.length == 0) return "";
-        StringBuilder sb = new StringBuilder(64);
-        sb.append(elements[0]);
-        for (int i = 1; i < elements.length; i++) {
-            sb.append(delimiter).append(elements[i]);
-        }
-        return sb.toString();
-    }
-    public static String joinArrays(CharSequence delimiter, char[]... elements)
-    {
-        if(elements == null || elements.length == 0) return "";
+    public static String join(CharSequence delimiter, CharSequence... elements) {
+        if (elements == null || elements.length == 0) return "";
         StringBuilder sb = new StringBuilder(64);
         sb.append(elements[0]);
         for (int i = 1; i < elements.length; i++) {
@@ -29,11 +18,98 @@ public class StringKit {
         return sb.toString();
     }
 
+    public static String joinArrays(CharSequence delimiter, char[]... elements) {
+        if (elements == null || elements.length == 0) return "";
+        StringBuilder sb = new StringBuilder(64);
+        sb.append(elements[0]);
+        for (int i = 1; i < elements.length; i++) {
+            sb.append(delimiter).append(elements[i]);
+        }
+        return sb.toString();
+    }
+
+    public static String join(CharSequence delimiter, long... elements) {
+        if (elements == null || elements.length == 0) return "";
+        StringBuilder sb = new StringBuilder(64);
+        sb.append(elements[0]);
+        for (int i = 1; i < elements.length; i++) {
+            sb.append(delimiter).append(elements[i]);
+        }
+        return sb.toString();
+    }
+    public static String join(CharSequence delimiter, double... elements) {
+        if (elements == null || elements.length == 0) return "";
+        StringBuilder sb = new StringBuilder(64);
+        sb.append(elements[0]);
+        for (int i = 1; i < elements.length; i++) {
+            sb.append(delimiter).append(elements[i]);
+        }
+        return sb.toString();
+    }
+    public static String join(CharSequence delimiter, int... elements) {
+        if (elements == null || elements.length == 0) return "";
+        StringBuilder sb = new StringBuilder(64);
+        sb.append(elements[0]);
+        for (int i = 1; i < elements.length; i++) {
+            sb.append(delimiter).append(elements[i]);
+        }
+        return sb.toString();
+    }
+    public static String join(CharSequence delimiter, float... elements) {
+        if (elements == null || elements.length == 0) return "";
+        StringBuilder sb = new StringBuilder(64);
+        sb.append(elements[0]);
+        for (int i = 1; i < elements.length; i++) {
+            sb.append(delimiter).append(elements[i]);
+        }
+        return sb.toString();
+    }
+    public static String join(CharSequence delimiter, short... elements) {
+        if (elements == null || elements.length == 0) return "";
+        StringBuilder sb = new StringBuilder(64);
+        sb.append(elements[0]);
+        for (int i = 1; i < elements.length; i++) {
+            sb.append(delimiter).append(elements[i]);
+        }
+        return sb.toString();
+    }
+    public static String join(CharSequence delimiter, char... elements) {
+        if (elements == null || elements.length == 0) return "";
+        StringBuilder sb = new StringBuilder(64);
+        sb.append(elements[0]);
+        for (int i = 1; i < elements.length; i++) {
+            sb.append(delimiter).append(elements[i]);
+        }
+        return sb.toString();
+    }
+    public static String join(CharSequence delimiter, byte... elements) {
+        if (elements == null || elements.length == 0) return "";
+        StringBuilder sb = new StringBuilder(64);
+        sb.append(elements[0]);
+        for (int i = 1; i < elements.length; i++) {
+            sb.append(delimiter).append(elements[i]);
+        }
+        return sb.toString();
+    }
+    public static String join(CharSequence delimiter, boolean... elements) {
+        if (elements == null || elements.length == 0) return "";
+        StringBuilder sb = new StringBuilder(64);
+        sb.append(elements[0]);
+        for (int i = 1; i < elements.length; i++) {
+            sb.append(delimiter).append(elements[i]);
+        }
+        return sb.toString();
+    }
 
     public static final String mask64 = "0000000000000000000000000000000000000000000000000000000000000000",
             mask32 = "00000000000000000000000000000000",
             mask16 = "0000000000000000",
             mask8 = "00000000";
+
+    private static final char[] keyBase64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".toCharArray(),
+            valBase64 = new char[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    62, 0, 0, 0, 63, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 0, 0, 0, 64, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
+                    0, 0, 0, 0, 0, 0, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51};
 
     public static String hex(long number) {
         String h = Long.toHexString(number);
@@ -62,7 +138,7 @@ public class StringKit {
 
     public static String hex(long[] numbers) {
         int len;
-        if(numbers == null || (len = numbers.length) <= 0) return "";
+        if (numbers == null || (len = numbers.length) <= 0) return "";
         StringBuilder sb = new StringBuilder(numbers.length << 4);
         for (int i = 0; i < len; i++) {
             sb.append(hex(numbers[i]));
@@ -72,40 +148,44 @@ public class StringKit {
 
     public static String hex(int[] numbers) {
         int len;
-        if(numbers == null || (len = numbers.length) <= 0) return "";
+        if (numbers == null || (len = numbers.length) <= 0) return "";
         StringBuilder sb = new StringBuilder(numbers.length << 3);
         for (int i = 0; i < len; i++) {
             sb.append(hex(numbers[i]));
         }
         return sb.toString();
     }
+
     public static String hex(short[] numbers) {
         int len;
-        if(numbers == null || (len = numbers.length) <= 0) return "";
+        if (numbers == null || (len = numbers.length) <= 0) return "";
         StringBuilder sb = new StringBuilder(numbers.length << 2);
         for (int i = 0; i < len; i++) {
             sb.append(hex(numbers[i]));
         }
         return sb.toString();
     }
+
     public static String hex(char[] numbers) {
         int len;
-        if(numbers == null || (len = numbers.length) <= 0) return "";
+        if (numbers == null || (len = numbers.length) <= 0) return "";
         StringBuilder sb = new StringBuilder(numbers.length << 2);
         for (int i = 0; i < len; i++) {
             sb.append(hex(numbers[i]));
         }
         return sb.toString();
     }
+
     public static String hex(byte[] numbers) {
         int len;
-        if(numbers == null || (len = numbers.length) <= 0) return "";
+        if (numbers == null || (len = numbers.length) <= 0) return "";
         StringBuilder sb = new StringBuilder(numbers.length << 1);
         for (int i = 0; i < len; i++) {
             sb.append(hex(numbers[i]));
         }
         return sb.toString();
     }
+
     public static String bin(long number) {
         String h = Long.toBinaryString(number);
         return mask64.substring(0, 64 - h.length()) + h;
@@ -130,153 +210,237 @@ public class StringKit {
         String h = Integer.toHexString(number & 0xff);
         return mask8.substring(0, 8 - h.length()) + h;
     }
-    public static char[] apEncode(long number, int offset, char[] buf) {
-        if(buf != null && buf.length >= 16 - offset) {
-            buf[offset] = (char) ((number >>> 60) + 65);
-            buf[offset+1] = (char) ((0xf & (number >>> 56)) + 65);
-            buf[offset+2] = (char) ((0xf & (number >>> 52)) + 65);
-            buf[offset+3] = (char) ((0xf & (number >>> 48)) + 65);
-            buf[offset+4] = (char) ((0xf & (number >>> 44)) + 65);
-            buf[offset+5] = (char) ((0xf & (number >>> 40)) + 65);
-            buf[offset+6] = (char) ((0xf & (number >>> 36)) + 65);
-            buf[offset+7] = (char) ((0xf & (number >>> 32)) + 65);
-            buf[offset+8] = (char) ((0xf & (number >>> 28)) + 65);
-            buf[offset+9] = (char) ((0xf & (number >>> 24)) + 65);
-            buf[offset+10] = (char) ((0xf & (number >>> 20)) + 65);
-            buf[offset+11] = (char) ((0xf & (number >>> 16)) + 65);
-            buf[offset+12] = (char) ((0xf & (number >>> 12)) + 65);
-            buf[offset+13] = (char) ((0xf & (number >>> 8)) + 65);
-            buf[offset+14] = (char) ((0xf & (number >>> 4)) + 65);
-            buf[offset+15] = (char) ((0xf & number) + 65);
+
+    /**
+     * Base-64 encodes number and stores that string representation in buf starting at offset; uses 11 chars.
+     *
+     * @param number the long to encode
+     * @param offset the first position to set in buf
+     * @param buf    a char array that should be non-null and have length of at least offset + 11
+     * @return buf, after modifying it in-place
+     */
+    public static char[] b64Encode(long number, int offset, char[] buf) {
+        if (buf != null && buf.length >= 11 - offset) {
+            buf[offset] = keyBase64[(int) (number >>> 60)];
+            buf[offset + 1] = keyBase64[(int) (0x3f & number >>> 54)];
+            buf[offset + 2] = keyBase64[(int) (0x3f & number >>> 48)];
+            buf[offset + 3] = keyBase64[(int) (0x3f & number >>> 42)];
+            buf[offset + 4] = keyBase64[(int) (0x3f & number >>> 36)];
+            buf[offset + 5] = keyBase64[(int) (0x3f & number >>> 30)];
+            buf[offset + 6] = keyBase64[(int) (0x3f & number >>> 24)];
+            buf[offset + 7] = keyBase64[(int) (0x3f & number >>> 18)];
+            buf[offset + 8] = keyBase64[(int) (0x3f & number >>> 12)];
+            buf[offset + 9] = keyBase64[(int) (0x3f & number >>> 6)];
+            buf[offset + 10] = keyBase64[(int) (0x3f & number)];
         }
         return buf;
     }
 
-    public static char[] apEncode(double number, int offset, char[] buf) {
-        return apEncode(Double.doubleToLongBits(number), offset, buf);
-    }
-        public static char[] apEncode(int number, int offset, char[] buf) {
-        if(buf != null && buf.length >= 8 - offset) {
-            buf[offset] = (char)((number >>> 28) + 65);
-            buf[offset+1] = (char)((0xf & (number >>> 24)) + 65);
-            buf[offset+2] = (char)((0xf & (number >>> 20)) + 65);
-            buf[offset+3] = (char)((0xf & (number >>> 16)) + 65);
-            buf[offset+4] = (char)((0xf & (number >>> 12)) + 65);
-            buf[offset+5] = (char)((0xf & (number >>> 8)) + 65);
-            buf[offset+6] = (char)((0xf & (number >>> 4)) + 65);
-            buf[offset+7] = (char)((0xf & number) + 65);
-        }
-        return buf;
-    }
-    public static char[] apEncode(float number, int offset, char[] buf) {
-        return apEncode(Float.floatToIntBits(number), offset, buf);
-    }
-    public static char[] apEncode(short number, int offset, char[] buf) {
-        if(buf != null && buf.length >= 4 - offset) {
-            buf[offset] = (char)((number >>> 12) + 65);
-            buf[offset+1] = (char)((0xf & (number >>> 8)) + 65);
-            buf[offset+2] = (char)((0xf & (number >>> 4)) + 65);
-            buf[offset+3] = (char)((0xf & number) + 65);
-        }
-        return buf;
+
+    /**
+     * Base-64 encodes number and stores that string representation in buf starting at offset; uses 11 chars.
+     *
+     * @param number the double to encode
+     * @param offset the first position to set in buf
+     * @param buf    a char array that should be non-null and have length of at least offset + 11
+     * @return buf, after modifying it in-place
+     */
+    public static char[] b64Encode(double number, int offset, char[] buf) {
+        return b64Encode(Double.doubleToLongBits(number), offset, buf);
     }
 
-    public static char[] apEncode(char number, int offset, char[] buf) {
-        if(buf != null && buf.length >= 4 - offset) {
-            buf[offset] = (char)((number >>> 12) + 65);
-            buf[offset+1] = (char)((0xf & (number >>> 8)) + 65);
-            buf[offset+2] = (char)((0xf & (number >>> 4)) + 65);
-            buf[offset+3] = (char)((0xf & number) + 65);
+    /**
+     * Base-64 encodes number and stores that string representation in buf starting at offset; uses 6 chars.
+     *
+     * @param number the int to encode
+     * @param offset the first position to set in buf
+     * @param buf    a char array that should be non-null and have length of at least offset + 6
+     * @return buf, after modifying it in-place
+     */
+    public static char[] b64Encode(int number, int offset, char[] buf) {
+        if (buf != null && buf.length >= 6 - offset) {
+            buf[offset] = keyBase64[number >>> 30];
+            buf[offset + 1] = keyBase64[0x3f & number >>> 24];
+            buf[offset + 2] = keyBase64[0x3f & number >>> 18];
+            buf[offset + 3] = keyBase64[0x3f & number >>> 12];
+            buf[offset + 4] = keyBase64[0x3f & number >>> 6];
+            buf[offset + 5] = keyBase64[0x3f & number];
         }
         return buf;
     }
 
-    public static char[] apEncode(byte number, int offset, char[] buf) {
-        if(buf != null && buf.length >= 2 - offset) {
-            buf[offset] = (char)((number >>> 4) + 65);
-            buf[offset+1] = (char)((0xf & number) + 65);
+    /**
+     * Base-64 encodes number and stores that string representation in buf starting at offset; uses 6 chars.
+     *
+     * @param number the float to encode
+     * @param offset the first position to set in buf
+     * @param buf    a char array that should be non-null and have length of at least offset + 6
+     * @return buf, after modifying it in-place
+     */
+    public static char[] b64Encode(float number, int offset, char[] buf) {
+        return b64Encode(Float.floatToIntBits(number), offset, buf);
+    }
+
+    /**
+     * Base-64 encodes number and stores that string representation in buf starting at offset; uses 3 chars.
+     *
+     * @param number the int to encode
+     * @param offset the first position to set in buf
+     * @param buf    a char array that should be non-null and have length of at least offset + 3
+     * @return buf, after modifying it in-place
+     */
+    public static char[] b64Encode(short number, int offset, char[] buf) {
+        if (buf != null && buf.length >= 3 - offset) {
+            buf[offset] = keyBase64[number >>> 12];
+            buf[offset + 1] = keyBase64[0x3f & number >>> 6];
+            buf[offset + 2] = keyBase64[0x3f & number];
+        }
+        return buf;
+    }
+
+    /**
+     * Base-64 encodes glyph and stores that string representation in buf starting at offset; uses 3 chars.
+     *
+     * @param glyph  the char to encode
+     * @param offset the first position to set in buf
+     * @param buf    a char array that should be non-null and have length of at least offset + 3
+     * @return buf, after modifying it in-place
+     */
+    public static char[] b64Encode(char glyph, int offset, char[] buf) {
+        if (buf != null && buf.length >= 4 - offset) {
+            buf[offset] = keyBase64[glyph >>> 12];
+            buf[offset + 1] = keyBase64[0x3f & glyph >>> 6];
+            buf[offset + 2] = keyBase64[0x3f & glyph];
+        }
+        return buf;
+    }
+
+    /**
+     * Base-64 encodes number and stores that string representation in buf starting at offset; uses 2 chars.
+     *
+     * @param number the byte to encode
+     * @param offset the first position to set in buf
+     * @param buf    a char array that should be non-null and have length of at least offset + 2
+     * @return buf, after modifying it in-place
+     */
+    public static char[] b64Encode(byte number, int offset, char[] buf) {
+        if (buf != null && buf.length >= 2 - offset) {
+            buf[offset] = keyBase64[number >>> 6];
+            buf[offset + 1] = keyBase64[0x3f & number];
         }
         return buf;
 
     }
 
-    public static long apDecodeLong(char[] data, int offset)
-    {
-        return (data == null || data.length < 16 + offset) ? 0 :
-                ((0xf & data[offset] - 65L) << 60)
-                        | ((0xf & data[offset + 1] - 65L) << 56)
-                        | ((0xf & data[offset + 2] - 65L) << 52)
-                        | ((0xf & data[offset + 3] - 65L) << 48)
-                        | ((0xf & data[offset + 4] - 65L) << 44)
-                        | ((0xf & data[offset + 5] - 65L) << 40)
-                        | ((0xf & data[offset + 6] - 65L) << 36)
-                        | ((0xf & data[offset + 7] - 65L) << 32)
-                        | ((0xf & data[offset + 8] - 65L) << 28)
-                        | ((0xf & data[offset + 9] - 65L) << 24)
-                        | ((0xf & data[offset + 10] - 65L) << 20)
-                        | ((0xf & data[offset + 11] - 65L) << 16)
-                        | ((0xf & data[offset + 12] - 65L) << 12)
-                        | ((0xf & data[offset + 13] - 65L) << 8)
-                        | ((0xf & data[offset + 14] - 65L) << 4)
-                        | (0xf & data[offset + 15] - 65L);
+    /**
+     * Decodes 11 characters from data starting from offset to get a long encoded as base-64.
+     * @param data a char array that should be have length of at least offset + 11
+     * @param offset where in data to start reading from
+     * @return the decoded long
+     */
+    public static long b64DecodeLong(char[] data, int offset) {
+        return (data == null || data.length < 11 + offset) ? 0L :
+                (((long)data[offset]) << 60)
+                        | ((0x3fL & data[offset + 1]) << 54)
+                        | ((0x3fL & data[offset + 2]) << 48)
+                        | ((0x3fL & data[offset + 3]) << 42)
+                        | ((0x3fL & data[offset + 4]) << 36)
+                        | ((0x3fL & data[offset + 5]) << 30)
+                        | ((0x3fL & data[offset + 6]) << 24)
+                        | ((0x3fL & data[offset + 7]) << 18)
+                        | ((0x3fL & data[offset + 8]) << 12)
+                        | ((0x3fL & data[offset + 9]) << 6)
+                        | (0x3fL & data[offset + 10]);
     }
-    public static double apDecodeDouble(char[] data, int offset)
-    {
-        return (data == null || data.length < 16 + offset) ? 0.0 :
-                Double.longBitsToDouble(((0xf & data[offset] - 65L) << 60)
-                        | ((0xf & data[offset + 1] - 65L) << 56)
-                        | ((0xf & data[offset + 2] - 65L) << 52)
-                        | ((0xf & data[offset + 3] - 65L) << 48)
-                        | ((0xf & data[offset + 4] - 65L) << 44)
-                        | ((0xf & data[offset + 5] - 65L) << 40)
-                        | ((0xf & data[offset + 6] - 65L) << 36)
-                        | ((0xf & data[offset + 7] - 65L) << 32)
-                        | ((0xf & data[offset + 8] - 65L) << 28)
-                        | ((0xf & data[offset + 9] - 65L) << 24)
-                        | ((0xf & data[offset + 10] - 65L) << 20)
-                        | ((0xf & data[offset + 11] - 65L) << 16)
-                        | ((0xf & data[offset + 12] - 65L) << 12)
-                        | ((0xf & data[offset + 13] - 65L) << 8)
-                        | ((0xf & data[offset + 14] - 65L) << 4)
-                        | (0xf & data[offset + 15] - 65L));
+
+    /**
+     * Decodes 11 characters from data starting from offset to get a double encoded as base-64.
+     * @param data a char array that should be have length of at least offset + 11
+     * @param offset where in data to start reading from
+     * @return the decoded double
+     */
+    public static double b64DecodeDouble(char[] data, int offset) {
+        return (data == null || data.length < 11 + offset) ? 0.0 :
+                Double.longBitsToDouble((((long) data[offset]) << 60)
+                        | ((0x3fL & data[offset + 1]) << 54)
+                        | ((0x3fL & data[offset + 2]) << 48)
+                        | ((0x3fL & data[offset + 3]) << 42)
+                        | ((0x3fL & data[offset + 4]) << 36)
+                        | ((0x3fL & data[offset + 5]) << 30)
+                        | ((0x3fL & data[offset + 6]) << 24)
+                        | ((0x3fL & data[offset + 7]) << 18)
+                        | ((0x3fL & data[offset + 8]) << 12)
+                        | ((0x3fL & data[offset + 9]) << 6)
+                        | (0x3fL & data[offset + 10]));
     }
-    public static int apDecodeInt(char[] data, int offset)
-    {
-        return (data == null || data.length < 8 + offset) ? 0 :
-                ((0xf & data[offset] - 65) << 28)
-                        | ((0xf & data[offset + 1] - 65) << 24)
-                        | ((0xf & data[offset + 2] - 65) << 20)
-                        | ((0xf & data[offset + 3] - 65) << 16)
-                        | ((0xf & data[offset + 4] - 65) << 12)
-                        | ((0xf & data[offset + 5] - 65) << 8)
-                        | ((0xf & data[offset + 6] - 65) << 4)
-                        | (0xf & data[offset + 7] - 65);
+
+    /**
+     * Decodes 6 characters from data starting from offset to get an int encoded as base-64.
+     * @param data a char array that should be have length of at least offset + 6
+     * @param offset where in data to start reading from
+     * @return the decoded int
+     */
+    public static int b64DecodeInt(char[] data, int offset) {
+        return (data == null || data.length < 6 + offset) ? 0 :
+                ((data[offset]) << 30)
+                        | ((0x3f & data[offset + 1]) << 24)
+                        | ((0x3f & data[offset + 2]) << 18)
+                        | ((0x3f & data[offset + 3]) << 12)
+                        | ((0x3f & data[offset + 4]) << 6)
+                        | (0x3f & data[offset + 5]);
     }
-    public static float apDecodeFloat(char[] data, int offset)
-    {
-        return (data == null || data.length < 8 + offset) ? 0f :
-                Float.intBitsToFloat(((0xf & data[offset] - 65) << 28)
-                        | ((0xf & data[offset + 1] - 65) << 24)
-                        | ((0xf & data[offset + 2] - 65) << 20)
-                        | ((0xf & data[offset + 3] - 65) << 16)
-                        | ((0xf & data[offset + 4] - 65) << 12)
-                        | ((0xf & data[offset + 5] - 65) << 8)
-                        | ((0xf & data[offset + 6] - 65) << 4)
-                        | (0xf & data[offset + 7] - 65));
+
+    /**
+     * Decodes 6 characters from data starting from offset to get a float encoded as base-64.
+     * @param data a char array that should be have length of at least offset + 6
+     * @param offset where in data to start reading from
+     * @return the decoded float
+     */
+    public static float b64DecodeFloat(char[] data, int offset) {
+        return (data == null || data.length < 6 + offset) ? 0f :
+                Float.intBitsToFloat(((data[offset]) << 30)
+                        | ((0x3f & data[offset + 1]) << 24)
+                        | ((0x3f & data[offset + 2]) << 18)
+                        | ((0x3f & data[offset + 3]) << 12)
+                        | ((0x3f & data[offset + 4]) << 6)
+                        | (0x3f & data[offset + 5]));
     }
-    public static short apDecodeShort(char[] data, int offset)
-    {
-        return (short) ((data == null || data.length < 4 + offset) ? 0 :
-                ((0xf & data[offset] - 65) << 12)
-                        | ((0xf & data[offset + 1] - 65) << 8)
-                        | ((0xf & data[offset + 2] - 65) << 4)
-                        | (0xf & data[offset + 3] - 65));
+
+    /**
+     * Decodes 3 characters from data starting from offset to get a short encoded as base-64.
+     * @param data a char array that should be have length of at least offset + 3
+     * @param offset where in data to start reading from
+     * @return the decoded short
+     */
+    public static short b64DecodeShort(char[] data, int offset) {
+        return (short) ((data == null || data.length < 3 + offset) ? 0 :
+                ((data[offset]) << 12)
+                        | ((0x3f & data[offset + 1]) << 6)
+                        | (0x3f & data[offset + 2]));
     }
-    public static byte apDecodeByte(char[] data, int offset)
-    {
+    /**
+     * Decodes 3 characters from data starting from offset to get a char encoded as base-64.
+     * @param data a char array that should be have length of at least offset + 3
+     * @param offset where in data to start reading from
+     * @return the decoded char
+     */
+    public static char b64DecodeChar(char[] data, int offset) {
+        return (char) ((data == null || data.length < 3 + offset) ? 0 :
+                ((data[offset]) << 12)
+                        | ((0x3f & data[offset + 1]) << 6)
+                        | (0x3f & data[offset + 2]));
+    }
+
+    /**
+     * Decodes 2 characters from data starting from offset to get a byte encoded as base-64.
+     * @param data a char array that should be have length of at least offset + 2
+     * @param offset where in data to start reading from
+     * @return the decoded byte
+     */
+    public static byte b64DecodeByte(char[] data, int offset) {
         return (byte) ((data == null || data.length < 2 + offset) ? 0 :
-                ((0xf & data[offset] - 65) << 4)
-                        | (0xf & data[offset + 1] - 65));
+                ((data[offset]) << 6)
+                        | (0x3f & data[offset + 1]));
     }
 
     public static String hexHash(boolean... array) {
