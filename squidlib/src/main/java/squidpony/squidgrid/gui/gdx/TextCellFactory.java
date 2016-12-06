@@ -79,6 +79,7 @@ public class TextCellFactory implements Disposable {
     private Label.LabelStyle style;
     protected OrderedMap<String, String> swap = new OrderedMap<>(32);
     protected char directionGlyph = '^';
+    protected OrderedMap<Character, TextureRegion> glyphTextures = new OrderedMap<>(16);
 
 
     /**
@@ -1175,7 +1176,7 @@ public class TextCellFactory implements Disposable {
      * @param loopTime the amount of time, in seconds, to spend looping through all colors in the list
      * @return the Actor, with no position set.
      */
-    public Actor makeDirectionMarker(Collection<Color> colors, float loopTime, boolean doubleWidth) {
+    public Image makeDirectionMarker(Collection<Color> colors, float loopTime, boolean doubleWidth) {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
@@ -1189,9 +1190,7 @@ public class TextCellFactory implements Disposable {
         ColorChangeImage im = new ColorChangeImage(dirMarker, loopTime, doubleWidth,
                 actualCellWidth, actualCellHeight + (distanceField ? 1 : 0), colors2);
         im.setAlign(2);
-        //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));
         im.setSize(actualCellWidth * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
-        // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
         return im;
     }
     /**
@@ -1199,16 +1198,70 @@ public class TextCellFactory implements Disposable {
      * @param color a Color to tint the '^' with
      * @return the Actor, with no position set.
      */
-    public Actor makeDirectionMarker(Color color) {
+    public Image makeDirectionMarker(Color color) {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
         Image im = new Image(dirMarker);
         im.setColor(scc.filter(color));
-        //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));
         im.setSize(actualCellWidth, actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
         im.setOrigin(1); //center
-        // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
+        return im;
+    }
+
+    public ColorChangeImage makeGlyphImage(char glyph, Color color)
+    {
+        return makeGlyphImage(glyph, color, false);
+    }
+    public ColorChangeImage makeGlyphImage(char glyph, Color color, boolean doubleWidth)
+    {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        TextureRegion tr;
+        if (glyphTextures.containsKey(glyph))
+        {
+            tr = glyphTextures.get(glyph);
+        }
+        else
+        {
+            BitmapFont.Glyph g = bmpFont.getData().getGlyph(glyph);
+            tr = new TextureRegion(bmpFont.getRegion(g.page), g.srcX, g.srcY, g.width, g.height);
+            glyphTextures.put(glyph, tr);
+        }
+
+        ColorChangeImage im = new ColorChangeImage(tr, 1, doubleWidth,
+                actualCellWidth, actualCellHeight + (distanceField ? 1 : 0), Collections.singletonList(scc.filter(color)));
+        im.setAlign(2);
+        im.setSize(actualCellWidth * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
+        return im;
+    }
+    public ColorChangeImage makeGlyphImage(char glyph, Collection<Color> colors, float loopTime, boolean doubleWidth) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        TextureRegion tr;
+        if (glyphTextures.containsKey(glyph))
+        {
+            tr = glyphTextures.get(glyph);
+        }
+        else
+        {
+            BitmapFont.Glyph g = bmpFont.getData().getGlyph(glyph);
+            tr = new TextureRegion(bmpFont.getRegion(g.page), g.srcX, g.srcY, g.width, g.height);
+            glyphTextures.put(glyph, tr);
+        }
+        ArrayList<Color> colors2 = null;
+        if (colors != null && !colors.isEmpty()) {
+            colors2 = new ArrayList<>(colors.size());
+            for (Color c : colors) {
+                colors2.add(scc.filter(c));
+            }
+        }
+        ColorChangeImage im = new ColorChangeImage(tr, loopTime, doubleWidth,
+                actualCellWidth, actualCellHeight + (distanceField ? 1 : 0), colors2);
+        im.setAlign(2);
+        im.setSize(actualCellWidth * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
         return im;
     }
 

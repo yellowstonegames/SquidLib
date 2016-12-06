@@ -3,6 +3,7 @@ package squidpony;
 import squidpony.panel.IColoredString;
 import squidpony.squidmath.RNG;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -241,7 +242,26 @@ public interface IColorCenter<T> {
      */
     public T saturate(T color, float degree);
 
-    /**
+	/**
+	 * Finds a gradient with 16 steps going from fromColor to toColor,
+	 * both included in the gradient.
+	 * @param fromColor the color to start with, included in the gradient
+	 * @param toColor the color to end on, included in the gradient
+	 * @return an ArrayList composed of the blending steps from fromColor to toColor, with length equal to steps
+	 */
+	public ArrayList<T> gradient(T fromColor, T toColor);
+
+	/**
+	 * Finds a gradient with the specified number of steps going from fromColor to toColor,
+	 * both included in the gradient.
+	 * @param fromColor the color to start with, included in the gradient
+	 * @param toColor the color to end on, included in the gradient
+	 * @param steps the number of elements to use in the gradient
+	 * @return an ArrayList composed of the blending steps from fromColor to toColor, with length equal to steps
+	 */
+	public ArrayList<T> gradient(T fromColor, T toColor, int steps);
+
+	/**
 	 * A skeletal implementation of {@link IColorCenter}.
 	 * 
 	 * @author smelC
@@ -635,6 +655,23 @@ public interface IColorCenter<T> {
 			return lerp(color, saturated(color), degree);
 		}
 
+		@Override
+		public ArrayList<T> gradient(T fromColor, T toColor) {
+			return gradient(fromColor, toColor, 16);
+		}
+
+		@Override
+		public ArrayList<T> gradient(T fromColor, T toColor, int steps) {
+			ArrayList<T> colors = new ArrayList<>((steps > 1) ? steps : 1);
+			colors.add(filter(fromColor));
+			if(steps < 2)
+				return colors;
+			for (float i = 1; i < steps; i++) {
+				colors.add(lerp(fromColor, toColor, i / (steps - 1f)));
+			}
+			return colors;
+
+		}
 
 		/**
 		 * Create a concrete instance of the color type given as a type parameter. That's the

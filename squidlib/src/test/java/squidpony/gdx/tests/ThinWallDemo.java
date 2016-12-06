@@ -15,6 +15,7 @@ import squidpony.panel.IColoredString;
 import squidpony.squidai.CustomDijkstraMap;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Adjacency;
+import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.gui.gdx.*;
@@ -417,7 +418,7 @@ public class ThinWallDemo extends ApplicationAdapter {
 
         if (health <= 0) return;
         int currentX = player.entity.gridX, currentY = player.entity.gridY,
-                newX = adjacency.extractX(pos), newY = adjacency.extractY(pos), nearX, nearY;
+                newX = adjacency.extractX(pos), newY = adjacency.extractY(pos);
         if (newX >= 0 && newY >= 0 && newX < overlapWidth && newY < overlapHeight
                 && bareDungeon[newX][newY] != '#') {
             // '+' is a closed door. '/' is an open door.
@@ -454,7 +455,17 @@ public class ThinWallDemo extends ApplicationAdapter {
                 //player.marker.setDirection(Direction.CLOCKWISE[adjacency.extractR(pos)]);
                 display.slide(player.entity, newX, newY);
                 player.move(pos);
-                monsters.remove(pos);
+                if(monsters.remove(pos) != null)
+                {
+                    Direction d;
+                    for (int i = 0; i < 8; i++) {
+                        d = Direction.CLOCKWISE[i];
+                        display.getForegroundLayer().summon(newX, newY, newX-d.deltaX, newY+d.deltaY,
+                                '\'', SColor.BLOOD, SColor.BLOOD.cpy().sub(0,0,0,1f),
+                                45f * i, 45f * (i-1),
+                                1f);
+                    }
+                }
             }
             phase = Phase.PLAYER_ANIM;
         }
