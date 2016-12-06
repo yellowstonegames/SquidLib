@@ -960,7 +960,6 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
             x &= -2;
             y &= -2;
         }
-//             y = gridHeight - (int)((a.getY() - getY()) / cellHeight) - 1;
         if(x < 0 || y < 0 || x >= contents.length || y >= contents[x].length)
             return;
         if (restoreSym)
@@ -995,8 +994,6 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         final Actor a = ae.actor;
         final float x = adjustX(ae.gridX, ae.doubleWidth),
                 y = adjustY(ae.gridY);
-        // ae.gridX * cellWidth + (int)getX(),
-        // (gridHeight - ae.gridY - 1) * cellHeight - 1 + (int)getY();
         if(a == null || ae.animating) return;
         duration = clampDuration(duration);
         animationCount++;
@@ -1079,7 +1076,6 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     {
         final Actor a = ae.actor;
         final float nextX = adjustX(newX, ae.doubleWidth), nextY = adjustY(newY);
-        //final int nextX = newX * cellWidth * ((ae.doubleWidth) ? 2 : 1) + (int)getX(), nextY = (gridHeight - newY - 1) * cellHeight - 1 + (int)getY();
         if(a == null || ae.animating) return;
         duration = clampDuration(duration);
         animationCount++;
@@ -1335,7 +1331,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      *
      * @param ae an AnimatedEntity returned by animateActor()
      * @param color what to transition ae's color towards, and then transition back from
-     * @param duration how long the total "round-trip" transition should take in milliseconds
+     * @param duration how long the total "round-trip" transition should take in seconds
      */
     public void tint(final AnimatedEntity ae, Color color, float duration) {
         final Actor a = ae.actor;
@@ -1359,11 +1355,11 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     /**
 	 * Like {@link #tint(int, int, Color, float)}, but waits for {@code delay}
 	 * (in seconds) before performing it.
-     * @param delay how long to wait in milliseconds before starting the effect
+     * @param delay how long to wait in seconds before starting the effect
      * @param x the x-coordinate of the cell to tint
      * @param y the y-coordinate of the cell to tint
      * @param color what to transition ae's color towards, and then transition back from
-     * @param duration how long the total "round-trip" transition should take in milliseconds
+     * @param duration how long the total "round-trip" transition should take in seconds
      */
     public void tint(float delay, int x, int y, Color color, float duration) {
         tint(delay, x, y, color, duration, null);
@@ -1373,11 +1369,11 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * Like {@link #tint(int, int, Color, float)}, but waits for {@code delay}
      * (in seconds) before performing it. Additionally, enqueue {@code postRunnable}
      * for running after the created action ends.
-     * @param delay how long to wait in milliseconds before starting the effect
+     * @param delay how long to wait in seconds before starting the effect
      * @param x the x-coordinate of the cell to tint
      * @param y the y-coordinate of the cell to tint
      * @param color what to transition ae's color towards, and then transition back from
-     * @param duration how long the total "round-trip" transition should take in milliseconds
+     * @param duration how long the total "round-trip" transition should take in seconds
      * @param postRunnable a Runnable to execute after the tint completes; may be null to do nothing.
      */
 
@@ -1420,7 +1416,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param color
      * @param duration
      */
-    public final void tint(int x, int y, Color color, float duration) {
+    public void tint(int x, int y, Color color, float duration) {
     	tint(0f, x, y, color, duration);
     }
 
@@ -1451,6 +1447,121 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 			}
 		})));
 	}
+
+    /**
+     * Create a new Actor at (x, y) that looks like glyph but can rotate, and immediately starts changing color from
+     * startColor to endColor and changing rotation from startRotation to endRotation, taking duration seconds to
+     * complete before removing the Actor.
+     * @param x the x position in cells; doesn't change
+     * @param y the y position in cells; doesn't change
+     * @param glyph the char to show (the same char throughout the effect, but it can rotate)
+     * @param startColor the starting Color
+     * @param endColor the Color to transition to
+     * @param startRotation the amount of rotation, in degrees, the glyph should start at
+     * @param endRotation the amount of rotation, in degrees, the glyph should end at
+     * @param duration the duration in seconds for the effect
+     */
+    public void summon(int x, int y, char glyph, Color startColor, Color endColor,
+                       float startRotation, float endRotation, float duration)
+    {
+        summon(x, y, x, y, glyph, startColor, endColor, false, startRotation, endRotation, duration);
+    }
+    /**
+     * Create a new Actor at (startX, startY) that looks like glyph but can rotate, sets its color, and immediately
+     * starts changing position so it ends on the cell (endX, endY) and changing rotation from startRotation to
+     * endRotation, taking duration seconds to complete before removing the Actor.
+     * @param startX the starting x position in cells
+     * @param startY the starting y position in cells
+     * @param endX the ending x position in cells
+     * @param endY the ending y position in cells
+     * @param glyph the char to show (the same char throughout the effect, but it can rotate)
+     * @param color the Color of the glyph throughout the effect
+     * @param startRotation the amount of rotation, in degrees, the glyph should start at
+     * @param endRotation the amount of rotation, in degrees, the glyph should end at
+     * @param duration the duration in seconds for the effect
+     */
+    public void summon(int startX, int startY, int endX, int endY, char glyph, Color color,
+                       float startRotation, float endRotation, float duration)
+    {
+        summon(startX, startY, endX, endY, glyph, color, color, false, startRotation, endRotation, duration);
+    }
+    /**
+     * Create a new Actor at (startX, startY) that looks like glyph but has the given rotation, and immediately starts
+     * changing color from startColor to endColor, and changing position so it ends on the cell (endX, endY), taking
+     * duration seconds to complete before removing the Actor.
+     * @param startX the starting x position in cells
+     * @param startY the starting y position in cells
+     * @param endX the ending x position in cells
+     * @param endY the ending y position in cells
+     * @param glyph the char to show (the same char throughout the effect, but it can rotate)
+     * @param startColor the starting Color
+     * @param endColor the Color to transition to
+     * @param rotation the amount of rotation, in degrees, the glyph should have throughout the effect
+     * @param duration the duration in seconds for the effect
+     */
+    public void summon(int startX, int startY, int endX, int endY, char glyph, Color startColor, Color endColor,
+                       float rotation, float duration)
+    {
+        summon(startX, startY, endX, endY, glyph, startColor, endColor, false, rotation, rotation, duration);
+    }
+    /**
+     * Create a new Actor at (startX, startY) that looks like glyph but can rotate, and immediately starts changing
+     * color from startColor to endColor, changing position so it ends on the cell (endX, endY), and changing rotation
+     * from startRotation to endRotation, taking duration seconds to complete before removing the Actor.
+     * @param startX the starting x position in cells
+     * @param startY the starting y position in cells
+     * @param endX the ending x position in cells
+     * @param endY the ending y position in cells
+     * @param glyph the char to show (the same char throughout the effect, but it can rotate)
+     * @param startColor the starting Color
+     * @param endColor the Color to transition to
+     * @param startRotation the amount of rotation, in degrees, the glyph should start at
+     * @param endRotation the amount of rotation, in degrees, the glyph should end at
+     * @param duration the duration in seconds for the effect
+     */
+    public void summon(int startX, int startY, int endX, int endY, char glyph, Color startColor, Color endColor,
+                       float startRotation, float endRotation, float duration)
+    {
+        summon(startX, startY, endX, endY, glyph, startColor, endColor, false, startRotation, endRotation, duration);
+    }
+    /**
+     * Create a new Actor at (startX, startY) that looks like glyph but can rotate, and immediately starts changing
+     * color from startColor to endColor, changing position so it ends on the cell (endX, endY), and changing rotation
+     * from startRotation to endRotation, taking duration seconds to complete before removing the Actor. Allows
+     * setting doubleWidth, which centers the created Actor in the space between the two glyphs in a cell.
+     * @param startX the starting x position in cells
+     * @param startY the starting y position in cells
+     * @param endX the ending x position in cells
+     * @param endY the ending y position in cells
+     * @param glyph the char to show (the same char throughout the effect, but it can rotate)
+     * @param startColor the starting Color
+     * @param endColor the Color to transition to
+     * @param doubleWidth true if this uses double-width cells, false in most cases
+     * @param startRotation the amount of rotation, in degrees, the glyph should start at
+     * @param endRotation the amount of rotation, in degrees, the glyph should end at
+     * @param duration the duration in seconds for the effect
+     */
+    public void summon(int startX, int startY, int endX, int endY, char glyph, Color startColor, Color endColor, boolean doubleWidth,
+                       float startRotation, float endRotation, float duration)
+    {
+        duration = clampDuration(duration);
+
+        final Color sc = scc.filter(startColor), ec = scc.filter(endColor);
+        final ColorChangeImage
+         gi = textFactory.makeGlyphImage(glyph, scc.gradient(startColor, endColor, (int) (duration * 40)), duration * 1.1f, doubleWidth);
+        gi.setPosition(adjustX(startX, doubleWidth) - getX() * 2, adjustY(startY) - getY() * 2);
+        gi.setRotation(startRotation);
+        addActor(gi);
+        gi.addAction(Actions.sequence(Actions.parallel(
+                Actions.moveTo(adjustX(endX, doubleWidth) - getX() * 2, adjustY(endY) - getY() * 2, duration),
+                Actions.rotateTo(endRotation, duration)), Actions.run(new Runnable() {
+            @Override
+            public void run() {
+                recallActor(gi, false);
+            }
+        })));
+
+    }
 
 	@Override
     public boolean hasActiveAnimations() {
