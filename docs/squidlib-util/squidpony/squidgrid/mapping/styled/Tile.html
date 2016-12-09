@@ -142,7 +142,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/styled/Tile.html#d_constraint">d_constraint</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]</code></td>
+<td class="colFirst"><code>long[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/styled/Tile.html#data">data</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -152,6 +152,14 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/styled/Tile.html#f_constraint">f_constraint</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/styled/Tile.html#height">height</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/styled/Tile.html#width">width</a></span></code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -173,13 +181,15 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/styled/Tile.html#Tile-int-int-int-int-int-int-java.lang.String:A-">Tile</a></span>(int&nbsp;a_constraint,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/styled/Tile.html#Tile-int-int-int-int-int-int-int-int-long...-">Tile</a></span>(int&nbsp;a_constraint,
     int&nbsp;b_constraint,
     int&nbsp;c_constraint,
     int&nbsp;d_constraint,
     int&nbsp;e_constraint,
     int&nbsp;f_constraint,
-    <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;data)</code>
+    int&nbsp;width,
+    int&nbsp;height,
+    long...&nbsp;data)</code>
 <div class="block">Constructor used internally.</div>
 </td>
 </tr>
@@ -267,13 +277,31 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <pre>public&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/mapping/styled/Tile.html#line.9">f_constraint</a></pre>
 </li>
 </ul>
+<a name="width">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>width</h4>
+<pre>public&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/mapping/styled/Tile.html#line.9">width</a></pre>
+</li>
+</ul>
+<a name="height">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>height</h4>
+<pre>public&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/mapping/styled/Tile.html#line.9">height</a></pre>
+</li>
+</ul>
 <a name="data">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>data</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[] <a href="../../../../src-html/squidpony/squidgrid/mapping/styled/Tile.html#line.10">data</a></pre>
+<pre>public&nbsp;long[] <a href="../../../../src-html/squidpony/squidgrid/mapping/styled/Tile.html#line.10">data</a></pre>
 </li>
 </ul>
 </li>
@@ -291,22 +319,24 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>Tile</h4>
 <pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/Tile.html#line.15">Tile</a>()</pre>
-<div class="block">Probably not something you will construct manually. See DungeonGen .</div>
+<div class="block">Probably not something you will construct manually. See DungeonBoneGen .</div>
 </li>
 </ul>
-<a name="Tile-int-int-int-int-int-int-java.lang.String:A-">
+<a name="Tile-int-int-int-int-int-int-int-int-long...-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Tile</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/Tile.html#line.36">Tile</a>(int&nbsp;a_constraint,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/Tile.html#line.38">Tile</a>(int&nbsp;a_constraint,
             int&nbsp;b_constraint,
             int&nbsp;c_constraint,
             int&nbsp;d_constraint,
             int&nbsp;e_constraint,
             int&nbsp;f_constraint,
-            <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;data)</pre>
+            int&nbsp;width,
+            int&nbsp;height,
+            long...&nbsp;data)</pre>
 <div class="block">Constructor used internally.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

@@ -246,21 +246,21 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#Spill-char:A:A-">Spill</a></span>(char[][]&nbsp;level)</code>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#Spill-char:A:A-char-">Spill</a></span>(char[][]&nbsp;level,
      char&nbsp;alternateWall)</code>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where one char means a wall and anything else is a walkable tile.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#Spill-char:A:A-squidpony.squidgrid.Spill.Measurement-">Spill</a></span>(char[][]&nbsp;level,
      <a href="../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid">Spill.Measurement</a>&nbsp;measurement)</code>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </td>
 </tr>
@@ -268,7 +268,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#Spill-char:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.LightRNG-">Spill</a></span>(char[][]&nbsp;level,
      <a href="../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid">Spill.Measurement</a>&nbsp;measurement,
      <a href="../../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath">LightRNG</a>&nbsp;random)</code>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </td>
 </tr>
@@ -276,7 +276,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#Spill-char:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.RNG-">Spill</a></span>(char[][]&nbsp;level,
      <a href="../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid">Spill.Measurement</a>&nbsp;measurement,
      <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</code>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </td>
 </tr>
@@ -579,7 +579,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>Spill</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.159">Spill</a>(char[][]&nbsp;level)</pre>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile. If you only have
  a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
  map that can be used here.</div>
@@ -597,7 +597,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <h4>Spill</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.173">Spill</a>(char[][]&nbsp;level,
              char&nbsp;alternateWall)</pre>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where one char means a wall and anything else is a walkable tile. If you only have
  a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
  map that can be used here. You can specify the character used for walls.</div>
@@ -615,7 +615,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <h4>Spill</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.189">Spill</a>(char[][]&nbsp;level,
              <a href="../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid">Spill.Measurement</a>&nbsp;measurement)</pre>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile. If you only have
  a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
  map that can be used here. This constructor specifies a distance measurement.</div>
@@ -635,7 +635,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.209">Spill</a>(char[][]&nbsp;level,
              <a href="../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid">Spill.Measurement</a>&nbsp;measurement,
              <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</pre>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile. If you only have
  a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
  map that can be used here. This constructor specifies a distance measurement.
@@ -659,7 +659,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.228">Spill</a>(char[][]&nbsp;level,
              <a href="../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid">Spill.Measurement</a>&nbsp;measurement,
              <a href="../../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath">LightRNG</a>&nbsp;random)</pre>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile. If you only have
  a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
  map that can be used here. This constructor specifies a distance measurement.

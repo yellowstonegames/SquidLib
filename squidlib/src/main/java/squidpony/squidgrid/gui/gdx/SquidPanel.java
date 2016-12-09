@@ -1544,23 +1544,254 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     public void summon(int startX, int startY, int endX, int endY, char glyph, Color startColor, Color endColor, boolean doubleWidth,
                        float startRotation, float endRotation, float duration)
     {
-        duration = clampDuration(duration);
+        summon(0f, startX, startY, endX, endY, glyph, startColor, endColor, doubleWidth, startRotation, endRotation, duration);
+    }
+    /**
+     * Create a new Actor at (startX, startY) that looks like glyph but can rotate, and immediately starts changing
+     * color from startColor to endColor, changing position so it ends on the cell (endX, endY), and changing rotation
+     * from startRotation to endRotation, taking duration seconds to complete before removing the Actor. Allows
+     * setting doubleWidth, which centers the created Actor in the space between the two glyphs in a cell.
+     * @param delay amount of time, in seconds, to wait before starting the effect
+     * @param startX the starting x position in cells
+     * @param startY the starting y position in cells
+     * @param endX the ending x position in cells
+     * @param endY the ending y position in cells
+     * @param glyph the char to show (the same char throughout the effect, but it can rotate)
+     * @param startColor the starting Color
+     * @param endColor the Color to transition to
+     * @param doubleWidth true if this uses double-width cells, false in most cases
+     * @param startRotation the amount of rotation, in degrees, the glyph should start at
+     * @param endRotation the amount of rotation, in degrees, the glyph should end at
+     * @param duration the duration in seconds for the effect
+     */
+    public void summon(float delay, int startX, int startY, int endX, int endY, char glyph,
+                       Color startColor, Color endColor, boolean doubleWidth,
+                       float startRotation, float endRotation, float duration)
 
-        final Color sc = scc.filter(startColor), ec = scc.filter(endColor);
+    {
+        duration = clampDuration(duration);
+        animationCount++;
         final ColorChangeImage
-         gi = textFactory.makeGlyphImage(glyph, scc.gradient(startColor, endColor, (int) (duration * 40)), duration * 1.1f, doubleWidth);
+                gi = textFactory.makeGlyphImage(glyph, scc.gradient(startColor, endColor, (int) (duration * 40)), duration * 1.1f, doubleWidth);
         gi.setPosition(adjustX(startX, doubleWidth) - getX() * 2, adjustY(startY) - getY() * 2);
         gi.setRotation(startRotation);
         addActor(gi);
-        gi.addAction(Actions.sequence(Actions.parallel(
+        final int nbActions = 2 + (0 < delay ? 1 : 0);
+        final Action[] sequence = new Action[nbActions];
+        int index = 0;
+        if (0 < delay)
+            sequence[index++] = Actions.delay(delay);
+        sequence[index++] = Actions.parallel(
                 Actions.moveTo(adjustX(endX, doubleWidth) - getX() * 2, adjustY(endY) - getY() * 2, duration),
-                Actions.rotateTo(endRotation, duration)), Actions.run(new Runnable() {
+                Actions.rotateTo(endRotation, duration));
+        sequence[index] = Actions.run(new Runnable() {
             @Override
             public void run() {
                 recallActor(gi, false);
             }
-        })));
+        });
 
+        gi.addAction(Actions.sequence(sequence));
+    }
+    /**
+     * Convenience method to produce an explosion, splash, or burst effect. Calls
+     * {@link #summon(float, int, int, int, int, char, Color, Color, boolean, float, float, float)} repeatedly with
+     * different parameters. As with summon(), this creates temporary Actors that change color, position, and rotation.
+     * This overload always moves Actors 1 cell away, which is a safe default, uses a "normal" amount of rotation for
+     * for all of the actors (a value of 1f if you used another overload), and always uses an end color that is a
+     * modified copy of startColor with 0 alpha (making the Actors all fade to transparent). The parameter
+     * eightWay determines whether this produces 4 (cardinal) or 8 (cardinal and diagonal) rotations and directions.
+     * @param x the starting, center, x-position to create all Actors at
+     * @param y the starting, center, y-position to create all Actors at
+     * @param eightWay if true, creates 8 Actors and moves them away in a square, otherwise, 4 Actors in a diamond
+     * @param glyph the char to make a rotate-able Actor of; should definitely be visible
+     * @param startColor the color to start the effect with
+     * @param duration how long, in seconds, the effect should last
+     */
+
+    public void burst(int x, int y, boolean eightWay, char glyph,
+                      Color startColor,
+                      float duration)
+    {
+        burst(0f, x, y, 1, eightWay, glyph, startColor, startColor.cpy().sub(0,0,0,1), false, 1f, duration);
+    }
+
+
+    /**
+     * Convenience method to produce an explosion, splash, or burst effect. Calls
+     * {@link #summon(float, int, int, int, int, char, Color, Color, boolean, float, float, float)} repeatedly with
+     * different parameters. As with summon(), this creates temporary Actors that change color, position, and rotation.
+     * This overload always moves Actors 1 cell away, which is a safe default, and uses a "normal" amount of rotation
+     * for all of the actors (a value of 1f if you used another overload). The parameter
+     * eightWay determines whether this produces 4 (cardinal) or 8 (cardinal and diagonal) rotations and directions.
+     * @param x the starting, center, x-position to create all Actors at
+     * @param y the starting, center, y-position to create all Actors at
+     * @param eightWay if true, creates 8 Actors and moves them away in a square, otherwise, 4 Actors in a diamond
+     * @param glyph the char to make a rotate-able Actor of; should definitely be visible
+     * @param startColor the color to start the effect with
+     * @param endColor the color to end the effect on
+     * @param duration how long, in seconds, the effect should last
+     */
+    public void burst(int x, int y, boolean eightWay, char glyph,
+                      Color startColor, Color endColor,
+                      float duration)
+    {
+        burst(0f, x, y, 1, eightWay, glyph, startColor, endColor, false, 1f, duration);
+    }
+
+    /**
+     * Convenience method to produce an explosion, splash, or burst effect. Calls
+     * {@link #summon(float, int, int, int, int, char, Color, Color, boolean, float, float, float)} repeatedly with
+     * different parameters. As with summon(), this creates temporary Actors that change color, position, and rotation.
+     * This overload always moves Actors 1 cell away, which is a safe default. Some parameters need explanation:
+     * eightWay determines whether this produces 4 (cardinal) or 8 (cardinal and diagonal) rotations and directions;
+     * rotationStrength can default to 1 if you want some rotation (which looks good) or 0 if you want the Actors to
+     * start at the correct rotation and not change that rotation over the course of the effect, but can be between 0
+     * and 1 or higher than 1 (negative values may also work).
+     * @param x the starting, center, x-position to create all Actors at
+     * @param y the starting, center, y-position to create all Actors at
+     * @param eightWay if true, creates 8 Actors and moves them away in a square, otherwise, 4 Actors in a diamond
+     * @param glyph the char to make a rotate-able Actor of; should definitely be visible
+     * @param startColor the color to start the effect with
+     * @param endColor the color to end the effect on
+     * @param rotationStrength how strongly to rotate the Actors; 0 is no rotation, 1 is a normal rotation
+     * @param duration how long, in seconds, the effect should last
+     */
+    public void burst(int x, int y, boolean eightWay, char glyph,
+                      Color startColor, Color endColor,
+                      float rotationStrength, float duration)
+    {
+        burst(0f, x, y, 1, eightWay, glyph, startColor, endColor, false, rotationStrength, duration);
+    }
+
+
+    /**
+     * Convenience method to produce an explosion, splash, or burst effect. Calls
+     * {@link #summon(float, int, int, int, int, char, Color, Color, boolean, float, float, float)} repeatedly with
+     * different parameters. As with summon(), this creates temporary Actors that change color, position, and rotation.
+     * Some parameters need explanation: distance is how many cells away to move the created Actors away from (x,y);
+     * eightWay determines whether this produces 4 (cardinal) or 8 (cardinal and diagonal) rotations and directions;
+     * rotationStrength can default to 1 if you want some rotation (which looks good) or 0 if you want the Actors to
+     * start at the correct rotation and not change that rotation over the course of the effect, but can be between 0
+     * and 1 or higher than 1 (negative values may also work).
+     * @param x the starting, center, x-position to create all Actors at
+     * @param y the starting, center, y-position to create all Actors at
+     * @param distance how far away, in cells, to move each actor from the center (Chebyshev distance, forming a square)
+     * @param eightWay if true, creates 8 Actors and moves them away in a square, otherwise, 4 Actors in a diamond
+     * @param glyph the char to make a rotate-able Actor of; should definitely be visible
+     * @param startColor the color to start the effect with
+     * @param endColor the color to end the effect on
+     * @param rotationStrength how strongly to rotate the Actors; 0 is no rotation, 1 is a normal rotation
+     * @param duration how long, in seconds, the effect should last
+     */
+    public void burst(int x, int y, int distance, boolean eightWay, char glyph,
+                      Color startColor, Color endColor,
+                      float rotationStrength, float duration)
+    {
+        burst(0f, x, y, distance, eightWay, glyph, startColor, endColor, false, rotationStrength, duration);
+    }
+
+
+    /**
+     * Convenience method to produce an explosion, splash, or burst effect. Calls
+     * {@link #summon(float, int, int, int, int, char, Color, Color, boolean, float, float, float)} repeatedly with
+     * different parameters. As with summon(), this creates temporary Actors that change color, position, and rotation.
+     * This overload always moves Actors 1 cell away, which is a safe default. Some parameters need explanation:
+     * eightWay determines whether this produces 4 (cardinal) or 8 (cardinal and diagonal) rotations and directions;
+     * rotationStrength can default to 1 if you want some rotation (which looks good) or 0 if you want the Actors to
+     * start at the correct rotation and not change that rotation over the course of the effect, but can be between 0
+     * and 1 or higher than 1 (negative values may also work).
+     * @param x the starting, center, x-position to create all Actors at
+     * @param y the starting, center, y-position to create all Actors at
+     * @param eightWay if true, creates 8 Actors and moves them away in a square, otherwise, 4 Actors in a diamond
+     * @param glyph the char to make a rotate-able Actor of; should definitely be visible
+     * @param startColor the color to start the effect with
+     * @param endColor the color to end the effect on
+     * @param doubleWidth true if this should use the double-width-cell technique, false in most cases
+     * @param rotationStrength how strongly to rotate the Actors; 0 is no rotation, 1 is a normal rotation
+     * @param duration how long, in seconds, the effect should last
+     */
+    public void burst(int x, int y, boolean eightWay, char glyph,
+                      Color startColor, Color endColor, boolean doubleWidth,
+                      float rotationStrength, float duration)
+    {
+        burst(0f, x, y, 1, eightWay, glyph, startColor, endColor, doubleWidth, rotationStrength, duration);
+    }
+
+    /**
+     * Convenience method to produce an explosion, splash, or burst effect. Calls
+     * {@link #summon(float, int, int, int, int, char, Color, Color, boolean, float, float, float)} repeatedly with
+     * different parameters. As with summon(), this creates temporary Actors that change color, position, and rotation.
+     * Some parameters need explanation: distance is how many cells away to move the created Actors away from (x,y);
+     * eightWay determines whether this produces 4 (cardinal) or 8 (cardinal and diagonal) rotations and directions;
+     * rotationStrength can default to 1 if you want some rotation (which looks good) or 0 if you want the Actors to
+     * start at the correct rotation and not change that rotation over the course of the effect, but can be between 0
+     * and 1 or higher than 1 (negative values may also work).
+     * @param x the starting, center, x-position to create all Actors at
+     * @param y the starting, center, y-position to create all Actors at
+     * @param distance how far away, in cells, to move each actor from the center (Chebyshev distance, forming a square)
+     * @param eightWay if true, creates 8 Actors and moves them away in a square, otherwise, 4 Actors in a diamond
+     * @param glyph the char to make a rotate-able Actor of; should definitely be visible
+     * @param startColor the color to start the effect with
+     * @param endColor the color to end the effect on
+     * @param doubleWidth true if this should use the double-width-cell technique, false in most cases
+     * @param rotationStrength how strongly to rotate the Actors; 0 is no rotation, 1 is a normal rotation
+     * @param duration how long, in seconds, the effect should last
+     */
+    public void burst(int x, int y, int distance, boolean eightWay, char glyph,
+                      Color startColor, Color endColor, boolean doubleWidth,
+                      float rotationStrength, float duration)
+    {
+        burst(0f, x, y, distance, eightWay, glyph, startColor, endColor, doubleWidth, rotationStrength, duration);
+    }
+
+    /**
+     * Convenience method to produce an explosion, splash, or burst effect. Calls
+     * {@link #summon(float, int, int, int, int, char, Color, Color, boolean, float, float, float)} repeatedly with
+     * different parameters. As with summon(), this creates temporary Actors that change color, position, and rotation.
+     * Some parameters need explanation: distance is how many cells away to move the created Actors away from (x,y);
+     * eightWay determines whether this produces 4 (cardinal) or 8 (cardinal and diagonal) rotations and directions;
+     * rotationStrength can default to 1 if you want some rotation (which looks good) or 0 if you want the Actors to
+     * start at the correct rotation and not change that rotation over the course of the effect, but can be between 0
+     * and 1 or higher than 1 (negative values may also work).
+     * @param delay amount of time, in seconds, to wait before starting the effect
+     * @param x the starting, center, x-position to create all Actors at
+     * @param y the starting, center, y-position to create all Actors at
+     * @param distance how far away, in cells, to move each actor from the center (Chebyshev distance, forming a square)
+     * @param eightWay if true, creates 8 Actors and moves them away in a square, otherwise, 4 Actors in a diamond
+     * @param glyph the char to make a rotate-able Actor of; should definitely be visible
+     * @param startColor the color to start the effect with
+     * @param endColor the color to end the effect on
+     * @param doubleWidth true if this should use the double-width-cell technique, false in most cases
+     * @param rotationStrength how strongly to rotate the Actors; 0 is no rotation, 1 is a normal rotation
+     * @param duration how long, in seconds, the effect should last
+     */
+    public void burst(float delay, int x, int y, int distance, boolean eightWay, char glyph,
+                      Color startColor, Color endColor, boolean doubleWidth,
+                      float rotationStrength, float duration)
+    {
+        Direction d;
+        if(eightWay)
+        {
+            for (int i = 0; i < 8; i++) {
+                d = Direction.CLOCKWISE[i];
+                summon(delay, x, y, x - d.deltaX * distance, y + d.deltaY * distance,
+                        glyph, startColor, endColor, doubleWidth,
+                        45f * i, 45f * (i - rotationStrength),
+                        duration);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < 4; i++) {
+                d = Direction.CARDINALS_CLOCKWISE[i];
+                summon(delay, x, y, x - d.deltaX * distance, y + d.deltaY * distance,
+                        glyph, startColor, endColor, doubleWidth,
+                        90f * i, 90f * (i - rotationStrength),
+                        duration);
+            }
+
+        }
     }
 
 	@Override

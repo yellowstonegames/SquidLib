@@ -74,6 +74,10 @@
 </a>
 <h2 class="title">S</h2>
 <dl>
+<dt><span class="memberNameLink"><a href="../squidpony/StringKit.html#safeSubstring-java.lang.String-int-int-">safeSubstring(String, int, int)</a></span> - Static method in class squidpony.<a href="../squidpony/StringKit.html" title="class in squidpony">StringKit</a></dt>
+<dd>
+<div class="block">Like <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true#substring-int-int-" title="class or interface in java.lang"><code>String.substring(int, int)</code></a> but returns "" instead of throwing any sort of Exception.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#safetyMap">safetyMap</a></span> - Variable in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
 <dd>
 <div class="block">A 2D array of modifiers to apply to the perceived safety of an area; modifiers go up when deteriorate() is
@@ -264,6 +268,8 @@
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#serializeToString--">serializeToString()</a></span> - Method in class squidpony.<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.html#serializeToString--">serializeToString()</a></span> - Method in class squidpony.<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#serializeToString--">serializeToString()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="../squidpony/squidgrid/mapping/SerpentDeepMapGenerator.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">SerpentDeepMapGenerator</span></a> - Class in <a href="../squidpony/squidgrid/mapping/package-summary.html">squidpony.squidgrid.mapping</a></dt>
 <dd>
@@ -1222,17 +1228,17 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/SoundMap.html#SoundMap-char:A:A-">SoundMap(char[][])</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/SoundMap.html" title="class in squidpony.squidgrid">SoundMap</a></dt>
 <dd>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/SoundMap.html#SoundMap-char:A:A-char-">SoundMap(char[][], char)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/SoundMap.html" title="class in squidpony.squidgrid">SoundMap</a></dt>
 <dd>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where one char means a wall and anything else is a walkable tile.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/SoundMap.html#SoundMap-char:A:A-squidpony.squidgrid.SoundMap.Measurement-">SoundMap(char[][], SoundMap.Measurement)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/SoundMap.html" title="class in squidpony.squidgrid">SoundMap</a></dt>
 <dd>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </dd>
 <dt><a href="../squidpony/squidgrid/SoundMap.Measurement.html" title="enum in squidpony.squidgrid"><span class="typeNameLink">SoundMap.Measurement</span></a> - Enum in <a href="../squidpony/squidgrid/package-summary.html">squidpony.squidgrid</a></dt>
@@ -1299,27 +1305,27 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Spill.html#Spill-char:A:A-">Spill(char[][])</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a></dt>
 <dd>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Spill.html#Spill-char:A:A-char-">Spill(char[][], char)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a></dt>
 <dd>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where one char means a wall and anything else is a walkable tile.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Spill.html#Spill-char:A:A-squidpony.squidgrid.Spill.Measurement-">Spill(char[][], Spill.Measurement)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a></dt>
 <dd>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Spill.html#Spill-char:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.RNG-">Spill(char[][], Spill.Measurement, RNG)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a></dt>
 <dd>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Spill.html#Spill-char:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.LightRNG-">Spill(char[][], Spill.Measurement, LightRNG)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a></dt>
 <dd>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Splash.html#spill-squidpony.squidmath.RNG-char:A:A-squidpony.squidmath.Coord-int-int-">spill(RNG, char[][], Coord, int, int)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/Splash.html" title="class in squidpony.squidgrid">Splash</a></dt>
@@ -1383,6 +1389,10 @@
 <div class="block">If this GreasedRegion stores multiple unconnected "on" areas, this finds each isolated area (areas that
  are only adjacent diagonally are considered separate from each other) and returns it as an element in an
  ArrayList of GreasedRegion, with one GreasedRegion per isolated area.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/StringKit.html#split-java.lang.String-java.lang.String-">split(String, String)</a></span> - Static method in class squidpony.<a href="../squidpony/StringKit.html" title="class in squidpony">StringKit</a></dt>
+<dd>
+<div class="block">Like <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true#split-java.lang.String-" title="class or interface in java.lang"><code>String.split(String)</code></a> but doesn't use any regex for splitting (delimiter is a literal String).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/MultiSpill.html#spreadPattern">spreadPattern</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/MultiSpill.html" title="class in squidpony.squidgrid">MultiSpill</a></dt>
 <dd>

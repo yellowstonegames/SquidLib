@@ -262,14 +262,14 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidai/CustomDijkstraMap.html#CustomDijkstraMap-char:A:A-">CustomDijkstraMap</a></span>(char[][]&nbsp;level)</code>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidai/CustomDijkstraMap.html#CustomDijkstraMap-char:A:A-squidpony.squidgrid.Adjacency-">CustomDijkstraMap</a></span>(char[][]&nbsp;level,
                  <a href="../../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a>&nbsp;adjacency)</code>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </td>
 </tr>
@@ -277,21 +277,21 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidai/CustomDijkstraMap.html#CustomDijkstraMap-char:A:A-squidpony.squidgrid.Adjacency-squidpony.squidmath.RNG-">CustomDijkstraMap</a></span>(char[][]&nbsp;level,
                  <a href="../../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a>&nbsp;adjacency,
                  <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidai/CustomDijkstraMap.html#CustomDijkstraMap-char:A:A-char-">CustomDijkstraMap</a></span>(char[][]&nbsp;level,
                  char&nbsp;alternateWall)</code>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where one char means a wall and anything else is a walkable tile.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidai/CustomDijkstraMap.html#CustomDijkstraMap-char:A:A-squidpony.squidmath.RNG-">CustomDijkstraMap</a></span>(char[][]&nbsp;level,
                  <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </td>
 </tr>
@@ -894,7 +894,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <li class="blockList">
 <h4>CustomDijkstraMap</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidai/CustomDijkstraMap.html#line.179">CustomDijkstraMap</a>(char[][]&nbsp;level)</pre>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile. If you only have
  a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
  map that can be used here.</div>
@@ -912,7 +912,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <h4>CustomDijkstraMap</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidai/CustomDijkstraMap.html#line.193">CustomDijkstraMap</a>(char[][]&nbsp;level,
                          <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile. If you only have
  a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
  map that can be used here. Also takes an RNG that ensures predictable path choices given
@@ -932,7 +932,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <h4>CustomDijkstraMap</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidai/CustomDijkstraMap.html#line.205">CustomDijkstraMap</a>(char[][]&nbsp;level,
                          char&nbsp;alternateWall)</pre>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where one char means a wall and anything else is a walkable tile. If you only have
  a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
  map that can be used here. You can specify the character used for walls.</div>
@@ -950,7 +950,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <h4>CustomDijkstraMap</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidai/CustomDijkstraMap.html#line.226">CustomDijkstraMap</a>(char[][]&nbsp;level,
                          <a href="../../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a>&nbsp;adjacency)</pre>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile. If you only have
  a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
  map that can be used here. This constructor specifies a distance measurement.</div>
@@ -970,7 +970,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidai/CustomDijkstraMap.html#line.240">CustomDijkstraMap</a>(char[][]&nbsp;level,
                          <a href="../../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a>&nbsp;adjacency,
                          <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile. If you only have
  a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
  map that can be used here. Also takes a distance measurement and an RNG that ensures

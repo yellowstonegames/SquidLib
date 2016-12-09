@@ -237,21 +237,21 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/SoundMap.html#SoundMap-char:A:A-">SoundMap</a></span>(char[][]&nbsp;level)</code>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/SoundMap.html#SoundMap-char:A:A-char-">SoundMap</a></span>(char[][]&nbsp;level,
         char&nbsp;alternateWall)</code>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where one char means a wall and anything else is a walkable tile.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/SoundMap.html#SoundMap-char:A:A-squidpony.squidgrid.SoundMap.Measurement-">SoundMap</a></span>(char[][]&nbsp;level,
         <a href="../../squidpony/squidgrid/SoundMap.Measurement.html" title="enum in squidpony.squidgrid">SoundMap.Measurement</a>&nbsp;measurement)</code>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </td>
 </tr>
@@ -605,7 +605,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>SoundMap</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.141">SoundMap</a>(char[][]&nbsp;level)</pre>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile. If you only have
  a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
  map that can be used here.</div>
@@ -623,7 +623,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <h4>SoundMap</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.156">SoundMap</a>(char[][]&nbsp;level,
                 char&nbsp;alternateWall)</pre>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where one char means a wall and anything else is a walkable tile. If you only have
  a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
  map that can be used here. You can specify the character used for walls.</div>
@@ -641,7 +641,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <h4>SoundMap</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.173">SoundMap</a>(char[][]&nbsp;level,
                 <a href="../../squidpony/squidgrid/SoundMap.Measurement.html" title="enum in squidpony.squidgrid">SoundMap.Measurement</a>&nbsp;measurement)</pre>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile. If you only have
  a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
  map that can be used here. This constructor specifies a distance measurement.</div>
