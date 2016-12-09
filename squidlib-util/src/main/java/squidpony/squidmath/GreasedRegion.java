@@ -569,11 +569,18 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
     {
         this.width = width;
         this.height = height;
-        ySections = (dataHeight + 63) >> 6;
+        ySections = (height + 63) >> 6;
         yEndMask = -1L >>> (64 - (height & 63));
         data = new long[width * ySections];
-        System.arraycopy(data2, 0, data, 0, dataWidth * ySections);
-        ySections = (height + 63) >> 6;
+        if(ySections == 1) {
+            System.arraycopy(data2, 0, data, 0, dataWidth * ySections);
+        }
+        else
+        {
+            for (int i = 0, j = 0; i < dataWidth; i++, j += ySections) {
+                data[j] = data2[i];
+            }
+        }
     }
 
     public GreasedRegion remake(GreasedRegion other) {
