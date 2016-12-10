@@ -26,7 +26,8 @@ package squidpony.squidmath;
  */
 public class PerlinNoise {
 
-    private static final double phi = 1.61803398875;
+    private static final double phi = 1.61803398875,
+    epi = 1.0 / Math.E / Math.PI;
     /*, unit1_4 =  0.70710678118, unit1_8 = 0.38268343236, unit3_8 = 0.92387953251;*/
     /*
     private static final double[][] grad2 = {
@@ -143,12 +144,18 @@ public class PerlinNoise {
 
     /**
      * 2D simplex noise.
+     * This doesn't use its parameters verbatim; xin and yin are both effectively divided by
+     * ({@link Math#E} * {@link Math#PI}), because without a step like that, any integer parameters would return 0 and
+     * only doubles with a decimal component would produce actual noise. This step allows integers to be passed in a
+     * arguments, and changes the cycle at which 0 is repeated to multiples of (E*PI).
      *
-     * @param xin x input
-     * @param yin y input
+     * @param xin x input; works well if between 0.0 and 1.0, but anything is accepted
+     * @param yin y input; works well if between 0.0 and 1.0, but anything is accepted
      * @return noise from -1.0 to 1.0, inclusive
      */
     public static double noise(double xin, double yin) {
+        xin *= epi;
+        yin *= epi;
         double noise0, noise1, noise2; // from the three corners
         // Skew the input space to determine which simplex cell we're in
         double skew = (xin + yin) * F2; // Hairy factor for 2D
@@ -224,6 +231,9 @@ public class PerlinNoise {
      * @return noise from -1.0 to 1.0, inclusive
      */
     public static double noise(double xin, double yin, double zin) {
+        xin *= epi;
+        yin *= epi;
+        zin *= epi;
         double n0, n1, n2, n3; // Noise contributions from the four corners
         // Skew the input space to determine which simplex cell we're in
         double s = (xin + yin + zin) * F3; // Very nice and simple skew
@@ -367,6 +377,10 @@ public class PerlinNoise {
      * @return noise from -1.0 to 1.0, inclusive
      */
     public static double noise(double x, double y, double z, double w) {
+        x *= epi;
+        y *= epi;
+        z *= epi;
+        w *= epi;
         // The skewing and unskewing factors are hairy again for the 4D case
         double n0, n1, n2, n3, n4; // Noise contributions from the five
         // corners
