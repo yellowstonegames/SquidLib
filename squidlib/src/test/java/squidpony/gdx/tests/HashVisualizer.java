@@ -1067,8 +1067,8 @@ public class HashVisualizer extends ApplicationAdapter {
                                 bright = (float)
                                         (//PerlinNoise.noise(xx / 16.0, yy / 16.0) * 16 +
                                         //PerlinNoise.noise(xx / 8.0, yy / 8.0) * 8 +
-                                        PerlinNoise.noise(xx / 4.0, yy / 4.0) * 4 +
-                                        PerlinNoise.noise(xx / 2.0, yy / 2.0) * 2 +
+                                        PerlinNoise.noise(xx * 0.25, yy * 0.25) * 4 +
+                                        PerlinNoise.noise(xx * 0.5, yy * 0.5) * 2 +
                                         PerlinNoise.noise(xx, yy)
                                         + 7f) / 14f;
                                         //+ 15f) / 30f;
@@ -1169,9 +1169,9 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)
                                         (//PerlinNoise.noise(x / 8.0, y / 8.0, ctr * 0.125) * 8 +
-                                                PerlinNoise.noise(x / 4.0, y / 4.0, ctr * 0.125) * 4 +
-                                                        PerlinNoise.noise(x / 2.0, y / 2.0, ctr * 0.125) * 2 +
-                                                        PerlinNoise.noise(x, y, ctr * 0.125)
+                                                PerlinNoise.noise(x * 0.25, y * 0.25, ctr * 0.3) * 4 +
+                                                        PerlinNoise.noise(x * 0.5, y * 0.5, ctr * 0.3) * 2 +
+                                                        PerlinNoise.noise(x, y, ctr * 0.3)
                                                         + 7f) / 14f;
                                 //+ 15.0f) / 30f;
 
@@ -1190,7 +1190,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                                 //PerlinNoise.noise(xx / 8.0, yy / 8.0) * 8 +
                                                 //PerlinNoise.noise(xx / 4.0, yy / 4.0) * 4 +
                                                 //PerlinNoise.noise(xx / 2.0, yy / 2.0) * 2 +
-                                                PerlinNoise.noise(xx / 8.0, yy / 8.0)
+                                                PerlinNoise.noise(xx, yy)
                                                         + 1f) / 2f;
                                 //+ 15f) / 30f;
                                 display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
@@ -1206,7 +1206,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                         (//PerlinNoise.noise(x / 8.0, y / 8.0, ctr * 0.125) * 8 +
                                                 //PerlinNoise.noise(x / 4.0, y / 4.0, ctr * 0.125) * 4 +
                                                 //PerlinNoise.noise(x / 2.0, y / 2.0, ctr * 0.125) * 2 +
-                                                PerlinNoise.noise(x / 8.0, y / 8.0, ctr * 0.125)
+                                                PerlinNoise.noise(x, y, ctr * 0.3)
                                                 + 1f) / 2f;
                                 //+ 15.0f) / 30f;
 
