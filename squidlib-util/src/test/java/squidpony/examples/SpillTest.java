@@ -1,6 +1,7 @@
 package squidpony.examples;
 
 import squidpony.ArrayTools;
+import squidpony.FakeLanguageGen;
 import squidpony.squidgrid.MultiSpill;
 import squidpony.squidgrid.Spill;
 import squidpony.squidgrid.mapping.DungeonGenerator;
@@ -99,7 +100,7 @@ public class SpillTest {
             }
             char[] glyphs = "adeghjklnprstwxy".toCharArray(); //Category.IdentifierStart.contents();
             //int gs = glyphs.length;
-            for (int i = 2; i < 3; i++) {
+            for (int i = 3; i < 3; i++) {
                 StatefulRNG rng = new StatefulRNG(); //i * 5617
                 int dim = 40 + i * 40, count = 20 + 10 * i * i;
                 char[][] blank = ArrayTools.fill('~', dim, dim);
@@ -143,10 +144,17 @@ public class SpillTest {
             int factions = 40;
             int w = 100, h = 60;
             SpillWorldMap swm;
-            for (String world : new String[]{"Ertah", "Tera", "Tarrah", "Morple", "Oruzdiam"}) {
+            StatefulRNG stable = new StatefulRNG(0x123456789ABCDEF0L);
+            for (String world : new String[]{
+                    FakeLanguageGen.NORSE.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_NORSE).word(stable, true),
+                    FakeLanguageGen.JAPANESE_ROMANIZED.word(stable, true),
+                    FakeLanguageGen.SWAHILI.word(stable, true),
+                    FakeLanguageGen.RUSSIAN_ROMANIZED.word(stable, true),
+                    FakeLanguageGen.NAHUATL.word(stable, true),
+            }) {
                 swm = new SpillWorldMap(w += 20, h += 15, world);
                 System.out.println(world + '_' + w + 'x' + h);
-                DungeonUtility.debugPrint(swm.generate(factions, true));
+                DungeonUtility.debugPrint(swm.generate(factions, true, stable.between(0.4, 1.0), w * 0.03));
                 System.out.println("     Atlas for the world of " + world);
                 for (int i = 0; i < factions + 2; i++) {
                     System.out.println("  " + swm.atlas.keyAt(i) + "  :  " + swm.atlas.getAt(i));

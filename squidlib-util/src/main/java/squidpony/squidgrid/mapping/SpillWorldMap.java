@@ -23,7 +23,7 @@ public class SpillWorldMap {
     public StatefulRNG rng;
     public String name;
     public char[][] politicalMap;
-    public static final char[] letters = ArrayTools.letterSpan(255);
+    public static final char[] letters = ArrayTools.letterSpan(256);
     public final OrderedMap<Character, String> atlas = new OrderedMap<>(16);
 
     public SpillWorldMap()
@@ -52,7 +52,9 @@ public class SpillWorldMap {
      * Generates a basic physical map for this world, then overlays a more involved political map with the given number
      * of factions trying to take land in the world (essentially, nations). The output is a 2D char array where each
      * letter char is tied to a different faction, while '~' is always water, and '%' is always wilderness or unclaimed
-     * land. If makeAtlas is true, it also generates an atlas with the procedural names of all the factions and a
+     * land. A random amount, up to 10% of all land, will be unclaimed wilderness with this method; for more precise
+     * control, use the overload that takes a controlledFraction parameter and give it a value between 0.0 and 1.0,
+     * inclusive. If makeAtlas is true, this also generates an atlas with the procedural names of all the factions and a
      * mapping to the chars used in the output; the atlas will be in the {@link #atlas} member of this object but will
      * be empty if makeAtlas has never been true in a call to this.
      * <br>
@@ -66,6 +68,54 @@ public class SpillWorldMap {
      * @return a 2D char array where letters represent the claiming faction, '~' is water, and '%' is unclaimed
      */
     public char[][] generate(int factionCount, boolean makeAtlas) {
+        return generate(factionCount, makeAtlas, rng.between(0.9, 1.0));
+    }
+    /**
+     * Generates a basic physical map for this world, then overlays a more involved political map with the given number
+     * of factions trying to take land in the world (essentially, nations). The output is a 2D char array where each
+     * letter char is tied to a different faction, while '~' is always water, and '%' is always wilderness or unclaimed
+     * land. The amount of unclaimed land is determined by the controlledFraction parameter, which will be clamped
+     * between 0.0 and 1.0, with higher numbers resulting in more land owned by factions and lower numbers meaning more
+     * wilderness. If makeAtlas is true, it also generates an atlas with the procedural names of all the factions and a
+     * mapping to the chars used in the output; the atlas will be in the {@link #atlas} member of this object but will
+     * be empty if makeAtlas has never been true in a call to this.
+     * <br>
+     * If width or height is larger than 256, consider enlarging the Coord pool before calling this with
+     * {@code Coord.expandPoolTo(width, height);}. This will have no effect if width and height are both less than or
+     * equal to 256, but if you expect to be using maps that are especially large (which makes sense for world maps),
+     * expanding the pool will use more memory initially and then (possibly) much less over time, easing pressure on
+     * the garbage collector as well, as re-allocations of large Coords that would otherwise be un-cached are avoided.
+     * @param factionCount the number of factions to have claiming land, cannot be negative or more than 255
+     * @param makeAtlas if true, this will assign random names to factions, accessible via {@link #atlas}
+     * @param controlledFraction between 0.0 and 1.0 inclusive; higher means more land has a letter, lower has more '%'
+     * @return a 2D char array where letters represent the claiming faction, '~' is water, and '%' is unclaimed
+     */
+    public char[][] generate(int factionCount, boolean makeAtlas, double controlledFraction) {
+        return generate(factionCount, makeAtlas, controlledFraction, 1.0);
+    }
+    /**
+     * Generates a basic physical map for this world, then overlays a more involved political map with the given number
+     * of factions trying to take land in the world (essentially, nations). The output is a 2D char array where each
+     * letter char is tied to a different faction, while '~' is always water, and '%' is always wilderness or unclaimed
+     * land. The amount of unclaimed land is determined by the controlledFraction parameter, which will be clamped
+     * between 0.0 and 1.0, with higher numbers resulting in more land owned by factions and lower numbers meaning more
+     * wilderness. If makeAtlas is true, it also generates an atlas with the procedural names of all the factions and a
+     * mapping to the chars used in the output; the atlas will be in the {@link #atlas} member of this object but will
+     * be empty if makeAtlas has never been true in a call to this.
+     * <br>
+     * If width or height is larger than 256, consider enlarging the Coord pool before calling this with
+     * {@code Coord.expandPoolTo(width, height);}. This will have no effect if width and height are both less than or
+     * equal to 256, but if you expect to be using maps that are especially large (which makes sense for world maps),
+     * expanding the pool will use more memory initially and then (possibly) much less over time, easing pressure on
+     * the garbage collector as well, as re-allocations of large Coords that would otherwise be un-cached are avoided.
+     * @param factionCount the number of factions to have claiming land, cannot be negative or more than 255
+     * @param makeAtlas if true, this will assign random names to factions, accessible via {@link #atlas}
+     * @param controlledFraction between 0.0 and 1.0 inclusive; higher means more land has a letter, lower has more '%'
+     * @param waterStrength a non-negative multiplier that affects ocean size; 1 is more land than water
+     * @return a 2D char array where letters represent the claiming faction, '~' is water, and '%' is unclaimed
+     */
+    public char[][] generate(int factionCount, boolean makeAtlas, double controlledFraction, double waterStrength) {
+
         factionCount &= 255;
         //, extra = 25 + (height * width >>> 4);
         MultiSpill spreader = new MultiSpill(new short[width][height], Spill.Measurement.MANHATTAN, rng);
@@ -74,6 +124,7 @@ public class SpillWorldMap {
                 tmpEdge = new GreasedRegion(width, height), tmpInner = new GreasedRegion(width, height),
                 tmpOOB = new GreasedRegion(width, height);
         Coord[] pts = smallerBounds.randomPortion(rng, rng.between(24, 48));
+        waterStrength = Math.max(0.0, waterStrength);
         int aLen = pts.length;
         short[][] sm = new short[width][height], tmpSM;
         Arrays.fill(sm[0], (short) -1);
@@ -90,7 +141,7 @@ public class SpillWorldMap {
             Coord[] edges = tmpEdge.separatedPortion(0.5);
             int eLen = edges.length;
             Double[] powers = new Double[eLen];
-            Arrays.fill(powers, 0.1);
+            Arrays.fill(powers, 0.1 * waterStrength);
             entries = new OrderedMap<>(edges, powers);
             eLen = entries.size();
             for (int j = 0; j < 32; j++) {
@@ -146,7 +197,7 @@ public class SpillWorldMap {
         */
         GreasedRegion map = new GreasedRegion(sm, 0, 0x7fff);
         Coord[] centers = map.randomSeparated(0.1, rng, factionCount);
-        int controlled = (int) (map.size() * rng.between(0.9, 1.0));
+        int controlled = (int) (map.size() * Math.max(0.0, Math.min(1.0, controlledFraction)));
 
         spreader.initialize(sm);
         entries.clear();
@@ -166,10 +217,12 @@ public class SpillWorldMap {
             atlas.clear();
             atlas.put('~', "Water");
             atlas.put('%', "Wilderness");
-            Thesaurus th = new Thesaurus(rng.nextLong());
-            th.addKnownCategories();
-            for (int i = 0; i < factionCount && i < 512; i++) {
-                atlas.put(letters[i], th.makeNationName());
+            if(factionCount > 0) {
+                Thesaurus th = new Thesaurus(rng.nextLong());
+                th.addKnownCategories();
+                for (int i = 0; i < factionCount && i < 256; i++) {
+                    atlas.put(letters[i], th.makeNationName());
+                }
             }
         }
         return politicalMap;
