@@ -58,10 +58,11 @@ public class DefaultResources implements LifecycleListener {
     private BitmapFont narrow1 = null, narrow2 = null, narrow3 = null,
             smooth1 = null, smooth2 = null, smoothSquare = null, smoothSquareOld = null,
             square1 = null, square2 = null,
-            unicode1 = null, unicode2 = null, arial15 = null;
+            unicode1 = null, unicode2 = null,
+            arial15 = null;
 
     private TextCellFactory distanceNarrow = null, distanceSquare = null, typewriterDistanceNarrow = null,
-            distancePrint = null, distanceClean = null, distanceCode = null;
+            distancePrint = null, distanceClean = null, distanceCode = null, distanceDejaVu = null;
     private TextureAtlas iconAtlas = null;
     public static final String squareName = "Zodiac-Square-12x12.fnt",
             narrowName = "Rogue-Zodiac-6x12.fnt",
@@ -83,7 +84,9 @@ public class DefaultResources implements LifecycleListener {
             distanceFieldTypewriterNarrow = "CM-Custom-distance.fnt",
             distanceFieldTypewriterNarrowTexture = "CM-Custom-distance.png",
             distanceFieldCode = "SourceCodePro-Medium-distance.fnt",
-            distanceFieldCodeTexture = "SourceCodePro-Medium-distance.png";
+            distanceFieldCodeTexture = "SourceCodePro-Medium-distance.png",
+            distanceFieldDejaVu = "DejaVuSansMono-distance.fnt",
+            distanceFieldDejaVuTexture = "DejaVuSansMono-distance.png";
     public static String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n"
             + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n"
             + "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n"
@@ -549,6 +552,42 @@ public class DefaultResources implements LifecycleListener {
         if(instance.distanceCode != null)
             return instance.distanceCode.copy();
         return null;
+    }
+
+    /**
+     * Returns a TextCellFactory already configured to use a font with extremely wide Unicode support that should scale
+     * cleanly to many sizes. Caches the result for later calls. The font is DejaVu Sans Mono, a common font on Linux
+     * operating systems and a clean-looking, legible font, though it has some visual quirks like a "tail" on lower-case
+     * 'l', that take some getting used to. A possible requirement for this font is that the size of the text in a
+     * SquidPanel or SquidLayers may need to be increased 1-5 pixels past what the cell width and height are; this can
+     * be done with {@link SquidPanel#setTextSize(int, int)} or {@link SquidLayers#setTextSize(int, int)}, giving 1-2
+     * more than the cell width for x and 3-5 more than the cell height for y.
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/DejaVuSansMono-distance.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/DejaVuSansMono-distance.png</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font DejaVuSansMono.ttf
+     */
+    public static TextCellFactory getStretchableDejaVuFont()
+    {
+        initialize();
+        if(instance.distanceDejaVu == null)
+        {
+            try {
+                instance.distanceDejaVu = new TextCellFactory().fontDistanceField(distanceFieldDejaVu, distanceFieldDejaVuTexture);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.distanceDejaVu != null)
+            return instance.distanceDejaVu.copy();
+        return null;
+
     }
 
     /**
