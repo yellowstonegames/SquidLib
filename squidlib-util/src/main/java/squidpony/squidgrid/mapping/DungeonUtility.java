@@ -889,13 +889,13 @@ public class DungeonUtility {
                         portion[i][j] = -10;
                         break;
                     case ',':
-                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i / 4.0, j / 4.0) / 2.5 - 0.45));
+                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i* 1.5, j* 1.5) / 2.5 - 0.45));
                         break;
                     case '~':
-                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i / 4.0, j / 4.0) / 2.5 - 0.65));
+                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i* 1.5, j* 1.5) / 2.5 - 0.65));
                         break;
                     case '"':
-                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i / 4.0, j / 4.0) / 4.0 - 1.5));
+                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i* 1.5, j* 1.5) / 4.0 - 1.5));
                         break;
                     case '^':
                         portion[i][j] = 40;
@@ -950,13 +950,13 @@ public class DungeonUtility {
                         portion[i][j] = -10;
                         break;
                     case ',':
-                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 25.0) / 2.5 - 0.45));
+                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) / 2.5 - 0.45));
                         break;
                     case '~':
-                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 25.0) / 2.5 - 0.65));
+                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) / 2.5 - 0.65));
                         break;
                     case '"':
-                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 35.0) / 4.0 - 1.5));
+                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.45) / 4.0 - 1.5));
                         break;
                     case '^':
                         portion[i][j] = 40;
@@ -1014,22 +1014,22 @@ public class DungeonUtility {
                         portion[i][j] = -10;
                         break;
                     case ',':
-                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 25.0) / 2.5 - 0.45));
+                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) / 2.5 - 0.45));
                         break;
                     case '~':
-                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 25.0) / 2.5 - 0.65));
+                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) / 2.5 - 0.65));
                         break;
                     case '"':
-                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 35.0) / 4.0 - 1.5));
+                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.45) / 4.0 - 1.5));
                         break;
                     case '^':
                         portion[i][j] = 40;
                         break;
                     default:
                         if (map[i][j] == deepLiquid)
-                            portion[i][j] = (int) (180 * (PerlinNoise.noise(i / 5.0, j / 5.0, frame / 21.0) / 2.5 - 0.7));
+                            portion[i][j] = (int) (180 * (PerlinNoise.noise(i * 1.2, j * 1.2, frame / 21.0) / 2.5 - 0.7));
                         else if (map[i][j] == shallowLiquid)
-                            portion[i][j] = (int) (110 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 30.0) / 2.5 - 0.45));
+                            portion[i][j] = (int) (110 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame / 30.0) / 2.5 - 0.45));
                         else portion[i][j] = 0;
                 }
             }

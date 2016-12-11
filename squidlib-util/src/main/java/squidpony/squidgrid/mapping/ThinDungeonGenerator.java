@@ -269,7 +269,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                             default:
                                 switch (tempShapes & 0xF) {
                                     case ROOM_WALL_CHAOTIC:
-                                        if (PerlinNoise.noise(x * 0.8, y * 0.8) > -0.2) {
+                                        if (PerlinNoise.noise(x * 6, y * 6) > -0.2) {
                                             e2[x][y] = eHigh;
                                             d2[x][y] = dHigh;
                                         } else {
@@ -311,7 +311,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                             case MixedGenerator.UNTOUCHED:
                                 switch (tempShapes & 0xF) {
                                     case ROOM_WALL_CHAOTIC:
-                                        if (PerlinNoise.noise(x * 0.8, y * 0.8) > -0.2) {
+                                        if (PerlinNoise.noise(x * 6, y * 6) > -0.2) {
                                             e2[x][y] = eLow;
                                             d2[x][y] = dLow;
                                         } else {
@@ -488,7 +488,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                             default:
                                 switch (tempShapes & 0xF) {
                                     case ROOM_WALL_CHAOTIC:
-                                        if (PerlinNoise.noise(x * 0.8, y * 0.8) > -0.2) {
+                                        if (PerlinNoise.noise(x * 6, y * 6) > -0.2) {
                                             e2[x][y] = eHigh;
                                             d2[x][y] = dHigh;
                                         } else {
@@ -530,7 +530,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                             case MixedGenerator.UNTOUCHED:
                                 switch (tempShapes & 0xF) {
                                     case ROOM_WALL_CHAOTIC:
-                                        if (PerlinNoise.noise(x * 0.8, y * 0.8) > -0.2) {
+                                        if (PerlinNoise.noise(x * 6, y * 6) > -0.2) {
                                             e2[x][y] = eLow;
                                             d2[x][y] = dLow;
                                         } else {
