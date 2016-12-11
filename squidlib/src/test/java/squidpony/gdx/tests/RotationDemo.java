@@ -113,7 +113,7 @@ public class RotationDemo extends ApplicationAdapter {
     private Viewport viewport;
     private float currentZoomX = INTERNAL_ZOOM, currentZoomY = INTERNAL_ZOOM;
 
-    public static final Adjacency adjacency = new Adjacency.RotationAdjacency(width, height, DijkstraMap.Measurement.MANHATTAN);
+    public static final Adjacency adjacency = new Adjacency.RotationAdjacency(width, height, DijkstraMap.Measurement.EUCLIDEAN);
     @Override
     public void create() {
         // gotta have a random number generator. We seed a LightRNG with any long we want, then pass that to an RNG.
@@ -133,8 +133,11 @@ public class RotationDemo extends ApplicationAdapter {
         // manually if you use a constant internal zoom; here we use 1f for internal zoom 1, about 2/3f for zoom 2, and
         // about 1/2f for zoom 3. If you have more zooms as options for some reason, this formula should hold for many
         // cases but probably not all.
-        textFactory = DefaultResources.getStretchableCodeFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
-                .width(cellWidth).height(cellHeight).initBySize(); //.setDirectionGlyph('ˆ')
+        textFactory = DefaultResources.getStretchableDejaVuFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
+                .width(cellWidth).height(cellHeight).initBySize();
+        //textFactory = DefaultResources.getStretchableCodeFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
+        //        .width(cellWidth).height(cellHeight).initBySize(); //.setDirectionGlyph('ˆ')
+
         // Creates a layered series of text grids in a SquidLayers object, using the previously set-up textFactory and
         // SquidColorCenters.
         display = new SquidLayers(width, height, cellWidth, cellHeight,
@@ -147,8 +150,8 @@ public class RotationDemo extends ApplicationAdapter {
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        messages.setTextSize(cellWidth, cellHeight + INTERNAL_ZOOM);
-        display.setTextSize(cellWidth, cellHeight + INTERNAL_ZOOM);
+        messages.setTextSize(cellWidth + INTERNAL_ZOOM, cellHeight + INTERNAL_ZOOM * 4);
+        display.setTextSize(cellWidth + INTERNAL_ZOOM, cellHeight + INTERNAL_ZOOM * 4);
         //The subCell SquidPanel uses a smaller size here; the numbers 8 and 16 should change if cellWidth or cellHeight
         //change, and the INTERNAL_ZOOM multiplier keeps things sharp, the same as it does all over here.
         viewport = new StretchViewport(width * cellWidth, (height + 4) * cellHeight);
