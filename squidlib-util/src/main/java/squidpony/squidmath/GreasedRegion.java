@@ -2547,7 +2547,7 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
         return this;
     }
 
-    protected class GRIterator implements Iterator<Coord>
+    public class GRIterator implements Iterator<Coord>
     {
         public int index = 0;
         private int limit;
