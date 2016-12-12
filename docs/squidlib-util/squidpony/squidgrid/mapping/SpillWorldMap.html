@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -110,7 +110,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre><a href="../../../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.20">SpillWorldMap</a>
+public class <a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.22">SpillWorldMap</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">Generates a procedural world map and fills it with the requested number of factions, keeping some land unclaimed.
  The factions are given procedural names in an atlas that is linked to the chars used by the world map.
@@ -144,22 +144,26 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SpillWorldMap.html#height">height</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>int[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SpillWorldMap.html#heightMap">heightMap</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static char[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SpillWorldMap.html#letters">letters</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SpillWorldMap.html#name">name</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>char[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SpillWorldMap.html#politicalMap">politicalMap</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SpillWorldMap.html#rng">rng</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SpillWorldMap.html#width">width</a></span></code>&nbsp;</td>
 </tr>
@@ -218,6 +222,36 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  of factions trying to take land in the world (essentially, nations).</div>
 </td>
 </tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>char[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SpillWorldMap.html#generate-int-boolean-boolean-double-double-">generate</a></span>(int&nbsp;factionCount,
+        boolean&nbsp;makeAtlas,
+        boolean&nbsp;makeHeight,
+        double&nbsp;controlledFraction,
+        double&nbsp;waterStrength)</code>
+<div class="block">Generates a basic physical map for this world, then overlays a more involved political map with the given number
+ of factions trying to take land in the world (essentially, nations).</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>char[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SpillWorldMap.html#generate-int-boolean-double-">generate</a></span>(int&nbsp;factionCount,
+        boolean&nbsp;makeAtlas,
+        double&nbsp;controlledFraction)</code>
+<div class="block">Generates a basic physical map for this world, then overlays a more involved political map with the given number
+ of factions trying to take land in the world (essentially, nations).</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>char[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SpillWorldMap.html#generate-int-boolean-double-double-">generate</a></span>(int&nbsp;factionCount,
+        boolean&nbsp;makeAtlas,
+        double&nbsp;controlledFraction,
+        double&nbsp;waterStrength)</code>
+<div class="block">Generates a basic physical map for this world, then overlays a more involved political map with the given number
+ of factions trying to take land in the world (essentially, nations).</div>
+</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -246,7 +280,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>width</h4>
-<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.21">width</a></pre>
+<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.23">width</a></pre>
 </li>
 </ul>
 <a name="height">
@@ -255,7 +289,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>height</h4>
-<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.22">height</a></pre>
+<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.24">height</a></pre>
 </li>
 </ul>
 <a name="rng">
@@ -264,7 +298,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>rng</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a> <a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.23">rng</a></pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a> <a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.25">rng</a></pre>
 </li>
 </ul>
 <a name="name">
@@ -273,7 +307,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>name</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> <a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.24">name</a></pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> <a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.26">name</a></pre>
 </li>
 </ul>
 <a name="politicalMap">
@@ -282,7 +316,16 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>politicalMap</h4>
-<pre>public&nbsp;char[][] <a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.25">politicalMap</a></pre>
+<pre>public&nbsp;char[][] <a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.27">politicalMap</a></pre>
+</li>
+</ul>
+<a name="heightMap">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>heightMap</h4>
+<pre>public&nbsp;int[][] <a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.28">heightMap</a></pre>
 </li>
 </ul>
 <a name="letters">
@@ -291,7 +334,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>letters</h4>
-<pre>public static final&nbsp;char[] <a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.26">letters</a></pre>
+<pre>public static final&nbsp;char[] <a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.29">letters</a></pre>
 </li>
 </ul>
 <a name="atlas">
@@ -300,7 +343,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>atlas</h4>
-<pre>public final&nbsp;<a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt; <a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.27">atlas</a></pre>
+<pre>public final&nbsp;<a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt; <a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.30">atlas</a></pre>
 </li>
 </ul>
 </li>
@@ -317,7 +360,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>SpillWorldMap</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.29">SpillWorldMap</a>()</pre>
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.32">SpillWorldMap</a>()</pre>
 </li>
 </ul>
 <a name="SpillWorldMap-int-int-java.lang.String-">
@@ -326,7 +369,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>SpillWorldMap</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.44">SpillWorldMap</a>(int&nbsp;width,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.47">SpillWorldMap</a>(int&nbsp;width,
                      int&nbsp;height,
                      <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;worldName)</pre>
 <div class="block">Constructs a SpillWorldMap using the given width, height, and world name, and uses the world name as the
@@ -353,12 +396,14 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>generate</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.68">generate</a>(int&nbsp;factionCount,
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.73">generate</a>(int&nbsp;factionCount,
                          boolean&nbsp;makeAtlas)</pre>
 <div class="block">Generates a basic physical map for this world, then overlays a more involved political map with the given number
  of factions trying to take land in the world (essentially, nations). The output is a 2D char array where each
  letter char is tied to a different faction, while '~' is always water, and '%' is always wilderness or unclaimed
- land. If makeAtlas is true, it also generates an atlas with the procedural names of all the factions and a
+ land. A random amount, up to 10% of all land, will be unclaimed wilderness with this method; for more precise
+ control, use the overload that takes a controlledFraction parameter and give it a value between 0.0 and 1.0,
+ inclusive. If makeAtlas is true, this also generates an atlas with the procedural names of all the factions and a
  mapping to the chars used in the output; the atlas will be in the <a href="../../../squidpony/squidgrid/mapping/SpillWorldMap.html#atlas"><code>atlas</code></a> member of this object but will
  be empty if makeAtlas has never been true in a call to this.
  <br>
@@ -376,13 +421,118 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
+<a name="generate-int-boolean-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>generate</h4>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.96">generate</a>(int&nbsp;factionCount,
+                         boolean&nbsp;makeAtlas,
+                         double&nbsp;controlledFraction)</pre>
+<div class="block">Generates a basic physical map for this world, then overlays a more involved political map with the given number
+ of factions trying to take land in the world (essentially, nations). The output is a 2D char array where each
+ letter char is tied to a different faction, while '~' is always water, and '%' is always wilderness or unclaimed
+ land. The amount of unclaimed land is determined by the controlledFraction parameter, which will be clamped
+ between 0.0 and 1.0, with higher numbers resulting in more land owned by factions and lower numbers meaning more
+ wilderness. If makeAtlas is true, it also generates an atlas with the procedural names of all the factions and a
+ mapping to the chars used in the output; the atlas will be in the <a href="../../../squidpony/squidgrid/mapping/SpillWorldMap.html#atlas"><code>atlas</code></a> member of this object but will
+ be empty if makeAtlas has never been true in a call to this.
+ <br>
+ If width or height is larger than 256, consider enlarging the Coord pool before calling this with
+ <code>Coord.expandPoolTo(width, height);</code>. This will have no effect if width and height are both less than or
+ equal to 256, but if you expect to be using maps that are especially large (which makes sense for world maps),
+ expanding the pool will use more memory initially and then (possibly) much less over time, easing pressure on
+ the garbage collector as well, as re-allocations of large Coords that would otherwise be un-cached are avoided.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>factionCount</code> - the number of factions to have claiming land, cannot be negative or more than 255</dd>
+<dd><code>makeAtlas</code> - if true, this will assign random names to factions, accessible via <a href="../../../squidpony/squidgrid/mapping/SpillWorldMap.html#atlas"><code>atlas</code></a></dd>
+<dd><code>controlledFraction</code> - between 0.0 and 1.0 inclusive; higher means more land has a letter, lower has more '%'</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a 2D char array where letters represent the claiming faction, '~' is water, and '%' is unclaimed</dd>
+</dl>
+</li>
+</ul>
+<a name="generate-int-boolean-double-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>generate</h4>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.120">generate</a>(int&nbsp;factionCount,
+                         boolean&nbsp;makeAtlas,
+                         double&nbsp;controlledFraction,
+                         double&nbsp;waterStrength)</pre>
+<div class="block">Generates a basic physical map for this world, then overlays a more involved political map with the given number
+ of factions trying to take land in the world (essentially, nations). The output is a 2D char array where each
+ letter char is tied to a different faction, while '~' is always water, and '%' is always wilderness or unclaimed
+ land. The amount of unclaimed land is determined by the controlledFraction parameter, which will be clamped
+ between 0.0 and 1.0, with higher numbers resulting in more land owned by factions and lower numbers meaning more
+ wilderness. If makeAtlas is true, it also generates an atlas with the procedural names of all the factions and a
+ mapping to the chars used in the output; the atlas will be in the <a href="../../../squidpony/squidgrid/mapping/SpillWorldMap.html#atlas"><code>atlas</code></a> member of this object but will
+ be empty if makeAtlas has never been true in a call to this.
+ <br>
+ If width or height is larger than 256, consider enlarging the Coord pool before calling this with
+ <code>Coord.expandPoolTo(width, height);</code>. This will have no effect if width and height are both less than or
+ equal to 256, but if you expect to be using maps that are especially large (which makes sense for world maps),
+ expanding the pool will use more memory initially and then (possibly) much less over time, easing pressure on
+ the garbage collector as well, as re-allocations of large Coords that would otherwise be un-cached are avoided.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>factionCount</code> - the number of factions to have claiming land, cannot be negative or more than 255</dd>
+<dd><code>makeAtlas</code> - if true, this will assign random names to factions, accessible via <a href="../../../squidpony/squidgrid/mapping/SpillWorldMap.html#atlas"><code>atlas</code></a></dd>
+<dd><code>controlledFraction</code> - between 0.0 and 1.0 inclusive; higher means more land has a letter, lower has more '%'</dd>
+<dd><code>waterStrength</code> - a non-negative multiplier that affects ocean size; 1 is more land than water</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a 2D char array where letters represent the claiming faction, '~' is water, and '%' is unclaimed</dd>
+</dl>
+</li>
+</ul>
+<a name="generate-int-boolean-boolean-double-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>generate</h4>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.145">generate</a>(int&nbsp;factionCount,
+                         boolean&nbsp;makeAtlas,
+                         boolean&nbsp;makeHeight,
+                         double&nbsp;controlledFraction,
+                         double&nbsp;waterStrength)</pre>
+<div class="block">Generates a basic physical map for this world, then overlays a more involved political map with the given number
+ of factions trying to take land in the world (essentially, nations). The output is a 2D char array where each
+ letter char is tied to a different faction, while '~' is always water, and '%' is always wilderness or unclaimed
+ land. The amount of unclaimed land is determined by the controlledFraction parameter, which will be clamped
+ between 0.0 and 1.0, with higher numbers resulting in more land owned by factions and lower numbers meaning more
+ wilderness. If makeAtlas is true, it also generates an atlas with the procedural names of all the factions and a
+ mapping to the chars used in the output; the atlas will be in the <a href="../../../squidpony/squidgrid/mapping/SpillWorldMap.html#atlas"><code>atlas</code></a> member of this object but will
+ be empty if makeAtlas has never been true in a call to this.
+ <br>
+ If width or height is larger than 256, consider enlarging the Coord pool before calling this with
+ <code>Coord.expandPoolTo(width, height);</code>. This will have no effect if width and height are both less than or
+ equal to 256, but if you expect to be using maps that are especially large (which makes sense for world maps),
+ expanding the pool will use more memory initially and then (possibly) much less over time, easing pressure on
+ the garbage collector as well, as re-allocations of large Coords that would otherwise be un-cached are avoided.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>factionCount</code> - the number of factions to have claiming land, cannot be negative or more than 255</dd>
+<dd><code>makeAtlas</code> - if true, this will assign random names to factions, accessible via <a href="../../../squidpony/squidgrid/mapping/SpillWorldMap.html#atlas"><code>atlas</code></a></dd>
+<dd><code>makeHeight</code> - if true, this will generate a height map, accessible via <a href="../../../squidpony/squidgrid/mapping/SpillWorldMap.html#heightMap"><code>heightMap</code></a>, with -1 for water</dd>
+<dd><code>controlledFraction</code> - between 0.0 and 1.0 inclusive; higher means more land has a letter, lower has more '%'</dd>
+<dd><code>waterStrength</code> - a non-negative multiplier that affects ocean size; 1 is more land than water</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a 2D char array where letters represent the claiming faction, '~' is water, and '%' is unclaimed</dd>
+</dl>
+</li>
+</ul>
 <a name="generate-int-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>generate</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.186">generate</a>(int&nbsp;factionCount)</pre>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/SpillWorldMap.html#line.291">generate</a>(int&nbsp;factionCount)</pre>
 <div class="block">Generates a basic physical map for this world, then overlays a more involved political map with the given number
  of factions trying to take land in the world (essentially, nations). The output is a 2D char array where each
  letter char is tied to a different faction, while '~' is always water, and '%' is always wilderness or unclaimed

@@ -2523,6 +2523,30 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
         return new GRIterator();
     }
 
+    /**
+     * Randomly removes points from a GreasedRegion, with larger values for preservation keeping more of the existing
+     * shape intact. If preservation is 1, roughly 1/2 of all points will be removed; if 2, roughly 1/4, if 3, roughly
+     * 1/8, and so on, so that preservation can be thought of as a negative exponent of 2. This allows both negative
+     * and positive values for preservation, and treats 2 and -2 the same for preservation.
+     * @param rng used to determine random factors
+     * @param preservation roughly what degree of points to remove; removes about {@code 1/(2^preservation)} points (assuming positive)
+     * @return a randomly modified change to this GreasedRegion
+     */
+    public GreasedRegion deteriorate(RNG rng, int preservation) {
+        if(rng == null || width <= 2 || ySections <= 0 || preservation == 0)
+            return this;
+        preservation = Math.abs(preservation);
+        long mash;
+        for (int i = 0; i < width * ySections; i++) {
+            mash = rng.nextLong();
+            for (int j = i; j < preservation; j++) {
+                mash |= rng.nextLong();
+            }
+            data[i] &= mash;
+        }
+        return this;
+    }
+
     protected class GRIterator implements Iterator<Coord>
     {
         public int index = 0;

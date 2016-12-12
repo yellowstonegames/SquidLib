@@ -203,13 +203,17 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.151">noise</a>(double&nbsp;xin,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.156">noise</a>(double&nbsp;xin,
                            double&nbsp;yin)</pre>
-<div class="block">2D simplex noise.</div>
+<div class="block">2D simplex noise.
+ This doesn't use its parameters verbatim; xin and yin are both effectively divided by
+ (<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Math.html?is-external=true#E" title="class or interface in java.lang"><code>Math.E</code></a> * <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Math.html?is-external=true#PI" title="class or interface in java.lang"><code>Math.PI</code></a>), because without a step like that, any integer parameters would return 0 and
+ only doubles with a decimal component would produce actual noise. This step allows integers to be passed in a
+ arguments, and changes the cycle at which 0 is repeated to multiples of (E*PI).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>xin</code> - x input</dd>
-<dd><code>yin</code> - y input</dd>
+<dd><code>xin</code> - x input; works well if between 0.0 and 1.0, but anything is accepted</dd>
+<dd><code>yin</code> - y input; works well if between 0.0 and 1.0, but anything is accepted</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>noise from -1.0 to 1.0, inclusive</dd>
 </dl>
@@ -221,7 +225,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.226">noise</a>(double&nbsp;xin,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.233">noise</a>(double&nbsp;xin,
                            double&nbsp;yin,
                            double&nbsp;zin)</pre>
 <div class="block">3D simplex noise.</div>
@@ -241,7 +245,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.369">noise</a>(double&nbsp;x,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.379">noise</a>(double&nbsp;x,
                            double&nbsp;y,
                            double&nbsp;z,
                            double&nbsp;w)</pre>

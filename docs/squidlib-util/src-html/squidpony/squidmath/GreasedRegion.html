@@ -2531,42 +2531,66 @@
 <span class="sourceLineNo">2523</span>        return new GRIterator();<a name="line.2523"></a>
 <span class="sourceLineNo">2524</span>    }<a name="line.2524"></a>
 <span class="sourceLineNo">2525</span><a name="line.2525"></a>
-<span class="sourceLineNo">2526</span>    protected class GRIterator implements Iterator&lt;Coord&gt;<a name="line.2526"></a>
-<span class="sourceLineNo">2527</span>    {<a name="line.2527"></a>
-<span class="sourceLineNo">2528</span>        public int index = 0;<a name="line.2528"></a>
-<span class="sourceLineNo">2529</span>        private int limit;<a name="line.2529"></a>
-<span class="sourceLineNo">2530</span>        private long w, i = 0;<a name="line.2530"></a>
-<span class="sourceLineNo">2531</span>        public GRIterator()<a name="line.2531"></a>
-<span class="sourceLineNo">2532</span>        {<a name="line.2532"></a>
-<span class="sourceLineNo">2533</span>            limit = size();<a name="line.2533"></a>
-<span class="sourceLineNo">2534</span>        }<a name="line.2534"></a>
-<span class="sourceLineNo">2535</span>        @Override<a name="line.2535"></a>
-<span class="sourceLineNo">2536</span>        public boolean hasNext() {<a name="line.2536"></a>
-<span class="sourceLineNo">2537</span>            return index &lt; limit;<a name="line.2537"></a>
-<span class="sourceLineNo">2538</span>        }<a name="line.2538"></a>
-<span class="sourceLineNo">2539</span><a name="line.2539"></a>
-<span class="sourceLineNo">2540</span>        @Override<a name="line.2540"></a>
-<span class="sourceLineNo">2541</span>        public Coord next() {<a name="line.2541"></a>
-<span class="sourceLineNo">2542</span>            i = 0L;<a name="line.2542"></a>
-<span class="sourceLineNo">2543</span>            for (int x = 0; x &lt; width; x++) {<a name="line.2543"></a>
-<span class="sourceLineNo">2544</span>                for (int s = 0; s &lt; ySections; s++) {<a name="line.2544"></a>
-<span class="sourceLineNo">2545</span>                    if ((w = Long.lowestOneBit(data[x * ySections + s])) != 0 &amp;&amp; i++ &gt;= index) {<a name="line.2545"></a>
-<span class="sourceLineNo">2546</span>                        if(index++ &lt; limit)<a name="line.2546"></a>
-<span class="sourceLineNo">2547</span>                            return Coord.get(x, (s &lt;&lt; 6) | Long.numberOfTrailingZeros(w));<a name="line.2547"></a>
-<span class="sourceLineNo">2548</span>                        else<a name="line.2548"></a>
-<span class="sourceLineNo">2549</span>                            return null;<a name="line.2549"></a>
-<span class="sourceLineNo">2550</span>                    }<a name="line.2550"></a>
-<span class="sourceLineNo">2551</span>                }<a name="line.2551"></a>
-<span class="sourceLineNo">2552</span>            }<a name="line.2552"></a>
-<span class="sourceLineNo">2553</span>            return null;<a name="line.2553"></a>
-<span class="sourceLineNo">2554</span>        }<a name="line.2554"></a>
-<span class="sourceLineNo">2555</span><a name="line.2555"></a>
-<span class="sourceLineNo">2556</span>        @Override<a name="line.2556"></a>
-<span class="sourceLineNo">2557</span>        public void remove() {<a name="line.2557"></a>
-<span class="sourceLineNo">2558</span>            throw new UnsupportedOperationException("remove() is not supported on this Iterator.");<a name="line.2558"></a>
-<span class="sourceLineNo">2559</span>        }<a name="line.2559"></a>
-<span class="sourceLineNo">2560</span>    }<a name="line.2560"></a>
-<span class="sourceLineNo">2561</span>}<a name="line.2561"></a>
+<span class="sourceLineNo">2526</span>    /**<a name="line.2526"></a>
+<span class="sourceLineNo">2527</span>     * Randomly removes points from a GreasedRegion, with larger values for preservation keeping more of the existing<a name="line.2527"></a>
+<span class="sourceLineNo">2528</span>     * shape intact. If preservation is 1, roughly 1/2 of all points will be removed; if 2, roughly 1/4, if 3, roughly<a name="line.2528"></a>
+<span class="sourceLineNo">2529</span>     * 1/8, and so on, so that preservation can be thought of as a negative exponent of 2. This allows both negative<a name="line.2529"></a>
+<span class="sourceLineNo">2530</span>     * and positive values for preservation, and treats 2 and -2 the same for preservation.<a name="line.2530"></a>
+<span class="sourceLineNo">2531</span>     * @param rng used to determine random factors<a name="line.2531"></a>
+<span class="sourceLineNo">2532</span>     * @param preservation roughly what degree of points to remove; removes about {@code 1/(2^preservation)} points (assuming positive)<a name="line.2532"></a>
+<span class="sourceLineNo">2533</span>     * @return a randomly modified change to this GreasedRegion<a name="line.2533"></a>
+<span class="sourceLineNo">2534</span>     */<a name="line.2534"></a>
+<span class="sourceLineNo">2535</span>    public GreasedRegion deteriorate(RNG rng, int preservation) {<a name="line.2535"></a>
+<span class="sourceLineNo">2536</span>        if(rng == null || width &lt;= 2 || ySections &lt;= 0 || preservation == 0)<a name="line.2536"></a>
+<span class="sourceLineNo">2537</span>            return this;<a name="line.2537"></a>
+<span class="sourceLineNo">2538</span>        preservation = Math.abs(preservation);<a name="line.2538"></a>
+<span class="sourceLineNo">2539</span>        long mash;<a name="line.2539"></a>
+<span class="sourceLineNo">2540</span>        for (int i = 0; i &lt; width * ySections; i++) {<a name="line.2540"></a>
+<span class="sourceLineNo">2541</span>            mash = rng.nextLong();<a name="line.2541"></a>
+<span class="sourceLineNo">2542</span>            for (int j = i; j &lt; preservation; j++) {<a name="line.2542"></a>
+<span class="sourceLineNo">2543</span>                mash |= rng.nextLong();<a name="line.2543"></a>
+<span class="sourceLineNo">2544</span>            }<a name="line.2544"></a>
+<span class="sourceLineNo">2545</span>            data[i] &amp;= mash;<a name="line.2545"></a>
+<span class="sourceLineNo">2546</span>        }<a name="line.2546"></a>
+<span class="sourceLineNo">2547</span>        return this;<a name="line.2547"></a>
+<span class="sourceLineNo">2548</span>    }<a name="line.2548"></a>
+<span class="sourceLineNo">2549</span><a name="line.2549"></a>
+<span class="sourceLineNo">2550</span>    protected class GRIterator implements Iterator&lt;Coord&gt;<a name="line.2550"></a>
+<span class="sourceLineNo">2551</span>    {<a name="line.2551"></a>
+<span class="sourceLineNo">2552</span>        public int index = 0;<a name="line.2552"></a>
+<span class="sourceLineNo">2553</span>        private int limit;<a name="line.2553"></a>
+<span class="sourceLineNo">2554</span>        private long w, i = 0;<a name="line.2554"></a>
+<span class="sourceLineNo">2555</span>        public GRIterator()<a name="line.2555"></a>
+<span class="sourceLineNo">2556</span>        {<a name="line.2556"></a>
+<span class="sourceLineNo">2557</span>            limit = size();<a name="line.2557"></a>
+<span class="sourceLineNo">2558</span>        }<a name="line.2558"></a>
+<span class="sourceLineNo">2559</span>        @Override<a name="line.2559"></a>
+<span class="sourceLineNo">2560</span>        public boolean hasNext() {<a name="line.2560"></a>
+<span class="sourceLineNo">2561</span>            return index &lt; limit;<a name="line.2561"></a>
+<span class="sourceLineNo">2562</span>        }<a name="line.2562"></a>
+<span class="sourceLineNo">2563</span><a name="line.2563"></a>
+<span class="sourceLineNo">2564</span>        @Override<a name="line.2564"></a>
+<span class="sourceLineNo">2565</span>        public Coord next() {<a name="line.2565"></a>
+<span class="sourceLineNo">2566</span>            i = 0L;<a name="line.2566"></a>
+<span class="sourceLineNo">2567</span>            for (int x = 0; x &lt; width; x++) {<a name="line.2567"></a>
+<span class="sourceLineNo">2568</span>                for (int s = 0; s &lt; ySections; s++) {<a name="line.2568"></a>
+<span class="sourceLineNo">2569</span>                    if ((w = Long.lowestOneBit(data[x * ySections + s])) != 0 &amp;&amp; i++ &gt;= index) {<a name="line.2569"></a>
+<span class="sourceLineNo">2570</span>                        if(index++ &lt; limit)<a name="line.2570"></a>
+<span class="sourceLineNo">2571</span>                            return Coord.get(x, (s &lt;&lt; 6) | Long.numberOfTrailingZeros(w));<a name="line.2571"></a>
+<span class="sourceLineNo">2572</span>                        else<a name="line.2572"></a>
+<span class="sourceLineNo">2573</span>                            return null;<a name="line.2573"></a>
+<span class="sourceLineNo">2574</span>                    }<a name="line.2574"></a>
+<span class="sourceLineNo">2575</span>                }<a name="line.2575"></a>
+<span class="sourceLineNo">2576</span>            }<a name="line.2576"></a>
+<span class="sourceLineNo">2577</span>            return null;<a name="line.2577"></a>
+<span class="sourceLineNo">2578</span>        }<a name="line.2578"></a>
+<span class="sourceLineNo">2579</span><a name="line.2579"></a>
+<span class="sourceLineNo">2580</span>        @Override<a name="line.2580"></a>
+<span class="sourceLineNo">2581</span>        public void remove() {<a name="line.2581"></a>
+<span class="sourceLineNo">2582</span>            throw new UnsupportedOperationException("remove() is not supported on this Iterator.");<a name="line.2582"></a>
+<span class="sourceLineNo">2583</span>        }<a name="line.2583"></a>
+<span class="sourceLineNo">2584</span>    }<a name="line.2584"></a>
+<span class="sourceLineNo">2585</span>}<a name="line.2585"></a>
 
 
 
