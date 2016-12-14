@@ -26,6 +26,7 @@ public class SpillWorldMap {
     public String name;
     public char[][] politicalMap;
     public int[][] heightMap;
+    public Coord[] mountains;
     public static final char[] letters = ArrayTools.letterSpan(256);
     public final OrderedMap<Character, String> atlas = new OrderedMap<>(16);
 
@@ -128,7 +129,12 @@ public class SpillWorldMap {
      * between 0.0 and 1.0, with higher numbers resulting in more land owned by factions and lower numbers meaning more
      * wilderness. If makeAtlas is true, it also generates an atlas with the procedural names of all the factions and a
      * mapping to the chars used in the output; the atlas will be in the {@link #atlas} member of this object but will
-     * be empty if makeAtlas has never been true in a call to this.
+     * be empty if makeAtlas has never been true in a call to this. If makeHeight is true, this will generate a height
+     * map in an organic way (though it isn't especially fast on very large maps), assigning the height map as an
+     * int[][] to {@link #heightMap} and the potential mountains, hills, or peaks to the Coord[] {@link #mountains}. The
+     * first Coord in mountains is usually the tallest point on the map, though two or more small peaks that are very
+     * close to one another might fuse into one larger mountain range, with higher int values than those for the first
+     * mountain on its own.
      * <br>
      * If width or height is larger than 256, consider enlarging the Coord pool before calling this with
      * {@code Coord.expandPoolTo(width, height);}. This will have no effect if width and height are both less than or
@@ -256,7 +262,7 @@ public class SpillWorldMap {
         {
             GreasedRegion m2 = new GreasedRegion(map), g2;
             map.retract(1);
-            OrderedSet<Coord> peaks = new OrderedSet<>(map.quasiRandomSeparated(0.4, rng.between(100, 150)));
+            OrderedSet<Coord> peaks = new OrderedSet<>(mountains = map.quasiRandomSeparated(0.4, rng.between(100, 150)));
             int peakCount = peaks.size();
             ArrayList<GreasedRegion> groups = new ArrayList<>(peakCount * 3);
             for (int i = 0; i < peakCount; i++) {
