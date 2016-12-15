@@ -1573,6 +1573,20 @@ public class CrossHash {
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
     }
+
+    /**
+     * An alternative hashing function that is slightly faster than CrossHash.Lightning, drastically
+     * faster than the default CrossHash methods (not in an inner class), and has good quality on most
+     * input, but has issues with certain methods (namely, {@link CrossHash.Falcon#hash(long[])} and
+     * {@link CrossHash.Falcon#hash(double[])} disregard the upper 32 bits, at the least, of any items
+     * in their input arrays, though the hash64 variants don't have this issue).
+     * <br>
+     * In most cases Lightning is a safe alternative, and is only slightly slower. If statistical
+     * quality or "salting" of the hash is particularly important, you should use {@link CrossHash.Storm}
+     * with a variety of salts/alterations.
+     * <br>
+     * Created by Tommy Ettinger on 1/16/2016.
+     */
     @Beta
     public static class Falcon
     {
@@ -1769,6 +1783,14 @@ public class CrossHash {
             return result ^ ((z ^ result) >>> 8) * 0x9E3779B9;
         }
 
+        /**
+         * Be aware that this disregards the most-significant 32 bits of each long in data.
+         * Its use is discouraged, and if you need 32-bit hashes of long arrays, you should use
+         * {@link CrossHash.Lightning#hash(long[])} instead.
+         * @param data an array of long; be aware that this disregards a significant amount of data
+         * @return a 32-bit int hash of some of data
+         * @see CrossHash.Lightning#hash(long[]) You should prefer CrossHash.Lightning for this
+         */
         public static int hash(final long[] data) {
             if (data == null)
                 return 0;
@@ -1789,6 +1811,15 @@ public class CrossHash {
             return result ^ ((z ^ result) >>> 8) * 0x9E3779B9;
         }
 
+        /**
+         * Be aware that this disregards the most-significant 32 bits of the long
+         * representation of each double in data. Its use is discouraged, and if you
+         * need 32-bit hashes of double arrays, you should use
+         * {@link CrossHash.Lightning#hash(double[])} instead.
+         * @param data an array of double; be aware that this disregards a significant amount of data
+         * @return a 32-bit int hash of some of data
+         * @see CrossHash.Lightning#hash(double[]) You should prefer CrossHash.Lightning for this
+         */
         public static int hash(final double[] data) {
             if (data == null)
                 return 0;
@@ -1864,7 +1895,9 @@ public class CrossHash {
 
     /**
      * Lower statistical quality than other hashes, but very fast. Fails visual testing with noticeable artifacts, an
-     * issue that Falcon, Lightning, and Storm do not have.
+     * issue that Falcon, Lightning, and Storm do not have. Not currently recommended if hash quality matters, since it
+     * probably has deeper problems than just failing visual testing, though its speed is excellent (better than some
+     * core JDK array hashing methods).
      */
     @Beta
     public static class Wisp

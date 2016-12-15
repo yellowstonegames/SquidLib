@@ -257,4 +257,21 @@ public class LightRNG implements RandomnessSource, StatefulRandomness, Serializa
     public int hashCode() {
         return (int) (state ^ (state >>> 32));
     }
+
+    public static long determine(long state)
+    {
+        state += 0x9E3779B97F4A7C15L;
+        state = (state ^ (state >>> 30)) * 0xBF58476D1CE4E5B9L;
+        state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
+        return state ^ (state >>> 31);
+    }
+
+    public static int determine(long state, int bound)
+    {
+        state += 0x9E3779B97F4A7C15L;
+        state = (state ^ (state >>> 30)) * 0xBF58476D1CE4E5B9L;
+        state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
+        return (int)((bound * ((state ^ (state >>> 31)) & 0x7FFFFFFFL)) >> 31);
+    }
+
 }
