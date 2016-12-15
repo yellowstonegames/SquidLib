@@ -27,15 +27,17 @@ package squidpony.squidmath;
 public class PerlinNoise {
 
     protected static final double phi = 1.61803398875,
-    epi = 1.0 / Math.E / Math.PI;
-    /*, unit1_4 =  0.70710678118, unit1_8 = 0.38268343236, unit3_8 = 0.92387953251;*/
-    /*
-    private static final double[][] grad2 = {
-            {unit1_4, unit1_4}, {unit1_4, -unit1_4}, {-unit1_4, unit1_4}, {-unit1_4, -unit1_4},
+    epi = 1.0 / Math.E / Math.PI, unit1_4 =  0.70710678118, unit1_8 = 0.38268343236, unit3_8 = 0.92387953251;
+
+    protected static final double[][] grad2 = {
+            {1, 0}, {-1, 0}, {0, 1}, {0, -1},/*
             {1, 0}, {-1, 0}, {0, 1}, {0, -1},
+            {1, 0}, {-1, 0}, {0, 1}, {0, -1},
+            {1, 0}, {-1, 0}, {0, 1}, {0, -1},*/
             {unit3_8, unit1_8}, {unit3_8, -unit1_8}, {-unit3_8, unit1_8}, {-unit3_8, -unit1_8},
+            {unit1_4, unit1_4}, {unit1_4, -unit1_4}, {-unit1_4, unit1_4}, {-unit1_4, -unit1_4},
             {unit1_8, unit3_8}, {unit1_8, -unit3_8}, {-unit1_8, unit3_8}, {-unit1_8, -unit3_8}};
-    */
+
     protected static final double[][] phiGrad2 = {
             {1, 0}, {Math.cos(phi), Math.sin(phi)},
             {Math.cos(phi*2), Math.sin(phi*2)}, {Math.cos(phi*3), Math.sin(phi*3)},

@@ -266,7 +266,7 @@ public class LightRNG implements RandomnessSource, StatefulRandomness, Serializa
         return state ^ (state >>> 31);
     }
 
-    public static int determine(long state, int bound)
+    public static int determineBounded(long state, final int bound)
     {
         state += 0x9E3779B97F4A7C15L;
         state = (state ^ (state >>> 30)) * 0xBF58476D1CE4E5B9L;

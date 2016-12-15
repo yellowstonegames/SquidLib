@@ -3,6 +3,7 @@ package squidpony.squidmath;
 import squidpony.annotation.Beta;
 
 import static squidpony.squidmath.LightRNG.determine;
+import static squidpony.squidmath.LightRNG.determineBounded;
 
 /**
  * Another experimental noise class. Extends PerlinNoise and should look similar, but have less periodic results.
@@ -164,10 +165,6 @@ public class WhirlingNoise extends PerlinNoise {
         return g0 * x + g1 * y + g2 * z + g3 * w;
     }
 
-
-    public static double noise(double xin, double yin) {
-        return noiseSeeded(xin, yin, 1L);
-    }
     /**
      * 2D simplex noise.
      * This doesn't use its parameters verbatim; xin and yin are both effectively divided by
@@ -179,9 +176,9 @@ public class WhirlingNoise extends PerlinNoise {
      * @param yin y input; works well if between 0.0 and 1.0, but anything is accepted
      * @return noise from -1.0 to 1.0, inclusive
      */
-    public static double noiseSeeded(double xin, double yin, long seed) {
-        xin *= epi;
-        yin *= epi;
+    public static double noise(double xin, double yin) {
+        //xin *= epi;
+        //yin *= epi;
         double noise0, noise1, noise2; // from the three corners
         // Skew the input space to determine which simplex cell we're in
         double skew = (xin + yin) * F2; // Hairy factor for 2D
@@ -241,7 +238,7 @@ public class WhirlingNoise extends PerlinNoise {
             noise0 = 0.0;
         } else {
             t0 *= t0;
-            noise0 = t0 * t0 * dot(phiGrad2[gi0], x0, y0); // (x,y) of grad3 used
+            noise0 = t0 * t0 * dot(grad2[gi0], x0, y0);
             // for 2D gradient
         }
         double t1 = 0.5 - x1 * x1 - y1 * y1;
@@ -249,14 +246,14 @@ public class WhirlingNoise extends PerlinNoise {
             noise1 = 0.0;
         } else {
             t1 *= t1;
-            noise1 = t1 * t1 * dot(phiGrad2[gi1], x1, y1);
+            noise1 = t1 * t1 * dot(grad2[gi1], x1, y1);
         }
         double t2 = 0.5 - x2 * x2 - y2 * y2;
         if (t2 < 0) {
             noise2 = 0.0;
         } else {
             t2 *= t2;
-            noise2 = t2 * t2 * dot(phiGrad2[gi2], x2, y2);
+            noise2 = t2 * t2 * dot(grad2[gi2], x2, y2);
         }
         // Add contributions from each corner to get the final noise value.
         // The result is scaled to return values in the interval [-1,1].
@@ -272,20 +269,9 @@ public class WhirlingNoise extends PerlinNoise {
      * @return noise from -1.0 to 1.0, inclusive
      */
     public static double noise(double xin, double yin, double zin) {
-        return noiseSeeded(xin, yin, zin, 1L);
-    }
-    /**
-     * 3D simplex noise.
-     *
-     * @param xin X input
-     * @param yin Y input
-     * @param zin Z input
-     * @return noise from -1.0 to 1.0, inclusive
-     */
-    public static double noiseSeeded(double xin, double yin, double zin, long seed) {
-        xin *= epi;
-        yin *= epi;
-        zin *= epi;
+        //xin *= epi;
+        //yin *= epi;
+        //zin *= epi;
         double n0, n1, n2, n3; // Noise contributions from the four corners
         // Skew the input space to determine which simplex cell we're in
         double s = (xin + yin + zin) * F3; // Very nice and simple skew
@@ -390,11 +376,10 @@ public class WhirlingNoise extends PerlinNoise {
         int gi3 = perm[ii + 1 + perm[jj + 1 + perm[kk + 1]]] % 12;
         */
 
-
-        int gi0 = determine(seed + i + determine(j + determine(k)), 12);
-        int gi1 = determine(seed + i + i1 + determine(j + j1 + determine(k + k1)), 12);
-        int gi2 = determine(seed + i + i2 + determine(j + j2 + determine(k + k2)), 12);
-        int gi3 = determine(seed + i + 1 + determine(j + 1 + determine(k + 1)), 12);
+        int gi0 = determineBounded(i + determine(j + determine(k)), 12);
+        int gi1 = determineBounded(i + i1 + determine(j + j1 + determine(k + k1)), 12);
+        int gi2 = determineBounded(i + i2 + determine(j + j2 + determine(k + k2)), 12);
+        int gi3 = determineBounded(i + 1 + determine(j + 1 + determine(k + 1)), 12);
 
         /*
         int hash = (int) rawNoise(i + ((j + k * 0x632BE5AB) * 0x9E3779B9),

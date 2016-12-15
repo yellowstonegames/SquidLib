@@ -214,15 +214,20 @@ public class IntVLA implements Serializable, Cloneable {
         return -1;
     }
 
-    public boolean removeValue (int value) {
+    /**
+     * Removes the first occurrence of the requested value, and returns the index it was removed at (-1 if not found)
+     * @param value a value in this IntVLA to remove
+     * @return the index the value was found and removed at, or -1 if it was not present
+     */
+    public int removeValue (int value) {
         int[] items = this.items;
         for (int i = 0, n = size; i < n; i++) {
             if (items[i] == value) {
                 removeIndex(i);
-                return true;
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 
     /** Removes and returns the item at the specified index. */
