@@ -26,7 +26,7 @@ package squidpony.squidmath;
  */
 public class PerlinNoise {
 
-    private static final double phi = 1.61803398875,
+    protected static final double phi = 1.61803398875,
     epi = 1.0 / Math.E / Math.PI;
     /*, unit1_4 =  0.70710678118, unit1_8 = 0.38268343236, unit3_8 = 0.92387953251;*/
     /*
@@ -36,7 +36,7 @@ public class PerlinNoise {
             {unit3_8, unit1_8}, {unit3_8, -unit1_8}, {-unit3_8, unit1_8}, {-unit3_8, -unit1_8},
             {unit1_8, unit3_8}, {unit1_8, -unit3_8}, {-unit1_8, unit3_8}, {-unit1_8, -unit3_8}};
     */
-    private static final double[][] phiGrad2 = {
+    protected static final double[][] phiGrad2 = {
             {1, 0}, {Math.cos(phi), Math.sin(phi)},
             {Math.cos(phi*2), Math.sin(phi*2)}, {Math.cos(phi*3), Math.sin(phi*3)},
             {Math.cos(phi*4), Math.sin(phi*4)}, {Math.cos(phi*5), Math.sin(phi*5)},
@@ -46,11 +46,11 @@ public class PerlinNoise {
             {Math.cos(phi*13), Math.sin(phi*12)}, {Math.cos(phi*13), Math.sin(phi*13)},
             {Math.cos(phi*14), Math.sin(phi*14)}, {Math.cos(phi*15), Math.sin(phi*15)},
     };
-    private static final int[][] grad3 = {{1, 1, 0}, {-1, 1, 0}, {1, -1, 0},
+    protected static final int[][] grad3 = {{1, 1, 0}, {-1, 1, 0}, {1, -1, 0},
             {-1, -1, 0}, {1, 0, 1}, {-1, 0, 1},
             {1, 0, -1}, {-1, 0, -1}, {0, 1, 1},
             {0, -1, 1}, {0, 1, -1}, {0, -1, -1}};
-    private static final int[][] grad4 = {{0, 1, 1, 1}, {0, 1, 1, -1},
+    protected static final int[][] grad4 = {{0, 1, 1, 1}, {0, 1, 1, -1},
     {0, 1, -1, 1}, {0, 1, -1, -1},
     {0, -1, 1, 1}, {0, -1, 1, -1},
     {0, -1, -1, 1}, {0, -1, -1, -1},
@@ -91,28 +91,28 @@ public class PerlinNoise {
         50, 45, 127, 4, 150, 254, 138, 236, 205, 93, 222,
         114, 67, 29, 24, 72, 243, 141, 128, 195, 78, 66,
         215, 61, 156, 180};
-    private static final double F2 = 0.5 * (Math.sqrt(3.0) - 1.0);
-    private static final double G2 = (3.0 - Math.sqrt(3.0)) / 6.0;
-    private static final double F3 = 1.0 / 3.0;
-    private static final double G3 = 1.0 / 6.0;
-    private static final double F4 = (Math.sqrt(5.0) - 1.0) / 4.0;
-    private static final double G4 = (5.0 - Math.sqrt(5.0)) / 20.0;
+    protected static final double F2 = 0.5 * (Math.sqrt(3.0) - 1.0);
+    protected static final double G2 = (3.0 - Math.sqrt(3.0)) / 6.0;
+    protected static final double F3 = 1.0 / 3.0;
+    protected static final double G3 = 1.0 / 6.0;
+    protected static final double F4 = (Math.sqrt(5.0) - 1.0) / 4.0;
+    protected static final double G4 = (5.0 - Math.sqrt(5.0)) / 20.0;
     // To remove the need for index wrapping, double the permutation table
     // length
-    private static final int perm[] = new int[512];
+    protected static final int perm[] = new int[512];
 
     static {
         for (int i = 0; i < 512; i++) {
             perm[i] = p[i & 255];
         }
     }
-    private PerlinNoise()
+    protected PerlinNoise()
     {
 
     }
     // A lookup table to traverse the simplex around a given point in 4D.
     // Details can be found where this table is used, in the 4D noise method.
-    private static final int simplex[][]
+    protected static final int simplex[][]
             = {{0, 1, 2, 3}, {0, 1, 3, 2}, {0, 0, 0, 0}, {0, 2, 3, 1},
             {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {1, 2, 3, 0},
             {0, 2, 1, 3}, {0, 0, 0, 0}, {0, 3, 1, 2}, {0, 3, 2, 1},
@@ -130,15 +130,15 @@ public class PerlinNoise {
             {2, 1, 0, 3}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0},
             {3, 1, 0, 2}, {0, 0, 0, 0}, {3, 2, 0, 1}, {3, 2, 1, 0}};
 
-    private static double dot(double g[], double x, double y) {
+    protected static double dot(double g[], double x, double y) {
         return g[0] * x + g[1] * y;
     }
 
-    private static double dot(int g[], double x, double y, double z) {
+    protected static double dot(int g[], double x, double y, double z) {
         return g[0] * x + g[1] * y + g[2] * z;
     }
 
-    private static double dot(int g[], double x, double y, double z, double w) {
+    protected static double dot(int g[], double x, double y, double z, double w) {
         return g[0] * x + g[1] * y + g[2] * z + g[3] * w;
     }
 
