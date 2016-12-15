@@ -128,8 +128,8 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
 
         long p = state;
         p ^= p >>> (5 + (p >>> 59));
-        p *= -5840758589994634535L;
-        state = state * 6364136223846793005L + 1442695040888963407L;
+        p *= 0xAEF17502108EF2D9L;
+        state = state * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL;
         return p ^ (p >>> 43);
     }
 
@@ -147,18 +147,25 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
         return next;
     }
 
-    public static long permute(long p)
+    /**
+     * Performs all of the steps {@link #nextLong()} does except for reading or changing the state, which lets this be
+     * a static method. This will produce the same result for most longs that only differ in their lowest 5 bits, that
+     * is, if {@code (long1 / 32L == long2 / 32L)}, so keep that in mind.
+     * @param state the long to permute
+     * @return the permuted version of state
+     */
+    public static long permute(long state)
     {
-        p ^= p >>> (5 + (p >>> 59));
-        p *= -5840758589994634535L;
-        return p ^ (p >>> 43);
-
+        state ^= state >>> (5 + (state >>> 59));
+        state *= 0xAEF17502108EF2D9L;
+        return state ^ (state >>> 43);
     }
+
 
     protected static long invert(long internal)
     {
         internal = unxorshift(internal, 64, 43);
-        internal *= -3437190434928431767L;
+        internal *= 0xD04CA582ACB86D69L;
         return unxorshift(internal, 64, 5 + (int)(internal >>> 59));
     }
 

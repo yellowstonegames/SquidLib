@@ -1223,7 +1223,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                         (//PerlinNoise.noise(x / 8.0, y / 8.0, ctr * 0.125) * 8 +
                                                 //PerlinNoise.noise(x / 4.0, y / 4.0, ctr * 0.125) * 4 +
                                                 //PerlinNoise.noise(x / 2.0, y / 2.0, ctr * 0.125) * 2 +
-                                                WhirlingNoise.noise(x, y, ctr  * 0.3)
+                                                WhirlingNoise.noise(x * 0.125, y * 0.125, ctr  * 0.0375)
                                                         + 1f) / 2f;
                                 //+ 15.0f) / 30f;
 
@@ -1243,7 +1243,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                                 //PerlinNoise.noise(xx / 8.0, yy / 8.0) * 8 +
                                                 //PerlinNoise.noise(xx / 4.0, yy / 4.0) * 4 +
                                                 //PerlinNoise.noise(xx / 2.0, yy / 2.0) * 2 +
-                                                WhirlingNoise.noise(xx, yy)
+                                                WhirlingNoise.noise(xx * 0.125, yy * 0.125)
                                                         + 1f) / 2f;
                                 //+ 15f) / 30f;
                                 display.put(x, y, colorFactory.get(bright, bright, bright, 1f));

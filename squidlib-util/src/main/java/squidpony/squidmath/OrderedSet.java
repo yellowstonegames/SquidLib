@@ -497,6 +497,37 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             rehash(arraySize(size + 1, f));
         return true;
     }
+
+    public boolean addAt(final K k, final int idx) {
+        if(idx <= 0)
+            return addAndMoveToFirst(k);
+        else if(idx >= size)
+            return addAndMoveToLast(k);
+
+        int pos;
+        if (k == null) {
+            if (containsNull)
+                return false;
+            pos = n;
+            containsNull = true;
+        } else {
+            K curr;
+            final K[] key = this.key;
+            // The starting point.
+            if (!((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)) {
+                if (hasher.areEqual(curr, k))
+                    return false;
+                while (!((curr = key[pos = (pos + 1) & mask]) == null))
+                    if (hasher.areEqual(curr, k))
+                        return false;
+            }
+            key[pos] = k;
+        }
+        order.insert(idx, pos);
+        if (size++ >= maxFill)
+            rehash(arraySize(size + 1, f));
+        return true;
+    }
     /**
      * Add a random element if not present, get the existing value if already
      * present.
@@ -949,41 +980,20 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      *
      * @param i the index of an entry.
      */
-    protected void fixOrder(final int i) {
+    protected int fixOrder(final int i) {
         if (size == 0) {
             order.clear();
             first = last = -1;
-            return;
+            return 0;
         }
-        order.removeValue(i);
+        int idx = order.removeValue(i);
         if (first == i) {
             first = order.get(0);
-            //first = (int) link[i];
-            /*
-            if (0 <= first) {
-                // Special case of SET_PREV( link[ first ], -1 )
-                link[first] |= (-1 & 0xFFFFFFFFL) << 32;
-            }
-            return;
-            */
         }
         if (last == i) {
             last = order.peek();
-            //last = (int) (link[i] >>> 32);
-            /*if (0 <= last) {
-                // Special case of SET_NEXT( link[ last ], -1 )
-                link[last] |= -1 & 0xFFFFFFFFL;
-            }
-            return;
-            */
         }
-        /*
-        final long linki = link[i];
-        final int prev = (int) (linki >>> 32);
-        final int next = (int) linki;
-        link[prev] ^= ((link[prev] ^ (linki & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-        link[next] ^= ((link[next] ^ (linki & 0xFFFFFFFF00000000L)) & 0xFFFFFFFF00000000L);
-        */
+        return idx;
     }
 
     /**
@@ -997,34 +1007,20 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
     protected void fixOrder(int s, int d) {
         if (size == 1) {
             first = last = d;
-            // Special case of SET_UPPER_LOWER( link[ d ], -1, -1 )
-            //link[d] = -1L;
             order.set(0, d);
         }
         else if (first == s) {
             first = d;
             order.set(0, d);
-            //link[(int) link[s]] ^= ((link[(int) link[s]] ^ ((d & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
-            //link[d] = link[s];
         }
         else if (last == s) {
             last = d;
             order.set(order.size - 1, d);
-            //link[(int) (link[s] >>> 32)] ^= ((link[(int) (link[s] >>> 32)] ^ (d & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-            //link[d] = link[s];
         }
         else
         {
             order.set(order.indexOf(s), d);
         }
-        /*
-        final long links = link[s];
-        final int prev = (int) (links >>> 32);
-        final int next = (int) links;
-        link[prev] ^= ((link[prev] ^ (d & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-        link[next] ^= ((link[next] ^ ((d & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
-        link[d] = links;
-        */
     }
 
     /**
@@ -1888,12 +1884,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         return true;
     }
 
-    /**
-     * Changes a K, original, to another, replacement, while keeping replacement at the same point in the ordering.
-     * @param original a K value that will be removed from this Set if present, and its iteration index remembered
-     * @param replacement another K value that will replace original at the remembered index
-     * @return true if the Set changed, or false if it didn't (such as if the two arguments are equal, or replacement was already in the Set but original was not)
-     */
+    /*
     public boolean alter(K original, K replacement)
     {
         if (original == null) {
@@ -1919,5 +1910,68 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             if (hasher.areEqual(original, curr))
                 return alterEntry(pos, replacement);
         }
+    }*/
+    private int alterEntry(final int pos) {
+        size--;
+        int idx = fixOrder(pos);
+        shiftKeys(pos);
+        if (size < maxFill / 4 && n > DEFAULT_INITIAL_SIZE)
+            rehash(n / 2);
+        return idx;
     }
+    private int alterNullEntry() {
+        containsNull = false;
+        key[n] = null;
+        size--;
+        int idx = fixOrder(n);
+        if (size < maxFill / 4 && n > DEFAULT_INITIAL_SIZE)
+            rehash(n / 2);
+        return idx;
+    }
+    /**
+     * Changes a K, original, to another, replacement, while keeping replacement at the same point in the ordering.
+     * @param original a K value that will be removed from this Set if present, and its iteration index remembered
+     * @param replacement another K value that will replace original at the remembered index
+     * @return true if the Set changed, or false if it didn't (such as if the two arguments are equal, or replacement was already in the Set but original was not)
+     */
+    public boolean alter(K original, K replacement) {
+        int idx;
+        if (original == null) {
+            if (containsNull) {
+                if (replacement != null) {
+                    idx = alterNullEntry();
+                    addAt(replacement, idx);
+                    return true;
+                }
+                else
+                    return false;
+            };
+            return false;
+        }
+        if(hasher.areEqual(original, replacement))
+            return false;
+        K curr;
+        final K[] key = this.key;
+        int pos;
+        // The starting point.
+        if ((curr = key[pos = HashCommon.mix(hasher.hash(original)) & mask]) == null)
+            return false;
+        if (hasher.areEqual(original, curr))
+        {
+            idx = alterEntry(pos);
+            addAt(replacement, idx);
+            return true;
+        }
+        while (true) {
+            if ((curr = key[pos = (pos + 1) & mask]) == null)
+                return false;
+            if (hasher.areEqual(original, curr))
+            {
+                idx = alterEntry(pos);
+                addAt(replacement, idx);
+                return true;
+            }
+        }
+    }
+
 }
