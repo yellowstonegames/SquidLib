@@ -2745,7 +2745,7 @@
 <span class="sourceLineNo">2737</span>                }<a name="line.2737"></a>
 <span class="sourceLineNo">2738</span>            }<a name="line.2738"></a>
 <span class="sourceLineNo">2739</span>            for (int i = 0; i &lt; mods.size(); i++) {<a name="line.2739"></a>
-<span class="sourceLineNo">2740</span>                brief.append('\016').append(mods.get(i).serializeToString());<a name="line.2740"></a>
+<span class="sourceLineNo">2740</span>                brief.append('\016').append(mods.getAt(i).serializeToString());<a name="line.2740"></a>
 <span class="sourceLineNo">2741</span>            }<a name="line.2741"></a>
 <span class="sourceLineNo">2742</span>            return mixer.addModifiers(mods).summarize(brief.toString());<a name="line.2742"></a>
 <span class="sourceLineNo">2743</span>        } else<a name="line.2743"></a>

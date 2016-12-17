@@ -367,8 +367,10 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 </td>
 </tr>
 <tr id="i31" class="rowColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntVLA.html#removeValue-int-">removeValue</a></span>(int&nbsp;value)</code>&nbsp;</td>
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntVLA.html#removeValue-int-">removeValue</a></span>(int&nbsp;value)</code>
+<div class="block">Removes the first occurrence of the requested value, and returns the index it was removed at (-1 if not found)</div>
+</td>
 </tr>
 <tr id="i32" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
@@ -747,7 +749,14 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>removeValue</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.217">removeValue</a>(int&nbsp;value)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.222">removeValue</a>(int&nbsp;value)</pre>
+<div class="block">Removes the first occurrence of the requested value, and returns the index it was removed at (-1 if not found)</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>value</code> - a value in this IntVLA to remove</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the index the value was found and removed at, or -1 if it was not present</dd>
+</dl>
 </li>
 </ul>
 <a name="removeIndex-int-">
@@ -756,7 +765,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>removeIndex</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.229">removeIndex</a>(int&nbsp;index)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.234">removeIndex</a>(int&nbsp;index)</pre>
 <div class="block">Removes and returns the item at the specified index.</div>
 </li>
 </ul>
@@ -766,7 +775,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>removeRange</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.239">removeRange</a>(int&nbsp;start,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.244">removeRange</a>(int&nbsp;start,
                         int&nbsp;end)</pre>
 <div class="block">Removes the items between the specified indices, inclusive.</div>
 </li>
@@ -777,7 +786,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>removeAll</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.250">removeAll</a>(<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;array)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.255">removeAll</a>(<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;array)</pre>
 <div class="block">Removes from this array all of elements contained in the specified array.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -791,7 +800,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>moveToFirst</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.269">moveToFirst</a>(int&nbsp;index)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.274">moveToFirst</a>(int&nbsp;index)</pre>
 <div class="block">Moves the item at the specified index to the first index and returns it.</div>
 </li>
 </ul>
@@ -801,7 +810,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>moveToLast</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.280">moveToLast</a>(int&nbsp;index)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.285">moveToLast</a>(int&nbsp;index)</pre>
 <div class="block">Moves the item at the specified index to the last index and returns it.</div>
 </li>
 </ul>
@@ -811,7 +820,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>pop</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.291">pop</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.296">pop</a>()</pre>
 <div class="block">Removes and returns the last item.</div>
 </li>
 </ul>
@@ -821,7 +830,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>peek</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.296">peek</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.301">peek</a>()</pre>
 <div class="block">Returns the last item.</div>
 </li>
 </ul>
@@ -831,7 +840,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>first</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.301">first</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.306">first</a>()</pre>
 <div class="block">Returns the first item.</div>
 </li>
 </ul>
@@ -841,7 +850,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>clear</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.306">clear</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.311">clear</a>()</pre>
 </li>
 </ul>
 <a name="shrink--">
@@ -850,7 +859,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>shrink</h4>
-<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.313">shrink</a>()</pre>
+<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.318">shrink</a>()</pre>
 <div class="block">Reduces the size of the backing array to the size of the actual items. This is useful to release memory when many items have
  been removed, or if it is known that more items will not be added.</div>
 <dl>
@@ -865,7 +874,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>ensureCapacity</h4>
-<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.321">ensureCapacity</a>(int&nbsp;additionalCapacity)</pre>
+<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.326">ensureCapacity</a>(int&nbsp;additionalCapacity)</pre>
 <div class="block">Increases the size of the backing array to accommodate the specified number of additional items. Useful before adding many
  items to avoid multiple backing array resizes.</div>
 <dl>
@@ -880,7 +889,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>resize</h4>
-<pre>protected&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.327">resize</a>(int&nbsp;newSize)</pre>
+<pre>protected&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.332">resize</a>(int&nbsp;newSize)</pre>
 </li>
 </ul>
 <a name="asInts--">
@@ -889,7 +898,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>asInts</h4>
-<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.335">asInts</a>()</pre>
+<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.340">asInts</a>()</pre>
 </li>
 </ul>
 <a name="sort--">
@@ -898,7 +907,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>sort</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.344">sort</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.349">sort</a>()</pre>
 </li>
 </ul>
 <a name="reverse--">
@@ -907,7 +916,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>reverse</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.348">reverse</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.353">reverse</a>()</pre>
 </li>
 </ul>
 <a name="truncate-int-">
@@ -916,7 +925,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>truncate</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.360">truncate</a>(int&nbsp;newSize)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.365">truncate</a>(int&nbsp;newSize)</pre>
 <div class="block">Reduces the size of the array to the specified size. If the array is already smaller than the specified size, no action is
  taken.</div>
 </li>
@@ -927,7 +936,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getRandomElement</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.364">getRandomElement</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.369">getRandomElement</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</pre>
 </li>
 </ul>
 <a name="shuffle-squidpony.squidmath.RNG-">
@@ -936,7 +945,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>shuffle</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.374">shuffle</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.379">shuffle</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</pre>
 <div class="block">Shuffles this IntVLA in place using the given RNG.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -952,7 +961,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>toArray</h4>
-<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.385">toArray</a>()</pre>
+<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.390">toArray</a>()</pre>
 </li>
 </ul>
 <a name="copy--">
@@ -961,7 +970,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.391">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.396">copy</a>()</pre>
 </li>
 </ul>
 <a name="clone--">
@@ -970,7 +979,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>clone</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.399">clone</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.404">clone</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#clone--" title="class or interface in java.lang">clone</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -983,7 +992,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.410">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.415">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -996,7 +1005,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.417">hash64</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.422">hash64</a>()</pre>
 </li>
 </ul>
 <a name="equals-java.lang.Object-">
@@ -1005,7 +1014,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.422">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;object)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.427">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;object)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -1018,7 +1027,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.434">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.439">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -1031,7 +1040,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.448">toString</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;separator)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.453">toString</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;separator)</pre>
 </li>
 </ul>
 <a name="with-int...-">
@@ -1040,7 +1049,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>with</h4>
-<pre>public static&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.461">with</a>(int...&nbsp;array)</pre>
+<pre>public static&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.466">with</a>(int...&nbsp;array)</pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../squidpony/squidmath/IntVLA.html#IntVLA-int:A-"><code>IntVLA(int[])</code></a></dd>

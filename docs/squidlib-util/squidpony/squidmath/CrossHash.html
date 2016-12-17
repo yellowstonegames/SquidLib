@@ -209,7 +209,13 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Falcon.html" title="class in squidpony.squidmath">CrossHash.Falcon</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Falcon.html" title="class in squidpony.squidmath">CrossHash.Falcon</a></span></code>
+<div class="block">An alternative hashing function that is slightly faster than CrossHash.Lightning, drastically
+ faster than the default CrossHash methods (not in an inner class), and has good quality on most
+ input, but has issues with certain methods (namely, <a href="../../squidpony/squidmath/CrossHash.Falcon.html#hash-long:A-"><code>CrossHash.Falcon.hash(long[])</code></a> and
+ <a href="../../squidpony/squidmath/CrossHash.Falcon.html#hash-double:A-"><code>CrossHash.Falcon.hash(double[])</code></a> disregard the upper 32 bits, at the least, of any items
+ in their input arrays, though the hash64 variants don't have this issue).</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static interface&nbsp;</code></td>
