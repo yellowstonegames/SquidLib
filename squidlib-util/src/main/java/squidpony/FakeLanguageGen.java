@@ -2737,7 +2737,7 @@ public class FakeLanguageGen implements Serializable {
                 }
             }
             for (int i = 0; i < mods.size(); i++) {
-                brief.append('\016').append(mods.get(i).serializeToString());
+                brief.append('\016').append(mods.getAt(i).serializeToString());
             }
             return mixer.addModifiers(mods).summarize(brief.toString());
         } else

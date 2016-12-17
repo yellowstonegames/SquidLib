@@ -273,12 +273,6 @@ public class LanguageGenTest {
                 FakeLanguageGen.JAPANESE_ROMANIZED.addModifiers(FakeLanguageGen.Modifier.DOUBLE_VOWELS),
                 FakeLanguageGen.SOMALI.addModifiers(FakeLanguageGen.modifier("([kd])h", "$1"),
                         FakeLanguageGen.modifier("([pfsgkcb])([aeiouy])", "$1l$2", 0.35),
-                        /*FakeLanguageGen.modifier("a+", "á", 0.18),
-                        FakeLanguageGen.modifier("e+", "é", 0.18),
-                        FakeLanguageGen.modifier("i+", "í", 0.18),
-                        FakeLanguageGen.modifier("o+", "ó", 0.18),
-                        FakeLanguageGen.modifier("u+", "ú", 0.18),*/
-                        //FakeLanguageGen.modifier("aa", "au"),
                         FakeLanguageGen.modifier("ii", "ai"),
                         FakeLanguageGen.modifier("uu", "ia"),
                         FakeLanguageGen.modifier("([aeo])\\1", "$1"),
