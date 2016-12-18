@@ -2547,6 +2547,19 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
         return this;
     }
 
+    /**
+     * Inverts the on/off state of the cell with the given x and y.
+     * @param x the x position of the cell to flip
+     * @param y the y position of the cell to flip
+     * @return this for chaining, modified
+     */
+    public GreasedRegion flip(int x, int y) {
+        if(x >= 0 && y >= 0 && x < width && y < height && ySections > 0)
+            data[x * ySections + (y >> 6)] ^= (1L << (y & 63));
+        return this;
+
+    }
+
     public class GRIterator implements Iterator<Coord>
     {
         public int index = 0;

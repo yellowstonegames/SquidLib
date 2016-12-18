@@ -2555,42 +2555,55 @@
 <span class="sourceLineNo">2547</span>        return this;<a name="line.2547"></a>
 <span class="sourceLineNo">2548</span>    }<a name="line.2548"></a>
 <span class="sourceLineNo">2549</span><a name="line.2549"></a>
-<span class="sourceLineNo">2550</span>    public class GRIterator implements Iterator&lt;Coord&gt;<a name="line.2550"></a>
-<span class="sourceLineNo">2551</span>    {<a name="line.2551"></a>
-<span class="sourceLineNo">2552</span>        public int index = 0;<a name="line.2552"></a>
-<span class="sourceLineNo">2553</span>        private int limit;<a name="line.2553"></a>
-<span class="sourceLineNo">2554</span>        private long w, i = 0;<a name="line.2554"></a>
-<span class="sourceLineNo">2555</span>        public GRIterator()<a name="line.2555"></a>
-<span class="sourceLineNo">2556</span>        {<a name="line.2556"></a>
-<span class="sourceLineNo">2557</span>            limit = size();<a name="line.2557"></a>
-<span class="sourceLineNo">2558</span>        }<a name="line.2558"></a>
-<span class="sourceLineNo">2559</span>        @Override<a name="line.2559"></a>
-<span class="sourceLineNo">2560</span>        public boolean hasNext() {<a name="line.2560"></a>
-<span class="sourceLineNo">2561</span>            return index &lt; limit;<a name="line.2561"></a>
-<span class="sourceLineNo">2562</span>        }<a name="line.2562"></a>
-<span class="sourceLineNo">2563</span><a name="line.2563"></a>
-<span class="sourceLineNo">2564</span>        @Override<a name="line.2564"></a>
-<span class="sourceLineNo">2565</span>        public Coord next() {<a name="line.2565"></a>
-<span class="sourceLineNo">2566</span>            i = 0L;<a name="line.2566"></a>
-<span class="sourceLineNo">2567</span>            for (int x = 0; x &lt; width; x++) {<a name="line.2567"></a>
-<span class="sourceLineNo">2568</span>                for (int s = 0; s &lt; ySections; s++) {<a name="line.2568"></a>
-<span class="sourceLineNo">2569</span>                    if ((w = Long.lowestOneBit(data[x * ySections + s])) != 0 &amp;&amp; i++ &gt;= index) {<a name="line.2569"></a>
-<span class="sourceLineNo">2570</span>                        if(index++ &lt; limit)<a name="line.2570"></a>
-<span class="sourceLineNo">2571</span>                            return Coord.get(x, (s &lt;&lt; 6) | Long.numberOfTrailingZeros(w));<a name="line.2571"></a>
-<span class="sourceLineNo">2572</span>                        else<a name="line.2572"></a>
-<span class="sourceLineNo">2573</span>                            return null;<a name="line.2573"></a>
-<span class="sourceLineNo">2574</span>                    }<a name="line.2574"></a>
-<span class="sourceLineNo">2575</span>                }<a name="line.2575"></a>
-<span class="sourceLineNo">2576</span>            }<a name="line.2576"></a>
-<span class="sourceLineNo">2577</span>            return null;<a name="line.2577"></a>
-<span class="sourceLineNo">2578</span>        }<a name="line.2578"></a>
-<span class="sourceLineNo">2579</span><a name="line.2579"></a>
-<span class="sourceLineNo">2580</span>        @Override<a name="line.2580"></a>
-<span class="sourceLineNo">2581</span>        public void remove() {<a name="line.2581"></a>
-<span class="sourceLineNo">2582</span>            throw new UnsupportedOperationException("remove() is not supported on this Iterator.");<a name="line.2582"></a>
-<span class="sourceLineNo">2583</span>        }<a name="line.2583"></a>
-<span class="sourceLineNo">2584</span>    }<a name="line.2584"></a>
-<span class="sourceLineNo">2585</span>}<a name="line.2585"></a>
+<span class="sourceLineNo">2550</span>    /**<a name="line.2550"></a>
+<span class="sourceLineNo">2551</span>     * Inverts the on/off state of the cell with the given x and y.<a name="line.2551"></a>
+<span class="sourceLineNo">2552</span>     * @param x the x position of the cell to flip<a name="line.2552"></a>
+<span class="sourceLineNo">2553</span>     * @param y the y position of the cell to flip<a name="line.2553"></a>
+<span class="sourceLineNo">2554</span>     * @return this for chaining, modified<a name="line.2554"></a>
+<span class="sourceLineNo">2555</span>     */<a name="line.2555"></a>
+<span class="sourceLineNo">2556</span>    public GreasedRegion flip(int x, int y) {<a name="line.2556"></a>
+<span class="sourceLineNo">2557</span>        if(x &gt;= 0 &amp;&amp; y &gt;= 0 &amp;&amp; x &lt; width &amp;&amp; y &lt; height &amp;&amp; ySections &gt; 0)<a name="line.2557"></a>
+<span class="sourceLineNo">2558</span>            data[x * ySections + (y &gt;&gt; 6)] ^= (1L &lt;&lt; (y &amp; 63));<a name="line.2558"></a>
+<span class="sourceLineNo">2559</span>        return this;<a name="line.2559"></a>
+<span class="sourceLineNo">2560</span><a name="line.2560"></a>
+<span class="sourceLineNo">2561</span>    }<a name="line.2561"></a>
+<span class="sourceLineNo">2562</span><a name="line.2562"></a>
+<span class="sourceLineNo">2563</span>    public class GRIterator implements Iterator&lt;Coord&gt;<a name="line.2563"></a>
+<span class="sourceLineNo">2564</span>    {<a name="line.2564"></a>
+<span class="sourceLineNo">2565</span>        public int index = 0;<a name="line.2565"></a>
+<span class="sourceLineNo">2566</span>        private int limit;<a name="line.2566"></a>
+<span class="sourceLineNo">2567</span>        private long w, i = 0;<a name="line.2567"></a>
+<span class="sourceLineNo">2568</span>        public GRIterator()<a name="line.2568"></a>
+<span class="sourceLineNo">2569</span>        {<a name="line.2569"></a>
+<span class="sourceLineNo">2570</span>            limit = size();<a name="line.2570"></a>
+<span class="sourceLineNo">2571</span>        }<a name="line.2571"></a>
+<span class="sourceLineNo">2572</span>        @Override<a name="line.2572"></a>
+<span class="sourceLineNo">2573</span>        public boolean hasNext() {<a name="line.2573"></a>
+<span class="sourceLineNo">2574</span>            return index &lt; limit;<a name="line.2574"></a>
+<span class="sourceLineNo">2575</span>        }<a name="line.2575"></a>
+<span class="sourceLineNo">2576</span><a name="line.2576"></a>
+<span class="sourceLineNo">2577</span>        @Override<a name="line.2577"></a>
+<span class="sourceLineNo">2578</span>        public Coord next() {<a name="line.2578"></a>
+<span class="sourceLineNo">2579</span>            i = 0L;<a name="line.2579"></a>
+<span class="sourceLineNo">2580</span>            for (int x = 0; x &lt; width; x++) {<a name="line.2580"></a>
+<span class="sourceLineNo">2581</span>                for (int s = 0; s &lt; ySections; s++) {<a name="line.2581"></a>
+<span class="sourceLineNo">2582</span>                    if ((w = Long.lowestOneBit(data[x * ySections + s])) != 0 &amp;&amp; i++ &gt;= index) {<a name="line.2582"></a>
+<span class="sourceLineNo">2583</span>                        if(index++ &lt; limit)<a name="line.2583"></a>
+<span class="sourceLineNo">2584</span>                            return Coord.get(x, (s &lt;&lt; 6) | Long.numberOfTrailingZeros(w));<a name="line.2584"></a>
+<span class="sourceLineNo">2585</span>                        else<a name="line.2585"></a>
+<span class="sourceLineNo">2586</span>                            return null;<a name="line.2586"></a>
+<span class="sourceLineNo">2587</span>                    }<a name="line.2587"></a>
+<span class="sourceLineNo">2588</span>                }<a name="line.2588"></a>
+<span class="sourceLineNo">2589</span>            }<a name="line.2589"></a>
+<span class="sourceLineNo">2590</span>            return null;<a name="line.2590"></a>
+<span class="sourceLineNo">2591</span>        }<a name="line.2591"></a>
+<span class="sourceLineNo">2592</span><a name="line.2592"></a>
+<span class="sourceLineNo">2593</span>        @Override<a name="line.2593"></a>
+<span class="sourceLineNo">2594</span>        public void remove() {<a name="line.2594"></a>
+<span class="sourceLineNo">2595</span>            throw new UnsupportedOperationException("remove() is not supported on this Iterator.");<a name="line.2595"></a>
+<span class="sourceLineNo">2596</span>        }<a name="line.2596"></a>
+<span class="sourceLineNo">2597</span>    }<a name="line.2597"></a>
+<span class="sourceLineNo">2598</span>}<a name="line.2598"></a>
 
 
 

@@ -6310,21 +6310,21 @@ public class SColor extends Color {
      * This array is loaded with the colors found in the rainbow, in the
      * standard ROYGBIV order.
      */
-    public static SColor[] RAINBOW = {
+    public static final SColor[] RAINBOW = {
             RED_PIGMENT, ORANGE_PEEL, YELLOW, GREEN, BLUE, INDIGO_DYE, VIOLET};
     /**
      * This array is loaded with the colors from the traditional Japanese
      * Red-Violet Series found at the wikipedia site here:
      * http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
      */
-    public static SColor[] RED_VIOLET_SERIES = {
+    public static final SColor[] RED_VIOLET_SERIES = {
             ONE_KIN_DYE, RED_PLUM, CHERRY_BLOSSOM_DYE, PALE_CRIMSON, PEACH_DYE, MEDIUM_CRIMSON, WASHED_OUT_CRIMSON};
     /**
      * This array is loaded with the colors from the traditional Japanese Red
      * Series found at the wikipedia site here:
      * http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
      */
-    public static SColor[] RED_SERIES = {
+    public static final SColor[] RED_SERIES = {
             IBIS_WING, LONG_SPRING, COCHINEAL_RED, THRICE_DYED_CRIMSON, PLUM_BLOSSOM_MOUSE, PURE_CRIMSON, RED_BEAN,
             SHRIMP_BROWN, DAWN, ORANGUTAN, PERSIMMON_JUICE, RED_KITE, BLACK_KITE, GLAZED_PERSIMMON, EDO_BROWN,
             CYPRESS_BARK, RINSED_OUT_RED, BREWED_MUSTARD_BROWN, OVERDYED_RED_BROWN, CHINESE_TEA_BROWN, FADED_CHINESE_TEA_BROWN,
@@ -6337,7 +6337,7 @@ public class SColor extends Color {
      * Red Series found at the wikipedia site here:
      * http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
      */
-    public static SColor[] YELLOW_RED_SERIES = {
+    public static final SColor[] YELLOW_RED_SERIES = {
             WALNUT, SUMAC, RICH_GARDENIA, RED_OCHRE, POLISHED_BROWN, STYLISH_PERSIMMON, DAYLILY, RED_DYE_TURMERIC,
             LEGAL_DYE, AMBER_DYE, DECAYING_LEAVES, CLOVE_DYED, BRUSHWOOD_DYED, SOOTY_BAMBOO, EARTHEN_YELLOW, CHINESE_TEA_YELLOW,
             CATTAIL, SCORTCHED_BROWN, WASHED_OUT_PERSIMMON, SAWTOOTH_OAK, GREEN_TEA_DYE, PALE_PERSIMMON, PLUM_DYED,
@@ -6348,7 +6348,7 @@ public class SColor extends Color {
      * Series found at the wikipedia site here:
      * http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
      */
-    public static SColor[] YELLOW_SERIES = {
+    public static final SColor[] YELLOW_SERIES = {
             LIGHT_YELLOW_DYE, EGG_DYE, BRIGHT_GOLD_BROWN, UNDRIED_WALL, CORN_DYE, GOLDEN_OAK, FLORAL_LEAF, TURMERIC,
             FADED_SEN_NO_RIKYUS_TEA, LYE, TEA_GARDEN_CONTEMPLATION, RAPESEED_OIL, NIGHTINGALE_BROWN, JAPANESE_TRIANDRA_GRASS,
             STEAMED_CHESTNUT, FINCH_BROWN, NIGHTINGALE, BRIGHT_GOLDEN_YELLOW, SUMAC_DYED, MULBERRY_DYED, CAPE_JASMINE,
@@ -6359,7 +6359,7 @@ public class SColor extends Color {
      * Green Series found at the wikipedia site here:
      * http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
      */
-    public static SColor[] YELLOW_GREEN_SERIES = {
+    public static final SColor[] YELLOW_GREEN_SERIES = {
             GREENFINCH, WILLOW_TEA, FLIRTATIOUS_INDIGO_TEA, DEAD_MANS_FINGERS_SEAWEED, BAIKO_BROWN, SISKIN_SPROUT_YELLOW,
             WILLOW_LEAVES_UNDERSIDE, WILLOW_DYE, BLUE_BLACK_CRAYFISH, PALE_OAK, RIKAN_BROWN, MOSS, THOUSAND_YEAR_OLD_BROWN,
             IWAI_BROWN, SOOTY_WILLOW_BAMBOO, PALE_YOUNG_GREEN_ONION, FRESH_ONION, PINE_NEEDLE};
@@ -6368,7 +6368,7 @@ public class SColor extends Color {
      * Green Series found at the wikipedia site here:
      * http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
      */
-    public static SColor[] BLUE_GREEN_SERIES = {
+    public static final SColor[] BLUE_GREEN_SERIES = {
             JAPANESE_PALE_BLUE, WILLOW_GREY, THOUSAND_YEAR_OLD_GREEN, WHITISH_GREEN, PATINA, STOREROOM_BROWN, GREYISH_DARK_GREEN,
             INSECT_SCREEN, ALOEWOOD_BROWN, CELADON_DYE, RUSTY_STOREROOM, SILK_CREPE_BROWN, YOUNG_BAMBOO, OLD_BAMBOO,
             MIDORI, RUSTY_CELADON, HORSETAIL, GREEN_BAMBOO, VELVET, FRAGILE_SEAWEED_BROWN, PALE_GREEN_ONION, BLUE_GREEN_DYE,
@@ -6378,7 +6378,7 @@ public class SColor extends Color {
      * Violet Series found at the wikipedia site here:
      * http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
      */
-    public static SColor[] BLUE_VIOLET_SERIES = {
+    public static final SColor[] BLUE_VIOLET_SERIES = {
             HARBOR_RAT, IRON_STORAGE, RUSTED_LIGHT_BLUE, LIGHT_BLUE_DYE, RUSTY_STORAGE, JAPANESE_INDIGO, LIGHT_BLUE_FLOWER,
             OPPOSITE_FLOWER, IRONHEAD_FLOWER, SKY, ULTRAMARINE_DYE, COARSE_WOOL, NAVY_BLUE_DYE, STAINED_RED, MOUSY_WISTERIA,
             WISTERIA_DYE, DULL_BLUE, WATER, INSIDE_OF_A_BOTTLE, NEW_BRIDGE, MOUSY_INDIGO, ONANDO, THOUSAND_HERB, LIGHT_BLUE_SILK,
@@ -6389,7 +6389,7 @@ public class SColor extends Color {
      * Series found at the wikipedia site here:
      * http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
      */
-    public static SColor[] VIOLET_SERIES = {
+    public static final SColor[] VIOLET_SERIES = {
             WISTERIA_PURPLE, TATARIAN_ASTER, BLUE_VIOLET_DYE, THIN_VIOLET, VIOLET_DYE, DARK_RED_DYE, RED_WISTERIA,
             DOVE_FEATHER_GREY, VINE_GRAPE, TREE_PEONY, FAKE_PURPLE, SAPPANWOOD, VANISHING_RED_MOUSE, BELLFLOWER,
             DISAPPEARING_PURPLE, DEEP_PURPLE, HALF_PURPLE, PURPLE_DYE, IRIS, RABBIT_EAR_IRIS, GRAPE_MOUSE, BURNT_BAMBOO,
@@ -6399,9 +6399,52 @@ public class SColor extends Color {
      * Achromatic Series found at the wikipedia site here:
      * http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
      */
-    public static SColor[] ACHROMATIC_SERIES = {
+    public static final SColor[] ACHROMATIC_SERIES = {
             UNBLEACHED_SILK, SILVER_GREY, BROWN_RAT_GREY, BETEL_NUT_DYE, BLACK_DYE, WHITE_MOUSE, PLAIN_MOUSE,
             INDIGO_INK_BROWN, INK, INDIGO_WHITE};
+
+    /**
+     * An array of SColor values that should all be fairly different from any other in the group.
+     * This may be useful for tinting things that should be color-coded differently from each other. To get a random
+     * order for these colors while still guaranteeing that no color will be drawn twice in the first 56 choices, you
+     * can use {@code OrderedSet<SColor> palette = new OrderedSet<SColor>(SColor.VARIED_PALETTE).shuffle(rng);} (where
+     * rng is any non-null RNG) and then get sequential colors from that set with
+     * {@code int i = 0; SColor color = palette.getAt(i);} , incrementing i before calling getAt again and possibly
+     * wrapping with {@code i %= 56;} .
+     * This includes 56 colors, organized in groups of 4 from dark to light in each group:
+     * <ul>
+     *     <li>0-3: gray group</li>
+     *     <li>4-7: brown group</li>
+     *     <li>8-11: red group</li>
+     *     <li>12-15: pink group</li>
+     *     <li>16-19: magenta/purple group</li>
+     *     <li>20-23: purple/blue-ish group</li>
+     *     <li>24-27: darker blue group</li>
+     *     <li>28-31: lighter blue and blue-green group</li>
+     *     <li>32-35: pure green group</li>
+     *     <li>36-39: grayish-green group</li>
+     *     <li>40-43: yellow-green group</li>
+     *     <li>44-47: yellow group</li>
+     *     <li>48-51: orange group</li>
+     *     <li>52-55: orange-red-pink/salmon/coral group</li>
+     * </ul>
+     */
+    public static final SColor[] VARIED_PALETTE = {
+            DARK_GRAY, GRAY, LIGHT_GRAY, DB_EGGSHELL,
+            DB_SEAL_BROWN, BROWNER, DARK_TAN, TAN,
+            DB_BLOOD, PURE_CRIMSON, RED, IBIS_WING,
+            TREE_PEONY, DEEP_CERISE, HOT_PINK, PINK,
+            INDIGO, PURPLE, PSYCHEDELIC_PURPLE, LIGHT_VIOLET,
+            ROYAL_PURPLE, VIOLET, HALF_PURPLE, LAVENDER_FLORAL,
+            COBALT, CERULEAN_BLUE, BLUE, CORNFLOWER_BLUE,
+            LIGHT_BLUE_FLOWER, ROBIN_EGG_BLUE, CYAN, LIGHT_BLUE,
+            GREEN_BAMBOO, PERSIAN_GREEN, ELECTRIC_GREEN, MINT_GREEN,
+            CAMO_GREEN, PALE_GREEN_ONION, PASTEL_GREEN, MOSS_GREEN,
+            OLIVE_DRAB, YELLOW_GREEN, CHARTREUSE_GREEN, ELECTRIC_LIME,
+            GOLD, SCHOOL_BUS_YELLOW, YELLOW, LEMON_CHIFFON,
+            BURNT_ORANGE, OCHRE, CAPE_JASMINE, PEACH_YELLOW,
+            SAFETY_ORANGE, CORAL_DYE, DARK_SALMON, LIGHT_YELLOW_DYE
+    };
 
     /**
      * DawnBringer's original 16-color palette, as posted on the Pixel Joint forums,
@@ -6409,7 +6452,7 @@ public class SColor extends Color {
      * Some useful previews can be seen here https://github.com/geoffb/dawnbringer-palettes , and the order
      * this array uses is the same as the previews at the bottom of that page.
      */
-    public static SColor[] DAWNBRINGER_16 = {DB_MIDNIGHT, DB_DARK_LEATHER, DB_DEEP_OCEAN, DB_LEAD, DB_EARTH,
+    public static final SColor[] DAWNBRINGER_16 = {DB_MIDNIGHT, DB_DARK_LEATHER, DB_DEEP_OCEAN, DB_LEAD, DB_EARTH,
             DB_FOREST, DB_LOBSTER, DB_DRAB, DB_CADET_BLUE, DB_TAWNY_BROWN, DB_IRON, DB_PEA_SOUP, DB_PUTTY,
             DB_TURQUOISE, DB_MUSTARD, DB_EGGSHELL};
 
@@ -6420,7 +6463,7 @@ public class SColor extends Color {
      * Some useful previews can be seen here https://github.com/geoffb/dawnbringer-palettes , and the order
      * this array uses is the same as the previews at the bottom of that page.
      */
-    public static SColor[] DAWNBRINGER_32 = {DB_BLACK, DB_INK, DB_SEAL_BROWN, DB_CHESTNUT, DB_CAPPUCCINO,
+    public static final SColor[] DAWNBRINGER_32 = {DB_BLACK, DB_INK, DB_SEAL_BROWN, DB_CHESTNUT, DB_CAPPUCCINO,
             DB_PUMPKIN, DB_FAWN, DB_NUDE, DB_DAFFODIL, DB_KEY_LIME, DB_SHAMROCK, DB_JUNGLE, DB_OLIVE, DB_MUD,
             DB_SHADOW, DB_COBALT, DB_CERULEAN, DB_DENIM, DB_SKY_BLUE, DB_SEAFOAM, DB_PLATINUM, DB_WHITE,
             DB_STORM_CLOUD, DB_ELEPHANT, DB_GRAPHITE, DB_SOOT, DB_EGGPLANT, DB_BLOOD, DB_CORAL, DB_LAVENDER,
@@ -6430,7 +6473,7 @@ public class SColor extends Color {
      * This array is loaded with all of the colors defined in SColor, in
      * arbitrary order.
      */
-    public static SColor[] FULL_PALETTE = {ALICE_BLUE, ALIZARIN, ALOEWOOD, ALOEWOOD_BROWN, AMARANTH, AMBER,
+    public static final SColor[] FULL_PALETTE = {ALICE_BLUE, ALIZARIN, ALOEWOOD, ALOEWOOD_BROWN, AMARANTH, AMBER,
             AMBER_DYE, AMETHYST, AMUR_CORK_TREE, APRICOT, AQUA, AQUAMARINE, ARMY_GREEN, ASPARAGUS, ATOMIC_TANGERINE,
             AUBURN, AZUL, AZURE, BABY_BLUE, BAIKO_BROWN, BEIGE, BELLFLOWER, BENI_DYE, BETEL_NUT_DYE, BIRCH_BROWN,
             BISTRE, BLACK, BLACK_CHESTNUT_OAK, BLACK_DYE, BLACK_KITE, BLOOD, BLOOD_RED, BLUE, BLUE_BLACK_CRAYFISH,
@@ -6512,7 +6555,8 @@ public class SColor extends Color {
      *
      * @deprecated Prefer FULL_PALETTE to this misspelled name; they are equivalent.
      */
-    public static SColor[] FULL_PALLET = FULL_PALETTE;
+    @Deprecated
+    public static final SColor[] FULL_PALLET = FULL_PALETTE;
 
     /**
      * Indexes into this palette can be used as a placeholder for modules that do not have access to SColor.
@@ -6561,7 +6605,7 @@ public class SColor extends Color {
      * <li>39: Dark brown</li>
      * </ul>
      */
-    public static SColor[] LIMITED_PALETTE = {
+    public static final SColor[] LIMITED_PALETTE = {
             // 0                 1       2                 3      4            5                     6
             PURE_DARK_GRAY, CREAM, FLATTERY_BROWN, SILVER_GREY, RUST, PALE_CORNFLOWER_BLUE, INTERNATIONAL_ORANGE,
             // 7     8             9

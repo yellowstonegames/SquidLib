@@ -150,6 +150,7 @@ public class MimicFill {
      * @param random an RNG to use for the random components of this technique
      * @return a new 2D boolean array, width = size, height = size, mimicking the visual style of sample
      */
+    /*
     public static boolean[][] fill(boolean[][] sample, int size, double temperature, int iterations, RNG random) {
         boolean[][] field = new boolean[size][size];
         double[] weights = new double[1 << (N * N)];
@@ -205,7 +206,71 @@ public class MimicFill {
         }
         return field;
     }
+    */
 
+    public static boolean[][] fill(boolean[][] sample, int size, double temperature, int iterations, RNG random)
+    {
+        boolean[][] field = new boolean[size][size];
+        double[] weights = new double[1 << (N * N)];
+        for (int x = 0; x < sample.length; x++) {
+            for (int y = 0; y < sample[x].length; y++) {
+                Pattern[] p = new Pattern[8];
+                weights[Pattern.index(sample, x, y, N, false, false, false)]++;
+                weights[Pattern.index(sample, x, y, N, false, true, true)]++;
+                weights[Pattern.index(sample, x, y, N, true, true, false)]++;
+                weights[Pattern.index(sample, x, y, N, true, false, true)]++;
+                weights[Pattern.index(sample, x, y, N, true, false, false)]++;
+                weights[Pattern.index(sample, x, y, N, true, true, true)]++;
+                weights[Pattern.index(sample, x, y, N, false, true, false)]++;
+                weights[Pattern.index(sample, x, y, N, false, false, true)]++;
+            }
+        }
+        
+        for (int k = 0; k < weights.length; k++)
+        {
+            if (weights[k] <= 0)
+                weights[k] = 0.1;
+        }
+
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                field[x][y] = random.nextBoolean();
+            }
+        }
+        for (int k = 0; k < iterations * size * size; k++)
+        {
+            int x = random.nextIntHasty(size), y = random.nextIntHasty(size);
+
+            double q = 1;
+            for (int sy = y - N + 1; sy <= y + N - 1; sy++) for (int sx = x - N + 1; sx <= x + N - 1; sx++)
+            {
+                int ind = 0, difference = 0;
+                for (int dy = 0; dy < N; dy++) for (int dx = 0; dx < N; dx++)
+                {
+                    int X = sx + dx;
+                    if (X < 0) X += size;
+                    else if (X >= size) X -= size;
+
+                    int Y = sy + dy;
+                    if (Y < 0) Y += size;
+                    else if (Y >= size) Y -= size;
+
+                    boolean value = field[X][Y];
+                    int power = 1 << (dy * N + dx);
+                    ind += value ? power : 0;
+                    if (X == x && Y == y) difference = value ? power : -power;
+                }
+
+                q *= weights[ind - difference] / weights[ind];
+            }
+
+            if (q >= 1) { field[x][y] = !field[x][y]; continue; }
+            if (temperature != 1) q = Math.pow(q, 1.0 / temperature);
+            if (q > random.nextDouble()) field[x][y] = !field[x][y];
+        }
+
+        return field;
+    }
     private static class Pattern {
         public boolean[][] data;
 
@@ -245,10 +310,11 @@ public class MimicFill {
         }
 
         int index() {
-            int result = 0;
+            int result = 0, power = 1;
             for (int y = 0; y < data.length; y++) {
                 for (int x = 0; x < data.length; x++) {
-                    result += data[x][y] ? 1 << (y * data.length + x) : 0;
+                    result += data[data.length - 1 - x][data.length - 1 - y] ? power : 0;
+                    power <<= 1;
                 }
             }
             return result;
@@ -260,6 +326,32 @@ public class MimicFill {
                 for (int j = 0; j < size; j++) {
                     if (field[(x + i + field.length) % field.length][(y + j + field[0].length) % field[0].length])
                         result += 1 << (j * size + i);
+                }
+            }
+            return result;
+        }
+        
+        static int index(boolean[][] field, int x, int y, int size, boolean flipX, boolean flipY, boolean swap) {
+            int result = 0;
+            int width = field.length, height = field[0].length;
+            if(swap)
+            {
+                for (int i = 0; i < size; i++) {
+                    for (int j = 0; j < size; j++) {
+                        if(field[(height * 2 + (flipY ? -(y + j) : (y + j))) % height]
+                                [(width * 2 + (flipX ? -(x + i) : (x + i))) % width])
+                            result += 1 << (j * size + i);
+                    }
+                }
+            }
+            else 
+            {
+                for (int i = 0; i < size; i++) {
+                    for (int j = 0; j < size; j++) {
+                        if(field[(width * 2 + (flipX ? -(x + i) : (x + i))) % width]
+                                [(height * 2 + (flipY ? -(y + j) : (y + j))) % height])
+                            result += 1 << (j * size + i);
+                    }
                 }
             }
             return result;
