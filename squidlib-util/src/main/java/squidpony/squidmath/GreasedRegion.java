@@ -86,6 +86,7 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
 
     public GreasedRegion refill(boolean[][] map) {
         if (map != null && map.length > 0 && width == map.length && height == map[0].length) {
+            Arrays.fill(data, 0L);
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     data[x * ySections + (y >> 6)] |= (map[x][y] ? 1L : 0L) << (y & 63);
@@ -123,6 +124,7 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
 
     public GreasedRegion refill(char[][] map, char yes) {
         if (map != null && map.length > 0 && width == map.length && height == map[0].length) {
+            Arrays.fill(data, 0L);
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     data[x * ySections + (y >> 6)] |= ((map[x][y] == yes) ? 1L : 0L) << (y & 63);
@@ -171,6 +173,7 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
      * @param yes the char to consider "on" in the GreasedRegion
      */public GreasedRegion refill(String[] map, char yes) {
         if (map != null && map.length > 0 && height == map.length && width == map[0].length()) {
+            Arrays.fill(data, 0L);
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     data[x * ySections + (y >> 6)] |= ((map[y].charAt(x) == yes) ? 1L : 0L) << (y & 63);
@@ -208,6 +211,7 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
 
     public GreasedRegion refill(int[][] map, int yes) {
         if (map != null && map.length > 0 && width == map.length && height == map[0].length) {
+            Arrays.fill(data, 0L);
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     data[x * ySections + (y >> 6)] |= ((map[x][y] == yes) ? 1L : 0L) << (y & 63);
@@ -253,6 +257,7 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
     }
     public GreasedRegion refill(int[][] map, int lower, int upper) {
         if (map != null && map.length > 0 && width == map.length && height == map[0].length) {
+            Arrays.fill(data, 0L);
             int[] column;
             for (int x = 0; x < width; x++) {
                 column = map[x];
@@ -302,6 +307,7 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
     }
     public GreasedRegion refill(short[][] map, int lower, int upper) {
         if (map != null && map.length > 0 && width == map.length && height == map[0].length) {
+            Arrays.fill(data, 0L);
             short[] column;
             for (int x = 0; x < width; x++) {
                 column = map[x];
@@ -350,6 +356,7 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
 
     public GreasedRegion refill(double[][] map, double upperBound) {
         if (map != null && map.length > 0 && width == map.length && height == map[0].length) {
+            Arrays.fill(data, 0L);
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     if(map[x][y] <= upperBound) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
@@ -397,6 +404,7 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
     }
     public GreasedRegion refill(double[][] map, double lower, double upper) {
         if (map != null && map.length > 0 && width == map.length && height == map[0].length) {
+            Arrays.fill(data, 0L);
             double[] column;
             for (int x = 0; x < width; x++) {
                 column = map[x];
@@ -436,6 +444,7 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
 
     public GreasedRegion refill(boolean[] bits, int width, int height) {
         if (bits != null && bits.length > 0 && this.width == width && this.height == height) {
+            Arrays.fill(data, 0L);
             for (int a = 0, x = 0, y = 0; a < bits.length; a++, x = a / height, y = a % height) {
                 data[x * ySections + (y >> 6)] |= (bits[a] ? 1L : 0L) << (y & 63);
             }
@@ -515,7 +524,7 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
     }
 
     /**
-     * Constructor for an random GreasedRegion of the given width and height.
+     * Constructor for a random GreasedRegion of the given width and height.
      * GreasedRegions are mutable, so you can add to this with insert() or insertSeveral(), among others.
      * @param random a RandomnessSource (such as LightRNG or ThunderRNG) that this will use to generate its contents
      * @param width the maximum width for the GreasedRegion
@@ -537,6 +546,19 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
             }
         }
     }
+
+    /**
+     * Constructor for a random GreasedRegion of the given width and height.
+     * GreasedRegions are mutable, so you can add to this with insert() or insertSeveral(), among others.
+     * @param random a RandomnessSource (such as LightRNG or ThunderRNG) that this will use to generate its contents
+     * @param width the maximum width for the GreasedRegion
+     * @param height the maximum height for the GreasedRegion
+     */
+    public GreasedRegion(RNG random, int width, int height)
+    {
+        this(random.getRandomness(), width, height);
+    }
+
 
     /**
      * Copy constructor that takes another GreasedRegion and copies all of its data into this new one.
@@ -598,6 +620,50 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
         }
     }
 
+    /**
+     * Changes the width and/or height of this GreasedRegion, enlarging or shrinking starting at the edges where
+     * {@code x == width - 1} and {@code y == height - 1}. There isn't an especially efficient way to expand from the
+     * other edges, but this method is able to copy data in bulk, so at least this method should be very fast. You can
+     * use {@code insert(int, int, GreasedRegion)} if you want to place one GreasedRegion inside another one,
+     * potentially with a different size. The space created by any enlargement starts all off; shrinking doesn't change
+     * the existing data where it isn't removed by the shrink.
+     * @param widthChange the amount to change width by; can be positive, negative, or zero
+     * @param heightChange the amount to change height by; can be positive, negative, or zero
+     * @return this for chaining
+     */
+    public GreasedRegion alterBounds(int widthChange, int heightChange)
+    {
+        int newWidth = width + widthChange;
+        int newHeight = height + heightChange;
+        if(newWidth <= 0 || newHeight <= 0)
+        {
+            width = 0;
+            height = 0;
+            ySections= 0;
+            yEndMask = -1;
+            data = new long[0];
+            return this;
+        }
+        int newYSections = (newHeight + 63) >> 6;
+        yEndMask = -1L >>> (64 - (newHeight & 63));
+        long[] newData = new long[newWidth * newYSections];
+        for (int x = 0; x < width && x < newWidth; x++) {
+            for (int ys = 0; ys < ySections && ys < newYSections; ys++) {
+                newData[x * newYSections + ys] = data[x * ySections + ys];
+            }
+        }
+        ySections = newYSections;
+        width = newWidth;
+        height = newHeight;
+        data = newData;
+        if(ySections > 0 && yEndMask != -1) {
+            for (int a = ySections - 1; a < data.length; a += ySections) {
+                data[a] &= yEndMask;
+            }
+        }
+        return this;
+    }
+
     public GreasedRegion insert(int x, int y)
     {
         if(x < width && y < height && x >= 0 && y >= 0)
@@ -607,6 +673,123 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
     public GreasedRegion insert(Coord point)
     {
         return insert(point.x, point.y);
+    }
+
+
+    public GreasedRegion insert(int x, int y, GreasedRegion other)
+    {
+        if(other == null || other.ySections <= 0 || other.width <= 0)
+            return this;
+
+        int start = Math.max(0, x), len = Math.min(width, Math.min(other.width, other.width + x) - start),
+        oys = other.ySections, jump = (y == 0) ? 0 : (y < 0) ? -(1-y >>> 6) : (y-1 >>> 6), lily = (y < 0) ? -(-y & 63) : (y & 63),
+        originalJump = Math.max(0, -jump), alterJump = Math.max(0, jump);
+        long[] data2 = new long[other.width * ySections];
+
+        long prev, tmp;
+        if(oys == ySections) {
+            if (x < 0) {
+                for (int i = alterJump, oi = originalJump; i < ySections && oi < oys; i++, oi++) {
+                    for (int j = Math.max(0, -x), jj = 0; jj < len; j++, jj++) {
+                        data2[jj * ySections + i] = other.data[j * oys + oi];
+                    }
+                }
+            } else if (x > 0) {
+                for (int i = alterJump, oi = originalJump; i < ySections && oi < oys; i++, oi++) {
+                    for (int j = 0, jj = start; j < len; j++, jj++) {
+                        data2[jj * ySections + i] = other.data[j * ySections + oi];
+                    }
+                }
+            } else {
+                for (int i = alterJump, oi = originalJump; i < ySections && oi < oys; i++, oi++) {
+                    for (int j = 0; j < len; j++) {
+                        data2[j * ySections + i] = other.data[j * ySections + oi];
+                    }
+                }
+            }
+        }
+        else if(oys < ySections)
+        {
+            if (x < 0) {
+                for (int i = alterJump, oi = originalJump; i < ySections && oi < oys; i++, oi++) {
+                    for (int j = Math.max(0, -x), jj = 0; jj < len; j++, jj++) {
+                        data2[jj * ySections + i] = other.data[j * oys + oi];
+                    }
+                }
+            } else if (x > 0) {
+                for (int i = alterJump, oi = originalJump; i < ySections && oi < oys; i++, oi++) {// oi < oys - Math.max(0, jump)
+                    for (int j = 0, jj = start; j < len; j++, jj++) {
+                        data2[jj * ySections + i] = other.data[j * oys + oi];
+                    }
+                }
+            } else {
+                for (int i = alterJump, oi = originalJump; i < ySections && oi < oys; i++, oi++) {
+                    for (int j = 0; j < len; j++) {
+                        data2[j * ySections + i] = other.data[j * oys + oi];
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (x < 0) {
+                for (int i = alterJump, oi = originalJump; i < ySections && oi < oys; i++, oi++) {
+                    for (int j = Math.max(0, -x), jj = 0; jj < len; j++, jj++) {
+                        data2[jj * ySections + i] = other.data[j * oys + oi];
+                    }
+                }
+            } else if (x > 0) {
+                for (int i = alterJump, oi = originalJump; i < ySections && oi < oys; i++, oi++) {
+                    for (int j = 0, jj = start; j < len; j++, jj++) {
+                        data2[jj * ySections + i] = other.data[j * oys + oi];
+                    }
+                }
+            } else {
+                for (int i = alterJump, oi = originalJump; i < ySections && oi < oys; i++, oi++) {
+                    for (int j = 0; j < len; j++) {
+                        data2[j * ySections + i] = other.data[j * oys + oi];
+                    }
+                }
+            }
+        }
+
+        if(lily < 0) {
+            for (int i = start; i < len; i++) {
+                prev = 0L;
+                for (int j = 0; j < ySections; j++) {
+                    tmp = prev;
+                    prev = (data2[i * ySections + j] & ~(-1L << -lily)) << (64 + lily);
+                    data2[i * ySections + j] >>>= -lily;
+                    data2[i * ySections + j] |= tmp;
+                }
+            }
+        }
+        else if(lily > 0) {
+            for (int i = start; i < start + len; i++) {
+                prev = 0L;
+                for (int j = 0; j < ySections; j++) {
+                    tmp = prev;
+                    prev = (data2[i * ySections + j] & ~(-1L >>> lily)) >>> (64 - lily);
+                    data2[i * ySections + j] <<= lily;
+                    data2[i * ySections + j] |= tmp;
+                }
+            }
+        }
+        len = Math.min(width, start + len);
+        for (int i = start; i < len; i++) {
+            for (int j = 0; j < ySections; j++) {
+                data[i * ySections + j] |= data2[i * ySections + j];
+            }
+        }
+
+        if(ySections > 0 && yEndMask != -1) {
+            for (int a = ySections - 1; a < data.length; a += ySections) {
+                data[a] &= yEndMask;
+            }
+        }
+
+        return this;
+
     }
 
     public GreasedRegion insertSeveral(Coord... points)
@@ -651,7 +834,7 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
         {
             long startMask = -1L << (startY & 63),
                     endMask = -1L >>> (~endY & 63);
-            for (int a = startX * ySections + startSection; a <= endX * ySections; a += ySections) {
+            for (int a = startX * ySections + startSection; a <= endX * ySections + startSection; a += ySections) {
                 data[a] |= startMask;
             }
             if(endSection - startSection > 1)
@@ -662,7 +845,7 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
                     }
                 }
             }
-            for (int a = startX * ySections + endSection; a <= endX * ySections + ySections; a += ySections) {
+            for (int a = startX * ySections + endSection; a <= endX * ySections + endSection; a += ySections) {
                 data[a] |= endMask;
             }
         }
@@ -772,8 +955,33 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
 
     public GreasedRegion clear()
     {
-        for (int i = 0; i < data.length; i++) {
-            data[i] = 0;
+        Arrays.fill(data, 0L);
+        return this;
+    }
+    public GreasedRegion fill(boolean contents)
+    {
+        if(contents)
+        {
+            if(ySections > 0)
+            {
+                if(yEndMask == -1) {
+                    Arrays.fill(data, -1);
+                }
+                else
+                {
+                    for (int a = ySections - 1; a < data.length; a += ySections) {
+                        data[a] = yEndMask;
+                        for (int i = 0; i < ySections - 1; i++) {
+                            data[a-i-1] = -1;
+                        }
+                    }
+                }
+            }
+            //else... what, if ySections is 0 there's nothing to do
+        }
+        else
+        {
+            Arrays.fill(data, 0L);
         }
         return this;
     }
@@ -902,12 +1110,6 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
             for (int y = 0; y < ySections && y < other.ySections; y++) {
                 data[x * ySections + y] |= other.data[x * ySections + y];
             }
-            /*
-            for (int y = 0; y < height && y < other.height; y++) {
-                data[x * ySections + (y >> 6)] &= other.data[x * ySections + (y >> 6)];
-            }
-
-             */
         }
 
         if(ySections > 0 && yEndMask != -1) {
@@ -988,9 +1190,58 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
 
     public GreasedRegion translate(int x, int y)
     {
-        if(width < 2 || ySections <= 0 || (x == 0 && y == 0))
+        if(width < 1 || ySections <= 0 || (x == 0 && y == 0))
             return this;
+        int start = Math.max(0, x), len = Math.min(width, width + x) - start,
+                jump = (y == 0) ? 0 : (y < 0) ? -(1-y >>> 6) : (y-1 >>> 6), lily = (y < 0) ? -(-y & 63) : (y & 63),
+                originalJump = Math.max(0, -jump), alterJump = Math.max(0, jump);
+        long[] data2 = new long[width * ySections];
 
+        long prev, tmp;
+        if (x < 0) {
+                for (int i = alterJump, oi = originalJump; i < ySections && oi < ySections; i++, oi++) {
+                    for (int j = Math.max(0, -x), jj = 0; jj < len; j++, jj++) {
+                        data2[jj * ySections + i] = data[j * ySections + oi];
+                    }
+                }
+            } else if (x > 0) {
+                for (int i = alterJump, oi = originalJump; i < ySections && oi < ySections; i++, oi++) {
+                    for (int j = 0, jj = start; j < len; j++, jj++) {
+                        data2[jj * ySections + i] = data[j * ySections + oi];
+                    }
+                }
+            } else {
+                for (int i = alterJump, oi = originalJump; i < ySections && oi < ySections; i++, oi++) {
+                    for (int j = 0; j < len; j++) {
+                        data2[j * ySections + i] = data[j * ySections + oi];
+                    }
+                }
+            }
+
+        if(lily < 0) {
+            for (int i = start; i < len; i++) {
+                prev = 0L;
+                for (int j = 0; j < ySections; j++) {
+                    tmp = prev;
+                    prev = (data2[i * ySections + j] & ~(-1L << -lily)) << (64 + lily);
+                    data2[i * ySections + j] >>>= -lily;
+                    data2[i * ySections + j] |= tmp;
+                }
+            }
+        }
+        else if(lily > 0) {
+            for (int i = start; i < start + len; i++) {
+                prev = 0L;
+                for (int j = 0; j < ySections; j++) {
+                    tmp = prev;
+                    prev = (data2[i * ySections + j] & ~(-1L >>> lily)) >>> (64 - lily);
+                    data2[i * ySections + j] <<= lily;
+                    data2[i * ySections + j] |= tmp;
+                }
+            }
+        }
+
+        /*
         long[] data2 = new long[width * ySections];
         int start = Math.max(0, x), len = Math.min(width, width + x) - start;
         long prev, tmp;
@@ -1028,12 +1279,13 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
                 }
             }
         }
-
+        */
         if(ySections > 0 && yEndMask != -1) {
             for (int a = ySections - 1; a < data.length; a += ySections) {
                 data2[a] &= yEndMask;
             }
         }
+
         data = data2;
         return this;
     }
