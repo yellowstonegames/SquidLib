@@ -679,7 +679,6 @@ public class RNG implements Serializable {
         return (random.nextLong() & 0x1fffffffffffffL) * DOUBLE_UNIT;
         // consider changing to this in a future version; it will break compatibility but should be fast/correct
         //return Double.longBitsToDouble(0x3FFL << 52 | random.nextLong() >>> 12) - 1.0;
-
     }
 
     /**
