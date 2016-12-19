@@ -34,7 +34,7 @@ public class MimicFillTest {
                     true));
             System.out.println();
 //            DungeonUtility.debugPrint(DungeonUtility.hashesToLines(
-//                    DungeonUtility.wallWrap(gr.clear().refill(result).toChars())));
+//                    DungeonUtility.wallWrap(gr.refill(result).toChars())));
 //            System.out.println("\n\n*****************\n\n");
 
         }
@@ -53,7 +53,7 @@ public class MimicFillTest {
                     true));
             System.out.println();
 //            DungeonUtility.debugPrint(DungeonUtility.hashesToLines(
-//                    DungeonUtility.wallWrap(gr.clear().refill(solo, 200, 200).toChars())));
+//                    DungeonUtility.wallWrap(gr.refill(solo, 200, 200).toChars())));
 //            System.out.println("\n\n*****************\n\n");
 
         }

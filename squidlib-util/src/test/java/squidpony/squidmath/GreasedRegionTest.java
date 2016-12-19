@@ -61,7 +61,7 @@ public class GreasedRegionTest {
         GreasedRegion gr2 = new GreasedRegion(120, 120);
         gr2.insertRectangle(24 + 32, 24 + 32, 16, 16);
         assertTrue(gr.equals(gr2));
-        if(PRINTING) {
+        if(false) {
             srng.setState(0x123456789ABCDEFL);
             DungeonUtility.debugPrint(CoordPacker.unpackChar(CoordPacker.packSeveral(gr.singleRandom(srng),
                     gr.singleRandom(srng), gr.singleRandom(srng),
@@ -85,10 +85,10 @@ public class GreasedRegionTest {
             System.out.println();
             printRegion(dataDungeon);
             System.out.println("\nSOBOL:");
-            printRegion(gr = dataDungeon.copy().clear().insertSeveral(dataDungeon.separatedPortion(0.06)));
+            printRegion(gr = dataDungeon.copy().clear().insertSeveral(dataDungeon.separatedPortion(0.05)));
             System.out.println("expected size: " + (dataDungeon.size() * 3 / 50) + ", actual size " + gr.size());
             System.out.println("\nVDC_2:");
-            printRegion(gr2 = dataDungeon.copy().clear().insertSeveral(dataDungeon.quasiRandomSeparated(0.06)));
+            printRegion(gr2 = dataDungeon.copy().clear().insertSeveral(dataDungeon.quasiRandomSeparated(0.05)));
             System.out.println("expected size: " + (dataDungeon.size() * 3 / 50) + ", actual size " + gr2.size());
         }
         GreasedRegion g = new GreasedRegion(box);
@@ -99,6 +99,20 @@ public class GreasedRegionTest {
         GreasedRegion grr2 = new GreasedRegion(240, 240);
         grr2.insertRectangle(30, 30, 180, 180);
         assertTrue(grr.equals(grr2));
+//        GreasedRegion gri = new GreasedRegion(grr).insertRectangle(24, 52, 16, 16);
+//        GreasedRegion gri2 = new GreasedRegion(grr).insert(0, 28, box);
+//        printRegion(box);
+//        printRegion(gri);
+//        printRegion(gri2);
+//        assertTrue(gri.equals(gri2));
+        GreasedRegion bigOn = new GreasedRegion(152, 152).not();
+        GreasedRegion gri = new GreasedRegion(150, 150).insertRectangle(3, 4, 147, 146);
+        GreasedRegion gri2 = new GreasedRegion(150, 150).insert(3, 4, bigOn);
+        printRegion(box);
+        printRegion(gri);
+        printRegion(gri2);
+        assertTrue(gri.equals(gri2));
+
     }
 
     public static int FOV_RANGE = 12;
@@ -148,9 +162,16 @@ public class GreasedRegionTest {
         assertTrue(dataCross.equals(crossZeroTranslated));
         assertTrue(dataCross.equals(crossUnTranslated));
 
+        printRegion(dataCross);
         GreasedRegion crossBox = new GreasedRegion(dataCross).translate(25, 25).translate(-50, -50);
-        //printPacked(crossBox, 64, 64);
+        printRegion(crossBox);
         assertTrue(crossBox.equals(new GreasedRegion(unpack(rectangle(14, 14), 64, 64))));
+
+        GreasedRegion big = new GreasedRegion(150, 150).not().translate(100, 100);
+        GreasedRegion big2 = new GreasedRegion(150, 150).insertRectangle(100, 100, 50, 50);
+        printRegion(big);
+        printRegion(big2);
+        assertTrue(big.equals(big2));
     }
 
     @Test
