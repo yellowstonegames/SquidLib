@@ -29,13 +29,13 @@
 <span class="sourceLineNo">021</span>    Coord getBottomLeft();<a name="line.21"></a>
 <span class="sourceLineNo">022</span><a name="line.22"></a>
 <span class="sourceLineNo">023</span>    /**<a name="line.23"></a>
-<span class="sourceLineNo">024</span>     * @return The room's width (from {@link #getBottomLeft()). It is greater or<a name="line.24"></a>
+<span class="sourceLineNo">024</span>     * @return The room's width (from {@link #getBottomLeft()}). It is greater or<a name="line.24"></a>
 <span class="sourceLineNo">025</span>     * equal than 0.<a name="line.25"></a>
 <span class="sourceLineNo">026</span>     */<a name="line.26"></a>
 <span class="sourceLineNo">027</span>    int getWidth();<a name="line.27"></a>
 <span class="sourceLineNo">028</span><a name="line.28"></a>
 <span class="sourceLineNo">029</span>    /**<a name="line.29"></a>
-<span class="sourceLineNo">030</span>     * @return The room's height (from {@link #getBottomLeft()). It is greater<a name="line.30"></a>
+<span class="sourceLineNo">030</span>     * @return The room's height (from {@link #getBottomLeft()}). It is greater<a name="line.30"></a>
 <span class="sourceLineNo">031</span>     * or equal than 0.<a name="line.31"></a>
 <span class="sourceLineNo">032</span>     */<a name="line.32"></a>
 <span class="sourceLineNo">033</span>    int getHeight();<a name="line.33"></a>
@@ -229,7 +229,7 @@
 <span class="sourceLineNo">221</span>                 *            An array of (at least) size 4, to hold the 4 corners. It<a name="line.221"></a>
 <span class="sourceLineNo">222</span>                 *            is returned, except if {@code null} or too small, in which<a name="line.222"></a>
 <span class="sourceLineNo">223</span>                 *            case a fresh array is returned.<a name="line.223"></a>
-<span class="sourceLineNo">224</span>                 * @return<a name="line.224"></a>
+<span class="sourceLineNo">224</span>                 * @return buf, if it had length of at least 4, or a new 4-element array; it contains this Rectangle's 4 corners<a name="line.224"></a>
 <span class="sourceLineNo">225</span>                 */<a name="line.225"></a>
 <span class="sourceLineNo">226</span>                public static Coord[] getAll4Corners(Rectangle r, Coord[] buf) {<a name="line.226"></a>
 <span class="sourceLineNo">227</span>                        final Coord[] result = buf == null || buf.length &lt; 4 ? new Coord[4] : buf;<a name="line.227"></a>

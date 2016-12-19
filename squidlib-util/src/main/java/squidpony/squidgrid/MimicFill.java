@@ -66,6 +66,31 @@ public class MimicFill {
     }
 
     /**
+     * Comverts a 2D boolean array to a 2D char array, where false means the parameter no and true the parameter yes.
+     * @param sample a 1D boolean array that you want converted to a 2D char array
+     * @param width  the desired width of the 2D char array
+     * @param height the desired height of the 2D char array
+     * @param yes true in sample will be mapped to this char; usually '.'
+     * @param no false in sample will be mapped to this char; usually '#'
+     * @return a 2D char array containing only the chars yes and no
+     */
+    public static char[][] sampleToMap(boolean[] sample, int width, int height, char yes, char no)
+    {
+
+        if(sample == null || sample.length == 0 || width <= 0 || height <= 0)
+            return new char[0][0];
+        char[][] map = new char[width][height];
+        for (int x = 0, idx = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                map[x][y] = sample[idx++] ? yes : no;
+                if(idx >= sample.length)
+                    return map;
+            }
+        }
+        return map;
+    }
+
+    /**
      * Runs a logical OR on each pair of booleans at the same position in left and right, and returns the result of all
      * the OR operations as a 2D boolean array (using the minimum dimensions shared between left and right).
      * @param left a 2D boolean array
@@ -140,16 +165,6 @@ public class MimicFill {
         return sample2;
     }
 
-    /**
-     *
-     * @param sample a 2D boolean array to mimic visually; you can use mapToSample() if you have a 2D char array
-     * @param size the side length of the square boolean array to generate
-     * @param temperature typically 0.2 works well for this, but other numbers between 0 and 1 may work
-     * @param iterations typically 3-5 works well for this; lower numbers may have slight problems with quality,
-     *                   and higher numbers make this slightly slower
-     * @param random an RNG to use for the random components of this technique
-     * @return a new 2D boolean array, width = size, height = size, mimicking the visual style of sample
-     */
     /*
     public static boolean[][] fill(boolean[][] sample, int size, double temperature, int iterations, RNG random) {
         boolean[][] field = new boolean[size][size];
@@ -207,14 +222,38 @@ public class MimicFill {
         return field;
     }
     */
-
+    /**
+     * The main part of MimicFill; generates a 2D boolean array that mimics the patterns present in the 2D boolean array
+     * sample, but can produce a larger or smaller output 2D array than the sample.
+     * Takes a 2D boolean array as a "sample" (often one of the constants in this class), a size parameter for the
+     * generated square data (same width and height) and several other parameters that affect how closely the output
+     * will match the input. The temperature is how "agitated" or "chaotic" the changes to the map can be; 0.2 is
+     * definitely recommended for map-like data but other values (between 0 and 1, both exclusive) may be better fits
+     * for certain kinds of output. The iterations parameter should usually be between 3 and 5, with higher values
+     * taking longer but fitting more closely; values over 5 are barely different from 5 here. This also takes an RNG,
+     * and because it queries it very frequently, a fast RNG is ideal; the default RandomnessSource used by RNG
+     * (LightRNG) is fine if you aren't generating many very-large results, but if you are, then passing a
+     * {@link squidpony.squidmath.XoRoRNG} as the RandomnessSource parameter to RNG may give better results regarding
+     * quality since its period (how many random numbers it can generate before repeating a cycle) is much larger, and
+     * its speed is essentially a tie with LightRNG. For some reason, {@link squidpony.squidmath.ThunderRNG} doesn't
+     * perform as well here as it sometimes does, and because the period of its less-significant bits is lower than its
+     * full period, it may show patterns sooner than XoRoRNG. While {@link squidpony.squidmath.LongPeriodRNG} is
+     * probably fast enough to not have problems (and its period is massive), slower, more "secure" generators like
+     * {@link squidpony.squidmath.IsaacRNG} are probably not a good choice here.
+     * @param sample a 2D boolean array to mimic visually; you can use mapToSample() if you have a 2D char array
+     * @param size the side length of the square boolean array to generate
+     * @param temperature typically 0.2 works well for this, but other numbers between 0 and 1 may work
+     * @param iterations typically 3-5 works well for this; lower numbers may have slight problems with quality,
+     *                   and higher numbers make this slightly slower
+     * @param random an RNG to use for the random components of this technique
+     * @return a new 2D boolean array, width = size, height = size, mimicking the visual style of sample
+     */
     public static boolean[][] fill(boolean[][] sample, int size, double temperature, int iterations, RNG random)
     {
         boolean[][] field = new boolean[size][size];
         double[] weights = new double[1 << (N * N)];
         for (int x = 0; x < sample.length; x++) {
             for (int y = 0; y < sample[x].length; y++) {
-                Pattern[] p = new Pattern[8];
                 weights[Pattern.index(sample, x, y, N, false, false, false)]++;
                 weights[Pattern.index(sample, x, y, N, false, true, true)]++;
                 weights[Pattern.index(sample, x, y, N, true, true, false)]++;
@@ -225,48 +264,172 @@ public class MimicFill {
                 weights[Pattern.index(sample, x, y, N, false, false, true)]++;
             }
         }
-        
+
         for (int k = 0; k < weights.length; k++)
         {
             if (weights[k] <= 0)
                 weights[k] = 0.1;
         }
-
+        long randomBits;
+        for (int o = (size * size) + 63 >> 6, x = 0, y = 0; o > 0; o--) {
+            randomBits = random.nextLong();
+            for (long a = 1; a != 0; a <<= 1) {
+                field[x][y++] = (randomBits & a) == 0;
+                if(y >= size)
+                {
+                    x++;
+                    y = 0;
+                }
+            }
+        }
+        /*
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
                 field[x][y] = random.nextBoolean();
             }
-        }
+        }*/
         for (int k = 0; k < iterations * size * size; k++)
         {
             int x = random.nextIntHasty(size), y = random.nextIntHasty(size);
 
             double q = 1;
-            for (int sy = y - N + 1; sy <= y + N - 1; sy++) for (int sx = x - N + 1; sx <= x + N - 1; sx++)
+            for (int sy = y - N + 1; sy <= y + N - 1; sy++)
             {
-                int ind = 0, difference = 0;
-                for (int dy = 0; dy < N; dy++) for (int dx = 0; dx < N; dx++)
+                for (int sx = x - N + 1; sx <= x + N - 1; sx++)
                 {
-                    int X = sx + dx;
-                    if (X < 0) X += size;
-                    else if (X >= size) X -= size;
+                    int ind = 0, difference = 0;
+                    for (int dy = 0; dy < N; dy++)
+                    {
+                        for (int dx = 0; dx < N; dx++)
+                        {
+                            int X = sx + dx;
+                            if (X < 0) X += size;
+                            else if (X >= size) X -= size;
 
-                    int Y = sy + dy;
-                    if (Y < 0) Y += size;
-                    else if (Y >= size) Y -= size;
+                            int Y = sy + dy;
+                            if (Y < 0) Y += size;
+                            else if (Y >= size) Y -= size;
 
-                    boolean value = field[X][Y];
-                    int power = 1 << (dy * N + dx);
-                    ind += value ? power : 0;
-                    if (X == x && Y == y) difference = value ? power : -power;
+                            boolean value = field[X][Y];
+                            int power = 1 << (dy * N + dx);
+                            ind += value ? power : 0;
+                            if (X == x && Y == y) difference = value ? power : -power;
+                        }
+                    }
+
+                    q *= weights[ind - difference] / weights[ind];
                 }
-
-                q *= weights[ind - difference] / weights[ind];
             }
 
-            if (q >= 1) { field[x][y] = !field[x][y]; continue; }
+            if (q >= 1) { field[x][y] ^= true; continue; }
             if (temperature != 1) q = Math.pow(q, 1.0 / temperature);
-            if (q > random.nextDouble()) field[x][y] = !field[x][y];
+            field[x][y] ^= (q > random.nextDouble());
+        }
+
+        return field;
+    }
+
+    /**
+     * The main part of MimicFill; generates a 1D boolean array that, when used correctly, mimics the patterns present
+     * in the 2D boolean array sample, but can produce a larger or smaller output 1D array than the sample. Using the
+     * output correctly mostly involves passing the 1D boolean array with the correct width and height settings to
+     * {@link #sampleToMap(boolean[], int, int, char, char)} to get a 2D char array or producing a GreasedRegion with it
+     * using {@link squidpony.squidmath.GreasedRegion#GreasedRegion(boolean[], int, int)}. Both the width and height
+     * used to interpret the 1D array as a 2D array should be equal to the size parameter passed here. The main reason
+     * you would prefer this method over {@link #fill(boolean[][], int, double, int, RNG)} is that this overload is
+     * somewhat faster due to slightly less-frequent RNG calls and a lot less nested array reading and writing.
+     * <br>
+     * Takes a 2D boolean array as a "sample" (often one of the constants in this class), a size parameter for the
+     * generated square data (same width and height) and several other parameters that affect how closely the output
+     * will match the input. The temperature is how "agitated" or "chaotic" the changes to the map can be; 0.2 is
+     * definitely recommended for map-like data but other values (between 0 and 1, both exclusive) may be better fits
+     * for certain kinds of output. The iterations parameter should usually be between 3 and 5, with higher values
+     * taking longer but fitting more closely; values over 5 are barely different from 5 here. This also takes an RNG,
+     * and because it queries it very frequently, a fast RNG is ideal; the default RandomnessSource used by RNG
+     * (LightRNG) is fine if you aren't generating many very-large results, but if you are, then passing a
+     * {@link squidpony.squidmath.XoRoRNG} as the RandomnessSource parameter to RNG may give better results regarding
+     * quality since its period (how many random numbers it can generate before repeating a cycle) is much larger, and
+     * its speed is essentially a tie with LightRNG. For some reason, {@link squidpony.squidmath.ThunderRNG} doesn't
+     * perform as well here as it sometimes does, and because the period of its less-significant bits is lower than its
+     * full period, it may show patterns sooner than XoRoRNG. While {@link squidpony.squidmath.LongPeriodRNG} is
+     * probably fast enough to not have problems (and its period is massive), slower, more "secure" generators like
+     * {@link squidpony.squidmath.IsaacRNG} are probably not a good choice here.
+     * @param sample a 2D boolean array to mimic visually; you can use mapToSample() if you have a 2D char array
+     * @param size the side length of the square boolean array to generate
+     * @param temperature typically 0.2 works well for this, but other numbers between 0 and 1 may work
+     * @param iterations typically 3-5 works well for this; lower numbers may have slight problems with quality,
+     *                   and higher numbers make this slightly slower
+     * @param random an RNG to use for the random components of this technique
+     * @return a new 1D boolean array, length = size * size, mimicking the visual style of sample when used as 2D data
+     */
+    public static boolean[] fillSolo(boolean[][] sample, int size, double temperature, int iterations, RNG random)
+    {
+        int fieldLen = size*size;
+        boolean[] field = new boolean[fieldLen];
+        double[] weights = new double[1 << (N * N)];
+        for (int x = 0; x < sample.length; x++) {
+            for (int y = 0; y < sample[x].length; y++) {
+                weights[Pattern.index(sample, x, y, N, false, false, false)]++;
+                weights[Pattern.index(sample, x, y, N, false, true, true)]++;
+                weights[Pattern.index(sample, x, y, N, true, true, false)]++;
+                weights[Pattern.index(sample, x, y, N, true, false, true)]++;
+                weights[Pattern.index(sample, x, y, N, true, false, false)]++;
+                weights[Pattern.index(sample, x, y, N, true, true, true)]++;
+                weights[Pattern.index(sample, x, y, N, false, true, false)]++;
+                weights[Pattern.index(sample, x, y, N, false, false, true)]++;
+            }
+        }
+
+        for (int k = 0; k < weights.length; k++)
+        {
+            if (weights[k] <= 0)
+                weights[k] = 0.1;
+        }
+        long randomBits;
+        for (int o = fieldLen + 63 >> 6, idx = 0; o > 0; o--) {
+            randomBits = random.nextLong();
+            for (long a = 1; a != 0; a <<= 1) {
+                field[idx++] = (randomBits & a) == 0;
+            }
+        }
+        for (int k = 0; k < iterations * fieldLen; k++)
+        {
+            final int r = random.nextIntHasty(fieldLen);
+            final int x = r % size, y = r / size;
+
+
+            double q = 1;
+            for (int sy = y - N + 1; sy <= y + N - 1; sy++)
+            {
+                for (int sx = x - N + 1; sx <= x + N - 1; sx++)
+                {
+                    int ind = 0, difference = 0;
+                    for (int dy = 0; dy < N; dy++)
+                    {
+                        for (int dx = 0; dx < N; dx++)
+                        {
+                            int X = sx + dx;
+                            if (X < 0) X += size;
+                            else if (X >= size) X -= size;
+
+                            int Y = sy + dy;
+                            if (Y < 0) Y += size;
+                            else if (Y >= size) Y -= size;
+
+                            boolean value = field[X + size * Y];
+                            int power = 1 << (dy * N + dx);
+                            ind += value ? power : 0;
+                            if (X == x && Y == y) difference = value ? power : -power;
+                        }
+                    }
+
+                    q *= weights[ind - difference] / weights[ind];
+                }
+            }
+
+            if (q >= 1) { field[r] ^= true; continue; }
+            if (temperature != 1) q = Math.pow(q, 1.0 / temperature);
+            field[r] ^= q > random.nextDouble();
         }
 
         return field;
