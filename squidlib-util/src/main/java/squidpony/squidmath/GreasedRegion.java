@@ -2400,6 +2400,29 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         }
         return points;
     }
+    public int[] asEncoded()
+    {
+        int ct = 0, idx = 0;
+        for (int i = 0; i < width * ySections; i++) {
+            ct += Long.bitCount(data[i]);
+        }
+        int[] points = new int[ct];
+        long t, w;
+        for (int x = 0; x < width; x++) {
+            for (int s = 0; s < ySections; s++) {
+                if((t = data[x * ySections + s]) != 0)
+                {
+                    w = Long.lowestOneBit(t);
+                    while (w != 0) {
+                        points[idx++] = Coord.pureEncode(x, (s << 6) | Long.numberOfTrailingZeros(w));
+                        t ^= w;
+                        w = Long.lowestOneBit(t);
+                    }
+                }
+            }
+        }
+        return points;
+    }
 
     /**
      * @return All cells in this zone.

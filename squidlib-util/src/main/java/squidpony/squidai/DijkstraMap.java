@@ -560,6 +560,34 @@ public class DijkstraMap implements Serializable {
 
         goals.put(pt.encode(), GOAL);
     }
+    /**
+     * Marks many cells as goals for pathfinding, ignoring cells in walls or unreachable areas. More efficient than
+     * a loop that calls {@link #setGoal(Coord)} over and over, since this doesn't need to do a bounds check. The
+     * GreasedRegion passed to this should have the same width and height as this DijkstraMap.
+     *
+     * @param pts a GreasedRegion containing "on" cells to treat as goals; should have the same width and height as this
+     */
+    public void setGoals(GreasedRegion pts) {
+        if (!initialized || pts.width > width || pts.height > height) return;
+        int[] enc = new GreasedRegion(physicalMap, FLOOR).and(pts).asEncoded();
+        double[] gls = new double[enc.length];
+        Arrays.fill(gls, GOAL);
+        goals.putAll(enc, gls);
+    }
+
+    /**
+     * Marks many cells as goals for pathfinding, ignoring cells in walls or unreachable areas. Simply loops through
+     * pts and calls {@link #setGoal(Coord)} on each Coord in pts.
+     * If you have a GreasedRegion, you should use it with {@link #setGoals(GreasedRegion)}, which is faster.
+     * @param pts any Iterable of Coord, which can be a List, Set, Queue, etc. of Coords to mark as goals
+     */
+    public void setGoals(Iterable<Coord> pts) {
+        if (!initialized) return;
+        for(Coord c : pts)
+        {
+            setGoal(c);
+        }
+    }
 
     /**
      * Marks a cell's cost for pathfinding as cost, unless the cell is a wall or unreachable area (then it always sets
