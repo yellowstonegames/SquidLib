@@ -51,7 +51,7 @@ import java.util.*;
  * Created by Tommy Ettinger on 6/24/2016.
  */
 @Beta
-public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Serializable, MutableZone {
+public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, Serializable, MutableZone {
     private static final long serialVersionUID = 0;
     private static final SobolQRNG sobol = new SobolQRNG(2);
 
@@ -953,7 +953,7 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
         return removeSeveral(Radius.CIRCLE.pointsInside(center, radius, false, width, height));
     }
 
-    public GreasedRegion clear()
+    public GreasedRegion empty()
     {
         Arrays.fill(data, 0L);
         return this;
@@ -2031,7 +2031,7 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
         Coord fst = first();
         GreasedRegion remaining = new GreasedRegion(this), filled = new GreasedRegion(this);
         while (fst.x >= 0) {
-            filled.clear().insert(fst).flood(remaining, 8);
+            filled.empty().insert(fst).flood(remaining, 8);
             if(filled.size() <= 4)
                 andNot(filled);
             remaining.andNot(filled);
@@ -2771,8 +2771,100 @@ public class GreasedRegion extends Zone.Skeleton implements Iterable<Coord>, Ser
     }
 
     @Override
+    public boolean contains(Object o) {
+        if(o instanceof Coord)
+            return contains((Coord)o);
+        return false;
+    }
+
+    @Override
     public Iterator<Coord> iterator() {
         return new GRIterator();
+    }
+
+    @Override
+    public Object[] toArray() {
+        return new Object[0];
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T[] toArray(T[] a) {
+        if(a instanceof Coord[])
+            return (a = (T[])asCoords());
+        return a;
+    }
+
+    @Override
+    public boolean add(Coord coord) {
+        if(contains(coord))
+            return false;
+        insert(coord);
+        return true;
+    }
+    @Override
+    public void clear()
+    {
+        Arrays.fill(data, 0L);
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        if(o instanceof Coord)
+        {
+            if(contains((Coord)o))
+            {
+                remove((Coord)o);
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        for(Object o : c)
+        {
+            if(!contains(o))
+                return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends Coord> c) {
+        boolean changed = false;
+        for(Coord co : c)
+        {
+            changed |= add(co);
+        }
+        return changed;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        boolean changed = false;
+        for(Object o : c)
+        {
+            changed |= remove(o);
+        }
+        return changed;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        GreasedRegion g2 = new GreasedRegion(width, height);
+        for(Object o : c)
+        {
+            if(contains(o) && o instanceof Coord)
+            {
+                g2.add((Coord)o);
+            }
+        }
+        boolean changed = equals(g2);
+        remake(g2);
+        return changed;
     }
 
     /**

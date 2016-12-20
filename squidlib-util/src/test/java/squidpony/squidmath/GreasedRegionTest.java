@@ -85,10 +85,10 @@ public class GreasedRegionTest {
             System.out.println();
             printRegion(dataDungeon);
             System.out.println("\nSOBOL:");
-            printRegion(gr = dataDungeon.copy().clear().insertSeveral(dataDungeon.separatedPortion(0.05)));
+            printRegion(gr = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedPortion(0.05)));
             System.out.println("expected size: " + (dataDungeon.size() * 3 / 50) + ", actual size " + gr.size());
             System.out.println("\nVDC_2:");
-            printRegion(gr2 = dataDungeon.copy().clear().insertSeveral(dataDungeon.quasiRandomSeparated(0.05)));
+            printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.quasiRandomSeparated(0.05)));
             System.out.println("expected size: " + (dataDungeon.size() * 3 / 50) + ", actual size " + gr2.size());
         }
         GreasedRegion g = new GreasedRegion(box);

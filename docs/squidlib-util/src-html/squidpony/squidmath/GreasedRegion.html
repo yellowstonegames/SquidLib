@@ -59,7 +59,7 @@
 <span class="sourceLineNo">051</span> * Created by Tommy Ettinger on 6/24/2016.<a name="line.51"></a>
 <span class="sourceLineNo">052</span> */<a name="line.52"></a>
 <span class="sourceLineNo">053</span>@Beta<a name="line.53"></a>
-<span class="sourceLineNo">054</span>public class GreasedRegion extends Zone.Skeleton implements Iterable&lt;Coord&gt;, Serializable, MutableZone {<a name="line.54"></a>
+<span class="sourceLineNo">054</span>public class GreasedRegion extends Zone.Skeleton implements Collection&lt;Coord&gt;, Serializable, MutableZone {<a name="line.54"></a>
 <span class="sourceLineNo">055</span>    private static final long serialVersionUID = 0;<a name="line.55"></a>
 <span class="sourceLineNo">056</span>    private static final SobolQRNG sobol = new SobolQRNG(2);<a name="line.56"></a>
 <span class="sourceLineNo">057</span><a name="line.57"></a>
@@ -961,7 +961,7 @@
 <span class="sourceLineNo">953</span>        return removeSeveral(Radius.CIRCLE.pointsInside(center, radius, false, width, height));<a name="line.953"></a>
 <span class="sourceLineNo">954</span>    }<a name="line.954"></a>
 <span class="sourceLineNo">955</span><a name="line.955"></a>
-<span class="sourceLineNo">956</span>    public GreasedRegion clear()<a name="line.956"></a>
+<span class="sourceLineNo">956</span>    public GreasedRegion empty()<a name="line.956"></a>
 <span class="sourceLineNo">957</span>    {<a name="line.957"></a>
 <span class="sourceLineNo">958</span>        Arrays.fill(data, 0L);<a name="line.958"></a>
 <span class="sourceLineNo">959</span>        return this;<a name="line.959"></a>
@@ -2039,7 +2039,7 @@
 <span class="sourceLineNo">2031</span>        Coord fst = first();<a name="line.2031"></a>
 <span class="sourceLineNo">2032</span>        GreasedRegion remaining = new GreasedRegion(this), filled = new GreasedRegion(this);<a name="line.2032"></a>
 <span class="sourceLineNo">2033</span>        while (fst.x &gt;= 0) {<a name="line.2033"></a>
-<span class="sourceLineNo">2034</span>            filled.clear().insert(fst).flood(remaining, 8);<a name="line.2034"></a>
+<span class="sourceLineNo">2034</span>            filled.empty().insert(fst).flood(remaining, 8);<a name="line.2034"></a>
 <span class="sourceLineNo">2035</span>            if(filled.size() &lt;= 4)<a name="line.2035"></a>
 <span class="sourceLineNo">2036</span>                andNot(filled);<a name="line.2036"></a>
 <span class="sourceLineNo">2037</span>            remaining.andNot(filled);<a name="line.2037"></a>
@@ -2779,83 +2779,175 @@
 <span class="sourceLineNo">2771</span>    }<a name="line.2771"></a>
 <span class="sourceLineNo">2772</span><a name="line.2772"></a>
 <span class="sourceLineNo">2773</span>    @Override<a name="line.2773"></a>
-<span class="sourceLineNo">2774</span>    public Iterator&lt;Coord&gt; iterator() {<a name="line.2774"></a>
-<span class="sourceLineNo">2775</span>        return new GRIterator();<a name="line.2775"></a>
-<span class="sourceLineNo">2776</span>    }<a name="line.2776"></a>
-<span class="sourceLineNo">2777</span><a name="line.2777"></a>
-<span class="sourceLineNo">2778</span>    /**<a name="line.2778"></a>
-<span class="sourceLineNo">2779</span>     * Randomly removes points from a GreasedRegion, with larger values for preservation keeping more of the existing<a name="line.2779"></a>
-<span class="sourceLineNo">2780</span>     * shape intact. If preservation is 1, roughly 1/2 of all points will be removed; if 2, roughly 1/4, if 3, roughly<a name="line.2780"></a>
-<span class="sourceLineNo">2781</span>     * 1/8, and so on, so that preservation can be thought of as a negative exponent of 2. This allows both negative<a name="line.2781"></a>
-<span class="sourceLineNo">2782</span>     * and positive values for preservation, and treats 2 and -2 the same for preservation.<a name="line.2782"></a>
-<span class="sourceLineNo">2783</span>     * @param rng used to determine random factors<a name="line.2783"></a>
-<span class="sourceLineNo">2784</span>     * @param preservation roughly what degree of points to remove; removes about {@code 1/(2^preservation)} points (assuming positive)<a name="line.2784"></a>
-<span class="sourceLineNo">2785</span>     * @return a randomly modified change to this GreasedRegion<a name="line.2785"></a>
-<span class="sourceLineNo">2786</span>     */<a name="line.2786"></a>
-<span class="sourceLineNo">2787</span>    public GreasedRegion deteriorate(RNG rng, int preservation) {<a name="line.2787"></a>
-<span class="sourceLineNo">2788</span>        if(rng == null || width &lt;= 2 || ySections &lt;= 0 || preservation == 0)<a name="line.2788"></a>
-<span class="sourceLineNo">2789</span>            return this;<a name="line.2789"></a>
-<span class="sourceLineNo">2790</span>        preservation = Math.abs(preservation);<a name="line.2790"></a>
-<span class="sourceLineNo">2791</span>        long mash;<a name="line.2791"></a>
-<span class="sourceLineNo">2792</span>        for (int i = 0; i &lt; width * ySections; i++) {<a name="line.2792"></a>
-<span class="sourceLineNo">2793</span>            mash = rng.nextLong();<a name="line.2793"></a>
-<span class="sourceLineNo">2794</span>            for (int j = i; j &lt; preservation; j++) {<a name="line.2794"></a>
-<span class="sourceLineNo">2795</span>                mash |= rng.nextLong();<a name="line.2795"></a>
-<span class="sourceLineNo">2796</span>            }<a name="line.2796"></a>
-<span class="sourceLineNo">2797</span>            data[i] &amp;= mash;<a name="line.2797"></a>
-<span class="sourceLineNo">2798</span>        }<a name="line.2798"></a>
-<span class="sourceLineNo">2799</span>        return this;<a name="line.2799"></a>
-<span class="sourceLineNo">2800</span>    }<a name="line.2800"></a>
-<span class="sourceLineNo">2801</span><a name="line.2801"></a>
-<span class="sourceLineNo">2802</span>    /**<a name="line.2802"></a>
-<span class="sourceLineNo">2803</span>     * Inverts the on/off state of the cell with the given x and y.<a name="line.2803"></a>
-<span class="sourceLineNo">2804</span>     * @param x the x position of the cell to flip<a name="line.2804"></a>
-<span class="sourceLineNo">2805</span>     * @param y the y position of the cell to flip<a name="line.2805"></a>
-<span class="sourceLineNo">2806</span>     * @return this for chaining, modified<a name="line.2806"></a>
-<span class="sourceLineNo">2807</span>     */<a name="line.2807"></a>
-<span class="sourceLineNo">2808</span>    public GreasedRegion flip(int x, int y) {<a name="line.2808"></a>
-<span class="sourceLineNo">2809</span>        if(x &gt;= 0 &amp;&amp; y &gt;= 0 &amp;&amp; x &lt; width &amp;&amp; y &lt; height &amp;&amp; ySections &gt; 0)<a name="line.2809"></a>
-<span class="sourceLineNo">2810</span>            data[x * ySections + (y &gt;&gt; 6)] ^= (1L &lt;&lt; (y &amp; 63));<a name="line.2810"></a>
-<span class="sourceLineNo">2811</span>        return this;<a name="line.2811"></a>
-<span class="sourceLineNo">2812</span><a name="line.2812"></a>
-<span class="sourceLineNo">2813</span>    }<a name="line.2813"></a>
-<span class="sourceLineNo">2814</span><a name="line.2814"></a>
-<span class="sourceLineNo">2815</span>    public class GRIterator implements Iterator&lt;Coord&gt;<a name="line.2815"></a>
-<span class="sourceLineNo">2816</span>    {<a name="line.2816"></a>
-<span class="sourceLineNo">2817</span>        public int index = 0;<a name="line.2817"></a>
-<span class="sourceLineNo">2818</span>        private int limit;<a name="line.2818"></a>
-<span class="sourceLineNo">2819</span>        private long w, i = 0;<a name="line.2819"></a>
-<span class="sourceLineNo">2820</span>        public GRIterator()<a name="line.2820"></a>
-<span class="sourceLineNo">2821</span>        {<a name="line.2821"></a>
-<span class="sourceLineNo">2822</span>            limit = size();<a name="line.2822"></a>
-<span class="sourceLineNo">2823</span>        }<a name="line.2823"></a>
-<span class="sourceLineNo">2824</span>        @Override<a name="line.2824"></a>
-<span class="sourceLineNo">2825</span>        public boolean hasNext() {<a name="line.2825"></a>
-<span class="sourceLineNo">2826</span>            return index &lt; limit;<a name="line.2826"></a>
-<span class="sourceLineNo">2827</span>        }<a name="line.2827"></a>
-<span class="sourceLineNo">2828</span><a name="line.2828"></a>
-<span class="sourceLineNo">2829</span>        @Override<a name="line.2829"></a>
-<span class="sourceLineNo">2830</span>        public Coord next() {<a name="line.2830"></a>
-<span class="sourceLineNo">2831</span>            i = 0L;<a name="line.2831"></a>
-<span class="sourceLineNo">2832</span>            for (int x = 0; x &lt; width; x++) {<a name="line.2832"></a>
-<span class="sourceLineNo">2833</span>                for (int s = 0; s &lt; ySections; s++) {<a name="line.2833"></a>
-<span class="sourceLineNo">2834</span>                    if ((w = Long.lowestOneBit(data[x * ySections + s])) != 0 &amp;&amp; i++ &gt;= index) {<a name="line.2834"></a>
-<span class="sourceLineNo">2835</span>                        if(index++ &lt; limit)<a name="line.2835"></a>
-<span class="sourceLineNo">2836</span>                            return Coord.get(x, (s &lt;&lt; 6) | Long.numberOfTrailingZeros(w));<a name="line.2836"></a>
-<span class="sourceLineNo">2837</span>                        else<a name="line.2837"></a>
-<span class="sourceLineNo">2838</span>                            return null;<a name="line.2838"></a>
-<span class="sourceLineNo">2839</span>                    }<a name="line.2839"></a>
-<span class="sourceLineNo">2840</span>                }<a name="line.2840"></a>
-<span class="sourceLineNo">2841</span>            }<a name="line.2841"></a>
-<span class="sourceLineNo">2842</span>            return null;<a name="line.2842"></a>
-<span class="sourceLineNo">2843</span>        }<a name="line.2843"></a>
+<span class="sourceLineNo">2774</span>    public boolean contains(Object o) {<a name="line.2774"></a>
+<span class="sourceLineNo">2775</span>        if(o instanceof Coord)<a name="line.2775"></a>
+<span class="sourceLineNo">2776</span>            return contains((Coord)o);<a name="line.2776"></a>
+<span class="sourceLineNo">2777</span>        return false;<a name="line.2777"></a>
+<span class="sourceLineNo">2778</span>    }<a name="line.2778"></a>
+<span class="sourceLineNo">2779</span><a name="line.2779"></a>
+<span class="sourceLineNo">2780</span>    @Override<a name="line.2780"></a>
+<span class="sourceLineNo">2781</span>    public Iterator&lt;Coord&gt; iterator() {<a name="line.2781"></a>
+<span class="sourceLineNo">2782</span>        return new GRIterator();<a name="line.2782"></a>
+<span class="sourceLineNo">2783</span>    }<a name="line.2783"></a>
+<span class="sourceLineNo">2784</span><a name="line.2784"></a>
+<span class="sourceLineNo">2785</span>    @Override<a name="line.2785"></a>
+<span class="sourceLineNo">2786</span>    public Object[] toArray() {<a name="line.2786"></a>
+<span class="sourceLineNo">2787</span>        return new Object[0];<a name="line.2787"></a>
+<span class="sourceLineNo">2788</span>    }<a name="line.2788"></a>
+<span class="sourceLineNo">2789</span><a name="line.2789"></a>
+<span class="sourceLineNo">2790</span>    @SuppressWarnings("unchecked")<a name="line.2790"></a>
+<span class="sourceLineNo">2791</span>    @Override<a name="line.2791"></a>
+<span class="sourceLineNo">2792</span>    public &lt;T&gt; T[] toArray(T[] a) {<a name="line.2792"></a>
+<span class="sourceLineNo">2793</span>        if(a instanceof Coord[])<a name="line.2793"></a>
+<span class="sourceLineNo">2794</span>            return (a = (T[])asCoords());<a name="line.2794"></a>
+<span class="sourceLineNo">2795</span>        return a;<a name="line.2795"></a>
+<span class="sourceLineNo">2796</span>    }<a name="line.2796"></a>
+<span class="sourceLineNo">2797</span><a name="line.2797"></a>
+<span class="sourceLineNo">2798</span>    @Override<a name="line.2798"></a>
+<span class="sourceLineNo">2799</span>    public boolean add(Coord coord) {<a name="line.2799"></a>
+<span class="sourceLineNo">2800</span>        if(contains(coord))<a name="line.2800"></a>
+<span class="sourceLineNo">2801</span>            return false;<a name="line.2801"></a>
+<span class="sourceLineNo">2802</span>        insert(coord);<a name="line.2802"></a>
+<span class="sourceLineNo">2803</span>        return true;<a name="line.2803"></a>
+<span class="sourceLineNo">2804</span>    }<a name="line.2804"></a>
+<span class="sourceLineNo">2805</span>    @Override<a name="line.2805"></a>
+<span class="sourceLineNo">2806</span>    public void clear()<a name="line.2806"></a>
+<span class="sourceLineNo">2807</span>    {<a name="line.2807"></a>
+<span class="sourceLineNo">2808</span>        Arrays.fill(data, 0L);<a name="line.2808"></a>
+<span class="sourceLineNo">2809</span>    }<a name="line.2809"></a>
+<span class="sourceLineNo">2810</span><a name="line.2810"></a>
+<span class="sourceLineNo">2811</span>    @Override<a name="line.2811"></a>
+<span class="sourceLineNo">2812</span>    public boolean remove(Object o) {<a name="line.2812"></a>
+<span class="sourceLineNo">2813</span>        if(o instanceof Coord)<a name="line.2813"></a>
+<span class="sourceLineNo">2814</span>        {<a name="line.2814"></a>
+<span class="sourceLineNo">2815</span>            if(contains((Coord)o))<a name="line.2815"></a>
+<span class="sourceLineNo">2816</span>            {<a name="line.2816"></a>
+<span class="sourceLineNo">2817</span>                remove((Coord)o);<a name="line.2817"></a>
+<span class="sourceLineNo">2818</span>                return true;<a name="line.2818"></a>
+<span class="sourceLineNo">2819</span>            }<a name="line.2819"></a>
+<span class="sourceLineNo">2820</span>            return false;<a name="line.2820"></a>
+<span class="sourceLineNo">2821</span>        }<a name="line.2821"></a>
+<span class="sourceLineNo">2822</span>        return false;<a name="line.2822"></a>
+<span class="sourceLineNo">2823</span>    }<a name="line.2823"></a>
+<span class="sourceLineNo">2824</span><a name="line.2824"></a>
+<span class="sourceLineNo">2825</span>    @Override<a name="line.2825"></a>
+<span class="sourceLineNo">2826</span>    public boolean containsAll(Collection&lt;?&gt; c) {<a name="line.2826"></a>
+<span class="sourceLineNo">2827</span>        for(Object o : c)<a name="line.2827"></a>
+<span class="sourceLineNo">2828</span>        {<a name="line.2828"></a>
+<span class="sourceLineNo">2829</span>            if(!contains(o))<a name="line.2829"></a>
+<span class="sourceLineNo">2830</span>                return false;<a name="line.2830"></a>
+<span class="sourceLineNo">2831</span>        }<a name="line.2831"></a>
+<span class="sourceLineNo">2832</span>        return true;<a name="line.2832"></a>
+<span class="sourceLineNo">2833</span>    }<a name="line.2833"></a>
+<span class="sourceLineNo">2834</span><a name="line.2834"></a>
+<span class="sourceLineNo">2835</span>    @Override<a name="line.2835"></a>
+<span class="sourceLineNo">2836</span>    public boolean addAll(Collection&lt;? extends Coord&gt; c) {<a name="line.2836"></a>
+<span class="sourceLineNo">2837</span>        boolean changed = false;<a name="line.2837"></a>
+<span class="sourceLineNo">2838</span>        for(Coord co : c)<a name="line.2838"></a>
+<span class="sourceLineNo">2839</span>        {<a name="line.2839"></a>
+<span class="sourceLineNo">2840</span>            changed |= add(co);<a name="line.2840"></a>
+<span class="sourceLineNo">2841</span>        }<a name="line.2841"></a>
+<span class="sourceLineNo">2842</span>        return changed;<a name="line.2842"></a>
+<span class="sourceLineNo">2843</span>    }<a name="line.2843"></a>
 <span class="sourceLineNo">2844</span><a name="line.2844"></a>
-<span class="sourceLineNo">2845</span>        @Override<a name="line.2845"></a>
-<span class="sourceLineNo">2846</span>        public void remove() {<a name="line.2846"></a>
-<span class="sourceLineNo">2847</span>            throw new UnsupportedOperationException("remove() is not supported on this Iterator.");<a name="line.2847"></a>
-<span class="sourceLineNo">2848</span>        }<a name="line.2848"></a>
-<span class="sourceLineNo">2849</span>    }<a name="line.2849"></a>
-<span class="sourceLineNo">2850</span>}<a name="line.2850"></a>
+<span class="sourceLineNo">2845</span>    @Override<a name="line.2845"></a>
+<span class="sourceLineNo">2846</span>    public boolean removeAll(Collection&lt;?&gt; c) {<a name="line.2846"></a>
+<span class="sourceLineNo">2847</span>        boolean changed = false;<a name="line.2847"></a>
+<span class="sourceLineNo">2848</span>        for(Object o : c)<a name="line.2848"></a>
+<span class="sourceLineNo">2849</span>        {<a name="line.2849"></a>
+<span class="sourceLineNo">2850</span>            changed |= remove(o);<a name="line.2850"></a>
+<span class="sourceLineNo">2851</span>        }<a name="line.2851"></a>
+<span class="sourceLineNo">2852</span>        return changed;<a name="line.2852"></a>
+<span class="sourceLineNo">2853</span>    }<a name="line.2853"></a>
+<span class="sourceLineNo">2854</span><a name="line.2854"></a>
+<span class="sourceLineNo">2855</span>    @Override<a name="line.2855"></a>
+<span class="sourceLineNo">2856</span>    public boolean retainAll(Collection&lt;?&gt; c) {<a name="line.2856"></a>
+<span class="sourceLineNo">2857</span>        GreasedRegion g2 = new GreasedRegion(width, height);<a name="line.2857"></a>
+<span class="sourceLineNo">2858</span>        for(Object o : c)<a name="line.2858"></a>
+<span class="sourceLineNo">2859</span>        {<a name="line.2859"></a>
+<span class="sourceLineNo">2860</span>            if(contains(o) &amp;&amp; o instanceof Coord)<a name="line.2860"></a>
+<span class="sourceLineNo">2861</span>            {<a name="line.2861"></a>
+<span class="sourceLineNo">2862</span>                g2.add((Coord)o);<a name="line.2862"></a>
+<span class="sourceLineNo">2863</span>            }<a name="line.2863"></a>
+<span class="sourceLineNo">2864</span>        }<a name="line.2864"></a>
+<span class="sourceLineNo">2865</span>        boolean changed = equals(g2);<a name="line.2865"></a>
+<span class="sourceLineNo">2866</span>        remake(g2);<a name="line.2866"></a>
+<span class="sourceLineNo">2867</span>        return changed;<a name="line.2867"></a>
+<span class="sourceLineNo">2868</span>    }<a name="line.2868"></a>
+<span class="sourceLineNo">2869</span><a name="line.2869"></a>
+<span class="sourceLineNo">2870</span>    /**<a name="line.2870"></a>
+<span class="sourceLineNo">2871</span>     * Randomly removes points from a GreasedRegion, with larger values for preservation keeping more of the existing<a name="line.2871"></a>
+<span class="sourceLineNo">2872</span>     * shape intact. If preservation is 1, roughly 1/2 of all points will be removed; if 2, roughly 1/4, if 3, roughly<a name="line.2872"></a>
+<span class="sourceLineNo">2873</span>     * 1/8, and so on, so that preservation can be thought of as a negative exponent of 2. This allows both negative<a name="line.2873"></a>
+<span class="sourceLineNo">2874</span>     * and positive values for preservation, and treats 2 and -2 the same for preservation.<a name="line.2874"></a>
+<span class="sourceLineNo">2875</span>     * @param rng used to determine random factors<a name="line.2875"></a>
+<span class="sourceLineNo">2876</span>     * @param preservation roughly what degree of points to remove; removes about {@code 1/(2^preservation)} points (assuming positive)<a name="line.2876"></a>
+<span class="sourceLineNo">2877</span>     * @return a randomly modified change to this GreasedRegion<a name="line.2877"></a>
+<span class="sourceLineNo">2878</span>     */<a name="line.2878"></a>
+<span class="sourceLineNo">2879</span>    public GreasedRegion deteriorate(RNG rng, int preservation) {<a name="line.2879"></a>
+<span class="sourceLineNo">2880</span>        if(rng == null || width &lt;= 2 || ySections &lt;= 0 || preservation == 0)<a name="line.2880"></a>
+<span class="sourceLineNo">2881</span>            return this;<a name="line.2881"></a>
+<span class="sourceLineNo">2882</span>        preservation = Math.abs(preservation);<a name="line.2882"></a>
+<span class="sourceLineNo">2883</span>        long mash;<a name="line.2883"></a>
+<span class="sourceLineNo">2884</span>        for (int i = 0; i &lt; width * ySections; i++) {<a name="line.2884"></a>
+<span class="sourceLineNo">2885</span>            mash = rng.nextLong();<a name="line.2885"></a>
+<span class="sourceLineNo">2886</span>            for (int j = i; j &lt; preservation; j++) {<a name="line.2886"></a>
+<span class="sourceLineNo">2887</span>                mash |= rng.nextLong();<a name="line.2887"></a>
+<span class="sourceLineNo">2888</span>            }<a name="line.2888"></a>
+<span class="sourceLineNo">2889</span>            data[i] &amp;= mash;<a name="line.2889"></a>
+<span class="sourceLineNo">2890</span>        }<a name="line.2890"></a>
+<span class="sourceLineNo">2891</span>        return this;<a name="line.2891"></a>
+<span class="sourceLineNo">2892</span>    }<a name="line.2892"></a>
+<span class="sourceLineNo">2893</span><a name="line.2893"></a>
+<span class="sourceLineNo">2894</span>    /**<a name="line.2894"></a>
+<span class="sourceLineNo">2895</span>     * Inverts the on/off state of the cell with the given x and y.<a name="line.2895"></a>
+<span class="sourceLineNo">2896</span>     * @param x the x position of the cell to flip<a name="line.2896"></a>
+<span class="sourceLineNo">2897</span>     * @param y the y position of the cell to flip<a name="line.2897"></a>
+<span class="sourceLineNo">2898</span>     * @return this for chaining, modified<a name="line.2898"></a>
+<span class="sourceLineNo">2899</span>     */<a name="line.2899"></a>
+<span class="sourceLineNo">2900</span>    public GreasedRegion flip(int x, int y) {<a name="line.2900"></a>
+<span class="sourceLineNo">2901</span>        if(x &gt;= 0 &amp;&amp; y &gt;= 0 &amp;&amp; x &lt; width &amp;&amp; y &lt; height &amp;&amp; ySections &gt; 0)<a name="line.2901"></a>
+<span class="sourceLineNo">2902</span>            data[x * ySections + (y &gt;&gt; 6)] ^= (1L &lt;&lt; (y &amp; 63));<a name="line.2902"></a>
+<span class="sourceLineNo">2903</span>        return this;<a name="line.2903"></a>
+<span class="sourceLineNo">2904</span><a name="line.2904"></a>
+<span class="sourceLineNo">2905</span>    }<a name="line.2905"></a>
+<span class="sourceLineNo">2906</span><a name="line.2906"></a>
+<span class="sourceLineNo">2907</span>    public class GRIterator implements Iterator&lt;Coord&gt;<a name="line.2907"></a>
+<span class="sourceLineNo">2908</span>    {<a name="line.2908"></a>
+<span class="sourceLineNo">2909</span>        public int index = 0;<a name="line.2909"></a>
+<span class="sourceLineNo">2910</span>        private int limit;<a name="line.2910"></a>
+<span class="sourceLineNo">2911</span>        private long w, i = 0;<a name="line.2911"></a>
+<span class="sourceLineNo">2912</span>        public GRIterator()<a name="line.2912"></a>
+<span class="sourceLineNo">2913</span>        {<a name="line.2913"></a>
+<span class="sourceLineNo">2914</span>            limit = size();<a name="line.2914"></a>
+<span class="sourceLineNo">2915</span>        }<a name="line.2915"></a>
+<span class="sourceLineNo">2916</span>        @Override<a name="line.2916"></a>
+<span class="sourceLineNo">2917</span>        public boolean hasNext() {<a name="line.2917"></a>
+<span class="sourceLineNo">2918</span>            return index &lt; limit;<a name="line.2918"></a>
+<span class="sourceLineNo">2919</span>        }<a name="line.2919"></a>
+<span class="sourceLineNo">2920</span><a name="line.2920"></a>
+<span class="sourceLineNo">2921</span>        @Override<a name="line.2921"></a>
+<span class="sourceLineNo">2922</span>        public Coord next() {<a name="line.2922"></a>
+<span class="sourceLineNo">2923</span>            i = 0L;<a name="line.2923"></a>
+<span class="sourceLineNo">2924</span>            for (int x = 0; x &lt; width; x++) {<a name="line.2924"></a>
+<span class="sourceLineNo">2925</span>                for (int s = 0; s &lt; ySections; s++) {<a name="line.2925"></a>
+<span class="sourceLineNo">2926</span>                    if ((w = Long.lowestOneBit(data[x * ySections + s])) != 0 &amp;&amp; i++ &gt;= index) {<a name="line.2926"></a>
+<span class="sourceLineNo">2927</span>                        if(index++ &lt; limit)<a name="line.2927"></a>
+<span class="sourceLineNo">2928</span>                            return Coord.get(x, (s &lt;&lt; 6) | Long.numberOfTrailingZeros(w));<a name="line.2928"></a>
+<span class="sourceLineNo">2929</span>                        else<a name="line.2929"></a>
+<span class="sourceLineNo">2930</span>                            return null;<a name="line.2930"></a>
+<span class="sourceLineNo">2931</span>                    }<a name="line.2931"></a>
+<span class="sourceLineNo">2932</span>                }<a name="line.2932"></a>
+<span class="sourceLineNo">2933</span>            }<a name="line.2933"></a>
+<span class="sourceLineNo">2934</span>            return null;<a name="line.2934"></a>
+<span class="sourceLineNo">2935</span>        }<a name="line.2935"></a>
+<span class="sourceLineNo">2936</span><a name="line.2936"></a>
+<span class="sourceLineNo">2937</span>        @Override<a name="line.2937"></a>
+<span class="sourceLineNo">2938</span>        public void remove() {<a name="line.2938"></a>
+<span class="sourceLineNo">2939</span>            throw new UnsupportedOperationException("remove() is not supported on this Iterator.");<a name="line.2939"></a>
+<span class="sourceLineNo">2940</span>        }<a name="line.2940"></a>
+<span class="sourceLineNo">2941</span>    }<a name="line.2941"></a>
+<span class="sourceLineNo">2942</span>}<a name="line.2942"></a>
 
 
 

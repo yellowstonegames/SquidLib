@@ -69,7 +69,7 @@ public class WorldSpillTest extends ApplicationAdapter{
     {
         swm = new SpillWorldMap(gridWidth, gridHeight, FakeLanguageGen.FANTASY_NAME.word(rng, true));
         map = swm.generate(0, false, true, 0.0, 1.4);
-        land.clear().refill(swm.heightMap, 0, 0xffff);
+        land.empty().refill(swm.heightMap, 0, 0xffff);
         ArrayTools.fill(indicesBG, 27);
         land.writeIntsInto(indicesBG, 20);
         for (int x = 0; x < gridWidth; x++) {
