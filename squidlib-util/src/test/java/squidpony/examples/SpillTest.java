@@ -154,7 +154,7 @@ public class SpillTest {
             }) {
                 swm = new SpillWorldMap(w += 20, h += 15, world);
                 System.out.println(world + '_' + w + 'x' + h);
-                DungeonUtility.debugPrint(swm.generate(factions, true, stable.between(0.4, 1.0), w * 0.03));
+                DungeonUtility.debugPrint(swm.generate(factions, true, stable.between(0.7, 1.0), w * 0.03));
                 System.out.println("     Atlas for the world of " + world);
                 for (int i = 0; i < factions + 2; i++) {
                     System.out.println("  " + swm.atlas.keyAt(i) + "  :  " + swm.atlas.getAt(i));

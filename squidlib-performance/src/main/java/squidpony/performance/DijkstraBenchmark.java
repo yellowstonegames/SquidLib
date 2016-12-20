@@ -102,7 +102,7 @@ public class DijkstraBenchmark {
             for (int j = 1; j < DIMENSION - 1; j++) {
                 if(map[i][j] == '#')
                     continue;
-                c = tmp.clear().insert(i, j).flood(floors, 8).remove(i, j).singleRandom(srng);
+                c = tmp.empty().insert(i, j).flood(floors, 8).remove(i, j).singleRandom(srng);
                 nearbyMap[i][j] = c;
                 customNearbyMap[adj.composite(i, j, 0, 0)] = adj.composite(c.x, c.y, 0, 0);
             }

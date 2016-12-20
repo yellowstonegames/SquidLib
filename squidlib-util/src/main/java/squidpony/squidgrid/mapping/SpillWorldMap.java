@@ -165,10 +165,9 @@ public class SpillWorldMap {
             System.arraycopy(sm[0], 0, sm[i], 0, height);
         }
         OrderedMap<Coord, Double> entries = new OrderedMap<>();
-        OrderedSet<Coord> oob;
         for (int i = 0; i < aLen; i++) {
             int volume = 10 + (height * width) / (aLen * 2);
-            area.clear().insert(pts[i]).spill(bounds, volume, rng).expand(3);
+            area.empty().insert(pts[i]).spill(bounds, volume, rng).expand(3);
             tmpInner.remake(area).retract(4).expand8way().and(area);
             tmpEdge.remake(area).surface8way();
             Coord[] edges = tmpEdge.separatedPortion(0.35);
@@ -181,9 +180,8 @@ public class SpillWorldMap {
                 entries.put(tmpInner.singleRandom(rng), (rng.nextDouble() + 1.5) * 0.4);
             }
             tmpOOB.remake(area).not();
-            oob = new OrderedSet<>(tmpOOB.asCoords());
 
-            spreader.start(entries, -1, oob);
+            spreader.start(entries, -1, tmpOOB);
             tmpSM = spreader.spillMap;
 
             for (int x = 0; x < width; x++) {
