@@ -983,7 +983,7 @@
 <span class="sourceLineNo">975</span>     * @param targets the Coords that this is trying to find; it will stop once it finds one<a name="line.975"></a>
 <span class="sourceLineNo">976</span>     * @return the Coord that it found first.<a name="line.976"></a>
 <span class="sourceLineNo">977</span>     */<a name="line.977"></a>
-<span class="sourceLineNo">978</span>    public Coord findNearest(Coord start, Set&lt;Coord&gt; targets) {<a name="line.978"></a>
+<span class="sourceLineNo">978</span>    public Coord findNearest(Coord start, Collection&lt;Coord&gt; targets) {<a name="line.978"></a>
 <span class="sourceLineNo">979</span>        if (!initialized) return null;<a name="line.979"></a>
 <span class="sourceLineNo">980</span>        if (targets == null)<a name="line.980"></a>
 <span class="sourceLineNo">981</span>            return null;<a name="line.981"></a>
@@ -1127,11 +1127,11 @@
 <span class="sourceLineNo">1119</span>     * @param targets the Coords that this is trying to find; it will stop once it finds enough (based on limit)<a name="line.1119"></a>
 <span class="sourceLineNo">1120</span>     * @return the Coords that it found first.<a name="line.1120"></a>
 <span class="sourceLineNo">1121</span>     */<a name="line.1121"></a>
-<span class="sourceLineNo">1122</span>    public ArrayList&lt;Coord&gt; findNearestMultiple(Coord start, int limit, Set&lt;Coord&gt; targets) {<a name="line.1122"></a>
+<span class="sourceLineNo">1122</span>    public ArrayList&lt;Coord&gt; findNearestMultiple(Coord start, int limit, Collection&lt;Coord&gt; targets) {<a name="line.1122"></a>
 <span class="sourceLineNo">1123</span>        if (!initialized) return null;<a name="line.1123"></a>
-<span class="sourceLineNo">1124</span>        if (targets == null)<a name="line.1124"></a>
-<span class="sourceLineNo">1125</span>            return null;<a name="line.1125"></a>
-<span class="sourceLineNo">1126</span>        ArrayList&lt;Coord&gt; found = new ArrayList&lt;&gt;(limit);<a name="line.1126"></a>
+<span class="sourceLineNo">1124</span>        ArrayList&lt;Coord&gt; found = new ArrayList&lt;&gt;(limit);<a name="line.1124"></a>
+<span class="sourceLineNo">1125</span>        if (targets == null)<a name="line.1125"></a>
+<span class="sourceLineNo">1126</span>            return found;<a name="line.1126"></a>
 <span class="sourceLineNo">1127</span>        if (targets.contains(start))<a name="line.1127"></a>
 <span class="sourceLineNo">1128</span>            return found;<a name="line.1128"></a>
 <span class="sourceLineNo">1129</span>        Coord start2 = start, adj, cen;<a name="line.1129"></a>
@@ -1343,7 +1343,7 @@
 <span class="sourceLineNo">1335</span>     * scenarios), it will recalculate a move so that it does not pass into that cell. The keys in impassable should<a name="line.1335"></a>
 <span class="sourceLineNo">1336</span>     * be the positions of enemies and obstacles that cannot be moved  through, and will be ignored if there is a goal<a name="line.1336"></a>
 <span class="sourceLineNo">1337</span>     * overlapping one. This overload always scans the whole map; use<a name="line.1337"></a>
-<span class="sourceLineNo">1338</span>     * {@link #findPath(int, int, Set, Set, Coord, Coord...)} to scan a smaller area for performance reasons.<a name="line.1338"></a>
+<span class="sourceLineNo">1338</span>     * {@link #findPath(int, int, Collection, Collection, Coord, Coord...)} to scan a smaller area for performance reasons.<a name="line.1338"></a>
 <span class="sourceLineNo">1339</span>     * &lt;br&gt;<a name="line.1339"></a>
 <span class="sourceLineNo">1340</span>     * This caches its result in a member field, path, which can be fetched after finding a path and will change with<a name="line.1340"></a>
 <span class="sourceLineNo">1341</span>     * each call to a pathfinding method.<a name="line.1341"></a>
@@ -1354,8 +1354,8 @@
 <span class="sourceLineNo">1346</span>     * @param targets      a vararg or array of Coord that this will try to pathfind toward<a name="line.1346"></a>
 <span class="sourceLineNo">1347</span>     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.<a name="line.1347"></a>
 <span class="sourceLineNo">1348</span>     */<a name="line.1348"></a>
-<span class="sourceLineNo">1349</span>    public ArrayList&lt;Coord&gt; findPath(int length, Set&lt;Coord&gt; impassable,<a name="line.1349"></a>
-<span class="sourceLineNo">1350</span>                                     Set&lt;Coord&gt; onlyPassable, Coord start, Coord... targets) {<a name="line.1350"></a>
+<span class="sourceLineNo">1349</span>    public ArrayList&lt;Coord&gt; findPath(int length, Collection&lt;Coord&gt; impassable,<a name="line.1349"></a>
+<span class="sourceLineNo">1350</span>                                     Collection&lt;Coord&gt; onlyPassable, Coord start, Coord... targets) {<a name="line.1350"></a>
 <span class="sourceLineNo">1351</span>        return findPath(length, -1, impassable, onlyPassable, start, targets);<a name="line.1351"></a>
 <span class="sourceLineNo">1352</span>    }<a name="line.1352"></a>
 <span class="sourceLineNo">1353</span><a name="line.1353"></a>
@@ -1383,17 +1383,17 @@
 <span class="sourceLineNo">1375</span>     * @param targets      a vararg or array of Coord that this will try to pathfind toward<a name="line.1375"></a>
 <span class="sourceLineNo">1376</span>     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.<a name="line.1376"></a>
 <span class="sourceLineNo">1377</span>     */<a name="line.1377"></a>
-<span class="sourceLineNo">1378</span>    public ArrayList&lt;Coord&gt; findPath(int length, int scanLimit, Set&lt;Coord&gt; impassable,<a name="line.1378"></a>
-<span class="sourceLineNo">1379</span>                                     Set&lt;Coord&gt; onlyPassable, Coord start, Coord... targets) {<a name="line.1379"></a>
+<span class="sourceLineNo">1378</span>    public ArrayList&lt;Coord&gt; findPath(int length, int scanLimit, Collection&lt;Coord&gt; impassable,<a name="line.1378"></a>
+<span class="sourceLineNo">1379</span>                                     Collection&lt;Coord&gt; onlyPassable, Coord start, Coord... targets) {<a name="line.1379"></a>
 <span class="sourceLineNo">1380</span>        if (!initialized) return null;<a name="line.1380"></a>
 <span class="sourceLineNo">1381</span>        path.clear();<a name="line.1381"></a>
-<span class="sourceLineNo">1382</span>        OrderedSet&lt;Coord&gt; impassable2;<a name="line.1382"></a>
+<span class="sourceLineNo">1382</span>        Collection&lt;Coord&gt; impassable2;<a name="line.1382"></a>
 <span class="sourceLineNo">1383</span>        if (impassable == null)<a name="line.1383"></a>
-<span class="sourceLineNo">1384</span>            impassable2 = new OrderedSet&lt;&gt;();<a name="line.1384"></a>
+<span class="sourceLineNo">1384</span>            impassable2 = Collections.emptySet();<a name="line.1384"></a>
 <span class="sourceLineNo">1385</span>        else<a name="line.1385"></a>
-<span class="sourceLineNo">1386</span>            impassable2 = new OrderedSet&lt;&gt;(impassable);<a name="line.1386"></a>
+<span class="sourceLineNo">1386</span>            impassable2 = new GreasedRegion(width, height, impassable);<a name="line.1386"></a>
 <span class="sourceLineNo">1387</span>        if (onlyPassable == null)<a name="line.1387"></a>
-<span class="sourceLineNo">1388</span>            onlyPassable = new OrderedSet&lt;&gt;();<a name="line.1388"></a>
+<span class="sourceLineNo">1388</span>            onlyPassable = Collections.emptySet();<a name="line.1388"></a>
 <span class="sourceLineNo">1389</span><a name="line.1389"></a>
 <span class="sourceLineNo">1390</span>        resetMap();<a name="line.1390"></a>
 <span class="sourceLineNo">1391</span>        for (Coord goal : targets) {<a name="line.1391"></a>
@@ -1483,8 +1483,8 @@
 <span class="sourceLineNo">1475</span>     * @param targets        a vararg or array of Coord that this will try to pathfind toward<a name="line.1475"></a>
 <span class="sourceLineNo">1476</span>     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.<a name="line.1476"></a>
 <span class="sourceLineNo">1477</span>     */<a name="line.1477"></a>
-<span class="sourceLineNo">1478</span>    public ArrayList&lt;Coord&gt; findAttackPath(int moveLength, int preferredRange, LOS los, Set&lt;Coord&gt; impassable,<a name="line.1478"></a>
-<span class="sourceLineNo">1479</span>                                           Set&lt;Coord&gt; onlyPassable, Coord start, Coord... targets) {<a name="line.1479"></a>
+<span class="sourceLineNo">1478</span>    public ArrayList&lt;Coord&gt; findAttackPath(int moveLength, int preferredRange, LOS los, Collection&lt;Coord&gt; impassable,<a name="line.1478"></a>
+<span class="sourceLineNo">1479</span>                                           Collection&lt;Coord&gt; onlyPassable, Coord start, Coord... targets) {<a name="line.1479"></a>
 <span class="sourceLineNo">1480</span>        return findAttackPath(moveLength, preferredRange, preferredRange, los, impassable, onlyPassable, start, targets);<a name="line.1480"></a>
 <span class="sourceLineNo">1481</span>    }<a name="line.1481"></a>
 <span class="sourceLineNo">1482</span><a name="line.1482"></a>
@@ -1515,7 +1515,7 @@
 <span class="sourceLineNo">1507</span>     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.<a name="line.1507"></a>
 <span class="sourceLineNo">1508</span>     */<a name="line.1508"></a>
 <span class="sourceLineNo">1509</span>    public ArrayList&lt;Coord&gt; findAttackPath(int moveLength, int minPreferredRange, int maxPreferredRange, LOS los,<a name="line.1509"></a>
-<span class="sourceLineNo">1510</span>                                           Set&lt;Coord&gt; impassable, Set&lt;Coord&gt; onlyPassable, Coord start, Coord... targets) {<a name="line.1510"></a>
+<span class="sourceLineNo">1510</span>                                           Collection&lt;Coord&gt; impassable, Collection&lt;Coord&gt; onlyPassable, Coord start, Coord... targets) {<a name="line.1510"></a>
 <span class="sourceLineNo">1511</span>        if (!initialized) return null;<a name="line.1511"></a>
 <span class="sourceLineNo">1512</span>        if (minPreferredRange &lt; 0) minPreferredRange = 0;<a name="line.1512"></a>
 <span class="sourceLineNo">1513</span>        if (maxPreferredRange &lt; minPreferredRange) maxPreferredRange = minPreferredRange;<a name="line.1513"></a>
@@ -1528,13 +1528,13 @@
 <span class="sourceLineNo">1520</span>            }<a name="line.1520"></a>
 <span class="sourceLineNo">1521</span>        }<a name="line.1521"></a>
 <span class="sourceLineNo">1522</span>        path.clear();<a name="line.1522"></a>
-<span class="sourceLineNo">1523</span>        OrderedSet&lt;Coord&gt; impassable2;<a name="line.1523"></a>
+<span class="sourceLineNo">1523</span>        Collection&lt;Coord&gt; impassable2;<a name="line.1523"></a>
 <span class="sourceLineNo">1524</span>        if (impassable == null)<a name="line.1524"></a>
-<span class="sourceLineNo">1525</span>            impassable2 = new OrderedSet&lt;&gt;();<a name="line.1525"></a>
+<span class="sourceLineNo">1525</span>            impassable2 = Collections.emptySet();<a name="line.1525"></a>
 <span class="sourceLineNo">1526</span>        else<a name="line.1526"></a>
-<span class="sourceLineNo">1527</span>            impassable2 = new OrderedSet&lt;&gt;(impassable);<a name="line.1527"></a>
+<span class="sourceLineNo">1527</span>            impassable2 = new GreasedRegion(width, height, impassable);<a name="line.1527"></a>
 <span class="sourceLineNo">1528</span>        if (onlyPassable == null)<a name="line.1528"></a>
-<span class="sourceLineNo">1529</span>            onlyPassable = new OrderedSet&lt;&gt;();<a name="line.1529"></a>
+<span class="sourceLineNo">1529</span>            onlyPassable = Collections.emptySet();<a name="line.1529"></a>
 <span class="sourceLineNo">1530</span><a name="line.1530"></a>
 <span class="sourceLineNo">1531</span>        resetMap();<a name="line.1531"></a>
 <span class="sourceLineNo">1532</span>        for (Coord goal : targets) {<a name="line.1532"></a>
@@ -1671,7 +1671,7 @@
 <span class="sourceLineNo">1663</span>     * @return an ArrayList of Coord that represents a path to travel to get to an ideal place to use tech. Copy of path.<a name="line.1663"></a>
 <span class="sourceLineNo">1664</span>     */<a name="line.1664"></a>
 <span class="sourceLineNo">1665</span>    public ArrayList&lt;Coord&gt; findTechniquePath(int moveLength, Technique tech, char[][] dungeon, LOS los,<a name="line.1665"></a>
-<span class="sourceLineNo">1666</span>                                              Set&lt;Coord&gt; impassable, Set&lt;Coord&gt; allies, Coord start, Set&lt;Coord&gt; targets) {<a name="line.1666"></a>
+<span class="sourceLineNo">1666</span>                                              Collection&lt;Coord&gt; impassable, Collection&lt;Coord&gt; allies, Coord start, Collection&lt;Coord&gt; targets) {<a name="line.1666"></a>
 <span class="sourceLineNo">1667</span>        if (!initialized) return null;<a name="line.1667"></a>
 <span class="sourceLineNo">1668</span>        tech.setMap(dungeon);<a name="line.1668"></a>
 <span class="sourceLineNo">1669</span>        double[][] resMap = new double[width][height];<a name="line.1669"></a>
@@ -1695,11 +1695,11 @@
 <span class="sourceLineNo">1687</span>            cutShort = true;<a name="line.1687"></a>
 <span class="sourceLineNo">1688</span>            return new ArrayList&lt;&gt;(path);<a name="line.1688"></a>
 <span class="sourceLineNo">1689</span>        }<a name="line.1689"></a>
-<span class="sourceLineNo">1690</span>        OrderedSet&lt;Coord&gt; impassable2;<a name="line.1690"></a>
+<span class="sourceLineNo">1690</span>        Collection&lt;Coord&gt; impassable2;<a name="line.1690"></a>
 <span class="sourceLineNo">1691</span>        if (impassable == null)<a name="line.1691"></a>
-<span class="sourceLineNo">1692</span>            impassable2 = new OrderedSet&lt;&gt;();<a name="line.1692"></a>
+<span class="sourceLineNo">1692</span>            impassable2 = Collections.emptySet();<a name="line.1692"></a>
 <span class="sourceLineNo">1693</span>        else<a name="line.1693"></a>
-<span class="sourceLineNo">1694</span>            impassable2 = new OrderedSet&lt;&gt;(impassable);<a name="line.1694"></a>
+<span class="sourceLineNo">1694</span>            impassable2 = new GreasedRegion(width, height, impassable);<a name="line.1694"></a>
 <span class="sourceLineNo">1695</span><a name="line.1695"></a>
 <span class="sourceLineNo">1696</span>        if (allies == null)<a name="line.1696"></a>
 <span class="sourceLineNo">1697</span>            friends = new OrderedSet&lt;&gt;();<a name="line.1697"></a>
@@ -1871,8 +1871,8 @@
 <span class="sourceLineNo">1863</span>     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.<a name="line.1863"></a>
 <span class="sourceLineNo">1864</span>     */<a name="line.1864"></a>
 <span class="sourceLineNo">1865</span>    @GwtIncompatible<a name="line.1865"></a>
-<span class="sourceLineNo">1866</span>    public ArrayList&lt;Coord&gt; findAttackPath(int moveLength, int preferredRange, FOVCache cache, Set&lt;Coord&gt; impassable,<a name="line.1866"></a>
-<span class="sourceLineNo">1867</span>                                           Set&lt;Coord&gt; onlyPassable, Coord start, Coord... targets) {<a name="line.1867"></a>
+<span class="sourceLineNo">1866</span>    public ArrayList&lt;Coord&gt; findAttackPath(int moveLength, int preferredRange, FOVCache cache, Collection&lt;Coord&gt; impassable,<a name="line.1866"></a>
+<span class="sourceLineNo">1867</span>                                           Collection&lt;Coord&gt; onlyPassable, Coord start, Coord... targets) {<a name="line.1867"></a>
 <span class="sourceLineNo">1868</span>        return findAttackPath(moveLength, preferredRange, preferredRange, cache, impassable, onlyPassable, start, targets);<a name="line.1868"></a>
 <span class="sourceLineNo">1869</span>    }<a name="line.1869"></a>
 <span class="sourceLineNo">1870</span><a name="line.1870"></a>
@@ -1903,19 +1903,19 @@
 <span class="sourceLineNo">1895</span>     */<a name="line.1895"></a>
 <span class="sourceLineNo">1896</span>    @GwtIncompatible<a name="line.1896"></a>
 <span class="sourceLineNo">1897</span>    public ArrayList&lt;Coord&gt; findAttackPath(int moveLength, int minPreferredRange, int maxPreferredRange, FOVCache cache,<a name="line.1897"></a>
-<span class="sourceLineNo">1898</span>                                           Set&lt;Coord&gt; impassable, Set&lt;Coord&gt; onlyPassable, Coord start, Coord... targets) {<a name="line.1898"></a>
+<span class="sourceLineNo">1898</span>                                           Collection&lt;Coord&gt; impassable, Collection&lt;Coord&gt; onlyPassable, Coord start, Coord... targets) {<a name="line.1898"></a>
 <span class="sourceLineNo">1899</span>        if (!initialized) return null;<a name="line.1899"></a>
 <span class="sourceLineNo">1900</span>        if (minPreferredRange &lt; 0) minPreferredRange = 0;<a name="line.1900"></a>
 <span class="sourceLineNo">1901</span>        if (maxPreferredRange &lt; minPreferredRange) maxPreferredRange = minPreferredRange;<a name="line.1901"></a>
 <span class="sourceLineNo">1902</span><a name="line.1902"></a>
 <span class="sourceLineNo">1903</span>        path.clear();<a name="line.1903"></a>
-<span class="sourceLineNo">1904</span>        OrderedSet&lt;Coord&gt; impassable2;<a name="line.1904"></a>
+<span class="sourceLineNo">1904</span>        Collection&lt;Coord&gt; impassable2;<a name="line.1904"></a>
 <span class="sourceLineNo">1905</span>        if (impassable == null)<a name="line.1905"></a>
-<span class="sourceLineNo">1906</span>            impassable2 = new OrderedSet&lt;&gt;();<a name="line.1906"></a>
+<span class="sourceLineNo">1906</span>            impassable2 = Collections.emptySet();<a name="line.1906"></a>
 <span class="sourceLineNo">1907</span>        else<a name="line.1907"></a>
-<span class="sourceLineNo">1908</span>            impassable2 = new OrderedSet&lt;&gt;(impassable);<a name="line.1908"></a>
+<span class="sourceLineNo">1908</span>            impassable2 = new GreasedRegion(width, height, impassable);<a name="line.1908"></a>
 <span class="sourceLineNo">1909</span>        if (onlyPassable == null)<a name="line.1909"></a>
-<span class="sourceLineNo">1910</span>            onlyPassable = new OrderedSet&lt;&gt;();<a name="line.1910"></a>
+<span class="sourceLineNo">1910</span>            onlyPassable = Collections.emptySet();<a name="line.1910"></a>
 <span class="sourceLineNo">1911</span><a name="line.1911"></a>
 <span class="sourceLineNo">1912</span>        resetMap();<a name="line.1912"></a>
 <span class="sourceLineNo">1913</span>        for (Coord goal : targets) {<a name="line.1913"></a>
@@ -2042,8 +2042,8 @@
 <span class="sourceLineNo">2034</span>     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.<a name="line.2034"></a>
 <span class="sourceLineNo">2035</span>     */<a name="line.2035"></a>
 <span class="sourceLineNo">2036</span>    public ArrayList&lt;Coord&gt; findCoveredAttackPath(int moveLength, int minPreferredRange, int maxPreferredRange,<a name="line.2036"></a>
-<span class="sourceLineNo">2037</span>                                                  double coverPreference, Set&lt;Coord&gt; impassable,<a name="line.2037"></a>
-<span class="sourceLineNo">2038</span>                                                  Set&lt;Coord&gt; onlyPassable, Iterable&lt;Threat&gt; threats, Coord start,<a name="line.2038"></a>
+<span class="sourceLineNo">2037</span>                                                  double coverPreference, Collection&lt;Coord&gt; impassable,<a name="line.2037"></a>
+<span class="sourceLineNo">2038</span>                                                  Collection&lt;Coord&gt; onlyPassable, Iterable&lt;Threat&gt; threats, Coord start,<a name="line.2038"></a>
 <span class="sourceLineNo">2039</span>                                                  Coord... targets) {<a name="line.2039"></a>
 <span class="sourceLineNo">2040</span>        if (!initialized) return null;<a name="line.2040"></a>
 <span class="sourceLineNo">2041</span><a name="line.2041"></a>
@@ -2059,7 +2059,7 @@
 <span class="sourceLineNo">2051</span><a name="line.2051"></a>
 <span class="sourceLineNo">2052</span><a name="line.2052"></a>
 <span class="sourceLineNo">2053</span>        path = new ArrayList&lt;Coord&gt;();<a name="line.2053"></a>
-<span class="sourceLineNo">2054</span>        OrderedSet&lt;Coord&gt; impassable2;<a name="line.2054"></a>
+<span class="sourceLineNo">2054</span>        Collection&lt;Coord&gt; impassable2;<a name="line.2054"></a>
 <span class="sourceLineNo">2055</span>        if (impassable == null)<a name="line.2055"></a>
 <span class="sourceLineNo">2056</span>            impassable2 = new OrderedSet&lt;Coord&gt;();<a name="line.2056"></a>
 <span class="sourceLineNo">2057</span>        else<a name="line.2057"></a>
@@ -2210,8 +2210,8 @@
 <span class="sourceLineNo">2202</span>     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.<a name="line.2202"></a>
 <span class="sourceLineNo">2203</span>     */<a name="line.2203"></a>
 <span class="sourceLineNo">2204</span>    public ArrayList&lt;Coord&gt; findCoveredAttackPath(int moveLength, int preferredRange, double coverPreference,<a name="line.2204"></a>
-<span class="sourceLineNo">2205</span>                                                  FOV fov, boolean seekDistantGoals, Set&lt;Coord&gt; impassable,<a name="line.2205"></a>
-<span class="sourceLineNo">2206</span>                                                  Set&lt;Coord&gt; onlyPassable, List&lt;Threat&gt; threats, Coord start,<a name="line.2206"></a>
+<span class="sourceLineNo">2205</span>                                                  FOV fov, boolean seekDistantGoals, Collection&lt;Coord&gt; impassable,<a name="line.2205"></a>
+<span class="sourceLineNo">2206</span>                                                  Collection&lt;Coord&gt; onlyPassable, List&lt;Threat&gt; threats, Coord start,<a name="line.2206"></a>
 <span class="sourceLineNo">2207</span>                                                  Coord... targets) {<a name="line.2207"></a>
 <span class="sourceLineNo">2208</span>        return findCoveredAttackPath(moveLength, preferredRange, preferredRange, coverPreference, fov,<a name="line.2208"></a>
 <span class="sourceLineNo">2209</span>                seekDistantGoals, impassable, onlyPassable, threats, start, targets);<a name="line.2209"></a>
@@ -2253,8 +2253,8 @@
 <span class="sourceLineNo">2245</span>     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.<a name="line.2245"></a>
 <span class="sourceLineNo">2246</span>     */<a name="line.2246"></a>
 <span class="sourceLineNo">2247</span>    public ArrayList&lt;Coord&gt; findCoveredAttackPath(int moveLength, int minPreferredRange, int maxPreferredRange,<a name="line.2247"></a>
-<span class="sourceLineNo">2248</span>                                                  double coverPreference, FOV fov, boolean seekDistantGoals, Set&lt;Coord&gt; impassable,<a name="line.2248"></a>
-<span class="sourceLineNo">2249</span>                                                  Set&lt;Coord&gt; onlyPassable, Iterable&lt;Threat&gt; threats, Coord start,<a name="line.2249"></a>
+<span class="sourceLineNo">2248</span>                                                  double coverPreference, FOV fov, boolean seekDistantGoals, Collection&lt;Coord&gt; impassable,<a name="line.2248"></a>
+<span class="sourceLineNo">2249</span>                                                  Collection&lt;Coord&gt; onlyPassable, Iterable&lt;Threat&gt; threats, Coord start,<a name="line.2249"></a>
 <span class="sourceLineNo">2250</span>                                                  Coord... targets) {<a name="line.2250"></a>
 <span class="sourceLineNo">2251</span>        if (!initialized) return null;<a name="line.2251"></a>
 <span class="sourceLineNo">2252</span>        if(fov == null) {<a name="line.2252"></a>
@@ -2273,7 +2273,7 @@
 <span class="sourceLineNo">2265</span><a name="line.2265"></a>
 <span class="sourceLineNo">2266</span><a name="line.2266"></a>
 <span class="sourceLineNo">2267</span>        path = new ArrayList&lt;Coord&gt;();<a name="line.2267"></a>
-<span class="sourceLineNo">2268</span>        OrderedSet&lt;Coord&gt; impassable2;<a name="line.2268"></a>
+<span class="sourceLineNo">2268</span>        Collection&lt;Coord&gt; impassable2;<a name="line.2268"></a>
 <span class="sourceLineNo">2269</span>        if (impassable == null)<a name="line.2269"></a>
 <span class="sourceLineNo">2270</span>            impassable2 = new OrderedSet&lt;Coord&gt;();<a name="line.2270"></a>
 <span class="sourceLineNo">2271</span>        else<a name="line.2271"></a>
@@ -2443,8 +2443,8 @@
 <span class="sourceLineNo">2435</span>     */<a name="line.2435"></a>
 <span class="sourceLineNo">2436</span>    @GwtIncompatible<a name="line.2436"></a>
 <span class="sourceLineNo">2437</span>    public ArrayList&lt;Coord&gt; findCoveredAttackPath(int moveLength, int preferredRange, double coverPreference,<a name="line.2437"></a>
-<span class="sourceLineNo">2438</span>                                                  FOVCache fov, boolean seekDistantGoals, Set&lt;Coord&gt; impassable,<a name="line.2438"></a>
-<span class="sourceLineNo">2439</span>                                                  Set&lt;Coord&gt; onlyPassable, List&lt;Threat&gt; threats, Coord start,<a name="line.2439"></a>
+<span class="sourceLineNo">2438</span>                                                  FOVCache fov, boolean seekDistantGoals, Collection&lt;Coord&gt; impassable,<a name="line.2438"></a>
+<span class="sourceLineNo">2439</span>                                                  Collection&lt;Coord&gt; onlyPassable, List&lt;Threat&gt; threats, Coord start,<a name="line.2439"></a>
 <span class="sourceLineNo">2440</span>                                                  Coord... targets) {<a name="line.2440"></a>
 <span class="sourceLineNo">2441</span>        return findCoveredAttackPath(moveLength, preferredRange, preferredRange, coverPreference, fov,<a name="line.2441"></a>
 <span class="sourceLineNo">2442</span>                seekDistantGoals, impassable, onlyPassable, threats, start, targets);<a name="line.2442"></a>
@@ -2487,8 +2487,8 @@
 <span class="sourceLineNo">2479</span>     */<a name="line.2479"></a>
 <span class="sourceLineNo">2480</span>    @GwtIncompatible<a name="line.2480"></a>
 <span class="sourceLineNo">2481</span>    public ArrayList&lt;Coord&gt; findCoveredAttackPath(int moveLength, int minPreferredRange, int maxPreferredRange,<a name="line.2481"></a>
-<span class="sourceLineNo">2482</span>                                                  double coverPreference, FOVCache fov, boolean seekDistantGoals, Set&lt;Coord&gt; impassable,<a name="line.2482"></a>
-<span class="sourceLineNo">2483</span>                                                  Set&lt;Coord&gt; onlyPassable, List&lt;Threat&gt; threats, Coord start,<a name="line.2483"></a>
+<span class="sourceLineNo">2482</span>                                                  double coverPreference, FOVCache fov, boolean seekDistantGoals, Collection&lt;Coord&gt; impassable,<a name="line.2482"></a>
+<span class="sourceLineNo">2483</span>                                                  Collection&lt;Coord&gt; onlyPassable, List&lt;Threat&gt; threats, Coord start,<a name="line.2483"></a>
 <span class="sourceLineNo">2484</span>                                                  Coord... targets) {<a name="line.2484"></a>
 <span class="sourceLineNo">2485</span>        if (!initialized) return null;<a name="line.2485"></a>
 <span class="sourceLineNo">2486</span>        if(fov == null) {<a name="line.2486"></a>
@@ -2507,13 +2507,13 @@
 <span class="sourceLineNo">2499</span>        }<a name="line.2499"></a>
 <span class="sourceLineNo">2500</span><a name="line.2500"></a>
 <span class="sourceLineNo">2501</span>        path.clear();<a name="line.2501"></a>
-<span class="sourceLineNo">2502</span>        OrderedSet&lt;Coord&gt; impassable2;<a name="line.2502"></a>
+<span class="sourceLineNo">2502</span>        Collection&lt;Coord&gt; impassable2;<a name="line.2502"></a>
 <span class="sourceLineNo">2503</span>        if (impassable == null)<a name="line.2503"></a>
-<span class="sourceLineNo">2504</span>            impassable2 = new OrderedSet&lt;&gt;();<a name="line.2504"></a>
+<span class="sourceLineNo">2504</span>            impassable2 = Collections.emptySet();<a name="line.2504"></a>
 <span class="sourceLineNo">2505</span>        else<a name="line.2505"></a>
-<span class="sourceLineNo">2506</span>            impassable2 = new OrderedSet&lt;&gt;(impassable);<a name="line.2506"></a>
+<span class="sourceLineNo">2506</span>            impassable2 = new GreasedRegion(width, height, impassable);<a name="line.2506"></a>
 <span class="sourceLineNo">2507</span>        if (onlyPassable == null)<a name="line.2507"></a>
-<span class="sourceLineNo">2508</span>            onlyPassable = new OrderedSet&lt;&gt;();<a name="line.2508"></a>
+<span class="sourceLineNo">2508</span>            onlyPassable = Collections.emptySet();<a name="line.2508"></a>
 <span class="sourceLineNo">2509</span><a name="line.2509"></a>
 <span class="sourceLineNo">2510</span>        resetMap();<a name="line.2510"></a>
 <span class="sourceLineNo">2511</span>        for (Coord goal : targets) {<a name="line.2511"></a>
@@ -2681,12 +2681,12 @@
 <span class="sourceLineNo">2673</span>     * @param impassable locations of enemies or mobile hazards/obstacles that aren't in the map as walls<a name="line.2673"></a>
 <span class="sourceLineNo">2674</span>     * @param allies     called onlyPassable in other methods, here it also represents allies for Technique things<a name="line.2674"></a>
 <span class="sourceLineNo">2675</span>     * @param start      the Coord the pathfinder starts at.<a name="line.2675"></a>
-<span class="sourceLineNo">2676</span>     * @param targets    a Set of Coord, not an array of Coord or variable argument list as in other methods.<a name="line.2676"></a>
+<span class="sourceLineNo">2676</span>     * @param targets    a Set (or any Collection) of Coord, not an array of Coord or variable argument list as in other methods.<a name="line.2676"></a>
 <span class="sourceLineNo">2677</span>     * @return an ArrayList of Coord that represents a path to travel to get to an ideal place to use tech. Copy of path.<a name="line.2677"></a>
 <span class="sourceLineNo">2678</span>     */<a name="line.2678"></a>
 <span class="sourceLineNo">2679</span>    @GwtIncompatible<a name="line.2679"></a>
 <span class="sourceLineNo">2680</span>    public ArrayList&lt;Coord&gt; findTechniquePath(int moveLength, Technique tech, char[][] dungeon, FOVCache cache,<a name="line.2680"></a>
-<span class="sourceLineNo">2681</span>                                              Set&lt;Coord&gt; impassable, Set&lt;Coord&gt; allies, Coord start, Set&lt;Coord&gt; targets) {<a name="line.2681"></a>
+<span class="sourceLineNo">2681</span>                                              Collection&lt;Coord&gt; impassable, Collection&lt;Coord&gt; allies, Coord start, Collection&lt;Coord&gt; targets) {<a name="line.2681"></a>
 <span class="sourceLineNo">2682</span>        if (!initialized) return null;<a name="line.2682"></a>
 <span class="sourceLineNo">2683</span>        tech.setMap(dungeon);<a name="line.2683"></a>
 <span class="sourceLineNo">2684</span>        if (cache != null)<a name="line.2684"></a>
@@ -2696,7 +2696,7 @@
 <span class="sourceLineNo">2688</span>        double[][] userDistanceMap;<a name="line.2688"></a>
 <span class="sourceLineNo">2689</span>        double paidLength = 0.0;<a name="line.2689"></a>
 <span class="sourceLineNo">2690</span><a name="line.2690"></a>
-<span class="sourceLineNo">2691</span>        OrderedSet&lt;Coord&gt; friends;<a name="line.2691"></a>
+<span class="sourceLineNo">2691</span>        Collection&lt;Coord&gt; friends;<a name="line.2691"></a>
 <span class="sourceLineNo">2692</span><a name="line.2692"></a>
 <span class="sourceLineNo">2693</span><a name="line.2693"></a>
 <span class="sourceLineNo">2694</span>        for (int x = 0; x &lt; width; x++) {<a name="line.2694"></a>
@@ -2712,16 +2712,16 @@
 <span class="sourceLineNo">2704</span>            cutShort = true;<a name="line.2704"></a>
 <span class="sourceLineNo">2705</span>            return new ArrayList&lt;&gt;(path);<a name="line.2705"></a>
 <span class="sourceLineNo">2706</span>        }<a name="line.2706"></a>
-<span class="sourceLineNo">2707</span>        OrderedSet&lt;Coord&gt; impassable2;<a name="line.2707"></a>
+<span class="sourceLineNo">2707</span>        Collection&lt;Coord&gt; impassable2;<a name="line.2707"></a>
 <span class="sourceLineNo">2708</span>        if (impassable == null)<a name="line.2708"></a>
-<span class="sourceLineNo">2709</span>            impassable2 = new OrderedSet&lt;&gt;();<a name="line.2709"></a>
+<span class="sourceLineNo">2709</span>            impassable2 = Collections.emptySet();<a name="line.2709"></a>
 <span class="sourceLineNo">2710</span>        else<a name="line.2710"></a>
-<span class="sourceLineNo">2711</span>            impassable2 = new OrderedSet&lt;&gt;(impassable);<a name="line.2711"></a>
+<span class="sourceLineNo">2711</span>            impassable2 = new GreasedRegion(width, height, impassable);<a name="line.2711"></a>
 <span class="sourceLineNo">2712</span><a name="line.2712"></a>
 <span class="sourceLineNo">2713</span>        if (allies == null)<a name="line.2713"></a>
-<span class="sourceLineNo">2714</span>            friends = new OrderedSet&lt;&gt;();<a name="line.2714"></a>
+<span class="sourceLineNo">2714</span>            friends = Collections.emptySet();<a name="line.2714"></a>
 <span class="sourceLineNo">2715</span>        else {<a name="line.2715"></a>
-<span class="sourceLineNo">2716</span>            friends = new OrderedSet&lt;&gt;(allies);<a name="line.2716"></a>
+<span class="sourceLineNo">2716</span>            friends = new GreasedRegion(width, height, allies);<a name="line.2716"></a>
 <span class="sourceLineNo">2717</span>            friends.remove(start);<a name="line.2717"></a>
 <span class="sourceLineNo">2718</span>        }<a name="line.2718"></a>
 <span class="sourceLineNo">2719</span><a name="line.2719"></a>
@@ -2865,7 +2865,7 @@
 <span class="sourceLineNo">2857</span><a name="line.2857"></a>
 <span class="sourceLineNo">2858</span><a name="line.2858"></a>
 <span class="sourceLineNo">2859</span>    private double cachedLongerPaths = 1.2;<a name="line.2859"></a>
-<span class="sourceLineNo">2860</span>    private Set&lt;Coord&gt; cachedImpassable = new OrderedSet&lt;&gt;();<a name="line.2860"></a>
+<span class="sourceLineNo">2860</span>    private Collection&lt;Coord&gt; cachedImpassable = new OrderedSet&lt;&gt;();<a name="line.2860"></a>
 <span class="sourceLineNo">2861</span>    private Coord[] cachedFearSources;<a name="line.2861"></a>
 <span class="sourceLineNo">2862</span>    private double[][] cachedFleeMap;<a name="line.2862"></a>
 <span class="sourceLineNo">2863</span>    private int cachedSize = 1;<a name="line.2863"></a>
@@ -2896,8 +2896,8 @@
 <span class="sourceLineNo">2888</span>     * @param fearSources       a vararg or array of Coord positions to run away from<a name="line.2888"></a>
 <span class="sourceLineNo">2889</span>     * @return an ArrayList of Coord that will contain the locations of this creature as it goes away from fear sources. Copy of path.<a name="line.2889"></a>
 <span class="sourceLineNo">2890</span>     */<a name="line.2890"></a>
-<span class="sourceLineNo">2891</span>    public ArrayList&lt;Coord&gt; findFleePath(int length, double preferLongerPaths, Set&lt;Coord&gt; impassable,<a name="line.2891"></a>
-<span class="sourceLineNo">2892</span>                                         Set&lt;Coord&gt; onlyPassable, Coord start, Coord... fearSources) {<a name="line.2892"></a>
+<span class="sourceLineNo">2891</span>    public ArrayList&lt;Coord&gt; findFleePath(int length, double preferLongerPaths, Collection&lt;Coord&gt; impassable,<a name="line.2891"></a>
+<span class="sourceLineNo">2892</span>                                         Collection&lt;Coord&gt; onlyPassable, Coord start, Coord... fearSources) {<a name="line.2892"></a>
 <span class="sourceLineNo">2893</span>        return findFleePath(length, -1, preferLongerPaths, impassable, onlyPassable, start, fearSources);<a name="line.2893"></a>
 <span class="sourceLineNo">2894</span>    }<a name="line.2894"></a>
 <span class="sourceLineNo">2895</span><a name="line.2895"></a>
@@ -2933,18 +2933,18 @@
 <span class="sourceLineNo">2925</span>     * @param fearSources       a vararg or array of Coord positions to run away from<a name="line.2925"></a>
 <span class="sourceLineNo">2926</span>     * @return an ArrayList of Coord that will contain the locations of this creature as it goes away from fear sources. Copy of path.<a name="line.2926"></a>
 <span class="sourceLineNo">2927</span>     */<a name="line.2927"></a>
-<span class="sourceLineNo">2928</span>    public ArrayList&lt;Coord&gt; findFleePath(int length, int scanLimit, double preferLongerPaths, Set&lt;Coord&gt; impassable,<a name="line.2928"></a>
-<span class="sourceLineNo">2929</span>                                         Set&lt;Coord&gt; onlyPassable, Coord start, Coord... fearSources) {<a name="line.2929"></a>
+<span class="sourceLineNo">2928</span>    public ArrayList&lt;Coord&gt; findFleePath(int length, int scanLimit, double preferLongerPaths, Collection&lt;Coord&gt; impassable,<a name="line.2928"></a>
+<span class="sourceLineNo">2929</span>                                         Collection&lt;Coord&gt; onlyPassable, Coord start, Coord... fearSources) {<a name="line.2929"></a>
 <span class="sourceLineNo">2930</span>        if (!initialized) return null;<a name="line.2930"></a>
 <span class="sourceLineNo">2931</span>        path.clear();<a name="line.2931"></a>
-<span class="sourceLineNo">2932</span>        OrderedSet&lt;Coord&gt; impassable2;<a name="line.2932"></a>
+<span class="sourceLineNo">2932</span>        Collection&lt;Coord&gt; impassable2;<a name="line.2932"></a>
 <span class="sourceLineNo">2933</span>        if (impassable == null)<a name="line.2933"></a>
-<span class="sourceLineNo">2934</span>            impassable2 = new OrderedSet&lt;&gt;();<a name="line.2934"></a>
+<span class="sourceLineNo">2934</span>            impassable2 = Collections.emptySet();<a name="line.2934"></a>
 <span class="sourceLineNo">2935</span>        else<a name="line.2935"></a>
-<span class="sourceLineNo">2936</span>            impassable2 = new OrderedSet&lt;&gt;(impassable);<a name="line.2936"></a>
+<span class="sourceLineNo">2936</span>            impassable2 = new GreasedRegion(width, height, impassable);<a name="line.2936"></a>
 <span class="sourceLineNo">2937</span><a name="line.2937"></a>
 <span class="sourceLineNo">2938</span>        if (onlyPassable == null)<a name="line.2938"></a>
-<span class="sourceLineNo">2939</span>            onlyPassable = new OrderedSet&lt;&gt;();<a name="line.2939"></a>
+<span class="sourceLineNo">2939</span>            onlyPassable = Collections.emptySet();<a name="line.2939"></a>
 <span class="sourceLineNo">2940</span>        if (fearSources == null || fearSources.length &lt; 1) {<a name="line.2940"></a>
 <span class="sourceLineNo">2941</span>            cutShort = true;<a name="line.2941"></a>
 <span class="sourceLineNo">2942</span>            path.clear();<a name="line.2942"></a>
@@ -3063,18 +3063,18 @@
 <span class="sourceLineNo">3055</span>     * @return an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target. Copy of path.<a name="line.3055"></a>
 <span class="sourceLineNo">3056</span>     */<a name="line.3056"></a>
 <span class="sourceLineNo">3057</span><a name="line.3057"></a>
-<span class="sourceLineNo">3058</span>    public ArrayList&lt;Coord&gt; findPathLarge(int size, int length, Set&lt;Coord&gt; impassable,<a name="line.3058"></a>
-<span class="sourceLineNo">3059</span>                                          Set&lt;Coord&gt; onlyPassable, Coord start, Coord... targets) {<a name="line.3059"></a>
+<span class="sourceLineNo">3058</span>    public ArrayList&lt;Coord&gt; findPathLarge(int size, int length, Collection&lt;Coord&gt; impassable,<a name="line.3058"></a>
+<span class="sourceLineNo">3059</span>                                          Collection&lt;Coord&gt; onlyPassable, Coord start, Coord... targets) {<a name="line.3059"></a>
 <span class="sourceLineNo">3060</span>        if (!initialized) return null;<a name="line.3060"></a>
 <span class="sourceLineNo">3061</span>        path.clear();<a name="line.3061"></a>
-<span class="sourceLineNo">3062</span>        OrderedSet&lt;Coord&gt; impassable2;<a name="line.3062"></a>
+<span class="sourceLineNo">3062</span>        Collection&lt;Coord&gt; impassable2;<a name="line.3062"></a>
 <span class="sourceLineNo">3063</span>        if (impassable == null)<a name="line.3063"></a>
-<span class="sourceLineNo">3064</span>            impassable2 = new OrderedSet&lt;&gt;();<a name="line.3064"></a>
+<span class="sourceLineNo">3064</span>            impassable2 = Collections.emptySet();<a name="line.3064"></a>
 <span class="sourceLineNo">3065</span>        else<a name="line.3065"></a>
-<span class="sourceLineNo">3066</span>            impassable2 = new OrderedSet&lt;&gt;(impassable);<a name="line.3066"></a>
+<span class="sourceLineNo">3066</span>            impassable2 = new GreasedRegion(width, height, impassable);<a name="line.3066"></a>
 <span class="sourceLineNo">3067</span><a name="line.3067"></a>
 <span class="sourceLineNo">3068</span>        if (onlyPassable == null)<a name="line.3068"></a>
-<span class="sourceLineNo">3069</span>            onlyPassable = new OrderedSet&lt;&gt;();<a name="line.3069"></a>
+<span class="sourceLineNo">3069</span>            onlyPassable = Collections.emptySet();<a name="line.3069"></a>
 <span class="sourceLineNo">3070</span><a name="line.3070"></a>
 <span class="sourceLineNo">3071</span>        resetMap();<a name="line.3071"></a>
 <span class="sourceLineNo">3072</span>        for (Coord goal : targets) {<a name="line.3072"></a>
@@ -3166,8 +3166,8 @@
 <span class="sourceLineNo">3158</span>     * @param targets        a vararg or array of Coord that this will try to pathfind toward<a name="line.3158"></a>
 <span class="sourceLineNo">3159</span>     * @return an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target. Copy of path.<a name="line.3159"></a>
 <span class="sourceLineNo">3160</span>     */<a name="line.3160"></a>
-<span class="sourceLineNo">3161</span>    public ArrayList&lt;Coord&gt; findAttackPathLarge(int size, int moveLength, int preferredRange, LOS los, Set&lt;Coord&gt; impassable,<a name="line.3161"></a>
-<span class="sourceLineNo">3162</span>                                                Set&lt;Coord&gt; onlyPassable, Coord start, Coord... targets) {<a name="line.3162"></a>
+<span class="sourceLineNo">3161</span>    public ArrayList&lt;Coord&gt; findAttackPathLarge(int size, int moveLength, int preferredRange, LOS los, Collection&lt;Coord&gt; impassable,<a name="line.3161"></a>
+<span class="sourceLineNo">3162</span>                                                Collection&lt;Coord&gt; onlyPassable, Coord start, Coord... targets) {<a name="line.3162"></a>
 <span class="sourceLineNo">3163</span>        if (!initialized) return null;<a name="line.3163"></a>
 <span class="sourceLineNo">3164</span>        if (preferredRange &lt; 0) preferredRange = 0;<a name="line.3164"></a>
 <span class="sourceLineNo">3165</span>        double[][] resMap = new double[width][height];<a name="line.3165"></a>
@@ -3179,14 +3179,14 @@
 <span class="sourceLineNo">3171</span>            }<a name="line.3171"></a>
 <span class="sourceLineNo">3172</span>        }<a name="line.3172"></a>
 <span class="sourceLineNo">3173</span>        path.clear();<a name="line.3173"></a>
-<span class="sourceLineNo">3174</span>        OrderedSet&lt;Coord&gt; impassable2;<a name="line.3174"></a>
+<span class="sourceLineNo">3174</span>        Collection&lt;Coord&gt; impassable2;<a name="line.3174"></a>
 <span class="sourceLineNo">3175</span>        if (impassable == null)<a name="line.3175"></a>
-<span class="sourceLineNo">3176</span>            impassable2 = new OrderedSet&lt;&gt;();<a name="line.3176"></a>
+<span class="sourceLineNo">3176</span>            impassable2 = Collections.emptySet();<a name="line.3176"></a>
 <span class="sourceLineNo">3177</span>        else<a name="line.3177"></a>
-<span class="sourceLineNo">3178</span>            impassable2 = new OrderedSet&lt;&gt;(impassable);<a name="line.3178"></a>
+<span class="sourceLineNo">3178</span>            impassable2 = new GreasedRegion(width, height, impassable);<a name="line.3178"></a>
 <span class="sourceLineNo">3179</span><a name="line.3179"></a>
 <span class="sourceLineNo">3180</span>        if (onlyPassable == null)<a name="line.3180"></a>
-<span class="sourceLineNo">3181</span>            onlyPassable = new OrderedSet&lt;&gt;();<a name="line.3181"></a>
+<span class="sourceLineNo">3181</span>            onlyPassable = Collections.emptySet();<a name="line.3181"></a>
 <span class="sourceLineNo">3182</span><a name="line.3182"></a>
 <span class="sourceLineNo">3183</span>        resetMap();<a name="line.3183"></a>
 <span class="sourceLineNo">3184</span>        for (Coord goal : targets) {<a name="line.3184"></a>
@@ -3311,7 +3311,7 @@
 <span class="sourceLineNo">3303</span>     * @return an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target. Copy of path.<a name="line.3303"></a>
 <span class="sourceLineNo">3304</span>     */<a name="line.3304"></a>
 <span class="sourceLineNo">3305</span>    public ArrayList&lt;Coord&gt; findAttackPathLarge(int size, int moveLength, int minPreferredRange, int maxPreferredRange, LOS los,<a name="line.3305"></a>
-<span class="sourceLineNo">3306</span>                                                Set&lt;Coord&gt; impassable, Set&lt;Coord&gt; onlyPassable, Coord start, Coord... targets) {<a name="line.3306"></a>
+<span class="sourceLineNo">3306</span>                                                Collection&lt;Coord&gt; impassable, Collection&lt;Coord&gt; onlyPassable, Coord start, Coord... targets) {<a name="line.3306"></a>
 <span class="sourceLineNo">3307</span>        if (!initialized) return null;<a name="line.3307"></a>
 <span class="sourceLineNo">3308</span>        if (minPreferredRange &lt; 0) minPreferredRange = 0;<a name="line.3308"></a>
 <span class="sourceLineNo">3309</span>        if (maxPreferredRange &lt; minPreferredRange) maxPreferredRange = minPreferredRange;<a name="line.3309"></a>
@@ -3324,14 +3324,14 @@
 <span class="sourceLineNo">3316</span>            }<a name="line.3316"></a>
 <span class="sourceLineNo">3317</span>        }<a name="line.3317"></a>
 <span class="sourceLineNo">3318</span>        path.clear();<a name="line.3318"></a>
-<span class="sourceLineNo">3319</span>        OrderedSet&lt;Coord&gt; impassable2;<a name="line.3319"></a>
+<span class="sourceLineNo">3319</span>        Collection&lt;Coord&gt; impassable2;<a name="line.3319"></a>
 <span class="sourceLineNo">3320</span>        if (impassable == null)<a name="line.3320"></a>
-<span class="sourceLineNo">3321</span>            impassable2 = new OrderedSet&lt;&gt;();<a name="line.3321"></a>
+<span class="sourceLineNo">3321</span>            impassable2 = Collections.emptySet();<a name="line.3321"></a>
 <span class="sourceLineNo">3322</span>        else<a name="line.3322"></a>
-<span class="sourceLineNo">3323</span>            impassable2 = new OrderedSet&lt;&gt;(impassable);<a name="line.3323"></a>
+<span class="sourceLineNo">3323</span>            impassable2 = new GreasedRegion(width, height, impassable);<a name="line.3323"></a>
 <span class="sourceLineNo">3324</span><a name="line.3324"></a>
 <span class="sourceLineNo">3325</span>        if (onlyPassable == null)<a name="line.3325"></a>
-<span class="sourceLineNo">3326</span>            onlyPassable = new OrderedSet&lt;&gt;();<a name="line.3326"></a>
+<span class="sourceLineNo">3326</span>            onlyPassable = Collections.emptySet();<a name="line.3326"></a>
 <span class="sourceLineNo">3327</span><a name="line.3327"></a>
 <span class="sourceLineNo">3328</span>        resetMap();<a name="line.3328"></a>
 <span class="sourceLineNo">3329</span>        for (Coord goal : targets) {<a name="line.3329"></a>
@@ -3457,18 +3457,18 @@
 <span class="sourceLineNo">3449</span>     * @param fearSources       a vararg or array of Coord positions to run away from<a name="line.3449"></a>
 <span class="sourceLineNo">3450</span>     * @return an ArrayList of Coord that will contain the locations of this creature as it goes away from fear sources. Copy of path.<a name="line.3450"></a>
 <span class="sourceLineNo">3451</span>     */<a name="line.3451"></a>
-<span class="sourceLineNo">3452</span>    public ArrayList&lt;Coord&gt; findFleePathLarge(int size, int length, double preferLongerPaths, Set&lt;Coord&gt; impassable,<a name="line.3452"></a>
-<span class="sourceLineNo">3453</span>                                              Set&lt;Coord&gt; onlyPassable, Coord start, Coord... fearSources) {<a name="line.3453"></a>
+<span class="sourceLineNo">3452</span>    public ArrayList&lt;Coord&gt; findFleePathLarge(int size, int length, double preferLongerPaths, Collection&lt;Coord&gt; impassable,<a name="line.3452"></a>
+<span class="sourceLineNo">3453</span>                                              Collection&lt;Coord&gt; onlyPassable, Coord start, Coord... fearSources) {<a name="line.3453"></a>
 <span class="sourceLineNo">3454</span>        if (!initialized) return null;<a name="line.3454"></a>
 <span class="sourceLineNo">3455</span>        path.clear();<a name="line.3455"></a>
-<span class="sourceLineNo">3456</span>        OrderedSet&lt;Coord&gt; impassable2;<a name="line.3456"></a>
+<span class="sourceLineNo">3456</span>        Collection&lt;Coord&gt; impassable2;<a name="line.3456"></a>
 <span class="sourceLineNo">3457</span>        if (impassable == null)<a name="line.3457"></a>
-<span class="sourceLineNo">3458</span>            impassable2 = new OrderedSet&lt;&gt;();<a name="line.3458"></a>
+<span class="sourceLineNo">3458</span>            impassable2 = Collections.emptySet();<a name="line.3458"></a>
 <span class="sourceLineNo">3459</span>        else<a name="line.3459"></a>
-<span class="sourceLineNo">3460</span>            impassable2 = new OrderedSet&lt;&gt;(impassable);<a name="line.3460"></a>
+<span class="sourceLineNo">3460</span>            impassable2 = new GreasedRegion(width, height, impassable);<a name="line.3460"></a>
 <span class="sourceLineNo">3461</span><a name="line.3461"></a>
 <span class="sourceLineNo">3462</span>        if (onlyPassable == null)<a name="line.3462"></a>
-<span class="sourceLineNo">3463</span>            onlyPassable = new OrderedSet&lt;&gt;();<a name="line.3463"></a>
+<span class="sourceLineNo">3463</span>            onlyPassable = Collections.emptySet();<a name="line.3463"></a>
 <span class="sourceLineNo">3464</span>        if (fearSources == null || fearSources.length &lt; 1) {<a name="line.3464"></a>
 <span class="sourceLineNo">3465</span>            cutShort = true;<a name="line.3465"></a>
 <span class="sourceLineNo">3466</span>            path.clear();<a name="line.3466"></a>

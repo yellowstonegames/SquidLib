@@ -84,13 +84,13 @@ public class DijkstraRiverTest {
     {
         int width = heights.length, height = heights[0].length;
         StatefulRNG random = new StatefulRNG(0x13371337BEEFL);
-        GreasedRegion water = new GreasedRegion(heights, 0.5),
-                land = water.copy().not(),
+        GreasedRegion land = new GreasedRegion(heights,  0.0, 0.5),
                 chaos = new GreasedRegion(random, width, height),
                 riverStarts = new GreasedRegion(heights, 0.7, 2.0).and(chaos),
                 rivers = new GreasedRegion(width, height);
         chaos.refill(random, width, height);
         char[][] map = land.toChars('.', '~');
+        Coord[] shores = land.copy().fringe().asCoords();
         DijkstraMap dm = new DijkstraMap(map, '~');
         dm.rng = random;
         dm.measurement = DijkstraMap.Measurement.EUCLIDEAN;
@@ -103,15 +103,15 @@ public class DijkstraRiverTest {
                     heights2[x][y] *= 15.0; // up to 3 bits of random number, so 0-7
             }
         }
-        dm.initialize(heights2);
-        dm.setGoals(water);
-        dm.scan(chaos);
         ArrayList<Coord> path;
         Coord source;
         int size = riverStarts.size() >> 1;
         char[] letters = ArrayTools.letterSpan(size);
         for (int idx = 0; idx < size && idx < 26; idx++) {
-            path = dm.findPathPreScanned(riverStarts.atFraction(VanDerCorputQRNG.determineMixed(idx)));
+            dm.initialize(heights2);
+            path = dm.findPath(80, chaos.refill(random, width, height), null,
+                    riverStarts.atFraction(VanDerCorputQRNG.determineMixed(idx)),
+                    shores);
             rivers.clear();
             rivers.insertSeveral(path);
             if(dm.cutShort && !path.isEmpty())

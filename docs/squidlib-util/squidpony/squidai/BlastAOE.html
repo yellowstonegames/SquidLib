@@ -229,8 +229,8 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidai/BlastAOE.html#idealLocations-java.util.Set-java.util.Set-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidai/BlastAOE.html#idealLocations-java.util.Collection-java.util.Collection-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>
 <div class="block">Returns a OrderedMap of Coord keys and ArrayList of Coord values, where each Coord key is an ideal location to
  hit as many of the Points in targets as possible without hitting any Points in requiredExclusions, and each value
  is the collection of targets that will be hit if the associated key is used.</div>
@@ -238,9 +238,9 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidai/BlastAOE.html#idealLocations-java.util.Set-java.util.Set-java.util.Set-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;priorityTargets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;lesserTargets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidai/BlastAOE.html#idealLocations-java.util.Collection-java.util.Collection-java.util.Collection-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;priorityTargets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;lesserTargets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>
 <div class="block">A variant of idealLocations that takes two groups of desirable targets, and will rate locations by how many
  priorityTargets are in the AOE, then by how many lesserTargets are in the AOE, and will only consider locations
  that do not affect a Coord in requiredExclusions.</div>
@@ -248,7 +248,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidai/BlastAOE.html#mayContainTarget-java.util.Set-">mayContainTarget</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidai/BlastAOE.html#mayContainTarget-java.util.Collection-">mayContainTarget</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets)</code>
 <div class="block">Given a Set of Points that the producer of the AOE wants to include in the region of this AOE, this method does
  a quick approximation to see if there is any possibility that the AOE as currently configured might include one
  of those Points within itself.</div>
@@ -461,14 +461,14 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 </dl>
 </li>
 </ul>
-<a name="mayContainTarget-java.util.Set-">
+<a name="mayContainTarget-java.util.Collection-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>mayContainTarget</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidai/BlastAOE.html#line.87">mayContainTarget</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidai/AOE.html#mayContainTarget-java.util.Set-">AOE</a></code></span></div>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidai/BlastAOE.html#line.87">mayContainTarget</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidai/AOE.html#mayContainTarget-java.util.Collection-">AOE</a></code></span></div>
 <div class="block">Given a Set of Points that the producer of the AOE wants to include in the region of this AOE, this method does
  a quick approximation to see if there is any possibility that the AOE as currently configured might include one
  of those Points within itself. It does not do a full, detailed scan, nor does it count how many opponents might
@@ -478,23 +478,23 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
  FOV radius) because it prevents checking enemies on the other side of the map and through multiple walls.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../squidpony/squidai/AOE.html#mayContainTarget-java.util.Set-">mayContainTarget</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidai/AOE.html" title="interface in squidpony.squidai">AOE</a></code></dd>
+<dd><code><a href="../../squidpony/squidai/AOE.html#mayContainTarget-java.util.Collection-">mayContainTarget</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidai/AOE.html" title="interface in squidpony.squidai">AOE</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>targets</code> - a Set of Points that are desirable targets to include in this AOE</dd>
+<dd><code>targets</code> - a Collection (usually a Set) of Points that are desirable targets to include in this AOE</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if there could be at least one target within the AOE, false otherwise. Very approximate.</dd>
 </dl>
 </li>
 </ul>
-<a name="idealLocations-java.util.Set-java.util.Set-">
+<a name="idealLocations-java.util.Collection-java.util.Collection-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>idealLocations</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/squidai/BlastAOE.html#line.97">idealLocations</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
-                                                         <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidai/AOE.html#idealLocations-java.util.Set-java.util.Set-">AOE</a></code></span></div>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/squidai/BlastAOE.html#line.97">idealLocations</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
+                                                         <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidai/AOE.html#idealLocations-java.util.Collection-java.util.Collection-">AOE</a></code></span></div>
 <div class="block">Returns a OrderedMap of Coord keys and ArrayList of Coord values, where each Coord key is an ideal location to
  hit as many of the Points in targets as possible without hitting any Points in requiredExclusions, and each value
  is the collection of targets that will be hit if the associated key is used. The length of any ArrayList in the
@@ -512,7 +512,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
  shift(Coord) with the location of some enemy (probably the closest) as its argument.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../squidpony/squidai/AOE.html#idealLocations-java.util.Set-java.util.Set-">idealLocations</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidai/AOE.html" title="interface in squidpony.squidai">AOE</a></code></dd>
+<dd><code><a href="../../squidpony/squidai/AOE.html#idealLocations-java.util.Collection-java.util.Collection-">idealLocations</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidai/AOE.html" title="interface in squidpony.squidai">AOE</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>targets</code> - a Set of Points that are desirable targets to include in this AOE</dd>
 <dd><code>requiredExclusions</code> - a Set of Points that this tries strongly to avoid including in this AOE</dd>
@@ -521,16 +521,16 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 </dl>
 </li>
 </ul>
-<a name="idealLocations-java.util.Set-java.util.Set-java.util.Set-">
+<a name="idealLocations-java.util.Collection-java.util.Collection-java.util.Collection-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>idealLocations</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/squidai/BlastAOE.html#line.239">idealLocations</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;priorityTargets,
-                                                         <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;lesserTargets,
-                                                         <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidai/AOE.html#idealLocations-java.util.Set-java.util.Set-java.util.Set-">AOE</a></code></span></div>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/squidai/BlastAOE.html#line.239">idealLocations</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;priorityTargets,
+                                                         <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;lesserTargets,
+                                                         <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidai/AOE.html#idealLocations-java.util.Collection-java.util.Collection-java.util.Collection-">AOE</a></code></span></div>
 <div class="block">A variant of idealLocations that takes two groups of desirable targets, and will rate locations by how many
  priorityTargets are in the AOE, then by how many lesserTargets are in the AOE, and will only consider locations
  that do not affect a Coord in requiredExclusions. Unlike the variant of idealLocations that only takes one group
@@ -540,7 +540,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
  priorityTarget is worth four times what a lesserTarget is worth in the calculation this uses).</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../squidpony/squidai/AOE.html#idealLocations-java.util.Set-java.util.Set-java.util.Set-">idealLocations</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidai/AOE.html" title="interface in squidpony.squidai">AOE</a></code></dd>
+<dd><code><a href="../../squidpony/squidai/AOE.html#idealLocations-java.util.Collection-java.util.Collection-java.util.Collection-">idealLocations</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidai/AOE.html" title="interface in squidpony.squidai">AOE</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>priorityTargets</code> - A Set of Points that are the most-wanted targets to include in this AOE</dd>
 <dd><code>lesserTargets</code> - A Set of Points that are the less-wanted targets to include in this AOE, should not overlap with priorityTargets</dd>

@@ -109,7 +109,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/squidai/Technique.html#line.47">Technique</a>
+<pre>public class <a href="../../src-html/squidpony/squidai/Technique.html#line.48">Technique</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">A simple struct-like class that stores various public fields which describe the targeting properties of a skill,
  spell, tech, or any other game-specific term for a targeted (typically offensive) ability we call a Technique.
@@ -251,9 +251,9 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidai/Technique.html#idealLocations-squidpony.squidmath.Coord-java.util.Set-java.util.Set-">idealLocations</a></span>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;user,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidai/Technique.html#idealLocations-squidpony.squidmath.Coord-java.util.Collection-java.util.Collection-">idealLocations</a></span>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;user,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>
 <div class="block">Get a mapping of Coord keys representing locations to apply this Technique to, to ArrayList of Coord values
  representing which targets (by their location) are effected by choosing that Coord.</div>
 </td>
@@ -302,7 +302,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>name</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> <a href="../../src-html/squidpony/squidai/Technique.html#line.48">name</a></pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> <a href="../../src-html/squidpony/squidai/Technique.html#line.49">name</a></pre>
 </li>
 </ul>
 <a name="id">
@@ -311,7 +311,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>id</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> <a href="../../src-html/squidpony/squidai/Technique.html#line.49">id</a></pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> <a href="../../src-html/squidpony/squidai/Technique.html#line.50">id</a></pre>
 </li>
 </ul>
 <a name="aoe">
@@ -320,7 +320,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>aoe</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidai/AOE.html" title="interface in squidpony.squidai">AOE</a> <a href="../../src-html/squidpony/squidai/Technique.html#line.50">aoe</a></pre>
+<pre>public&nbsp;<a href="../../squidpony/squidai/AOE.html" title="interface in squidpony.squidai">AOE</a> <a href="../../src-html/squidpony/squidai/Technique.html#line.51">aoe</a></pre>
 </li>
 </ul>
 <a name="dungeon">
@@ -329,7 +329,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>dungeon</h4>
-<pre>protected&nbsp;char[][] <a href="../../src-html/squidpony/squidai/Technique.html#line.51">dungeon</a></pre>
+<pre>protected&nbsp;char[][] <a href="../../src-html/squidpony/squidai/Technique.html#line.52">dungeon</a></pre>
 </li>
 </ul>
 <a name="DEFAULT_POINT">
@@ -338,7 +338,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>DEFAULT_POINT</h4>
-<pre>protected static final&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a> <a href="../../src-html/squidpony/squidai/Technique.html#line.52">DEFAULT_POINT</a></pre>
+<pre>protected static final&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a> <a href="../../src-html/squidpony/squidai/Technique.html#line.53">DEFAULT_POINT</a></pre>
 </li>
 </ul>
 </li>
@@ -355,7 +355,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>Technique</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/Technique.html#line.58">Technique</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/Technique.html#line.59">Technique</a>()</pre>
 <div class="block">Creates a Technique that can target any adjacent single Coord, using
  Chebyshev (8-way square) distance.</div>
 </li>
@@ -366,7 +366,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>Technique</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/Technique.html#line.69">Technique</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/Technique.html#line.70">Technique</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</pre>
 <div class="block">Creates a Technique that can target any adjacent single Coord,
  using Chebyshev (8-way square) distance.</div>
 <dl>
@@ -381,7 +381,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>Technique</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/Technique.html#line.81">Technique</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/Technique.html#line.82">Technique</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
                  <a href="../../squidpony/squidai/AOE.html" title="interface in squidpony.squidai">AOE</a>&nbsp;aoe)</pre>
 <div class="block">Creates a Technique that can target a Coord at a range specified by the given AOE's minRange and maxRange,
  using a distance metric from the AOE, and use that target Coord for the given AOE.</div>
@@ -398,7 +398,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Technique</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/Technique.html#line.95">Technique</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/Technique.html#line.96">Technique</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
                  <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;id,
                  <a href="../../squidpony/squidai/AOE.html" title="interface in squidpony.squidai">AOE</a>&nbsp;aoe)</pre>
 <div class="block">Creates a Technique that can target a Coord at a range specified by the given AOE's minRange and maxRange,
@@ -425,7 +425,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>setMap</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/Technique.html#line.111">setMap</a>(char[][]&nbsp;map)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/Technique.html#line.112">setMap</a>(char[][]&nbsp;map)</pre>
 <div class="block">VITAL: Call this method before any calls to idealLocations() or apply(), and call it again if the map changes.
 
  This simple method sets the map that this Technique can find targets in to a given char 2D array with '#' for
@@ -438,15 +438,15 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="idealLocations-squidpony.squidmath.Coord-java.util.Set-java.util.Set-">
+<a name="idealLocations-squidpony.squidmath.Coord-java.util.Collection-java.util.Collection-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>idealLocations</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/squidai/Technique.html#line.132">idealLocations</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;user,
-                                                         <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
-                                                         <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/squidai/Technique.html#line.133">idealLocations</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;user,
+                                                         <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
+                                                         <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</pre>
 <div class="block">Get a mapping of Coord keys representing locations to apply this Technique to, to ArrayList of Coord values
  representing which targets (by their location) are effected by choosing that Coord. All targets with this method
  are valued equally, and the ideal location affects as many as possible without hitting any requiredExclusions.
@@ -471,7 +471,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>idealLocations</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/squidai/Technique.html#line.156">idealLocations</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;user,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/squidai/Technique.html#line.157">idealLocations</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;user,
                                                          <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;priorityTargets,
                                                          <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;lesserTargets,
                                                          <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</pre>
@@ -502,7 +502,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>apply</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/Technique.html#line.176">apply</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;user,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/Technique.html#line.177">apply</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;user,
                                       <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;aimAt)</pre>
 <div class="block">This does one last validation of the location aimAt (checking that it is within the valid range for this
  Technique) before getting the area affected by the AOE targeting that cell. It considers the origin of the AOE

@@ -92,7 +92,32 @@
  instead of just staying in cover forever (or until an enemy moves around the cover and ambushes the pathfinder).</div>
 </dd>
 <dt><a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance"><span class="typeNameLink">DijkstraBenchmark</span></a> - Class in <a href="../squidpony/performance/package-summary.html">squidpony.performance</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Times:
+ Benchmark                                        Mode  Cnt     Score     Error  Units
+ DijkstraBenchmark.measurePathAStar               avgt    3  5083.488 ± 997.886  ms/op
+ DijkstraBenchmark.measurePathAStar2              avgt    3   485.639 ±  21.579  ms/op
+ DijkstraBenchmark.measurePathCustomDijkstra      avgt    3   104.302 ±  12.242  ms/op
+ DijkstraBenchmark.measurePathDijkstra            avgt    3   113.594 ±   4.293  ms/op
+ DijkstraBenchmark.measurePathGDXAStar            avgt    3    29.972 ±   0.370  ms/op
+ DijkstraBenchmark.measureTinyPathAStar2          avgt    3     7.099 ±   0.192  ms/op
+ DijkstraBenchmark.measureTinyPathCustomDijkstra  avgt    3    12.209 ±  22.552  ms/op
+ DijkstraBenchmark.measureTinyPathDijkstra        avgt    3    25.559 ±   1.930  ms/op
+ DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3     1.119 ±   0.100  ms/op
+
+ December 21 2016, different hardware:
+ Benchmark                                        Mode  Cnt     Score      Error  Units
+ DijkstraBenchmark.measurePathAStar               avgt    3  5850.311 ± 404.757  ms/op
+ DijkstraBenchmark.measurePathAStar2              avgt    3   560.238 ± 189.030  ms/op
+ DijkstraBenchmark.measurePathBoxedDijkstra       avgt    3   209.980 ±  66.035  ms/op // not tested before
+ DijkstraBenchmark.measurePathCustomDijkstra      avgt    3   121.427 ±  38.127  ms/op
+ DijkstraBenchmark.measurePathDijkstra            avgt    3   130.467 ±  88.321  ms/op
+ DijkstraBenchmark.measurePathGDXAStar            avgt    3    34.108 ±  17.086  ms/op
+ DijkstraBenchmark.measureTinyPathAStar2          avgt    3     8.278 ±   1.149  ms/op
+ DijkstraBenchmark.measureTinyPathCustomDijkstra  avgt    3    14.551 ±  14.218  ms/op
+ DijkstraBenchmark.measureTinyPathDijkstra        avgt    3    28.658 ±  13.810  ms/op
+ DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3     1.245 ±   0.265  ms/op</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#DijkstraBenchmark--">DijkstraBenchmark()</a></span> - Constructor for class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate"><span class="typeNameLink">DijkstraMap</span></a> - Class in <a href="../squidpony/performance/alternate/package-summary.html">squidpony.performance.alternate</a></dt>
@@ -117,27 +142,27 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#DijkstraMap-char:A:A-">DijkstraMap(char[][])</a></span> - Constructor for class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
 <dd>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#DijkstraMap-char:A:A-squidpony.squidmath.RNG-">DijkstraMap(char[][], RNG)</a></span> - Constructor for class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
 <dd>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#DijkstraMap-char:A:A-char-">DijkstraMap(char[][], char)</a></span> - Constructor for class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
 <dd>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where one char means a wall and anything else is a walkable tile.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#DijkstraMap-char:A:A-squidpony.performance.alternate.DijkstraMap.Measurement-">DijkstraMap(char[][], DijkstraMap.Measurement)</a></span> - Constructor for class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
 <dd>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#DijkstraMap-char:A:A-squidpony.performance.alternate.DijkstraMap.Measurement-squidpony.squidmath.RNG-">DijkstraMap(char[][], DijkstraMap.Measurement, RNG)</a></span> - Constructor for class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
 <dd>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </dd>
 <dt><a href="../squidpony/performance/alternate/DijkstraMap.Measurement.html" title="enum in squidpony.performance.alternate"><span class="typeNameLink">DijkstraMap.Measurement</span></a> - Enum in <a href="../squidpony/performance/alternate/package-summary.html">squidpony.performance.alternate</a></dt>

@@ -269,21 +269,21 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/DijkstraMap.html#DijkstraMap-char:A:A-">DijkstraMap</a></span>(char[][]&nbsp;level)</code>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/DijkstraMap.html#DijkstraMap-char:A:A-char-">DijkstraMap</a></span>(char[][]&nbsp;level,
            char&nbsp;alternateWall)</code>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where one char means a wall and anything else is a walkable tile.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/DijkstraMap.html#DijkstraMap-char:A:A-squidpony.performance.alternate.DijkstraMap.Measurement-">DijkstraMap</a></span>(char[][]&nbsp;level,
            <a href="../../../squidpony/performance/alternate/DijkstraMap.Measurement.html" title="enum in squidpony.performance.alternate">DijkstraMap.Measurement</a>&nbsp;measurement)</code>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </td>
 </tr>
@@ -291,14 +291,14 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/DijkstraMap.html#DijkstraMap-char:A:A-squidpony.performance.alternate.DijkstraMap.Measurement-squidpony.squidmath.RNG-">DijkstraMap</a></span>(char[][]&nbsp;level,
            <a href="../../../squidpony/performance/alternate/DijkstraMap.Measurement.html" title="enum in squidpony.performance.alternate">DijkstraMap.Measurement</a>&nbsp;measurement,
            squidpony.squidmath.RNG&nbsp;rng)</code>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/DijkstraMap.html#DijkstraMap-char:A:A-squidpony.squidmath.RNG-">DijkstraMap</a></span>(char[][]&nbsp;level,
            squidpony.squidmath.RNG&nbsp;rng)</code>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </td>
 </tr>
@@ -1096,7 +1096,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>DijkstraMap</h4>
 <pre>public&nbsp;<a href="../../../src-html/squidpony/performance/alternate/DijkstraMap.html#line.202">DijkstraMap</a>(char[][]&nbsp;level)</pre>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile. If you only have
  a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
  map that can be used here.</div>
@@ -1114,7 +1114,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <h4>DijkstraMap</h4>
 <pre>public&nbsp;<a href="../../../src-html/squidpony/performance/alternate/DijkstraMap.html#line.223">DijkstraMap</a>(char[][]&nbsp;level,
                    squidpony.squidmath.RNG&nbsp;rng)</pre>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile. If you only have
  a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
  map that can be used here. Also takes an RNG that ensures predictable path choices given
@@ -1134,7 +1134,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <h4>DijkstraMap</h4>
 <pre>public&nbsp;<a href="../../../src-html/squidpony/performance/alternate/DijkstraMap.html#line.242">DijkstraMap</a>(char[][]&nbsp;level,
                    char&nbsp;alternateWall)</pre>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where one char means a wall and anything else is a walkable tile. If you only have
  a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
  map that can be used here. You can specify the character used for walls.</div>
@@ -1152,7 +1152,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <h4>DijkstraMap</h4>
 <pre>public&nbsp;<a href="../../../src-html/squidpony/performance/alternate/DijkstraMap.html#line.262">DijkstraMap</a>(char[][]&nbsp;level,
                    <a href="../../../squidpony/performance/alternate/DijkstraMap.Measurement.html" title="enum in squidpony.performance.alternate">DijkstraMap.Measurement</a>&nbsp;measurement)</pre>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile. If you only have
  a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
  map that can be used here. This constructor specifies a distance measurement.</div>
@@ -1172,7 +1172,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <pre>public&nbsp;<a href="../../../src-html/squidpony/performance/alternate/DijkstraMap.html#line.284">DijkstraMap</a>(char[][]&nbsp;level,
                    <a href="../../../squidpony/performance/alternate/DijkstraMap.Measurement.html" title="enum in squidpony.performance.alternate">DijkstraMap.Measurement</a>&nbsp;measurement,
                    squidpony.squidmath.RNG&nbsp;rng)</pre>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile. If you only have
  a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
  map that can be used here. Also takes a distance measurement and an RNG that ensures
