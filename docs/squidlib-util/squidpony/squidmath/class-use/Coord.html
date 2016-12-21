@@ -2817,8 +2817,8 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>double[][]</code></td>
-<td class="colLast"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.html#partialScan-int-java.util.Set-">partialScan</a></span>(int&nbsp;limit,
-           <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable)</code>
+<td class="colLast"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.html#partialScan-int-java.util.Collection-">partialScan</a></span>(int&nbsp;limit,
+           <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable)</code>
 <div class="block">Recalculate the Dijkstra map up to a limit and return it.</div>
 </td>
 </tr>
@@ -2832,13 +2832,13 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>double[][]</code></td>
-<td class="colLast"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.html#scan-java.util.Set-">scan</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable)</code>
+<td class="colLast"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.html#scan-java.util.Collection-">scan</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable)</code>
 <div class="block">Recalculate the Dijkstra map and return it.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>double[][]</code></td>
-<td class="colLast"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.html#scan-java.util.Set-int-">scan</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable,
+<td class="colLast"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.html#scan-java.util.Collection-int-">scan</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable,
     int&nbsp;size)</code>
 <div class="block">Recalculate the Dijkstra map for a creature that is potentially larger than 1x1 cell and return it.</div>
 </td>
@@ -5955,6 +5955,13 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#GreasedRegion-int-int-java.lang.Iterable-">GreasedRegion</a></span>(int&nbsp;width,
+             int&nbsp;height,
+             <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</code>
+<div class="block">Constructor for a GreasedRegion that can have several "on" cells specified, and has the given width and height.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Region.html#Region-java.util.Collection-">Region</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</code>
 <div class="block">A constructor for a Region that takes a Collection of Coord, such as a List or Set, and encodes all of them in
  the Region.</div>

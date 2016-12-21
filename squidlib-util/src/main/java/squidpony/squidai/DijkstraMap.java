@@ -125,6 +125,9 @@ public class DijkstraMap implements Serializable {
      * path toward a goal is impossible, this ArrayList will be empty.
      */
     public ArrayList<Coord> path = new ArrayList<>();
+
+    public boolean cutShort = false;
+
     /**
      * Goals are always marked with 0.
      */
@@ -772,10 +775,10 @@ public class DijkstraMap implements Serializable {
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
-    public double[][] scan(Set<Coord> impassable) {
+    public double[][] scan(Collection<Coord> impassable) {
         if (!initialized) return null;
         if (impassable == null)
-            impassable = new OrderedSet<>();
+            impassable = Collections.emptySet();
         for (Coord pt : impassable) {
             closed.put(pt.encode(), WALL);
         }
@@ -873,7 +876,7 @@ public class DijkstraMap implements Serializable {
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
-    public double[][] partialScan(int limit, Set<Coord> impassable) {
+    public double[][] partialScan(int limit, Collection<Coord> impassable) {
         if (!initialized) return null;
         if (impassable == null)
             impassable = new OrderedSet<>();
@@ -1062,6 +1065,7 @@ public class DijkstraMap implements Serializable {
      */
     public ArrayList<Coord> findShortcutPath(Coord start, Coord... targets) {
         if (targets.length == 0) {
+            cutShort = true;
             path.clear();
             return new ArrayList<>(path);
         }
@@ -1088,8 +1092,9 @@ public class DijkstraMap implements Serializable {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path.clear();
-                break;
+                cutShort = true;
+                frustration = 0;
+                return new ArrayList<>(path);
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             if (gradientMap[currentPos.x][currentPos.y] == 0)
@@ -1098,6 +1103,7 @@ public class DijkstraMap implements Serializable {
             frustration++;
         }
         frustration = 0;
+        cutShort = false;
         Collections.reverse(path);
         return new ArrayList<>(path);
 
@@ -1201,7 +1207,7 @@ public class DijkstraMap implements Serializable {
      *                   creature. Non-square creatures are not supported because turning is really hard.
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
-    public double[][] scan(Set<Coord> impassable, int size) {
+    public double[][] scan(Collection<Coord> impassable, int size) {
         if (!initialized) return null;
         if (impassable == null)
             impassable = new OrderedSet<>();
@@ -1386,7 +1392,10 @@ public class DijkstraMap implements Serializable {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
+        {
+            cutShort = true;
             return new ArrayList<>(path);
+        }
         if(length < 0)
             length = 0;
         if(scanLimit <= 0 || scanLimit < length)
@@ -1417,8 +1426,9 @@ public class DijkstraMap implements Serializable {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path.clear();
-                break;
+                cutShort = true;
+                frustration = 0;
+                return new ArrayList<>(path);
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(currentPos);
@@ -1435,6 +1445,7 @@ public class DijkstraMap implements Serializable {
             if (gradientMap[currentPos.x][currentPos.y] == 0)
                 break;
         }
+        cutShort = false;
         frustration = 0;
         goals.clear();
         return new ArrayList<>(path);
@@ -1522,7 +1533,10 @@ public class DijkstraMap implements Serializable {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
+        {
+            cutShort = true;
             return new ArrayList<>(path);
+        }
 
         Measurement mess = measurement;
         if (measurement == Measurement.EUCLIDEAN) {
@@ -1577,8 +1591,9 @@ public class DijkstraMap implements Serializable {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path.clear();
-                break;
+                cutShort = true;
+                frustration = 0;
+                return new ArrayList<>(path);
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(Coord.get(currentPos.x, currentPos.y));
@@ -1598,6 +1613,7 @@ public class DijkstraMap implements Serializable {
             if (gradientMap[currentPos.x][currentPos.y] == 0)
                 break;
         }
+        cutShort = false;
         frustration = 0;
         goals.clear();
         return new ArrayList<>(path);
@@ -1667,7 +1683,10 @@ public class DijkstraMap implements Serializable {
 
         path.clear();
         if (targets == null || targets.size() == 0)
+        {
+            cutShort = true;
             return new ArrayList<>(path);
+        }
         OrderedSet<Coord> impassable2;
         if (impassable == null)
             impassable2 = new OrderedSet<>();
@@ -1690,7 +1709,10 @@ public class DijkstraMap implements Serializable {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
+        {
+            cutShort = true;
             return new ArrayList<>(path);
+        }
 
         Measurement mess = measurement;
         /*
@@ -1790,8 +1812,9 @@ public class DijkstraMap implements Serializable {
                 break;
             }
             if (best > gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path.clear();
-                break;
+                cutShort = true;
+                frustration = 0;
+                return new ArrayList<>(path);
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(currentPos);
@@ -1809,6 +1832,7 @@ public class DijkstraMap implements Serializable {
 //            if(gradientMap[currentPos.x][currentPos.y] == 0)
 //                break;
         }
+        cutShort = false;
         frustration = 0;
         goals.clear();
         return new ArrayList<>(path);
@@ -1890,7 +1914,10 @@ public class DijkstraMap implements Serializable {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
+        {
+            cutShort = true;
             return new ArrayList<>(path);
+        }
 
         Measurement mess = measurement;
         if (measurement == Measurement.EUCLIDEAN) {
@@ -1945,8 +1972,9 @@ public class DijkstraMap implements Serializable {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path.clear();
-                break;
+                cutShort = true;
+                frustration = 0;
+                return new ArrayList<>(path);
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(Coord.get(currentPos.x, currentPos.y));
@@ -1966,6 +1994,7 @@ public class DijkstraMap implements Serializable {
             if (gradientMap[currentPos.x][currentPos.y] == 0)
                 break;
         }
+        cutShort = false;
         frustration = 0;
         goals.clear();
         return new ArrayList<>(path);
@@ -2035,7 +2064,10 @@ public class DijkstraMap implements Serializable {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
+        {
+            cutShort = true;
             return new ArrayList<>(path);
+        }
 
         Measurement mess = measurement;
         if (measurement == Measurement.EUCLIDEAN) {
@@ -2132,7 +2164,7 @@ public class DijkstraMap implements Serializable {
             return findCoveredAttackPath(moveLength, minPreferredRange, maxPreferredRange, coverPreference,
                     impassable2, onlyPassable, threats, start, targets);
         }
-
+        cutShort = false;
         frustration = 0;
         return new ArrayList<>(path);
     }
@@ -2246,7 +2278,10 @@ public class DijkstraMap implements Serializable {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
+        {
+            cutShort = true;
             return new ArrayList<>(path);
+        }
 
         Measurement mess = measurement;
         if (measurement == Measurement.EUCLIDEAN) {
@@ -2361,7 +2396,7 @@ public class DijkstraMap implements Serializable {
             return findCoveredAttackPath(moveLength, minPreferredRange, maxPreferredRange, coverPreference,
                     fov, seekDistantGoals, impassable2, onlyPassable, threats, start, targets);
         }
-
+        cutShort = false;
         frustration = 0;
         return new ArrayList<>(path);
     }
@@ -2477,7 +2512,10 @@ public class DijkstraMap implements Serializable {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
+        {
+            cutShort = true;
             return new ArrayList<>(path);
+        }
 
         Measurement mess = measurement;
         if (measurement == Measurement.EUCLIDEAN) {
@@ -2591,7 +2629,7 @@ public class DijkstraMap implements Serializable {
             return findCoveredAttackPath(moveLength, minPreferredRange, maxPreferredRange, coverPreference,
                     fov, seekDistantGoals, impassable2, onlyPassable, threats, start, targets);
         }
-
+        cutShort = false;
         frustration = 0;
         return new ArrayList<>(path);
     }
@@ -2662,7 +2700,10 @@ public class DijkstraMap implements Serializable {
 
         path.clear();
         if (targets == null || targets.size() == 0)
+        {
+            cutShort = true;
             return new ArrayList<>(path);
+        }
         OrderedSet<Coord> impassable2;
         if (impassable == null)
             impassable2 = new OrderedSet<>();
@@ -2685,7 +2726,10 @@ public class DijkstraMap implements Serializable {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
+        {
+            cutShort = true;
             return new ArrayList<>(path);
+        }
 
         Measurement mess = measurement;
         /*
@@ -2785,8 +2829,9 @@ public class DijkstraMap implements Serializable {
                 break;
             }
             if (best > gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path.clear();
-                break;
+                cutShort = true;
+                frustration = 0;
+                return new ArrayList<>(path);
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(currentPos);
@@ -2804,6 +2849,7 @@ public class DijkstraMap implements Serializable {
 //            if(gradientMap[currentPos.x][currentPos.y] == 0)
 //                break;
         }
+        cutShort = false;
         frustration = 0;
         goals.clear();
         return new ArrayList<>(path);
@@ -2892,6 +2938,7 @@ public class DijkstraMap implements Serializable {
         if (onlyPassable == null)
             onlyPassable = new OrderedSet<>();
         if (fearSources == null || fearSources.length < 1) {
+            cutShort = true;
             path.clear();
             return new ArrayList<>(path);
         }
@@ -2908,7 +2955,10 @@ public class DijkstraMap implements Serializable {
                 setGoal(goal.x, goal.y);
             }
             if (goals.isEmpty())
+            {
+                cutShort = true;
                 return new ArrayList<>(path);
+            }
 
             if(length < 0) length = 0;
             if(scanLimit <= 0 || scanLimit < length)
@@ -2951,8 +3001,9 @@ public class DijkstraMap implements Serializable {
                 }
             }
             if (best >= gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path.clear();
-                break;
+                cutShort = true;
+                frustration = 0;
+                return new ArrayList<>(path);
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             if (path.size() > 0) {
@@ -2973,6 +3024,7 @@ public class DijkstraMap implements Serializable {
                 break;
             }
         }
+        cutShort = false;
         frustration = 0;
         goals.clear();
         return new ArrayList<>(path);
@@ -3021,7 +3073,10 @@ public class DijkstraMap implements Serializable {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
+        {
+            cutShort = true;
             return new ArrayList<>(path);
+        }
 
         scan(impassable2, size);
         Coord currentPos = start;
@@ -3048,8 +3103,9 @@ public class DijkstraMap implements Serializable {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path.clear();
-                break;
+                cutShort = true;
+                frustration = 0;
+                return new ArrayList<>(path);
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
 
@@ -3068,6 +3124,7 @@ public class DijkstraMap implements Serializable {
             if (gradientMap[currentPos.x][currentPos.y] == 0)
                 break;
         }
+        cutShort = false;
         frustration = 0;
         goals.clear();
         return new ArrayList<>(path);
@@ -3128,7 +3185,10 @@ public class DijkstraMap implements Serializable {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
+        {
+            cutShort = true;
             return new ArrayList<>(path);
+        }
 
         Measurement mess = measurement;
         if (measurement == Measurement.EUCLIDEAN) {
@@ -3186,8 +3246,9 @@ public class DijkstraMap implements Serializable {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path.clear();
-                break;
+                cutShort = true;
+                frustration = 0;
+                return new ArrayList<>(path);
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(currentPos);
@@ -3205,6 +3266,7 @@ public class DijkstraMap implements Serializable {
             if (gradientMap[currentPos.x][currentPos.y] == 0)
                 break;
         }
+        cutShort = false;
         frustration = 0;
         goals.clear();
         return new ArrayList<>(path);
@@ -3268,7 +3330,10 @@ public class DijkstraMap implements Serializable {
             setGoal(goal);
         }
         if (goals.isEmpty())
+        {
+            cutShort = true;
             return new ArrayList<>(path);
+        }
 
         Measurement mess = measurement;
         if (measurement == Measurement.EUCLIDEAN) {
@@ -3326,8 +3391,9 @@ public class DijkstraMap implements Serializable {
                 }
             }
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path.clear();
-                break;
+                cutShort = true;
+                frustration = 0;
+                return new ArrayList<>(path);
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
 
@@ -3347,6 +3413,7 @@ public class DijkstraMap implements Serializable {
             if (gradientMap[currentPos.x][currentPos.y] == 0)
                 break;
         }
+        cutShort = false;
         frustration = 0;
         goals.clear();
         return new ArrayList<>(path);
@@ -3395,6 +3462,7 @@ public class DijkstraMap implements Serializable {
         if (onlyPassable == null)
             onlyPassable = new OrderedSet<>();
         if (fearSources == null || fearSources.length < 1) {
+            cutShort = true;
             path.clear();
             return new ArrayList<>(path);
         }
@@ -3411,7 +3479,10 @@ public class DijkstraMap implements Serializable {
                 setGoal(goal.x, goal.y);
             }
             if (goals.isEmpty())
+            {
+                cutShort = true;
                 return new ArrayList<>(path);
+            }
 
             scan(impassable2, size);
 
@@ -3446,8 +3517,9 @@ public class DijkstraMap implements Serializable {
                 }
             }
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path.clear();
-                break;
+                cutShort = true;
+                frustration = 0;
+                return new ArrayList<>(path);
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
 
@@ -3469,6 +3541,7 @@ public class DijkstraMap implements Serializable {
                 break;
             }
         }
+        cutShort = false;
         frustration = 0;
         goals.clear();
         return new ArrayList<>(path);
@@ -3512,8 +3585,9 @@ public class DijkstraMap implements Serializable {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path.clear();
-                break;
+                cutShort = true;
+                frustration = 0;
+                return new ArrayList<>(path);
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(0, currentPos);
@@ -3522,8 +3596,8 @@ public class DijkstraMap implements Serializable {
             if (gradientMap[currentPos.x][currentPos.y] == 0)
                 break;
         }
-        frustration = 0;
-        return new ArrayList<>(path);
+        cutShort = false;
+        frustration = 0; return new ArrayList<>(path);
     }
 
     /**
