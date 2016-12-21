@@ -70,6 +70,19 @@ import java.util.concurrent.TimeUnit;
  * DijkstraBenchmark.measureTinyPathCustomDijkstra  avgt    3    12.209 ±  22.552  ms/op
  * DijkstraBenchmark.measureTinyPathDijkstra        avgt    3    25.559 ±   1.930  ms/op
  * DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3     1.119 ±   0.100  ms/op
+ *
+ * December 21 2016, different hardware:
+ * Benchmark                                        Mode  Cnt     Score      Error  Units
+ * DijkstraBenchmark.measurePathAStar               avgt    3  5850.311 ± 404.757  ms/op
+ * DijkstraBenchmark.measurePathAStar2              avgt    3   560.238 ± 189.030  ms/op
+ * DijkstraBenchmark.measurePathBoxedDijkstra       avgt    3   209.980 ±  66.035  ms/op // not tested before
+ * DijkstraBenchmark.measurePathCustomDijkstra      avgt    3   121.427 ±  38.127  ms/op
+ * DijkstraBenchmark.measurePathDijkstra            avgt    3   130.467 ±  88.321  ms/op
+ * DijkstraBenchmark.measurePathGDXAStar            avgt    3    34.108 ±  17.086  ms/op
+ * DijkstraBenchmark.measureTinyPathAStar2          avgt    3     8.278 ±   1.149  ms/op
+ * DijkstraBenchmark.measureTinyPathCustomDijkstra  avgt    3    14.551 ±  14.218  ms/op
+ * DijkstraBenchmark.measureTinyPathDijkstra        avgt    3    28.658 ±  13.810  ms/op
+ * DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3     1.245 ±   0.265  ms/op
  */
 public class DijkstraBenchmark {
 
@@ -355,7 +368,7 @@ public class DijkstraBenchmark {
         }
         return scanned;
     }
-    //@Benchmark
+    @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measurePathBoxedDijkstra() throws InterruptedException {

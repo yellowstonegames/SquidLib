@@ -1037,8 +1037,8 @@ public class CustomDijkstraMap implements Serializable {
      * and that poses all sorts of issues for creatures trying to pathfind to it, not to mention the more
      * general issues of how to display a bisected, but mobile, creature.
      *
-     * @param impassable A Set of Position keys representing the locations of enemies or other moving obstacles to a
-     *                   path that cannot be moved through; this can be null if there are no such obstacles.
+     * @param impassable An array of encoded int keys representing the locations of enemies or other moving obstacles to
+     *                   a path that cannot be moved through; this can be null if there are no such obstacles.
      * @param size       The length of one side of a square creature using this to find a path, i.e. 2 for a 2x2 cell
      *                   creature. Non-square creatures are not supported because turning is really hard.
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
