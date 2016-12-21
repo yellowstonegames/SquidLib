@@ -452,11 +452,13 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         } else {
             this.width = (bits == null || width < 0) ? 0 : width;
             this.height = (bits == null || bits.length <= 0 || height < 0) ? 0 : height;
-            ySections = (height + 63) >> 6;
-            yEndMask = -1L >>> (64 - (height & 63));
-            data = new long[width * ySections];
-            for (int a = 0, x = 0, y = 0; a < bits.length; a++, x = a / height, y = a % height) {
-                if(bits[a]) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+            ySections = (this.height + 63) >> 6;
+            yEndMask = -1L >>> (64 - (this.height & 63));
+            data = new long[this.width * ySections];
+            if(bits != null) {
+                for (int a = 0, x = 0, y = 0; a < bits.length; a++, x = a / this.height, y = a % this.height) {
+                    if (bits[a]) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+                }
             }
             return this;
         }
@@ -524,6 +526,32 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
 
     /**
+     * Constructor for a GreasedRegion that can have several "on" cells specified, and has the given width and height.
+     * Note that to avoid confusion with the constructor that takes one Coord value, this takes the Iterable of
+     * Coords last, while the single-Coord constructor takes its one Coord first.
+     * @param width the maximum width for the GreasedRegion
+     * @param height the maximum height for the GreasedRegion
+     * @param points an array or vararg of Coord to store as "on" in this GreasedRegion
+     */
+    public GreasedRegion(int width, int height, Iterable<Coord> points)
+    {
+        this.width = width;
+        this.height = height;
+        ySections = (height + 63) >> 6;
+        yEndMask = -1L >>> (64 - (height & 63));
+        data = new long[width * ySections];
+        if(points != null) {
+            int x, y;
+            for (Coord c : points) {
+                x = c.x;
+                y = c.y;
+                if (x < width && y < height && x >= 0 && y >= 0)
+                    data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+            }
+        }
+    }
+
+    /**
      * Constructor for a random GreasedRegion of the given width and height.
      * GreasedRegions are mutable, so you can add to this with insert() or insertSeveral(), among others.
      * @param random a RandomnessSource (such as LightRNG or ThunderRNG) that this will use to generate its contents
@@ -547,6 +575,29 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         }
     }
 
+    public GreasedRegion refill(RandomnessSource random, int width, int height) {
+        if (random != null){
+            if(this.width == width && this.height == height) {
+                for (int i = 0; i < width * ySections; i++) {
+                    data[i] = random.nextLong();
+                }
+            } else {
+                this.width = (width <= 0) ? 0 : width;
+                this.height = (height <= 0) ? 0 : height;
+                ySections = (this.height + 63) >> 6;
+                yEndMask = -1L >>> (64 - (this.height & 63));
+                data = new long[this.width * ySections];
+                for (int i = 0; i < this.width * ySections; i++) {
+                    data[i] = random.nextLong();
+                }
+            }
+        }
+        return this;
+    }
+
+    public GreasedRegion refill(RNG random, int width, int height) {
+        return refill(random.getRandomness(), width, height);
+    }
     /**
      * Constructor for a random GreasedRegion of the given width and height.
      * GreasedRegions are mutable, so you can add to this with insert() or insertSeveral(), among others.
@@ -2930,11 +2981,18 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     public class GRIterator implements Iterator<Coord>
     {
         public int index = 0;
+        private int[] counts;
         private int limit;
-        private long w, i = 0;
+        private long t, w;
         public GRIterator()
         {
-            limit = size();
+            limit = 0;
+            counts = new int[width * ySections];
+            int tmp;
+            for (int i = 0; i < width * ySections; i++) {
+                tmp = Long.bitCount(data[i]);
+                counts[i] = tmp == 0 ? -1 : (limit += tmp);
+            }
         }
         @Override
         public boolean hasNext() {
@@ -2943,7 +3001,31 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
 
         @Override
         public Coord next() {
-            i = 0L;
+            int ct;
+            if(index >= limit)
+                return null;
+            for (int s = 0; s < ySections; s++) {
+                for (int x = 0; x < width; x++) {
+                    if ((ct = counts[x * ySections + s]) > index) {
+                        t = data[x * ySections + s];
+                        w = Long.lowestOneBit(t);
+                        for (--ct; w != 0; ct--) {
+                            if (ct == index)
+                            {
+                                if(index++ < limit)
+                                    return Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
+                                else
+                                    return null;
+                            }
+                            t ^= w;
+                            w = Long.lowestOneBit(t);
+                        }
+                    }
+                }
+            }
+            return null;
+
+            /*
             for (int x = 0; x < width; x++) {
                 for (int s = 0; s < ySections; s++) {
                     if ((w = Long.lowestOneBit(data[x * ySections + s])) != 0 && i++ >= index) {
@@ -2954,7 +3036,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     }
                 }
             }
-            return null;
+            */
         }
 
         @Override
