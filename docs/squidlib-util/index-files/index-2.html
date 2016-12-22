@@ -480,7 +480,7 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/MonsterGen.html#adjectives">adjectives</a></span> - Variable in class squidpony.<a href="../squidpony/MonsterGen.html" title="class in squidpony">MonsterGen</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="../squidpony/squidgrid/mapping/AestheticDifference.html" title="interface in squidpony.squidgrid.mapping"><span class="typeNameLink">AestheticDifference</span></a> - Interface in <a href="../squidpony/squidgrid/mapping/package-summary.html">squidpony.squidgrid.mapping</a></dt>
+<dt><a href="../squidpony/squidgrid/AestheticDifference.html" title="interface in squidpony.squidgrid"><span class="typeNameLink">AestheticDifference</span></a> - Interface in <a href="../squidpony/squidgrid/package-summary.html">squidpony.squidgrid</a></dt>
 <dd>
 <div class="block">Used by DetailedMimic to allow different kinds of detail, including differentiating color or map features.</div>
 </dd>
@@ -614,7 +614,10 @@
 <div class="block">Changes the Q value at <code>index</code> to another Q value, <code>future</code>, if index is valid.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/DetailedMimic.html#analyze-int:A-int-int-int-int-boolean-">analyze(int[], int, int, int, int, boolean)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/DetailedMimic.html" title="class in squidpony.squidgrid">DetailedMimic</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">DISCOURAGED; use <a href="../squidpony/squidgrid/DetailedMimic.html#neoProcess-int:A-int-int-int-int-int-int-boolean-"><code>DetailedMimic.neoProcess(int[], int, int, int, int, int, int, boolean)</code></a> instead, which doesn't need a
+ separate analysis step.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#and-squidpony.squidmath.GreasedRegion-">and(GreasedRegion)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#andNot-squidpony.squidmath.GreasedRegion-">andNot(GreasedRegion)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
@@ -706,6 +709,10 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/MathExtras.html#approxEquals-double-double-double-">approxEquals(double, double, double)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/MathExtras.html" title="class in squidpony.squidmath">MathExtras</a></dt>
 <dd>
 <div class="block">Checks that two values are approximately equal (plus or minus a specified tolerance).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/RNG.html#approximateBits-int-">approximateBits(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
+<dd>
+<div class="block">Generates a random 64-bit long with a number of '1' bits (Hamming weight) approximately equal to bitCount.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOVCache.html#approximateMemoryUsage--">approximateMemoryUsage()</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOVCache.html" title="class in squidpony.squidgrid">FOVCache</a></dt>
 <dd>&nbsp;</dd>

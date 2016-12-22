@@ -350,10 +350,19 @@
  more than just booleans; it can produce similar styles of texture (its original use in SynTex), of map, of item
  placement, and so on by specifying a different technique for differentiating two int values.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/DetailedMimic.html#DetailedMimic-squidpony.squidgrid.mapping.AestheticDifference-">DetailedMimic(AestheticDifference)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/DetailedMimic.html" title="class in squidpony.squidgrid">DetailedMimic</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/DetailedMimic.html#DetailedMimic-squidpony.squidgrid.mapping.AestheticDifference-squidpony.squidmath.RNG-">DetailedMimic(AestheticDifference, RNG)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/DetailedMimic.html" title="class in squidpony.squidgrid">DetailedMimic</a></dt>
-<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/DetailedMimic.html#DetailedMimic--">DetailedMimic()</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/DetailedMimic.html" title="class in squidpony.squidgrid">DetailedMimic</a></dt>
+<dd>
+<div class="block">Constructor that uses an unseeded RNG and, without any instruction otherwise, assumes the ints this is asked to
+ compare are colors in RGBA8888 format.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/DetailedMimic.html#DetailedMimic-squidpony.squidgrid.AestheticDifference-">DetailedMimic(AestheticDifference)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/DetailedMimic.html" title="class in squidpony.squidgrid">DetailedMimic</a></dt>
+<dd>
+<div class="block">Constructor that uses an unseeded RNG (effectively a random seed) and the given AestheticDifference.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/DetailedMimic.html#DetailedMimic-squidpony.squidgrid.AestheticDifference-squidpony.squidmath.RNG-">DetailedMimic(AestheticDifference, RNG)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/DetailedMimic.html" title="class in squidpony.squidgrid">DetailedMimic</a></dt>
+<dd>
+<div class="block">Constructor that uses the given RNG and the given AestheticDifference.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#deteriorate-java.util.List-">deteriorate(List&lt;Coord&gt;)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
 <dd>
 <div class="block">Used in conjunction with methods that depend on finding cover, like findCoveredAttackPath(), this method causes
@@ -467,13 +476,13 @@
 <dd>
 <div class="block">Creates a new dice roller that will use its own RNG, seeded with the given seed.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/DetailedMimic.html#difference">difference</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/DetailedMimic.html" title="class in squidpony.squidgrid">DetailedMimic</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/AestheticDifference.html#difference-int-int-">difference(int, int)</a></span> - Method in interface squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/AestheticDifference.html" title="interface in squidpony.squidgrid.mapping">AestheticDifference</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/AestheticDifference.html#difference-int-int-">difference(int, int)</a></span> - Method in interface squidpony.squidgrid.<a href="../squidpony/squidgrid/AestheticDifference.html" title="interface in squidpony.squidgrid">AestheticDifference</a></dt>
 <dd>
 <div class="block">Finds the difference between two int values, which implementations of this interface may treat as colors, as
  kinds of map feature, as item placement factors, or various other ways.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/DetailedMimic.html#difference">difference</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/DetailedMimic.html" title="class in squidpony.squidgrid">DetailedMimic</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordPacker.html#differencePacked-short:A-short:A-">differencePacked(short[], short[])</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordPacker.html" title="class in squidpony.squidmath">CoordPacker</a></dt>
 <dd>
 <div class="block">Given two packed short arrays, left and right, this produces a packed short array that encodes "on" for any cell

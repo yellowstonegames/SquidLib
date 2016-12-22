@@ -477,7 +477,7 @@ public class DetailedMimic {
         return sum;
     }
 
-    private static int weightedRandom(double[] array, double r)
+    static int weightedRandom(double[] array, double r)
     {
         double sum = 0;
         for (int j = 0; j < array.length; j++)
@@ -499,7 +499,7 @@ public class DetailedMimic {
         return 0;
     }
 
-    private static int weightedRandom(IntDoubleOrderedMap dic, double r) {
+    static int weightedRandom(IntDoubleOrderedMap dic, double r) {
         int[] ints = new int[dic.size()];
         double[] doubles = new double[dic.size()];
         dic.keySet().toArray(ints);

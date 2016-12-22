@@ -819,6 +819,43 @@ public class RNG implements Serializable {
         return new RNG(random.copy());
     }
 
+    /**
+     * Generates a random 64-bit long with a number of '1' bits (Hamming weight) approximately equal to bitCount.
+     * For example, calling this with a parameter of 32 will be equivalent to calling nextLong() on this object's
+     * RandomnessSource (it doesn't consider overridden nextLong() methods, where present, on subclasses of RNG).
+     * Calling this with a parameter of 16 will have on average 16 of the 64 bits in the returned long set to '1',
+     * distributed pseudo-randomly, while a parameter of 47 will have on average 47 bits set. This can be useful for
+     * certain code that uses bits to represent data but needs a different ratio of set bits to unset bits than 1:1.
+     * <br>
+     * Implementors should limit any overriding method to calling and returning super(), potentially storing any extra
+     * information they need to internally, but should not change the result. This works based on a delicate balance of
+     * the RandomnessSource producing bits with an even 50% chance of being set, regardless of position, and RNG
+     * subclasses that alter the odds won't work as expected here, particularly if those subclasses use doubles
+     * internally (which usually produce less than 64 random bits).
+     * @param bitCount an int, only considered if between 0 and 64, that is the average number of bits to set
+     * @return a 64-bit long that, on average, should have bitCount bits set to 1, potentially anywhere in the long
+     */
+    public long approximateBits(int bitCount)
+    {
+        if(bitCount <= 0)
+            return 0L;
+        if(bitCount >= 64)
+            return -1L;
+        if(bitCount == 32)
+            return random.nextLong();
+        boolean high = bitCount > 32;
+        int altered = (high ? 64 - bitCount : bitCount), lsb = Integer.lowestOneBit(altered);
+        long data = random.nextLong();
+        for (int i = lsb << 1; i <= 16; i <<= 1) {
+            if((altered & i) == 0)
+                data &= random.nextLong();
+            else
+                data |= random.nextLong();
+        }
+        return high ? ~(random.nextLong() & data) : (random.nextLong() & data);
+
+    }
+
     @Override
     public String toString() {
         return "RNG with Randomness Source " + random;
