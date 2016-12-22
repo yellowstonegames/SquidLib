@@ -1,4 +1,4 @@
-package squidpony.squidgrid.mapping;
+package squidpony.squidgrid;
 
 /**
  * Used by DetailedMimic to allow different kinds of detail, including differentiating color or map features.
@@ -24,4 +24,21 @@ public interface AestheticDifference {
      */
     double difference(int a, int b);
 
+    AestheticDifference rgba8888 = new AestheticDifference() {
+        @Override
+        public double difference(int a, int b) {
+            int aa = a >>> 24,
+                    bb = b >>> 24,
+                    t = aa - bb,
+                    sum = t * t;
+            aa = (a >>> 16) & 0xff;
+            bb = (b >>> 16) & 0xff;
+            t = aa - bb;
+            sum += t * t;
+            aa = (a >>> 8) & 0xff;
+            bb = (b >>> 8) & 0xff;
+            t = aa - bb;
+            return (sum + t * t) / 65536.0;
+        }
+    };
 }
