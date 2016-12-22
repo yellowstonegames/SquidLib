@@ -610,6 +610,52 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         this(random.getRandomness(), width, height);
     }
 
+    /**
+     * Constructor for a random GreasedRegion of the given width and height, trying to set the given fraction of cells
+     * to on. GreasedRegions are mutable, so you can add to this with insert() or insertSeveral(), among others.
+     * @param random a RandomnessSource (such as LightRNG or ThunderRNG) that this will use to generate its contents
+     * @param fraction between 0.0 and 1.0 (clamped), only considering a precision of 1.0/64.0 between steps
+     * @param width the maximum width for the GreasedRegion
+     * @param height the maximum height for the GreasedRegion
+     */
+    public GreasedRegion(RNG random, double fraction, int width, int height)
+    {
+        this.width = width;
+        this.height = height;
+        int bitCount = (int) (fraction * 64);
+        ySections = (height + 63) >> 6;
+        yEndMask = -1L >>> (64 - (height & 63));
+        data = new long[width * ySections];
+        for (int i = 0; i < width * ySections; i++) {
+            data[i] = random.approximateBits(bitCount);
+        }
+        if(ySections > 0 && yEndMask != -1) {
+            for (int a = ySections - 1; a < data.length; a += ySections) {
+                data[a] &= yEndMask;
+            }
+        }
+    }
+
+    public GreasedRegion refill(RNG random, double fraction, int width, int height) {
+        if (random != null){
+            int bitCount = (int) (fraction * 64);
+            if(this.width == width && this.height == height) {
+                for (int i = 0; i < width * ySections; i++) {
+                    data[i] = random.approximateBits(bitCount);
+                }
+            } else {
+                this.width = (width <= 0) ? 0 : width;
+                this.height = (height <= 0) ? 0 : height;
+                ySections = (this.height + 63) >> 6;
+                yEndMask = -1L >>> (64 - (this.height & 63));
+                data = new long[this.width * ySections];
+                for (int i = 0; i < this.width * ySections; i++) {
+                    data[i] = random.approximateBits(bitCount);
+                }
+            }
+        }
+        return this;
+    }
 
     /**
      * Copy constructor that takes another GreasedRegion and copies all of its data into this new one.

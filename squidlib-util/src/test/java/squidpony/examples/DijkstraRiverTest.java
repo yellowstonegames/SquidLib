@@ -84,13 +84,12 @@ public class DijkstraRiverTest {
     {
         int width = heights.length, height = heights[0].length;
         StatefulRNG random = new StatefulRNG(0x13371337BEEFL);
-        GreasedRegion land = new GreasedRegion(heights,  0.0, 0.5),
-                chaos = new GreasedRegion(random, width, height),
+        GreasedRegion land = new GreasedRegion(heights, 0.5, 2.0),
+                chaos = new GreasedRegion(random, 0.4, width, height),
                 riverStarts = new GreasedRegion(heights, 0.7, 2.0).and(chaos),
                 rivers = new GreasedRegion(width, height);
-        chaos.refill(random, width, height);
         char[][] map = land.toChars('.', '~');
-        Coord[] shores = land.copy().fringe().asCoords();
+        Coord[] shores = land.copy().not().fringe().asCoords();
         DijkstraMap dm = new DijkstraMap(map, '~');
         dm.rng = random;
         dm.measurement = DijkstraMap.Measurement.EUCLIDEAN;
@@ -109,7 +108,7 @@ public class DijkstraRiverTest {
         char[] letters = ArrayTools.letterSpan(size);
         for (int idx = 0; idx < size && idx < 26; idx++) {
             dm.initialize(heights2);
-            path = dm.findPath(80, chaos.refill(random, width, height), null,
+            path = dm.findPath(80, chaos.refill(random, 0.4, width, height), null,
                     riverStarts.atFraction(VanDerCorputQRNG.determineMixed(idx)),
                     shores);
             rivers.clear();
