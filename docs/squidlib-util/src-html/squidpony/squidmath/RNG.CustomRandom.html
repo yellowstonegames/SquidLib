@@ -839,51 +839,53 @@
 <span class="sourceLineNo">831</span>     * information they need to internally, but should not change the result. This works based on a delicate balance of<a name="line.831"></a>
 <span class="sourceLineNo">832</span>     * the RandomnessSource producing bits with an even 50% chance of being set, regardless of position, and RNG<a name="line.832"></a>
 <span class="sourceLineNo">833</span>     * subclasses that alter the odds won't work as expected here, particularly if those subclasses use doubles<a name="line.833"></a>
-<span class="sourceLineNo">834</span>     * internally (which usually produce less than 64 random bits).<a name="line.834"></a>
-<span class="sourceLineNo">835</span>     * @param bitCount an int, only considered if between 0 and 64, that is the average number of bits to set<a name="line.835"></a>
-<span class="sourceLineNo">836</span>     * @return a 64-bit long that, on average, should have bitCount bits set to 1, potentially anywhere in the long<a name="line.836"></a>
-<span class="sourceLineNo">837</span>     */<a name="line.837"></a>
-<span class="sourceLineNo">838</span>    public long approximateBits(int bitCount)<a name="line.838"></a>
-<span class="sourceLineNo">839</span>    {<a name="line.839"></a>
-<span class="sourceLineNo">840</span>        if(bitCount &lt;= 0)<a name="line.840"></a>
-<span class="sourceLineNo">841</span>            return 0L;<a name="line.841"></a>
-<span class="sourceLineNo">842</span>        if(bitCount &gt;= 64)<a name="line.842"></a>
-<span class="sourceLineNo">843</span>            return -1L;<a name="line.843"></a>
-<span class="sourceLineNo">844</span>        if(bitCount == 32)<a name="line.844"></a>
-<span class="sourceLineNo">845</span>            return random.nextLong();<a name="line.845"></a>
-<span class="sourceLineNo">846</span>        boolean high = bitCount &gt; 32;<a name="line.846"></a>
-<span class="sourceLineNo">847</span>        int altered = (high ? 64 - bitCount : bitCount), lsb = Integer.lowestOneBit(altered);<a name="line.847"></a>
-<span class="sourceLineNo">848</span>        long data = random.nextLong();<a name="line.848"></a>
-<span class="sourceLineNo">849</span>        for (int i = lsb &lt;&lt; 1; i &lt;= 16; i &lt;&lt;= 1) {<a name="line.849"></a>
-<span class="sourceLineNo">850</span>            if((altered &amp; i) == 0)<a name="line.850"></a>
-<span class="sourceLineNo">851</span>                data &amp;= random.nextLong();<a name="line.851"></a>
-<span class="sourceLineNo">852</span>            else<a name="line.852"></a>
-<span class="sourceLineNo">853</span>                data |= random.nextLong();<a name="line.853"></a>
-<span class="sourceLineNo">854</span>        }<a name="line.854"></a>
-<span class="sourceLineNo">855</span>        return high ? ~(random.nextLong() &amp; data) : (random.nextLong() &amp; data);<a name="line.855"></a>
-<span class="sourceLineNo">856</span><a name="line.856"></a>
-<span class="sourceLineNo">857</span>    }<a name="line.857"></a>
+<span class="sourceLineNo">834</span>     * internally (which almost always produce less than 64 random bits). You should definitely avoid using certain<a name="line.834"></a>
+<span class="sourceLineNo">835</span>     * RandomnessSources that aren't properly pseudo-random, such as any QRNG class (SobolQRNG and VanDerCorputQRNG,<a name="line.835"></a>
+<span class="sourceLineNo">836</span>     * pretty much), since these won't fill all 64 bits with equal likelihood.<a name="line.836"></a>
+<span class="sourceLineNo">837</span>     * @param bitCount an int, only considered if between 0 and 64, that is the average number of bits to set<a name="line.837"></a>
+<span class="sourceLineNo">838</span>     * @return a 64-bit long that, on average, should have bitCount bits set to 1, potentially anywhere in the long<a name="line.838"></a>
+<span class="sourceLineNo">839</span>     */<a name="line.839"></a>
+<span class="sourceLineNo">840</span>    public long approximateBits(int bitCount)<a name="line.840"></a>
+<span class="sourceLineNo">841</span>    {<a name="line.841"></a>
+<span class="sourceLineNo">842</span>        if(bitCount &lt;= 0)<a name="line.842"></a>
+<span class="sourceLineNo">843</span>            return 0L;<a name="line.843"></a>
+<span class="sourceLineNo">844</span>        if(bitCount &gt;= 64)<a name="line.844"></a>
+<span class="sourceLineNo">845</span>            return -1L;<a name="line.845"></a>
+<span class="sourceLineNo">846</span>        if(bitCount == 32)<a name="line.846"></a>
+<span class="sourceLineNo">847</span>            return random.nextLong();<a name="line.847"></a>
+<span class="sourceLineNo">848</span>        boolean high = bitCount &gt; 32;<a name="line.848"></a>
+<span class="sourceLineNo">849</span>        int altered = (high ? 64 - bitCount : bitCount), lsb = Integer.lowestOneBit(altered);<a name="line.849"></a>
+<span class="sourceLineNo">850</span>        long data = random.nextLong();<a name="line.850"></a>
+<span class="sourceLineNo">851</span>        for (int i = lsb &lt;&lt; 1; i &lt;= 16; i &lt;&lt;= 1) {<a name="line.851"></a>
+<span class="sourceLineNo">852</span>            if((altered &amp; i) == 0)<a name="line.852"></a>
+<span class="sourceLineNo">853</span>                data &amp;= random.nextLong();<a name="line.853"></a>
+<span class="sourceLineNo">854</span>            else<a name="line.854"></a>
+<span class="sourceLineNo">855</span>                data |= random.nextLong();<a name="line.855"></a>
+<span class="sourceLineNo">856</span>        }<a name="line.856"></a>
+<span class="sourceLineNo">857</span>        return high ? ~(random.nextLong() &amp; data) : (random.nextLong() &amp; data);<a name="line.857"></a>
 <span class="sourceLineNo">858</span><a name="line.858"></a>
-<span class="sourceLineNo">859</span>    @Override<a name="line.859"></a>
-<span class="sourceLineNo">860</span>    public String toString() {<a name="line.860"></a>
-<span class="sourceLineNo">861</span>        return "RNG with Randomness Source " + random;<a name="line.861"></a>
-<span class="sourceLineNo">862</span>    }<a name="line.862"></a>
-<span class="sourceLineNo">863</span><a name="line.863"></a>
-<span class="sourceLineNo">864</span>    @Override<a name="line.864"></a>
-<span class="sourceLineNo">865</span>    public boolean equals(Object o) {<a name="line.865"></a>
-<span class="sourceLineNo">866</span>        if (this == o) return true;<a name="line.866"></a>
-<span class="sourceLineNo">867</span>        if (!(o instanceof RNG)) return false;<a name="line.867"></a>
-<span class="sourceLineNo">868</span><a name="line.868"></a>
-<span class="sourceLineNo">869</span>        RNG rng = (RNG) o;<a name="line.869"></a>
+<span class="sourceLineNo">859</span>    }<a name="line.859"></a>
+<span class="sourceLineNo">860</span><a name="line.860"></a>
+<span class="sourceLineNo">861</span>    @Override<a name="line.861"></a>
+<span class="sourceLineNo">862</span>    public String toString() {<a name="line.862"></a>
+<span class="sourceLineNo">863</span>        return "RNG with Randomness Source " + random;<a name="line.863"></a>
+<span class="sourceLineNo">864</span>    }<a name="line.864"></a>
+<span class="sourceLineNo">865</span><a name="line.865"></a>
+<span class="sourceLineNo">866</span>    @Override<a name="line.866"></a>
+<span class="sourceLineNo">867</span>    public boolean equals(Object o) {<a name="line.867"></a>
+<span class="sourceLineNo">868</span>        if (this == o) return true;<a name="line.868"></a>
+<span class="sourceLineNo">869</span>        if (!(o instanceof RNG)) return false;<a name="line.869"></a>
 <span class="sourceLineNo">870</span><a name="line.870"></a>
-<span class="sourceLineNo">871</span>        return random.equals(rng.random);<a name="line.871"></a>
-<span class="sourceLineNo">872</span>    }<a name="line.872"></a>
-<span class="sourceLineNo">873</span><a name="line.873"></a>
-<span class="sourceLineNo">874</span>    @Override<a name="line.874"></a>
-<span class="sourceLineNo">875</span>    public int hashCode() {<a name="line.875"></a>
-<span class="sourceLineNo">876</span>        return random.hashCode();<a name="line.876"></a>
-<span class="sourceLineNo">877</span>    }<a name="line.877"></a>
-<span class="sourceLineNo">878</span>}<a name="line.878"></a>
+<span class="sourceLineNo">871</span>        RNG rng = (RNG) o;<a name="line.871"></a>
+<span class="sourceLineNo">872</span><a name="line.872"></a>
+<span class="sourceLineNo">873</span>        return random.equals(rng.random);<a name="line.873"></a>
+<span class="sourceLineNo">874</span>    }<a name="line.874"></a>
+<span class="sourceLineNo">875</span><a name="line.875"></a>
+<span class="sourceLineNo">876</span>    @Override<a name="line.876"></a>
+<span class="sourceLineNo">877</span>    public int hashCode() {<a name="line.877"></a>
+<span class="sourceLineNo">878</span>        return random.hashCode();<a name="line.878"></a>
+<span class="sourceLineNo">879</span>    }<a name="line.879"></a>
+<span class="sourceLineNo">880</span>}<a name="line.880"></a>
 
 
 
