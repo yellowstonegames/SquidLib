@@ -761,6 +761,21 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return this;
     }
 
+    public GreasedRegion set(boolean value, int x, int y)
+    {
+        if(x < width && y < height && x >= 0 && y >= 0) {
+            if(value)
+                data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+            else
+                data[x * ySections + (y >> 6)] &= ~(1L << (y & 63));
+        }
+        return this;
+    }
+    public GreasedRegion set(boolean value, Coord point)
+    {
+        return set(value, point.x, point.y);
+    }
+
     public GreasedRegion insert(int x, int y)
     {
         if(x < width && y < height && x >= 0 && y >= 0)
@@ -1053,6 +1068,25 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     public GreasedRegion empty()
     {
         Arrays.fill(data, 0L);
+        return this;
+    }
+    public GreasedRegion allOn()
+    {
+        if(ySections > 0)
+        {
+            if(yEndMask == -1) {
+                Arrays.fill(data, -1);
+            }
+            else
+            {
+                for (int a = ySections - 1; a < data.length; a += ySections) {
+                    data[a] = yEndMask;
+                    for (int i = 0; i < ySections - 1; i++) {
+                        data[a-i-1] = -1;
+                    }
+                }
+            }
+        }
         return this;
     }
     public GreasedRegion fill(boolean contents)

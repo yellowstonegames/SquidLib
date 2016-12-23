@@ -831,7 +831,9 @@ public class RNG implements Serializable {
      * information they need to internally, but should not change the result. This works based on a delicate balance of
      * the RandomnessSource producing bits with an even 50% chance of being set, regardless of position, and RNG
      * subclasses that alter the odds won't work as expected here, particularly if those subclasses use doubles
-     * internally (which usually produce less than 64 random bits).
+     * internally (which almost always produce less than 64 random bits). You should definitely avoid using certain
+     * RandomnessSources that aren't properly pseudo-random, such as any QRNG class (SobolQRNG and VanDerCorputQRNG,
+     * pretty much), since these won't fill all 64 bits with equal likelihood.
      * @param bitCount an int, only considered if between 0 and 64, that is the average number of bits to set
      * @return a 64-bit long that, on average, should have bitCount bits set to 1, potentially anywhere in the long
      */
