@@ -863,18 +863,28 @@ public class RNG implements Serializable {
      * @return a random long with 32 "1" bits, distributed so exactly one bit is "1" for each pair of bits
      */
     public long randomInterleave() {
-        long bits = nextInt() & 0xFFFFFFFFL;
+        long bits = nextLong() & 0xFFFFFFFFL, ib = ~bits & 0xFFFFFFFFL;
         bits |= (bits << 16);
-        bits &= 0x0000FFFF;
+        ib |= (ib << 16);
+        bits &= 0x0000FFFF0000FFFFL;
+        ib &= 0x0000FFFF0000FFFFL;
         bits |= (bits << 8);
-        bits &= 0x00FF00FF;
+        ib |= (ib << 8);
+        bits &= 0x00FF00FF00FF00FFL;
+        ib &= 0x00FF00FF00FF00FFL;
         bits |= (bits << 4);
-        bits &= 0x0F0F0F0F;
+        ib |= (ib << 4);
+        bits &= 0x0F0F0F0F0F0F0F0FL;
+        ib &= 0x0F0F0F0F0F0F0F0FL;
         bits |= (bits << 2);
-        bits &= 0x33333333;
+        ib |= (ib << 2);
+        bits &= 0x3333333333333333L;
+        ib &= 0x3333333333333333L;
         bits |= (bits << 1);
-        bits &= 0x55555555;
-        return (bits | (~bits << 1));
+        ib |= (ib << 1);
+        bits &= 0x5555555555555555L;
+        ib &= 0x5555555555555555L;
+        return (bits | (ib << 1));
     }
 
     @Override
