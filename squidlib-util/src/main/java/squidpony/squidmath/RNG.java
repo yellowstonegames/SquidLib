@@ -855,7 +855,26 @@ public class RNG implements Serializable {
                 data |= random.nextLong();
         }
         return high ? ~(random.nextLong() & data) : (random.nextLong() & data);
+    }
 
+    /**
+     * Gets a somewhat-random long with exactly 32 bits set; in each pair of bits starting at bit 0 and bit 1, then bit
+     * 2 and bit 3, up to bit 62 and bit 3, one bit will be 1 and one bit will be 0 in each pair.
+     * @return a random long with 32 "1" bits, distributed so exactly one bit is "1" for each pair of bits
+     */
+    public long randomInterleave() {
+        long bits = nextInt() & 0xFFFFFFFFL;
+        bits |= (bits << 16);
+        bits &= 0x0000FFFF;
+        bits |= (bits << 8);
+        bits &= 0x00FF00FF;
+        bits |= (bits << 4);
+        bits &= 0x0F0F0F0F;
+        bits |= (bits << 2);
+        bits &= 0x33333333;
+        bits |= (bits << 1);
+        bits &= 0x55555555;
+        return (bits | (~bits << 1));
     }
 
     @Override

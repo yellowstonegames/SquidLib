@@ -1330,24 +1330,24 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
 
         long prev, tmp;
         if (x < 0) {
-                for (int i = alterJump, oi = originalJump; i < ySections && oi < ySections; i++, oi++) {
-                    for (int j = Math.max(0, -x), jj = 0; jj < len; j++, jj++) {
-                        data2[jj * ySections + i] = data[j * ySections + oi];
-                    }
-                }
-            } else if (x > 0) {
-                for (int i = alterJump, oi = originalJump; i < ySections && oi < ySections; i++, oi++) {
-                    for (int j = 0, jj = start; j < len; j++, jj++) {
-                        data2[jj * ySections + i] = data[j * ySections + oi];
-                    }
-                }
-            } else {
-                for (int i = alterJump, oi = originalJump; i < ySections && oi < ySections; i++, oi++) {
-                    for (int j = 0; j < len; j++) {
-                        data2[j * ySections + i] = data[j * ySections + oi];
-                    }
+            for (int i = alterJump, oi = originalJump; i < ySections && oi < ySections; i++, oi++) {
+                for (int j = Math.max(0, -x), jj = 0; jj < len; j++, jj++) {
+                    data2[jj * ySections + i] = data[j * ySections + oi];
                 }
             }
+        } else if (x > 0) {
+            for (int i = alterJump, oi = originalJump; i < ySections && oi < ySections; i++, oi++) {
+                for (int j = 0, jj = start; j < len; j++, jj++) {
+                    data2[jj * ySections + i] = data[j * ySections + oi];
+                }
+            }
+        } else {
+            for (int i = alterJump, oi = originalJump; i < ySections && oi < ySections; i++, oi++) {
+                for (int j = 0; j < len; j++) {
+                    data2[j * ySections + i] = data[j * ySections + oi];
+                }
+            }
+        }
 
         if(lily < 0) {
             for (int i = start; i < len; i++) {
@@ -1372,45 +1372,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
 
-        /*
-        long[] data2 = new long[width * ySections];
-        int start = Math.max(0, x), len = Math.min(width, width + x) - start;
-        long prev, tmp;
-        if(x < 0)
-        {
-            System.arraycopy(data, Math.max(0, -x) * ySections, data2, 0, len * ySections);
-        }
-        else if(x > 0)
-        {
-            System.arraycopy(data, 0, data2, start * ySections, len * ySections);
-        }
-        else
-        {
-            System.arraycopy(data, 0, data2, 0, len * ySections);
-        }
-        if(y < 0) {
-            for (int i = start; i < len; i++) {
-                prev = 0L;
-                for (int j = 0; j < ySections; j++) {
-                    tmp = prev;
-                    prev = (data2[i * ySections + j] & ~(-1L << -y)) << (64 + y);
-                    data2[i * ySections + j] >>>= -y;
-                    data2[i * ySections + j] |= tmp;
-                }
-            }
-        }
-        else if(y > 0) {
-            for (int i = start; i < start + len; i++) {
-                prev = 0L;
-                for (int j = ySections - 1; j >= 0; j--) {
-                    tmp = prev;
-                    prev = (data2[i * ySections + j] & ~(-1L >>> y)) >>> (64 - y);
-                    data2[i * ySections + j] <<= y;
-                    data2[i * ySections + j] |= tmp;
-                }
-            }
-        }
-        */
+
         if(ySections > 0 && yEndMask != -1) {
             for (int a = ySections - 1; a < data.length; a += ySections) {
                 data2[a] &= yEndMask;
@@ -1420,6 +1382,63 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         data = data2;
         return this;
     }
+
+
+    /**
+     * Removes "on" cells that are orthogonally adjacent to other "on" cells, keeping at least one cell in a group "on."
+     * Uses a "checkerboard" pattern to determine which cells to turn  off, with all cells that would be black on a
+     * checkerboard turned off and all others kept as-is.
+     * @return this for chaining
+     */
+    public GreasedRegion disperse()
+    {
+        if(width < 1 || ySections <= 0)
+            return this;
+        int len = data.length;
+        long mask = 0x5555555555555555L;
+        for (int j = 0; j < len;) {
+            data[j] &= mask;
+            mask >>>= (j & 1);
+            mask <<= (++j & 1);
+        }
+        return this;
+    }
+    /**
+     * Removes "on" cells that are 8-way adjacent to other "on" cells, keeping at least one cell in a group "on."
+     * Uses a "grid-like" pattern to determine which cells to turn off, with all cells with even x and even y kept as-is
+     * but all other cells (with either or both odd x or odd y) turned off.
+     * @return this for chaining
+     */
+    public GreasedRegion disperse8way()
+    {
+        if(width < 1 || ySections <= 0)
+            return this;
+        int len = data.length;
+        long mask = 0x5555555555555555L;
+        for (int j = 0; j < len - 1; j += 2) {
+            data[j] &= mask;
+            data[j+1] = 0;
+        }
+        return this;
+    }
+    /**
+     * Removes "on" cells that are nearby other "on" cells, with a random factor to which bits are actually turned off
+     * that still ensures exactly half of the bits are kept as-is (the one exception is when height is an odd number,
+     * which makes the bottom row slightly random).
+     * @param random the RNG used for a random factor
+     * @return this for chaining
+     */
+    public GreasedRegion disperseRandom(RNG random)
+    {
+        if(width < 1 || ySections <= 0)
+            return this;
+        int len = data.length;
+        for (int j = 0; j < len;) {
+            data[j] &= random.randomInterleave();
+        }
+        return this;
+    }
+
     public GreasedRegion expand()
     {
         if(width < 2 || ySections == 0)

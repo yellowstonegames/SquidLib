@@ -31,7 +31,7 @@ public class GreasedRegionTest {
         //printRegion(dataCross);
         //printRegion(dataCross2);
     }
-    public static final boolean PRINTING = false;
+    public static final boolean PRINTING = true;
     public static void print2D(int[][] data)
     {
         if(!PRINTING)
@@ -252,5 +252,14 @@ public class GreasedRegionTest {
         printRegion(wrecked);
         System.out.println();
         print2D(wrecked.fit(numbers, 0));
+    }
+    @Test
+    public void testRandom()
+    {
+        StatefulRNG rng = new StatefulRNG(0x1337BEEF);
+        GreasedRegion wrecked = dataCross.copy().disperse();
+        printRegion(wrecked);
+        wrecked.disperse8way();
+        printRegion(wrecked);
     }
 }
