@@ -2,6 +2,9 @@ package squidpony;
 
 import squidpony.squidmath.CrossHash;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 /**
  * Various utility functions for dealing with Strings, CharSequences, and char[]s; mostly converting numbers.
  * Created by Tommy Ettinger on 3/21/2016.
@@ -14,6 +17,17 @@ public class StringKit {
         sb.append(elements[0]);
         for (int i = 1; i < elements.length; i++) {
             sb.append(delimiter).append(elements[i]);
+        }
+        return sb.toString();
+    }
+
+    public static String join(CharSequence delimiter, Collection<? extends CharSequence> elements) {
+        if (elements == null || elements.isEmpty()) return "";
+        StringBuilder sb = new StringBuilder(64);
+        Iterator<? extends CharSequence> it = elements.iterator();
+        sb.append(it.next());
+        while(it.hasNext()) {
+            sb.append(delimiter).append(it.next());
         }
         return sb.toString();
     }
