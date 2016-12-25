@@ -333,142 +333,166 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
-<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#empty--">empty</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#disperse--">disperse</a></span>()</code>
+<div class="block">Removes "on" cells that are orthogonally adjacent to other "on" cells, keeping at least one cell in a group "on."
+ Uses a "checkerboard" pattern to determine which cells to turn  off, with all cells that would be black on a
+ checkerboard turned off and all others kept as-is.</div>
+</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#disperse8way--">disperse8way</a></span>()</code>
+<div class="block">Removes "on" cells that are 8-way adjacent to other "on" cells, keeping at least one cell in a group "on."
+ Uses a "grid-like" pattern to determine which cells to turn off, with all cells with even x and even y kept as-is
+ but all other cells (with either or both odd x or odd y) turned off.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#disperseRandom-squidpony.squidmath.RNG-">disperseRandom</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</code>
+<div class="block">Removes "on" cells that are nearby other "on" cells, with a random factor to which bits are actually turned off
+ that still ensures exactly half of the bits are kept as-is (the one exception is when height is an odd number,
+ which makes the bottom row slightly random).</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#empty--">empty</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#expand--">expand</a></span>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#expand-int-">expand</a></span>(int&nbsp;amount)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#expand8way--">expand8way</a></span>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#expand8way-int-">expand8way</a></span>(int&nbsp;amount)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#expandSeries-int-">expandSeries</a></span>(int&nbsp;amount)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#expandSeries8way-int-">expandSeries8way</a></span>(int&nbsp;amount)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#fill-boolean-">fill</a></span>(boolean&nbsp;contents)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#flip-int-int-">flip</a></span>(int&nbsp;x,
     int&nbsp;y)</code>
 <div class="block">Inverts the on/off state of the cell with the given x and y.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#flood-squidpony.squidmath.GreasedRegion-">flood</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#flood-squidpony.squidmath.GreasedRegion-int-">flood</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
      int&nbsp;amount)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#flood8way-squidpony.squidmath.GreasedRegion-">flood8way</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#flood8way-squidpony.squidmath.GreasedRegion-int-">flood8way</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
          int&nbsp;amount)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#floodSeries-squidpony.squidmath.GreasedRegion-int-">floodSeries</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
            int&nbsp;amount)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#floodSeries8way-squidpony.squidmath.GreasedRegion-int-">floodSeries8way</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
                int&nbsp;amount)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#fringe--">fringe</a></span>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#fringe-int-">fringe</a></span>(int&nbsp;amount)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#fringe8way--">fringe8way</a></span>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#fringe8way-int-">fringe8way</a></span>(int&nbsp;amount)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#fringeSeries-int-">fringeSeries</a></span>(int&nbsp;amount)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#fringeSeries8way-int-">fringeSeries8way</a></span>(int&nbsp;amount)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#insert-squidpony.squidmath.Coord-">insert</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;point)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#insert-int-int-">insert</a></span>(int&nbsp;x,
       int&nbsp;y)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#insert-int-int-squidpony.squidmath.GreasedRegion-">insert</a></span>(int&nbsp;x,
       int&nbsp;y,
       <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#insertCircle-squidpony.squidmath.Coord-int-">insertCircle</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
             int&nbsp;radius)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#insertRectangle-int-int-int-int-">insertRectangle</a></span>(int&nbsp;startX,
                int&nbsp;startY,
                int&nbsp;rectangleWidth,
                int&nbsp;rectangleHeight)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#insertSeveral-squidpony.squidmath.Coord...-">insertSeveral</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;points)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#insertSeveral-java.lang.Iterable-">insertSeveral</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#not--">not</a></span>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#notAnd-squidpony.squidmath.GreasedRegion-">notAnd</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</code>
 <div class="block">Like andNot, but subtracts this GreasedRegion from other and stores the result in this GreasedRegion, without
  mutating other.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#of-int-int-long...-">of</a></span>(int&nbsp;width,
   int&nbsp;height,
@@ -476,73 +500,73 @@
 <div class="block">Constructs a GreasedRegion using a vararg for data.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#or-squidpony.squidmath.GreasedRegion-">or</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#refill-boolean:A:A-">refill</a></span>(boolean[][]&nbsp;map)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#refill-boolean:A-int-int-">refill</a></span>(boolean[]&nbsp;bits,
       int&nbsp;width,
       int&nbsp;height)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#refill-char:A:A-char-">refill</a></span>(char[][]&nbsp;map,
       char&nbsp;yes)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#refill-double:A:A-double-">refill</a></span>(double[][]&nbsp;map,
       double&nbsp;upperBound)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#refill-double:A:A-double-double-">refill</a></span>(double[][]&nbsp;map,
       double&nbsp;lower,
       double&nbsp;upper)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#refill-int:A:A-int-">refill</a></span>(int[][]&nbsp;map,
       int&nbsp;yes)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#refill-int:A:A-int-int-">refill</a></span>(int[][]&nbsp;map,
       int&nbsp;lower,
       int&nbsp;upper)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#refill-squidpony.squidmath.RandomnessSource-int-int-">refill</a></span>(<a href="../../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;random,
       int&nbsp;width,
       int&nbsp;height)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#refill-squidpony.squidmath.RNG-double-int-int-">refill</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random,
       double&nbsp;fraction,
       int&nbsp;width,
       int&nbsp;height)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#refill-squidpony.squidmath.RNG-int-int-">refill</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random,
       int&nbsp;width,
       int&nbsp;height)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#refill-short:A:A-int-int-">refill</a></span>(short[][]&nbsp;map,
       int&nbsp;lower,
       int&nbsp;upper)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#refill-java.lang.String:A-char-">refill</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;map,
       char&nbsp;yes)</code>
@@ -550,114 +574,114 @@
  would be done with y, x instead of the normal x, y.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#remake-squidpony.squidmath.GreasedRegion-">remake</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#remove-squidpony.squidmath.Coord-">remove</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;point)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#remove-int-int-">remove</a></span>(int&nbsp;x,
       int&nbsp;y)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#removeCircle-squidpony.squidmath.Coord-int-">removeCircle</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
             int&nbsp;radius)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#removeIsolated--">removeIsolated</a></span>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#removeRectangle-int-int-int-int-">removeRectangle</a></span>(int&nbsp;startX,
                int&nbsp;startY,
                int&nbsp;rectangleWidth,
                int&nbsp;rectangleHeight)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#removeSeveral-squidpony.squidmath.Coord...-">removeSeveral</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;points)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#removeSeveral-java.lang.Iterable-">removeSeveral</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#retract--">retract</a></span>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#retract-int-">retract</a></span>(int&nbsp;amount)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#retract8way--">retract8way</a></span>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#retract8way-int-">retract8way</a></span>(int&nbsp;amount)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#retractSeries-int-">retractSeries</a></span>(int&nbsp;amount)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#retractSeries8way-int-">retractSeries8way</a></span>(int&nbsp;amount)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#set-boolean-squidpony.squidmath.Coord-">set</a></span>(boolean&nbsp;value,
    <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;point)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#set-boolean-int-int-">set</a></span>(boolean&nbsp;value,
    int&nbsp;x,
    int&nbsp;y)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#spill-squidpony.squidmath.GreasedRegion-int-squidpony.squidmath.RNG-">spill</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
      int&nbsp;volume,
      <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#surface--">surface</a></span>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#surface-int-">surface</a></span>(int&nbsp;amount)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#surface8way--">surface8way</a></span>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#surface8way-int-">surface8way</a></span>(int&nbsp;amount)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#surfaceSeries-int-">surfaceSeries</a></span>(int&nbsp;amount)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#surfaceSeries8way-int-">surfaceSeries8way</a></span>(int&nbsp;amount)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#translate-int-int-">translate</a></span>(int&nbsp;x,
          int&nbsp;y)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CoordPacker.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CoordPacker.html#unpackGreasedRegion-short:A-int-int-">unpackGreasedRegion</a></span>(short[]&nbsp;packed,
                    int&nbsp;width,
@@ -666,7 +690,7 @@
  from a short array of packed data.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#xor-squidpony.squidmath.GreasedRegion-">xor</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</code>&nbsp;</td>
 </tr>

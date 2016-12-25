@@ -508,55 +508,53 @@
 <span class="sourceLineNo">500</span>    }<a name="line.500"></a>
 <span class="sourceLineNo">501</span><a name="line.501"></a>
 <span class="sourceLineNo">502</span>    static int weightedRandom(IntDoubleOrderedMap dic, double r) {<a name="line.502"></a>
-<span class="sourceLineNo">503</span>        int[] ints = new int[dic.size()];<a name="line.503"></a>
-<span class="sourceLineNo">504</span>        double[] doubles = new double[dic.size()];<a name="line.504"></a>
-<span class="sourceLineNo">505</span>        dic.keySet().toArray(ints);<a name="line.505"></a>
-<span class="sourceLineNo">506</span>        dic.values().toArray(doubles);<a name="line.506"></a>
-<span class="sourceLineNo">507</span>        return ints[weightedRandom(doubles, r)];<a name="line.507"></a>
-<span class="sourceLineNo">508</span>    }<a name="line.508"></a>
-<span class="sourceLineNo">509</span><a name="line.509"></a>
-<span class="sourceLineNo">510</span>    /**<a name="line.510"></a>
-<span class="sourceLineNo">511</span>     * Utility method to produce 1D int arrays this can process when discrete is true or difference is null.<a name="line.511"></a>
-<span class="sourceLineNo">512</span>     * @param map a 2D char array<a name="line.512"></a>
-<span class="sourceLineNo">513</span>     * @return an int array that can be used as a sample<a name="line.513"></a>
-<span class="sourceLineNo">514</span>     */<a name="line.514"></a>
-<span class="sourceLineNo">515</span>    public static int[] convertCharToInt(char[][] map)<a name="line.515"></a>
-<span class="sourceLineNo">516</span>    {<a name="line.516"></a>
-<span class="sourceLineNo">517</span>        int w = map.length, h = map[0].length;<a name="line.517"></a>
-<span class="sourceLineNo">518</span>        int[] result = new int[w * h];<a name="line.518"></a>
-<span class="sourceLineNo">519</span>        for (int x = 0; x &lt; w; x++) {<a name="line.519"></a>
-<span class="sourceLineNo">520</span>            for (int y = 0; y &lt; h; y++) {<a name="line.520"></a>
-<span class="sourceLineNo">521</span>                result[x * h + y] = map[x][y];<a name="line.521"></a>
-<span class="sourceLineNo">522</span>            }<a name="line.522"></a>
-<span class="sourceLineNo">523</span>        }<a name="line.523"></a>
-<span class="sourceLineNo">524</span>        return result;<a name="line.524"></a>
-<span class="sourceLineNo">525</span>    }<a name="line.525"></a>
-<span class="sourceLineNo">526</span><a name="line.526"></a>
-<span class="sourceLineNo">527</span>    /**<a name="line.527"></a>
-<span class="sourceLineNo">528</span>     * Utility method that takes a 1D int array that represents chars (such as a sample produced by<a name="line.528"></a>
-<span class="sourceLineNo">529</span>     * {@link #convertCharToInt(char[][])} or, more likely, the result of processing such a sample with this class) and<a name="line.529"></a>
-<span class="sourceLineNo">530</span>     * returns a 2D char array with the requested width and height (which should match the targetWidth and targetHeight<a name="line.530"></a>
-<span class="sourceLineNo">531</span>     * given during processing).<a name="line.531"></a>
-<span class="sourceLineNo">532</span>     * @param arr a 1D int array that represents char values<a name="line.532"></a>
-<span class="sourceLineNo">533</span>     * @param w the width that arr can be interpreted as; should probably match the targetWidth given in processing<a name="line.533"></a>
-<span class="sourceLineNo">534</span>     * @param h the height that arr can be interpreted as; should probably match the targetHeight given in processing<a name="line.534"></a>
-<span class="sourceLineNo">535</span>     * @return a 2D char array with the given width and height, probably filled with the data from arr<a name="line.535"></a>
-<span class="sourceLineNo">536</span>     */<a name="line.536"></a>
-<span class="sourceLineNo">537</span>    public static char[][] convertIntToChar(int[] arr, int w, int h)<a name="line.537"></a>
-<span class="sourceLineNo">538</span>    {<a name="line.538"></a>
-<span class="sourceLineNo">539</span>        char[][] result = new char[w][h];<a name="line.539"></a>
-<span class="sourceLineNo">540</span>        if(arr == null)<a name="line.540"></a>
-<span class="sourceLineNo">541</span>            return result;<a name="line.541"></a>
-<span class="sourceLineNo">542</span>        for (int x = 0; x &lt; w; x++) {<a name="line.542"></a>
-<span class="sourceLineNo">543</span>            for (int y = 0; y &lt; h; y++) {<a name="line.543"></a>
-<span class="sourceLineNo">544</span>                if(x * h + y &gt;= arr.length)<a name="line.544"></a>
-<span class="sourceLineNo">545</span>                    return result;<a name="line.545"></a>
-<span class="sourceLineNo">546</span>                result[x][y] = (char) arr[x * h + y];<a name="line.546"></a>
-<span class="sourceLineNo">547</span>            }<a name="line.547"></a>
-<span class="sourceLineNo">548</span>        }<a name="line.548"></a>
-<span class="sourceLineNo">549</span>        return result;<a name="line.549"></a>
-<span class="sourceLineNo">550</span>    }<a name="line.550"></a>
-<span class="sourceLineNo">551</span>}<a name="line.551"></a>
+<span class="sourceLineNo">503</span>        int[] ints = dic.keySet().toIntArray();<a name="line.503"></a>
+<span class="sourceLineNo">504</span>        double[] doubles =  dic.values().toDoubleArray();<a name="line.504"></a>
+<span class="sourceLineNo">505</span>        return ints[weightedRandom(doubles, r)];<a name="line.505"></a>
+<span class="sourceLineNo">506</span>    }<a name="line.506"></a>
+<span class="sourceLineNo">507</span><a name="line.507"></a>
+<span class="sourceLineNo">508</span>    /**<a name="line.508"></a>
+<span class="sourceLineNo">509</span>     * Utility method to produce 1D int arrays this can process when discrete is true or difference is null.<a name="line.509"></a>
+<span class="sourceLineNo">510</span>     * @param map a 2D char array<a name="line.510"></a>
+<span class="sourceLineNo">511</span>     * @return an int array that can be used as a sample<a name="line.511"></a>
+<span class="sourceLineNo">512</span>     */<a name="line.512"></a>
+<span class="sourceLineNo">513</span>    public static int[] convertCharToInt(char[][] map)<a name="line.513"></a>
+<span class="sourceLineNo">514</span>    {<a name="line.514"></a>
+<span class="sourceLineNo">515</span>        int w = map.length, h = map[0].length;<a name="line.515"></a>
+<span class="sourceLineNo">516</span>        int[] result = new int[w * h];<a name="line.516"></a>
+<span class="sourceLineNo">517</span>        for (int x = 0; x &lt; w; x++) {<a name="line.517"></a>
+<span class="sourceLineNo">518</span>            for (int y = 0; y &lt; h; y++) {<a name="line.518"></a>
+<span class="sourceLineNo">519</span>                result[x * h + y] = map[x][y];<a name="line.519"></a>
+<span class="sourceLineNo">520</span>            }<a name="line.520"></a>
+<span class="sourceLineNo">521</span>        }<a name="line.521"></a>
+<span class="sourceLineNo">522</span>        return result;<a name="line.522"></a>
+<span class="sourceLineNo">523</span>    }<a name="line.523"></a>
+<span class="sourceLineNo">524</span><a name="line.524"></a>
+<span class="sourceLineNo">525</span>    /**<a name="line.525"></a>
+<span class="sourceLineNo">526</span>     * Utility method that takes a 1D int array that represents chars (such as a sample produced by<a name="line.526"></a>
+<span class="sourceLineNo">527</span>     * {@link #convertCharToInt(char[][])} or, more likely, the result of processing such a sample with this class) and<a name="line.527"></a>
+<span class="sourceLineNo">528</span>     * returns a 2D char array with the requested width and height (which should match the targetWidth and targetHeight<a name="line.528"></a>
+<span class="sourceLineNo">529</span>     * given during processing).<a name="line.529"></a>
+<span class="sourceLineNo">530</span>     * @param arr a 1D int array that represents char values<a name="line.530"></a>
+<span class="sourceLineNo">531</span>     * @param w the width that arr can be interpreted as; should probably match the targetWidth given in processing<a name="line.531"></a>
+<span class="sourceLineNo">532</span>     * @param h the height that arr can be interpreted as; should probably match the targetHeight given in processing<a name="line.532"></a>
+<span class="sourceLineNo">533</span>     * @return a 2D char array with the given width and height, probably filled with the data from arr<a name="line.533"></a>
+<span class="sourceLineNo">534</span>     */<a name="line.534"></a>
+<span class="sourceLineNo">535</span>    public static char[][] convertIntToChar(int[] arr, int w, int h)<a name="line.535"></a>
+<span class="sourceLineNo">536</span>    {<a name="line.536"></a>
+<span class="sourceLineNo">537</span>        char[][] result = new char[w][h];<a name="line.537"></a>
+<span class="sourceLineNo">538</span>        if(arr == null)<a name="line.538"></a>
+<span class="sourceLineNo">539</span>            return result;<a name="line.539"></a>
+<span class="sourceLineNo">540</span>        for (int x = 0; x &lt; w; x++) {<a name="line.540"></a>
+<span class="sourceLineNo">541</span>            for (int y = 0; y &lt; h; y++) {<a name="line.541"></a>
+<span class="sourceLineNo">542</span>                if(x * h + y &gt;= arr.length)<a name="line.542"></a>
+<span class="sourceLineNo">543</span>                    return result;<a name="line.543"></a>
+<span class="sourceLineNo">544</span>                result[x][y] = (char) arr[x * h + y];<a name="line.544"></a>
+<span class="sourceLineNo">545</span>            }<a name="line.545"></a>
+<span class="sourceLineNo">546</span>        }<a name="line.546"></a>
+<span class="sourceLineNo">547</span>        return result;<a name="line.547"></a>
+<span class="sourceLineNo">548</span>    }<a name="line.548"></a>
+<span class="sourceLineNo">549</span>}<a name="line.549"></a>
 
 
 

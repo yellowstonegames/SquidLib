@@ -261,5 +261,7 @@ public class GreasedRegionTest {
         printRegion(wrecked);
         wrecked.disperse8way();
         printRegion(wrecked);
+        wrecked.remake(dataCross).disperseRandom(rng);
+        printRegion(wrecked);
     }
 }

@@ -565,6 +565,24 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/AStarSearch.html#dirs">dirs</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/AStarSearch.html" title="class in squidpony.squidmath">AStarSearch</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#disperse--">disperse()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
+<dd>
+<div class="block">Removes "on" cells that are orthogonally adjacent to other "on" cells, keeping at least one cell in a group "on."
+ Uses a "checkerboard" pattern to determine which cells to turn  off, with all cells that would be black on a
+ checkerboard turned off and all others kept as-is.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#disperse8way--">disperse8way()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
+<dd>
+<div class="block">Removes "on" cells that are 8-way adjacent to other "on" cells, keeping at least one cell in a group "on."
+ Uses a "grid-like" pattern to determine which cells to turn off, with all cells with even x and even y kept as-is
+ but all other cells (with either or both odd x or odd y) turned off.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#disperseRandom-squidpony.squidmath.RNG-">disperseRandom(RNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
+<dd>
+<div class="block">Removes "on" cells that are nearby other "on" cells, with a random factor to which bits are actually turned off
+ that still ensures exactly half of the bits are kept as-is (the one exception is when height is an odd number,
+ which makes the bottom row slightly random).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/ModularMapGenerator.html#displacement">displacement</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/ModularMapGenerator.html" title="class in squidpony.squidgrid.mapping">ModularMapGenerator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Coord.html#distance-double-double-">distance(double, double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></dt>

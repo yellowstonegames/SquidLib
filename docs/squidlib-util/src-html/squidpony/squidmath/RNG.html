@@ -863,29 +863,58 @@
 <span class="sourceLineNo">855</span>                data |= random.nextLong();<a name="line.855"></a>
 <span class="sourceLineNo">856</span>        }<a name="line.856"></a>
 <span class="sourceLineNo">857</span>        return high ? ~(random.nextLong() &amp; data) : (random.nextLong() &amp; data);<a name="line.857"></a>
-<span class="sourceLineNo">858</span><a name="line.858"></a>
-<span class="sourceLineNo">859</span>    }<a name="line.859"></a>
-<span class="sourceLineNo">860</span><a name="line.860"></a>
-<span class="sourceLineNo">861</span>    @Override<a name="line.861"></a>
-<span class="sourceLineNo">862</span>    public String toString() {<a name="line.862"></a>
-<span class="sourceLineNo">863</span>        return "RNG with Randomness Source " + random;<a name="line.863"></a>
-<span class="sourceLineNo">864</span>    }<a name="line.864"></a>
-<span class="sourceLineNo">865</span><a name="line.865"></a>
-<span class="sourceLineNo">866</span>    @Override<a name="line.866"></a>
-<span class="sourceLineNo">867</span>    public boolean equals(Object o) {<a name="line.867"></a>
-<span class="sourceLineNo">868</span>        if (this == o) return true;<a name="line.868"></a>
-<span class="sourceLineNo">869</span>        if (!(o instanceof RNG)) return false;<a name="line.869"></a>
-<span class="sourceLineNo">870</span><a name="line.870"></a>
-<span class="sourceLineNo">871</span>        RNG rng = (RNG) o;<a name="line.871"></a>
-<span class="sourceLineNo">872</span><a name="line.872"></a>
-<span class="sourceLineNo">873</span>        return random.equals(rng.random);<a name="line.873"></a>
-<span class="sourceLineNo">874</span>    }<a name="line.874"></a>
-<span class="sourceLineNo">875</span><a name="line.875"></a>
-<span class="sourceLineNo">876</span>    @Override<a name="line.876"></a>
-<span class="sourceLineNo">877</span>    public int hashCode() {<a name="line.877"></a>
-<span class="sourceLineNo">878</span>        return random.hashCode();<a name="line.878"></a>
-<span class="sourceLineNo">879</span>    }<a name="line.879"></a>
-<span class="sourceLineNo">880</span>}<a name="line.880"></a>
+<span class="sourceLineNo">858</span>    }<a name="line.858"></a>
+<span class="sourceLineNo">859</span><a name="line.859"></a>
+<span class="sourceLineNo">860</span>    /**<a name="line.860"></a>
+<span class="sourceLineNo">861</span>     * Gets a somewhat-random long with exactly 32 bits set; in each pair of bits starting at bit 0 and bit 1, then bit<a name="line.861"></a>
+<span class="sourceLineNo">862</span>     * 2 and bit 3, up to bit 62 and bit 3, one bit will be 1 and one bit will be 0 in each pair.<a name="line.862"></a>
+<span class="sourceLineNo">863</span>     * @return a random long with 32 "1" bits, distributed so exactly one bit is "1" for each pair of bits<a name="line.863"></a>
+<span class="sourceLineNo">864</span>     */<a name="line.864"></a>
+<span class="sourceLineNo">865</span>    public long randomInterleave() {<a name="line.865"></a>
+<span class="sourceLineNo">866</span>        long bits = nextLong() &amp; 0xFFFFFFFFL, ib = ~bits &amp; 0xFFFFFFFFL;<a name="line.866"></a>
+<span class="sourceLineNo">867</span>        bits |= (bits &lt;&lt; 16);<a name="line.867"></a>
+<span class="sourceLineNo">868</span>        ib |= (ib &lt;&lt; 16);<a name="line.868"></a>
+<span class="sourceLineNo">869</span>        bits &amp;= 0x0000FFFF0000FFFFL;<a name="line.869"></a>
+<span class="sourceLineNo">870</span>        ib &amp;= 0x0000FFFF0000FFFFL;<a name="line.870"></a>
+<span class="sourceLineNo">871</span>        bits |= (bits &lt;&lt; 8);<a name="line.871"></a>
+<span class="sourceLineNo">872</span>        ib |= (ib &lt;&lt; 8);<a name="line.872"></a>
+<span class="sourceLineNo">873</span>        bits &amp;= 0x00FF00FF00FF00FFL;<a name="line.873"></a>
+<span class="sourceLineNo">874</span>        ib &amp;= 0x00FF00FF00FF00FFL;<a name="line.874"></a>
+<span class="sourceLineNo">875</span>        bits |= (bits &lt;&lt; 4);<a name="line.875"></a>
+<span class="sourceLineNo">876</span>        ib |= (ib &lt;&lt; 4);<a name="line.876"></a>
+<span class="sourceLineNo">877</span>        bits &amp;= 0x0F0F0F0F0F0F0F0FL;<a name="line.877"></a>
+<span class="sourceLineNo">878</span>        ib &amp;= 0x0F0F0F0F0F0F0F0FL;<a name="line.878"></a>
+<span class="sourceLineNo">879</span>        bits |= (bits &lt;&lt; 2);<a name="line.879"></a>
+<span class="sourceLineNo">880</span>        ib |= (ib &lt;&lt; 2);<a name="line.880"></a>
+<span class="sourceLineNo">881</span>        bits &amp;= 0x3333333333333333L;<a name="line.881"></a>
+<span class="sourceLineNo">882</span>        ib &amp;= 0x3333333333333333L;<a name="line.882"></a>
+<span class="sourceLineNo">883</span>        bits |= (bits &lt;&lt; 1);<a name="line.883"></a>
+<span class="sourceLineNo">884</span>        ib |= (ib &lt;&lt; 1);<a name="line.884"></a>
+<span class="sourceLineNo">885</span>        bits &amp;= 0x5555555555555555L;<a name="line.885"></a>
+<span class="sourceLineNo">886</span>        ib &amp;= 0x5555555555555555L;<a name="line.886"></a>
+<span class="sourceLineNo">887</span>        return (bits | (ib &lt;&lt; 1));<a name="line.887"></a>
+<span class="sourceLineNo">888</span>    }<a name="line.888"></a>
+<span class="sourceLineNo">889</span><a name="line.889"></a>
+<span class="sourceLineNo">890</span>    @Override<a name="line.890"></a>
+<span class="sourceLineNo">891</span>    public String toString() {<a name="line.891"></a>
+<span class="sourceLineNo">892</span>        return "RNG with Randomness Source " + random;<a name="line.892"></a>
+<span class="sourceLineNo">893</span>    }<a name="line.893"></a>
+<span class="sourceLineNo">894</span><a name="line.894"></a>
+<span class="sourceLineNo">895</span>    @Override<a name="line.895"></a>
+<span class="sourceLineNo">896</span>    public boolean equals(Object o) {<a name="line.896"></a>
+<span class="sourceLineNo">897</span>        if (this == o) return true;<a name="line.897"></a>
+<span class="sourceLineNo">898</span>        if (!(o instanceof RNG)) return false;<a name="line.898"></a>
+<span class="sourceLineNo">899</span><a name="line.899"></a>
+<span class="sourceLineNo">900</span>        RNG rng = (RNG) o;<a name="line.900"></a>
+<span class="sourceLineNo">901</span><a name="line.901"></a>
+<span class="sourceLineNo">902</span>        return random.equals(rng.random);<a name="line.902"></a>
+<span class="sourceLineNo">903</span>    }<a name="line.903"></a>
+<span class="sourceLineNo">904</span><a name="line.904"></a>
+<span class="sourceLineNo">905</span>    @Override<a name="line.905"></a>
+<span class="sourceLineNo">906</span>    public int hashCode() {<a name="line.906"></a>
+<span class="sourceLineNo">907</span>        return random.hashCode();<a name="line.907"></a>
+<span class="sourceLineNo">908</span>    }<a name="line.908"></a>
+<span class="sourceLineNo">909</span>}<a name="line.909"></a>
 
 
 

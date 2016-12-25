@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -417,12 +417,19 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 </td>
 </tr>
 <tr id="i27" class="rowColor">
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/RNG.html#randomInterleave--">randomInterleave</a></span>()</code>
+<div class="block">Gets a somewhat-random long with exactly 32 bits set; in each pair of bits starting at bit 0 and bit 1, then bit
+ 2 and bit 3, up to bit 62 and bit 3, one bit will be 1 and one bit will be 0 in each pair.</div>
+</td>
+</tr>
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>int[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/RNG.html#randomOrdering-int-">randomOrdering</a></span>(int&nbsp;length)</code>
 <div class="block">Generates a random permutation of the range from 0 (inclusive) to length (exclusive).</div>
 </td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>int[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/RNG.html#randomOrdering-int-int:A-">randomOrdering</a></span>(int&nbsp;length,
               int[]&nbsp;dest)</code>
@@ -430,14 +437,14 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
  the dest parameter, avoiding allocations.</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;T&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/RNG.html#randomPortion-java.util.List-int-">randomPortion</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;T&gt;&nbsp;data,
              int&nbsp;count)</code>
 <div class="block">Gets a random portion of a List and returns it as a new List.</div>
 </td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/RNG.html#randomPortion-T:A-T:A-">randomPortion</a></span>(T[]&nbsp;data,
              T[]&nbsp;output)</code>
@@ -445,7 +452,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
  it can, and then returns output.</div>
 </td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i32" class="altColor">
 <td class="colFirst"><code>int[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/RNG.html#randomRange-int-int-int-">randomRange</a></span>(int&nbsp;start,
            int&nbsp;end,
@@ -453,49 +460,49 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <div class="block">Gets a random subrange of the non-negative ints from start (inclusive) to end (exclusive), using count elements.</div>
 </td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;T&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/RNG.html#randomRotation-java.util.List-">randomRotation</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;T&gt;&nbsp;l)</code>
 <div class="block">Given a <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util"><code>List</code></a> l, this selects a random element of l to be the first value in the returned list l2.</div>
 </td>
 </tr>
-<tr id="i33" class="rowColor">
+<tr id="i34" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/RNG.html#setRandomness-squidpony.squidmath.RandomnessSource-">setRandomness</a></span>(<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;random)</code>&nbsp;</td>
 </tr>
-<tr id="i34" class="altColor">
+<tr id="i35" class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/RNG.html#shuffle-java.util.Collection-">shuffle</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;T&gt;&nbsp;elements)</code>
 <div class="block">Shuffles a <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util"><code>Collection</code></a> of T using the Fisher-Yates algorithm and returns an ArrayList of T.</div>
 </td>
 </tr>
-<tr id="i35" class="rowColor">
+<tr id="i36" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/RNG.html#shuffle-java.util.Collection-java.util.ArrayList-">shuffle</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;T&gt;&nbsp;elements,
        <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;&nbsp;buf)</code>
 <div class="block">Shuffles a <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util"><code>Collection</code></a> of T using the Fisher-Yates algorithm.</div>
 </td>
 </tr>
-<tr id="i36" class="altColor">
+<tr id="i37" class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/RNG.html#shuffle-T:A-">shuffle</a></span>(T[]&nbsp;elements)</code>
 <div class="block">Shuffle an array using the Fisher-Yates algorithm and returns a shuffled copy.</div>
 </td>
 </tr>
-<tr id="i37" class="rowColor">
+<tr id="i38" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/RNG.html#shuffle-T:A-T:A-">shuffle</a></span>(T[]&nbsp;elements,
        T[]&nbsp;dest)</code>
 <div class="block">Shuffle an array using the "inside-out" Fisher-Yates algorithm.</div>
 </td>
 </tr>
-<tr id="i38" class="altColor">
+<tr id="i39" class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/RNG.html#shuffleInPlace-T:A-">shuffleInPlace</a></span>(T[]&nbsp;elements)</code>
 <div class="block">Shuffles an array in place using the Fisher-Yates algorithm.</div>
 </td>
 </tr>
-<tr id="i39" class="rowColor">
+<tr id="i40" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/RNG.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
@@ -1386,13 +1393,28 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 </dl>
 </li>
 </ul>
+<a name="randomInterleave--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>randomInterleave</h4>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.865">randomInterleave</a>()</pre>
+<div class="block">Gets a somewhat-random long with exactly 32 bits set; in each pair of bits starting at bit 0 and bit 1, then bit
+ 2 and bit 3, up to bit 62 and bit 3, one bit will be 1 and one bit will be 0 in each pair.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a random long with 32 "1" bits, distributed so exactly one bit is "1" for each pair of bits</dd>
+</dl>
+</li>
+</ul>
 <a name="toString--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.862">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.891">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -1405,7 +1427,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.867">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.896">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -1418,7 +1440,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.877">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.906">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>

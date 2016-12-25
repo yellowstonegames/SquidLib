@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -109,7 +109,8 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.24">WaffleFill</a>
+<pre><a href="../../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
+public class <a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.27">WaffleFill</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">An implementation of the Wave Function Collapse algorithm for placing tiles in a way that satisfies constraints; the
  name both sounds like Wave Function and loosely describes how the algorithm works. All tiles start off in an
@@ -216,11 +217,27 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.html#WaffleFill-java.lang.String-int-int-boolean-boolean-">WaffleFill</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;encoded,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.html#WaffleFill-java.lang.String:A-int-int-boolean-">WaffleFill</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;strings,
           int&nbsp;width,
           int&nbsp;height,
-          boolean&nbsp;periodic,
-          boolean&nbsp;black)</code>&nbsp;</td>
+          boolean&nbsp;periodic)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.html#WaffleFill-java.lang.String-int-int-boolean-">WaffleFill</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;encoded,
+          int&nbsp;width,
+          int&nbsp;height,
+          boolean&nbsp;periodic)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.html#WaffleFill-squidpony.squidgrid.WaffleFill.WaffleTile:A-java.lang.String:A-int-int-int-boolean-">WaffleFill</a></span>(<a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html" title="class in squidpony.squidgrid">WaffleFill.WaffleTile</a>[]&nbsp;waffleTiles,
+          <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;neighbors,
+          int&nbsp;tileSize,
+          int&nbsp;width,
+          int&nbsp;height,
+          boolean&nbsp;periodic)</code>
+<div class="block">Constructs a WaffleFill given a WaffleTile array, a String array, the size of a tile in chars, the width and
+ height of the result to generate</div>
+</td>
 </tr>
 </table>
 </li>
@@ -239,19 +256,23 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.html#Clear--">Clear</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.html#clear--">clear</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.html#observe--">observe</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>char[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.html#output--">output</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.html#propagate--">propagate</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.html#Run-squidpony.squidmath.RNG-int-">Run</a></span>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.html#run-squidpony.squidmath.RNG-int-">run</a></span>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
    int&nbsp;limit)</code>&nbsp;</td>
 </tr>
 </table>
@@ -282,7 +303,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>wave</h4>
-<pre>protected&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[] <a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.26">wave</a></pre>
+<pre>protected&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[] <a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.29">wave</a></pre>
 </li>
 </ul>
 <a name="changes">
@@ -291,7 +312,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>changes</h4>
-<pre>protected&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> <a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.27">changes</a></pre>
+<pre>protected&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> <a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.30">changes</a></pre>
 </li>
 </ul>
 <a name="stationary">
@@ -300,7 +321,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>stationary</h4>
-<pre>protected&nbsp;int[] <a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.28">stationary</a></pre>
+<pre>protected&nbsp;int[] <a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.31">stationary</a></pre>
 </li>
 </ul>
 <a name="observed">
@@ -309,7 +330,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>observed</h4>
-<pre>protected&nbsp;int[][] <a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.29">observed</a></pre>
+<pre>protected&nbsp;int[][] <a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.32">observed</a></pre>
 </li>
 </ul>
 <a name="random">
@@ -318,7 +339,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>random</h4>
-<pre>protected&nbsp;<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a> <a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.31">random</a></pre>
+<pre>protected&nbsp;<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a> <a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.34">random</a></pre>
 </li>
 </ul>
 <a name="FMX">
@@ -327,7 +348,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>FMX</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.32">FMX</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.35">FMX</a></pre>
 </li>
 </ul>
 <a name="FMY">
@@ -336,7 +357,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>FMY</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.32">FMY</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.35">FMY</a></pre>
 </li>
 </ul>
 <a name="T">
@@ -345,7 +366,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>T</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.32">T</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.35">T</a></pre>
 </li>
 </ul>
 <a name="limit">
@@ -354,7 +375,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>limit</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.32">limit</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.35">limit</a></pre>
 </li>
 </ul>
 <a name="periodic">
@@ -363,7 +384,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>periodic</h4>
-<pre>protected&nbsp;boolean <a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.33">periodic</a></pre>
+<pre>protected&nbsp;boolean <a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.36">periodic</a></pre>
 </li>
 </ul>
 </li>
@@ -374,17 +395,53 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="WaffleFill-java.lang.String-int-int-boolean-boolean-">
+<a name="WaffleFill-java.lang.String-int-int-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>WaffleFill</h4>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.143">WaffleFill</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;encoded,
+                  int&nbsp;width,
+                  int&nbsp;height,
+                  boolean&nbsp;periodic)</pre>
+</li>
+</ul>
+<a name="WaffleFill-java.lang.String:A-int-int-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>WaffleFill</h4>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.147">WaffleFill</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;strings,
+                  int&nbsp;width,
+                  int&nbsp;height,
+                  boolean&nbsp;periodic)</pre>
+</li>
+</ul>
+<a name="WaffleFill-squidpony.squidgrid.WaffleFill.WaffleTile:A-java.lang.String:A-int-int-int-boolean-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>WaffleFill</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.145">WaffleFill</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;encoded,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.319">WaffleFill</a>(<a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html" title="class in squidpony.squidgrid">WaffleFill.WaffleTile</a>[]&nbsp;waffleTiles,
+                  <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;neighbors,
+                  int&nbsp;tileSize,
                   int&nbsp;width,
                   int&nbsp;height,
-                  boolean&nbsp;periodic,
-                  boolean&nbsp;black)</pre>
+                  boolean&nbsp;periodic)</pre>
+<div class="block">Constructs a WaffleFill given a WaffleTile array, a String array, the size of a tile in chars, the width and
+ height of the result to generate</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>waffleTiles</code> - </dd>
+<dd><code>neighbors</code> - </dd>
+<dd><code>tileSize</code> - </dd>
+<dd><code>width</code> - </dd>
+<dd><code>height</code> - </dd>
+<dd><code>periodic</code> - </dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -401,35 +458,44 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>observe</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.38">observe</a>()</pre>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.41">observe</a>()</pre>
 </li>
 </ul>
-<a name="Run-squidpony.squidmath.RNG-int-">
+<a name="run-squidpony.squidmath.RNG-int-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>Run</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.104">Run</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+<h4>run</h4>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.107">run</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
                    int&nbsp;limit)</pre>
 </li>
 </ul>
-<a name="Clear--">
+<a name="clear--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>Clear</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.124">Clear</a>()</pre>
+<h4>clear</h4>
+<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.125">clear</a>()</pre>
 </li>
 </ul>
 <a name="propagate--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>propagate</h4>
-<pre>protected&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.367">propagate</a>()</pre>
+<pre>protected&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.472">propagate</a>()</pre>
+</li>
+</ul>
+<a name="output--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>output</h4>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.524">output</a>()</pre>
 </li>
 </ul>
 </li>
