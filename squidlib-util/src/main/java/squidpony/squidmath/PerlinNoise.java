@@ -481,15 +481,15 @@ public class PerlinNoise {
         int jj = j & 255;
         int kk = k & 255;
         int ll = l & 255;
-        int gi0 = perm[ii + perm[jj + perm[kk + perm[ll]]]] % 32;
+        int gi0 = perm[ii + perm[jj + perm[kk + perm[ll]]]] & 31;
         int gi1
-                = perm[ii + i1 + perm[jj + j1 + perm[kk + k1 + perm[ll + l1]]]] % 32;
+                = perm[ii + i1 + perm[jj + j1 + perm[kk + k1 + perm[ll + l1]]]] & 31;
         int gi2
-                = perm[ii + i2 + perm[jj + j2 + perm[kk + k2 + perm[ll + l2]]]] % 32;
+                = perm[ii + i2 + perm[jj + j2 + perm[kk + k2 + perm[ll + l2]]]] & 31;
         int gi3
-                = perm[ii + i3 + perm[jj + j3 + perm[kk + k3 + perm[ll + l3]]]] % 32;
+                = perm[ii + i3 + perm[jj + j3 + perm[kk + k3 + perm[ll + l3]]]] & 31;
         int gi4
-                = perm[ii + 1 + perm[jj + 1 + perm[kk + 1 + perm[ll + 1]]]] % 32;
+                = perm[ii + 1 + perm[jj + 1 + perm[kk + 1 + perm[ll + 1]]]] & 31;
         // Calculate the contribution from the five corners
         double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
         if (t0 < 0) {

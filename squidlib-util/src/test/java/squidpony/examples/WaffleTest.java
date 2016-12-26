@@ -25,10 +25,10 @@ public class WaffleTest {
                         "...."),
                 */
                 w.tile('I', 5,
-                        "#..#",
-                        "#..#",
-                        "#..#",
-                        "#..#"),
+                        "####",
+                        "....",
+                        "....",
+                        "####"),
                 w.tile('L', 2,
                         "#..#",
                         "#...",
@@ -45,7 +45,7 @@ public class WaffleTest {
                         "....",
                         "#..#"),*/
         };
-        WaffleFill actual = new WaffleFill(tiles, 4, 3, 3, true);
+        WaffleFill actual = new WaffleFill(tiles, 4, 4, 4, false);
         StatefulRNG rng = new StatefulRNG(0x1337CAFECABAL);
         System.out.println(actual.run(rng, 100));
         DungeonUtility.debugPrint(actual.output());

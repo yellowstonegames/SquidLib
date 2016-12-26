@@ -201,7 +201,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         {
                             case 4:
                                 noiseMode++;
-                                noiseMode %= 12;
+                                noiseMode %= 14;
                                 break;
                             case 5:
                                 rngMode++;
@@ -1244,6 +1244,42 @@ public class HashVisualizer extends ApplicationAdapter {
                                                 //PerlinNoise.noise(xx / 4.0, yy / 4.0) * 4 +
                                                 //PerlinNoise.noise(xx / 2.0, yy / 2.0) * 2 +
                                                 WhirlingNoise.noise(xx * 0.125, yy * 0.125)
+                                                        + 1f) / 2f;
+                                //+ 15f) / 30f;
+                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+
+                    case 12:
+                        Gdx.graphics.setTitle("Whirling Alt 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float)
+                                        (//PerlinNoise.noise(x / 8.0, y / 8.0, ctr * 0.125) * 8 +
+                                                //PerlinNoise.noise(x / 4.0, y / 4.0, ctr * 0.125) * 4 +
+                                                //PerlinNoise.noise(x / 2.0, y / 2.0, ctr * 0.125) * 2 +
+                                                WhirlingNoise.noiseAlt(x * 0.125, y * 0.125, ctr  * 0.0375)
+                                                        + 1f) / 2f;
+                                //+ 15.0f) / 30f;
+
+                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+
+                    case 13:
+                        Gdx.graphics.setTitle("Whirling Alt Noise, one octave at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright = (float)
+                                        (//PerlinNoise.noise(xx / 16.0, yy / 16.0) * 16 +
+                                                //PerlinNoise.noise(xx / 8.0, yy / 8.0) * 8 +
+                                                //PerlinNoise.noise(xx / 4.0, yy / 4.0) * 4 +
+                                                //PerlinNoise.noise(xx / 2.0, yy / 2.0) * 2 +
+                                                WhirlingNoise.noiseAlt(xx * 0.125, yy * 0.125)
                                                         + 1f) / 2f;
                                 //+ 15f) / 30f;
                                 display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
