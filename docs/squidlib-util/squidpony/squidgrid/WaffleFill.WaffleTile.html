@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -117,7 +117,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public static class <a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.583">WaffleFill.WaffleTile</a>
+<pre>public class <a href="../../src-html/squidpony/squidgrid/WaffleFill.html#line.683">WaffleFill.WaffleTile</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <dl>
@@ -147,28 +147,28 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html#data">data</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html#h">h</a></span></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/Router.html" title="interface in squidpony.squidmath">Router</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html#indexer">indexer</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html#leftSide">leftSide</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html#name">name</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html#rightSide">rightSide</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected char</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html#routerID">routerID</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>char</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html#symmetry">symmetry</a></span></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html#w">w</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
@@ -192,43 +192,16 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html#WaffleTile--">WaffleTile</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html#WaffleTile-char:A:A-char-">WaffleTile</a></span>(char[][]&nbsp;map,
-          char&nbsp;symmetry)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html#WaffleTile-char:A:A-char-boolean-boolean-">WaffleTile</a></span>(char[][]&nbsp;map,
-          char&nbsp;symmetry,
-          boolean&nbsp;flipX,
-          boolean&nbsp;flipY)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html#WaffleTile-char:A:A-char-int-">WaffleTile</a></span>(char[][]&nbsp;map,
-          char&nbsp;symmetry,
-          int&nbsp;rotation)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html#WaffleTile-char:A:A-char-int-boolean-boolean-">WaffleTile</a></span>(char[][]&nbsp;map,
-          char&nbsp;symmetry,
-          int&nbsp;rotation,
-          boolean&nbsp;flipX,
-          boolean&nbsp;flipY)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html#WaffleTile-char:A:A-char-int-boolean-boolean-int-">WaffleTile</a></span>(char[][]&nbsp;map,
-          char&nbsp;symmetry,
-          int&nbsp;rotation,
-          boolean&nbsp;flipX,
-          boolean&nbsp;flipY,
-          int&nbsp;weight)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html#WaffleTile-char:A-char-int-int-int-char-java.lang.String-">WaffleTile</a></span>(char[]&nbsp;data,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html#WaffleTile-char:A-char-int-char-java.lang.String-">WaffleTile</a></span>(char[]&nbsp;data,
           char&nbsp;routerID,
-          int&nbsp;w,
-          int&nbsp;h,
           int&nbsp;weight,
           char&nbsp;symmetry,
           <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html#WaffleTile-char-int-java.lang.String...-">WaffleTile</a></span>(char&nbsp;symmetry,
+          int&nbsp;weight,
+          <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;map)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html#WaffleTile-java.lang.String-">WaffleTile</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;encoded)</code>&nbsp;</td>
@@ -252,8 +225,8 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html#encode--">encode</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html#equals-java.lang.Object-">equals</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>char</code></td>
@@ -265,12 +238,24 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html#getName--">getName</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html" title="class in squidpony.squidgrid">WaffleFill.WaffleTile</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html#rotateCopy-int-">rotateCopy</a></span>(int&nbsp;rotation)</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html#serializeToString--">serializeToString</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html#setName-java.lang.String-">setName</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html#sideHash-boolean-">sideHash</a></span>(boolean&nbsp;rightSide)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -278,7 +263,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
-<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#clone--" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#getClass--" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#notify--" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#notifyAll--" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait--" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait-long-" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait-long-int-" title="class or interface in java.lang">wait</a></code></li>
+<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#clone--" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#getClass--" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#notify--" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#notifyAll--" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait--" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait-long-" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait-long-int-" title="class or interface in java.lang">wait</a></code></li>
 </ul>
 </li>
 </ul>
@@ -300,7 +285,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>data</h4>
-<pre>public&nbsp;char[] <a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.586">data</a></pre>
+<pre>public&nbsp;char[] <a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.686">data</a></pre>
 </li>
 </ul>
 <a name="indexer">
@@ -309,7 +294,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>indexer</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Router.html" title="interface in squidpony.squidmath">Router</a> <a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.587">indexer</a></pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Router.html" title="interface in squidpony.squidmath">Router</a> <a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.687">indexer</a></pre>
 </li>
 </ul>
 <a name="name">
@@ -318,7 +303,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>name</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> <a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.588">name</a></pre>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> <a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.688">name</a></pre>
 </li>
 </ul>
 <a name="routerID">
@@ -327,25 +312,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>routerID</h4>
-<pre>protected&nbsp;char <a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.589">routerID</a></pre>
-</li>
-</ul>
-<a name="w">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>w</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.590">w</a></pre>
-</li>
-</ul>
-<a name="h">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>h</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.590">h</a></pre>
+<pre>protected&nbsp;char <a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.689">routerID</a></pre>
 </li>
 </ul>
 <a name="weight">
@@ -354,16 +321,34 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>weight</h4>
-<pre>public&nbsp;int <a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.591">weight</a></pre>
+<pre>public&nbsp;int <a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.690">weight</a></pre>
 </li>
 </ul>
 <a name="symmetry">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>symmetry</h4>
-<pre>public&nbsp;char <a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.592">symmetry</a></pre>
+<pre>public&nbsp;char <a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.691">symmetry</a></pre>
+</li>
+</ul>
+<a name="leftSide">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>leftSide</h4>
+<pre>public transient&nbsp;int <a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.692">leftSide</a></pre>
+</li>
+</ul>
+<a name="rightSide">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>rightSide</h4>
+<pre>public transient&nbsp;int <a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.692">rightSide</a></pre>
 </li>
 </ul>
 </li>
@@ -380,7 +365,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>WaffleTile</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.594">WaffleTile</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.694">WaffleTile</a>()</pre>
 </li>
 </ul>
 <a name="WaffleTile-squidpony.squidgrid.WaffleFill.WaffleTile-">
@@ -389,19 +374,17 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>WaffleTile</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.602">WaffleTile</a>(<a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html" title="class in squidpony.squidgrid">WaffleFill.WaffleTile</a>&nbsp;other)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.703">WaffleTile</a>(<a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html" title="class in squidpony.squidgrid">WaffleFill.WaffleTile</a>&nbsp;other)</pre>
 </li>
 </ul>
-<a name="WaffleTile-char:A-char-int-int-int-char-java.lang.String-">
+<a name="WaffleTile-char:A-char-int-char-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>WaffleTile</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.606">WaffleTile</a>(char[]&nbsp;data,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.707">WaffleTile</a>(char[]&nbsp;data,
                   char&nbsp;routerID,
-                  int&nbsp;w,
-                  int&nbsp;h,
                   int&nbsp;weight,
                   char&nbsp;symmetry,
                   <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</pre>
@@ -413,67 +396,18 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>WaffleTile</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.629">WaffleTile</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;encoded)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.719">WaffleTile</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;encoded)</pre>
 </li>
 </ul>
-<a name="WaffleTile-char:A:A-char-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>WaffleTile</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.650">WaffleTile</a>(char[][]&nbsp;map,
-                  char&nbsp;symmetry)</pre>
-</li>
-</ul>
-<a name="WaffleTile-char:A:A-char-int-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>WaffleTile</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.663">WaffleTile</a>(char[][]&nbsp;map,
-                  char&nbsp;symmetry,
-                  int&nbsp;rotation)</pre>
-</li>
-</ul>
-<a name="WaffleTile-char:A:A-char-boolean-boolean-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>WaffleTile</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.677">WaffleTile</a>(char[][]&nbsp;map,
-                  char&nbsp;symmetry,
-                  boolean&nbsp;flipX,
-                  boolean&nbsp;flipY)</pre>
-</li>
-</ul>
-<a name="WaffleTile-char:A:A-char-int-boolean-boolean-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>WaffleTile</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.694">WaffleTile</a>(char[][]&nbsp;map,
-                  char&nbsp;symmetry,
-                  int&nbsp;rotation,
-                  boolean&nbsp;flipX,
-                  boolean&nbsp;flipY)</pre>
-</li>
-</ul>
-<a name="WaffleTile-char:A:A-char-int-boolean-boolean-int-">
+<a name="WaffleTile-char-int-java.lang.String...-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>WaffleTile</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.722">WaffleTile</a>(char[][]&nbsp;map,
-                  char&nbsp;symmetry,
-                  int&nbsp;rotation,
-                  boolean&nbsp;flipX,
-                  boolean&nbsp;flipY,
-                  int&nbsp;weight)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.730">WaffleTile</a>(char&nbsp;symmetry,
+                  int&nbsp;weight,
+                  <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;map)</pre>
 </li>
 </ul>
 </li>
@@ -490,8 +424,17 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>get</h4>
-<pre>public&nbsp;char&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.727">get</a>(int&nbsp;x,
+<pre>public&nbsp;char&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.746">get</a>(int&nbsp;x,
                 int&nbsp;y)</pre>
+</li>
+</ul>
+<a name="sideHash-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>sideHash</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.751">sideHash</a>(boolean&nbsp;rightSide)</pre>
 </li>
 </ul>
 <a name="getName--">
@@ -500,7 +443,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getName</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.732">getName</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.760">getName</a>()</pre>
 </li>
 </ul>
 <a name="setName-java.lang.String-">
@@ -509,16 +452,42 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>setName</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.736">setName</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.764">setName</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</pre>
 </li>
 </ul>
-<a name="encode--">
+<a name="serializeToString--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>encode</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.740">encode</a>()</pre>
+<h4>serializeToString</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.768">serializeToString</a>()</pre>
+</li>
+</ul>
+<a name="equals-java.lang.Object-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>equals</h4>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.773">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="hashCode--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hashCode</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.787">hashCode</a>()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+</dl>
 </li>
 </ul>
 <a name="rotateCopy-int-">
@@ -527,7 +496,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>rotateCopy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html" title="class in squidpony.squidgrid">WaffleFill.WaffleTile</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.744">rotateCopy</a>(int&nbsp;rotation)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidgrid/WaffleFill.WaffleTile.html" title="class in squidpony.squidgrid">WaffleFill.WaffleTile</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/WaffleFill.WaffleTile.html#line.796">rotateCopy</a>(int&nbsp;rotation)</pre>
 </li>
 </ul>
 </li>

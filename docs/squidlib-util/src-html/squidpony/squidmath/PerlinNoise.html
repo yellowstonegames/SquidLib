@@ -489,15 +489,15 @@
 <span class="sourceLineNo">481</span>        int jj = j &amp; 255;<a name="line.481"></a>
 <span class="sourceLineNo">482</span>        int kk = k &amp; 255;<a name="line.482"></a>
 <span class="sourceLineNo">483</span>        int ll = l &amp; 255;<a name="line.483"></a>
-<span class="sourceLineNo">484</span>        int gi0 = perm[ii + perm[jj + perm[kk + perm[ll]]]] % 32;<a name="line.484"></a>
+<span class="sourceLineNo">484</span>        int gi0 = perm[ii + perm[jj + perm[kk + perm[ll]]]] &amp; 31;<a name="line.484"></a>
 <span class="sourceLineNo">485</span>        int gi1<a name="line.485"></a>
-<span class="sourceLineNo">486</span>                = perm[ii + i1 + perm[jj + j1 + perm[kk + k1 + perm[ll + l1]]]] % 32;<a name="line.486"></a>
+<span class="sourceLineNo">486</span>                = perm[ii + i1 + perm[jj + j1 + perm[kk + k1 + perm[ll + l1]]]] &amp; 31;<a name="line.486"></a>
 <span class="sourceLineNo">487</span>        int gi2<a name="line.487"></a>
-<span class="sourceLineNo">488</span>                = perm[ii + i2 + perm[jj + j2 + perm[kk + k2 + perm[ll + l2]]]] % 32;<a name="line.488"></a>
+<span class="sourceLineNo">488</span>                = perm[ii + i2 + perm[jj + j2 + perm[kk + k2 + perm[ll + l2]]]] &amp; 31;<a name="line.488"></a>
 <span class="sourceLineNo">489</span>        int gi3<a name="line.489"></a>
-<span class="sourceLineNo">490</span>                = perm[ii + i3 + perm[jj + j3 + perm[kk + k3 + perm[ll + l3]]]] % 32;<a name="line.490"></a>
+<span class="sourceLineNo">490</span>                = perm[ii + i3 + perm[jj + j3 + perm[kk + k3 + perm[ll + l3]]]] &amp; 31;<a name="line.490"></a>
 <span class="sourceLineNo">491</span>        int gi4<a name="line.491"></a>
-<span class="sourceLineNo">492</span>                = perm[ii + 1 + perm[jj + 1 + perm[kk + 1 + perm[ll + 1]]]] % 32;<a name="line.492"></a>
+<span class="sourceLineNo">492</span>                = perm[ii + 1 + perm[jj + 1 + perm[kk + 1 + perm[ll + 1]]]] &amp; 31;<a name="line.492"></a>
 <span class="sourceLineNo">493</span>        // Calculate the contribution from the five corners<a name="line.493"></a>
 <span class="sourceLineNo">494</span>        double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;<a name="line.494"></a>
 <span class="sourceLineNo">495</span>        if (t0 &lt; 0) {<a name="line.495"></a>

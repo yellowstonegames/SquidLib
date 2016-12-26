@@ -454,20 +454,20 @@ public class WaffleFill {
         DungeonUtility.debugPrint(tempPropagator[3].toChars());
         System.out.println();
 
+        /*
         IntVLA[][] sparsePropagator = new IntVLA[4][T];
         for (int d = 0; d < 4; d++) {
             for (int t = 0; t < T; t++) {
                 sparsePropagator[d][t] = new IntVLA();
             }
-        }
+        }*/
 
-        IntVLA sp;
+        IntVLA sp = new IntVLA();
         GreasedRegion tg;
         for (int d = 0; d < 4; d++) {
             tg = tempPropagator[d];
             for (int t1 = 0; t1 < T; t1++) {
-                sp = sparsePropagator[d][t1];
-
+                sp.clear();
                 for (int t2 = 0; t2 < T; t2++) {
                     if (tg.contains(t1, t2)) sp.add(t2);
                 }

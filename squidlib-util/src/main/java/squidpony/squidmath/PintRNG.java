@@ -70,9 +70,8 @@ public class PintRNG implements RandomnessSource, StatefulRandomness, Serializab
 
         int p = state;
         p ^= p >>> (4 + (p >>> 28));
-        p *= 277803737;
         state = state * 0x2C9277B5 + 0xAC564B05;
-        return p ^ (p >>> 22);
+        return ((p *= 277803737) >>> 22) ^ p;
     }
 
     /**
@@ -84,12 +83,10 @@ public class PintRNG implements RandomnessSource, StatefulRandomness, Serializab
     public long nextLong() {
         int p = state;
         p ^= p >>> (4 + (p >>> 28));
-        p *= 277803737;
+        int q = (state = state * 0x2C9277B5 + 0xAC564B05);
+        q ^= q >>> (4 + (q >>> 28));
         state = state * 0x2C9277B5 + 0xAC564B05;
-        p ^= state ^ (p >>> 22);
-        p ^= p >>> (4 + (p >>> 28));
-        p *= 277803737;
-        return p ^ (p >>> 22);
+        return (((p *= 277803737) >>> 22) ^ p) | ((((q *= 277803737) >>> 22) ^ q) & 0xffffffffL) << 32;
 
         //return 0x100000000L * nextInt() | nextInt();
         /*
@@ -224,5 +221,17 @@ public class PintRNG implements RandomnessSource, StatefulRandomness, Serializab
     @Override
     public int hashCode() {
         return 0x632BE5AB * state;
+    }
+
+    public static int determine(int state)
+    {
+        state ^= state >>> (4 + (state >>> 28));
+        return ((state *= 277803737) >>> 22) ^ state;
+    }
+
+    public static int determineBounded(int state, final int bound)
+    {
+        state ^= state >>> (4 + (state >>> 28));
+        return (int)((bound * ((((state *= 277803737) >>> 22) ^ state) & 0x7FFFFFFFL)) >> 31);
     }
 }
