@@ -2141,9 +2141,12 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     /**
      * If this GreasedRegion stores multiple unconnected "on" areas, this finds each isolated area (areas that
      * are only adjacent diagonally are considered separate from each other) and returns it as an element in an
-     * ArrayList of GreasedRegion, with one GreasedRegion per isolated area. Useful when you have, for example, all the
-     * rooms in a dungeon with their connecting corridors removed, but want to separate the rooms. You can get the
-     * aforementioned data assuming a bare dungeon called map using:
+     * ArrayList of GreasedRegion, with one GreasedRegion per isolated area. Not to be confused with
+     * {@link #split8way()}, which considers diagonally-adjacent cells as part of one region, while this method requires
+     * cells to be orthogonally adjacent.
+     * <br>
+     * Useful when you have, for example, all the rooms in a dungeon with their connecting corridors removed, but want
+     * to separate the rooms. You can get the aforementioned data assuming a bare dungeon called map using:
      * <br>
      * {@code GreasedRegion floors = new GreasedRegion(map, '.'),
      * rooms = floors.copy().retract8way().flood(floors, 2),
@@ -2168,6 +2171,45 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         GreasedRegion remaining = new GreasedRegion(this);
         while (fst.x >= 0) {
             GreasedRegion filled = new GreasedRegion(fst, width, height).flood(remaining, width * height);
+            scattered.add(filled);
+            remaining.andNot(filled);
+            fst = remaining.first();
+        }
+        return scattered;
+    }
+    /**
+     * If this GreasedRegion stores multiple unconnected "on" areas, this finds each isolated area (areas that
+     * are only adjacent diagonally are considered <b>one area</b> with this) and returns it as an element in an
+     * ArrayList of GreasedRegion, with one GreasedRegion per isolated area. This should not be confused with
+     * {@link #split()}, which is almost identical except that split() considers only orthogonal connections, while this
+     * method considers both orthogonal and diagonal connections between cells as joining an area.
+     * <br>
+     * Useful when you have, for example, all the rooms in a dungeon with their connecting corridors removed, but want
+     * to separate the rooms. You can get the aforementioned data assuming a bare dungeon called map using:
+     * <br>
+     * {@code GreasedRegion floors = new GreasedRegion(map, '.'),
+     * rooms = floors.copy().retract8way().flood(floors, 2),
+     * corridors = floors.copy().andNot(rooms),
+     * doors = rooms.copy().and(corridors.copy().fringe());}
+     * <br>
+     * You can then get all rooms as separate regions with {@code List<GreasedRegion> apart = split(rooms);}, or
+     * substitute {@code split(corridors)} to get the corridors. The room-finding technique works by shrinking floors
+     * by a radius of 1 (8-way), which causes thin areas like corridors of 2 or less width to be removed, then
+     * flood-filling the floors out from the area that produces by 2 cells (4-way this time) to restore the original
+     * size of non-corridor areas (plus some extra to ensure odd shapes are kept). Corridors are obtained by removing
+     * the rooms from floors. The example code also gets the doors (which overlap with rooms, not corridors) by finding
+     * where the a room and a corridor are adjacent. This technique is used with some enhancements in the RoomFinder
+     * class.
+     * @see squidpony.squidgrid.mapping.RoomFinder for a class that uses this technique without exposing GreasedRegion
+     * @return an ArrayList containing each unconnected area from packed as a GreasedRegion element
+     */
+    public ArrayList<GreasedRegion> split8way()
+    {
+        ArrayList<GreasedRegion> scattered = new ArrayList<>(32);
+        Coord fst = first();
+        GreasedRegion remaining = new GreasedRegion(this);
+        while (fst.x >= 0) {
+            GreasedRegion filled = new GreasedRegion(fst, width, height).flood8way(remaining, width * height);
             scattered.add(filled);
             remaining.andNot(filled);
             fst = remaining.first();
