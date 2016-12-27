@@ -133,10 +133,12 @@ public class RotationDemo extends ApplicationAdapter {
         // manually if you use a constant internal zoom; here we use 1f for internal zoom 1, about 2/3f for zoom 2, and
         // about 1/2f for zoom 3. If you have more zooms as options for some reason, this formula should hold for many
         // cases but probably not all.
-        textFactory = DefaultResources.getStretchableDejaVuFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
-                .width(cellWidth).height(cellHeight).initBySize();
+        //textFactory = DefaultResources.getStretchableDejaVuFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
+        //        .width(cellWidth).height(cellHeight).initBySize();
         //textFactory = DefaultResources.getStretchableCodeFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
         //        .width(cellWidth).height(cellHeight).initBySize(); //.setDirectionGlyph('ˆ')
+        textFactory = DefaultResources.getStretchableSciFiFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
+                .width(cellWidth).height(cellHeight).initBySize();
 
         // Creates a layered series of text grids in a SquidLayers object, using the previously set-up textFactory and
         // SquidColorCenters.
@@ -177,7 +179,7 @@ public class RotationDemo extends ApplicationAdapter {
         char[][] mg = serpent.generate();
         decoDungeon = dungeonGen.generate(mg, serpent.getEnvironment());
         bareDungeon = dungeonGen.getBareDungeon();
-        lineDungeon = DungeonUtility.hashesToLines(dungeonGen.getDungeon(), true);
+        lineDungeon = DungeonUtility.linesToHashes(DungeonUtility.hashesToLines(dungeonGen.getDungeon(), true));
         /*
         decoDungeon = new char[][]{
                 {'#','#','#','#',},
@@ -222,7 +224,7 @@ public class RotationDemo extends ApplicationAdapter {
             Coord monPos = placement.singleRandom(rng);
             placement.remove(monPos);
             p = adjacency.composite(monPos.x, monPos.y, rng.nextIntHasty(4), 0);
-            monsters.put(p >> 3, new Creature(display.animateActor(monPos.x, monPos.y, 'Я',
+            monsters.put(p >> 3, new Creature(display.animateActor(monPos.x, monPos.y, ((i & 1) == 0) ? 'g' : 'K', //'Я',
                     SColor.SCARLET),
                     display.directionMarker(monPos.x, monPos.y, monsterMarkColors, 1.5f, 3, false),
                     p,
@@ -262,7 +264,11 @@ public class RotationDemo extends ApplicationAdapter {
         }
         lights = DungeonUtility.generateLightnessModifiers(decoDungeon, counter);
         seen = new boolean[width][height];
+        /*
         lang = FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 4, 6, new String[]{",", ",", ",", " -"},
+                new String[]{"..."}, 0.25);
+        */
+        lang = FakeLanguageGen.RUSSIAN_ROMANIZED.sentence(rng, 4, 6, new String[]{",", ",", ",", " -"},
                 new String[]{"..."}, 0.25);
         // this is a big one.
         // SquidInput can be constructed with a KeyHandler (which just processes specific keypresses), a SquidMouse
@@ -483,8 +489,13 @@ public class RotationDemo extends ApplicationAdapter {
             // monster values are used to store their aggression, 1 for actively stalking the player, 0 for not.
             if (mon.state > 0 || fovmap[adjacency.extractX(pos << 3)][adjacency.extractY(pos << 3)] > 0.1) {
                 if (mon.state == 0) {
+                    /*
                     messages.appendMessage("The AЯMED GUAЯD shouts at you, \"" +
                             FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 1, 3,
+                                    new String[]{",", ",", ",", " -"}, new String[]{"!"}, 0.25) + "\"");
+                    */
+                    messages.appendMessage("The ARMED GUARD shouts at you, \"" +
+                            FakeLanguageGen.RUSSIAN_ROMANIZED.sentence(rng, 1, 3,
                                     new String[]{",", ",", ",", " -"}, new String[]{"!"}, 0.25) + "\"");
                 }
 

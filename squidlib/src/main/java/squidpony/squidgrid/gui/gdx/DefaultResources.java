@@ -62,7 +62,8 @@ public class DefaultResources implements LifecycleListener {
             arial15 = null;
 
     private TextCellFactory distanceNarrow = null, distanceSquare = null, typewriterDistanceNarrow = null,
-            distancePrint = null, distanceClean = null, distanceCode = null, distanceDejaVu = null;
+            distancePrint = null, distanceClean = null, distanceCode = null, distanceDejaVu = null,
+            distanceSciFi = null;
     private TextureAtlas iconAtlas = null;
     public static final String squareName = "Zodiac-Square-12x12.fnt",
             narrowName = "Rogue-Zodiac-6x12.fnt",
@@ -86,7 +87,9 @@ public class DefaultResources implements LifecycleListener {
             distanceFieldCode = "SourceCodePro-Medium-distance.fnt",
             distanceFieldCodeTexture = "SourceCodePro-Medium-distance.png",
             distanceFieldDejaVu = "DejaVuSansMono-distance.fnt",
-            distanceFieldDejaVuTexture = "DejaVuSansMono-distance.png";
+            distanceFieldDejaVuTexture = "DejaVuSansMono-distance.png",
+            distanceFieldSciFi = "Galaxsea-Starlight-Mono-v3_1-distance.fnt",
+            distanceFieldSciFiTexture = "Galaxsea-Starlight-Mono-v3_1-distance.png";
     public static String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n"
             + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n"
             + "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n"
@@ -589,7 +592,49 @@ public class DefaultResources implements LifecycleListener {
         return null;
 
     }
-
+    /**
+     * Returns a TextCellFactory already configured to use a highly-decorative "alien-like" font that should scale
+     * cleanly to many sizes, and is a good fit for text used in science-fiction settings. Has excellent Latin script
+     * support, including enough to handle the rare characters used by Vietnamese, but does not support Cyrillic and has
+     * only very limited Greek support (e.g. no alpha or beta). This font looks better at larger sizes, and many small
+     * glyphs, including '^' and '`' will only be recognizable at a height of at least 24 and a width of at least 12 (in
+     * pixels). A lot of glyphs may be somewhat hard to read at first. Caches the result for later calls.
+     * <br>
+     * This font has additional an license requirement, attribution to the original author of the font (using the
+     * nickname dialNforNinja); you should also attribute Elementalist, which is me (Tommy Ettinger), to note that not
+     * all of the changes in the font (which people may or may not prefer, but were done for better compatibility with
+     * SquidLib) were by the original author. The license file that the font was generated with is provided in the
+     * SquidLib assets, and you should include some form of attribution to dialNforNinja in your distribution and/or
+     * credits if you incorporate this font; the license file should be suitable in an open-source game. There are no
+     * other restrictions on the usage of this font (it can be used commercially, can be modified, etc.).
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Galaxsea-Starlight-Mono-v3_1-distance.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Galaxsea-Starlight-Mono-v3_1-distance.png</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Galaxsea-Starlight-Mono-v3_1-license.txt</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font Galaxsea-Starlight-Mono-v3_1.ttf
+     */
+    public static TextCellFactory getStretchableSciFiFont()
+    {
+        initialize();
+        if(instance.typewriterDistanceNarrow == null)
+        {
+            try {
+                instance.typewriterDistanceNarrow = new TextCellFactory()
+                        .fontDistanceField(distanceFieldSciFi, distanceFieldSciFiTexture);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.typewriterDistanceNarrow != null)
+            return instance.typewriterDistanceNarrow.copy();
+        return null;
+    }
     /**
      * Returns a TextCellFactory already configured to use a variable-width serif font that should look like the serif
      * fonts used in many novels' main texts, and that should scale cleanly to many sizes. Meant to be used in variable-
