@@ -608,6 +608,9 @@ public class DefaultResources implements LifecycleListener {
      * credits if you incorporate this font; the license file should be suitable in an open-source game. There are no
      * other restrictions on the usage of this font (it can be used commercially, can be modified, etc.).
      * <br>
+     * The font can be previewed here, http://fontstruct.com/fontstructions/show/1353674/galaxsea-starlight-mono-v3 ,
+     * with links to the font it was based on (v3 by dialNforNinja instead of v3.1 by Elementalist/Tommy Ettinger).
+     * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * distance field font technique this uses can work.
      * <br>
@@ -622,17 +625,17 @@ public class DefaultResources implements LifecycleListener {
     public static TextCellFactory getStretchableSciFiFont()
     {
         initialize();
-        if(instance.typewriterDistanceNarrow == null)
+        if(instance.distanceSciFi == null)
         {
             try {
-                instance.typewriterDistanceNarrow = new TextCellFactory()
+                instance.distanceSciFi = new TextCellFactory()
                         .fontDistanceField(distanceFieldSciFi, distanceFieldSciFiTexture);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        if(instance.typewriterDistanceNarrow != null)
-            return instance.typewriterDistanceNarrow.copy();
+        if(instance.distanceSciFi != null)
+            return instance.distanceSciFi.copy();
         return null;
     }
     /**
@@ -865,6 +868,18 @@ public class DefaultResources implements LifecycleListener {
         if(typewriterDistanceNarrow != null) {
             typewriterDistanceNarrow.dispose();
             typewriterDistanceNarrow = null;
+        }
+        if(distanceCode != null) {
+            distanceCode.dispose();
+            distanceCode = null;
+        }
+        if(distanceDejaVu != null) {
+            distanceDejaVu.dispose();
+            distanceDejaVu = null;
+        }
+        if(distanceSciFi != null) {
+            distanceSciFi.dispose();
+            distanceSciFi = null;
         }
         if(distanceClean != null) {
             distanceClean.dispose();
