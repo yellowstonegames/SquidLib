@@ -65,15 +65,16 @@ public class DefaultResources implements LifecycleListener {
             distancePrint = null, distanceClean = null, distanceCode = null, distanceDejaVu = null,
             distanceSciFi = null;
     private TextureAtlas iconAtlas = null;
-    public static final String squareName = "Zodiac-Square-12x12.fnt",
-            narrowName = "Rogue-Zodiac-6x12.fnt",
-            unicodeName = "Mandrill-6x16.fnt",
-            squareNameLarge = "Zodiac-Square-24x24.fnt",
-            narrowNameLarge = "Rogue-Zodiac-12x24.fnt",
-            unicodeNameLarge = "Mandrill-12x32.fnt",
-            narrowNameExtraLarge = "Rogue-Zodiac-18x36.fnt",
-            smoothName = "Inconsolata-LGC-8x18.fnt",
-            smoothNameLarge = "Inconsolata-LGC-12x24.fnt",
+    public static final String squareName = "Zodiac-Square-12x12.fnt", squareTexture = "Zodiac-Square-12x12.png",
+            narrowName = "Rogue-Zodiac-6x12.fnt", narrowTexture = "Rogue-Zodiac-6x12_0.png",
+            unicodeName = "Mandrill-6x16.fnt", unicodeTexture = "Mandrill-6x16.png",
+            squareNameLarge = "Zodiac-Square-24x24.fnt", squareTextureLarge = "Zodiac-Square-24x24.png",
+            narrowNameLarge = "Rogue-Zodiac-12x24.fnt", narrowTextureLarge = "Rogue-Zodiac-12x24_0.png",
+            unicodeNameLarge = "Mandrill-12x32.fnt", unicodeTextureLarge = "Mandrill-12x32.png",
+            narrowNameExtraLarge = "Rogue-Zodiac-18x36.fnt", narrowTextureExtraLarge = "Rogue-Zodiac-18x36_0.png",
+            smoothName = "Inconsolata-LGC-8x18.fnt", smoothTexture = "Inconsolata-LGC-8x18.png",
+            smoothNameLarge = "Inconsolata-LGC-12x24.fnt", smoothTextureLarge = "Inconsolata-LGC-12x24.png",
+            smoothSquareName = "Inconsolata-LGC-Square-25x25.fnt", smoothSquareTexture = "Inconsolata-LGC-Square-25x25.png",
             distanceFieldSquare = "Inconsolata-LGC-Square-distance.fnt",
             distanceFieldSquareTexture = "Inconsolata-LGC-Square-distance.png",
             distanceFieldNarrow = "Inconsolata-LGC-Custom-distance.fnt",
@@ -177,7 +178,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.square1 == null)
         {
             try {
-                instance.square1 = new BitmapFont(Gdx.files.internal("Zodiac-Square-12x12.fnt"), Gdx.files.internal("Zodiac-Square-12x12.png"), false);
+                instance.square1 = new BitmapFont(Gdx.files.internal(squareName), Gdx.files.internal(squareTexture), false);
                 //instance.square1.getData().padBottom = instance.square1.getDescent();
             } catch (Exception e) {
             }
@@ -200,7 +201,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.square2 == null)
         {
             try {
-                instance.square2 = new BitmapFont(Gdx.files.internal("Zodiac-Square-24x24.fnt"), Gdx.files.internal("Zodiac-Square-24x24.png"), false);
+                instance.square2 = new BitmapFont(Gdx.files.internal(squareNameLarge), Gdx.files.internal(squareTextureLarge), false);
                 //instance.square2.getData().padBottom = instance.square2.getDescent();
             } catch (Exception e) {
             }
@@ -223,7 +224,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.narrow1 == null)
         {
             try {
-                instance.narrow1 = new BitmapFont(Gdx.files.internal("Rogue-Zodiac-6x12.fnt"), Gdx.files.internal("Rogue-Zodiac-6x12_0.png"), false);
+                instance.narrow1 = new BitmapFont(Gdx.files.internal(narrowName), Gdx.files.internal(narrowTexture), false);
                 //instance.narrow1.getData().padBottom = instance.narrow1.getDescent();
             } catch (Exception e) {
             }
@@ -247,7 +248,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.narrow2 == null)
         {
             try {
-                instance.narrow2 = new BitmapFont(Gdx.files.internal("Rogue-Zodiac-12x24.fnt"), Gdx.files.internal("Rogue-Zodiac-12x24_0.png"), false);
+                instance.narrow2 = new BitmapFont(Gdx.files.internal(narrowNameLarge), Gdx.files.internal(narrowTextureLarge), false);
                 //instance.narrow2.getData().padBottom = instance.narrow2.getDescent();
             } catch (Exception e) {
             }
@@ -270,7 +271,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.narrow3 == null)
         {
             try {
-                instance.narrow3 = new BitmapFont(Gdx.files.internal("Rogue-Zodiac-18x36.fnt"), Gdx.files.internal("Rogue-Zodiac-18x36_0.png"), false);
+                instance.narrow3 = new BitmapFont(Gdx.files.internal(narrowNameExtraLarge), Gdx.files.internal(narrowTextureExtraLarge), false);
                 //instance.narrow3.getData().padBottom = instance.narrow3.getDescent();
             } catch (Exception e) {
             }
@@ -296,7 +297,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.smooth1 == null)
         {
             try {
-                instance.smooth1 = new BitmapFont(Gdx.files.internal("Inconsolata-LGC-8x18.fnt"), Gdx.files.internal("Inconsolata-LGC-8x18.png"), false);
+                instance.smooth1 = new BitmapFont(Gdx.files.internal(smoothName), Gdx.files.internal(smoothTexture), false);
                 //instance.smooth1.getData().padBottom = instance.smooth1.getDescent();
             } catch (Exception e) {
             }
@@ -321,7 +322,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.smooth2 == null)
         {
             try {
-                instance.smooth2 = new BitmapFont(Gdx.files.internal("Inconsolata-LGC-12x24.fnt"), Gdx.files.internal("Inconsolata-LGC-12x24.png"), false);
+                instance.smooth2 = new BitmapFont(Gdx.files.internal(smoothNameLarge), Gdx.files.internal(smoothTextureLarge), false);
                 //instance.smooth2.getData().padBottom = instance.smooth2.getDescent();
             } catch (Exception e) {
             }
@@ -344,7 +345,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.unicode1 == null)
         {
             try {
-                instance.unicode1 = new BitmapFont(Gdx.files.internal("Mandrill-6x16.fnt"), Gdx.files.internal("Mandrill-6x16.png"), false);
+                instance.unicode1 = new BitmapFont(Gdx.files.internal(unicodeName), Gdx.files.internal(unicodeTexture), false);
                 //instance.unicode1.getData().padBottom = instance.unicode1.getDescent();
             } catch (Exception e) {
             }
@@ -368,7 +369,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.unicode2 == null)
         {
             try {
-                instance.unicode2 = new BitmapFont(Gdx.files.internal("Mandrill-12x32.fnt"), Gdx.files.internal("Mandrill-12x32.png"), false);
+                instance.unicode2 = new BitmapFont(Gdx.files.internal(unicodeNameLarge), Gdx.files.internal(unicodeTextureLarge), false);
                 //instance.unicode2.getData().padBottom = instance.unicode2.getDescent();
             } catch (Exception e) {
             }
@@ -379,7 +380,8 @@ public class DefaultResources implements LifecycleListener {
      * Returns a 25x25px, very smooth and generally good-looking font (based on Inconsolata) as an embedded resource.
      * This font fully supports Latin, Greek, Cyrillic, and of particular interest to SquidLib, Box Drawing characters.
      * This variant is (almost) perfectly square, and box drawing characters should line up at size 25x25 px, but other
-     * glyphs will have much more horizontal spacing than in other fonts. Caches the font for later calls.
+     * glyphs will have much more horizontal spacing than in other fonts. Caches the font for later calls. You may want
+     * {@link #getStretchableSquareFont()} instead, which is the same font but can stretch smoothly to most sizes.
      * <br>
      * Needs files:
      * <ul>
@@ -394,41 +396,12 @@ public class DefaultResources implements LifecycleListener {
         if(instance.smoothSquare == null)
         {
             try {
-                instance.smoothSquare = new BitmapFont(Gdx.files.internal("Inconsolata-LGC-Square-25x25.fnt"), Gdx.files.internal("Inconsolata-LGC-Square-25x25.png"), false);
+                instance.smoothSquare = new BitmapFont(Gdx.files.internal(smoothSquareName), Gdx.files.internal(smoothSquareTexture), false);
                 //instance.smoothSquare.getData().padBottom = instance.smoothSquare.getDescent();
             } catch (Exception e) {
             }
         }
         return instance.smoothSquare;
-    }
-
-    /**
-     * NOTE: May have issues with transparency. Prefer using distance field fonts with getStretchableSquareFont() if
-     * possible, or getSquareSmoothFont() for a larger square BitmapFont. Returns a 20x20px, very smooth and generally
-     * good-looking font (based on Inconsolata) as an embedded resource. This font fully supports Latin, Greek,
-     * Cyrillic, and of particular interest to SquidLib, Box Drawing characters. This variant is (almost) perfectly
-     * square, and box drawing characters should line up at size 20x20 px, but other glyphs will have much more
-     * horizontal spacing than in other fonts. Caches the font for later calls.
-     * <br>
-     * Needs files:
-     * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Square.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Square.png</li>
-     * </ul>
-     * @return the BitmapFont object representing Inconsolata-LGC-Square at size 20x20 pixels
-     */
-    public static BitmapFont getSquareSmoothMediumFont()
-    {
-        initialize();
-        if(instance.smoothSquareOld == null)
-        {
-            try {
-                instance.smoothSquareOld = new BitmapFont(Gdx.files.internal("Inconsolata-LGC-Square.fnt"), Gdx.files.internal("Inconsolata-LGC-Square.png"), false);
-                //instance.smoothSquareOld.getData().padBottom = instance.smoothSquareOld.getDescent();
-            } catch (Exception e) {
-            }
-        }
-        return instance.smoothSquareOld;
     }
 
     /**
@@ -613,7 +586,7 @@ public class DefaultResources implements LifecycleListener {
      * with links to the font it was based on (v3 by dialNforNinja instead of v3.1 by Elementalist/Tommy Ettinger).
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
-     * distance field font technique this uses can work. This sets the smoothing multiplier to 1.2 by default, so
+     * distance field font technique this uses can work. This sets the smoothing multiplier to 1.2f by default, so
      * <b>if you set the smoothing multiplier yourself, you should probably increase the amount by 20%</b> relative to
      * other fonts' multipliers.
      * <br>
@@ -677,7 +650,9 @@ public class DefaultResources implements LifecycleListener {
      * currently you should prefer getStretchablePrintFont() for legibility. Caches the result for later calls.
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
-     * distance field font technique this uses can work.
+     * distance field font technique this uses can work. Sets the smoothing multiplier to 0.4f; if you set the smoothing
+     * multiplier yourself, it should be similarly smaller than what other fonts use (most fonts are 1.0, so multiplying
+     * whatever you would normally set the smoothing multiplier to by 0.4f should work).
      * <br>
      * Needs files:
      * <ul>
@@ -850,7 +825,7 @@ public class DefaultResources implements LifecycleListener {
         }
         if(square2 != null) {
             square2.dispose();
-            square1 = null;
+            square2 = null;
         }
         if(smoothSquare != null) {
             smoothSquare.dispose();
