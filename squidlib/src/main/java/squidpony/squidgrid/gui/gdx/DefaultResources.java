@@ -63,7 +63,7 @@ public class DefaultResources implements LifecycleListener {
 
     private TextCellFactory distanceNarrow = null, distanceSquare = null, typewriterDistanceNarrow = null,
             distancePrint = null, distanceClean = null, distanceCode = null, distanceDejaVu = null,
-            distanceSciFi = null;
+            distanceSciFi = null, distanceOrbit = null;
     private TextureAtlas iconAtlas = null;
     public static final String squareName = "Zodiac-Square-12x12.fnt", squareTexture = "Zodiac-Square-12x12.png",
             narrowName = "Rogue-Zodiac-6x12.fnt", narrowTexture = "Rogue-Zodiac-6x12_0.png",
@@ -90,7 +90,9 @@ public class DefaultResources implements LifecycleListener {
             distanceFieldDejaVu = "DejaVuSansMono-distance.fnt",
             distanceFieldDejaVuTexture = "DejaVuSansMono-distance.png",
             distanceFieldSciFi = "Galaxsea-Starlight-Mono-v3_1-distance.fnt",
-            distanceFieldSciFiTexture = "Galaxsea-Starlight-Mono-v3_1-distance.png";
+            distanceFieldSciFiTexture = "Galaxsea-Starlight-Mono-v3_1-distance.png",
+            distanceFieldOrbit = "Orbitron-distance.fnt",
+            distanceFieldOrbitTexture = "Orbitron-distance.png";
     public static String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n"
             + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n"
             + "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n"
@@ -634,13 +636,44 @@ public class DefaultResources implements LifecycleListener {
         if (instance.distancePrint == null) {
             try {
                 instance.distancePrint = new TextCellFactory().fontDistanceField(distanceFieldPrint, distanceFieldPrintTexture)
-                        /* .setSmoothingMultiplier(0.4f) */.height(30).width(7);
+                        /* .setSmoothingMultiplier(0.4f) */.height(30).width(8);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         if(instance.distancePrint != null)
             return instance.distancePrint.copy();
+        return null;
+    }
+
+    /**
+     * Returns a TextCellFactory already configured to use a variable-width sans-serif font that should have a blocky,
+     * futuristic look (based on the font Orbitron), and that should scale cleanly to many sizes. Meant to be used in
+     * variable-width displays like TextPanel. Caches the result for later calls.
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Orbitron-distance.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Orbitron-distance.png</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font Orbitron, by The League of Movable Type
+     */
+    public static TextCellFactory getStretchableOrbitFont() {
+        initialize();
+        if (instance.distanceOrbit == null) {
+            try {
+                instance.distanceOrbit = new TextCellFactory().setDirectionGlyph('ˆ')
+                        .fontDistanceField(distanceFieldOrbit, distanceFieldOrbitTexture)
+                        .setSmoothingMultiplier(1.3f).height(30).width(11);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.distanceOrbit != null)
+            return instance.distanceOrbit.copy();
         return null;
     }
 
@@ -666,7 +699,7 @@ public class DefaultResources implements LifecycleListener {
         if (instance.distanceClean == null) {
             try {
                 instance.distanceClean = new TextCellFactory().fontDistanceField(distanceFieldClean, distanceFieldCleanTexture)
-                        .setSmoothingMultiplier(0.4f).height(30).width(7);
+                        .setSmoothingMultiplier(0.8f).height(30).width(7);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -866,6 +899,10 @@ public class DefaultResources implements LifecycleListener {
         if(distancePrint != null) {
             distancePrint.dispose();
             distancePrint = null;
+        }
+        if(distanceOrbit != null) {
+            distanceOrbit.dispose();
+            distanceOrbit = null;
         }
         if (unicode1 != null) {
             unicode1.dispose();
