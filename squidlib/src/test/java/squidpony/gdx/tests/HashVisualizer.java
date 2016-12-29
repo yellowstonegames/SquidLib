@@ -33,15 +33,16 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 36, rngMode = 17, noiseMode = 7;
+    private int hashMode = 25, rngMode = 17, noiseMode = 7;
     private CrossHash.Storm storm, stormA, stormB, stormC;
+    private CrossHash.Chariot chariot, chariotA, chariotB, chariotC;
 
     // 0 commonly used hashes
     // 1 variants on Storm and other hashes
     // 3 artistic visualizations of hash functions
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
+    private int testType = 1;
 
     private RandomnessSource fuzzy, random;
     private Random jreRandom;
@@ -186,6 +187,10 @@ public class HashVisualizer extends ApplicationAdapter {
         stormA = CrossHash.Storm.alpha;
         stormB = CrossHash.Storm.beta;
         stormC = CrossHash.Storm.chi;
+        chariot = new CrossHash.Chariot();
+        chariotA = CrossHash.Chariot.alpha;
+        chariotB = CrossHash.Chariot.beta;
+        chariotC = CrossHash.Chariot.chi;
         fuzzy = new ThunderRNG(0xBEEFCAFEF00DCABAL);
         view = new ScreenViewport();
         stage = new Stage(view, batch);
@@ -578,110 +583,107 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 28:
-                        Gdx.graphics.setTitle("Falcon");
+                        Gdx.graphics.setTitle("Arrays.hashCode");
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = y;
-                                code = CrossHash.Falcon.hash(coordinates) & 0xFFFFFF00 | 255L;
+                                coordinate[0] = (x << 9) | y;
+                                code = Arrays.hashCode(coordinate) & 0xFFFFFF00 | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
                         break;
                     case 29:
-                        Gdx.graphics.setTitle("Falcon");
+                        Gdx.graphics.setTitle("Chariot (alpha)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = CrossHash.Falcon.hash(coordinate) & 0xFFFFFF00 | 255L;
+                                code = chariotA.hash(coordinate) & 0xFFFFFF00 | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
                         break;
                     case 30:
-                        Gdx.graphics.setTitle("Falcon");
+                        Gdx.graphics.setTitle("Chariot (beta)");
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = y;
-                                code = CrossHash.Falcon.hash64(coordinates) & 0xFFFFFF00 | 255L;
+                                coordinate[0] = (x << 9) | y;
+                                code = chariotB.hash(coordinate) & 0xFFFFFF00 | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
                         break;
                     case 31:
-                        Gdx.graphics.setTitle("Falcon");
+                        Gdx.graphics.setTitle("Chariot (chi)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = CrossHash.Falcon.hash64(coordinate) & 0xFFFFFF00 | 255L;
+                                code = chariotC.hash(coordinate) & 0xFFFFFF00 | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
                         break;
                     case 32:
-                        Gdx.graphics.setTitle("Wisp");
+                        Gdx.graphics.setTitle("Chariot (alpha)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = CrossHash.Wisp.hash(coordinates) & 0xFFFFFF00 | 255L;
+                                code = chariotA.hash(coordinates) << 8 | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
                         break;
                     case 33:
-                        Gdx.graphics.setTitle("Wisp");
+                        Gdx.graphics.setTitle("Chariot (beta)");
                         for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
-                                coordinate[0] = (x << 9) | y;
-                                code = CrossHash.Wisp.hash(coordinate) & 0xFFFFFF00 | 255L;
+                                coordinates[1] = y;
+                                code = chariotB.hash(coordinates) << 8 | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
                         break;
                     case 34:
-                        Gdx.graphics.setTitle("Wisp");
+                        Gdx.graphics.setTitle("Chariot (chi)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = CrossHash.Wisp.hash64(coordinates) & 0xFFFFFF00 | 255L;
+                                code = chariotC.hash(coordinates) << 8 | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
                         break;
                     case 35:
-                        Gdx.graphics.setTitle("Wisp");
+                        Gdx.graphics.setTitle("Chariot (alpha)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = CrossHash.Wisp.hash64(coordinate) & 0xFFFFFF00 | 255L;
+                                code = chariotA.hash(coordinate) << 8 | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
                         break;
                     case 36:
-                        colorFactory.clearCache();
+                        Gdx.graphics.setTitle("Chariot (beta)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = (mixHash(x, y) << 8) | 255L;
+                                coordinate[0] = (x << 9) | y;
+                                code = chariotB.hash(coordinate) << 8 | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
-                        Gdx.graphics.setTitle("mixHash, " + (width * height) + " cells, "
-                                + colorFactory.cacheSize() + " colors");
                         break;
                     case 37:
-                        colorFactory.clearCache();
+                        Gdx.graphics.setTitle("Chariot (chi)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = (oldHash(x, y) << 8) | 255L;
+                                coordinate[0] = (x << 9) | y;
+                                code = chariotC.hash(coordinate) << 8 | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
-                        Gdx.graphics.setTitle("old Coord hash, " + (width * height) + " cells, "
-                                + colorFactory.cacheSize() + " colors");
                         break;
                 }
             }
