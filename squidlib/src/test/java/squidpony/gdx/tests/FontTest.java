@@ -23,11 +23,12 @@ public class FontTest extends ApplicationAdapter {
     /**
      * In number of cells
      */
-    private static final int width = 120;
+    private static int[] widths;
     /**
      * In number of cells
      */
-    private static final int height = 24;
+    private static int[] heights;
+
     /**
      * The pixel width of a cell
      */
@@ -52,28 +53,33 @@ public class FontTest extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
+        widths = new int[]{100, 95, 90, 110, 95, 50};
+        heights = new int[]{20, 21, 20, 28, 18, 20};
         factories = new TextCellFactory[]{
                 DefaultResources.getStretchableFont().width(13).height(30).initBySize(),
                 DefaultResources.getStretchableTypewriterFont().width(14).height(28).initBySize(),
                 DefaultResources.getStretchableCodeFont().width(15).height(27).initBySize(),
                 DefaultResources.getStretchableDejaVuFont().width(14).height(25).initBySize(),
-                DefaultResources.getStretchableSciFiFont().width(18).height(32).initBySize(),
+                DefaultResources.getStretchableSciFiFont().width(28).height(64).initBySize(),
+                DefaultResources.getStretchableSquareFont().width(17).height(17).initBySize(),
         };
         viewports = new Viewport[]{
-                new StretchViewport(factories[0].width() * width, factories[0].height() * height),
-                new StretchViewport(factories[1].width() * width, factories[1].height() * height),
-                new StretchViewport(factories[2].width() * width, factories[2].height() * height),
-                new StretchViewport(factories[3].width() * width, factories[3].height() * height),
-                new StretchViewport(factories[4].width() * width, factories[4].height() * height),
+                new StretchViewport(factories[0].width() * widths[0], factories[0].height() * heights[0]),
+                new StretchViewport(factories[1].width() * widths[2], factories[1].height() * heights[1]),
+                new StretchViewport(factories[2].width() * widths[2], factories[2].height() * heights[2]),
+                new StretchViewport(factories[3].width() * widths[3], factories[3].height() * heights[3]),
+                new StretchViewport(factories[4].width() * widths[4], factories[4].height() * heights[4]),
+                new StretchViewport(factories[5].width() * widths[5], factories[5].height() * heights[5]),
         };
         displays = new SquidPanel[]{
-                new SquidPanel(width, height, factories[0]),
-                new SquidPanel(width, height, factories[1]),
-                new SquidPanel(width, height, factories[2]),
-                new SquidPanel(width, height, factories[3]),
-                new SquidPanel(width, height, factories[4]),
+                new SquidPanel(widths[0], heights[0], factories[0]),
+                new SquidPanel(widths[2], heights[1], factories[1]),
+                new SquidPanel(widths[2], heights[2], factories[2]),
+                new SquidPanel(widths[3], heights[3], factories[3]),
+                new SquidPanel(widths[4], heights[4], factories[4]),
+                new SquidPanel(widths[5], heights[5], factories[5]),
         };
-        for (int i = 4; i >= 0; i--) {
+        for (int i = 0; i < factories.length; i++) {
             tcf = factories[i];
             display = displays[i];
             BitmapFont.BitmapFontData data = tcf.font().getData();
@@ -88,9 +94,9 @@ public class FontTest extends ApplicationAdapter {
                 for (int gi = 0; gi < gl; gi++) {
                     if ((g = glyphs[gi]) != null) {
                         display.put(x++, y, (char) g.id);
-                        if (x >= width) {
+                        if (x >= widths[i]) {
                             x = 0;
-                            if (++y >= height) {
+                            if (++y >= heights[i]) {
                                 break ALL_PAGES;
                             }
                         }
@@ -108,17 +114,17 @@ public class FontTest extends ApplicationAdapter {
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean keyUp(int keycode) {
-                viewport = viewports[index = (index + 1) % 5];
-                tcf = factories[index];
+                tcf = factories[index = (index + 1) % factories.length];
+                viewport = viewports[index];
                 display = displays[index];
                 stage.clear();
                 stage.setViewport(viewport);
                 stage.addActor(display);
-                Gdx.graphics.setTitle("SquidLib Demo: Fonts, preview " + (index+1) + "/5 (press any key)");
+                Gdx.graphics.setTitle("SquidLib Demo: Fonts, preview " + (index+1) + "/" + factories.length + " (press any key)");
                 return true;
             }
         });
-        Gdx.graphics.setTitle("SquidLib Demo: Fonts, preview " + (index+1) + "/5 (press any key)");
+        Gdx.graphics.setTitle("SquidLib Demo: Fonts, preview " + (index+1) + "/" + factories.length + " (press any key)");
 
         stage.addActor(display);
     }
@@ -142,7 +148,7 @@ public class FontTest extends ApplicationAdapter {
     }
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "SquidLib Demo: Fonts, preview 1/5 (press any key)";
+        config.title = "SquidLib Demo: Fonts, preview 1/6 (press any key)";
         config.width = totalWidth = LwjglApplicationConfiguration.getDesktopDisplayMode().width - 10;
         config.height = totalHeight = LwjglApplicationConfiguration.getDesktopDisplayMode().height - 128;
         config.x = 0;

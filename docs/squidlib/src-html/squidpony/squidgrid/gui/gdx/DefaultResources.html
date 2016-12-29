@@ -605,334 +605,337 @@
 <span class="sourceLineNo">597</span>     * cleanly to many sizes, and is a good fit for text used in science-fiction settings. Has excellent Latin script<a name="line.597"></a>
 <span class="sourceLineNo">598</span>     * support, including enough to handle the rare characters used by Vietnamese, but does not support Cyrillic and has<a name="line.598"></a>
 <span class="sourceLineNo">599</span>     * only very limited Greek support (e.g. no alpha or beta). This font looks better at larger sizes, and many small<a name="line.599"></a>
-<span class="sourceLineNo">600</span>     * glyphs, including '^' and '`' will only be recognizable at a height of at least 24 and a width of at least 12 (in<a name="line.600"></a>
-<span class="sourceLineNo">601</span>     * pixels). A lot of glyphs may be somewhat hard to read at first. Caches the result for later calls.<a name="line.601"></a>
-<span class="sourceLineNo">602</span>     * &lt;br&gt;<a name="line.602"></a>
-<span class="sourceLineNo">603</span>     * This font has additional an license requirement, attribution to the original author of the font (using the<a name="line.603"></a>
-<span class="sourceLineNo">604</span>     * nickname dialNforNinja); you should also attribute Elementalist, which is me (Tommy Ettinger), to note that not<a name="line.604"></a>
-<span class="sourceLineNo">605</span>     * all of the changes in the font (which people may or may not prefer, but were done for better compatibility with<a name="line.605"></a>
-<span class="sourceLineNo">606</span>     * SquidLib) were by the original author. The license file that the font was generated with is provided in the<a name="line.606"></a>
-<span class="sourceLineNo">607</span>     * SquidLib assets, and you should include some form of attribution to dialNforNinja in your distribution and/or<a name="line.607"></a>
-<span class="sourceLineNo">608</span>     * credits if you incorporate this font; the license file should be suitable in an open-source game. There are no<a name="line.608"></a>
-<span class="sourceLineNo">609</span>     * other restrictions on the usage of this font (it can be used commercially, can be modified, etc.).<a name="line.609"></a>
-<span class="sourceLineNo">610</span>     * &lt;br&gt;<a name="line.610"></a>
-<span class="sourceLineNo">611</span>     * The font can be previewed here, http://fontstruct.com/fontstructions/show/1353674/galaxsea-starlight-mono-v3 ,<a name="line.611"></a>
-<span class="sourceLineNo">612</span>     * with links to the font it was based on (v3 by dialNforNinja instead of v3.1 by Elementalist/Tommy Ettinger).<a name="line.612"></a>
-<span class="sourceLineNo">613</span>     * &lt;br&gt;<a name="line.613"></a>
-<span class="sourceLineNo">614</span>     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the<a name="line.614"></a>
-<span class="sourceLineNo">615</span>     * distance field font technique this uses can work.<a name="line.615"></a>
-<span class="sourceLineNo">616</span>     * &lt;br&gt;<a name="line.616"></a>
-<span class="sourceLineNo">617</span>     * Needs files:<a name="line.617"></a>
-<span class="sourceLineNo">618</span>     * &lt;ul&gt;<a name="line.618"></a>
-<span class="sourceLineNo">619</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/Galaxsea-Starlight-Mono-v3_1-distance.fnt&lt;/li&gt;<a name="line.619"></a>
-<span class="sourceLineNo">620</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/Galaxsea-Starlight-Mono-v3_1-distance.png&lt;/li&gt;<a name="line.620"></a>
-<span class="sourceLineNo">621</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/Galaxsea-Starlight-Mono-v3_1-license.txt&lt;/li&gt;<a name="line.621"></a>
-<span class="sourceLineNo">622</span>     * &lt;/ul&gt;<a name="line.622"></a>
-<span class="sourceLineNo">623</span>     * @return the TextCellFactory object that can represent many sizes of the font Galaxsea-Starlight-Mono-v3_1.ttf<a name="line.623"></a>
-<span class="sourceLineNo">624</span>     */<a name="line.624"></a>
-<span class="sourceLineNo">625</span>    public static TextCellFactory getStretchableSciFiFont()<a name="line.625"></a>
-<span class="sourceLineNo">626</span>    {<a name="line.626"></a>
-<span class="sourceLineNo">627</span>        initialize();<a name="line.627"></a>
-<span class="sourceLineNo">628</span>        if(instance.distanceSciFi == null)<a name="line.628"></a>
-<span class="sourceLineNo">629</span>        {<a name="line.629"></a>
-<span class="sourceLineNo">630</span>            try {<a name="line.630"></a>
-<span class="sourceLineNo">631</span>                instance.distanceSciFi = new TextCellFactory()<a name="line.631"></a>
-<span class="sourceLineNo">632</span>                        .fontDistanceField(distanceFieldSciFi, distanceFieldSciFiTexture);<a name="line.632"></a>
-<span class="sourceLineNo">633</span>            } catch (Exception e) {<a name="line.633"></a>
-<span class="sourceLineNo">634</span>                e.printStackTrace();<a name="line.634"></a>
-<span class="sourceLineNo">635</span>            }<a name="line.635"></a>
-<span class="sourceLineNo">636</span>        }<a name="line.636"></a>
-<span class="sourceLineNo">637</span>        if(instance.distanceSciFi != null)<a name="line.637"></a>
-<span class="sourceLineNo">638</span>            return instance.distanceSciFi.copy();<a name="line.638"></a>
-<span class="sourceLineNo">639</span>        return null;<a name="line.639"></a>
-<span class="sourceLineNo">640</span>    }<a name="line.640"></a>
-<span class="sourceLineNo">641</span>    /**<a name="line.641"></a>
-<span class="sourceLineNo">642</span>     * Returns a TextCellFactory already configured to use a variable-width serif font that should look like the serif<a name="line.642"></a>
-<span class="sourceLineNo">643</span>     * fonts used in many novels' main texts, and that should scale cleanly to many sizes. Meant to be used in variable-<a name="line.643"></a>
-<span class="sourceLineNo">644</span>     * width displays like TextPanel. Caches the result for later calls.<a name="line.644"></a>
-<span class="sourceLineNo">645</span>     * &lt;br&gt;<a name="line.645"></a>
-<span class="sourceLineNo">646</span>     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the<a name="line.646"></a>
-<span class="sourceLineNo">647</span>     * distance field font technique this uses can work.<a name="line.647"></a>
+<span class="sourceLineNo">600</span>     * glyphs, including '^' and '`' will only be recognizable at a height of at least 24 and a width of at least 11 (in<a name="line.600"></a>
+<span class="sourceLineNo">601</span>     * pixels). It may be ideal to use a larger size and scale this down, with a height of 64 and a width of about 28<a name="line.601"></a>
+<span class="sourceLineNo">602</span>     * working well. A lot of glyphs may be somewhat hard to read at first. Caches the result for later calls.<a name="line.602"></a>
+<span class="sourceLineNo">603</span>     * &lt;br&gt;<a name="line.603"></a>
+<span class="sourceLineNo">604</span>     * This font has additional an license requirement, attribution to the original author of the font (using the<a name="line.604"></a>
+<span class="sourceLineNo">605</span>     * nickname dialNforNinja); you should also attribute Elementalist, which is me (Tommy Ettinger), to note that not<a name="line.605"></a>
+<span class="sourceLineNo">606</span>     * all of the changes in the font (which people may or may not prefer, but were done for better compatibility with<a name="line.606"></a>
+<span class="sourceLineNo">607</span>     * SquidLib) were by the original author. The license file that the font was generated with is provided in the<a name="line.607"></a>
+<span class="sourceLineNo">608</span>     * SquidLib assets, and you should include some form of attribution to dialNforNinja in your distribution and/or<a name="line.608"></a>
+<span class="sourceLineNo">609</span>     * credits if you incorporate this font; the license file should be suitable in an open-source game. There are no<a name="line.609"></a>
+<span class="sourceLineNo">610</span>     * other restrictions on the usage of this font (it can be used commercially, can be modified, etc.).<a name="line.610"></a>
+<span class="sourceLineNo">611</span>     * &lt;br&gt;<a name="line.611"></a>
+<span class="sourceLineNo">612</span>     * The font can be previewed here, http://fontstruct.com/fontstructions/show/1353674/galaxsea-starlight-mono-v3 ,<a name="line.612"></a>
+<span class="sourceLineNo">613</span>     * with links to the font it was based on (v3 by dialNforNinja instead of v3.1 by Elementalist/Tommy Ettinger).<a name="line.613"></a>
+<span class="sourceLineNo">614</span>     * &lt;br&gt;<a name="line.614"></a>
+<span class="sourceLineNo">615</span>     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the<a name="line.615"></a>
+<span class="sourceLineNo">616</span>     * distance field font technique this uses can work. This sets the smoothing multiplier to 1.2 by default, so<a name="line.616"></a>
+<span class="sourceLineNo">617</span>     * &lt;b&gt;if you set the smoothing multiplier yourself, you should probably increase the amount by 20%&lt;/b&gt; relative to<a name="line.617"></a>
+<span class="sourceLineNo">618</span>     * other fonts' multipliers.<a name="line.618"></a>
+<span class="sourceLineNo">619</span>     * &lt;br&gt;<a name="line.619"></a>
+<span class="sourceLineNo">620</span>     * Needs files:<a name="line.620"></a>
+<span class="sourceLineNo">621</span>     * &lt;ul&gt;<a name="line.621"></a>
+<span class="sourceLineNo">622</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/Galaxsea-Starlight-Mono-v3_1-distance.fnt&lt;/li&gt;<a name="line.622"></a>
+<span class="sourceLineNo">623</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/Galaxsea-Starlight-Mono-v3_1-distance.png&lt;/li&gt;<a name="line.623"></a>
+<span class="sourceLineNo">624</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/Galaxsea-Starlight-Mono-v3_1-license.txt&lt;/li&gt;<a name="line.624"></a>
+<span class="sourceLineNo">625</span>     * &lt;/ul&gt;<a name="line.625"></a>
+<span class="sourceLineNo">626</span>     * @return the TextCellFactory object that can represent many sizes of the font Galaxsea-Starlight-Mono-v3_1.ttf<a name="line.626"></a>
+<span class="sourceLineNo">627</span>     */<a name="line.627"></a>
+<span class="sourceLineNo">628</span>    public static TextCellFactory getStretchableSciFiFont()<a name="line.628"></a>
+<span class="sourceLineNo">629</span>    {<a name="line.629"></a>
+<span class="sourceLineNo">630</span>        initialize();<a name="line.630"></a>
+<span class="sourceLineNo">631</span>        if(instance.distanceSciFi == null)<a name="line.631"></a>
+<span class="sourceLineNo">632</span>        {<a name="line.632"></a>
+<span class="sourceLineNo">633</span>            try {<a name="line.633"></a>
+<span class="sourceLineNo">634</span>                instance.distanceSciFi = new TextCellFactory()<a name="line.634"></a>
+<span class="sourceLineNo">635</span>                        .fontDistanceField(distanceFieldSciFi, distanceFieldSciFiTexture).setSmoothingMultiplier(1.2f);<a name="line.635"></a>
+<span class="sourceLineNo">636</span>            } catch (Exception e) {<a name="line.636"></a>
+<span class="sourceLineNo">637</span>                e.printStackTrace();<a name="line.637"></a>
+<span class="sourceLineNo">638</span>            }<a name="line.638"></a>
+<span class="sourceLineNo">639</span>        }<a name="line.639"></a>
+<span class="sourceLineNo">640</span>        if(instance.distanceSciFi != null)<a name="line.640"></a>
+<span class="sourceLineNo">641</span>            return instance.distanceSciFi.copy();<a name="line.641"></a>
+<span class="sourceLineNo">642</span>        return null;<a name="line.642"></a>
+<span class="sourceLineNo">643</span>    }<a name="line.643"></a>
+<span class="sourceLineNo">644</span>    /**<a name="line.644"></a>
+<span class="sourceLineNo">645</span>     * Returns a TextCellFactory already configured to use a variable-width serif font that should look like the serif<a name="line.645"></a>
+<span class="sourceLineNo">646</span>     * fonts used in many novels' main texts, and that should scale cleanly to many sizes. Meant to be used in variable-<a name="line.646"></a>
+<span class="sourceLineNo">647</span>     * width displays like TextPanel. Caches the result for later calls.<a name="line.647"></a>
 <span class="sourceLineNo">648</span>     * &lt;br&gt;<a name="line.648"></a>
-<span class="sourceLineNo">649</span>     * Needs files:<a name="line.649"></a>
-<span class="sourceLineNo">650</span>     * &lt;ul&gt;<a name="line.650"></a>
-<span class="sourceLineNo">651</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/Gentium-distance.fnt&lt;/li&gt;<a name="line.651"></a>
-<span class="sourceLineNo">652</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/Gentium-distance.png&lt;/li&gt;<a name="line.652"></a>
-<span class="sourceLineNo">653</span>     * &lt;/ul&gt;<a name="line.653"></a>
-<span class="sourceLineNo">654</span>     * @return the TextCellFactory object that can represent many sizes of the font Gentium, by SIL<a name="line.654"></a>
-<span class="sourceLineNo">655</span>     */<a name="line.655"></a>
-<span class="sourceLineNo">656</span>    public static TextCellFactory getStretchablePrintFont() {<a name="line.656"></a>
-<span class="sourceLineNo">657</span>        initialize();<a name="line.657"></a>
-<span class="sourceLineNo">658</span>        if (instance.distancePrint == null) {<a name="line.658"></a>
-<span class="sourceLineNo">659</span>            try {<a name="line.659"></a>
-<span class="sourceLineNo">660</span>                instance.distancePrint = new TextCellFactory().fontDistanceField(distanceFieldPrint, distanceFieldPrintTexture)<a name="line.660"></a>
-<span class="sourceLineNo">661</span>                        /* .setSmoothingMultiplier(0.4f) */.height(30).width(7);<a name="line.661"></a>
-<span class="sourceLineNo">662</span>            } catch (Exception e) {<a name="line.662"></a>
-<span class="sourceLineNo">663</span>                e.printStackTrace();<a name="line.663"></a>
-<span class="sourceLineNo">664</span>            }<a name="line.664"></a>
-<span class="sourceLineNo">665</span>        }<a name="line.665"></a>
-<span class="sourceLineNo">666</span>        if(instance.distancePrint != null)<a name="line.666"></a>
-<span class="sourceLineNo">667</span>            return instance.distancePrint.copy();<a name="line.667"></a>
-<span class="sourceLineNo">668</span>        return null;<a name="line.668"></a>
-<span class="sourceLineNo">669</span>    }<a name="line.669"></a>
-<span class="sourceLineNo">670</span><a name="line.670"></a>
-<span class="sourceLineNo">671</span>    /**<a name="line.671"></a>
-<span class="sourceLineNo">672</span>     * Returns a TextCellFactory already configured to use a variable-width sans-serif font that currently looks<a name="line.672"></a>
-<span class="sourceLineNo">673</span>     * slightly jumbled without certain layout features. Meant to be used in variable-width displays like TextPanel, but<a name="line.673"></a>
-<span class="sourceLineNo">674</span>     * currently you should prefer getStretchablePrintFont() for legibility. Caches the result for later calls.<a name="line.674"></a>
-<span class="sourceLineNo">675</span>     * &lt;br&gt;<a name="line.675"></a>
-<span class="sourceLineNo">676</span>     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the<a name="line.676"></a>
-<span class="sourceLineNo">677</span>     * distance field font technique this uses can work.<a name="line.677"></a>
+<span class="sourceLineNo">649</span>     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the<a name="line.649"></a>
+<span class="sourceLineNo">650</span>     * distance field font technique this uses can work.<a name="line.650"></a>
+<span class="sourceLineNo">651</span>     * &lt;br&gt;<a name="line.651"></a>
+<span class="sourceLineNo">652</span>     * Needs files:<a name="line.652"></a>
+<span class="sourceLineNo">653</span>     * &lt;ul&gt;<a name="line.653"></a>
+<span class="sourceLineNo">654</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/Gentium-distance.fnt&lt;/li&gt;<a name="line.654"></a>
+<span class="sourceLineNo">655</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/Gentium-distance.png&lt;/li&gt;<a name="line.655"></a>
+<span class="sourceLineNo">656</span>     * &lt;/ul&gt;<a name="line.656"></a>
+<span class="sourceLineNo">657</span>     * @return the TextCellFactory object that can represent many sizes of the font Gentium, by SIL<a name="line.657"></a>
+<span class="sourceLineNo">658</span>     */<a name="line.658"></a>
+<span class="sourceLineNo">659</span>    public static TextCellFactory getStretchablePrintFont() {<a name="line.659"></a>
+<span class="sourceLineNo">660</span>        initialize();<a name="line.660"></a>
+<span class="sourceLineNo">661</span>        if (instance.distancePrint == null) {<a name="line.661"></a>
+<span class="sourceLineNo">662</span>            try {<a name="line.662"></a>
+<span class="sourceLineNo">663</span>                instance.distancePrint = new TextCellFactory().fontDistanceField(distanceFieldPrint, distanceFieldPrintTexture)<a name="line.663"></a>
+<span class="sourceLineNo">664</span>                        /* .setSmoothingMultiplier(0.4f) */.height(30).width(7);<a name="line.664"></a>
+<span class="sourceLineNo">665</span>            } catch (Exception e) {<a name="line.665"></a>
+<span class="sourceLineNo">666</span>                e.printStackTrace();<a name="line.666"></a>
+<span class="sourceLineNo">667</span>            }<a name="line.667"></a>
+<span class="sourceLineNo">668</span>        }<a name="line.668"></a>
+<span class="sourceLineNo">669</span>        if(instance.distancePrint != null)<a name="line.669"></a>
+<span class="sourceLineNo">670</span>            return instance.distancePrint.copy();<a name="line.670"></a>
+<span class="sourceLineNo">671</span>        return null;<a name="line.671"></a>
+<span class="sourceLineNo">672</span>    }<a name="line.672"></a>
+<span class="sourceLineNo">673</span><a name="line.673"></a>
+<span class="sourceLineNo">674</span>    /**<a name="line.674"></a>
+<span class="sourceLineNo">675</span>     * Returns a TextCellFactory already configured to use a variable-width sans-serif font that currently looks<a name="line.675"></a>
+<span class="sourceLineNo">676</span>     * slightly jumbled without certain layout features. Meant to be used in variable-width displays like TextPanel, but<a name="line.676"></a>
+<span class="sourceLineNo">677</span>     * currently you should prefer getStretchablePrintFont() for legibility. Caches the result for later calls.<a name="line.677"></a>
 <span class="sourceLineNo">678</span>     * &lt;br&gt;<a name="line.678"></a>
-<span class="sourceLineNo">679</span>     * Needs files:<a name="line.679"></a>
-<span class="sourceLineNo">680</span>     * &lt;ul&gt;<a name="line.680"></a>
-<span class="sourceLineNo">681</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/Noto-Sans-distance.fnt&lt;/li&gt;<a name="line.681"></a>
-<span class="sourceLineNo">682</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/Noto-Sans-distance.png&lt;/li&gt;<a name="line.682"></a>
-<span class="sourceLineNo">683</span>     * &lt;/ul&gt;<a name="line.683"></a>
-<span class="sourceLineNo">684</span>     * @return the TextCellFactory object that can represent many sizes of the font Noto Sans, by Google<a name="line.684"></a>
-<span class="sourceLineNo">685</span>     */<a name="line.685"></a>
-<span class="sourceLineNo">686</span>    public static TextCellFactory getStretchableCleanFont() {<a name="line.686"></a>
-<span class="sourceLineNo">687</span>        initialize();<a name="line.687"></a>
-<span class="sourceLineNo">688</span>        if (instance.distanceClean == null) {<a name="line.688"></a>
-<span class="sourceLineNo">689</span>            try {<a name="line.689"></a>
-<span class="sourceLineNo">690</span>                instance.distanceClean = new TextCellFactory().fontDistanceField(distanceFieldClean, distanceFieldCleanTexture)<a name="line.690"></a>
-<span class="sourceLineNo">691</span>                        .setSmoothingMultiplier(0.4f).height(30).width(7);<a name="line.691"></a>
-<span class="sourceLineNo">692</span>            } catch (Exception e) {<a name="line.692"></a>
-<span class="sourceLineNo">693</span>                e.printStackTrace();<a name="line.693"></a>
-<span class="sourceLineNo">694</span>            }<a name="line.694"></a>
-<span class="sourceLineNo">695</span>        }<a name="line.695"></a>
-<span class="sourceLineNo">696</span>        if(instance.distanceClean != null)<a name="line.696"></a>
-<span class="sourceLineNo">697</span>            return instance.distanceClean.copy();<a name="line.697"></a>
-<span class="sourceLineNo">698</span>        return null;<a name="line.698"></a>
-<span class="sourceLineNo">699</span>    }<a name="line.699"></a>
-<span class="sourceLineNo">700</span><a name="line.700"></a>
-<span class="sourceLineNo">701</span>    /**<a name="line.701"></a>
-<span class="sourceLineNo">702</span>     * Gets an image of a (squid-like, for SquidLib) tentacle, 32x32px.<a name="line.702"></a>
-<span class="sourceLineNo">703</span>     * Source is public domain: http://opengameart.org/content/496-pixel-art-icons-for-medievalfantasy-rpg<a name="line.703"></a>
-<span class="sourceLineNo">704</span>     * Created by Henrique Lazarini (7Soul1, http://7soul1.deviantart.com/ )<a name="line.704"></a>
-<span class="sourceLineNo">705</span>     * &lt;br&gt;<a name="line.705"></a>
-<span class="sourceLineNo">706</span>     * Needs file:<a name="line.706"></a>
-<span class="sourceLineNo">707</span>     * &lt;ul&gt;<a name="line.707"></a>
-<span class="sourceLineNo">708</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/Tentacle.png&lt;/li&gt;<a name="line.708"></a>
-<span class="sourceLineNo">709</span>     * &lt;/ul&gt;<a name="line.709"></a>
-<span class="sourceLineNo">710</span>     * @return a TextureRegion containing an image of a tentacle.<a name="line.710"></a>
-<span class="sourceLineNo">711</span>     */<a name="line.711"></a>
-<span class="sourceLineNo">712</span>    public static TextureRegion getTentacle()<a name="line.712"></a>
-<span class="sourceLineNo">713</span>    {<a name="line.713"></a>
-<span class="sourceLineNo">714</span>        initialize();<a name="line.714"></a>
-<span class="sourceLineNo">715</span>        if(instance.tentacle == null || instance.tentacleRegion == null)<a name="line.715"></a>
-<span class="sourceLineNo">716</span>        {<a name="line.716"></a>
-<span class="sourceLineNo">717</span>            try {<a name="line.717"></a>
-<span class="sourceLineNo">718</span>                instance.tentacle = new Texture(Gdx.files.internal("Tentacle.png"));<a name="line.718"></a>
-<span class="sourceLineNo">719</span>                instance.tentacleRegion = new TextureRegion(instance.tentacle);<a name="line.719"></a>
-<span class="sourceLineNo">720</span>            } catch (Exception ignored) {<a name="line.720"></a>
-<span class="sourceLineNo">721</span>            }<a name="line.721"></a>
-<span class="sourceLineNo">722</span>        }<a name="line.722"></a>
-<span class="sourceLineNo">723</span>        return instance.tentacleRegion;<a name="line.723"></a>
-<span class="sourceLineNo">724</span>    }<a name="line.724"></a>
-<span class="sourceLineNo">725</span><a name="line.725"></a>
-<span class="sourceLineNo">726</span><a name="line.726"></a>
-<span class="sourceLineNo">727</span>    /**<a name="line.727"></a>
-<span class="sourceLineNo">728</span>     * Gets a TextureAtlas containing many icons with a distance field effect applied, allowing them to be used with<a name="line.728"></a>
-<span class="sourceLineNo">729</span>     * "stretchable" fonts and be resized in the same way. These will not look as-expected if stretchable fonts are not<a name="line.729"></a>
-<span class="sourceLineNo">730</span>     * in use, and will seem hazy and indistinct if the shader hasn't been set up for a distance field effect by<a name="line.730"></a>
-<span class="sourceLineNo">731</span>     * TextCellFactory (which stretchable fonts will do automatically). The one page of the TextureAtlas is 2048x2048,<a name="line.731"></a>
-<span class="sourceLineNo">732</span>     * which may be too large for some old, low-end Android phones, and possibly integrated graphics with fairly old<a name="line.732"></a>
-<span class="sourceLineNo">733</span>     * processors on desktop. It has over 2000 icons.<a name="line.733"></a>
-<span class="sourceLineNo">734</span>     * &lt;br&gt;<a name="line.734"></a>
-<span class="sourceLineNo">735</span>     * The icons are CC-BY and the license is distributed with them, though the icons are not necessarily included with<a name="line.735"></a>
-<span class="sourceLineNo">736</span>     * SquidLib. If you use the icon atlas, be sure to include icons-license.txt with it and reference it with your<a name="line.736"></a>
-<span class="sourceLineNo">737</span>     * game's license and/or credits information.<a name="line.737"></a>
-<span class="sourceLineNo">738</span>     * &lt;br&gt;<a name="line.738"></a>
-<span class="sourceLineNo">739</span>     * Needs files:<a name="line.739"></a>
-<span class="sourceLineNo">740</span>     * &lt;ul&gt;<a name="line.740"></a>
-<span class="sourceLineNo">741</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/icons.atlas&lt;/li&gt;<a name="line.741"></a>
-<span class="sourceLineNo">742</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/icons.png&lt;/li&gt;<a name="line.742"></a>
-<span class="sourceLineNo">743</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/icons-license.txt Needed to credit artists&lt;/li&gt;<a name="line.743"></a>
-<span class="sourceLineNo">744</span>     * &lt;/ul&gt;<a name="line.744"></a>
-<span class="sourceLineNo">745</span>     * @return a TextureAtlas containing over 2000 icons with a distance field effect<a name="line.745"></a>
-<span class="sourceLineNo">746</span>     */<a name="line.746"></a>
-<span class="sourceLineNo">747</span>    public static TextureAtlas getIconAtlas()<a name="line.747"></a>
-<span class="sourceLineNo">748</span>    {<a name="line.748"></a>
-<span class="sourceLineNo">749</span>        initialize();<a name="line.749"></a>
-<span class="sourceLineNo">750</span>        if(instance.iconAtlas == null)<a name="line.750"></a>
-<span class="sourceLineNo">751</span>        {<a name="line.751"></a>
-<span class="sourceLineNo">752</span>            try {<a name="line.752"></a>
-<span class="sourceLineNo">753</span>                instance.iconAtlas = new TextureAtlas(Gdx.files.internal("icons.atlas"));<a name="line.753"></a>
-<span class="sourceLineNo">754</span>            } catch (Exception ignored) {<a name="line.754"></a>
-<span class="sourceLineNo">755</span>            }<a name="line.755"></a>
-<span class="sourceLineNo">756</span>        }<a name="line.756"></a>
-<span class="sourceLineNo">757</span>        return instance.iconAtlas;<a name="line.757"></a>
-<span class="sourceLineNo">758</span>    }<a name="line.758"></a>
-<span class="sourceLineNo">759</span><a name="line.759"></a>
-<span class="sourceLineNo">760</span>    /**<a name="line.760"></a>
-<span class="sourceLineNo">761</span>     * This is a static global StatefulRNG that's meant for usage in cases where the seed does not matter and any<a name="line.761"></a>
-<span class="sourceLineNo">762</span>     * changes to this RNG's state will not change behavior elsewhere in the program; this means the GUI mainly.<a name="line.762"></a>
-<span class="sourceLineNo">763</span>     */<a name="line.763"></a>
-<span class="sourceLineNo">764</span>    public static StatefulRNG getGuiRandom()<a name="line.764"></a>
-<span class="sourceLineNo">765</span>    {<a name="line.765"></a>
-<span class="sourceLineNo">766</span>        initialize();<a name="line.766"></a>
-<span class="sourceLineNo">767</span>        if(instance.guiRandom == null)<a name="line.767"></a>
-<span class="sourceLineNo">768</span>        {<a name="line.768"></a>
-<span class="sourceLineNo">769</span>            instance.guiRandom =  new StatefulRNG();<a name="line.769"></a>
-<span class="sourceLineNo">770</span>        }<a name="line.770"></a>
-<span class="sourceLineNo">771</span>        return instance.guiRandom;<a name="line.771"></a>
-<span class="sourceLineNo">772</span>    }<a name="line.772"></a>
-<span class="sourceLineNo">773</span>    /**<a name="line.773"></a>
-<span class="sourceLineNo">774</span>     * This is a static global SquidColorCenter that can be used in places that just need an existing object that can do<a name="line.774"></a>
-<span class="sourceLineNo">775</span>     * things like analyze hue or saturation of a color.<a name="line.775"></a>
-<span class="sourceLineNo">776</span>     */<a name="line.776"></a>
-<span class="sourceLineNo">777</span>    public static SquidColorCenter getSCC()<a name="line.777"></a>
-<span class="sourceLineNo">778</span>    {<a name="line.778"></a>
-<span class="sourceLineNo">779</span>        initialize();<a name="line.779"></a>
-<span class="sourceLineNo">780</span>        if(instance.scc == null)<a name="line.780"></a>
-<span class="sourceLineNo">781</span>        {<a name="line.781"></a>
-<span class="sourceLineNo">782</span>            instance.scc =  new SquidColorCenter();<a name="line.782"></a>
-<span class="sourceLineNo">783</span>        }<a name="line.783"></a>
-<span class="sourceLineNo">784</span>        return instance.scc;<a name="line.784"></a>
-<span class="sourceLineNo">785</span>    }<a name="line.785"></a>
-<span class="sourceLineNo">786</span><a name="line.786"></a>
-<span class="sourceLineNo">787</span>    /**<a name="line.787"></a>
-<span class="sourceLineNo">788</span>     * Special symbols that can be used as icons if you use the narrow default font.<a name="line.788"></a>
-<span class="sourceLineNo">789</span>     */<a name="line.789"></a>
-<span class="sourceLineNo">790</span>    public static final String narrowFontSymbols = "ሀሁሂሃሄህሆሇለሉሊላሌልሎሏሐሑሒሓሔሕሖሗመሙሚማሜ",<a name="line.790"></a>
-<span class="sourceLineNo">791</span>                                  narrowFontAll = " !\"#$%&amp;'()*+,-./0123\n" +<a name="line.791"></a>
-<span class="sourceLineNo">792</span>                                          "456789:;&lt;=&gt;?@ABCDEFG\n" +<a name="line.792"></a>
-<span class="sourceLineNo">793</span>                                          "HIJKLMNOPQRSTUVWXYZ[\n" +<a name="line.793"></a>
-<span class="sourceLineNo">794</span>                                          "\\]^_`abcdefghijklmno\n" +<a name="line.794"></a>
-<span class="sourceLineNo">795</span>                                          "pqrstuvwxyz{|}~¡¢£¤¥\n" +<a name="line.795"></a>
-<span class="sourceLineNo">796</span>                                          "¦§¨©ª«¬\u00AD®¯°±²³´µ¶·¸¹\n" +<a name="line.796"></a>
-<span class="sourceLineNo">797</span>                                          "º»¼½¾¿×ß÷øɍɎሀሁሂሃሄህሆሇ\n" +<a name="line.797"></a>
-<span class="sourceLineNo">798</span>                                          "ለሉሊላሌልሎሏሐሑሒሓሔሕሖሗመሙሚማ\n" +<a name="line.798"></a>
-<span class="sourceLineNo">799</span>                                          "ሜẞ‐‒–—―‖‗‘’‚‛“”„‟†‡•\n" +<a name="line.799"></a>
-<span class="sourceLineNo">800</span>                                          "…‧‹›€™"+<a name="line.800"></a>
-<span class="sourceLineNo">801</span>                                          "←↑→↓↷↺↻"+ // left, up, right, down, "tap", "counterclockwise", "clockwise"<a name="line.801"></a>
-<span class="sourceLineNo">802</span>                                          "∀∁∂∃∄∅∆\n" +<a name="line.802"></a>
-<span class="sourceLineNo">803</span>                                          "∇∈∉∋∌∎∏∐∑−∓∔∕∖∘∙√∛∜∝\n" +<a name="line.803"></a>
-<span class="sourceLineNo">804</span>                                          "∞∟∠∡∢∣∤∥∦∧∨∩∪∫∬∮∯∱∲∳\n" +<a name="line.804"></a>
-<span class="sourceLineNo">805</span>                                          "∴∵∶∷≈≋≠≡≢≣≤≥≦≧≨≩≪≫─━\n" +<a name="line.805"></a>
-<span class="sourceLineNo">806</span>                                          "│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕\n" +<a name="line.806"></a>
-<span class="sourceLineNo">807</span>                                          "┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩\n" +<a name="line.807"></a>
-<span class="sourceLineNo">808</span>                                          "┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽\n" +<a name="line.808"></a>
-<span class="sourceLineNo">809</span>                                          "┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║\n" +<a name="line.809"></a>
-<span class="sourceLineNo">810</span>                                          "╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥\n" +<a name="line.810"></a>
-<span class="sourceLineNo">811</span>                                          "╦╧╨╩╪╫╬╭╮╯╰╱╲╳╴╵╶╷╸╹\n" +<a name="line.811"></a>
-<span class="sourceLineNo">812</span>                                          "╺╻╼╽╾╿▁▄▅▆▇█▌▐░▒▓▔▖▗\n" +<a name="line.812"></a>
-<span class="sourceLineNo">813</span>                                          "▘▙▚▛▜▝▞▟";<a name="line.813"></a>
-<span class="sourceLineNo">814</span><a name="line.814"></a>
-<span class="sourceLineNo">815</span>    /**<a name="line.815"></a>
-<span class="sourceLineNo">816</span>     * Called when the {@link Application} is about to pause<a name="line.816"></a>
-<span class="sourceLineNo">817</span>     */<a name="line.817"></a>
-<span class="sourceLineNo">818</span>    @Override<a name="line.818"></a>
-<span class="sourceLineNo">819</span>    public void pause() {<a name="line.819"></a>
-<span class="sourceLineNo">820</span>        if(arial15 != null) {<a name="line.820"></a>
-<span class="sourceLineNo">821</span>            arial15.dispose();<a name="line.821"></a>
-<span class="sourceLineNo">822</span>            arial15 = null;<a name="line.822"></a>
-<span class="sourceLineNo">823</span>        }<a name="line.823"></a>
-<span class="sourceLineNo">824</span>        if(narrow1 != null) {<a name="line.824"></a>
-<span class="sourceLineNo">825</span>            narrow1.dispose();<a name="line.825"></a>
-<span class="sourceLineNo">826</span>            narrow1 = null;<a name="line.826"></a>
-<span class="sourceLineNo">827</span>        }<a name="line.827"></a>
-<span class="sourceLineNo">828</span>        if(narrow2 != null) {<a name="line.828"></a>
-<span class="sourceLineNo">829</span>            narrow2.dispose();<a name="line.829"></a>
-<span class="sourceLineNo">830</span>            narrow2 = null;<a name="line.830"></a>
-<span class="sourceLineNo">831</span>        }<a name="line.831"></a>
-<span class="sourceLineNo">832</span>        if(narrow3 != null) {<a name="line.832"></a>
-<span class="sourceLineNo">833</span>            narrow3.dispose();<a name="line.833"></a>
-<span class="sourceLineNo">834</span>            narrow3 = null;<a name="line.834"></a>
-<span class="sourceLineNo">835</span>        }<a name="line.835"></a>
-<span class="sourceLineNo">836</span>        if(smooth1 != null) {<a name="line.836"></a>
-<span class="sourceLineNo">837</span>            smooth1.dispose();<a name="line.837"></a>
-<span class="sourceLineNo">838</span>            smooth1 = null;<a name="line.838"></a>
-<span class="sourceLineNo">839</span>        }<a name="line.839"></a>
-<span class="sourceLineNo">840</span>        if(smooth2 != null) {<a name="line.840"></a>
-<span class="sourceLineNo">841</span>            smooth2.dispose();<a name="line.841"></a>
-<span class="sourceLineNo">842</span>            smooth2 = null;<a name="line.842"></a>
-<span class="sourceLineNo">843</span>        }<a name="line.843"></a>
-<span class="sourceLineNo">844</span>        if(square1 != null) {<a name="line.844"></a>
-<span class="sourceLineNo">845</span>            square1.dispose();<a name="line.845"></a>
-<span class="sourceLineNo">846</span>            square1 = null;<a name="line.846"></a>
-<span class="sourceLineNo">847</span>        }<a name="line.847"></a>
-<span class="sourceLineNo">848</span>        if(square2 != null) {<a name="line.848"></a>
-<span class="sourceLineNo">849</span>            square2.dispose();<a name="line.849"></a>
-<span class="sourceLineNo">850</span>            square1 = null;<a name="line.850"></a>
-<span class="sourceLineNo">851</span>        }<a name="line.851"></a>
-<span class="sourceLineNo">852</span>        if(smoothSquare != null) {<a name="line.852"></a>
-<span class="sourceLineNo">853</span>            smoothSquare.dispose();<a name="line.853"></a>
-<span class="sourceLineNo">854</span>            smoothSquare = null;<a name="line.854"></a>
-<span class="sourceLineNo">855</span>        }<a name="line.855"></a>
-<span class="sourceLineNo">856</span>        if(smoothSquareOld != null) {<a name="line.856"></a>
-<span class="sourceLineNo">857</span>            smoothSquareOld.dispose();<a name="line.857"></a>
-<span class="sourceLineNo">858</span>            smoothSquareOld = null;<a name="line.858"></a>
-<span class="sourceLineNo">859</span>        }<a name="line.859"></a>
-<span class="sourceLineNo">860</span>        if(distanceSquare != null) {<a name="line.860"></a>
-<span class="sourceLineNo">861</span>            distanceSquare.dispose();<a name="line.861"></a>
-<span class="sourceLineNo">862</span>            distanceSquare = null;<a name="line.862"></a>
-<span class="sourceLineNo">863</span>        }<a name="line.863"></a>
-<span class="sourceLineNo">864</span>        if(distanceNarrow != null) {<a name="line.864"></a>
-<span class="sourceLineNo">865</span>            distanceNarrow.dispose();<a name="line.865"></a>
-<span class="sourceLineNo">866</span>            distanceNarrow = null;<a name="line.866"></a>
-<span class="sourceLineNo">867</span>        }<a name="line.867"></a>
-<span class="sourceLineNo">868</span>        if(typewriterDistanceNarrow != null) {<a name="line.868"></a>
-<span class="sourceLineNo">869</span>            typewriterDistanceNarrow.dispose();<a name="line.869"></a>
-<span class="sourceLineNo">870</span>            typewriterDistanceNarrow = null;<a name="line.870"></a>
-<span class="sourceLineNo">871</span>        }<a name="line.871"></a>
-<span class="sourceLineNo">872</span>        if(distanceCode != null) {<a name="line.872"></a>
-<span class="sourceLineNo">873</span>            distanceCode.dispose();<a name="line.873"></a>
-<span class="sourceLineNo">874</span>            distanceCode = null;<a name="line.874"></a>
-<span class="sourceLineNo">875</span>        }<a name="line.875"></a>
-<span class="sourceLineNo">876</span>        if(distanceDejaVu != null) {<a name="line.876"></a>
-<span class="sourceLineNo">877</span>            distanceDejaVu.dispose();<a name="line.877"></a>
-<span class="sourceLineNo">878</span>            distanceDejaVu = null;<a name="line.878"></a>
-<span class="sourceLineNo">879</span>        }<a name="line.879"></a>
-<span class="sourceLineNo">880</span>        if(distanceSciFi != null) {<a name="line.880"></a>
-<span class="sourceLineNo">881</span>            distanceSciFi.dispose();<a name="line.881"></a>
-<span class="sourceLineNo">882</span>            distanceSciFi = null;<a name="line.882"></a>
-<span class="sourceLineNo">883</span>        }<a name="line.883"></a>
-<span class="sourceLineNo">884</span>        if(distanceClean != null) {<a name="line.884"></a>
-<span class="sourceLineNo">885</span>            distanceClean.dispose();<a name="line.885"></a>
-<span class="sourceLineNo">886</span>            distanceClean = null;<a name="line.886"></a>
-<span class="sourceLineNo">887</span>        }<a name="line.887"></a>
-<span class="sourceLineNo">888</span>        if(distancePrint != null) {<a name="line.888"></a>
-<span class="sourceLineNo">889</span>            distancePrint.dispose();<a name="line.889"></a>
-<span class="sourceLineNo">890</span>            distancePrint = null;<a name="line.890"></a>
-<span class="sourceLineNo">891</span>        }<a name="line.891"></a>
-<span class="sourceLineNo">892</span>        if (unicode1 != null) {<a name="line.892"></a>
-<span class="sourceLineNo">893</span>            unicode1.dispose();<a name="line.893"></a>
-<span class="sourceLineNo">894</span>            unicode1 = null;<a name="line.894"></a>
-<span class="sourceLineNo">895</span>        }<a name="line.895"></a>
-<span class="sourceLineNo">896</span>        if (unicode2 != null) {<a name="line.896"></a>
-<span class="sourceLineNo">897</span>            unicode2.dispose();<a name="line.897"></a>
-<span class="sourceLineNo">898</span>            unicode2 = null;<a name="line.898"></a>
-<span class="sourceLineNo">899</span>        }<a name="line.899"></a>
-<span class="sourceLineNo">900</span>        if(tentacle != null) {<a name="line.900"></a>
-<span class="sourceLineNo">901</span>            tentacle.dispose();<a name="line.901"></a>
-<span class="sourceLineNo">902</span>            tentacle = null;<a name="line.902"></a>
-<span class="sourceLineNo">903</span>        }<a name="line.903"></a>
-<span class="sourceLineNo">904</span>        if(iconAtlas != null) {<a name="line.904"></a>
-<span class="sourceLineNo">905</span>            iconAtlas.dispose();<a name="line.905"></a>
-<span class="sourceLineNo">906</span>            iconAtlas = null;<a name="line.906"></a>
-<span class="sourceLineNo">907</span>        }<a name="line.907"></a>
-<span class="sourceLineNo">908</span>    }<a name="line.908"></a>
-<span class="sourceLineNo">909</span><a name="line.909"></a>
-<span class="sourceLineNo">910</span>    /**<a name="line.910"></a>
-<span class="sourceLineNo">911</span>     * Called when the Application is about to be resumed<a name="line.911"></a>
-<span class="sourceLineNo">912</span>     */<a name="line.912"></a>
-<span class="sourceLineNo">913</span>    @Override<a name="line.913"></a>
-<span class="sourceLineNo">914</span>    public void resume() {<a name="line.914"></a>
-<span class="sourceLineNo">915</span>        initialize();<a name="line.915"></a>
-<span class="sourceLineNo">916</span>    }<a name="line.916"></a>
-<span class="sourceLineNo">917</span><a name="line.917"></a>
-<span class="sourceLineNo">918</span>    /**<a name="line.918"></a>
-<span class="sourceLineNo">919</span>     * Called when the {@link Application} is about to be disposed<a name="line.919"></a>
-<span class="sourceLineNo">920</span>     */<a name="line.920"></a>
-<span class="sourceLineNo">921</span>    @Override<a name="line.921"></a>
-<span class="sourceLineNo">922</span>    public void dispose() {<a name="line.922"></a>
-<span class="sourceLineNo">923</span>        pause();<a name="line.923"></a>
-<span class="sourceLineNo">924</span>        Gdx.app.removeLifecycleListener(this);<a name="line.924"></a>
-<span class="sourceLineNo">925</span>        instance = null;<a name="line.925"></a>
-<span class="sourceLineNo">926</span>    }<a name="line.926"></a>
-<span class="sourceLineNo">927</span>}<a name="line.927"></a>
+<span class="sourceLineNo">679</span>     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the<a name="line.679"></a>
+<span class="sourceLineNo">680</span>     * distance field font technique this uses can work.<a name="line.680"></a>
+<span class="sourceLineNo">681</span>     * &lt;br&gt;<a name="line.681"></a>
+<span class="sourceLineNo">682</span>     * Needs files:<a name="line.682"></a>
+<span class="sourceLineNo">683</span>     * &lt;ul&gt;<a name="line.683"></a>
+<span class="sourceLineNo">684</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/Noto-Sans-distance.fnt&lt;/li&gt;<a name="line.684"></a>
+<span class="sourceLineNo">685</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/Noto-Sans-distance.png&lt;/li&gt;<a name="line.685"></a>
+<span class="sourceLineNo">686</span>     * &lt;/ul&gt;<a name="line.686"></a>
+<span class="sourceLineNo">687</span>     * @return the TextCellFactory object that can represent many sizes of the font Noto Sans, by Google<a name="line.687"></a>
+<span class="sourceLineNo">688</span>     */<a name="line.688"></a>
+<span class="sourceLineNo">689</span>    public static TextCellFactory getStretchableCleanFont() {<a name="line.689"></a>
+<span class="sourceLineNo">690</span>        initialize();<a name="line.690"></a>
+<span class="sourceLineNo">691</span>        if (instance.distanceClean == null) {<a name="line.691"></a>
+<span class="sourceLineNo">692</span>            try {<a name="line.692"></a>
+<span class="sourceLineNo">693</span>                instance.distanceClean = new TextCellFactory().fontDistanceField(distanceFieldClean, distanceFieldCleanTexture)<a name="line.693"></a>
+<span class="sourceLineNo">694</span>                        .setSmoothingMultiplier(0.4f).height(30).width(7);<a name="line.694"></a>
+<span class="sourceLineNo">695</span>            } catch (Exception e) {<a name="line.695"></a>
+<span class="sourceLineNo">696</span>                e.printStackTrace();<a name="line.696"></a>
+<span class="sourceLineNo">697</span>            }<a name="line.697"></a>
+<span class="sourceLineNo">698</span>        }<a name="line.698"></a>
+<span class="sourceLineNo">699</span>        if(instance.distanceClean != null)<a name="line.699"></a>
+<span class="sourceLineNo">700</span>            return instance.distanceClean.copy();<a name="line.700"></a>
+<span class="sourceLineNo">701</span>        return null;<a name="line.701"></a>
+<span class="sourceLineNo">702</span>    }<a name="line.702"></a>
+<span class="sourceLineNo">703</span><a name="line.703"></a>
+<span class="sourceLineNo">704</span>    /**<a name="line.704"></a>
+<span class="sourceLineNo">705</span>     * Gets an image of a (squid-like, for SquidLib) tentacle, 32x32px.<a name="line.705"></a>
+<span class="sourceLineNo">706</span>     * Source is public domain: http://opengameart.org/content/496-pixel-art-icons-for-medievalfantasy-rpg<a name="line.706"></a>
+<span class="sourceLineNo">707</span>     * Created by Henrique Lazarini (7Soul1, http://7soul1.deviantart.com/ )<a name="line.707"></a>
+<span class="sourceLineNo">708</span>     * &lt;br&gt;<a name="line.708"></a>
+<span class="sourceLineNo">709</span>     * Needs file:<a name="line.709"></a>
+<span class="sourceLineNo">710</span>     * &lt;ul&gt;<a name="line.710"></a>
+<span class="sourceLineNo">711</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/Tentacle.png&lt;/li&gt;<a name="line.711"></a>
+<span class="sourceLineNo">712</span>     * &lt;/ul&gt;<a name="line.712"></a>
+<span class="sourceLineNo">713</span>     * @return a TextureRegion containing an image of a tentacle.<a name="line.713"></a>
+<span class="sourceLineNo">714</span>     */<a name="line.714"></a>
+<span class="sourceLineNo">715</span>    public static TextureRegion getTentacle()<a name="line.715"></a>
+<span class="sourceLineNo">716</span>    {<a name="line.716"></a>
+<span class="sourceLineNo">717</span>        initialize();<a name="line.717"></a>
+<span class="sourceLineNo">718</span>        if(instance.tentacle == null || instance.tentacleRegion == null)<a name="line.718"></a>
+<span class="sourceLineNo">719</span>        {<a name="line.719"></a>
+<span class="sourceLineNo">720</span>            try {<a name="line.720"></a>
+<span class="sourceLineNo">721</span>                instance.tentacle = new Texture(Gdx.files.internal("Tentacle.png"));<a name="line.721"></a>
+<span class="sourceLineNo">722</span>                instance.tentacleRegion = new TextureRegion(instance.tentacle);<a name="line.722"></a>
+<span class="sourceLineNo">723</span>            } catch (Exception ignored) {<a name="line.723"></a>
+<span class="sourceLineNo">724</span>            }<a name="line.724"></a>
+<span class="sourceLineNo">725</span>        }<a name="line.725"></a>
+<span class="sourceLineNo">726</span>        return instance.tentacleRegion;<a name="line.726"></a>
+<span class="sourceLineNo">727</span>    }<a name="line.727"></a>
+<span class="sourceLineNo">728</span><a name="line.728"></a>
+<span class="sourceLineNo">729</span><a name="line.729"></a>
+<span class="sourceLineNo">730</span>    /**<a name="line.730"></a>
+<span class="sourceLineNo">731</span>     * Gets a TextureAtlas containing many icons with a distance field effect applied, allowing them to be used with<a name="line.731"></a>
+<span class="sourceLineNo">732</span>     * "stretchable" fonts and be resized in the same way. These will not look as-expected if stretchable fonts are not<a name="line.732"></a>
+<span class="sourceLineNo">733</span>     * in use, and will seem hazy and indistinct if the shader hasn't been set up for a distance field effect by<a name="line.733"></a>
+<span class="sourceLineNo">734</span>     * TextCellFactory (which stretchable fonts will do automatically). The one page of the TextureAtlas is 2048x2048,<a name="line.734"></a>
+<span class="sourceLineNo">735</span>     * which may be too large for some old, low-end Android phones, and possibly integrated graphics with fairly old<a name="line.735"></a>
+<span class="sourceLineNo">736</span>     * processors on desktop. It has over 2000 icons.<a name="line.736"></a>
+<span class="sourceLineNo">737</span>     * &lt;br&gt;<a name="line.737"></a>
+<span class="sourceLineNo">738</span>     * The icons are CC-BY and the license is distributed with them, though the icons are not necessarily included with<a name="line.738"></a>
+<span class="sourceLineNo">739</span>     * SquidLib. If you use the icon atlas, be sure to include icons-license.txt with it and reference it with your<a name="line.739"></a>
+<span class="sourceLineNo">740</span>     * game's license and/or credits information.<a name="line.740"></a>
+<span class="sourceLineNo">741</span>     * &lt;br&gt;<a name="line.741"></a>
+<span class="sourceLineNo">742</span>     * Needs files:<a name="line.742"></a>
+<span class="sourceLineNo">743</span>     * &lt;ul&gt;<a name="line.743"></a>
+<span class="sourceLineNo">744</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/icons.atlas&lt;/li&gt;<a name="line.744"></a>
+<span class="sourceLineNo">745</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/icons.png&lt;/li&gt;<a name="line.745"></a>
+<span class="sourceLineNo">746</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/icons-license.txt Needed to credit artists&lt;/li&gt;<a name="line.746"></a>
+<span class="sourceLineNo">747</span>     * &lt;/ul&gt;<a name="line.747"></a>
+<span class="sourceLineNo">748</span>     * @return a TextureAtlas containing over 2000 icons with a distance field effect<a name="line.748"></a>
+<span class="sourceLineNo">749</span>     */<a name="line.749"></a>
+<span class="sourceLineNo">750</span>    public static TextureAtlas getIconAtlas()<a name="line.750"></a>
+<span class="sourceLineNo">751</span>    {<a name="line.751"></a>
+<span class="sourceLineNo">752</span>        initialize();<a name="line.752"></a>
+<span class="sourceLineNo">753</span>        if(instance.iconAtlas == null)<a name="line.753"></a>
+<span class="sourceLineNo">754</span>        {<a name="line.754"></a>
+<span class="sourceLineNo">755</span>            try {<a name="line.755"></a>
+<span class="sourceLineNo">756</span>                instance.iconAtlas = new TextureAtlas(Gdx.files.internal("icons.atlas"));<a name="line.756"></a>
+<span class="sourceLineNo">757</span>            } catch (Exception ignored) {<a name="line.757"></a>
+<span class="sourceLineNo">758</span>            }<a name="line.758"></a>
+<span class="sourceLineNo">759</span>        }<a name="line.759"></a>
+<span class="sourceLineNo">760</span>        return instance.iconAtlas;<a name="line.760"></a>
+<span class="sourceLineNo">761</span>    }<a name="line.761"></a>
+<span class="sourceLineNo">762</span><a name="line.762"></a>
+<span class="sourceLineNo">763</span>    /**<a name="line.763"></a>
+<span class="sourceLineNo">764</span>     * This is a static global StatefulRNG that's meant for usage in cases where the seed does not matter and any<a name="line.764"></a>
+<span class="sourceLineNo">765</span>     * changes to this RNG's state will not change behavior elsewhere in the program; this means the GUI mainly.<a name="line.765"></a>
+<span class="sourceLineNo">766</span>     */<a name="line.766"></a>
+<span class="sourceLineNo">767</span>    public static StatefulRNG getGuiRandom()<a name="line.767"></a>
+<span class="sourceLineNo">768</span>    {<a name="line.768"></a>
+<span class="sourceLineNo">769</span>        initialize();<a name="line.769"></a>
+<span class="sourceLineNo">770</span>        if(instance.guiRandom == null)<a name="line.770"></a>
+<span class="sourceLineNo">771</span>        {<a name="line.771"></a>
+<span class="sourceLineNo">772</span>            instance.guiRandom =  new StatefulRNG();<a name="line.772"></a>
+<span class="sourceLineNo">773</span>        }<a name="line.773"></a>
+<span class="sourceLineNo">774</span>        return instance.guiRandom;<a name="line.774"></a>
+<span class="sourceLineNo">775</span>    }<a name="line.775"></a>
+<span class="sourceLineNo">776</span>    /**<a name="line.776"></a>
+<span class="sourceLineNo">777</span>     * This is a static global SquidColorCenter that can be used in places that just need an existing object that can do<a name="line.777"></a>
+<span class="sourceLineNo">778</span>     * things like analyze hue or saturation of a color.<a name="line.778"></a>
+<span class="sourceLineNo">779</span>     */<a name="line.779"></a>
+<span class="sourceLineNo">780</span>    public static SquidColorCenter getSCC()<a name="line.780"></a>
+<span class="sourceLineNo">781</span>    {<a name="line.781"></a>
+<span class="sourceLineNo">782</span>        initialize();<a name="line.782"></a>
+<span class="sourceLineNo">783</span>        if(instance.scc == null)<a name="line.783"></a>
+<span class="sourceLineNo">784</span>        {<a name="line.784"></a>
+<span class="sourceLineNo">785</span>            instance.scc =  new SquidColorCenter();<a name="line.785"></a>
+<span class="sourceLineNo">786</span>        }<a name="line.786"></a>
+<span class="sourceLineNo">787</span>        return instance.scc;<a name="line.787"></a>
+<span class="sourceLineNo">788</span>    }<a name="line.788"></a>
+<span class="sourceLineNo">789</span><a name="line.789"></a>
+<span class="sourceLineNo">790</span>    /**<a name="line.790"></a>
+<span class="sourceLineNo">791</span>     * Special symbols that can be used as icons if you use the narrow default font.<a name="line.791"></a>
+<span class="sourceLineNo">792</span>     */<a name="line.792"></a>
+<span class="sourceLineNo">793</span>    public static final String narrowFontSymbols = "ሀሁሂሃሄህሆሇለሉሊላሌልሎሏሐሑሒሓሔሕሖሗመሙሚማሜ",<a name="line.793"></a>
+<span class="sourceLineNo">794</span>                                  narrowFontAll = " !\"#$%&amp;'()*+,-./0123\n" +<a name="line.794"></a>
+<span class="sourceLineNo">795</span>                                          "456789:;&lt;=&gt;?@ABCDEFG\n" +<a name="line.795"></a>
+<span class="sourceLineNo">796</span>                                          "HIJKLMNOPQRSTUVWXYZ[\n" +<a name="line.796"></a>
+<span class="sourceLineNo">797</span>                                          "\\]^_`abcdefghijklmno\n" +<a name="line.797"></a>
+<span class="sourceLineNo">798</span>                                          "pqrstuvwxyz{|}~¡¢£¤¥\n" +<a name="line.798"></a>
+<span class="sourceLineNo">799</span>                                          "¦§¨©ª«¬\u00AD®¯°±²³´µ¶·¸¹\n" +<a name="line.799"></a>
+<span class="sourceLineNo">800</span>                                          "º»¼½¾¿×ß÷øɍɎሀሁሂሃሄህሆሇ\n" +<a name="line.800"></a>
+<span class="sourceLineNo">801</span>                                          "ለሉሊላሌልሎሏሐሑሒሓሔሕሖሗመሙሚማ\n" +<a name="line.801"></a>
+<span class="sourceLineNo">802</span>                                          "ሜẞ‐‒–—―‖‗‘’‚‛“”„‟†‡•\n" +<a name="line.802"></a>
+<span class="sourceLineNo">803</span>                                          "…‧‹›€™"+<a name="line.803"></a>
+<span class="sourceLineNo">804</span>                                          "←↑→↓↷↺↻"+ // left, up, right, down, "tap", "counterclockwise", "clockwise"<a name="line.804"></a>
+<span class="sourceLineNo">805</span>                                          "∀∁∂∃∄∅∆\n" +<a name="line.805"></a>
+<span class="sourceLineNo">806</span>                                          "∇∈∉∋∌∎∏∐∑−∓∔∕∖∘∙√∛∜∝\n" +<a name="line.806"></a>
+<span class="sourceLineNo">807</span>                                          "∞∟∠∡∢∣∤∥∦∧∨∩∪∫∬∮∯∱∲∳\n" +<a name="line.807"></a>
+<span class="sourceLineNo">808</span>                                          "∴∵∶∷≈≋≠≡≢≣≤≥≦≧≨≩≪≫─━\n" +<a name="line.808"></a>
+<span class="sourceLineNo">809</span>                                          "│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕\n" +<a name="line.809"></a>
+<span class="sourceLineNo">810</span>                                          "┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩\n" +<a name="line.810"></a>
+<span class="sourceLineNo">811</span>                                          "┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽\n" +<a name="line.811"></a>
+<span class="sourceLineNo">812</span>                                          "┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║\n" +<a name="line.812"></a>
+<span class="sourceLineNo">813</span>                                          "╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥\n" +<a name="line.813"></a>
+<span class="sourceLineNo">814</span>                                          "╦╧╨╩╪╫╬╭╮╯╰╱╲╳╴╵╶╷╸╹\n" +<a name="line.814"></a>
+<span class="sourceLineNo">815</span>                                          "╺╻╼╽╾╿▁▄▅▆▇█▌▐░▒▓▔▖▗\n" +<a name="line.815"></a>
+<span class="sourceLineNo">816</span>                                          "▘▙▚▛▜▝▞▟";<a name="line.816"></a>
+<span class="sourceLineNo">817</span><a name="line.817"></a>
+<span class="sourceLineNo">818</span>    /**<a name="line.818"></a>
+<span class="sourceLineNo">819</span>     * Called when the {@link Application} is about to pause<a name="line.819"></a>
+<span class="sourceLineNo">820</span>     */<a name="line.820"></a>
+<span class="sourceLineNo">821</span>    @Override<a name="line.821"></a>
+<span class="sourceLineNo">822</span>    public void pause() {<a name="line.822"></a>
+<span class="sourceLineNo">823</span>        if(arial15 != null) {<a name="line.823"></a>
+<span class="sourceLineNo">824</span>            arial15.dispose();<a name="line.824"></a>
+<span class="sourceLineNo">825</span>            arial15 = null;<a name="line.825"></a>
+<span class="sourceLineNo">826</span>        }<a name="line.826"></a>
+<span class="sourceLineNo">827</span>        if(narrow1 != null) {<a name="line.827"></a>
+<span class="sourceLineNo">828</span>            narrow1.dispose();<a name="line.828"></a>
+<span class="sourceLineNo">829</span>            narrow1 = null;<a name="line.829"></a>
+<span class="sourceLineNo">830</span>        }<a name="line.830"></a>
+<span class="sourceLineNo">831</span>        if(narrow2 != null) {<a name="line.831"></a>
+<span class="sourceLineNo">832</span>            narrow2.dispose();<a name="line.832"></a>
+<span class="sourceLineNo">833</span>            narrow2 = null;<a name="line.833"></a>
+<span class="sourceLineNo">834</span>        }<a name="line.834"></a>
+<span class="sourceLineNo">835</span>        if(narrow3 != null) {<a name="line.835"></a>
+<span class="sourceLineNo">836</span>            narrow3.dispose();<a name="line.836"></a>
+<span class="sourceLineNo">837</span>            narrow3 = null;<a name="line.837"></a>
+<span class="sourceLineNo">838</span>        }<a name="line.838"></a>
+<span class="sourceLineNo">839</span>        if(smooth1 != null) {<a name="line.839"></a>
+<span class="sourceLineNo">840</span>            smooth1.dispose();<a name="line.840"></a>
+<span class="sourceLineNo">841</span>            smooth1 = null;<a name="line.841"></a>
+<span class="sourceLineNo">842</span>        }<a name="line.842"></a>
+<span class="sourceLineNo">843</span>        if(smooth2 != null) {<a name="line.843"></a>
+<span class="sourceLineNo">844</span>            smooth2.dispose();<a name="line.844"></a>
+<span class="sourceLineNo">845</span>            smooth2 = null;<a name="line.845"></a>
+<span class="sourceLineNo">846</span>        }<a name="line.846"></a>
+<span class="sourceLineNo">847</span>        if(square1 != null) {<a name="line.847"></a>
+<span class="sourceLineNo">848</span>            square1.dispose();<a name="line.848"></a>
+<span class="sourceLineNo">849</span>            square1 = null;<a name="line.849"></a>
+<span class="sourceLineNo">850</span>        }<a name="line.850"></a>
+<span class="sourceLineNo">851</span>        if(square2 != null) {<a name="line.851"></a>
+<span class="sourceLineNo">852</span>            square2.dispose();<a name="line.852"></a>
+<span class="sourceLineNo">853</span>            square1 = null;<a name="line.853"></a>
+<span class="sourceLineNo">854</span>        }<a name="line.854"></a>
+<span class="sourceLineNo">855</span>        if(smoothSquare != null) {<a name="line.855"></a>
+<span class="sourceLineNo">856</span>            smoothSquare.dispose();<a name="line.856"></a>
+<span class="sourceLineNo">857</span>            smoothSquare = null;<a name="line.857"></a>
+<span class="sourceLineNo">858</span>        }<a name="line.858"></a>
+<span class="sourceLineNo">859</span>        if(smoothSquareOld != null) {<a name="line.859"></a>
+<span class="sourceLineNo">860</span>            smoothSquareOld.dispose();<a name="line.860"></a>
+<span class="sourceLineNo">861</span>            smoothSquareOld = null;<a name="line.861"></a>
+<span class="sourceLineNo">862</span>        }<a name="line.862"></a>
+<span class="sourceLineNo">863</span>        if(distanceSquare != null) {<a name="line.863"></a>
+<span class="sourceLineNo">864</span>            distanceSquare.dispose();<a name="line.864"></a>
+<span class="sourceLineNo">865</span>            distanceSquare = null;<a name="line.865"></a>
+<span class="sourceLineNo">866</span>        }<a name="line.866"></a>
+<span class="sourceLineNo">867</span>        if(distanceNarrow != null) {<a name="line.867"></a>
+<span class="sourceLineNo">868</span>            distanceNarrow.dispose();<a name="line.868"></a>
+<span class="sourceLineNo">869</span>            distanceNarrow = null;<a name="line.869"></a>
+<span class="sourceLineNo">870</span>        }<a name="line.870"></a>
+<span class="sourceLineNo">871</span>        if(typewriterDistanceNarrow != null) {<a name="line.871"></a>
+<span class="sourceLineNo">872</span>            typewriterDistanceNarrow.dispose();<a name="line.872"></a>
+<span class="sourceLineNo">873</span>            typewriterDistanceNarrow = null;<a name="line.873"></a>
+<span class="sourceLineNo">874</span>        }<a name="line.874"></a>
+<span class="sourceLineNo">875</span>        if(distanceCode != null) {<a name="line.875"></a>
+<span class="sourceLineNo">876</span>            distanceCode.dispose();<a name="line.876"></a>
+<span class="sourceLineNo">877</span>            distanceCode = null;<a name="line.877"></a>
+<span class="sourceLineNo">878</span>        }<a name="line.878"></a>
+<span class="sourceLineNo">879</span>        if(distanceDejaVu != null) {<a name="line.879"></a>
+<span class="sourceLineNo">880</span>            distanceDejaVu.dispose();<a name="line.880"></a>
+<span class="sourceLineNo">881</span>            distanceDejaVu = null;<a name="line.881"></a>
+<span class="sourceLineNo">882</span>        }<a name="line.882"></a>
+<span class="sourceLineNo">883</span>        if(distanceSciFi != null) {<a name="line.883"></a>
+<span class="sourceLineNo">884</span>            distanceSciFi.dispose();<a name="line.884"></a>
+<span class="sourceLineNo">885</span>            distanceSciFi = null;<a name="line.885"></a>
+<span class="sourceLineNo">886</span>        }<a name="line.886"></a>
+<span class="sourceLineNo">887</span>        if(distanceClean != null) {<a name="line.887"></a>
+<span class="sourceLineNo">888</span>            distanceClean.dispose();<a name="line.888"></a>
+<span class="sourceLineNo">889</span>            distanceClean = null;<a name="line.889"></a>
+<span class="sourceLineNo">890</span>        }<a name="line.890"></a>
+<span class="sourceLineNo">891</span>        if(distancePrint != null) {<a name="line.891"></a>
+<span class="sourceLineNo">892</span>            distancePrint.dispose();<a name="line.892"></a>
+<span class="sourceLineNo">893</span>            distancePrint = null;<a name="line.893"></a>
+<span class="sourceLineNo">894</span>        }<a name="line.894"></a>
+<span class="sourceLineNo">895</span>        if (unicode1 != null) {<a name="line.895"></a>
+<span class="sourceLineNo">896</span>            unicode1.dispose();<a name="line.896"></a>
+<span class="sourceLineNo">897</span>            unicode1 = null;<a name="line.897"></a>
+<span class="sourceLineNo">898</span>        }<a name="line.898"></a>
+<span class="sourceLineNo">899</span>        if (unicode2 != null) {<a name="line.899"></a>
+<span class="sourceLineNo">900</span>            unicode2.dispose();<a name="line.900"></a>
+<span class="sourceLineNo">901</span>            unicode2 = null;<a name="line.901"></a>
+<span class="sourceLineNo">902</span>        }<a name="line.902"></a>
+<span class="sourceLineNo">903</span>        if(tentacle != null) {<a name="line.903"></a>
+<span class="sourceLineNo">904</span>            tentacle.dispose();<a name="line.904"></a>
+<span class="sourceLineNo">905</span>            tentacle = null;<a name="line.905"></a>
+<span class="sourceLineNo">906</span>        }<a name="line.906"></a>
+<span class="sourceLineNo">907</span>        if(iconAtlas != null) {<a name="line.907"></a>
+<span class="sourceLineNo">908</span>            iconAtlas.dispose();<a name="line.908"></a>
+<span class="sourceLineNo">909</span>            iconAtlas = null;<a name="line.909"></a>
+<span class="sourceLineNo">910</span>        }<a name="line.910"></a>
+<span class="sourceLineNo">911</span>    }<a name="line.911"></a>
+<span class="sourceLineNo">912</span><a name="line.912"></a>
+<span class="sourceLineNo">913</span>    /**<a name="line.913"></a>
+<span class="sourceLineNo">914</span>     * Called when the Application is about to be resumed<a name="line.914"></a>
+<span class="sourceLineNo">915</span>     */<a name="line.915"></a>
+<span class="sourceLineNo">916</span>    @Override<a name="line.916"></a>
+<span class="sourceLineNo">917</span>    public void resume() {<a name="line.917"></a>
+<span class="sourceLineNo">918</span>        initialize();<a name="line.918"></a>
+<span class="sourceLineNo">919</span>    }<a name="line.919"></a>
+<span class="sourceLineNo">920</span><a name="line.920"></a>
+<span class="sourceLineNo">921</span>    /**<a name="line.921"></a>
+<span class="sourceLineNo">922</span>     * Called when the {@link Application} is about to be disposed<a name="line.922"></a>
+<span class="sourceLineNo">923</span>     */<a name="line.923"></a>
+<span class="sourceLineNo">924</span>    @Override<a name="line.924"></a>
+<span class="sourceLineNo">925</span>    public void dispose() {<a name="line.925"></a>
+<span class="sourceLineNo">926</span>        pause();<a name="line.926"></a>
+<span class="sourceLineNo">927</span>        Gdx.app.removeLifecycleListener(this);<a name="line.927"></a>
+<span class="sourceLineNo">928</span>        instance = null;<a name="line.928"></a>
+<span class="sourceLineNo">929</span>    }<a name="line.929"></a>
+<span class="sourceLineNo">930</span>}<a name="line.930"></a>
 
 
 

@@ -597,8 +597,9 @@ public class DefaultResources implements LifecycleListener {
      * cleanly to many sizes, and is a good fit for text used in science-fiction settings. Has excellent Latin script
      * support, including enough to handle the rare characters used by Vietnamese, but does not support Cyrillic and has
      * only very limited Greek support (e.g. no alpha or beta). This font looks better at larger sizes, and many small
-     * glyphs, including '^' and '`' will only be recognizable at a height of at least 24 and a width of at least 12 (in
-     * pixels). A lot of glyphs may be somewhat hard to read at first. Caches the result for later calls.
+     * glyphs, including '^' and '`' will only be recognizable at a height of at least 24 and a width of at least 11 (in
+     * pixels). It may be ideal to use a larger size and scale this down, with a height of 64 and a width of about 28
+     * working well. A lot of glyphs may be somewhat hard to read at first. Caches the result for later calls.
      * <br>
      * This font has additional an license requirement, attribution to the original author of the font (using the
      * nickname dialNforNinja); you should also attribute Elementalist, which is me (Tommy Ettinger), to note that not
@@ -612,7 +613,9 @@ public class DefaultResources implements LifecycleListener {
      * with links to the font it was based on (v3 by dialNforNinja instead of v3.1 by Elementalist/Tommy Ettinger).
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
-     * distance field font technique this uses can work.
+     * distance field font technique this uses can work. This sets the smoothing multiplier to 1.2 by default, so
+     * <b>if you set the smoothing multiplier yourself, you should probably increase the amount by 20%</b> relative to
+     * other fonts' multipliers.
      * <br>
      * Needs files:
      * <ul>
@@ -629,7 +632,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.distanceSciFi = new TextCellFactory()
-                        .fontDistanceField(distanceFieldSciFi, distanceFieldSciFiTexture);
+                        .fontDistanceField(distanceFieldSciFi, distanceFieldSciFiTexture).setSmoothingMultiplier(1.2f);
             } catch (Exception e) {
                 e.printStackTrace();
             }
