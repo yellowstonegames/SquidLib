@@ -34,7 +34,7 @@
 <span class="sourceLineNo">026</span>    private static final long FLOAT_MASK = (1L &lt;&lt; 24) - 1;<a name="line.26"></a>
 <span class="sourceLineNo">027</span>    private static final double NORM_24 = 1. / (1L &lt;&lt; 24);<a name="line.27"></a>
 <span class="sourceLineNo">028</span><a name="line.28"></a>
-<span class="sourceLineNo">029</span>        private static final long serialVersionUID = 1018744536171610261L;<a name="line.29"></a>
+<span class="sourceLineNo">029</span>        private static final long serialVersionUID = 1018744536171610262L;<a name="line.29"></a>
 <span class="sourceLineNo">030</span><a name="line.30"></a>
 <span class="sourceLineNo">031</span>    private long state0, state1;<a name="line.31"></a>
 <span class="sourceLineNo">032</span><a name="line.32"></a>
@@ -166,7 +166,7 @@
 <span class="sourceLineNo">158</span>        z = (z ^ (z &gt;&gt;&gt; 30)) * 0xBF58476D1CE4E5B9L;<a name="line.158"></a>
 <span class="sourceLineNo">159</span>        z = (z ^ (z &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.159"></a>
 <span class="sourceLineNo">160</span>        state0 = z ^ (z &gt;&gt;&gt; 31);<a name="line.160"></a>
-<span class="sourceLineNo">161</span>        state += state0 + 0x9E3779B97F4A7C15L;<a name="line.161"></a>
+<span class="sourceLineNo">161</span>        state += 0x9E3779B97F4A7C15L;<a name="line.161"></a>
 <span class="sourceLineNo">162</span>        z = state;<a name="line.162"></a>
 <span class="sourceLineNo">163</span>        z = (z ^ (z &gt;&gt;&gt; 30)) * 0xBF58476D1CE4E5B9L;<a name="line.163"></a>
 <span class="sourceLineNo">164</span>        z = (z ^ (z &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.164"></a>

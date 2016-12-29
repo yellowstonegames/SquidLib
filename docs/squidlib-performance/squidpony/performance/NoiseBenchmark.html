@@ -109,8 +109,18 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.49">NoiseBenchmark</a>
+<pre>public class <a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.58">NoiseBenchmark</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
+<div class="block">Generating 64 million points of noise, each run
+ Benchmark                            Mode  Cnt     Score     Error  Units
+ NoiseBenchmark.measureMerlin2D       avgt    4   734.085 ±  58.096  ms/op // different type of result, not smooth
+ NoiseBenchmark.measureMerlin3D       avgt    4  1082.559 ± 143.629  ms/op // different type of result, not smooth
+ NoiseBenchmark.measurePerlin2D       avgt    4  2100.514 ±  55.326  ms/op
+ NoiseBenchmark.measurePerlin3D       avgt    4  3385.798 ±  77.035  ms/op
+ NoiseBenchmark.measureWhirling2D     avgt    4  1609.510 ± 134.049  ms/op // best smooth 2D
+ NoiseBenchmark.measureWhirling3D     avgt    4  2808.307 ± 121.119  ms/op // best smooth 3D
+ NoiseBenchmark.measureWhirlingAlt2D  avgt    4  1758.283 ± 117.308  ms/op
+ NoiseBenchmark.measureWhirlingAlt3D  avgt    4  2895.686 ±  98.599  ms/op</div>
 </li>
 </ul>
 </div>
@@ -242,7 +252,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>NoiseBenchmark</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.49">NoiseBenchmark</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.58">NoiseBenchmark</a>()</pre>
 </li>
 </ul>
 </li>
@@ -259,7 +269,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doPerlin2D</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.53">doPerlin2D</a>()</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.62">doPerlin2D</a>()</pre>
 </li>
 </ul>
 <a name="measurePerlin2D--">
@@ -268,7 +278,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measurePerlin2D</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.66">measurePerlin2D</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.75">measurePerlin2D</a>()
                      throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -282,7 +292,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doPerlin3D</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.71">doPerlin3D</a>()</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.80">doPerlin3D</a>()</pre>
 </li>
 </ul>
 <a name="measurePerlin3D--">
@@ -291,7 +301,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measurePerlin3D</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.86">measurePerlin3D</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.95">measurePerlin3D</a>()
                      throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -305,7 +315,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doMerlin2D</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.91">doMerlin2D</a>()</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.100">doMerlin2D</a>()</pre>
 </li>
 </ul>
 <a name="measureMerlin2D--">
@@ -314,7 +324,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureMerlin2D</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.104">measureMerlin2D</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.113">measureMerlin2D</a>()
                      throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -328,7 +338,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doMerlin3D</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.109">doMerlin3D</a>()</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.118">doMerlin3D</a>()</pre>
 </li>
 </ul>
 <a name="measureMerlin3D--">
@@ -337,7 +347,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureMerlin3D</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.124">measureMerlin3D</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.133">measureMerlin3D</a>()
                      throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -351,7 +361,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doWhirling2D</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.129">doWhirling2D</a>()</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.138">doWhirling2D</a>()</pre>
 </li>
 </ul>
 <a name="measureWhirling2D--">
@@ -360,7 +370,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureWhirling2D</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.142">measureWhirling2D</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.151">measureWhirling2D</a>()
                        throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -374,7 +384,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doWhirling3D</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.147">doWhirling3D</a>()</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.156">doWhirling3D</a>()</pre>
 </li>
 </ul>
 <a name="measureWhirling3D--">
@@ -383,7 +393,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureWhirling3D</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.162">measureWhirling3D</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.171">measureWhirling3D</a>()
                        throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -397,7 +407,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doWhirlingAlt2D</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.168">doWhirlingAlt2D</a>()</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.177">doWhirlingAlt2D</a>()</pre>
 </li>
 </ul>
 <a name="measureWhirlingAlt2D--">
@@ -406,7 +416,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureWhirlingAlt2D</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.181">measureWhirlingAlt2D</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.190">measureWhirlingAlt2D</a>()
                           throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -420,7 +430,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doWhirlingAlt3D</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.186">doWhirlingAlt3D</a>()</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.195">doWhirlingAlt3D</a>()</pre>
 </li>
 </ul>
 <a name="measureWhirlingAlt3D--">
@@ -429,7 +439,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureWhirlingAlt3D</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.201">measureWhirlingAlt3D</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.210">measureWhirlingAlt3D</a>()
                           throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -443,7 +453,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>main</h4>
-<pre>public static&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.226">main</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)
+<pre>public static&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/NoiseBenchmark.html#line.235">main</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)
                  throws org.openjdk.jmh.runner.RunnerException</pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>

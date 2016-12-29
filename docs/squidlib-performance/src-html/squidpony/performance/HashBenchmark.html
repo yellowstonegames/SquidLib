@@ -132,7 +132,7 @@
 <span class="sourceLineNo">124</span><a name="line.124"></a>
 <span class="sourceLineNo">125</span>    public long doFNV()<a name="line.125"></a>
 <span class="sourceLineNo">126</span>    {<a name="line.126"></a>
-<span class="sourceLineNo">127</span>        LongPeriodRNG rng = new LongPeriodRNG(seed);<a name="line.127"></a>
+<span class="sourceLineNo">127</span>        final LongPeriodRNG rng = new LongPeriodRNG(seed);<a name="line.127"></a>
 <span class="sourceLineNo">128</span><a name="line.128"></a>
 <span class="sourceLineNo">129</span>        for (int i = 0; i &lt; 1000000; i++) {<a name="line.129"></a>
 <span class="sourceLineNo">130</span>            rng.nextLong();<a name="line.130"></a>
@@ -151,7 +151,7 @@
 <span class="sourceLineNo">143</span><a name="line.143"></a>
 <span class="sourceLineNo">144</span>    public long doFNVInt()<a name="line.144"></a>
 <span class="sourceLineNo">145</span>    {<a name="line.145"></a>
-<span class="sourceLineNo">146</span>        LongPeriodRNG rng = new LongPeriodRNG(iseed);<a name="line.146"></a>
+<span class="sourceLineNo">146</span>        final LongPeriodRNG rng = new LongPeriodRNG(iseed);<a name="line.146"></a>
 <span class="sourceLineNo">147</span><a name="line.147"></a>
 <span class="sourceLineNo">148</span>        for (int i = 0; i &lt; 1000000; i++) {<a name="line.148"></a>
 <span class="sourceLineNo">149</span>            rng.nextLong();<a name="line.149"></a>
@@ -170,7 +170,7 @@
 <span class="sourceLineNo">162</span><a name="line.162"></a>
 <span class="sourceLineNo">163</span>    public long doLightning()<a name="line.163"></a>
 <span class="sourceLineNo">164</span>    {<a name="line.164"></a>
-<span class="sourceLineNo">165</span>        LongPeriodRNG rng = new LongPeriodRNG(seed);<a name="line.165"></a>
+<span class="sourceLineNo">165</span>        final LongPeriodRNG rng = new LongPeriodRNG(seed);<a name="line.165"></a>
 <span class="sourceLineNo">166</span><a name="line.166"></a>
 <span class="sourceLineNo">167</span>        for (int i = 0; i &lt; 1000000; i++) {<a name="line.167"></a>
 <span class="sourceLineNo">168</span>            rng.nextLong();<a name="line.168"></a>
@@ -189,7 +189,7 @@
 <span class="sourceLineNo">181</span><a name="line.181"></a>
 <span class="sourceLineNo">182</span>    public long doLightningInt()<a name="line.182"></a>
 <span class="sourceLineNo">183</span>    {<a name="line.183"></a>
-<span class="sourceLineNo">184</span>        LongPeriodRNG rng = new LongPeriodRNG(iseed);<a name="line.184"></a>
+<span class="sourceLineNo">184</span>        final LongPeriodRNG rng = new LongPeriodRNG(iseed);<a name="line.184"></a>
 <span class="sourceLineNo">185</span><a name="line.185"></a>
 <span class="sourceLineNo">186</span>        for (int i = 0; i &lt; 1000000; i++) {<a name="line.186"></a>
 <span class="sourceLineNo">187</span>            rng.nextLong();<a name="line.187"></a>
@@ -208,7 +208,7 @@
 <span class="sourceLineNo">200</span><a name="line.200"></a>
 <span class="sourceLineNo">201</span>    public long doJVMInt()<a name="line.201"></a>
 <span class="sourceLineNo">202</span>    {<a name="line.202"></a>
-<span class="sourceLineNo">203</span>        LongPeriodRNG rng = new LongPeriodRNG(seed);<a name="line.203"></a>
+<span class="sourceLineNo">203</span>        final LongPeriodRNG rng = new LongPeriodRNG(seed);<a name="line.203"></a>
 <span class="sourceLineNo">204</span><a name="line.204"></a>
 <span class="sourceLineNo">205</span>        for (int i = 0; i &lt; 1000000; i++) {<a name="line.205"></a>
 <span class="sourceLineNo">206</span>            rng.nextLong();<a name="line.206"></a>
@@ -227,7 +227,7 @@
 <span class="sourceLineNo">219</span>/*<a name="line.219"></a>
 <span class="sourceLineNo">220</span>    public long doStorm()<a name="line.220"></a>
 <span class="sourceLineNo">221</span>    {<a name="line.221"></a>
-<span class="sourceLineNo">222</span>        LongPeriodRNG rng = new LongPeriodRNG(seed);<a name="line.222"></a>
+<span class="sourceLineNo">222</span>        final LongPeriodRNG rng = new LongPeriodRNG(seed);<a name="line.222"></a>
 <span class="sourceLineNo">223</span>        CrossHash.Storm storm = new CrossHash.Storm();<a name="line.223"></a>
 <span class="sourceLineNo">224</span>        for (int i = 0; i &lt; 1000000; i++) {<a name="line.224"></a>
 <span class="sourceLineNo">225</span>            rng.nextLong();<a name="line.225"></a>
@@ -246,7 +246,7 @@
 <span class="sourceLineNo">238</span><a name="line.238"></a>
 <span class="sourceLineNo">239</span>    public long doStormInt()<a name="line.239"></a>
 <span class="sourceLineNo">240</span>    {<a name="line.240"></a>
-<span class="sourceLineNo">241</span>        LongPeriodRNG rng = new LongPeriodRNG(iseed);<a name="line.241"></a>
+<span class="sourceLineNo">241</span>        final LongPeriodRNG rng = new LongPeriodRNG(iseed);<a name="line.241"></a>
 <span class="sourceLineNo">242</span>        CrossHash.Storm storm = new CrossHash.Storm();<a name="line.242"></a>
 <span class="sourceLineNo">243</span>        for (int i = 0; i &lt; 1000000; i++) {<a name="line.243"></a>
 <span class="sourceLineNo">244</span>            rng.nextLong();<a name="line.244"></a>
@@ -265,8 +265,8 @@
 <span class="sourceLineNo">257</span>    */<a name="line.257"></a>
 <span class="sourceLineNo">258</span>    public long doStorm()<a name="line.258"></a>
 <span class="sourceLineNo">259</span>    {<a name="line.259"></a>
-<span class="sourceLineNo">260</span>        LongPeriodRNG rng = new LongPeriodRNG(seed);<a name="line.260"></a>
-<span class="sourceLineNo">261</span>        CrossHash.Storm storm = CrossHash.Storm.chi;<a name="line.261"></a>
+<span class="sourceLineNo">260</span>        final LongPeriodRNG rng = new LongPeriodRNG(seed);<a name="line.260"></a>
+<span class="sourceLineNo">261</span>        final CrossHash.Storm storm = CrossHash.Storm.chi;<a name="line.261"></a>
 <span class="sourceLineNo">262</span>        for (int i = 0; i &lt; 1000000; i++) {<a name="line.262"></a>
 <span class="sourceLineNo">263</span>            rng.nextLong();<a name="line.263"></a>
 <span class="sourceLineNo">264</span>            seed += storm.hash64(rng.state);<a name="line.264"></a>
@@ -284,8 +284,8 @@
 <span class="sourceLineNo">276</span><a name="line.276"></a>
 <span class="sourceLineNo">277</span>    public long doStormInt()<a name="line.277"></a>
 <span class="sourceLineNo">278</span>    {<a name="line.278"></a>
-<span class="sourceLineNo">279</span>        LongPeriodRNG rng = new LongPeriodRNG(iseed);<a name="line.279"></a>
-<span class="sourceLineNo">280</span>        CrossHash.Storm storm = CrossHash.Storm.chi;<a name="line.280"></a>
+<span class="sourceLineNo">279</span>        final LongPeriodRNG rng = new LongPeriodRNG(iseed);<a name="line.279"></a>
+<span class="sourceLineNo">280</span>        final CrossHash.Storm storm = CrossHash.Storm.chi;<a name="line.280"></a>
 <span class="sourceLineNo">281</span>        for (int i = 0; i &lt; 1000000; i++) {<a name="line.281"></a>
 <span class="sourceLineNo">282</span>            rng.nextLong();<a name="line.282"></a>
 <span class="sourceLineNo">283</span>            iseed += storm.hash(rng.state);<a name="line.283"></a>
@@ -302,135 +302,155 @@
 <span class="sourceLineNo">294</span>    }<a name="line.294"></a>
 <span class="sourceLineNo">295</span><a name="line.295"></a>
 <span class="sourceLineNo">296</span><a name="line.296"></a>
-<span class="sourceLineNo">297</span>    public long doFalcon()<a name="line.297"></a>
+<span class="sourceLineNo">297</span>    public long doChariotInt()<a name="line.297"></a>
 <span class="sourceLineNo">298</span>    {<a name="line.298"></a>
-<span class="sourceLineNo">299</span>        LongPeriodRNG rng = new LongPeriodRNG(seed);<a name="line.299"></a>
-<span class="sourceLineNo">300</span><a name="line.300"></a>
+<span class="sourceLineNo">299</span>        final LongPeriodRNG rng = new LongPeriodRNG(iseed);<a name="line.299"></a>
+<span class="sourceLineNo">300</span>        final CrossHash.Chariot chariot = CrossHash.Chariot.chi;<a name="line.300"></a>
 <span class="sourceLineNo">301</span>        for (int i = 0; i &lt; 1000000; i++) {<a name="line.301"></a>
 <span class="sourceLineNo">302</span>            rng.nextLong();<a name="line.302"></a>
-<span class="sourceLineNo">303</span>            seed += CrossHash.Falcon.hash64(rng.state);<a name="line.303"></a>
+<span class="sourceLineNo">303</span>            iseed += chariot.hash(rng.state);<a name="line.303"></a>
 <span class="sourceLineNo">304</span>        }<a name="line.304"></a>
-<span class="sourceLineNo">305</span>        return seed;<a name="line.305"></a>
+<span class="sourceLineNo">305</span>        return iseed;<a name="line.305"></a>
 <span class="sourceLineNo">306</span>    }<a name="line.306"></a>
 <span class="sourceLineNo">307</span><a name="line.307"></a>
 <span class="sourceLineNo">308</span>    @Benchmark<a name="line.308"></a>
 <span class="sourceLineNo">309</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.309"></a>
 <span class="sourceLineNo">310</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.310"></a>
-<span class="sourceLineNo">311</span>    public void measureFalcon() throws InterruptedException {<a name="line.311"></a>
-<span class="sourceLineNo">312</span>        seed = 9000;<a name="line.312"></a>
-<span class="sourceLineNo">313</span>        doFalcon();<a name="line.313"></a>
+<span class="sourceLineNo">311</span>    public void measureChariotInt() throws InterruptedException {<a name="line.311"></a>
+<span class="sourceLineNo">312</span>        iseed = 9000;<a name="line.312"></a>
+<span class="sourceLineNo">313</span>        doChariotInt();<a name="line.313"></a>
 <span class="sourceLineNo">314</span>    }<a name="line.314"></a>
 <span class="sourceLineNo">315</span><a name="line.315"></a>
-<span class="sourceLineNo">316</span>    public long doFalconInt()<a name="line.316"></a>
-<span class="sourceLineNo">317</span>    {<a name="line.317"></a>
-<span class="sourceLineNo">318</span>        LongPeriodRNG rng = new LongPeriodRNG(iseed);<a name="line.318"></a>
-<span class="sourceLineNo">319</span><a name="line.319"></a>
-<span class="sourceLineNo">320</span>        for (int i = 0; i &lt; 1000000; i++) {<a name="line.320"></a>
-<span class="sourceLineNo">321</span>            rng.nextLong();<a name="line.321"></a>
-<span class="sourceLineNo">322</span>            iseed += CrossHash.Falcon.hash(rng.state);<a name="line.322"></a>
-<span class="sourceLineNo">323</span>        }<a name="line.323"></a>
-<span class="sourceLineNo">324</span>        return iseed;<a name="line.324"></a>
-<span class="sourceLineNo">325</span>    }<a name="line.325"></a>
-<span class="sourceLineNo">326</span><a name="line.326"></a>
-<span class="sourceLineNo">327</span>    @Benchmark<a name="line.327"></a>
-<span class="sourceLineNo">328</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.328"></a>
-<span class="sourceLineNo">329</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.329"></a>
-<span class="sourceLineNo">330</span>    public void measureFalconInt() throws InterruptedException {<a name="line.330"></a>
-<span class="sourceLineNo">331</span>        iseed = 9000;<a name="line.331"></a>
-<span class="sourceLineNo">332</span>        doFalconInt();<a name="line.332"></a>
-<span class="sourceLineNo">333</span>    }<a name="line.333"></a>
-<span class="sourceLineNo">334</span><a name="line.334"></a>
-<span class="sourceLineNo">335</span>    public long doWisp()<a name="line.335"></a>
-<span class="sourceLineNo">336</span>    {<a name="line.336"></a>
-<span class="sourceLineNo">337</span>        LongPeriodRNG rng = new LongPeriodRNG(seed);<a name="line.337"></a>
-<span class="sourceLineNo">338</span><a name="line.338"></a>
-<span class="sourceLineNo">339</span>        for (int i = 0; i &lt; 1000000; i++) {<a name="line.339"></a>
-<span class="sourceLineNo">340</span>            rng.nextLong();<a name="line.340"></a>
-<span class="sourceLineNo">341</span>            seed += CrossHash.Wisp.hash64(rng.state);<a name="line.341"></a>
-<span class="sourceLineNo">342</span>        }<a name="line.342"></a>
-<span class="sourceLineNo">343</span>        return seed;<a name="line.343"></a>
-<span class="sourceLineNo">344</span>    }<a name="line.344"></a>
-<span class="sourceLineNo">345</span><a name="line.345"></a>
-<span class="sourceLineNo">346</span>    @Benchmark<a name="line.346"></a>
-<span class="sourceLineNo">347</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.347"></a>
-<span class="sourceLineNo">348</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.348"></a>
-<span class="sourceLineNo">349</span>    public void measureWisp() throws InterruptedException {<a name="line.349"></a>
-<span class="sourceLineNo">350</span>        seed = 9000;<a name="line.350"></a>
-<span class="sourceLineNo">351</span>        doWisp();<a name="line.351"></a>
-<span class="sourceLineNo">352</span>    }<a name="line.352"></a>
-<span class="sourceLineNo">353</span><a name="line.353"></a>
-<span class="sourceLineNo">354</span>    public long doWispInt()<a name="line.354"></a>
-<span class="sourceLineNo">355</span>    {<a name="line.355"></a>
-<span class="sourceLineNo">356</span>        LongPeriodRNG rng = new LongPeriodRNG(iseed);<a name="line.356"></a>
-<span class="sourceLineNo">357</span><a name="line.357"></a>
-<span class="sourceLineNo">358</span>        for (int i = 0; i &lt; 1000000; i++) {<a name="line.358"></a>
-<span class="sourceLineNo">359</span>            rng.nextLong();<a name="line.359"></a>
-<span class="sourceLineNo">360</span>            iseed += CrossHash.Wisp.hash(rng.state);<a name="line.360"></a>
-<span class="sourceLineNo">361</span>        }<a name="line.361"></a>
-<span class="sourceLineNo">362</span>        return iseed;<a name="line.362"></a>
-<span class="sourceLineNo">363</span>    }<a name="line.363"></a>
-<span class="sourceLineNo">364</span><a name="line.364"></a>
-<span class="sourceLineNo">365</span>    @Benchmark<a name="line.365"></a>
-<span class="sourceLineNo">366</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.366"></a>
-<span class="sourceLineNo">367</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.367"></a>
-<span class="sourceLineNo">368</span>    public void measureWispInt() throws InterruptedException {<a name="line.368"></a>
-<span class="sourceLineNo">369</span>        iseed = 9000;<a name="line.369"></a>
-<span class="sourceLineNo">370</span>        doWispInt();<a name="line.370"></a>
-<span class="sourceLineNo">371</span>    }<a name="line.371"></a>
-<span class="sourceLineNo">372</span><a name="line.372"></a>
-<span class="sourceLineNo">373</span>    public long doControl()<a name="line.373"></a>
-<span class="sourceLineNo">374</span>    {<a name="line.374"></a>
-<span class="sourceLineNo">375</span>        LongPeriodRNG rng = new LongPeriodRNG(iseed);<a name="line.375"></a>
-<span class="sourceLineNo">376</span><a name="line.376"></a>
-<span class="sourceLineNo">377</span>        for (int i = 0; i &lt; 1000000; i++) {<a name="line.377"></a>
-<span class="sourceLineNo">378</span>            iseed += rng.nextLong();<a name="line.378"></a>
-<span class="sourceLineNo">379</span>        }<a name="line.379"></a>
-<span class="sourceLineNo">380</span>        return iseed;<a name="line.380"></a>
-<span class="sourceLineNo">381</span>    }<a name="line.381"></a>
-<span class="sourceLineNo">382</span><a name="line.382"></a>
-<span class="sourceLineNo">383</span>    @Benchmark<a name="line.383"></a>
-<span class="sourceLineNo">384</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.384"></a>
-<span class="sourceLineNo">385</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.385"></a>
-<span class="sourceLineNo">386</span>    public void measureControl() throws InterruptedException {<a name="line.386"></a>
-<span class="sourceLineNo">387</span>        iseed = 9000;<a name="line.387"></a>
-<span class="sourceLineNo">388</span>        doControl();<a name="line.388"></a>
-<span class="sourceLineNo">389</span>    }<a name="line.389"></a>
-<span class="sourceLineNo">390</span><a name="line.390"></a>
-<span class="sourceLineNo">391</span><a name="line.391"></a>
+<span class="sourceLineNo">316</span><a name="line.316"></a>
+<span class="sourceLineNo">317</span>    public long doFalcon()<a name="line.317"></a>
+<span class="sourceLineNo">318</span>    {<a name="line.318"></a>
+<span class="sourceLineNo">319</span>        final LongPeriodRNG rng = new LongPeriodRNG(seed);<a name="line.319"></a>
+<span class="sourceLineNo">320</span><a name="line.320"></a>
+<span class="sourceLineNo">321</span>        for (int i = 0; i &lt; 1000000; i++) {<a name="line.321"></a>
+<span class="sourceLineNo">322</span>            rng.nextLong();<a name="line.322"></a>
+<span class="sourceLineNo">323</span>            seed += CrossHash.Falcon.hash64(rng.state);<a name="line.323"></a>
+<span class="sourceLineNo">324</span>        }<a name="line.324"></a>
+<span class="sourceLineNo">325</span>        return seed;<a name="line.325"></a>
+<span class="sourceLineNo">326</span>    }<a name="line.326"></a>
+<span class="sourceLineNo">327</span><a name="line.327"></a>
+<span class="sourceLineNo">328</span>    @Benchmark<a name="line.328"></a>
+<span class="sourceLineNo">329</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.329"></a>
+<span class="sourceLineNo">330</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.330"></a>
+<span class="sourceLineNo">331</span>    public void measureFalcon() throws InterruptedException {<a name="line.331"></a>
+<span class="sourceLineNo">332</span>        seed = 9000;<a name="line.332"></a>
+<span class="sourceLineNo">333</span>        doFalcon();<a name="line.333"></a>
+<span class="sourceLineNo">334</span>    }<a name="line.334"></a>
+<span class="sourceLineNo">335</span><a name="line.335"></a>
+<span class="sourceLineNo">336</span>    public long doFalconInt()<a name="line.336"></a>
+<span class="sourceLineNo">337</span>    {<a name="line.337"></a>
+<span class="sourceLineNo">338</span>        final LongPeriodRNG rng = new LongPeriodRNG(iseed);<a name="line.338"></a>
+<span class="sourceLineNo">339</span><a name="line.339"></a>
+<span class="sourceLineNo">340</span>        for (int i = 0; i &lt; 1000000; i++) {<a name="line.340"></a>
+<span class="sourceLineNo">341</span>            rng.nextLong();<a name="line.341"></a>
+<span class="sourceLineNo">342</span>            iseed += CrossHash.Falcon.hash(rng.state);<a name="line.342"></a>
+<span class="sourceLineNo">343</span>        }<a name="line.343"></a>
+<span class="sourceLineNo">344</span>        return iseed;<a name="line.344"></a>
+<span class="sourceLineNo">345</span>    }<a name="line.345"></a>
+<span class="sourceLineNo">346</span><a name="line.346"></a>
+<span class="sourceLineNo">347</span>    @Benchmark<a name="line.347"></a>
+<span class="sourceLineNo">348</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.348"></a>
+<span class="sourceLineNo">349</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.349"></a>
+<span class="sourceLineNo">350</span>    public void measureFalconInt() throws InterruptedException {<a name="line.350"></a>
+<span class="sourceLineNo">351</span>        iseed = 9000;<a name="line.351"></a>
+<span class="sourceLineNo">352</span>        doFalconInt();<a name="line.352"></a>
+<span class="sourceLineNo">353</span>    }<a name="line.353"></a>
+<span class="sourceLineNo">354</span><a name="line.354"></a>
+<span class="sourceLineNo">355</span>    public long doWisp()<a name="line.355"></a>
+<span class="sourceLineNo">356</span>    {<a name="line.356"></a>
+<span class="sourceLineNo">357</span>        final LongPeriodRNG rng = new LongPeriodRNG(seed);<a name="line.357"></a>
+<span class="sourceLineNo">358</span><a name="line.358"></a>
+<span class="sourceLineNo">359</span>        for (int i = 0; i &lt; 1000000; i++) {<a name="line.359"></a>
+<span class="sourceLineNo">360</span>            rng.nextLong();<a name="line.360"></a>
+<span class="sourceLineNo">361</span>            seed += CrossHash.Wisp.hash64(rng.state);<a name="line.361"></a>
+<span class="sourceLineNo">362</span>        }<a name="line.362"></a>
+<span class="sourceLineNo">363</span>        return seed;<a name="line.363"></a>
+<span class="sourceLineNo">364</span>    }<a name="line.364"></a>
+<span class="sourceLineNo">365</span><a name="line.365"></a>
+<span class="sourceLineNo">366</span>    @Benchmark<a name="line.366"></a>
+<span class="sourceLineNo">367</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.367"></a>
+<span class="sourceLineNo">368</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.368"></a>
+<span class="sourceLineNo">369</span>    public void measureWisp() throws InterruptedException {<a name="line.369"></a>
+<span class="sourceLineNo">370</span>        seed = 9000;<a name="line.370"></a>
+<span class="sourceLineNo">371</span>        doWisp();<a name="line.371"></a>
+<span class="sourceLineNo">372</span>    }<a name="line.372"></a>
+<span class="sourceLineNo">373</span><a name="line.373"></a>
+<span class="sourceLineNo">374</span>    public long doWispInt()<a name="line.374"></a>
+<span class="sourceLineNo">375</span>    {<a name="line.375"></a>
+<span class="sourceLineNo">376</span>        final LongPeriodRNG rng = new LongPeriodRNG(iseed);<a name="line.376"></a>
+<span class="sourceLineNo">377</span><a name="line.377"></a>
+<span class="sourceLineNo">378</span>        for (int i = 0; i &lt; 1000000; i++) {<a name="line.378"></a>
+<span class="sourceLineNo">379</span>            rng.nextLong();<a name="line.379"></a>
+<span class="sourceLineNo">380</span>            iseed += CrossHash.Wisp.hash(rng.state);<a name="line.380"></a>
+<span class="sourceLineNo">381</span>        }<a name="line.381"></a>
+<span class="sourceLineNo">382</span>        return iseed;<a name="line.382"></a>
+<span class="sourceLineNo">383</span>    }<a name="line.383"></a>
+<span class="sourceLineNo">384</span><a name="line.384"></a>
+<span class="sourceLineNo">385</span>    @Benchmark<a name="line.385"></a>
+<span class="sourceLineNo">386</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.386"></a>
+<span class="sourceLineNo">387</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.387"></a>
+<span class="sourceLineNo">388</span>    public void measureWispInt() throws InterruptedException {<a name="line.388"></a>
+<span class="sourceLineNo">389</span>        iseed = 9000;<a name="line.389"></a>
+<span class="sourceLineNo">390</span>        doWispInt();<a name="line.390"></a>
+<span class="sourceLineNo">391</span>    }<a name="line.391"></a>
 <span class="sourceLineNo">392</span><a name="line.392"></a>
-<span class="sourceLineNo">393</span>    /*<a name="line.393"></a>
-<span class="sourceLineNo">394</span>     * ============================== HOW TO RUN THIS TEST: ====================================<a name="line.394"></a>
-<span class="sourceLineNo">395</span>     *<a name="line.395"></a>
-<span class="sourceLineNo">396</span>     * You are expected to see the different run modes for the same benchmark.<a name="line.396"></a>
-<span class="sourceLineNo">397</span>     * Note the units are different, scores are consistent with each other.<a name="line.397"></a>
-<span class="sourceLineNo">398</span>     *<a name="line.398"></a>
-<span class="sourceLineNo">399</span>     * You can run this test:<a name="line.399"></a>
-<span class="sourceLineNo">400</span>     *<a name="line.400"></a>
-<span class="sourceLineNo">401</span>     * a) Via the command line from the squidlib-performance module's root folder:<a name="line.401"></a>
-<span class="sourceLineNo">402</span>     *    $ mvn clean install<a name="line.402"></a>
-<span class="sourceLineNo">403</span>     *    $ java -jar target/benchmarks.jar HashBenchmark -wi 8 -i 8 -f 1<a name="line.403"></a>
-<span class="sourceLineNo">404</span>     *<a name="line.404"></a>
-<span class="sourceLineNo">405</span>     *    (we requested 8 warmup/measurement iterations, single fork)<a name="line.405"></a>
-<span class="sourceLineNo">406</span>     *<a name="line.406"></a>
-<span class="sourceLineNo">407</span>     * b) Via the Java API:<a name="line.407"></a>
-<span class="sourceLineNo">408</span>     *    (see the JMH homepage for possible caveats when running from IDE:<a name="line.408"></a>
-<span class="sourceLineNo">409</span>     *      http://openjdk.java.net/projects/code-tools/jmh/)<a name="line.409"></a>
-<span class="sourceLineNo">410</span>     */<a name="line.410"></a>
+<span class="sourceLineNo">393</span>    public long doControl()<a name="line.393"></a>
+<span class="sourceLineNo">394</span>    {<a name="line.394"></a>
+<span class="sourceLineNo">395</span>        final LongPeriodRNG rng = new LongPeriodRNG(iseed);<a name="line.395"></a>
+<span class="sourceLineNo">396</span><a name="line.396"></a>
+<span class="sourceLineNo">397</span>        for (int i = 0; i &lt; 1000000; i++) {<a name="line.397"></a>
+<span class="sourceLineNo">398</span>            iseed += rng.nextLong();<a name="line.398"></a>
+<span class="sourceLineNo">399</span>        }<a name="line.399"></a>
+<span class="sourceLineNo">400</span>        return iseed;<a name="line.400"></a>
+<span class="sourceLineNo">401</span>    }<a name="line.401"></a>
+<span class="sourceLineNo">402</span><a name="line.402"></a>
+<span class="sourceLineNo">403</span>    @Benchmark<a name="line.403"></a>
+<span class="sourceLineNo">404</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.404"></a>
+<span class="sourceLineNo">405</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.405"></a>
+<span class="sourceLineNo">406</span>    public void measureControl() throws InterruptedException {<a name="line.406"></a>
+<span class="sourceLineNo">407</span>        iseed = 9000;<a name="line.407"></a>
+<span class="sourceLineNo">408</span>        doControl();<a name="line.408"></a>
+<span class="sourceLineNo">409</span>    }<a name="line.409"></a>
+<span class="sourceLineNo">410</span><a name="line.410"></a>
 <span class="sourceLineNo">411</span><a name="line.411"></a>
-<span class="sourceLineNo">412</span>    public static void main(String[] args) throws RunnerException {<a name="line.412"></a>
-<span class="sourceLineNo">413</span>        Options opt = new OptionsBuilder()<a name="line.413"></a>
-<span class="sourceLineNo">414</span>                .include(HashBenchmark.class.getSimpleName())<a name="line.414"></a>
-<span class="sourceLineNo">415</span>                .timeout(TimeValue.seconds(60))<a name="line.415"></a>
-<span class="sourceLineNo">416</span>                .warmupIterations(8)<a name="line.416"></a>
-<span class="sourceLineNo">417</span>                .measurementIterations(8)<a name="line.417"></a>
-<span class="sourceLineNo">418</span>                .forks(1)<a name="line.418"></a>
-<span class="sourceLineNo">419</span>                .build();<a name="line.419"></a>
-<span class="sourceLineNo">420</span><a name="line.420"></a>
-<span class="sourceLineNo">421</span>        new Runner(opt).run();<a name="line.421"></a>
-<span class="sourceLineNo">422</span>    }<a name="line.422"></a>
-<span class="sourceLineNo">423</span><a name="line.423"></a>
-<span class="sourceLineNo">424</span><a name="line.424"></a>
-<span class="sourceLineNo">425</span>}<a name="line.425"></a>
+<span class="sourceLineNo">412</span><a name="line.412"></a>
+<span class="sourceLineNo">413</span>    /*<a name="line.413"></a>
+<span class="sourceLineNo">414</span>     * ============================== HOW TO RUN THIS TEST: ====================================<a name="line.414"></a>
+<span class="sourceLineNo">415</span>     *<a name="line.415"></a>
+<span class="sourceLineNo">416</span>     * You are expected to see the different run modes for the same benchmark.<a name="line.416"></a>
+<span class="sourceLineNo">417</span>     * Note the units are different, scores are consistent with each other.<a name="line.417"></a>
+<span class="sourceLineNo">418</span>     *<a name="line.418"></a>
+<span class="sourceLineNo">419</span>     * You can run this test:<a name="line.419"></a>
+<span class="sourceLineNo">420</span>     *<a name="line.420"></a>
+<span class="sourceLineNo">421</span>     * a) Via the command line from the squidlib-performance module's root folder:<a name="line.421"></a>
+<span class="sourceLineNo">422</span>     *    $ mvn clean install<a name="line.422"></a>
+<span class="sourceLineNo">423</span>     *    $ java -jar target/benchmarks.jar HashBenchmark -wi 8 -i 8 -f 1<a name="line.423"></a>
+<span class="sourceLineNo">424</span>     *<a name="line.424"></a>
+<span class="sourceLineNo">425</span>     *    (we requested 8 warmup/measurement iterations, single fork)<a name="line.425"></a>
+<span class="sourceLineNo">426</span>     *<a name="line.426"></a>
+<span class="sourceLineNo">427</span>     * b) Via the Java API:<a name="line.427"></a>
+<span class="sourceLineNo">428</span>     *    (see the JMH homepage for possible caveats when running from IDE:<a name="line.428"></a>
+<span class="sourceLineNo">429</span>     *      http://openjdk.java.net/projects/code-tools/jmh/)<a name="line.429"></a>
+<span class="sourceLineNo">430</span>     */<a name="line.430"></a>
+<span class="sourceLineNo">431</span><a name="line.431"></a>
+<span class="sourceLineNo">432</span>    public static void main(String[] args) throws RunnerException {<a name="line.432"></a>
+<span class="sourceLineNo">433</span>        Options opt = new OptionsBuilder()<a name="line.433"></a>
+<span class="sourceLineNo">434</span>                .include(HashBenchmark.class.getSimpleName())<a name="line.434"></a>
+<span class="sourceLineNo">435</span>                .timeout(TimeValue.seconds(60))<a name="line.435"></a>
+<span class="sourceLineNo">436</span>                .warmupIterations(8)<a name="line.436"></a>
+<span class="sourceLineNo">437</span>                .measurementIterations(8)<a name="line.437"></a>
+<span class="sourceLineNo">438</span>                .forks(1)<a name="line.438"></a>
+<span class="sourceLineNo">439</span>                .build();<a name="line.439"></a>
+<span class="sourceLineNo">440</span><a name="line.440"></a>
+<span class="sourceLineNo">441</span>        new Runner(opt).run();<a name="line.441"></a>
+<span class="sourceLineNo">442</span>    }<a name="line.442"></a>
+<span class="sourceLineNo">443</span><a name="line.443"></a>
+<span class="sourceLineNo">444</span><a name="line.444"></a>
+<span class="sourceLineNo">445</span>}<a name="line.445"></a>
 
 
 

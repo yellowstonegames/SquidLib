@@ -26,7 +26,7 @@ public class XoRoRNG implements RandomnessSource {
     private static final long FLOAT_MASK = (1L << 24) - 1;
     private static final double NORM_24 = 1. / (1L << 24);
 
-	private static final long serialVersionUID = 1018744536171610261L;
+	private static final long serialVersionUID = 1018744536171610262L;
 
     private long state0, state1;
 
@@ -158,7 +158,7 @@ public class XoRoRNG implements RandomnessSource {
         z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
         z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
         state0 = z ^ (z >>> 31);
-        state += state0 + 0x9E3779B97F4A7C15L;
+        state += 0x9E3779B97F4A7C15L;
         z = state;
         z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
         z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;

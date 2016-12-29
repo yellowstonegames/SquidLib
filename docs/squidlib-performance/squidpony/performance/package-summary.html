@@ -215,7 +215,18 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../squidpony/performance/NoiseBenchmark.html" title="class in squidpony.performance">NoiseBenchmark</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Generating 64 million points of noise, each run
+ Benchmark                            Mode  Cnt     Score     Error  Units
+ NoiseBenchmark.measureMerlin2D       avgt    4   734.085 ±  58.096  ms/op // different type of result, not smooth
+ NoiseBenchmark.measureMerlin3D       avgt    4  1082.559 ± 143.629  ms/op // different type of result, not smooth
+ NoiseBenchmark.measurePerlin2D       avgt    4  2100.514 ±  55.326  ms/op
+ NoiseBenchmark.measurePerlin3D       avgt    4  3385.798 ±  77.035  ms/op
+ NoiseBenchmark.measureWhirling2D     avgt    4  1609.510 ± 134.049  ms/op // best smooth 2D
+ NoiseBenchmark.measureWhirling3D     avgt    4  2808.307 ± 121.119  ms/op // best smooth 3D
+ NoiseBenchmark.measureWhirlingAlt2D  avgt    4  1758.283 ± 117.308  ms/op
+ NoiseBenchmark.measureWhirlingAlt3D  avgt    4  2895.686 ±  98.599  ms/op</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../squidpony/performance/RNGBenchmark.html" title="class in squidpony.performance">RNGBenchmark</a></td>

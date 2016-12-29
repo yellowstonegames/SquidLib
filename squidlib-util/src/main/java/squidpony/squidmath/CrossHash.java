@@ -2235,5 +2235,420 @@ public class CrossHash {
             return (result ^ 0x62E2AC0D * data.length);
         }
     }
-}
 
+    /**
+     * Strongly universal hashing based loosely on Daniel Lemire's (Apache-licensed) code and paper, available at
+     * https://github.com/lemire/StronglyUniversalStringHashing . This should have among the best statistical qualities
+     * of any of these hashes while being fairly fast. It is like {@link Storm} in that you need to instantiate a
+     * Chariot object to use its hashing functions, but unlike Storm's single long it uses to salt the hash, these
+     * objects have a somewhat-large, expansible cache of random numbers they use to modify every result differently
+     * based on its position in the input array. The cache's size is related to the largest array, String, or similar
+     * sequence that this has been required to hash, and the cache's size should be about 4 bytes per byte that needs to
+     * be hashed in a single input (so hashing only 16-byte arrays, of any number of such arrays, would require 64 bytes
+     * of cache). Technically, only slightly more than 2 bytes per byte are required, but this caches more random
+     * numbers in advance to speed up expected larger inputs. Only produces 32-bit hashes because of constraints on this
+     * strongly universal hash algorithm; you could create two or more of these with different seeds and run them on the
+     * same inputs to get more than 32 bits, although that would be rather slow.
+     * <br>
+     * For 32-bit hash functions where the function can be altered by a salt, CrossHash provides {@link Storm} and now
+     * Chariot, and assuming there aren't bugs in Chariot, this class could be preferable because it has slightly better
+     * performance and the salt is a less-predictable 128 bits instead of 64 bits. If you need 64-bit hashes, you should
+     * use Storm instead unless you want to chain together two 32-bit hashes from Chariot (with 256 bits of salt).
+     * <br>
+     * Mostly fails visual testing with noticeable patterns based on the inputs as coordinates; for most String or array
+     * data this doesn't matter, but it may matter a lot if you hash nearby points and expect very different outputs.
+     * Storm does not fail visual testing. Chariot doesn't totally fail visual testing, though, since different salts
+     * produce different patterns.
+     */
+    @Beta
+    public static class Chariot implements Serializable
+    {
+        private static final long serialVersionUID = 3152426757973945155L;
+
+        private final long $alt0, $alt1;
+
+        private int top;
+
+        private transient long $tate0, $tate1;
+
+        private transient long[] $tore = null;
+
+        public Chariot()
+        {
+            this(0L);
+        }
+
+        public Chariot(final CharSequence alteration)
+        {
+            this(Falcon.hash64(alteration));
+        }
+        public Chariot(final long alteration0, final long alteration1)
+        {
+            $alt0 = alteration0;
+            $alt1 = alteration1;
+            expand(32);
+        }
+        public Chariot(final long alteration)
+        {
+            long state = alteration + 0x9E3779B97F4A7C15L,
+                    z = state;
+            z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
+            z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
+            z ^= (z >>> 31);
+            $alt0 = z + 191 - Long.bitCount(z);
+            state += 0x9E3779B97F4A7C15L;
+            z = state;
+            z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
+            z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
+            z ^= (z >>> 31);
+            $alt1 = z + 191 - Long.bitCount(z);
+            expand(32);
+        }
+
+        private void expand(final int amount) {
+            if(amount <= 0)
+                return;
+            int done;
+            long z;
+            if ($tore == null) {
+                top = 32 + amount;
+                $tore = new long[top];
+                $tate0 = $alt0;
+                $tate1 = $alt1;
+                done = 0;
+            }
+            else
+            {
+                done = $tore.length;
+                top = done + amount;
+                long[] ls = new long[top];
+                System.arraycopy($tore, 0, ls, 0, done);
+                $tore = ls;
+            }
+            long s1;
+            for (; done < top; done++) {
+                final long s0 = $tate0;
+                s1 = $tate1;
+                $tore[done] = s0 + s1;
+
+                s1 ^= s0;
+                $tate0 = Long.rotateLeft(s0, 55) ^ s1 ^ (s1 << 14); // a, b
+                $tate1 = Long.rotateLeft(s1, 36); // c
+            }
+        }
+
+        public static final Chariot alpha = new Chariot("alpha"), beta = new Chariot("beta"), gamma = new Chariot("gamma"),
+                delta = new Chariot("delta"), epsilon = new Chariot("epsilon"), zeta = new Chariot("zeta"),
+                eta = new Chariot("eta"), theta = new Chariot("theta"), iota = new Chariot("iota"),
+                kappa = new Chariot("kappa"), lambda = new Chariot("lambda"), mu = new Chariot("mu"),
+                nu = new Chariot("nu"), xi = new Chariot("xi"), omicron = new Chariot("omicron"), pi = new Chariot("pi"),
+                rho = new Chariot("rho"), sigma = new Chariot("sigma"), tau = new Chariot("tau"),
+                upsilon = new Chariot("upsilon"), phi = new Chariot("phi"), chi = new Chariot("chi"), psi = new Chariot("psi"),
+                omega = new Chariot("omega");
+        public static final Chariot[] predefined = new Chariot[]{alpha, beta, gamma, delta, epsilon, zeta, eta, theta, iota,
+                kappa, lambda, mu, nu, xi, omicron, pi, rho, sigma, tau, upsilon, phi, chi, psi, omega};
+
+
+        public int hash(final boolean[] data) {
+            if (data == null)
+                return 0;
+            final int limit = data.length;
+            if((limit >> 5) + 3 > top)
+                expand(top << 1 < (limit >> 5) + 3 ? (limit >> 5) + 3 : top);
+            long sum = $tore[0], t = 0L;
+            int i = 0, ii = 0;
+            for (; i + 31 < limit; i += 32) {
+                sum += (t = (data[i] ? 0x00000001L : 0L) | (data[i+1] ? 0x00000002L : 0L)
+                        | (data[i+2] ? 0x00000004L : 0L) | (data[i+3] ? 0x00000008L : 0L)
+                        | (data[i+4] ? 0x00000010L : 0L) | (data[i+5] ? 0x00000020L : 0L)
+                        | (data[i+6] ? 0x00000040L : 0L) | (data[i+7] ? 0x00000080L : 0L)
+                        | (data[i+8] ? 0x00000100L : 0L) | (data[i+9] ? 0x00000200L : 0L)
+                        | (data[i+10] ? 0x00000400L : 0L) | (data[i+11] ? 0x00000800L : 0L)
+                        | (data[i+12] ? 0x00001000L : 0L) | (data[i+13] ? 0x00002000L : 0L)
+                        | (data[i+14] ? 0x00004000L : 0L) | (data[i+15] ? 0x00008000L : 0L)
+                        | (data[i+16] ? 0x00010000L : 0L) | (data[i+17] ? 0x00020000L : 0L)
+                        | (data[i+18] ? 0x00040000L : 0L) | (data[i+19] ? 0x00080000L : 0L)
+                        | (data[i+20] ? 0x00100000L : 0L) | (data[i+21] ? 0x00200000L : 0L)
+                        | (data[i+22] ? 0x00400000L : 0L) | (data[i+23] ? 0x00800000L : 0L)
+                        | (data[i+24] ? 0x01000000L : 0L) | (data[i+25] ? 0x02000000L : 0L)
+                        | (data[i+26] ? 0x04000000L : 0L) | (data[i+27] ? 0x08000000L : 0L)
+                        | (data[i+28] ? 0x10000000L : 0L) | (data[i+29] ? 0x20000000L : 0L)
+                        | (data[i+30] ? 0x40000000L : 0L) | (data[i+31] ? 0x80000000L : 0L)
+
+                ) * ($tore[++ii]);
+            }
+            if((limit & 31) != 0)
+            {
+                t = 0L;
+                for (int l = 0; l < (limit & 31); l++) {
+                    t |= data[i++] ? 1L << l : 0L;
+                }
+                if(t == 0) sum += $tore[++ii] ^ 0x632BE59BD9B4E019L;
+                else sum += t * ($tore[++ii]);
+            }
+            else if(limit > 0 && t == 0)
+                sum += $tore[ii] ^ 0x632BE59BD9B4E019L;
+            return (int) (sum + $tore[ii+1] >>> 32);
+        }
+        public int hash(final byte[] data) {
+            if (data == null)
+                return 0;
+            final int limit = data.length;
+            if((limit >> 2) + 3 > top)
+                expand(top << 1 < (limit >> 2) + 3 ? (limit >> 2) + 3 : top);
+            long sum = $tore[0], t = 0L;
+            int i = 0, ii = 0;
+            for (; i + 3 < limit; i += 4) {
+                sum += (t = (data[i] & 0xFFL) | (data[i+1] & 0xFFL) << 8
+                        | (data[i+2] & 0xFFL) << 16 | (data[i+3] & 0xFFL) << 24) * ($tore[++ii]);
+            }
+            if((limit & 3) != 0)
+            {
+                t = 0L;
+                for (int l = 0; l < (limit & 3); l++) {
+                    t |= (data[i++] & 0xFFL) << (l << 3);
+                }
+                if(t == 0) sum += $tore[++ii] ^ 0x632BE59BD9B4E019L;
+                else sum += t * ($tore[++ii]);
+            }
+            else if(limit > 0 && t == 0)
+                sum += $tore[ii] ^ 0x632BE59BD9B4E019L;
+            return (int) (sum + $tore[ii+1] >>> 32);
+        }
+
+        public int hash(final short[] data) {
+            if (data == null)
+                return 0;
+            final int limit = data.length;
+            if((limit >> 1) + 3 > top)
+                expand(top << 1 < (limit >> 1) + 3 ? (limit >> 1) + 3 : top);
+            long sum = $tore[0], t = 0L;
+            int i = 0, ii = 0;
+            for (; i + 1 < limit; i += 2) {
+                sum += (t = (data[i] & 0xFFFFL) | (data[i+1] & 0xFFFFL) << 16) * ($tore[++ii]);
+            }
+            if((limit & 1) != 0)
+            {
+                t = data[i] & 0xFFFFL;
+                if(t == 0) sum += $tore[++ii] ^ 0x632BE59BD9B4E019L;
+                else sum += t * ($tore[++ii]);
+            }
+            else if(limit > 0 && t == 0)
+                sum += $tore[ii] ^ 0x632BE59BD9B4E019L;
+            return (int) (sum + $tore[ii+1] >>> 32);
+        }
+
+        public int hash(final char[] data) {
+            if (data == null)
+                return 0;
+            final int limit = data.length;
+            if((limit >> 1) + 3 > top)
+                expand(top << 1 < (limit >> 1) + 3 ? (limit >> 1) + 3 : top);
+            long sum = $tore[0], t = 0L;
+            int i = 0, ii = 0;
+            for (; i + 1 < limit; i += 2) {
+                sum += (t = (data[i] & 0xFFFFL) | (data[i+1] & 0xFFFFL) << 16) * ($tore[++ii]);
+            }
+            if((limit & 1) != 0)
+            {
+                t = data[i] & 0xFFFFL;
+                if(t == 0) sum += $tore[++ii] ^ 0x632BE59BD9B4E019L;
+                else sum += t * ($tore[++ii]);
+            }
+            else if(limit > 0 && t == 0)
+                sum += $tore[ii] ^ 0x632BE59BD9B4E019L;
+            return (int) (sum + $tore[ii+1] >>> 32);
+        }
+
+        public int hash(final char[] data, final int start, final int end) {
+            if (data == null)
+                return 0;
+            final int limit = end - start;
+            if((limit >> 1) + 3 > top)
+                expand(top << 1 < (limit >> 1) + 3 ? (limit >> 1) + 3 : top);
+            long sum = $tore[0], t = 0L;
+            int i = start, ii = 0;
+            for (; i + 1 < end; i += 2) {
+                sum += (t = (data[i] & 0xFFFFL) | (data[i+1] & 0xFFFFL) << 16) * ($tore[++ii]);
+            }
+            if((limit & 1) != 0)
+            {
+                t = data[i] & 0xFFFFL;
+                if(t == 0) sum += $tore[++ii] ^ 0x632BE59BD9B4E019L;
+                else sum += t * ($tore[++ii]);
+            }
+            else if(limit > 0 && t == 0)
+                sum += $tore[ii] ^ 0x632BE59BD9B4E019L;
+            return (int) (sum + $tore[ii+1] >>> 32);
+        }
+
+        public int hash(final char[] data, final int start, final int end, final int step) {
+            if (data == null)
+                return 0;
+            final int limit = (end - start + step - 1) / step;
+            if((limit >> 1) + 3 > top)
+                expand(top << 1 < (limit >> 1) + 3 ? (limit >> 1) + 3 : top);
+            long sum = $tore[0], t = 0L;
+            int i = start, ii = 0;
+            for (; i + 1 < end; i += step<<1) {
+                sum += (t = (data[i] & 0xFFFFL) | (data[i+step] & 0xFFFFL) << 16) * ($tore[++ii]);
+            }
+            if((limit & 1) != 0)
+            {
+                t = data[i] & 0xFFFFL;
+                if(t == 0) sum += $tore[++ii] ^ 0x632BE59BD9B4E019L;
+                else sum += t * ($tore[++ii]);
+            }
+            else if(limit > 0 && t == 0)
+                sum += $tore[ii] ^ 0x632BE59BD9B4E019L;
+            return (int) (sum + $tore[ii+1] >>> 32);
+        }
+
+        public int hash(final int[] data) {
+            if (data == null)
+                return 0;
+            final int limit = data.length;
+            if(limit + 2 > top)
+                expand(top << 1 < limit + 2 ? limit + 2 : top);
+            long sum = $tore[0];
+            for (int i = 0; i < limit;) {
+                sum += (data[i] & 0xFFFFFFFFL) * ($tore[++i]);
+            }
+            if(limit > 0 && data[limit-1] == 0)
+                sum += $tore[limit] ^ 0x632BE59BD9B4E019L;
+            return (int) (sum + $tore[limit+1] >>> 32);
+        }
+
+        public int hash(final long[] data) {
+            if (data == null)
+                return 0;
+            final int limit = data.length;
+            if((limit << 1) + 2 > top)
+                expand(top << 1 < (limit << 1) + 2 ? (limit << 1) + 2 : top);
+            long sum = $tore[0], t = 0;
+            for (int i = 0, ii=1; i < limit;ii+=2) {
+                sum += ((t = data[i++]) & 0xFFFFFFFFL) * ($tore[ii]) + (t >>> 32) * ($tore[ii+1]);
+            }
+            if(limit > 0 && (t>>>32) == 0)
+                sum += $tore[limit] ^ 0x632BE59BD9B4E019L;
+            return (int) (sum + $tore[(limit<<1)+1] >>> 32);
+        }
+
+
+        public int hash(final float[] data) {
+            if (data == null)
+                return 0;
+            final int limit = data.length;
+            if(limit + 2 > top)
+                expand(top << 1 < limit + 2 ? limit + 2 : top);
+            long sum = $tore[0];
+            for (int i = 0; i < limit;) {
+                sum += (Float.floatToIntBits(data[i]) & 0xFFFFFFFFL) * ($tore[++i]);
+            }
+            if(limit > 0 && data[limit-1] == 0)
+                sum += $tore[limit] ^ 0x632BE59BD9B4E019L;
+            return (int) (sum + $tore[limit+1] >>> 32);
+        }
+
+        public int hash(final double[] data) {
+            if (data == null)
+                return 0;
+            final int limit = data.length;
+            if((limit << 1) + 2 > top)
+                expand(top << 1 < (limit << 1) + 2 ? (limit << 1) + 2 : top);
+            long sum = $tore[0], t = 0;
+            for (int i = 0, ii=1; i < limit;ii+=2) {
+                sum += ((t = Double.doubleToLongBits(data[i++])) & 0xFFFFFFFFL) * ($tore[ii]) + (t >>> 32) * ($tore[ii+1]);
+            }
+            if(limit > 0 && (t>>>32) == 0)
+                sum += $tore[limit] ^ 0x632BE59BD9B4E019L;
+            return (int) (sum + $tore[(limit<<1)+1] >>> 32);
+        }
+
+        public int hash(final CharSequence data) {
+            if (data == null)
+                return 0;
+            final int limit = data.length();
+            if((limit >> 1) + 3 > top)
+                expand(top << 1 < (limit >> 1) + 3 ? (limit >> 1) + 3 : top);
+            long sum = $tore[0], t = 0L;
+            int i = 0, ii = 0;
+            for (; i + 1 < limit; i += 2) {
+                sum += (t = (data.charAt(i) & 0xFFFFL) | (data.charAt(i+1) & 0xFFFFL) << 16) * ($tore[++ii]);
+            }
+            if((limit & 1) != 0)
+            {
+                t = data.charAt(i) & 0xFFFFL;
+                if(t == 0) sum += $tore[++ii] ^ 0x632BE59BD9B4E019L;
+                else sum += t * ($tore[++ii]);
+            }
+            else if(limit > 0 && t == 0)
+                sum += $tore[ii] ^ 0x632BE59BD9B4E019L;
+            return (int) (sum + $tore[ii+1] >>> 32);
+        }
+
+
+        public int hash(final char[][] data) {
+            if (data == null)
+                return 0;
+            final int limit = data.length;
+            if(limit + 2 > top)
+                expand(top << 1 < limit + 2 ? limit + 2 : top);
+            long sum = $tore[0];
+            for (int i = 0; i < limit;) {
+                sum += (hash(data[i]) & 0xFFFFFFFFL) * ($tore[++i]);
+            }
+            if(limit > 0 && data[limit-1] == null)
+                sum += $tore[limit] ^ 0x632BE59BD9B4E019L;
+            return (int) (sum + $tore[limit+1] >>> 32);
+        }
+
+        public int hash(final CharSequence[] data) {
+            if (data == null)
+                return 0;
+            final int limit = data.length;
+            if(limit + 2 > top)
+                expand(top << 1 < limit + 2 ? limit + 2 : top);
+            long sum = $tore[0];
+            for (int i = 0; i < limit;) {
+                sum += (hash(data[i]) & 0xFFFFFFFFL) * ($tore[++i]);
+            }
+            if(limit > 0 && data[limit-1] == null)
+                sum += $tore[limit] ^ 0x632BE59BD9B4E019L;
+            return (int) (sum + $tore[limit+1] >>> 32);
+        }
+
+        public int hash(final CharSequence[]... data) {
+            if (data == null)
+                return 0;
+            final int limit = data.length;
+            if(limit + 2 > top)
+                expand(top << 1 < limit + 2 ? limit + 2 : top);
+            long sum = $tore[0];
+            for (int i = 0; i < limit;) {
+                sum += (hash(data[i]) & 0xFFFFFFFFL) * ($tore[++i]);
+            }
+            if(limit > 0 && data[limit-1] == null)
+                sum += $tore[limit] ^ 0x632BE59BD9B4E019L;
+            return (int) (sum + $tore[limit+1] >>> 32);
+        }
+
+
+        public int hash(final Object[] data) {
+            if (data == null)
+                return 0;
+            final int limit = data.length;
+            if(limit + 2 > top)
+                expand(top << 1 < limit + 2 ? limit + 2 : top);
+            Object o;
+            long sum = $tore[0];
+            for (int i = 0; i < limit;) {
+                o = data[i];
+                sum += (o == null ? 0xFFFFFFFFL : (o.hashCode() & 0xFFFFFFFFL)) * ($tore[++i]);
+            }
+            if(limit > 0 && data[limit-1] == null)
+                sum += $tore[limit] ^ 0x632BE59BD9B4E019L;
+            return (int) (sum + $tore[limit+1] >>> 32);
+        }
+    }
+}
