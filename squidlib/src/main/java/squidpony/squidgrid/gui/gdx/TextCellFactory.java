@@ -131,6 +131,7 @@ public class TextCellFactory implements Disposable {
         //next.modifiedHeight = modifiedHeight;
         next.smoothingMultiplier = smoothingMultiplier;
         next.scc = scc;
+        next.directionGlyph = directionGlyph;
         if(initializedBySize)
             next.initBySize();
         else if(initializedByFont)

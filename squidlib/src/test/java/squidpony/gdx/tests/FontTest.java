@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,6 +16,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.squidgrid.gui.gdx.DefaultResources;
 import squidpony.squidgrid.gui.gdx.SquidPanel;
 import squidpony.squidgrid.gui.gdx.TextCellFactory;
+import squidpony.squidgrid.gui.gdx.TextPanel;
+
+import java.util.ArrayList;
 
 /**
  * Created by Tommy Ettinger on 12/27/2016.
@@ -48,13 +52,15 @@ public class FontTest extends ApplicationAdapter {
     private TextCellFactory[] factories;
     private SquidPanel display;
     private SquidPanel[] displays;
+    private TextPanel<Color> text;
+    private ArrayList<TextPanel<Color>> texts;
     private int index = 0;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
-        widths = new int[]{100, 95, 90, 110, 95, 50};
-        heights = new int[]{20, 21, 20, 28, 18, 20};
+        widths = new int[]{100, 95, 90, 110, 95, 50, 170, 200, 90};
+        heights = new int[]{20, 21, 20, 28, 18, 20, 25, 25, 25};
         factories = new TextCellFactory[]{
                 DefaultResources.getStretchableFont().width(13).height(30).initBySize(),
                 DefaultResources.getStretchableTypewriterFont().width(14).height(28).initBySize(),
@@ -62,6 +68,9 @@ public class FontTest extends ApplicationAdapter {
                 DefaultResources.getStretchableDejaVuFont().width(14).height(25).initBySize(),
                 DefaultResources.getStretchableSciFiFont().width(28).height(64).initBySize(),
                 DefaultResources.getStretchableSquareFont().width(17).height(17).initBySize(),
+                DefaultResources.getStretchableOrbitFont().initBySize(),
+                DefaultResources.getStretchablePrintFont().initBySize(),
+                DefaultResources.getStretchableCleanFont().initBySize(),
         };
         viewports = new Viewport[]{
                 new StretchViewport(factories[0].width() * widths[0], factories[0].height() * heights[0]),
@@ -70,6 +79,9 @@ public class FontTest extends ApplicationAdapter {
                 new StretchViewport(factories[3].width() * widths[3], factories[3].height() * heights[3]),
                 new StretchViewport(factories[4].width() * widths[4], factories[4].height() * heights[4]),
                 new StretchViewport(factories[5].width() * widths[5], factories[5].height() * heights[5]),
+                new StretchViewport(factories[6].width() * widths[6], factories[6].height() * heights[6]),
+                new StretchViewport(factories[7].width() * widths[7], factories[7].height() * heights[7]),
+                new StretchViewport(factories[8].width() * widths[8], factories[8].height() * heights[8]),
         };
         displays = new SquidPanel[]{
                 new SquidPanel(widths[0], heights[0], factories[0]),
@@ -78,7 +90,23 @@ public class FontTest extends ApplicationAdapter {
                 new SquidPanel(widths[3], heights[3], factories[3]),
                 new SquidPanel(widths[4], heights[4], factories[4]),
                 new SquidPanel(widths[5], heights[5], factories[5]),
+                new SquidPanel(widths[6], heights[6], factories[6]),
+                new SquidPanel(widths[7], heights[7], factories[7]),
+                new SquidPanel(widths[8], heights[8], factories[8]),
         };
+        final String[] samples = {"The quick brown fox jumps over the lazy dog.",
+                "HAMBURGEVONS",
+                "Black Sphinx Of Quartz: Judge Ye My Vow!"};
+        texts = new ArrayList<>(4);
+        text = new TextPanel<Color>(null, factories[6]);
+        text.init(totalWidth, totalHeight, Color.WHITE, samples);
+        texts.add(text);
+        text = new TextPanel<Color>(null, factories[7]);
+        text.init(totalWidth, totalHeight, Color.WHITE, samples);
+        texts.add(text);
+        text = new TextPanel<Color>(null, factories[8]);
+        text.init(totalWidth, totalHeight, Color.WHITE, samples);
+        texts.add(text);
         for (int i = 0; i < factories.length; i++) {
             tcf = factories[i];
             display = displays[i];
@@ -114,17 +142,27 @@ public class FontTest extends ApplicationAdapter {
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean keyUp(int keycode) {
-                tcf = factories[index = (index + 1) % factories.length];
+                index = ((index + 1) % 9);
                 viewport = viewports[index];
-                display = displays[index];
-                stage.clear();
-                stage.setViewport(viewport);
-                stage.addActor(display);
-                Gdx.graphics.setTitle("SquidLib Demo: Fonts, preview " + (index+1) + "/" + factories.length + " (press any key)");
+                if(index < 6) {
+                    tcf = factories[index];
+                    display = displays[index];
+                    stage.clear();
+                    stage.setViewport(viewport);
+                    stage.addActor(display);
+                }
+                else
+                {
+                    text = texts.get(index - 6);
+                    stage.clear();
+                    stage.setViewport(viewport);
+                    stage.addActor(text.getScrollPane());
+                }
+                Gdx.graphics.setTitle("SquidLib Demo: Fonts, preview " + (index+1) + "/" + viewports.length + " (press any key)");
                 return true;
             }
         });
-        Gdx.graphics.setTitle("SquidLib Demo: Fonts, preview " + (index+1) + "/" + factories.length + " (press any key)");
+        Gdx.graphics.setTitle("SquidLib Demo: Fonts, preview " + (index+1) + "/" + viewports.length + " (press any key)");
 
         stage.addActor(display);
     }
@@ -148,7 +186,7 @@ public class FontTest extends ApplicationAdapter {
     }
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "SquidLib Demo: Fonts, preview 1/6 (press any key)";
+        config.title = "SquidLib Demo: Fonts, preview 1/9 (press any key)";
         config.width = totalWidth = LwjglApplicationConfiguration.getDesktopDisplayMode().width - 10;
         config.height = totalHeight = LwjglApplicationConfiguration.getDesktopDisplayMode().height - 128;
         config.x = 0;
