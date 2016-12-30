@@ -258,7 +258,7 @@ public class HashBenchmark {
     public long doStorm()
     {
         final LongPeriodRNG rng = new LongPeriodRNG(seed);
-        final CrossHash.Storm storm = CrossHash.Storm.chi;
+        final CrossHash.Storm storm = CrossHash.Storm.mu;
         for (int i = 0; i < 1000000; i++) {
             rng.nextLong();
             seed += storm.hash64(rng.state);
@@ -277,7 +277,7 @@ public class HashBenchmark {
     public long doStormInt()
     {
         final LongPeriodRNG rng = new LongPeriodRNG(iseed);
-        final CrossHash.Storm storm = CrossHash.Storm.chi;
+        final CrossHash.Storm storm = CrossHash.Storm.mu;
         for (int i = 0; i < 1000000; i++) {
             rng.nextLong();
             iseed += storm.hash(rng.state);
@@ -297,7 +297,7 @@ public class HashBenchmark {
     public long doChariotInt()
     {
         final LongPeriodRNG rng = new LongPeriodRNG(iseed);
-        final CrossHash.Chariot chariot = CrossHash.Chariot.chi;
+        final CrossHash.Chariot chariot = CrossHash.Chariot.mu;
         for (int i = 0; i < 1000000; i++) {
             rng.nextLong();
             iseed += chariot.hash(rng.state);

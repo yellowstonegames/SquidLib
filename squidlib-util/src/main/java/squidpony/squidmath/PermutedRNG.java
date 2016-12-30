@@ -128,9 +128,8 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
 
         long p = state;
         p ^= p >>> (5 + (p >>> 59));
-        p *= 0xAEF17502108EF2D9L;
         state = state * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL;
-        return p ^ (p >>> 43);
+        return ((p *= 0xAEF17502108EF2D9L) >>> 43) ^ p;
     }
 
     /**
@@ -345,4 +344,15 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
         return "PermutedRNG with state 0x" + StringKit.hex(state) + 'L';
     }
 
+    public static long determine(long state)
+    {
+        state ^= state >>> (5 + (state >>> 59));
+        return ((state *= 0xAEF17502108EF2D9L) >>> 43) ^ state;
+    }
+
+    public static int determineBounded(long state, final int bound)
+    {
+        state ^= state >>> (5 + (state >>> 59));
+        return (int)((bound * ((((state *= 0xAEF17502108EF2D9L) >>> 43) ^ state) & 0x7FFFFFFFL)) >> 31);
+    }
 }
