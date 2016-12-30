@@ -1,13 +1,18 @@
-package squidpony.gdx.examples;
+package squidpony.gdx.tests;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.FakeLanguageGen;
 import squidpony.squidai.DijkstraMap;
@@ -21,11 +26,21 @@ import squidpony.squidmath.RNG;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class BasicDemo extends ApplicationAdapter {
-    SpriteBatch batch;
-
+/**
+ * Trying to test how SplitPane s from libGDX can be used to differentiate parts of the UI. Not currently working.
+ * Created by Tommy Ettinger on 12/29/2016.
+ */
+public class SplitDemo extends ApplicationAdapter {
+    private Stage stage;
+    private SpriteBatch batch;
     private RNG rng;
+    private Skin skin;
     private SquidLayers display;
+    private TextPanel<Color> messages;
+    private VerticalGroup images;
+    private TextureAtlas atlas;
+    private Array<TextureAtlas.AtlasRegion> regions;
+    private SplitPane innerSplit, outerSplit;
     private DungeonGenerator dungeonGen;
     private char[][] decoDungeon, bareDungeon, lineDungeon;
     private int[][] colorIndices, bgColorIndices;
@@ -39,7 +54,6 @@ public class BasicDemo extends ApplicationAdapter {
     private int cellHeight;
     private SquidInput input;
     private Color bgColor;
-    private Stage stage;
     private DijkstraMap playerToCursor;
     private Coord cursor, player;
     private ArrayList<Coord> toCursor;
@@ -72,26 +86,46 @@ public class BasicDemo extends ApplicationAdapter {
         cellHeight = 21;
         // gotta have a random number generator. We can seed an RNG with any long we want, or even a String.
         rng = new RNG("SquidLib!");
+        atlas = DefaultResources.getIconAtlas();
+        regions = atlas.getRegions();
 
         //Some classes in SquidLib need access to a batch to render certain things, so it's a good idea to have one.
         batch = new SpriteBatch();
         //Here we make sure our Stage, which holds any text-based grids we make, uses our Batch.
-        stage = new Stage(new StretchViewport(gridWidth * cellWidth, (gridHeight + 8) * cellHeight), batch);
-        // the font will try to load CM-Custom as an embedded bitmap font with a distance field effect.
-        // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
-        display = new SquidLayers(gridWidth, gridHeight + 8, cellWidth, cellHeight,
-                DefaultResources.getStretchableTypewriterFont());
+        stage = new Stage(new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()), batch);
+        display = new SquidLayers(gridWidth, gridHeight, cellWidth, cellHeight,
+                DefaultResources.getStretchableCodeFont());
+
+        /*
+        	default-vertical: { handle: default-splitpane-vertical },
+	default-horizontal: { handle: default-splitpane }
+
+         */
+        skin = new Skin(atlas);
+        SplitPane.SplitPaneStyle splitStyleV = new SplitPane.SplitPaneStyle(skin.getDrawable("default-splitpane-vertical")),
+                splitStyleH = new SplitPane.SplitPaneStyle(skin.getDrawable("default-splitpane"));
+        skin.add("default-vertical", splitStyleV);
+        skin.add("default-horizontal", splitStyleH);
+        List.ListStyle listStyle = new List.ListStyle(DefaultResources.getIncludedFont(), Color.PURPLE, Color.WHITE, skin.getDrawable("selection"));
+        skin.add("default", listStyle);
+
+        images = new VerticalGroup();
+        images.addActor(new Image(regions.get(rng.nextIntHasty(regions.size))));
+        images.addActor(new Image(regions.get(rng.nextIntHasty(regions.size))));
+        images.addActor(new Image(regions.get(rng.nextIntHasty(regions.size))));
+        images.addActor(new Image(regions.get(rng.nextIntHasty(regions.size))));
+        images.addActor(new Image(regions.get(rng.nextIntHasty(regions.size))));
+        images.addActor(new Image(regions.get(rng.nextIntHasty(regions.size))));
+        images.setSize(128, 250);
+        messages = new TextPanel<Color>(null, DefaultResources.getStretchablePrintFont());
+
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
         display.setTextSize(cellWidth, cellHeight + 1);
 
-        // this makes animations very fast, which is good for multi-cell movement but bad for attack animations.
-        display.setAnimationDuration(0.03f);
-
-        //These need to have their positions set before adding any entities if there is an offset involved.
-        //There is no offset used here, but it's still a good practice here to set positions early on.
-        display.setPosition(0, 0);
+        // this makes animations rather slow, which is good for attack animations.
+        display.setAnimationDuration(0.1f);
 
         //This uses the seeded RNG we made earlier to build a procedural dungeon using a method that takes rectangular
         //sections of pre-drawn dungeon and drops them into place in a tiling pattern. It makes good "ruined" dungeons.
@@ -168,6 +202,13 @@ public class BasicDemo extends ApplicationAdapter {
                                 .sentence(5, 10, new String[]{",", ",", ",", ";"},
                                 new String[]{".", ".", ".", "!", "?", "..."}, 0.2, gridWidth - 4),
                 };
+        messages.init(1000, 400, Color.WHITE,
+                lang[(langIndex) % lang.length],
+                lang[(langIndex + 1) % lang.length],
+                lang[(langIndex + 2) % lang.length],
+                lang[(langIndex + 3) % lang.length],
+                lang[(langIndex + 4) % lang.length],
+                lang[(langIndex + 5) % lang.length]);
 
         // this is a big one.
         // SquidInput can be constructed with a KeyHandler (which just processes specific keypresses), a SquidMouse
@@ -232,55 +273,66 @@ public class BasicDemo extends ApplicationAdapter {
                     }
                 }
             }
-        },
+        });//,
+        /*
                 //The second parameter passed to a SquidInput can be a SquidMouse, which takes mouse or touchscreen
                 //input and converts it to grid coordinates (here, a cell is 12 wide and 24 tall, so clicking at the
                 // pixel position 15,51 will pass screenX as 1 (since if you divide 15 by 12 and round down you get 1),
                 // and screenY as 2 (since 51 divided by 24 rounded down is 2)).
                 new SquidMouse(cellWidth, cellHeight, gridWidth, gridHeight, 0, 0, new InputAdapter() {
 
-            // if the user clicks and there are no awaitedMoves queued up, generate toCursor if it
-            // hasn't been generated already by mouseMoved, then copy it over to awaitedMoves.
-            @Override
-            public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-                if(awaitedMoves.isEmpty()) {
-                    if (toCursor.isEmpty()) {
-                        cursor = Coord.get(screenX, screenY);
-                        //This uses DijkstraMap.findPath to get a possibly long path from the current player position
-                        //to the position the user clicked on.
-                        toCursor = playerToCursor.findPath(100, null, null, player, cursor);
+                    // if the user clicks and there are no awaitedMoves queued up, generate toCursor if it
+                    // hasn't been generated already by mouseMoved, then copy it over to awaitedMoves.
+                    @Override
+                    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+                        if(awaitedMoves.isEmpty()) {
+                            if (toCursor.isEmpty()) {
+                                cursor = Coord.get(screenX, screenY);
+                                //This uses DijkstraMap.findPath to get a possibly long path from the current player position
+                                //to the position the user clicked on.
+                                toCursor = playerToCursor.findPath(100, null, null, player, cursor);
+                            }
+                            awaitedMoves = new ArrayList<>(toCursor);
+                        }
+                        return false;
                     }
-                    awaitedMoves = new ArrayList<>(toCursor);
-                }
-                return true;
-            }
 
-            @Override
-            public boolean touchDragged(int screenX, int screenY, int pointer) {
-                return mouseMoved(screenX, screenY);
-            }
+                    @Override
+                    public boolean touchDragged(int screenX, int screenY, int pointer) {
+                        return mouseMoved(screenX, screenY);
+                    }
 
-            // causes the path to the mouse position to become highlighted (toCursor contains a list of points that
-            // receive highlighting). Uses DijkstraMap.findPath() to find the path, which is surprisingly fast.
-            @Override
-            public boolean mouseMoved(int screenX, int screenY) {
-                if(!awaitedMoves.isEmpty())
-                    return false;
-                if(cursor.x == screenX && cursor.y == screenY)
-                {
-                    return false;
-                }
-                cursor = Coord.get(screenX, screenY);
-                toCursor = playerToCursor.findPath(100, null, null, player, cursor);
-                return false;
-            }
-        }));
+                    // causes the path to the mouse position to become highlighted (toCursor contains a list of points that
+                    // receive highlighting). Uses DijkstraMap.findPath() to find the path, which is surprisingly fast.
+                    @Override
+                    public boolean mouseMoved(int screenX, int screenY) {
+                        if(!awaitedMoves.isEmpty())
+                            return false;
+                        if(cursor.x == screenX && cursor.y == screenY)
+                        {
+                            return false;
+                        }
+                        cursor = Coord.get(screenX, screenY);
+                        toCursor = playerToCursor.findPath(100, null, null, player, cursor);
+                        return false;
+                    }
+                }));
+                */
+
+//        innerSplit = new SplitPane(new StretchContainer(display), new StretchContainer(images), false, skin);
+//
+//        outerSplit = new SplitPane(innerSplit, new StretchContainer(messages.getScrollPane()), true, skin);
+
+        innerSplit = new SplitPane(display, images, false, skin);
+
+        outerSplit = new SplitPane(innerSplit, messages.getScrollPane(), true, skin);
+
         //Setting the InputProcessor is ABSOLUTELY NEEDED TO HANDLE INPUT
         Gdx.input.setInputProcessor(new InputMultiplexer(stage, input));
         //You might be able to get by with the next line instead of the above line, but the former is preferred.
         //Gdx.input.setInputProcessor(input);
         // and then add display, our one visual component, to the list of things that act in Stage.
-        stage.addActor(display);
+        stage.addActor(outerSplit);
 
     }
     /**
@@ -322,10 +374,13 @@ public class BasicDemo extends ApplicationAdapter {
         Arrays.fill(spaceArray, ' ');
         String spaces = String.valueOf(spaceArray);
 
-        for (int i = 0; i < 6; i++) {
-            display.putString(0, gridHeight + i + 1, spaces, 0, 1);
-            display.putString(2, gridHeight + i + 1, lang[(langIndex + i) % lang.length], 0, 1);
-        }
+        messages.init(1000, 400, Color.WHITE,
+                lang[(langIndex) % lang.length],
+                lang[(langIndex + 1) % lang.length],
+                lang[(langIndex + 2) % lang.length],
+                lang[(langIndex + 3) % lang.length],
+                lang[(langIndex + 4) % lang.length],
+                lang[(langIndex + 5) % lang.length]);
     }
     @Override
     public void render () {
@@ -352,14 +407,27 @@ public class BasicDemo extends ApplicationAdapter {
             input.next();
         }
 
-        // stage has its own batch and must be explicitly told to draw(). this also causes it to act().
+        // stage has its own batch and must be explicitly told to draw().
         stage.draw();
+        stage.act();
     }
 
     @Override
-	public void resize(int width, int height) {
-		super.resize(width, height);
+    public void resize(int width, int height) {
+        super.resize(width, height);
         //very important to have the mouse behave correctly if the user fullscreens or resizes the game!
-		input.getMouse().reinitialize((float) width / this.gridWidth, (float)height / (this.gridHeight + 8), this.gridWidth, this.gridHeight, 0, 0);
-	}
+        input.getMouse().reinitialize((float) width / this.gridWidth, (float)height / (this.gridHeight), this.gridWidth, this.gridHeight, 0, 0);
+    }
+
+    public static void main (String[] arg) {
+        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+        config.title = "SquidLib Test: Split";
+        config.width = 1000;
+        config.height = 650;
+        config.addIcon("Tentacle-16.png", Files.FileType.Internal);
+        config.addIcon("Tentacle-32.png", Files.FileType.Internal);
+        config.addIcon("Tentacle-128.png", Files.FileType.Internal);
+        new LwjglApplication(new SplitDemo(), config);
+    }
 }
+

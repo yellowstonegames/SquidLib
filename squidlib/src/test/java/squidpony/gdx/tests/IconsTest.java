@@ -86,7 +86,6 @@ public class IconsTest extends ApplicationAdapter{
             things.put(points[i], ent);
             ent.actor.setUserObject(i);
         }
-
         batch = new SpriteBatch();
         stage = new Stage(new StretchViewport(gridWidth * cellWidth, gridHeight * cellHeight), batch);
         stage.addActor(layers);
