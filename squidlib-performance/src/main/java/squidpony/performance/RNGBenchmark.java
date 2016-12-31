@@ -31,7 +31,6 @@
 
 package squidpony.performance;
 
-import com.badlogic.gdx.math.RandomXS128;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Mode;
@@ -41,10 +40,11 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.openjdk.jmh.runner.options.TimeValue;
-import squidpony.squidmath.*;
+import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.PermutedRNG;
+import squidpony.squidmath.PintRNG;
+import squidpony.squidmath.RNG;
 
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -223,6 +223,28 @@ import java.util.concurrent.TimeUnit;
  * RNGBenchmark.measureXoRoInt      avgt    3  1382.232 ±  68.132  ms/op
  * RNGBenchmark.measureXoRoIntR     avgt    3  1458.964 ±  10.307  ms/op
  * RNGBenchmark.measureXoRoR        avgt    3  1249.812 ± 450.441  ms/op
+ *
+ * Benchmark                        Mode  Cnt     Score     Error  Units
+ * RNGBenchmark.measureGDX          avgt    5  1443.180 ±  21.341  ms/op
+ * RNGBenchmark.measureGDXInt       avgt    5  1389.316 ±  28.694  ms/op
+ * RNGBenchmark.measureLight        avgt    5  1322.170 ±  17.512  ms/op
+ * RNGBenchmark.measureLightInt     avgt    5  1321.347 ±   8.074  ms/op
+ * RNGBenchmark.measureLightIntR    avgt    5  1497.184 ±  63.809  ms/op
+ * RNGBenchmark.measureLightR       avgt    5  1319.403 ±  16.077  ms/op
+ * RNGBenchmark.measurePermuted     avgt    5  1678.603 ±  19.053  ms/op
+ * RNGBenchmark.measurePermutedInt  avgt    5  1759.054 ± 253.032  ms/op
+ * RNGBenchmark.measurePint         avgt    5  4433.747 ±  12.294  ms/op
+ * RNGBenchmark.measurePintInt      avgt    5  1788.244 ±  14.589  ms/op
+ * RNGBenchmark.measurePintIntR     avgt    5  1791.904 ±  36.237  ms/op
+ * RNGBenchmark.measurePintR        avgt    5  4581.224 ±  77.325  ms/op
+ * RNGBenchmark.measureThunder      avgt    5   914.464 ±   6.066  ms/op
+ * RNGBenchmark.measureThunderInt   avgt    5  1075.635 ±  19.411  ms/op
+ * RNGBenchmark.measureThunderIntR  avgt    5  1156.366 ±  10.684  ms/op
+ * RNGBenchmark.measureThunderR     avgt    5   992.199 ±   5.749  ms/op
+ * RNGBenchmark.measureXoRo         avgt    5  1353.115 ±  14.770  ms/op
+ * RNGBenchmark.measureXoRoInt      avgt    5  1440.937 ±  26.151  ms/op
+ * RNGBenchmark.measureXoRoIntR     avgt    5  1551.285 ±  45.324  ms/op
+ * RNGBenchmark.measureXoRoR        avgt    5  1415.288 ±  28.783  ms/op
  */
 public class RNGBenchmark {
 
@@ -242,7 +264,7 @@ public class RNGBenchmark {
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void a_measurePint() throws InterruptedException {
+    public void measurePint() throws InterruptedException {
         seed = 9000;
         doPint();
     }
@@ -260,7 +282,7 @@ public class RNGBenchmark {
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void a_measurePintInt() throws InterruptedException {
+    public void measurePintInt() throws InterruptedException {
         iseed = 9000;
         doPintInt();
     }
@@ -277,7 +299,7 @@ public class RNGBenchmark {
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void a_measurePintR() throws InterruptedException {
+    public void measurePintR() throws InterruptedException {
         seed = 9000;
         doPintR();
     }
@@ -295,11 +317,11 @@ public class RNGBenchmark {
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void a_measurePintIntR() throws InterruptedException {
+    public void measurePintIntR() throws InterruptedException {
         iseed = 9000;
         doPintIntR();
     }
-
+/*
     public long doThunder()
     {
         ThunderRNG rng = new ThunderRNG(seed);
@@ -436,7 +458,7 @@ public class RNGBenchmark {
         iseed = 9000;
         doXoRoIntR();
     }
-
+*/
     public long doLight()
     {
         LightRNG rng = new LightRNG(seed);
@@ -545,7 +567,7 @@ public class RNGBenchmark {
     }
     */
 
-    /*
+
     public long doPermuted()
     {
         PermutedRNG rng = new PermutedRNG(seed);
@@ -578,7 +600,7 @@ public class RNGBenchmark {
         iseed = 9000;
         doPermutedInt();
     }
-    /*
+
     public long doPermutedR()
     {
         RNG rng = new RNG(new PermutedRNG(seed));
@@ -611,8 +633,7 @@ public class RNGBenchmark {
         iseed = 9000;
         doPermutedIntR();
     }
-
-
+    /*
     public long doXor()
     {
         XorRNG rng = new XorRNG(seed);
@@ -678,7 +699,7 @@ public class RNGBenchmark {
         iseed = 9000;
         doXorIntR();
     }
-    */
+
     public long doChaosR()
     {
         RNG rng = new RNG(new ChaosRNG());
@@ -790,7 +811,6 @@ public class RNGBenchmark {
     }
 
 
-
     public long doGDX()
     {
         RandomXS128 rng = new RandomXS128(seed);
@@ -801,7 +821,7 @@ public class RNGBenchmark {
         return seed;
     }
 
-    //@Benchmark
+    @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureGDX() throws InterruptedException {
@@ -819,7 +839,7 @@ public class RNGBenchmark {
         return iseed;
     }
 
-    //@Benchmark
+    @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureGDXInt() throws InterruptedException {

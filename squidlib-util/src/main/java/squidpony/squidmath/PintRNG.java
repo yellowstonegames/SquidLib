@@ -12,9 +12,11 @@ import java.io.Serializable;
  * Android, or other increasingly-rare environments may benefit from this class, though.
  * <br>
  * Quality is not completely certain, but should be excellent in this version since it's based almost directly on PCG-
- * Random's choices of numerical constants. Visual tests, at least, appear indistinguishable from other PRNGs. Period is
- * considered very low, at 2^32, but all seeds should be valid, including 0. Generating 64 bits of random data takes a
- * little less than twice as much time as generating 32 bits, since this can avoid some overhead via inlining.
+ * Random's choices of numerical constants. The state changes differently with this than with PCG-Random, however, due
+ * to performance issues on the JVM with the LCG-like state change, and instead it is added with a very large negative
+ * number. Visual tests, at least, appear indistinguishable from other PRNGs. Period is considered very low, at 2^32,
+ * but all seeds should be valid, including 0. Generating 64 bits of random data takes a little less than twice as much
+ * time as generating 32 bits, since this can avoid some overhead via inlining.
  * <br>
  * The name can be construed as Pint-Size, since this has a small period and uses a smaller amount of space, or as
  * Permuted Int, since this is based on PermutedRNG, changed to use 32-bit operations on ints.
@@ -68,9 +70,11 @@ public class PintRNG implements RandomnessSource, StatefulRandomness, Serializab
         // increment  = 2891336453;
         // multiplier = 747796405;
 
-        int p = state;
+//        int p = state;
+//        p ^= p >>> (4 + (p >>> 28));
+//        state = state * 0x2C9277B5 + 0xAC564B05;
+        int p = (state += 0x9E3779B9);
         p ^= p >>> (4 + (p >>> 28));
-        state = state * 0x2C9277B5 + 0xAC564B05;
         return ((p *= 277803737) >>> 22) ^ p;
     }
 
@@ -81,11 +85,17 @@ public class PintRNG implements RandomnessSource, StatefulRandomness, Serializab
      */
     @Override
     public long nextLong() {
-        int p = state;
+//        int p = state;
+//        p ^= p >>> (4 + (p >>> 28));
+//        int q = (state = state * 0x2C9277B5 + 0xAC564B05);
+//        q ^= q >>> (4 + (q >>> 28));
+//        state = state * 0x2C9277B5 + 0xAC564B05;
+//        return (((p *= 277803737) >>> 22) ^ p) | ((((q *= 277803737) >>> 22) ^ q) & 0xffffffffL) << 32;
+
+        int p = (state += 0x9E3779B9);
         p ^= p >>> (4 + (p >>> 28));
-        int q = (state = state * 0x2C9277B5 + 0xAC564B05);
+        int q = (state += 0x9E3779B9);
         q ^= q >>> (4 + (q >>> 28));
-        state = state * 0x2C9277B5 + 0xAC564B05;
         return (((p *= 277803737) >>> 22) ^ p) | ((((q *= 277803737) >>> 22) ^ q) & 0xffffffffL) << 32;
 
         //return 0x100000000L * nextInt() | nextInt();
@@ -222,7 +232,19 @@ public class PintRNG implements RandomnessSource, StatefulRandomness, Serializab
     public int hashCode() {
         return 0x632BE5AB * state;
     }
-
+    /**
+     * Advances or rolls back the PintRNG's state without actually generating each number. Skip forward
+     * or backward a number of steps specified by advance, where a step is equal to one call to nextInt(),
+     * and returns the random number produced at that step (you can get the state with {@link #getState()}).
+     * @param advance Number of future generations to skip past. Can be negative to backtrack.
+     * @return the int that would be generated after generating advance random numbers.
+     */
+    public int skip(final int advance)
+    {
+        int p = (state += 0x9E3779B9 * advance);
+        p ^= p >>> (4 + (p >>> 28));
+        return ((p *= 277803737) >>> 22) ^ p;
+    }
     public static int determine(int state)
     {
         state ^= state >>> (4 + (state >>> 28));
