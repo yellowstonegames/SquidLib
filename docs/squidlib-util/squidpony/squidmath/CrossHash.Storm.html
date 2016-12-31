@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -117,7 +117,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public static class <a href="../../src-html/squidpony/squidmath/CrossHash.html#line.1257">CrossHash.Storm</a>
+<pre>public static class <a href="../../src-html/squidpony/squidmath/CrossHash.html#line.1275">CrossHash.Storm</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">A whole cluster of Lightning-like hash functions that sacrifice a small degree of speed, but can be
@@ -355,78 +355,86 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Storm.html#hash-java.lang.Object:A-">hash</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;data)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Storm.html#hash-long:A:A-">hash</a></span>(long[][]&nbsp;data)</code>&nbsp;</td>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Storm.html#hash-short:A-">hash</a></span>(short[]&nbsp;data)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Storm.html#hash-java.lang.Object:A-">hash</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;data)</code>&nbsp;</td>
 </tr>
 <tr id="i16" class="altColor">
-<td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Storm.html#hash64-boolean:A-">hash64</a></span>(boolean[]&nbsp;data)</code>&nbsp;</td>
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Storm.html#hash-short:A-">hash</a></span>(short[]&nbsp;data)</code>&nbsp;</td>
 </tr>
 <tr id="i17" class="rowColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Storm.html#hash64-byte:A-">hash64</a></span>(byte[]&nbsp;data)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Storm.html#hash64-boolean:A-">hash64</a></span>(boolean[]&nbsp;data)</code>&nbsp;</td>
 </tr>
 <tr id="i18" class="altColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Storm.html#hash64-char:A-">hash64</a></span>(char[]&nbsp;data)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Storm.html#hash64-byte:A-">hash64</a></span>(byte[]&nbsp;data)</code>&nbsp;</td>
 </tr>
 <tr id="i19" class="rowColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Storm.html#hash64-char:A:A-">hash64</a></span>(char[][]&nbsp;data)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Storm.html#hash64-char:A-">hash64</a></span>(char[]&nbsp;data)</code>&nbsp;</td>
 </tr>
 <tr id="i20" class="altColor">
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Storm.html#hash64-char:A:A-">hash64</a></span>(char[][]&nbsp;data)</code>&nbsp;</td>
+</tr>
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Storm.html#hash64-char:A-int-int-">hash64</a></span>(char[]&nbsp;data,
       int&nbsp;start,
       int&nbsp;end)</code>&nbsp;</td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Storm.html#hash64-char:A-int-int-int-">hash64</a></span>(char[]&nbsp;data,
       int&nbsp;start,
       int&nbsp;end,
       int&nbsp;step)</code>&nbsp;</td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Storm.html#hash64-java.lang.CharSequence-">hash64</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;data)</code>&nbsp;</td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Storm.html#hash64-java.lang.CharSequence:A...-">hash64</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>[]...&nbsp;data)</code>&nbsp;</td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Storm.html#hash64-java.lang.CharSequence:A-">hash64</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>[]&nbsp;data)</code>&nbsp;</td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Storm.html#hash64-double:A-">hash64</a></span>(double[]&nbsp;data)</code>&nbsp;</td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Storm.html#hash64-float:A-">hash64</a></span>(float[]&nbsp;data)</code>&nbsp;</td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Storm.html#hash64-int:A-">hash64</a></span>(int[]&nbsp;data)</code>&nbsp;</td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Storm.html#hash64-java.lang.Iterable-">hash64</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&gt;&nbsp;data)</code>&nbsp;</td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Storm.html#hash64-long:A-">hash64</a></span>(long[]&nbsp;data)</code>&nbsp;</td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i31" class="rowColor">
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Storm.html#hash64-long:A:A-">hash64</a></span>(long[][]&nbsp;data)</code>&nbsp;</td>
+</tr>
+<tr id="i32" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Storm.html#hash64-java.lang.Object:A-">hash64</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;data)</code>&nbsp;</td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Storm.html#hash64-short:A-">hash64</a></span>(short[]&nbsp;data)</code>&nbsp;</td>
 </tr>
@@ -458,7 +466,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>alpha</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1278">alpha</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1296">alpha</a></pre>
 </li>
 </ul>
 <a name="beta">
@@ -467,7 +475,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>beta</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1278">beta</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1296">beta</a></pre>
 </li>
 </ul>
 <a name="gamma">
@@ -476,7 +484,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>gamma</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1278">gamma</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1296">gamma</a></pre>
 </li>
 </ul>
 <a name="delta">
@@ -485,7 +493,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>delta</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1279">delta</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1297">delta</a></pre>
 </li>
 </ul>
 <a name="epsilon">
@@ -494,7 +502,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>epsilon</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1279">epsilon</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1297">epsilon</a></pre>
 </li>
 </ul>
 <a name="zeta">
@@ -503,7 +511,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>zeta</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1279">zeta</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1297">zeta</a></pre>
 </li>
 </ul>
 <a name="eta">
@@ -512,7 +520,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>eta</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1280">eta</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1298">eta</a></pre>
 </li>
 </ul>
 <a name="theta">
@@ -521,7 +529,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>theta</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1280">theta</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1298">theta</a></pre>
 </li>
 </ul>
 <a name="iota">
@@ -530,7 +538,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>iota</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1280">iota</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1298">iota</a></pre>
 </li>
 </ul>
 <a name="kappa">
@@ -539,7 +547,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>kappa</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1281">kappa</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1299">kappa</a></pre>
 </li>
 </ul>
 <a name="lambda">
@@ -548,7 +556,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>lambda</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1281">lambda</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1299">lambda</a></pre>
 </li>
 </ul>
 <a name="mu">
@@ -557,7 +565,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>mu</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1281">mu</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1299">mu</a></pre>
 </li>
 </ul>
 <a name="nu">
@@ -566,7 +574,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>nu</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1282">nu</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1300">nu</a></pre>
 </li>
 </ul>
 <a name="xi">
@@ -575,7 +583,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>xi</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1282">xi</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1300">xi</a></pre>
 </li>
 </ul>
 <a name="omicron">
@@ -584,7 +592,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>omicron</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1282">omicron</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1300">omicron</a></pre>
 </li>
 </ul>
 <a name="pi">
@@ -593,7 +601,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>pi</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1282">pi</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1300">pi</a></pre>
 </li>
 </ul>
 <a name="rho">
@@ -602,7 +610,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>rho</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1283">rho</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1301">rho</a></pre>
 </li>
 </ul>
 <a name="sigma">
@@ -611,7 +619,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>sigma</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1283">sigma</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1301">sigma</a></pre>
 </li>
 </ul>
 <a name="tau">
@@ -620,7 +628,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>tau</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1283">tau</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1301">tau</a></pre>
 </li>
 </ul>
 <a name="upsilon">
@@ -629,7 +637,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>upsilon</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1284">upsilon</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1302">upsilon</a></pre>
 </li>
 </ul>
 <a name="phi">
@@ -638,7 +646,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>phi</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1284">phi</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1302">phi</a></pre>
 </li>
 </ul>
 <a name="chi">
@@ -647,7 +655,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>chi</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1284">chi</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1302">chi</a></pre>
 </li>
 </ul>
 <a name="psi">
@@ -656,7 +664,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>psi</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1284">psi</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1302">psi</a></pre>
 </li>
 </ul>
 <a name="omega">
@@ -665,7 +673,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>omega</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1285">omega</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1303">omega</a></pre>
 </li>
 </ul>
 <a name="predefined">
@@ -674,7 +682,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>predefined</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a>[] <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1286">predefined</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a>[] <a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1304">predefined</a></pre>
 </li>
 </ul>
 </li>
@@ -691,7 +699,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>Storm</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1262">Storm</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1280">Storm</a>()</pre>
 </li>
 </ul>
 <a name="Storm-java.lang.CharSequence-">
@@ -700,7 +708,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>Storm</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1266">Storm</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;alteration)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1284">Storm</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;alteration)</pre>
 </li>
 </ul>
 <a name="Storm-long-">
@@ -709,7 +717,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Storm</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1270">Storm</a>(long&nbsp;alteration)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1288">Storm</a>(long&nbsp;alteration)</pre>
 </li>
 </ul>
 </li>
@@ -726,7 +734,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1289">hash64</a>(boolean[]&nbsp;data)</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1307">hash64</a>(boolean[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash64-byte:A-">
@@ -735,7 +743,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1300">hash64</a>(byte[]&nbsp;data)</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1318">hash64</a>(byte[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash64-short:A-">
@@ -744,7 +752,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1311">hash64</a>(short[]&nbsp;data)</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1329">hash64</a>(short[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash64-char:A-">
@@ -753,7 +761,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1322">hash64</a>(char[]&nbsp;data)</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1340">hash64</a>(char[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash64-int:A-">
@@ -762,7 +770,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1333">hash64</a>(int[]&nbsp;data)</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1351">hash64</a>(int[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash64-long:A-">
@@ -771,7 +779,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1344">hash64</a>(long[]&nbsp;data)</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1362">hash64</a>(long[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash64-float:A-">
@@ -780,7 +788,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1355">hash64</a>(float[]&nbsp;data)</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1373">hash64</a>(float[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash64-double:A-">
@@ -789,7 +797,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1366">hash64</a>(double[]&nbsp;data)</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1384">hash64</a>(double[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash64-char:A-int-int-">
@@ -798,7 +806,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1377">hash64</a>(char[]&nbsp;data,
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1395">hash64</a>(char[]&nbsp;data,
                    int&nbsp;start,
                    int&nbsp;end)</pre>
 </li>
@@ -809,7 +817,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1388">hash64</a>(char[]&nbsp;data,
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1406">hash64</a>(char[]&nbsp;data,
                    int&nbsp;start,
                    int&nbsp;end,
                    int&nbsp;step)</pre>
@@ -821,7 +829,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1399">hash64</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;data)</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1417">hash64</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash64-char:A:A-">
@@ -830,7 +838,16 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1410">hash64</a>(char[][]&nbsp;data)</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1428">hash64</a>(char[][]&nbsp;data)</pre>
+</li>
+</ul>
+<a name="hash64-long:A:A-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hash64</h4>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1438">hash64</a>(long[][]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash64-java.lang.CharSequence:A-">
@@ -839,7 +856,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1421">hash64</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>[]&nbsp;data)</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1449">hash64</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash64-java.lang.Iterable-">
@@ -848,7 +865,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1432">hash64</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&gt;&nbsp;data)</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1460">hash64</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&gt;&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash64-java.lang.CharSequence:A...-">
@@ -857,7 +874,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1443">hash64</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>[]...&nbsp;data)</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1471">hash64</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>[]...&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash64-java.lang.Object:A-">
@@ -866,7 +883,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1454">hash64</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;data)</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1482">hash64</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-boolean:A-">
@@ -875,7 +892,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1468">hash</a>(boolean[]&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1496">hash</a>(boolean[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-byte:A-">
@@ -884,7 +901,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1479">hash</a>(byte[]&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1507">hash</a>(byte[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-short:A-">
@@ -893,7 +910,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1490">hash</a>(short[]&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1518">hash</a>(short[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-char:A-">
@@ -902,7 +919,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1501">hash</a>(char[]&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1529">hash</a>(char[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-int:A-">
@@ -911,7 +928,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1512">hash</a>(int[]&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1540">hash</a>(int[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-long:A-">
@@ -920,7 +937,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1524">hash</a>(long[]&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1552">hash</a>(long[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-float:A-">
@@ -929,7 +946,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1535">hash</a>(float[]&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1563">hash</a>(float[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-double:A-">
@@ -938,7 +955,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1546">hash</a>(double[]&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1574">hash</a>(double[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-char:A-int-int-">
@@ -947,7 +964,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1557">hash</a>(char[]&nbsp;data,
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1585">hash</a>(char[]&nbsp;data,
                 int&nbsp;start,
                 int&nbsp;end)</pre>
 </li>
@@ -958,7 +975,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1569">hash</a>(char[]&nbsp;data,
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1597">hash</a>(char[]&nbsp;data,
                 int&nbsp;start,
                 int&nbsp;end,
                 int&nbsp;step)</pre>
@@ -970,7 +987,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1581">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1609">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-char:A:A-">
@@ -979,7 +996,16 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1592">hash</a>(char[][]&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1620">hash</a>(char[][]&nbsp;data)</pre>
+</li>
+</ul>
+<a name="hash-long:A:A-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hash</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1631">hash</a>(long[][]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-java.lang.CharSequence:A-">
@@ -988,7 +1014,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1603">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>[]&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1642">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-java.lang.Iterable-">
@@ -997,7 +1023,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1614">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&gt;&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1653">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&gt;&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-java.lang.CharSequence:A...-">
@@ -1006,7 +1032,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1625">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>[]...&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1664">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>[]...&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-java.lang.Object:A-">
@@ -1015,7 +1041,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1636">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Storm.html#line.1675">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;data)</pre>
 </li>
 </ul>
 </li>

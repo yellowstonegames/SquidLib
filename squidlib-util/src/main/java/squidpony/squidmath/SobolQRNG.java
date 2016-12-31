@@ -609,4 +609,29 @@ public class SobolQRNG implements RandomnessSource {
         next.skipTo(count);
         return next;
     }
+    @Override
+    public String toString()
+    {
+        return "SobolQRNG with rank " + dimension + " and index " + count;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SobolQRNG sobolQRNG = (SobolQRNG) o;
+
+        if (dimension != sobolQRNG.dimension) return false;
+        return (count == sobolQRNG.count);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = dimension;
+        result = 31 * result + count;
+        result = 31 * result + CrossHash.Lightning.hash(direction);
+        result = 31 * result + CrossHash.Lightning.hash(x);
+        return result;
+    }
 }

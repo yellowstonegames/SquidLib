@@ -705,7 +705,7 @@ public class RNG implements Serializable {
      * @return a random boolean.
      */
     public boolean nextBoolean() {
-        return next(1) != 0;
+        return nextLong() < 0L;
     }
 
     /**

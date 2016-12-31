@@ -204,67 +204,71 @@
 <span class="sourceLineNo">196</span><a name="line.196"></a>
 <span class="sourceLineNo">197</span><a name="line.197"></a>
 <span class="sourceLineNo">198</span>    /**<a name="line.198"></a>
-<span class="sourceLineNo">199</span>     * Sets the current state of this generator (an int) by XOR-ing the upper and lower halves of seed into one int.<a name="line.199"></a>
-<span class="sourceLineNo">200</span>     * @param seed the seed to use for this PintRNG, as if it was constructed with this seed.<a name="line.200"></a>
-<span class="sourceLineNo">201</span>     */<a name="line.201"></a>
-<span class="sourceLineNo">202</span>    @Override<a name="line.202"></a>
-<span class="sourceLineNo">203</span>    public void setState( final long seed ) {<a name="line.203"></a>
-<span class="sourceLineNo">204</span>        state = (int)(seed&gt;&gt;&gt;32 ^ seed);<a name="line.204"></a>
-<span class="sourceLineNo">205</span>    }<a name="line.205"></a>
-<span class="sourceLineNo">206</span>    /**<a name="line.206"></a>
-<span class="sourceLineNo">207</span>     * Gets the current state of this generator.<a name="line.207"></a>
-<span class="sourceLineNo">208</span>     * @return the current seed of this PintRNG, changed once per call to nextInt()<a name="line.208"></a>
-<span class="sourceLineNo">209</span>     */<a name="line.209"></a>
-<span class="sourceLineNo">210</span>    @Override<a name="line.210"></a>
-<span class="sourceLineNo">211</span>    public long getState() {<a name="line.211"></a>
-<span class="sourceLineNo">212</span>        return state;<a name="line.212"></a>
-<span class="sourceLineNo">213</span>    }<a name="line.213"></a>
-<span class="sourceLineNo">214</span><a name="line.214"></a>
-<span class="sourceLineNo">215</span>    @Override<a name="line.215"></a>
-<span class="sourceLineNo">216</span>    public String toString() {<a name="line.216"></a>
-<span class="sourceLineNo">217</span>        return "PintRNG with state 0x" + StringKit.hex(state);<a name="line.217"></a>
-<span class="sourceLineNo">218</span>    }<a name="line.218"></a>
-<span class="sourceLineNo">219</span><a name="line.219"></a>
-<span class="sourceLineNo">220</span>    @Override<a name="line.220"></a>
-<span class="sourceLineNo">221</span>    public boolean equals(Object o) {<a name="line.221"></a>
-<span class="sourceLineNo">222</span>        if (this == o) return true;<a name="line.222"></a>
-<span class="sourceLineNo">223</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.223"></a>
-<span class="sourceLineNo">224</span><a name="line.224"></a>
-<span class="sourceLineNo">225</span>        PintRNG pintRNG = (PintRNG) o;<a name="line.225"></a>
-<span class="sourceLineNo">226</span><a name="line.226"></a>
-<span class="sourceLineNo">227</span>        return state == pintRNG.state;<a name="line.227"></a>
+<span class="sourceLineNo">199</span>     * Sets the current state of this generator (an int) using only the least-significant 32 bits of seed (by casting<a name="line.199"></a>
+<span class="sourceLineNo">200</span>     * a mask of those bits in seed to int, which helps ensure that a full 32 bits of state are possible). Giving<a name="line.200"></a>
+<span class="sourceLineNo">201</span>     * int seeds should set the seed to an identical int; long seeds will lose any information in higher bits (including<a name="line.201"></a>
+<span class="sourceLineNo">202</span>     * the sign, so 0xFFFFFFFF00000000L, which is a negative long, would be treated as 0 since only the 0x00000000 part<a name="line.202"></a>
+<span class="sourceLineNo">203</span>     * at the end is actually used).<a name="line.203"></a>
+<span class="sourceLineNo">204</span>     * @param seed the seed to use for this PintRNG, as if it was constructed with this seed.<a name="line.204"></a>
+<span class="sourceLineNo">205</span>     */<a name="line.205"></a>
+<span class="sourceLineNo">206</span>    @Override<a name="line.206"></a>
+<span class="sourceLineNo">207</span>    public void setState( final long seed ) {<a name="line.207"></a>
+<span class="sourceLineNo">208</span>        state = (int)(seed &amp; 0xFFFFFFFFL);<a name="line.208"></a>
+<span class="sourceLineNo">209</span>    }<a name="line.209"></a>
+<span class="sourceLineNo">210</span>    /**<a name="line.210"></a>
+<span class="sourceLineNo">211</span>     * Gets the current state of this generator.<a name="line.211"></a>
+<span class="sourceLineNo">212</span>     * @return the current seed of this PintRNG, changed once per call to nextInt()<a name="line.212"></a>
+<span class="sourceLineNo">213</span>     */<a name="line.213"></a>
+<span class="sourceLineNo">214</span>    @Override<a name="line.214"></a>
+<span class="sourceLineNo">215</span>    public long getState() {<a name="line.215"></a>
+<span class="sourceLineNo">216</span>        return state;<a name="line.216"></a>
+<span class="sourceLineNo">217</span>    }<a name="line.217"></a>
+<span class="sourceLineNo">218</span><a name="line.218"></a>
+<span class="sourceLineNo">219</span>    @Override<a name="line.219"></a>
+<span class="sourceLineNo">220</span>    public String toString() {<a name="line.220"></a>
+<span class="sourceLineNo">221</span>        return "PintRNG with state 0x" + StringKit.hex(state);<a name="line.221"></a>
+<span class="sourceLineNo">222</span>    }<a name="line.222"></a>
+<span class="sourceLineNo">223</span><a name="line.223"></a>
+<span class="sourceLineNo">224</span>    @Override<a name="line.224"></a>
+<span class="sourceLineNo">225</span>    public boolean equals(Object o) {<a name="line.225"></a>
+<span class="sourceLineNo">226</span>        if (this == o) return true;<a name="line.226"></a>
+<span class="sourceLineNo">227</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.227"></a>
 <span class="sourceLineNo">228</span><a name="line.228"></a>
-<span class="sourceLineNo">229</span>    }<a name="line.229"></a>
+<span class="sourceLineNo">229</span>        PintRNG pintRNG = (PintRNG) o;<a name="line.229"></a>
 <span class="sourceLineNo">230</span><a name="line.230"></a>
-<span class="sourceLineNo">231</span>    @Override<a name="line.231"></a>
-<span class="sourceLineNo">232</span>    public int hashCode() {<a name="line.232"></a>
-<span class="sourceLineNo">233</span>        return 0x632BE5AB * state;<a name="line.233"></a>
-<span class="sourceLineNo">234</span>    }<a name="line.234"></a>
-<span class="sourceLineNo">235</span>    /**<a name="line.235"></a>
-<span class="sourceLineNo">236</span>     * Advances or rolls back the PintRNG's state without actually generating each number. Skip forward<a name="line.236"></a>
-<span class="sourceLineNo">237</span>     * or backward a number of steps specified by advance, where a step is equal to one call to nextInt(),<a name="line.237"></a>
-<span class="sourceLineNo">238</span>     * and returns the random number produced at that step (you can get the state with {@link #getState()}).<a name="line.238"></a>
-<span class="sourceLineNo">239</span>     * @param advance Number of future generations to skip past. Can be negative to backtrack.<a name="line.239"></a>
-<span class="sourceLineNo">240</span>     * @return the int that would be generated after generating advance random numbers.<a name="line.240"></a>
-<span class="sourceLineNo">241</span>     */<a name="line.241"></a>
-<span class="sourceLineNo">242</span>    public int skip(final int advance)<a name="line.242"></a>
-<span class="sourceLineNo">243</span>    {<a name="line.243"></a>
-<span class="sourceLineNo">244</span>        int p = (state += 0x9E3779B9 * advance);<a name="line.244"></a>
-<span class="sourceLineNo">245</span>        p ^= p &gt;&gt;&gt; (4 + (p &gt;&gt;&gt; 28));<a name="line.245"></a>
-<span class="sourceLineNo">246</span>        return ((p *= 277803737) &gt;&gt;&gt; 22) ^ p;<a name="line.246"></a>
-<span class="sourceLineNo">247</span>    }<a name="line.247"></a>
-<span class="sourceLineNo">248</span>    public static int determine(int state)<a name="line.248"></a>
-<span class="sourceLineNo">249</span>    {<a name="line.249"></a>
-<span class="sourceLineNo">250</span>        state ^= state &gt;&gt;&gt; (4 + (state &gt;&gt;&gt; 28));<a name="line.250"></a>
-<span class="sourceLineNo">251</span>        return ((state *= 277803737) &gt;&gt;&gt; 22) ^ state;<a name="line.251"></a>
-<span class="sourceLineNo">252</span>    }<a name="line.252"></a>
-<span class="sourceLineNo">253</span><a name="line.253"></a>
-<span class="sourceLineNo">254</span>    public static int determineBounded(int state, final int bound)<a name="line.254"></a>
-<span class="sourceLineNo">255</span>    {<a name="line.255"></a>
-<span class="sourceLineNo">256</span>        state ^= state &gt;&gt;&gt; (4 + (state &gt;&gt;&gt; 28));<a name="line.256"></a>
-<span class="sourceLineNo">257</span>        return (int)((bound * ((((state *= 277803737) &gt;&gt;&gt; 22) ^ state) &amp; 0x7FFFFFFFL)) &gt;&gt; 31);<a name="line.257"></a>
-<span class="sourceLineNo">258</span>    }<a name="line.258"></a>
-<span class="sourceLineNo">259</span>}<a name="line.259"></a>
+<span class="sourceLineNo">231</span>        return state == pintRNG.state;<a name="line.231"></a>
+<span class="sourceLineNo">232</span><a name="line.232"></a>
+<span class="sourceLineNo">233</span>    }<a name="line.233"></a>
+<span class="sourceLineNo">234</span><a name="line.234"></a>
+<span class="sourceLineNo">235</span>    @Override<a name="line.235"></a>
+<span class="sourceLineNo">236</span>    public int hashCode() {<a name="line.236"></a>
+<span class="sourceLineNo">237</span>        return 0x632BE5AB * state;<a name="line.237"></a>
+<span class="sourceLineNo">238</span>    }<a name="line.238"></a>
+<span class="sourceLineNo">239</span>    /**<a name="line.239"></a>
+<span class="sourceLineNo">240</span>     * Advances or rolls back the PintRNG's state without actually generating each number. Skip forward<a name="line.240"></a>
+<span class="sourceLineNo">241</span>     * or backward a number of steps specified by advance, where a step is equal to one call to nextInt(),<a name="line.241"></a>
+<span class="sourceLineNo">242</span>     * and returns the random number produced at that step (you can get the state with {@link #getState()}).<a name="line.242"></a>
+<span class="sourceLineNo">243</span>     * @param advance Number of future generations to skip past. Can be negative to backtrack.<a name="line.243"></a>
+<span class="sourceLineNo">244</span>     * @return the int that would be generated after generating advance random numbers.<a name="line.244"></a>
+<span class="sourceLineNo">245</span>     */<a name="line.245"></a>
+<span class="sourceLineNo">246</span>    public int skip(final int advance)<a name="line.246"></a>
+<span class="sourceLineNo">247</span>    {<a name="line.247"></a>
+<span class="sourceLineNo">248</span>        int p = (state += 0x9E3779B9 * advance);<a name="line.248"></a>
+<span class="sourceLineNo">249</span>        p ^= p &gt;&gt;&gt; (4 + (p &gt;&gt;&gt; 28));<a name="line.249"></a>
+<span class="sourceLineNo">250</span>        return ((p *= 277803737) &gt;&gt;&gt; 22) ^ p;<a name="line.250"></a>
+<span class="sourceLineNo">251</span>    }<a name="line.251"></a>
+<span class="sourceLineNo">252</span>    public static int determine(int state)<a name="line.252"></a>
+<span class="sourceLineNo">253</span>    {<a name="line.253"></a>
+<span class="sourceLineNo">254</span>        state ^= state &gt;&gt;&gt; (4 + (state &gt;&gt;&gt; 28));<a name="line.254"></a>
+<span class="sourceLineNo">255</span>        return ((state *= 277803737) &gt;&gt;&gt; 22) ^ state;<a name="line.255"></a>
+<span class="sourceLineNo">256</span>    }<a name="line.256"></a>
+<span class="sourceLineNo">257</span><a name="line.257"></a>
+<span class="sourceLineNo">258</span>    public static int determineBounded(int state, final int bound)<a name="line.258"></a>
+<span class="sourceLineNo">259</span>    {<a name="line.259"></a>
+<span class="sourceLineNo">260</span>        state ^= state &gt;&gt;&gt; (4 + (state &gt;&gt;&gt; 28));<a name="line.260"></a>
+<span class="sourceLineNo">261</span>        return (int)((bound * ((((state *= 277803737) &gt;&gt;&gt; 22) ^ state) &amp; 0x7FFFFFFFL)) &gt;&gt;&gt; 31);<a name="line.261"></a>
+<span class="sourceLineNo">262</span>    }<a name="line.262"></a>
+<span class="sourceLineNo">263</span>}<a name="line.263"></a>
 
 
 

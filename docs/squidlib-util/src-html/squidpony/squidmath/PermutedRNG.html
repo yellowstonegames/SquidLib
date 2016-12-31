@@ -309,7 +309,7 @@
 <span class="sourceLineNo">301</span>    public static int determineBounded(long state, final int bound)<a name="line.301"></a>
 <span class="sourceLineNo">302</span>    {<a name="line.302"></a>
 <span class="sourceLineNo">303</span>        state ^= state &gt;&gt;&gt; (5 + (state &gt;&gt;&gt; 59));<a name="line.303"></a>
-<span class="sourceLineNo">304</span>        return (int)((bound * ((((state *= 0xAEF17502108EF2D9L) &gt;&gt;&gt; 43) ^ state) &amp; 0x7FFFFFFFL)) &gt;&gt; 31);<a name="line.304"></a>
+<span class="sourceLineNo">304</span>        return (int)((bound * ((((state *= 0xAEF17502108EF2D9L) &gt;&gt;&gt; 43) ^ state) &amp; 0x7FFFFFFFL)) &gt;&gt;&gt; 31);<a name="line.304"></a>
 <span class="sourceLineNo">305</span>    }<a name="line.305"></a>
 <span class="sourceLineNo">306</span>}<a name="line.306"></a>
 

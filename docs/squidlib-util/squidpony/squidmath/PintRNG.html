@@ -296,7 +296,8 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PintRNG.html#setState-long-">setState</a></span>(long&nbsp;seed)</code>
-<div class="block">Sets the current state of this generator (an int) by XOR-ing the upper and lower halves of seed into one int.</div>
+<div class="block">Sets the current state of this generator (an int) using only the least-significant 32 bits of seed (by casting
+ a mask of those bits in seed to int, which helps ensure that a full 32 bits of state are possible).</div>
 </td>
 </tr>
 <tr id="i17" class="rowColor">
@@ -571,8 +572,12 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>setState</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.203">setState</a>(long&nbsp;seed)</pre>
-<div class="block">Sets the current state of this generator (an int) by XOR-ing the upper and lower halves of seed into one int.</div>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.207">setState</a>(long&nbsp;seed)</pre>
+<div class="block">Sets the current state of this generator (an int) using only the least-significant 32 bits of seed (by casting
+ a mask of those bits in seed to int, which helps ensure that a full 32 bits of state are possible). Giving
+ int seeds should set the seed to an identical int; long seeds will lose any information in higher bits (including
+ the sign, so 0xFFFFFFFF00000000L, which is a negative long, would be treated as 0 since only the 0x00000000 part
+ at the end is actually used).</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/squidmath/StatefulRandomness.html#setState-long-">setState</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a></code></dd>
@@ -587,7 +592,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>getState</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.211">getState</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.215">getState</a>()</pre>
 <div class="block">Gets the current state of this generator.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -603,7 +608,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.216">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.220">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -616,7 +621,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.221">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.225">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -629,7 +634,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.232">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.236">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -642,7 +647,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>skip</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.242">skip</a>(int&nbsp;advance)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.246">skip</a>(int&nbsp;advance)</pre>
 <div class="block">Advances or rolls back the PintRNG's state without actually generating each number. Skip forward
  or backward a number of steps specified by advance, where a step is equal to one call to nextInt(),
  and returns the random number produced at that step (you can get the state with <a href="../../squidpony/squidmath/PintRNG.html#getState--"><code>getState()</code></a>).</div>
@@ -660,7 +665,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>determine</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.248">determine</a>(int&nbsp;state)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.252">determine</a>(int&nbsp;state)</pre>
 </li>
 </ul>
 <a name="determineBounded-int-int-">
@@ -669,7 +674,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>determineBounded</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.254">determineBounded</a>(int&nbsp;state,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.258">determineBounded</a>(int&nbsp;state,
                                    int&nbsp;bound)</pre>
 </li>
 </ul>

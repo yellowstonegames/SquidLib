@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -118,7 +118,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre><a href="../../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public static class <a href="../../src-html/squidpony/squidmath/CrossHash.html#line.2308">CrossHash.Chariot</a>
+public static class <a href="../../src-html/squidpony/squidmath/CrossHash.html#line.2385">CrossHash.Chariot</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">Strongly universal hashing based loosely on Daniel Lemire's (Apache-licensed) code and paper, available at
@@ -365,9 +365,13 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Chariot.html#hash-java.lang.Object:A-">hash</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;data)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Chariot.html#hash-long:A:A-">hash</a></span>(long[][]&nbsp;data)</code>&nbsp;</td>
 </tr>
 <tr id="i14" class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Chariot.html#hash-java.lang.Object:A-">hash</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;data)</code>&nbsp;</td>
+</tr>
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Chariot.html#hash-short:A-">hash</a></span>(short[]&nbsp;data)</code>&nbsp;</td>
 </tr>
@@ -399,7 +403,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>alpha</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2379">alpha</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2456">alpha</a></pre>
 </li>
 </ul>
 <a name="beta">
@@ -408,7 +412,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>beta</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2379">beta</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2456">beta</a></pre>
 </li>
 </ul>
 <a name="gamma">
@@ -417,7 +421,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>gamma</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2379">gamma</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2456">gamma</a></pre>
 </li>
 </ul>
 <a name="delta">
@@ -426,7 +430,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>delta</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2380">delta</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2457">delta</a></pre>
 </li>
 </ul>
 <a name="epsilon">
@@ -435,7 +439,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>epsilon</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2380">epsilon</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2457">epsilon</a></pre>
 </li>
 </ul>
 <a name="zeta">
@@ -444,7 +448,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>zeta</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2380">zeta</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2457">zeta</a></pre>
 </li>
 </ul>
 <a name="eta">
@@ -453,7 +457,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>eta</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2381">eta</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2458">eta</a></pre>
 </li>
 </ul>
 <a name="theta">
@@ -462,7 +466,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>theta</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2381">theta</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2458">theta</a></pre>
 </li>
 </ul>
 <a name="iota">
@@ -471,7 +475,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>iota</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2381">iota</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2458">iota</a></pre>
 </li>
 </ul>
 <a name="kappa">
@@ -480,7 +484,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>kappa</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2382">kappa</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2459">kappa</a></pre>
 </li>
 </ul>
 <a name="lambda">
@@ -489,7 +493,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>lambda</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2382">lambda</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2459">lambda</a></pre>
 </li>
 </ul>
 <a name="mu">
@@ -498,7 +502,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>mu</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2382">mu</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2459">mu</a></pre>
 </li>
 </ul>
 <a name="nu">
@@ -507,7 +511,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>nu</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2383">nu</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2460">nu</a></pre>
 </li>
 </ul>
 <a name="xi">
@@ -516,7 +520,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>xi</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2383">xi</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2460">xi</a></pre>
 </li>
 </ul>
 <a name="omicron">
@@ -525,7 +529,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>omicron</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2383">omicron</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2460">omicron</a></pre>
 </li>
 </ul>
 <a name="pi">
@@ -534,7 +538,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>pi</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2383">pi</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2460">pi</a></pre>
 </li>
 </ul>
 <a name="rho">
@@ -543,7 +547,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>rho</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2384">rho</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2461">rho</a></pre>
 </li>
 </ul>
 <a name="sigma">
@@ -552,7 +556,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>sigma</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2384">sigma</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2461">sigma</a></pre>
 </li>
 </ul>
 <a name="tau">
@@ -561,7 +565,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>tau</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2384">tau</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2461">tau</a></pre>
 </li>
 </ul>
 <a name="upsilon">
@@ -570,7 +574,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>upsilon</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2385">upsilon</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2462">upsilon</a></pre>
 </li>
 </ul>
 <a name="phi">
@@ -579,7 +583,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>phi</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2385">phi</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2462">phi</a></pre>
 </li>
 </ul>
 <a name="chi">
@@ -588,7 +592,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>chi</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2385">chi</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2462">chi</a></pre>
 </li>
 </ul>
 <a name="psi">
@@ -597,7 +601,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>psi</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2385">psi</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2462">psi</a></pre>
 </li>
 </ul>
 <a name="omega">
@@ -606,7 +610,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>omega</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2386">omega</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a> <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2463">omega</a></pre>
 </li>
 </ul>
 <a name="predefined">
@@ -615,7 +619,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>predefined</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a>[] <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2387">predefined</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a>[] <a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2464">predefined</a></pre>
 </li>
 </ul>
 </li>
@@ -632,7 +636,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>Chariot</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2319">Chariot</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2396">Chariot</a>()</pre>
 </li>
 </ul>
 <a name="Chariot-java.lang.CharSequence-">
@@ -641,7 +645,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>Chariot</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2323">Chariot</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;alteration)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2400">Chariot</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;alteration)</pre>
 </li>
 </ul>
 <a name="Chariot-long-long-">
@@ -650,7 +654,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>Chariot</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2327">Chariot</a>(long&nbsp;alteration0,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2404">Chariot</a>(long&nbsp;alteration0,
                long&nbsp;alteration1)</pre>
 </li>
 </ul>
@@ -660,7 +664,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Chariot</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2333">Chariot</a>(long&nbsp;alteration)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2410">Chariot</a>(long&nbsp;alteration)</pre>
 </li>
 </ul>
 </li>
@@ -677,7 +681,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2391">hash</a>(boolean[]&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2468">hash</a>(boolean[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-byte:A-">
@@ -686,7 +690,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2430">hash</a>(byte[]&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2507">hash</a>(byte[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-short:A-">
@@ -695,7 +699,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2454">hash</a>(short[]&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2531">hash</a>(short[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-char:A-">
@@ -704,7 +708,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2474">hash</a>(char[]&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2551">hash</a>(char[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-char:A-int-int-">
@@ -713,7 +717,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2494">hash</a>(char[]&nbsp;data,
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2571">hash</a>(char[]&nbsp;data,
                 int&nbsp;start,
                 int&nbsp;end)</pre>
 </li>
@@ -724,7 +728,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2514">hash</a>(char[]&nbsp;data,
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2591">hash</a>(char[]&nbsp;data,
                 int&nbsp;start,
                 int&nbsp;end,
                 int&nbsp;step)</pre>
@@ -736,7 +740,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2534">hash</a>(int[]&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2611">hash</a>(int[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-long:A-">
@@ -745,7 +749,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2549">hash</a>(long[]&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2626">hash</a>(long[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-float:A-">
@@ -754,7 +758,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2565">hash</a>(float[]&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2642">hash</a>(float[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-double:A-">
@@ -763,7 +767,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2580">hash</a>(double[]&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2657">hash</a>(double[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-java.lang.CharSequence-">
@@ -772,7 +776,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2595">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2672">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-char:A:A-">
@@ -781,7 +785,16 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2616">hash</a>(char[][]&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2692">hash</a>(char[][]&nbsp;data)</pre>
+</li>
+</ul>
+<a name="hash-long:A:A-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hash</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2707">hash</a>(long[][]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-java.lang.CharSequence:A-">
@@ -790,7 +803,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2631">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>[]&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2722">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-java.lang.CharSequence:A...-">
@@ -799,7 +812,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2646">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>[]...&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2737">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>[]...&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-java.lang.Object:A-">
@@ -808,7 +821,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2662">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Chariot.html#line.2753">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;data)</pre>
 </li>
 </ul>
 </li>
