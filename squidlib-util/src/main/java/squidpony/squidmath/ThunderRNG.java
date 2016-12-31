@@ -6,8 +6,8 @@ import squidpony.annotation.Beta;
 import java.io.Serializable;
 
 /**
- * Like LightRNG, but shares a lot in common with CrossHash's hashing mechanism. The name comes from its
- * similarity to the nickname for that hash, Lightning, but also to how the current version acts like LightRNG,
+ * Like LightRNG, but shares a lot in common with one of CrossHash's hashing algorithms. The name comes from its
+ * similarity to that particular hash, Lightning, but also to how the current version acts like LightRNG,
  * sort-of, but involves a thunder-like "echo" where the earlier results are used as additional state for the
  * next result. Why should you consider it? It appears to be the fastest RandomnessSource we have available,
  * and is the only RNG in the library that can generate 1 billion random long values in under 1 second (or
@@ -94,8 +94,7 @@ public class ThunderRNG implements RandomnessSource, Serializable {
     public static long bitPermute(long p)
     {
         p ^= p >>> (5 + (p >>> 59));
-        p *= 0xAEF17502108EF2D9L;
-        return p ^ (p >>> 43);
+        return ((p *= 0xAEF17502108EF2D9L) >>> 43) ^ p;
     }
 
     @Override
@@ -224,18 +223,36 @@ public class ThunderRNG implements RandomnessSource, Serializable {
         return "ThunderRNG with state parts A=0x" + StringKit.hex(state) + "L, B=0x"  + StringKit.hex(jumble)+ 'L';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ThunderRNG that = (ThunderRNG) o;
+
+        if (state != that.state) return false;
+        return jumble == that.jumble;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (state ^ (state >>> 32));
+        result = 31 * result + (int) (jumble ^ (jumble >>> 32));
+        return result;
+    }
+
     public static long determine(final long x)
     {
-        long a = ((x ^ 0xC6BC279692B5CC83L) << 16) ^ x, b = (((x ^ 0x632BE59BD9B4E019L) << 16) ^ x) | 1L;
-        a += b & (b += 0xAB79B96DCD7FE75EL);
+        long b = (((x ^ 0x632BE59BD9B4E019L) << 16) ^ -x) | 1L,
+                a = (((x ^ 0xC6BC279692B5CC83L) << 16) ^ x) + (b & (b += 0xAB79B96DCD7FE75EL));
         return a ^ (0x9E3779B97F4A7C15L * (((x ^ a + b) & (b + 0xAB79B96DCD7FE75EL)) >> 20));
     }
 
     public static int determineBounded(final long x, final int bound)
     {
-        long a = ((x ^ 0xC6BC279692B5CC83L) << 16) ^ x, b = (((x ^ 0x632BE59BD9B4E019L) << 16) ^ x) | 1L;
-        a += b & (b += 0xAB79B96DCD7FE75EL);
-        return (int)((bound * ((a ^ (0x9E3779B97F4A7C15L * (((x ^ a + b) & (b + 0xAB79B96DCD7FE75EL)) >> 20))) & 0x7FFFFFFFL)) >> 31);
+        long b = (((x ^ 0x632BE59BD9B4E019L) << 16) ^ -x) | 1L,
+                a = (((x ^ 0xC6BC279692B5CC83L) << 16) ^ x) + (b & (b += 0xAB79B96DCD7FE75EL));
+        return (int)((bound * ((a ^ (0x9E3779B97F4A7C15L * (((x ^ a + b) & (b + 0xAB79B96DCD7FE75EL)) >> 20))) & 0x7FFFFFFFL)) >>> 31);
     }
 
     public static long determine(final long x, final long y)
@@ -251,7 +268,7 @@ public class ThunderRNG implements RandomnessSource, Serializable {
         a += b & (b += 0xAB79B96DCD7FE75EL);
         return (int)((bound * ((
                 y ^ a ^ (0x9E3779B97F4A7C15L * (((x ^ a + b) & (b + 0xAB79B96DCD7FE75EL)) >> 20))
-                ) & 0x7FFFFFFFL)) >> 31);
+                ) & 0x7FFFFFFFL)) >>> 31);
     }
 
     public static long determine(final long x, final long y, final long z)
@@ -267,7 +284,7 @@ public class ThunderRNG implements RandomnessSource, Serializable {
         a += b & (b += 0xAB79B96DCD7FE75EL);
         return (int)((bound * ((
                 y + z ^ a ^ (0x9E3779B97F4A7C15L * (((x + z ^ a + b) & (b + 0xAB79B96DCD7FE75EL)) >> 20))
-        ) & 0x7FFFFFFFL)) >> 31);
+        ) & 0x7FFFFFFFL)) >>> 31);
     }
 
     public static long determine(final long x, final long y, final long z, final long w)
@@ -283,6 +300,6 @@ public class ThunderRNG implements RandomnessSource, Serializable {
         a += b & (b += 0xAB79B96DCD7FE75EL);
         return (int)((bound * ((
                 y + w ^ a ^ (0x9E3779B97F4A7C15L * (((x + z ^ a + b) & (b + 0xAB79B96DCD7FE75EL)) >> 20))
-        ) & 0x7FFFFFFFL)) >> 31);
+        ) & 0x7FFFFFFFL)) >>> 31);
     }
 }

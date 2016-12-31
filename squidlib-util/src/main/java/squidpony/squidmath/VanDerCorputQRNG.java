@@ -15,8 +15,11 @@ import java.io.Serializable;
  * this class are: size of state affects speed (prefer smaller seeds, but quality is sometimes a bit poor at first if
  * you start at 0); the base (when given) should be prime and moderately small (or very small if scramble is false, any
  * of 2, 3, 5, or 7 should be safe); this doesn't generate very random numbers when scramble is false (which can be good
- * for making points that should not overlap), but it will seem much more random when scramble is true; and this is a
- * StatefulRandomness with an additional method for generating quasi-random doubles, {@link #nextDouble()}.
+ * for making points that should not overlap), but it will seem much more random when scramble is true; this is a
+ * StatefulRandomness with an additional method for generating quasi-random doubles, {@link #nextDouble()}; and there
+ * are several static methods offered for convenient generation of points on the related Halton sequence (as well as
+ * faster generation of doubles in the base-2 van der Corput sequence, and a special method that switches which base
+ * it uses depending on the index to seem even less clearly-patterned).
  * <br>
  * This generator allows a base (also called a radix) that changes the sequence significantly; a base should be prime,
  * and this performs a little better in terms of time used with larger primes, though quality is also improved by
@@ -90,8 +93,8 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      */
     public VanDerCorputQRNG()
     {
-        base = 13;
-        state = 83;
+        base = 7;
+        state = 37;
         scramble = true;
     }
 
@@ -103,7 +106,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      */
     public VanDerCorputQRNG(long seed)
     {
-        base = 13;
+        base = 7;
         state = seed;
         scramble = true;
     }
@@ -134,7 +137,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
     @Override
     public long nextLong() {
         // when scrambling the sequence, intentionally uses a non-standard Gray-like code
-        long s = (scramble) ? (++state & 0x7fffffffffffffffL) : (++state * state) ^ (state * 137 >> 4),
+        long s = (scramble) ? (++state & 0x7fffffffffffffffL) : (++state * state) ^ (state * 137 >>> 4),
                 num = s % base, den = base;
         while (den <= s) {
             num *= base;
@@ -159,14 +162,14 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      */
     public double nextDouble() {
         // when scrambling the sequence, intentionally uses a non-standard Gray-like code
-        long s = (scramble) ? (++state & 0x7fffffffffffffffL) : (++state * state) ^ (state * 137 >> 4),
+        long s = (scramble) ? (++state & 0x7fffffffffffffffL) : (++state * state) ^ (state * 137 >>> 4),
                 num = s % base, den = base;
         while (den <= s) {
             num *= base;
             num += (s % (den * base)) / den;
             den *= base;
         }
-        return num / ((double)den);
+        return num / (double)den;
     }
 
     @Override
@@ -307,7 +310,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
     public static double determine2(int index)
     {
         int s = (index+1 & 0x7fffffff), leading = Integer.numberOfLeadingZeros(s);
-        return (Integer.reverse(s) >>> leading) / (1.0 * (1 << (32 - leading)));
+        return (Integer.reverse(s) >>> leading) / (double)(1 << (32 - leading));
     }
 
     private static final int[] lowPrimes = {2, 3, 2, 3, 5, 2, 3, 2};

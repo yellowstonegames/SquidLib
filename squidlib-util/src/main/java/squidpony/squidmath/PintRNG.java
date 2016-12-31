@@ -196,12 +196,16 @@ public class PintRNG implements RandomnessSource, StatefulRandomness, Serializab
 
 
     /**
-     * Sets the current state of this generator (an int) by XOR-ing the upper and lower halves of seed into one int.
+     * Sets the current state of this generator (an int) using only the least-significant 32 bits of seed (by casting
+     * a mask of those bits in seed to int, which helps ensure that a full 32 bits of state are possible). Giving
+     * int seeds should set the seed to an identical int; long seeds will lose any information in higher bits (including
+     * the sign, so 0xFFFFFFFF00000000L, which is a negative long, would be treated as 0 since only the 0x00000000 part
+     * at the end is actually used).
      * @param seed the seed to use for this PintRNG, as if it was constructed with this seed.
      */
     @Override
     public void setState( final long seed ) {
-        state = (int)(seed>>>32 ^ seed);
+        state = (int)(seed & 0xFFFFFFFFL);
     }
     /**
      * Gets the current state of this generator.
@@ -254,6 +258,6 @@ public class PintRNG implements RandomnessSource, StatefulRandomness, Serializab
     public static int determineBounded(int state, final int bound)
     {
         state ^= state >>> (4 + (state >>> 28));
-        return (int)((bound * ((((state *= 277803737) >>> 22) ^ state) & 0x7FFFFFFFL)) >> 31);
+        return (int)((bound * ((((state *= 277803737) >>> 22) ^ state) & 0x7FFFFFFFL)) >>> 31);
     }
 }

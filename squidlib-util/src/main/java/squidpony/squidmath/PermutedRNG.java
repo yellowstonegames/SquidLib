@@ -301,6 +301,6 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness, Serial
     public static int determineBounded(long state, final int bound)
     {
         state ^= state >>> (5 + (state >>> 59));
-        return (int)((bound * ((((state *= 0xAEF17502108EF2D9L) >>> 43) ^ state) & 0x7FFFFFFFL)) >> 31);
+        return (int)((bound * ((((state *= 0xAEF17502108EF2D9L) >>> 43) ^ state) & 0x7FFFFFFFL)) >>> 31);
     }
 }

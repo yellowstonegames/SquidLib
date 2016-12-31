@@ -191,4 +191,29 @@ public class MersenneTwister implements RandomnessSource {
         return next;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MersenneTwister that = (MersenneTwister) o;
+
+        if (mtIndex != that.mtIndex) return false;
+        if (!Arrays.equals(seed, that.seed)) return false;
+        return Arrays.equals(mt, that.mt);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = CrossHash.Lightning.hash(seed);
+        result = 31 * result + CrossHash.Lightning.hash(mt);
+        result = 31 * result + mtIndex;
+        return result;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "MersenneTwister with hidden state (id is " + System.identityHashCode(this)  + ')';
+    }
 }
