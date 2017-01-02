@@ -58,9 +58,13 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     public long[] data;
     public int height;
     public int width;
-    private int ySections;
-    private long yEndMask;
+    protected int ySections;
+    protected long yEndMask;
 
+    /**
+     * Constructs an empty 64x64 GreasedRegion.
+     * GreasedRegions are mutable, so you can add to this with insert() or insertSeveral(), among others.
+     */
     public GreasedRegion()
     {
         width = 64;
@@ -70,7 +74,12 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         data = new long[64];
     }
 
-    public GreasedRegion(boolean[][] bits)
+    /**
+     * Constructs a GreasedRegion with the given rectangular boolean array, with width of bits.length and height of
+     * bits[0].length, any value of true considered "on", and any value of false considered "off."
+     * @param bits a rectangular 2D boolean array where true is on and false is off
+     */
+    public GreasedRegion(final boolean[][] bits)
     {
         width = bits.length;
         height = bits[0].length;
@@ -83,8 +92,15 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
     }
-
-    public GreasedRegion refill(boolean[][] map) {
+    /**
+     * Reassigns this GreasedRegion with the given rectangular boolean array, reusing the current data storage (without
+     * extra allocations) if this.width == map.length and this.height == map[0].length. The current values stored in
+     * this are always cleared, then any value of true in map is considered "on", and any value of false in map is
+     * considered "off."
+     * @param map a rectangular 2D boolean array where true is on and false is off
+     * @return this for chaining
+     */
+    public GreasedRegion refill(final boolean[][] map) {
         if (map != null && map.length > 0 && width == map.length && height == map[0].length) {
             Arrays.fill(data, 0L);
             for (int x = 0; x < width; x++) {
@@ -108,7 +124,13 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         }
     }
 
-    public GreasedRegion(char[][] map, char yes)
+    /**
+     * Constructs a GreasedRegion with the given rectangular char array, with width of map.length and height of
+     * map[0].length, any value that equals yes is considered "on", and any other value considered "off."
+     * @param map a rectangular 2D char array where yes is on and everything else is off
+     * @param yes which char to encode as "on"
+     */
+    public GreasedRegion(final char[][] map, final char yes)
     {
         width = map.length;
         height = map[0].length;
@@ -121,8 +143,15 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
     }
-
-    public GreasedRegion refill(char[][] map, char yes) {
+    /**
+     * Reassigns this GreasedRegion with the given rectangular char array, reusing the current data storage (without
+     * extra allocations) if this.width == map.length and this.height == map[0].length. The current values stored in
+     * this are always cleared, then any value that equals yes is considered "on", and any other value considered "off."
+     * @param map a rectangular 2D char array where yes is on and everything else is off
+     * @param yes which char to encode as "on"
+     * @return this for chaining
+     */
+    public GreasedRegion refill(final char[][] map, final char yes) {
         if (map != null && map.length > 0 && width == map.length && height == map[0].length) {
             Arrays.fill(data, 0L);
             for (int x = 0; x < width; x++) {
@@ -152,7 +181,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param map String array (as printed, not the normal storage) where each String is a row
      * @param yes the char to consider "on" in the GreasedRegion
      */
-    public GreasedRegion(String[] map, char yes)
+    public GreasedRegion(final String[] map, final char yes)
     {
         height = map.length;
         width = map[0].length();
@@ -171,7 +200,9 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * would be done with y, x instead of the normal x, y.
      * @param map String array (as printed, not the normal storage) where each String is a row
      * @param yes the char to consider "on" in the GreasedRegion
-     */public GreasedRegion refill(String[] map, char yes) {
+     * @return this for chaining
+     */
+    public GreasedRegion refill(final String[] map, final char yes) {
         if (map != null && map.length > 0 && height == map.length && width == map[0].length()) {
             Arrays.fill(data, 0L);
             for (int x = 0; x < width; x++) {
@@ -194,8 +225,13 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             return this;
         }
     }
-
-    public GreasedRegion(int[][] map, int yes)
+    /**
+     * Constructs a GreasedRegion with the given rectangular int array, with width of map.length and height of
+     * map[0].length, any value that equals yes is considered "on", and any other value considered "off."
+     * @param map a rectangular 2D int array where an int == yes is on and everything else is off
+     * @param yes which int to encode as "on"
+     */
+    public GreasedRegion(final int[][] map, final int yes)
     {
         width = map.length;
         height = map[0].length;
@@ -208,8 +244,15 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
     }
-
-    public GreasedRegion refill(int[][] map, int yes) {
+    /**
+     * Reassigns this GreasedRegion with the given rectangular int array, reusing the current data storage (without
+     * extra allocations) if this.width == map.length and this.height == map[0].length. The current values stored in
+     * this are always cleared, then any value that equals yes is considered "on", and any other value considered "off."
+     * @param map a rectangular 2D int array where an int == yes is on and everything else is off
+     * @param yes which int to encode as "on"
+     * @return this for chaining
+     */
+    public GreasedRegion refill(final int[][] map, final int yes) {
         if (map != null && map.length > 0 && width == map.length && height == map[0].length) {
             Arrays.fill(data, 0L);
             for (int x = 0; x < width; x++) {
@@ -239,8 +282,9 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param map an int[][] that should have some ints between lower and upper
      * @param lower lower bound, inclusive; all on cells will have values in map that are at least equal to lower
      * @param upper upper bound, exclusive; all on cells will have values in map that are less than upper
+     * @return this for chaining
      */
-    public GreasedRegion(int[][] map, int lower, int upper)
+    public GreasedRegion(final int[][] map, final int lower, final int upper)
     {
         width = map.length;
         height = map[0].length;
@@ -255,7 +299,18 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
     }
-    public GreasedRegion refill(int[][] map, int lower, int upper) {
+
+    /**
+     * Reassigns this GreasedRegion with the given rectangular int array, reusing the current data storage (without
+     * extra allocations) if this.width == map.length and this.height == map[0].length. The current values stored in
+     * this are always cleared, then cells are treated as on if they are greater than or equal to lower and less than
+     * upper, or off otherwise.
+     * @param map a rectangular 2D int array that should have some values between lower and upper
+     * @param lower lower bound, inclusive; all on cells will have values in map that are at least equal to lower
+     * @param upper upper bound, exclusive; all on cells will have values in map that are less than upper
+     * @return this for chaining
+     */
+    public GreasedRegion refill(final int[][] map, final int lower, final int upper) {
         if (map != null && map.length > 0 && width == map.length && height == map[0].length) {
             Arrays.fill(data, 0L);
             int[] column;
@@ -290,7 +345,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param lower lower bound, inclusive; all on cells will have values in map that are at least equal to lower
      * @param upper upper bound, exclusive; all on cells will have values in map that are less than upper
      */
-    public GreasedRegion(short[][] map, int lower, int upper)
+    public GreasedRegion(final short[][] map, final int lower, final int upper)
     {
         width = map.length;
         height = map[0].length;
@@ -305,7 +360,18 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
     }
-    public GreasedRegion refill(short[][] map, int lower, int upper) {
+
+    /**
+     * Reassigns this GreasedRegion with the given rectangular short array, reusing the current data storage (without
+     * extra allocations) if this.width == map.length and this.height == map[0].length. The current values stored in
+     * this are always cleared, then cells are treated as on if they are greater than or equal to lower and less than
+     * upper, or off otherwise.
+     * @param map a rectangular 2D short array that should have some values between lower and upper
+     * @param lower lower bound, inclusive; all on cells will have values in map that are at least equal to lower
+     * @param upper upper bound, exclusive; all on cells will have values in map that are less than upper
+     * @return this for chaining
+     */
+    public GreasedRegion refill(final short[][] map, final int lower, final int upper) {
         if (map != null && map.length > 0 && width == map.length && height == map[0].length) {
             Arrays.fill(data, 0L);
             short[] column;
@@ -339,7 +405,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param map a double[][] that probably relates in some way to DijkstraMap.
      * @param upperBound upper inclusive; any double greater than this will be off, any others will be on
      */
-    public GreasedRegion(double[][] map, double upperBound)
+    public GreasedRegion(final double[][] map, final double upperBound)
     {
         width = map.length;
         height = map[0].length;
@@ -353,8 +419,16 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
     }
-
-    public GreasedRegion refill(double[][] map, double upperBound) {
+    /**
+     * Reassigns this GreasedRegion with the given rectangular double array, reusing the current data storage (without
+     * extra allocations) if this.width == map.length and this.height == map[0].length. The current values stored in
+     * this are always cleared, then cells are treated as on if they are less than or equal to upperBound, or off
+     * otherwise.
+     * @param map a rectangular 2D double array that should usually have some values less than or equal to upperBound
+     * @param upperBound upper bound, inclusive; all on cells will have values in map that are less than or equal to this
+     * @return this for chaining
+     */
+    public GreasedRegion refill(final double[][] map, final double upperBound) {
         if (map != null && map.length > 0 && width == map.length && height == map[0].length) {
             Arrays.fill(data, 0L);
             for (int x = 0; x < width; x++) {
@@ -388,7 +462,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param upperBound upper exclusive; any double greater than or equal to this this will be off, any doubles both
      *                   less than this and equal to or greater than lower will be on
      */
-    public GreasedRegion(double[][] map, double lowerBound, double upperBound)
+    public GreasedRegion(final double[][] map, final double lowerBound, final double upperBound)
     {
         width = map.length;
         height = map[0].length;
@@ -402,7 +476,17 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
     }
-    public GreasedRegion refill(double[][] map, double lower, double upper) {
+    /**
+     * Reassigns this GreasedRegion with the given rectangular double array, reusing the current data storage (without
+     * extra allocations) if this.width == map.length and this.height == map[0].length. The current values stored in
+     * this are always cleared, then cells are treated as on if they are greater than or equal to lower and less than
+     * upper, or off otherwise.
+     * @param map a rectangular 2D double array that should have some values between lower and upper
+     * @param lower lower bound, inclusive; all on cells will have values in map that are at least equal to lower
+     * @param upper upper bound, exclusive; all on cells will have values in map that are less than upper
+     * @return this for chaining
+     */
+    public GreasedRegion refill(final double[][] map, final double lower, final double upper) {
         if (map != null && map.length > 0 && width == map.length && height == map[0].length) {
             Arrays.fill(data, 0L);
             double[] column;
@@ -429,8 +513,15 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             return this;
         }
     }
-
-    public GreasedRegion(boolean[] bits, int width, int height)
+    /**
+     * Constructs a GreasedRegion with the given 1D boolean array, with the given width and height, where an [x][y]
+     * position is obtained from bits given an index n with x = n / height, y = n % height, any value of true
+     * considered "on", and any value of false considered "off."
+     * @param bits a 1D boolean array where true is on and false is off
+     * @param width the width of the desired GreasedRegion; width * height should equal bits.length
+     * @param height the height of the desired GreasedRegion; width * height should equal bits.length
+     */
+    public GreasedRegion(final boolean[] bits, final int width, final int height)
     {
         this.width = width;
         this.height = height;
@@ -441,9 +532,18 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             if(bits[a]) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
         }
     }
-
-    public GreasedRegion refill(boolean[] bits, int width, int height) {
-        if (bits != null && bits.length > 0 && this.width == width && this.height == height) {
+    /**
+     * Reassigns this GreasedRegion with the given 1D boolean array, reusing the current data storage (without
+     * extra allocations) if this.width == width and this.height == height, where an [x][y]
+     * position is obtained from bits given an index n with x = n / height, y = n % height, any value of true
+     * considered "on", and any value of false considered "off."
+     * @param bits a 1D boolean array where true is on and false is off
+     * @param width the width of the desired GreasedRegion; width * height should equal bits.length
+     * @param height the height of the desired GreasedRegion; width * height should equal bits.length
+     * @return this for chaining
+     */
+    public GreasedRegion refill(final boolean[] bits, final int width, final int height) {
+        if (bits != null && this.width == width && this.height == height) {
             Arrays.fill(data, 0L);
             for (int a = 0, x = 0, y = 0; a < bits.length; a++, x = a / height, y = a % height) {
                 data[x * ySections + (y >> 6)] |= (bits[a] ? 1L : 0L) << (y & 63);
@@ -470,7 +570,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param width the maximum width for the GreasedRegion
      * @param height the maximum height for the GreasedRegion
      */
-    public GreasedRegion(int width, int height)
+    public GreasedRegion(final int width, final int height)
     {
         this.width = width;
         this.height = height;
@@ -487,7 +587,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param width the maximum width for the GreasedRegion
      * @param height the maximum height for the GreasedRegion
      */
-    public GreasedRegion(Coord single, int width, int height)
+    public GreasedRegion(final Coord single, final int width, final int height)
     {
         this.width = width;
         this.height = height;
@@ -507,7 +607,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param height the maximum height for the GreasedRegion
      * @param points an array or vararg of Coord to store as "on" in this GreasedRegion
      */
-    public GreasedRegion(int width, int height, Coord... points)
+    public GreasedRegion(final int width, final  int height, final Coord... points)
     {
         this.width = width;
         this.height = height;
@@ -533,7 +633,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param height the maximum height for the GreasedRegion
      * @param points an array or vararg of Coord to store as "on" in this GreasedRegion
      */
-    public GreasedRegion(int width, int height, Iterable<Coord> points)
+    public GreasedRegion(final int width, final int height, final Iterable<Coord> points)
     {
         this.width = width;
         this.height = height;
@@ -552,13 +652,14 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
 
     /**
-     * Constructor for a random GreasedRegion of the given width and height.
-     * GreasedRegions are mutable, so you can add to this with insert() or insertSeveral(), among others.
-     * @param random a RandomnessSource (such as LightRNG or ThunderRNG) that this will use to generate its contents
+     * Constructor for a random GreasedRegion of the given width and height, typically assigning approximately half of
+     * the cells in this to "on" and the rest to off. A RandomnessSource can be slightly more efficient than an RNG when
+     * you're making a lot of calls on it.
+     * @param random a RandomnessSource that should have a good nextLong() method; LightRNG, XoRoRNG, and ThunderRNG do
      * @param width the maximum width for the GreasedRegion
      * @param height the maximum height for the GreasedRegion
      */
-    public GreasedRegion(RandomnessSource random, int width, int height)
+    public GreasedRegion(final RandomnessSource random, final int width, final int height)
     {
         this.width = width;
         this.height = height;
@@ -574,8 +675,17 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
     }
-
-    public GreasedRegion refill(RandomnessSource random, int width, int height) {
+    /**
+     * Reassigns this GreasedRegion by filling it with random values from random, reusing the current data storage
+     * (without extra allocations) if this.width == width and this.height == height, and typically assigning
+     * approximately half of the cells in this to "on" and the rest to off. A RandomnessSource can be slightly more
+     * efficient than an RNG when you're making a lot of calls on it.
+     * @param random a RandomnessSource that should have a good nextLong() method; LightRNG, XoRoRNG, and ThunderRNG do
+     * @param width the width of the desired GreasedRegion
+     * @param height the height of the desired GreasedRegion
+     * @return this for chaining
+     */
+    public GreasedRegion refill(final RandomnessSource random, final int width, final int height) {
         if (random != null){
             if(this.width == width && this.height == height) {
                 for (int i = 0; i < width * ySections; i++) {
@@ -595,9 +705,6 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return this;
     }
 
-    public GreasedRegion refill(RNG random, int width, int height) {
-        return refill(random.getRandomness(), width, height);
-    }
     /**
      * Constructor for a random GreasedRegion of the given width and height.
      * GreasedRegions are mutable, so you can add to this with insert() or insertSeveral(), among others.
@@ -605,20 +712,36 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param width the maximum width for the GreasedRegion
      * @param height the maximum height for the GreasedRegion
      */
-    public GreasedRegion(RNG random, int width, int height)
+    public GreasedRegion(final RNG random, final int width, final int height)
     {
         this(random.getRandomness(), width, height);
+    }
+    /**
+     * Reassigns this GreasedRegion by filling it with random values from random, reusing the current data storage
+     * (without extra allocations) if this.width == width and this.height == height, and typically assigning
+     * approximately half of the cells in this to "on" and the rest to off.
+     * @param random an RNG that should have a good nextLong() method; the default (LightRNG internally) should be fine
+     * @param width the width of the desired GreasedRegion
+     * @param height the height of the desired GreasedRegion
+     * @return this for chaining
+     */
+    public GreasedRegion refill(final RNG random, final int width, final int height) {
+        return refill(random.getRandomness(), width, height);
     }
 
     /**
      * Constructor for a random GreasedRegion of the given width and height, trying to set the given fraction of cells
-     * to on. GreasedRegions are mutable, so you can add to this with insert() or insertSeveral(), among others.
-     * @param random a RandomnessSource (such as LightRNG or ThunderRNG) that this will use to generate its contents
-     * @param fraction between 0.0 and 1.0 (clamped), only considering a precision of 1.0/64.0 between steps
+     * to on. Depending on the value of fraction, this makes between 0 and 6 calls to the nextLong() method of random's
+     * internal RandomnessSource, per 64 cells of this GreasedRegion (if height is not a multiple of 64, round up to get
+     * the number of calls this makes). As such, this sacrifices the precision of the fraction to obtain significantly
+     * better speed than generating one random number per cell, although the precision is probably good enough (fraction
+     * is effectively rounded down to the nearest multiple of 0.015625, and clamped between 0.0 and 1.0).
+     * @param random an RNG that should have a good approximateBits() method; the default (LightRNG internally) should be fine
+     * @param fraction between 0.0 and 1.0 (clamped), only considering a precision of 1/64.0 (0.015625) between steps
      * @param width the maximum width for the GreasedRegion
      * @param height the maximum height for the GreasedRegion
      */
-    public GreasedRegion(RNG random, double fraction, int width, int height)
+    public GreasedRegion(final RNG random, final double fraction, final int width, final int height)
     {
         this.width = width;
         this.height = height;
@@ -635,8 +758,21 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
     }
-
-    public GreasedRegion refill(RNG random, double fraction, int width, int height) {
+    /**
+     * Reassigns this GreasedRegion randomly, reusing the current data storage (without extra allocations) if this.width
+     * == width and this.height == height, while trying to set the given fraction of cells to on. Depending on the value
+     * of fraction, this makes between 0 and 6 calls to the nextLong() method of random's internal RandomnessSource, per
+     * 64 cells of this GreasedRegion (if height is not a multiple of 64, round up to get the number of calls this
+     * makes). As such, this sacrifices the precision of the fraction to obtain significantly better speed than
+     * generating one random number per cell, although the precision is probably good enough (fraction is effectively
+     * rounded down to the nearest multiple of 0.015625, and clamped between 0.0 and 1.0).
+     * @param random an RNG that should have a good approximateBits() method; the default (LightRNG internally) should be fine
+     * @param fraction between 0.0 and 1.0 (clamped), only considering a precision of 1/64.0 (0.015625) between steps
+     * @param width the maximum width for the GreasedRegion
+     * @param height the maximum height for the GreasedRegion
+     * @return this for chaining
+     */
+    public GreasedRegion refill(final RNG random, final double fraction, final int width, final int height) {
         if (random != null){
             int bitCount = (int) (fraction * 64);
             if(this.width == width && this.height == height) {
@@ -665,7 +801,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @see #copy() for a convenience method that just uses this constructor
      * @param other another GreasedRegion that will be copied into this new GreasedRegion
      */
-    public GreasedRegion(GreasedRegion other)
+    public GreasedRegion(final GreasedRegion other)
     {
         width = other.width;
         height = other.height;
@@ -674,6 +810,16 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         data = new long[width * ySections];
         System.arraycopy(other.data, 0, data, 0, width * ySections);
     }
+
+    /**
+     * Primarily for internal use, this constructor copies data2 exactly into the internal long array the new
+     * GreasedRegion will use, and does not perform any validation steps to ensure that cells that would be "on" but are
+     * outside the actual height of the GreasedRegion are actually removed (this only matters if height is not a
+     * multiple of 64).
+     * @param data2 a long array that is typically from another GreasedRegion, and would be hard to make otherwise
+     * @param width the width of the GreasedRegion to construct
+     * @param height the height of the GreasedRegion to construct
+     */
     public GreasedRegion(final long[] data2, final int width, final int height)
     {
         this.width = width;
@@ -684,6 +830,19 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         System.arraycopy(data2, 0, data, 0, width * ySections);
     }
 
+    /**
+     * Primarily for internal use, this constructor copies data2 into the internal long array the new GreasedRegion will
+     * use, but treats data2 as having the dimensions [dataWidth][dataHeight], and uses the potentially-different
+     * dimensions [width][height] for the constructed GreasedRegion. This will truncate data2 on width, height, or both
+     * if width or height is smaller than dataWidth or dataHeight. It will fill extra space with all "off" if width or
+     * height is larger than dataWidth or dataHeight. It will interpret data2 as the same 2D shape regardless of the
+     * width or height it is being assigned to, and data2 will not be reshaped by truncation.
+     * @param data2 a long array that is typically from another GreasedRegion, and would be hard to make otherwise
+     * @param dataWidth the width to interpret data2 as having
+     * @param dataHeight the height to interpret data2 as having
+     * @param width the width of the GreasedRegion to construct
+     * @param height the height of the GreasedRegion to construct
+     */
     public GreasedRegion(final long[] data2, final int dataWidth, final int dataHeight, final int width, final int height)
     {
         this.width = width;
@@ -691,17 +850,42 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         ySections = (height + 63) >> 6;
         yEndMask = -1L >>> (64 - (height & 63));
         data = new long[width * ySections];
+
+        final int ySections2 = (dataHeight + 63) >> 6;
+
         if(ySections == 1) {
-            System.arraycopy(data2, 0, data, 0, dataWidth * ySections);
+            System.arraycopy(data2, 0, data, 0, dataWidth * Math.min(ySections, ySections2));
         }
         else
         {
-            for (int i = 0, j = 0; i < dataWidth; i++, j += ySections) {
-                data[j] = data2[i];
+            if(dataHeight >= height) {
+                for (int i = 0, j = 0; i < width && i < dataWidth; i += ySections2, j += ySections) {
+                    System.arraycopy(data2, i, data, j, ySections);
+                }
+            }
+            else
+            {
+                for (int i = 0, j = 0; i < width && i < dataWidth; i += ySections2, j += ySections) {
+                    System.arraycopy(data2, i, data, j, ySections2);
+                }
             }
         }
     }
 
+    /**
+     * A useful method for efficiency, remake() reassigns this GreasedRegion to have its contents replaced by other. If
+     * other and this GreasedRegion have identical width and height, this is very efficient and performs no additional
+     * allocations, simply replacing the cell data in this with the cell data from other. If width and height are not
+     * both equal between this and other, this does allocate a new data array, but still reassigns this GreasedRegion
+     * in-place and acts similarly to when width and height are both equal (it just uses some more memory).
+     * <br>
+     * Using remake() or the similar refill() methods in chains of operations on multiple GreasedRegions can be key to
+     * maintaining good performance and memory usage. You often can recycle a no-longer-used GreasedRegion by assigning
+     * a GreasedRegion you want to keep to it with remake(), then mutating either the remade value or the one that was
+     * just filled into this but keeping one version around for later usage.
+     * @param other another GreasedRegion to replace the data in this GreasedRegion with
+     * @return this for chaining
+     */
     public GreasedRegion remake(GreasedRegion other) {
         if (width == other.width && height == other.height) {
             System.arraycopy(other.data, 0, data, 0, width * ySections);
@@ -761,6 +945,13 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return this;
     }
 
+    /**
+     * Sets the cell at x,y to on if value is true or off if value is false. Does nothing if x,y is out of bounds.
+     * @param value the value to set in the cell
+     * @param x the x-position of the cell
+     * @param y the y-position of the cell
+     * @return this for chaining
+     */
     public GreasedRegion set(boolean value, int x, int y)
     {
         if(x < width && y < height && x >= 0 && y >= 0) {
@@ -771,23 +962,57 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         }
         return this;
     }
+
+    /**
+     * Sets the cell at point to on if value is true or off if value is false. Does nothing if point is out of bounds,
+     * or if point is null.
+     * @param value the value to set in the cell
+     * @param point the x,y Coord of the cell to set
+     * @return this for chaining
+     */
     public GreasedRegion set(boolean value, Coord point)
     {
+        if(point == null) return this;
         return set(value, point.x, point.y);
     }
 
+    /**
+     * Sets the cell at x,y to "on". Does nothing if x,y is out of bounds.
+     * More efficient, slightly, than {@link #set(boolean, int, int)} if you just need to set a cell to "on".
+     * @param x the x-position of the cell
+     * @param y the y-position of the cell
+     * @return this for chaining
+     */
     public GreasedRegion insert(int x, int y)
     {
         if(x < width && y < height && x >= 0 && y >= 0)
             data[x * ySections + (y >> 6)] |= 1L << (y & 63);
         return this;
     }
+    /**
+     * Sets the cell at point to "on". Does nothing if point is out of bounds, or if point is null.
+     * More efficient, slightly, than {@link #set(boolean, Coord)} if you just need to set a cell to "on".
+     * @param point the x,y Coord of the cell
+     * @return this for chaining
+     */
     public GreasedRegion insert(Coord point)
     {
+
+        if(point == null) return this;
         return insert(point.x, point.y);
     }
 
-
+    /**
+     * Takes another GreasedRegion, called other, with potentially different size and inserts its "on" cells into thi
+     * GreasedRegion at the given x,y offset, allowing negative x and/or y to put only part of other in this.
+     * <br>
+     * This is a rather complex method internally, but should be about as efficient as a general insert-region method
+     * can be.
+     * @param x the x offset to start inserting other at; may be negative
+     * @param y the y offset to start inserting other at; may be negative
+     * @param other the other GreasedRegion to insert
+     * @return this for chaining
+     */
     public GreasedRegion insert(int x, int y, GreasedRegion other)
     {
         if(other == null || other.ySections <= 0 || other.width <= 0)
@@ -901,7 +1126,6 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         }
 
         return this;
-
     }
 
     public GreasedRegion insertSeveral(Coord... points)
@@ -992,7 +1216,133 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     {
         return remove(point.x, point.y);
     }
+    /**
+     * Takes another GreasedRegion, called other, with potentially different size and removes its "on" cells from this
+     * GreasedRegion at the given x,y offset, allowing negative x and/or y to remove only part of other in this.
+     * <br>
+     * This is a rather complex method internally, but should be about as efficient as a general remove-region method
+     * can be. The code is identical to {@link #insert(int, int, GreasedRegion)} except that where insert only adds
+     * cells, this only removes cells. Essentially, insert() is to {@link #or(GreasedRegion)} as remove() is to
+     * {@link #andNot(GreasedRegion)}.
+     * @param x the x offset to start removing other from; may be negative
+     * @param y the y offset to start removing other from; may be negative
+     * @param other the other GreasedRegion to remove
+     * @return this for chaining
+     */
+    public GreasedRegion remove(int x, int y, GreasedRegion other)
+    {
+        if(other == null || other.ySections <= 0 || other.width <= 0)
+            return this;
 
+        int start = Math.max(0, x), len = Math.min(width, Math.min(other.width, other.width + x) - start),
+                oys = other.ySections, jump = (y == 0) ? 0 : (y < 0) ? -(1-y >>> 6) : (y-1 >>> 6), lily = (y < 0) ? -(-y & 63) : (y & 63),
+                originalJump = Math.max(0, -jump), alterJump = Math.max(0, jump);
+        long[] data2 = new long[other.width * ySections];
+
+        long prev, tmp;
+        if(oys == ySections) {
+            if (x < 0) {
+                for (int i = alterJump, oi = originalJump; i < ySections && oi < oys; i++, oi++) {
+                    for (int j = Math.max(0, -x), jj = 0; jj < len; j++, jj++) {
+                        data2[jj * ySections + i] = other.data[j * oys + oi];
+                    }
+                }
+            } else if (x > 0) {
+                for (int i = alterJump, oi = originalJump; i < ySections && oi < oys; i++, oi++) {
+                    for (int j = 0, jj = start; j < len; j++, jj++) {
+                        data2[jj * ySections + i] = other.data[j * ySections + oi];
+                    }
+                }
+            } else {
+                for (int i = alterJump, oi = originalJump; i < ySections && oi < oys; i++, oi++) {
+                    for (int j = 0; j < len; j++) {
+                        data2[j * ySections + i] = other.data[j * ySections + oi];
+                    }
+                }
+            }
+        }
+        else if(oys < ySections)
+        {
+            if (x < 0) {
+                for (int i = alterJump, oi = originalJump; i < ySections && oi < oys; i++, oi++) {
+                    for (int j = Math.max(0, -x), jj = 0; jj < len; j++, jj++) {
+                        data2[jj * ySections + i] = other.data[j * oys + oi];
+                    }
+                }
+            } else if (x > 0) {
+                for (int i = alterJump, oi = originalJump; i < ySections && oi < oys; i++, oi++) {// oi < oys - Math.max(0, jump)
+                    for (int j = 0, jj = start; j < len; j++, jj++) {
+                        data2[jj * ySections + i] = other.data[j * oys + oi];
+                    }
+                }
+            } else {
+                for (int i = alterJump, oi = originalJump; i < ySections && oi < oys; i++, oi++) {
+                    for (int j = 0; j < len; j++) {
+                        data2[j * ySections + i] = other.data[j * oys + oi];
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (x < 0) {
+                for (int i = alterJump, oi = originalJump; i < ySections && oi < oys; i++, oi++) {
+                    for (int j = Math.max(0, -x), jj = 0; jj < len; j++, jj++) {
+                        data2[jj * ySections + i] = other.data[j * oys + oi];
+                    }
+                }
+            } else if (x > 0) {
+                for (int i = alterJump, oi = originalJump; i < ySections && oi < oys; i++, oi++) {
+                    for (int j = 0, jj = start; j < len; j++, jj++) {
+                        data2[jj * ySections + i] = other.data[j * oys + oi];
+                    }
+                }
+            } else {
+                for (int i = alterJump, oi = originalJump; i < ySections && oi < oys; i++, oi++) {
+                    for (int j = 0; j < len; j++) {
+                        data2[j * ySections + i] = other.data[j * oys + oi];
+                    }
+                }
+            }
+        }
+
+        if(lily < 0) {
+            for (int i = start; i < len; i++) {
+                prev = 0L;
+                for (int j = 0; j < ySections; j++) {
+                    tmp = prev;
+                    prev = (data2[i * ySections + j] & ~(-1L << -lily)) << (64 + lily);
+                    data2[i * ySections + j] >>>= -lily;
+                    data2[i * ySections + j] |= tmp;
+                }
+            }
+        }
+        else if(lily > 0) {
+            for (int i = start; i < start + len; i++) {
+                prev = 0L;
+                for (int j = 0; j < ySections; j++) {
+                    tmp = prev;
+                    prev = (data2[i * ySections + j] & ~(-1L >>> lily)) >>> (64 - lily);
+                    data2[i * ySections + j] <<= lily;
+                    data2[i * ySections + j] |= tmp;
+                }
+            }
+        }
+        len = Math.min(width, start + len);
+        for (int i = start; i < len; i++) {
+            for (int j = 0; j < ySections; j++) {
+                data[i * ySections + j] &= ~data2[i * ySections + j];
+            }
+        }
+
+        if(ySections > 0 && yEndMask != -1) {
+            for (int a = ySections - 1; a < data.length; a += ySections) {
+                data[a] &= yEndMask;
+            }
+        }
+
+        return this;
+    }
     public GreasedRegion removeSeveral(Coord... points)
     {
         for (int i = 0, x, y; i < points.length; i++) {
@@ -1065,11 +1415,20 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return removeSeveral(Radius.CIRCLE.pointsInside(center, radius, false, width, height));
     }
 
+    /**
+     * Equivalent to {@link #clear()}, setting all cells to "off," but also returns this for chaining.
+     * @return this for chaining
+     */
     public GreasedRegion empty()
     {
         Arrays.fill(data, 0L);
         return this;
     }
+
+    /**
+     * Sets all cells in this to "on."
+     * @return this for chaining
+     */
     public GreasedRegion allOn()
     {
         if(ySections > 0)
@@ -1089,6 +1448,12 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         }
         return this;
     }
+
+    /**
+     * Sets all cells in this to "on" if contents is true, or "off" if contents is false.
+     * @param contents true to set all cells to on, false to set all cells to off
+     * @return this for chaining
+     */
     public GreasedRegion fill(boolean contents)
     {
         if(contents)
@@ -1117,11 +1482,21 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return this;
     }
 
+    /**
+     * Simple method that returns a newly-allocated copy of this GreasedRegion; modifications to one won't change the
+     * other, and this method returns the copy while leaving the original unchanged.
+     * @return a copy of this GreasedRegion; the copy can be changed without altering the original
+     */
     public GreasedRegion copy()
     {
         return new GreasedRegion(this);
     }
 
+    /**
+     * Returns this GreasedRegion's data as a 2D boolean array, [width][height] in size, with on treated as true and off
+     * treated as false.
+     * @return a 2D boolean array that represents this GreasedRegion's data
+     */
     public boolean[][] decode()
     {
         boolean[][] bools = new boolean[width][height];
@@ -1133,6 +1508,13 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return bools;
     }
 
+    /**
+     * Returns this GreasedRegion's data as a 2D char array,  [width][height] in size, with "on" cells filled with the
+     * char parameter on and "off" cells with the parameter off.
+     * @param on the char to use for "on" cells
+     * @param off the char to use for "off" cells
+     * @return a 2D char array that represents this GreasedRegion's data
+     */
     public char[][] toChars(char on, char off)
     {
         char[][] chars = new char[width][height];
@@ -1143,10 +1525,47 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         }
         return chars;
     }
+    /**
+     * Returns this GreasedRegion's data as a 2D char array,  [width][height] in size, with "on" cells filled with '.'
+     * and "off" cells with '#'.
+     * @return a 2D char array that represents this GreasedRegion's data
+     */
 
     public char[][] toChars()
     {
         return toChars('.', '#');
+    }
+
+    /**
+     * Returns this GreasedRegion's data as a StringBuilder, with each row made of the parameter on for "on" cells and
+     * the parameter off for "off" cells, separated by newlines, with no trailing newline at the end.
+     * @param on the char to use for "on" cells
+     * @param off the char to use for "off" cells
+     * @return a StringBuilder that stores each row of this GreasedRegion as chars separated by newlines.
+     */
+    public StringBuilder show(char on, char off)
+    {
+        StringBuilder sb = new StringBuilder((width+1) * height);
+        for (int y = 0; y < height;) {
+            for (int x = 0; x < width; x++) {
+                sb.append((data[x * ySections + (y >> 6)] & (1L << (y & 63))) != 0 ? on : off);
+            }
+            if(++y < height)
+                sb.append('\n');
+        }
+        return sb;
+    }
+
+    /**
+     * Returns a legible String representation of this that can be printed over multiple lines, with all "on" cells
+     * represented by '.' and all "off" cells by '#', in roguelike floors-on walls-off convention, separating each row
+     * by newlines (without a final trailing newline, so you could append text right after this).
+     * @return a String representation of this GreasedRegion using '.' for on, '#' for off, and newlines between rows
+     */
+    @Override
+    public String toString()
+    {
+        return show('.', '#').toString();
     }
 
     /**
@@ -1235,6 +1654,12 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return map;
     }
 
+    /**
+     * Union of two GreasedRegions, assigning the result into this GreasedRegion. Any cell that is "on" in either
+     * GreasedRegion will be made "on" in this GreasedRegion.
+     * @param other another GreasedRegion that will not be modified
+     * @return this, after modification, for chaining
+     */
     public GreasedRegion or(GreasedRegion other)
     {
         for (int x = 0; x < width && x < other.width; x++) {
@@ -1252,6 +1677,12 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return this;
     }
 
+    /**
+     * Intersection of two GreasedRegions, assigning the result into this GreasedRegion. Any cell that is "on" in both
+     * GreasedRegions will be kept "on" in this GreasedRegion, but all other cells will be made "off."
+     * @param other another GreasedRegion that will not be modified
+     * @return this, after modification, for chaining
+     */
     public GreasedRegion and(GreasedRegion other)
     {
         for (int x = 0; x < width && x < other.width; x++) {
@@ -1261,7 +1692,13 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         }
         return this;
     }
-
+    /**
+     * Difference of two GreasedRegions, assigning the result into this GreasedRegion. Any cell that is "on" in this
+     * GreasedRegion and "off" in other will be kept "on" in this GreasedRegion, but all other cells will be made "off."
+     * @param other another GreasedRegion that will not be modified
+     * @return this, after modification, for chaining
+     * @see #notAnd(GreasedRegion) notAnd is a very similar method that acts sort-of in reverse of this method
+     */
     public GreasedRegion andNot(GreasedRegion other)
     {
         for (int x = 0; x < width && x < other.width; x++) {
@@ -1275,8 +1712,9 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     /**
      * Like andNot, but subtracts this GreasedRegion from other and stores the result in this GreasedRegion, without
      * mutating other.
-     * @param other
-     * @return
+     * @param other another GreasedRegion that will not be modified
+     * @return this, after modification, for chaining
+     * @see #andNot(GreasedRegion) andNot is a very similar method that acts sort-of in reverse of this method
      */
     public GreasedRegion notAnd(GreasedRegion other)
     {
@@ -1288,6 +1726,14 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return this;
     }
 
+    /**
+     * Symmetric difference (more commonly known as exclusive or, hence the name) of two GreasedRegions, assigning the
+     * result into this GreasedRegion. Any cell that is "on" in this and "off" in other, or "off" in this and "on" in
+     * other, will be made "on" in this; all other cells will be made "off." Useful to find cells that are "on" in
+     * exactly one of two GreasedRegions (not "on" in both, or "off" in both).
+     * @param other another GreasedRegion that will not be modified
+     * @return this, after modification, for chaining
+     */
     public GreasedRegion xor(GreasedRegion other)
     {
         for (int x = 0; x < width && x < other.width; x++) {
@@ -1304,6 +1750,10 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return this;
     }
 
+    /**
+     * Negates this GreasedRegion, turning "on" to "off" and "off" to "on."
+     * @return this, after modification, for chaining
+     */
     public GreasedRegion not()
     {
         for (int a = 0; a < data.length; a++)
@@ -1319,6 +1769,12 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return this;
     }
 
+    /**
+     * Moves the "on" cells in this GreasedRegion to the given x and y offset, removing cells that move out of bounds.
+     * @param x the x offset to translate by; can be negative
+     * @param y the y offset to translate by; can be negative
+     * @return this for chaining
+     */
     public GreasedRegion translate(int x, int y)
     {
         if(width < 1 || ySections <= 0 || (x == 0 && y == 0))
@@ -1439,6 +1895,16 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return this;
     }
 
+    /**
+     * Takes the "on" cells in this GreasedRegion and expands them by one cell in the 4 orthogonal directions, making
+     * each "on" cell take up a plus-shaped area that may overlap with other "on" cells (which is just a normal "on"
+     * cell then).
+     * <br>
+     * This method is very efficient due to how the class is implemented, and the various spatial increase/decrease
+     * methods (including {@link #expand()}, {@link #retract()}, {@link #fringe()}, and {@link #surface()}) all perform
+     * very well by operating in bulk on up to 64 cells at a time.
+     * @return this for chaining
+     */
     public GreasedRegion expand()
     {
         if(width < 2 || ySections == 0)
@@ -1475,6 +1941,16 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         data = next;
         return this;
     }
+    /**
+     * Takes the "on" cells in this GreasedRegion and expands them by amount cells in the 4 orthogonal directions,
+     * making each "on" cell take up a plus-shaped area that may overlap with other "on" cells (which is just a normal
+     * "on" cell then).
+     * <br>
+     * This method is very efficient due to how the class is implemented, and the various spatial increase/decrease
+     * methods (including {@link #expand()}, {@link #retract()}, {@link #fringe()}, and {@link #surface()}) all perform
+     * very well by operating in bulk on up to 64 cells at a time.
+     * @return this for chaining
+     */
     @Override
     public GreasedRegion expand(int amount)
     {
@@ -1483,7 +1959,17 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         }
         return this;
     }
-
+    /**
+     * Takes the "on" cells in this GreasedRegion and produces amount GreasedRegions, each one expanded by 1 cell in
+     * the 4 orthogonal directions relative to the previous GreasedRegion, making each "on" cell take up a plus-shaped
+     * area that may overlap with other "on" cells (which is just a normal "on" cell then). This returns an array of
+     * GreasedRegions with progressively greater expansions, and does not modify this GreasedRegion.
+     * <br>
+     * This method is very efficient due to how the class is implemented, and the various spatial increase/decrease
+     * methods (including {@link #expand()}, {@link #retract()}, {@link #fringe()}, and {@link #surface()}) all perform
+     * very well by operating in bulk on up to 64 cells at a time.
+     * @return an array of new GreasedRegions, length == amount, where each one is expanded by 1 relative to the last
+     */
     public GreasedRegion[] expandSeries(int amount)
     {
         if(amount <= 0) return new GreasedRegion[0];
@@ -1504,13 +1990,38 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         }
         return regions;
     }
-
+    /**
+     * Takes the "on" cells in this GreasedRegion and expands them by one cell in the 4 orthogonal directions, producing
+     * a diamoond shape, then removes the original area before expansion, producing only the cells that were "off" in
+     * this and within 1 cell (orthogonal-only) of an "on" cell. This method is similar to {@link #surface()}, but
+     * surface finds cells inside the current GreasedRegion, while fringe finds cells outside it.
+     * <br>
+     * This method is very efficient due to how the class is implemented, and the various spatial increase/decrease
+     * methods (including {@link #expand()}, {@link #retract()}, {@link #fringe()}, and {@link #surface()}) all perform
+     * very well by operating in bulk on up to 64 cells at a time. The surface and retract methods do allocate one
+     * temporary GreasedRegion to store the original before modification, but the others generally don't.
+     * @return this for chaining
+     */
     public GreasedRegion fringe()
     {
         GreasedRegion cpy = new GreasedRegion(this);
         expand();
         return andNot(cpy);
     }
+    /**
+     * Takes the "on" cells in this GreasedRegion and expands them by amount cells in the 4 orthogonal directions
+     * (iteratively, producing a diamond shape), then removes the original area before expansion, producing only the
+     * cells that were "off" in this and within amount cells (orthogonal-only) of an "on" cell. This method is similar
+     * to {@link #surface()}, but surface finds cells inside the current GreasedRegion, while fringe finds cells outside
+     * it.
+     * <br>
+     * This method is very efficient due to how the class is implemented, and the various spatial increase/decrease
+     * methods (including {@link #expand()}, {@link #retract()}, {@link #fringe()}, and {@link #surface()}) all perform
+     * very well by operating in bulk on up to 64 cells at a time. The surface and retract methods do allocate one
+     * temporary GreasedRegion to store the original before modification, but the others generally don't.
+     * @return this for chaining
+     */
+
     public GreasedRegion fringe(int amount)
     {
         GreasedRegion cpy = new GreasedRegion(this);
@@ -1518,6 +2029,19 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return andNot(cpy);
     }
 
+    /**
+     * Takes the "on" cells in this GreasedRegion and produces amount GreasedRegions, each one expanded by 1 cell in
+     * the 4 orthogonal directions relative to the previous GreasedRegion, making each "on" cell take up a diamond-
+     * shaped area. After producing the expansions, this removes the previous GreasedRegion from the next GreasedRegion
+     * in the array, making each "fringe" in the series have 1 "thickness," which can be useful for finding which layer
+     * of expansion a cell lies in. This returns an array of GreasedRegions with progressively greater expansions
+     * without the cells of this GreasedRegion, and does not modify this GreasedRegion.
+     * <br>
+     * This method is very efficient due to how the class is implemented, and the various spatial increase/decrease
+     * methods (including {@link #expand()}, {@link #retract()}, {@link #fringe()}, and {@link #surface()}) all perform
+     * very well by operating in bulk on up to 64 cells at a time.
+     * @return an array of new GreasedRegions, length == amount, where each one is a 1-depth fringe pushed further out from this
+     */
     public GreasedRegion[] fringeSeries(int amount)
     {
         if(amount <= 0) return new GreasedRegion[0];
@@ -1542,6 +2066,16 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         regions.get(0).xor(this);
         return regions;
     }
+
+    /**
+     * Takes the "on" cells in this GreasedRegion and retracts them by one cell in the 4 orthogonal directions,
+     * making each "on" cell that was orthogonally adjacent to an "off" cell into an "off" cell.
+     * <br>
+     * This method is very efficient due to how the class is implemented, and the various spatial increase/decrease
+     * methods (including {@link #expand()}, {@link #retract()}, {@link #fringe()}, and {@link #surface()}) all perform
+     * very well by operating in bulk on up to 64 cells at a time.
+     * @return this for chaining
+     */
     public GreasedRegion retract()
     {
         if(width <= 2 || ySections <= 0)
@@ -1590,6 +2124,17 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         data = next;
         return this;
     }
+
+    /**
+     * Takes the "on" cells in this GreasedRegion and retracts them by one cell in the 4 orthogonal directions, doing
+     * this iteeratively amount times, making each "on" cell that was within amount orthogonal distance to an "off" cell
+     * into an "off" cell.
+     * <br>
+     * This method is very efficient due to how the class is implemented, and the various spatial increase/decrease
+     * methods (including {@link #expand()}, {@link #retract()}, {@link #fringe()}, and {@link #surface()}) all perform
+     * very well by operating in bulk on up to 64 cells at a time.
+     * @return this for chaining
+     */
     public GreasedRegion retract(int amount)
     {
         for (int i = 0; i < amount; i++) {
