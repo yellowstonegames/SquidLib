@@ -23,7 +23,7 @@ public class SquidStorage {
     public final Preferences preferences;
     public final String storageName;
     public final Json json;
-    protected OrderedMap<String, String> contents;
+    protected StringStringMap contents;
     public boolean compress = true;
 
     /**
@@ -90,6 +90,7 @@ public class SquidStorage {
         json.addClassTag("#Lang", FakeLanguageGen.class);
         json.addClassTag("#LnAl", FakeLanguageGen.Alteration.class);
         json.addClassTag("#LnMd", FakeLanguageGen.Modifier.class);
+        json.addClassTag("#SSMp", StringStringMap.class);
         json.addClassTag("#OMap", OrderedMap.class);
         json.addClassTag("#OSet", OrderedSet.class);
         json.addClassTag("#Aran", Arrangement.class);
@@ -117,7 +118,7 @@ public class SquidStorage {
                     json.writeValue(null);
                     return;
                 }
-                json.writeValue(object.serializeToString());
+                json.writeValue((Object) object.serializeToString(), String.class);
             }
 
             @Override
@@ -150,6 +151,23 @@ public class SquidStorage {
                 return new GreasedRegion(jsonData.get("d").asLongArray(), jsonData.getInt("w"), jsonData.getInt("h"));
             }
         });
+        json.setSerializer(IntVLA.class, new Json.Serializer<IntVLA>() {
+            @Override
+            public void write(Json json, IntVLA object, Class knownType) {
+                if(object == null)
+                {
+                    json.writeValue(null);
+                    return;
+                }
+                json.writeValue(object.toArray(), int[].class);
+            }
+
+            @Override
+            public IntVLA read(Json json, JsonValue jsonData, Class type) {
+                if(jsonData == null || jsonData.isNull()) return null;
+                return new IntVLA(jsonData.asIntArray());
+            }
+        });
 
         json.setSerializer(IntDoubleOrderedMap.class, new Json.Serializer<IntDoubleOrderedMap>() {
             @Override
@@ -178,6 +196,30 @@ public class SquidStorage {
             public IntDoubleOrderedMap read(Json json, JsonValue jsonData, Class type) {
                 if(jsonData == null || jsonData.isNull()) return null;
                 return new IntDoubleOrderedMap(jsonData.get("k").asIntArray(), jsonData.get("v").asDoubleArray(), jsonData.getFloat("f"));
+            }
+        });
+
+        json.setSerializer(StringStringMap.class, new Json.Serializer<StringStringMap>() {
+            @Override
+            public void write(Json json, StringStringMap object, Class knownType) {
+                if(object == null)
+                {
+                    json.writeValue(null);
+                    return;
+                }
+                json.writeObjectStart();
+                json.writeValue("k", object.keysAsOrderedSet(), OrderedSet.class, String.class);
+                json.writeValue("v", object.valuesAsList(), ArrayList.class, String.class);
+                json.writeValue("f", object.f);
+                json.writeObjectEnd();
+            }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public StringStringMap read(Json json, JsonValue jsonData, Class type) {
+                if(jsonData == null || jsonData.isNull()) return null;
+                return new StringStringMap(json.readValue(OrderedSet.class, String.class, jsonData.get("k")),
+                        json.readValue(ArrayList.class, String.class, jsonData.get("v")), jsonData.getFloat("f"));
             }
         });
 
@@ -323,7 +365,7 @@ public class SquidStorage {
             }
         });
 
-        contents = new OrderedMap<>(16, 0.2f);
+        contents = new StringStringMap(16, 0.2f);
     }
 
     /**
@@ -353,9 +395,9 @@ public class SquidStorage {
     public SquidStorage store(String outerName)
     {
         if(compress)
-            preferences.putString(outerName, LZSEncoding.compressToUTF16(json.toJson(contents, OrderedMap.class)));
+            preferences.putString(outerName, LZSEncoding.compressToUTF16(json.toJson(contents, StringStringMap.class)));
         else
-            preferences.putString(outerName, json.toJson(contents, OrderedMap.class));
+            preferences.putString(outerName, json.toJson(contents, StringStringMap.class));
         preferences.flush();
         return this;
     }
@@ -368,9 +410,9 @@ public class SquidStorage {
     public String show()
     {
         if(compress)
-            return LZSEncoding.compressToUTF16(json.toJson(contents, OrderedMap.class));
+            return LZSEncoding.compressToUTF16(json.toJson(contents, StringStringMap.class));
         else
-            return json.toJson(contents, OrderedMap.class);
+            return json.toJson(contents, StringStringMap.class);
     }
 
     /**
@@ -410,14 +452,14 @@ public class SquidStorage {
     @SuppressWarnings("unchecked")
     public <T> T get(String outerName, String innerName, Class<T> type)
     {
-        OrderedMap<String, String> om;
+        StringStringMap om;
         String got;
         if(compress)
             got = LZSEncoding.decompressFromUTF16(preferences.getString(outerName));
         else
             got = preferences.getString(outerName);
         if(got == null) return null;
-        om = json.fromJson(OrderedMap.class, got);
+        om = json.fromJson(StringStringMap.class, got);
         if(om == null) return null;
         return json.fromJson(type, om.get(innerName));
     }
@@ -440,7 +482,5 @@ public class SquidStorage {
         }
         return byteSize * 2;
     }
-
-
 
 }

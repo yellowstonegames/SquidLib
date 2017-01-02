@@ -6,6 +6,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import squidpony.squidgrid.mapping.SpillWorldMap;
 import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.ProbabilityTable;
 import squidpony.squidmath.StatefulRNG;
 import squidpony.squidmath.ThunderRNG;
 
@@ -69,17 +70,25 @@ public class SquidStorageTest extends ApplicationAdapter{
             world.generate(15, true);
             GreasedRegion grease = new GreasedRegion(new ThunderRNG(75L), 75, 75);
             String text = randomLanguage.sentence(srng.copy(), 5, 8);
+            ProbabilityTable<String> table = new ProbabilityTable<>("I heard you like JSON...");
+            table.add("well", 1).add("this", 2).add("ain't", 3).add("real", 4).add("JSON!", 5);
+            text = table.random();
+            /*
             noCompression.put("rng", srng);
             noCompression.put("language", randomLanguage);
             noCompression.put("generated", text);
             noCompression.put("world", world);
-            noCompression.put("grease", grease);
-
+            noCompression.put("grease", grease);*/
+            noCompression.put("table", table);
+            noCompression.put("drawn", text);
+            /*
             yesCompression.put("rng", srng);
             yesCompression.put("language", randomLanguage);
             yesCompression.put("generated", text);
             yesCompression.put("world", world);
-            yesCompression.put("grease", grease);
+            yesCompression.put("grease", grease);*/
+            yesCompression.put("table", table);
+            yesCompression.put("drawn", text);
 
             System.out.println(text);
 
@@ -94,8 +103,8 @@ public class SquidStorageTest extends ApplicationAdapter{
             noCompression.preferences.flush();
             yesCompression.store("Compressed");
 
-            System.out.println(yesCompression.get("Compressed", "language", FakeLanguageGen.class).sentence(srng.copy(), 5, 8));
-
+            //System.out.println(yesCompression.get("Compressed", "language", FakeLanguageGen.class).sentence(srng.copy(), 5, 8));
+            System.out.println(yesCompression.get("Compressed", "drawn", String.class));
             yesCompression.preferences.clear();
             yesCompression.preferences.flush();
 

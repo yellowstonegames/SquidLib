@@ -1314,7 +1314,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             throw new UnsupportedOperationException();
         }
     }
-    private final class MapEntrySet
+    public final class MapEntrySet
             implements Cloneable, SortedSet<Entry<K, V>>, Set<Entry<K, V>>, Collection<Entry<K, V>>, Serializable {
         private static final long serialVersionUID = 0L;
         public EntryIterator iterator() {

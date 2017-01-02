@@ -345,15 +345,6 @@ public class IntVLA implements Serializable, Cloneable {
         return newItems;
     }
 
-    public int[] asInts () {
-        int[] newItems = new int[size];
-        int[] items = this.items;
-        for (int i = 0; i < size; i++) {
-            newItems[i] = items[i] & 0xffff;
-        }
-        return newItems;
-    }
-
     public void sort () {
         Arrays.sort(items, 0, size);
     }
