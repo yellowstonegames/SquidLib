@@ -329,6 +329,14 @@ public class IntVLA implements Serializable, Cloneable {
         return items;
     }
 
+    /** Sets the array size, leaving any values beyond the current size undefined.
+     * @return {@link #items} */
+    public int[] setSize (int newSize) {
+        if (newSize > items.length) resize(Math.max(8, newSize));
+        size = newSize;
+        return items;
+    }
+
     protected int[] resize (int newSize) {
         int[] newItems = new int[newSize];
         int[] items = this.items;
