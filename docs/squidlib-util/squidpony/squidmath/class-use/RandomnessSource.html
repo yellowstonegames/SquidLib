@@ -338,7 +338,11 @@
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#refill-squidpony.squidmath.RandomnessSource-int-int-">refill</a></span>(<a href="../../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;random,
       int&nbsp;width,
-      int&nbsp;height)</code>&nbsp;</td>
+      int&nbsp;height)</code>
+<div class="block">Reassigns this GreasedRegion by filling it with random values from random, reusing the current data storage
+ (without extra allocations) if this.width == width and this.height == height, and typically assigning
+ approximately half of the cells in this to "on" and the rest to off.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -413,7 +417,8 @@
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#GreasedRegion-squidpony.squidmath.RandomnessSource-int-int-">GreasedRegion</a></span>(<a href="../../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;random,
              int&nbsp;width,
              int&nbsp;height)</code>
-<div class="block">Constructor for a random GreasedRegion of the given width and height.</div>
+<div class="block">Constructor for a random GreasedRegion of the given width and height, typically assigning approximately half of
+ the cells in this to "on" and the rest to off.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -478,6 +483,6 @@
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

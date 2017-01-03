@@ -134,7 +134,9 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Elias.html#Elias--">Elias()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Elias.html" title="class in squidpony.squidmath">Elias</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#empty--">empty()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Equivalent to <a href="../squidpony/squidmath/GreasedRegion.html#clear--"><code>GreasedRegion.clear()</code></a>, setting all cells to "off," but also returns this for chaining.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/Terrain.html#EMPTY_SPACE">EMPTY_SPACE</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/Terrain.html" title="class in squidpony.squidgrid.mapping">Terrain</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Coord.html#encode--">encode()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></dt>
@@ -324,6 +326,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedMap.KeySet.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedMap.KeySet.html" title="class in squidpony.squidmath">OrderedMap.KeySet</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedMap.MapEntrySet.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedMap.MapEntrySet.html" title="class in squidpony.squidmath">OrderedMap.MapEntrySet</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedSet.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/PintRNG.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath">PintRNG</a></dt>
@@ -394,9 +398,17 @@
  width - 1 (for xMove) or height - 1 (for yMove), in which case that cell is stopped at the edge.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#expand--">expand()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Takes the "on" cells in this GreasedRegion and expands them by one cell in the 4 orthogonal directions, making
+ each "on" cell take up a plus-shaped area that may overlap with other "on" cells (which is just a normal "on"
+ cell then).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#expand-int-">expand(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Takes the "on" cells in this GreasedRegion and expands them by amount cells in the 4 orthogonal directions,
+ making each "on" cell take up a plus-shaped area that may overlap with other "on" cells (which is just a normal
+ "on" cell then).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/Rectangle.Impl.html#expand8way-int-">expand8way(int)</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/Rectangle.Impl.html" title="class in squidpony.squidgrid.mapping">Rectangle.Impl</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/zone/CoordPackerZone.html#expand8way-int-">expand8way(int)</a></span> - Method in class squidpony.squidgrid.zone.<a href="../squidpony/squidgrid/zone/CoordPackerZone.html" title="class in squidpony.squidgrid.zone">CoordPackerZone</a></dt>
@@ -425,7 +437,11 @@
  a dimension if it would be reduced in size.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#expandSeries-int-">expandSeries(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Takes the "on" cells in this GreasedRegion and produces amount GreasedRegions, each one expanded by 1 cell in
+ the 4 orthogonal directions relative to the previous GreasedRegion, making each "on" cell take up a plus-shaped
+ area that may overlap with other "on" cells (which is just a normal "on" cell then).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#expandSeries8way-int-">expandSeries8way(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#expandSeriesToLimit--">expandSeriesToLimit()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
@@ -519,6 +535,6 @@
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

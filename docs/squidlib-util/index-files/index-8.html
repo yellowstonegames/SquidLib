@@ -1399,18 +1399,29 @@
 <div class="block">Region encoding of on/off information about areas using bitsets; uncompressed (fatty), but fast (greased lightning).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#GreasedRegion--">GreasedRegion()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Constructs an empty 64x64 GreasedRegion.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#GreasedRegion-boolean:A:A-">GreasedRegion(boolean[][])</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Constructs a GreasedRegion with the given rectangular boolean array, with width of bits.length and height of
+ bits[0].length, any value of true considered "on", and any value of false considered "off."</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#GreasedRegion-char:A:A-char-">GreasedRegion(char[][], char)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Constructs a GreasedRegion with the given rectangular char array, with width of map.length and height of
+ map[0].length, any value that equals yes is considered "on", and any other value considered "off."</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#GreasedRegion-java.lang.String:A-char-">GreasedRegion(String[], char)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>
 <div class="block">Weird constructor that takes a String array, _as it would be printed_, so each String is a row and indexing would
  be done with y, x instead of the normal x, y.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#GreasedRegion-int:A:A-int-">GreasedRegion(int[][], int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Constructs a GreasedRegion with the given rectangular int array, with width of map.length and height of
+ map[0].length, any value that equals yes is considered "on", and any other value considered "off."</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#GreasedRegion-int:A:A-int-int-">GreasedRegion(int[][], int, int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>
 <div class="block">Constructs this GreasedRegion using an int[][], treating cells as on if they are greater than or equal to lower
@@ -1434,7 +1445,11 @@
  lowerBound (inclusive) and upperBound (exclusive), and an "off" state for anything else.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#GreasedRegion-boolean:A-int-int-">GreasedRegion(boolean[], int, int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Constructs a GreasedRegion with the given 1D boolean array, with the given width and height, where an [x][y]
+ position is obtained from bits given an index n with x = n / height, y = n % height, any value of true
+ considered "on", and any value of false considered "off."</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#GreasedRegion-int-int-">GreasedRegion(int, int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>
 <div class="block">Constructor for an empty GreasedRegion of the given width and height.</div>
@@ -1453,7 +1468,8 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#GreasedRegion-squidpony.squidmath.RandomnessSource-int-int-">GreasedRegion(RandomnessSource, int, int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>
-<div class="block">Constructor for a random GreasedRegion of the given width and height.</div>
+<div class="block">Constructor for a random GreasedRegion of the given width and height, typically assigning approximately half of
+ the cells in this to "on" and the rest to off.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#GreasedRegion-squidpony.squidmath.RNG-int-int-">GreasedRegion(RNG, int, int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>
@@ -1469,9 +1485,18 @@
 <div class="block">Copy constructor that takes another GreasedRegion and copies all of its data into this new one.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#GreasedRegion-long:A-int-int-">GreasedRegion(long[], int, int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Primarily for internal use, this constructor copies data2 exactly into the internal long array the new
+ GreasedRegion will use, and does not perform any validation steps to ensure that cells that would be "on" but are
+ outside the actual height of the GreasedRegion are actually removed (this only matters if height is not a
+ multiple of 64).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#GreasedRegion-long:A-int-int-int-int-">GreasedRegion(long[], int, int, int, int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Primarily for internal use, this constructor copies data2 into the internal long array the new GreasedRegion will
+ use, but treats data2 as having the dimensions [dataWidth][dataHeight], and uses the potentially-different
+ dimensions [width][height] for the constructed GreasedRegion.</div>
+</dd>
 <dt><a href="../squidpony/squidmath/GreasedRegion.GRIterator.html" title="class in squidpony.squidmath"><span class="typeNameLink">GreasedRegion.GRIterator</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/MathExtras.html#greatestCommonDivisor-long-long-">greatestCommonDivisor(long, long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/MathExtras.html" title="class in squidpony.squidmath">MathExtras</a></dt>
@@ -1596,6 +1621,6 @@
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

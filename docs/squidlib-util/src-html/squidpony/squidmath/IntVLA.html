@@ -337,144 +337,143 @@
 <span class="sourceLineNo">329</span>        return items;<a name="line.329"></a>
 <span class="sourceLineNo">330</span>    }<a name="line.330"></a>
 <span class="sourceLineNo">331</span><a name="line.331"></a>
-<span class="sourceLineNo">332</span>    protected int[] resize (int newSize) {<a name="line.332"></a>
-<span class="sourceLineNo">333</span>        int[] newItems = new int[newSize];<a name="line.333"></a>
-<span class="sourceLineNo">334</span>        int[] items = this.items;<a name="line.334"></a>
-<span class="sourceLineNo">335</span>        System.arraycopy(items, 0, newItems, 0, Math.min(size, newItems.length));<a name="line.335"></a>
-<span class="sourceLineNo">336</span>        this.items = newItems;<a name="line.336"></a>
-<span class="sourceLineNo">337</span>        return newItems;<a name="line.337"></a>
+<span class="sourceLineNo">332</span>    /** Sets the array size, leaving any values beyond the current size undefined.<a name="line.332"></a>
+<span class="sourceLineNo">333</span>     * @return {@link #items} */<a name="line.333"></a>
+<span class="sourceLineNo">334</span>    public int[] setSize (int newSize) {<a name="line.334"></a>
+<span class="sourceLineNo">335</span>        if (newSize &gt; items.length) resize(Math.max(8, newSize));<a name="line.335"></a>
+<span class="sourceLineNo">336</span>        size = newSize;<a name="line.336"></a>
+<span class="sourceLineNo">337</span>        return items;<a name="line.337"></a>
 <span class="sourceLineNo">338</span>    }<a name="line.338"></a>
 <span class="sourceLineNo">339</span><a name="line.339"></a>
-<span class="sourceLineNo">340</span>    public int[] asInts () {<a name="line.340"></a>
-<span class="sourceLineNo">341</span>        int[] newItems = new int[size];<a name="line.341"></a>
+<span class="sourceLineNo">340</span>    protected int[] resize (int newSize) {<a name="line.340"></a>
+<span class="sourceLineNo">341</span>        int[] newItems = new int[newSize];<a name="line.341"></a>
 <span class="sourceLineNo">342</span>        int[] items = this.items;<a name="line.342"></a>
-<span class="sourceLineNo">343</span>        for (int i = 0; i &lt; size; i++) {<a name="line.343"></a>
-<span class="sourceLineNo">344</span>            newItems[i] = items[i] &amp; 0xffff;<a name="line.344"></a>
-<span class="sourceLineNo">345</span>        }<a name="line.345"></a>
-<span class="sourceLineNo">346</span>        return newItems;<a name="line.346"></a>
-<span class="sourceLineNo">347</span>    }<a name="line.347"></a>
-<span class="sourceLineNo">348</span><a name="line.348"></a>
-<span class="sourceLineNo">349</span>    public void sort () {<a name="line.349"></a>
-<span class="sourceLineNo">350</span>        Arrays.sort(items, 0, size);<a name="line.350"></a>
-<span class="sourceLineNo">351</span>    }<a name="line.351"></a>
-<span class="sourceLineNo">352</span><a name="line.352"></a>
-<span class="sourceLineNo">353</span>    public void reverse () {<a name="line.353"></a>
-<span class="sourceLineNo">354</span>        int[] items = this.items;<a name="line.354"></a>
-<span class="sourceLineNo">355</span>        for (int i = 0, lastIndex = size - 1, n = size / 2; i &lt; n; i++) {<a name="line.355"></a>
-<span class="sourceLineNo">356</span>            int ii = lastIndex - i;<a name="line.356"></a>
-<span class="sourceLineNo">357</span>            int temp = items[i];<a name="line.357"></a>
-<span class="sourceLineNo">358</span>            items[i] = items[ii];<a name="line.358"></a>
-<span class="sourceLineNo">359</span>            items[ii] = temp;<a name="line.359"></a>
-<span class="sourceLineNo">360</span>        }<a name="line.360"></a>
-<span class="sourceLineNo">361</span>    }<a name="line.361"></a>
-<span class="sourceLineNo">362</span><a name="line.362"></a>
-<span class="sourceLineNo">363</span>    /** Reduces the size of the array to the specified size. If the array is already smaller than the specified size, no action is<a name="line.363"></a>
-<span class="sourceLineNo">364</span>     * taken. */<a name="line.364"></a>
-<span class="sourceLineNo">365</span>    public void truncate (int newSize) {<a name="line.365"></a>
-<span class="sourceLineNo">366</span>        if (size &gt; newSize) size = newSize;<a name="line.366"></a>
-<span class="sourceLineNo">367</span>    }<a name="line.367"></a>
-<span class="sourceLineNo">368</span><a name="line.368"></a>
-<span class="sourceLineNo">369</span>    public int getRandomElement(RNG random)<a name="line.369"></a>
-<span class="sourceLineNo">370</span>    {<a name="line.370"></a>
-<span class="sourceLineNo">371</span>        return items[random.nextInt(items.length)];<a name="line.371"></a>
-<span class="sourceLineNo">372</span>    }<a name="line.372"></a>
-<span class="sourceLineNo">373</span><a name="line.373"></a>
-<span class="sourceLineNo">374</span>    /**<a name="line.374"></a>
-<span class="sourceLineNo">375</span>     * Shuffles this IntVLA in place using the given RNG.<a name="line.375"></a>
-<span class="sourceLineNo">376</span>     * @param random an RNG used to generate the shuffled order<a name="line.376"></a>
-<span class="sourceLineNo">377</span>     * @return this object, modified, after shuffling<a name="line.377"></a>
-<span class="sourceLineNo">378</span>     */<a name="line.378"></a>
-<span class="sourceLineNo">379</span>    public IntVLA shuffle(RNG random)<a name="line.379"></a>
-<span class="sourceLineNo">380</span>    {<a name="line.380"></a>
-<span class="sourceLineNo">381</span>        int n = size;<a name="line.381"></a>
-<span class="sourceLineNo">382</span>        for (int i = 0; i &lt; n; i++)<a name="line.382"></a>
-<span class="sourceLineNo">383</span>        {<a name="line.383"></a>
-<span class="sourceLineNo">384</span>            swap(i + random.nextInt(n - i), i);<a name="line.384"></a>
-<span class="sourceLineNo">385</span>        }<a name="line.385"></a>
-<span class="sourceLineNo">386</span>        return this;<a name="line.386"></a>
-<span class="sourceLineNo">387</span><a name="line.387"></a>
-<span class="sourceLineNo">388</span>    }<a name="line.388"></a>
-<span class="sourceLineNo">389</span><a name="line.389"></a>
-<span class="sourceLineNo">390</span>    public int[] toArray () {<a name="line.390"></a>
-<span class="sourceLineNo">391</span>        int[] array = new int[size];<a name="line.391"></a>
-<span class="sourceLineNo">392</span>        System.arraycopy(items, 0, array, 0, size);<a name="line.392"></a>
-<span class="sourceLineNo">393</span>        return array;<a name="line.393"></a>
-<span class="sourceLineNo">394</span>    }<a name="line.394"></a>
-<span class="sourceLineNo">395</span><a name="line.395"></a>
-<span class="sourceLineNo">396</span>    public IntVLA copy()<a name="line.396"></a>
-<span class="sourceLineNo">397</span>    {<a name="line.397"></a>
-<span class="sourceLineNo">398</span>        return new IntVLA(this);<a name="line.398"></a>
-<span class="sourceLineNo">399</span>    }<a name="line.399"></a>
-<span class="sourceLineNo">400</span><a name="line.400"></a>
-<span class="sourceLineNo">401</span>    @GwtIncompatible<a name="line.401"></a>
-<span class="sourceLineNo">402</span>    @SuppressWarnings("unchecked")<a name="line.402"></a>
-<span class="sourceLineNo">403</span>    @Override<a name="line.403"></a>
-<span class="sourceLineNo">404</span>    public Object clone() {<a name="line.404"></a>
-<span class="sourceLineNo">405</span>        try {<a name="line.405"></a>
-<span class="sourceLineNo">406</span>            IntVLA nx = (IntVLA) super.clone();<a name="line.406"></a>
-<span class="sourceLineNo">407</span>            nx.items = new int[items.length];<a name="line.407"></a>
-<span class="sourceLineNo">408</span>            System.arraycopy(items, 0, nx.items, 0, items.length);<a name="line.408"></a>
-<span class="sourceLineNo">409</span>            return nx;<a name="line.409"></a>
-<span class="sourceLineNo">410</span>        } catch (CloneNotSupportedException e) {<a name="line.410"></a>
-<span class="sourceLineNo">411</span>            throw new InternalError(e + (e.getMessage() != null ? "; " + e.getMessage() : ""));<a name="line.411"></a>
-<span class="sourceLineNo">412</span>        }<a name="line.412"></a>
-<span class="sourceLineNo">413</span>    }<a name="line.413"></a>
-<span class="sourceLineNo">414</span>    @Override<a name="line.414"></a>
-<span class="sourceLineNo">415</span>    public int hashCode () {<a name="line.415"></a>
-<span class="sourceLineNo">416</span>        int[] items = this.items;<a name="line.416"></a>
-<span class="sourceLineNo">417</span>        int h = 1;<a name="line.417"></a>
-<span class="sourceLineNo">418</span>        for (int i = 0, n = size; i &lt; n; i++)<a name="line.418"></a>
-<span class="sourceLineNo">419</span>            h = h * 31 + items[i];<a name="line.419"></a>
-<span class="sourceLineNo">420</span>        return h;<a name="line.420"></a>
-<span class="sourceLineNo">421</span>    }<a name="line.421"></a>
-<span class="sourceLineNo">422</span>    public long hash64 () {<a name="line.422"></a>
-<span class="sourceLineNo">423</span>        return CrossHash.Lightning.hash64(items);<a name="line.423"></a>
-<span class="sourceLineNo">424</span>    }<a name="line.424"></a>
-<span class="sourceLineNo">425</span><a name="line.425"></a>
-<span class="sourceLineNo">426</span>    @Override<a name="line.426"></a>
-<span class="sourceLineNo">427</span>        public boolean equals (Object object) {<a name="line.427"></a>
-<span class="sourceLineNo">428</span>        if (object == this) return true;<a name="line.428"></a>
-<span class="sourceLineNo">429</span>        if (!(object instanceof IntVLA)) return false;<a name="line.429"></a>
-<span class="sourceLineNo">430</span>        IntVLA array = (IntVLA)object;<a name="line.430"></a>
-<span class="sourceLineNo">431</span>        int n = size;<a name="line.431"></a>
-<span class="sourceLineNo">432</span>        if (n != array.size) return false;<a name="line.432"></a>
-<span class="sourceLineNo">433</span>        for (int i = 0; i &lt; n; i++)<a name="line.433"></a>
-<span class="sourceLineNo">434</span>            if (items[i] != array.items[i]) return false;<a name="line.434"></a>
-<span class="sourceLineNo">435</span>        return true;<a name="line.435"></a>
-<span class="sourceLineNo">436</span>    }<a name="line.436"></a>
-<span class="sourceLineNo">437</span><a name="line.437"></a>
-<span class="sourceLineNo">438</span>    @Override<a name="line.438"></a>
-<span class="sourceLineNo">439</span>        public String toString () {<a name="line.439"></a>
-<span class="sourceLineNo">440</span>        if (size == 0) return "[]";<a name="line.440"></a>
-<span class="sourceLineNo">441</span>        int[] items = this.items;<a name="line.441"></a>
-<span class="sourceLineNo">442</span>        StringBuilder buffer = new StringBuilder(32);<a name="line.442"></a>
-<span class="sourceLineNo">443</span>        buffer.append('[');<a name="line.443"></a>
-<span class="sourceLineNo">444</span>        buffer.append(items[0]);<a name="line.444"></a>
-<span class="sourceLineNo">445</span>        for (int i = 1; i &lt; size; i++) {<a name="line.445"></a>
-<span class="sourceLineNo">446</span>            buffer.append(", ");<a name="line.446"></a>
-<span class="sourceLineNo">447</span>            buffer.append(items[i]);<a name="line.447"></a>
-<span class="sourceLineNo">448</span>        }<a name="line.448"></a>
-<span class="sourceLineNo">449</span>        buffer.append(']');<a name="line.449"></a>
-<span class="sourceLineNo">450</span>        return buffer.toString();<a name="line.450"></a>
-<span class="sourceLineNo">451</span>    }<a name="line.451"></a>
-<span class="sourceLineNo">452</span><a name="line.452"></a>
-<span class="sourceLineNo">453</span>    public String toString (String separator) {<a name="line.453"></a>
-<span class="sourceLineNo">454</span>        if (size == 0) return "";<a name="line.454"></a>
-<span class="sourceLineNo">455</span>        int[] items = this.items;<a name="line.455"></a>
-<span class="sourceLineNo">456</span>        StringBuilder buffer = new StringBuilder(32);<a name="line.456"></a>
-<span class="sourceLineNo">457</span>        buffer.append(items[0]);<a name="line.457"></a>
-<span class="sourceLineNo">458</span>        for (int i = 1; i &lt; size; i++) {<a name="line.458"></a>
-<span class="sourceLineNo">459</span>            buffer.append(separator);<a name="line.459"></a>
-<span class="sourceLineNo">460</span>            buffer.append(items[i]);<a name="line.460"></a>
-<span class="sourceLineNo">461</span>        }<a name="line.461"></a>
-<span class="sourceLineNo">462</span>        return buffer.toString();<a name="line.462"></a>
-<span class="sourceLineNo">463</span>    }<a name="line.463"></a>
-<span class="sourceLineNo">464</span><a name="line.464"></a>
-<span class="sourceLineNo">465</span>    /** @see #IntVLA(int[]) */<a name="line.465"></a>
-<span class="sourceLineNo">466</span>    public static IntVLA with (int... array) {<a name="line.466"></a>
-<span class="sourceLineNo">467</span>        return new IntVLA(array);<a name="line.467"></a>
-<span class="sourceLineNo">468</span>    }<a name="line.468"></a>
-<span class="sourceLineNo">469</span>}<a name="line.469"></a>
+<span class="sourceLineNo">343</span>        System.arraycopy(items, 0, newItems, 0, Math.min(size, newItems.length));<a name="line.343"></a>
+<span class="sourceLineNo">344</span>        this.items = newItems;<a name="line.344"></a>
+<span class="sourceLineNo">345</span>        return newItems;<a name="line.345"></a>
+<span class="sourceLineNo">346</span>    }<a name="line.346"></a>
+<span class="sourceLineNo">347</span><a name="line.347"></a>
+<span class="sourceLineNo">348</span>    public void sort () {<a name="line.348"></a>
+<span class="sourceLineNo">349</span>        Arrays.sort(items, 0, size);<a name="line.349"></a>
+<span class="sourceLineNo">350</span>    }<a name="line.350"></a>
+<span class="sourceLineNo">351</span><a name="line.351"></a>
+<span class="sourceLineNo">352</span>    public void reverse () {<a name="line.352"></a>
+<span class="sourceLineNo">353</span>        int[] items = this.items;<a name="line.353"></a>
+<span class="sourceLineNo">354</span>        for (int i = 0, lastIndex = size - 1, n = size / 2; i &lt; n; i++) {<a name="line.354"></a>
+<span class="sourceLineNo">355</span>            int ii = lastIndex - i;<a name="line.355"></a>
+<span class="sourceLineNo">356</span>            int temp = items[i];<a name="line.356"></a>
+<span class="sourceLineNo">357</span>            items[i] = items[ii];<a name="line.357"></a>
+<span class="sourceLineNo">358</span>            items[ii] = temp;<a name="line.358"></a>
+<span class="sourceLineNo">359</span>        }<a name="line.359"></a>
+<span class="sourceLineNo">360</span>    }<a name="line.360"></a>
+<span class="sourceLineNo">361</span><a name="line.361"></a>
+<span class="sourceLineNo">362</span>    /** Reduces the size of the array to the specified size. If the array is already smaller than the specified size, no action is<a name="line.362"></a>
+<span class="sourceLineNo">363</span>     * taken. */<a name="line.363"></a>
+<span class="sourceLineNo">364</span>    public void truncate (int newSize) {<a name="line.364"></a>
+<span class="sourceLineNo">365</span>        if (size &gt; newSize) size = newSize;<a name="line.365"></a>
+<span class="sourceLineNo">366</span>    }<a name="line.366"></a>
+<span class="sourceLineNo">367</span><a name="line.367"></a>
+<span class="sourceLineNo">368</span>    public int getRandomElement(RNG random)<a name="line.368"></a>
+<span class="sourceLineNo">369</span>    {<a name="line.369"></a>
+<span class="sourceLineNo">370</span>        return items[random.nextInt(items.length)];<a name="line.370"></a>
+<span class="sourceLineNo">371</span>    }<a name="line.371"></a>
+<span class="sourceLineNo">372</span><a name="line.372"></a>
+<span class="sourceLineNo">373</span>    /**<a name="line.373"></a>
+<span class="sourceLineNo">374</span>     * Shuffles this IntVLA in place using the given RNG.<a name="line.374"></a>
+<span class="sourceLineNo">375</span>     * @param random an RNG used to generate the shuffled order<a name="line.375"></a>
+<span class="sourceLineNo">376</span>     * @return this object, modified, after shuffling<a name="line.376"></a>
+<span class="sourceLineNo">377</span>     */<a name="line.377"></a>
+<span class="sourceLineNo">378</span>    public IntVLA shuffle(RNG random)<a name="line.378"></a>
+<span class="sourceLineNo">379</span>    {<a name="line.379"></a>
+<span class="sourceLineNo">380</span>        int n = size;<a name="line.380"></a>
+<span class="sourceLineNo">381</span>        for (int i = 0; i &lt; n; i++)<a name="line.381"></a>
+<span class="sourceLineNo">382</span>        {<a name="line.382"></a>
+<span class="sourceLineNo">383</span>            swap(i + random.nextInt(n - i), i);<a name="line.383"></a>
+<span class="sourceLineNo">384</span>        }<a name="line.384"></a>
+<span class="sourceLineNo">385</span>        return this;<a name="line.385"></a>
+<span class="sourceLineNo">386</span><a name="line.386"></a>
+<span class="sourceLineNo">387</span>    }<a name="line.387"></a>
+<span class="sourceLineNo">388</span><a name="line.388"></a>
+<span class="sourceLineNo">389</span>    public int[] toArray () {<a name="line.389"></a>
+<span class="sourceLineNo">390</span>        int[] array = new int[size];<a name="line.390"></a>
+<span class="sourceLineNo">391</span>        System.arraycopy(items, 0, array, 0, size);<a name="line.391"></a>
+<span class="sourceLineNo">392</span>        return array;<a name="line.392"></a>
+<span class="sourceLineNo">393</span>    }<a name="line.393"></a>
+<span class="sourceLineNo">394</span><a name="line.394"></a>
+<span class="sourceLineNo">395</span>    public IntVLA copy()<a name="line.395"></a>
+<span class="sourceLineNo">396</span>    {<a name="line.396"></a>
+<span class="sourceLineNo">397</span>        return new IntVLA(this);<a name="line.397"></a>
+<span class="sourceLineNo">398</span>    }<a name="line.398"></a>
+<span class="sourceLineNo">399</span><a name="line.399"></a>
+<span class="sourceLineNo">400</span>    @GwtIncompatible<a name="line.400"></a>
+<span class="sourceLineNo">401</span>    @SuppressWarnings("unchecked")<a name="line.401"></a>
+<span class="sourceLineNo">402</span>    @Override<a name="line.402"></a>
+<span class="sourceLineNo">403</span>    public Object clone() {<a name="line.403"></a>
+<span class="sourceLineNo">404</span>        try {<a name="line.404"></a>
+<span class="sourceLineNo">405</span>            IntVLA nx = (IntVLA) super.clone();<a name="line.405"></a>
+<span class="sourceLineNo">406</span>            nx.items = new int[items.length];<a name="line.406"></a>
+<span class="sourceLineNo">407</span>            System.arraycopy(items, 0, nx.items, 0, items.length);<a name="line.407"></a>
+<span class="sourceLineNo">408</span>            return nx;<a name="line.408"></a>
+<span class="sourceLineNo">409</span>        } catch (CloneNotSupportedException e) {<a name="line.409"></a>
+<span class="sourceLineNo">410</span>            throw new InternalError(e + (e.getMessage() != null ? "; " + e.getMessage() : ""));<a name="line.410"></a>
+<span class="sourceLineNo">411</span>        }<a name="line.411"></a>
+<span class="sourceLineNo">412</span>    }<a name="line.412"></a>
+<span class="sourceLineNo">413</span>    @Override<a name="line.413"></a>
+<span class="sourceLineNo">414</span>    public int hashCode () {<a name="line.414"></a>
+<span class="sourceLineNo">415</span>        int[] items = this.items;<a name="line.415"></a>
+<span class="sourceLineNo">416</span>        int h = 1;<a name="line.416"></a>
+<span class="sourceLineNo">417</span>        for (int i = 0, n = size; i &lt; n; i++)<a name="line.417"></a>
+<span class="sourceLineNo">418</span>            h = h * 31 + items[i];<a name="line.418"></a>
+<span class="sourceLineNo">419</span>        return h;<a name="line.419"></a>
+<span class="sourceLineNo">420</span>    }<a name="line.420"></a>
+<span class="sourceLineNo">421</span>    public long hash64 () {<a name="line.421"></a>
+<span class="sourceLineNo">422</span>        return CrossHash.Lightning.hash64(items);<a name="line.422"></a>
+<span class="sourceLineNo">423</span>    }<a name="line.423"></a>
+<span class="sourceLineNo">424</span><a name="line.424"></a>
+<span class="sourceLineNo">425</span>    @Override<a name="line.425"></a>
+<span class="sourceLineNo">426</span>        public boolean equals (Object object) {<a name="line.426"></a>
+<span class="sourceLineNo">427</span>        if (object == this) return true;<a name="line.427"></a>
+<span class="sourceLineNo">428</span>        if (!(object instanceof IntVLA)) return false;<a name="line.428"></a>
+<span class="sourceLineNo">429</span>        IntVLA array = (IntVLA)object;<a name="line.429"></a>
+<span class="sourceLineNo">430</span>        int n = size;<a name="line.430"></a>
+<span class="sourceLineNo">431</span>        if (n != array.size) return false;<a name="line.431"></a>
+<span class="sourceLineNo">432</span>        for (int i = 0; i &lt; n; i++)<a name="line.432"></a>
+<span class="sourceLineNo">433</span>            if (items[i] != array.items[i]) return false;<a name="line.433"></a>
+<span class="sourceLineNo">434</span>        return true;<a name="line.434"></a>
+<span class="sourceLineNo">435</span>    }<a name="line.435"></a>
+<span class="sourceLineNo">436</span><a name="line.436"></a>
+<span class="sourceLineNo">437</span>    @Override<a name="line.437"></a>
+<span class="sourceLineNo">438</span>        public String toString () {<a name="line.438"></a>
+<span class="sourceLineNo">439</span>        if (size == 0) return "[]";<a name="line.439"></a>
+<span class="sourceLineNo">440</span>        int[] items = this.items;<a name="line.440"></a>
+<span class="sourceLineNo">441</span>        StringBuilder buffer = new StringBuilder(32);<a name="line.441"></a>
+<span class="sourceLineNo">442</span>        buffer.append('[');<a name="line.442"></a>
+<span class="sourceLineNo">443</span>        buffer.append(items[0]);<a name="line.443"></a>
+<span class="sourceLineNo">444</span>        for (int i = 1; i &lt; size; i++) {<a name="line.444"></a>
+<span class="sourceLineNo">445</span>            buffer.append(", ");<a name="line.445"></a>
+<span class="sourceLineNo">446</span>            buffer.append(items[i]);<a name="line.446"></a>
+<span class="sourceLineNo">447</span>        }<a name="line.447"></a>
+<span class="sourceLineNo">448</span>        buffer.append(']');<a name="line.448"></a>
+<span class="sourceLineNo">449</span>        return buffer.toString();<a name="line.449"></a>
+<span class="sourceLineNo">450</span>    }<a name="line.450"></a>
+<span class="sourceLineNo">451</span><a name="line.451"></a>
+<span class="sourceLineNo">452</span>    public String toString (String separator) {<a name="line.452"></a>
+<span class="sourceLineNo">453</span>        if (size == 0) return "";<a name="line.453"></a>
+<span class="sourceLineNo">454</span>        int[] items = this.items;<a name="line.454"></a>
+<span class="sourceLineNo">455</span>        StringBuilder buffer = new StringBuilder(32);<a name="line.455"></a>
+<span class="sourceLineNo">456</span>        buffer.append(items[0]);<a name="line.456"></a>
+<span class="sourceLineNo">457</span>        for (int i = 1; i &lt; size; i++) {<a name="line.457"></a>
+<span class="sourceLineNo">458</span>            buffer.append(separator);<a name="line.458"></a>
+<span class="sourceLineNo">459</span>            buffer.append(items[i]);<a name="line.459"></a>
+<span class="sourceLineNo">460</span>        }<a name="line.460"></a>
+<span class="sourceLineNo">461</span>        return buffer.toString();<a name="line.461"></a>
+<span class="sourceLineNo">462</span>    }<a name="line.462"></a>
+<span class="sourceLineNo">463</span><a name="line.463"></a>
+<span class="sourceLineNo">464</span>    /** @see #IntVLA(int[]) */<a name="line.464"></a>
+<span class="sourceLineNo">465</span>    public static IntVLA with (int... array) {<a name="line.465"></a>
+<span class="sourceLineNo">466</span>        return new IntVLA(array);<a name="line.466"></a>
+<span class="sourceLineNo">467</span>    }<a name="line.467"></a>
+<span class="sourceLineNo">468</span>}<a name="line.468"></a>
 
 
 
