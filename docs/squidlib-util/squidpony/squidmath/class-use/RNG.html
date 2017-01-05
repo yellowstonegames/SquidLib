@@ -107,12 +107,16 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="#squidpony.squidgrid.mapping.locks.generators">squidpony.squidgrid.mapping.locks.generators</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#squidpony.squidgrid.mapping.styled">squidpony.squidgrid.mapping.styled</a></td>
 <td class="colLast">
 <div class="block">Support code for working with tiled dungeon generation; normally only TilesetType is used outside SquidLib.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#squidpony.squidmath">squidpony.squidmath</a></td>
 <td class="colLast">
 <div class="block">A very broad package containing random number generators, geometry tools, and some classes for combinatorics.</div>
@@ -872,6 +876,39 @@
                     int&nbsp;corridorShape,
                     int&nbsp;caveShape)</code>
 <div class="block">Make a DungeonGenerator with the given height, width, and RNG for generating random features.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="squidpony.squidgrid.mapping.locks.generators">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a> in <a href="../../../squidpony/squidgrid/mapping/locks/generators/package-summary.html">squidpony.squidgrid.mapping.locks.generators</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../squidpony/squidgrid/mapping/locks/generators/package-summary.html">squidpony.squidgrid.mapping.locks.generators</a> declared as <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></code></td>
+<td class="colLast"><span class="typeNameLabel">LayoutGenerator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#random">random</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../squidpony/squidgrid/mapping/locks/generators/package-summary.html">squidpony.squidgrid.mapping.locks.generators</a> with parameters of type <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#LayoutGenerator-squidpony.squidmath.RNG-squidpony.squidgrid.mapping.locks.constraints.ILayoutConstraints-">LayoutGenerator</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+               <a href="../../../squidpony/squidgrid/mapping/locks/constraints/ILayoutConstraints.html" title="interface in squidpony.squidgrid.mapping.locks.constraints">ILayoutConstraints</a>&nbsp;constraints)</code>
+<div class="block">Creates a LayoutGenerator with a given random seed and places
+ specific constraints on <a href="../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks"><code>IRoomLayout</code></a>s it generates.</div>
 </td>
 </tr>
 </tbody>

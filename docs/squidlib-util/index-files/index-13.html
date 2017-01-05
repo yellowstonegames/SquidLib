@@ -196,6 +196,25 @@
 <dd>
 <div class="block">Use this tag when logging things about the screen's layout.</div>
 </dd>
+<dt><a href="../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html" title="class in squidpony.squidgrid.mapping.locks.generators"><span class="typeNameLink">LayoutGenerator</span></a> - Class in <a href="../squidpony/squidgrid/mapping/locks/generators/package-summary.html">squidpony.squidgrid.mapping.locks.generators</a></dt>
+<dd>
+<div class="block">The default and reference implementation of an <a href="../squidpony/squidgrid/mapping/locks/generators/ILayoutGenerator.html" title="interface in squidpony.squidgrid.mapping.locks.generators"><code>ILayoutGenerator</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#LayoutGenerator-squidpony.squidmath.RNG-squidpony.squidgrid.mapping.locks.constraints.ILayoutConstraints-">LayoutGenerator(RNG, ILayoutConstraints)</a></span> - Constructor for class squidpony.squidgrid.mapping.locks.generators.<a href="../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html" title="class in squidpony.squidgrid.mapping.locks.generators">LayoutGenerator</a></dt>
+<dd>
+<div class="block">Creates a LayoutGenerator with a given random seed and places
+ specific constraints on <a href="../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks"><code>IRoomLayout</code></a>s it generates.</div>
+</dd>
+<dt><a href="../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.KeyLevelRoomMapping.html" title="class in squidpony.squidgrid.mapping.locks.generators"><span class="typeNameLink">LayoutGenerator.KeyLevelRoomMapping</span></a> - Class in <a href="../squidpony/squidgrid/mapping/locks/generators/package-summary.html">squidpony.squidgrid.mapping.locks.generators</a></dt>
+<dd>
+<div class="block">Maps 'keyLevel' to the set of rooms within that keyLevel.</div>
+</dd>
+<dt><a href="../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.OutOfRoomsException.html" title="class in squidpony.squidgrid.mapping.locks.generators"><span class="typeNameLink">LayoutGenerator.OutOfRoomsException</span></a> - Exception in <a href="../squidpony/squidgrid/mapping/locks/generators/package-summary.html">squidpony.squidgrid.mapping.locks.generators</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.RetryException.html" title="class in squidpony.squidgrid.mapping.locks.generators"><span class="typeNameLink">LayoutGenerator.RetryException</span></a> - Exception in <a href="../squidpony/squidgrid/mapping/locks/generators/package-summary.html">squidpony.squidgrid.mapping.locks.generators</a></dt>
+<dd>
+<div class="block">Thrown by several ILayoutGenerator methods that can fail.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/Messaging.html#learnIrregularWord-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-">learnIrregularWord(String, String, String, String, String, String, String)</a></span> - Static method in class squidpony.<a href="../squidpony/Messaging.html" title="class in squidpony">Messaging</a></dt>
 <dd>
 <div class="block">Adds a given <code>word</code>, which should start with a lower-case letter and use lower-case letters and underscores
@@ -226,6 +245,8 @@
 <div class="block">Adds translation pairs to vocabulary so it can be used in decipher, giving a correct translation for sourceWords.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/iterator/SquidIterators.Left.html#Left-int-int-int-int-">Left(int, int, int, int)</a></span> - Constructor for class squidpony.squidgrid.iterator.<a href="../squidpony/squidgrid/iterator/SquidIterators.Left.html" title="class in squidpony.squidgrid.iterator">SquidIterators.Left</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/util/Rect2I.html#left--">left()</a></span> - Method in class squidpony.squidgrid.mapping.locks.util.<a href="../squidpony/squidgrid/mapping/locks/util/Rect2I.html" title="class in squidpony.squidgrid.mapping.locks.util">Rect2I</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/MapModule.html#leftDoors">leftDoors</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a></dt>
 <dd>&nbsp;</dd>
@@ -437,10 +458,38 @@
 <dd>
 <div class="block">Reverses most of the effects of hashesToLines().</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/IRoomLayout.html#link-squidpony.squidgrid.mapping.locks.Room-squidpony.squidgrid.mapping.locks.Room-">link(Room, Room)</a></span> - Method in interface squidpony.squidgrid.mapping.locks.<a href="../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks">IRoomLayout</a></dt>
+<dd>
+<div class="block">Adds a two-way unconditional edge between the given rooms.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/IRoomLayout.html#link-squidpony.squidgrid.mapping.locks.Room-squidpony.squidgrid.mapping.locks.Room-int-">link(Room, Room, int)</a></span> - Method in interface squidpony.squidgrid.mapping.locks.<a href="../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks">IRoomLayout</a></dt>
+<dd>
+<div class="block">Adds a two-way conditional edge between the given rooms.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/RoomLayout.html#link-squidpony.squidgrid.mapping.locks.Room-squidpony.squidgrid.mapping.locks.Room-">link(Room, Room)</a></span> - Method in class squidpony.squidgrid.mapping.locks.<a href="../squidpony/squidgrid/mapping/locks/RoomLayout.html" title="class in squidpony.squidgrid.mapping.locks">RoomLayout</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/RoomLayout.html#link-squidpony.squidgrid.mapping.locks.Room-squidpony.squidgrid.mapping.locks.Room-int-">link(Room, Room, int)</a></span> - Method in class squidpony.squidgrid.mapping.locks.<a href="../squidpony/squidgrid/mapping/locks/RoomLayout.html" title="class in squidpony.squidgrid.mapping.locks">RoomLayout</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#link">link</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
 <dd>
 <div class="block">For each entry, the next and the previous entry in iteration order, stored as <code>((prev & 0xFFFFFFFFL) << 32) | (next & 0xFFFFFFFFL)</code>.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/Room.html#linkCount--">linkCount()</a></span> - Method in class squidpony.squidgrid.mapping.locks.<a href="../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a></dt>
+<dd>
+<div class="block">Gets the number of Rooms this Room is linked to.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/IRoomLayout.html#linkOneWay-squidpony.squidgrid.mapping.locks.Room-squidpony.squidgrid.mapping.locks.Room-">linkOneWay(Room, Room)</a></span> - Method in interface squidpony.squidgrid.mapping.locks.<a href="../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks">IRoomLayout</a></dt>
+<dd>
+<div class="block">Adds a one-way unconditional edge between the given rooms.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/IRoomLayout.html#linkOneWay-squidpony.squidgrid.mapping.locks.Room-squidpony.squidgrid.mapping.locks.Room-int-">linkOneWay(Room, Room, int)</a></span> - Method in interface squidpony.squidgrid.mapping.locks.<a href="../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks">IRoomLayout</a></dt>
+<dd>
+<div class="block">Adds a one-way conditional edge between the given rooms.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/RoomLayout.html#linkOneWay-squidpony.squidgrid.mapping.locks.Room-squidpony.squidgrid.mapping.locks.Room-">linkOneWay(Room, Room)</a></span> - Method in class squidpony.squidgrid.mapping.locks.<a href="../squidpony/squidgrid/mapping/locks/RoomLayout.html" title="class in squidpony.squidgrid.mapping.locks">RoomLayout</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/RoomLayout.html#linkOneWay-squidpony.squidgrid.mapping.locks.Room-squidpony.squidgrid.mapping.locks.Room-int-">linkOneWay(Room, Room, int)</a></span> - Method in class squidpony.squidgrid.mapping.locks.<a href="../squidpony/squidgrid/mapping/locks/RoomLayout.html" title="class in squidpony.squidgrid.mapping.locks">RoomLayout</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/MonsterGen.html#LION">LION</a></span> - Static variable in class squidpony.<a href="../squidpony/MonsterGen.html" title="class in squidpony">MonsterGen</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/Terrain.html#LIQUID">LIQUID</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/Terrain.html" title="class in squidpony.squidgrid.mapping">Terrain</a></dt>

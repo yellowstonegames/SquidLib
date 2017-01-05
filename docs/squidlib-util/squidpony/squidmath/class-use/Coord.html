@@ -113,10 +113,24 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#squidpony.squidgrid.zone">squidpony.squidgrid.zone</a></td>
+<td class="colFirst"><a href="#squidpony.squidgrid.mapping.locks">squidpony.squidgrid.mapping.locks</a></td>
+<td class="colLast">
+<div class="block">Lock-and-key puzzle generation from MetaZelda, https://github.com/tcoxon/metazelda (BSD-licensed).</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#squidpony.squidgrid.mapping.locks.constraints">squidpony.squidgrid.mapping.locks.constraints</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#squidpony.squidgrid.mapping.locks.util">squidpony.squidgrid.mapping.locks.util</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="#squidpony.squidgrid.zone">squidpony.squidgrid.zone</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#squidpony.squidmath">squidpony.squidmath</a></td>
 <td class="colLast">
 <div class="block">A very broad package containing random number generators, geometry tools, and some classes for combinatorics.</div>
@@ -4713,6 +4727,268 @@
                         float&nbsp;roomSizeMultiplier)</code>
 <div class="block">This prepares a map generator that will generate a map with the given width and height, using the given RNG.</div>
 </td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="squidpony.squidgrid.mapping.locks">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a> in <a href="../../../squidpony/squidgrid/mapping/locks/package-summary.html">squidpony.squidgrid.mapping.locks</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../squidpony/squidgrid/mapping/locks/package-summary.html">squidpony.squidgrid.mapping.locks</a> declared as <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
+<td class="colLast"><span class="typeNameLabel">Room.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/Room.html#center">center</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../squidpony/squidgrid/mapping/locks/package-summary.html">squidpony.squidgrid.mapping.locks</a> with type parameters of type <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">Room.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/Room.html#coords">coords</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../squidpony/squidgrid/mapping/locks/package-summary.html">squidpony.squidgrid.mapping.locks</a> that return <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
+<td class="colLast"><span class="typeNameLabel">Room.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/Room.html#getCenter--">getCenter</a></span>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../squidpony/squidgrid/mapping/locks/package-summary.html">squidpony.squidgrid.mapping.locks</a> that return types with arguments of type <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">Room.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/Room.html#getCoords--">getCoords</a></span>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../squidpony/squidgrid/mapping/locks/package-summary.html">squidpony.squidgrid.mapping.locks</a> with parameters of type <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/Room.html#Room-int-squidpony.squidmath.Coord-squidpony.squidgrid.mapping.locks.Room-int-squidpony.squidgrid.mapping.locks.Condition-">Room</a></span>(int&nbsp;id,
+    <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;coords,
+    <a href="../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;parent,
+    int&nbsp;item,
+    <a href="../../../squidpony/squidgrid/mapping/locks/Condition.html" title="class in squidpony.squidgrid.mapping.locks">Condition</a>&nbsp;precond)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructor parameters in <a href="../../../squidpony/squidgrid/mapping/locks/package-summary.html">squidpony.squidgrid.mapping.locks</a> with type arguments of type <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/Room.html#Room-int-java.util.Set-squidpony.squidgrid.mapping.locks.Room-int-squidpony.squidgrid.mapping.locks.Condition-">Room</a></span>(int&nbsp;id,
+    <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;coords,
+    <a href="../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;parent,
+    int&nbsp;item,
+    <a href="../../../squidpony/squidgrid/mapping/locks/Condition.html" title="class in squidpony.squidgrid.mapping.locks">Condition</a>&nbsp;precond)</code>
+<div class="block">Creates a Room at the given coordinates, with the given parent,
+ containing a specific item, and having a certain pre-<a href="../../../squidpony/squidgrid/mapping/locks/Condition.html" title="class in squidpony.squidgrid.mapping.locks"><code>Condition</code></a>.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="squidpony.squidgrid.mapping.locks.constraints">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a> in <a href="../../../squidpony/squidgrid/mapping/locks/constraints/package-summary.html">squidpony.squidgrid.mapping.locks.constraints</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../squidpony/squidgrid/mapping/locks/constraints/package-summary.html">squidpony.squidgrid.mapping.locks.constraints</a> with type parameters of type <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">FreeformConstraints.Group.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/constraints/FreeformConstraints.Group.html#coords">coords</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">ColorMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/constraints/ColorMap.html#map">map</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">CountConstraints.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/constraints/CountConstraints.html#roomIds">roomIds</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">SpaceMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/constraints/SpaceMap.html#spaces">spaces</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../squidpony/squidgrid/mapping/locks/constraints/package-summary.html">squidpony.squidgrid.mapping.locks.constraints</a> that return <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
+<td class="colLast"><span class="typeNameLabel">ColorMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/constraints/ColorMap.html#getCenter--">getCenter</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
+<td class="colLast"><span class="typeNameLabel">CountConstraints.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/constraints/CountConstraints.html#getRoomCoords-int-">getRoomCoords</a></span>(int&nbsp;id)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../squidpony/squidgrid/mapping/locks/constraints/package-summary.html">squidpony.squidgrid.mapping.locks.constraints</a> that return types with arguments of type <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">SpaceMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/constraints/SpaceMap.html#getBottomSpaces--">getBottomSpaces</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">ILayoutConstraints.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/constraints/ILayoutConstraints.html#getCoords-int-">getCoords</a></span>(int&nbsp;id)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">FreeformConstraints.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/constraints/FreeformConstraints.html#getCoords-int-">getCoords</a></span>(int&nbsp;id)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">CountConstraints.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/constraints/CountConstraints.html#getCoords-int-">getCoords</a></span>(int&nbsp;id)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../squidpony/squidgrid/mapping/locks/constraints/package-summary.html">squidpony.squidgrid.mapping.locks.constraints</a> with parameters of type <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">SpaceMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/constraints/SpaceMap.html#get-squidpony.squidmath.Coord-">get</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><span class="typeNameLabel">CountConstraints.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/constraints/CountConstraints.html#getRoomId-squidpony.squidmath.Coord-">getRoomId</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;xy)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">SpaceMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/constraints/SpaceMap.html#set-squidpony.squidmath.Coord-boolean-">set</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c,
+   boolean&nbsp;val)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">SpaceConstraints.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/constraints/SpaceConstraints.html#validRoomCoords-squidpony.squidmath.Coord-">validRoomCoords</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">CountConstraints.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/constraints/CountConstraints.html#validRoomCoords-squidpony.squidmath.Coord-">validRoomCoords</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="squidpony.squidgrid.mapping.locks.util">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a> in <a href="../../../squidpony/squidgrid/mapping/locks/util/package-summary.html">squidpony.squidgrid.mapping.locks.util</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../squidpony/squidgrid/mapping/locks/util/package-summary.html">squidpony.squidgrid.mapping.locks.util</a> declared as <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
+<td class="colLast"><span class="typeNameLabel">Rect2I.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/util/Rect2I.html#topLeft">topLeft</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../squidpony/squidgrid/mapping/locks/util/package-summary.html">squidpony.squidgrid.mapping.locks.util</a> that return <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
+<td class="colLast"><span class="typeNameLabel">Rect2I.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/util/Rect2I.html#getBottomLeft--">getBottomLeft</a></span>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../squidpony/squidgrid/mapping/locks/util/package-summary.html">squidpony.squidgrid.mapping.locks.util</a> that return types with arguments of type <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">Rect2I.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/util/Rect2I.html#getAll--">getAll</a></span>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../squidpony/squidgrid/mapping/locks/util/package-summary.html">squidpony.squidgrid.mapping.locks.util</a> with parameters of type <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">Rect2I.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/util/Rect2I.html#contains-squidpony.squidmath.Coord-">contains</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;coord)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../squidpony/squidgrid/mapping/locks/util/package-summary.html">squidpony.squidgrid.mapping.locks.util</a> with parameters of type <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/util/Rect2I.html#Rect2I-squidpony.squidmath.Coord-int-int-">Rect2I</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;min,
+      int&nbsp;w,
+      int&nbsp;h)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
