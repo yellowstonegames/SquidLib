@@ -30,7 +30,7 @@ public class CountConstraints implements ILayoutConstraints {
         this.maxSwitches = maxSwitches;
 
         roomIds = new Arrangement<Coord>();
-        Coord first = Coord.get(0,0);
+        Coord first = Coord.get(127,127);
         firstRoomId = getRoomId(first);
     }
     
@@ -59,8 +59,8 @@ public class CountConstraints implements ILayoutConstraints {
     }
     
     @Override
-    public Collection<Integer> initialRooms() {
-        return Collections.singleton(firstRoomId);
+    public IntVLA initialRooms() {
+        return IntVLA.with(firstRoomId);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class CountConstraints implements ILayoutConstraints {
 
     @Override
     public Set<Coord> getCoords(int id) {
-        return new TreeSet<Coord>(Arrays.asList(getRoomCoords(id)));
+        return Collections.singleton(getRoomCoords(id));
     }
 
     @Override

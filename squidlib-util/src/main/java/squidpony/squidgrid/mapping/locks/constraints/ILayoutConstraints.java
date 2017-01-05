@@ -5,7 +5,6 @@ import squidpony.squidgrid.mapping.locks.generators.ILayoutGenerator;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.IntVLA;
 
-import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -50,7 +49,7 @@ public interface ILayoutConstraints {
      * 
      * @return the collection of ids
      */
-    Collection<Integer> initialRooms();
+    IntVLA initialRooms();
     
     /**
      * @return a weighted list of ids of rooms that are adjacent to the room

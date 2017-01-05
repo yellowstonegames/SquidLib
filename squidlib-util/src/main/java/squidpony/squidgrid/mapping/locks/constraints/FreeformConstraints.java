@@ -8,10 +8,8 @@ import squidpony.squidmath.IntVLA;
 import squidpony.squidmath.OrderedMap;
 import squidpony.squidmath.OrderedSet;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class FreeformConstraints implements ILayoutConstraints {
     
@@ -19,13 +17,13 @@ public class FreeformConstraints implements ILayoutConstraints {
     
     protected static class Group {
         public int id;
-        public Set<Coord> coords;
-        public Set<Integer> adjacentGroups;
+        public OrderedSet<Coord> coords;
+        public OrderedSet<Integer> adjacentGroups;
         
         public Group(int id) {
             this.id = id;
-            this.coords = new TreeSet<Coord>();
-            this.adjacentGroups = new TreeSet<Integer>();
+            this.coords = new OrderedSet<>();
+            this.adjacentGroups = new OrderedSet<>();
         }
     }
     
@@ -53,7 +51,7 @@ public class FreeformConstraints implements ILayoutConstraints {
                     group = new Group(val);
                     groups.put(val, group);
                 }
-                group.coords.add(Coord.get(x,y));
+                group.coords.add(Coord.get(x+127,y+127));
             }
         System.out.println(groups.size() + " groups");
         
@@ -129,8 +127,8 @@ public class FreeformConstraints implements ILayoutConstraints {
     }
 
     @Override
-    public Collection<Integer> initialRooms() {
-        return Collections.singleton(groups.getAt(0).id);
+    public IntVLA initialRooms() {
+        return IntVLA.with(groups.getAt(0).id);
     }
 
     @Override

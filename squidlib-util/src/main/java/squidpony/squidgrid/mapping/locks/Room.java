@@ -22,10 +22,9 @@ public class Room {
 
     protected Condition precond;
     public final int id;
-    protected Set<Coord> coords;
     protected Coord center;
     protected int item;
-    protected List<Edge> edges;
+    protected ArrayList<Edge> edges;
     protected double intensity;
     protected Room parent;
     protected List<Room> children;
@@ -48,7 +47,6 @@ public class Room {
      */
     public Room(int id, Set<Coord> coords, Room parent, int item, Condition precond) {
         this.id = id;
-        this.coords = coords;
         this.item = item;
         this.edges = new ArrayList<Edge>();
         this.precond = precond;
@@ -64,8 +62,8 @@ public class Room {
         center = Coord.get(x/coords.size(), y/coords.size());
     }
     
-    public Room(int id, Coord coords, Room parent, int item, Condition precond) {
-        this(id, Collections.singleton(coords), parent, item,
+    public Room(int id, Coord coord, Room parent, int item, Condition precond) {
+        this(id, Collections.singleton(coord), parent, item,
                 precond);
     }
     
@@ -113,13 +111,14 @@ public class Room {
     /**
      * Gets the Edge object for a link in a given direction.
      * 
-     * @param targetRoomId the compass {@link Direction} of the Edge for the link from this
-     *          Room to an adjacent Room
+     * @param targetRoomId the adjacent Room's id
      * @return  the {@link Edge} for the link in the given direction, or null if
      *          there is no link from this Room in the given direction
      */
     public Edge getEdge(int targetRoomId) {
-        for (Edge e: edges) {
+        Edge e;
+        for (int i = edges.size() - 1; i >= 0; i--) {
+            e = edges.get(i);
             if (e.getTargetRoomId() == targetRoomId)
                 return e;
         }
@@ -224,16 +223,12 @@ public class Room {
         children.add(child);
     }
     
-    public Set<Coord> getCoords() {
-        return coords;
-    }
-    
     public Coord getCenter() {
         return center;
     }
     
     public String toString() {
-        return "Room(" + coords.toString() + ")";
+        return "Room(" + center.toString() + ")";
     }
     
 }

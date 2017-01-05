@@ -2,7 +2,7 @@ package squidpony.squidgrid.mapping.locks;
 
 import squidpony.squidgrid.mapping.locks.util.Rect2I;
 
-import java.util.Collection;
+import java.util.SortedSet;
 
 /**
  * Represents the spatial layout of a lock-and-key puzzle and contains all
@@ -13,7 +13,7 @@ public interface IRoomLayout {
     /**
      * @return  the rooms within the dungeon
      */
-    Collection<Room> getRooms();
+    SortedSet<Room> getRooms();
     /**
      * @return the number of rooms in the dungeon
      */
