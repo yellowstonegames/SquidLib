@@ -87,7 +87,7 @@ public class CountConstraints implements ILayoutConstraints {
     }
 
     protected boolean validRoomCoords(Coord c) {
-        return c.y <= 0;
+        return c.y >= 0 && c.x >= 0 && c.x <= 255 && c.y <= 255;
     }
     
     @Override

@@ -1,11 +1,15 @@
 package squidpony.squidgrid.mapping;
 
+import squidpony.ArrayTools;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.mapping.locks.Edge;
 import squidpony.squidgrid.mapping.locks.IRoomLayout;
 import squidpony.squidgrid.mapping.locks.Room;
 import squidpony.squidgrid.mapping.locks.util.Rect2I;
-import squidpony.squidmath.*;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.IntVLA;
+import squidpony.squidmath.PoissonDisk;
+import squidpony.squidmath.RNG;
 
 import java.util.*;
 
@@ -227,8 +231,11 @@ public class MixedGenerator {
                           float roomSizeMultiplier) {
         this.width = width;
         this.height = height;
-        this.roomWidth = (width / 64.0f) * roomSizeMultiplier;
-        this.roomHeight = (height / 64.0f) * roomSizeMultiplier;
+        Rect2I bounds = layout.getExtentBounds();
+        int offX = bounds.getBottomLeft().x, offY = bounds.getBottomLeft().y;
+        float rw = (width) / (bounds.width+1f), rh = (height) / (bounds.height+1f);
+        this.roomWidth = roomSizeMultiplier * rw * 0.125f;
+        this.roomHeight = roomSizeMultiplier * rh * 0.125f;
         if(width <= 2 || height <= 2)
             throw new IllegalStateException("width and height must be greater than 2");
         this.rng = rng;
@@ -237,31 +244,31 @@ public class MixedGenerator {
         marked = new boolean[width][height];
         walled = new boolean[width][height];
         fixedRooms = new boolean[width][height];
-        Arrays.fill(dungeon[0], '#');
-        Arrays.fill(environment[0], UNTOUCHED);
-        for (int i = 1; i < width; i++) {
-            System.arraycopy(dungeon[0], 0, dungeon[i], 0, height);
-            System.arraycopy(environment[0], 0, environment[i], 0, height);
-        }
+        ArrayTools.fill(dungeon, '#');
+        ArrayTools.fill(environment, UNTOUCHED);
         totalPoints = layout.roomCount();
         points = new IntVLA(totalPoints);
         Coord c2;
         Set<Room> rooms = layout.getRooms(), removing = new HashSet<>(rooms);
         Room t;
-        Rect2I bounds = layout.getExtentBounds();
-        int offX = bounds.getBottomLeft().x, offY = bounds.getBottomLeft().y,
-                irw = this.width / bounds.width, irh = this.height / bounds.height;
         for (Room room : rooms) {
             Coord c1 = room.getCenter();
+            if (!bounds.contains(c1)) {
+                removing.remove(room);
+                continue;
+            }
             for (Edge e : room.getEdges()) {
                 if (removing.contains(t = layout.get(e.getTargetRoomId()))) {
                     c2 = t.getCenter();
-                    points.add((((c1.x - offX) * irw & 0xff) << 24) | (((c1.y - offY) * irh & 0xff) << 16)
-                            | (((c2.x - offX) * irw & 0xff) << 8) | ((c2.y - offY) * irh & 0xff));
+                    points.add((((int) ((c1.x - offX + 0.75f) * (rw)) & 0xff) << 24)
+                            | (((int) ((c1.y - offY + 0.75f) * (rh)) & 0xff) << 16)
+                            | (((int) ((c2.x - offX + 0.75f) * (rw)) & 0xff) << 8)
+                            | ((int) ((c2.y - offY + 0.75f) * (rh)) & 0xff));
                 }
             }
             removing.remove(room);
         }
+        totalPoints = points.size;
         carvers = new EnumMap<>(CarverType.class);
     }
 
