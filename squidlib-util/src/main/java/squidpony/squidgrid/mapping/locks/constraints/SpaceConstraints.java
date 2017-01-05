@@ -1,10 +1,7 @@
 package squidpony.squidgrid.mapping.locks.constraints;
 
 import squidpony.squidmath.Coord;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import squidpony.squidmath.IntVLA;
 
 /**
  * Constrains the coordinates where Rooms may be placed to be only those within
@@ -32,8 +29,8 @@ public class SpaceConstraints extends CountConstraints {
     }
 
     @Override
-    public Collection<Integer> initialRooms() {
-        List<Integer> ids = new ArrayList<Integer>();
+    public IntVLA initialRooms() {
+        IntVLA ids = new IntVLA();
         for (Coord xy: spaceMap.getBottomSpaces()) {
             ids.add(getRoomId(xy));
         }

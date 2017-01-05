@@ -83,16 +83,22 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><a href="#squidpony.squidgrid.mapping">squidpony.squidgrid.mapping</a></td>
+<td class="colLast">
+<div class="block">Tools specifically for generating maps and placing content in them, usually working with 2D char arrays.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#squidpony.squidgrid.mapping.locks">squidpony.squidgrid.mapping.locks</a></td>
 <td class="colLast">
 <div class="block">Lock-and-key puzzle generation from MetaZelda, https://github.com/tcoxon/metazelda (BSD-licensed).</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#squidpony.squidgrid.mapping.locks.constraints">squidpony.squidgrid.mapping.locks.constraints</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#squidpony.squidgrid.mapping.locks.generators">squidpony.squidgrid.mapping.locks.generators</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -101,6 +107,28 @@
 </li>
 <li class="blockList">
 <ul class="blockList">
+<li class="blockList"><a name="squidpony.squidgrid.mapping">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks">IRoomLayout</a> in <a href="../../../../../squidpony/squidgrid/mapping/package-summary.html">squidpony.squidgrid.mapping</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../squidpony/squidgrid/mapping/package-summary.html">squidpony.squidgrid.mapping</a> with parameters of type <a href="../../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks">IRoomLayout</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/mapping/MixedGenerator.html#MixedGenerator-int-int-squidpony.squidmath.RNG-squidpony.squidgrid.mapping.locks.IRoomLayout-float-">MixedGenerator</a></span>(int&nbsp;width,
+              int&nbsp;height,
+              <a href="../../../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+              <a href="../../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks">IRoomLayout</a>&nbsp;layout,
+              float&nbsp;roomSizeMultiplier)</code>
+<div class="block">This prepares a map generator that will generate a map with the given width and height, using the given RNG.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="squidpony.squidgrid.mapping.locks">
 <!--   -->
 </a>
@@ -160,11 +188,11 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks">IRoomLayout</a></code></td>
-<td class="colLast"><span class="typeNameLabel">LayoutGenerator.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#getDungeon--">getDungeon</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">LayoutGenerator.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#getRoomLayout--">getRoomLayout</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks">IRoomLayout</a></code></td>
-<td class="colLast"><span class="typeNameLabel">ILayoutGenerator.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/mapping/locks/generators/ILayoutGenerator.html#getDungeon--">getDungeon</a></span>()</code>
+<td class="colLast"><span class="typeNameLabel">ILayoutGenerator.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/mapping/locks/generators/ILayoutGenerator.html#getRoomLayout--">getRoomLayout</a></span>()</code>
 <div class="block">Gets the most recently generated <a href="../../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks"><code>IRoomLayout</code></a>.</div>
 </td>
 </tr>

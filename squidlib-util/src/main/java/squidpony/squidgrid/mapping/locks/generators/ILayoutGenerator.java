@@ -18,6 +18,6 @@ public interface ILayoutGenerator {
      * 
      * @return the most recently generated IRoomLayout
      */
-    IRoomLayout getDungeon();
+    IRoomLayout getRoomLayout();
     
 }

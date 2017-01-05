@@ -303,7 +303,7 @@ implements <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks">IRoomLayout</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#getDungeon--">getDungeon</a></span>()</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#getRoomLayout--">getRoomLayout</a></span>()</code>
 <div class="block">Gets the most recently generated <a href="../../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks"><code>IRoomLayout</code></a>.</div>
 </td>
 </tr>
@@ -520,7 +520,7 @@ implements <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/
 <ul class="blockList">
 <li class="blockList">
 <h4>INTENSITY_GROWTH_JITTER</h4>
-<pre>protected static final&nbsp;double <a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.551">INTENSITY_GROWTH_JITTER</a></pre>
+<pre>protected static final&nbsp;double <a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.549">INTENSITY_GROWTH_JITTER</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../../constant-values.html#squidpony.squidgrid.mapping.locks.generators.LayoutGenerator.INTENSITY_GROWTH_JITTER">Constant Field Values</a></dd>
@@ -533,7 +533,7 @@ implements <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/
 <ul class="blockListLast">
 <li class="blockList">
 <h4>INTENSITY_EASE_OFF</h4>
-<pre>protected static final&nbsp;double <a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.552">INTENSITY_EASE_OFF</a></pre>
+<pre>protected static final&nbsp;double <a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.550">INTENSITY_EASE_OFF</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../../constant-values.html#squidpony.squidgrid.mapping.locks.generators.LayoutGenerator.INTENSITY_EASE_OFF">Constant Field Values</a></dd>
@@ -638,7 +638,7 @@ implements <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/
 <ul class="blockList">
 <li class="blockList">
 <h4>shouldAddNewLock</h4>
-<pre>protected&nbsp;boolean&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.183">shouldAddNewLock</a>(int&nbsp;keyLevel,
+<pre>protected&nbsp;boolean&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.182">shouldAddNewLock</a>(int&nbsp;keyLevel,
                                    int&nbsp;numRooms,
                                    int&nbsp;targetRoomsPerLock)</pre>
 <div class="block">Decides whether to add a new lock (and keyLevel) at this point.</div>
@@ -659,7 +659,7 @@ implements <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/
 <ul class="blockList">
 <li class="blockList">
 <h4>placeRooms</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.198">placeRooms</a>(<a href="../../../../../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.KeyLevelRoomMapping.html" title="class in squidpony.squidgrid.mapping.locks.generators">LayoutGenerator.KeyLevelRoomMapping</a>&nbsp;levels,
+<pre>protected&nbsp;void&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.197">placeRooms</a>(<a href="../../../../../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.KeyLevelRoomMapping.html" title="class in squidpony.squidgrid.mapping.locks.generators">LayoutGenerator.KeyLevelRoomMapping</a>&nbsp;levels,
                           int&nbsp;roomsPerLock)
                    throws <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.RetryException.html" title="class in squidpony.squidgrid.mapping.locks.generators">LayoutGenerator.RetryException</a>,
                           <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.OutOfRoomsException.html" title="class in squidpony.squidgrid.mapping.locks.generators">LayoutGenerator.OutOfRoomsException</a></pre>
@@ -682,7 +682,7 @@ implements <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/
 <ul class="blockList">
 <li class="blockList">
 <h4>placeBossGoalRooms</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.260">placeBossGoalRooms</a>(<a href="../../../../../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.KeyLevelRoomMapping.html" title="class in squidpony.squidgrid.mapping.locks.generators">LayoutGenerator.KeyLevelRoomMapping</a>&nbsp;levels)
+<pre>protected&nbsp;void&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.259">placeBossGoalRooms</a>(<a href="../../../../../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.KeyLevelRoomMapping.html" title="class in squidpony.squidgrid.mapping.locks.generators">LayoutGenerator.KeyLevelRoomMapping</a>&nbsp;levels)
                            throws <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.RetryException.html" title="class in squidpony.squidgrid.mapping.locks.generators">LayoutGenerator.RetryException</a></pre>
 <div class="block">Places the BOSS and GOAL rooms within the dungeon, in existing rooms.
  These rooms are moved into the next keyLevel.</div>
@@ -702,7 +702,7 @@ implements <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/
 <ul class="blockList">
 <li class="blockList">
 <h4>removeDescendantsFromList</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.332">removeDescendantsFromList</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&gt;&nbsp;rooms,
+<pre>protected&nbsp;void&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.330">removeDescendantsFromList</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&gt;&nbsp;rooms,
                                          <a href="../../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;room)</pre>
 <div class="block">Removes the given <a href="../../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks"><code>Room</code></a> and all its descendants from the given
  list.</div>
@@ -719,7 +719,7 @@ implements <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/
 <ul class="blockList">
 <li class="blockList">
 <h4>addPrecond</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.346">addPrecond</a>(<a href="../../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;room,
+<pre>protected&nbsp;void&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.344">addPrecond</a>(<a href="../../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;room,
                           <a href="../../../../../squidpony/squidgrid/mapping/locks/Condition.html" title="class in squidpony.squidgrid.mapping.locks">Condition</a>&nbsp;cond)</pre>
 <div class="block">Adds extra conditions to the given <a href="../../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks"><code>Room</code></a>'s preconditions and all
  of its descendants.</div>
@@ -736,7 +736,7 @@ implements <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/
 <ul class="blockList">
 <li class="blockList">
 <h4>switchLockChildRooms</h4>
-<pre>protected&nbsp;boolean&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.367">switchLockChildRooms</a>(<a href="../../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;room,
+<pre>protected&nbsp;boolean&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.365">switchLockChildRooms</a>(<a href="../../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;room,
                                        <a href="../../../../../squidpony/squidgrid/mapping/locks/Condition.SwitchState.html" title="enum in squidpony.squidgrid.mapping.locks">Condition.SwitchState</a>&nbsp;givenState)</pre>
 <div class="block">Randomly locks descendant rooms of the given <a href="../../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks"><code>Room</code></a> with
  <a href="../../../../../squidpony/squidgrid/mapping/locks/Edge.html" title="class in squidpony.squidgrid.mapping.locks"><code>Edge</code></a>s that require the switch to be in the given state.
@@ -762,7 +762,7 @@ implements <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/
 <ul class="blockList">
 <li class="blockList">
 <h4>getSolutionPath</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&gt;&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.404">getSolutionPath</a>()</pre>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&gt;&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.402">getSolutionPath</a>()</pre>
 <div class="block">Returns a path from the goal to the dungeon entrance, along the 'parent'
  relations.</div>
 <dl>
@@ -778,7 +778,7 @@ implements <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/
 <ul class="blockList">
 <li class="blockList">
 <h4>placeSwitches</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.421">placeSwitches</a>()
+<pre>protected&nbsp;void&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.419">placeSwitches</a>()
                       throws <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.RetryException.html" title="class in squidpony.squidgrid.mapping.locks.generators">LayoutGenerator.RetryException</a></pre>
 <div class="block">Makes some <a href="../../../../../squidpony/squidgrid/mapping/locks/Edge.html" title="class in squidpony.squidgrid.mapping.locks"><code>Edge</code></a>s within the dungeon require the dungeon's switch
  to be in a particular state, and places the switch in a room in the
@@ -795,7 +795,7 @@ implements <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/
 <ul class="blockList">
 <li class="blockList">
 <h4>graphify</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.475">graphify</a>()
+<pre>protected&nbsp;void&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.473">graphify</a>()
                  throws <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.RetryException.html" title="class in squidpony.squidgrid.mapping.locks.generators">LayoutGenerator.RetryException</a></pre>
 <div class="block">Randomly links up some adjacent rooms to make the dungeon graph less of
  a tree.</div>
@@ -811,7 +811,7 @@ implements <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/
 <ul class="blockList">
 <li class="blockList">
 <h4>placeKeys</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.523">placeKeys</a>(<a href="../../../../../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.KeyLevelRoomMapping.html" title="class in squidpony.squidgrid.mapping.locks.generators">LayoutGenerator.KeyLevelRoomMapping</a>&nbsp;levels)
+<pre>protected&nbsp;void&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.521">placeKeys</a>(<a href="../../../../../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.KeyLevelRoomMapping.html" title="class in squidpony.squidgrid.mapping.locks.generators">LayoutGenerator.KeyLevelRoomMapping</a>&nbsp;levels)
                   throws <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.RetryException.html" title="class in squidpony.squidgrid.mapping.locks.generators">LayoutGenerator.RetryException</a></pre>
 <div class="block">Places keys within the dungeon in such a way that the dungeon is
  guaranteed to be solvable.</div>
@@ -831,7 +831,7 @@ implements <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/
 <ul class="blockList">
 <li class="blockList">
 <h4>applyIntensity</h4>
-<pre>protected&nbsp;double&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.567">applyIntensity</a>(<a href="../../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;room,
+<pre>protected&nbsp;double&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.565">applyIntensity</a>(<a href="../../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;room,
                                 double&nbsp;intensity)</pre>
 <div class="block">Recursively applies the given intensity to the given <a href="../../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks"><code>Room</code></a>, and
  higher intensities to each of its descendants that are within the same
@@ -855,7 +855,7 @@ implements <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/
 <ul class="blockList">
 <li class="blockList">
 <h4>normalizeIntensity</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.590">normalizeIntensity</a>()</pre>
+<pre>protected&nbsp;void&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.588">normalizeIntensity</a>()</pre>
 <div class="block">Scales intensities within the dungeon down so that they all fit within
  the range 0 <= intensity < 1.0.</div>
 <dl>
@@ -870,7 +870,7 @@ implements <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/
 <ul class="blockList">
 <li class="blockList">
 <h4>computeIntensity</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.609">computeIntensity</a>(<a href="../../../../../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.KeyLevelRoomMapping.html" title="class in squidpony.squidgrid.mapping.locks.generators">LayoutGenerator.KeyLevelRoomMapping</a>&nbsp;levels)
+<pre>protected&nbsp;void&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.607">computeIntensity</a>(<a href="../../../../../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.KeyLevelRoomMapping.html" title="class in squidpony.squidgrid.mapping.locks.generators">LayoutGenerator.KeyLevelRoomMapping</a>&nbsp;levels)
                          throws <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.RetryException.html" title="class in squidpony.squidgrid.mapping.locks.generators">LayoutGenerator.RetryException</a></pre>
 <div class="block">Computes the 'intensity' of each <a href="../../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks"><code>Room</code></a>. Rooms generally get more
  intense the deeper they are into the dungeon.</div>
@@ -891,7 +891,7 @@ implements <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/
 <ul class="blockList">
 <li class="blockList">
 <h4>checkAcceptable</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.646">checkAcceptable</a>()
+<pre>protected&nbsp;void&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.644">checkAcceptable</a>()
                         throws <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.RetryException.html" title="class in squidpony.squidgrid.mapping.locks.generators">LayoutGenerator.RetryException</a></pre>
 <div class="block">Checks with the
  <a href="../../../../../squidpony/squidgrid/mapping/locks/constraints/ILayoutConstraints.html" title="interface in squidpony.squidgrid.mapping.locks.constraints"><code>ILayoutConstraints</code></a> that the
@@ -911,7 +911,7 @@ implements <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/
 <ul class="blockList">
 <li class="blockList">
 <h4>generate</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.652">generate</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.650">generate</a>()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../squidpony/squidgrid/mapping/locks/generators/ILayoutGenerator.html#generate--">ILayoutGenerator</a></code></span></div>
 <div class="block">Generates a new <a href="../../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks"><code>IRoomLayout</code></a>.</div>
 <dl>
@@ -920,18 +920,18 @@ implements <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/
 </dl>
 </li>
 </ul>
-<a name="getDungeon--">
+<a name="getRoomLayout--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getDungeon</h4>
-<pre>public&nbsp;<a href="../../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks">IRoomLayout</a>&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.735">getDungeon</a>()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../squidpony/squidgrid/mapping/locks/generators/ILayoutGenerator.html#getDungeon--">ILayoutGenerator</a></code></span></div>
+<h4>getRoomLayout</h4>
+<pre>public&nbsp;<a href="../../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks">IRoomLayout</a>&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.733">getRoomLayout</a>()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../squidpony/squidgrid/mapping/locks/generators/ILayoutGenerator.html#getRoomLayout--">ILayoutGenerator</a></code></span></div>
 <div class="block">Gets the most recently generated <a href="../../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks"><code>IRoomLayout</code></a>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../squidpony/squidgrid/mapping/locks/generators/ILayoutGenerator.html#getDungeon--">getDungeon</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../squidpony/squidgrid/mapping/locks/generators/ILayoutGenerator.html" title="interface in squidpony.squidgrid.mapping.locks.generators">ILayoutGenerator</a></code></dd>
+<dd><code><a href="../../../../../squidpony/squidgrid/mapping/locks/generators/ILayoutGenerator.html#getRoomLayout--">getRoomLayout</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../squidpony/squidgrid/mapping/locks/generators/ILayoutGenerator.html" title="interface in squidpony.squidgrid.mapping.locks.generators">ILayoutGenerator</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the most recently generated IRoomLayout</dd>
 </dl>
@@ -943,7 +943,7 @@ implements <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/
 <ul class="blockList">
 <li class="blockList">
 <h4>isBossRoomLocked</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.739">isBossRoomLocked</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.737">isBossRoomLocked</a>()</pre>
 </li>
 </ul>
 <a name="setBossRoomLocked-boolean-">
@@ -952,7 +952,7 @@ implements <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/
 <ul class="blockList">
 <li class="blockList">
 <h4>setBossRoomLocked</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.743">setBossRoomLocked</a>(boolean&nbsp;bossRoomLocked)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.741">setBossRoomLocked</a>(boolean&nbsp;bossRoomLocked)</pre>
 </li>
 </ul>
 <a name="isGenerateGoal--">
@@ -961,7 +961,7 @@ implements <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/
 <ul class="blockList">
 <li class="blockList">
 <h4>isGenerateGoal</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.747">isGenerateGoal</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.745">isGenerateGoal</a>()</pre>
 </li>
 </ul>
 <a name="setGenerateGoal-boolean-">
@@ -970,7 +970,7 @@ implements <a href="../../../../../squidpony/squidgrid/mapping/locks/generators/
 <ul class="blockListLast">
 <li class="blockList">
 <h4>setGenerateGoal</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.751">setGenerateGoal</a>(boolean&nbsp;generateGoal)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../../src-html/squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#line.749">setGenerateGoal</a>(boolean&nbsp;generateGoal)</pre>
 </li>
 </ul>
 </li>

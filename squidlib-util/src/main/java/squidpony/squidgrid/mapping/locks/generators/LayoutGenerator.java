@@ -159,10 +159,9 @@ public class LayoutGenerator implements ILayoutGenerator {
     protected void initEntranceRoom(KeyLevelRoomMapping levels)
             throws RetryException {
         int id;
-        List<Integer> possibleEntries = new ArrayList<Integer>(
-                constraints.initialRooms());
-        assert possibleEntries.size() > 0;
-        id = possibleEntries.get(random.nextInt(possibleEntries.size()));
+        IntVLA possibleEntries = constraints.initialRooms();
+        assert possibleEntries.size > 0;
+        id = possibleEntries.getRandomElement(random);
         
         Room entry = new Room(id, constraints.getCoords(id), null, Symbol.START, new Condition());
         dungeon.add(entry);
@@ -220,7 +219,7 @@ public class LayoutGenerator implements ILayoutGenerator {
             
             // Find an existing room with a free edge:
             Room parentRoom = null;
-            if (!doLock && random.nextInt(10) > 0)
+            if (!doLock && random.nextIntHasty(10) > 0)
                 parentRoom = chooseRoomWithFreeEdge(levels.getRooms(keyLevel),
                         keyLevel);
             if (parentRoom == null) {
@@ -240,11 +239,11 @@ public class LayoutGenerator implements ILayoutGenerator {
             
             // Add the room to the dungeon
             assert dungeon.get(room.id) == null;
-            synchronized (dungeon) {
-                dungeon.add(room);
-                parentRoom.addChild(room);
-                dungeon.link(parentRoom, room, doLock ? latestKey : Symbol.NOTHING);
-            }
+            //synchronized(dungeon) {
+            dungeon.add(room);
+            parentRoom.addChild(room);
+            dungeon.link(parentRoom, room, doLock ? latestKey : Symbol.NOTHING);
+            // }
             levels.addRoom(keyLevel, room);
         }
     }
@@ -285,8 +284,7 @@ public class LayoutGenerator implements ILayoutGenerator {
         
         if (possibleGoalRooms.size() == 0) throw new RetryException();
         
-        Room goalRoom = possibleGoalRooms.get(random.nextInt(
-                possibleGoalRooms.size())),
+        Room goalRoom = random.getRandomElement(possibleGoalRooms),
              bossRoom = goalRoom.getParent();
         
         if (!isGenerateGoal()) {
@@ -369,7 +367,7 @@ public class LayoutGenerator implements ILayoutGenerator {
         boolean anyLocks = false;
         Condition.SwitchState state = givenState != Condition.SwitchState.EITHER
                 ? givenState
-                : (random.nextInt(2) == 0
+                : (random.nextBoolean()
                     ? Condition.SwitchState.ON
                     : Condition.SwitchState.OFF);
         
@@ -378,7 +376,7 @@ public class LayoutGenerator implements ILayoutGenerator {
             Room nextRoom = dungeon.get(neighborId);
             if (room.getChildren().contains(nextRoom)) {
                 if (room.getEdge(neighborId).getSymbol() == Symbol.NOTHING &&
-                        random.nextInt(4) != 0) {
+                        random.nextIntHasty(4) != 0) {
                     dungeon.link(room, nextRoom, state.toSymbol());
                     addPrecond(nextRoom, new Condition(state.toSymbol()));
                     anyLocks = true;
@@ -732,7 +730,7 @@ public class LayoutGenerator implements ILayoutGenerator {
     }
 
     @Override
-    public IRoomLayout getDungeon() {
+    public IRoomLayout getRoomLayout() {
         return dungeon;
     }
 

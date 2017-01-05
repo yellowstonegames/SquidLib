@@ -2,9 +2,9 @@ package squidpony.squidgrid.mapping.locks;
 
 import squidpony.squidgrid.mapping.locks.util.Rect2I;
 import squidpony.squidmath.Coord;
-import squidpony.squidmath.OrderedMap;
+import squidpony.squidmath.K2;
 
-import java.util.Collection;
+import java.util.SortedSet;
 
 /**
  * @see IRoomLayout
@@ -12,11 +12,11 @@ import java.util.Collection;
 public class RoomLayout implements IRoomLayout {
 
     protected int itemCount;
-    protected OrderedMap<Integer, Room> rooms;
+    protected K2<Integer, Room> rooms;
     protected Rect2I bounds;
     
     public RoomLayout() {
-        rooms = new OrderedMap<>();
+        rooms = new K2<>();
         bounds = Rect2I.fromExtremes(Integer.MAX_VALUE,Integer.MAX_VALUE,
                 Integer.MIN_VALUE,Integer.MIN_VALUE);
     }
@@ -27,8 +27,8 @@ public class RoomLayout implements IRoomLayout {
     }
     
     @Override
-    public Collection<Room> getRooms() {
-        return rooms.values();
+    public SortedSet<Room> getRooms() {
+        return rooms.getSetB();
     }
     
     @Override
@@ -38,30 +38,29 @@ public class RoomLayout implements IRoomLayout {
     
     @Override
     public Room get(int id) {
-        return rooms.get(id);
+        return rooms.getBFromA(id);
     }
     
     @Override
     public void add(Room room) {
         rooms.put(room.id, room);
-        
-        for (Coord xy: room.getCoords()) {
-            if (xy.x < bounds.left()) {
-                bounds = Rect2I.fromExtremes(xy.x, bounds.top(),
-                        bounds.right(), bounds.bottom());
-            }
-            if (xy.x >= bounds.right()) {
-                bounds = Rect2I.fromExtremes(bounds.left(), bounds.top(),
-                        xy.x+1, bounds.bottom());
-            }
-            if (xy.y < bounds.top()) {
-                bounds = Rect2I.fromExtremes(bounds.left(), xy.y,
-                        bounds.right(), bounds.bottom());
-            }
-            if (xy.y >= bounds.bottom()) {
-                bounds = Rect2I.fromExtremes(bounds.left(), bounds.top(),
-                        bounds.right(), xy.y+1);
-            }
+
+        Coord xy = room.center;
+        if (xy.x < bounds.left()) {
+            bounds = Rect2I.fromExtremes(xy.x, bounds.top(),
+                    bounds.right(), bounds.bottom());
+        }
+        if (xy.x >= bounds.right()) {
+            bounds = Rect2I.fromExtremes(bounds.left(), bounds.top(),
+                    xy.x + 1, bounds.bottom());
+        }
+        if (xy.y < bounds.top()) {
+            bounds = Rect2I.fromExtremes(bounds.left(), xy.y,
+                    bounds.right(), bounds.bottom());
+        }
+        if (xy.y >= bounds.bottom()) {
+            bounds = Rect2I.fromExtremes(bounds.left(), bounds.top(),
+                    bounds.right(), xy.y + 1);
         }
     }
     
@@ -77,7 +76,7 @@ public class RoomLayout implements IRoomLayout {
     
     @Override
     public void linkOneWay(Room room1, Room room2, int cond) {
-        assert rooms.values().contains(room1) && rooms.values().contains(room2);
+        assert rooms.containsB(room1) && rooms.containsB(room2);
         room1.setEdge(room2.id, cond);
     }
     

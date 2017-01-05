@@ -147,7 +147,7 @@ implements <a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.ht
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/locks/RoomLayout.html#itemCount">itemCount</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,<a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&gt;</code></td>
+<td class="colFirst"><code>protected <a href="../../../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,<a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/locks/RoomLayout.html#rooms">rooms</a></span></code>&nbsp;</td>
 </tr>
 </table>
@@ -216,7 +216,7 @@ implements <a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.ht
 </td>
 </tr>
 <tr id="i7" class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&gt;</code></td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/locks/RoomLayout.html#getRooms--">getRooms</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
@@ -297,7 +297,7 @@ implements <a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>rooms</h4>
-<pre>protected&nbsp;<a href="../../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,<a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&gt; <a href="../../../../src-html/squidpony/squidgrid/mapping/locks/RoomLayout.html#line.15">rooms</a></pre>
+<pre>protected&nbsp;<a href="../../../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,<a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&gt; <a href="../../../../src-html/squidpony/squidgrid/mapping/locks/RoomLayout.html#line.15">rooms</a></pre>
 </li>
 </ul>
 <a name="bounds">
@@ -361,7 +361,7 @@ implements <a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>getRooms</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/locks/RoomLayout.html#line.30">getRooms</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/locks/RoomLayout.html#line.30">getRooms</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html#getRooms--">getRooms</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks">IRoomLayout</a></code></dd>
@@ -426,7 +426,7 @@ implements <a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>linkOneWay</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/locks/RoomLayout.html#line.69">linkOneWay</a>(<a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;room1,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/locks/RoomLayout.html#line.68">linkOneWay</a>(<a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;room1,
                        <a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;room2)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html#linkOneWay-squidpony.squidgrid.mapping.locks.Room-squidpony.squidgrid.mapping.locks.Room-">IRoomLayout</a></code></span></div>
 <div class="block">Adds a one-way unconditional edge between the given rooms.
@@ -447,7 +447,7 @@ implements <a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>link</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/locks/RoomLayout.html#line.74">link</a>(<a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;room1,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/locks/RoomLayout.html#line.73">link</a>(<a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;room1,
                  <a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;room2)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html#link-squidpony.squidgrid.mapping.locks.Room-squidpony.squidgrid.mapping.locks.Room-">IRoomLayout</a></code></span></div>
 <div class="block">Adds a two-way unconditional edge between the given rooms.
@@ -467,7 +467,7 @@ implements <a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>linkOneWay</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/locks/RoomLayout.html#line.79">linkOneWay</a>(<a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;room1,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/locks/RoomLayout.html#line.78">linkOneWay</a>(<a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;room1,
                        <a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;room2,
                        int&nbsp;cond)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html#linkOneWay-squidpony.squidgrid.mapping.locks.Room-squidpony.squidgrid.mapping.locks.Room-int-">IRoomLayout</a></code></span></div>
@@ -490,7 +490,7 @@ implements <a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>link</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/locks/RoomLayout.html#line.85">link</a>(<a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;room1,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/locks/RoomLayout.html#line.84">link</a>(<a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;room1,
                  <a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;room2,
                  int&nbsp;cond)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html#link-squidpony.squidgrid.mapping.locks.Room-squidpony.squidgrid.mapping.locks.Room-int-">IRoomLayout</a></code></span></div>
@@ -512,7 +512,7 @@ implements <a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>roomsAreLinked</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/locks/RoomLayout.html#line.91">roomsAreLinked</a>(<a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;room1,
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/locks/RoomLayout.html#line.90">roomsAreLinked</a>(<a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;room1,
                               <a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;room2)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html#roomsAreLinked-squidpony.squidgrid.mapping.locks.Room-squidpony.squidgrid.mapping.locks.Room-">IRoomLayout</a></code></span></div>
 <div class="block">Tests whether two rooms are linked.
@@ -532,7 +532,7 @@ implements <a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>findStart</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/locks/RoomLayout.html#line.97">findStart</a>()</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/locks/RoomLayout.html#line.96">findStart</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html#findStart--">findStart</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks">IRoomLayout</a></code></dd>
@@ -547,7 +547,7 @@ implements <a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>findBoss</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/locks/RoomLayout.html#line.105">findBoss</a>()</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/locks/RoomLayout.html#line.104">findBoss</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html#findBoss--">findBoss</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks">IRoomLayout</a></code></dd>
@@ -562,7 +562,7 @@ implements <a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>findGoal</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/locks/RoomLayout.html#line.113">findGoal</a>()</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/locks/RoomLayout.html#line.112">findGoal</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html#findGoal--">findGoal</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks">IRoomLayout</a></code></dd>
@@ -577,7 +577,7 @@ implements <a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.ht
 <ul class="blockListLast">
 <li class="blockList">
 <h4>findSwitch</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/locks/RoomLayout.html#line.121">findSwitch</a>()</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/locks/RoomLayout.html#line.120">findSwitch</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html#findSwitch--">findSwitch</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks">IRoomLayout</a></code></dd>

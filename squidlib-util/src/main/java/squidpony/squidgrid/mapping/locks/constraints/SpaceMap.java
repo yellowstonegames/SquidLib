@@ -39,14 +39,14 @@ public class SpaceMap {
         return spaces.first();
     }
     
-    public Collection<Coord> getBottomSpaces() {
-        List<Coord> bottomRow = new ArrayList<Coord>();
+    public ArrayList<Coord> getBottomSpaces() {
+        ArrayList<Coord> bottomRow = new ArrayList<Coord>();
         bottomRow.add(getFirst());
         int bottomY = getFirst().y;
         for (Coord space: spaces) {
             if (space.y > bottomY) {
                 bottomY = space.y;
-                bottomRow = new ArrayList<Coord>();
+                bottomRow.clear();
                 bottomRow.add(space);
             } else if (space.y == bottomY) {
                 bottomRow.add(space);
