@@ -17,11 +17,11 @@ public class LockTest {
     public static void main(String[] args)
     {
         StatefulRNG rng = new StatefulRNG(0x1337BEEFBABBL);
-        ILayoutConstraints constraints = new CountConstraints(20, 5, 0);
+        ILayoutConstraints constraints = new CountConstraints(50, 5, 0);
         LayoutGenerator gen = new LayoutGenerator(rng, constraints);
         MixedGenerator mix;
         SectionDungeonGenerator sdg = new SectionDungeonGenerator(width, height, rng);
-        sdg.addDoors(20, false);
+        sdg.addDoors(90, false);
         try{
             gen.generate();
             mix = new MixedGenerator(width, height, rng, gen.getRoomLayout(), 0.75f);
@@ -32,6 +32,6 @@ public class LockTest {
         mix.putBoxRoomCarvers(3);
         mix.putRoundRoomCarvers(1);
         char[][] dungeon = mix.generate();
-        DungeonUtility.debugPrint(sdg.generate(dungeon, mix.getEnvironment()));
+        DungeonUtility.debugPrint(DungeonUtility.hashesToLines(sdg.generate(dungeon, mix.getEnvironment())));
     }
 }

@@ -8,904 +8,970 @@
 <div class="sourceContainer">
 <pre><span class="sourceLineNo">001</span>package squidpony.squidgrid.mapping;<a name="line.1"></a>
 <span class="sourceLineNo">002</span><a name="line.2"></a>
-<span class="sourceLineNo">003</span>import squidpony.squidgrid.Direction;<a name="line.3"></a>
-<span class="sourceLineNo">004</span>import squidpony.squidmath.Coord;<a name="line.4"></a>
-<span class="sourceLineNo">005</span>import squidpony.squidmath.PoissonDisk;<a name="line.5"></a>
-<span class="sourceLineNo">006</span>import squidpony.squidmath.RNG;<a name="line.6"></a>
-<span class="sourceLineNo">007</span><a name="line.7"></a>
-<span class="sourceLineNo">008</span>import java.util.*;<a name="line.8"></a>
-<span class="sourceLineNo">009</span><a name="line.9"></a>
-<span class="sourceLineNo">010</span>/**<a name="line.10"></a>
-<span class="sourceLineNo">011</span> * A dungeon generator that can use a mix of techniques to have part-cave, part-room dungeons. Not entirely intended for<a name="line.11"></a>
-<span class="sourceLineNo">012</span> * normal use outside of this library, though it can be very useful when you want to make a dungeon match a specific<a name="line.12"></a>
-<span class="sourceLineNo">013</span> * path and existing generators that use MixedGenerator aren't sufficient. You may want to use a simpler generator based<a name="line.13"></a>
-<span class="sourceLineNo">014</span> * on this, like SerpentMapGenerator, which generates a long, winding path that loops around on itself. This supports<a name="line.14"></a>
-<span class="sourceLineNo">015</span> * the getEnvironment() method, which can be used in conjunction with RoomFinder to find where separate room, corridor,<a name="line.15"></a>
-<span class="sourceLineNo">016</span> * and cave areas have been placed.<a name="line.16"></a>
-<span class="sourceLineNo">017</span> * &lt;br&gt;<a name="line.17"></a>
-<span class="sourceLineNo">018</span> * Based on Michael Patraw's excellent Drunkard's Walk dungeon generator.<a name="line.18"></a>
-<span class="sourceLineNo">019</span> * http://mpatraw.github.io/libdrunkard/<a name="line.19"></a>
-<span class="sourceLineNo">020</span> * @see squidpony.squidgrid.mapping.SerpentMapGenerator a normal use for MixedGenerator that makes winding dungeons<a name="line.20"></a>
-<span class="sourceLineNo">021</span> * @see squidpony.squidgrid.mapping.SerpentDeepMapGenerator uses MixedGenerator as it makes a multi-level dungeon<a name="line.21"></a>
-<span class="sourceLineNo">022</span> * Created by Tommy Ettinger on 10/22/2015.<a name="line.22"></a>
-<span class="sourceLineNo">023</span> */<a name="line.23"></a>
-<span class="sourceLineNo">024</span>public class MixedGenerator {<a name="line.24"></a>
-<span class="sourceLineNo">025</span>    public enum CarverType<a name="line.25"></a>
-<span class="sourceLineNo">026</span>    {<a name="line.26"></a>
-<span class="sourceLineNo">027</span>        CAVE,<a name="line.27"></a>
-<span class="sourceLineNo">028</span>        BOX,<a name="line.28"></a>
-<span class="sourceLineNo">029</span>        ROUND,<a name="line.29"></a>
-<span class="sourceLineNo">030</span>        BOX_WALLED,<a name="line.30"></a>
-<span class="sourceLineNo">031</span>        ROUND_WALLED<a name="line.31"></a>
-<span class="sourceLineNo">032</span>    }<a name="line.32"></a>
-<span class="sourceLineNo">033</span><a name="line.33"></a>
-<span class="sourceLineNo">034</span>    /**<a name="line.34"></a>
-<span class="sourceLineNo">035</span>     * Constant for environment tiles that are not near a cave, room, or corridor. Value is 0.<a name="line.35"></a>
-<span class="sourceLineNo">036</span>     */<a name="line.36"></a>
-<span class="sourceLineNo">037</span>    public static final int UNTOUCHED = 0;<a name="line.37"></a>
-<span class="sourceLineNo">038</span>    /**<a name="line.38"></a>
-<span class="sourceLineNo">039</span>     * Constant for environment tiles that are floors for a room. Value is 1.<a name="line.39"></a>
-<span class="sourceLineNo">040</span>     */<a name="line.40"></a>
-<span class="sourceLineNo">041</span>    public static final int ROOM_FLOOR = 1;<a name="line.41"></a>
-<span class="sourceLineNo">042</span>    /**<a name="line.42"></a>
-<span class="sourceLineNo">043</span>     * Constant for environment tiles that are walls near a room. Value is 2.<a name="line.43"></a>
-<span class="sourceLineNo">044</span>     */<a name="line.44"></a>
-<span class="sourceLineNo">045</span>    public static final int ROOM_WALL = 2;<a name="line.45"></a>
-<span class="sourceLineNo">046</span>    /**<a name="line.46"></a>
-<span class="sourceLineNo">047</span>     * Constant for environment tiles that are floors for a cave. Value is 3.<a name="line.47"></a>
-<span class="sourceLineNo">048</span>     */<a name="line.48"></a>
-<span class="sourceLineNo">049</span>    public static final int CAVE_FLOOR = 3;<a name="line.49"></a>
-<span class="sourceLineNo">050</span>    /**<a name="line.50"></a>
-<span class="sourceLineNo">051</span>     * Constant for environment tiles that are walls near a cave. Value is 4.<a name="line.51"></a>
-<span class="sourceLineNo">052</span>     */<a name="line.52"></a>
-<span class="sourceLineNo">053</span>    public static final int CAVE_WALL = 4;<a name="line.53"></a>
-<span class="sourceLineNo">054</span>    /**<a name="line.54"></a>
-<span class="sourceLineNo">055</span>     * Constant for environment tiles that are floors for a corridor. Value is 5.<a name="line.55"></a>
-<span class="sourceLineNo">056</span>     */<a name="line.56"></a>
-<span class="sourceLineNo">057</span>    public static final int CORRIDOR_FLOOR = 5;<a name="line.57"></a>
-<span class="sourceLineNo">058</span>    /**<a name="line.58"></a>
-<span class="sourceLineNo">059</span>     * Constant for environment tiles that are walls near a corridor. Value is 6.<a name="line.59"></a>
-<span class="sourceLineNo">060</span>     */<a name="line.60"></a>
-<span class="sourceLineNo">061</span>    public static final int CORRIDOR_WALL = 6;<a name="line.61"></a>
-<span class="sourceLineNo">062</span><a name="line.62"></a>
-<span class="sourceLineNo">063</span>    protected EnumMap&lt;CarverType, Integer&gt; carvers;<a name="line.63"></a>
-<span class="sourceLineNo">064</span>    protected int width, height;<a name="line.64"></a>
-<span class="sourceLineNo">065</span>    protected float roomWidth, roomHeight;<a name="line.65"></a>
-<span class="sourceLineNo">066</span>    public RNG rng;<a name="line.66"></a>
-<span class="sourceLineNo">067</span>    protected char[][] dungeon;<a name="line.67"></a>
-<span class="sourceLineNo">068</span>    protected boolean generated = false;<a name="line.68"></a>
-<span class="sourceLineNo">069</span>    protected int[][] environment;<a name="line.69"></a>
-<span class="sourceLineNo">070</span>    protected boolean[][] marked, walled, fixedRooms;<a name="line.70"></a>
-<span class="sourceLineNo">071</span>    protected List&lt;Long&gt; points;<a name="line.71"></a>
-<span class="sourceLineNo">072</span>    protected int totalPoints;<a name="line.72"></a>
-<span class="sourceLineNo">073</span><a name="line.73"></a>
-<span class="sourceLineNo">074</span>    /**<a name="line.74"></a>
-<span class="sourceLineNo">075</span>     * Internal use.<a name="line.75"></a>
-<span class="sourceLineNo">076</span>     * @param width dungeon width in cells<a name="line.76"></a>
-<span class="sourceLineNo">077</span>     * @param height dungeon height in cells<a name="line.77"></a>
-<span class="sourceLineNo">078</span>     * @param rng rng to use<a name="line.78"></a>
-<span class="sourceLineNo">079</span>     * @return evenly spaced Coord points in a list made by PoissonDisk, trimmed down so they aren't all used<a name="line.79"></a>
-<span class="sourceLineNo">080</span>     * @see PoissonDisk used to make the list<a name="line.80"></a>
-<span class="sourceLineNo">081</span>     */<a name="line.81"></a>
-<span class="sourceLineNo">082</span>    protected static List&lt;Coord&gt; basicPoints(int width, int height, RNG rng)<a name="line.82"></a>
-<span class="sourceLineNo">083</span>    {<a name="line.83"></a>
-<span class="sourceLineNo">084</span>        return PoissonDisk.sampleRectangle(Coord.get(2, 2), Coord.get(width - 3, height - 3),<a name="line.84"></a>
-<span class="sourceLineNo">085</span>                8.5f * (width + height) / 120f, width, height, 35, rng);<a name="line.85"></a>
-<span class="sourceLineNo">086</span>    }<a name="line.86"></a>
-<span class="sourceLineNo">087</span><a name="line.87"></a>
-<span class="sourceLineNo">088</span>    /**<a name="line.88"></a>
-<span class="sourceLineNo">089</span>     * This prepares a map generator that will generate a map with the given width and height, using the given RNG.<a name="line.89"></a>
-<span class="sourceLineNo">090</span>     * This version of the constructor uses Poisson Disk sampling to generate the points it will draw caves and<a name="line.90"></a>
-<span class="sourceLineNo">091</span>     * corridors between, ensuring a minimum distance between points, but it does not ensure that paths between points<a name="line.91"></a>
-<span class="sourceLineNo">092</span>     * will avoid overlapping with rooms or other paths. You call the different carver-adding methods to affect what the<a name="line.92"></a>
-<span class="sourceLineNo">093</span>     * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only<a name="line.93"></a>
-<span class="sourceLineNo">094</span>     * caves if none are called. You call generate() after adding carvers, which returns a char[][] for a map.<a name="line.94"></a>
-<span class="sourceLineNo">095</span>     * @param width the width of the final map in cells<a name="line.95"></a>
-<span class="sourceLineNo">096</span>     * @param height the height of the final map in cells<a name="line.96"></a>
-<span class="sourceLineNo">097</span>     * @param rng an RNG object to use for random choices; this make a lot of random choices.<a name="line.97"></a>
-<span class="sourceLineNo">098</span>     * @see PoissonDisk used to ensure spacing for the points.<a name="line.98"></a>
-<span class="sourceLineNo">099</span>     */<a name="line.99"></a>
-<span class="sourceLineNo">100</span>    public MixedGenerator(int width, int height, RNG rng) {<a name="line.100"></a>
-<span class="sourceLineNo">101</span>        this(width, height, rng, basicPoints(width, height, rng));<a name="line.101"></a>
-<span class="sourceLineNo">102</span>    }<a name="line.102"></a>
-<span class="sourceLineNo">103</span><a name="line.103"></a>
-<span class="sourceLineNo">104</span>    /**<a name="line.104"></a>
-<span class="sourceLineNo">105</span>     * This prepares a map generator that will generate a map with the given width and height, using the given RNG.<a name="line.105"></a>
-<span class="sourceLineNo">106</span>     * This version of the constructor uses a List of Coord points from some other source to determine the path to add<a name="line.106"></a>
-<span class="sourceLineNo">107</span>     * rooms or caves to and then connect. You call the different carver-adding methods to affect what the<a name="line.107"></a>
-<span class="sourceLineNo">108</span>     * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only<a name="line.108"></a>
-<span class="sourceLineNo">109</span>     * caves if none are called. You call generate() after adding carvers, which returns a char[][] for a map.<a name="line.109"></a>
-<span class="sourceLineNo">110</span>     * @param width the width of the final map in cells<a name="line.110"></a>
-<span class="sourceLineNo">111</span>     * @param height the height of the final map in cells<a name="line.111"></a>
-<span class="sourceLineNo">112</span>     * @param rng an RNG object to use for random choices; this make a lot of random choices.<a name="line.112"></a>
-<span class="sourceLineNo">113</span>     * @param sequence a List of Coord to connect in order; index 0 is the start, index size() - 1 is the end.<a name="line.113"></a>
-<span class="sourceLineNo">114</span>     * @see SerpentMapGenerator a class that uses this technique<a name="line.114"></a>
-<span class="sourceLineNo">115</span>     */<a name="line.115"></a>
-<span class="sourceLineNo">116</span>    public MixedGenerator(int width, int height, RNG rng, List&lt;Coord&gt; sequence) {<a name="line.116"></a>
-<span class="sourceLineNo">117</span>        this.width = width;<a name="line.117"></a>
-<span class="sourceLineNo">118</span>        this.height = height;<a name="line.118"></a>
-<span class="sourceLineNo">119</span>        this.roomWidth = width / 64.0f;<a name="line.119"></a>
-<span class="sourceLineNo">120</span>        this.roomHeight = height / 64.0f;<a name="line.120"></a>
-<span class="sourceLineNo">121</span>        if(width &lt;= 2 || height &lt;= 2)<a name="line.121"></a>
-<span class="sourceLineNo">122</span>            throw new IllegalStateException("width and height must be greater than 2");<a name="line.122"></a>
-<span class="sourceLineNo">123</span>        this.rng = rng;<a name="line.123"></a>
-<span class="sourceLineNo">124</span>        dungeon = new char[width][height];<a name="line.124"></a>
-<span class="sourceLineNo">125</span>        environment = new int[width][height];<a name="line.125"></a>
-<span class="sourceLineNo">126</span>        marked = new boolean[width][height];<a name="line.126"></a>
-<span class="sourceLineNo">127</span>        walled = new boolean[width][height];<a name="line.127"></a>
-<span class="sourceLineNo">128</span>        fixedRooms = new boolean[width][height];<a name="line.128"></a>
-<span class="sourceLineNo">129</span>        Arrays.fill(dungeon[0], '#');<a name="line.129"></a>
-<span class="sourceLineNo">130</span>        Arrays.fill(environment[0], UNTOUCHED);<a name="line.130"></a>
-<span class="sourceLineNo">131</span>        for (int i = 1; i &lt; width; i++) {<a name="line.131"></a>
-<span class="sourceLineNo">132</span>            System.arraycopy(dungeon[0], 0, dungeon[i], 0, height);<a name="line.132"></a>
-<span class="sourceLineNo">133</span>            System.arraycopy(environment[0], 0, environment[i], 0, height);<a name="line.133"></a>
-<span class="sourceLineNo">134</span>        }<a name="line.134"></a>
-<span class="sourceLineNo">135</span>        totalPoints = sequence.size() - 1;<a name="line.135"></a>
-<span class="sourceLineNo">136</span>        points = new ArrayList&lt;&gt;(totalPoints);<a name="line.136"></a>
-<span class="sourceLineNo">137</span>        for (int i = 0; i &lt; totalPoints; i++) {<a name="line.137"></a>
-<span class="sourceLineNo">138</span>            Coord c1 = sequence.get(i), c2 = sequence.get(i + 1);<a name="line.138"></a>
-<span class="sourceLineNo">139</span>            points.add(((c1.x &amp; 0xffL) &lt;&lt; 24) | ((c1.y &amp; 0xff) &lt;&lt; 16) | ((c2.x &amp; 0xff) &lt;&lt; 8) | (c2.y &amp; 0xff));<a name="line.139"></a>
+<span class="sourceLineNo">003</span>import squidpony.ArrayTools;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import squidpony.squidgrid.Direction;<a name="line.4"></a>
+<span class="sourceLineNo">005</span>import squidpony.squidgrid.mapping.locks.Edge;<a name="line.5"></a>
+<span class="sourceLineNo">006</span>import squidpony.squidgrid.mapping.locks.IRoomLayout;<a name="line.6"></a>
+<span class="sourceLineNo">007</span>import squidpony.squidgrid.mapping.locks.Room;<a name="line.7"></a>
+<span class="sourceLineNo">008</span>import squidpony.squidgrid.mapping.locks.util.Rect2I;<a name="line.8"></a>
+<span class="sourceLineNo">009</span>import squidpony.squidmath.Coord;<a name="line.9"></a>
+<span class="sourceLineNo">010</span>import squidpony.squidmath.IntVLA;<a name="line.10"></a>
+<span class="sourceLineNo">011</span>import squidpony.squidmath.PoissonDisk;<a name="line.11"></a>
+<span class="sourceLineNo">012</span>import squidpony.squidmath.RNG;<a name="line.12"></a>
+<span class="sourceLineNo">013</span><a name="line.13"></a>
+<span class="sourceLineNo">014</span>import java.util.*;<a name="line.14"></a>
+<span class="sourceLineNo">015</span><a name="line.15"></a>
+<span class="sourceLineNo">016</span>/**<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * A dungeon generator that can use a mix of techniques to have part-cave, part-room dungeons. Not entirely intended for<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * normal use outside of this library, though it can be very useful when you want to make a dungeon match a specific<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * path and existing generators that use MixedGenerator aren't sufficient. You may want to use a simpler generator based<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * on this, like SerpentMapGenerator, which generates a long, winding path that loops around on itself. This supports<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * the getEnvironment() method, which can be used in conjunction with RoomFinder to find where separate room, corridor,<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * and cave areas have been placed.<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * &lt;br&gt;<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * Based on Michael Patraw's excellent Drunkard's Walk dungeon generator.<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * http://mpatraw.github.io/libdrunkard/<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * @see squidpony.squidgrid.mapping.SerpentMapGenerator a normal use for MixedGenerator that makes winding dungeons<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * @see squidpony.squidgrid.mapping.SerpentDeepMapGenerator uses MixedGenerator as it makes a multi-level dungeon<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * Created by Tommy Ettinger on 10/22/2015.<a name="line.28"></a>
+<span class="sourceLineNo">029</span> */<a name="line.29"></a>
+<span class="sourceLineNo">030</span>public class MixedGenerator {<a name="line.30"></a>
+<span class="sourceLineNo">031</span>    public enum CarverType<a name="line.31"></a>
+<span class="sourceLineNo">032</span>    {<a name="line.32"></a>
+<span class="sourceLineNo">033</span>        CAVE,<a name="line.33"></a>
+<span class="sourceLineNo">034</span>        BOX,<a name="line.34"></a>
+<span class="sourceLineNo">035</span>        ROUND,<a name="line.35"></a>
+<span class="sourceLineNo">036</span>        BOX_WALLED,<a name="line.36"></a>
+<span class="sourceLineNo">037</span>        ROUND_WALLED<a name="line.37"></a>
+<span class="sourceLineNo">038</span>    }<a name="line.38"></a>
+<span class="sourceLineNo">039</span><a name="line.39"></a>
+<span class="sourceLineNo">040</span>    /**<a name="line.40"></a>
+<span class="sourceLineNo">041</span>     * Constant for environment tiles that are not near a cave, room, or corridor. Value is 0.<a name="line.41"></a>
+<span class="sourceLineNo">042</span>     */<a name="line.42"></a>
+<span class="sourceLineNo">043</span>    public static final int UNTOUCHED = 0;<a name="line.43"></a>
+<span class="sourceLineNo">044</span>    /**<a name="line.44"></a>
+<span class="sourceLineNo">045</span>     * Constant for environment tiles that are floors for a room. Value is 1.<a name="line.45"></a>
+<span class="sourceLineNo">046</span>     */<a name="line.46"></a>
+<span class="sourceLineNo">047</span>    public static final int ROOM_FLOOR = 1;<a name="line.47"></a>
+<span class="sourceLineNo">048</span>    /**<a name="line.48"></a>
+<span class="sourceLineNo">049</span>     * Constant for environment tiles that are walls near a room. Value is 2.<a name="line.49"></a>
+<span class="sourceLineNo">050</span>     */<a name="line.50"></a>
+<span class="sourceLineNo">051</span>    public static final int ROOM_WALL = 2;<a name="line.51"></a>
+<span class="sourceLineNo">052</span>    /**<a name="line.52"></a>
+<span class="sourceLineNo">053</span>     * Constant for environment tiles that are floors for a cave. Value is 3.<a name="line.53"></a>
+<span class="sourceLineNo">054</span>     */<a name="line.54"></a>
+<span class="sourceLineNo">055</span>    public static final int CAVE_FLOOR = 3;<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    /**<a name="line.56"></a>
+<span class="sourceLineNo">057</span>     * Constant for environment tiles that are walls near a cave. Value is 4.<a name="line.57"></a>
+<span class="sourceLineNo">058</span>     */<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    public static final int CAVE_WALL = 4;<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    /**<a name="line.60"></a>
+<span class="sourceLineNo">061</span>     * Constant for environment tiles that are floors for a corridor. Value is 5.<a name="line.61"></a>
+<span class="sourceLineNo">062</span>     */<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    public static final int CORRIDOR_FLOOR = 5;<a name="line.63"></a>
+<span class="sourceLineNo">064</span>    /**<a name="line.64"></a>
+<span class="sourceLineNo">065</span>     * Constant for environment tiles that are walls near a corridor. Value is 6.<a name="line.65"></a>
+<span class="sourceLineNo">066</span>     */<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    public static final int CORRIDOR_WALL = 6;<a name="line.67"></a>
+<span class="sourceLineNo">068</span><a name="line.68"></a>
+<span class="sourceLineNo">069</span>    protected EnumMap&lt;CarverType, Integer&gt; carvers;<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    protected int width, height;<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    protected float roomWidth, roomHeight;<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    public RNG rng;<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    protected char[][] dungeon;<a name="line.73"></a>
+<span class="sourceLineNo">074</span>    protected boolean generated = false;<a name="line.74"></a>
+<span class="sourceLineNo">075</span>    protected int[][] environment;<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    protected boolean[][] marked, walled, fixedRooms;<a name="line.76"></a>
+<span class="sourceLineNo">077</span>    protected IntVLA points;<a name="line.77"></a>
+<span class="sourceLineNo">078</span>    protected int totalPoints;<a name="line.78"></a>
+<span class="sourceLineNo">079</span><a name="line.79"></a>
+<span class="sourceLineNo">080</span>    /**<a name="line.80"></a>
+<span class="sourceLineNo">081</span>     * Internal use.<a name="line.81"></a>
+<span class="sourceLineNo">082</span>     * @param width dungeon width in cells<a name="line.82"></a>
+<span class="sourceLineNo">083</span>     * @param height dungeon height in cells<a name="line.83"></a>
+<span class="sourceLineNo">084</span>     * @param rng rng to use<a name="line.84"></a>
+<span class="sourceLineNo">085</span>     * @return evenly spaced Coord points in a list made by PoissonDisk, trimmed down so they aren't all used<a name="line.85"></a>
+<span class="sourceLineNo">086</span>     * @see PoissonDisk used to make the list<a name="line.86"></a>
+<span class="sourceLineNo">087</span>     */<a name="line.87"></a>
+<span class="sourceLineNo">088</span>    protected static List&lt;Coord&gt; basicPoints(int width, int height, RNG rng)<a name="line.88"></a>
+<span class="sourceLineNo">089</span>    {<a name="line.89"></a>
+<span class="sourceLineNo">090</span>        return PoissonDisk.sampleRectangle(Coord.get(2, 2), Coord.get(width - 3, height - 3),<a name="line.90"></a>
+<span class="sourceLineNo">091</span>                8.5f * (width + height) / 120f, width, height, 35, rng);<a name="line.91"></a>
+<span class="sourceLineNo">092</span>    }<a name="line.92"></a>
+<span class="sourceLineNo">093</span><a name="line.93"></a>
+<span class="sourceLineNo">094</span>    /**<a name="line.94"></a>
+<span class="sourceLineNo">095</span>     * This prepares a map generator that will generate a map with the given width and height, using the given RNG.<a name="line.95"></a>
+<span class="sourceLineNo">096</span>     * This version of the constructor uses Poisson Disk sampling to generate the points it will draw caves and<a name="line.96"></a>
+<span class="sourceLineNo">097</span>     * corridors between, ensuring a minimum distance between points, but it does not ensure that paths between points<a name="line.97"></a>
+<span class="sourceLineNo">098</span>     * will avoid overlapping with rooms or other paths. You call the different carver-adding methods to affect what the<a name="line.98"></a>
+<span class="sourceLineNo">099</span>     * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only<a name="line.99"></a>
+<span class="sourceLineNo">100</span>     * caves if none are called. You call generate() after adding carvers, which returns a char[][] for a map.<a name="line.100"></a>
+<span class="sourceLineNo">101</span>     * @param width the width of the final map in cells<a name="line.101"></a>
+<span class="sourceLineNo">102</span>     * @param height the height of the final map in cells<a name="line.102"></a>
+<span class="sourceLineNo">103</span>     * @param rng an RNG object to use for random choices; this make a lot of random choices.<a name="line.103"></a>
+<span class="sourceLineNo">104</span>     * @see PoissonDisk used to ensure spacing for the points.<a name="line.104"></a>
+<span class="sourceLineNo">105</span>     */<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    public MixedGenerator(int width, int height, RNG rng) {<a name="line.106"></a>
+<span class="sourceLineNo">107</span>        this(width, height, rng, basicPoints(width, height, rng));<a name="line.107"></a>
+<span class="sourceLineNo">108</span>    }<a name="line.108"></a>
+<span class="sourceLineNo">109</span><a name="line.109"></a>
+<span class="sourceLineNo">110</span>    /**<a name="line.110"></a>
+<span class="sourceLineNo">111</span>     * This prepares a map generator that will generate a map with the given width and height, using the given RNG.<a name="line.111"></a>
+<span class="sourceLineNo">112</span>     * This version of the constructor uses a List of Coord points from some other source to determine the path to add<a name="line.112"></a>
+<span class="sourceLineNo">113</span>     * rooms or caves to and then connect. You call the different carver-adding methods to affect what the<a name="line.113"></a>
+<span class="sourceLineNo">114</span>     * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only<a name="line.114"></a>
+<span class="sourceLineNo">115</span>     * caves if none are called. You call generate() after adding carvers, which returns a char[][] for a map.<a name="line.115"></a>
+<span class="sourceLineNo">116</span>     * @param width the width of the final map in cells<a name="line.116"></a>
+<span class="sourceLineNo">117</span>     * @param height the height of the final map in cells<a name="line.117"></a>
+<span class="sourceLineNo">118</span>     * @param rng an RNG object to use for random choices; this make a lot of random choices.<a name="line.118"></a>
+<span class="sourceLineNo">119</span>     * @param sequence a List of Coord to connect in order; index 0 is the start, index size() - 1 is the end.<a name="line.119"></a>
+<span class="sourceLineNo">120</span>     * @see SerpentMapGenerator a class that uses this technique<a name="line.120"></a>
+<span class="sourceLineNo">121</span>     */<a name="line.121"></a>
+<span class="sourceLineNo">122</span>    public MixedGenerator(int width, int height, RNG rng, List&lt;Coord&gt; sequence) {<a name="line.122"></a>
+<span class="sourceLineNo">123</span>        this.width = width;<a name="line.123"></a>
+<span class="sourceLineNo">124</span>        this.height = height;<a name="line.124"></a>
+<span class="sourceLineNo">125</span>        this.roomWidth = width / 64.0f;<a name="line.125"></a>
+<span class="sourceLineNo">126</span>        this.roomHeight = height / 64.0f;<a name="line.126"></a>
+<span class="sourceLineNo">127</span>        if(width &lt;= 2 || height &lt;= 2)<a name="line.127"></a>
+<span class="sourceLineNo">128</span>            throw new IllegalStateException("width and height must be greater than 2");<a name="line.128"></a>
+<span class="sourceLineNo">129</span>        this.rng = rng;<a name="line.129"></a>
+<span class="sourceLineNo">130</span>        dungeon = new char[width][height];<a name="line.130"></a>
+<span class="sourceLineNo">131</span>        environment = new int[width][height];<a name="line.131"></a>
+<span class="sourceLineNo">132</span>        marked = new boolean[width][height];<a name="line.132"></a>
+<span class="sourceLineNo">133</span>        walled = new boolean[width][height];<a name="line.133"></a>
+<span class="sourceLineNo">134</span>        fixedRooms = new boolean[width][height];<a name="line.134"></a>
+<span class="sourceLineNo">135</span>        Arrays.fill(dungeon[0], '#');<a name="line.135"></a>
+<span class="sourceLineNo">136</span>        Arrays.fill(environment[0], UNTOUCHED);<a name="line.136"></a>
+<span class="sourceLineNo">137</span>        for (int i = 1; i &lt; width; i++) {<a name="line.137"></a>
+<span class="sourceLineNo">138</span>            System.arraycopy(dungeon[0], 0, dungeon[i], 0, height);<a name="line.138"></a>
+<span class="sourceLineNo">139</span>            System.arraycopy(environment[0], 0, environment[i], 0, height);<a name="line.139"></a>
 <span class="sourceLineNo">140</span>        }<a name="line.140"></a>
-<span class="sourceLineNo">141</span>        carvers = new EnumMap&lt;&gt;(CarverType.class);<a name="line.141"></a>
-<span class="sourceLineNo">142</span>    }<a name="line.142"></a>
-<span class="sourceLineNo">143</span>    /**<a name="line.143"></a>
-<span class="sourceLineNo">144</span>     * This prepares a map generator that will generate a map with the given width and height, using the given RNG.<a name="line.144"></a>
-<span class="sourceLineNo">145</span>     * This version of the constructor uses a Map with Coord keys and Coord array values to determine a<a name="line.145"></a>
-<span class="sourceLineNo">146</span>     * branching path for the dungeon to take; each key will connect once to each of the Coords in its value, and you<a name="line.146"></a>
-<span class="sourceLineNo">147</span>     * usually don't want to connect in both directions. You call the different carver-adding methods to affect what the<a name="line.147"></a>
-<span class="sourceLineNo">148</span>     * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only<a name="line.148"></a>
-<span class="sourceLineNo">149</span>     * caves if none are called. You call generate() after adding carvers, which returns a char[][] for a map.<a name="line.149"></a>
-<span class="sourceLineNo">150</span>     * @param width the width of the final map in cells<a name="line.150"></a>
-<span class="sourceLineNo">151</span>     * @param height the height of the final map in cells<a name="line.151"></a>
-<span class="sourceLineNo">152</span>     * @param rng an RNG object to use for random choices; this make a lot of random choices.<a name="line.152"></a>
-<span class="sourceLineNo">153</span>     * @param connections a Map of Coord keys to arrays of Coord to connect to next; shouldn't connect both ways<a name="line.153"></a>
-<span class="sourceLineNo">154</span>     * @see SerpentMapGenerator a class that uses this technique<a name="line.154"></a>
-<span class="sourceLineNo">155</span>     */<a name="line.155"></a>
-<span class="sourceLineNo">156</span>    public MixedGenerator(int width, int height, RNG rng, Map&lt;Coord, List&lt;Coord&gt;&gt; connections)<a name="line.156"></a>
-<span class="sourceLineNo">157</span>    {<a name="line.157"></a>
-<span class="sourceLineNo">158</span>        this(width, height, rng, connections, 0.8f);<a name="line.158"></a>
-<span class="sourceLineNo">159</span>    }<a name="line.159"></a>
-<span class="sourceLineNo">160</span>    /**<a name="line.160"></a>
-<span class="sourceLineNo">161</span>     * This prepares a map generator that will generate a map with the given width and height, using the given RNG.<a name="line.161"></a>
-<span class="sourceLineNo">162</span>     * This version of the constructor uses a Map with Coord keys and Coord array values to determine a<a name="line.162"></a>
-<span class="sourceLineNo">163</span>     * branching path for the dungeon to take; each key will connect once to each of the Coords in its value, and you<a name="line.163"></a>
-<span class="sourceLineNo">164</span>     * usually don't want to connect in both directions. You call the different carver-adding methods to affect what the<a name="line.164"></a>
-<span class="sourceLineNo">165</span>     * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only<a name="line.165"></a>
-<span class="sourceLineNo">166</span>     * caves if none are called. You call generate() after adding carvers, which returns a char[][] for a map.<a name="line.166"></a>
-<span class="sourceLineNo">167</span>     * @param width the width of the final map in cells<a name="line.167"></a>
-<span class="sourceLineNo">168</span>     * @param height the height of the final map in cells<a name="line.168"></a>
-<span class="sourceLineNo">169</span>     * @param rng an RNG object to use for random choices; this make a lot of random choices.<a name="line.169"></a>
-<span class="sourceLineNo">170</span>     * @param connections a Map of Coord keys to arrays of Coord to connect to next; shouldn't connect both ways<a name="line.170"></a>
-<span class="sourceLineNo">171</span>     * @param roomSizeMultiplier a float multiplier that will be applied to each room's width and height<a name="line.171"></a>
-<span class="sourceLineNo">172</span>     * @see SerpentMapGenerator a class that uses this technique<a name="line.172"></a>
-<span class="sourceLineNo">173</span>     */<a name="line.173"></a>
-<span class="sourceLineNo">174</span>    public MixedGenerator(int width, int height, RNG rng, Map&lt;Coord, List&lt;Coord&gt;&gt; connections,<a name="line.174"></a>
-<span class="sourceLineNo">175</span>                          float roomSizeMultiplier) {<a name="line.175"></a>
-<span class="sourceLineNo">176</span>        this.width = width;<a name="line.176"></a>
-<span class="sourceLineNo">177</span>        this.height = height;<a name="line.177"></a>
-<span class="sourceLineNo">178</span>        this.roomWidth = (width / 64.0f) * roomSizeMultiplier;<a name="line.178"></a>
-<span class="sourceLineNo">179</span>        this.roomHeight = (height / 64.0f) * roomSizeMultiplier;<a name="line.179"></a>
-<span class="sourceLineNo">180</span>        if(width &lt;= 2 || height &lt;= 2)<a name="line.180"></a>
-<span class="sourceLineNo">181</span>            throw new IllegalStateException("width and height must be greater than 2");<a name="line.181"></a>
-<span class="sourceLineNo">182</span>        this.rng = rng;<a name="line.182"></a>
-<span class="sourceLineNo">183</span>        dungeon = new char[width][height];<a name="line.183"></a>
-<span class="sourceLineNo">184</span>        environment = new int[width][height];<a name="line.184"></a>
-<span class="sourceLineNo">185</span>        marked = new boolean[width][height];<a name="line.185"></a>
-<span class="sourceLineNo">186</span>        walled = new boolean[width][height];<a name="line.186"></a>
-<span class="sourceLineNo">187</span>        fixedRooms = new boolean[width][height];<a name="line.187"></a>
-<span class="sourceLineNo">188</span>        Arrays.fill(dungeon[0], '#');<a name="line.188"></a>
-<span class="sourceLineNo">189</span>        Arrays.fill(environment[0], UNTOUCHED);<a name="line.189"></a>
-<span class="sourceLineNo">190</span>        for (int i = 1; i &lt; width; i++) {<a name="line.190"></a>
-<span class="sourceLineNo">191</span>            System.arraycopy(dungeon[0], 0, dungeon[i], 0, height);<a name="line.191"></a>
-<span class="sourceLineNo">192</span>            System.arraycopy(environment[0], 0, environment[i], 0, height);<a name="line.192"></a>
-<span class="sourceLineNo">193</span>        }<a name="line.193"></a>
-<span class="sourceLineNo">194</span>        totalPoints = 0;<a name="line.194"></a>
-<span class="sourceLineNo">195</span>        for(List&lt;Coord&gt; vals : connections.values())<a name="line.195"></a>
-<span class="sourceLineNo">196</span>        {<a name="line.196"></a>
-<span class="sourceLineNo">197</span>            totalPoints += vals.size();<a name="line.197"></a>
-<span class="sourceLineNo">198</span>        }<a name="line.198"></a>
-<span class="sourceLineNo">199</span>        points = new ArrayList&lt;&gt;(totalPoints);<a name="line.199"></a>
-<span class="sourceLineNo">200</span>        for (Map.Entry&lt;Coord, List&lt;Coord&gt;&gt; kv : connections.entrySet()) {<a name="line.200"></a>
-<span class="sourceLineNo">201</span>            Coord c1 = kv.getKey();<a name="line.201"></a>
-<span class="sourceLineNo">202</span>            for (Coord c2 : kv.getValue()) {<a name="line.202"></a>
-<span class="sourceLineNo">203</span>                points.add(((c1.x &amp; 0xffL) &lt;&lt; 24) | ((c1.y &amp; 0xff) &lt;&lt; 16) | ((c2.x &amp; 0xff) &lt;&lt; 8) | (c2.y &amp; 0xff));<a name="line.203"></a>
-<span class="sourceLineNo">204</span>            }<a name="line.204"></a>
-<span class="sourceLineNo">205</span>        }<a name="line.205"></a>
-<span class="sourceLineNo">206</span>        carvers = new EnumMap&lt;&gt;(CarverType.class);<a name="line.206"></a>
-<span class="sourceLineNo">207</span>    }<a name="line.207"></a>
-<span class="sourceLineNo">208</span><a name="line.208"></a>
-<span class="sourceLineNo">209</span>    /**<a name="line.209"></a>
-<span class="sourceLineNo">210</span>     * Changes the number of "carvers" that will create caves from one room to the next. If count is 0 or less, no caves<a name="line.210"></a>
-<span class="sourceLineNo">211</span>     * will be made. If count is at least 1, caves are possible, and higher numbers relative to the other carvers make<a name="line.211"></a>
-<span class="sourceLineNo">212</span>     * caves more likely. Carvers are shuffled when used, then repeat if exhausted during generation. Since typically<a name="line.212"></a>
-<span class="sourceLineNo">213</span>     * about 30-40 rooms are carved, large totals for carver count aren't really needed; aiming for a total of 10<a name="line.213"></a>
-<span class="sourceLineNo">214</span>     * between the count of putCaveCarvers(), putBoxRoomCarvers(), putRoundRoomCarvers(), putWalledBoxRoomCarvers(), and<a name="line.214"></a>
-<span class="sourceLineNo">215</span>     * putWalledRoundRoomCarvers() is reasonable.<a name="line.215"></a>
-<span class="sourceLineNo">216</span>     * @param count the number of carvers making caves between rooms; only matters in relation to other carvers<a name="line.216"></a>
-<span class="sourceLineNo">217</span>     */<a name="line.217"></a>
-<span class="sourceLineNo">218</span>    public void putCaveCarvers(int count)<a name="line.218"></a>
-<span class="sourceLineNo">219</span>    {<a name="line.219"></a>
-<span class="sourceLineNo">220</span>        carvers.put(CarverType.CAVE, count);<a name="line.220"></a>
-<span class="sourceLineNo">221</span>    }<a name="line.221"></a>
-<span class="sourceLineNo">222</span>    /**<a name="line.222"></a>
-<span class="sourceLineNo">223</span>     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms<a name="line.223"></a>
-<span class="sourceLineNo">224</span>     * with a random size in a box shape at the start and end, and a small room at the corner if there is one. If count<a name="line.224"></a>
-<span class="sourceLineNo">225</span>     * is 0 or less, no box-shaped rooms will be made. If count is at least 1, box-shaped rooms are possible, and higher<a name="line.225"></a>
-<span class="sourceLineNo">226</span>     * numbers relative to the other carvers make box-shaped rooms more likely. Carvers are shuffled when used, then<a name="line.226"></a>
-<span class="sourceLineNo">227</span>     * repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver<a name="line.227"></a>
-<span class="sourceLineNo">228</span>     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),<a name="line.228"></a>
-<span class="sourceLineNo">229</span>     * putRoundRoomCarvers(), putWalledBoxRoomCarvers(), and putWalledRoundRoomCarvers() is reasonable.<a name="line.229"></a>
-<span class="sourceLineNo">230</span>     * @param count the number of carvers making box-shaped rooms and corridors between them; only matters in relation<a name="line.230"></a>
-<span class="sourceLineNo">231</span>     *              to other carvers<a name="line.231"></a>
-<span class="sourceLineNo">232</span>     */<a name="line.232"></a>
-<span class="sourceLineNo">233</span>    public void putBoxRoomCarvers(int count)<a name="line.233"></a>
-<span class="sourceLineNo">234</span>    {<a name="line.234"></a>
-<span class="sourceLineNo">235</span>        carvers.put(CarverType.BOX, count);<a name="line.235"></a>
-<span class="sourceLineNo">236</span>    }<a name="line.236"></a>
-<span class="sourceLineNo">237</span><a name="line.237"></a>
-<span class="sourceLineNo">238</span>    /**<a name="line.238"></a>
-<span class="sourceLineNo">239</span>     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms<a name="line.239"></a>
-<span class="sourceLineNo">240</span>     * with a random size in a circle shape at the start and end, and a small circular room at the corner if there is<a name="line.240"></a>
-<span class="sourceLineNo">241</span>     * one. If count is 0 or less, no circular rooms will be made. If count is at least 1, circular rooms are possible,<a name="line.241"></a>
-<span class="sourceLineNo">242</span>     * and higher numbers relative to the other carvers make circular rooms more likely. Carvers are shuffled when used,<a name="line.242"></a>
-<span class="sourceLineNo">243</span>     * then repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver<a name="line.243"></a>
-<span class="sourceLineNo">244</span>     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),<a name="line.244"></a>
-<span class="sourceLineNo">245</span>     * putRoundRoomCarvers(), putWalledBoxRoomCarvers(), and putWalledRoundRoomCarvers() is reasonable.<a name="line.245"></a>
-<span class="sourceLineNo">246</span>     * @param count the number of carvers making circular rooms and corridors between them; only matters in relation<a name="line.246"></a>
-<span class="sourceLineNo">247</span>     *              to other carvers<a name="line.247"></a>
-<span class="sourceLineNo">248</span>     */<a name="line.248"></a>
-<span class="sourceLineNo">249</span>    public void putRoundRoomCarvers(int count)<a name="line.249"></a>
-<span class="sourceLineNo">250</span>    {<a name="line.250"></a>
-<span class="sourceLineNo">251</span>        carvers.put(CarverType.ROUND, count);<a name="line.251"></a>
-<span class="sourceLineNo">252</span>    }<a name="line.252"></a>
-<span class="sourceLineNo">253</span>    /**<a name="line.253"></a>
-<span class="sourceLineNo">254</span>     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms<a name="line.254"></a>
-<span class="sourceLineNo">255</span>     * with a random size in a box shape at the start and end, and a small room at the corner if there is one, enforcing<a name="line.255"></a>
-<span class="sourceLineNo">256</span>     * the presence of walls around the rooms even if another room is already there or would be placed there. Corridors<a name="line.256"></a>
-<span class="sourceLineNo">257</span>     * can always pass through enforced walls, but caves will open at most one cell in the wall. If count<a name="line.257"></a>
-<span class="sourceLineNo">258</span>     * is 0 or less, no box-shaped rooms will be made. If count is at least 1, box-shaped rooms are possible, and higher<a name="line.258"></a>
-<span class="sourceLineNo">259</span>     * numbers relative to the other carvers make box-shaped rooms more likely. Carvers are shuffled when used, then<a name="line.259"></a>
-<span class="sourceLineNo">260</span>     * repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver<a name="line.260"></a>
-<span class="sourceLineNo">261</span>     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),<a name="line.261"></a>
-<span class="sourceLineNo">262</span>     * putRoundRoomCarvers(), putWalledBoxRoomCarvers(), and putWalledRoundRoomCarvers() is reasonable.<a name="line.262"></a>
-<span class="sourceLineNo">263</span>     * @param count the number of carvers making box-shaped rooms and corridors between them; only matters in relation<a name="line.263"></a>
-<span class="sourceLineNo">264</span>     *              to other carvers<a name="line.264"></a>
-<span class="sourceLineNo">265</span>     */<a name="line.265"></a>
-<span class="sourceLineNo">266</span>    public void putWalledBoxRoomCarvers(int count)<a name="line.266"></a>
-<span class="sourceLineNo">267</span>    {<a name="line.267"></a>
-<span class="sourceLineNo">268</span>        carvers.put(CarverType.BOX_WALLED, count);<a name="line.268"></a>
-<span class="sourceLineNo">269</span>    }<a name="line.269"></a>
-<span class="sourceLineNo">270</span><a name="line.270"></a>
-<span class="sourceLineNo">271</span>    /**<a name="line.271"></a>
-<span class="sourceLineNo">272</span>     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms<a name="line.272"></a>
-<span class="sourceLineNo">273</span>     * with a random size in a circle shape at the start and end, and a small circular room at the corner if there is<a name="line.273"></a>
-<span class="sourceLineNo">274</span>     * one, enforcing the presence of walls around the rooms even if another room is already there or would be placed<a name="line.274"></a>
-<span class="sourceLineNo">275</span>     * there. Corridors can always pass through enforced walls, but caves will open at most one cell in the wall. If<a name="line.275"></a>
-<span class="sourceLineNo">276</span>     * count is 0 or less, no circular rooms will be made. If count is at least 1, circular rooms are possible,<a name="line.276"></a>
-<span class="sourceLineNo">277</span>     * and higher numbers relative to the other carvers make circular rooms more likely. Carvers are shuffled when used,<a name="line.277"></a>
-<span class="sourceLineNo">278</span>     * then repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver<a name="line.278"></a>
-<span class="sourceLineNo">279</span>     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),<a name="line.279"></a>
-<span class="sourceLineNo">280</span>     * putRoundRoomCarvers(), putWalledBoxRoomCarvers(), and putWalledRoundRoomCarvers() is reasonable.<a name="line.280"></a>
-<span class="sourceLineNo">281</span>     * @param count the number of carvers making circular rooms and corridors between them; only matters in relation<a name="line.281"></a>
-<span class="sourceLineNo">282</span>     *              to other carvers<a name="line.282"></a>
+<span class="sourceLineNo">141</span>        totalPoints = sequence.size() - 1;<a name="line.141"></a>
+<span class="sourceLineNo">142</span>        points = new IntVLA(totalPoints);<a name="line.142"></a>
+<span class="sourceLineNo">143</span>        for (int i = 0; i &lt; totalPoints; i++) {<a name="line.143"></a>
+<span class="sourceLineNo">144</span>            Coord c1 = sequence.get(i), c2 = sequence.get(i + 1);<a name="line.144"></a>
+<span class="sourceLineNo">145</span>            points.add(((c1.x &amp; 0xff) &lt;&lt; 24) | ((c1.y &amp; 0xff) &lt;&lt; 16) | ((c2.x &amp; 0xff) &lt;&lt; 8) | (c2.y &amp; 0xff));<a name="line.145"></a>
+<span class="sourceLineNo">146</span>        }<a name="line.146"></a>
+<span class="sourceLineNo">147</span>        carvers = new EnumMap&lt;&gt;(CarverType.class);<a name="line.147"></a>
+<span class="sourceLineNo">148</span>    }<a name="line.148"></a>
+<span class="sourceLineNo">149</span>    /**<a name="line.149"></a>
+<span class="sourceLineNo">150</span>     * This prepares a map generator that will generate a map with the given width and height, using the given RNG.<a name="line.150"></a>
+<span class="sourceLineNo">151</span>     * This version of the constructor uses a Map with Coord keys and Coord array values to determine a<a name="line.151"></a>
+<span class="sourceLineNo">152</span>     * branching path for the dungeon to take; each key will connect once to each of the Coords in its value, and you<a name="line.152"></a>
+<span class="sourceLineNo">153</span>     * usually don't want to connect in both directions. You call the different carver-adding methods to affect what the<a name="line.153"></a>
+<span class="sourceLineNo">154</span>     * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only<a name="line.154"></a>
+<span class="sourceLineNo">155</span>     * caves if none are called. You call generate() after adding carvers, which returns a char[][] for a map.<a name="line.155"></a>
+<span class="sourceLineNo">156</span>     * @param width the width of the final map in cells<a name="line.156"></a>
+<span class="sourceLineNo">157</span>     * @param height the height of the final map in cells<a name="line.157"></a>
+<span class="sourceLineNo">158</span>     * @param rng an RNG object to use for random choices; this make a lot of random choices.<a name="line.158"></a>
+<span class="sourceLineNo">159</span>     * @param connections a Map of Coord keys to arrays of Coord to connect to next; shouldn't connect both ways<a name="line.159"></a>
+<span class="sourceLineNo">160</span>     * @see SerpentMapGenerator a class that uses this technique<a name="line.160"></a>
+<span class="sourceLineNo">161</span>     */<a name="line.161"></a>
+<span class="sourceLineNo">162</span>    public MixedGenerator(int width, int height, RNG rng, Map&lt;Coord, List&lt;Coord&gt;&gt; connections)<a name="line.162"></a>
+<span class="sourceLineNo">163</span>    {<a name="line.163"></a>
+<span class="sourceLineNo">164</span>        this(width, height, rng, connections, 0.8f);<a name="line.164"></a>
+<span class="sourceLineNo">165</span>    }<a name="line.165"></a>
+<span class="sourceLineNo">166</span>    /**<a name="line.166"></a>
+<span class="sourceLineNo">167</span>     * This prepares a map generator that will generate a map with the given width and height, using the given RNG.<a name="line.167"></a>
+<span class="sourceLineNo">168</span>     * This version of the constructor uses a Map with Coord keys and Coord array values to determine a<a name="line.168"></a>
+<span class="sourceLineNo">169</span>     * branching path for the dungeon to take; each key will connect once to each of the Coords in its value, and you<a name="line.169"></a>
+<span class="sourceLineNo">170</span>     * usually don't want to connect in both directions. You call the different carver-adding methods to affect what the<a name="line.170"></a>
+<span class="sourceLineNo">171</span>     * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only<a name="line.171"></a>
+<span class="sourceLineNo">172</span>     * caves if none are called. You call generate() after adding carvers, which returns a char[][] for a map.<a name="line.172"></a>
+<span class="sourceLineNo">173</span>     * @param width the width of the final map in cells<a name="line.173"></a>
+<span class="sourceLineNo">174</span>     * @param height the height of the final map in cells<a name="line.174"></a>
+<span class="sourceLineNo">175</span>     * @param rng an RNG object to use for random choices; this make a lot of random choices.<a name="line.175"></a>
+<span class="sourceLineNo">176</span>     * @param connections a Map of Coord keys to arrays of Coord to connect to next; shouldn't connect both ways<a name="line.176"></a>
+<span class="sourceLineNo">177</span>     * @param roomSizeMultiplier a float multiplier that will be applied to each room's width and height<a name="line.177"></a>
+<span class="sourceLineNo">178</span>     * @see SerpentMapGenerator a class that uses this technique<a name="line.178"></a>
+<span class="sourceLineNo">179</span>     */<a name="line.179"></a>
+<span class="sourceLineNo">180</span>    public MixedGenerator(int width, int height, RNG rng, Map&lt;Coord, List&lt;Coord&gt;&gt; connections,<a name="line.180"></a>
+<span class="sourceLineNo">181</span>                          float roomSizeMultiplier) {<a name="line.181"></a>
+<span class="sourceLineNo">182</span>        this.width = width;<a name="line.182"></a>
+<span class="sourceLineNo">183</span>        this.height = height;<a name="line.183"></a>
+<span class="sourceLineNo">184</span>        roomWidth = (width / 64.0f) * roomSizeMultiplier;<a name="line.184"></a>
+<span class="sourceLineNo">185</span>        roomHeight = (height / 64.0f) * roomSizeMultiplier;<a name="line.185"></a>
+<span class="sourceLineNo">186</span>        if(width &lt;= 2 || height &lt;= 2)<a name="line.186"></a>
+<span class="sourceLineNo">187</span>            throw new IllegalStateException("width and height must be greater than 2");<a name="line.187"></a>
+<span class="sourceLineNo">188</span>        this.rng = rng;<a name="line.188"></a>
+<span class="sourceLineNo">189</span>        dungeon = new char[width][height];<a name="line.189"></a>
+<span class="sourceLineNo">190</span>        environment = new int[width][height];<a name="line.190"></a>
+<span class="sourceLineNo">191</span>        marked = new boolean[width][height];<a name="line.191"></a>
+<span class="sourceLineNo">192</span>        walled = new boolean[width][height];<a name="line.192"></a>
+<span class="sourceLineNo">193</span>        fixedRooms = new boolean[width][height];<a name="line.193"></a>
+<span class="sourceLineNo">194</span>        Arrays.fill(dungeon[0], '#');<a name="line.194"></a>
+<span class="sourceLineNo">195</span>        Arrays.fill(environment[0], UNTOUCHED);<a name="line.195"></a>
+<span class="sourceLineNo">196</span>        for (int i = 1; i &lt; width; i++) {<a name="line.196"></a>
+<span class="sourceLineNo">197</span>            System.arraycopy(dungeon[0], 0, dungeon[i], 0, height);<a name="line.197"></a>
+<span class="sourceLineNo">198</span>            System.arraycopy(environment[0], 0, environment[i], 0, height);<a name="line.198"></a>
+<span class="sourceLineNo">199</span>        }<a name="line.199"></a>
+<span class="sourceLineNo">200</span>        totalPoints = 0;<a name="line.200"></a>
+<span class="sourceLineNo">201</span>        for(List&lt;Coord&gt; vals : connections.values())<a name="line.201"></a>
+<span class="sourceLineNo">202</span>        {<a name="line.202"></a>
+<span class="sourceLineNo">203</span>            totalPoints += vals.size();<a name="line.203"></a>
+<span class="sourceLineNo">204</span>        }<a name="line.204"></a>
+<span class="sourceLineNo">205</span>        points = new IntVLA(totalPoints);<a name="line.205"></a>
+<span class="sourceLineNo">206</span>        for (Map.Entry&lt;Coord, List&lt;Coord&gt;&gt; kv : connections.entrySet()) {<a name="line.206"></a>
+<span class="sourceLineNo">207</span>            Coord c1 = kv.getKey();<a name="line.207"></a>
+<span class="sourceLineNo">208</span>            for (Coord c2 : kv.getValue()) {<a name="line.208"></a>
+<span class="sourceLineNo">209</span>                points.add(((c1.x &amp; 0xff) &lt;&lt; 24) | ((c1.y &amp; 0xff) &lt;&lt; 16) | ((c2.x &amp; 0xff) &lt;&lt; 8) | (c2.y &amp; 0xff));<a name="line.209"></a>
+<span class="sourceLineNo">210</span>            }<a name="line.210"></a>
+<span class="sourceLineNo">211</span>        }<a name="line.211"></a>
+<span class="sourceLineNo">212</span>        carvers = new EnumMap&lt;&gt;(CarverType.class);<a name="line.212"></a>
+<span class="sourceLineNo">213</span>    }<a name="line.213"></a>
+<span class="sourceLineNo">214</span><a name="line.214"></a>
+<span class="sourceLineNo">215</span>    /**<a name="line.215"></a>
+<span class="sourceLineNo">216</span>     * This prepares a map generator that will generate a map with the given width and height, using the given RNG.<a name="line.216"></a>
+<span class="sourceLineNo">217</span>     * This version of the constructor uses an {@link squidpony.squidgrid.mapping.locks.IRoomLayout} to set up rooms,<a name="line.217"></a>
+<span class="sourceLineNo">218</span>     * almost always produced by {@link squidpony.squidgrid.mapping.locks.generators.LayoutGenerator}. You call the<a name="line.218"></a>
+<span class="sourceLineNo">219</span>     * different carver-adding methods to affect what the dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(),<a name="line.219"></a>
+<span class="sourceLineNo">220</span>     * and putRoundRoomCarvers(), defaulting to only caves if none are called. You call generate() after adding carvers,<a name="line.220"></a>
+<span class="sourceLineNo">221</span>     * which returns a char[][] for a map and sets the environment to be fetched with {@link #getEnvironment()}, which<a name="line.221"></a>
+<span class="sourceLineNo">222</span>     * is usually needed for {@link SectionDungeonGenerator} to correctly place doors and various other features.<a name="line.222"></a>
+<span class="sourceLineNo">223</span>     * @param width the width of the final map in cells<a name="line.223"></a>
+<span class="sourceLineNo">224</span>     * @param height the height of the final map in cells<a name="line.224"></a>
+<span class="sourceLineNo">225</span>     * @param rng an RNG object to use for random choices; this make a lot of random choices.<a name="line.225"></a>
+<span class="sourceLineNo">226</span>     * @param layout an IRoomLayout that will almost always be produced by LayoutGenerator<a name="line.226"></a>
+<span class="sourceLineNo">227</span>     * @param roomSizeMultiplier a float multiplier that will be applied to each room's width and height<a name="line.227"></a>
+<span class="sourceLineNo">228</span>     * @see SerpentMapGenerator a class that uses this technique<a name="line.228"></a>
+<span class="sourceLineNo">229</span>     */<a name="line.229"></a>
+<span class="sourceLineNo">230</span>    public MixedGenerator(int width, int height, RNG rng, IRoomLayout layout,<a name="line.230"></a>
+<span class="sourceLineNo">231</span>                          float roomSizeMultiplier) {<a name="line.231"></a>
+<span class="sourceLineNo">232</span>        this.width = width;<a name="line.232"></a>
+<span class="sourceLineNo">233</span>        this.height = height;<a name="line.233"></a>
+<span class="sourceLineNo">234</span>        Rect2I bounds = layout.getExtentBounds();<a name="line.234"></a>
+<span class="sourceLineNo">235</span>        int offX = bounds.getBottomLeft().x, offY = bounds.getBottomLeft().y;<a name="line.235"></a>
+<span class="sourceLineNo">236</span>        float rw = (width) / (bounds.width+1f), rh = (height) / (bounds.height+1f);<a name="line.236"></a>
+<span class="sourceLineNo">237</span>        this.roomWidth = roomSizeMultiplier * rw * 0.125f;<a name="line.237"></a>
+<span class="sourceLineNo">238</span>        this.roomHeight = roomSizeMultiplier * rh * 0.125f;<a name="line.238"></a>
+<span class="sourceLineNo">239</span>        if(width &lt;= 2 || height &lt;= 2)<a name="line.239"></a>
+<span class="sourceLineNo">240</span>            throw new IllegalStateException("width and height must be greater than 2");<a name="line.240"></a>
+<span class="sourceLineNo">241</span>        this.rng = rng;<a name="line.241"></a>
+<span class="sourceLineNo">242</span>        dungeon = new char[width][height];<a name="line.242"></a>
+<span class="sourceLineNo">243</span>        environment = new int[width][height];<a name="line.243"></a>
+<span class="sourceLineNo">244</span>        marked = new boolean[width][height];<a name="line.244"></a>
+<span class="sourceLineNo">245</span>        walled = new boolean[width][height];<a name="line.245"></a>
+<span class="sourceLineNo">246</span>        fixedRooms = new boolean[width][height];<a name="line.246"></a>
+<span class="sourceLineNo">247</span>        ArrayTools.fill(dungeon, '#');<a name="line.247"></a>
+<span class="sourceLineNo">248</span>        ArrayTools.fill(environment, UNTOUCHED);<a name="line.248"></a>
+<span class="sourceLineNo">249</span>        totalPoints = layout.roomCount();<a name="line.249"></a>
+<span class="sourceLineNo">250</span>        points = new IntVLA(totalPoints);<a name="line.250"></a>
+<span class="sourceLineNo">251</span>        Coord c2;<a name="line.251"></a>
+<span class="sourceLineNo">252</span>        Set&lt;Room&gt; rooms = layout.getRooms(), removing = new HashSet&lt;&gt;(rooms);<a name="line.252"></a>
+<span class="sourceLineNo">253</span>        Room t;<a name="line.253"></a>
+<span class="sourceLineNo">254</span>        for (Room room : rooms) {<a name="line.254"></a>
+<span class="sourceLineNo">255</span>            Coord c1 = room.getCenter();<a name="line.255"></a>
+<span class="sourceLineNo">256</span>            if (!bounds.contains(c1)) {<a name="line.256"></a>
+<span class="sourceLineNo">257</span>                removing.remove(room);<a name="line.257"></a>
+<span class="sourceLineNo">258</span>                continue;<a name="line.258"></a>
+<span class="sourceLineNo">259</span>            }<a name="line.259"></a>
+<span class="sourceLineNo">260</span>            for (Edge e : room.getEdges()) {<a name="line.260"></a>
+<span class="sourceLineNo">261</span>                if (removing.contains(t = layout.get(e.getTargetRoomId()))) {<a name="line.261"></a>
+<span class="sourceLineNo">262</span>                    c2 = t.getCenter();<a name="line.262"></a>
+<span class="sourceLineNo">263</span>                    points.add((((int) ((c1.x - offX + 0.75f) * (rw)) &amp; 0xff) &lt;&lt; 24)<a name="line.263"></a>
+<span class="sourceLineNo">264</span>                            | (((int) ((c1.y - offY + 0.75f) * (rh)) &amp; 0xff) &lt;&lt; 16)<a name="line.264"></a>
+<span class="sourceLineNo">265</span>                            | (((int) ((c2.x - offX + 0.75f) * (rw)) &amp; 0xff) &lt;&lt; 8)<a name="line.265"></a>
+<span class="sourceLineNo">266</span>                            | ((int) ((c2.y - offY + 0.75f) * (rh)) &amp; 0xff));<a name="line.266"></a>
+<span class="sourceLineNo">267</span>                }<a name="line.267"></a>
+<span class="sourceLineNo">268</span>            }<a name="line.268"></a>
+<span class="sourceLineNo">269</span>            removing.remove(room);<a name="line.269"></a>
+<span class="sourceLineNo">270</span>        }<a name="line.270"></a>
+<span class="sourceLineNo">271</span>        totalPoints = points.size;<a name="line.271"></a>
+<span class="sourceLineNo">272</span>        carvers = new EnumMap&lt;&gt;(CarverType.class);<a name="line.272"></a>
+<span class="sourceLineNo">273</span>    }<a name="line.273"></a>
+<span class="sourceLineNo">274</span><a name="line.274"></a>
+<span class="sourceLineNo">275</span>    /**<a name="line.275"></a>
+<span class="sourceLineNo">276</span>     * Changes the number of "carvers" that will create caves from one room to the next. If count is 0 or less, no caves<a name="line.276"></a>
+<span class="sourceLineNo">277</span>     * will be made. If count is at least 1, caves are possible, and higher numbers relative to the other carvers make<a name="line.277"></a>
+<span class="sourceLineNo">278</span>     * caves more likely. Carvers are shuffled when used, then repeat if exhausted during generation. Since typically<a name="line.278"></a>
+<span class="sourceLineNo">279</span>     * about 30-40 rooms are carved, large totals for carver count aren't really needed; aiming for a total of 10<a name="line.279"></a>
+<span class="sourceLineNo">280</span>     * between the count of putCaveCarvers(), putBoxRoomCarvers(), putRoundRoomCarvers(), putWalledBoxRoomCarvers(), and<a name="line.280"></a>
+<span class="sourceLineNo">281</span>     * putWalledRoundRoomCarvers() is reasonable.<a name="line.281"></a>
+<span class="sourceLineNo">282</span>     * @param count the number of carvers making caves between rooms; only matters in relation to other carvers<a name="line.282"></a>
 <span class="sourceLineNo">283</span>     */<a name="line.283"></a>
-<span class="sourceLineNo">284</span>    public void putWalledRoundRoomCarvers(int count)<a name="line.284"></a>
+<span class="sourceLineNo">284</span>    public void putCaveCarvers(int count)<a name="line.284"></a>
 <span class="sourceLineNo">285</span>    {<a name="line.285"></a>
-<span class="sourceLineNo">286</span>        carvers.put(CarverType.ROUND_WALLED, count);<a name="line.286"></a>
+<span class="sourceLineNo">286</span>        carvers.put(CarverType.CAVE, count);<a name="line.286"></a>
 <span class="sourceLineNo">287</span>    }<a name="line.287"></a>
-<span class="sourceLineNo">288</span><a name="line.288"></a>
-<span class="sourceLineNo">289</span>    /**<a name="line.289"></a>
-<span class="sourceLineNo">290</span>     * Uses the added carvers (or just makes caves if none were added) to carve from point to point in sequence, if it<a name="line.290"></a>
-<span class="sourceLineNo">291</span>     * was provided by the constructor, or evenly-spaced randomized points if it was not. This will never carve out<a name="line.291"></a>
-<span class="sourceLineNo">292</span>     * cells on the very edge of the map. Uses the numbers of the various kinds of carver that were added relative to<a name="line.292"></a>
-<span class="sourceLineNo">293</span>     * each other to determine how frequently to use a given carver type.<a name="line.293"></a>
-<span class="sourceLineNo">294</span>     * @return a char[][] where '#' is a wall and '.' is a floor or corridor; x first y second<a name="line.294"></a>
-<span class="sourceLineNo">295</span>     */<a name="line.295"></a>
-<span class="sourceLineNo">296</span>    public char[][] generate()<a name="line.296"></a>
-<span class="sourceLineNo">297</span>    {<a name="line.297"></a>
-<span class="sourceLineNo">298</span>        CarverType[] carvings = carvers.keySet().toArray(new CarverType[carvers.size()]);<a name="line.298"></a>
-<span class="sourceLineNo">299</span>        int[] carvingsCounters = new int[carvings.length];<a name="line.299"></a>
-<span class="sourceLineNo">300</span>        int totalLength = 0;<a name="line.300"></a>
-<span class="sourceLineNo">301</span>        for (int i = 0; i &lt; carvings.length; i++) {<a name="line.301"></a>
-<span class="sourceLineNo">302</span>            carvingsCounters[i] = carvers.get(carvings[i]);<a name="line.302"></a>
-<span class="sourceLineNo">303</span>            totalLength += carvingsCounters[i];<a name="line.303"></a>
-<span class="sourceLineNo">304</span>        }<a name="line.304"></a>
-<span class="sourceLineNo">305</span>        CarverType[] allCarvings = new CarverType[totalLength];<a name="line.305"></a>
-<span class="sourceLineNo">306</span><a name="line.306"></a>
-<span class="sourceLineNo">307</span>        for (int i = 0, c = 0; i &lt; carvings.length; i++) {<a name="line.307"></a>
-<span class="sourceLineNo">308</span>            for (int j = 0; j &lt; carvingsCounters[i]; j++) {<a name="line.308"></a>
-<span class="sourceLineNo">309</span>                allCarvings[c++] = carvings[i];<a name="line.309"></a>
-<span class="sourceLineNo">310</span>            }<a name="line.310"></a>
-<span class="sourceLineNo">311</span>        }<a name="line.311"></a>
-<span class="sourceLineNo">312</span>        if(allCarvings.length == 0)<a name="line.312"></a>
-<span class="sourceLineNo">313</span>        {<a name="line.313"></a>
-<span class="sourceLineNo">314</span>            allCarvings = new CarverType[]{CarverType.CAVE};<a name="line.314"></a>
-<span class="sourceLineNo">315</span>            totalLength = 1;<a name="line.315"></a>
-<span class="sourceLineNo">316</span>        }<a name="line.316"></a>
-<span class="sourceLineNo">317</span>        else<a name="line.317"></a>
-<span class="sourceLineNo">318</span>            allCarvings = rng.shuffle(allCarvings, new CarverType[allCarvings.length]);<a name="line.318"></a>
-<span class="sourceLineNo">319</span><a name="line.319"></a>
-<span class="sourceLineNo">320</span>        for (int p = 0, c = 0; p &lt; totalPoints; p++, c = ++c % totalLength) {<a name="line.320"></a>
-<span class="sourceLineNo">321</span>            long pair = points.get(p);<a name="line.321"></a>
-<span class="sourceLineNo">322</span>            Coord start = Coord.get((int)(pair &gt;&gt; 24) &amp; 0xff, (int)(pair &gt;&gt; 16) &amp; 0xff),<a name="line.322"></a>
-<span class="sourceLineNo">323</span>                  end   = Coord.get((int)(pair &gt;&gt; 8) &amp; 0xff, (int)pair &amp; 0xff);<a name="line.323"></a>
-<span class="sourceLineNo">324</span>            CarverType ct = allCarvings[c];<a name="line.324"></a>
-<span class="sourceLineNo">325</span>            Direction dir;<a name="line.325"></a>
-<span class="sourceLineNo">326</span>            switch (ct)<a name="line.326"></a>
-<span class="sourceLineNo">327</span>            {<a name="line.327"></a>
-<span class="sourceLineNo">328</span>                case CAVE:<a name="line.328"></a>
-<span class="sourceLineNo">329</span>                    markPiercing(end);<a name="line.329"></a>
-<span class="sourceLineNo">330</span>                    markEnvironmentCave(end.x, end.y);<a name="line.330"></a>
-<span class="sourceLineNo">331</span>                    store();<a name="line.331"></a>
-<span class="sourceLineNo">332</span>                    double weight = 0.75;<a name="line.332"></a>
-<span class="sourceLineNo">333</span>                    do {<a name="line.333"></a>
-<span class="sourceLineNo">334</span>                        Coord cent = markPlusCave(start);<a name="line.334"></a>
-<span class="sourceLineNo">335</span>                        if(cent != null)<a name="line.335"></a>
-<span class="sourceLineNo">336</span>                        {<a name="line.336"></a>
-<span class="sourceLineNo">337</span>                            markPiercingCave(cent);<a name="line.337"></a>
-<span class="sourceLineNo">338</span>                            markPiercingCave(cent.translate(1, 0));<a name="line.338"></a>
-<span class="sourceLineNo">339</span>                            markPiercingCave(cent.translate(-1, 0));<a name="line.339"></a>
-<span class="sourceLineNo">340</span>                            markPiercingCave(cent.translate(0, 1));<a name="line.340"></a>
-<span class="sourceLineNo">341</span>                            markPiercingCave(cent.translate(0, -1));<a name="line.341"></a>
-<span class="sourceLineNo">342</span>                            weight = 0.95;<a name="line.342"></a>
-<span class="sourceLineNo">343</span>                        }<a name="line.343"></a>
-<span class="sourceLineNo">344</span>                        dir = stepWobbly(start, end, weight);<a name="line.344"></a>
-<span class="sourceLineNo">345</span>                        start = start.translate(dir);<a name="line.345"></a>
-<span class="sourceLineNo">346</span>                    }while (dir != Direction.NONE);<a name="line.346"></a>
-<span class="sourceLineNo">347</span>                    break;<a name="line.347"></a>
-<span class="sourceLineNo">348</span>                case BOX:<a name="line.348"></a>
-<span class="sourceLineNo">349</span>                    markRectangle(end, rng.between(1, 5), rng.between(1, 5));<a name="line.349"></a>
-<span class="sourceLineNo">350</span>                    markRectangle(start, rng.between(1, 4), rng.between(1, 4));<a name="line.350"></a>
-<span class="sourceLineNo">351</span>                    store();<a name="line.351"></a>
-<span class="sourceLineNo">352</span>                    dir = Direction.getDirection(end.x - start.x, end.y - start.y);<a name="line.352"></a>
-<span class="sourceLineNo">353</span>                    if(dir.isDiagonal())<a name="line.353"></a>
-<span class="sourceLineNo">354</span>                        dir = rng.nextBoolean() ? Direction.getCardinalDirection(dir.deltaX, 0)<a name="line.354"></a>
-<span class="sourceLineNo">355</span>                                : Direction.getCardinalDirection(0, -dir.deltaY);<a name="line.355"></a>
-<span class="sourceLineNo">356</span>                    while (start.x != end.x &amp;&amp; start.y != end.y)<a name="line.356"></a>
-<span class="sourceLineNo">357</span>                    {<a name="line.357"></a>
-<span class="sourceLineNo">358</span>                        markPiercing(start);<a name="line.358"></a>
-<span class="sourceLineNo">359</span>                        markEnvironmentCorridor(start.x, start.y);<a name="line.359"></a>
-<span class="sourceLineNo">360</span>                        start = start.translate(dir);<a name="line.360"></a>
-<span class="sourceLineNo">361</span>                    }<a name="line.361"></a>
-<span class="sourceLineNo">362</span>                    markRectangle(start, 1, 1);<a name="line.362"></a>
-<span class="sourceLineNo">363</span>                    dir = Direction.getCardinalDirection(end.x - start.x, -(end.y - start.y));<a name="line.363"></a>
-<span class="sourceLineNo">364</span>                    while (!(start.x == end.x &amp;&amp; start.y == end.y))<a name="line.364"></a>
-<span class="sourceLineNo">365</span>                    {<a name="line.365"></a>
-<span class="sourceLineNo">366</span>                        markPiercing(start);<a name="line.366"></a>
-<span class="sourceLineNo">367</span>                        markEnvironmentCorridor(start.x, start.y);<a name="line.367"></a>
-<span class="sourceLineNo">368</span>                        start = start.translate(dir);<a name="line.368"></a>
-<span class="sourceLineNo">369</span>                    }<a name="line.369"></a>
-<span class="sourceLineNo">370</span>                    break;<a name="line.370"></a>
-<span class="sourceLineNo">371</span>                case BOX_WALLED:<a name="line.371"></a>
-<span class="sourceLineNo">372</span>                    markRectangleWalled(end, rng.between(1, 5), rng.between(1, 5));<a name="line.372"></a>
-<span class="sourceLineNo">373</span>                    markRectangleWalled(start, rng.between(1, 4), rng.between(1, 4));<a name="line.373"></a>
-<span class="sourceLineNo">374</span>                    store();<a name="line.374"></a>
-<span class="sourceLineNo">375</span>                    dir = Direction.getDirection(end.x - start.x, end.y - start.y);<a name="line.375"></a>
-<span class="sourceLineNo">376</span>                    if(dir.isDiagonal())<a name="line.376"></a>
-<span class="sourceLineNo">377</span>                        dir = rng.nextBoolean() ? Direction.getCardinalDirection(dir.deltaX, 0)<a name="line.377"></a>
-<span class="sourceLineNo">378</span>                                : Direction.getCardinalDirection(0, -dir.deltaY);<a name="line.378"></a>
-<span class="sourceLineNo">379</span>                    while (start.x != end.x &amp;&amp; start.y != end.y)<a name="line.379"></a>
-<span class="sourceLineNo">380</span>                    {<a name="line.380"></a>
-<span class="sourceLineNo">381</span>                        markPiercing(start);<a name="line.381"></a>
-<span class="sourceLineNo">382</span>                        markEnvironmentCorridor(start.x, start.y);<a name="line.382"></a>
-<span class="sourceLineNo">383</span>                        start = start.translate(dir);<a name="line.383"></a>
-<span class="sourceLineNo">384</span>                    }<a name="line.384"></a>
-<span class="sourceLineNo">385</span>                    markRectangleWalled(start, 1, 1);<a name="line.385"></a>
-<span class="sourceLineNo">386</span>                    dir = Direction.getCardinalDirection(end.x - start.x, -(end.y - start.y));<a name="line.386"></a>
-<span class="sourceLineNo">387</span>                    while (!(start.x == end.x &amp;&amp; start.y == end.y))<a name="line.387"></a>
-<span class="sourceLineNo">388</span>                    {<a name="line.388"></a>
-<span class="sourceLineNo">389</span>                        markPiercing(start);<a name="line.389"></a>
-<span class="sourceLineNo">390</span>                        markEnvironmentCorridor(start.x, start.y);<a name="line.390"></a>
-<span class="sourceLineNo">391</span>                        start = start.translate(dir);<a name="line.391"></a>
-<span class="sourceLineNo">392</span>                    }<a name="line.392"></a>
-<span class="sourceLineNo">393</span>                    break;<a name="line.393"></a>
-<span class="sourceLineNo">394</span>                case ROUND:<a name="line.394"></a>
-<span class="sourceLineNo">395</span>                    markCircle(end, rng.between(2, 6));<a name="line.395"></a>
-<span class="sourceLineNo">396</span>                    markCircle(start, rng.between(2, 6));<a name="line.396"></a>
+<span class="sourceLineNo">288</span>    /**<a name="line.288"></a>
+<span class="sourceLineNo">289</span>     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms<a name="line.289"></a>
+<span class="sourceLineNo">290</span>     * with a random size in a box shape at the start and end, and a small room at the corner if there is one. If count<a name="line.290"></a>
+<span class="sourceLineNo">291</span>     * is 0 or less, no box-shaped rooms will be made. If count is at least 1, box-shaped rooms are possible, and higher<a name="line.291"></a>
+<span class="sourceLineNo">292</span>     * numbers relative to the other carvers make box-shaped rooms more likely. Carvers are shuffled when used, then<a name="line.292"></a>
+<span class="sourceLineNo">293</span>     * repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver<a name="line.293"></a>
+<span class="sourceLineNo">294</span>     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),<a name="line.294"></a>
+<span class="sourceLineNo">295</span>     * putRoundRoomCarvers(), putWalledBoxRoomCarvers(), and putWalledRoundRoomCarvers() is reasonable.<a name="line.295"></a>
+<span class="sourceLineNo">296</span>     * @param count the number of carvers making box-shaped rooms and corridors between them; only matters in relation<a name="line.296"></a>
+<span class="sourceLineNo">297</span>     *              to other carvers<a name="line.297"></a>
+<span class="sourceLineNo">298</span>     */<a name="line.298"></a>
+<span class="sourceLineNo">299</span>    public void putBoxRoomCarvers(int count)<a name="line.299"></a>
+<span class="sourceLineNo">300</span>    {<a name="line.300"></a>
+<span class="sourceLineNo">301</span>        carvers.put(CarverType.BOX, count);<a name="line.301"></a>
+<span class="sourceLineNo">302</span>    }<a name="line.302"></a>
+<span class="sourceLineNo">303</span><a name="line.303"></a>
+<span class="sourceLineNo">304</span>    /**<a name="line.304"></a>
+<span class="sourceLineNo">305</span>     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms<a name="line.305"></a>
+<span class="sourceLineNo">306</span>     * with a random size in a circle shape at the start and end, and a small circular room at the corner if there is<a name="line.306"></a>
+<span class="sourceLineNo">307</span>     * one. If count is 0 or less, no circular rooms will be made. If count is at least 1, circular rooms are possible,<a name="line.307"></a>
+<span class="sourceLineNo">308</span>     * and higher numbers relative to the other carvers make circular rooms more likely. Carvers are shuffled when used,<a name="line.308"></a>
+<span class="sourceLineNo">309</span>     * then repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver<a name="line.309"></a>
+<span class="sourceLineNo">310</span>     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),<a name="line.310"></a>
+<span class="sourceLineNo">311</span>     * putRoundRoomCarvers(), putWalledBoxRoomCarvers(), and putWalledRoundRoomCarvers() is reasonable.<a name="line.311"></a>
+<span class="sourceLineNo">312</span>     * @param count the number of carvers making circular rooms and corridors between them; only matters in relation<a name="line.312"></a>
+<span class="sourceLineNo">313</span>     *              to other carvers<a name="line.313"></a>
+<span class="sourceLineNo">314</span>     */<a name="line.314"></a>
+<span class="sourceLineNo">315</span>    public void putRoundRoomCarvers(int count)<a name="line.315"></a>
+<span class="sourceLineNo">316</span>    {<a name="line.316"></a>
+<span class="sourceLineNo">317</span>        carvers.put(CarverType.ROUND, count);<a name="line.317"></a>
+<span class="sourceLineNo">318</span>    }<a name="line.318"></a>
+<span class="sourceLineNo">319</span>    /**<a name="line.319"></a>
+<span class="sourceLineNo">320</span>     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms<a name="line.320"></a>
+<span class="sourceLineNo">321</span>     * with a random size in a box shape at the start and end, and a small room at the corner if there is one, enforcing<a name="line.321"></a>
+<span class="sourceLineNo">322</span>     * the presence of walls around the rooms even if another room is already there or would be placed there. Corridors<a name="line.322"></a>
+<span class="sourceLineNo">323</span>     * can always pass through enforced walls, but caves will open at most one cell in the wall. If count<a name="line.323"></a>
+<span class="sourceLineNo">324</span>     * is 0 or less, no box-shaped rooms will be made. If count is at least 1, box-shaped rooms are possible, and higher<a name="line.324"></a>
+<span class="sourceLineNo">325</span>     * numbers relative to the other carvers make box-shaped rooms more likely. Carvers are shuffled when used, then<a name="line.325"></a>
+<span class="sourceLineNo">326</span>     * repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver<a name="line.326"></a>
+<span class="sourceLineNo">327</span>     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),<a name="line.327"></a>
+<span class="sourceLineNo">328</span>     * putRoundRoomCarvers(), putWalledBoxRoomCarvers(), and putWalledRoundRoomCarvers() is reasonable.<a name="line.328"></a>
+<span class="sourceLineNo">329</span>     * @param count the number of carvers making box-shaped rooms and corridors between them; only matters in relation<a name="line.329"></a>
+<span class="sourceLineNo">330</span>     *              to other carvers<a name="line.330"></a>
+<span class="sourceLineNo">331</span>     */<a name="line.331"></a>
+<span class="sourceLineNo">332</span>    public void putWalledBoxRoomCarvers(int count)<a name="line.332"></a>
+<span class="sourceLineNo">333</span>    {<a name="line.333"></a>
+<span class="sourceLineNo">334</span>        carvers.put(CarverType.BOX_WALLED, count);<a name="line.334"></a>
+<span class="sourceLineNo">335</span>    }<a name="line.335"></a>
+<span class="sourceLineNo">336</span><a name="line.336"></a>
+<span class="sourceLineNo">337</span>    /**<a name="line.337"></a>
+<span class="sourceLineNo">338</span>     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms<a name="line.338"></a>
+<span class="sourceLineNo">339</span>     * with a random size in a circle shape at the start and end, and a small circular room at the corner if there is<a name="line.339"></a>
+<span class="sourceLineNo">340</span>     * one, enforcing the presence of walls around the rooms even if another room is already there or would be placed<a name="line.340"></a>
+<span class="sourceLineNo">341</span>     * there. Corridors can always pass through enforced walls, but caves will open at most one cell in the wall. If<a name="line.341"></a>
+<span class="sourceLineNo">342</span>     * count is 0 or less, no circular rooms will be made. If count is at least 1, circular rooms are possible,<a name="line.342"></a>
+<span class="sourceLineNo">343</span>     * and higher numbers relative to the other carvers make circular rooms more likely. Carvers are shuffled when used,<a name="line.343"></a>
+<span class="sourceLineNo">344</span>     * then repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver<a name="line.344"></a>
+<span class="sourceLineNo">345</span>     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),<a name="line.345"></a>
+<span class="sourceLineNo">346</span>     * putRoundRoomCarvers(), putWalledBoxRoomCarvers(), and putWalledRoundRoomCarvers() is reasonable.<a name="line.346"></a>
+<span class="sourceLineNo">347</span>     * @param count the number of carvers making circular rooms and corridors between them; only matters in relation<a name="line.347"></a>
+<span class="sourceLineNo">348</span>     *              to other carvers<a name="line.348"></a>
+<span class="sourceLineNo">349</span>     */<a name="line.349"></a>
+<span class="sourceLineNo">350</span>    public void putWalledRoundRoomCarvers(int count)<a name="line.350"></a>
+<span class="sourceLineNo">351</span>    {<a name="line.351"></a>
+<span class="sourceLineNo">352</span>        carvers.put(CarverType.ROUND_WALLED, count);<a name="line.352"></a>
+<span class="sourceLineNo">353</span>    }<a name="line.353"></a>
+<span class="sourceLineNo">354</span><a name="line.354"></a>
+<span class="sourceLineNo">355</span>    /**<a name="line.355"></a>
+<span class="sourceLineNo">356</span>     * Uses the added carvers (or just makes caves if none were added) to carve from point to point in sequence, if it<a name="line.356"></a>
+<span class="sourceLineNo">357</span>     * was provided by the constructor, or evenly-spaced randomized points if it was not. This will never carve out<a name="line.357"></a>
+<span class="sourceLineNo">358</span>     * cells on the very edge of the map. Uses the numbers of the various kinds of carver that were added relative to<a name="line.358"></a>
+<span class="sourceLineNo">359</span>     * each other to determine how frequently to use a given carver type.<a name="line.359"></a>
+<span class="sourceLineNo">360</span>     * @return a char[][] where '#' is a wall and '.' is a floor or corridor; x first y second<a name="line.360"></a>
+<span class="sourceLineNo">361</span>     */<a name="line.361"></a>
+<span class="sourceLineNo">362</span>    public char[][] generate()<a name="line.362"></a>
+<span class="sourceLineNo">363</span>    {<a name="line.363"></a>
+<span class="sourceLineNo">364</span>        CarverType[] carvings = carvers.keySet().toArray(new CarverType[carvers.size()]);<a name="line.364"></a>
+<span class="sourceLineNo">365</span>        int[] carvingsCounters = new int[carvings.length];<a name="line.365"></a>
+<span class="sourceLineNo">366</span>        int totalLength = 0;<a name="line.366"></a>
+<span class="sourceLineNo">367</span>        for (int i = 0; i &lt; carvings.length; i++) {<a name="line.367"></a>
+<span class="sourceLineNo">368</span>            carvingsCounters[i] = carvers.get(carvings[i]);<a name="line.368"></a>
+<span class="sourceLineNo">369</span>            totalLength += carvingsCounters[i];<a name="line.369"></a>
+<span class="sourceLineNo">370</span>        }<a name="line.370"></a>
+<span class="sourceLineNo">371</span>        CarverType[] allCarvings = new CarverType[totalLength];<a name="line.371"></a>
+<span class="sourceLineNo">372</span><a name="line.372"></a>
+<span class="sourceLineNo">373</span>        for (int i = 0, c = 0; i &lt; carvings.length; i++) {<a name="line.373"></a>
+<span class="sourceLineNo">374</span>            for (int j = 0; j &lt; carvingsCounters[i]; j++) {<a name="line.374"></a>
+<span class="sourceLineNo">375</span>                allCarvings[c++] = carvings[i];<a name="line.375"></a>
+<span class="sourceLineNo">376</span>            }<a name="line.376"></a>
+<span class="sourceLineNo">377</span>        }<a name="line.377"></a>
+<span class="sourceLineNo">378</span>        if(allCarvings.length == 0)<a name="line.378"></a>
+<span class="sourceLineNo">379</span>        {<a name="line.379"></a>
+<span class="sourceLineNo">380</span>            allCarvings = new CarverType[]{CarverType.CAVE};<a name="line.380"></a>
+<span class="sourceLineNo">381</span>            totalLength = 1;<a name="line.381"></a>
+<span class="sourceLineNo">382</span>        }<a name="line.382"></a>
+<span class="sourceLineNo">383</span>        else<a name="line.383"></a>
+<span class="sourceLineNo">384</span>            allCarvings = rng.shuffle(allCarvings, new CarverType[allCarvings.length]);<a name="line.384"></a>
+<span class="sourceLineNo">385</span><a name="line.385"></a>
+<span class="sourceLineNo">386</span>        for (int p = 0, c = 0; p &lt; totalPoints; p++, c = (c+1) % totalLength) {<a name="line.386"></a>
+<span class="sourceLineNo">387</span>            int pair = points.get(p);<a name="line.387"></a>
+<span class="sourceLineNo">388</span>            Coord start = Coord.get(pair &gt;&gt;&gt; 24 &amp; 0xff, pair &gt;&gt;&gt; 16 &amp; 0xff),<a name="line.388"></a>
+<span class="sourceLineNo">389</span>                  end   = Coord.get(pair &gt;&gt;&gt; 8 &amp; 0xff, pair &amp; 0xff);<a name="line.389"></a>
+<span class="sourceLineNo">390</span>            CarverType ct = allCarvings[c];<a name="line.390"></a>
+<span class="sourceLineNo">391</span>            Direction dir;<a name="line.391"></a>
+<span class="sourceLineNo">392</span>            switch (ct)<a name="line.392"></a>
+<span class="sourceLineNo">393</span>            {<a name="line.393"></a>
+<span class="sourceLineNo">394</span>                case CAVE:<a name="line.394"></a>
+<span class="sourceLineNo">395</span>                    markPiercing(end);<a name="line.395"></a>
+<span class="sourceLineNo">396</span>                    markEnvironmentCave(end.x, end.y);<a name="line.396"></a>
 <span class="sourceLineNo">397</span>                    store();<a name="line.397"></a>
-<span class="sourceLineNo">398</span>                    dir = Direction.getDirection(end.x - start.x, end.y - start.y);<a name="line.398"></a>
-<span class="sourceLineNo">399</span>                    if(dir.isDiagonal())<a name="line.399"></a>
-<span class="sourceLineNo">400</span>                        dir = rng.nextBoolean() ? Direction.getCardinalDirection(dir.deltaX, 0)<a name="line.400"></a>
-<span class="sourceLineNo">401</span>                                : Direction.getCardinalDirection(0, -dir.deltaY);<a name="line.401"></a>
-<span class="sourceLineNo">402</span>                    while (start.x != end.x &amp;&amp; start.y != end.y)<a name="line.402"></a>
-<span class="sourceLineNo">403</span>                    {<a name="line.403"></a>
-<span class="sourceLineNo">404</span>                        markPiercing(start);<a name="line.404"></a>
-<span class="sourceLineNo">405</span>                        markEnvironmentCorridor(start.x, start.y);<a name="line.405"></a>
-<span class="sourceLineNo">406</span>                        start = start.translate(dir);<a name="line.406"></a>
-<span class="sourceLineNo">407</span>                    }<a name="line.407"></a>
-<span class="sourceLineNo">408</span>                    markCircle(start, 2);<a name="line.408"></a>
-<span class="sourceLineNo">409</span>                    dir = Direction.getCardinalDirection(end.x - start.x, -(end.y - start.y));<a name="line.409"></a>
-<span class="sourceLineNo">410</span>                    while (!(start.x == end.x &amp;&amp; start.y == end.y))<a name="line.410"></a>
-<span class="sourceLineNo">411</span>                    {<a name="line.411"></a>
-<span class="sourceLineNo">412</span>                        markPiercing(start);<a name="line.412"></a>
-<span class="sourceLineNo">413</span>                        markEnvironmentCorridor(start.x, start.y);<a name="line.413"></a>
-<span class="sourceLineNo">414</span>                        start = start.translate(dir);<a name="line.414"></a>
-<span class="sourceLineNo">415</span>                    }<a name="line.415"></a>
-<span class="sourceLineNo">416</span>                    break;<a name="line.416"></a>
-<span class="sourceLineNo">417</span>                case ROUND_WALLED:<a name="line.417"></a>
-<span class="sourceLineNo">418</span>                    markCircleWalled(end, rng.between(2, 6));<a name="line.418"></a>
-<span class="sourceLineNo">419</span>                    markCircleWalled(start, rng.between(2, 6));<a name="line.419"></a>
-<span class="sourceLineNo">420</span>                    store();<a name="line.420"></a>
-<span class="sourceLineNo">421</span>                    dir = Direction.getDirection(end.x - start.x, end.y - start.y);<a name="line.421"></a>
-<span class="sourceLineNo">422</span>                    if(dir.isDiagonal())<a name="line.422"></a>
-<span class="sourceLineNo">423</span>                        dir = rng.nextBoolean() ? Direction.getCardinalDirection(dir.deltaX, 0)<a name="line.423"></a>
-<span class="sourceLineNo">424</span>                                : Direction.getCardinalDirection(0, -dir.deltaY);<a name="line.424"></a>
-<span class="sourceLineNo">425</span>                    while (start.x != end.x &amp;&amp; start.y != end.y)<a name="line.425"></a>
-<span class="sourceLineNo">426</span>                    {<a name="line.426"></a>
-<span class="sourceLineNo">427</span>                        markPiercing(start);<a name="line.427"></a>
-<span class="sourceLineNo">428</span>                        markEnvironmentCorridor(start.x, start.y);<a name="line.428"></a>
-<span class="sourceLineNo">429</span>                        start = start.translate(dir);<a name="line.429"></a>
-<span class="sourceLineNo">430</span>                    }<a name="line.430"></a>
-<span class="sourceLineNo">431</span>                    markCircleWalled(start, 2);<a name="line.431"></a>
-<span class="sourceLineNo">432</span>                    dir = Direction.getCardinalDirection(end.x - start.x, -(end.y - start.y));<a name="line.432"></a>
-<span class="sourceLineNo">433</span>                    while (!(start.x == end.x &amp;&amp; start.y == end.y))<a name="line.433"></a>
-<span class="sourceLineNo">434</span>                    {<a name="line.434"></a>
-<span class="sourceLineNo">435</span>                        markPiercing(start);<a name="line.435"></a>
-<span class="sourceLineNo">436</span>                        markEnvironmentCorridor(start.x, start.y);<a name="line.436"></a>
-<span class="sourceLineNo">437</span>                        start = start.translate(dir);<a name="line.437"></a>
-<span class="sourceLineNo">438</span>                    }<a name="line.438"></a>
-<span class="sourceLineNo">439</span>                    break;<a name="line.439"></a>
-<span class="sourceLineNo">440</span>            }<a name="line.440"></a>
-<span class="sourceLineNo">441</span>            store();<a name="line.441"></a>
-<span class="sourceLineNo">442</span>        }<a name="line.442"></a>
-<span class="sourceLineNo">443</span>        for (int x = 0; x &lt; width; x++) {<a name="line.443"></a>
-<span class="sourceLineNo">444</span>            for (int y = 0; y &lt; height; y++) {<a name="line.444"></a>
-<span class="sourceLineNo">445</span>                if(fixedRooms[x][y])<a name="line.445"></a>
-<span class="sourceLineNo">446</span>                    markPiercingRoom(x, y);<a name="line.446"></a>
-<span class="sourceLineNo">447</span>            }<a name="line.447"></a>
-<span class="sourceLineNo">448</span>        }<a name="line.448"></a>
-<span class="sourceLineNo">449</span>        store();<a name="line.449"></a>
-<span class="sourceLineNo">450</span>        markEnvironmentWalls();<a name="line.450"></a>
-<span class="sourceLineNo">451</span>        generated = true;<a name="line.451"></a>
-<span class="sourceLineNo">452</span>        return dungeon;<a name="line.452"></a>
-<span class="sourceLineNo">453</span>    }<a name="line.453"></a>
-<span class="sourceLineNo">454</span><a name="line.454"></a>
-<span class="sourceLineNo">455</span>    public int[][] getEnvironment()<a name="line.455"></a>
-<span class="sourceLineNo">456</span>    {<a name="line.456"></a>
-<span class="sourceLineNo">457</span>        return environment;<a name="line.457"></a>
-<span class="sourceLineNo">458</span>    }<a name="line.458"></a>
-<span class="sourceLineNo">459</span><a name="line.459"></a>
-<span class="sourceLineNo">460</span>    public boolean hasGenerated()<a name="line.460"></a>
-<span class="sourceLineNo">461</span>    {<a name="line.461"></a>
-<span class="sourceLineNo">462</span>        return generated;<a name="line.462"></a>
-<span class="sourceLineNo">463</span>    }<a name="line.463"></a>
-<span class="sourceLineNo">464</span><a name="line.464"></a>
-<span class="sourceLineNo">465</span>    public boolean[][] getFixedRooms() {<a name="line.465"></a>
-<span class="sourceLineNo">466</span>        return fixedRooms;<a name="line.466"></a>
-<span class="sourceLineNo">467</span>    }<a name="line.467"></a>
-<span class="sourceLineNo">468</span><a name="line.468"></a>
-<span class="sourceLineNo">469</span>    public void setFixedRooms(boolean[][] fixedRooms) {<a name="line.469"></a>
-<span class="sourceLineNo">470</span>        this.fixedRooms = fixedRooms;<a name="line.470"></a>
-<span class="sourceLineNo">471</span>    }<a name="line.471"></a>
-<span class="sourceLineNo">472</span><a name="line.472"></a>
-<span class="sourceLineNo">473</span>    /**<a name="line.473"></a>
-<span class="sourceLineNo">474</span>     * Internal use. Takes cells that have been previously marked and permanently stores them as floors in the dungeon.<a name="line.474"></a>
-<span class="sourceLineNo">475</span>     */<a name="line.475"></a>
-<span class="sourceLineNo">476</span>    protected void store()<a name="line.476"></a>
-<span class="sourceLineNo">477</span>    {<a name="line.477"></a>
-<span class="sourceLineNo">478</span>        for (int i = 0; i &lt; width; i++) {<a name="line.478"></a>
-<span class="sourceLineNo">479</span>            for (int j = 0; j &lt; height; j++) {<a name="line.479"></a>
-<span class="sourceLineNo">480</span>                if(marked[i][j])<a name="line.480"></a>
-<span class="sourceLineNo">481</span>                {<a name="line.481"></a>
-<span class="sourceLineNo">482</span>                    dungeon[i][j] = '.';<a name="line.482"></a>
-<span class="sourceLineNo">483</span>                    marked[i][j] = false;<a name="line.483"></a>
-<span class="sourceLineNo">484</span>                }<a name="line.484"></a>
-<span class="sourceLineNo">485</span>            }<a name="line.485"></a>
-<span class="sourceLineNo">486</span>        }<a name="line.486"></a>
-<span class="sourceLineNo">487</span>    }<a name="line.487"></a>
-<span class="sourceLineNo">488</span><a name="line.488"></a>
-<span class="sourceLineNo">489</span>    /**<a name="line.489"></a>
-<span class="sourceLineNo">490</span>     * Internal use. Finds all floor cells by environment and marks untouched adjacent (8-way) cells as walls, using the<a name="line.490"></a>
-<span class="sourceLineNo">491</span>     * appropriate type for the nearby floor.<a name="line.491"></a>
-<span class="sourceLineNo">492</span>     */<a name="line.492"></a>
-<span class="sourceLineNo">493</span>    protected void markEnvironmentWalls()<a name="line.493"></a>
-<span class="sourceLineNo">494</span>    {<a name="line.494"></a>
-<span class="sourceLineNo">495</span>        for (int i = 0; i &lt; width; i++) {<a name="line.495"></a>
-<span class="sourceLineNo">496</span>            for (int j = 0; j &lt; height; j++) {<a name="line.496"></a>
-<span class="sourceLineNo">497</span>                if(environment[i][j] == UNTOUCHED)<a name="line.497"></a>
-<span class="sourceLineNo">498</span>                {<a name="line.498"></a>
-<span class="sourceLineNo">499</span>                    boolean allWalls = true;<a name="line.499"></a>
-<span class="sourceLineNo">500</span>                    //lowest precedence, also checks for any floors<a name="line.500"></a>
-<span class="sourceLineNo">501</span>                    for (int x = Math.max(0, i - 1); x &lt;= Math.min(width - 1, i + 1); x++) {<a name="line.501"></a>
-<span class="sourceLineNo">502</span><a name="line.502"></a>
-<span class="sourceLineNo">503</span>                        for (int y = Math.max(0, j - 1); y &lt;= Math.min(height - 1, j + 1); y++) {<a name="line.503"></a>
-<span class="sourceLineNo">504</span>                            if (environment[x][y] == CORRIDOR_FLOOR) {<a name="line.504"></a>
-<span class="sourceLineNo">505</span>                                markEnvironment(i, j, CORRIDOR_WALL);<a name="line.505"></a>
-<span class="sourceLineNo">506</span>                            }<a name="line.506"></a>
-<span class="sourceLineNo">507</span>                            if(dungeon[x][y] == '.')<a name="line.507"></a>
-<span class="sourceLineNo">508</span>                                allWalls = false;<a name="line.508"></a>
-<span class="sourceLineNo">509</span>                        }<a name="line.509"></a>
-<span class="sourceLineNo">510</span>                    }<a name="line.510"></a>
-<span class="sourceLineNo">511</span>                    //if there are no floors we don't need to check twice again.<a name="line.511"></a>
-<span class="sourceLineNo">512</span>                    if(allWalls)<a name="line.512"></a>
-<span class="sourceLineNo">513</span>                        continue;<a name="line.513"></a>
-<span class="sourceLineNo">514</span>                    //more precedence<a name="line.514"></a>
-<span class="sourceLineNo">515</span>                    for (int x = Math.max(0, i - 1); x &lt;= Math.min(width - 1, i + 1); x++) {<a name="line.515"></a>
-<span class="sourceLineNo">516</span><a name="line.516"></a>
-<span class="sourceLineNo">517</span>                        for (int y = Math.max(0, j - 1); y &lt;= Math.min(height - 1, j + 1); y++) {<a name="line.517"></a>
-<span class="sourceLineNo">518</span>                            if (environment[x][y] == CAVE_FLOOR) {<a name="line.518"></a>
-<span class="sourceLineNo">519</span>                                markEnvironment(i, j, CAVE_WALL);<a name="line.519"></a>
-<span class="sourceLineNo">520</span>                            }<a name="line.520"></a>
-<span class="sourceLineNo">521</span>                        }<a name="line.521"></a>
-<span class="sourceLineNo">522</span>                    }<a name="line.522"></a>
-<span class="sourceLineNo">523</span>                    //highest precedence<a name="line.523"></a>
-<span class="sourceLineNo">524</span>                    for (int x = Math.max(0, i - 1); x &lt;= Math.min(width - 1, i + 1); x++) {<a name="line.524"></a>
+<span class="sourceLineNo">398</span>                    double weight = 0.75;<a name="line.398"></a>
+<span class="sourceLineNo">399</span>                    do {<a name="line.399"></a>
+<span class="sourceLineNo">400</span>                        Coord cent = markPlusCave(start);<a name="line.400"></a>
+<span class="sourceLineNo">401</span>                        if(cent != null)<a name="line.401"></a>
+<span class="sourceLineNo">402</span>                        {<a name="line.402"></a>
+<span class="sourceLineNo">403</span>                            markPiercingCave(cent);<a name="line.403"></a>
+<span class="sourceLineNo">404</span>                            markPiercingCave(cent.translate(1, 0));<a name="line.404"></a>
+<span class="sourceLineNo">405</span>                            markPiercingCave(cent.translate(-1, 0));<a name="line.405"></a>
+<span class="sourceLineNo">406</span>                            markPiercingCave(cent.translate(0, 1));<a name="line.406"></a>
+<span class="sourceLineNo">407</span>                            markPiercingCave(cent.translate(0, -1));<a name="line.407"></a>
+<span class="sourceLineNo">408</span>                            weight = 0.95;<a name="line.408"></a>
+<span class="sourceLineNo">409</span>                        }<a name="line.409"></a>
+<span class="sourceLineNo">410</span>                        dir = stepWobbly(start, end, weight);<a name="line.410"></a>
+<span class="sourceLineNo">411</span>                        start = start.translate(dir);<a name="line.411"></a>
+<span class="sourceLineNo">412</span>                    }while (dir != Direction.NONE);<a name="line.412"></a>
+<span class="sourceLineNo">413</span>                    break;<a name="line.413"></a>
+<span class="sourceLineNo">414</span>                case BOX:<a name="line.414"></a>
+<span class="sourceLineNo">415</span>                    markRectangle(end, rng.between(1, 5), rng.between(1, 5));<a name="line.415"></a>
+<span class="sourceLineNo">416</span>                    markRectangle(start, rng.between(1, 4), rng.between(1, 4));<a name="line.416"></a>
+<span class="sourceLineNo">417</span>                    store();<a name="line.417"></a>
+<span class="sourceLineNo">418</span>                    dir = Direction.getDirection(end.x - start.x, end.y - start.y);<a name="line.418"></a>
+<span class="sourceLineNo">419</span>                    if(dir.isDiagonal())<a name="line.419"></a>
+<span class="sourceLineNo">420</span>                        dir = rng.nextBoolean() ? Direction.getCardinalDirection(dir.deltaX, 0)<a name="line.420"></a>
+<span class="sourceLineNo">421</span>                                : Direction.getCardinalDirection(0, -dir.deltaY);<a name="line.421"></a>
+<span class="sourceLineNo">422</span>                    while (start.x != end.x &amp;&amp; start.y != end.y)<a name="line.422"></a>
+<span class="sourceLineNo">423</span>                    {<a name="line.423"></a>
+<span class="sourceLineNo">424</span>                        markPiercing(start);<a name="line.424"></a>
+<span class="sourceLineNo">425</span>                        markEnvironmentCorridor(start.x, start.y);<a name="line.425"></a>
+<span class="sourceLineNo">426</span>                        start = start.translate(dir);<a name="line.426"></a>
+<span class="sourceLineNo">427</span>                    }<a name="line.427"></a>
+<span class="sourceLineNo">428</span>                    markRectangle(start, 1, 1);<a name="line.428"></a>
+<span class="sourceLineNo">429</span>                    dir = Direction.getCardinalDirection(end.x - start.x, -(end.y - start.y));<a name="line.429"></a>
+<span class="sourceLineNo">430</span>                    while (!(start.x == end.x &amp;&amp; start.y == end.y))<a name="line.430"></a>
+<span class="sourceLineNo">431</span>                    {<a name="line.431"></a>
+<span class="sourceLineNo">432</span>                        markPiercing(start);<a name="line.432"></a>
+<span class="sourceLineNo">433</span>                        markEnvironmentCorridor(start.x, start.y);<a name="line.433"></a>
+<span class="sourceLineNo">434</span>                        start = start.translate(dir);<a name="line.434"></a>
+<span class="sourceLineNo">435</span>                    }<a name="line.435"></a>
+<span class="sourceLineNo">436</span>                    break;<a name="line.436"></a>
+<span class="sourceLineNo">437</span>                case BOX_WALLED:<a name="line.437"></a>
+<span class="sourceLineNo">438</span>                    markRectangleWalled(end, rng.between(1, 5), rng.between(1, 5));<a name="line.438"></a>
+<span class="sourceLineNo">439</span>                    markRectangleWalled(start, rng.between(1, 4), rng.between(1, 4));<a name="line.439"></a>
+<span class="sourceLineNo">440</span>                    store();<a name="line.440"></a>
+<span class="sourceLineNo">441</span>                    dir = Direction.getDirection(end.x - start.x, end.y - start.y);<a name="line.441"></a>
+<span class="sourceLineNo">442</span>                    if(dir.isDiagonal())<a name="line.442"></a>
+<span class="sourceLineNo">443</span>                        dir = rng.nextBoolean() ? Direction.getCardinalDirection(dir.deltaX, 0)<a name="line.443"></a>
+<span class="sourceLineNo">444</span>                                : Direction.getCardinalDirection(0, -dir.deltaY);<a name="line.444"></a>
+<span class="sourceLineNo">445</span>                    while (start.x != end.x &amp;&amp; start.y != end.y)<a name="line.445"></a>
+<span class="sourceLineNo">446</span>                    {<a name="line.446"></a>
+<span class="sourceLineNo">447</span>                        markPiercing(start);<a name="line.447"></a>
+<span class="sourceLineNo">448</span>                        markEnvironmentCorridor(start.x, start.y);<a name="line.448"></a>
+<span class="sourceLineNo">449</span>                        start = start.translate(dir);<a name="line.449"></a>
+<span class="sourceLineNo">450</span>                    }<a name="line.450"></a>
+<span class="sourceLineNo">451</span>                    markRectangleWalled(start, 1, 1);<a name="line.451"></a>
+<span class="sourceLineNo">452</span>                    dir = Direction.getCardinalDirection(end.x - start.x, -(end.y - start.y));<a name="line.452"></a>
+<span class="sourceLineNo">453</span>                    while (!(start.x == end.x &amp;&amp; start.y == end.y))<a name="line.453"></a>
+<span class="sourceLineNo">454</span>                    {<a name="line.454"></a>
+<span class="sourceLineNo">455</span>                        markPiercing(start);<a name="line.455"></a>
+<span class="sourceLineNo">456</span>                        markEnvironmentCorridor(start.x, start.y);<a name="line.456"></a>
+<span class="sourceLineNo">457</span>                        start = start.translate(dir);<a name="line.457"></a>
+<span class="sourceLineNo">458</span>                    }<a name="line.458"></a>
+<span class="sourceLineNo">459</span>                    break;<a name="line.459"></a>
+<span class="sourceLineNo">460</span>                case ROUND:<a name="line.460"></a>
+<span class="sourceLineNo">461</span>                    markCircle(end, rng.between(2, 6));<a name="line.461"></a>
+<span class="sourceLineNo">462</span>                    markCircle(start, rng.between(2, 6));<a name="line.462"></a>
+<span class="sourceLineNo">463</span>                    store();<a name="line.463"></a>
+<span class="sourceLineNo">464</span>                    dir = Direction.getDirection(end.x - start.x, end.y - start.y);<a name="line.464"></a>
+<span class="sourceLineNo">465</span>                    if(dir.isDiagonal())<a name="line.465"></a>
+<span class="sourceLineNo">466</span>                        dir = rng.nextBoolean() ? Direction.getCardinalDirection(dir.deltaX, 0)<a name="line.466"></a>
+<span class="sourceLineNo">467</span>                                : Direction.getCardinalDirection(0, -dir.deltaY);<a name="line.467"></a>
+<span class="sourceLineNo">468</span>                    while (start.x != end.x &amp;&amp; start.y != end.y)<a name="line.468"></a>
+<span class="sourceLineNo">469</span>                    {<a name="line.469"></a>
+<span class="sourceLineNo">470</span>                        markPiercing(start);<a name="line.470"></a>
+<span class="sourceLineNo">471</span>                        markEnvironmentCorridor(start.x, start.y);<a name="line.471"></a>
+<span class="sourceLineNo">472</span>                        start = start.translate(dir);<a name="line.472"></a>
+<span class="sourceLineNo">473</span>                    }<a name="line.473"></a>
+<span class="sourceLineNo">474</span>                    markCircle(start, 2);<a name="line.474"></a>
+<span class="sourceLineNo">475</span>                    dir = Direction.getCardinalDirection(end.x - start.x, -(end.y - start.y));<a name="line.475"></a>
+<span class="sourceLineNo">476</span>                    while (!(start.x == end.x &amp;&amp; start.y == end.y))<a name="line.476"></a>
+<span class="sourceLineNo">477</span>                    {<a name="line.477"></a>
+<span class="sourceLineNo">478</span>                        markPiercing(start);<a name="line.478"></a>
+<span class="sourceLineNo">479</span>                        markEnvironmentCorridor(start.x, start.y);<a name="line.479"></a>
+<span class="sourceLineNo">480</span>                        start = start.translate(dir);<a name="line.480"></a>
+<span class="sourceLineNo">481</span>                    }<a name="line.481"></a>
+<span class="sourceLineNo">482</span>                    break;<a name="line.482"></a>
+<span class="sourceLineNo">483</span>                case ROUND_WALLED:<a name="line.483"></a>
+<span class="sourceLineNo">484</span>                    markCircleWalled(end, rng.between(2, 6));<a name="line.484"></a>
+<span class="sourceLineNo">485</span>                    markCircleWalled(start, rng.between(2, 6));<a name="line.485"></a>
+<span class="sourceLineNo">486</span>                    store();<a name="line.486"></a>
+<span class="sourceLineNo">487</span>                    dir = Direction.getDirection(end.x - start.x, end.y - start.y);<a name="line.487"></a>
+<span class="sourceLineNo">488</span>                    if(dir.isDiagonal())<a name="line.488"></a>
+<span class="sourceLineNo">489</span>                        dir = rng.nextBoolean() ? Direction.getCardinalDirection(dir.deltaX, 0)<a name="line.489"></a>
+<span class="sourceLineNo">490</span>                                : Direction.getCardinalDirection(0, -dir.deltaY);<a name="line.490"></a>
+<span class="sourceLineNo">491</span>                    while (start.x != end.x &amp;&amp; start.y != end.y)<a name="line.491"></a>
+<span class="sourceLineNo">492</span>                    {<a name="line.492"></a>
+<span class="sourceLineNo">493</span>                        markPiercing(start);<a name="line.493"></a>
+<span class="sourceLineNo">494</span>                        markEnvironmentCorridor(start.x, start.y);<a name="line.494"></a>
+<span class="sourceLineNo">495</span>                        start = start.translate(dir);<a name="line.495"></a>
+<span class="sourceLineNo">496</span>                    }<a name="line.496"></a>
+<span class="sourceLineNo">497</span>                    markCircleWalled(start, 2);<a name="line.497"></a>
+<span class="sourceLineNo">498</span>                    dir = Direction.getCardinalDirection(end.x - start.x, -(end.y - start.y));<a name="line.498"></a>
+<span class="sourceLineNo">499</span>                    while (!(start.x == end.x &amp;&amp; start.y == end.y))<a name="line.499"></a>
+<span class="sourceLineNo">500</span>                    {<a name="line.500"></a>
+<span class="sourceLineNo">501</span>                        markPiercing(start);<a name="line.501"></a>
+<span class="sourceLineNo">502</span>                        markEnvironmentCorridor(start.x, start.y);<a name="line.502"></a>
+<span class="sourceLineNo">503</span>                        start = start.translate(dir);<a name="line.503"></a>
+<span class="sourceLineNo">504</span>                    }<a name="line.504"></a>
+<span class="sourceLineNo">505</span>                    break;<a name="line.505"></a>
+<span class="sourceLineNo">506</span>            }<a name="line.506"></a>
+<span class="sourceLineNo">507</span>            store();<a name="line.507"></a>
+<span class="sourceLineNo">508</span>        }<a name="line.508"></a>
+<span class="sourceLineNo">509</span>        for (int x = 0; x &lt; width; x++) {<a name="line.509"></a>
+<span class="sourceLineNo">510</span>            for (int y = 0; y &lt; height; y++) {<a name="line.510"></a>
+<span class="sourceLineNo">511</span>                if(fixedRooms[x][y])<a name="line.511"></a>
+<span class="sourceLineNo">512</span>                    markPiercingRoom(x, y);<a name="line.512"></a>
+<span class="sourceLineNo">513</span>            }<a name="line.513"></a>
+<span class="sourceLineNo">514</span>        }<a name="line.514"></a>
+<span class="sourceLineNo">515</span>        store();<a name="line.515"></a>
+<span class="sourceLineNo">516</span>        markEnvironmentWalls();<a name="line.516"></a>
+<span class="sourceLineNo">517</span>        generated = true;<a name="line.517"></a>
+<span class="sourceLineNo">518</span>        return dungeon;<a name="line.518"></a>
+<span class="sourceLineNo">519</span>    }<a name="line.519"></a>
+<span class="sourceLineNo">520</span><a name="line.520"></a>
+<span class="sourceLineNo">521</span>    public int[][] getEnvironment()<a name="line.521"></a>
+<span class="sourceLineNo">522</span>    {<a name="line.522"></a>
+<span class="sourceLineNo">523</span>        return environment;<a name="line.523"></a>
+<span class="sourceLineNo">524</span>    }<a name="line.524"></a>
 <span class="sourceLineNo">525</span><a name="line.525"></a>
-<span class="sourceLineNo">526</span>                        for (int y = Math.max(0, j - 1); y &lt;= Math.min(height - 1, j + 1); y++) {<a name="line.526"></a>
-<span class="sourceLineNo">527</span>                            if (environment[x][y] == ROOM_FLOOR) {<a name="line.527"></a>
-<span class="sourceLineNo">528</span>                                markEnvironment(i, j, ROOM_WALL);<a name="line.528"></a>
-<span class="sourceLineNo">529</span>                            }<a name="line.529"></a>
-<span class="sourceLineNo">530</span>                        }<a name="line.530"></a>
-<span class="sourceLineNo">531</span>                    }<a name="line.531"></a>
-<span class="sourceLineNo">532</span><a name="line.532"></a>
-<span class="sourceLineNo">533</span>                }<a name="line.533"></a>
-<span class="sourceLineNo">534</span>            }<a name="line.534"></a>
-<span class="sourceLineNo">535</span>        }<a name="line.535"></a>
-<span class="sourceLineNo">536</span>    }<a name="line.536"></a>
-<span class="sourceLineNo">537</span><a name="line.537"></a>
-<span class="sourceLineNo">538</span>    /**<a name="line.538"></a>
-<span class="sourceLineNo">539</span>     * Internal use. Marks a point to be made into floor.<a name="line.539"></a>
-<span class="sourceLineNo">540</span>     * @param x x position to mark<a name="line.540"></a>
-<span class="sourceLineNo">541</span>     * @param y y position to mark<a name="line.541"></a>
-<span class="sourceLineNo">542</span>     * @return false if everything is normal, true if and only if this failed to mark because the position is walled<a name="line.542"></a>
-<span class="sourceLineNo">543</span>     */<a name="line.543"></a>
-<span class="sourceLineNo">544</span>    protected boolean mark(int x, int y) {<a name="line.544"></a>
-<span class="sourceLineNo">545</span>        if (x &gt; 0 &amp;&amp; x &lt; width - 1 &amp;&amp; y &gt; 0 &amp;&amp; y &lt; height - 1 &amp;&amp; !walled[x][y]) {<a name="line.545"></a>
-<span class="sourceLineNo">546</span>            marked[x][y] = true;<a name="line.546"></a>
-<span class="sourceLineNo">547</span>            return false;<a name="line.547"></a>
-<span class="sourceLineNo">548</span>        }<a name="line.548"></a>
-<span class="sourceLineNo">549</span>        else return x &gt; 0 &amp;&amp; x &lt; width - 1 &amp;&amp; y &gt; 0 &amp;&amp; y &lt; height - 1 &amp;&amp; walled[x][y];<a name="line.549"></a>
-<span class="sourceLineNo">550</span>    }<a name="line.550"></a>
-<span class="sourceLineNo">551</span><a name="line.551"></a>
-<span class="sourceLineNo">552</span>    /**<a name="line.552"></a>
-<span class="sourceLineNo">553</span>     * Internal use. Marks a point to be made into floor.<a name="line.553"></a>
-<span class="sourceLineNo">554</span>     * @param x x position to mark<a name="line.554"></a>
-<span class="sourceLineNo">555</span>     * @param y y position to mark<a name="line.555"></a>
-<span class="sourceLineNo">556</span>     */<a name="line.556"></a>
-<span class="sourceLineNo">557</span>    protected void markPiercing(int x, int y) {<a name="line.557"></a>
-<span class="sourceLineNo">558</span>        if (x &gt; 0 &amp;&amp; x &lt; width - 1 &amp;&amp; y &gt; 0 &amp;&amp; y &lt; height - 1) {<a name="line.558"></a>
-<span class="sourceLineNo">559</span>            marked[x][y] = true;<a name="line.559"></a>
-<span class="sourceLineNo">560</span>        }<a name="line.560"></a>
-<span class="sourceLineNo">561</span>    }<a name="line.561"></a>
-<span class="sourceLineNo">562</span>    /**<a name="line.562"></a>
-<span class="sourceLineNo">563</span>     * Internal use. Marks a point's environment type as the appropriate kind of environment.<a name="line.563"></a>
-<span class="sourceLineNo">564</span>     * @param x x position to mark<a name="line.564"></a>
-<span class="sourceLineNo">565</span>     * @param y y position to mark<a name="line.565"></a>
-<span class="sourceLineNo">566</span>     * @param kind an int that should be one of the constants in MixedGenerator for environment types.<a name="line.566"></a>
-<span class="sourceLineNo">567</span>     */<a name="line.567"></a>
-<span class="sourceLineNo">568</span>    protected void markEnvironment(int x, int y, int kind) {<a name="line.568"></a>
-<span class="sourceLineNo">569</span>        environment[x][y] = kind;<a name="line.569"></a>
-<span class="sourceLineNo">570</span>    }<a name="line.570"></a>
-<span class="sourceLineNo">571</span><a name="line.571"></a>
-<span class="sourceLineNo">572</span>    /**<a name="line.572"></a>
-<span class="sourceLineNo">573</span>     * Internal use. Marks a point's environment type as a corridor floor.<a name="line.573"></a>
-<span class="sourceLineNo">574</span>     * @param x x position to mark<a name="line.574"></a>
-<span class="sourceLineNo">575</span>     * @param y y position to mark<a name="line.575"></a>
-<span class="sourceLineNo">576</span>     */<a name="line.576"></a>
-<span class="sourceLineNo">577</span>    protected void markEnvironmentCorridor(int x, int y) {<a name="line.577"></a>
-<span class="sourceLineNo">578</span>        if (x &gt; 0 &amp;&amp; x &lt; width - 1 &amp;&amp; y &gt; 0 &amp;&amp; y &lt; height - 1 &amp;&amp; environment[x][y] != ROOM_FLOOR &amp;&amp; environment[x][y] != CAVE_FLOOR) {<a name="line.578"></a>
-<span class="sourceLineNo">579</span>            markEnvironment(x, y, CORRIDOR_FLOOR);<a name="line.579"></a>
-<span class="sourceLineNo">580</span>        }<a name="line.580"></a>
-<span class="sourceLineNo">581</span>    }<a name="line.581"></a>
+<span class="sourceLineNo">526</span>    public boolean hasGenerated()<a name="line.526"></a>
+<span class="sourceLineNo">527</span>    {<a name="line.527"></a>
+<span class="sourceLineNo">528</span>        return generated;<a name="line.528"></a>
+<span class="sourceLineNo">529</span>    }<a name="line.529"></a>
+<span class="sourceLineNo">530</span><a name="line.530"></a>
+<span class="sourceLineNo">531</span>    public boolean[][] getFixedRooms() {<a name="line.531"></a>
+<span class="sourceLineNo">532</span>        return fixedRooms;<a name="line.532"></a>
+<span class="sourceLineNo">533</span>    }<a name="line.533"></a>
+<span class="sourceLineNo">534</span><a name="line.534"></a>
+<span class="sourceLineNo">535</span>    public void setFixedRooms(boolean[][] fixedRooms) {<a name="line.535"></a>
+<span class="sourceLineNo">536</span>        this.fixedRooms = fixedRooms;<a name="line.536"></a>
+<span class="sourceLineNo">537</span>    }<a name="line.537"></a>
+<span class="sourceLineNo">538</span><a name="line.538"></a>
+<span class="sourceLineNo">539</span>    /**<a name="line.539"></a>
+<span class="sourceLineNo">540</span>     * Internal use. Takes cells that have been previously marked and permanently stores them as floors in the dungeon.<a name="line.540"></a>
+<span class="sourceLineNo">541</span>     */<a name="line.541"></a>
+<span class="sourceLineNo">542</span>    protected void store()<a name="line.542"></a>
+<span class="sourceLineNo">543</span>    {<a name="line.543"></a>
+<span class="sourceLineNo">544</span>        for (int i = 0; i &lt; width; i++) {<a name="line.544"></a>
+<span class="sourceLineNo">545</span>            for (int j = 0; j &lt; height; j++) {<a name="line.545"></a>
+<span class="sourceLineNo">546</span>                if(marked[i][j])<a name="line.546"></a>
+<span class="sourceLineNo">547</span>                {<a name="line.547"></a>
+<span class="sourceLineNo">548</span>                    dungeon[i][j] = '.';<a name="line.548"></a>
+<span class="sourceLineNo">549</span>                    marked[i][j] = false;<a name="line.549"></a>
+<span class="sourceLineNo">550</span>                }<a name="line.550"></a>
+<span class="sourceLineNo">551</span>            }<a name="line.551"></a>
+<span class="sourceLineNo">552</span>        }<a name="line.552"></a>
+<span class="sourceLineNo">553</span>    }<a name="line.553"></a>
+<span class="sourceLineNo">554</span><a name="line.554"></a>
+<span class="sourceLineNo">555</span>    /**<a name="line.555"></a>
+<span class="sourceLineNo">556</span>     * Internal use. Finds all floor cells by environment and marks untouched adjacent (8-way) cells as walls, using the<a name="line.556"></a>
+<span class="sourceLineNo">557</span>     * appropriate type for the nearby floor.<a name="line.557"></a>
+<span class="sourceLineNo">558</span>     */<a name="line.558"></a>
+<span class="sourceLineNo">559</span>    protected void markEnvironmentWalls()<a name="line.559"></a>
+<span class="sourceLineNo">560</span>    {<a name="line.560"></a>
+<span class="sourceLineNo">561</span>        for (int i = 0; i &lt; width; i++) {<a name="line.561"></a>
+<span class="sourceLineNo">562</span>            for (int j = 0; j &lt; height; j++) {<a name="line.562"></a>
+<span class="sourceLineNo">563</span>                if(environment[i][j] == UNTOUCHED)<a name="line.563"></a>
+<span class="sourceLineNo">564</span>                {<a name="line.564"></a>
+<span class="sourceLineNo">565</span>                    boolean allWalls = true;<a name="line.565"></a>
+<span class="sourceLineNo">566</span>                    //lowest precedence, also checks for any floors<a name="line.566"></a>
+<span class="sourceLineNo">567</span>                    for (int x = Math.max(0, i - 1); x &lt;= Math.min(width - 1, i + 1); x++) {<a name="line.567"></a>
+<span class="sourceLineNo">568</span><a name="line.568"></a>
+<span class="sourceLineNo">569</span>                        for (int y = Math.max(0, j - 1); y &lt;= Math.min(height - 1, j + 1); y++) {<a name="line.569"></a>
+<span class="sourceLineNo">570</span>                            if (environment[x][y] == CORRIDOR_FLOOR) {<a name="line.570"></a>
+<span class="sourceLineNo">571</span>                                markEnvironment(i, j, CORRIDOR_WALL);<a name="line.571"></a>
+<span class="sourceLineNo">572</span>                            }<a name="line.572"></a>
+<span class="sourceLineNo">573</span>                            if(dungeon[x][y] == '.')<a name="line.573"></a>
+<span class="sourceLineNo">574</span>                                allWalls = false;<a name="line.574"></a>
+<span class="sourceLineNo">575</span>                        }<a name="line.575"></a>
+<span class="sourceLineNo">576</span>                    }<a name="line.576"></a>
+<span class="sourceLineNo">577</span>                    //if there are no floors we don't need to check twice again.<a name="line.577"></a>
+<span class="sourceLineNo">578</span>                    if(allWalls)<a name="line.578"></a>
+<span class="sourceLineNo">579</span>                        continue;<a name="line.579"></a>
+<span class="sourceLineNo">580</span>                    //more precedence<a name="line.580"></a>
+<span class="sourceLineNo">581</span>                    for (int x = Math.max(0, i - 1); x &lt;= Math.min(width - 1, i + 1); x++) {<a name="line.581"></a>
 <span class="sourceLineNo">582</span><a name="line.582"></a>
-<span class="sourceLineNo">583</span>    /**<a name="line.583"></a>
-<span class="sourceLineNo">584</span>     * Internal use. Marks a point's environment type as a room floor.<a name="line.584"></a>
-<span class="sourceLineNo">585</span>     * @param x x position to mark<a name="line.585"></a>
-<span class="sourceLineNo">586</span>     * @param y y position to mark<a name="line.586"></a>
-<span class="sourceLineNo">587</span>     */<a name="line.587"></a>
-<span class="sourceLineNo">588</span>    protected void markEnvironmentRoom(int x, int y) {<a name="line.588"></a>
-<span class="sourceLineNo">589</span>        if (x &gt; 0 &amp;&amp; x &lt; width - 1 &amp;&amp; y &gt; 0 &amp;&amp; y &lt; height - 1) {<a name="line.589"></a>
-<span class="sourceLineNo">590</span>            markEnvironment(x, y, ROOM_FLOOR);<a name="line.590"></a>
-<span class="sourceLineNo">591</span>        }<a name="line.591"></a>
-<span class="sourceLineNo">592</span>    }<a name="line.592"></a>
-<span class="sourceLineNo">593</span><a name="line.593"></a>
-<span class="sourceLineNo">594</span>    /**<a name="line.594"></a>
-<span class="sourceLineNo">595</span>     * Internal use. Marks a point's environment type as a cave floor.<a name="line.595"></a>
-<span class="sourceLineNo">596</span>     * @param x x position to mark<a name="line.596"></a>
-<span class="sourceLineNo">597</span>     * @param y y position to mark<a name="line.597"></a>
-<span class="sourceLineNo">598</span>     */<a name="line.598"></a>
-<span class="sourceLineNo">599</span>    protected void markEnvironmentCave(int x, int y) {<a name="line.599"></a>
-<span class="sourceLineNo">600</span>        if (x &gt; 0 &amp;&amp; x &lt; width - 1 &amp;&amp; y &gt; 0 &amp;&amp; y &lt; height - 1 &amp;&amp; environment[x][y] != ROOM_FLOOR) {<a name="line.600"></a>
-<span class="sourceLineNo">601</span>            markEnvironment(x, y, CAVE_FLOOR);<a name="line.601"></a>
-<span class="sourceLineNo">602</span>        }<a name="line.602"></a>
-<span class="sourceLineNo">603</span>    }<a name="line.603"></a>
+<span class="sourceLineNo">583</span>                        for (int y = Math.max(0, j - 1); y &lt;= Math.min(height - 1, j + 1); y++) {<a name="line.583"></a>
+<span class="sourceLineNo">584</span>                            if (environment[x][y] == CAVE_FLOOR) {<a name="line.584"></a>
+<span class="sourceLineNo">585</span>                                markEnvironment(i, j, CAVE_WALL);<a name="line.585"></a>
+<span class="sourceLineNo">586</span>                            }<a name="line.586"></a>
+<span class="sourceLineNo">587</span>                        }<a name="line.587"></a>
+<span class="sourceLineNo">588</span>                    }<a name="line.588"></a>
+<span class="sourceLineNo">589</span>                    //highest precedence<a name="line.589"></a>
+<span class="sourceLineNo">590</span>                    for (int x = Math.max(0, i - 1); x &lt;= Math.min(width - 1, i + 1); x++) {<a name="line.590"></a>
+<span class="sourceLineNo">591</span><a name="line.591"></a>
+<span class="sourceLineNo">592</span>                        for (int y = Math.max(0, j - 1); y &lt;= Math.min(height - 1, j + 1); y++) {<a name="line.592"></a>
+<span class="sourceLineNo">593</span>                            if (environment[x][y] == ROOM_FLOOR) {<a name="line.593"></a>
+<span class="sourceLineNo">594</span>                                markEnvironment(i, j, ROOM_WALL);<a name="line.594"></a>
+<span class="sourceLineNo">595</span>                            }<a name="line.595"></a>
+<span class="sourceLineNo">596</span>                        }<a name="line.596"></a>
+<span class="sourceLineNo">597</span>                    }<a name="line.597"></a>
+<span class="sourceLineNo">598</span><a name="line.598"></a>
+<span class="sourceLineNo">599</span>                }<a name="line.599"></a>
+<span class="sourceLineNo">600</span>            }<a name="line.600"></a>
+<span class="sourceLineNo">601</span>        }<a name="line.601"></a>
+<span class="sourceLineNo">602</span>    }<a name="line.602"></a>
+<span class="sourceLineNo">603</span><a name="line.603"></a>
 <span class="sourceLineNo">604</span>    /**<a name="line.604"></a>
 <span class="sourceLineNo">605</span>     * Internal use. Marks a point to be made into floor.<a name="line.605"></a>
 <span class="sourceLineNo">606</span>     * @param x x position to mark<a name="line.606"></a>
 <span class="sourceLineNo">607</span>     * @param y y position to mark<a name="line.607"></a>
-<span class="sourceLineNo">608</span>     */<a name="line.608"></a>
-<span class="sourceLineNo">609</span>    protected void wallOff(int x, int y) {<a name="line.609"></a>
-<span class="sourceLineNo">610</span>        if (x &gt; 0 &amp;&amp; x &lt; width - 1 &amp;&amp; y &gt; 0 &amp;&amp; y &lt; height - 1) {<a name="line.610"></a>
-<span class="sourceLineNo">611</span>            walled[x][y] = true;<a name="line.611"></a>
-<span class="sourceLineNo">612</span>        }<a name="line.612"></a>
-<span class="sourceLineNo">613</span>    }<a name="line.613"></a>
-<span class="sourceLineNo">614</span><a name="line.614"></a>
-<span class="sourceLineNo">615</span>    /**<a name="line.615"></a>
-<span class="sourceLineNo">616</span>     * Internal use. Marks a point to be made into floor.<a name="line.616"></a>
-<span class="sourceLineNo">617</span>     * @param pos position to mark<a name="line.617"></a>
-<span class="sourceLineNo">618</span>     * @return false if everything is normal, true if and only if this failed to mark because the position is walled<a name="line.618"></a>
-<span class="sourceLineNo">619</span>     */<a name="line.619"></a>
-<span class="sourceLineNo">620</span>    protected boolean mark(Coord pos)<a name="line.620"></a>
-<span class="sourceLineNo">621</span>    {<a name="line.621"></a>
-<span class="sourceLineNo">622</span>        return mark(pos.x, pos.y);<a name="line.622"></a>
-<span class="sourceLineNo">623</span>    }<a name="line.623"></a>
-<span class="sourceLineNo">624</span><a name="line.624"></a>
-<span class="sourceLineNo">625</span>    /**<a name="line.625"></a>
-<span class="sourceLineNo">626</span>     * Internal use. Marks a point to be made into floor, piercing walls.<a name="line.626"></a>
-<span class="sourceLineNo">627</span>     * @param pos position to mark<a name="line.627"></a>
-<span class="sourceLineNo">628</span>     */<a name="line.628"></a>
-<span class="sourceLineNo">629</span>    protected void markPiercing(Coord pos)<a name="line.629"></a>
-<span class="sourceLineNo">630</span>    {<a name="line.630"></a>
-<span class="sourceLineNo">631</span>        markPiercing(pos.x, pos.y);<a name="line.631"></a>
-<span class="sourceLineNo">632</span>    }<a name="line.632"></a>
-<span class="sourceLineNo">633</span>    /**<a name="line.633"></a>
-<span class="sourceLineNo">634</span>     * Internal use. Marks a point to be made into floor, piercing walls, and also marks the point as a cave floor.<a name="line.634"></a>
-<span class="sourceLineNo">635</span>     * @param pos position to mark<a name="line.635"></a>
-<span class="sourceLineNo">636</span>     */<a name="line.636"></a>
-<span class="sourceLineNo">637</span>    protected void markPiercingCave(Coord pos)<a name="line.637"></a>
-<span class="sourceLineNo">638</span>    {<a name="line.638"></a>
-<span class="sourceLineNo">639</span>        markPiercing(pos.x, pos.y);<a name="line.639"></a>
-<span class="sourceLineNo">640</span>        markEnvironmentCave(pos.x, pos.y);<a name="line.640"></a>
-<span class="sourceLineNo">641</span>    }<a name="line.641"></a>
-<span class="sourceLineNo">642</span>    /**<a name="line.642"></a>
-<span class="sourceLineNo">643</span>     * Internal use. Marks a point to be made into floor, piercing walls, and also marks the point as a room floor.<a name="line.643"></a>
-<span class="sourceLineNo">644</span>     * @param x x coordinate of position to mark<a name="line.644"></a>
-<span class="sourceLineNo">645</span>     * @param y y coordinate of position to mark<a name="line.645"></a>
-<span class="sourceLineNo">646</span>     */<a name="line.646"></a>
-<span class="sourceLineNo">647</span>    protected void markPiercingRoom(int x, int y)<a name="line.647"></a>
-<span class="sourceLineNo">648</span>    {<a name="line.648"></a>
-<span class="sourceLineNo">649</span>        markPiercing(x, y);<a name="line.649"></a>
-<span class="sourceLineNo">650</span>        markEnvironmentCave(x, y);<a name="line.650"></a>
-<span class="sourceLineNo">651</span>    }<a name="line.651"></a>
-<span class="sourceLineNo">652</span><a name="line.652"></a>
-<span class="sourceLineNo">653</span>    /**<a name="line.653"></a>
-<span class="sourceLineNo">654</span>     * Internal use. Marks a point and the four cells orthogonally adjacent to it.<a name="line.654"></a>
-<span class="sourceLineNo">655</span>     * @param pos center position to mark<a name="line.655"></a>
-<span class="sourceLineNo">656</span>     * @return null if the center of the plus shape wasn't blocked by wall, otherwise the Coord of the center<a name="line.656"></a>
-<span class="sourceLineNo">657</span>     */<a name="line.657"></a>
-<span class="sourceLineNo">658</span>    private Coord markPlus(Coord pos) {<a name="line.658"></a>
-<span class="sourceLineNo">659</span>        Coord block = null;<a name="line.659"></a>
-<span class="sourceLineNo">660</span>        if (mark(pos.x, pos.y))<a name="line.660"></a>
-<span class="sourceLineNo">661</span>            block = pos;<a name="line.661"></a>
-<span class="sourceLineNo">662</span>        mark(pos.x + 1, pos.y);<a name="line.662"></a>
-<span class="sourceLineNo">663</span>        mark(pos.x - 1, pos.y);<a name="line.663"></a>
-<span class="sourceLineNo">664</span>        mark(pos.x, pos.y + 1);<a name="line.664"></a>
-<span class="sourceLineNo">665</span>        mark(pos.x, pos.y - 1);<a name="line.665"></a>
-<span class="sourceLineNo">666</span>        return block;<a name="line.666"></a>
-<span class="sourceLineNo">667</span>    }<a name="line.667"></a>
-<span class="sourceLineNo">668</span><a name="line.668"></a>
-<span class="sourceLineNo">669</span>    /**<a name="line.669"></a>
-<span class="sourceLineNo">670</span>     * Internal use. Marks a point and the four cells orthogonally adjacent to it, and also marks any cells that weren't<a name="line.670"></a>
-<span class="sourceLineNo">671</span>     * blocked as cave floors.<a name="line.671"></a>
-<span class="sourceLineNo">672</span>     * @param pos center position to mark<a name="line.672"></a>
-<span class="sourceLineNo">673</span>     * @return null if the center of the plus shape wasn't blocked by wall, otherwise the Coord of the center<a name="line.673"></a>
+<span class="sourceLineNo">608</span>     * @return false if everything is normal, true if and only if this failed to mark because the position is walled<a name="line.608"></a>
+<span class="sourceLineNo">609</span>     */<a name="line.609"></a>
+<span class="sourceLineNo">610</span>    protected boolean mark(int x, int y) {<a name="line.610"></a>
+<span class="sourceLineNo">611</span>        if (x &gt; 0 &amp;&amp; x &lt; width - 1 &amp;&amp; y &gt; 0 &amp;&amp; y &lt; height - 1 &amp;&amp; !walled[x][y]) {<a name="line.611"></a>
+<span class="sourceLineNo">612</span>            marked[x][y] = true;<a name="line.612"></a>
+<span class="sourceLineNo">613</span>            return false;<a name="line.613"></a>
+<span class="sourceLineNo">614</span>        }<a name="line.614"></a>
+<span class="sourceLineNo">615</span>        else return x &gt; 0 &amp;&amp; x &lt; width - 1 &amp;&amp; y &gt; 0 &amp;&amp; y &lt; height - 1 &amp;&amp; walled[x][y];<a name="line.615"></a>
+<span class="sourceLineNo">616</span>    }<a name="line.616"></a>
+<span class="sourceLineNo">617</span><a name="line.617"></a>
+<span class="sourceLineNo">618</span>    /**<a name="line.618"></a>
+<span class="sourceLineNo">619</span>     * Internal use. Marks a point to be made into floor.<a name="line.619"></a>
+<span class="sourceLineNo">620</span>     * @param x x position to mark<a name="line.620"></a>
+<span class="sourceLineNo">621</span>     * @param y y position to mark<a name="line.621"></a>
+<span class="sourceLineNo">622</span>     */<a name="line.622"></a>
+<span class="sourceLineNo">623</span>    protected void markPiercing(int x, int y) {<a name="line.623"></a>
+<span class="sourceLineNo">624</span>        if (x &gt; 0 &amp;&amp; x &lt; width - 1 &amp;&amp; y &gt; 0 &amp;&amp; y &lt; height - 1) {<a name="line.624"></a>
+<span class="sourceLineNo">625</span>            marked[x][y] = true;<a name="line.625"></a>
+<span class="sourceLineNo">626</span>        }<a name="line.626"></a>
+<span class="sourceLineNo">627</span>    }<a name="line.627"></a>
+<span class="sourceLineNo">628</span>    /**<a name="line.628"></a>
+<span class="sourceLineNo">629</span>     * Internal use. Marks a point's environment type as the appropriate kind of environment.<a name="line.629"></a>
+<span class="sourceLineNo">630</span>     * @param x x position to mark<a name="line.630"></a>
+<span class="sourceLineNo">631</span>     * @param y y position to mark<a name="line.631"></a>
+<span class="sourceLineNo">632</span>     * @param kind an int that should be one of the constants in MixedGenerator for environment types.<a name="line.632"></a>
+<span class="sourceLineNo">633</span>     */<a name="line.633"></a>
+<span class="sourceLineNo">634</span>    protected void markEnvironment(int x, int y, int kind) {<a name="line.634"></a>
+<span class="sourceLineNo">635</span>        environment[x][y] = kind;<a name="line.635"></a>
+<span class="sourceLineNo">636</span>    }<a name="line.636"></a>
+<span class="sourceLineNo">637</span><a name="line.637"></a>
+<span class="sourceLineNo">638</span>    /**<a name="line.638"></a>
+<span class="sourceLineNo">639</span>     * Internal use. Marks a point's environment type as a corridor floor.<a name="line.639"></a>
+<span class="sourceLineNo">640</span>     * @param x x position to mark<a name="line.640"></a>
+<span class="sourceLineNo">641</span>     * @param y y position to mark<a name="line.641"></a>
+<span class="sourceLineNo">642</span>     */<a name="line.642"></a>
+<span class="sourceLineNo">643</span>    protected void markEnvironmentCorridor(int x, int y) {<a name="line.643"></a>
+<span class="sourceLineNo">644</span>        if (x &gt; 0 &amp;&amp; x &lt; width - 1 &amp;&amp; y &gt; 0 &amp;&amp; y &lt; height - 1 &amp;&amp; environment[x][y] != ROOM_FLOOR &amp;&amp; environment[x][y] != CAVE_FLOOR) {<a name="line.644"></a>
+<span class="sourceLineNo">645</span>            markEnvironment(x, y, CORRIDOR_FLOOR);<a name="line.645"></a>
+<span class="sourceLineNo">646</span>        }<a name="line.646"></a>
+<span class="sourceLineNo">647</span>    }<a name="line.647"></a>
+<span class="sourceLineNo">648</span><a name="line.648"></a>
+<span class="sourceLineNo">649</span>    /**<a name="line.649"></a>
+<span class="sourceLineNo">650</span>     * Internal use. Marks a point's environment type as a room floor.<a name="line.650"></a>
+<span class="sourceLineNo">651</span>     * @param x x position to mark<a name="line.651"></a>
+<span class="sourceLineNo">652</span>     * @param y y position to mark<a name="line.652"></a>
+<span class="sourceLineNo">653</span>     */<a name="line.653"></a>
+<span class="sourceLineNo">654</span>    protected void markEnvironmentRoom(int x, int y) {<a name="line.654"></a>
+<span class="sourceLineNo">655</span>        if (x &gt; 0 &amp;&amp; x &lt; width - 1 &amp;&amp; y &gt; 0 &amp;&amp; y &lt; height - 1) {<a name="line.655"></a>
+<span class="sourceLineNo">656</span>            markEnvironment(x, y, ROOM_FLOOR);<a name="line.656"></a>
+<span class="sourceLineNo">657</span>        }<a name="line.657"></a>
+<span class="sourceLineNo">658</span>    }<a name="line.658"></a>
+<span class="sourceLineNo">659</span><a name="line.659"></a>
+<span class="sourceLineNo">660</span>    /**<a name="line.660"></a>
+<span class="sourceLineNo">661</span>     * Internal use. Marks a point's environment type as a cave floor.<a name="line.661"></a>
+<span class="sourceLineNo">662</span>     * @param x x position to mark<a name="line.662"></a>
+<span class="sourceLineNo">663</span>     * @param y y position to mark<a name="line.663"></a>
+<span class="sourceLineNo">664</span>     */<a name="line.664"></a>
+<span class="sourceLineNo">665</span>    protected void markEnvironmentCave(int x, int y) {<a name="line.665"></a>
+<span class="sourceLineNo">666</span>        if (x &gt; 0 &amp;&amp; x &lt; width - 1 &amp;&amp; y &gt; 0 &amp;&amp; y &lt; height - 1 &amp;&amp; environment[x][y] != ROOM_FLOOR) {<a name="line.666"></a>
+<span class="sourceLineNo">667</span>            markEnvironment(x, y, CAVE_FLOOR);<a name="line.667"></a>
+<span class="sourceLineNo">668</span>        }<a name="line.668"></a>
+<span class="sourceLineNo">669</span>    }<a name="line.669"></a>
+<span class="sourceLineNo">670</span>    /**<a name="line.670"></a>
+<span class="sourceLineNo">671</span>     * Internal use. Marks a point to be made into floor.<a name="line.671"></a>
+<span class="sourceLineNo">672</span>     * @param x x position to mark<a name="line.672"></a>
+<span class="sourceLineNo">673</span>     * @param y y position to mark<a name="line.673"></a>
 <span class="sourceLineNo">674</span>     */<a name="line.674"></a>
-<span class="sourceLineNo">675</span>    private Coord markPlusCave(Coord pos) {<a name="line.675"></a>
-<span class="sourceLineNo">676</span>        Coord block = null;<a name="line.676"></a>
-<span class="sourceLineNo">677</span>        if (mark(pos.x, pos.y))<a name="line.677"></a>
-<span class="sourceLineNo">678</span>            block = pos;<a name="line.678"></a>
-<span class="sourceLineNo">679</span>        else<a name="line.679"></a>
-<span class="sourceLineNo">680</span>            markEnvironmentCave(pos.x, pos.y);<a name="line.680"></a>
-<span class="sourceLineNo">681</span>        if(!mark(pos.x + 1, pos.y))<a name="line.681"></a>
-<span class="sourceLineNo">682</span>            markEnvironmentCave(pos.x + 1, pos.y);<a name="line.682"></a>
-<span class="sourceLineNo">683</span>        if(!mark(pos.x - 1, pos.y))<a name="line.683"></a>
-<span class="sourceLineNo">684</span>            markEnvironmentCave(pos.x - 1, pos.y);<a name="line.684"></a>
-<span class="sourceLineNo">685</span>        if(!mark(pos.x, pos.y + 1))<a name="line.685"></a>
-<span class="sourceLineNo">686</span>            markEnvironmentCave(pos.x, pos.y + 1);<a name="line.686"></a>
-<span class="sourceLineNo">687</span>        if(!mark(pos.x, pos.y - 1))<a name="line.687"></a>
-<span class="sourceLineNo">688</span>            markEnvironmentCave(pos.x, pos.y - 1);<a name="line.688"></a>
-<span class="sourceLineNo">689</span>        return block;<a name="line.689"></a>
-<span class="sourceLineNo">690</span>    }<a name="line.690"></a>
+<span class="sourceLineNo">675</span>    protected void wallOff(int x, int y) {<a name="line.675"></a>
+<span class="sourceLineNo">676</span>        if (x &gt; 0 &amp;&amp; x &lt; width - 1 &amp;&amp; y &gt; 0 &amp;&amp; y &lt; height - 1) {<a name="line.676"></a>
+<span class="sourceLineNo">677</span>            walled[x][y] = true;<a name="line.677"></a>
+<span class="sourceLineNo">678</span>        }<a name="line.678"></a>
+<span class="sourceLineNo">679</span>    }<a name="line.679"></a>
+<span class="sourceLineNo">680</span><a name="line.680"></a>
+<span class="sourceLineNo">681</span>    /**<a name="line.681"></a>
+<span class="sourceLineNo">682</span>     * Internal use. Marks a point to be made into floor.<a name="line.682"></a>
+<span class="sourceLineNo">683</span>     * @param pos position to mark<a name="line.683"></a>
+<span class="sourceLineNo">684</span>     * @return false if everything is normal, true if and only if this failed to mark because the position is walled<a name="line.684"></a>
+<span class="sourceLineNo">685</span>     */<a name="line.685"></a>
+<span class="sourceLineNo">686</span>    protected boolean mark(Coord pos)<a name="line.686"></a>
+<span class="sourceLineNo">687</span>    {<a name="line.687"></a>
+<span class="sourceLineNo">688</span>        return mark(pos.x, pos.y);<a name="line.688"></a>
+<span class="sourceLineNo">689</span>    }<a name="line.689"></a>
+<span class="sourceLineNo">690</span><a name="line.690"></a>
 <span class="sourceLineNo">691</span>    /**<a name="line.691"></a>
-<span class="sourceLineNo">692</span>     * Internal use. Marks a rectangle of points centered on pos, extending halfWidth in both x directions and<a name="line.692"></a>
-<span class="sourceLineNo">693</span>     * halfHeight in both vertical directions. Marks all cells in the rectangle as room floors.<a name="line.693"></a>
-<span class="sourceLineNo">694</span>     * @param pos center position to mark<a name="line.694"></a>
-<span class="sourceLineNo">695</span>     * @param halfWidth the distance from the center to extend horizontally<a name="line.695"></a>
-<span class="sourceLineNo">696</span>     * @param halfHeight the distance from the center to extend vertically<a name="line.696"></a>
-<span class="sourceLineNo">697</span>     * @return null if no points in the rectangle were blocked by walls, otherwise a Coord blocked by a wall<a name="line.697"></a>
-<span class="sourceLineNo">698</span>     */<a name="line.698"></a>
-<span class="sourceLineNo">699</span>    private Coord markRectangle(Coord pos, int halfWidth, int halfHeight)<a name="line.699"></a>
-<span class="sourceLineNo">700</span>    {<a name="line.700"></a>
-<span class="sourceLineNo">701</span>        halfWidth = Math.max(1, Math.round(halfWidth * roomWidth));<a name="line.701"></a>
-<span class="sourceLineNo">702</span>        halfHeight = Math.max(1, Math.round(halfHeight * roomHeight));<a name="line.702"></a>
-<span class="sourceLineNo">703</span>        Coord block = null;<a name="line.703"></a>
-<span class="sourceLineNo">704</span>        for (int i = pos.x - halfWidth; i &lt;= pos.x + halfWidth; i++) {<a name="line.704"></a>
-<span class="sourceLineNo">705</span>            for (int j = pos.y - halfHeight; j &lt;= pos.y + halfHeight; j++) {<a name="line.705"></a>
-<span class="sourceLineNo">706</span>                if(mark(i, j))<a name="line.706"></a>
-<span class="sourceLineNo">707</span>                    block = Coord.get(i, j);<a name="line.707"></a>
-<span class="sourceLineNo">708</span>                else<a name="line.708"></a>
-<span class="sourceLineNo">709</span>                    markEnvironmentRoom(i, j);<a name="line.709"></a>
-<span class="sourceLineNo">710</span>            }<a name="line.710"></a>
-<span class="sourceLineNo">711</span>        }<a name="line.711"></a>
-<span class="sourceLineNo">712</span>        return block;<a name="line.712"></a>
-<span class="sourceLineNo">713</span>    }<a name="line.713"></a>
-<span class="sourceLineNo">714</span>    /**<a name="line.714"></a>
-<span class="sourceLineNo">715</span>     * Internal use. Marks a rectangle of points centered on pos, extending halfWidth in both x directions and<a name="line.715"></a>
-<span class="sourceLineNo">716</span>     * halfHeight in both vertical directions. Also considers the area just beyond each wall, but not corners, to be<a name="line.716"></a>
-<span class="sourceLineNo">717</span>     * a blocking wall that can only be passed by corridors and small cave openings. Marks all cells in the rectangle as<a name="line.717"></a>
-<span class="sourceLineNo">718</span>     * room floors.<a name="line.718"></a>
-<span class="sourceLineNo">719</span>     * @param pos center position to mark<a name="line.719"></a>
-<span class="sourceLineNo">720</span>     * @param halfWidth the distance from the center to extend horizontally<a name="line.720"></a>
-<span class="sourceLineNo">721</span>     * @param halfHeight the distance from the center to extend vertically<a name="line.721"></a>
-<span class="sourceLineNo">722</span>     * @return null if no points in the rectangle were blocked by walls, otherwise a Coord blocked by a wall<a name="line.722"></a>
+<span class="sourceLineNo">692</span>     * Internal use. Marks a point to be made into floor, piercing walls.<a name="line.692"></a>
+<span class="sourceLineNo">693</span>     * @param pos position to mark<a name="line.693"></a>
+<span class="sourceLineNo">694</span>     */<a name="line.694"></a>
+<span class="sourceLineNo">695</span>    protected void markPiercing(Coord pos)<a name="line.695"></a>
+<span class="sourceLineNo">696</span>    {<a name="line.696"></a>
+<span class="sourceLineNo">697</span>        markPiercing(pos.x, pos.y);<a name="line.697"></a>
+<span class="sourceLineNo">698</span>    }<a name="line.698"></a>
+<span class="sourceLineNo">699</span>    /**<a name="line.699"></a>
+<span class="sourceLineNo">700</span>     * Internal use. Marks a point to be made into floor, piercing walls, and also marks the point as a cave floor.<a name="line.700"></a>
+<span class="sourceLineNo">701</span>     * @param pos position to mark<a name="line.701"></a>
+<span class="sourceLineNo">702</span>     */<a name="line.702"></a>
+<span class="sourceLineNo">703</span>    protected void markPiercingCave(Coord pos)<a name="line.703"></a>
+<span class="sourceLineNo">704</span>    {<a name="line.704"></a>
+<span class="sourceLineNo">705</span>        markPiercing(pos.x, pos.y);<a name="line.705"></a>
+<span class="sourceLineNo">706</span>        markEnvironmentCave(pos.x, pos.y);<a name="line.706"></a>
+<span class="sourceLineNo">707</span>    }<a name="line.707"></a>
+<span class="sourceLineNo">708</span>    /**<a name="line.708"></a>
+<span class="sourceLineNo">709</span>     * Internal use. Marks a point to be made into floor, piercing walls, and also marks the point as a room floor.<a name="line.709"></a>
+<span class="sourceLineNo">710</span>     * @param x x coordinate of position to mark<a name="line.710"></a>
+<span class="sourceLineNo">711</span>     * @param y y coordinate of position to mark<a name="line.711"></a>
+<span class="sourceLineNo">712</span>     */<a name="line.712"></a>
+<span class="sourceLineNo">713</span>    protected void markPiercingRoom(int x, int y)<a name="line.713"></a>
+<span class="sourceLineNo">714</span>    {<a name="line.714"></a>
+<span class="sourceLineNo">715</span>        markPiercing(x, y);<a name="line.715"></a>
+<span class="sourceLineNo">716</span>        markEnvironmentCave(x, y);<a name="line.716"></a>
+<span class="sourceLineNo">717</span>    }<a name="line.717"></a>
+<span class="sourceLineNo">718</span><a name="line.718"></a>
+<span class="sourceLineNo">719</span>    /**<a name="line.719"></a>
+<span class="sourceLineNo">720</span>     * Internal use. Marks a point and the four cells orthogonally adjacent to it.<a name="line.720"></a>
+<span class="sourceLineNo">721</span>     * @param pos center position to mark<a name="line.721"></a>
+<span class="sourceLineNo">722</span>     * @return null if the center of the plus shape wasn't blocked by wall, otherwise the Coord of the center<a name="line.722"></a>
 <span class="sourceLineNo">723</span>     */<a name="line.723"></a>
-<span class="sourceLineNo">724</span>    private Coord markRectangleWalled(Coord pos, int halfWidth, int halfHeight)<a name="line.724"></a>
-<span class="sourceLineNo">725</span>    {<a name="line.725"></a>
-<span class="sourceLineNo">726</span>        halfWidth = Math.max(1, Math.round(halfWidth * roomWidth));<a name="line.726"></a>
-<span class="sourceLineNo">727</span>        halfHeight = Math.max(1, Math.round(halfHeight * roomHeight));<a name="line.727"></a>
-<span class="sourceLineNo">728</span>        Coord block = null;<a name="line.728"></a>
-<span class="sourceLineNo">729</span>        for (int i = pos.x - halfWidth; i &lt;= pos.x + halfWidth; i++) {<a name="line.729"></a>
-<span class="sourceLineNo">730</span>            for (int j = pos.y - halfHeight; j &lt;= pos.y + halfHeight; j++) {<a name="line.730"></a>
-<span class="sourceLineNo">731</span>                if(mark(i, j))<a name="line.731"></a>
-<span class="sourceLineNo">732</span>                    block = Coord.get(i, j);<a name="line.732"></a>
-<span class="sourceLineNo">733</span>                else<a name="line.733"></a>
-<span class="sourceLineNo">734</span>                    markEnvironmentRoom(i, j);<a name="line.734"></a>
-<span class="sourceLineNo">735</span>            }<a name="line.735"></a>
-<span class="sourceLineNo">736</span>        }<a name="line.736"></a>
-<span class="sourceLineNo">737</span>        for (int i = Math.max(0, pos.x - halfWidth - 1); i &lt;= Math.min(width - 1, pos.x + halfWidth + 1); i++) {<a name="line.737"></a>
-<span class="sourceLineNo">738</span>            for (int j = Math.max(0, pos.y - halfHeight - 1); j &lt;= Math.min(height - 1, pos.y + halfHeight + 1); j++)<a name="line.738"></a>
-<span class="sourceLineNo">739</span>            {<a name="line.739"></a>
-<span class="sourceLineNo">740</span>                wallOff(i, j);<a name="line.740"></a>
-<span class="sourceLineNo">741</span>            }<a name="line.741"></a>
-<span class="sourceLineNo">742</span>        }<a name="line.742"></a>
-<span class="sourceLineNo">743</span>        return block;<a name="line.743"></a>
-<span class="sourceLineNo">744</span>    }<a name="line.744"></a>
-<span class="sourceLineNo">745</span><a name="line.745"></a>
-<span class="sourceLineNo">746</span>    /**<a name="line.746"></a>
-<span class="sourceLineNo">747</span>     * Internal use. Marks a circle of points centered on pos, extending out to radius in Euclidean measurement. Marks<a name="line.747"></a>
-<span class="sourceLineNo">748</span>     * all cells in the circle as room floors.<a name="line.748"></a>
-<span class="sourceLineNo">749</span>     * @param pos center position to mark<a name="line.749"></a>
-<span class="sourceLineNo">750</span>     * @param radius radius to extend in all directions from center<a name="line.750"></a>
-<span class="sourceLineNo">751</span>     * @return null if no points in the circle were blocked by walls, otherwise a Coord blocked by a wall<a name="line.751"></a>
-<span class="sourceLineNo">752</span>     */<a name="line.752"></a>
-<span class="sourceLineNo">753</span>    private Coord markCircle(Coord pos, int radius)<a name="line.753"></a>
-<span class="sourceLineNo">754</span>    {<a name="line.754"></a>
-<span class="sourceLineNo">755</span>        Coord block = null;<a name="line.755"></a>
-<span class="sourceLineNo">756</span>        int high;<a name="line.756"></a>
-<span class="sourceLineNo">757</span>        radius = Math.max(1, Math.round(radius * Math.min(roomWidth, roomHeight)));<a name="line.757"></a>
-<span class="sourceLineNo">758</span>        for (int dx = -radius; dx &lt;= radius; ++dx)<a name="line.758"></a>
-<span class="sourceLineNo">759</span>        {<a name="line.759"></a>
-<span class="sourceLineNo">760</span>            high = (int)Math.floor(Math.sqrt(radius * radius - dx * dx));<a name="line.760"></a>
-<span class="sourceLineNo">761</span>            for (int dy = -high; dy &lt;= high; ++dy)<a name="line.761"></a>
-<span class="sourceLineNo">762</span>            {<a name="line.762"></a>
-<span class="sourceLineNo">763</span>                if(mark(pos.x + dx, pos.y + dy))<a name="line.763"></a>
-<span class="sourceLineNo">764</span>                    block = pos.translate(dx, dy);<a name="line.764"></a>
-<span class="sourceLineNo">765</span>                else<a name="line.765"></a>
-<span class="sourceLineNo">766</span>                    markEnvironmentRoom(pos.x + dx, pos.y + dy);<a name="line.766"></a>
-<span class="sourceLineNo">767</span>            }<a name="line.767"></a>
-<span class="sourceLineNo">768</span>        }<a name="line.768"></a>
-<span class="sourceLineNo">769</span>        return block;<a name="line.769"></a>
-<span class="sourceLineNo">770</span>    }<a name="line.770"></a>
-<span class="sourceLineNo">771</span>    /**<a name="line.771"></a>
-<span class="sourceLineNo">772</span>     * Internal use. Marks a circle of points centered on pos, extending out to radius in Euclidean measurement.<a name="line.772"></a>
-<span class="sourceLineNo">773</span>     * Also considers the area just beyond each wall, but not corners, to be a blocking wall that can only be passed by<a name="line.773"></a>
-<span class="sourceLineNo">774</span>     * corridors and small cave openings. Marks all cells in the circle as room floors.<a name="line.774"></a>
-<span class="sourceLineNo">775</span>     * @param pos center position to mark<a name="line.775"></a>
-<span class="sourceLineNo">776</span>     * @param radius radius to extend in all directions from center<a name="line.776"></a>
-<span class="sourceLineNo">777</span>     * @return null if no points in the circle were blocked by walls, otherwise a Coord blocked by a wall<a name="line.777"></a>
-<span class="sourceLineNo">778</span>     */<a name="line.778"></a>
-<span class="sourceLineNo">779</span>    private Coord markCircleWalled(Coord pos, int radius)<a name="line.779"></a>
-<span class="sourceLineNo">780</span>    {<a name="line.780"></a>
-<span class="sourceLineNo">781</span>        Coord block = null;<a name="line.781"></a>
-<span class="sourceLineNo">782</span>        int high;<a name="line.782"></a>
-<span class="sourceLineNo">783</span>        radius = Math.max(1, Math.round(radius * Math.min(roomWidth, roomHeight)));<a name="line.783"></a>
-<span class="sourceLineNo">784</span>        for (int dx = -radius; dx &lt;= radius; ++dx)<a name="line.784"></a>
-<span class="sourceLineNo">785</span>        {<a name="line.785"></a>
-<span class="sourceLineNo">786</span>            high = (int)Math.floor(Math.sqrt(radius * radius - dx * dx));<a name="line.786"></a>
-<span class="sourceLineNo">787</span>            for (int dy = -high; dy &lt;= high; ++dy)<a name="line.787"></a>
-<span class="sourceLineNo">788</span>            {<a name="line.788"></a>
-<span class="sourceLineNo">789</span>                if(mark(pos.x + dx, pos.y + dy))<a name="line.789"></a>
-<span class="sourceLineNo">790</span>                    block = pos.translate(dx, dy);<a name="line.790"></a>
-<span class="sourceLineNo">791</span>                else<a name="line.791"></a>
-<span class="sourceLineNo">792</span>                    markEnvironmentRoom(pos.x + dx, pos.y + dy);<a name="line.792"></a>
-<span class="sourceLineNo">793</span>            }<a name="line.793"></a>
-<span class="sourceLineNo">794</span>        }<a name="line.794"></a>
-<span class="sourceLineNo">795</span>        for (int dx = -radius; dx &lt;= radius; ++dx)<a name="line.795"></a>
-<span class="sourceLineNo">796</span>        {<a name="line.796"></a>
-<span class="sourceLineNo">797</span>            high = (int)Math.floor(Math.sqrt(radius * radius - dx * dx));<a name="line.797"></a>
-<span class="sourceLineNo">798</span>            int dx2 = Math.max(1, Math.min(pos.x + dx, width - 2));<a name="line.798"></a>
-<span class="sourceLineNo">799</span>            for (int dy = -high; dy &lt;= high; ++dy)<a name="line.799"></a>
-<span class="sourceLineNo">800</span>            {<a name="line.800"></a>
-<span class="sourceLineNo">801</span>                int dy2 = Math.max(1, Math.min(pos.y + dy, height - 2));<a name="line.801"></a>
-<span class="sourceLineNo">802</span><a name="line.802"></a>
-<span class="sourceLineNo">803</span>                wallOff(dx2, dy2-1);<a name="line.803"></a>
-<span class="sourceLineNo">804</span>                wallOff(dx2+1, dy2-1);<a name="line.804"></a>
-<span class="sourceLineNo">805</span>                wallOff(dx2-1, dy2-1);<a name="line.805"></a>
-<span class="sourceLineNo">806</span>                wallOff(dx2, dy2);<a name="line.806"></a>
-<span class="sourceLineNo">807</span>                wallOff(dx2+1, dy2);<a name="line.807"></a>
-<span class="sourceLineNo">808</span>                wallOff(dx2-1, dy2);<a name="line.808"></a>
-<span class="sourceLineNo">809</span>                wallOff(dx2, dy2+1);<a name="line.809"></a>
-<span class="sourceLineNo">810</span>                wallOff(dx2+1, dy2+1);<a name="line.810"></a>
-<span class="sourceLineNo">811</span>                wallOff(dx2-1, dy2+1);<a name="line.811"></a>
-<span class="sourceLineNo">812</span><a name="line.812"></a>
-<span class="sourceLineNo">813</span>            }<a name="line.813"></a>
-<span class="sourceLineNo">814</span>        }<a name="line.814"></a>
-<span class="sourceLineNo">815</span>        return block;<a name="line.815"></a>
-<span class="sourceLineNo">816</span>    }<a name="line.816"></a>
-<span class="sourceLineNo">817</span><a name="line.817"></a>
-<span class="sourceLineNo">818</span>    /**<a name="line.818"></a>
-<span class="sourceLineNo">819</span>     * Internal use. Drunkard's walk algorithm, single step. Based on Michael Patraw's C code, used for cave carving.<a name="line.819"></a>
-<span class="sourceLineNo">820</span>     * http://mpatraw.github.io/libdrunkard/<a name="line.820"></a>
-<span class="sourceLineNo">821</span>     * @param current the current point<a name="line.821"></a>
-<span class="sourceLineNo">822</span>     * @param target the point to wobble towards<a name="line.822"></a>
-<span class="sourceLineNo">823</span>     * @param weight between 0.5 and 1.0, usually. 0.6 makes very random caves, 0.9 is almost a straight line.<a name="line.823"></a>
-<span class="sourceLineNo">824</span>     * @return a Direction, either UP, DOWN, LEFT, or RIGHT if we should move, or NONE if we have reached our target<a name="line.824"></a>
-<span class="sourceLineNo">825</span>     */<a name="line.825"></a>
-<span class="sourceLineNo">826</span>    private Direction stepWobbly(Coord current, Coord target, double weight)<a name="line.826"></a>
-<span class="sourceLineNo">827</span>    {<a name="line.827"></a>
-<span class="sourceLineNo">828</span>        int dx = target.x - current.x;<a name="line.828"></a>
-<span class="sourceLineNo">829</span>        int dy = target.y - current.y;<a name="line.829"></a>
-<span class="sourceLineNo">830</span><a name="line.830"></a>
-<span class="sourceLineNo">831</span>        if (dx &gt;  1) dx = 1;<a name="line.831"></a>
-<span class="sourceLineNo">832</span>        if (dx &lt; -1) dx = -1;<a name="line.832"></a>
-<span class="sourceLineNo">833</span>        if (dy &gt;  1) dy = 1;<a name="line.833"></a>
-<span class="sourceLineNo">834</span>        if (dy &lt; -1) dy = -1;<a name="line.834"></a>
-<span class="sourceLineNo">835</span><a name="line.835"></a>
-<span class="sourceLineNo">836</span>        double r = rng.nextDouble();<a name="line.836"></a>
-<span class="sourceLineNo">837</span>        Direction dir;<a name="line.837"></a>
-<span class="sourceLineNo">838</span>        if (dx == 0 &amp;&amp; dy == 0)<a name="line.838"></a>
-<span class="sourceLineNo">839</span>        {<a name="line.839"></a>
-<span class="sourceLineNo">840</span>            return Direction.NONE;<a name="line.840"></a>
-<span class="sourceLineNo">841</span>        }<a name="line.841"></a>
-<span class="sourceLineNo">842</span>        else if (dx == 0 || dy == 0)<a name="line.842"></a>
-<span class="sourceLineNo">843</span>        {<a name="line.843"></a>
-<span class="sourceLineNo">844</span>            int dx2 = (dx == 0) ? dx : dy, dy2 = (dx == 0) ? dy : dx;<a name="line.844"></a>
-<span class="sourceLineNo">845</span>            if (r &gt;= (weight * 0.5))<a name="line.845"></a>
-<span class="sourceLineNo">846</span>            {<a name="line.846"></a>
-<span class="sourceLineNo">847</span>                r -= weight * 0.5;<a name="line.847"></a>
-<span class="sourceLineNo">848</span>                if (r &lt; weight * (1.0 / 6) + (1 - weight) * (1.0 / 3))<a name="line.848"></a>
-<span class="sourceLineNo">849</span>                {<a name="line.849"></a>
-<span class="sourceLineNo">850</span>                    dx2 = -1;<a name="line.850"></a>
-<span class="sourceLineNo">851</span>                    dy2 = 0;<a name="line.851"></a>
-<span class="sourceLineNo">852</span>                }<a name="line.852"></a>
-<span class="sourceLineNo">853</span>                else if (r &lt; weight * (2.0 / 6) + (1 - weight) * (2.0 / 3))<a name="line.853"></a>
-<span class="sourceLineNo">854</span>                {<a name="line.854"></a>
-<span class="sourceLineNo">855</span>                    dx2 = 1;<a name="line.855"></a>
-<span class="sourceLineNo">856</span>                    dy2 = 0;<a name="line.856"></a>
-<span class="sourceLineNo">857</span>                }<a name="line.857"></a>
-<span class="sourceLineNo">858</span>                else<a name="line.858"></a>
-<span class="sourceLineNo">859</span>                {<a name="line.859"></a>
-<span class="sourceLineNo">860</span>                    dx2 = 0;<a name="line.860"></a>
-<span class="sourceLineNo">861</span>                    dy2 *= -1;<a name="line.861"></a>
-<span class="sourceLineNo">862</span>                }<a name="line.862"></a>
-<span class="sourceLineNo">863</span>            }<a name="line.863"></a>
-<span class="sourceLineNo">864</span>            dir = Direction.getCardinalDirection(dx2, -dy2);<a name="line.864"></a>
-<span class="sourceLineNo">865</span><a name="line.865"></a>
-<span class="sourceLineNo">866</span>        }<a name="line.866"></a>
-<span class="sourceLineNo">867</span>        else<a name="line.867"></a>
-<span class="sourceLineNo">868</span>        {<a name="line.868"></a>
-<span class="sourceLineNo">869</span>            if (r &lt; weight * 0.5)<a name="line.869"></a>
-<span class="sourceLineNo">870</span>            {<a name="line.870"></a>
-<span class="sourceLineNo">871</span>                dy = 0;<a name="line.871"></a>
-<span class="sourceLineNo">872</span>            }<a name="line.872"></a>
-<span class="sourceLineNo">873</span>            else if (r &lt; weight)<a name="line.873"></a>
-<span class="sourceLineNo">874</span>            {<a name="line.874"></a>
-<span class="sourceLineNo">875</span>                dx = 0;<a name="line.875"></a>
-<span class="sourceLineNo">876</span>            }<a name="line.876"></a>
-<span class="sourceLineNo">877</span>            else if (r &lt; weight + (1 - weight) * 0.5)<a name="line.877"></a>
-<span class="sourceLineNo">878</span>            {<a name="line.878"></a>
-<span class="sourceLineNo">879</span>                dx *= -1;<a name="line.879"></a>
-<span class="sourceLineNo">880</span>                dy = 0;<a name="line.880"></a>
-<span class="sourceLineNo">881</span>            }<a name="line.881"></a>
-<span class="sourceLineNo">882</span>            else<a name="line.882"></a>
-<span class="sourceLineNo">883</span>            {<a name="line.883"></a>
-<span class="sourceLineNo">884</span>                dx = 0;<a name="line.884"></a>
-<span class="sourceLineNo">885</span>                dy *= -1;<a name="line.885"></a>
-<span class="sourceLineNo">886</span>            }<a name="line.886"></a>
-<span class="sourceLineNo">887</span>            dir = Direction.getCardinalDirection(dx, -dy);<a name="line.887"></a>
-<span class="sourceLineNo">888</span>        }<a name="line.888"></a>
-<span class="sourceLineNo">889</span>        if(current.x + dir.deltaX &lt;= 0 || current.x + dir.deltaX &gt;= width - 1) {<a name="line.889"></a>
-<span class="sourceLineNo">890</span>            if (current.y &lt; target.y) dir = Direction.DOWN;<a name="line.890"></a>
-<span class="sourceLineNo">891</span>            else if (current.y &gt; target.y) dir = Direction.UP;<a name="line.891"></a>
-<span class="sourceLineNo">892</span>        }<a name="line.892"></a>
-<span class="sourceLineNo">893</span>        else if(current.y + dir.deltaY &lt;= 0 || current.y + dir.deltaY &gt;= height - 1) {<a name="line.893"></a>
-<span class="sourceLineNo">894</span>            if (current.x &lt; target.x) dir = Direction.RIGHT;<a name="line.894"></a>
-<span class="sourceLineNo">895</span>            else if (current.x &gt; target.x) dir = Direction.LEFT;<a name="line.895"></a>
-<span class="sourceLineNo">896</span>        }<a name="line.896"></a>
-<span class="sourceLineNo">897</span>        return dir;<a name="line.897"></a>
-<span class="sourceLineNo">898</span>    }<a name="line.898"></a>
-<span class="sourceLineNo">899</span><a name="line.899"></a>
-<span class="sourceLineNo">900</span>}<a name="line.900"></a>
+<span class="sourceLineNo">724</span>    private Coord markPlus(Coord pos) {<a name="line.724"></a>
+<span class="sourceLineNo">725</span>        Coord block = null;<a name="line.725"></a>
+<span class="sourceLineNo">726</span>        if (mark(pos.x, pos.y))<a name="line.726"></a>
+<span class="sourceLineNo">727</span>            block = pos;<a name="line.727"></a>
+<span class="sourceLineNo">728</span>        mark(pos.x + 1, pos.y);<a name="line.728"></a>
+<span class="sourceLineNo">729</span>        mark(pos.x - 1, pos.y);<a name="line.729"></a>
+<span class="sourceLineNo">730</span>        mark(pos.x, pos.y + 1);<a name="line.730"></a>
+<span class="sourceLineNo">731</span>        mark(pos.x, pos.y - 1);<a name="line.731"></a>
+<span class="sourceLineNo">732</span>        return block;<a name="line.732"></a>
+<span class="sourceLineNo">733</span>    }<a name="line.733"></a>
+<span class="sourceLineNo">734</span><a name="line.734"></a>
+<span class="sourceLineNo">735</span>    /**<a name="line.735"></a>
+<span class="sourceLineNo">736</span>     * Internal use. Marks a point and the four cells orthogonally adjacent to it, and also marks any cells that weren't<a name="line.736"></a>
+<span class="sourceLineNo">737</span>     * blocked as cave floors.<a name="line.737"></a>
+<span class="sourceLineNo">738</span>     * @param pos center position to mark<a name="line.738"></a>
+<span class="sourceLineNo">739</span>     * @return null if the center of the plus shape wasn't blocked by wall, otherwise the Coord of the center<a name="line.739"></a>
+<span class="sourceLineNo">740</span>     */<a name="line.740"></a>
+<span class="sourceLineNo">741</span>    private Coord markPlusCave(Coord pos) {<a name="line.741"></a>
+<span class="sourceLineNo">742</span>        Coord block = null;<a name="line.742"></a>
+<span class="sourceLineNo">743</span>        if (mark(pos.x, pos.y))<a name="line.743"></a>
+<span class="sourceLineNo">744</span>            block = pos;<a name="line.744"></a>
+<span class="sourceLineNo">745</span>        else<a name="line.745"></a>
+<span class="sourceLineNo">746</span>            markEnvironmentCave(pos.x, pos.y);<a name="line.746"></a>
+<span class="sourceLineNo">747</span>        if(!mark(pos.x + 1, pos.y))<a name="line.747"></a>
+<span class="sourceLineNo">748</span>            markEnvironmentCave(pos.x + 1, pos.y);<a name="line.748"></a>
+<span class="sourceLineNo">749</span>        if(!mark(pos.x - 1, pos.y))<a name="line.749"></a>
+<span class="sourceLineNo">750</span>            markEnvironmentCave(pos.x - 1, pos.y);<a name="line.750"></a>
+<span class="sourceLineNo">751</span>        if(!mark(pos.x, pos.y + 1))<a name="line.751"></a>
+<span class="sourceLineNo">752</span>            markEnvironmentCave(pos.x, pos.y + 1);<a name="line.752"></a>
+<span class="sourceLineNo">753</span>        if(!mark(pos.x, pos.y - 1))<a name="line.753"></a>
+<span class="sourceLineNo">754</span>            markEnvironmentCave(pos.x, pos.y - 1);<a name="line.754"></a>
+<span class="sourceLineNo">755</span>        return block;<a name="line.755"></a>
+<span class="sourceLineNo">756</span>    }<a name="line.756"></a>
+<span class="sourceLineNo">757</span>    /**<a name="line.757"></a>
+<span class="sourceLineNo">758</span>     * Internal use. Marks a rectangle of points centered on pos, extending halfWidth in both x directions and<a name="line.758"></a>
+<span class="sourceLineNo">759</span>     * halfHeight in both vertical directions. Marks all cells in the rectangle as room floors.<a name="line.759"></a>
+<span class="sourceLineNo">760</span>     * @param pos center position to mark<a name="line.760"></a>
+<span class="sourceLineNo">761</span>     * @param halfWidth the distance from the center to extend horizontally<a name="line.761"></a>
+<span class="sourceLineNo">762</span>     * @param halfHeight the distance from the center to extend vertically<a name="line.762"></a>
+<span class="sourceLineNo">763</span>     * @return null if no points in the rectangle were blocked by walls, otherwise a Coord blocked by a wall<a name="line.763"></a>
+<span class="sourceLineNo">764</span>     */<a name="line.764"></a>
+<span class="sourceLineNo">765</span>    private Coord markRectangle(Coord pos, int halfWidth, int halfHeight)<a name="line.765"></a>
+<span class="sourceLineNo">766</span>    {<a name="line.766"></a>
+<span class="sourceLineNo">767</span>        halfWidth = Math.max(1, Math.round(halfWidth * roomWidth));<a name="line.767"></a>
+<span class="sourceLineNo">768</span>        halfHeight = Math.max(1, Math.round(halfHeight * roomHeight));<a name="line.768"></a>
+<span class="sourceLineNo">769</span>        Coord block = null;<a name="line.769"></a>
+<span class="sourceLineNo">770</span>        for (int i = pos.x - halfWidth; i &lt;= pos.x + halfWidth; i++) {<a name="line.770"></a>
+<span class="sourceLineNo">771</span>            for (int j = pos.y - halfHeight; j &lt;= pos.y + halfHeight; j++) {<a name="line.771"></a>
+<span class="sourceLineNo">772</span>                if(mark(i, j))<a name="line.772"></a>
+<span class="sourceLineNo">773</span>                    block = Coord.get(i, j);<a name="line.773"></a>
+<span class="sourceLineNo">774</span>                else<a name="line.774"></a>
+<span class="sourceLineNo">775</span>                    markEnvironmentRoom(i, j);<a name="line.775"></a>
+<span class="sourceLineNo">776</span>            }<a name="line.776"></a>
+<span class="sourceLineNo">777</span>        }<a name="line.777"></a>
+<span class="sourceLineNo">778</span>        return block;<a name="line.778"></a>
+<span class="sourceLineNo">779</span>    }<a name="line.779"></a>
+<span class="sourceLineNo">780</span>    /**<a name="line.780"></a>
+<span class="sourceLineNo">781</span>     * Internal use. Marks a rectangle of points centered on pos, extending halfWidth in both x directions and<a name="line.781"></a>
+<span class="sourceLineNo">782</span>     * halfHeight in both vertical directions. Also considers the area just beyond each wall, but not corners, to be<a name="line.782"></a>
+<span class="sourceLineNo">783</span>     * a blocking wall that can only be passed by corridors and small cave openings. Marks all cells in the rectangle as<a name="line.783"></a>
+<span class="sourceLineNo">784</span>     * room floors.<a name="line.784"></a>
+<span class="sourceLineNo">785</span>     * @param pos center position to mark<a name="line.785"></a>
+<span class="sourceLineNo">786</span>     * @param halfWidth the distance from the center to extend horizontally<a name="line.786"></a>
+<span class="sourceLineNo">787</span>     * @param halfHeight the distance from the center to extend vertically<a name="line.787"></a>
+<span class="sourceLineNo">788</span>     * @return null if no points in the rectangle were blocked by walls, otherwise a Coord blocked by a wall<a name="line.788"></a>
+<span class="sourceLineNo">789</span>     */<a name="line.789"></a>
+<span class="sourceLineNo">790</span>    private Coord markRectangleWalled(Coord pos, int halfWidth, int halfHeight)<a name="line.790"></a>
+<span class="sourceLineNo">791</span>    {<a name="line.791"></a>
+<span class="sourceLineNo">792</span>        halfWidth = Math.max(1, Math.round(halfWidth * roomWidth));<a name="line.792"></a>
+<span class="sourceLineNo">793</span>        halfHeight = Math.max(1, Math.round(halfHeight * roomHeight));<a name="line.793"></a>
+<span class="sourceLineNo">794</span>        Coord block = null;<a name="line.794"></a>
+<span class="sourceLineNo">795</span>        for (int i = pos.x - halfWidth; i &lt;= pos.x + halfWidth; i++) {<a name="line.795"></a>
+<span class="sourceLineNo">796</span>            for (int j = pos.y - halfHeight; j &lt;= pos.y + halfHeight; j++) {<a name="line.796"></a>
+<span class="sourceLineNo">797</span>                if(mark(i, j))<a name="line.797"></a>
+<span class="sourceLineNo">798</span>                    block = Coord.get(i, j);<a name="line.798"></a>
+<span class="sourceLineNo">799</span>                else<a name="line.799"></a>
+<span class="sourceLineNo">800</span>                    markEnvironmentRoom(i, j);<a name="line.800"></a>
+<span class="sourceLineNo">801</span>            }<a name="line.801"></a>
+<span class="sourceLineNo">802</span>        }<a name="line.802"></a>
+<span class="sourceLineNo">803</span>        for (int i = Math.max(0, pos.x - halfWidth - 1); i &lt;= Math.min(width - 1, pos.x + halfWidth + 1); i++) {<a name="line.803"></a>
+<span class="sourceLineNo">804</span>            for (int j = Math.max(0, pos.y - halfHeight - 1); j &lt;= Math.min(height - 1, pos.y + halfHeight + 1); j++)<a name="line.804"></a>
+<span class="sourceLineNo">805</span>            {<a name="line.805"></a>
+<span class="sourceLineNo">806</span>                wallOff(i, j);<a name="line.806"></a>
+<span class="sourceLineNo">807</span>            }<a name="line.807"></a>
+<span class="sourceLineNo">808</span>        }<a name="line.808"></a>
+<span class="sourceLineNo">809</span>        return block;<a name="line.809"></a>
+<span class="sourceLineNo">810</span>    }<a name="line.810"></a>
+<span class="sourceLineNo">811</span><a name="line.811"></a>
+<span class="sourceLineNo">812</span>    /**<a name="line.812"></a>
+<span class="sourceLineNo">813</span>     * Internal use. Marks a circle of points centered on pos, extending out to radius in Euclidean measurement. Marks<a name="line.813"></a>
+<span class="sourceLineNo">814</span>     * all cells in the circle as room floors.<a name="line.814"></a>
+<span class="sourceLineNo">815</span>     * @param pos center position to mark<a name="line.815"></a>
+<span class="sourceLineNo">816</span>     * @param radius radius to extend in all directions from center<a name="line.816"></a>
+<span class="sourceLineNo">817</span>     * @return null if no points in the circle were blocked by walls, otherwise a Coord blocked by a wall<a name="line.817"></a>
+<span class="sourceLineNo">818</span>     */<a name="line.818"></a>
+<span class="sourceLineNo">819</span>    private Coord markCircle(Coord pos, int radius)<a name="line.819"></a>
+<span class="sourceLineNo">820</span>    {<a name="line.820"></a>
+<span class="sourceLineNo">821</span>        Coord block = null;<a name="line.821"></a>
+<span class="sourceLineNo">822</span>        int high;<a name="line.822"></a>
+<span class="sourceLineNo">823</span>        radius = Math.max(1, Math.round(radius * Math.min(roomWidth, roomHeight)));<a name="line.823"></a>
+<span class="sourceLineNo">824</span>        for (int dx = -radius; dx &lt;= radius; ++dx)<a name="line.824"></a>
+<span class="sourceLineNo">825</span>        {<a name="line.825"></a>
+<span class="sourceLineNo">826</span>            high = (int)Math.floor(Math.sqrt(radius * radius - dx * dx));<a name="line.826"></a>
+<span class="sourceLineNo">827</span>            for (int dy = -high; dy &lt;= high; ++dy)<a name="line.827"></a>
+<span class="sourceLineNo">828</span>            {<a name="line.828"></a>
+<span class="sourceLineNo">829</span>                if(mark(pos.x + dx, pos.y + dy))<a name="line.829"></a>
+<span class="sourceLineNo">830</span>                    block = pos.translate(dx, dy);<a name="line.830"></a>
+<span class="sourceLineNo">831</span>                else<a name="line.831"></a>
+<span class="sourceLineNo">832</span>                    markEnvironmentRoom(pos.x + dx, pos.y + dy);<a name="line.832"></a>
+<span class="sourceLineNo">833</span>            }<a name="line.833"></a>
+<span class="sourceLineNo">834</span>        }<a name="line.834"></a>
+<span class="sourceLineNo">835</span>        return block;<a name="line.835"></a>
+<span class="sourceLineNo">836</span>    }<a name="line.836"></a>
+<span class="sourceLineNo">837</span>    /**<a name="line.837"></a>
+<span class="sourceLineNo">838</span>     * Internal use. Marks a circle of points centered on pos, extending out to radius in Euclidean measurement.<a name="line.838"></a>
+<span class="sourceLineNo">839</span>     * Also considers the area just beyond each wall, but not corners, to be a blocking wall that can only be passed by<a name="line.839"></a>
+<span class="sourceLineNo">840</span>     * corridors and small cave openings. Marks all cells in the circle as room floors.<a name="line.840"></a>
+<span class="sourceLineNo">841</span>     * @param pos center position to mark<a name="line.841"></a>
+<span class="sourceLineNo">842</span>     * @param radius radius to extend in all directions from center<a name="line.842"></a>
+<span class="sourceLineNo">843</span>     * @return null if no points in the circle were blocked by walls, otherwise a Coord blocked by a wall<a name="line.843"></a>
+<span class="sourceLineNo">844</span>     */<a name="line.844"></a>
+<span class="sourceLineNo">845</span>    private Coord markCircleWalled(Coord pos, int radius)<a name="line.845"></a>
+<span class="sourceLineNo">846</span>    {<a name="line.846"></a>
+<span class="sourceLineNo">847</span>        Coord block = null;<a name="line.847"></a>
+<span class="sourceLineNo">848</span>        int high;<a name="line.848"></a>
+<span class="sourceLineNo">849</span>        radius = Math.max(1, Math.round(radius * Math.min(roomWidth, roomHeight)));<a name="line.849"></a>
+<span class="sourceLineNo">850</span>        for (int dx = -radius; dx &lt;= radius; ++dx)<a name="line.850"></a>
+<span class="sourceLineNo">851</span>        {<a name="line.851"></a>
+<span class="sourceLineNo">852</span>            high = (int)Math.floor(Math.sqrt(radius * radius - dx * dx));<a name="line.852"></a>
+<span class="sourceLineNo">853</span>            for (int dy = -high; dy &lt;= high; ++dy)<a name="line.853"></a>
+<span class="sourceLineNo">854</span>            {<a name="line.854"></a>
+<span class="sourceLineNo">855</span>                if(mark(pos.x + dx, pos.y + dy))<a name="line.855"></a>
+<span class="sourceLineNo">856</span>                    block = pos.translate(dx, dy);<a name="line.856"></a>
+<span class="sourceLineNo">857</span>                else<a name="line.857"></a>
+<span class="sourceLineNo">858</span>                    markEnvironmentRoom(pos.x + dx, pos.y + dy);<a name="line.858"></a>
+<span class="sourceLineNo">859</span>            }<a name="line.859"></a>
+<span class="sourceLineNo">860</span>        }<a name="line.860"></a>
+<span class="sourceLineNo">861</span>        for (int dx = -radius; dx &lt;= radius; ++dx)<a name="line.861"></a>
+<span class="sourceLineNo">862</span>        {<a name="line.862"></a>
+<span class="sourceLineNo">863</span>            high = (int)Math.floor(Math.sqrt(radius * radius - dx * dx));<a name="line.863"></a>
+<span class="sourceLineNo">864</span>            int dx2 = Math.max(1, Math.min(pos.x + dx, width - 2));<a name="line.864"></a>
+<span class="sourceLineNo">865</span>            for (int dy = -high; dy &lt;= high; ++dy)<a name="line.865"></a>
+<span class="sourceLineNo">866</span>            {<a name="line.866"></a>
+<span class="sourceLineNo">867</span>                int dy2 = Math.max(1, Math.min(pos.y + dy, height - 2));<a name="line.867"></a>
+<span class="sourceLineNo">868</span><a name="line.868"></a>
+<span class="sourceLineNo">869</span>                wallOff(dx2, dy2-1);<a name="line.869"></a>
+<span class="sourceLineNo">870</span>                wallOff(dx2+1, dy2-1);<a name="line.870"></a>
+<span class="sourceLineNo">871</span>                wallOff(dx2-1, dy2-1);<a name="line.871"></a>
+<span class="sourceLineNo">872</span>                wallOff(dx2, dy2);<a name="line.872"></a>
+<span class="sourceLineNo">873</span>                wallOff(dx2+1, dy2);<a name="line.873"></a>
+<span class="sourceLineNo">874</span>                wallOff(dx2-1, dy2);<a name="line.874"></a>
+<span class="sourceLineNo">875</span>                wallOff(dx2, dy2+1);<a name="line.875"></a>
+<span class="sourceLineNo">876</span>                wallOff(dx2+1, dy2+1);<a name="line.876"></a>
+<span class="sourceLineNo">877</span>                wallOff(dx2-1, dy2+1);<a name="line.877"></a>
+<span class="sourceLineNo">878</span><a name="line.878"></a>
+<span class="sourceLineNo">879</span>            }<a name="line.879"></a>
+<span class="sourceLineNo">880</span>        }<a name="line.880"></a>
+<span class="sourceLineNo">881</span>        return block;<a name="line.881"></a>
+<span class="sourceLineNo">882</span>    }<a name="line.882"></a>
+<span class="sourceLineNo">883</span><a name="line.883"></a>
+<span class="sourceLineNo">884</span>    /**<a name="line.884"></a>
+<span class="sourceLineNo">885</span>     * Internal use. Drunkard's walk algorithm, single step. Based on Michael Patraw's C code, used for cave carving.<a name="line.885"></a>
+<span class="sourceLineNo">886</span>     * http://mpatraw.github.io/libdrunkard/<a name="line.886"></a>
+<span class="sourceLineNo">887</span>     * @param current the current point<a name="line.887"></a>
+<span class="sourceLineNo">888</span>     * @param target the point to wobble towards<a name="line.888"></a>
+<span class="sourceLineNo">889</span>     * @param weight between 0.5 and 1.0, usually. 0.6 makes very random caves, 0.9 is almost a straight line.<a name="line.889"></a>
+<span class="sourceLineNo">890</span>     * @return a Direction, either UP, DOWN, LEFT, or RIGHT if we should move, or NONE if we have reached our target<a name="line.890"></a>
+<span class="sourceLineNo">891</span>     */<a name="line.891"></a>
+<span class="sourceLineNo">892</span>    private Direction stepWobbly(Coord current, Coord target, double weight)<a name="line.892"></a>
+<span class="sourceLineNo">893</span>    {<a name="line.893"></a>
+<span class="sourceLineNo">894</span>        int dx = target.x - current.x;<a name="line.894"></a>
+<span class="sourceLineNo">895</span>        int dy = target.y - current.y;<a name="line.895"></a>
+<span class="sourceLineNo">896</span><a name="line.896"></a>
+<span class="sourceLineNo">897</span>        if (dx &gt;  1) dx = 1;<a name="line.897"></a>
+<span class="sourceLineNo">898</span>        if (dx &lt; -1) dx = -1;<a name="line.898"></a>
+<span class="sourceLineNo">899</span>        if (dy &gt;  1) dy = 1;<a name="line.899"></a>
+<span class="sourceLineNo">900</span>        if (dy &lt; -1) dy = -1;<a name="line.900"></a>
+<span class="sourceLineNo">901</span><a name="line.901"></a>
+<span class="sourceLineNo">902</span>        double r = rng.nextDouble();<a name="line.902"></a>
+<span class="sourceLineNo">903</span>        Direction dir;<a name="line.903"></a>
+<span class="sourceLineNo">904</span>        if (dx == 0 &amp;&amp; dy == 0)<a name="line.904"></a>
+<span class="sourceLineNo">905</span>        {<a name="line.905"></a>
+<span class="sourceLineNo">906</span>            return Direction.NONE;<a name="line.906"></a>
+<span class="sourceLineNo">907</span>        }<a name="line.907"></a>
+<span class="sourceLineNo">908</span>        else if (dx == 0 || dy == 0)<a name="line.908"></a>
+<span class="sourceLineNo">909</span>        {<a name="line.909"></a>
+<span class="sourceLineNo">910</span>            int dx2 = (dx == 0) ? dx : dy, dy2 = (dx == 0) ? dy : dx;<a name="line.910"></a>
+<span class="sourceLineNo">911</span>            if (r &gt;= (weight * 0.5))<a name="line.911"></a>
+<span class="sourceLineNo">912</span>            {<a name="line.912"></a>
+<span class="sourceLineNo">913</span>                r -= weight * 0.5;<a name="line.913"></a>
+<span class="sourceLineNo">914</span>                if (r &lt; weight * (1.0 / 6) + (1 - weight) * (1.0 / 3))<a name="line.914"></a>
+<span class="sourceLineNo">915</span>                {<a name="line.915"></a>
+<span class="sourceLineNo">916</span>                    dx2 = -1;<a name="line.916"></a>
+<span class="sourceLineNo">917</span>                    dy2 = 0;<a name="line.917"></a>
+<span class="sourceLineNo">918</span>                }<a name="line.918"></a>
+<span class="sourceLineNo">919</span>                else if (r &lt; weight * (2.0 / 6) + (1 - weight) * (2.0 / 3))<a name="line.919"></a>
+<span class="sourceLineNo">920</span>                {<a name="line.920"></a>
+<span class="sourceLineNo">921</span>                    dx2 = 1;<a name="line.921"></a>
+<span class="sourceLineNo">922</span>                    dy2 = 0;<a name="line.922"></a>
+<span class="sourceLineNo">923</span>                }<a name="line.923"></a>
+<span class="sourceLineNo">924</span>                else<a name="line.924"></a>
+<span class="sourceLineNo">925</span>                {<a name="line.925"></a>
+<span class="sourceLineNo">926</span>                    dx2 = 0;<a name="line.926"></a>
+<span class="sourceLineNo">927</span>                    dy2 *= -1;<a name="line.927"></a>
+<span class="sourceLineNo">928</span>                }<a name="line.928"></a>
+<span class="sourceLineNo">929</span>            }<a name="line.929"></a>
+<span class="sourceLineNo">930</span>            dir = Direction.getCardinalDirection(dx2, -dy2);<a name="line.930"></a>
+<span class="sourceLineNo">931</span><a name="line.931"></a>
+<span class="sourceLineNo">932</span>        }<a name="line.932"></a>
+<span class="sourceLineNo">933</span>        else<a name="line.933"></a>
+<span class="sourceLineNo">934</span>        {<a name="line.934"></a>
+<span class="sourceLineNo">935</span>            if (r &lt; weight * 0.5)<a name="line.935"></a>
+<span class="sourceLineNo">936</span>            {<a name="line.936"></a>
+<span class="sourceLineNo">937</span>                dy = 0;<a name="line.937"></a>
+<span class="sourceLineNo">938</span>            }<a name="line.938"></a>
+<span class="sourceLineNo">939</span>            else if (r &lt; weight)<a name="line.939"></a>
+<span class="sourceLineNo">940</span>            {<a name="line.940"></a>
+<span class="sourceLineNo">941</span>                dx = 0;<a name="line.941"></a>
+<span class="sourceLineNo">942</span>            }<a name="line.942"></a>
+<span class="sourceLineNo">943</span>            else if (r &lt; weight + (1 - weight) * 0.5)<a name="line.943"></a>
+<span class="sourceLineNo">944</span>            {<a name="line.944"></a>
+<span class="sourceLineNo">945</span>                dx *= -1;<a name="line.945"></a>
+<span class="sourceLineNo">946</span>                dy = 0;<a name="line.946"></a>
+<span class="sourceLineNo">947</span>            }<a name="line.947"></a>
+<span class="sourceLineNo">948</span>            else<a name="line.948"></a>
+<span class="sourceLineNo">949</span>            {<a name="line.949"></a>
+<span class="sourceLineNo">950</span>                dx = 0;<a name="line.950"></a>
+<span class="sourceLineNo">951</span>                dy *= -1;<a name="line.951"></a>
+<span class="sourceLineNo">952</span>            }<a name="line.952"></a>
+<span class="sourceLineNo">953</span>            dir = Direction.getCardinalDirection(dx, -dy);<a name="line.953"></a>
+<span class="sourceLineNo">954</span>        }<a name="line.954"></a>
+<span class="sourceLineNo">955</span>        if(current.x + dir.deltaX &lt;= 0 || current.x + dir.deltaX &gt;= width - 1) {<a name="line.955"></a>
+<span class="sourceLineNo">956</span>            if (current.y &lt; target.y) dir = Direction.DOWN;<a name="line.956"></a>
+<span class="sourceLineNo">957</span>            else if (current.y &gt; target.y) dir = Direction.UP;<a name="line.957"></a>
+<span class="sourceLineNo">958</span>        }<a name="line.958"></a>
+<span class="sourceLineNo">959</span>        else if(current.y + dir.deltaY &lt;= 0 || current.y + dir.deltaY &gt;= height - 1) {<a name="line.959"></a>
+<span class="sourceLineNo">960</span>            if (current.x &lt; target.x) dir = Direction.RIGHT;<a name="line.960"></a>
+<span class="sourceLineNo">961</span>            else if (current.x &gt; target.x) dir = Direction.LEFT;<a name="line.961"></a>
+<span class="sourceLineNo">962</span>        }<a name="line.962"></a>
+<span class="sourceLineNo">963</span>        return dir;<a name="line.963"></a>
+<span class="sourceLineNo">964</span>    }<a name="line.964"></a>
+<span class="sourceLineNo">965</span><a name="line.965"></a>
+<span class="sourceLineNo">966</span>}<a name="line.966"></a>
 
 
 
