@@ -1,6 +1,6 @@
 package squidpony.examples;
 
-import squidpony.squidmath.PerlinNoise;
+import squidpony.StringKit;
 
 /**
  * This class is a scratchpad area to test things out.
@@ -14,11 +14,8 @@ public class Playground {
     }
 
     private void go() {
-        System.out.println(PerlinNoise.noise(1000, 10, 111222333));
-        System.out.println(PerlinNoise.noise(1000 * 0.11709966304863834, 10 * 0.11709966304863834, 111222333 * 0.11709966304863834));
-        System.out.println(PerlinNoise.noise(1000.25 * 0.11709966304863834, 10 * 0.11709966304863834, 111222333 * 0.11709966304863834));
-        System.out.println(PerlinNoise.noise(1000.5 * 0.11709966304863834, 10 * 0.11709966304863834, 111222333 * 0.11709966304863834));
-        System.out.println(PerlinNoise.noise(1001 * 0.11709966304863834, 10 * 0.11709966304863834, 111222333 * 0.11709966304863834));
+        System.out.println(StringKit.longFromHex("1234567890ABCDEF") == 0x1234567890ABCDEFL);
+        System.out.println(StringKit.longFromBin("1") == 1L);
     }
 
 }
