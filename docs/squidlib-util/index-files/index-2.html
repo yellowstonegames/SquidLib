@@ -917,6 +917,21 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/ArrayTools.html#ArrayTools--">ArrayTools()</a></span> - Constructor for class squidpony.<a href="../squidpony/ArrayTools.html" title="class in squidpony">ArrayTools</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/Symbol.html#asChar-int-">asChar(int)</a></span> - Static method in class squidpony.squidgrid.mapping.locks.<a href="../squidpony/squidgrid/mapping/locks/Symbol.html" title="class in squidpony.squidgrid.mapping.locks">Symbol</a></dt>
+<dd>
+<div class="block">Like <a href="../squidpony/squidgrid/mapping/locks/Symbol.html#toString-int-"><code>Symbol.toString(int)</code></a>, but returns one char instead, sometimes using some roguelike map conventions:
+ 
+     Symbol.START maps to <code>'&lt;'</code>
+     Symbol.GOAL maps to <code>'&gt;'</code>
+     Symbol.BOSS maps to <code>'!'</code>
+     Symbol.SWITCH maps to <code>'&amp;'</code>
+     Symbol.SWITCH_ON maps to <code>'1'</code>
+     Symbol.SWITCH_OFF maps to <code>'0'</code>
+     Symbol.NOTHING maps to <code>' '</code>
+     Any number between 0 and 255 inclusive is mapped to a letter using <a href="../squidpony/ArrayTools.html#letterAt-int-"><code>ArrayTools.letterAt(int)</code></a>
+     Anything else maps to <code>'*'</code>
+ </div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#asCoords--">asCoords()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#asEncoded--">asEncoded()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>

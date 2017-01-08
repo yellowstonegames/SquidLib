@@ -63,8 +63,15 @@ public class Room {
     }
     
     public Room(int id, Coord coord, Room parent, int item, Condition precond) {
-        this(id, Collections.singleton(coord), parent, item,
-                precond);
+        this.id = id;
+        this.item = item;
+        this.edges = new ArrayList<Edge>();
+        this.precond = precond;
+        this.intensity = 0.0;
+        this.parent = parent;
+        this.children = new ArrayList<Room>(3);
+        // all edges initially null
+        center = coord;
     }
     
     /**
@@ -222,13 +229,31 @@ public class Room {
     public void addChild(Room child) {
         children.add(child);
     }
-    
+
     public Coord getCenter() {
         return center;
     }
-    
-    public String toString() {
-        return "Room(" + center.toString() + ")";
+
+    public void setCenter(final Coord c2) {
+        this.center = c2;
     }
-    
+
+    public String toString() {
+        return "Room(id:"  + id + ", center: " + center.toString() + ")";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Room room = (Room) o;
+
+        return id == room.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
 }
