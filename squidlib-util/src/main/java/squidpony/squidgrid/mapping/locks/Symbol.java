@@ -1,5 +1,7 @@
 package squidpony.squidgrid.mapping.locks;
 
+import squidpony.ArrayTools;
+
 /**
  * Represents a single key or lock within the lock-and-key puzzle.
  * <p>
@@ -56,21 +58,74 @@ public class Symbol {
     public static boolean isBoss(final int value) {
         return value == BOSS;
     }
-    
+
     /**
      * @return whether the symbol is the special SWITCH symbol
      */
     public static boolean isSwitch(final int value) {
         return value == SWITCH;
     }
-    
+
+    /**
+     * @return whether the symbol is the special NOTHING symbol
+     */
+    public static boolean isNothing(final int value) {
+        return value == NOTHING;
+    }
+
     /**
      * @return whether the symbol is one of the special SWITCH_{ON,OFF} symbols
      */
     public static boolean isSwitchState(final int value) {
         return value == SWITCH_ON || value == SWITCH_OFF;
     }
-    
+
+    /**
+     * Like {@link #toString(int)}, but returns one char instead, sometimes using some roguelike map conventions:
+     * <ul>
+     *     <li>Symbol.START maps to {@code '<'}</li>
+     *     <li>Symbol.GOAL maps to {@code '>'}</li>
+     *     <li>Symbol.BOSS maps to {@code '!'}</li>
+     *     <li>Symbol.SWITCH maps to {@code '&'}</li>
+     *     <li>Symbol.SWITCH_ON maps to {@code '1'}</li>
+     *     <li>Symbol.SWITCH_OFF maps to {@code '0'}</li>
+     *     <li>Symbol.NOTHING maps to {@code ' '}</li>
+     *     <li>Any number between 0 and 255 inclusive is mapped to a letter using {@link ArrayTools#letterAt(int)}</li>
+     *     <li>Anything else maps to {@code '*'}</li>
+     * </ul>
+     * @param value a symbol int that should be less than 256, and if negative should equal one of the Symbol constants
+     * @return a single char that can be used to identify value
+     */
+    public static char asChar(final int value) {
+        if (value == START)
+            return '<';
+        else if (value == GOAL)
+            return '>';
+        else if (value == BOSS)
+            return '!';
+        else if (value == SWITCH_ON)
+            return '1';
+        else if (value == SWITCH_OFF)
+            return '0';
+        else if (value == SWITCH)
+            return '&';
+        else if (value == NOTHING)
+            return ' ';
+        else if (value >= 0 && value < 256)
+            return ArrayTools.letterAt(value);
+        else
+            return '*';
+    }
+
+    /**
+     * Gets a printable String representation of the int (the parameter value) that represents a symbol.
+     * START, GOAL, and BOSS map to "Start", "Goal", and "Boss", respectively. SWITCH, SWITCH_ON, and SWITCH_OFF map to
+     * "SW", "ON", and "OFF", respectively. NOTHING maps to "NO". Any number between 0 and 255 inclusive is mapped to a
+     * letter using {@link ArrayTools#letterAt(int)}, and that becomes the returned String. Any other number is simply
+     * printed as a normal integer.
+     * @param value a symbol int that should be less than 256, and if negative should equal one of the Symbol constants
+     * @return a printable String that should match the meaning of value
+     */
     public static String toString(final int value) {
         if (value == START)
             return "Start";
@@ -84,11 +139,12 @@ public class Symbol {
             return "OFF";
         else if (value == SWITCH)
             return "SW";
-        else if (value >= 0 && value < 26)
-            return Character.toString((char)((int)'A' + value));
+        else if (value == NOTHING)
+            return "NO";
+        else if (value >= 0 && value < 256)
+            return String.valueOf(ArrayTools.letterAt(value));
         else
             return Integer.toString(value);
-
     }
-    
+
 }
