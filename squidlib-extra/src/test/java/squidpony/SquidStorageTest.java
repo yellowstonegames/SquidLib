@@ -16,7 +16,7 @@ import java.util.Arrays;
  * Just a test.
  * Created by Tommy Ettinger on 9/17/2016.
  */
-public class SquidStorageTest extends ApplicationAdapter{
+public class SquidStorageTest extends ApplicationAdapter {
     @Override
     public void create() {
         super.create();
@@ -72,21 +72,21 @@ public class SquidStorageTest extends ApplicationAdapter{
             String text = randomLanguage.sentence(srng.copy(), 5, 8);
             ProbabilityTable<String> table = new ProbabilityTable<>("I heard you like JSON...");
             table.add("well", 1).add("this", 2).add("ain't", 3).add("real", 4).add("JSON!", 5);
-            text = table.random();
-            /*
+            //String text = table.random();
+
             noCompression.put("rng", srng);
             noCompression.put("language", randomLanguage);
             noCompression.put("generated", text);
             noCompression.put("world", world);
-            noCompression.put("grease", grease);*/
+            noCompression.put("grease", grease);
             noCompression.put("table", table);
             noCompression.put("drawn", text);
-            /*
+
             yesCompression.put("rng", srng);
             yesCompression.put("language", randomLanguage);
             yesCompression.put("generated", text);
             yesCompression.put("world", world);
-            yesCompression.put("grease", grease);*/
+            yesCompression.put("grease", grease);
             yesCompression.put("table", table);
             yesCompression.put("drawn", text);
 
@@ -103,7 +103,7 @@ public class SquidStorageTest extends ApplicationAdapter{
             noCompression.preferences.flush();
             yesCompression.store("Compressed");
 
-            //System.out.println(yesCompression.get("Compressed", "language", FakeLanguageGen.class).sentence(srng.copy(), 5, 8));
+            System.out.println(yesCompression.get("Compressed", "language", FakeLanguageGen.class).sentence(srng.copy(), 5, 8));
             System.out.println(yesCompression.get("Compressed", "drawn", String.class));
             yesCompression.preferences.clear();
             yesCompression.preferences.flush();
