@@ -149,10 +149,18 @@ public class StringKit {
     public static String[] split(String source, String delimiter) {
         int amount = count(source, delimiter);
         if (amount <= 0) return new String[]{source};
-        String[] splat = new String[++amount];
-        int dl = delimiter.length(), idx = -dl;
+        String[] splat = new String[amount+1];
+        int dl = delimiter.length(), idx = -dl, idx2;
         for (int i = 0; i < amount; i++) {
             splat[i] = safeSubstring(source, idx+dl, idx = source.indexOf(delimiter, idx+dl));
+        }
+        if((idx2 = source.indexOf(delimiter, idx+dl)) < 0)
+        {
+            splat[amount] = safeSubstring(source, idx+dl, source.length());
+        }
+        else
+        {
+            splat[amount] = safeSubstring(source, idx+dl, idx2);
         }
         return splat;
     }
