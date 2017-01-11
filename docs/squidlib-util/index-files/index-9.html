@@ -208,7 +208,10 @@
 <div class="block">Hashes only a subsection of the given data, starting at start (inclusive) and ending before end (exclusive).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.IHasher.html#hash-java.lang.Object-">hash(Object)</a></span> - Method in interface squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">If data is a type that this IHasher can specifically hash, this method should use that specific hash; in
+ other situations, it should simply delegate to calling <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang"><code>Object.hashCode()</code></a> on data.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Lightning.html#hash-boolean:A-">hash(boolean[])</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Lightning.html" title="class in squidpony.squidmath">CrossHash.Lightning</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Lightning.html#hash-byte:A-">hash(byte[])</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Lightning.html" title="class in squidpony.squidmath">CrossHash.Lightning</a></dt>

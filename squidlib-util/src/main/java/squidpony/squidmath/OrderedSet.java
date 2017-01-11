@@ -617,7 +617,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
     }
 
     @SuppressWarnings("unchecked")
-    public boolean rem(final Object k) {
+    protected boolean rem(final Object k) {
         if (k == null)
             return containsNull && removeNullEntry();
         K curr;

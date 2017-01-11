@@ -171,11 +171,33 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a></code></td>
-<td class="colLast"><span class="typeNameLabel">CrossHash.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CrossHash.html#stringArrayHasher">stringArrayHasher</a></span></code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">CrossHash.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CrossHash.html#stringArrayHasher">stringArrayHasher</a></span></code>
+<div class="block">Though the name suggests this only hashes String arrays, it can actually hash any CharSequence array as well.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CrossHash.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CrossHash.html#stringHasher">stringHasher</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> with parameters of type <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">CrossHash.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CrossHash.html#equalityHelper-java.lang.Object:A-java.lang.Object:A-squidpony.squidmath.CrossHash.IHasher-">equalityHelper</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;left,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;right,
+              <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;inner)</code>
+<div class="block">Not a general-purpose method; meant to ease implementation of <a href="../../../squidpony/squidmath/CrossHash.IHasher.html#areEqual-java.lang.Object-java.lang.Object-"><code>areEqual(Object, Object)</code></a>
+ methods when the type being compared is a multi-dimensional array (which normally requires the heavyweight method
+ <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html?is-external=true#deepEquals-java.lang.Object:A-java.lang.Object:A-" title="class or interface in java.util"><code>Arrays.deepEquals(Object[], Object[])</code></a> or doing more work yourself; this reduces the work needed to
+ implement fixed-depth equality).</div>
+</td>
 </tr>
 </tbody>
 </table>
