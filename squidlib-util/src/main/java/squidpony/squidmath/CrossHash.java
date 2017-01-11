@@ -595,13 +595,64 @@ public class CrossHash {
         return h;
     }
 
+    /**
+     * An interface that can be used to move the logic for the hashCode() and equals() methods from a class' methods to
+     * an implementation of IHasher that certain collections in SquidLib can use. Primarily useful when the key type is
+     * an array, which normally doesn't work as expected in Java hash-based collections, but can if the right collection
+     * and IHasher are used.
+     */
     public interface IHasher extends Serializable {
+        /**
+         * If data is a type that this IHasher can specifically hash, this method should use that specific hash; in
+         * other situations, it should simply delegate to calling {@link Object#hashCode()} on data. The body of an
+         * implementation of this method can be very small; for an IHasher that is meant for byte arrays, the body could
+         * be: {@code return (data instanceof byte[]) ? CrossHash.Lightning.hash((byte[]) data) : data.hashCode();}
+         *
+         * @param data the Object to hash; this method should take any type but often has special behavior for one type
+         * @return a 32-bit int hash code of data
+         */
         int hash(final Object data);
 
+        /**
+         * Not all types you might want to use an IHasher on meaningfully implement .equals(), such as array types; in
+         * these situations the areEqual method helps quickly check for equality by potentially having special logic for
+         * the type this is meant to check. The body of implementations for this method can be fairly small; for byte
+         * arrays, it looks like: {@code return left == right
+         * || ((left instanceof byte[] && right instanceof byte[])
+         * ? Arrays.equals((byte[]) left, (byte[]) right)
+         * : Objects.equals(left, right));} , but for multidimensional arrays you should use the
+         * {@link #equalityHelper(Object[], Object[], IHasher)} method with an IHasher for the inner arrays that are 1D
+         * or otherwise already-hash-able, as can be seen in the body of the implementation for 2D char arrays, where
+         * charHasher is an existing IHasher that handles 1D arrays:
+         * {@code return left == right
+         * || ((left instanceof char[][] && right instanceof char[][])
+         * ? equalityHelper((char[][]) left, (char[][]) right, charHasher)
+         * : Objects.equals(left, right));}
+         *
+         * @param left  allowed to be null; most implementations will have special behavior for one type
+         * @param right allowed to be null; most implementations will have special behavior for one type
+         * @return true if left is equal to right (preferably by value, but reference equality may sometimes be needed)
+         */
         boolean areEqual(final Object left, final Object right);
     }
 
-    private static boolean equalityHelper(Object[] left, Object[] right, IHasher inner) {
+    /**
+     * Not a general-purpose method; meant to ease implementation of {@link IHasher#areEqual(Object, Object)}
+     * methods when the type being compared is a multi-dimensional array (which normally requires the heavyweight method
+     * {@link Arrays#deepEquals(Object[], Object[])} or doing more work yourself; this reduces the work needed to
+     * implement fixed-depth equality). As mentioned in the docs for {@link IHasher#areEqual(Object, Object)}, example
+     * code that hashes 2D char arrays can be done using an IHasher for 1D char arrays called charHasher:
+     * {@code return left == right
+     * || ((left instanceof char[][] && right instanceof char[][])
+     * ? equalityHelper((char[][]) left, (char[][]) right, charHasher)
+     * : Objects.equals(left, right));}
+     *
+     * @param left
+     * @param right
+     * @param inner
+     * @return
+     */
+    public static boolean equalityHelper(Object[] left, Object[] right, IHasher inner) {
         if (left == right)
             return true;
         if ((left == null) ^ (right == null))
@@ -613,25 +664,27 @@ public class CrossHash {
         return true;
     }
 
-    private static class BooleanHasher implements IHasher {
+    private static class BooleanHasher implements IHasher, Serializable {
+        private static final long serialVersionUID = 2L;
+
         protected BooleanHasher() {
         }
 
         public int hash(final Object data) {
-            return (data instanceof boolean[]) ? CrossHash.hash((boolean[]) data) : data.hashCode();
+            return (data instanceof boolean[]) ? CrossHash.Lightning.hash((boolean[]) data) : data.hashCode();
         }
 
         @Override
         public boolean areEqual(Object left, Object right) {
-            if (left == right)
-                return true;
-            return (left instanceof boolean[] && right instanceof boolean[]) ? Arrays.equals((boolean[]) left, (boolean[]) right) : Objects.equals(left, right);
+            return left == right || ((left instanceof boolean[] && right instanceof boolean[]) ? Arrays.equals((boolean[]) left, (boolean[]) right) : Objects.equals(left, right));
         }
     }
 
     public static final IHasher booleanHasher = new BooleanHasher();
 
-    private static class ByteHasher implements IHasher {
+    private static class ByteHasher implements IHasher, Serializable {
+        private static final long serialVersionUID = 2L;
+
         protected ByteHasher() {
         }
 
@@ -641,15 +694,18 @@ public class CrossHash {
 
         @Override
         public boolean areEqual(Object left, Object right) {
-            if (left == right)
-                return true;
-            return (left instanceof byte[] && right instanceof byte[]) ? Arrays.equals((byte[]) left, (byte[]) right) : Objects.equals(left, right);
+            return left == right
+                    || ((left instanceof byte[] && right instanceof byte[])
+                    ? Arrays.equals((byte[]) left, (byte[]) right)
+                    : Objects.equals(left, right));
         }
     }
 
     public static final IHasher byteHasher = new ByteHasher();
 
-    private static class ShortHasher implements IHasher {
+    private static class ShortHasher implements IHasher, Serializable {
+        private static final long serialVersionUID = 2L;
+
         protected ShortHasher() {
         }
 
@@ -659,15 +715,15 @@ public class CrossHash {
 
         @Override
         public boolean areEqual(Object left, Object right) {
-            if (left == right)
-                return true;
-            return (left instanceof short[] && right instanceof short[]) ? Arrays.equals((short[]) left, (short[]) right) : Objects.equals(left, right);
+            return left == right || ((left instanceof short[] && right instanceof short[]) ? Arrays.equals((short[]) left, (short[]) right) : Objects.equals(left, right));
         }
     }
 
     public static final IHasher shortHasher = new ShortHasher();
 
-    private static class CharHasher implements IHasher {
+    private static class CharHasher implements IHasher, Serializable {
+        private static final long serialVersionUID = 2L;
+
         protected CharHasher() {
         }
 
@@ -677,15 +733,15 @@ public class CrossHash {
 
         @Override
         public boolean areEqual(Object left, Object right) {
-            if (left == right)
-                return true;
-            return (left instanceof char[] && right instanceof char[]) ? Arrays.equals((char[]) left, (char[]) right) : Objects.equals(left, right);
+            return left == right || ((left instanceof char[] && right instanceof char[]) ? Arrays.equals((char[]) left, (char[]) right) : Objects.equals(left, right));
         }
     }
 
     public static final IHasher charHasher = new CharHasher();
 
-    private static class IntHasher implements IHasher {
+    private static class IntHasher implements IHasher, Serializable {
+        private static final long serialVersionUID = 2L;
+
         protected IntHasher() {
         }
 
@@ -701,7 +757,9 @@ public class CrossHash {
 
     public static final IHasher intHasher = new IntHasher();
 
-    private static class LongHasher implements IHasher {
+    private static class LongHasher implements IHasher, Serializable {
+        private static final long serialVersionUID = 2L;
+
         protected LongHasher() {
         }
 
@@ -717,7 +775,9 @@ public class CrossHash {
 
     public static final IHasher longHasher = new LongHasher();
 
-    private static class FloatHasher implements IHasher {
+    private static class FloatHasher implements IHasher, Serializable {
+        private static final long serialVersionUID = 2L;
+
         protected FloatHasher() {
         }
 
@@ -727,15 +787,15 @@ public class CrossHash {
 
         @Override
         public boolean areEqual(Object left, Object right) {
-            if (left == right)
-                return true;
-            return (left instanceof float[] && right instanceof float[]) ? Arrays.equals((float[]) left, (float[]) right) : Objects.equals(left, right);
+            return left == right || ((left instanceof float[] && right instanceof float[]) ? Arrays.equals((float[]) left, (float[]) right) : Objects.equals(left, right));
         }
     }
 
     public static final IHasher floatHasher = new FloatHasher();
 
-    private static class DoubleHasher implements IHasher {
+    private static class DoubleHasher implements IHasher, Serializable {
+        private static final long serialVersionUID = 2L;
+
         protected DoubleHasher() {
         }
 
@@ -745,15 +805,15 @@ public class CrossHash {
 
         @Override
         public boolean areEqual(Object left, Object right) {
-            if (left == right)
-                return true;
-            return (left instanceof double[] && right instanceof double[]) ? Arrays.equals((double[]) left, (double[]) right) : Objects.equals(left, right);
+            return left == right || ((left instanceof double[] && right instanceof double[]) ? Arrays.equals((double[]) left, (double[]) right) : Objects.equals(left, right));
         }
     }
 
     public static final IHasher doubleHasher = new DoubleHasher();
 
-    private static class Char2DHasher implements IHasher {
+    private static class Char2DHasher implements IHasher, Serializable {
+        private static final long serialVersionUID = 2L;
+
         protected Char2DHasher() {
         }
 
@@ -763,15 +823,18 @@ public class CrossHash {
 
         @Override
         public boolean areEqual(Object left, Object right) {
-            if (left == right)
-                return true;
-            return (left instanceof char[][] && right instanceof char[][]) ? equalityHelper((char[][]) left, (char[][]) right, charHasher) : Objects.equals(left, right);
+            return left == right
+                    || ((left instanceof char[][] && right instanceof char[][])
+                    ? equalityHelper((char[][]) left, (char[][]) right, charHasher)
+                    : Objects.equals(left, right));
         }
     }
 
     public static final IHasher char2DHasher = new Char2DHasher();
 
-    private static class StringHasher implements IHasher {
+    private static class StringHasher implements IHasher, Serializable {
+        private static final long serialVersionUID = 2L;
+
         protected StringHasher() {
         }
 
@@ -787,7 +850,9 @@ public class CrossHash {
 
     public static final IHasher stringHasher = new StringHasher();
 
-    private static class StringArrayHasher implements IHasher {
+    private static class StringArrayHasher implements IHasher, Serializable {
+        private static final long serialVersionUID = 2L;
+
         protected StringArrayHasher() {
         }
 
@@ -797,15 +862,18 @@ public class CrossHash {
 
         @Override
         public boolean areEqual(Object left, Object right) {
-            if (left == right)
-                return true;
-            return (left instanceof CharSequence[] && right instanceof CharSequence[]) ? equalityHelper((CharSequence[]) left, (CharSequence[]) right, stringHasher) : Objects.equals(left, right);
+            return left == right || ((left instanceof CharSequence[] && right instanceof CharSequence[]) ? equalityHelper((CharSequence[]) left, (CharSequence[]) right, stringHasher) : Objects.equals(left, right));
         }
     }
 
+    /**
+     * Though the name suggests this only hashes String arrays, it can actually hash any CharSequence array as well.
+     */
     public static final IHasher stringArrayHasher = new StringArrayHasher();
 
-    public static class DefaultHasher implements IHasher {
+    public static class DefaultHasher implements IHasher, Serializable {
+        private static final long serialVersionUID = 2L;
+
         protected DefaultHasher() {
         }
 
@@ -1031,6 +1099,7 @@ public class CrossHash {
             }
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
+
         public static long hash64(final long[][] data) {
             if (data == null)
                 return 0;
@@ -1205,6 +1274,7 @@ public class CrossHash {
             }
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
+
         public static int hash(final long[][] data) {
             if (data == null)
                 return 0;
@@ -1435,6 +1505,7 @@ public class CrossHash {
             }
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
+
         public long hash64(final long[][] data) {
             if (data == null)
                 return 0;
@@ -2164,6 +2235,7 @@ public class CrossHash {
             }
             return (result ^ 0xC6BC25963AB56C93L * data.length);
         }
+
         public static long hash64(final long[][] data) {
             if (data == null)
                 return 0;
@@ -2315,6 +2387,7 @@ public class CrossHash {
             }
             return (result ^ 0x62E2AC0D * data.length);
         }
+
         public static int hash(final long[][] data) {
             if (data == null)
                 return 0;
@@ -2501,7 +2574,8 @@ public class CrossHash {
                 else sum += t * ($tore[++ii]);
             } else if (limit > 0 && t == 0)
                 sum += $tore[ii] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[ii + 1] + sum >>> (5 + (sum >>> 59)); return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            sum ^= $tore[ii + 1] + sum >>> (5 + (sum >>> 59));
+            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
         }
 
         public int hash(final byte[] data) {
@@ -2525,7 +2599,8 @@ public class CrossHash {
                 else sum += t * ($tore[++ii]);
             } else if (limit > 0 && t == 0)
                 sum += $tore[ii] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[ii + 1] + sum >>> (5 + (sum >>> 59)); return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            sum ^= $tore[ii + 1] + sum >>> (5 + (sum >>> 59));
+            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
         }
 
         public int hash(final short[] data) {
@@ -2545,7 +2620,8 @@ public class CrossHash {
                 else sum += t * ($tore[++ii]);
             } else if (limit > 0 && t == 0)
                 sum += $tore[ii] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[ii + 1] + sum >>> (5 + (sum >>> 59)); return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            sum ^= $tore[ii + 1] + sum >>> (5 + (sum >>> 59));
+            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
         }
 
         public int hash(final char[] data) {
@@ -2565,7 +2641,8 @@ public class CrossHash {
                 else sum += t * ($tore[++ii]);
             } else if (limit > 0 && t == 0)
                 sum += $tore[ii] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[ii + 1] + sum >>> (5 + (sum >>> 59)); return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            sum ^= $tore[ii + 1] + sum >>> (5 + (sum >>> 59));
+            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
         }
 
         public int hash(final char[] data, final int start, final int end) {
@@ -2585,7 +2662,8 @@ public class CrossHash {
                 else sum += t * ($tore[++ii]);
             } else if (limit > 0 && t == 0)
                 sum += $tore[ii] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[ii + 1] + sum >>> (5 + (sum >>> 59)); return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            sum ^= $tore[ii + 1] + sum >>> (5 + (sum >>> 59));
+            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
         }
 
         public int hash(final char[] data, final int start, final int end, final int step) {
@@ -2605,7 +2683,8 @@ public class CrossHash {
                 else sum += t * ($tore[++ii]);
             } else if (limit > 0 && t == 0)
                 sum += $tore[ii] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[ii + 1] + sum >>> (5 + (sum >>> 59)); return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            sum ^= $tore[ii + 1] + sum >>> (5 + (sum >>> 59));
+            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
         }
 
         public int hash(final int[] data) {
@@ -2620,7 +2699,8 @@ public class CrossHash {
             }
             if (limit > 0 && data[limit - 1] == 0)
                 sum += $tore[limit] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[limit + 1] + sum >>> (5 + (sum >>> 59)); return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            sum ^= $tore[limit + 1] + sum >>> (5 + (sum >>> 59));
+            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
         }
 
         public int hash(final long[] data) {
@@ -2635,7 +2715,8 @@ public class CrossHash {
             }
             if (limit > 0 && (t >>> 32) == 0)
                 sum += $tore[limit] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[(limit << 1) + 1] + sum >>> (5 + (sum >>> 59)); return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            sum ^= $tore[(limit << 1) + 1] + sum >>> (5 + (sum >>> 59));
+            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
         }
 
 
@@ -2651,7 +2732,8 @@ public class CrossHash {
             }
             if (limit > 0 && data[limit - 1] == 0)
                 sum += $tore[limit] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[limit + 1] + sum >>> (5 + (sum >>> 59)); return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            sum ^= $tore[limit + 1] + sum >>> (5 + (sum >>> 59));
+            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
         }
 
         public int hash(final double[] data) {
@@ -2666,7 +2748,8 @@ public class CrossHash {
             }
             if (limit > 0 && (t >>> 32) == 0)
                 sum += $tore[limit] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[(limit << 1) + 1] + sum >>> (5 + (sum >>> 59)); return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            sum ^= $tore[(limit << 1) + 1] + sum >>> (5 + (sum >>> 59));
+            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
         }
 
         public int hash(final CharSequence data) {
@@ -2686,7 +2769,8 @@ public class CrossHash {
                 else sum += t * ($tore[++ii]);
             } else if (limit > 0 && t == 0)
                 sum += $tore[ii] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[ii + 1] + sum >>> (5 + (sum >>> 59)); return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            sum ^= $tore[ii + 1] + sum >>> (5 + (sum >>> 59));
+            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
         }
 
         public int hash(final char[][] data) {
@@ -2701,7 +2785,8 @@ public class CrossHash {
             }
             if (limit > 0 && data[limit - 1] == null)
                 sum += $tore[limit] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[limit + 1] + sum >>> (5 + (sum >>> 59)); return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            sum ^= $tore[limit + 1] + sum >>> (5 + (sum >>> 59));
+            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
         }
 
         public int hash(final long[][] data) {
@@ -2716,7 +2801,8 @@ public class CrossHash {
             }
             if (limit > 0 && data[limit - 1] == null)
                 sum += $tore[limit] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[limit + 1] + sum >>> (5 + (sum >>> 59)); return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            sum ^= $tore[limit + 1] + sum >>> (5 + (sum >>> 59));
+            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
         }
 
         public int hash(final CharSequence[] data) {
@@ -2731,7 +2817,8 @@ public class CrossHash {
             }
             if (limit > 0 && data[limit - 1] == null)
                 sum += $tore[limit] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[limit + 1] + sum >>> (5 + (sum >>> 59)); return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            sum ^= $tore[limit + 1] + sum >>> (5 + (sum >>> 59));
+            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
         }
 
         public int hash(final CharSequence[]... data) {
@@ -2746,7 +2833,8 @@ public class CrossHash {
             }
             if (limit > 0 && data[limit - 1] == null)
                 sum += $tore[limit] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[limit + 1] + sum >>> (5 + (sum >>> 59)); return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            sum ^= $tore[limit + 1] + sum >>> (5 + (sum >>> 59));
+            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
         }
 
 
@@ -2764,7 +2852,8 @@ public class CrossHash {
             }
             if (limit > 0 && data[limit - 1] == null)
                 sum += $tore[limit] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[limit + 1] + sum >>> (5 + (sum >>> 59)); return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            sum ^= $tore[limit + 1] + sum >>> (5 + (sum >>> 59));
+            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
         }
     }
 }
