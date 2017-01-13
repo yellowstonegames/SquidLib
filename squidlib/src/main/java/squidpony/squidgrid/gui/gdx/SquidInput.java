@@ -3,7 +3,7 @@ package squidpony.squidgrid.gui.gdx;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.utils.CharArray;
+import squidpony.squidmath.IntVLA;
 
 /**
  * This input processing class can handle mouse and keyboard input, using a squidpony.squidgrid.gui.gdx.SquidMouse for
@@ -55,8 +55,7 @@ public class SquidInput extends InputAdapter {
     protected KeyHandler keyAction;
     protected boolean numpadDirections = true, ignoreInput = false;
     protected SquidMouse mouse;
-    protected final CharArray queue = new CharArray();
-    protected final CharArray processingQueue = new CharArray();
+    protected final IntVLA queue = new IntVLA();
 
     /**
      * Constructs a new SquidInput that does not respond to keyboard or mouse input. These can be set later by calling
@@ -194,26 +193,19 @@ public class SquidInput extends InputAdapter {
      * events are not queued and are processed when they come in.
      */
     public void drain () {
-        CharArray q = processingQueue;
+        IntVLA qu = queue;
 
-        if (keyAction == null || queue.size < 2) {
-            queue.clear();
+        if (keyAction == null || qu.size <= 0) {
+            qu.clear();
             return;
         }
-        q.addAll(queue);
-        queue.clear();
 
-        for (int i = 0, n = q.size; i < n; ) {
-            char c = q.get(i++), mods = q.get(i++);
-            keyAction.handle(c, (mods & 1) != 0, (mods & 2) != 0, (mods & 4) != 0);
+        for (int i = 0, n = qu.size, t; i < n; ) {
+            t = qu.get(i++);
+            keyAction.handle((char)t, (t & 0x10000) != 0, (t & 0x20000) != 0, (t & 0x40000) != 0);
         }
-        /**
-         case KEY_UP:
-         keyProcessor.keyUp(q.get(i++));
-         break;
-         */
 
-        q.clear();
+        qu.clear();
     }
 
     /**
@@ -222,7 +214,7 @@ public class SquidInput extends InputAdapter {
      */
     public boolean hasNext()
     {
-        return queue.size >= 2;
+        return queue.size > 0;
     }
 
     /**
@@ -230,19 +222,15 @@ public class SquidInput extends InputAdapter {
      * queued and are processed when they come in.
      */
     public void next() {
-        CharArray q = processingQueue;
-        if (keyAction == null || queue.size < 2) {
-            queue.clear();
+        IntVLA qu = queue;
+        if (keyAction == null || qu.size <= 0) {
             return;
         }
-        q.addAll(queue, 0, 2);
-        queue.removeRange(0, 1);
+        int t = qu.removeIndex(0);
 
-        if (q.size >= 2) {
-            char c = q.get(0), mods = q.get(1);
-            keyAction.handle(c, (mods & 1) != 0, (mods & 2) != 0, (mods & 4) != 0);
-        }
-        q.clear();
+        char c = (char)t;
+        keyAction.handle(c, (t & 0x10000) != 0, (t & 0x20000) != 0, (t & 0x40000) != 0);
+
     }
 
     /**
@@ -259,14 +247,12 @@ public class SquidInput extends InputAdapter {
         boolean alt =  Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.ALT_RIGHT),
                 ctrl =  Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT),
                 shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
-        char c = fromCode(keycode, shift);
-        char mods = 0;
+        int c = fromCode(keycode, shift);
         if(c != '\0') {
+            c |= (alt) ? 0x10000 : 0;
+            c |= (ctrl) ? 0x20000 : 0;
+            c |= (shift) ? 0x40000 : 0;
             queue.add(c);
-            mods |= (alt) ? 1 : 0;
-            mods |= (ctrl) ? 2 : 0;
-            mods |= (shift) ? 4 : 0;
-            queue.add(mods);
         }
         return false;
     }
@@ -352,7 +338,7 @@ public class SquidInput extends InputAdapter {
      * <li>{@code '|'} to {@code '\\'}</li>
      * <li>{@code '-'} to {@code '_'}</li>
      * <li>{@code '+'} to {@code '='}</li>
-     * <li>{@code '`'} to {@code '~'}</li>
+     * <li>{@code '`'} to {@code '~'} (note, this key produces no event on the GWT backend)</li>
      * </ul>
      * @param keycode a keycode as passed by LibGDX
      * @param shift true if Shift key is being held.
