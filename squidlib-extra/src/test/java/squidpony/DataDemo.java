@@ -50,9 +50,9 @@ public class DataDemo extends ApplicationAdapter {
             adventurers.put(adventurer.name, adventurer);
         }
         Gdx.files.local("squidlib-extra/src/test/resources/generated/UncompressedAdventurers.js")
-                .writeString(convert.toJson(adventurers, OrderedMap.class), false);
+                .writeString(convert.toJson(adventurers, OrderedMap.class), false, "UTF-8");
         Gdx.files.local("squidlib-extra/src/test/resources/generated/CompressedAdventurers.js")
-                .writeString(compress.toJson(adventurers, OrderedMap.class), false);
+                .writeString(compress.toJson(adventurers, OrderedMap.class), false, "UTF-8");
 
         Gdx.app.exit();
     }
