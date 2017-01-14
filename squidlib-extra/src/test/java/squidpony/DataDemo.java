@@ -23,17 +23,19 @@ import java.util.Scanner;
  * Created by Tommy Ettinger on 1/10/2017.
  */
 public class DataDemo extends ApplicationAdapter {
+    private static String ROOT_DIR = "squidlib-extra/"; // "squidlib-extra/" if you're running this file from the parent project and "" if you're running from the squidlib-extra project directly
+
     @Override
     public void create() {
         super.create();
         DataConverter convert = new DataConverter(JsonWriter.OutputType.json);
         DataCompressor compress = new DataCompressor();
         OrderedMap<String, Adventurer> adventurers = new OrderedMap<>(200, 0.8f);
-        if(Gdx.files.local("squidlib-extra/src/test/resources/generated/UncompressedAdventurers.js").exists()) {
+        if(Gdx.files.local(ROOT_DIR + "src/test/resources/generated/UncompressedAdventurers.js").exists()) {
             OrderedMap<String, Adventurer> fromNormal = convert.fromJson(adventurers.getClass(),
-                    Gdx.files.local("squidlib-extra/src/test/resources/generated/UncompressedAdventurers.js")),
+                    Gdx.files.local(ROOT_DIR + "src/test/resources/generated/UncompressedAdventurers.js")),
                     fromCompressed = compress.fromJson(adventurers.getClass(),
-                            Gdx.files.local("squidlib-extra/src/test/resources/generated/CompressedAdventurers.js"));
+                            Gdx.files.local(ROOT_DIR + "src/test/resources/generated/CompressedAdventurers.js"));
             for (int i = 0; i < 200; i++) {
                 if ((i & 1) == 0)
                     System.out.println(fromNormal.getAt(i).serializeToString());
@@ -49,9 +51,9 @@ public class DataDemo extends ApplicationAdapter {
             Adventurer adventurer = Adventurer.deserializeFromString(scanner.nextLine());
             adventurers.put(adventurer.name, adventurer);
         }
-        Gdx.files.local("squidlib-extra/src/test/resources/generated/UncompressedAdventurers.js")
+        Gdx.files.local(ROOT_DIR + "src/test/resources/generated/UncompressedAdventurers.js")
                 .writeString(convert.toJson(adventurers, OrderedMap.class), false, "UTF-8");
-        Gdx.files.local("squidlib-extra/src/test/resources/generated/CompressedAdventurers.js")
+        Gdx.files.local(ROOT_DIR + "src/test/resources/generated/CompressedAdventurers.js")
                 .writeString(compress.toJson(adventurers, OrderedMap.class), false, "UTF-8");
 
         Gdx.app.exit();
