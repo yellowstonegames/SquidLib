@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Align;
+import squidpony.ArrayTools;
 import squidpony.IColorCenter;
 import squidpony.panel.IColoredString;
 import squidpony.panel.ISquidPanel;
@@ -42,8 +43,8 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     protected final int cellWidth, cellHeight;
     protected int gridWidth, gridHeight, gridOffsetX = 0, gridOffsetY = 0;
     protected final String[][] contents;
-    protected final Color[][] colors;
-    protected Color lightingColor = SColor.WHITE;
+    protected final float[][] colors;
+    protected Color lightingColor = SColor.WHITE, tmpColor = new Color();
     protected final TextCellFactory textFactory;
     protected float xOffset, yOffset;
     public final OrderedSet<AnimatedEntity> animatedEntities;
@@ -150,11 +151,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         cellHeight = MathUtils.round(textFactory.actualCellHeight);
 
         contents = new String[gridWidth][gridHeight];
-        colors = new Color[gridWidth][gridHeight];
-        for (int i = 0; i < gridWidth; i++) {
-            Arrays.fill(colors[i], scc.filter(Color.CLEAR));
-        }
-
+        colors = ArrayTools.fill(scc.filter(Color.CLEAR).toFloatBits(), gridWidth, gridHeight);
 
         int w = gridWidth * cellWidth;
         int h = gridHeight * cellHeight;
@@ -353,7 +350,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     public void erase() {
         for (int i = 0; i < contents.length; i++) {
             Arrays.fill(contents[i], "\0");
-            Arrays.fill(colors[i], Color.CLEAR);
+            Arrays.fill(colors[i], 0f);
             /*
             for (int j = 0; j < contents[i].length; j++) {
                 contents[i][j] = "\0";
@@ -365,12 +362,16 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
     @Override
 	public void clear(int x, int y) {
-        put(x, y, Color.CLEAR);
+        put(x, y, 0f);
     }
 
     @Override
-	public void put(int x, int y, Color color) {
+    public void put(int x, int y, Color color) {
         put(x, y, '\0', color);
+    }
+
+    public void put(int x, int y, float encodedColor) {
+        put(x, y, '\0', encodedColor);
     }
 
     public void put(int x, int y, Color color, float colorMultiplier) {
@@ -419,7 +420,22 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
             return;//skip if out of bounds
         }
         contents[x][y] = String.valueOf(c);
-        colors[x][y] = scc.filter(color);
+        colors[x][y] = scc.filter(color).toFloatBits();
+    }
+    /**
+     * Takes a unicode char for input.
+     *
+     * @param x
+     * @param y
+     * @param c
+     * @param encodedColor
+     */
+    public void put(int x, int y, char c, float encodedColor) {
+        if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) {
+            return;//skip if out of bounds
+        }
+        contents[x][y] = String.valueOf(c);
+        colors[x][y] = encodedColor;
     }
 
 	/**
@@ -433,7 +449,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
             return;//skip if out of bounds
         }
         contents[x][y] = String.valueOf(c);
-		colors[x][y] = scc.lerp(color, lightingColor, colorMultiplier);
+		colors[x][y] = scc.lerp(color, lightingColor, colorMultiplier).toFloatBits();
 	}
 
     @Override
@@ -480,12 +496,12 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     @Override
     public void draw (Batch batch, float parentAlpha) {
         textFactory.configureShader(batch);
-        Color tmp;
         int inc = onlyRenderEven ? 2 : 1;
         for (int x = gridOffsetX; x < gridWidth; x += inc) {
             for (int y = gridOffsetY; y < gridHeight; y += inc) {
-                tmp = scc.filter(colors[x][y]);
-                textFactory.draw(batch, contents[x][y], tmp, xOffset + /*- getX() + 1f * */ x * cellWidth,
+                textFactory.draw(batch, contents[x][y],
+                        Filters.Utility.colorFromFloat(tmpColor, colors[x][y]),
+                        xOffset + /*- getX() + 1f * */ x * cellWidth,
                         yOffset + /*- getY() + 1f * */ (gridHeight - y) * cellHeight + 1f);
             }
         }
@@ -911,16 +927,20 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     	return createActor(x, y, contents[x][y], colors[x][y], doubleWidth);
     }
 
-	protected /* @Nullable */ Actor createActor(int x, int y, String name, Color color, boolean doubleWidth) {
-		if (name == null || name.isEmpty())
-			return null;
-		else {
-			final Actor a = textFactory.makeActor(name, scc.filter(color));
-			a.setName(name);
-			a.setPosition(adjustX(x, doubleWidth) - getX() * 2, adjustY(y) - getY() * 2);
-			addActor(a);
-			return a;
-		}
+    protected /* @Nullable */ Actor createActor(int x, int y, String name, Color color, boolean doubleWidth) {
+        if (name == null || name.isEmpty())
+            return null;
+        else {
+            final Actor a = textFactory.makeActor(name, scc.filter(color));
+            a.setName(name);
+            a.setPosition(adjustX(x, doubleWidth) - getX() * 2, adjustY(y) - getY() * 2);
+            addActor(a);
+            return a;
+        }
+    }
+
+    protected /* @Nullable */ Actor createActor(int x, int y, String name, float encodedColor, boolean doubleWidth) {
+        return createActor(x, y, name, Filters.Utility.colorFromFloat(tmpColor, encodedColor), doubleWidth);
     }
 
     public float adjustX(float x, boolean doubleWidth)
@@ -1181,7 +1201,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     public void slide(int x, int y, final /* @Nullable */ String name, /* @Nullable */ Color color, int newX,
                       int newY, float duration, /* @Nullable */ Runnable postRunnable) {
         final Actor a = createActor(x, y, name == null ? contents[x][y] : name,
-                color == null ? colors[x][y] : color, false);
+                color == null ? Filters.Utility.colorFromFloat(tmpColor, colors[x][y]) : color, false);
         if (a == null)
             return;
 
@@ -1853,7 +1873,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     }
     public Color getColorAt(int x, int y)
     {
-        return colors[x][y];
+        return Filters.Utility.colorFromFloat(tmpColor, colors[x][y]);
     }
 
     public Color getLightingColor() {

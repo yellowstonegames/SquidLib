@@ -19,7 +19,12 @@ import com.badlogic.gdx.utils.Disposable;
 import squidpony.IColorCenter;
 import squidpony.squidmath.OrderedMap;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+
+import static squidpony.squidgrid.gui.gdx.Filters.Utility.colorFromFloat;
 
 /**
  * Class for creating text blocks.
@@ -857,6 +862,40 @@ public class TextCellFactory implements Disposable {
             batch.setColor(orig);
         } else {
             bmpFont.setColor(scc.filter(color));
+            if(swap.containsKey(s))
+                bmpFont.draw(batch, swap.get(s), x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width * s.length(), Align.center, false);
+            else
+                bmpFont.draw(batch, s, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width * s.length(), Align.center, false);
+        }
+    }
+    /**
+     * Use the specified Batch to draw a String (often just one char long) in the specified LibGDX Color, with x and y
+     * determining the world-space coordinates for the upper-left corner.
+     *
+     * @param batch the LibGDX Batch to do the drawing
+     * @param s the string to draw, often but not necessarily one char. Can be null to draw a solid block instead.
+     * @param encodedColor the LibGDX Color to use, converted to float as by {@link Color#toFloatBits()}
+     * @param x x of the upper-left corner of the region of text in world coordinates.
+     * @param y y of the upper-left corner of the region of text in world coordinates.
+     */
+    public void draw(Batch batch, String s, float encodedColor, float x, float y) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+
+        if (s == null) {
+            float orig = batch.getPackedColor();
+            batch.setColor(encodedColor);
+            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // descent * 1 / 3f
+            batch.setColor(orig);
+        } else if(s.length() > 0 && s.charAt(0) == '\0') {
+            float orig = batch.getPackedColor();
+            batch.setColor(encodedColor);
+            batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight); // descent * 1 / 3f
+            batch.setColor(orig);
+        } else
+        {
+            colorFromFloat(bmpFont.getColor(), encodedColor);
             if(swap.containsKey(s))
                 bmpFont.draw(batch, swap.get(s), x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width * s.length(), Align.center, false);
             else
