@@ -135,10 +135,10 @@ public class RotationDemo extends ApplicationAdapter {
         // cases but probably not all.
         //textFactory = DefaultResources.getStretchableDejaVuFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
         //        .width(cellWidth).height(cellHeight).initBySize();
-        //textFactory = DefaultResources.getStretchableCodeFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
-        //        .width(cellWidth).height(cellHeight).initBySize(); //.setDirectionGlyph('ˆ')
-        textFactory = DefaultResources.getStretchableSciFiFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
-                .width(cellWidth).height(cellHeight).initBySize();
+        textFactory = DefaultResources.getStretchableCodeFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
+                .width(cellWidth).height(cellHeight).initBySize(); //.setDirectionGlyph('ˆ')
+        //textFactory = DefaultResources.getStretchableSciFiFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
+        //        .width(cellWidth).height(cellHeight).initBySize();
 
         // Creates a layered series of text grids in a SquidLayers object, using the previously set-up textFactory and
         // SquidColorCenters.
@@ -152,8 +152,8 @@ public class RotationDemo extends ApplicationAdapter {
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        messages.setTextSize(cellWidth + INTERNAL_ZOOM, cellHeight + INTERNAL_ZOOM * 4);
-        display.setTextSize(cellWidth + INTERNAL_ZOOM, cellHeight + INTERNAL_ZOOM * 4);
+        messages.setTextSize(cellWidth + INTERNAL_ZOOM * 2, cellHeight + INTERNAL_ZOOM * 4);
+        display.setTextSize(cellWidth + INTERNAL_ZOOM * 2, cellHeight + INTERNAL_ZOOM * 4);
         //The subCell SquidPanel uses a smaller size here; the numbers 8 and 16 should change if cellWidth or cellHeight
         //change, and the INTERNAL_ZOOM multiplier keeps things sharp, the same as it does all over here.
         viewport = new StretchViewport(width * cellWidth, (height + 4) * cellHeight);
@@ -179,7 +179,7 @@ public class RotationDemo extends ApplicationAdapter {
         char[][] mg = serpent.generate();
         decoDungeon = dungeonGen.generate(mg, serpent.getEnvironment());
         bareDungeon = dungeonGen.getBareDungeon();
-        lineDungeon = DungeonUtility.linesToHashes(DungeonUtility.hashesToLines(dungeonGen.getDungeon(), true));
+        lineDungeon = DungeonUtility.hashesToLines(dungeonGen.getDungeon(), true);
         /*
         decoDungeon = new char[][]{
                 {'#','#','#','#',},

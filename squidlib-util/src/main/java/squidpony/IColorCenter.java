@@ -38,22 +38,22 @@ import java.util.Map;
  */
 public interface IColorCenter<T> {
 
-	/**
-	 * @param red
-	 *            The red component. For screen colors, in-between 0 (inclusive)
+    /**
+     * @param red
+     *            The red component. For screen colors, in-between 0 (inclusive)
      *            and 256 (exclusive).
-	 * @param green
-	 *            The green component. For screen colors, in-between 0 (inclusive)
+     * @param green
+     *            The green component. For screen colors, in-between 0 (inclusive)
      *            and 256 (exclusive).
-	 * @param blue
-	 *            The blue component. For screen colors, in-between 0 (inclusive)
+     * @param blue
+     *            The blue component. For screen colors, in-between 0 (inclusive)
      *            and 256 (exclusive).
-	 * @param opacity
-	 *            The alpha component. In-between 0 (inclusive) and 256
-	 *            (exclusive). Larger values mean more opacity; 0 is clear.
-	 * @return A possibly transparent color.
-	 */
-	T get(int red, int green, int blue, int opacity);
+     * @param opacity
+     *            The alpha component. In-between 0 (inclusive) and 256
+     *            (exclusive). Larger values mean more opacity; 0 is clear.
+     * @return A possibly transparent color.
+     */
+    T get(int red, int green, int blue, int opacity);
 
 	/**
 	 * @param red
@@ -332,18 +332,20 @@ public interface IColorCenter<T> {
 			return this;
 		}
 
-		@Override
-		public T get(int red, int green, int blue, int opacity) {
-			final Long value = getUniqueIdentifier((short)red, (short)green, (short)blue, (short)opacity);
-			T t = cache.get(value);
-			if (t == null) {
+		protected transient Long tempValue;
+
+        @Override
+        public T get(int red, int green, int blue, int opacity) {
+            tempValue = getUniqueIdentifier(red, green, blue, opacity);
+            T t = cache.get(tempValue);
+            if (t == null) {
 				/* Miss */
-				t = create(red, green, blue, opacity);
+                t = create(red, green, blue, opacity);
 				/* Put in cache */
-				cache.put(value, t);
-			}
-			return t;
-		}
+                cache.put(tempValue, t);
+            }
+            return t;
+        }
 
 		@Override
 		public T get(int red, int green, int blue) {
@@ -383,6 +385,7 @@ public interface IColorCenter<T> {
                 }
             }
         }
+
 
         @Override
         public T getHSV(float hue, float saturation, float value) {
@@ -513,10 +516,11 @@ public interface IColorCenter<T> {
         }
 
         @Override
-		public T filter(T c)
+        public T filter(T c)
         {
-        	return get(getRed(c), getGreen(c), getBlue(c), getAlpha(c));
+            return get(getRed(c), getGreen(c), getBlue(c), getAlpha(c));
         }
+
 
 		@Override
 		public IColoredString<T> filter(IColoredString<T> ics) {
@@ -673,19 +677,19 @@ public interface IColorCenter<T> {
 
 		}
 
-		/**
-		 * Create a concrete instance of the color type given as a type parameter. That's the
-		 * place to use the {@link #filter}.
-		 * 
-		 * @param red the red component of the desired color
-		 * @param green the green component of the desired color
-		 * @param blue the blue component of the desired color
-		 * @param opacity the alpha component or opacity of the desired color
-		 * @return a fresh instance of the concrete color type
-		 */
-		protected abstract T create(int red, int green, int blue, int opacity);
+        /**
+         * Create a concrete instance of the color type given as a type parameter. That's the
+         * place to use the {@link #filter}.
+         *
+         * @param red the red component of the desired color
+         * @param green the green component of the desired color
+         * @param blue the blue component of the desired color
+         * @param opacity the alpha component or opacity of the desired color
+         * @return a fresh instance of the concrete color type
+         */
+        protected abstract T create(int red, int green, int blue, int opacity);
 
-		private long getUniqueIdentifier(short r, short g, short b, short a) {
+		private long getUniqueIdentifier(int r, int g, int b, int a) {
 			return ((a & 0xffL) << 48) | ((r & 0xffffL) << 32) | ((g & 0xffffL) << 16) | (b & 0xffffL);
 		}
 

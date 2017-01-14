@@ -53,8 +53,8 @@ public class SquidLayersTest extends ApplicationAdapter{
                 //DefaultResources.getStretchableFont());
         layers.setTextSize(cellWidth + 1, cellHeight + 4);
         //colors = DefaultResources.getSCC().rainbow(0.2f, 1.0f, 144);
-        colors = DefaultResources.getSCC().loopingGradient(SColor.ATOMIC_TANGERINE, SColor.CRIMSON, 100);
-        mColors = DefaultResources.getSCC().loopingGradient(SColor.SKY_BLUE, SColor.MAGIC_MINT, 123);
+        colors = DefaultResources.getSCC().loopingGradient(SColor.ATOMIC_TANGERINE, SColor.CRIMSON, 500);
+        mColors = DefaultResources.getSCC().loopingGradient(SColor.SKY_BLUE, SColor.MAGIC_MINT, 523);
         //colors.addAll(DefaultResources.getSCC().zigzagGradient(Color.MAGENTA, Color.RED, 200));
         layers.setLightingColor(colors.get(colorIndex));
         fov = new FOV(FOV.SHADOW);
@@ -110,6 +110,7 @@ public class SquidLayersTest extends ApplicationAdapter{
     @Override
     public void render() {
         super.render();
+        Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() + " FPS");
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         ctr += Gdx.graphics.getDeltaTime();
@@ -166,6 +167,7 @@ public class SquidLayersTest extends ApplicationAdapter{
         config.title = "SquidLib Test: SquidLayers";
         config.width = gridWidth * cellWidth;
         config.height = gridHeight * cellHeight;
+        config.foregroundFPS = 0;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);
         config.addIcon("Tentacle-128.png", Files.FileType.Internal);

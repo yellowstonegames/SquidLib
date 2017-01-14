@@ -37,23 +37,26 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
     {
     	super(filterEffect);
     }
-	@Override
-	protected Color create(int red, int green, int blue, int opacity) {
-		if (filter == null)
-			/* No filtering */
-			return new Color(red / 255f, green / 255f, blue / 255f, opacity / 255f);
-		else
-			/* Some filtering */
-			return filter.alter(red / 255f, green / 255f, blue / 255f, opacity / 255f);
-	}
+
+    private final Color tmpColor = new Color();
     @Override
-	public Color filter(Color c)
+    protected Color create(int red, int green, int blue, int opacity) {
+        if (filter == null)
+			/* No filtering */
+            return new Color(red / 255f, green / 255f, blue / 255f, opacity / 255f);
+        else
+			/* Some filtering */
+            return filter.alter(red / 255f, green / 255f, blue / 255f, opacity / 255f);
+    }
+    @Override
+    public Color filter(Color c)
     {
         if(c == null)
             return Color.CLEAR;
         else
-        	return super.filter(c);
+            return super.filter(c);
     }
+
     public Color get(long c)
     {
         return get((int)((c >> 24) & 0xff), (int)((c >> 16) & 0xff), (int)((c >> 8) & 0xff), (int)(c & 0xff));

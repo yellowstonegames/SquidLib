@@ -201,24 +201,24 @@
 <span class="sourceLineNo">193</span>            new Replacer(Pattern.compile("^[pc]([nts])"), "$1"),<a name="line.193"></a>
 <span class="sourceLineNo">194</span>            new Replacer(Pattern.compile("^fth"), "t", false),<a name="line.194"></a>
 <span class="sourceLineNo">195</span>    }, conjugationProc = { // 17 is REFlags.UNICODE | REFlags.IGNORE_CASE<a name="line.195"></a>
-<span class="sourceLineNo">196</span>            new Replacer(Pattern.compile("([^àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]+)" +<a name="line.196"></a>
-<span class="sourceLineNo">197</span>                    "([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])\\2" +<a name="line.197"></a>
-<span class="sourceLineNo">198</span>                    "([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])", 17), "$1$2$1$2$3"),<a name="line.198"></a>
-<span class="sourceLineNo">199</span>            new Replacer(Pattern.compile("([^àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]+)" +<a name="line.199"></a>
-<span class="sourceLineNo">200</span>                    "([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])" +<a name="line.200"></a>
-<span class="sourceLineNo">201</span>                    "([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])\\3", 17), "$1$2$3$1$3"),<a name="line.201"></a>
-<span class="sourceLineNo">202</span>            new Replacer(Pattern.compile("([^àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]{3})" +<a name="line.202"></a>
-<span class="sourceLineNo">203</span>                    "(?:[^àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]+)", 17), "$1"),<a name="line.203"></a>
-<span class="sourceLineNo">204</span>            new Replacer(Pattern.compile("([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])" +<a name="line.204"></a>
-<span class="sourceLineNo">205</span>                    "([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])(?:\\1\\2)+", 17), "$1$2"),<a name="line.205"></a>
-<span class="sourceLineNo">206</span>            new Replacer(Pattern.compile("[æǽœìíîïĩīĭįıiùúûüũūŭůűųuýÿŷỳy]([æǽœýÿŷỳy])", 17), "$1"),<a name="line.206"></a>
-<span class="sourceLineNo">207</span>            new Replacer(Pattern.compile("q([ùúûüũūŭůűųu])$", 17), "q$1e"),<a name="line.207"></a>
-<span class="sourceLineNo">208</span>            new Replacer(Pattern.compile("([ìíîïĩīĭįıi])[ìíîïĩīĭįıi]", 17), "$1"),<a name="line.208"></a>
-<span class="sourceLineNo">209</span>            new Replacer(Pattern.compile("([æǽœìíîïĩīĭįıiùúûüũūŭůűųuýÿŷỳy])[wŵẁẃẅ]$", 17), "$1"),<a name="line.209"></a>
-<span class="sourceLineNo">210</span>            new Replacer(Pattern.compile("([ùúûüũūŭůűųu])([òóôõöøōŏőǿo])", 17), "$2$1"),<a name="line.210"></a>
-<span class="sourceLineNo">211</span>            new Replacer(Pattern.compile("[àáâãäåāăąǻaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőǿoùúûüũūŭůűųuýÿŷỳy]([æǽœ])", 17), "$1"),<a name="line.211"></a>
-<span class="sourceLineNo">212</span>            new Replacer(Pattern.compile("([æǽœ])[àáâãäåāăąǻaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőǿoùúûüũūŭůűųuýÿŷỳy]", 17), "$1"),<a name="line.212"></a>
-<span class="sourceLineNo">213</span>            new Replacer(Pattern.compile("([wŵẁẃẅ])[wŵẁẃẅ]", 17), "$1"),<a name="line.213"></a>
+<span class="sourceLineNo">196</span>            new Replacer(Pattern.compile("([^�������?????a����?????e����?????i������???�?o����??????u��??y?????????????????]+)" +<a name="line.196"></a>
+<span class="sourceLineNo">197</span>                    "([�������?????a����?????e����?????i������???�?o����??????u��??y?????????????????])\\2" +<a name="line.197"></a>
+<span class="sourceLineNo">198</span>                    "([�������?????a����?????e����?????i������???�?o����??????u��??y?????????????????])", 17), "$1$2$1$2$3"),<a name="line.198"></a>
+<span class="sourceLineNo">199</span>            new Replacer(Pattern.compile("([^�������?????a����?????e����?????i������???�?o����??????u��??y?????????????????]+)" +<a name="line.199"></a>
+<span class="sourceLineNo">200</span>                    "([�������?????a����?????e����?????i������???�?o����??????u��??y?????????????????])" +<a name="line.200"></a>
+<span class="sourceLineNo">201</span>                    "([�������?????a����?????e����?????i������???�?o����??????u��??y?????????????????])\\3", 17), "$1$2$3$1$3"),<a name="line.201"></a>
+<span class="sourceLineNo">202</span>            new Replacer(Pattern.compile("([^�������?????a����?????e����?????i������???�?o����??????u��??y?????????????????]{3})" +<a name="line.202"></a>
+<span class="sourceLineNo">203</span>                    "(?:[^�������?????a����?????e����?????i������???�?o����??????u��??y?????????????????]+)", 17), "$1"),<a name="line.203"></a>
+<span class="sourceLineNo">204</span>            new Replacer(Pattern.compile("([�������?????a����?????e����?????i������???�?o����??????u��??y?????????????????])" +<a name="line.204"></a>
+<span class="sourceLineNo">205</span>                    "([�������?????a����?????e����?????i������???�?o����??????u��??y?????????????????])(?:\\1\\2)+", 17), "$1$2"),<a name="line.205"></a>
+<span class="sourceLineNo">206</span>            new Replacer(Pattern.compile("[�?�����?????i����??????u��??y]([�?���??y])", 17), "$1"),<a name="line.206"></a>
+<span class="sourceLineNo">207</span>            new Replacer(Pattern.compile("q([����??????u])$", 17), "q$1e"),<a name="line.207"></a>
+<span class="sourceLineNo">208</span>            new Replacer(Pattern.compile("([����?????i])[����?????i]", 17), "$1"),<a name="line.208"></a>
+<span class="sourceLineNo">209</span>            new Replacer(Pattern.compile("([�?�����?????i����??????u��??y])[w????]$", 17), "$1"),<a name="line.209"></a>
+<span class="sourceLineNo">210</span>            new Replacer(Pattern.compile("([����??????u])([������????o])", 17), "$2$1"),<a name="line.210"></a>
+<span class="sourceLineNo">211</span>            new Replacer(Pattern.compile("[������????a����?????e����?????i������????o����??????u��??y]([�?�])", 17), "$1"),<a name="line.211"></a>
+<span class="sourceLineNo">212</span>            new Replacer(Pattern.compile("([�?�])[������????a����?????e����?????i������????o����??????u��??y]", 17), "$1"),<a name="line.212"></a>
+<span class="sourceLineNo">213</span>            new Replacer(Pattern.compile("([w????])[w????]", 17), "$1"),<a name="line.213"></a>
 <span class="sourceLineNo">214</span>            new Replacer(Pattern.compile("q{2,}", 17), "q")<a name="line.214"></a>
 <span class="sourceLineNo">215</span>    };<a name="line.215"></a>
 <span class="sourceLineNo">216</span><a name="line.216"></a>
@@ -323,26 +323,26 @@
 <span class="sourceLineNo">315</span><a name="line.315"></a>
 <span class="sourceLineNo">316</span>    private Pattern[] additionalPrefixChecks = {<a name="line.316"></a>
 <span class="sourceLineNo">317</span>            //17 is REFlags.UNICODE | REFlags.IGNORE_CASE<a name="line.317"></a>
-<span class="sourceLineNo">318</span>            Pattern.compile("(?:(?:[pрρ][hн])|[fd])[aаαiτιuμυνv]$", 17),<a name="line.318"></a>
-<span class="sourceLineNo">319</span>            Pattern.compile("[kкκcсςq][uμυνv]$", 17),<a name="line.319"></a>
-<span class="sourceLineNo">320</span>            Pattern.compile("[bъыбвβЪЫБ][iτι][tтτг]$", 17),<a name="line.320"></a>
-<span class="sourceLineNo">321</span>            Pattern.compile("[sξζzcсς](?:[hн]?)[iτιyуλγУ]$", 17),<a name="line.321"></a>
-<span class="sourceLineNo">322</span>            Pattern.compile("[aаαΛ][nи][aаαΛiτιyуλγУuμυνvoоюσο]*$", 17),<a name="line.322"></a>
-<span class="sourceLineNo">323</span>            Pattern.compile("[tтτΓг][iτιyуλγУ]+$", 17),<a name="line.323"></a>
-<span class="sourceLineNo">324</span>            Pattern.compile("[cсςkкκq][lι]?[iτιyуλγУ]+$", 17),<a name="line.324"></a>
-<span class="sourceLineNo">325</span>            Pattern.compile("[aаαΛ][sξζz]$", 17),<a name="line.325"></a>
-<span class="sourceLineNo">326</span>            Pattern.compile("[nиfvν][iτιyуλγУaаαΛ]+$", 17),<a name="line.326"></a>
-<span class="sourceLineNo">327</span>            Pattern.compile("[pрρ][eезξεЗΣoоюσοiτιyуλγУuμυνv]+$", 17),<a name="line.327"></a>
-<span class="sourceLineNo">328</span>            Pattern.compile("[g][hн]?[aаαΛeезξεЗΣyуλγУ]+$", 17),<a name="line.328"></a>
-<span class="sourceLineNo">329</span>            Pattern.compile("[wψшщuμυνv](?:[hн]?)[aаαΛeезξεЗΣoоюσοuμυνv]+$", 17),<a name="line.329"></a>
+<span class="sourceLineNo">318</span>            Pattern.compile("(?:(?:[p??][h?])|[fd])[a??i??u???v]$", 17),<a name="line.318"></a>
+<span class="sourceLineNo">319</span>            Pattern.compile("[k??c??q][u???v]$", 17),<a name="line.319"></a>
+<span class="sourceLineNo">320</span>            Pattern.compile("[b????????][i??][t???]$", 17),<a name="line.320"></a>
+<span class="sourceLineNo">321</span>            Pattern.compile("[s??zc??](?:[h?]?)[i??y????]$", 17),<a name="line.321"></a>
+<span class="sourceLineNo">322</span>            Pattern.compile("[a???][n?][a???i??y????u???vo????]*$", 17),<a name="line.322"></a>
+<span class="sourceLineNo">323</span>            Pattern.compile("[t????][i??y????]+$", 17),<a name="line.323"></a>
+<span class="sourceLineNo">324</span>            Pattern.compile("[c??k??q][l?]?[i??y????]+$", 17),<a name="line.324"></a>
+<span class="sourceLineNo">325</span>            Pattern.compile("[a???][s??z]$", 17),<a name="line.325"></a>
+<span class="sourceLineNo">326</span>            Pattern.compile("[n?fv?][i??y????a???]+$", 17),<a name="line.326"></a>
+<span class="sourceLineNo">327</span>            Pattern.compile("[p??][e??????o????i??y????u???v]+$", 17),<a name="line.327"></a>
+<span class="sourceLineNo">328</span>            Pattern.compile("[g][h?]?[a???e??????y????]+$", 17),<a name="line.328"></a>
+<span class="sourceLineNo">329</span>            Pattern.compile("[w???u???v](?:[h?]?)[a???e??????o????u???v]+$", 17),<a name="line.329"></a>
 <span class="sourceLineNo">330</span>    }, additionalSuffixChecks = {<a name="line.330"></a>
-<span class="sourceLineNo">331</span>            Pattern.compile("^(?:[aаαeезξεЗΣoоюσοuμυ]*)(?:[nи]+)[tтτΓгdgkкκcсςq]", 17),<a name="line.331"></a>
-<span class="sourceLineNo">332</span>            Pattern.compile("^(?:[aаαeезξεЗΣoоюσοuμυ]+)(?:[nи]*)[tтτΓгdgkкκcсςq]", 17),<a name="line.332"></a>
-<span class="sourceLineNo">333</span>            Pattern.compile("^(?:[iτιyуλγУaаαΛ]*)[gj]", 17),<a name="line.333"></a>
-<span class="sourceLineNo">334</span>            Pattern.compile("^[nи]..?[Ssξlιζz]", 17),<a name="line.334"></a>
-<span class="sourceLineNo">335</span>            Pattern.compile("^[iτιyуλγУaаαΛ][dtтτΓг]", 17),<a name="line.335"></a>
-<span class="sourceLineNo">336</span>            Pattern.compile("^[iτιyуλγУaаαΛ][kкκcсςq][kкκcсςq]", 17),<a name="line.336"></a>
-<span class="sourceLineNo">337</span>            Pattern.compile("^[uμυ]*[mм]", 17),<a name="line.337"></a>
+<span class="sourceLineNo">331</span>            Pattern.compile("^(?:[a??e??????o????u??]*)(?:[n?]+)[t????dgk??c??q]", 17),<a name="line.331"></a>
+<span class="sourceLineNo">332</span>            Pattern.compile("^(?:[a??e??????o????u??]+)(?:[n?]*)[t????dgk??c??q]", 17),<a name="line.332"></a>
+<span class="sourceLineNo">333</span>            Pattern.compile("^(?:[i??y????a???]*)[gj]", 17),<a name="line.333"></a>
+<span class="sourceLineNo">334</span>            Pattern.compile("^[n?]..?[Ss?l??z]", 17),<a name="line.334"></a>
+<span class="sourceLineNo">335</span>            Pattern.compile("^[i??y????a???][dt????]", 17),<a name="line.335"></a>
+<span class="sourceLineNo">336</span>            Pattern.compile("^[i??y????a???][k??c??q][k??c??q]", 17),<a name="line.336"></a>
+<span class="sourceLineNo">337</span>            Pattern.compile("^[u??]*[m?]", 17),<a name="line.337"></a>
 <span class="sourceLineNo">338</span>    };<a name="line.338"></a>
 <span class="sourceLineNo">339</span><a name="line.339"></a>
 <span class="sourceLineNo">340</span>    private String addPart(String original, int syllables)<a name="line.340"></a>

@@ -2,6 +2,8 @@ package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
 
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.NumberUtils;
 import squidpony.IFilter;
 import squidpony.squidmath.LightRNG;
 
@@ -47,6 +49,7 @@ public class Filters {
             float v = (r + g + b) / 3f;
             return new Color(v, v, v, a);
         }
+
     }
 
     /**
@@ -121,6 +124,7 @@ public class Filters {
         public Color alter(float r, float g, float b, float a) {
             return new Color(r, g, b, a).lerp(state[0], state[1], state[2], state[3], state[4]);
         }
+
     }
     /**
      * A Filter that is constructed with a group of colors and linear-interpolates any color it is told to alter toward
@@ -295,6 +299,7 @@ public class Filters {
                     (h + v + s) * 0.35f + 0.7f,
                     a);
         }
+
     }
 
 
@@ -326,6 +331,7 @@ public class Filters {
                     globalSCC.getValue(r, g, b),
                     a);
         }
+
     }
 
     /**
@@ -340,9 +346,9 @@ public class Filters {
         }
         @Override
         public Color alter(float r, float g, float b, float a) {
-            return new Color(r - 0.1f + rng.nextInt(5) * 0.05f,
-                    g - 0.1f + rng.nextInt(5) * 0.05f,
-                    b - 0.1f + rng.nextInt(5) * 0.05f,
+            return new Color(r - 0.1f + rng.nextFloat() * 0.2f,
+                    g - 0.1f + rng.nextFloat() * 0.2f,
+                    b - 0.1f + rng.nextFloat() * 0.2f,
                     a);
         }
     }
@@ -368,10 +374,10 @@ public class Filters {
             state = new float[Math.min(r.length, Math.min(g.length, Math.min(b.length,
                     a.length))) * 4];
             for (int i = 0; i < state.length / 4; i++) {
-                state[i * 4] = r[i];
-                state[i * 4 + 1] = g[i];
-                state[i * 4 + 2] = b[i];
-                state[i * 4 + 3] = a[i];
+                state[i * 4] = MathUtils.clamp(r[i], 0f, 1f);
+                state[i * 4 + 1] = MathUtils.clamp(g[i], 0f, 1f);
+                state[i * 4 + 2] = MathUtils.clamp(b[i], 0f, 1f);
+                state[i * 4 + 3] = MathUtils.clamp(a[i], 0f, 1f);
             }
         }/**
          * Sets up a PaletteFilter with the exact colors to use as Colors. A convenient way to
@@ -410,7 +416,7 @@ public class Filters {
      * very well, and tritanopia may not benefit at all). Causes reds to be darkened and greens to be lightened if the
      * other of the pair is not present in similar quantities (which is the case for yellows and blues).
      */
-    public static class DistinctRedGreenFilter implements  IFilter<Color> {
+    public static class DistinctRedGreenFilter implements IFilter<Color> {
         /**
          * Constructs a DistinctRedGreenFilter. This class is a simple wrapper around a function that doesn't need
          * member variables, so there should be little overhead with this filter.
@@ -429,6 +435,37 @@ public class Filters {
                         b * (0.7f - diff), a);
             else
                 return new Color(r, g, b, a);
+        }
+    }
+    public static class Utility
+    {
+
+        /**
+         * Modifies the color parameter {@code changing} so its value is the one encoded in {@code value}. The way to
+         * obtain value for libGDX Color objects is with {@link Color#toFloatBits()}, which uses ABGR order, so this
+         * does some quick work to convert that to RGBA order and assign that into changing.
+         * @param changing a Color object that will be modified to have the given value
+         * @param value a value as a float that can be obtained by {@link Color#toFloatBits()}
+         * @return
+         */
+        public static Color colorFromFloat(Color changing, float value)
+        {
+            return changing.set(Integer.reverseBytes(NumberUtils.floatToIntColor(value)));
+        }
+
+        public static float floatGet(float r, float g, float b, float a)
+        {
+            return NumberUtils.intToFloatColor(Integer.reverseBytes(Color.rgba8888(r, g, b, a)));
+        }
+        public static float floatGet(long c)
+        {
+            return NumberUtils.intToFloatColor((int)((c >>> 24 & 0xff) | (c >>> 8 & 0xff00) | (c << 8 & 0xff0000)
+                    | (c << 24 & 0xfe000000)));
+        }
+        public static float floatGetI(int r, int g, int b)
+        {
+            return NumberUtils.intToFloatColor((r & 0xff) | (g << 8 & 0xff00) | (b << 16 & 0xff0000)
+                    | 0xfe000000);
         }
     }
 

@@ -38,41 +38,41 @@
 <span class="sourceLineNo">030</span>    protected String summary = null;<a name="line.30"></a>
 <span class="sourceLineNo">031</span>    static final Pattern repeats = Pattern.compile("(.)\\1+"),<a name="line.31"></a>
 <span class="sourceLineNo">032</span>            vowelClusters = Pattern.compile(<a name="line.32"></a>
-<span class="sourceLineNo">033</span>                    "[àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]+",<a name="line.33"></a>
+<span class="sourceLineNo">033</span>                    "[�������?????a����?????e����?????i������???�?o����??????u��??y?????????????????]+",<a name="line.33"></a>
 <span class="sourceLineNo">034</span>                    REFlags.IGNORE_CASE | REFlags.UNICODE),<a name="line.34"></a>
 <span class="sourceLineNo">035</span>            consonantClusters = Pattern.compile(<a name="line.35"></a>
-<span class="sourceLineNo">036</span>                    "[bcçćĉċčdþðďđfgĝğġģhĥħjĵȷkķlĺļľŀłmnñńņňŋpqrŕŗřsśŝşšștţťțvwŵẁẃẅxyýÿŷỳzźżžṛṝḷḹḍṭṅṇṣṃḥρσζτκχνθμπψβλγφξςбвгдклпрстфхцжмнзчшщ]+",<a name="line.36"></a>
+<span class="sourceLineNo">036</span>                    "[bc�????d��??fg????h??j??k?l?????mn�????pqr???s???�?t???vw????xy��??z??�????????????????????????????????????????????????]+",<a name="line.36"></a>
 <span class="sourceLineNo">037</span>                    REFlags.IGNORE_CASE | REFlags.UNICODE);<a name="line.37"></a>
 <span class="sourceLineNo">038</span>    //latin<a name="line.38"></a>
-<span class="sourceLineNo">039</span>    //àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳybcçćĉċčdþðďđfgĝğġģhĥħjĵȷkķlĺļľŀłmnñńņňŋpqrŕŗřsśŝşšștţťțvwŵẁẃẅxyýÿŷỳzźżžṛṝḷḹḍṭṅṇṣṃḥ<a name="line.39"></a>
-<span class="sourceLineNo">040</span>    //ÀÁÂÃÄÅÆĀĂĄǺǼAÈÉÊËĒĔĖĘĚEÌÍÎÏĨĪĬĮIIÒÓÔÕÖØŌŎŐŒǾOÙÚÛÜŨŪŬŮŰŲUÝŸŶỲYBCÇĆĈĊČDÞÐĎĐFGĜĞĠĢHĤĦJĴȷKĶLĹĻĽĿŁMNÑŃŅŇŊPQRŔŖŘSŚŜŞŠȘTŢŤȚVWŴẀẂẄXYÝŸŶỲZŹŻŽṚṜḶḸḌṬṄṆṢṂḤ<a name="line.40"></a>
+<span class="sourceLineNo">039</span>    //�������?????a����?????e����?????i������???�?o����??????u��??ybc�????d��??fg????h??j??k?l?????mn�????pqr???s???�?t???vw????xy��??z??�???????????<a name="line.39"></a>
+<span class="sourceLineNo">040</span>    //�������?????A����?????E����????II������???�?O����??????Uݟ??YBC�????D��??FG????H??J??K?L?????MN�????PQR???S???�?T???VW????XYݟ??Z??�???????????<a name="line.40"></a>
 <span class="sourceLineNo">041</span>    //greek<a name="line.41"></a>
-<span class="sourceLineNo">042</span>    //αοειυρσζτκχνθμπψβλγφξς<a name="line.42"></a>
-<span class="sourceLineNo">043</span>    //ΑΟΕΙΥΡΣΖΤΚΧΝΘΜΠΨΒΛΓΦΞ<a name="line.43"></a>
+<span class="sourceLineNo">042</span>    //??????????????????????<a name="line.42"></a>
+<span class="sourceLineNo">043</span>    //?????????????????????<a name="line.43"></a>
 <span class="sourceLineNo">044</span>    //cyrillic<a name="line.44"></a>
-<span class="sourceLineNo">045</span>    //аеёийоуъыэюябвгдклпрстфхцжмнзчшщ<a name="line.45"></a>
-<span class="sourceLineNo">046</span>    //АЕЁИЙОУЪЫЭЮЯБВГДКЛПРСТФХЦЖМНЗЧШЩ<a name="line.46"></a>
+<span class="sourceLineNo">045</span>    //????????????????????????????????<a name="line.45"></a>
+<span class="sourceLineNo">046</span>    //????????????????????????????????<a name="line.46"></a>
 <span class="sourceLineNo">047</span><a name="line.47"></a>
 <span class="sourceLineNo">048</span>    static final Pattern[]<a name="line.48"></a>
 <span class="sourceLineNo">049</span>            vulgarChecks = new Pattern[]<a name="line.49"></a>
 <span class="sourceLineNo">050</span>            {<a name="line.50"></a>
 <span class="sourceLineNo">051</span>                    //17 is REFlags.UNICODE | REFlags.IGNORE_CASE<a name="line.51"></a>
-<span class="sourceLineNo">052</span>                    Pattern.compile("[sξζzkкκcсς][hнlι].{1,3}[dtтτΓг]", 17),<a name="line.52"></a>
-<span class="sourceLineNo">053</span>                    Pattern.compile("(?:(?:[pрρ][hн])|[fd]).{1,3}[kкκcсςxхжχq]", 17), // lots of these end in a 'k' sound, huh<a name="line.53"></a>
-<span class="sourceLineNo">054</span>                    Pattern.compile("[kкκcсςСQq].{1,3}[kкκcсςxхжχqmм]", 17),<a name="line.54"></a>
-<span class="sourceLineNo">055</span>                    Pattern.compile("[bъыбвβЪЫБ].{1,3}[cсς]", 17),<a name="line.55"></a>
-<span class="sourceLineNo">056</span>                    Pattern.compile("[hн][^aаαΛeезξεЗΣiτιyуλγУ][^aаαΛeезξεЗΣiτιyуλγУ]?[rяΓ]", 17),<a name="line.56"></a>
-<span class="sourceLineNo">057</span>                    Pattern.compile("[tтτΓгcсς][iτιyуλγУ][tтτΓг]+$", 17),<a name="line.57"></a>
-<span class="sourceLineNo">058</span>                    Pattern.compile("(?:(?:[pрρ][hн])|f)..?[rяΓ][tтτΓг]", 17),<a name="line.58"></a>
-<span class="sourceLineNo">059</span>                    Pattern.compile("[Ssξζzcсς][hн][iτιyуλγУ].?[sξζzcсς]", 17),<a name="line.59"></a>
-<span class="sourceLineNo">060</span>                    Pattern.compile("[aаαΛ][nи]..?[Ssξlιζz]", 17),<a name="line.60"></a>
-<span class="sourceLineNo">061</span>                    Pattern.compile("[aаαΛ]([sξζz]{2})", 17),<a name="line.61"></a>
-<span class="sourceLineNo">062</span>                    Pattern.compile("[uμυνv]([hн]?)[nи]+[tтτΓг]", 17),<a name="line.62"></a>
-<span class="sourceLineNo">063</span>                    Pattern.compile("[nиfvν]..?[jg]", 17), // might as well remove two possible slurs and a body part with one check<a name="line.63"></a>
-<span class="sourceLineNo">064</span>                    Pattern.compile("[pрρ](?:(?:([eезξεЗΣoоюσοuμυνv])\\1)|(?:[eезξεЗΣiτιyуλγУuμυνv]+[sξζzcсς]))", 17), // the grab bag of juvenile words<a name="line.64"></a>
-<span class="sourceLineNo">065</span>                    Pattern.compile("[mм][hнwψшщ]?..?[rяΓ].?d", 17), // should pick up the #1 obscenity from Spanish and French<a name="line.65"></a>
-<span class="sourceLineNo">066</span>                    Pattern.compile("[g][hн]?[aаαАΑΛeеёзξεЕЁЗΕΣ][yуλγУeеёзξεЕЁЗΕΣ]", 17), // could be inappropriate for random text<a name="line.66"></a>
-<span class="sourceLineNo">067</span>                    Pattern.compile("[wψшщuμυνv](?:[hн]?)[aаαΛeеёзξεЗΕΣoоюσοuμυνv](?:[nи]+)[gkкκcсςxхжχq]", 17)<a name="line.67"></a>
+<span class="sourceLineNo">052</span>                    Pattern.compile("[s??zk??c??][h?l?].{1,3}[dt????]", 17),<a name="line.52"></a>
+<span class="sourceLineNo">053</span>                    Pattern.compile("(?:(?:[p??][h?])|[fd]).{1,3}[k??c??x???q]", 17), // lots of these end in a 'k' sound, huh<a name="line.53"></a>
+<span class="sourceLineNo">054</span>                    Pattern.compile("[k??c???Qq].{1,3}[k??c??x???qm?]", 17),<a name="line.54"></a>
+<span class="sourceLineNo">055</span>                    Pattern.compile("[b????????].{1,3}[c??]", 17),<a name="line.55"></a>
+<span class="sourceLineNo">056</span>                    Pattern.compile("[h?][^a???e??????i??y????][^a???e??????i??y????]?[r??]", 17),<a name="line.56"></a>
+<span class="sourceLineNo">057</span>                    Pattern.compile("[t????c??][i??y????][t????]+$", 17),<a name="line.57"></a>
+<span class="sourceLineNo">058</span>                    Pattern.compile("(?:(?:[p??][h?])|f)..?[r??][t????]", 17),<a name="line.58"></a>
+<span class="sourceLineNo">059</span>                    Pattern.compile("[Ss??zc??][h?][i??y????].?[s??zc??]", 17),<a name="line.59"></a>
+<span class="sourceLineNo">060</span>                    Pattern.compile("[a???][n?]..?[Ss?l??z]", 17),<a name="line.60"></a>
+<span class="sourceLineNo">061</span>                    Pattern.compile("[a???]([s??z]{2})", 17),<a name="line.61"></a>
+<span class="sourceLineNo">062</span>                    Pattern.compile("[u???v]([h?]?)[n?]+[t????]", 17),<a name="line.62"></a>
+<span class="sourceLineNo">063</span>                    Pattern.compile("[n?fv?]..?[jg]", 17), // might as well remove two possible slurs and a body part with one check<a name="line.63"></a>
+<span class="sourceLineNo">064</span>                    Pattern.compile("[p??](?:(?:([e??????o????u???v])\\1)|(?:[e??????i??y????u???v]+[s??zc??]))", 17), // the grab bag of juvenile words<a name="line.64"></a>
+<span class="sourceLineNo">065</span>                    Pattern.compile("[m?][h?w???]?..?[r??].?d", 17), // should pick up the #1 obscenity from Spanish and French<a name="line.65"></a>
+<span class="sourceLineNo">066</span>                    Pattern.compile("[g][h?]?[a?????e??????????][y????e??????????]", 17), // could be inappropriate for random text<a name="line.66"></a>
+<span class="sourceLineNo">067</span>                    Pattern.compile("[w???u???v](?:[h?]?)[a???e????????o????u???v](?:[n?]+)[gk??c??x???q]", 17)<a name="line.67"></a>
 <span class="sourceLineNo">068</span>            },<a name="line.68"></a>
 <span class="sourceLineNo">069</span>            genericSanityChecks = new Pattern[]<a name="line.69"></a>
 <span class="sourceLineNo">070</span>                    {<a name="line.70"></a>
@@ -133,67 +133,67 @@
 <span class="sourceLineNo">125</span>    static final Replacer[]<a name="line.125"></a>
 <span class="sourceLineNo">126</span>            accentFinders = new Replacer[]<a name="line.126"></a>
 <span class="sourceLineNo">127</span>            {<a name="line.127"></a>
-<span class="sourceLineNo">128</span>                    Pattern.compile("[àáâãäåæāăąǻǽ]").replacer("a"),<a name="line.128"></a>
-<span class="sourceLineNo">129</span>                    Pattern.compile("[èéêëēĕėęě]").replacer("e"),<a name="line.129"></a>
-<span class="sourceLineNo">130</span>                    Pattern.compile("[ìíîïĩīĭįı]").replacer("i"),<a name="line.130"></a>
-<span class="sourceLineNo">131</span>                    Pattern.compile("[òóôõöøōŏőœǿ]").replacer("o"),<a name="line.131"></a>
-<span class="sourceLineNo">132</span>                    Pattern.compile("[ùúûüũūŭůűų]").replacer("u"),<a name="line.132"></a>
-<span class="sourceLineNo">133</span>                    Pattern.compile("[ÀÁÂÃÄÅÆĀĂĄǺǼ]").replacer("A"),<a name="line.133"></a>
-<span class="sourceLineNo">134</span>                    Pattern.compile("[ÈÉÊËĒĔĖĘĚ]").replacer("E"),<a name="line.134"></a>
-<span class="sourceLineNo">135</span>                    Pattern.compile("[ÌÍÎÏĨĪĬĮI]").replacer("I"),<a name="line.135"></a>
-<span class="sourceLineNo">136</span>                    Pattern.compile("[ÒÓÔÕÖØŌŎŐŒǾ]").replacer("O"),<a name="line.136"></a>
-<span class="sourceLineNo">137</span>                    Pattern.compile("[ÙÚÛÜŨŪŬŮŰŲ]").replacer("U"),<a name="line.137"></a>
-<span class="sourceLineNo">138</span>                    Pattern.compile("Ё").replacer("Е"),<a name="line.138"></a>
-<span class="sourceLineNo">139</span>                    Pattern.compile("Й").replacer("И"),<a name="line.139"></a>
-<span class="sourceLineNo">140</span>                    Pattern.compile("[çćĉċč]").replacer("c"),<a name="line.140"></a>
-<span class="sourceLineNo">141</span>                    Pattern.compile("[þðďđḍ]").replacer("d"),<a name="line.141"></a>
-<span class="sourceLineNo">142</span>                    Pattern.compile("[ĝğġģ]").replacer("g"),<a name="line.142"></a>
-<span class="sourceLineNo">143</span>                    Pattern.compile("[ĥħḥ]").replacer("h"),<a name="line.143"></a>
-<span class="sourceLineNo">144</span>                    Pattern.compile("[ĵȷ]").replacer("j"),<a name="line.144"></a>
-<span class="sourceLineNo">145</span>                    Pattern.compile("ķ").replacer("k"),<a name="line.145"></a>
-<span class="sourceLineNo">146</span>                    Pattern.compile("[ĺļľŀłḷḹļ]").replacer("l"),<a name="line.146"></a>
-<span class="sourceLineNo">147</span>                    Pattern.compile("ṃ").replacer("m"),<a name="line.147"></a>
-<span class="sourceLineNo">148</span>                    Pattern.compile("[ñńņňŋṅṇ]").replacer("n"),<a name="line.148"></a>
-<span class="sourceLineNo">149</span>                    Pattern.compile("[ŕŗřṛṝŗŕ]").replacer("r"),<a name="line.149"></a>
-<span class="sourceLineNo">150</span>                    Pattern.compile("[śŝşšșṣ]").replacer("s"),<a name="line.150"></a>
-<span class="sourceLineNo">151</span>                    Pattern.compile("[ţťŧțṭ]").replacer("t"),<a name="line.151"></a>
-<span class="sourceLineNo">152</span>                    Pattern.compile("[ŵẁẃẅ]").replacer("w"),<a name="line.152"></a>
-<span class="sourceLineNo">153</span>                    Pattern.compile("[ýÿŷỳ]").replacer("y"),<a name="line.153"></a>
-<span class="sourceLineNo">154</span>                    Pattern.compile("[źżž]").replacer("z"),<a name="line.154"></a>
-<span class="sourceLineNo">155</span>                    Pattern.compile("[ÇĆĈĊČ]").replacer("C"),<a name="line.155"></a>
-<span class="sourceLineNo">156</span>                    Pattern.compile("[ÞÐĎĐḌ]").replacer("D"),<a name="line.156"></a>
-<span class="sourceLineNo">157</span>                    Pattern.compile("[ĜĞĠĢ]").replacer("G"),<a name="line.157"></a>
-<span class="sourceLineNo">158</span>                    Pattern.compile("[ĤĦḤ]").replacer("H"),<a name="line.158"></a>
-<span class="sourceLineNo">159</span>                    Pattern.compile("Ĵ").replacer("J"),<a name="line.159"></a>
-<span class="sourceLineNo">160</span>                    Pattern.compile("Ķ").replacer("K"),<a name="line.160"></a>
-<span class="sourceLineNo">161</span>                    Pattern.compile("[ĹĻĽĿŁḶḸĻ]").replacer("L"),<a name="line.161"></a>
-<span class="sourceLineNo">162</span>                    Pattern.compile("Ṃ").replacer("M"),<a name="line.162"></a>
-<span class="sourceLineNo">163</span>                    Pattern.compile("[ÑŃŅŇŊṄṆ]").replacer("N"),<a name="line.163"></a>
-<span class="sourceLineNo">164</span>                    Pattern.compile("[ŔŖŘṚṜŖŔ]").replacer("R"),<a name="line.164"></a>
-<span class="sourceLineNo">165</span>                    Pattern.compile("[ŚŜŞŠȘṢ]").replacer("S"),<a name="line.165"></a>
-<span class="sourceLineNo">166</span>                    Pattern.compile("[ŢŤŦȚṬ]").replacer("T"),<a name="line.166"></a>
-<span class="sourceLineNo">167</span>                    Pattern.compile("[ŴẀẂẄ]").replacer("W"),<a name="line.167"></a>
-<span class="sourceLineNo">168</span>                    Pattern.compile("[ÝŸŶỲ]").replacer("Y"),<a name="line.168"></a>
-<span class="sourceLineNo">169</span>                    Pattern.compile("[ŹŻŽ]").replacer("Z"),<a name="line.169"></a>
-<span class="sourceLineNo">170</span>                    Pattern.compile("ё").replacer("е"),<a name="line.170"></a>
-<span class="sourceLineNo">171</span>                    Pattern.compile("й").replacer("и"),<a name="line.171"></a>
+<span class="sourceLineNo">128</span>                    Pattern.compile("[�������?????]").replacer("a"),<a name="line.128"></a>
+<span class="sourceLineNo">129</span>                    Pattern.compile("[����?????]").replacer("e"),<a name="line.129"></a>
+<span class="sourceLineNo">130</span>                    Pattern.compile("[����?????]").replacer("i"),<a name="line.130"></a>
+<span class="sourceLineNo">131</span>                    Pattern.compile("[������???�?]").replacer("o"),<a name="line.131"></a>
+<span class="sourceLineNo">132</span>                    Pattern.compile("[����??????]").replacer("u"),<a name="line.132"></a>
+<span class="sourceLineNo">133</span>                    Pattern.compile("[�������?????]").replacer("A"),<a name="line.133"></a>
+<span class="sourceLineNo">134</span>                    Pattern.compile("[����?????]").replacer("E"),<a name="line.134"></a>
+<span class="sourceLineNo">135</span>                    Pattern.compile("[����????I]").replacer("I"),<a name="line.135"></a>
+<span class="sourceLineNo">136</span>                    Pattern.compile("[������???�?]").replacer("O"),<a name="line.136"></a>
+<span class="sourceLineNo">137</span>                    Pattern.compile("[����??????]").replacer("U"),<a name="line.137"></a>
+<span class="sourceLineNo">138</span>                    Pattern.compile("?").replacer("?"),<a name="line.138"></a>
+<span class="sourceLineNo">139</span>                    Pattern.compile("?").replacer("?"),<a name="line.139"></a>
+<span class="sourceLineNo">140</span>                    Pattern.compile("[�????]").replacer("c"),<a name="line.140"></a>
+<span class="sourceLineNo">141</span>                    Pattern.compile("[��???]").replacer("d"),<a name="line.141"></a>
+<span class="sourceLineNo">142</span>                    Pattern.compile("[????]").replacer("g"),<a name="line.142"></a>
+<span class="sourceLineNo">143</span>                    Pattern.compile("[???]").replacer("h"),<a name="line.143"></a>
+<span class="sourceLineNo">144</span>                    Pattern.compile("[??]").replacer("j"),<a name="line.144"></a>
+<span class="sourceLineNo">145</span>                    Pattern.compile("?").replacer("k"),<a name="line.145"></a>
+<span class="sourceLineNo">146</span>                    Pattern.compile("[????????]").replacer("l"),<a name="line.146"></a>
+<span class="sourceLineNo">147</span>                    Pattern.compile("?").replacer("m"),<a name="line.147"></a>
+<span class="sourceLineNo">148</span>                    Pattern.compile("[�??????]").replacer("n"),<a name="line.148"></a>
+<span class="sourceLineNo">149</span>                    Pattern.compile("[???????]").replacer("r"),<a name="line.149"></a>
+<span class="sourceLineNo">150</span>                    Pattern.compile("[???�??]").replacer("s"),<a name="line.150"></a>
+<span class="sourceLineNo">151</span>                    Pattern.compile("[?????]").replacer("t"),<a name="line.151"></a>
+<span class="sourceLineNo">152</span>                    Pattern.compile("[????]").replacer("w"),<a name="line.152"></a>
+<span class="sourceLineNo">153</span>                    Pattern.compile("[��??]").replacer("y"),<a name="line.153"></a>
+<span class="sourceLineNo">154</span>                    Pattern.compile("[??�]").replacer("z"),<a name="line.154"></a>
+<span class="sourceLineNo">155</span>                    Pattern.compile("[�????]").replacer("C"),<a name="line.155"></a>
+<span class="sourceLineNo">156</span>                    Pattern.compile("[��???]").replacer("D"),<a name="line.156"></a>
+<span class="sourceLineNo">157</span>                    Pattern.compile("[????]").replacer("G"),<a name="line.157"></a>
+<span class="sourceLineNo">158</span>                    Pattern.compile("[???]").replacer("H"),<a name="line.158"></a>
+<span class="sourceLineNo">159</span>                    Pattern.compile("?").replacer("J"),<a name="line.159"></a>
+<span class="sourceLineNo">160</span>                    Pattern.compile("?").replacer("K"),<a name="line.160"></a>
+<span class="sourceLineNo">161</span>                    Pattern.compile("[????????]").replacer("L"),<a name="line.161"></a>
+<span class="sourceLineNo">162</span>                    Pattern.compile("?").replacer("M"),<a name="line.162"></a>
+<span class="sourceLineNo">163</span>                    Pattern.compile("[�??????]").replacer("N"),<a name="line.163"></a>
+<span class="sourceLineNo">164</span>                    Pattern.compile("[???????]").replacer("R"),<a name="line.164"></a>
+<span class="sourceLineNo">165</span>                    Pattern.compile("[???�??]").replacer("S"),<a name="line.165"></a>
+<span class="sourceLineNo">166</span>                    Pattern.compile("[?????]").replacer("T"),<a name="line.166"></a>
+<span class="sourceLineNo">167</span>                    Pattern.compile("[????]").replacer("W"),<a name="line.167"></a>
+<span class="sourceLineNo">168</span>                    Pattern.compile("[ݟ??]").replacer("Y"),<a name="line.168"></a>
+<span class="sourceLineNo">169</span>                    Pattern.compile("[??�]").replacer("Z"),<a name="line.169"></a>
+<span class="sourceLineNo">170</span>                    Pattern.compile("?").replacer("?"),<a name="line.170"></a>
+<span class="sourceLineNo">171</span>                    Pattern.compile("?").replacer("?"),<a name="line.171"></a>
 <span class="sourceLineNo">172</span>            };<a name="line.172"></a>
 <span class="sourceLineNo">173</span><a name="line.173"></a>
 <span class="sourceLineNo">174</span>    static final char[][] accentedVowels = new char[][]{<a name="line.174"></a>
 <span class="sourceLineNo">175</span>            new char[]{<a name="line.175"></a>
-<span class="sourceLineNo">176</span>                    'a', 'à', 'á', 'â', 'ä', 'ā', 'ă', 'ã', 'å', 'æ', 'ą', 'ǻ', 'ǽ'<a name="line.176"></a>
+<span class="sourceLineNo">176</span>                    'a', '�', '�', '�', '�', '?', '?', '�', '�', '�', '?', '?', '?'<a name="line.176"></a>
 <span class="sourceLineNo">177</span>            },<a name="line.177"></a>
 <span class="sourceLineNo">178</span>            new char[]{<a name="line.178"></a>
-<span class="sourceLineNo">179</span>                    'e', 'è', 'é', 'ê', 'ë', 'ē', 'ĕ', 'ė', 'ę', 'ě'<a name="line.179"></a>
+<span class="sourceLineNo">179</span>                    'e', '�', '�', '�', '�', '?', '?', '?', '?', '?'<a name="line.179"></a>
 <span class="sourceLineNo">180</span>            },<a name="line.180"></a>
 <span class="sourceLineNo">181</span>            new char[]{<a name="line.181"></a>
-<span class="sourceLineNo">182</span>                    'i', 'ì', 'í', 'î', 'ï', 'ī', 'ĭ', 'ĩ', 'į', 'ı',<a name="line.182"></a>
+<span class="sourceLineNo">182</span>                    'i', '�', '�', '�', '�', '?', '?', '?', '?', '?',<a name="line.182"></a>
 <span class="sourceLineNo">183</span>            },<a name="line.183"></a>
 <span class="sourceLineNo">184</span>            new char[]{<a name="line.184"></a>
-<span class="sourceLineNo">185</span>                    'o', 'ò', 'ó', 'ô', 'ö', 'ō', 'ŏ', 'õ', 'ø', 'ő', 'œ', 'ǿ'<a name="line.185"></a>
+<span class="sourceLineNo">185</span>                    'o', '�', '�', '�', '�', '?', '?', '�', '�', '?', '�', '?'<a name="line.185"></a>
 <span class="sourceLineNo">186</span>            },<a name="line.186"></a>
 <span class="sourceLineNo">187</span>            new char[]{<a name="line.187"></a>
-<span class="sourceLineNo">188</span>                    'u', 'ù', 'ú', 'û', 'ü', 'ū', 'ŭ', 'ũ', 'ů', 'ű', 'ų'<a name="line.188"></a>
+<span class="sourceLineNo">188</span>                    'u', '�', '�', '�', '�', '?', '?', '?', '?', '?', '?'<a name="line.188"></a>
 <span class="sourceLineNo">189</span>            }<a name="line.189"></a>
 <span class="sourceLineNo">190</span>    },<a name="line.190"></a>
 <span class="sourceLineNo">191</span>            accentedConsonants = new char[][]<a name="line.191"></a>
@@ -202,34 +202,34 @@
 <span class="sourceLineNo">194</span>                                    'b'<a name="line.194"></a>
 <span class="sourceLineNo">195</span>                            },<a name="line.195"></a>
 <span class="sourceLineNo">196</span>                            new char[]{<a name="line.196"></a>
-<span class="sourceLineNo">197</span>                                    'c', 'ç', 'ć', 'ĉ', 'ċ', 'č',<a name="line.197"></a>
+<span class="sourceLineNo">197</span>                                    'c', '�', '?', '?', '?', '?',<a name="line.197"></a>
 <span class="sourceLineNo">198</span>                            },<a name="line.198"></a>
 <span class="sourceLineNo">199</span>                            new char[]{<a name="line.199"></a>
-<span class="sourceLineNo">200</span>                                    'd', 'þ', 'ð', 'ď', 'đ',<a name="line.200"></a>
+<span class="sourceLineNo">200</span>                                    'd', '�', '�', '?', '?',<a name="line.200"></a>
 <span class="sourceLineNo">201</span>                            },<a name="line.201"></a>
 <span class="sourceLineNo">202</span>                            new char[]{<a name="line.202"></a>
 <span class="sourceLineNo">203</span>                                    'f'<a name="line.203"></a>
 <span class="sourceLineNo">204</span>                            },<a name="line.204"></a>
 <span class="sourceLineNo">205</span>                            new char[]{<a name="line.205"></a>
-<span class="sourceLineNo">206</span>                                    'g', 'ĝ', 'ğ', 'ġ', 'ģ',<a name="line.206"></a>
+<span class="sourceLineNo">206</span>                                    'g', '?', '?', '?', '?',<a name="line.206"></a>
 <span class="sourceLineNo">207</span>                            },<a name="line.207"></a>
 <span class="sourceLineNo">208</span>                            new char[]{<a name="line.208"></a>
-<span class="sourceLineNo">209</span>                                    'h', 'ĥ', 'ħ',<a name="line.209"></a>
+<span class="sourceLineNo">209</span>                                    'h', '?', '?',<a name="line.209"></a>
 <span class="sourceLineNo">210</span>                            },<a name="line.210"></a>
 <span class="sourceLineNo">211</span>                            new char[]{<a name="line.211"></a>
-<span class="sourceLineNo">212</span>                                    'j', 'ĵ', 'ȷ',<a name="line.212"></a>
+<span class="sourceLineNo">212</span>                                    'j', '?', '?',<a name="line.212"></a>
 <span class="sourceLineNo">213</span>                            },<a name="line.213"></a>
 <span class="sourceLineNo">214</span>                            new char[]{<a name="line.214"></a>
-<span class="sourceLineNo">215</span>                                    'k', 'ķ',<a name="line.215"></a>
+<span class="sourceLineNo">215</span>                                    'k', '?',<a name="line.215"></a>
 <span class="sourceLineNo">216</span>                            },<a name="line.216"></a>
 <span class="sourceLineNo">217</span>                            new char[]{<a name="line.217"></a>
-<span class="sourceLineNo">218</span>                                    'l', 'ĺ', 'ļ', 'ľ', 'ŀ', 'ł',<a name="line.218"></a>
+<span class="sourceLineNo">218</span>                                    'l', '?', '?', '?', '?', '?',<a name="line.218"></a>
 <span class="sourceLineNo">219</span>                            },<a name="line.219"></a>
 <span class="sourceLineNo">220</span>                            new char[]{<a name="line.220"></a>
 <span class="sourceLineNo">221</span>                                    'm',<a name="line.221"></a>
 <span class="sourceLineNo">222</span>                            },<a name="line.222"></a>
 <span class="sourceLineNo">223</span>                            new char[]{<a name="line.223"></a>
-<span class="sourceLineNo">224</span>                                    'n', 'ñ', 'ń', 'ņ', 'ň', 'ŋ',<a name="line.224"></a>
+<span class="sourceLineNo">224</span>                                    'n', '�', '?', '?', '?', '?',<a name="line.224"></a>
 <span class="sourceLineNo">225</span>                            },<a name="line.225"></a>
 <span class="sourceLineNo">226</span>                            new char[]{<a name="line.226"></a>
 <span class="sourceLineNo">227</span>                                    'p',<a name="line.227"></a>
@@ -238,28 +238,28 @@
 <span class="sourceLineNo">230</span>                                    'q',<a name="line.230"></a>
 <span class="sourceLineNo">231</span>                            },<a name="line.231"></a>
 <span class="sourceLineNo">232</span>                            new char[]{<a name="line.232"></a>
-<span class="sourceLineNo">233</span>                                    'r', 'ŕ', 'ŗ', 'ř',<a name="line.233"></a>
+<span class="sourceLineNo">233</span>                                    'r', '?', '?', '?',<a name="line.233"></a>
 <span class="sourceLineNo">234</span>                            },<a name="line.234"></a>
 <span class="sourceLineNo">235</span>                            new char[]{<a name="line.235"></a>
-<span class="sourceLineNo">236</span>                                    's', 'ś', 'ŝ', 'ş', 'š', 'ș',<a name="line.236"></a>
+<span class="sourceLineNo">236</span>                                    's', '?', '?', '?', '�', '?',<a name="line.236"></a>
 <span class="sourceLineNo">237</span>                            },<a name="line.237"></a>
 <span class="sourceLineNo">238</span>                            new char[]{<a name="line.238"></a>
-<span class="sourceLineNo">239</span>                                    't', 'ţ', 'ť', 'ț',<a name="line.239"></a>
+<span class="sourceLineNo">239</span>                                    't', '?', '?', '?',<a name="line.239"></a>
 <span class="sourceLineNo">240</span>                            },<a name="line.240"></a>
 <span class="sourceLineNo">241</span>                            new char[]{<a name="line.241"></a>
 <span class="sourceLineNo">242</span>                                    'v',<a name="line.242"></a>
 <span class="sourceLineNo">243</span>                            },<a name="line.243"></a>
 <span class="sourceLineNo">244</span>                            new char[]{<a name="line.244"></a>
-<span class="sourceLineNo">245</span>                                    'w', 'ŵ', 'ẁ', 'ẃ', 'ẅ',<a name="line.245"></a>
+<span class="sourceLineNo">245</span>                                    'w', '?', '?', '?', '?',<a name="line.245"></a>
 <span class="sourceLineNo">246</span>                            },<a name="line.246"></a>
 <span class="sourceLineNo">247</span>                            new char[]{<a name="line.247"></a>
 <span class="sourceLineNo">248</span>                                    'x',<a name="line.248"></a>
 <span class="sourceLineNo">249</span>                            },<a name="line.249"></a>
 <span class="sourceLineNo">250</span>                            new char[]{<a name="line.250"></a>
-<span class="sourceLineNo">251</span>                                    'y', 'ý', 'ÿ', 'ŷ', 'ỳ',<a name="line.251"></a>
+<span class="sourceLineNo">251</span>                                    'y', '�', '�', '?', '?',<a name="line.251"></a>
 <span class="sourceLineNo">252</span>                            },<a name="line.252"></a>
 <span class="sourceLineNo">253</span>                            new char[]{<a name="line.253"></a>
-<span class="sourceLineNo">254</span>                                    'z', 'ź', 'ż', 'ž',<a name="line.254"></a>
+<span class="sourceLineNo">254</span>                                    'z', '?', '?', '�',<a name="line.254"></a>
 <span class="sourceLineNo">255</span>                            },<a name="line.255"></a>
 <span class="sourceLineNo">256</span>                    };<a name="line.256"></a>
 <span class="sourceLineNo">257</span>    private static final OrderedMap&lt;String, String&gt; openVowels = new OrderedMap&lt;&gt;(16, 0.875f),<a name="line.257"></a>
@@ -381,10 +381,10 @@
 <span class="sourceLineNo">373</span>    public String removeAccents(String str) {<a name="line.373"></a>
 <span class="sourceLineNo">374</span>        String alteredString = Normalizer.normalize(str, Normalizer.Form.NFD);<a name="line.374"></a>
 <span class="sourceLineNo">375</span>        alteredString = diacritics.matcher(alteredString).replaceAll("");<a name="line.375"></a>
-<span class="sourceLineNo">376</span>        alteredString = alteredString.replace('æ', 'a');<a name="line.376"></a>
-<span class="sourceLineNo">377</span>        alteredString = alteredString.replace('œ', 'o');<a name="line.377"></a>
-<span class="sourceLineNo">378</span>        alteredString = alteredString.replace('Æ', 'A');<a name="line.378"></a>
-<span class="sourceLineNo">379</span>        alteredString = alteredString.replace('Œ', 'O');<a name="line.379"></a>
+<span class="sourceLineNo">376</span>        alteredString = alteredString.replace('�', 'a');<a name="line.376"></a>
+<span class="sourceLineNo">377</span>        alteredString = alteredString.replace('�', 'o');<a name="line.377"></a>
+<span class="sourceLineNo">378</span>        alteredString = alteredString.replace('�', 'A');<a name="line.378"></a>
+<span class="sourceLineNo">379</span>        alteredString = alteredString.replace('�', 'O');<a name="line.379"></a>
 <span class="sourceLineNo">380</span>        return alteredString;<a name="line.380"></a>
 <span class="sourceLineNo">381</span>    }*/<a name="line.381"></a>
 <span class="sourceLineNo">382</span><a name="line.382"></a>
@@ -501,19 +501,19 @@
 <span class="sourceLineNo">493</span>     * Make sure the font you use to render this supports the Greek alphabet! In the GDX display module, the "smooth"<a name="line.493"></a>
 <span class="sourceLineNo">494</span>     * fonts support all the Greek you need for this.<a name="line.494"></a>
 <span class="sourceLineNo">495</span>     * &lt;br&gt;<a name="line.495"></a>
-<span class="sourceLineNo">496</span>     * Ψυιλασ αλορ; αιπεομαρτα λε λιασπα...<a name="line.496"></a>
+<span class="sourceLineNo">496</span>     * ?????? ????; ?????????? ?? ??????...<a name="line.496"></a>
 <span class="sourceLineNo">497</span>     */<a name="line.497"></a>
 <span class="sourceLineNo">498</span>    public static final FakeLanguageGen GREEK_AUTHENTIC = new FakeLanguageGen(<a name="line.498"></a>
-<span class="sourceLineNo">499</span>            new String[]{"α", "α", "α", "α", "α", "ο", "ο", "ε", "ε", "ε", "ι", "ι", "ι", "ι", "ι", "αυ", "αι", "αι", "οι", "οι",<a name="line.499"></a>
-<span class="sourceLineNo">500</span>                    "ια", "ιο", "ου", "ου", "εο", "ει", "ω", "ω", "ωυ", "ωι", "υ", "υ", "υ", "υ"},<a name="line.500"></a>
-<span class="sourceLineNo">501</span>            new String[]{"υι", "υι", "ει", "ει"},<a name="line.501"></a>
-<span class="sourceLineNo">502</span>            new String[]{"ρ", "σ", "ζ", "τ", "τ", "κ", "χ", "ν", "θ", "κθ", "μ", "π", "ψ", "β", "λ", "κρ",<a name="line.502"></a>
-<span class="sourceLineNo">503</span>                    "γ", "φθ", "δ", "τ", "κ", "χ", "ν", "φ", "φ", "κ",},<a name="line.503"></a>
-<span class="sourceLineNo">504</span>            new String[]{"λφ", "πλ", "λ", "λ", "κρ", "γχ", "γξ", "ψ"},<a name="line.504"></a>
-<span class="sourceLineNo">505</span>            new String[]{"σ", "π", "τ", "χ", "ν", "μ", "σ", "π", "τ", "χ", "ν", "μ", "β", "γ", "στ", "ρστ",<a name="line.505"></a>
-<span class="sourceLineNo">506</span>                    "ρτ", "σπ", "ρκ", "φ", "ξ", "ζ", "γκ", "γγ", "θ", "δ", "κ", "ν", "ν",},<a name="line.506"></a>
-<span class="sourceLineNo">507</span>            new String[]{"ος", "ος", "ος", "ις", "ις", "υς", "υμ", "ευμ", "ιυμ", "ιαμ", "υς", "υμ", "ες",<a name="line.507"></a>
-<span class="sourceLineNo">508</span>                    "ανες", "ερος", "ορ", "ορ", "οφον", "ον", "ον", "ικον", "οτρον", "ικ",},<a name="line.508"></a>
+<span class="sourceLineNo">499</span>            new String[]{"?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "??", "??", "??", "??", "??",<a name="line.499"></a>
+<span class="sourceLineNo">500</span>                    "??", "??", "??", "??", "??", "??", "?", "?", "??", "??", "?", "?", "?", "?"},<a name="line.500"></a>
+<span class="sourceLineNo">501</span>            new String[]{"??", "??", "??", "??"},<a name="line.501"></a>
+<span class="sourceLineNo">502</span>            new String[]{"?", "?", "?", "?", "?", "?", "?", "?", "?", "??", "?", "?", "?", "?", "?", "??",<a name="line.502"></a>
+<span class="sourceLineNo">503</span>                    "?", "??", "?", "?", "?", "?", "?", "?", "?", "?",},<a name="line.503"></a>
+<span class="sourceLineNo">504</span>            new String[]{"??", "??", "?", "?", "??", "??", "??", "?"},<a name="line.504"></a>
+<span class="sourceLineNo">505</span>            new String[]{"?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "??", "???",<a name="line.505"></a>
+<span class="sourceLineNo">506</span>                    "??", "??", "??", "?", "?", "?", "??", "??", "?", "?", "?", "?", "?",},<a name="line.506"></a>
+<span class="sourceLineNo">507</span>            new String[]{"??", "??", "??", "??", "??", "??", "??", "???", "???", "???", "??", "??", "??",<a name="line.507"></a>
+<span class="sourceLineNo">508</span>                    "????", "????", "??", "??", "????", "??", "??", "????", "?????", "??",},<a name="line.508"></a>
 <span class="sourceLineNo">509</span>            new String[]{}, new int[]{1, 2, 3, 4}, new double[]{5, 7, 4, 1}, 0.45, 0.45, 0.0, 0.2, null, true).register();<a name="line.509"></a>
 <span class="sourceLineNo">510</span><a name="line.510"></a>
 <span class="sourceLineNo">511</span>    /**<a name="line.511"></a>
@@ -521,19 +521,19 @@
 <span class="sourceLineNo">513</span>     * will produce gibberish if it produces anything at all. In the GDX display module, the "smooth" and "unicode"<a name="line.513"></a>
 <span class="sourceLineNo">514</span>     * fonts support all the accented characters you need for this.<a name="line.514"></a>
 <span class="sourceLineNo">515</span>     * &lt;br&gt;<a name="line.515"></a>
-<span class="sourceLineNo">516</span>     * Bœurter; ubi plaqua se saigui ef brafeur?<a name="line.516"></a>
+<span class="sourceLineNo">516</span>     * B�urter; ubi plaqua se saigui ef brafeur?<a name="line.516"></a>
 <span class="sourceLineNo">517</span>     */<a name="line.517"></a>
 <span class="sourceLineNo">518</span>    public static final FakeLanguageGen FRENCH = new FakeLanguageGen(<a name="line.518"></a>
 <span class="sourceLineNo">519</span>            new String[]{"a", "a", "a", "e", "e", "e", "i", "i", "o", "u", "a", "a", "a", "e", "e", "e", "i", "i", "o",<a name="line.519"></a>
 <span class="sourceLineNo">520</span>                    "a", "a", "a", "e", "e", "e", "i", "i", "o", "u", "a", "a", "a", "e", "e", "e", "i", "i", "o",<a name="line.520"></a>
 <span class="sourceLineNo">521</span>                    "a", "a", "e", "e", "i", "o", "a", "a", "a", "e", "e", "e", "i", "i", "o",<a name="line.521"></a>
-<span class="sourceLineNo">522</span>                    "ai", "oi", "oui", "au", "œu", "ou"<a name="line.522"></a>
+<span class="sourceLineNo">522</span>                    "ai", "oi", "oui", "au", "�u", "ou"<a name="line.522"></a>
 <span class="sourceLineNo">523</span>            },<a name="line.523"></a>
 <span class="sourceLineNo">524</span>            new String[]{<a name="line.524"></a>
 <span class="sourceLineNo">525</span>                    "ai", "aie", "aou", "eau", "oi", "oui", "oie", "eu", "eu",<a name="line.525"></a>
-<span class="sourceLineNo">526</span>                    "à", "â", "ai", "aî", "aï", "aie", "aou", "aoû", "au", "ay", "e", "é", "ée", "è",<a name="line.526"></a>
-<span class="sourceLineNo">527</span>                    "ê", "eau", "ei", "eî", "eu", "eû", "i", "î", "ï", "o", "ô", "oe", "oê", "oë", "œu",<a name="line.527"></a>
-<span class="sourceLineNo">528</span>                    "oi", "oie", "oï", "ou", "oû", "oy", "u", "û", "ue",<a name="line.528"></a>
+<span class="sourceLineNo">526</span>                    "�", "�", "ai", "a�", "a�", "aie", "aou", "ao�", "au", "ay", "e", "�", "�e", "�",<a name="line.526"></a>
+<span class="sourceLineNo">527</span>                    "�", "eau", "ei", "e�", "eu", "e�", "i", "�", "�", "o", "�", "oe", "o�", "o�", "�u",<a name="line.527"></a>
+<span class="sourceLineNo">528</span>                    "oi", "oie", "o�", "ou", "o�", "oy", "u", "�", "ue",<a name="line.528"></a>
 <span class="sourceLineNo">529</span>                    "a", "a", "a", "e", "e", "e", "i", "i", "o", "u", "a", "a", "a", "e", "e", "e", "i", "i", "o",<a name="line.529"></a>
 <span class="sourceLineNo">530</span>                    "a", "a", "e", "e", "i", "o", "a", "a", "a", "e", "e", "e", "i", "i", "o",<a name="line.530"></a>
 <span class="sourceLineNo">531</span>                    "a", "a", "a", "e", "e", "e", "i", "i", "o", "u", "a", "a", "a", "e", "e", "e", "i", "i", "o",<a name="line.531"></a>
@@ -545,19 +545,19 @@
 <span class="sourceLineNo">537</span>            new String[]{"cqu", "gu", "qu", "rqu", "nt", "ng", "ngu", "mb", "ll", "nd", "ndr", "nct", "st",<a name="line.537"></a>
 <span class="sourceLineNo">538</span>                    "xt", "mbr", "pl", "g", "gg", "ggr", "gl", "bl", "j", "gn",<a name="line.538"></a>
 <span class="sourceLineNo">539</span>                    "m", "m", "mm", "v", "v", "f", "f", "f", "ff", "b", "b", "bb", "d", "d", "dd", "s", "s", "s", "ss", "ss", "ss",<a name="line.539"></a>
-<span class="sourceLineNo">540</span>                    "cl", "cr", "ng", "ç", "ç", "rç", "rd", "lg", "rg"},<a name="line.540"></a>
+<span class="sourceLineNo">540</span>                    "cl", "cr", "ng", "�", "�", "r�", "rd", "lg", "rg"},<a name="line.540"></a>
 <span class="sourceLineNo">541</span>            new String[]{"rt", "ch", "m", "b", "b", "lb", "t", "t", "t", "t", "c", "d", "f", "f", "n", "n", "l", "l",<a name="line.541"></a>
 <span class="sourceLineNo">542</span>                    "s", "s", "s", "r", "r", "p", "rd", "ff", "ss", "ll"<a name="line.542"></a>
 <span class="sourceLineNo">543</span>            },<a name="line.543"></a>
-<span class="sourceLineNo">544</span>            new String[]{"e", "e", "e", "e", "e", "é", "é", "er", "er", "er", "er", "er", "es", "es", "es", "es", "es", "es",<a name="line.544"></a>
-<span class="sourceLineNo">545</span>                    "e", "e", "e", "e", "e", "é", "é", "er", "er", "er", "er", "er", "er", "es", "es", "es", "es", "es",<a name="line.545"></a>
-<span class="sourceLineNo">546</span>                    "e", "e", "e", "e", "e", "é", "é", "é", "er", "er", "er", "er", "er", "es", "es", "es", "es", "es",<a name="line.546"></a>
+<span class="sourceLineNo">544</span>            new String[]{"e", "e", "e", "e", "e", "�", "�", "er", "er", "er", "er", "er", "es", "es", "es", "es", "es", "es",<a name="line.544"></a>
+<span class="sourceLineNo">545</span>                    "e", "e", "e", "e", "e", "�", "�", "er", "er", "er", "er", "er", "er", "es", "es", "es", "es", "es",<a name="line.545"></a>
+<span class="sourceLineNo">546</span>                    "e", "e", "e", "e", "e", "�", "�", "�", "er", "er", "er", "er", "er", "es", "es", "es", "es", "es",<a name="line.546"></a>
 <span class="sourceLineNo">547</span>                    "ent", "em", "en", "en", "aim", "ain", "an", "oin", "ien", "iere", "ors", "anse",<a name="line.547"></a>
-<span class="sourceLineNo">548</span>                    "ombs", "ommes", "ancs", "ends", "œufs", "erfs", "ongs", "aps", "ats", "ives", "ui", "illes",<a name="line.548"></a>
+<span class="sourceLineNo">548</span>                    "ombs", "ommes", "ancs", "ends", "�ufs", "erfs", "ongs", "aps", "ats", "ives", "ui", "illes",<a name="line.548"></a>
 <span class="sourceLineNo">549</span>                    "aen", "aon", "am", "an", "eun", "ein", "age", "age", "uile", "uin", "um", "un", "un", "un",<a name="line.549"></a>
 <span class="sourceLineNo">550</span>                    "aille", "ouille", "eille", "ille", "eur", "it", "ot", "oi", "oi", "oi", "aire", "om", "on", "on",<a name="line.550"></a>
-<span class="sourceLineNo">551</span>                    "im", "in", "in", "ien", "ien", "ine", "ion", "il", "eil", "oin", "oint", "iguïté", "ience", "incte",<a name="line.551"></a>
-<span class="sourceLineNo">552</span>                    "ang", "ong", "acré", "eau", "ouche", "oux", "oux", "ect", "ecri", "agne", "uer", "aix", "eth", "ut", "ant",<a name="line.552"></a>
+<span class="sourceLineNo">551</span>                    "im", "in", "in", "ien", "ien", "ine", "ion", "il", "eil", "oin", "oint", "igu�t�", "ience", "incte",<a name="line.551"></a>
+<span class="sourceLineNo">552</span>                    "ang", "ong", "acr�", "eau", "ouche", "oux", "oux", "ect", "ecri", "agne", "uer", "aix", "eth", "ut", "ant",<a name="line.552"></a>
 <span class="sourceLineNo">553</span>                    "anc", "anc", "anche", "ioche", "eaux", "ive", "eur", "ancois", "ecois", "ente", "enri",<a name="line.553"></a>
 <span class="sourceLineNo">554</span>                    "arc", "oc", "ouis", "arche", "ique", "ique", "ique", "oque", "arque", "uis", "este", "oir", "oir"<a name="line.554"></a>
 <span class="sourceLineNo">555</span>            },<a name="line.555"></a>
@@ -588,20 +588,20 @@
 <span class="sourceLineNo">580</span>     * Make sure the font you use to render this supports the Cyrillic alphabet!<a name="line.580"></a>
 <span class="sourceLineNo">581</span>     * In the GDX display module, the "smooth" fonts support all the Cyrillic alphabet you need for this.<a name="line.581"></a>
 <span class="sourceLineNo">582</span>     * &lt;br&gt;<a name="line.582"></a>
-<span class="sourceLineNo">583</span>     * Жыдотуф руц пйцас, гогутяр шыскучэбаб - гйчапофёглор гюнуз ъсказюжин.<a name="line.583"></a>
+<span class="sourceLineNo">583</span>     * ??????? ??? ?????, ??????? ?????????? - ???????????? ????? ?????????.<a name="line.583"></a>
 <span class="sourceLineNo">584</span>     */<a name="line.584"></a>
 <span class="sourceLineNo">585</span>    public static final FakeLanguageGen RUSSIAN_AUTHENTIC = new FakeLanguageGen(<a name="line.585"></a>
-<span class="sourceLineNo">586</span>            new String[]{"а", "е", "ё", "и", "й", "о", "у", "ъ", "ы", "э", "ю", "я", "ы", "а", "а", "о", "у"},<a name="line.586"></a>
+<span class="sourceLineNo">586</span>            new String[]{"?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?"},<a name="line.586"></a>
 <span class="sourceLineNo">587</span>            new String[]{},<a name="line.587"></a>
-<span class="sourceLineNo">588</span>            new String[]{"б", "в", "г", "д", "к", "л", "п", "р", "с", "т", "ф", "х", "ц",<a name="line.588"></a>
-<span class="sourceLineNo">589</span>                    "б", "в", "г", "д", "к", "л", "п", "р", "с", "т", "ф", "х", "ц",<a name="line.589"></a>
-<span class="sourceLineNo">590</span>                    "б", "в", "г", "д", "к", "л", "п", "р", "с", "т", "ф",<a name="line.590"></a>
-<span class="sourceLineNo">591</span>                    "ж", "м", "н", "з", "ч", "ш", "щ",<a name="line.591"></a>
-<span class="sourceLineNo">592</span>                    "бр", "ск", "тр", "бл", "гл", "кр", "гр"},<a name="line.592"></a>
-<span class="sourceLineNo">593</span>            new String[]{"бл", "бр", "пл", "дж", "тр", "гл", "гр", "кр"},<a name="line.593"></a>
-<span class="sourceLineNo">594</span>            new String[]{"б", "в", "г", "д", "ж", "з", "к", "л", "м", "н", "п", "р", "с", "т", "ф", "х", "ц", "ч", "ш",<a name="line.594"></a>
-<span class="sourceLineNo">595</span>                    "в", "ф", "ск", "ск", "ск", "с", "б", "д", "д", "н", "р", "р"},<a name="line.595"></a>
-<span class="sourceLineNo">596</span>            new String[]{"одка", "одна", "уск", "аск", "ускы", "ад", "ар", "овйч", "ев", "ов", "оф", "агда", "ёцкы", "йч", "он", "ах", "ъв", "ян"},<a name="line.596"></a>
+<span class="sourceLineNo">588</span>            new String[]{"?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?",<a name="line.588"></a>
+<span class="sourceLineNo">589</span>                    "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?",<a name="line.589"></a>
+<span class="sourceLineNo">590</span>                    "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?",<a name="line.590"></a>
+<span class="sourceLineNo">591</span>                    "?", "?", "?", "?", "?", "?", "?",<a name="line.591"></a>
+<span class="sourceLineNo">592</span>                    "??", "??", "??", "??", "??", "??", "??"},<a name="line.592"></a>
+<span class="sourceLineNo">593</span>            new String[]{"??", "??", "??", "??", "??", "??", "??", "??"},<a name="line.593"></a>
+<span class="sourceLineNo">594</span>            new String[]{"?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?",<a name="line.594"></a>
+<span class="sourceLineNo">595</span>                    "?", "?", "??", "??", "??", "?", "?", "?", "?", "?", "?", "?"},<a name="line.595"></a>
+<span class="sourceLineNo">596</span>            new String[]{"????", "????", "???", "???", "????", "??", "??", "????", "??", "??", "??", "????", "????", "??", "??", "??", "??", "??"},<a name="line.596"></a>
 <span class="sourceLineNo">597</span>            new String[]{}, new int[]{1, 2, 3, 4, 5, 6}, new double[]{4, 5, 6, 5, 3, 1}, 0.1, 0.2, 0.0, 0.12, null, true).register();<a name="line.597"></a>
 <span class="sourceLineNo">598</span><a name="line.598"></a>
 <span class="sourceLineNo">599</span>    /**<a name="line.599"></a>
@@ -801,73 +801,73 @@
 <span class="sourceLineNo">793</span>    /**<a name="line.793"></a>
 <span class="sourceLineNo">794</span>     * Imitation Hindi, romanized to use the Latin alphabet using accented glyphs similar to the IAST standard.<a name="line.794"></a>
 <span class="sourceLineNo">795</span>     * Most fonts do not support the glyphs that IAST-standard romanization of Hindi needs, so this uses alternate<a name="line.795"></a>
-<span class="sourceLineNo">796</span>     * glyphs from at most Latin Extended-A. Relative to the IAST standard, the glyphs {@code "ṛṝḷḹḍṭṅṇṣṃḥ"} become<a name="line.796"></a>
-<span class="sourceLineNo">797</span>     * {@code "ŗŕļĺđţńņşĕĭ"}, with the nth glyph in the first string being substituted with the nth glyph in the second<a name="line.797"></a>
+<span class="sourceLineNo">796</span>     * glyphs from at most Latin Extended-A. Relative to the IAST standard, the glyphs {@code "???????????"} become<a name="line.796"></a>
+<span class="sourceLineNo">797</span>     * {@code "???????????"}, with the nth glyph in the first string being substituted with the nth glyph in the second<a name="line.797"></a>
 <span class="sourceLineNo">798</span>     * string. You may want to get a variant on this language with {@link #removeAccents()} if you can't display the<a name="line.798"></a>
-<span class="sourceLineNo">799</span>     * less-commonly-supported glyphs {@code āīūĕĭáíúóŗŕļţĺđńñņśş}. For some time SquidLib had a separate version of<a name="line.799"></a>
+<span class="sourceLineNo">799</span>     * less-commonly-supported glyphs {@code ?????����???????�???}. For some time SquidLib had a separate version of<a name="line.799"></a>
 <span class="sourceLineNo">800</span>     * imitation Hindi that was accurate to the IAST standard, but this version is more usable because font support is<a name="line.800"></a>
 <span class="sourceLineNo">801</span>     * much better for the glyphs it uses, so the IAST kind was removed (it added quite a bit of code for something that<a name="line.801"></a>
 <span class="sourceLineNo">802</span>     * was mostly unusable).<a name="line.802"></a>
 <span class="sourceLineNo">803</span>     * &lt;br&gt;<a name="line.803"></a>
-<span class="sourceLineNo">804</span>     * Darvāga yar; ghađhinopŕauka āĕrdur, conśaigaijo śabhodhaĕđū jiviđaudu.<a name="line.804"></a>
+<span class="sourceLineNo">804</span>     * Darv?ga yar; gha?hinop?auka ??rdur, con?aigaijo ?abhodha??? jivi?audu.<a name="line.804"></a>
 <span class="sourceLineNo">805</span>     */<a name="line.805"></a>
 <span class="sourceLineNo">806</span>    public static final FakeLanguageGen HINDI_ROMANIZED = new FakeLanguageGen(<a name="line.806"></a>
 <span class="sourceLineNo">807</span>            new String[]{<a name="line.807"></a>
-<span class="sourceLineNo">808</span>                    "a", "a", "a", "a", "a", "a", "ā", "ā", "i", "i", "i", "i", "ī", "ī",<a name="line.808"></a>
-<span class="sourceLineNo">809</span>                    "u", "u", "u", "ū", "e", "ai", "ai", "o", "o", "o", "au",<a name="line.809"></a>
-<span class="sourceLineNo">810</span>                    "a", "a", "a", "a", "a", "a", "ā", "ā", "i", "i", "i", "i", "ī", "ī",<a name="line.810"></a>
-<span class="sourceLineNo">811</span>                    "u", "u", "u", "ū", "e", "ai", "ai", "o", "o", "o", "au",<a name="line.811"></a>
-<span class="sourceLineNo">812</span>                    "a", "a", "a", "a", "a", "a", "ā", "ā", "i", "i", "i", "i", "ī", "ī",<a name="line.812"></a>
-<span class="sourceLineNo">813</span>                    "u", "u", "u", "ū", "e", "ai", "ai", "o", "o", "o", "au",<a name="line.813"></a>
-<span class="sourceLineNo">814</span>                    "a", "a", "a", "a", "a", "a", "ā", "ā", "i", "i", "i", "i", "ī", "ī",<a name="line.814"></a>
-<span class="sourceLineNo">815</span>                    "u", "u", "u", "ū", "e", "ai", "ai", "o", "o", "o", "au",<a name="line.815"></a>
-<span class="sourceLineNo">816</span>                    "a", "a", "a", "a", "a", "a", "ā", "ā", "i", "i", "i", "i", "ī", "i", "i", "ī", "ī",<a name="line.816"></a>
-<span class="sourceLineNo">817</span>                    "u", "u", "u", "ū", "u", "ū", "u", "ū", "e", "ai", "ai", "o", "o", "o", "au",<a name="line.817"></a>
-<span class="sourceLineNo">818</span>                    "a", "a", "a", "a", "a", "a", "ā", "ā", "i", "i", "i", "i", "ī", "i", "i", "ī", "ī",<a name="line.818"></a>
-<span class="sourceLineNo">819</span>                    "u", "u", "u", "ū", "u", "ū", "u", "ū", "e", "ai", "ai", "o", "o", "o", "au",<a name="line.819"></a>
-<span class="sourceLineNo">820</span>                    "a", "a", "a", "a", "a", "a", "ā", "ā", "i", "i", "i", "i", "ī", "i", "i", "ī", "ī",<a name="line.820"></a>
-<span class="sourceLineNo">821</span>                    "u", "u", "u", "ū", "u", "ū", "u", "ū", "e", "ai", "ai", "o", "o", "o", "au",<a name="line.821"></a>
-<span class="sourceLineNo">822</span>                    "a", "a", "a", "a", "a", "a", "ā", "ā", "i", "i", "i", "i", "ī", "i", "i", "ī", "ī",<a name="line.822"></a>
-<span class="sourceLineNo">823</span>                    "u", "u", "u", "ū", "u", "ū", "u", "ū", "e", "ai", "ai", "o", "o", "o", "au",<a name="line.823"></a>
-<span class="sourceLineNo">824</span>                    "aĕ", "aĕ", "aĕ", "aĕ", "aĕ", "āĕ", "āĕ", "iĕ", "iĕ", "iĕ", "īĕ", "īĕ",<a name="line.824"></a>
-<span class="sourceLineNo">825</span>                    "uĕ", "uĕ", "ūĕ", "aiĕ", "aiĕ", "oĕ", "oĕ", "oĕ", "auĕ",<a name="line.825"></a>
-<span class="sourceLineNo">826</span>                    //"aĭ", "aĭ", "aĭ", "aĭ", "aĭ", "āĭ", "āĭ", "iĭ", "iĭ", "iĭ", "īĭ", "īĭ",<a name="line.826"></a>
-<span class="sourceLineNo">827</span>                    //"uĭ", "uĭ", "ūĭ", "aiĭ", "aiĭ", "oĭ", "oĭ", "oĭ", "auĭ",<a name="line.827"></a>
+<span class="sourceLineNo">808</span>                    "a", "a", "a", "a", "a", "a", "?", "?", "i", "i", "i", "i", "?", "?",<a name="line.808"></a>
+<span class="sourceLineNo">809</span>                    "u", "u", "u", "?", "e", "ai", "ai", "o", "o", "o", "au",<a name="line.809"></a>
+<span class="sourceLineNo">810</span>                    "a", "a", "a", "a", "a", "a", "?", "?", "i", "i", "i", "i", "?", "?",<a name="line.810"></a>
+<span class="sourceLineNo">811</span>                    "u", "u", "u", "?", "e", "ai", "ai", "o", "o", "o", "au",<a name="line.811"></a>
+<span class="sourceLineNo">812</span>                    "a", "a", "a", "a", "a", "a", "?", "?", "i", "i", "i", "i", "?", "?",<a name="line.812"></a>
+<span class="sourceLineNo">813</span>                    "u", "u", "u", "?", "e", "ai", "ai", "o", "o", "o", "au",<a name="line.813"></a>
+<span class="sourceLineNo">814</span>                    "a", "a", "a", "a", "a", "a", "?", "?", "i", "i", "i", "i", "?", "?",<a name="line.814"></a>
+<span class="sourceLineNo">815</span>                    "u", "u", "u", "?", "e", "ai", "ai", "o", "o", "o", "au",<a name="line.815"></a>
+<span class="sourceLineNo">816</span>                    "a", "a", "a", "a", "a", "a", "?", "?", "i", "i", "i", "i", "?", "i", "i", "?", "?",<a name="line.816"></a>
+<span class="sourceLineNo">817</span>                    "u", "u", "u", "?", "u", "?", "u", "?", "e", "ai", "ai", "o", "o", "o", "au",<a name="line.817"></a>
+<span class="sourceLineNo">818</span>                    "a", "a", "a", "a", "a", "a", "?", "?", "i", "i", "i", "i", "?", "i", "i", "?", "?",<a name="line.818"></a>
+<span class="sourceLineNo">819</span>                    "u", "u", "u", "?", "u", "?", "u", "?", "e", "ai", "ai", "o", "o", "o", "au",<a name="line.819"></a>
+<span class="sourceLineNo">820</span>                    "a", "a", "a", "a", "a", "a", "?", "?", "i", "i", "i", "i", "?", "i", "i", "?", "?",<a name="line.820"></a>
+<span class="sourceLineNo">821</span>                    "u", "u", "u", "?", "u", "?", "u", "?", "e", "ai", "ai", "o", "o", "o", "au",<a name="line.821"></a>
+<span class="sourceLineNo">822</span>                    "a", "a", "a", "a", "a", "a", "?", "?", "i", "i", "i", "i", "?", "i", "i", "?", "?",<a name="line.822"></a>
+<span class="sourceLineNo">823</span>                    "u", "u", "u", "?", "u", "?", "u", "?", "e", "ai", "ai", "o", "o", "o", "au",<a name="line.823"></a>
+<span class="sourceLineNo">824</span>                    "a?", "a?", "a?", "a?", "a?", "??", "??", "i?", "i?", "i?", "??", "??",<a name="line.824"></a>
+<span class="sourceLineNo">825</span>                    "u?", "u?", "??", "ai?", "ai?", "o?", "o?", "o?", "au?",<a name="line.825"></a>
+<span class="sourceLineNo">826</span>                    //"a?", "a?", "a?", "a?", "a?", "??", "??", "i?", "i?", "i?", "??", "??",<a name="line.826"></a>
+<span class="sourceLineNo">827</span>                    //"u?", "u?", "??", "ai?", "ai?", "o?", "o?", "o?", "au?",<a name="line.827"></a>
 <span class="sourceLineNo">828</span>            },<a name="line.828"></a>
-<span class="sourceLineNo">829</span>            new String[]{"á", "í", "ú", "ó", "á", "í", "ú", "ó",<a name="line.829"></a>
+<span class="sourceLineNo">829</span>            new String[]{"�", "�", "�", "�", "�", "�", "�", "�",<a name="line.829"></a>
 <span class="sourceLineNo">830</span>            },<a name="line.830"></a>
 <span class="sourceLineNo">831</span>            new String[]{<a name="line.831"></a>
-<span class="sourceLineNo">832</span>                    "k", "k", "k", "k", "k", "k", "k", "k", "kŗ", "kŕ", "kļ",<a name="line.832"></a>
-<span class="sourceLineNo">833</span>                    "c", "c", "c", "c", "c", "c", "cŗ", "cŕ", "cļ",<a name="line.833"></a>
-<span class="sourceLineNo">834</span>                    "ţ", "t", "t", "t", "t", "t", "t", "t", "t", "t", "tŗ", "tŕ", "tŗ", "tŕ",<a name="line.834"></a>
-<span class="sourceLineNo">835</span>                    "p", "p", "p", "p", "p", "p", "p", "p", "p", "p", "pŗ", "pŕ", "pļ", "pĺ", "pŗ", "pŕ", "p", "p",<a name="line.835"></a>
-<span class="sourceLineNo">836</span>                    "kh", "kh", "kh", "kh", "kh", "kh", "kh", "kh", "kh", "kh", "khŗ", "khŕ", "khļ", "khĺ",<a name="line.836"></a>
-<span class="sourceLineNo">837</span>                    "ch", "ch", "ch", "ch", "ch", "ch", "ch", "ch", "ch", "chŗ", "chŕ", "chļ", "chĺ",<a name="line.837"></a>
-<span class="sourceLineNo">838</span>                    "ţh", "th", "th", "th", "th", "th", "th", "th", "th", "th", "thŗ", "thŕ", "thļ", "thĺ",<a name="line.838"></a>
-<span class="sourceLineNo">839</span>                    "ph", "ph", "ph", "ph", "ph", "ph", "ph", "phŗ", "phŕ", "phļ", "phĺ",<a name="line.839"></a>
-<span class="sourceLineNo">840</span>                    "g", "j", "đ", "d", "b", "gh", "jh", "đh", "dh", "bh",<a name="line.840"></a>
-<span class="sourceLineNo">841</span>                    "ń", "ñ", "ņ", "n", "m", "h", "y", "r", "l", "v", "ś", "ş", "s",<a name="line.841"></a>
-<span class="sourceLineNo">842</span>                    "g", "j", "đ", "d", "b", "gh", "jh", "đh", "dh", "bh",<a name="line.842"></a>
-<span class="sourceLineNo">843</span>                    "ń", "ñ", "ņ", "n", "m", "h", "y", "r", "l", "v", "ś", "ş", "s",<a name="line.843"></a>
-<span class="sourceLineNo">844</span>                    "g", "j", "đ", "d", "b", "gh", "jh", "đh", "dh", "bh",<a name="line.844"></a>
-<span class="sourceLineNo">845</span>                    "ń", "ñ", "ņ", "n", "m", "h", "y", "r", "l", "v", "ś", "ş", "s",<a name="line.845"></a>
-<span class="sourceLineNo">846</span>                    "g", "j", "đ", "d", "b", "gh", "jh", "đh", "dh", "bh",<a name="line.846"></a>
-<span class="sourceLineNo">847</span>                    "ń", "ñ", "ņ", "n", "m", "h", "y", "r", "l", "v", "ś", "ş", "s",<a name="line.847"></a>
-<span class="sourceLineNo">848</span>                    "g", "j", "đ", "d", "b", "gh", "jh", "đh", "dh", "bh",<a name="line.848"></a>
-<span class="sourceLineNo">849</span>                    "ń", "ñ", "ņ", "n", "m", "h", "y", "r", "l", "v", "ś", "ş", "s",<a name="line.849"></a>
-<span class="sourceLineNo">850</span>                    "g", "j", "đ", "d", "b", "gh", "jh", "đh", "dh", "bh",<a name="line.850"></a>
-<span class="sourceLineNo">851</span>                    "ń", "ñ", "ņ", "n", "m", "h", "y", "r", "l", "v", "ś", "ş", "s",<a name="line.851"></a>
-<span class="sourceLineNo">852</span>                    "g", "j", "đ", "d", "b", "gh", "jh", "đh", "dh", "bh",<a name="line.852"></a>
-<span class="sourceLineNo">853</span>                    "ń", "ñ", "ņ", "n", "m", "h", "y", "r", "l", "v", "ś", "ş", "s",<a name="line.853"></a>
-<span class="sourceLineNo">854</span>                    "g", "j", "đ", "d", "b", "gh", "đh", "dh", "bh",<a name="line.854"></a>
-<span class="sourceLineNo">855</span>                    "ń", "ñ", "ņ", "n", "m", "h", "y", "r", "l", "v", "ś", "ş", "s",<a name="line.855"></a>
-<span class="sourceLineNo">856</span>                    "g", "j", "đ", "d", "b", "gh", "đh", "dh", "bh",<a name="line.856"></a>
-<span class="sourceLineNo">857</span>                    "ń", "ņ", "n", "m", "h", "y", "r", "l", "v", "ş", "s",<a name="line.857"></a>
-<span class="sourceLineNo">858</span>                    "g", "j", "đ", "d", "b", "gh", "đh", "dh", "bh",<a name="line.858"></a>
-<span class="sourceLineNo">859</span>                    "ń", "ņ", "n", "m", "h", "y", "r", "l", "v", "ş", "s",<a name="line.859"></a>
-<span class="sourceLineNo">860</span>                    "g", "đ", "d", "b", "gh", "đh", "dh", "bh", "n", "m", "v", "s",<a name="line.860"></a>
-<span class="sourceLineNo">861</span>                    "g", "đ", "d", "b", "g", "d", "b", "dh", "bh", "n", "m", "v",<a name="line.861"></a>
-<span class="sourceLineNo">862</span>                    "g", "đ", "d", "b", "g", "d", "b", "dh", "bh", "n", "m", "v",<a name="line.862"></a>
+<span class="sourceLineNo">832</span>                    "k", "k", "k", "k", "k", "k", "k", "k", "k?", "k?", "k?",<a name="line.832"></a>
+<span class="sourceLineNo">833</span>                    "c", "c", "c", "c", "c", "c", "c?", "c?", "c?",<a name="line.833"></a>
+<span class="sourceLineNo">834</span>                    "?", "t", "t", "t", "t", "t", "t", "t", "t", "t", "t?", "t?", "t?", "t?",<a name="line.834"></a>
+<span class="sourceLineNo">835</span>                    "p", "p", "p", "p", "p", "p", "p", "p", "p", "p", "p?", "p?", "p?", "p?", "p?", "p?", "p", "p",<a name="line.835"></a>
+<span class="sourceLineNo">836</span>                    "kh", "kh", "kh", "kh", "kh", "kh", "kh", "kh", "kh", "kh", "kh?", "kh?", "kh?", "kh?",<a name="line.836"></a>
+<span class="sourceLineNo">837</span>                    "ch", "ch", "ch", "ch", "ch", "ch", "ch", "ch", "ch", "ch?", "ch?", "ch?", "ch?",<a name="line.837"></a>
+<span class="sourceLineNo">838</span>                    "?h", "th", "th", "th", "th", "th", "th", "th", "th", "th", "th?", "th?", "th?", "th?",<a name="line.838"></a>
+<span class="sourceLineNo">839</span>                    "ph", "ph", "ph", "ph", "ph", "ph", "ph", "ph?", "ph?", "ph?", "ph?",<a name="line.839"></a>
+<span class="sourceLineNo">840</span>                    "g", "j", "?", "d", "b", "gh", "jh", "?h", "dh", "bh",<a name="line.840"></a>
+<span class="sourceLineNo">841</span>                    "?", "�", "?", "n", "m", "h", "y", "r", "l", "v", "?", "?", "s",<a name="line.841"></a>
+<span class="sourceLineNo">842</span>                    "g", "j", "?", "d", "b", "gh", "jh", "?h", "dh", "bh",<a name="line.842"></a>
+<span class="sourceLineNo">843</span>                    "?", "�", "?", "n", "m", "h", "y", "r", "l", "v", "?", "?", "s",<a name="line.843"></a>
+<span class="sourceLineNo">844</span>                    "g", "j", "?", "d", "b", "gh", "jh", "?h", "dh", "bh",<a name="line.844"></a>
+<span class="sourceLineNo">845</span>                    "?", "�", "?", "n", "m", "h", "y", "r", "l", "v", "?", "?", "s",<a name="line.845"></a>
+<span class="sourceLineNo">846</span>                    "g", "j", "?", "d", "b", "gh", "jh", "?h", "dh", "bh",<a name="line.846"></a>
+<span class="sourceLineNo">847</span>                    "?", "�", "?", "n", "m", "h", "y", "r", "l", "v", "?", "?", "s",<a name="line.847"></a>
+<span class="sourceLineNo">848</span>                    "g", "j", "?", "d", "b", "gh", "jh", "?h", "dh", "bh",<a name="line.848"></a>
+<span class="sourceLineNo">849</span>                    "?", "�", "?", "n", "m", "h", "y", "r", "l", "v", "?", "?", "s",<a name="line.849"></a>
+<span class="sourceLineNo">850</span>                    "g", "j", "?", "d", "b", "gh", "jh", "?h", "dh", "bh",<a name="line.850"></a>
+<span class="sourceLineNo">851</span>                    "?", "�", "?", "n", "m", "h", "y", "r", "l", "v", "?", "?", "s",<a name="line.851"></a>
+<span class="sourceLineNo">852</span>                    "g", "j", "?", "d", "b", "gh", "jh", "?h", "dh", "bh",<a name="line.852"></a>
+<span class="sourceLineNo">853</span>                    "?", "�", "?", "n", "m", "h", "y", "r", "l", "v", "?", "?", "s",<a name="line.853"></a>
+<span class="sourceLineNo">854</span>                    "g", "j", "?", "d", "b", "gh", "?h", "dh", "bh",<a name="line.854"></a>
+<span class="sourceLineNo">855</span>                    "?", "�", "?", "n", "m", "h", "y", "r", "l", "v", "?", "?", "s",<a name="line.855"></a>
+<span class="sourceLineNo">856</span>                    "g", "j", "?", "d", "b", "gh", "?h", "dh", "bh",<a name="line.856"></a>
+<span class="sourceLineNo">857</span>                    "?", "?", "n", "m", "h", "y", "r", "l", "v", "?", "s",<a name="line.857"></a>
+<span class="sourceLineNo">858</span>                    "g", "j", "?", "d", "b", "gh", "?h", "dh", "bh",<a name="line.858"></a>
+<span class="sourceLineNo">859</span>                    "?", "?", "n", "m", "h", "y", "r", "l", "v", "?", "s",<a name="line.859"></a>
+<span class="sourceLineNo">860</span>                    "g", "?", "d", "b", "gh", "?h", "dh", "bh", "n", "m", "v", "s",<a name="line.860"></a>
+<span class="sourceLineNo">861</span>                    "g", "?", "d", "b", "g", "d", "b", "dh", "bh", "n", "m", "v",<a name="line.861"></a>
+<span class="sourceLineNo">862</span>                    "g", "?", "d", "b", "g", "d", "b", "dh", "bh", "n", "m", "v",<a name="line.862"></a>
 <span class="sourceLineNo">863</span>            },<a name="line.863"></a>
 <span class="sourceLineNo">864</span>            new String[]{<a name="line.864"></a>
 <span class="sourceLineNo">865</span>                    "k", "k", "k", "k", "k", "nk", "rk",<a name="line.865"></a>
@@ -878,24 +878,24 @@
 <span class="sourceLineNo">870</span>                    "k", "k", "k", "k", "k", "nk", "rk",<a name="line.870"></a>
 <span class="sourceLineNo">871</span>                    "k", "k", "k", "k", "k", "nk", "rk",<a name="line.871"></a>
 <span class="sourceLineNo">872</span>                    "k", "k", "k", "k", "k", "nk", "rk",<a name="line.872"></a>
-<span class="sourceLineNo">873</span>                    "kŗ", "kŗ", "kŗ", "kŗ", "kŗ", "nkŗ", "rkŗ",<a name="line.873"></a>
-<span class="sourceLineNo">874</span>                    "kŕ", "kŕ", "kŕ", "kŕ", "kŕ", "nkŕ", "rkŕ",<a name="line.874"></a>
-<span class="sourceLineNo">875</span>                    "kļ", "kļ", "kļ", "kļ", "kļ", "nkļ", "rkļ",<a name="line.875"></a>
+<span class="sourceLineNo">873</span>                    "k?", "k?", "k?", "k?", "k?", "nk?", "rk?",<a name="line.873"></a>
+<span class="sourceLineNo">874</span>                    "k?", "k?", "k?", "k?", "k?", "nk?", "rk?",<a name="line.874"></a>
+<span class="sourceLineNo">875</span>                    "k?", "k?", "k?", "k?", "k?", "nk?", "rk?",<a name="line.875"></a>
 <span class="sourceLineNo">876</span><a name="line.876"></a>
-<span class="sourceLineNo">877</span>                    "c", "c", "c", "c", "c", "c", "cŗ", "cŕ", "cļ",<a name="line.877"></a>
-<span class="sourceLineNo">878</span>                    "ţ", "t", "t", "t", "t", "t", "nt", "rt",<a name="line.878"></a>
-<span class="sourceLineNo">879</span>                    "ţ", "t", "t", "t", "t", "nt", "rt",<a name="line.879"></a>
-<span class="sourceLineNo">880</span>                    "ţ", "t", "t", "t", "t", "nt", "rt",<a name="line.880"></a>
-<span class="sourceLineNo">881</span>                    "ţ", "t", "t", "t", "t", "nt", "rt",<a name="line.881"></a>
-<span class="sourceLineNo">882</span>                    "ţ", "t", "t", "t", "t", "nt", "rt",<a name="line.882"></a>
-<span class="sourceLineNo">883</span>                    "ţ", "t", "t", "t", "t", "nt", "rt",<a name="line.883"></a>
-<span class="sourceLineNo">884</span>                    "ţ", "t", "t", "t", "t", "nt", "rt",<a name="line.884"></a>
-<span class="sourceLineNo">885</span>                    "ţ", "t", "t", "t", "t", "nt", "rt",<a name="line.885"></a>
-<span class="sourceLineNo">886</span>                    "ţ", "t", "t", "t", "t", "nt", "rt",<a name="line.886"></a>
-<span class="sourceLineNo">887</span>                    "tŗ", "tŗ", "tŗ", "tŗ", "tŗ", "ntŗ", "rtŗ",<a name="line.887"></a>
-<span class="sourceLineNo">888</span>                    "tŕ", "tŕ", "tŕ", "tŕ", "tŕ", "ntŕ", "rtŕ",<a name="line.888"></a>
-<span class="sourceLineNo">889</span>                    "tŗ", "tŗ", "tŗ", "tŗ", "tŗ", "ntŗ", "rtŗ",<a name="line.889"></a>
-<span class="sourceLineNo">890</span>                    "tŕ", "tŕ", "tŕ", "tŕ", "tŕ", "ntŕ", "rtŕ",<a name="line.890"></a>
+<span class="sourceLineNo">877</span>                    "c", "c", "c", "c", "c", "c", "c?", "c?", "c?",<a name="line.877"></a>
+<span class="sourceLineNo">878</span>                    "?", "t", "t", "t", "t", "t", "nt", "rt",<a name="line.878"></a>
+<span class="sourceLineNo">879</span>                    "?", "t", "t", "t", "t", "nt", "rt",<a name="line.879"></a>
+<span class="sourceLineNo">880</span>                    "?", "t", "t", "t", "t", "nt", "rt",<a name="line.880"></a>
+<span class="sourceLineNo">881</span>                    "?", "t", "t", "t", "t", "nt", "rt",<a name="line.881"></a>
+<span class="sourceLineNo">882</span>                    "?", "t", "t", "t", "t", "nt", "rt",<a name="line.882"></a>
+<span class="sourceLineNo">883</span>                    "?", "t", "t", "t", "t", "nt", "rt",<a name="line.883"></a>
+<span class="sourceLineNo">884</span>                    "?", "t", "t", "t", "t", "nt", "rt",<a name="line.884"></a>
+<span class="sourceLineNo">885</span>                    "?", "t", "t", "t", "t", "nt", "rt",<a name="line.885"></a>
+<span class="sourceLineNo">886</span>                    "?", "t", "t", "t", "t", "nt", "rt",<a name="line.886"></a>
+<span class="sourceLineNo">887</span>                    "t?", "t?", "t?", "t?", "t?", "nt?", "rt?",<a name="line.887"></a>
+<span class="sourceLineNo">888</span>                    "t?", "t?", "t?", "t?", "t?", "nt?", "rt?",<a name="line.888"></a>
+<span class="sourceLineNo">889</span>                    "t?", "t?", "t?", "t?", "t?", "nt?", "rt?",<a name="line.889"></a>
+<span class="sourceLineNo">890</span>                    "t?", "t?", "t?", "t?", "t?", "nt?", "rt?",<a name="line.890"></a>
 <span class="sourceLineNo">891</span><a name="line.891"></a>
 <span class="sourceLineNo">892</span>                    "p", "p", "p", "p", "p", "np", "rp",<a name="line.892"></a>
 <span class="sourceLineNo">893</span>                    "p", "p", "p", "p", "p", "np", "rp",<a name="line.893"></a>
@@ -907,12 +907,12 @@
 <span class="sourceLineNo">899</span>                    "p", "p", "p", "p", "p", "np", "rp",<a name="line.899"></a>
 <span class="sourceLineNo">900</span>                    "p", "p", "p", "p", "p", "np", "rp",<a name="line.900"></a>
 <span class="sourceLineNo">901</span>                    "p", "p", "p", "p", "p", "np", "rp",<a name="line.901"></a>
-<span class="sourceLineNo">902</span>                    "pŗ", "pŗ", "pŗ", "pŗ", "pŗ", "npŗ", "rpŗ",<a name="line.902"></a>
-<span class="sourceLineNo">903</span>                    "pŕ", "pŕ", "pŕ", "pŕ", "pŕ", "npŕ", "rpŕ",<a name="line.903"></a>
-<span class="sourceLineNo">904</span>                    "pļ", "pļ", "pļ", "pļ", "pļ", "npļ", "rpļ",<a name="line.904"></a>
-<span class="sourceLineNo">905</span>                    "pĺ", "pĺ", "pĺ", "pĺ", "pĺ", "npĺ", "rpĺ",<a name="line.905"></a>
-<span class="sourceLineNo">906</span>                    "pŗ", "pŗ", "pŗ", "pŗ", "pŗ", "npŗ", "rpŗ",<a name="line.906"></a>
-<span class="sourceLineNo">907</span>                    "pŕ", "pŕ", "pŕ", "pŕ", "pŕ", "npŕ", "rpŕ",<a name="line.907"></a>
+<span class="sourceLineNo">902</span>                    "p?", "p?", "p?", "p?", "p?", "np?", "rp?",<a name="line.902"></a>
+<span class="sourceLineNo">903</span>                    "p?", "p?", "p?", "p?", "p?", "np?", "rp?",<a name="line.903"></a>
+<span class="sourceLineNo">904</span>                    "p?", "p?", "p?", "p?", "p?", "np?", "rp?",<a name="line.904"></a>
+<span class="sourceLineNo">905</span>                    "p?", "p?", "p?", "p?", "p?", "np?", "rp?",<a name="line.905"></a>
+<span class="sourceLineNo">906</span>                    "p?", "p?", "p?", "p?", "p?", "np?", "rp?",<a name="line.906"></a>
+<span class="sourceLineNo">907</span>                    "p?", "p?", "p?", "p?", "p?", "np?", "rp?",<a name="line.907"></a>
 <span class="sourceLineNo">908</span>                    "p", "p", "p", "p", "p", "np", "rp",<a name="line.908"></a>
 <span class="sourceLineNo">909</span>                    "p", "p", "p", "p", "p", "np", "rp",<a name="line.909"></a>
 <span class="sourceLineNo">910</span><a name="line.910"></a>
@@ -926,13 +926,13 @@
 <span class="sourceLineNo">918</span>                    "kh", "kh", "kh", "kh", "kh", "nkh", "rkh",<a name="line.918"></a>
 <span class="sourceLineNo">919</span>                    "kh", "kh", "kh", "kh", "kh", "nkh", "rkh",<a name="line.919"></a>
 <span class="sourceLineNo">920</span>                    "kh", "kh", "kh", "kh", "kh", "nkh", "rkh",<a name="line.920"></a>
-<span class="sourceLineNo">921</span>                    "khŗ", "khŗ", "khŗ", "khŗ", "khŗ", "nkhŗ", "rkhŗ",<a name="line.921"></a>
-<span class="sourceLineNo">922</span>                    "khŕ", "khŕ", "khŕ", "khŕ", "khŕ", "nkhŕ", "rkhŕ",<a name="line.922"></a>
-<span class="sourceLineNo">923</span>                    "khļ", "khļ", "khļ", "khļ", "khļ", "nkhļ", "rkhļ",<a name="line.923"></a>
-<span class="sourceLineNo">924</span>                    "khĺ", "khĺ", "khĺ", "khĺ", "khĺ", "nkhĺ", "rkhĺ",<a name="line.924"></a>
+<span class="sourceLineNo">921</span>                    "kh?", "kh?", "kh?", "kh?", "kh?", "nkh?", "rkh?",<a name="line.921"></a>
+<span class="sourceLineNo">922</span>                    "kh?", "kh?", "kh?", "kh?", "kh?", "nkh?", "rkh?",<a name="line.922"></a>
+<span class="sourceLineNo">923</span>                    "kh?", "kh?", "kh?", "kh?", "kh?", "nkh?", "rkh?",<a name="line.923"></a>
+<span class="sourceLineNo">924</span>                    "kh?", "kh?", "kh?", "kh?", "kh?", "nkh?", "rkh?",<a name="line.924"></a>
 <span class="sourceLineNo">925</span><a name="line.925"></a>
-<span class="sourceLineNo">926</span>                    "ch", "ch", "ch", "ch", "ch", "ch", "ch", "ch", "ch", "chŗ", "chŕ", "chļ", "chĺ",<a name="line.926"></a>
-<span class="sourceLineNo">927</span>                    "ţh", "th", "th", "th", "th", "th", "nth", "rth",<a name="line.927"></a>
+<span class="sourceLineNo">926</span>                    "ch", "ch", "ch", "ch", "ch", "ch", "ch", "ch", "ch", "ch?", "ch?", "ch?", "ch?",<a name="line.926"></a>
+<span class="sourceLineNo">927</span>                    "?h", "th", "th", "th", "th", "th", "nth", "rth",<a name="line.927"></a>
 <span class="sourceLineNo">928</span>                    "th", "th", "th", "th", "th", "nth", "rth",<a name="line.928"></a>
 <span class="sourceLineNo">929</span>                    "th", "th", "th", "th", "th", "nth", "rth",<a name="line.929"></a>
 <span class="sourceLineNo">930</span>                    "th", "th", "th", "th", "th", "nth", "rth",<a name="line.930"></a>
@@ -941,10 +941,10 @@
 <span class="sourceLineNo">933</span>                    "th", "th", "th", "th", "th", "nth", "rth",<a name="line.933"></a>
 <span class="sourceLineNo">934</span>                    "th", "th", "th", "th", "th", "nth", "rth",<a name="line.934"></a>
 <span class="sourceLineNo">935</span>                    "th", "th", "th", "th", "th", "nth", "rth",<a name="line.935"></a>
-<span class="sourceLineNo">936</span>                    "thŗ", "thŗ", "thŗ", "thŗ", "thŗ", "nthŗ", "rthŗ",<a name="line.936"></a>
-<span class="sourceLineNo">937</span>                    "thŕ", "thŕ", "thŕ", "thŕ", "thŕ", "nthŕ", "rthŕ",<a name="line.937"></a>
-<span class="sourceLineNo">938</span>                    "thļ", "thļ", "thļ", "thļ", "thļ", "nthļ", "rthļ",<a name="line.938"></a>
-<span class="sourceLineNo">939</span>                    "thĺ", "thĺ", "thĺ", "thĺ", "thĺ", "nthĺ", "rthĺ",<a name="line.939"></a>
+<span class="sourceLineNo">936</span>                    "th?", "th?", "th?", "th?", "th?", "nth?", "rth?",<a name="line.936"></a>
+<span class="sourceLineNo">937</span>                    "th?", "th?", "th?", "th?", "th?", "nth?", "rth?",<a name="line.937"></a>
+<span class="sourceLineNo">938</span>                    "th?", "th?", "th?", "th?", "th?", "nth?", "rth?",<a name="line.938"></a>
+<span class="sourceLineNo">939</span>                    "th?", "th?", "th?", "th?", "th?", "nth?", "rth?",<a name="line.939"></a>
 <span class="sourceLineNo">940</span><a name="line.940"></a>
 <span class="sourceLineNo">941</span>                    "ph", "ph", "ph", "ph", "ph", "nph", "rph",<a name="line.941"></a>
 <span class="sourceLineNo">942</span>                    "ph", "ph", "ph", "ph", "ph", "nph", "rph",<a name="line.942"></a>
@@ -953,185 +953,185 @@
 <span class="sourceLineNo">945</span>                    "ph", "ph", "ph", "ph", "ph", "nph", "rph",<a name="line.945"></a>
 <span class="sourceLineNo">946</span>                    "ph", "ph", "ph", "ph", "ph", "nph", "rph",<a name="line.946"></a>
 <span class="sourceLineNo">947</span>                    "ph", "ph", "ph", "ph", "ph", "nph", "rph",<a name="line.947"></a>
-<span class="sourceLineNo">948</span>                    "phŗ", "phŗ", "phŗ", "phŗ", "phŗ", "nphŗ", "rphŗ",<a name="line.948"></a>
-<span class="sourceLineNo">949</span>                    "phŕ", "phŕ", "phŕ", "phŕ", "phŕ", "nphŕ", "rphŕ",<a name="line.949"></a>
-<span class="sourceLineNo">950</span>                    "phļ", "phļ", "phļ", "phļ", "phļ", "nphļ", "rphļ",<a name="line.950"></a>
-<span class="sourceLineNo">951</span>                    "phĺ", "phĺ", "phĺ", "phĺ", "phĺ", "nphĺ", "rphĺ",<a name="line.951"></a>
+<span class="sourceLineNo">948</span>                    "ph?", "ph?", "ph?", "ph?", "ph?", "nph?", "rph?",<a name="line.948"></a>
+<span class="sourceLineNo">949</span>                    "ph?", "ph?", "ph?", "ph?", "ph?", "nph?", "rph?",<a name="line.949"></a>
+<span class="sourceLineNo">950</span>                    "ph?", "ph?", "ph?", "ph?", "ph?", "nph?", "rph?",<a name="line.950"></a>
+<span class="sourceLineNo">951</span>                    "ph?", "ph?", "ph?", "ph?", "ph?", "nph?", "rph?",<a name="line.951"></a>
 <span class="sourceLineNo">952</span><a name="line.952"></a>
 <span class="sourceLineNo">953</span>                    "g", "g", "g", "g", "g", "ng", "rg",<a name="line.953"></a>
 <span class="sourceLineNo">954</span>                    "j", "j", "j", "j", "j", "nj", "rj",<a name="line.954"></a>
-<span class="sourceLineNo">955</span>                    "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",<a name="line.955"></a>
+<span class="sourceLineNo">955</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.955"></a>
 <span class="sourceLineNo">956</span>                    "d", "d", "d", "d", "d", "nd", "rd",<a name="line.956"></a>
 <span class="sourceLineNo">957</span>                    "b", "b", "b", "b", "b", "nb", "rb",<a name="line.957"></a>
 <span class="sourceLineNo">958</span>                    "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",<a name="line.958"></a>
-<span class="sourceLineNo">959</span>                    "jh", "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",<a name="line.959"></a>
+<span class="sourceLineNo">959</span>                    "jh", "?h", "?h", "?h", "?h", "?h", "n?h", "r?h",<a name="line.959"></a>
 <span class="sourceLineNo">960</span>                    "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",<a name="line.960"></a>
 <span class="sourceLineNo">961</span>                    "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",<a name="line.961"></a>
 <span class="sourceLineNo">962</span><a name="line.962"></a>
-<span class="sourceLineNo">963</span>                    "ń", "ñ", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",<a name="line.963"></a>
+<span class="sourceLineNo">963</span>                    "?", "�", "?", "n", "m", "m", "m", "m", "m", "nm", "rm",<a name="line.963"></a>
 <span class="sourceLineNo">964</span>                    "h", "y", "y", "y", "y", "y", "ny", "ry",<a name="line.964"></a>
 <span class="sourceLineNo">965</span>                    "r", "l", "v", "v", "v", "v", "v", "nv", "rv",<a name="line.965"></a>
-<span class="sourceLineNo">966</span>                    "ś", "ś", "ś", "ś", "ś", "nś", "rś",<a name="line.966"></a>
-<span class="sourceLineNo">967</span>                    "ş", "ş", "ş", "ş", "ş", "nş", "rş",<a name="line.967"></a>
+<span class="sourceLineNo">966</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.966"></a>
+<span class="sourceLineNo">967</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.967"></a>
 <span class="sourceLineNo">968</span>                    "s", "s", "s", "s", "s", "ns", "rs",<a name="line.968"></a>
 <span class="sourceLineNo">969</span><a name="line.969"></a>
 <span class="sourceLineNo">970</span>                    "g", "g", "g", "g", "g", "ng", "rg",<a name="line.970"></a>
 <span class="sourceLineNo">971</span>                    "j", "j", "j", "j", "j", "nj", "rj",<a name="line.971"></a>
-<span class="sourceLineNo">972</span>                    "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",<a name="line.972"></a>
+<span class="sourceLineNo">972</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.972"></a>
 <span class="sourceLineNo">973</span>                    "d", "d", "d", "d", "d", "nd", "rd",<a name="line.973"></a>
 <span class="sourceLineNo">974</span>                    "b", "b", "b", "b", "b", "nb", "rb",<a name="line.974"></a>
 <span class="sourceLineNo">975</span>                    "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",<a name="line.975"></a>
-<span class="sourceLineNo">976</span>                    "jh", "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",<a name="line.976"></a>
+<span class="sourceLineNo">976</span>                    "jh", "?h", "?h", "?h", "?h", "?h", "n?h", "r?h",<a name="line.976"></a>
 <span class="sourceLineNo">977</span>                    "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",<a name="line.977"></a>
 <span class="sourceLineNo">978</span>                    "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",<a name="line.978"></a>
 <span class="sourceLineNo">979</span><a name="line.979"></a>
-<span class="sourceLineNo">980</span>                    "ń", "ñ", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",<a name="line.980"></a>
+<span class="sourceLineNo">980</span>                    "?", "�", "?", "n", "m", "m", "m", "m", "m", "nm", "rm",<a name="line.980"></a>
 <span class="sourceLineNo">981</span>                    "h", "y", "y", "y", "y", "y", "ny", "ry",<a name="line.981"></a>
 <span class="sourceLineNo">982</span>                    "r", "l", "v", "v", "v", "v", "v", "nv", "rv",<a name="line.982"></a>
-<span class="sourceLineNo">983</span>                    "ś", "ś", "ś", "ś", "ś", "nś", "rś",<a name="line.983"></a>
-<span class="sourceLineNo">984</span>                    "ş", "ş", "ş", "ş", "ş", "nş", "rş",<a name="line.984"></a>
+<span class="sourceLineNo">983</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.983"></a>
+<span class="sourceLineNo">984</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.984"></a>
 <span class="sourceLineNo">985</span>                    "s", "s", "s", "s", "s", "ns", "rs",<a name="line.985"></a>
 <span class="sourceLineNo">986</span><a name="line.986"></a>
 <span class="sourceLineNo">987</span>                    "g", "g", "g", "g", "g", "ng", "rg",<a name="line.987"></a>
 <span class="sourceLineNo">988</span>                    "j", "j", "j", "j", "j", "nj", "rj",<a name="line.988"></a>
-<span class="sourceLineNo">989</span>                    "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",<a name="line.989"></a>
+<span class="sourceLineNo">989</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.989"></a>
 <span class="sourceLineNo">990</span>                    "d", "d", "d", "d", "d", "nd", "rd",<a name="line.990"></a>
 <span class="sourceLineNo">991</span>                    "b", "b", "b", "b", "b", "nb", "rb",<a name="line.991"></a>
 <span class="sourceLineNo">992</span>                    "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",<a name="line.992"></a>
-<span class="sourceLineNo">993</span>                    "jh", "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",<a name="line.993"></a>
+<span class="sourceLineNo">993</span>                    "jh", "?h", "?h", "?h", "?h", "?h", "n?h", "r?h",<a name="line.993"></a>
 <span class="sourceLineNo">994</span>                    "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",<a name="line.994"></a>
 <span class="sourceLineNo">995</span>                    "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",<a name="line.995"></a>
 <span class="sourceLineNo">996</span><a name="line.996"></a>
-<span class="sourceLineNo">997</span>                    "ń", "ñ", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",<a name="line.997"></a>
+<span class="sourceLineNo">997</span>                    "?", "�", "?", "n", "m", "m", "m", "m", "m", "nm", "rm",<a name="line.997"></a>
 <span class="sourceLineNo">998</span>                    "h", "y", "y", "y", "y", "y", "ny", "ry",<a name="line.998"></a>
 <span class="sourceLineNo">999</span>                    "r", "l", "v", "v", "v", "v", "v", "nv", "rv",<a name="line.999"></a>
-<span class="sourceLineNo">1000</span>                    "ś", "ś", "ś", "ś", "ś", "nś", "rś",<a name="line.1000"></a>
-<span class="sourceLineNo">1001</span>                    "ş", "ş", "ş", "ş", "ş", "nş", "rş",<a name="line.1001"></a>
+<span class="sourceLineNo">1000</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.1000"></a>
+<span class="sourceLineNo">1001</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.1001"></a>
 <span class="sourceLineNo">1002</span>                    "s", "s", "s", "s", "s", "ns", "rs",<a name="line.1002"></a>
 <span class="sourceLineNo">1003</span><a name="line.1003"></a>
 <span class="sourceLineNo">1004</span>                    "g", "g", "g", "g", "g", "ng", "rg",<a name="line.1004"></a>
 <span class="sourceLineNo">1005</span>                    "j", "j", "j", "j", "j", "nj", "rj",<a name="line.1005"></a>
-<span class="sourceLineNo">1006</span>                    "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",<a name="line.1006"></a>
+<span class="sourceLineNo">1006</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.1006"></a>
 <span class="sourceLineNo">1007</span>                    "d", "d", "d", "d", "d", "nd", "rd",<a name="line.1007"></a>
 <span class="sourceLineNo">1008</span>                    "b", "b", "b", "b", "b", "nb", "rb",<a name="line.1008"></a>
 <span class="sourceLineNo">1009</span>                    "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",<a name="line.1009"></a>
-<span class="sourceLineNo">1010</span>                    "jh", "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",<a name="line.1010"></a>
+<span class="sourceLineNo">1010</span>                    "jh", "?h", "?h", "?h", "?h", "?h", "n?h", "r?h",<a name="line.1010"></a>
 <span class="sourceLineNo">1011</span>                    "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",<a name="line.1011"></a>
 <span class="sourceLineNo">1012</span>                    "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",<a name="line.1012"></a>
 <span class="sourceLineNo">1013</span><a name="line.1013"></a>
-<span class="sourceLineNo">1014</span>                    "ń", "ñ", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",<a name="line.1014"></a>
+<span class="sourceLineNo">1014</span>                    "?", "�", "?", "n", "m", "m", "m", "m", "m", "nm", "rm",<a name="line.1014"></a>
 <span class="sourceLineNo">1015</span>                    "h", "y", "y", "y", "y", "y", "ny", "ry",<a name="line.1015"></a>
 <span class="sourceLineNo">1016</span>                    "r", "l", "v", "v", "v", "v", "v", "nv", "rv",<a name="line.1016"></a>
-<span class="sourceLineNo">1017</span>                    "ś", "ś", "ś", "ś", "ś", "nś", "rś",<a name="line.1017"></a>
-<span class="sourceLineNo">1018</span>                    "ş", "ş", "ş", "ş", "ş", "nş", "rş",<a name="line.1018"></a>
+<span class="sourceLineNo">1017</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.1017"></a>
+<span class="sourceLineNo">1018</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.1018"></a>
 <span class="sourceLineNo">1019</span>                    "s", "s", "s", "s", "s", "ns", "rs",<a name="line.1019"></a>
 <span class="sourceLineNo">1020</span><a name="line.1020"></a>
 <span class="sourceLineNo">1021</span>                    "g", "g", "g", "g", "g", "ng", "rg",<a name="line.1021"></a>
 <span class="sourceLineNo">1022</span>                    "j", "j", "j", "j", "j", "nj", "rj",<a name="line.1022"></a>
-<span class="sourceLineNo">1023</span>                    "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",<a name="line.1023"></a>
+<span class="sourceLineNo">1023</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.1023"></a>
 <span class="sourceLineNo">1024</span>                    "d", "d", "d", "d", "d", "nd", "rd",<a name="line.1024"></a>
 <span class="sourceLineNo">1025</span>                    "b", "b", "b", "b", "b", "nb", "rb",<a name="line.1025"></a>
 <span class="sourceLineNo">1026</span>                    "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",<a name="line.1026"></a>
-<span class="sourceLineNo">1027</span>                    "jh", "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",<a name="line.1027"></a>
+<span class="sourceLineNo">1027</span>                    "jh", "?h", "?h", "?h", "?h", "?h", "n?h", "r?h",<a name="line.1027"></a>
 <span class="sourceLineNo">1028</span>                    "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",<a name="line.1028"></a>
 <span class="sourceLineNo">1029</span>                    "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",<a name="line.1029"></a>
 <span class="sourceLineNo">1030</span><a name="line.1030"></a>
-<span class="sourceLineNo">1031</span>                    "ń", "ñ", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",<a name="line.1031"></a>
+<span class="sourceLineNo">1031</span>                    "?", "�", "?", "n", "m", "m", "m", "m", "m", "nm", "rm",<a name="line.1031"></a>
 <span class="sourceLineNo">1032</span>                    "h", "y", "y", "y", "y", "y", "ny", "ry",<a name="line.1032"></a>
 <span class="sourceLineNo">1033</span>                    "r", "l", "v", "v", "v", "v", "v", "nv", "rv",<a name="line.1033"></a>
-<span class="sourceLineNo">1034</span>                    "ś", "ś", "ś", "ś", "ś", "nś", "rś",<a name="line.1034"></a>
-<span class="sourceLineNo">1035</span>                    "ş", "ş", "ş", "ş", "ş", "nş", "rş",<a name="line.1035"></a>
+<span class="sourceLineNo">1034</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.1034"></a>
+<span class="sourceLineNo">1035</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.1035"></a>
 <span class="sourceLineNo">1036</span>                    "s", "s", "s", "s", "s", "ns", "rs",<a name="line.1036"></a>
 <span class="sourceLineNo">1037</span><a name="line.1037"></a>
 <span class="sourceLineNo">1038</span>                    "g", "g", "g", "g", "g", "ng", "rg",<a name="line.1038"></a>
 <span class="sourceLineNo">1039</span>                    "j", "j", "j", "j", "j", "nj", "rj",<a name="line.1039"></a>
-<span class="sourceLineNo">1040</span>                    "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",<a name="line.1040"></a>
+<span class="sourceLineNo">1040</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.1040"></a>
 <span class="sourceLineNo">1041</span>                    "d", "d", "d", "d", "d", "nd", "rd",<a name="line.1041"></a>
 <span class="sourceLineNo">1042</span>                    "b", "b", "b", "b", "b", "nb", "rb",<a name="line.1042"></a>
 <span class="sourceLineNo">1043</span>                    "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",<a name="line.1043"></a>
-<span class="sourceLineNo">1044</span>                    "jh", "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",<a name="line.1044"></a>
+<span class="sourceLineNo">1044</span>                    "jh", "?h", "?h", "?h", "?h", "?h", "n?h", "r?h",<a name="line.1044"></a>
 <span class="sourceLineNo">1045</span>                    "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",<a name="line.1045"></a>
 <span class="sourceLineNo">1046</span>                    "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",<a name="line.1046"></a>
 <span class="sourceLineNo">1047</span><a name="line.1047"></a>
-<span class="sourceLineNo">1048</span>                    "ń", "ñ", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",<a name="line.1048"></a>
+<span class="sourceLineNo">1048</span>                    "?", "�", "?", "n", "m", "m", "m", "m", "m", "nm", "rm",<a name="line.1048"></a>
 <span class="sourceLineNo">1049</span>                    "h", "y", "y", "y", "y", "y", "ny", "ry",<a name="line.1049"></a>
 <span class="sourceLineNo">1050</span>                    "r", "l", "v", "v", "v", "v", "v", "nv", "rv",<a name="line.1050"></a>
-<span class="sourceLineNo">1051</span>                    "ś", "ś", "ś", "ś", "ś", "nś", "rś",<a name="line.1051"></a>
-<span class="sourceLineNo">1052</span>                    "ş", "ş", "ş", "ş", "ş", "nş", "rş",<a name="line.1052"></a>
+<span class="sourceLineNo">1051</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.1051"></a>
+<span class="sourceLineNo">1052</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.1052"></a>
 <span class="sourceLineNo">1053</span>                    "s", "s", "s", "s", "s", "ns", "rs",<a name="line.1053"></a>
 <span class="sourceLineNo">1054</span><a name="line.1054"></a>
 <span class="sourceLineNo">1055</span>                    "g", "g", "g", "g", "g", "ng", "rg",<a name="line.1055"></a>
 <span class="sourceLineNo">1056</span>                    "j", "j", "j", "j", "j", "nj", "rj",<a name="line.1056"></a>
-<span class="sourceLineNo">1057</span>                    "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",<a name="line.1057"></a>
+<span class="sourceLineNo">1057</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.1057"></a>
 <span class="sourceLineNo">1058</span>                    "d", "d", "d", "d", "d", "nd", "rd",<a name="line.1058"></a>
 <span class="sourceLineNo">1059</span>                    "b", "b", "b", "b", "b", "nb", "rb",<a name="line.1059"></a>
 <span class="sourceLineNo">1060</span>                    "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",<a name="line.1060"></a>
-<span class="sourceLineNo">1061</span>                    "jh", "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",<a name="line.1061"></a>
+<span class="sourceLineNo">1061</span>                    "jh", "?h", "?h", "?h", "?h", "?h", "n?h", "r?h",<a name="line.1061"></a>
 <span class="sourceLineNo">1062</span>                    "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",<a name="line.1062"></a>
 <span class="sourceLineNo">1063</span>                    "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",<a name="line.1063"></a>
 <span class="sourceLineNo">1064</span><a name="line.1064"></a>
-<span class="sourceLineNo">1065</span>                    "ń", "ñ", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",<a name="line.1065"></a>
+<span class="sourceLineNo">1065</span>                    "?", "�", "?", "n", "m", "m", "m", "m", "m", "nm", "rm",<a name="line.1065"></a>
 <span class="sourceLineNo">1066</span>                    "h", "y", "y", "y", "y", "y", "ny", "ry",<a name="line.1066"></a>
 <span class="sourceLineNo">1067</span>                    "r", "l", "v", "v", "v", "v", "v", "nv", "rv",<a name="line.1067"></a>
-<span class="sourceLineNo">1068</span>                    "ś", "ś", "ś", "ś", "ś", "nś", "rś",<a name="line.1068"></a>
-<span class="sourceLineNo">1069</span>                    "ş", "ş", "ş", "ş", "ş", "nş", "rş",<a name="line.1069"></a>
+<span class="sourceLineNo">1068</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.1068"></a>
+<span class="sourceLineNo">1069</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.1069"></a>
 <span class="sourceLineNo">1070</span>                    "s", "s", "s", "s", "s", "ns", "rs",<a name="line.1070"></a>
 <span class="sourceLineNo">1071</span><a name="line.1071"></a>
 <span class="sourceLineNo">1072</span>                    "g", "g", "g", "g", "g", "ng", "rg",<a name="line.1072"></a>
 <span class="sourceLineNo">1073</span>                    "j", "j", "j", "j", "j", "nj", "rj",<a name="line.1073"></a>
-<span class="sourceLineNo">1074</span>                    "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",<a name="line.1074"></a>
+<span class="sourceLineNo">1074</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.1074"></a>
 <span class="sourceLineNo">1075</span>                    "d", "d", "d", "d", "d", "nd", "rd",<a name="line.1075"></a>
 <span class="sourceLineNo">1076</span>                    "b", "b", "b", "b", "b", "nb", "rb",<a name="line.1076"></a>
 <span class="sourceLineNo">1077</span>                    "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",<a name="line.1077"></a>
-<span class="sourceLineNo">1078</span>                    "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",<a name="line.1078"></a>
+<span class="sourceLineNo">1078</span>                    "?h", "?h", "?h", "?h", "?h", "n?h", "r?h",<a name="line.1078"></a>
 <span class="sourceLineNo">1079</span>                    "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",<a name="line.1079"></a>
 <span class="sourceLineNo">1080</span>                    "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",<a name="line.1080"></a>
 <span class="sourceLineNo">1081</span><a name="line.1081"></a>
-<span class="sourceLineNo">1082</span>                    "ń", "ñ", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",<a name="line.1082"></a>
+<span class="sourceLineNo">1082</span>                    "?", "�", "?", "n", "m", "m", "m", "m", "m", "nm", "rm",<a name="line.1082"></a>
 <span class="sourceLineNo">1083</span>                    "h", "y", "y", "y", "y", "y", "ny", "ry",<a name="line.1083"></a>
 <span class="sourceLineNo">1084</span>                    "r", "l", "v", "v", "v", "v", "v", "nv", "rv",<a name="line.1084"></a>
-<span class="sourceLineNo">1085</span>                    "ś", "ś", "ś", "ś", "ś", "nś", "rś",<a name="line.1085"></a>
-<span class="sourceLineNo">1086</span>                    "ş", "ş", "ş", "ş", "ş", "nş", "rş",<a name="line.1086"></a>
+<span class="sourceLineNo">1085</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.1085"></a>
+<span class="sourceLineNo">1086</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.1086"></a>
 <span class="sourceLineNo">1087</span>                    "s", "s", "s", "s", "s", "ns", "rs",<a name="line.1087"></a>
 <span class="sourceLineNo">1088</span><a name="line.1088"></a>
 <span class="sourceLineNo">1089</span>                    "g", "g", "g", "g", "g", "ng", "rg",<a name="line.1089"></a>
 <span class="sourceLineNo">1090</span>                    "j", "j", "j", "j", "j", "nj", "rj",<a name="line.1090"></a>
-<span class="sourceLineNo">1091</span>                    "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",<a name="line.1091"></a>
+<span class="sourceLineNo">1091</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.1091"></a>
 <span class="sourceLineNo">1092</span>                    "d", "d", "d", "d", "d", "nd", "rd",<a name="line.1092"></a>
 <span class="sourceLineNo">1093</span>                    "b", "b", "b", "b", "b", "nb", "rb",<a name="line.1093"></a>
 <span class="sourceLineNo">1094</span>                    "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",<a name="line.1094"></a>
-<span class="sourceLineNo">1095</span>                    "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",<a name="line.1095"></a>
+<span class="sourceLineNo">1095</span>                    "?h", "?h", "?h", "?h", "?h", "n?h", "r?h",<a name="line.1095"></a>
 <span class="sourceLineNo">1096</span>                    "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",<a name="line.1096"></a>
 <span class="sourceLineNo">1097</span>                    "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",<a name="line.1097"></a>
 <span class="sourceLineNo">1098</span><a name="line.1098"></a>
-<span class="sourceLineNo">1099</span>                    "ń", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",<a name="line.1099"></a>
+<span class="sourceLineNo">1099</span>                    "?", "?", "n", "m", "m", "m", "m", "m", "nm", "rm",<a name="line.1099"></a>
 <span class="sourceLineNo">1100</span>                    "h", "y", "y", "y", "y", "y", "ny", "ry",<a name="line.1100"></a>
 <span class="sourceLineNo">1101</span>                    "r", "l", "v", "v", "v", "v", "v", "nv", "rv",<a name="line.1101"></a>
-<span class="sourceLineNo">1102</span>                    "ş", "ş", "ş", "ş", "ş", "nş", "rş",<a name="line.1102"></a>
+<span class="sourceLineNo">1102</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.1102"></a>
 <span class="sourceLineNo">1103</span>                    "s", "s", "s", "s", "s", "ns", "rs",<a name="line.1103"></a>
 <span class="sourceLineNo">1104</span><a name="line.1104"></a>
 <span class="sourceLineNo">1105</span>                    "g", "g", "g", "g", "g", "ng", "rg",<a name="line.1105"></a>
 <span class="sourceLineNo">1106</span>                    "j", "j", "j", "j", "j", "nj", "rj",<a name="line.1106"></a>
-<span class="sourceLineNo">1107</span>                    "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",<a name="line.1107"></a>
+<span class="sourceLineNo">1107</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.1107"></a>
 <span class="sourceLineNo">1108</span>                    "d", "d", "d", "d", "d", "nd", "rd",<a name="line.1108"></a>
 <span class="sourceLineNo">1109</span>                    "b", "b", "b", "b", "b", "nb", "rb",<a name="line.1109"></a>
 <span class="sourceLineNo">1110</span>                    "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",<a name="line.1110"></a>
-<span class="sourceLineNo">1111</span>                    "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",<a name="line.1111"></a>
+<span class="sourceLineNo">1111</span>                    "?h", "?h", "?h", "?h", "?h", "n?h", "r?h",<a name="line.1111"></a>
 <span class="sourceLineNo">1112</span>                    "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",<a name="line.1112"></a>
 <span class="sourceLineNo">1113</span>                    "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",<a name="line.1113"></a>
 <span class="sourceLineNo">1114</span><a name="line.1114"></a>
-<span class="sourceLineNo">1115</span>                    "ń", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",<a name="line.1115"></a>
+<span class="sourceLineNo">1115</span>                    "?", "?", "n", "m", "m", "m", "m", "m", "nm", "rm",<a name="line.1115"></a>
 <span class="sourceLineNo">1116</span>                    "h", "y", "y", "y", "y", "y", "ny", "ry",<a name="line.1116"></a>
 <span class="sourceLineNo">1117</span>                    "r", "l", "v", "v", "v", "v", "v", "nv", "rv",<a name="line.1117"></a>
-<span class="sourceLineNo">1118</span>                    "ş", "ş", "ş", "ş", "ş", "nş", "rş",<a name="line.1118"></a>
+<span class="sourceLineNo">1118</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.1118"></a>
 <span class="sourceLineNo">1119</span>                    "s", "s", "s", "s", "s", "ns", "rs",<a name="line.1119"></a>
 <span class="sourceLineNo">1120</span><a name="line.1120"></a>
 <span class="sourceLineNo">1121</span>                    "g", "g", "g", "g", "g", "ng", "rg",<a name="line.1121"></a>
-<span class="sourceLineNo">1122</span>                    "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",<a name="line.1122"></a>
+<span class="sourceLineNo">1122</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.1122"></a>
 <span class="sourceLineNo">1123</span>                    "d", "d", "d", "d", "d", "nd", "rd",<a name="line.1123"></a>
 <span class="sourceLineNo">1124</span>                    "b", "b", "b", "b", "b", "nb", "rb",<a name="line.1124"></a>
 <span class="sourceLineNo">1125</span>                    "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",<a name="line.1125"></a>
-<span class="sourceLineNo">1126</span>                    "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",<a name="line.1126"></a>
+<span class="sourceLineNo">1126</span>                    "?h", "?h", "?h", "?h", "?h", "n?h", "r?h",<a name="line.1126"></a>
 <span class="sourceLineNo">1127</span>                    "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",<a name="line.1127"></a>
 <span class="sourceLineNo">1128</span>                    "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",<a name="line.1128"></a>
 <span class="sourceLineNo">1129</span>                    "n", "m", "m", "m", "m", "m", "nm", "rm",<a name="line.1129"></a>
@@ -1139,7 +1139,7 @@
 <span class="sourceLineNo">1131</span>                    "s", "s", "s", "s", "s", "ns", "rs",<a name="line.1131"></a>
 <span class="sourceLineNo">1132</span><a name="line.1132"></a>
 <span class="sourceLineNo">1133</span>                    "g", "g", "g", "g", "g", "ng", "rg",<a name="line.1133"></a>
-<span class="sourceLineNo">1134</span>                    "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",<a name="line.1134"></a>
+<span class="sourceLineNo">1134</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.1134"></a>
 <span class="sourceLineNo">1135</span>                    "d", "d", "d", "d", "d", "nd", "rd",<a name="line.1135"></a>
 <span class="sourceLineNo">1136</span>                    "b", "b", "b", "b", "b", "nb", "rb",<a name="line.1136"></a>
 <span class="sourceLineNo">1137</span>                    "g", "g", "g", "g", "g", "ng", "rg",<a name="line.1137"></a>
@@ -1151,7 +1151,7 @@
 <span class="sourceLineNo">1143</span>                    "v", "v", "v", "v", "v", "nv", "rv",<a name="line.1143"></a>
 <span class="sourceLineNo">1144</span><a name="line.1144"></a>
 <span class="sourceLineNo">1145</span>                    "g", "g", "g", "g", "g", "ng", "rg",<a name="line.1145"></a>
-<span class="sourceLineNo">1146</span>                    "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",<a name="line.1146"></a>
+<span class="sourceLineNo">1146</span>                    "?", "?", "?", "?", "?", "n?", "r?",<a name="line.1146"></a>
 <span class="sourceLineNo">1147</span>                    "d", "d", "d", "d", "d", "nd", "rd",<a name="line.1147"></a>
 <span class="sourceLineNo">1148</span>                    "b", "b", "b", "b", "b", "nb", "rb",<a name="line.1148"></a>
 <span class="sourceLineNo">1149</span>                    "g", "g", "g", "g", "g", "ng", "rg",<a name="line.1149"></a>
@@ -1162,8 +1162,8 @@
 <span class="sourceLineNo">1154</span>                    "n", "m", "m", "m", "m", "m", "nm", "rm",<a name="line.1154"></a>
 <span class="sourceLineNo">1155</span>                    "v", "v", "v", "v", "v", "nv", "rv",<a name="line.1155"></a>
 <span class="sourceLineNo">1156</span>            },<a name="line.1156"></a>
-<span class="sourceLineNo">1157</span>            new String[]{"t", "d", "m", "r", "dh", "b", "t", "d", "m", "r", "dh", "bh", "nt", "nt", "nk", "ş"},<a name="line.1157"></a>
-<span class="sourceLineNo">1158</span>            new String[]{"it", "it", "ati", "adva", "aş", "arma", "ardha", "abi", "ab", "aya"},<a name="line.1158"></a>
+<span class="sourceLineNo">1157</span>            new String[]{"t", "d", "m", "r", "dh", "b", "t", "d", "m", "r", "dh", "bh", "nt", "nt", "nk", "?"},<a name="line.1157"></a>
+<span class="sourceLineNo">1158</span>            new String[]{"it", "it", "ati", "adva", "a?", "arma", "ardha", "abi", "ab", "aya"},<a name="line.1158"></a>
 <span class="sourceLineNo">1159</span>            new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{1, 2, 3, 3, 1}, 0.15, 0.75, 0.0, 0.12, null, true).register();<a name="line.1159"></a>
 <span class="sourceLineNo">1160</span><a name="line.1160"></a>
 <span class="sourceLineNo">1161</span>    /**<a name="line.1161"></a>
@@ -1227,40 +1227,40 @@
 <span class="sourceLineNo">1219</span>            new String[]{}, new int[]{1, 2, 3, 4}, new double[]{6, 5, 5, 1}, 0.55, 0.65, 0.0, 0.15, arabicSanityChecks, true).register();<a name="line.1219"></a>
 <span class="sourceLineNo">1220</span>    /*<a name="line.1220"></a>
 <span class="sourceLineNo">1221</span>    public static final FakeLanguageGen ARABIC_ROMANIZED = new FakeLanguageGen(<a name="line.1221"></a>
-<span class="sourceLineNo">1222</span>            new String[]{"a", "a", "a", "a", "a", "a", "ā", "ā", "ā", "ai", "au",<a name="line.1222"></a>
+<span class="sourceLineNo">1222</span>            new String[]{"a", "a", "a", "a", "a", "a", "?", "?", "?", "ai", "au",<a name="line.1222"></a>
 <span class="sourceLineNo">1223</span>                    "a", "i", "u", "a", "i", "u",<a name="line.1223"></a>
-<span class="sourceLineNo">1224</span>                    "i", "i", "i", "i", "i", "ī", "ī", "ī",<a name="line.1224"></a>
-<span class="sourceLineNo">1225</span>                    "u", "u", "u", "ū", "ū",<a name="line.1225"></a>
+<span class="sourceLineNo">1224</span>                    "i", "i", "i", "i", "i", "?", "?", "?",<a name="line.1224"></a>
+<span class="sourceLineNo">1225</span>                    "u", "u", "u", "?", "?",<a name="line.1225"></a>
 <span class="sourceLineNo">1226</span>            },<a name="line.1226"></a>
 <span class="sourceLineNo">1227</span>            new String[]{},<a name="line.1227"></a>
-<span class="sourceLineNo">1228</span>            new String[]{"δ", "b", "t", "ţ", "j", "ĥ", "ħ", "d", "đ", "r", "z", "s", "š", "ş", "ď", "ť",<a name="line.1228"></a>
-<span class="sourceLineNo">1229</span>                    "ż", "ξ", "g", "f", "q", "k", "l", "m", "n", "h", "w",<a name="line.1229"></a>
-<span class="sourceLineNo">1230</span>                    "q", "k", "q", "k", "b", "d", "f", "l", "z", "ż", "h", "h", "ĥ", "j", "s", "š", "ş", "r",<a name="line.1230"></a>
+<span class="sourceLineNo">1228</span>            new String[]{"?", "b", "t", "?", "j", "?", "?", "d", "?", "r", "z", "s", "�", "?", "?", "?",<a name="line.1228"></a>
+<span class="sourceLineNo">1229</span>                    "?", "?", "g", "f", "q", "k", "l", "m", "n", "h", "w",<a name="line.1229"></a>
+<span class="sourceLineNo">1230</span>                    "q", "k", "q", "k", "b", "d", "f", "l", "z", "?", "h", "h", "?", "j", "s", "�", "?", "r",<a name="line.1230"></a>
 <span class="sourceLineNo">1231</span>                    "q", "k", "q", "k", "f", "l", "z", "h", "h", "j", "s", "r",<a name="line.1231"></a>
 <span class="sourceLineNo">1232</span>                    "q", "k", "f", "l", "z", "h", "h", "j", "s", "r",<a name="line.1232"></a>
 <span class="sourceLineNo">1233</span>                    "al-", "al-", "ibn-",<a name="line.1233"></a>
 <span class="sourceLineNo">1234</span>            },<a name="line.1234"></a>
 <span class="sourceLineNo">1235</span>            new String[]{<a name="line.1235"></a>
 <span class="sourceLineNo">1236</span>                    "kk", "kk", "kk", "kk", "kk", "dd", "dd", "dd", "dd",<a name="line.1236"></a>
-<span class="sourceLineNo">1237</span>                    "nj", "mj", "bj", "mj", "bj", "mj", "bj", "dj", "ďj", "đj",<a name="line.1237"></a>
-<span class="sourceLineNo">1238</span>                    "nz", "nż", "mz", "mż", "rz", "rż", "bz", "dz", "tz",<a name="line.1238"></a>
-<span class="sourceLineNo">1239</span>                    "s-h", "š-h", "ş-h", "tw", "bn", "fq", "hz", "hl", "ĥm",<a name="line.1239"></a>
+<span class="sourceLineNo">1237</span>                    "nj", "mj", "bj", "mj", "bj", "mj", "bj", "dj", "?j", "?j",<a name="line.1237"></a>
+<span class="sourceLineNo">1238</span>                    "nz", "n?", "mz", "m?", "rz", "r?", "bz", "dz", "tz",<a name="line.1238"></a>
+<span class="sourceLineNo">1239</span>                    "s-h", "�-h", "?-h", "tw", "bn", "fq", "hz", "hl", "?m",<a name="line.1239"></a>
 <span class="sourceLineNo">1240</span>                    "lb", "lz", "lj", "lf", "ll", "lk", "lq", "lg", "ln"<a name="line.1240"></a>
 <span class="sourceLineNo">1241</span>            },<a name="line.1241"></a>
 <span class="sourceLineNo">1242</span>            new String[]{<a name="line.1242"></a>
-<span class="sourceLineNo">1243</span>                    "δ", "b", "t", "ţ", "j", "ĥ", "ħ", "d", "đ", "r", "z", "s", "š", "ş", "ď", "ť",<a name="line.1243"></a>
-<span class="sourceLineNo">1244</span>                    "ż", "ξ", "g", "f", "q", "k", "l", "m", "n", "h", "w",<a name="line.1244"></a>
-<span class="sourceLineNo">1245</span>                    "k", "q", "k", "b", "d", "f", "l", "z", "ż", "h", "h", "ĥ", "j", "s", "š", "ş", "r",<a name="line.1245"></a>
+<span class="sourceLineNo">1243</span>                    "?", "b", "t", "?", "j", "?", "?", "d", "?", "r", "z", "s", "�", "?", "?", "?",<a name="line.1243"></a>
+<span class="sourceLineNo">1244</span>                    "?", "?", "g", "f", "q", "k", "l", "m", "n", "h", "w",<a name="line.1244"></a>
+<span class="sourceLineNo">1245</span>                    "k", "q", "k", "b", "d", "f", "l", "z", "?", "h", "h", "?", "j", "s", "�", "?", "r",<a name="line.1245"></a>
 <span class="sourceLineNo">1246</span>                    "k", "q", "k", "f", "l", "z", "h", "h", "j", "s", "r",<a name="line.1246"></a>
 <span class="sourceLineNo">1247</span>                    "k", "f", "l", "z", "h", "h", "j", "s", "r",<a name="line.1247"></a>
-<span class="sourceLineNo">1248</span>                    "b", "t", "ţ", "j", "ĥ", "ħ", "d", "đ", "r", "z", "s", "š", "ş", "ď", "ť",<a name="line.1248"></a>
-<span class="sourceLineNo">1249</span>                    "ż", "g", "f", "q", "k", "l", "m", "n", "h", "w",<a name="line.1249"></a>
-<span class="sourceLineNo">1250</span>                    "k", "q", "k", "b", "d", "f", "l", "z", "ż", "h", "h", "ĥ", "j", "s", "š", "ş", "r",<a name="line.1250"></a>
+<span class="sourceLineNo">1248</span>                    "b", "t", "?", "j", "?", "?", "d", "?", "r", "z", "s", "�", "?", "?", "?",<a name="line.1248"></a>
+<span class="sourceLineNo">1249</span>                    "?", "g", "f", "q", "k", "l", "m", "n", "h", "w",<a name="line.1249"></a>
+<span class="sourceLineNo">1250</span>                    "k", "q", "k", "b", "d", "f", "l", "z", "?", "h", "h", "?", "j", "s", "�", "?", "r",<a name="line.1250"></a>
 <span class="sourceLineNo">1251</span>                    "k", "q", "k", "f", "l", "z", "h", "h", "j", "s", "r",<a name="line.1251"></a>
 <span class="sourceLineNo">1252</span>                    "k", "f", "l", "z", "h", "h", "j", "s", "r",<a name="line.1252"></a>
 <span class="sourceLineNo">1253</span>            },<a name="line.1253"></a>
-<span class="sourceLineNo">1254</span>            new String[]{"āδ", "āδ", "ari", "ari", "aīd", "ūq", "arīd", "adih", "ateh", "adeš", "amīt", "it",<a name="line.1254"></a>
-<span class="sourceLineNo">1255</span>                    "īt", "aĥmen", "aĥmed", "ani", "abīb", "īb", "ūni", "īz", "aqarī", "adīq",<a name="line.1255"></a>
+<span class="sourceLineNo">1254</span>            new String[]{"??", "??", "ari", "ari", "a?d", "?q", "ar?d", "adih", "ateh", "ade�", "am?t", "it",<a name="line.1254"></a>
+<span class="sourceLineNo">1255</span>                    "?t", "a?men", "a?med", "ani", "ab?b", "?b", "?ni", "?z", "aqar?", "ad?q",<a name="line.1255"></a>
 <span class="sourceLineNo">1256</span>            },<a name="line.1256"></a>
 <span class="sourceLineNo">1257</span>            new String[]{}, new int[]{1, 2, 3, 4}, new double[]{6, 5, 5, 1}, 0.55, 0.65, 0.0, 0.15, arabicSanityChecks, true);<a name="line.1257"></a>
 <span class="sourceLineNo">1258</span>            */<a name="line.1258"></a>
@@ -1291,63 +1291,63 @@
 <span class="sourceLineNo">1283</span>    /**<a name="line.1283"></a>
 <span class="sourceLineNo">1284</span>     * Somewhat close to Old Norse, which is itself very close to Icelandic, so this uses Icelandic spelling rules. Not<a name="line.1284"></a>
 <span class="sourceLineNo">1285</span>     * to be confused with the language(s) of Norway, where the Norwegian languages are called norsk, and are further<a name="line.1285"></a>
-<span class="sourceLineNo">1286</span>     * distinguished into Bokmål and Nynorsk. This should not be likely to seem like any form of Norwegian, since it<a name="line.1286"></a>
-<span class="sourceLineNo">1287</span>     * doesn't have the a-with-ring letter 'å' and has the letters eth ('Ðð') and thorn (Þþ). If you want to remove any<a name="line.1287"></a>
+<span class="sourceLineNo">1286</span>     * distinguished into Bokm�l and Nynorsk. This should not be likely to seem like any form of Norwegian, since it<a name="line.1286"></a>
+<span class="sourceLineNo">1287</span>     * doesn't have the a-with-ring letter '�' and has the letters eth ('��') and thorn (��). If you want to remove any<a name="line.1287"></a>
 <span class="sourceLineNo">1288</span>     * letters not present on a US-ASCII keyboard, you can use {@link Modifier#SIMPLIFY_NORSE} on this language or some<a name="line.1288"></a>
 <span class="sourceLineNo">1289</span>     * mix of this with other languages; it also changes some of the usage of "j" where it means the English "y" sound,<a name="line.1289"></a>
 <span class="sourceLineNo">1290</span>     * making "fjord" into "fyord", which is closer to familiar uses from East Asia like "Tokyo" and "Pyongyang".<a name="line.1290"></a>
 <span class="sourceLineNo">1291</span>     * &lt;br&gt;<a name="line.1291"></a>
-<span class="sourceLineNo">1292</span>     * Leyrk tjör stomri kna snó æd ðrépdápá, prygso?<a name="line.1292"></a>
+<span class="sourceLineNo">1292</span>     * Leyrk tj�r stomri kna sn� �d �r�pd�p�, prygso?<a name="line.1292"></a>
 <span class="sourceLineNo">1293</span>     */<a name="line.1293"></a>
 <span class="sourceLineNo">1294</span>    public static final FakeLanguageGen NORSE = new FakeLanguageGen(<a name="line.1294"></a>
-<span class="sourceLineNo">1295</span>            new String[]{"a","a","a","á","á","au","e","e","e","é","é","ei","ey","i","i","í","í","y","y","ý","ý",<a name="line.1295"></a>
-<span class="sourceLineNo">1296</span>                    "o","o","o","ó","ó","u","u","u","ú","ú","æ","æ","æ","ö","ö",},<a name="line.1296"></a>
+<span class="sourceLineNo">1295</span>            new String[]{"a","a","a","�","�","au","e","e","e","�","�","ei","ey","i","i","�","�","y","y","�","�",<a name="line.1295"></a>
+<span class="sourceLineNo">1296</span>                    "o","o","o","�","�","u","u","u","�","�","�","�","�","�","�",},<a name="line.1296"></a>
 <span class="sourceLineNo">1297</span>            new String[]{},<a name="line.1297"></a>
-<span class="sourceLineNo">1298</span>            new String[]{"b","bl","br","bj","d","dr","dj","ð","ðl","ðr","f","fl","flj","fr","fn","fj","g","gn","gj","h",<a name="line.1298"></a>
+<span class="sourceLineNo">1298</span>            new String[]{"b","bl","br","bj","d","dr","dj","�","�l","�r","f","fl","flj","fr","fn","fj","g","gn","gj","h",<a name="line.1298"></a>
 <span class="sourceLineNo">1299</span>                    "hj","hl","hr","hv","j","k","kl","kr","kn","kj","l","lj","m","mj","n","nj","p","pl","pr","pj","r",<a name="line.1299"></a>
-<span class="sourceLineNo">1300</span>                    "rj","s","sj","sl","sn","sp","st","str","skr","skj","sþ","sð","t","tj","v","vl","vr","vj","þ","þl","þr",<a name="line.1300"></a>
+<span class="sourceLineNo">1300</span>                    "rj","s","sj","sl","sn","sp","st","str","skr","skj","s�","s�","t","tj","v","vl","vr","vj","�","�l","�r",<a name="line.1300"></a>
 <span class="sourceLineNo">1301</span><a name="line.1301"></a>
-<span class="sourceLineNo">1302</span>                    "d","f","fl","g","gl","gr","k","h","hr","n","k","l","m","mj","n","r","s","st","t","þ","ð",<a name="line.1302"></a>
-<span class="sourceLineNo">1303</span>                    "d","f","fl","g","gl","gr","k","h","hr","n","k","l","m","mj","n","r","s","st","t","þ","ð",<a name="line.1303"></a>
-<span class="sourceLineNo">1304</span>                    "d","f","fl","g","gl","gr","k","h","hr","n","k","l","m","mj","n","r","s","st","t","þ","ð",<a name="line.1304"></a>
-<span class="sourceLineNo">1305</span>                    "d","f","fl","g","gl","gr","k","h","hr","n","k","l","m","mj","n","r","s","st","t","þ","ð",<a name="line.1305"></a>
-<span class="sourceLineNo">1306</span>                    "d","f","fl","g","gl","gr","k","h","hr","n","k","l","m","mj","n","r","s","st","t","þ","ð",<a name="line.1306"></a>
+<span class="sourceLineNo">1302</span>                    "d","f","fl","g","gl","gr","k","h","hr","n","k","l","m","mj","n","r","s","st","t","�","�",<a name="line.1302"></a>
+<span class="sourceLineNo">1303</span>                    "d","f","fl","g","gl","gr","k","h","hr","n","k","l","m","mj","n","r","s","st","t","�","�",<a name="line.1303"></a>
+<span class="sourceLineNo">1304</span>                    "d","f","fl","g","gl","gr","k","h","hr","n","k","l","m","mj","n","r","s","st","t","�","�",<a name="line.1304"></a>
+<span class="sourceLineNo">1305</span>                    "d","f","fl","g","gl","gr","k","h","hr","n","k","l","m","mj","n","r","s","st","t","�","�",<a name="line.1305"></a>
+<span class="sourceLineNo">1306</span>                    "d","f","fl","g","gl","gr","k","h","hr","n","k","l","m","mj","n","r","s","st","t","�","�",<a name="line.1306"></a>
 <span class="sourceLineNo">1307</span><a name="line.1307"></a>
 <span class="sourceLineNo">1308</span>                    "d","d","f","f","fl","g","g","g","gl","gr","k","h","hr","n","k","kl","l","n","r","r","s","st","t","t",<a name="line.1308"></a>
 <span class="sourceLineNo">1309</span>                    "d","d","f","f","fl","g","g","g","gl","gr","k","h","hr","n","k","kl","l","n","r","r","s","st","t","t",<a name="line.1309"></a>
 <span class="sourceLineNo">1310</span>                    "d","d","f","f","fl","g","g","g","gl","gr","k","h","hr","n","k","kl","l","n","r","r","s","st","t","t",<a name="line.1310"></a>
 <span class="sourceLineNo">1311</span>                    "d","d","f","f","fl","g","g","g","gl","gr","k","h","hr","n","k","kl","l","n","r","r","s","st","t","t",<a name="line.1311"></a>
 <span class="sourceLineNo">1312</span>            },<a name="line.1312"></a>
-<span class="sourceLineNo">1313</span>            new String[]{"bd","bf","bg","bk","bl","bp","br","bt","bv","bm","bn","bð","bj",<a name="line.1313"></a>
-<span class="sourceLineNo">1314</span>                    "db","df","dg","dk","dl","dp","dr","dt","dv","dm","dn","dð","dþ","dj","ndk","ndb","ndg","ndl","nds","nds",<a name="line.1314"></a>
-<span class="sourceLineNo">1315</span>                    "ðl","ðr","ðk","ðj","ðg","ðd","ðb","ðp","ðs",<a name="line.1315"></a>
-<span class="sourceLineNo">1316</span>                    "fb","fd","fg","fk","fl","fp","fr","fs","ft","fv","fm","fn","fð","fj",<a name="line.1316"></a>
-<span class="sourceLineNo">1317</span>                    "gb","gd","gf","gk","gl","gp","gr","gt","gv","gm","gn","gð","gj",<a name="line.1317"></a>
+<span class="sourceLineNo">1313</span>            new String[]{"bd","bf","bg","bk","bl","bp","br","bt","bv","bm","bn","b�","bj",<a name="line.1313"></a>
+<span class="sourceLineNo">1314</span>                    "db","df","dg","dk","dl","dp","dr","dt","dv","dm","dn","d�","d�","dj","ndk","ndb","ndg","ndl","nds","nds",<a name="line.1314"></a>
+<span class="sourceLineNo">1315</span>                    "�l","�r","�k","�j","�g","�d","�b","�p","�s",<a name="line.1315"></a>
+<span class="sourceLineNo">1316</span>                    "fb","fd","fg","fk","fl","fp","fr","fs","ft","fv","fm","fn","f�","fj",<a name="line.1316"></a>
+<span class="sourceLineNo">1317</span>                    "gb","gd","gf","gk","gl","gp","gr","gt","gv","gm","gn","g�","gj",<a name="line.1317"></a>
 <span class="sourceLineNo">1318</span>                    "h","hj","hl","hr","hv",<a name="line.1318"></a>
-<span class="sourceLineNo">1319</span>                    "kb","kd","kf","kp","kv","km","kn","kð","kl","kr","nkj","nkr","nkl",<a name="line.1319"></a>
-<span class="sourceLineNo">1320</span>                    "lbr","ldr","lfr","lg","lgr","lj","lkr","ln","ls","ltr","lv","lð","lðr","lþ",<a name="line.1320"></a>
-<span class="sourceLineNo">1321</span>                    "mb","md","mk","mg","ml","mp","mr","ms","mt","mv","mð","mþ","mj",<a name="line.1321"></a>
-<span class="sourceLineNo">1322</span>                    "nb","nl","np","nr","nv","nð","nþ","nj",<a name="line.1322"></a>
-<span class="sourceLineNo">1323</span>                    "ngl","ngb","ngd","ngk","ngp","ngt","ngv","ngm","ngð","ngþ","ngr",<a name="line.1323"></a>
-<span class="sourceLineNo">1324</span>                    "mbd","mbg","mbs","mbt","ldg","ldn","ldk","lds","rðn","rðl","gðs","gðr",<a name="line.1324"></a>
-<span class="sourceLineNo">1325</span>                    "pb","pd","pg","pk","pl","pr","ps","psj","pð","pj",<a name="line.1325"></a>
+<span class="sourceLineNo">1319</span>                    "kb","kd","kf","kp","kv","km","kn","k�","kl","kr","nkj","nkr","nkl",<a name="line.1319"></a>
+<span class="sourceLineNo">1320</span>                    "lbr","ldr","lfr","lg","lgr","lj","lkr","ln","ls","ltr","lv","l�","l�r","l�",<a name="line.1320"></a>
+<span class="sourceLineNo">1321</span>                    "mb","md","mk","mg","ml","mp","mr","ms","mt","mv","m�","m�","mj",<a name="line.1321"></a>
+<span class="sourceLineNo">1322</span>                    "nb","nl","np","nr","nv","n�","n�","nj",<a name="line.1322"></a>
+<span class="sourceLineNo">1323</span>                    "ngl","ngb","ngd","ngk","ngp","ngt","ngv","ngm","ng�","ng�","ngr",<a name="line.1323"></a>
+<span class="sourceLineNo">1324</span>                    "mbd","mbg","mbs","mbt","ldg","ldn","ldk","lds","r�n","r�l","g�s","g�r",<a name="line.1324"></a>
+<span class="sourceLineNo">1325</span>                    "pb","pd","pg","pk","pl","pr","ps","psj","p�","pj",<a name="line.1325"></a>
 <span class="sourceLineNo">1326</span>                    "rl","rbr","rdr","rg","rgr","rkr","rpr","rs","rts","rtr","rv","rj",<a name="line.1326"></a>
-<span class="sourceLineNo">1327</span>                    "sb","sbr","sd","sdr","sf","sfj","sg","skr","skl","sm","sn","str","sv","sð","sþ","sj",<a name="line.1327"></a>
+<span class="sourceLineNo">1327</span>                    "sb","sbr","sd","sdr","sf","sfj","sg","skr","skl","sm","sn","str","sv","s�","s�","sj",<a name="line.1327"></a>
 <span class="sourceLineNo">1328</span>                    "tr","tn","tb","td","tg","tv","tf","tj","tk","tm","tp",},<a name="line.1328"></a>
 <span class="sourceLineNo">1329</span>            new String[]{"kk","ll","nn","pp","tt","kk","ll","nn","pp","tt",<a name="line.1329"></a>
 <span class="sourceLineNo">1330</span>                    "bs","ds","gs","x","rn","gn","gt","gs","ks","kt","nt","nd","nk","nt","ng","ngs","ns",<a name="line.1330"></a>
 <span class="sourceLineNo">1331</span>                    "ps","pk","pt","pts","lb","ld","lf","lk","lm","lp","lps","lt",<a name="line.1331"></a>
-<span class="sourceLineNo">1332</span>                    "rn","rb","rd","rk","rp","rt","rm","rð","rþ","sk","sp","st","ts",<a name="line.1332"></a>
-<span class="sourceLineNo">1333</span>                    "b","d","ð","f","g","gn","h","k","nk","l","m","n","ng","p","r","s","sp","st","sþ","sð","t","v","þ",<a name="line.1333"></a>
-<span class="sourceLineNo">1334</span>                    "b","d","ð","f","g","gn","h","k","nk","l","m","n","ng","p","r","s","sp","st","sþ","sð","t","v","þ",<a name="line.1334"></a>
-<span class="sourceLineNo">1335</span>                    "b","d","ð","f","g","gn","h","k","nk","l","m","n","ng","p","r","s","sp","st","sþ","sð","t","v","þ",<a name="line.1335"></a>
+<span class="sourceLineNo">1332</span>                    "rn","rb","rd","rk","rp","rt","rm","r�","r�","sk","sp","st","ts",<a name="line.1332"></a>
+<span class="sourceLineNo">1333</span>                    "b","d","�","f","g","gn","h","k","nk","l","m","n","ng","p","r","s","sp","st","s�","s�","t","v","�",<a name="line.1333"></a>
+<span class="sourceLineNo">1334</span>                    "b","d","�","f","g","gn","h","k","nk","l","m","n","ng","p","r","s","sp","st","s�","s�","t","v","�",<a name="line.1334"></a>
+<span class="sourceLineNo">1335</span>                    "b","d","�","f","g","gn","h","k","nk","l","m","n","ng","p","r","s","sp","st","s�","s�","t","v","�",<a name="line.1335"></a>
 <span class="sourceLineNo">1336</span><a name="line.1336"></a>
 <span class="sourceLineNo">1337</span>                    "b","b","b","d","d","d","f","f","f","g","g","k","k","nk","l","n","ng","p","p","r","r","r","s","s","st","t","t",<a name="line.1337"></a>
 <span class="sourceLineNo">1338</span>                    "b","b","b","d","d","d","f","f","f","g","g","k","k","nk","l","n","ng","p","p","r","r","r","s","s","st","t","t",<a name="line.1338"></a>
 <span class="sourceLineNo">1339</span>                    "b","b","b","d","d","d","f","f","f","g","g","k","k","nk","l","n","ng","p","p","r","r","r","s","s","st","t","t",<a name="line.1339"></a>
 <span class="sourceLineNo">1340</span>            },<a name="line.1340"></a>
-<span class="sourceLineNo">1341</span>            new String[]{"etta","eþa","uinn","ing","ard","eign","ef","efs","eg","ir","ir","ir","ir","ír","ír","ar","ar",<a name="line.1341"></a>
-<span class="sourceLineNo">1342</span>                    "ar","ár","or","or","ór","ör","on","on","ón","onn","unn","ung","ut","ett","att","ot"},<a name="line.1342"></a>
+<span class="sourceLineNo">1341</span>            new String[]{"etta","e�a","uinn","ing","ard","eign","ef","efs","eg","ir","ir","ir","ir","�r","�r","ar","ar",<a name="line.1341"></a>
+<span class="sourceLineNo">1342</span>                    "ar","�r","or","or","�r","�r","on","on","�n","onn","unn","ung","ut","ett","att","ot"},<a name="line.1342"></a>
 <span class="sourceLineNo">1343</span>            new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{5, 5, 4, 3, 1}, 0.25, 0.5, 0.0, 0.08, genericSanityChecks, true).register();<a name="line.1343"></a>
 <span class="sourceLineNo">1344</span>    /**<a name="line.1344"></a>
 <span class="sourceLineNo">1345</span>     * Imitation text from an approximation of the language spoken by the Aztec people and also over a million<a name="line.1345"></a>
@@ -1389,7 +1389,7 @@
 <span class="sourceLineNo">1381</span>     * generating single words for creature or place names in fantasy settings that should have a "fancy" feeling from<a name="line.1381"></a>
 <span class="sourceLineNo">1382</span>     * having unnecessary accents added primarily for visual reasons.<a name="line.1382"></a>
 <span class="sourceLineNo">1383</span>     * &lt;br&gt;<a name="line.1383"></a>
-<span class="sourceLineNo">1384</span>     * Askieno, Blarcīnũn, Mēmida, Zizhounkô, Blęrinaf, Zemĭ, Mónazôr, Renerstă, Uskus, Toufounôr...<a name="line.1384"></a>
+<span class="sourceLineNo">1384</span>     * Askieno, Blarc?n?n, M?mida, Zizhounk�, Bl?rinaf, Zem?, M�naz�r, Renerst?, Uskus, Toufoun�r...<a name="line.1384"></a>
 <span class="sourceLineNo">1385</span>     */<a name="line.1385"></a>
 <span class="sourceLineNo">1386</span>    public static final FakeLanguageGen FANCY_FANTASY_NAME = FANTASY_NAME.addAccents(0.47, 0.07).register();<a name="line.1386"></a>
 <span class="sourceLineNo">1387</span><a name="line.1387"></a>
@@ -3034,7 +3034,7 @@
 <span class="sourceLineNo">3026</span>        public final Alteration[] alterations;<a name="line.3026"></a>
 <span class="sourceLineNo">3027</span><a name="line.3027"></a>
 <span class="sourceLineNo">3028</span>        public Modifier() {<a name="line.3028"></a>
-<span class="sourceLineNo">3029</span>            this("[tţťțṭ]?[sśŝşšș]+h?", "th");<a name="line.3029"></a>
+<span class="sourceLineNo">3029</span>            this("[t????]?[s???�?]+h?", "th");<a name="line.3029"></a>
 <span class="sourceLineNo">3030</span>        }<a name="line.3030"></a>
 <span class="sourceLineNo">3031</span><a name="line.3031"></a>
 <span class="sourceLineNo">3032</span>        public Modifier(String pattern, String replacement) {<a name="line.3032"></a>
@@ -3087,36 +3087,36 @@
 <span class="sourceLineNo">3079</span>        /**<a name="line.3079"></a>
 <span class="sourceLineNo">3080</span>         * For a character who always pronounces 's', 'ss', and 'sh' as 'th'.<a name="line.3080"></a>
 <span class="sourceLineNo">3081</span>         */<a name="line.3081"></a>
-<span class="sourceLineNo">3082</span>        public static final Modifier LISP = new Modifier("[tţťțṭ]?[sśŝşšș]+h?", "th");<a name="line.3082"></a>
+<span class="sourceLineNo">3082</span>        public static final Modifier LISP = new Modifier("[t????]?[s???�?]+h?", "th");<a name="line.3082"></a>
 <span class="sourceLineNo">3083</span><a name="line.3083"></a>
 <span class="sourceLineNo">3084</span>        /**<a name="line.3084"></a>
 <span class="sourceLineNo">3085</span>         * For a character who always lengthens 's' and 'z' sounds not starting a word.<a name="line.3085"></a>
 <span class="sourceLineNo">3086</span>         */<a name="line.3086"></a>
-<span class="sourceLineNo">3087</span>        public static final Modifier HISS = new Modifier("(.)([sśŝşšșzźżž])+", "$1$2$2$2");<a name="line.3087"></a>
+<span class="sourceLineNo">3087</span>        public static final Modifier HISS = new Modifier("(.)([s???�?z??�])+", "$1$2$2$2");<a name="line.3087"></a>
 <span class="sourceLineNo">3088</span><a name="line.3088"></a>
 <span class="sourceLineNo">3089</span>        /**<a name="line.3089"></a>
 <span class="sourceLineNo">3090</span>         * For a character who has a 20% chance to repeat a starting consonant or vowel.<a name="line.3090"></a>
 <span class="sourceLineNo">3091</span>         */<a name="line.3091"></a>
 <span class="sourceLineNo">3092</span>        public static final Modifier STUTTER = new Modifier(<a name="line.3092"></a>
-<span class="sourceLineNo">3093</span>                new Alteration("^([^aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųyýÿŷỳαοειυаеёийъыэюяоу]+)", "$1-$1", 0.2),<a name="line.3093"></a>
-<span class="sourceLineNo">3094</span>                new Alteration("^([aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųαοειυаеёийъыэюяоу]+)", "$1-$1", 0.2));<a name="line.3094"></a>
+<span class="sourceLineNo">3093</span>                new Alteration("^([^a�������?????e����?????i����?????o������???�?u����??????y��???????????????????]+)", "$1-$1", 0.2),<a name="line.3093"></a>
+<span class="sourceLineNo">3094</span>                new Alteration("^([a�������?????e����?????i����?????o������???�?u����???????????????????????]+)", "$1-$1", 0.2));<a name="line.3094"></a>
 <span class="sourceLineNo">3095</span><a name="line.3095"></a>
 <span class="sourceLineNo">3096</span>        /**<a name="line.3096"></a>
 <span class="sourceLineNo">3097</span>         * For a language that has a 40% chance to repeat a single Latin vowel (a, e, o, or a variant on one of them<a name="line.3097"></a>
-<span class="sourceLineNo">3098</span>         * like å or ö, but not merged letters like æ and œ).<a name="line.3098"></a>
+<span class="sourceLineNo">3098</span>         * like � or �, but not merged letters like � and �).<a name="line.3098"></a>
 <span class="sourceLineNo">3099</span>         */<a name="line.3099"></a>
 <span class="sourceLineNo">3100</span>        public static final Modifier DOUBLE_VOWELS = new Modifier(<a name="line.3100"></a>
-<span class="sourceLineNo">3101</span>                "([^aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųyýÿŷỳ]|^)"<a name="line.3101"></a>
-<span class="sourceLineNo">3102</span>                        + "([aàáâãäåāăąǻeèéêëēĕėęěòóôõöøōŏőǿ])"<a name="line.3102"></a>
-<span class="sourceLineNo">3103</span>                        + "([^aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųyýÿŷỳ]|$)", "$1$2$2$3", 0.4);<a name="line.3103"></a>
+<span class="sourceLineNo">3101</span>                "([^a�������?????e����?????i����?????o������???�?u����??????y��??]|^)"<a name="line.3101"></a>
+<span class="sourceLineNo">3102</span>                        + "([a������????e����?????������????])"<a name="line.3102"></a>
+<span class="sourceLineNo">3103</span>                        + "([^a�������?????e����?????i����?????o������???�?u����??????y��??]|$)", "$1$2$2$3", 0.4);<a name="line.3103"></a>
 <span class="sourceLineNo">3104</span><a name="line.3104"></a>
 <span class="sourceLineNo">3105</span><a name="line.3105"></a>
 <span class="sourceLineNo">3106</span>        /**<a name="line.3106"></a>
 <span class="sourceLineNo">3107</span>         * For a language that has a 50% chance to repeat a single consonant.<a name="line.3107"></a>
 <span class="sourceLineNo">3108</span>         */<a name="line.3108"></a>
-<span class="sourceLineNo">3109</span>        public static final Modifier DOUBLE_CONSONANTS = new Modifier("([aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųyýÿŷỳαοειυаеёийъыэюяоу])" +<a name="line.3109"></a>
-<span class="sourceLineNo">3110</span>                "([^aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųyýÿŷỳαοειυаеёийъыэюяоуqwhjx])" +<a name="line.3110"></a>
-<span class="sourceLineNo">3111</span>                "([aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųyýÿŷỳαοειυаеёийъыэюяоу]|$)", "$1$2$2$3", 0.5);<a name="line.3111"></a>
+<span class="sourceLineNo">3109</span>        public static final Modifier DOUBLE_CONSONANTS = new Modifier("([a�������?????e����?????i����?????o������???�?u����??????y��???????????????????])" +<a name="line.3109"></a>
+<span class="sourceLineNo">3110</span>                "([^a�������?????e����?????i����?????o������???�?u����??????y��???????????????????qwhjx])" +<a name="line.3110"></a>
+<span class="sourceLineNo">3111</span>                "([a�������?????e����?????i����?????o������???�?u����??????y��???????????????????]|$)", "$1$2$2$3", 0.5);<a name="line.3111"></a>
 <span class="sourceLineNo">3112</span><a name="line.3112"></a>
 <span class="sourceLineNo">3113</span>        /**<a name="line.3113"></a>
 <span class="sourceLineNo">3114</span>         * For a language that never repeats the same letter twice in a row.<a name="line.3114"></a>
@@ -3125,39 +3125,39 @@
 <span class="sourceLineNo">3117</span><a name="line.3117"></a>
 <span class="sourceLineNo">3118</span>        /**<a name="line.3118"></a>
 <span class="sourceLineNo">3119</span>         * Removes accented letters and the two non-English consonants from text generated with {@link #NORSE}.<a name="line.3119"></a>
-<span class="sourceLineNo">3120</span>         * Replaces á, é, í, ý, ó, æ, ú, and ö with a, e, i, y, o, ae, and ou. In some instances, replaces j<a name="line.3120"></a>
-<span class="sourceLineNo">3121</span>         * with y. Replaces ð and þ with th and th, except for when preceded by s (then it replaces sð or sþ<a name="line.3121"></a>
-<span class="sourceLineNo">3122</span>         * with st or st) or when the start of a word is fð or fþ, where it replaces with fr or fr.<a name="line.3122"></a>
+<span class="sourceLineNo">3120</span>         * Replaces �, �, �, �, �, �, �, and � with a, e, i, y, o, ae, and ou. In some instances, replaces j<a name="line.3120"></a>
+<span class="sourceLineNo">3121</span>         * with y. Replaces � and � with th and th, except for when preceded by s (then it replaces s� or s�<a name="line.3121"></a>
+<span class="sourceLineNo">3122</span>         * with st or st) or when the start of a word is f� or f�, where it replaces with fr or fr.<a name="line.3122"></a>
 <span class="sourceLineNo">3123</span>         */<a name="line.3123"></a>
 <span class="sourceLineNo">3124</span>        public static final Modifier SIMPLIFY_NORSE = replacementTable(Maker.makeOM(<a name="line.3124"></a>
-<span class="sourceLineNo">3125</span>                "á", "a",<a name="line.3125"></a>
-<span class="sourceLineNo">3126</span>                "é", "e",<a name="line.3126"></a>
-<span class="sourceLineNo">3127</span>                "í", "i",<a name="line.3127"></a>
-<span class="sourceLineNo">3128</span>                "ý", "y",<a name="line.3128"></a>
-<span class="sourceLineNo">3129</span>                "ó", "o",<a name="line.3129"></a>
-<span class="sourceLineNo">3130</span>                "ú", "u",<a name="line.3130"></a>
-<span class="sourceLineNo">3131</span>                "æ", "ae",<a name="line.3131"></a>
-<span class="sourceLineNo">3132</span>                "ö", "ou",<a name="line.3132"></a>
+<span class="sourceLineNo">3125</span>                "�", "a",<a name="line.3125"></a>
+<span class="sourceLineNo">3126</span>                "�", "e",<a name="line.3126"></a>
+<span class="sourceLineNo">3127</span>                "�", "i",<a name="line.3127"></a>
+<span class="sourceLineNo">3128</span>                "�", "y",<a name="line.3128"></a>
+<span class="sourceLineNo">3129</span>                "�", "o",<a name="line.3129"></a>
+<span class="sourceLineNo">3130</span>                "�", "u",<a name="line.3130"></a>
+<span class="sourceLineNo">3131</span>                "�", "ae",<a name="line.3131"></a>
+<span class="sourceLineNo">3132</span>                "�", "ou",<a name="line.3132"></a>
 <span class="sourceLineNo">3133</span>                "([^aeiou])jy", "$1yai",<a name="line.3133"></a>
 <span class="sourceLineNo">3134</span>                "([^aeiou])j(?:[aeiouy]+)", "$1yo",<a name="line.3134"></a>
-<span class="sourceLineNo">3135</span>                "s([ðþ])", "st",<a name="line.3135"></a>
-<span class="sourceLineNo">3136</span>                "\\bf[ðþ]", "fr",<a name="line.3136"></a>
-<span class="sourceLineNo">3137</span>                "[ðþ]", "th"));<a name="line.3137"></a>
-<span class="sourceLineNo">3138</span>        //àáâãäåāăąǻæǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳy<a name="line.3138"></a>
+<span class="sourceLineNo">3135</span>                "s([��])", "st",<a name="line.3135"></a>
+<span class="sourceLineNo">3136</span>                "\\bf[��]", "fr",<a name="line.3136"></a>
+<span class="sourceLineNo">3137</span>                "[��]", "th"));<a name="line.3137"></a>
+<span class="sourceLineNo">3138</span>        //������????�?a����?????e����?????i������???�?o����??????u��??y<a name="line.3138"></a>
 <span class="sourceLineNo">3139</span>        /**<a name="line.3139"></a>
 <span class="sourceLineNo">3140</span>         * Some changes that can be applied when sanity checks (which force re-generating a new word) aren't appropriate<a name="line.3140"></a>
 <span class="sourceLineNo">3141</span>         * for fixing a word that isn't pronounceable.<a name="line.3141"></a>
 <span class="sourceLineNo">3142</span>         */<a name="line.3142"></a>
-<span class="sourceLineNo">3143</span>        //bcçćĉċčdþðďđḍfgĝğġģhĥħḥjĵȷkķlĺļľŀłḷḹmṃnñńņňŋṅṇpqrŕŗřṛṝsśŝşšșṣtţťțṭvwŵẁẃẅxyýÿŷỳzźżž<a name="line.3143"></a>
+<span class="sourceLineNo">3143</span>        //bc�????d��???fg????h???j??k?l???????m?n�??????pqr?????s???�??t????vw????xy��??z??�<a name="line.3143"></a>
 <span class="sourceLineNo">3144</span>        public static final Modifier GENERAL_CLEANUP = replacementTable(Maker.makeOM(<a name="line.3144"></a>
-<span class="sourceLineNo">3145</span>                "[æǽœìíîïĩīĭįıiùúûüũūŭůűųuýÿŷỳy]([æǽœýÿŷỳy])", "$1",<a name="line.3145"></a>
-<span class="sourceLineNo">3146</span>                "q([ùúûüũūŭůűųu])$", "q$1e",<a name="line.3146"></a>
-<span class="sourceLineNo">3147</span>                "([ìíîïĩīĭįıi])[ìíîïĩīĭįıi]", "$1",<a name="line.3147"></a>
-<span class="sourceLineNo">3148</span>                "([æǽœìíîïĩīĭįıiùúûüũūŭůűųuýÿŷỳy])[wŵẁẃẅ]$", "$1",<a name="line.3148"></a>
-<span class="sourceLineNo">3149</span>                "([ùúûüũūŭůűųu])([òóôõöøōŏőǿo])", "$2$1",<a name="line.3149"></a>
-<span class="sourceLineNo">3150</span>                "[àáâãäåāăąǻaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőǿoùúûüũūŭůűųuýÿŷỳy]([æǽœ])", "$1",<a name="line.3150"></a>
-<span class="sourceLineNo">3151</span>                "([æǽœ])[àáâãäåāăąǻaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőǿoùúûüũūŭůűųuýÿŷỳy]", "$1",<a name="line.3151"></a>
-<span class="sourceLineNo">3152</span>                "([wŵẁẃẅ])[wŵẁẃẅ]", "$1",<a name="line.3152"></a>
+<span class="sourceLineNo">3145</span>                "[�?�����?????i����??????u��??y]([�?���??y])", "$1",<a name="line.3145"></a>
+<span class="sourceLineNo">3146</span>                "q([����??????u])$", "q$1e",<a name="line.3146"></a>
+<span class="sourceLineNo">3147</span>                "([����?????i])[����?????i]", "$1",<a name="line.3147"></a>
+<span class="sourceLineNo">3148</span>                "([�?�����?????i����??????u��??y])[w????]$", "$1",<a name="line.3148"></a>
+<span class="sourceLineNo">3149</span>                "([����??????u])([������????o])", "$2$1",<a name="line.3149"></a>
+<span class="sourceLineNo">3150</span>                "[������????a����?????e����?????i������????o����??????u��??y]([�?�])", "$1",<a name="line.3150"></a>
+<span class="sourceLineNo">3151</span>                "([�?�])[������????a����?????e����?????i������????o����??????u��??y]", "$1",<a name="line.3151"></a>
+<span class="sourceLineNo">3152</span>                "([w????])[w????]", "$1",<a name="line.3152"></a>
 <span class="sourceLineNo">3153</span>                "qq", "q"));<a name="line.3153"></a>
 <span class="sourceLineNo">3154</span><a name="line.3154"></a>
 <span class="sourceLineNo">3155</span><a name="line.3155"></a>
@@ -3205,20 +3205,20 @@
 <span class="sourceLineNo">3197</span><a name="line.3197"></a>
 <span class="sourceLineNo">3198</span>        public static final Modifier SIMPLIFY_ARABIC = new Modifier(<a name="line.3198"></a>
 <span class="sourceLineNo">3199</span>                /*<a name="line.3199"></a>
-<span class="sourceLineNo">3200</span>                new Alteration("ţ", "th"),<a name="line.3200"></a>
-<span class="sourceLineNo">3201</span>                new Alteration("ĥ", "kh"),<a name="line.3201"></a>
-<span class="sourceLineNo">3202</span>                new Alteration("ħ", "khr"),<a name="line.3202"></a>
-<span class="sourceLineNo">3203</span>                new Alteration("đ", "dh"),<a name="line.3203"></a>
-<span class="sourceLineNo">3204</span>                new Alteration("ď", "dt"),<a name="line.3204"></a>
-<span class="sourceLineNo">3205</span>                new Alteration("š", "sh"),<a name="line.3205"></a>
-<span class="sourceLineNo">3206</span>                new Alteration("ş", "shw"),<a name="line.3206"></a>
-<span class="sourceLineNo">3207</span>                new Alteration("ť", "ch"),<a name="line.3207"></a>
-<span class="sourceLineNo">3208</span>                new Alteration("ż", "zh"),<a name="line.3208"></a>
-<span class="sourceLineNo">3209</span>                new Alteration("ξ", "khm"),<a name="line.3209"></a>
-<span class="sourceLineNo">3210</span>                new Alteration("δ", "gh"),<a name="line.3210"></a>
-<span class="sourceLineNo">3211</span>                new Alteration("ā", "aa"),<a name="line.3211"></a>
-<span class="sourceLineNo">3212</span>                new Alteration("ū", "uu"),<a name="line.3212"></a>
-<span class="sourceLineNo">3213</span>                new Alteration("ī", "ii")*/);<a name="line.3213"></a>
+<span class="sourceLineNo">3200</span>                new Alteration("?", "th"),<a name="line.3200"></a>
+<span class="sourceLineNo">3201</span>                new Alteration("?", "kh"),<a name="line.3201"></a>
+<span class="sourceLineNo">3202</span>                new Alteration("?", "khr"),<a name="line.3202"></a>
+<span class="sourceLineNo">3203</span>                new Alteration("?", "dh"),<a name="line.3203"></a>
+<span class="sourceLineNo">3204</span>                new Alteration("?", "dt"),<a name="line.3204"></a>
+<span class="sourceLineNo">3205</span>                new Alteration("�", "sh"),<a name="line.3205"></a>
+<span class="sourceLineNo">3206</span>                new Alteration("?", "shw"),<a name="line.3206"></a>
+<span class="sourceLineNo">3207</span>                new Alteration("?", "ch"),<a name="line.3207"></a>
+<span class="sourceLineNo">3208</span>                new Alteration("?", "zh"),<a name="line.3208"></a>
+<span class="sourceLineNo">3209</span>                new Alteration("?", "khm"),<a name="line.3209"></a>
+<span class="sourceLineNo">3210</span>                new Alteration("?", "gh"),<a name="line.3210"></a>
+<span class="sourceLineNo">3211</span>                new Alteration("?", "aa"),<a name="line.3211"></a>
+<span class="sourceLineNo">3212</span>                new Alteration("?", "uu"),<a name="line.3212"></a>
+<span class="sourceLineNo">3213</span>                new Alteration("?", "ii")*/);<a name="line.3213"></a>
 <span class="sourceLineNo">3214</span><a name="line.3214"></a>
 <span class="sourceLineNo">3215</span>        @Override<a name="line.3215"></a>
 <span class="sourceLineNo">3216</span>        public boolean equals(Object o) {<a name="line.3216"></a>
@@ -3273,7 +3273,7 @@
 <span class="sourceLineNo">3265</span>        public double chance;<a name="line.3265"></a>
 <span class="sourceLineNo">3266</span><a name="line.3266"></a>
 <span class="sourceLineNo">3267</span>        public Alteration() {<a name="line.3267"></a>
-<span class="sourceLineNo">3268</span>            this("[tţťțṭ]?[sśŝşšș]+h?", "th");<a name="line.3268"></a>
+<span class="sourceLineNo">3268</span>            this("[t????]?[s???�?]+h?", "th");<a name="line.3268"></a>
 <span class="sourceLineNo">3269</span>        }<a name="line.3269"></a>
 <span class="sourceLineNo">3270</span><a name="line.3270"></a>
 <span class="sourceLineNo">3271</span>        public Alteration(String pattern, String replacement) {<a name="line.3271"></a>
