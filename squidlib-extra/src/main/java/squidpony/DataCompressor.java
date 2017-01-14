@@ -54,7 +54,7 @@ public class DataCompressor extends Json {
     @Override
     public void toJson (Object object, Class knownType, Class elementType, FileHandle file) {
         try {
-            file.writeString(this.toJson(object, knownType, elementType), false, "UTF-16");
+            file.writeString(this.toJson(object, knownType, elementType), false, "UTF-8");
         } catch (Exception ex) {
             throw new SerializationException("Error writing file: " + file, ex);
         }
@@ -81,7 +81,7 @@ public class DataCompressor extends Json {
     @Override
     public <T> T fromJson(Class<T> type, Reader reader) {
         throw new UnsupportedOperationException("fromJson() given a char[], Reader or InputStream won't decompress;" +
-                "use the overloads that take a String or FilHandle instead");
+                "use the overloads that take a String or FileHandle instead");
     }
 
     /**
@@ -93,7 +93,7 @@ public class DataCompressor extends Json {
     @Override
     public <T> T fromJson(Class<T> type, Class elementType, Reader reader) {
         throw new UnsupportedOperationException("fromJson() given a char[], Reader or InputStream won't decompress;" +
-                "use the overloads that take a String or FilHandle instead");
+                "use the overloads that take a String or FileHandle instead");
     }
 
     /**
@@ -104,7 +104,7 @@ public class DataCompressor extends Json {
     @Override
     public <T> T fromJson(Class<T> type, InputStream input) {
         throw new UnsupportedOperationException("fromJson() given a char[], Reader or InputStream won't decompress;" +
-                "use the overloads that take a String or FilHandle instead");
+                "use the overloads that take a String or FileHandle instead");
     }
 
     /**
@@ -116,7 +116,7 @@ public class DataCompressor extends Json {
     @Override
     public <T> T fromJson(Class<T> type, Class elementType, InputStream input) {
         throw new UnsupportedOperationException("fromJson() given a char[], Reader or InputStream won't decompress;" +
-                "use the overloads that take a String or FilHandle instead");
+                "use the overloads that take a String or FileHandle instead");
     }
 
     /**
@@ -150,7 +150,7 @@ public class DataCompressor extends Json {
     @Override
     public <T> T fromJson(Class<T> type, char[] data, int offset, int length) {
         throw new UnsupportedOperationException("fromJson() given a char[], Reader or InputStream won't decompress;" +
-                "use the overloads that take a String or FilHandle instead");
+                "use the overloads that take a String or FileHandle instead");
     }
 
     /**
@@ -164,7 +164,7 @@ public class DataCompressor extends Json {
     @Override
     public <T> T fromJson(Class<T> type, Class elementType, char[] data, int offset, int length) {
         throw new UnsupportedOperationException("fromJson() given a char[], Reader or InputStream won't decompress;" +
-                "use the overloads that take a String or FilHandle instead");
+                "use the overloads that take a String or FileHandle instead");
     }
 
     /**

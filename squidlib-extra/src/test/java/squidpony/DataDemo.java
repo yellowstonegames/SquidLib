@@ -73,11 +73,11 @@ public class DataDemo extends ApplicationAdapter {
         public int meleeRes, rangedRes, magicRes, ailmentRes;
         public Adventurer()
         {
-            this("Abjurer", 1, 1, 4, 2,
-                    "Ward field, better spread",
-                    "Earth spells, better duration",
-                    "Superior Grimoire, acts as Shield",
-                    "Magic counter, may inflict Nullify");
+            this("Sommelier", 0, 4, 4, 0,
+                    "Scorn aura, dominating",
+                    "Restaurant Base, upgrade Wine",
+                    "Limitless Wine, identify potions",
+                    "Limitless Cheese, cleanse items");
         }
         public Adventurer(String title, int melee, int ranged, int magic, int ailment, String... traits)
         {
