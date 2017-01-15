@@ -56,6 +56,9 @@ public class DataDemo extends ApplicationAdapter {
         Gdx.files.local(ROOT_DIR + "src/test/resources/generated/CompressedAdventurers.js")
                 .writeString(compress.toJson(adventurers, OrderedMap.class), false, "UTF-8");
 
+        Gdx.files.local(ROOT_DIR + "src/test/resources/generated/PrettyAdventurers.js")
+                .writeString(convert.prettyPrint(adventurers), false, "UTF-8");
+
         Gdx.app.exit();
     }
 
