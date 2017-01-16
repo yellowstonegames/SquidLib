@@ -28,7 +28,7 @@ public class DataDemo extends ApplicationAdapter {
     @Override
     public void create() {
         super.create();
-        DataConverter convert = new DataConverter(JsonWriter.OutputType.json);
+        DataConverter convert = new DataConverter(JsonWriter.OutputType.minimal);
         DataCompressor compress = new DataCompressor();
         OrderedMap<String, Adventurer> adventurers = new OrderedMap<>(200, 0.8f);
         if(Gdx.files.local(ROOT_DIR + "src/test/resources/generated/UncompressedAdventurers.js").exists()) {
