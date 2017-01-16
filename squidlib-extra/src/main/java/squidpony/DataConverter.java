@@ -208,9 +208,18 @@ public class DataConverter extends Json {
                     return;
                 }
                 json.writeObjectStart();
-                json.writeValue("k", object.keysAsOrderedSet(), OrderedSet.class);
-                json.writeValue("v", object.valuesAsList(), ArrayList.class);
                 json.writeValue("f", object.f);
+                if(!object.isEmpty()) {
+                    json.writeValue("k", object.firstKey(), OrderedSet.class);
+                    json.writeValue("v", object.getAt(0), ArrayList.class);
+                    int sz = object.size();
+                    Object[] r = new Object[(sz - 1) * 2];
+                    for (int i = 1, p = 0; i < sz; i++) {
+                        r[p++] = object.keyAt(i);
+                        r[p++] = object.getAt(i);
+                    }
+                    json.writeValue("r", r, Object[].class, Object.class);
+                }
                 json.writeObjectEnd();
             }
 
@@ -218,8 +227,12 @@ public class DataConverter extends Json {
             @SuppressWarnings("unchecked")
             public OrderedMap read(Json json, JsonValue jsonData, Class type) {
                 if(jsonData == null || jsonData.isNull()) return null;
-                return new OrderedMap(json.readValue(OrderedSet.class, jsonData.get("k")),
-                        json.readValue(ArrayList.class, jsonData.get("v")), jsonData.getFloat("f"));
+                return Maker.makeOM(json.readValue("f", float.class, jsonData),
+                        json.readValue("k", null, jsonData),
+                        json.readValue("v", null, jsonData),
+                        json.readValue("r", Object[].class, jsonData));
+                //return new OrderedMap(json.readValue(OrderedSet.class, jsonData.get("k")),
+                //        json.readValue(ArrayList.class, jsonData.get("v")), jsonData.getFloat("f"));
             }
         });
 
