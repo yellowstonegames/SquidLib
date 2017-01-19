@@ -500,7 +500,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         for (int x = gridOffsetX; x < gridWidth; x += inc) {
             for (int y = gridOffsetY; y < gridHeight; y += inc) {
                 textFactory.draw(batch, contents[x][y],
-                        Filters.Utility.colorFromFloat(tmpColor, colors[x][y]),
+                        colors[x][y],
                         xOffset + /*- getX() + 1f * */ x * cellWidth,
                         yOffset + /*- getY() + 1f * */ (gridHeight - y) * cellHeight + 1f);
             }
