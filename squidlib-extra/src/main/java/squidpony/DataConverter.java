@@ -4,10 +4,11 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonWriter;
 import regexodus.Pattern;
+import squidpony.squidgrid.Direction;
+import squidpony.squidgrid.Radius;
 import squidpony.squidmath.*;
 
-import java.util.ArrayList;
-import java.util.SortedSet;
+import java.util.*;
 
 /**
  * Augmented version of LibGDX's Json class that knows how to handle various data types common in SquidLib.
@@ -83,6 +84,8 @@ public class DataConverter extends Json {
         json.addClassTag("#XoRo", XoRoRNG.class);
         json.addClassTag("#XorR", XorRNG.class);
         json.addClassTag("#Strm", CrossHash.Storm.class);
+        json.addClassTag("#Dir", Direction.class);
+        json.addClassTag("#Rad", Radius.class);
 
         json.setSerializer(Pattern.class, new Json.Serializer<Pattern>() {
             @Override
@@ -210,8 +213,8 @@ public class DataConverter extends Json {
                 json.writeObjectStart();
                 json.writeValue("f", object.f);
                 if(!object.isEmpty()) {
-                    json.writeValue("k", object.firstKey(), OrderedSet.class);
-                    json.writeValue("v", object.getAt(0), ArrayList.class);
+                    json.writeValue("k", object.firstKey());
+                    json.writeValue("v", object.getAt(0));
                     int sz = object.size();
                     Object[] r = new Object[(sz - 1) * 2];
                     for (int i = 1, p = 0; i < sz; i++) {
@@ -231,6 +234,47 @@ public class DataConverter extends Json {
                         json.readValue("k", null, jsonData),
                         json.readValue("v", null, jsonData),
                         json.readValue("r", Object[].class, jsonData));
+                //return new OrderedMap(json.readValue(OrderedSet.class, jsonData.get("k")),
+                //        json.readValue(ArrayList.class, jsonData.get("v")), jsonData.getFloat("f"));
+            }
+        });
+
+        json.setSerializer(EnumMap.class, new Json.Serializer<EnumMap>() {
+            @Override
+            public void write(Json json, EnumMap object, Class knownType) {
+                if(object == null)
+                {
+                    json.writeValue(null);
+                    return;
+                }
+                json.writeObjectStart();
+                if(!object.isEmpty()) {
+                    Iterator it = object.entrySet().iterator();
+                    Map.Entry en = (Map.Entry)it.next();
+                    json.writeValue("e", en.getKey(), Enum.class);
+                    json.writeValue("v", en.getValue());
+                    int sz = object.size();
+                    Object[] r = new Object[(sz - 1) * 2];
+                    for (int i = 1, p = 0; i < sz; i++) {
+                        if(!it.hasNext())
+                            break;
+                        en = (Map.Entry)it.next();
+                        r[p++] = en.getKey();
+                        r[p++] = en.getValue();
+                    }
+                    json.writeValue("r", r, Object[].class, Object.class);
+                }
+                json.writeObjectEnd();
+            }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public EnumMap read(Json json, JsonValue jsonData, Class type) {
+                if(jsonData == null || jsonData.isNull()) return null;
+                return new EnumMap(Maker.makeOM(0.75f,
+                        json.readValue("e", null, jsonData),
+                        json.readValue("v", null, jsonData),
+                        json.readValue("r", Object[].class, jsonData)));
                 //return new OrderedMap(json.readValue(OrderedSet.class, jsonData.get("k")),
                 //        json.readValue(ArrayList.class, jsonData.get("v")), jsonData.getFloat("f"));
             }

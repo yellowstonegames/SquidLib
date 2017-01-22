@@ -10,6 +10,9 @@
     <inherits name="squidlib-util" />
     <inherits name="regexodus"/>
     <inherits name="blazing.chain"/>
+    <extend-configuration-property name="gdx.reflect.include" value="java.util.SortedSet" />
+    <extend-configuration-property name="gdx.reflect.include" value="java.util.EnumMap" />
+    <extend-configuration-property name="gdx.reflect.include" value="regexodus.Pattern" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.StringStringMap" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.FakeLanguageGen" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.IntVLA" />
@@ -17,7 +20,6 @@
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.GreasedRegion" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.OrderedMap" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.OrderedSet" />
-    <extend-configuration-property name="gdx.reflect.include" value="java.util.SortedSet" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.Arrangement" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.K2" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.K2V1" />
