@@ -508,7 +508,7 @@
 <span class="sourceLineNo">500</span>        for (int x = gridOffsetX; x &lt; gridWidth; x += inc) {<a name="line.500"></a>
 <span class="sourceLineNo">501</span>            for (int y = gridOffsetY; y &lt; gridHeight; y += inc) {<a name="line.501"></a>
 <span class="sourceLineNo">502</span>                textFactory.draw(batch, contents[x][y],<a name="line.502"></a>
-<span class="sourceLineNo">503</span>                        Filters.Utility.colorFromFloat(tmpColor, colors[x][y]),<a name="line.503"></a>
+<span class="sourceLineNo">503</span>                        colors[x][y],<a name="line.503"></a>
 <span class="sourceLineNo">504</span>                        xOffset + /*- getX() + 1f * */ x * cellWidth,<a name="line.504"></a>
 <span class="sourceLineNo">505</span>                        yOffset + /*- getY() + 1f * */ (gridHeight - y) * cellHeight + 1f);<a name="line.505"></a>
 <span class="sourceLineNo">506</span>            }<a name="line.506"></a>

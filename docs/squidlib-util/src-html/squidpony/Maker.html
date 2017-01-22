@@ -125,69 +125,89 @@
 <span class="sourceLineNo">117</span>     * @param k0 the first key; used to infer the types of other keys if generic parameters aren't specified.<a name="line.117"></a>
 <span class="sourceLineNo">118</span>     * @param v0 the first value; used to infer the types of other values if generic parameters aren't specified.<a name="line.118"></a>
 <span class="sourceLineNo">119</span>     * @param rest an array or vararg of keys and values in pairs; should contain alternating K, V, K, V... elements<a name="line.119"></a>
-<span class="sourceLineNo">120</span>     * @param &lt;K&gt; the type of keys in the returned LinkedHashMap; if not specified, will be inferred from k0<a name="line.120"></a>
-<span class="sourceLineNo">121</span>     * @param &lt;V&gt; the type of values in the returned LinkedHashMap; if not specified, will be inferred from v0<a name="line.121"></a>
+<span class="sourceLineNo">120</span>     * @param &lt;K&gt; the type of keys in the returned OrderedMap; if not specified, will be inferred from k0<a name="line.120"></a>
+<span class="sourceLineNo">121</span>     * @param &lt;V&gt; the type of values in the returned OrderedMap; if not specified, will be inferred from v0<a name="line.121"></a>
 <span class="sourceLineNo">122</span>     * @return a freshly-made OrderedMap with K keys and V values, using k0, v0, and the contents of rest to fill it<a name="line.122"></a>
 <span class="sourceLineNo">123</span>     */<a name="line.123"></a>
 <span class="sourceLineNo">124</span>    @SuppressWarnings("unchecked")<a name="line.124"></a>
 <span class="sourceLineNo">125</span>    public static &lt;K, V&gt; OrderedMap&lt;K, V&gt; makeOM(K k0, V v0, Object... rest)<a name="line.125"></a>
 <span class="sourceLineNo">126</span>    {<a name="line.126"></a>
-<span class="sourceLineNo">127</span>        if(rest == null)<a name="line.127"></a>
-<span class="sourceLineNo">128</span>            return makeOM(k0, v0);<a name="line.128"></a>
-<span class="sourceLineNo">129</span>        OrderedMap&lt;K, V&gt; om = new OrderedMap&lt;&gt;(1 + (rest.length / 2));<a name="line.129"></a>
-<span class="sourceLineNo">130</span>        om.put(k0, v0);<a name="line.130"></a>
-<span class="sourceLineNo">131</span><a name="line.131"></a>
-<span class="sourceLineNo">132</span>        for (int i = 0; i &lt; rest.length - 1; i+=2) {<a name="line.132"></a>
-<span class="sourceLineNo">133</span>            try {<a name="line.133"></a>
-<span class="sourceLineNo">134</span>                om.put((K) rest[i], (V) rest[i + 1]);<a name="line.134"></a>
-<span class="sourceLineNo">135</span>            }catch (ClassCastException cce) {<a name="line.135"></a>
-<span class="sourceLineNo">136</span>                issueLog.append("makeOM call had a casting problem with pair at rest[");<a name="line.136"></a>
-<span class="sourceLineNo">137</span>                issueLog.append(i);<a name="line.137"></a>
-<span class="sourceLineNo">138</span>                issueLog.append("] and/or rest[");<a name="line.138"></a>
-<span class="sourceLineNo">139</span>                issueLog.append(i + 1);<a name="line.139"></a>
-<span class="sourceLineNo">140</span>                issueLog.append("], with contents: ");<a name="line.140"></a>
-<span class="sourceLineNo">141</span>                issueLog.append(rest[i]);<a name="line.141"></a>
-<span class="sourceLineNo">142</span>                issueLog.append(", ");<a name="line.142"></a>
-<span class="sourceLineNo">143</span>                issueLog.append(rest[i+1]);<a name="line.143"></a>
-<span class="sourceLineNo">144</span>                issueLog.append(".\n\nException messages:\n");<a name="line.144"></a>
-<span class="sourceLineNo">145</span>                issueLog.append(cce);<a name="line.145"></a>
-<span class="sourceLineNo">146</span>                String msg = cce.getMessage();<a name="line.146"></a>
-<span class="sourceLineNo">147</span>                if (msg != null) {<a name="line.147"></a>
-<span class="sourceLineNo">148</span>                    issueLog.append('\n');<a name="line.148"></a>
-<span class="sourceLineNo">149</span>                    issueLog.append(msg);<a name="line.149"></a>
-<span class="sourceLineNo">150</span>                }<a name="line.150"></a>
-<span class="sourceLineNo">151</span>                issueLog.append('\n');<a name="line.151"></a>
-<span class="sourceLineNo">152</span>            }<a name="line.152"></a>
-<span class="sourceLineNo">153</span>        }<a name="line.153"></a>
-<span class="sourceLineNo">154</span>        return om;<a name="line.154"></a>
-<span class="sourceLineNo">155</span>    }<a name="line.155"></a>
-<span class="sourceLineNo">156</span><a name="line.156"></a>
-<span class="sourceLineNo">157</span>    /**<a name="line.157"></a>
-<span class="sourceLineNo">158</span>     * Makes an empty OrderedMap (OM); needs key and value types to be specified in order to work. For an empty<a name="line.158"></a>
-<span class="sourceLineNo">159</span>     * OrderedMap with String keys and Coord values, you could use {@code Maker.&lt;String, Coord&gt;makeOM();}. Using<a name="line.159"></a>
-<span class="sourceLineNo">160</span>     * the new keyword is probably just as easy in this case; this method is provided for completeness relative to<a name="line.160"></a>
-<span class="sourceLineNo">161</span>     * makeOM() with 2 or more parameters.<a name="line.161"></a>
-<span class="sourceLineNo">162</span>     * @param &lt;K&gt; the type of keys in the returned OrderedMap; cannot be inferred and must be specified<a name="line.162"></a>
-<span class="sourceLineNo">163</span>     * @param &lt;V&gt; the type of values in the returned OrderedMap; cannot be inferred and must be specified<a name="line.163"></a>
-<span class="sourceLineNo">164</span>     * @return an empty OrderedMap with the given key and value types.<a name="line.164"></a>
-<span class="sourceLineNo">165</span>     */<a name="line.165"></a>
-<span class="sourceLineNo">166</span>    public static &lt;K, V&gt; OrderedMap&lt;K, V&gt; makeOM()<a name="line.166"></a>
-<span class="sourceLineNo">167</span>    {<a name="line.167"></a>
-<span class="sourceLineNo">168</span>        return new OrderedMap&lt;&gt;();<a name="line.168"></a>
-<span class="sourceLineNo">169</span>    }<a name="line.169"></a>
-<span class="sourceLineNo">170</span><a name="line.170"></a>
-<span class="sourceLineNo">171</span>    /**<a name="line.171"></a>
-<span class="sourceLineNo">172</span>     * Makes a OrderedSet (OS) of T given an array or vararg of T elements. Duplicate items in elements will have<a name="line.172"></a>
-<span class="sourceLineNo">173</span>     * all but one item discarded, using the later item in elements.<a name="line.173"></a>
-<span class="sourceLineNo">174</span>     * @param elements an array or vararg of T<a name="line.174"></a>
-<span class="sourceLineNo">175</span>     * @param &lt;T&gt; just about any non-primitive type<a name="line.175"></a>
-<span class="sourceLineNo">176</span>     * @return a newly-allocated OrderedSet containing all of the non-duplicate items in elements, in order<a name="line.176"></a>
-<span class="sourceLineNo">177</span>     */<a name="line.177"></a>
-<span class="sourceLineNo">178</span>    public static &lt;T&gt; OrderedSet&lt;T&gt; makeOS(T... elements) {<a name="line.178"></a>
-<span class="sourceLineNo">179</span>        if(elements == null) return null;<a name="line.179"></a>
-<span class="sourceLineNo">180</span>        return new OrderedSet&lt;T&gt;(elements);<a name="line.180"></a>
-<span class="sourceLineNo">181</span>    }<a name="line.181"></a>
-<span class="sourceLineNo">182</span>}<a name="line.182"></a>
+<span class="sourceLineNo">127</span>        return makeOM(0.625f, k0, v0, rest);<a name="line.127"></a>
+<span class="sourceLineNo">128</span>    }<a name="line.128"></a>
+<span class="sourceLineNo">129</span>    /**<a name="line.129"></a>
+<span class="sourceLineNo">130</span>     * Makes an OrderedMap (OM) with the given load factor (which should be between 0.1 and 0.9), key and value types<a name="line.130"></a>
+<span class="sourceLineNo">131</span>     * inferred from the types of k0 and v0, and considers all remaining parameters key-value pairs, casting the Objects<a name="line.131"></a>
+<span class="sourceLineNo">132</span>     * at positions 0, 2, 4... etc. to K and the objects at positions 1, 3, 5... etc. to V. If rest has an odd-number<a name="line.132"></a>
+<span class="sourceLineNo">133</span>     * length, then it discards the last item. If any pair of items in rest cannot be cast to the correct type of K or<a name="line.133"></a>
+<span class="sourceLineNo">134</span>     * V, then this inserts nothing for that pair and logs information on the problematic pair to the static<a name="line.134"></a>
+<span class="sourceLineNo">135</span>     * Maker.issueLog field.<a name="line.135"></a>
+<span class="sourceLineNo">136</span>     * @param factor the load factor; should be between 0.1 and 0.9, and 0.75f is a safe choice<a name="line.136"></a>
+<span class="sourceLineNo">137</span>     * @param k0 the first key; used to infer the types of other keys if generic parameters aren't specified.<a name="line.137"></a>
+<span class="sourceLineNo">138</span>     * @param v0 the first value; used to infer the types of other values if generic parameters aren't specified.<a name="line.138"></a>
+<span class="sourceLineNo">139</span>     * @param rest an array or vararg of keys and values in pairs; should contain alternating K, V, K, V... elements<a name="line.139"></a>
+<span class="sourceLineNo">140</span>     * @param &lt;K&gt; the type of keys in the returned OrderedMap; if not specified, will be inferred from k0<a name="line.140"></a>
+<span class="sourceLineNo">141</span>     * @param &lt;V&gt; the type of values in the returned OrderedMap; if not specified, will be inferred from v0<a name="line.141"></a>
+<span class="sourceLineNo">142</span>     * @return a freshly-made OrderedMap with K keys and V values, using k0, v0, and the contents of rest to fill it<a name="line.142"></a>
+<span class="sourceLineNo">143</span>     */<a name="line.143"></a>
+<span class="sourceLineNo">144</span>    @SuppressWarnings("unchecked")<a name="line.144"></a>
+<span class="sourceLineNo">145</span>    public static &lt;K, V&gt; OrderedMap&lt;K, V&gt; makeOM(float factor, K k0, V v0, Object... rest)<a name="line.145"></a>
+<span class="sourceLineNo">146</span>    {<a name="line.146"></a>
+<span class="sourceLineNo">147</span>        if(rest == null)<a name="line.147"></a>
+<span class="sourceLineNo">148</span>            rest = new Object[0];<a name="line.148"></a>
+<span class="sourceLineNo">149</span>        OrderedMap&lt;K, V&gt; om = new OrderedMap&lt;&gt;(1 + (rest.length / 2), factor);<a name="line.149"></a>
+<span class="sourceLineNo">150</span>        om.put(k0, v0);<a name="line.150"></a>
+<span class="sourceLineNo">151</span><a name="line.151"></a>
+<span class="sourceLineNo">152</span>        for (int i = 0; i &lt; rest.length - 1; i+=2) {<a name="line.152"></a>
+<span class="sourceLineNo">153</span>            try {<a name="line.153"></a>
+<span class="sourceLineNo">154</span>                om.put((K) rest[i], (V) rest[i + 1]);<a name="line.154"></a>
+<span class="sourceLineNo">155</span>            }catch (ClassCastException cce) {<a name="line.155"></a>
+<span class="sourceLineNo">156</span>                issueLog.append("makeOM call had a casting problem with pair at rest[");<a name="line.156"></a>
+<span class="sourceLineNo">157</span>                issueLog.append(i);<a name="line.157"></a>
+<span class="sourceLineNo">158</span>                issueLog.append("] and/or rest[");<a name="line.158"></a>
+<span class="sourceLineNo">159</span>                issueLog.append(i + 1);<a name="line.159"></a>
+<span class="sourceLineNo">160</span>                issueLog.append("], with contents: ");<a name="line.160"></a>
+<span class="sourceLineNo">161</span>                issueLog.append(rest[i]);<a name="line.161"></a>
+<span class="sourceLineNo">162</span>                issueLog.append(", ");<a name="line.162"></a>
+<span class="sourceLineNo">163</span>                issueLog.append(rest[i+1]);<a name="line.163"></a>
+<span class="sourceLineNo">164</span>                issueLog.append(".\n\nException messages:\n");<a name="line.164"></a>
+<span class="sourceLineNo">165</span>                issueLog.append(cce);<a name="line.165"></a>
+<span class="sourceLineNo">166</span>                String msg = cce.getMessage();<a name="line.166"></a>
+<span class="sourceLineNo">167</span>                if (msg != null) {<a name="line.167"></a>
+<span class="sourceLineNo">168</span>                    issueLog.append('\n');<a name="line.168"></a>
+<span class="sourceLineNo">169</span>                    issueLog.append(msg);<a name="line.169"></a>
+<span class="sourceLineNo">170</span>                }<a name="line.170"></a>
+<span class="sourceLineNo">171</span>                issueLog.append('\n');<a name="line.171"></a>
+<span class="sourceLineNo">172</span>            }<a name="line.172"></a>
+<span class="sourceLineNo">173</span>        }<a name="line.173"></a>
+<span class="sourceLineNo">174</span>        return om;<a name="line.174"></a>
+<span class="sourceLineNo">175</span>    }<a name="line.175"></a>
+<span class="sourceLineNo">176</span><a name="line.176"></a>
+<span class="sourceLineNo">177</span>    /**<a name="line.177"></a>
+<span class="sourceLineNo">178</span>     * Makes an empty OrderedMap (OM); needs key and value types to be specified in order to work. For an empty<a name="line.178"></a>
+<span class="sourceLineNo">179</span>     * OrderedMap with String keys and Coord values, you could use {@code Maker.&lt;String, Coord&gt;makeOM();}. Using<a name="line.179"></a>
+<span class="sourceLineNo">180</span>     * the new keyword is probably just as easy in this case; this method is provided for completeness relative to<a name="line.180"></a>
+<span class="sourceLineNo">181</span>     * makeOM() with 2 or more parameters.<a name="line.181"></a>
+<span class="sourceLineNo">182</span>     * @param &lt;K&gt; the type of keys in the returned OrderedMap; cannot be inferred and must be specified<a name="line.182"></a>
+<span class="sourceLineNo">183</span>     * @param &lt;V&gt; the type of values in the returned OrderedMap; cannot be inferred and must be specified<a name="line.183"></a>
+<span class="sourceLineNo">184</span>     * @return an empty OrderedMap with the given key and value types.<a name="line.184"></a>
+<span class="sourceLineNo">185</span>     */<a name="line.185"></a>
+<span class="sourceLineNo">186</span>    public static &lt;K, V&gt; OrderedMap&lt;K, V&gt; makeOM()<a name="line.186"></a>
+<span class="sourceLineNo">187</span>    {<a name="line.187"></a>
+<span class="sourceLineNo">188</span>        return new OrderedMap&lt;&gt;();<a name="line.188"></a>
+<span class="sourceLineNo">189</span>    }<a name="line.189"></a>
+<span class="sourceLineNo">190</span><a name="line.190"></a>
+<span class="sourceLineNo">191</span>    /**<a name="line.191"></a>
+<span class="sourceLineNo">192</span>     * Makes a OrderedSet (OS) of T given an array or vararg of T elements. Duplicate items in elements will have<a name="line.192"></a>
+<span class="sourceLineNo">193</span>     * all but one item discarded, using the later item in elements.<a name="line.193"></a>
+<span class="sourceLineNo">194</span>     * @param elements an array or vararg of T<a name="line.194"></a>
+<span class="sourceLineNo">195</span>     * @param &lt;T&gt; just about any non-primitive type<a name="line.195"></a>
+<span class="sourceLineNo">196</span>     * @return a newly-allocated OrderedSet containing all of the non-duplicate items in elements, in order<a name="line.196"></a>
+<span class="sourceLineNo">197</span>     */<a name="line.197"></a>
+<span class="sourceLineNo">198</span>    public static &lt;T&gt; OrderedSet&lt;T&gt; makeOS(T... elements) {<a name="line.198"></a>
+<span class="sourceLineNo">199</span>        if(elements == null) return null;<a name="line.199"></a>
+<span class="sourceLineNo">200</span>        return new OrderedSet&lt;T&gt;(elements);<a name="line.200"></a>
+<span class="sourceLineNo">201</span>    }<a name="line.201"></a>
+<span class="sourceLineNo">202</span>}<a name="line.202"></a>
 
 
 

@@ -62,7 +62,7 @@
 <span class="sourceLineNo">054</span>    @Override<a name="line.54"></a>
 <span class="sourceLineNo">055</span>    public void toJson (Object object, Class knownType, Class elementType, FileHandle file) {<a name="line.55"></a>
 <span class="sourceLineNo">056</span>        try {<a name="line.56"></a>
-<span class="sourceLineNo">057</span>            file.writeString(this.toJson(object, knownType, elementType), false, "UTF-16");<a name="line.57"></a>
+<span class="sourceLineNo">057</span>            file.writeString(this.toJson(object, knownType, elementType), false, "UTF-8");<a name="line.57"></a>
 <span class="sourceLineNo">058</span>        } catch (Exception ex) {<a name="line.58"></a>
 <span class="sourceLineNo">059</span>            throw new SerializationException("Error writing file: " + file, ex);<a name="line.59"></a>
 <span class="sourceLineNo">060</span>        }<a name="line.60"></a>
@@ -89,7 +89,7 @@
 <span class="sourceLineNo">081</span>    @Override<a name="line.81"></a>
 <span class="sourceLineNo">082</span>    public &lt;T&gt; T fromJson(Class&lt;T&gt; type, Reader reader) {<a name="line.82"></a>
 <span class="sourceLineNo">083</span>        throw new UnsupportedOperationException("fromJson() given a char[], Reader or InputStream won't decompress;" +<a name="line.83"></a>
-<span class="sourceLineNo">084</span>                "use the overloads that take a String or FilHandle instead");<a name="line.84"></a>
+<span class="sourceLineNo">084</span>                "use the overloads that take a String or FileHandle instead");<a name="line.84"></a>
 <span class="sourceLineNo">085</span>    }<a name="line.85"></a>
 <span class="sourceLineNo">086</span><a name="line.86"></a>
 <span class="sourceLineNo">087</span>    /**<a name="line.87"></a>
@@ -101,7 +101,7 @@
 <span class="sourceLineNo">093</span>    @Override<a name="line.93"></a>
 <span class="sourceLineNo">094</span>    public &lt;T&gt; T fromJson(Class&lt;T&gt; type, Class elementType, Reader reader) {<a name="line.94"></a>
 <span class="sourceLineNo">095</span>        throw new UnsupportedOperationException("fromJson() given a char[], Reader or InputStream won't decompress;" +<a name="line.95"></a>
-<span class="sourceLineNo">096</span>                "use the overloads that take a String or FilHandle instead");<a name="line.96"></a>
+<span class="sourceLineNo">096</span>                "use the overloads that take a String or FileHandle instead");<a name="line.96"></a>
 <span class="sourceLineNo">097</span>    }<a name="line.97"></a>
 <span class="sourceLineNo">098</span><a name="line.98"></a>
 <span class="sourceLineNo">099</span>    /**<a name="line.99"></a>
@@ -112,7 +112,7 @@
 <span class="sourceLineNo">104</span>    @Override<a name="line.104"></a>
 <span class="sourceLineNo">105</span>    public &lt;T&gt; T fromJson(Class&lt;T&gt; type, InputStream input) {<a name="line.105"></a>
 <span class="sourceLineNo">106</span>        throw new UnsupportedOperationException("fromJson() given a char[], Reader or InputStream won't decompress;" +<a name="line.106"></a>
-<span class="sourceLineNo">107</span>                "use the overloads that take a String or FilHandle instead");<a name="line.107"></a>
+<span class="sourceLineNo">107</span>                "use the overloads that take a String or FileHandle instead");<a name="line.107"></a>
 <span class="sourceLineNo">108</span>    }<a name="line.108"></a>
 <span class="sourceLineNo">109</span><a name="line.109"></a>
 <span class="sourceLineNo">110</span>    /**<a name="line.110"></a>
@@ -124,7 +124,7 @@
 <span class="sourceLineNo">116</span>    @Override<a name="line.116"></a>
 <span class="sourceLineNo">117</span>    public &lt;T&gt; T fromJson(Class&lt;T&gt; type, Class elementType, InputStream input) {<a name="line.117"></a>
 <span class="sourceLineNo">118</span>        throw new UnsupportedOperationException("fromJson() given a char[], Reader or InputStream won't decompress;" +<a name="line.118"></a>
-<span class="sourceLineNo">119</span>                "use the overloads that take a String or FilHandle instead");<a name="line.119"></a>
+<span class="sourceLineNo">119</span>                "use the overloads that take a String or FileHandle instead");<a name="line.119"></a>
 <span class="sourceLineNo">120</span>    }<a name="line.120"></a>
 <span class="sourceLineNo">121</span><a name="line.121"></a>
 <span class="sourceLineNo">122</span>    /**<a name="line.122"></a>
@@ -158,7 +158,7 @@
 <span class="sourceLineNo">150</span>    @Override<a name="line.150"></a>
 <span class="sourceLineNo">151</span>    public &lt;T&gt; T fromJson(Class&lt;T&gt; type, char[] data, int offset, int length) {<a name="line.151"></a>
 <span class="sourceLineNo">152</span>        throw new UnsupportedOperationException("fromJson() given a char[], Reader or InputStream won't decompress;" +<a name="line.152"></a>
-<span class="sourceLineNo">153</span>                "use the overloads that take a String or FilHandle instead");<a name="line.153"></a>
+<span class="sourceLineNo">153</span>                "use the overloads that take a String or FileHandle instead");<a name="line.153"></a>
 <span class="sourceLineNo">154</span>    }<a name="line.154"></a>
 <span class="sourceLineNo">155</span><a name="line.155"></a>
 <span class="sourceLineNo">156</span>    /**<a name="line.156"></a>
@@ -172,7 +172,7 @@
 <span class="sourceLineNo">164</span>    @Override<a name="line.164"></a>
 <span class="sourceLineNo">165</span>    public &lt;T&gt; T fromJson(Class&lt;T&gt; type, Class elementType, char[] data, int offset, int length) {<a name="line.165"></a>
 <span class="sourceLineNo">166</span>        throw new UnsupportedOperationException("fromJson() given a char[], Reader or InputStream won't decompress;" +<a name="line.166"></a>
-<span class="sourceLineNo">167</span>                "use the overloads that take a String or FilHandle instead");<a name="line.167"></a>
+<span class="sourceLineNo">167</span>                "use the overloads that take a String or FileHandle instead");<a name="line.167"></a>
 <span class="sourceLineNo">168</span>    }<a name="line.168"></a>
 <span class="sourceLineNo">169</span><a name="line.169"></a>
 <span class="sourceLineNo">170</span>    /**<a name="line.170"></a>

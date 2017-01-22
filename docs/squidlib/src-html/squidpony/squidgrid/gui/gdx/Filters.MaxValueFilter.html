@@ -447,37 +447,77 @@
 <span class="sourceLineNo">439</span>    }<a name="line.439"></a>
 <span class="sourceLineNo">440</span>    public static class Utility<a name="line.440"></a>
 <span class="sourceLineNo">441</span>    {<a name="line.441"></a>
-<span class="sourceLineNo">442</span><a name="line.442"></a>
-<span class="sourceLineNo">443</span>        /**<a name="line.443"></a>
-<span class="sourceLineNo">444</span>         * Modifies the color parameter {@code changing} so its value is the one encoded in {@code value}. The way to<a name="line.444"></a>
-<span class="sourceLineNo">445</span>         * obtain value for libGDX Color objects is with {@link Color#toFloatBits()}, which uses ABGR order, so this<a name="line.445"></a>
-<span class="sourceLineNo">446</span>         * does some quick work to convert that to RGBA order and assign that into changing.<a name="line.446"></a>
-<span class="sourceLineNo">447</span>         * @param changing a Color object that will be modified to have the given value<a name="line.447"></a>
-<span class="sourceLineNo">448</span>         * @param value a value as a float that can be obtained by {@link Color#toFloatBits()}<a name="line.448"></a>
-<span class="sourceLineNo">449</span>         * @return<a name="line.449"></a>
-<span class="sourceLineNo">450</span>         */<a name="line.450"></a>
-<span class="sourceLineNo">451</span>        public static Color colorFromFloat(Color changing, float value)<a name="line.451"></a>
-<span class="sourceLineNo">452</span>        {<a name="line.452"></a>
-<span class="sourceLineNo">453</span>            return changing.set(Integer.reverseBytes(NumberUtils.floatToIntColor(value)));<a name="line.453"></a>
-<span class="sourceLineNo">454</span>        }<a name="line.454"></a>
-<span class="sourceLineNo">455</span><a name="line.455"></a>
-<span class="sourceLineNo">456</span>        public static float floatGet(float r, float g, float b, float a)<a name="line.456"></a>
-<span class="sourceLineNo">457</span>        {<a name="line.457"></a>
-<span class="sourceLineNo">458</span>            return NumberUtils.intToFloatColor(Integer.reverseBytes(Color.rgba8888(r, g, b, a)));<a name="line.458"></a>
-<span class="sourceLineNo">459</span>        }<a name="line.459"></a>
-<span class="sourceLineNo">460</span>        public static float floatGet(long c)<a name="line.460"></a>
-<span class="sourceLineNo">461</span>        {<a name="line.461"></a>
-<span class="sourceLineNo">462</span>            return NumberUtils.intToFloatColor((int)((c &gt;&gt;&gt; 24 &amp; 0xff) | (c &gt;&gt;&gt; 8 &amp; 0xff00) | (c &lt;&lt; 8 &amp; 0xff0000)<a name="line.462"></a>
-<span class="sourceLineNo">463</span>                    | (c &lt;&lt; 24 &amp; 0xfe000000)));<a name="line.463"></a>
-<span class="sourceLineNo">464</span>        }<a name="line.464"></a>
-<span class="sourceLineNo">465</span>        public static float floatGetI(int r, int g, int b)<a name="line.465"></a>
-<span class="sourceLineNo">466</span>        {<a name="line.466"></a>
-<span class="sourceLineNo">467</span>            return NumberUtils.intToFloatColor((r &amp; 0xff) | (g &lt;&lt; 8 &amp; 0xff00) | (b &lt;&lt; 16 &amp; 0xff0000)<a name="line.467"></a>
-<span class="sourceLineNo">468</span>                    | 0xfe000000);<a name="line.468"></a>
-<span class="sourceLineNo">469</span>        }<a name="line.469"></a>
-<span class="sourceLineNo">470</span>    }<a name="line.470"></a>
-<span class="sourceLineNo">471</span><a name="line.471"></a>
-<span class="sourceLineNo">472</span>}<a name="line.472"></a>
+<span class="sourceLineNo">442</span>        /**<a name="line.442"></a>
+<span class="sourceLineNo">443</span>         * Modifies the color parameter {@code changing} so its value is the one encoded in {@code value}. The way to<a name="line.443"></a>
+<span class="sourceLineNo">444</span>         * obtain value for libGDX Color objects is with {@link Color#toFloatBits()}, which uses ABGR order, so this<a name="line.444"></a>
+<span class="sourceLineNo">445</span>         * does some quick work to convert that to RGBA order and assign that into changing.<a name="line.445"></a>
+<span class="sourceLineNo">446</span>         * @param changing a Color object that will be modified to have the given value<a name="line.446"></a>
+<span class="sourceLineNo">447</span>         * @param value a value as a float that can be obtained by {@link Color#toFloatBits()}<a name="line.447"></a>
+<span class="sourceLineNo">448</span>         * @return<a name="line.448"></a>
+<span class="sourceLineNo">449</span>         */<a name="line.449"></a>
+<span class="sourceLineNo">450</span>        public static Color colorFromFloat(Color changing, float value)<a name="line.450"></a>
+<span class="sourceLineNo">451</span>        {<a name="line.451"></a>
+<span class="sourceLineNo">452</span>            return changing.set(Integer.reverseBytes(NumberUtils.floatToIntColor(value)));<a name="line.452"></a>
+<span class="sourceLineNo">453</span>        }<a name="line.453"></a>
+<span class="sourceLineNo">454</span><a name="line.454"></a>
+<span class="sourceLineNo">455</span>        /**<a name="line.455"></a>
+<span class="sourceLineNo">456</span>         * Gets a packed float representation of a color given as 4 RGBA float components. LibGDX expects ABGR format<a name="line.456"></a>
+<span class="sourceLineNo">457</span>         * in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR, or ARGB. Generally,<a name="line.457"></a>
+<span class="sourceLineNo">458</span>         * packed floats like what this returns are ABGR format, the kind that can be passed directly to<a name="line.458"></a>
+<span class="sourceLineNo">459</span>         * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)} without constructing intermediate objects.<a name="line.459"></a>
+<span class="sourceLineNo">460</span>         * SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that<a name="line.460"></a>
+<span class="sourceLineNo">461</span>         * associates colors to cells; this has changed from earlier releases and should be much more efficient.<a name="line.461"></a>
+<span class="sourceLineNo">462</span>         * @param r a float from 0.0 to 1.0 for red<a name="line.462"></a>
+<span class="sourceLineNo">463</span>         * @param g a float from 0.0 to 1.0 for green<a name="line.463"></a>
+<span class="sourceLineNo">464</span>         * @param b a float from 0.0 to 1.0 for blue<a name="line.464"></a>
+<span class="sourceLineNo">465</span>         * @param a a float from 0.0 to 1.0 for alpha/opacity<a name="line.465"></a>
+<span class="sourceLineNo">466</span>         * @return a packed float that can be given to the setColor method in LibGDX's Batch classes<a name="line.466"></a>
+<span class="sourceLineNo">467</span>         */<a name="line.467"></a>
+<span class="sourceLineNo">468</span>        public static float floatGet(float r, float g, float b, float a)<a name="line.468"></a>
+<span class="sourceLineNo">469</span>        {<a name="line.469"></a>
+<span class="sourceLineNo">470</span>            return NumberUtils.intToFloatColor(((int)(a * 255) &lt;&lt; 24) | ((int)(b * 255) &lt;&lt; 16)<a name="line.470"></a>
+<span class="sourceLineNo">471</span>                    | ((int)(g * 255) &lt;&lt; 8) | (int)(r * 255));<a name="line.471"></a>
+<span class="sourceLineNo">472</span>        }<a name="line.472"></a>
+<span class="sourceLineNo">473</span>        /**<a name="line.473"></a>
+<span class="sourceLineNo">474</span>         * Gets a packed float representation of a color given an RGBA8888-format long. LibGDX expects ABGR format<a name="line.474"></a>
+<span class="sourceLineNo">475</span>         * in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR, or ARGB. Generally,<a name="line.475"></a>
+<span class="sourceLineNo">476</span>         * packed floats like what this returns are ABGR format, the kind that can be passed directly to<a name="line.476"></a>
+<span class="sourceLineNo">477</span>         * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)} without constructing intermediate objects.<a name="line.477"></a>
+<span class="sourceLineNo">478</span>         * SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that<a name="line.478"></a>
+<span class="sourceLineNo">479</span>         * associates colors to cells; this has changed from earlier releases and should be much more efficient.<a name="line.479"></a>
+<span class="sourceLineNo">480</span>         * &lt;br&gt;<a name="line.480"></a>
+<span class="sourceLineNo">481</span>         * This method is probably not what you want unless you specifically have RGBA8888-format ints or longs that you<a name="line.481"></a>
+<span class="sourceLineNo">482</span>         * want converted to packed floats. You probably should look at {@link #floatGet(float, float, float, float)} if<a name="line.482"></a>
+<span class="sourceLineNo">483</span>         * you have alpha and/or float components, or {@link #floatGetI(int, int, int)} for the common case of the 3 RGB<a name="line.483"></a>
+<span class="sourceLineNo">484</span>         * components as ints and alpha simply opaque.<a name="line.484"></a>
+<span class="sourceLineNo">485</span>         * @param c a long with format {@code 32 unused bits, 8 red bits, 8 green bits, 8 blue bits, 7 alpha bits, 1 unused bit}<a name="line.485"></a>
+<span class="sourceLineNo">486</span>         * @return a packed float that can be given to the setColor method in LibGDX's Batch classes<a name="line.486"></a>
+<span class="sourceLineNo">487</span>         */<a name="line.487"></a>
+<span class="sourceLineNo">488</span>        public static float floatGet(long c)<a name="line.488"></a>
+<span class="sourceLineNo">489</span>        {<a name="line.489"></a>
+<span class="sourceLineNo">490</span>            return NumberUtils.intToFloatColor((int)((c &gt;&gt;&gt; 24 &amp; 0xff) | (c &gt;&gt;&gt; 8 &amp; 0xff00) | (c &lt;&lt; 8 &amp; 0xff0000)<a name="line.490"></a>
+<span class="sourceLineNo">491</span>                    | (c &lt;&lt; 24 &amp; 0xfe000000)));<a name="line.491"></a>
+<span class="sourceLineNo">492</span>        }<a name="line.492"></a>
+<span class="sourceLineNo">493</span>        /**<a name="line.493"></a>
+<span class="sourceLineNo">494</span>         * Gets a packed float representation of a color given as 3 RGB int components, setting alpha to opaque. LibGDX<a name="line.494"></a>
+<span class="sourceLineNo">495</span>         * expects ABGR format in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR,<a name="line.495"></a>
+<span class="sourceLineNo">496</span>         * or ARGB. Generally, packed floats like what this returns are ABGR format, the kind that can be passed<a name="line.496"></a>
+<span class="sourceLineNo">497</span>         * directly to {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)} without constructing intermediate<a name="line.497"></a>
+<span class="sourceLineNo">498</span>         * objects. SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that<a name="line.498"></a>
+<span class="sourceLineNo">499</span>         * associates colors to cells; this has changed from earlier releases and should be much more efficient.<a name="line.499"></a>
+<span class="sourceLineNo">500</span>         * @param r an int from 0 to 255 (both inclusive) for red<a name="line.500"></a>
+<span class="sourceLineNo">501</span>         * @param g an int from 0 to 255 (both inclusive) for green<a name="line.501"></a>
+<span class="sourceLineNo">502</span>         * @param b an int from 0 to 255 (both inclusive) for blue<a name="line.502"></a>
+<span class="sourceLineNo">503</span>         * @return a packed float that can be given to the setColor method in LibGDX's Batch classes<a name="line.503"></a>
+<span class="sourceLineNo">504</span>         */<a name="line.504"></a>
+<span class="sourceLineNo">505</span>        public static float floatGetI(int r, int g, int b)<a name="line.505"></a>
+<span class="sourceLineNo">506</span>        {<a name="line.506"></a>
+<span class="sourceLineNo">507</span>            return NumberUtils.intToFloatColor((r &amp; 0xff) | (g &lt;&lt; 8 &amp; 0xff00) | (b &lt;&lt; 16 &amp; 0xff0000)<a name="line.507"></a>
+<span class="sourceLineNo">508</span>                    | 0xfe000000);<a name="line.508"></a>
+<span class="sourceLineNo">509</span>        }<a name="line.509"></a>
+<span class="sourceLineNo">510</span>    }<a name="line.510"></a>
+<span class="sourceLineNo">511</span><a name="line.511"></a>
+<span class="sourceLineNo">512</span>}<a name="line.512"></a>
 
 
 
