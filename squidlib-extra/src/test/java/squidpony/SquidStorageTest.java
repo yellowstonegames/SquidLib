@@ -68,7 +68,8 @@ public class SquidStorageTest extends ApplicationAdapter {
 
             FakeLanguageGen randomLanguage = FakeLanguageGen.randomLanguage(0x1337BEEFCAFEBABEL).mix(4, FakeLanguageGen.ARABIC_ROMANIZED, 5, FakeLanguageGen.JAPANESE_ROMANIZED, 3);
 
-            EnumMap<Direction, String> em = new EnumMap<>(Direction.class);
+            EnumMap<Direction, String> em = new EnumMap<>(Direction.class), empty = new EnumMap<>(Direction.class);
+
             em.put(Direction.DOWN_LEFT, "California");
             em.put(Direction.DOWN_RIGHT, "Florida");
             em.put(Direction.UP_RIGHT, "Maine");
@@ -91,6 +92,7 @@ public class SquidStorageTest extends ApplicationAdapter {
             noCompression.put("table", table);
             noCompression.put("drawn", text);
             noCompression.put("enum_map", em);
+            noCompression.put("empty_enum_map", empty);
 
             yesCompression.put("rng", srng);
             yesCompression.put("language", randomLanguage);
@@ -100,6 +102,7 @@ public class SquidStorageTest extends ApplicationAdapter {
             yesCompression.put("table", table);
             yesCompression.put("drawn", text);
             yesCompression.put("enum_map", em);
+            yesCompression.put("empty_enum_map", empty);
 
             System.out.println(text);
 
@@ -118,6 +121,12 @@ public class SquidStorageTest extends ApplicationAdapter {
             System.out.println(yesCompression.get("Compressed", "drawn", String.class));
             System.out.println(em);
             System.out.println(yesCompression.get("Compressed", "enum_map", EnumMap.class));
+
+            //note, these are different because EnumMap needs the enum's Class to be constructed, and an empty EnumMap
+            //can't have any keys' Class queried (no keys are present). EnumMap has a field that stores the Class as a
+            //final field, but it's private so we can't safely use it.
+            System.out.println(empty);
+            System.out.println(yesCompression.get("Compressed", "empty_enum_map", EnumMap.class));
             yesCompression.preferences.clear();
             yesCompression.preferences.flush();
             Gdx.app.exit();

@@ -270,7 +270,7 @@ public class DataConverter extends Json {
             @Override
             @SuppressWarnings("unchecked")
             public EnumMap read(Json json, JsonValue jsonData, Class type) {
-                if(jsonData == null || jsonData.isNull()) return null;
+                if(jsonData == null || jsonData.isNull() || jsonData.size == 0) return null;
                 return new EnumMap(Maker.makeOM(0.75f,
                         json.readValue("e", null, jsonData),
                         json.readValue("v", null, jsonData),
