@@ -213,8 +213,8 @@ public class DataConverter extends Json {
                 json.writeObjectStart();
                 json.writeValue("f", object.f);
                 if(!object.isEmpty()) {
-                    json.writeValue("k", object.firstKey());
-                    json.writeValue("v", object.getAt(0));
+                    json.writeValue("k", object.firstKey(), null);
+                    json.writeValue("v", object.getAt(0), null);
                     int sz = object.size();
                     Object[] r = new Object[(sz - 1) * 2];
                     for (int i = 1, p = 0; i < sz; i++) {
@@ -252,7 +252,7 @@ public class DataConverter extends Json {
                     Iterator it = object.entrySet().iterator();
                     Map.Entry en = (Map.Entry)it.next();
                     json.writeValue("e", en.getKey(), Enum.class);
-                    json.writeValue("v", en.getValue());
+                    json.writeValue("v", en.getValue(), null);
                     int sz = object.size();
                     Object[] r = new Object[(sz - 1) * 2];
                     for (int i = 1, p = 0; i < sz; i++) {
