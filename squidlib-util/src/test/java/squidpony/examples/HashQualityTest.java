@@ -280,10 +280,21 @@ public class HashQualityTest {
             System.out.println("Chariot shorts: " + chariot.hash(shorts[i]));
             System.out.println("Chariot ints: " + chariot.hash(ints[i]));
             System.out.println("Chariot longs: " + chariot.hash(longs[i]));
+            System.out.println("Chariot objects: " + chariot.hash(objects[i]));
+        }
+
+        for (int i = 0; i < len; i++) {
+            System.out.println(Arrays.toString(longs[i]));
+            System.out.println("Wisp bytes: " + CrossHash.Wisp.hash(bytes[i]));
+            System.out.println("Wisp shorts: " + CrossHash.Wisp.hash(shorts[i]));
+            System.out.println("Wisp ints: " + CrossHash.Wisp.hash(ints[i]));
+            System.out.println("Wisp longs: " + CrossHash.Wisp.hash(longs[i]));
+            System.out.println("Wisp objects: " + CrossHash.Wisp.hash(objects[i]));
         }
 
 
-        int longHashLength = 0x100000, stringHashLength = 0xC0000;
+
+        int longHashLength = 0x80000, stringHashLength = 0xC0000;
         IntDoubleOrderedMap colliderJDK = new IntDoubleOrderedMap(longHashLength, 0.75f),
                 colliderFNV = new IntDoubleOrderedMap(longHashLength, 0.75f),
                 colliderLit = new IntDoubleOrderedMap(longHashLength, 0.75f),
