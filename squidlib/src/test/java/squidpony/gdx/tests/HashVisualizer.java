@@ -36,7 +36,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 25, rngMode = 0, noiseMode = 12;
+    private int hashMode = 30, rngMode = 0, noiseMode = 12;
     private CrossHash.Storm storm, stormA, stormB, stormC;
     private CrossHash.Chariot chariot, chariotA, chariotB, chariotC;
     private final int[] coordinates = new int[2];
@@ -47,7 +47,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions
     // 4 noise
     // 5 RNG results
-    private int testType = 5;
+    private int testType = 0;
 
     private RandomnessSource fuzzy, random;
     private Random jreRandom;
