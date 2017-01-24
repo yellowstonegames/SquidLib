@@ -87,15 +87,15 @@ public class RotationDemo extends ApplicationAdapter {
     /**
      * In number of cells
      */
-    private static final int height = 30;
+    private static final int height = 25;
     /**
      * The pixel width of a cell
      */
-    private static final int cellWidth = 15 * INTERNAL_ZOOM;
+    private static final int cellWidth = 18 * INTERNAL_ZOOM;
     /**
      * The pixel height of a cell
      */
-    private static final int cellHeight = 27 * INTERNAL_ZOOM;
+    private static final int cellHeight = 28 * INTERNAL_ZOOM;
     private VisualInput input;
     private double counter;
     private boolean[][] seen;
@@ -152,8 +152,8 @@ public class RotationDemo extends ApplicationAdapter {
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        messages.setTextSize(cellWidth + INTERNAL_ZOOM * 2, cellHeight + INTERNAL_ZOOM * 4);
-        display.setTextSize(cellWidth + INTERNAL_ZOOM * 2, cellHeight + INTERNAL_ZOOM * 4);
+        messages.setTextSize(cellWidth + INTERNAL_ZOOM * 3, cellHeight + INTERNAL_ZOOM * 4);
+        display.setTextSize(cellWidth + INTERNAL_ZOOM * 3, cellHeight + INTERNAL_ZOOM * 4);
         //The subCell SquidPanel uses a smaller size here; the numbers 8 and 16 should change if cellWidth or cellHeight
         //change, and the INTERNAL_ZOOM multiplier keeps things sharp, the same as it does all over here.
         viewport = new StretchViewport(width * cellWidth, (height + 4) * cellHeight);
@@ -178,6 +178,7 @@ public class RotationDemo extends ApplicationAdapter {
         serpent.putWalledRoundRoomCarvers(2);
         char[][] mg = serpent.generate();
         decoDungeon = dungeonGen.generate(mg, serpent.getEnvironment());
+        //decoDungeon = dungeonGen.generate();
         bareDungeon = dungeonGen.getBareDungeon();
         lineDungeon = DungeonUtility.hashesToLines(dungeonGen.getDungeon(), true);
         /*
@@ -475,17 +476,17 @@ public class RotationDemo extends ApplicationAdapter {
         // recalculate FOV, store it in fovmap for the render to use.
         fovmap = fov.calculateFOV(res, player.entity.gridX, player.entity.gridY, 8, Radius.SQUARE);
         // handle monster turns
-        Creature mon;
         int ms = monsters.size(), tmp;
         IntVLA impassable = new IntVLA(ms), path;
         for (int i = 0; i < ms; i++) {
             impassable.add(monsters.getAt(i).pos);
         }
         int[] playerGoal = new int[]{player.pos};
-        for (Integer pos : monsters.keySet()) {
-            mon = monsters.get(pos);
-            if(mon == null)
+        for (int i = 0; i < ms; i++) {
+            Integer pos = monsters.keyAt(i);
+            if(pos == null)
                 continue;
+            Creature mon = monsters.getAt(i);
             // monster values are used to store their aggression, 1 for actively stalking the player, 0 for not.
             if (mon.state > 0 || fovmap[adjacency.extractX(pos << 3)][adjacency.extractY(pos << 3)] > 0.1) {
                 if (mon.state == 0) {

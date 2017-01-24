@@ -1552,7 +1552,7 @@ public class CustomDijkstraMap implements Serializable {
         if(length < 0)
             length = 0;
         if(scanLimit <= 0 || scanLimit < length)
-            scan(impassable, impassable2.size);
+            scan(impassable2, impassable2.size);
         else
             partialScan(scanLimit, impassable2, impassable2.size);
 
