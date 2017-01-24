@@ -64,6 +64,7 @@
         <findbugs.version>3.0.2</findbugs.version>
         <cobertura.version>2.7</cobertura.version>
         <jdk.version>1.7</jdk.version>
+	<!-- As in build.gradle -->
         <gdx.version>1.9.3</gdx.version>
         <junit.version>4.11</junit.version>
         <regexodus.version>0.1.7</regexodus.version>

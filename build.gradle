@@ -1,0 +1,47 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+// note from smelC: I did not add a plugin for 'idea' as I don't use it. 
+// Please add it if you do.
+
+// In this section you declare where to find the dependencies of your project
+repositories {
+    // Use 'jcenter' for resolving your dependencies.
+    // You can declare any Maven/Ivy/file repository here.
+    jcenter()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'squidlib/src/main/java'
+            srcDirs 'squidlib-util/src/main/java'
+            srcDirs 'squidlib-util/src/main/resources'
+        }
+    }
+    test {
+    	java {
+            srcDirs 'squidlib/src/test/java'
+            srcDirs 'squidlib-util/src/test/java'
+            srcDirs 'squidlib-util/src/test/resources'
+    	}
+    }
+}
+
+// define 'gdxVersion' if not defined yet. This allows
+// a project depending on SquidLib (like: your game) to define
+// 'gdxVersion' itself, and yet be able to build SquidLib standalone too.
+def gdxVersion = System.getenv("gdxVersion") ?: "1.9.3" // As in pom.xml
+
+// In this section you declare the dependencies for your production and test code
+dependencies {
+	compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+	// note from smelC: the following two lines may mean that any build depending on SquidLib
+	// will include the desktop jars, which is irrelevant if doing a GWT one.
+	// I'll update that once I test GWT again on Dungeon Mercenary.
+	compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+	compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+
+	compile project(":RegExodus")
+
+	testCompile 'junit:junit:4.12'
+}
