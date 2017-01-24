@@ -10,12 +10,17 @@ repositories {
     jcenter()
 }
 
+project.ext.assetsDir = new File("assets");
+
 sourceSets {
     main {
         java {
             srcDirs 'squidlib/src/main/java'
             srcDirs 'squidlib-util/src/main/java'
             srcDirs 'squidlib-util/src/main/resources'
+
+            // srcDirs 'squidlib-util/etc' <- No. Solely contains TilesetsGenerator
+	    // which isn't useful anymore.
         }
     }
     test {
@@ -23,6 +28,8 @@ sourceSets {
             srcDirs 'squidlib/src/test/java'
             srcDirs 'squidlib-util/src/test/java'
             srcDirs 'squidlib-util/src/test/resources'
+
+            // srcDirs 'squidlib-performance/src/main/java' <- requires org.openjdk
     	}
     }
 }
@@ -35,13 +42,19 @@ def gdxVersion = System.getenv("gdxVersion") ?: "1.9.3" // As in pom.xml
 // In this section you declare the dependencies for your production and test code
 dependencies {
 	compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-	// note from smelC: the following two lines may mean that any build depending on SquidLib
-	// will include the desktop jars, which is irrelevant if doing a GWT one.
-	// I'll update that once I test GWT again on Dungeon Mercenary.
-	compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
-	compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-
 	compile project(":RegExodus")
 
+	testCompile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+	testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 	testCompile 'junit:junit:4.12'
+}
+
+// Execute with 'gradle everythingDemo' (add --info to get debug info)
+task(everythingDemo, type: JavaExec) {
+    main = 'squidpony.gdx.examples.desktop.EverythingDemoLauncher'
+    // smelC: It would be nice to automatically add the three following
+    // lines to any 'JavaExec' task, but I could not find how to do it.
+    classpath(sourceSets.test.runtimeClasspath,project.assetsDir)
+    standardInput = System.in
+    ignoreExitValue = true
 }
