@@ -3,11 +3,16 @@ apply plugin: 'eclipse'
 // note from smelC: I did not add a plugin for 'idea' as I don't use it. 
 // Please add it if you do.
 
+//Support UTF-8 file encoding even on Windows, where it defaults to something terrible.
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+
 // In this section you declare where to find the dependencies of your project
 repositories {
-    // Use 'jcenter' for resolving your dependencies.
+    // Use 'jcenter' and Maven Central for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
+    mavenCentral()
 }
 
 project.ext.assetsDir = new File("assets");
@@ -17,20 +22,26 @@ sourceSets {
         java {
             srcDirs 'squidlib/src/main/java'
             srcDirs 'squidlib-util/src/main/java'
-            srcDirs 'squidlib-util/src/main/resources'
+            srcDirs 'squidlib-extra/src/main/java'
 
             // srcDirs 'squidlib-util/etc' <- No. Solely contains TilesetsGenerator
 	    // which isn't useful anymore.
+        }
+        resources {
+            srcDirs 'squidlib-util/src/main/resources'
         }
     }
     test {
     	java {
             srcDirs 'squidlib/src/test/java'
             srcDirs 'squidlib-util/src/test/java'
-            srcDirs 'squidlib-util/src/test/resources'
-
+            srcDirs 'squidlib-extra/src/test/java'
             // srcDirs 'squidlib-performance/src/main/java' <- requires org.openjdk
     	}
+        resources {
+            srcDirs 'squidlib/src/test/resources'
+            srcDirs 'squidlib-extra/src/test/resources'
+        }
     }
 }
 
@@ -38,12 +49,13 @@ sourceSets {
 // a project depending on SquidLib (like: your game) to define
 // 'gdxVersion' itself, and yet be able to build SquidLib standalone too.
 def gdxVersion = System.getenv("gdxVersion") ?: "1.9.3" // As in pom.xml
+project.sourceCompatibility = 1.7
 
 // In this section you declare the dependencies for your production and test code
 dependencies {
 	compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-	compile project(":RegExodus")
-
+    compile "com.github.tommyettinger:regexodus:0.1.7"
+    compile "com.github.tommyettinger:blazingchain:1.4.4.1"
 	testCompile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
 	testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 	testCompile 'junit:junit:4.12'
@@ -54,6 +66,30 @@ task(everythingDemo, type: JavaExec) {
     main = 'squidpony.gdx.examples.desktop.EverythingDemoLauncher'
     // smelC: It would be nice to automatically add the three following
     // lines to any 'JavaExec' task, but I could not find how to do it.
+    classpath(sourceSets.test.runtimeClasspath,project.assetsDir)
+    standardInput = System.in
+    ignoreExitValue = true
+}
+
+// Execute with 'gradle basicDemo' (add --info to get debug info)
+task(basicDemo, type: JavaExec) {
+    main = 'squidpony.gdx.examples.desktop.BasicDemoLauncher'
+    classpath(sourceSets.test.runtimeClasspath,project.assetsDir)
+    standardInput = System.in
+    ignoreExitValue = true
+}
+
+// Execute with 'gradle iconDemo' (add --info to get debug info)
+task(iconDemo, type: JavaExec) {
+    main = 'squidpony.gdx.tests.IconsTest'
+    classpath(sourceSets.test.runtimeClasspath,project.assetsDir)
+    standardInput = System.in
+    ignoreExitValue = true
+}
+
+// Execute with 'gradle dataDemo' (add --info to get debug info)
+task(dataDemo, type: JavaExec) {
+    main = 'squidpony.DataDemo'
     classpath(sourceSets.test.runtimeClasspath,project.assetsDir)
     standardInput = System.in
     ignoreExitValue = true
