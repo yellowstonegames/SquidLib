@@ -124,7 +124,7 @@ public class HashBenchmark {
 
     public long doFNV()
     {
-        LongPeriodRNG rng = new LongPeriodRNG(seed);
+        final LongPeriodRNG rng = new LongPeriodRNG(seed);
 
         for (int i = 0; i < 1000000; i++) {
             rng.nextLong();
@@ -143,7 +143,7 @@ public class HashBenchmark {
 
     public long doFNVInt()
     {
-        LongPeriodRNG rng = new LongPeriodRNG(iseed);
+        final LongPeriodRNG rng = new LongPeriodRNG(iseed);
 
         for (int i = 0; i < 1000000; i++) {
             rng.nextLong();
@@ -162,7 +162,7 @@ public class HashBenchmark {
 
     public long doLightning()
     {
-        LongPeriodRNG rng = new LongPeriodRNG(seed);
+        final LongPeriodRNG rng = new LongPeriodRNG(seed);
 
         for (int i = 0; i < 1000000; i++) {
             rng.nextLong();
@@ -181,7 +181,7 @@ public class HashBenchmark {
 
     public long doLightningInt()
     {
-        LongPeriodRNG rng = new LongPeriodRNG(iseed);
+        final LongPeriodRNG rng = new LongPeriodRNG(iseed);
 
         for (int i = 0; i < 1000000; i++) {
             rng.nextLong();
@@ -200,7 +200,7 @@ public class HashBenchmark {
 
     public long doJVMInt()
     {
-        LongPeriodRNG rng = new LongPeriodRNG(seed);
+        final LongPeriodRNG rng = new LongPeriodRNG(seed);
 
         for (int i = 0; i < 1000000; i++) {
             rng.nextLong();
@@ -219,7 +219,7 @@ public class HashBenchmark {
 /*
     public long doStorm()
     {
-        LongPeriodRNG rng = new LongPeriodRNG(seed);
+        final LongPeriodRNG rng = new LongPeriodRNG(seed);
         CrossHash.Storm storm = new CrossHash.Storm();
         for (int i = 0; i < 1000000; i++) {
             rng.nextLong();
@@ -238,7 +238,7 @@ public class HashBenchmark {
 
     public long doStormInt()
     {
-        LongPeriodRNG rng = new LongPeriodRNG(iseed);
+        final LongPeriodRNG rng = new LongPeriodRNG(iseed);
         CrossHash.Storm storm = new CrossHash.Storm();
         for (int i = 0; i < 1000000; i++) {
             rng.nextLong();
@@ -257,8 +257,8 @@ public class HashBenchmark {
     */
     public long doStorm()
     {
-        LongPeriodRNG rng = new LongPeriodRNG(seed);
-        CrossHash.Storm storm = CrossHash.Storm.chi;
+        final LongPeriodRNG rng = new LongPeriodRNG(seed);
+        final CrossHash.Storm storm = CrossHash.Storm.mu;
         for (int i = 0; i < 1000000; i++) {
             rng.nextLong();
             seed += storm.hash64(rng.state);
@@ -276,8 +276,8 @@ public class HashBenchmark {
 
     public long doStormInt()
     {
-        LongPeriodRNG rng = new LongPeriodRNG(iseed);
-        CrossHash.Storm storm = CrossHash.Storm.chi;
+        final LongPeriodRNG rng = new LongPeriodRNG(iseed);
+        final CrossHash.Storm storm = CrossHash.Storm.mu;
         for (int i = 0; i < 1000000; i++) {
             rng.nextLong();
             iseed += storm.hash(rng.state);
@@ -294,9 +294,29 @@ public class HashBenchmark {
     }
 
 
+    public long doChariotInt()
+    {
+        final LongPeriodRNG rng = new LongPeriodRNG(iseed);
+        final CrossHash.Chariot chariot = CrossHash.Chariot.mu;
+        for (int i = 0; i < 1000000; i++) {
+            rng.nextLong();
+            iseed += chariot.hash(rng.state);
+        }
+        return iseed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureChariotInt() throws InterruptedException {
+        iseed = 9000;
+        doChariotInt();
+    }
+
+
     public long doFalcon()
     {
-        LongPeriodRNG rng = new LongPeriodRNG(seed);
+        final LongPeriodRNG rng = new LongPeriodRNG(seed);
 
         for (int i = 0; i < 1000000; i++) {
             rng.nextLong();
@@ -315,7 +335,7 @@ public class HashBenchmark {
 
     public long doFalconInt()
     {
-        LongPeriodRNG rng = new LongPeriodRNG(iseed);
+        final LongPeriodRNG rng = new LongPeriodRNG(iseed);
 
         for (int i = 0; i < 1000000; i++) {
             rng.nextLong();
@@ -334,7 +354,7 @@ public class HashBenchmark {
 
     public long doWisp()
     {
-        LongPeriodRNG rng = new LongPeriodRNG(seed);
+        final LongPeriodRNG rng = new LongPeriodRNG(seed);
 
         for (int i = 0; i < 1000000; i++) {
             rng.nextLong();
@@ -353,7 +373,7 @@ public class HashBenchmark {
 
     public long doWispInt()
     {
-        LongPeriodRNG rng = new LongPeriodRNG(iseed);
+        final LongPeriodRNG rng = new LongPeriodRNG(iseed);
 
         for (int i = 0; i < 1000000; i++) {
             rng.nextLong();
@@ -372,7 +392,7 @@ public class HashBenchmark {
 
     public long doControl()
     {
-        LongPeriodRNG rng = new LongPeriodRNG(iseed);
+        final LongPeriodRNG rng = new LongPeriodRNG(iseed);
 
         for (int i = 0; i < 1000000; i++) {
             iseed += rng.nextLong();

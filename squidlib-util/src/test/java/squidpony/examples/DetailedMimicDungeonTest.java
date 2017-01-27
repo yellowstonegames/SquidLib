@@ -22,7 +22,7 @@ public class DetailedMimicDungeonTest {
         rng.setState(2252637788195L);
         SectionDungeonGenerator sdg = new SectionDungeonGenerator(width, height, rng);
         DungeonGenerator dg;
-       sdg.addDoors(12, false);
+        sdg.addDoors(12, false);
         //sdg.addWater(SectionDungeonGenerator.CAVE, 13);
         sdg.addBoulders(SectionDungeonGenerator.ALL, 13);
         sdg.addWater(SectionDungeonGenerator.CAVE, 14);

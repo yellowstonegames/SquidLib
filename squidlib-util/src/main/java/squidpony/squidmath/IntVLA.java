@@ -214,15 +214,20 @@ public class IntVLA implements Serializable, Cloneable {
         return -1;
     }
 
-    public boolean removeValue (int value) {
+    /**
+     * Removes the first occurrence of the requested value, and returns the index it was removed at (-1 if not found)
+     * @param value a value in this IntVLA to remove
+     * @return the index the value was found and removed at, or -1 if it was not present
+     */
+    public int removeValue (int value) {
         int[] items = this.items;
         for (int i = 0, n = size; i < n; i++) {
             if (items[i] == value) {
                 removeIndex(i);
-                return true;
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 
     /** Removes and returns the item at the specified index. */
@@ -324,20 +329,19 @@ public class IntVLA implements Serializable, Cloneable {
         return items;
     }
 
+    /** Sets the array size, leaving any values beyond the current size undefined.
+     * @return {@link #items} */
+    public int[] setSize (int newSize) {
+        if (newSize > items.length) resize(Math.max(8, newSize));
+        size = newSize;
+        return items;
+    }
+
     protected int[] resize (int newSize) {
         int[] newItems = new int[newSize];
         int[] items = this.items;
         System.arraycopy(items, 0, newItems, 0, Math.min(size, newItems.length));
         this.items = newItems;
-        return newItems;
-    }
-
-    public int[] asInts () {
-        int[] newItems = new int[size];
-        int[] items = this.items;
-        for (int i = 0; i < size; i++) {
-            newItems[i] = items[i] & 0xffff;
-        }
         return newItems;
     }
 

@@ -68,9 +68,9 @@ public class LightRNGTest {
 		assertEquals(1L, l.getState());
 		assertTrue(l.nextBoolean());
 		assertTrue(l.nextBoolean());
+		assertTrue(l.nextBoolean());
 		assertFalse(l.nextBoolean());
-		assertTrue(l.nextBoolean());
-		assertTrue(l.nextBoolean());
+		assertFalse(l.nextBoolean());
 	}
 
 	@Test

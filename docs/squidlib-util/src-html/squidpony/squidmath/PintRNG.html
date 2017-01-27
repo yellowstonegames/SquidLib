@@ -1,0 +1,335 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.squidmath;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import squidpony.StringKit;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import squidpony.annotation.Beta;<a name="line.4"></a>
+<span class="sourceLineNo">005</span><a name="line.5"></a>
+<span class="sourceLineNo">006</span>import java.io.Serializable;<a name="line.6"></a>
+<span class="sourceLineNo">007</span><a name="line.7"></a>
+<span class="sourceLineNo">008</span>/**<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * A different kind of RandomnessSource that operates internally on ints, which may have significant advantages on GWT<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * since that toolchain has to emulate longs (slowly) for almost any math with them. It is, however, expected to be<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * slower on other platforms, at least platforms with 64-bit JVMs. Running on 32-bit desktop JVMs, 32-bit Dalvik on<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * Android, or other increasingly-rare environments may benefit from this class, though.<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * &lt;br&gt;<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * Quality is not completely certain, but should be excellent in this version since it's based almost directly on PCG-<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * Random's choices of numerical constants. The state changes differently with this than with PCG-Random, however, due<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * to performance issues on the JVM with the LCG-like state change, and instead it is added with a very large negative<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * number. Visual tests, at least, appear indistinguishable from other PRNGs. Period is considered very low, at 2^32,<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * but all seeds should be valid, including 0. Generating 64 bits of random data takes a little less than twice as much<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * time as generating 32 bits, since this can avoid some overhead via inlining.<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * &lt;br&gt;<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * The name can be construed as Pint-Size, since this has a small period and uses a smaller amount of space, or as<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * Permuted Int, since this is based on PermutedRNG, changed to use 32-bit operations on ints.<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * &lt;br&gt;<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * Based on work by Melissa E. O'Neill for PCG-Random, though no code is actually shared with PCG-Random.<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * Created by Tommy Ettinger on 11/15/2016.<a name="line.25"></a>
+<span class="sourceLineNo">026</span> */<a name="line.26"></a>
+<span class="sourceLineNo">027</span>@Beta<a name="line.27"></a>
+<span class="sourceLineNo">028</span>public class PintRNG implements RandomnessSource, StatefulRandomness, Serializable {<a name="line.28"></a>
+<span class="sourceLineNo">029</span><a name="line.29"></a>
+<span class="sourceLineNo">030</span>    /** 2 raised to the 53, - 1. */<a name="line.30"></a>
+<span class="sourceLineNo">031</span>    private static final long DOUBLE_MASK = ( 1L &lt;&lt; 53 ) - 1;<a name="line.31"></a>
+<span class="sourceLineNo">032</span>    /** 2 raised to the -53. */<a name="line.32"></a>
+<span class="sourceLineNo">033</span>    private static final double NORM_53 = 1. / ( 1L &lt;&lt; 53 );<a name="line.33"></a>
+<span class="sourceLineNo">034</span>    /** 2 raised to the 24, -1. */<a name="line.34"></a>
+<span class="sourceLineNo">035</span>    private static final long FLOAT_MASK = ( 1L &lt;&lt; 24 ) - 1;<a name="line.35"></a>
+<span class="sourceLineNo">036</span>    /** 2 raised to the -24. */<a name="line.36"></a>
+<span class="sourceLineNo">037</span>    private static final double NORM_24 = 1. / ( 1L &lt;&lt; 24 );<a name="line.37"></a>
+<span class="sourceLineNo">038</span><a name="line.38"></a>
+<span class="sourceLineNo">039</span>    private static final long serialVersionUID = -374415589203474497L;<a name="line.39"></a>
+<span class="sourceLineNo">040</span><a name="line.40"></a>
+<span class="sourceLineNo">041</span>    public int state; /* The state can be seeded with any value. */<a name="line.41"></a>
+<span class="sourceLineNo">042</span><a name="line.42"></a>
+<span class="sourceLineNo">043</span>    /** Creates a new generator seeded using Math.random. */<a name="line.43"></a>
+<span class="sourceLineNo">044</span>    public PintRNG() {<a name="line.44"></a>
+<span class="sourceLineNo">045</span>        this((int)((Math.random() - 0.5) * 4.294967296E9));<a name="line.45"></a>
+<span class="sourceLineNo">046</span>    }<a name="line.46"></a>
+<span class="sourceLineNo">047</span><a name="line.47"></a>
+<span class="sourceLineNo">048</span>    public PintRNG( final long seed ) {<a name="line.48"></a>
+<span class="sourceLineNo">049</span>        setState(seed);<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    }<a name="line.50"></a>
+<span class="sourceLineNo">051</span><a name="line.51"></a>
+<span class="sourceLineNo">052</span>    public PintRNG(final int a)<a name="line.52"></a>
+<span class="sourceLineNo">053</span>    {<a name="line.53"></a>
+<span class="sourceLineNo">054</span>        state = a;<a name="line.54"></a>
+<span class="sourceLineNo">055</span>    }<a name="line.55"></a>
+<span class="sourceLineNo">056</span><a name="line.56"></a>
+<span class="sourceLineNo">057</span>    @Override<a name="line.57"></a>
+<span class="sourceLineNo">058</span>    public int next( int bits ) {<a name="line.58"></a>
+<span class="sourceLineNo">059</span>        return nextInt() &gt;&gt;&gt; (32 - bits);<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    }<a name="line.60"></a>
+<span class="sourceLineNo">061</span><a name="line.61"></a>
+<span class="sourceLineNo">062</span>    /**<a name="line.62"></a>
+<span class="sourceLineNo">063</span>     * Can return any int, positive or negative, of any size permissible in a 32-bit signed integer.<a name="line.63"></a>
+<span class="sourceLineNo">064</span>     * @return any int, all 32 bits are random<a name="line.64"></a>
+<span class="sourceLineNo">065</span>     */<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    public int nextInt() {<a name="line.66"></a>
+<span class="sourceLineNo">067</span>        //return stateA += (stateB ^= (stateB + 0x62E2AC0D + 0x85157AF5 * stateA));<a name="line.67"></a>
+<span class="sourceLineNo">068</span>        //return stateB += ((stateB ^ (stateA += 0x62E2AC0D)) &gt;&gt;&gt; 8) * 0x9E3779B9;<a name="line.68"></a>
+<span class="sourceLineNo">069</span><a name="line.69"></a>
+<span class="sourceLineNo">070</span>        // increment  = 2891336453;<a name="line.70"></a>
+<span class="sourceLineNo">071</span>        // multiplier = 747796405;<a name="line.71"></a>
+<span class="sourceLineNo">072</span><a name="line.72"></a>
+<span class="sourceLineNo">073</span>//        int p = state;<a name="line.73"></a>
+<span class="sourceLineNo">074</span>//        p ^= p &gt;&gt;&gt; (4 + (p &gt;&gt;&gt; 28));<a name="line.74"></a>
+<span class="sourceLineNo">075</span>//        state = state * 0x2C9277B5 + 0xAC564B05;<a name="line.75"></a>
+<span class="sourceLineNo">076</span>        int p = (state += 0x9E3779B9);<a name="line.76"></a>
+<span class="sourceLineNo">077</span>        p ^= p &gt;&gt;&gt; (4 + (p &gt;&gt;&gt; 28));<a name="line.77"></a>
+<span class="sourceLineNo">078</span>        return ((p *= 277803737) &gt;&gt;&gt; 22) ^ p;<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    }<a name="line.79"></a>
+<span class="sourceLineNo">080</span><a name="line.80"></a>
+<span class="sourceLineNo">081</span>    /**<a name="line.81"></a>
+<span class="sourceLineNo">082</span>     * Can return any long, positive or negative, of any size permissible in a 64-bit signed integer.<a name="line.82"></a>
+<span class="sourceLineNo">083</span>     * Internally, generates two random 32-bit values and combines them into one random long.<a name="line.83"></a>
+<span class="sourceLineNo">084</span>     * @return any long, all 64 bits are random<a name="line.84"></a>
+<span class="sourceLineNo">085</span>     */<a name="line.85"></a>
+<span class="sourceLineNo">086</span>    @Override<a name="line.86"></a>
+<span class="sourceLineNo">087</span>    public long nextLong() {<a name="line.87"></a>
+<span class="sourceLineNo">088</span>//        int p = state;<a name="line.88"></a>
+<span class="sourceLineNo">089</span>//        p ^= p &gt;&gt;&gt; (4 + (p &gt;&gt;&gt; 28));<a name="line.89"></a>
+<span class="sourceLineNo">090</span>//        int q = (state = state * 0x2C9277B5 + 0xAC564B05);<a name="line.90"></a>
+<span class="sourceLineNo">091</span>//        q ^= q &gt;&gt;&gt; (4 + (q &gt;&gt;&gt; 28));<a name="line.91"></a>
+<span class="sourceLineNo">092</span>//        state = state * 0x2C9277B5 + 0xAC564B05;<a name="line.92"></a>
+<span class="sourceLineNo">093</span>//        return (((p *= 277803737) &gt;&gt;&gt; 22) ^ p) | ((((q *= 277803737) &gt;&gt;&gt; 22) ^ q) &amp; 0xffffffffL) &lt;&lt; 32;<a name="line.93"></a>
+<span class="sourceLineNo">094</span><a name="line.94"></a>
+<span class="sourceLineNo">095</span>        int p = (state += 0x9E3779B9);<a name="line.95"></a>
+<span class="sourceLineNo">096</span>        p ^= p &gt;&gt;&gt; (4 + (p &gt;&gt;&gt; 28));<a name="line.96"></a>
+<span class="sourceLineNo">097</span>        int q = (state += 0x9E3779B9);<a name="line.97"></a>
+<span class="sourceLineNo">098</span>        q ^= q &gt;&gt;&gt; (4 + (q &gt;&gt;&gt; 28));<a name="line.98"></a>
+<span class="sourceLineNo">099</span>        return (((p *= 277803737) &gt;&gt;&gt; 22) ^ p) | ((((q *= 277803737) &gt;&gt;&gt; 22) ^ q) &amp; 0xffffffffL) &lt;&lt; 32;<a name="line.99"></a>
+<span class="sourceLineNo">100</span><a name="line.100"></a>
+<span class="sourceLineNo">101</span>        //return 0x100000000L * nextInt() | nextInt();<a name="line.101"></a>
+<span class="sourceLineNo">102</span>        /*<a name="line.102"></a>
+<span class="sourceLineNo">103</span>        int p = stateA, q = stateB;<a name="line.103"></a>
+<span class="sourceLineNo">104</span>        p ^= p &gt;&gt;&gt; (4 + (p &gt;&gt;&gt; 28));<a name="line.104"></a>
+<span class="sourceLineNo">105</span>        p *= 277803737;<a name="line.105"></a>
+<span class="sourceLineNo">106</span>        stateA = stateA * 0x2C9277B5 + 0xAC564B05;<a name="line.106"></a>
+<span class="sourceLineNo">107</span>        q ^= q &gt;&gt;&gt; (4 + (q &gt;&gt;&gt; 28));<a name="line.107"></a>
+<span class="sourceLineNo">108</span>        q *= 277803737;<a name="line.108"></a>
+<span class="sourceLineNo">109</span>        stateB = stateB * 0x2C9277B5 + (p|1);<a name="line.109"></a>
+<span class="sourceLineNo">110</span>        return 0x100000000L * (p ^ (p &gt;&gt;&gt; 22)) | (q ^ (q &gt;&gt;&gt; 22));<a name="line.110"></a>
+<span class="sourceLineNo">111</span>        */<a name="line.111"></a>
+<span class="sourceLineNo">112</span>    }<a name="line.112"></a>
+<span class="sourceLineNo">113</span><a name="line.113"></a>
+<span class="sourceLineNo">114</span>    /**<a name="line.114"></a>
+<span class="sourceLineNo">115</span>     * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the<a name="line.115"></a>
+<span class="sourceLineNo">116</span>     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to<a name="line.116"></a>
+<span class="sourceLineNo">117</span>     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.<a name="line.117"></a>
+<span class="sourceLineNo">118</span>     *<a name="line.118"></a>
+<span class="sourceLineNo">119</span>     * @return a copy of this RandomnessSource<a name="line.119"></a>
+<span class="sourceLineNo">120</span>     */<a name="line.120"></a>
+<span class="sourceLineNo">121</span>    @Override<a name="line.121"></a>
+<span class="sourceLineNo">122</span>    public RandomnessSource copy() {<a name="line.122"></a>
+<span class="sourceLineNo">123</span>        return new PintRNG(state);<a name="line.123"></a>
+<span class="sourceLineNo">124</span>    }<a name="line.124"></a>
+<span class="sourceLineNo">125</span><a name="line.125"></a>
+<span class="sourceLineNo">126</span>    /**<a name="line.126"></a>
+<span class="sourceLineNo">127</span>     * Exclusive on the upper bound.  The lower bound is 0. Uses a technique that RNG calls<a name="line.127"></a>
+<span class="sourceLineNo">128</span>     * {@link squidpony.squidmath.RNG#nextIntHasty(int)}, made known to me by Daniel Lemire.<a name="line.128"></a>
+<span class="sourceLineNo">129</span>     * &lt;br&gt;<a name="line.129"></a>
+<span class="sourceLineNo">130</span>     * Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/<a name="line.130"></a>
+<span class="sourceLineNo">131</span>     * @param bound the upper bound; should be positive<a name="line.131"></a>
+<span class="sourceLineNo">132</span>     * @return a random int less than n and at least equal to 0<a name="line.132"></a>
+<span class="sourceLineNo">133</span>     */<a name="line.133"></a>
+<span class="sourceLineNo">134</span>    public int nextInt( final int bound ) {<a name="line.134"></a>
+<span class="sourceLineNo">135</span>        return (bound &lt;= 0) ? 0 : (int)((bound * (nextInt() &amp; 0x7FFFFFFFL)) &gt;&gt; 31);<a name="line.135"></a>
+<span class="sourceLineNo">136</span>    }<a name="line.136"></a>
+<span class="sourceLineNo">137</span>    /**<a name="line.137"></a>
+<span class="sourceLineNo">138</span>     * Inclusive lower, exclusive upper.<a name="line.138"></a>
+<span class="sourceLineNo">139</span>     * @param lower the lower bound, inclusive, can be positive or negative<a name="line.139"></a>
+<span class="sourceLineNo">140</span>     * @param upper the upper bound, exclusive, should be positive, must be greater than lower<a name="line.140"></a>
+<span class="sourceLineNo">141</span>     * @return a random int at least equal to lower and less than upper<a name="line.141"></a>
+<span class="sourceLineNo">142</span>     */<a name="line.142"></a>
+<span class="sourceLineNo">143</span>    public int nextInt( final int lower, final int upper ) {<a name="line.143"></a>
+<span class="sourceLineNo">144</span>        if ( upper - lower &lt;= 0 ) throw new IllegalArgumentException("Upper bound must be greater than lower bound");<a name="line.144"></a>
+<span class="sourceLineNo">145</span>        return lower + nextInt(upper - lower);<a name="line.145"></a>
+<span class="sourceLineNo">146</span>    }<a name="line.146"></a>
+<span class="sourceLineNo">147</span><a name="line.147"></a>
+<span class="sourceLineNo">148</span>    /**<a name="line.148"></a>
+<span class="sourceLineNo">149</span>     * Gets a uniform random double in the range [0.0,1.0)<a name="line.149"></a>
+<span class="sourceLineNo">150</span>     * @return a random double at least equal to 0.0 and less than 1.0<a name="line.150"></a>
+<span class="sourceLineNo">151</span>     */<a name="line.151"></a>
+<span class="sourceLineNo">152</span>    public double nextDouble() {<a name="line.152"></a>
+<span class="sourceLineNo">153</span>        return ( nextLong() &amp; DOUBLE_MASK ) * NORM_53;<a name="line.153"></a>
+<span class="sourceLineNo">154</span>    }<a name="line.154"></a>
+<span class="sourceLineNo">155</span><a name="line.155"></a>
+<span class="sourceLineNo">156</span>    /**<a name="line.156"></a>
+<span class="sourceLineNo">157</span>     * Gets a uniform random double in the range [0.0,outer) given a positive parameter outer. If outer<a name="line.157"></a>
+<span class="sourceLineNo">158</span>     * is negative, it will be the (exclusive) lower bound and 0.0 will be the (inclusive) upper bound.<a name="line.158"></a>
+<span class="sourceLineNo">159</span>     * @param outer the exclusive outer bound, can be negative<a name="line.159"></a>
+<span class="sourceLineNo">160</span>     * @return a random double between 0.0 (inclusive) and outer (exclusive)<a name="line.160"></a>
+<span class="sourceLineNo">161</span>     */<a name="line.161"></a>
+<span class="sourceLineNo">162</span>    public double nextDouble(final double outer) {<a name="line.162"></a>
+<span class="sourceLineNo">163</span>        return nextDouble() * outer;<a name="line.163"></a>
+<span class="sourceLineNo">164</span>    }<a name="line.164"></a>
+<span class="sourceLineNo">165</span><a name="line.165"></a>
+<span class="sourceLineNo">166</span>    /**<a name="line.166"></a>
+<span class="sourceLineNo">167</span>     * Gets a uniform random float in the range [0.0,1.0)<a name="line.167"></a>
+<span class="sourceLineNo">168</span>     * @return a random float at least equal to 0.0 and less than 1.0<a name="line.168"></a>
+<span class="sourceLineNo">169</span>     */<a name="line.169"></a>
+<span class="sourceLineNo">170</span>    public float nextFloat() {<a name="line.170"></a>
+<span class="sourceLineNo">171</span>        return (float)( ( nextLong() &amp; FLOAT_MASK ) * NORM_24 );<a name="line.171"></a>
+<span class="sourceLineNo">172</span>    }<a name="line.172"></a>
+<span class="sourceLineNo">173</span><a name="line.173"></a>
+<span class="sourceLineNo">174</span>    /**<a name="line.174"></a>
+<span class="sourceLineNo">175</span>     * Gets a random value, true or false.<a name="line.175"></a>
+<span class="sourceLineNo">176</span>     * Calls nextInt() once.<a name="line.176"></a>
+<span class="sourceLineNo">177</span>     * @return a random true or false value.<a name="line.177"></a>
+<span class="sourceLineNo">178</span>     */<a name="line.178"></a>
+<span class="sourceLineNo">179</span>    public boolean nextBoolean() {<a name="line.179"></a>
+<span class="sourceLineNo">180</span>        return ( nextInt() &amp; 1 ) != 0L;<a name="line.180"></a>
+<span class="sourceLineNo">181</span>    }<a name="line.181"></a>
+<span class="sourceLineNo">182</span><a name="line.182"></a>
+<span class="sourceLineNo">183</span>    /**<a name="line.183"></a>
+<span class="sourceLineNo">184</span>     * Given a byte array as a parameter, this will fill the array with random bytes (modifying it<a name="line.184"></a>
+<span class="sourceLineNo">185</span>     * in-place). Calls nextInt() {@code Math.ceil(bytes.length / 4.0)} times.<a name="line.185"></a>
+<span class="sourceLineNo">186</span>     * @param bytes a byte array that will have its contents overwritten with random bytes.<a name="line.186"></a>
+<span class="sourceLineNo">187</span>     */<a name="line.187"></a>
+<span class="sourceLineNo">188</span>    public void nextBytes( final byte[] bytes ) {<a name="line.188"></a>
+<span class="sourceLineNo">189</span>        int i = bytes.length, n = 0;<a name="line.189"></a>
+<span class="sourceLineNo">190</span>        while( i != 0 ) {<a name="line.190"></a>
+<span class="sourceLineNo">191</span>            n = Math.min( i, 4 );<a name="line.191"></a>
+<span class="sourceLineNo">192</span>            for ( int bits = nextInt(); n-- != 0; bits &gt;&gt;&gt;= 8 ) bytes[ --i ] = (byte)bits;<a name="line.192"></a>
+<span class="sourceLineNo">193</span>        }<a name="line.193"></a>
+<span class="sourceLineNo">194</span>    }<a name="line.194"></a>
+<span class="sourceLineNo">195</span><a name="line.195"></a>
+<span class="sourceLineNo">196</span><a name="line.196"></a>
+<span class="sourceLineNo">197</span><a name="line.197"></a>
+<span class="sourceLineNo">198</span>    /**<a name="line.198"></a>
+<span class="sourceLineNo">199</span>     * Sets the current state of this generator (an int) using only the least-significant 32 bits of seed (by casting<a name="line.199"></a>
+<span class="sourceLineNo">200</span>     * a mask of those bits in seed to int, which helps ensure that a full 32 bits of state are possible). Giving<a name="line.200"></a>
+<span class="sourceLineNo">201</span>     * int seeds should set the seed to an identical int; long seeds will lose any information in higher bits (including<a name="line.201"></a>
+<span class="sourceLineNo">202</span>     * the sign, so 0xFFFFFFFF00000000L, which is a negative long, would be treated as 0 since only the 0x00000000 part<a name="line.202"></a>
+<span class="sourceLineNo">203</span>     * at the end is actually used).<a name="line.203"></a>
+<span class="sourceLineNo">204</span>     * @param seed the seed to use for this PintRNG, as if it was constructed with this seed.<a name="line.204"></a>
+<span class="sourceLineNo">205</span>     */<a name="line.205"></a>
+<span class="sourceLineNo">206</span>    @Override<a name="line.206"></a>
+<span class="sourceLineNo">207</span>    public void setState( final long seed ) {<a name="line.207"></a>
+<span class="sourceLineNo">208</span>        state = (int)(seed &amp; 0xFFFFFFFFL);<a name="line.208"></a>
+<span class="sourceLineNo">209</span>    }<a name="line.209"></a>
+<span class="sourceLineNo">210</span>    /**<a name="line.210"></a>
+<span class="sourceLineNo">211</span>     * Gets the current state of this generator.<a name="line.211"></a>
+<span class="sourceLineNo">212</span>     * @return the current seed of this PintRNG, changed once per call to nextInt()<a name="line.212"></a>
+<span class="sourceLineNo">213</span>     */<a name="line.213"></a>
+<span class="sourceLineNo">214</span>    @Override<a name="line.214"></a>
+<span class="sourceLineNo">215</span>    public long getState() {<a name="line.215"></a>
+<span class="sourceLineNo">216</span>        return state;<a name="line.216"></a>
+<span class="sourceLineNo">217</span>    }<a name="line.217"></a>
+<span class="sourceLineNo">218</span><a name="line.218"></a>
+<span class="sourceLineNo">219</span>    @Override<a name="line.219"></a>
+<span class="sourceLineNo">220</span>    public String toString() {<a name="line.220"></a>
+<span class="sourceLineNo">221</span>        return "PintRNG with state 0x" + StringKit.hex(state);<a name="line.221"></a>
+<span class="sourceLineNo">222</span>    }<a name="line.222"></a>
+<span class="sourceLineNo">223</span><a name="line.223"></a>
+<span class="sourceLineNo">224</span>    @Override<a name="line.224"></a>
+<span class="sourceLineNo">225</span>    public boolean equals(Object o) {<a name="line.225"></a>
+<span class="sourceLineNo">226</span>        if (this == o) return true;<a name="line.226"></a>
+<span class="sourceLineNo">227</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.227"></a>
+<span class="sourceLineNo">228</span><a name="line.228"></a>
+<span class="sourceLineNo">229</span>        PintRNG pintRNG = (PintRNG) o;<a name="line.229"></a>
+<span class="sourceLineNo">230</span><a name="line.230"></a>
+<span class="sourceLineNo">231</span>        return state == pintRNG.state;<a name="line.231"></a>
+<span class="sourceLineNo">232</span><a name="line.232"></a>
+<span class="sourceLineNo">233</span>    }<a name="line.233"></a>
+<span class="sourceLineNo">234</span><a name="line.234"></a>
+<span class="sourceLineNo">235</span>    @Override<a name="line.235"></a>
+<span class="sourceLineNo">236</span>    public int hashCode() {<a name="line.236"></a>
+<span class="sourceLineNo">237</span>        return 0x632BE5AB * state;<a name="line.237"></a>
+<span class="sourceLineNo">238</span>    }<a name="line.238"></a>
+<span class="sourceLineNo">239</span>    /**<a name="line.239"></a>
+<span class="sourceLineNo">240</span>     * Advances or rolls back the PintRNG's state without actually generating each number. Skip forward<a name="line.240"></a>
+<span class="sourceLineNo">241</span>     * or backward a number of steps specified by advance, where a step is equal to one call to nextInt(),<a name="line.241"></a>
+<span class="sourceLineNo">242</span>     * and returns the random number produced at that step (you can get the state with {@link #getState()}).<a name="line.242"></a>
+<span class="sourceLineNo">243</span>     * @param advance Number of future generations to skip past. Can be negative to backtrack.<a name="line.243"></a>
+<span class="sourceLineNo">244</span>     * @return the int that would be generated after generating advance random numbers.<a name="line.244"></a>
+<span class="sourceLineNo">245</span>     */<a name="line.245"></a>
+<span class="sourceLineNo">246</span>    public int skip(final int advance)<a name="line.246"></a>
+<span class="sourceLineNo">247</span>    {<a name="line.247"></a>
+<span class="sourceLineNo">248</span>        int p = (state += 0x9E3779B9 * advance);<a name="line.248"></a>
+<span class="sourceLineNo">249</span>        p ^= p &gt;&gt;&gt; (4 + (p &gt;&gt;&gt; 28));<a name="line.249"></a>
+<span class="sourceLineNo">250</span>        return ((p *= 277803737) &gt;&gt;&gt; 22) ^ p;<a name="line.250"></a>
+<span class="sourceLineNo">251</span>    }<a name="line.251"></a>
+<span class="sourceLineNo">252</span>    public static int determine(int state)<a name="line.252"></a>
+<span class="sourceLineNo">253</span>    {<a name="line.253"></a>
+<span class="sourceLineNo">254</span>        state ^= state &gt;&gt;&gt; (4 + (state &gt;&gt;&gt; 28));<a name="line.254"></a>
+<span class="sourceLineNo">255</span>        return ((state *= 277803737) &gt;&gt;&gt; 22) ^ state;<a name="line.255"></a>
+<span class="sourceLineNo">256</span>    }<a name="line.256"></a>
+<span class="sourceLineNo">257</span><a name="line.257"></a>
+<span class="sourceLineNo">258</span>    public static int determineBounded(int state, final int bound)<a name="line.258"></a>
+<span class="sourceLineNo">259</span>    {<a name="line.259"></a>
+<span class="sourceLineNo">260</span>        state ^= state &gt;&gt;&gt; (4 + (state &gt;&gt;&gt; 28));<a name="line.260"></a>
+<span class="sourceLineNo">261</span>        return (int)((bound * ((((state *= 277803737) &gt;&gt;&gt; 22) ^ state) &amp; 0x7FFFFFFFL)) &gt;&gt;&gt; 31);<a name="line.261"></a>
+<span class="sourceLineNo">262</span>    }<a name="line.262"></a>
+<span class="sourceLineNo">263</span>}<a name="line.263"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

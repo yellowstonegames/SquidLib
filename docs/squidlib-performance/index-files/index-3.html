@@ -69,7 +69,7 @@
 <!--   -->
 </a></div>
 <!-- ========= END OF TOP NAVBAR ========= -->
-<div class="contentContainer"><a href="index-1.html">A</a>&nbsp;<a href="index-2.html">C</a>&nbsp;<a href="index-3.html">D</a>&nbsp;<a href="index-4.html">E</a>&nbsp;<a href="index-5.html">F</a>&nbsp;<a href="index-6.html">G</a>&nbsp;<a href="index-7.html">H</a>&nbsp;<a href="index-8.html">I</a>&nbsp;<a href="index-9.html">L</a>&nbsp;<a href="index-10.html">M</a>&nbsp;<a href="index-11.html">P</a>&nbsp;<a href="index-12.html">R</a>&nbsp;<a href="index-13.html">S</a>&nbsp;<a href="index-14.html">T</a>&nbsp;<a href="index-15.html">V</a>&nbsp;<a href="index-16.html">W</a>&nbsp;<a name="I:D">
+<div class="contentContainer"><a href="index-1.html">A</a>&nbsp;<a href="index-2.html">C</a>&nbsp;<a href="index-3.html">D</a>&nbsp;<a href="index-4.html">E</a>&nbsp;<a href="index-5.html">F</a>&nbsp;<a href="index-6.html">G</a>&nbsp;<a href="index-7.html">H</a>&nbsp;<a href="index-8.html">I</a>&nbsp;<a href="index-9.html">L</a>&nbsp;<a href="index-10.html">M</a>&nbsp;<a href="index-11.html">N</a>&nbsp;<a href="index-12.html">O</a>&nbsp;<a href="index-13.html">P</a>&nbsp;<a href="index-14.html">R</a>&nbsp;<a href="index-15.html">S</a>&nbsp;<a href="index-16.html">T</a>&nbsp;<a href="index-17.html">V</a>&nbsp;<a href="index-18.html">W</a>&nbsp;<a name="I:D">
 <!--   -->
 </a>
 <h2 class="title">D</h2>
@@ -92,7 +92,32 @@
  instead of just staying in cover forever (or until an enemy moves around the cover and ambushes the pathfinder).</div>
 </dd>
 <dt><a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance"><span class="typeNameLink">DijkstraBenchmark</span></a> - Class in <a href="../squidpony/performance/package-summary.html">squidpony.performance</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Times:
+ Benchmark                                        Mode  Cnt     Score     Error  Units
+ DijkstraBenchmark.measurePathAStar               avgt    3  5083.488 ± 997.886  ms/op
+ DijkstraBenchmark.measurePathAStar2              avgt    3   485.639 ±  21.579  ms/op
+ DijkstraBenchmark.measurePathCustomDijkstra      avgt    3   104.302 ±  12.242  ms/op
+ DijkstraBenchmark.measurePathDijkstra            avgt    3   113.594 ±   4.293  ms/op
+ DijkstraBenchmark.measurePathGDXAStar            avgt    3    29.972 ±   0.370  ms/op
+ DijkstraBenchmark.measureTinyPathAStar2          avgt    3     7.099 ±   0.192  ms/op
+ DijkstraBenchmark.measureTinyPathCustomDijkstra  avgt    3    12.209 ±  22.552  ms/op
+ DijkstraBenchmark.measureTinyPathDijkstra        avgt    3    25.559 ±   1.930  ms/op
+ DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3     1.119 ±   0.100  ms/op
+
+ December 21 2016, different hardware:
+ Benchmark                                        Mode  Cnt     Score      Error  Units
+ DijkstraBenchmark.measurePathAStar               avgt    3  5850.311 ± 404.757  ms/op
+ DijkstraBenchmark.measurePathAStar2              avgt    3   560.238 ± 189.030  ms/op
+ DijkstraBenchmark.measurePathBoxedDijkstra       avgt    3   209.980 ±  66.035  ms/op // not tested before
+ DijkstraBenchmark.measurePathCustomDijkstra      avgt    3   121.427 ±  38.127  ms/op
+ DijkstraBenchmark.measurePathDijkstra            avgt    3   130.467 ±  88.321  ms/op
+ DijkstraBenchmark.measurePathGDXAStar            avgt    3    34.108 ±  17.086  ms/op
+ DijkstraBenchmark.measureTinyPathAStar2          avgt    3     8.278 ±   1.149  ms/op
+ DijkstraBenchmark.measureTinyPathCustomDijkstra  avgt    3    14.551 ±  14.218  ms/op
+ DijkstraBenchmark.measureTinyPathDijkstra        avgt    3    28.658 ±  13.810  ms/op
+ DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3     1.245 ±   0.265  ms/op</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#DijkstraBenchmark--">DijkstraBenchmark()</a></span> - Constructor for class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate"><span class="typeNameLink">DijkstraMap</span></a> - Class in <a href="../squidpony/performance/alternate/package-summary.html">squidpony.performance.alternate</a></dt>
@@ -117,27 +142,27 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#DijkstraMap-char:A:A-">DijkstraMap(char[][])</a></span> - Constructor for class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
 <dd>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#DijkstraMap-char:A:A-squidpony.squidmath.RNG-">DijkstraMap(char[][], RNG)</a></span> - Constructor for class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
 <dd>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#DijkstraMap-char:A:A-char-">DijkstraMap(char[][], char)</a></span> - Constructor for class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
 <dd>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where one char means a wall and anything else is a walkable tile.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#DijkstraMap-char:A:A-squidpony.performance.alternate.DijkstraMap.Measurement-">DijkstraMap(char[][], DijkstraMap.Measurement)</a></span> - Constructor for class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
 <dd>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#DijkstraMap-char:A:A-squidpony.performance.alternate.DijkstraMap.Measurement-squidpony.squidmath.RNG-">DijkstraMap(char[][], DijkstraMap.Measurement, RNG)</a></span> - Constructor for class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
 <dd>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </dd>
 <dt><a href="../squidpony/performance/alternate/DijkstraMap.Measurement.html" title="enum in squidpony.performance.alternate"><span class="typeNameLink">DijkstraMap.Measurement</span></a> - Enum in <a href="../squidpony/performance/alternate/package-summary.html">squidpony.performance.alternate</a></dt>
@@ -154,9 +179,7 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/FOVCacheBenchmark.html#doCachedFOV--">doCachedFOV()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/FOVCacheBenchmark.html" title="class in squidpony.performance">FOVCacheBenchmark</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/performance/RNGBenchmark.html#doChaosR--">doChaosR()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/RNGBenchmark.html" title="class in squidpony.performance">RNGBenchmark</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/performance/RNGBenchmark.html#doChaosRInt--">doChaosRInt()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/RNGBenchmark.html" title="class in squidpony.performance">RNGBenchmark</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/HashBenchmark.html#doChariotInt--">doChariotInt()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/HashBenchmark.html" title="class in squidpony.performance">HashBenchmark</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/HashBenchmark.html#doControl--">doControl()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/HashBenchmark.html" title="class in squidpony.performance">HashBenchmark</a></dt>
 <dd>&nbsp;</dd>
@@ -182,10 +205,6 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/CoordPackerBenchmark.html#doFringeG-int-">doFringeG(int)</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/CoordPackerBenchmark.html" title="class in squidpony.performance">CoordPackerBenchmark</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/performance/RNGBenchmark.html#doGDX--">doGDX()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/RNGBenchmark.html" title="class in squidpony.performance">RNGBenchmark</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/performance/RNGBenchmark.html#doGDXInt--">doGDXInt()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/RNGBenchmark.html" title="class in squidpony.performance">RNGBenchmark</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/CoordPackerBenchmark.html#doIntersect--">doIntersect()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/CoordPackerBenchmark.html" title="class in squidpony.performance">CoordPackerBenchmark</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/CoordPackerBenchmark.html#doIntersectG--">doIntersectG()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/CoordPackerBenchmark.html" title="class in squidpony.performance">CoordPackerBenchmark</a></dt>
@@ -204,6 +223,10 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/RNGBenchmark.html#doLightR--">doLightR()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/RNGBenchmark.html" title="class in squidpony.performance">RNGBenchmark</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/NoiseBenchmark.html#doMerlin2D--">doMerlin2D()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/NoiseBenchmark.html" title="class in squidpony.performance">NoiseBenchmark</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/NoiseBenchmark.html#doMerlin3D--">doMerlin3D()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/NoiseBenchmark.html" title="class in squidpony.performance">NoiseBenchmark</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/CoordPackerBenchmark.html#doPack--">doPack()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/CoordPackerBenchmark.html" title="class in squidpony.performance">CoordPackerBenchmark</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/CoordPackerBenchmark.html#doPackG--">doPackG()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/CoordPackerBenchmark.html" title="class in squidpony.performance">CoordPackerBenchmark</a></dt>
@@ -216,15 +239,35 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doPathAStar--">doPathAStar()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doPathAStar2--">doPathAStar2()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doPathBoxedDijkstra--">doPathBoxedDijkstra()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doPathCustomDijkstra--">doPathCustomDijkstra()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doPathDijkstra--">doPathDijkstra()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doPathGDXAStar--">doPathGDXAStar()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/performance/RNGBenchmark.html#doRandom--">doRandom()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/RNGBenchmark.html" title="class in squidpony.performance">RNGBenchmark</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/NoiseBenchmark.html#doPerlin2D--">doPerlin2D()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/NoiseBenchmark.html" title="class in squidpony.performance">NoiseBenchmark</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/performance/RNGBenchmark.html#doRandomInt--">doRandomInt()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/RNGBenchmark.html" title="class in squidpony.performance">RNGBenchmark</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/NoiseBenchmark.html#doPerlin3D--">doPerlin3D()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/NoiseBenchmark.html" title="class in squidpony.performance">NoiseBenchmark</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/RNGBenchmark.html#doPermuted--">doPermuted()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/RNGBenchmark.html" title="class in squidpony.performance">RNGBenchmark</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/RNGBenchmark.html#doPermutedInt--">doPermutedInt()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/RNGBenchmark.html" title="class in squidpony.performance">RNGBenchmark</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/RNGBenchmark.html#doPermutedIntR--">doPermutedIntR()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/RNGBenchmark.html" title="class in squidpony.performance">RNGBenchmark</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/RNGBenchmark.html#doPermutedR--">doPermutedR()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/RNGBenchmark.html" title="class in squidpony.performance">RNGBenchmark</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/RNGBenchmark.html#doPint--">doPint()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/RNGBenchmark.html" title="class in squidpony.performance">RNGBenchmark</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/RNGBenchmark.html#doPintInt--">doPintInt()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/RNGBenchmark.html" title="class in squidpony.performance">RNGBenchmark</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/RNGBenchmark.html#doPintIntR--">doPintIntR()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/RNGBenchmark.html" title="class in squidpony.performance">RNGBenchmark</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/RNGBenchmark.html#doPintR--">doPintR()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/RNGBenchmark.html" title="class in squidpony.performance">RNGBenchmark</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/CoordPackerBenchmark.html#doRetract-int-">doRetract(int)</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/CoordPackerBenchmark.html" title="class in squidpony.performance">CoordPackerBenchmark</a></dt>
 <dd>&nbsp;</dd>
@@ -232,7 +275,11 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doScanBoxedDijkstra--">doScanBoxedDijkstra()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doScanCustomDijkstra--">doScanCustomDijkstra()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doScanDijkstra--">doScanDijkstra()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doScanGreased--">doScanGreased()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/HashBenchmark.html#doStorm--">doStorm()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/HashBenchmark.html" title="class in squidpony.performance">HashBenchmark</a></dt>
 <dd>&nbsp;</dd>
@@ -242,33 +289,29 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/CoordPackerBenchmark.html#doSurfaceG-int-">doSurfaceG(int)</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/CoordPackerBenchmark.html" title="class in squidpony.performance">CoordPackerBenchmark</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/performance/RNGBenchmark.html#doThreadLocalRandom--">doThreadLocalRandom()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/RNGBenchmark.html" title="class in squidpony.performance">RNGBenchmark</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doTinyPathAStar2--">doTinyPathAStar2()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/performance/RNGBenchmark.html#doThreadLocalRandomInt--">doThreadLocalRandomInt()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/RNGBenchmark.html" title="class in squidpony.performance">RNGBenchmark</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doTinyPathCustomDijkstra--">doTinyPathCustomDijkstra()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/performance/RNGBenchmark.html#doThunder--">doThunder()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/RNGBenchmark.html" title="class in squidpony.performance">RNGBenchmark</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doTinyPathDijkstra--">doTinyPathDijkstra()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/performance/RNGBenchmark.html#doThunderInt--">doThunderInt()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/RNGBenchmark.html" title="class in squidpony.performance">RNGBenchmark</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/performance/RNGBenchmark.html#doThunderIntR--">doThunderIntR()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/RNGBenchmark.html" title="class in squidpony.performance">RNGBenchmark</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/performance/RNGBenchmark.html#doThunderR--">doThunderR()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/RNGBenchmark.html" title="class in squidpony.performance">RNGBenchmark</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doTinyPathGDXAStar--">doTinyPathGDXAStar()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/CoordPackerBenchmark.html#doUnion--">doUnion()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/CoordPackerBenchmark.html" title="class in squidpony.performance">CoordPackerBenchmark</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/CoordPackerBenchmark.html#doUnionG--">doUnionG()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/CoordPackerBenchmark.html" title="class in squidpony.performance">CoordPackerBenchmark</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/NoiseBenchmark.html#doWhirling2D--">doWhirling2D()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/NoiseBenchmark.html" title="class in squidpony.performance">NoiseBenchmark</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/NoiseBenchmark.html#doWhirling3D--">doWhirling3D()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/NoiseBenchmark.html" title="class in squidpony.performance">NoiseBenchmark</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/NoiseBenchmark.html#doWhirlingAlt2D--">doWhirlingAlt2D()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/NoiseBenchmark.html" title="class in squidpony.performance">NoiseBenchmark</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/NoiseBenchmark.html#doWhirlingAlt3D--">doWhirlingAlt3D()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/NoiseBenchmark.html" title="class in squidpony.performance">NoiseBenchmark</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/HashBenchmark.html#doWisp--">doWisp()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/HashBenchmark.html" title="class in squidpony.performance">HashBenchmark</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/HashBenchmark.html#doWispInt--">doWispInt()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/HashBenchmark.html" title="class in squidpony.performance">HashBenchmark</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/performance/RNGBenchmark.html#doXoRo--">doXoRo()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/RNGBenchmark.html" title="class in squidpony.performance">RNGBenchmark</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/performance/RNGBenchmark.html#doXoRoInt--">doXoRoInt()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/RNGBenchmark.html" title="class in squidpony.performance">RNGBenchmark</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/performance/RNGBenchmark.html#doXoRoIntR--">doXoRoIntR()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/RNGBenchmark.html" title="class in squidpony.performance">RNGBenchmark</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/performance/RNGBenchmark.html#doXoRoR--">doXoRoR()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/RNGBenchmark.html" title="class in squidpony.performance">RNGBenchmark</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/CoordPackerBenchmark.html#dungeonGen">dungeonGen</a></span> - Static variable in class squidpony.performance.<a href="../squidpony/performance/CoordPackerBenchmark.html" title="class in squidpony.performance">CoordPackerBenchmark</a></dt>
 <dd>&nbsp;</dd>
@@ -279,7 +322,7 @@
 <dt><span class="memberNameLink"><a href="../squidpony/performance/WaypointBenchmark.html#dungeonGen">dungeonGen</a></span> - Static variable in class squidpony.performance.<a href="../squidpony/performance/WaypointBenchmark.html" title="class in squidpony.performance">WaypointBenchmark</a></dt>
 <dd>&nbsp;</dd>
 </dl>
-<a href="index-1.html">A</a>&nbsp;<a href="index-2.html">C</a>&nbsp;<a href="index-3.html">D</a>&nbsp;<a href="index-4.html">E</a>&nbsp;<a href="index-5.html">F</a>&nbsp;<a href="index-6.html">G</a>&nbsp;<a href="index-7.html">H</a>&nbsp;<a href="index-8.html">I</a>&nbsp;<a href="index-9.html">L</a>&nbsp;<a href="index-10.html">M</a>&nbsp;<a href="index-11.html">P</a>&nbsp;<a href="index-12.html">R</a>&nbsp;<a href="index-13.html">S</a>&nbsp;<a href="index-14.html">T</a>&nbsp;<a href="index-15.html">V</a>&nbsp;<a href="index-16.html">W</a>&nbsp;</div>
+<a href="index-1.html">A</a>&nbsp;<a href="index-2.html">C</a>&nbsp;<a href="index-3.html">D</a>&nbsp;<a href="index-4.html">E</a>&nbsp;<a href="index-5.html">F</a>&nbsp;<a href="index-6.html">G</a>&nbsp;<a href="index-7.html">H</a>&nbsp;<a href="index-8.html">I</a>&nbsp;<a href="index-9.html">L</a>&nbsp;<a href="index-10.html">M</a>&nbsp;<a href="index-11.html">N</a>&nbsp;<a href="index-12.html">O</a>&nbsp;<a href="index-13.html">P</a>&nbsp;<a href="index-14.html">R</a>&nbsp;<a href="index-15.html">S</a>&nbsp;<a href="index-16.html">T</a>&nbsp;<a href="index-17.html">V</a>&nbsp;<a href="index-18.html">W</a>&nbsp;</div>
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
 <div class="bottomNav"><a name="navbar.bottom">
 <!--   -->
@@ -327,6 +370,6 @@
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

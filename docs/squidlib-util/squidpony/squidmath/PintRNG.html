@@ -1,0 +1,690 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+<title>PintRNG (squidlib-util 3.0.0-SNAPSHOT)</title>
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="PintRNG (squidlib-util 3.0.0-SNAPSHOT)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/PintRNG.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-files/index-1.html">Index</a></li>
+<li><a href="../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../squidpony/squidmath/PermutedRNG.html" title="class in squidpony.squidmath"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../squidpony/squidmath/PoissonDisk.html" title="class in squidpony.squidmath"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../index.html?squidpony/squidmath/PintRNG.html" target="_top">Frames</a></li>
+<li><a href="PintRNG.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">squidpony.squidmath</div>
+<h2 title="Class PintRNG" class="title">Class PintRNG</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
+<li>
+<ul class="inheritance">
+<li>squidpony.squidmath.PintRNG</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>, <a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a></dd>
+</dl>
+<hr>
+<br>
+<pre><a href="../../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
+public class <a href="../../src-html/squidpony/squidmath/PintRNG.html#line.28">PintRNG</a>
+extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
+implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>, <a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
+<div class="block">A different kind of RandomnessSource that operates internally on ints, which may have significant advantages on GWT
+ since that toolchain has to emulate longs (slowly) for almost any math with them. It is, however, expected to be
+ slower on other platforms, at least platforms with 64-bit JVMs. Running on 32-bit desktop JVMs, 32-bit Dalvik on
+ Android, or other increasingly-rare environments may benefit from this class, though.
+ <br>
+ Quality is not completely certain, but should be excellent in this version since it's based almost directly on PCG-
+ Random's choices of numerical constants. The state changes differently with this than with PCG-Random, however, due
+ to performance issues on the JVM with the LCG-like state change, and instead it is added with a very large negative
+ number. Visual tests, at least, appear indistinguishable from other PRNGs. Period is considered very low, at 2^32,
+ but all seeds should be valid, including 0. Generating 64 bits of random data takes a little less than twice as much
+ time as generating 32 bits, since this can avoid some overhead via inlining.
+ <br>
+ The name can be construed as Pint-Size, since this has a small period and uses a smaller amount of space, or as
+ Permuted Int, since this is based on PermutedRNG, changed to use 32-bit operations on ints.
+ <br>
+ Based on work by Melissa E. O'Neill for PCG-Random, though no code is actually shared with PCG-Random.
+ Created by Tommy Ettinger on 11/15/2016.</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../serialized-form.html#squidpony.squidmath.PintRNG">Serialized Form</a></dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../squidpony/squidmath/PintRNG.html#state">state</a></strong></code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../squidpony/squidmath/PintRNG.html#PintRNG()">PintRNG</a></strong>()</code>
+<div class="block">Creates a new generator seeded using Math.random.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../squidpony/squidmath/PintRNG.html#PintRNG(int)">PintRNG</a></strong>(int&nbsp;a)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../squidpony/squidmath/PintRNG.html#PintRNG(long)">PintRNG</a></strong>(long&nbsp;seed)</code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></code></td>
+<td class="colLast"><code><strong><a href="../../squidpony/squidmath/PintRNG.html#copy()">copy</a></strong>()</code>
+<div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
+ copy, both will generate the same sequence of random numbers from the point copy() was called.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../squidpony/squidmath/PintRNG.html#determine(int)">determine</a></strong>(int&nbsp;state)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../squidpony/squidmath/PintRNG.html#determineBounded(int, int)">determineBounded</a></strong>(int&nbsp;state,
+                                int&nbsp;bound)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../squidpony/squidmath/PintRNG.html#equals(java.lang.Object)">equals</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><code><strong><a href="../../squidpony/squidmath/PintRNG.html#getState()">getState</a></strong>()</code>
+<div class="block">Gets the current state of this generator.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../squidpony/squidmath/PintRNG.html#hashCode()">hashCode</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../squidpony/squidmath/PintRNG.html#next(int)">next</a></strong>(int&nbsp;bits)</code>
+<div class="block">Using this method, any algorithm that might use the built-in Java Random
+ can interface with this randomness source.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../squidpony/squidmath/PintRNG.html#nextBoolean()">nextBoolean</a></strong>()</code>
+<div class="block">Gets a random value, true or false.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../squidpony/squidmath/PintRNG.html#nextBytes(byte[])">nextBytes</a></strong>(byte[]&nbsp;bytes)</code>
+<div class="block">Given a byte array as a parameter, this will fill the array with random bytes (modifying it
+ in-place).</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><strong><a href="../../squidpony/squidmath/PintRNG.html#nextDouble()">nextDouble</a></strong>()</code>
+<div class="block">Gets a uniform random double in the range [0.0,1.0)</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><strong><a href="../../squidpony/squidmath/PintRNG.html#nextDouble(double)">nextDouble</a></strong>(double&nbsp;outer)</code>
+<div class="block">Gets a uniform random double in the range [0.0,outer) given a positive parameter outer.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>float</code></td>
+<td class="colLast"><code><strong><a href="../../squidpony/squidmath/PintRNG.html#nextFloat()">nextFloat</a></strong>()</code>
+<div class="block">Gets a uniform random float in the range [0.0,1.0)</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../squidpony/squidmath/PintRNG.html#nextInt()">nextInt</a></strong>()</code>
+<div class="block">Can return any int, positive or negative, of any size permissible in a 32-bit signed integer.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../squidpony/squidmath/PintRNG.html#nextInt(int)">nextInt</a></strong>(int&nbsp;bound)</code>
+<div class="block">Exclusive on the upper bound.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../squidpony/squidmath/PintRNG.html#nextInt(int, int)">nextInt</a></strong>(int&nbsp;lower,
+              int&nbsp;upper)</code>
+<div class="block">Inclusive lower, exclusive upper.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><code><strong><a href="../../squidpony/squidmath/PintRNG.html#nextLong()">nextLong</a></strong>()</code>
+<div class="block">Can return any long, positive or negative, of any size permissible in a 64-bit signed integer.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../squidpony/squidmath/PintRNG.html#setState(long)">setState</a></strong>(long&nbsp;seed)</code>
+<div class="block">Sets the current state of this generator (an int) using only the least-significant 32 bits of seed (by casting
+ a mask of those bits in seed to int, which helps ensure that a full 32 bits of state are possible).</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../squidpony/squidmath/PintRNG.html#skip(int)">skip</a></strong>(int&nbsp;advance)</code>
+<div class="block">Advances or rolls back the PintRNG's state without actually generating each number.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../squidpony/squidmath/PintRNG.html#toString()">toString</a></strong>()</code>&nbsp;</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
+<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait(long, int)" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="state">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>state</h4>
+<pre>public&nbsp;int <a href="../../src-html/squidpony/squidmath/PintRNG.html#line.41">state</a></pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="PintRNG()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PintRNG</h4>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.44">PintRNG</a>()</pre>
+<div class="block">Creates a new generator seeded using Math.random.</div>
+</li>
+</ul>
+<a name="PintRNG(long)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PintRNG</h4>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.48">PintRNG</a>(long&nbsp;seed)</pre>
+</li>
+</ul>
+<a name="PintRNG(int)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>PintRNG</h4>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.52">PintRNG</a>(int&nbsp;a)</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="next(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>next</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.58">next</a>(int&nbsp;bits)</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#next(int)">RandomnessSource</a></code></strong></div>
+<div class="block">Using this method, any algorithm that might use the built-in Java Random
+ can interface with this randomness source.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../squidpony/squidmath/RandomnessSource.html#next(int)">next</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>bits</code> - the number of bits to be returned</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the integer containing the appropriate number of bits</dd></dl>
+</li>
+</ul>
+<a name="nextInt()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>nextInt</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.66">nextInt</a>()</pre>
+<div class="block">Can return any int, positive or negative, of any size permissible in a 32-bit signed integer.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>any int, all 32 bits are random</dd></dl>
+</li>
+</ul>
+<a name="nextLong()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>nextLong</h4>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.87">nextLong</a>()</pre>
+<div class="block">Can return any long, positive or negative, of any size permissible in a 64-bit signed integer.
+ Internally, generates two random 32-bit values and combines them into one random long.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../squidpony/squidmath/RandomnessSource.html#nextLong()">nextLong</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>any long, all 64 bits are random</dd></dl>
+</li>
+</ul>
+<a name="copy()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>copy</h4>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.122">copy</a>()</pre>
+<div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
+ copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to
+ copy the state so it isn't shared, usually, and produce a new value with the same exact state.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../squidpony/squidmath/RandomnessSource.html#copy()">copy</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>a copy of this RandomnessSource</dd></dl>
+</li>
+</ul>
+<a name="nextInt(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>nextInt</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.134">nextInt</a>(int&nbsp;bound)</pre>
+<div class="block">Exclusive on the upper bound.  The lower bound is 0. Uses a technique that RNG calls
+ <a href="../../squidpony/squidmath/RNG.html#nextIntHasty(int)"><code>RNG.nextIntHasty(int)</code></a>, made known to me by Daniel Lemire.
+ <br>
+ Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>bound</code> - the upper bound; should be positive</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a random int less than n and at least equal to 0</dd></dl>
+</li>
+</ul>
+<a name="nextInt(int, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>nextInt</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.143">nextInt</a>(int&nbsp;lower,
+          int&nbsp;upper)</pre>
+<div class="block">Inclusive lower, exclusive upper.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>lower</code> - the lower bound, inclusive, can be positive or negative</dd><dd><code>upper</code> - the upper bound, exclusive, should be positive, must be greater than lower</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a random int at least equal to lower and less than upper</dd></dl>
+</li>
+</ul>
+<a name="nextDouble()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>nextDouble</h4>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.152">nextDouble</a>()</pre>
+<div class="block">Gets a uniform random double in the range [0.0,1.0)</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>a random double at least equal to 0.0 and less than 1.0</dd></dl>
+</li>
+</ul>
+<a name="nextDouble(double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>nextDouble</h4>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.162">nextDouble</a>(double&nbsp;outer)</pre>
+<div class="block">Gets a uniform random double in the range [0.0,outer) given a positive parameter outer. If outer
+ is negative, it will be the (exclusive) lower bound and 0.0 will be the (inclusive) upper bound.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>outer</code> - the exclusive outer bound, can be negative</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a random double between 0.0 (inclusive) and outer (exclusive)</dd></dl>
+</li>
+</ul>
+<a name="nextFloat()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>nextFloat</h4>
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.170">nextFloat</a>()</pre>
+<div class="block">Gets a uniform random float in the range [0.0,1.0)</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>a random float at least equal to 0.0 and less than 1.0</dd></dl>
+</li>
+</ul>
+<a name="nextBoolean()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>nextBoolean</h4>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.179">nextBoolean</a>()</pre>
+<div class="block">Gets a random value, true or false.
+ Calls nextInt() once.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>a random true or false value.</dd></dl>
+</li>
+</ul>
+<a name="nextBytes(byte[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>nextBytes</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.188">nextBytes</a>(byte[]&nbsp;bytes)</pre>
+<div class="block">Given a byte array as a parameter, this will fill the array with random bytes (modifying it
+ in-place). Calls nextInt() <code>Math.ceil(bytes.length / 4.0)</code> times.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>bytes</code> - a byte array that will have its contents overwritten with random bytes.</dd></dl>
+</li>
+</ul>
+<a name="setState(long)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setState</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.207">setState</a>(long&nbsp;seed)</pre>
+<div class="block">Sets the current state of this generator (an int) using only the least-significant 32 bits of seed (by casting
+ a mask of those bits in seed to int, which helps ensure that a full 32 bits of state are possible). Giving
+ int seeds should set the seed to an identical int; long seeds will lose any information in higher bits (including
+ the sign, so 0xFFFFFFFF00000000L, which is a negative long, would be treated as 0 since only the 0x00000000 part
+ at the end is actually used).</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../squidpony/squidmath/StatefulRandomness.html#setState(long)">setState</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>seed</code> - the seed to use for this PintRNG, as if it was constructed with this seed.</dd></dl>
+</li>
+</ul>
+<a name="getState()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getState</h4>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.215">getState</a>()</pre>
+<div class="block">Gets the current state of this generator.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../squidpony/squidmath/StatefulRandomness.html#getState()">getState</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>the current seed of this PintRNG, changed once per call to nextInt()</dd></dl>
+</li>
+</ul>
+<a name="toString()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>toString</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.220">toString</a>()</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="equals(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>equals</h4>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.225">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="hashCode()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hashCode</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.236">hashCode</a>()</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="skip(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>skip</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.246">skip</a>(int&nbsp;advance)</pre>
+<div class="block">Advances or rolls back the PintRNG's state without actually generating each number. Skip forward
+ or backward a number of steps specified by advance, where a step is equal to one call to nextInt(),
+ and returns the random number produced at that step (you can get the state with <a href="../../squidpony/squidmath/PintRNG.html#getState()"><code>getState()</code></a>).</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>advance</code> - Number of future generations to skip past. Can be negative to backtrack.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the int that would be generated after generating advance random numbers.</dd></dl>
+</li>
+</ul>
+<a name="determine(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>determine</h4>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.252">determine</a>(int&nbsp;state)</pre>
+</li>
+</ul>
+<a name="determineBounded(int, int)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>determineBounded</h4>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/PintRNG.html#line.258">determineBounded</a>(int&nbsp;state,
+                   int&nbsp;bound)</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/PintRNG.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-files/index-1.html">Index</a></li>
+<li><a href="../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../squidpony/squidmath/PermutedRNG.html" title="class in squidpony.squidmath"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../squidpony/squidmath/PoissonDisk.html" title="class in squidpony.squidmath"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../index.html?squidpony/squidmath/PintRNG.html" target="_top">Frames</a></li>
+<li><a href="PintRNG.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
+</body>
+</html>

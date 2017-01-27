@@ -5,7 +5,36 @@ import squidpony.squidgrid.Direction;
 import java.io.Serializable;
 
 /**
- * A 2D coordinate.
+ * A 2D coordinate with (constant) x and y fields. Coord objects are immutable; a single pool of Coord values, with
+ * x and y each ranging from -3 to 255, is shared by all users of Coord. This pool helps reduce pressure on the
+ * garbage collector when many Coord values would have been created for some purpose and quickly discarded; instead
+ * of creating a new Coord with a constructor, you use the static method {@link #get(int, int)}, which retrieves an
+ * already-existing Coord from the pool if possible, and always returns a usable Coord.
+ * <br>
+ * The Coord class is a fundamental part of SquidLib; any class that uses positions on a grid makes use of it here.
+ * It finds usage naturally in classes throughout {@link squidpony.squidgrid}, with {@link squidpony.squidgrid.zone}
+ * providing an abstraction around groups of Coord and {@link squidpony.squidgrid.iterator} providing various ways to
+ * iterate through the Coords that make up a larger shape. In this package, {@link squidpony.squidmath}, a few classes
+ * should be pointed out. {@link CoordPacker} is a class with all static methods that provides various ways to compress
+ * the memory usage of regions made of many Coord values (and can be constructed in other ways but still provide Coords
+ * later), but since Coords don't use much memory anyway, the real use of the class is for manipulating the shapes and
+ * sizes of the regions those Coords are part of. {@link GreasedRegion} has similar functionality to CoordPacker, but
+ * where CoordPacker is purely static, taking and returning regions as encoded, usually-low-memory-cost arrays of
+ * {@code short} that it considers immutable, a GreasedRegion is a mutable object that allows the same region-altering
+ * techniques to be applied in-place in a way that is relatively (very) low-time-cost. If deciding between the two,
+ * GreasedRegion should usually be preferred, and CoordPacker cannot actually be used when storing regions in larger
+ * than a 256x256 space (usually when the Coord pool has been expanded; see below); GreasedRegion can store potentially
+ * large positions.
+ * <br>
+ * More on the Coord pool used by this class:  Coords can't always be retrieved from the pool; Coord.get constructs a
+ * new Coord if one of x or y is unusually large (greater than 255) or too negative (below -3). The upper limit of 255
+ * is not a hard rule; you can increase the limit on the pool by calling {@link #expandPoolTo(int, int)} or
+ * {@link #expandPool(int, int)}, which cause more memory to be spent initially on storing Coords but can save memory
+ * or ease GC pressure over the long term by preventing duplicate Coords from being created many times. The pool can
+ * never shrink because allowing that would cause completely unpredictable results if existing Coords were in use, or
+ * could easily cause crashes on Android after resuming an application that had previously shrunken the pool due to
+ * platform quirks. Long story short, you should only expand the pool size when your game needs a larger set of 2D
+ * points it will commonly use, and in most cases you shouldn't need to change it at all.
  * 
  * Created by Tommy Ettinger on 8/12/2015.
  */
@@ -281,6 +310,27 @@ public class Coord implements Serializable {
         return (co.x - x) * (co.x - x) + (co.y - y) * (co.y - y);
     }
 
+    /**
+     * Gets a Coord based off this instance but with odd values for x and/or y decreased to the nearest even number.
+     * May be useful for thin-wall maps as produced by {@link squidpony.squidgrid.mapping.ThinDungeonGenerator} and used
+     * with {@link squidpony.squidgrid.Adjacency.ThinWallAdjacency}.
+     * @return a Coord (probably from the pool) with even x and even y, changing (decrementing) only if they are odd
+     */
+    public Coord makeEven()
+    {
+        return get(x & -2, y & -2);
+    }
+
+    /**
+     * Gets a Coord based off this instance but with even values for x and/or y increased to the nearest odd number.
+     * May be useful for thin-wall maps as produced by {@link squidpony.squidgrid.mapping.ThinDungeonGenerator} and used
+     * with {@link squidpony.squidgrid.Adjacency.ThinWallAdjacency}.
+     * @return a Coord (probably from the pool) with odd x and odd y, changing (incrementing) only if they are even
+     */
+    public Coord makeOdd() {
+        return get(x | 1, y | 1);
+    }
+
 	/**
 	 * @param c
 	 * @return Whether {@code this} is adjacent to {@code c}. Not that a cell is
@@ -367,12 +417,23 @@ public class Coord implements Serializable {
         return "Coord (x " + x + ", y " + y + ")";
     }
 
+    /**
+     * Gets the hash code for this Coord; does not use the standard "auto-complete" style of hash that most IDEs will
+     * generate, but instead uses bit mixing (differently for x and y, with each multiplied by a different large int), a
+     * XOR of the mixed x and y, a seemingly-random right shift, and an overflowing multiplication by a large prime.
+     * <br>
+     * This changed at least twice in SquidLib's history. In general, you shouldn't rely on hashCodes to stay the same
+     * across platforms and versions, whether for the JDK or this library. SquidLib (tries to) never depend on the
+     * unpredictable ordering of some hash-based collections like HashSet and HashMap, instead using its own
+     * {@link OrderedSet} and {@link OrderedMap}; if you use the ordered kinds, then the only things that matter about
+     * this hash code are that it is fast (it's fast enough) and that it doesn't collide often (which is now much more
+     * accurate than in the last version of this method).
+     * @return an int that should, for most different Coord values, be significantly different from the other hash codes
+     */
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 113 * hash + x;
-        hash = 113 * hash + y;
-        return hash;
+        int x2 = 0x9E3779B9 * x, y2 = 0x632BE5AB * y;
+        return ((x2 ^ y2) >>> ((x2 & 7) + (y2 & 7))) * 0x85157AF5;
     }
 
     /**

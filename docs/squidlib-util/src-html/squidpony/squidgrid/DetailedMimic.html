@@ -18,428 +18,543 @@
 <span class="sourceLineNo">010</span>*/<a name="line.10"></a>
 <span class="sourceLineNo">011</span>package squidpony.squidgrid;<a name="line.11"></a>
 <span class="sourceLineNo">012</span><a name="line.12"></a>
-<span class="sourceLineNo">013</span>import squidpony.GwtCompatibility;<a name="line.13"></a>
-<span class="sourceLineNo">014</span>import squidpony.squidgrid.mapping.AestheticDifference;<a name="line.14"></a>
-<span class="sourceLineNo">015</span>import squidpony.squidmath.IntDoubleOrderedMap;<a name="line.15"></a>
-<span class="sourceLineNo">016</span>import squidpony.squidmath.IntVLA;<a name="line.16"></a>
-<span class="sourceLineNo">017</span>import squidpony.squidmath.OrderedSet;<a name="line.17"></a>
-<span class="sourceLineNo">018</span>import squidpony.squidmath.RNG;<a name="line.18"></a>
-<span class="sourceLineNo">019</span><a name="line.19"></a>
-<span class="sourceLineNo">020</span>/**<a name="line.20"></a>
-<span class="sourceLineNo">021</span> * Similar to MimicFill, this class can be used to imitate the style of an existing piece of data, but this works on<a name="line.21"></a>
-<span class="sourceLineNo">022</span> * more than just booleans; it can produce similar styles of texture (its original use in SynTex), of map, of item<a name="line.22"></a>
-<span class="sourceLineNo">023</span> * placement, and so on by specifying a different technique for differentiating two int values.<a name="line.23"></a>
-<span class="sourceLineNo">024</span> * &lt;br&gt;<a name="line.24"></a>
-<span class="sourceLineNo">025</span> * Two options are now available; the process() method allows the slow analyze() step to be computed once,<a name="line.25"></a>
-<span class="sourceLineNo">026</span> * before the rest of processing is potentially done many times, but the new neoProcess() method produces<a name="line.26"></a>
-<span class="sourceLineNo">027</span> * comparable or better results and is drastically faster even without needing analysis. This means<a name="line.27"></a>
-<span class="sourceLineNo">028</span> * neoProcess(), based on P.F. Harrison's algorithm in SynTex, is strongly recommended now.<a name="line.28"></a>
-<span class="sourceLineNo">029</span> * &lt;br&gt;<a name="line.29"></a>
-<span class="sourceLineNo">030</span> * Example results of neoProcess(), with a procedural dungeon first and the mimic versions after it:<a name="line.30"></a>
-<span class="sourceLineNo">031</span> * https://gist.github.com/tommyettinger/405336fb0fc74838d806c021aabe77da (you may need to click Raw and zoom<a name="line.31"></a>
-<span class="sourceLineNo">032</span> * out somewhat for it to render well).<a name="line.32"></a>
-<span class="sourceLineNo">033</span> * &lt;br&gt;<a name="line.33"></a>
-<span class="sourceLineNo">034</span> * Ported from https://github.com/mxgmn/SynTex by Tommy Ettinger on 6/9/2016.<a name="line.34"></a>
-<span class="sourceLineNo">035</span> */<a name="line.35"></a>
-<span class="sourceLineNo">036</span>public class DetailedMimic {<a name="line.36"></a>
-<span class="sourceLineNo">037</span><a name="line.37"></a>
-<span class="sourceLineNo">038</span>    private DetailedMimic()<a name="line.38"></a>
-<span class="sourceLineNo">039</span>    {<a name="line.39"></a>
-<span class="sourceLineNo">040</span>    }<a name="line.40"></a>
-<span class="sourceLineNo">041</span><a name="line.41"></a>
-<span class="sourceLineNo">042</span>    public DetailedMimic(AestheticDifference diff)<a name="line.42"></a>
+<span class="sourceLineNo">013</span>import squidpony.ArrayTools;<a name="line.13"></a>
+<span class="sourceLineNo">014</span>import squidpony.squidmath.IntDoubleOrderedMap;<a name="line.14"></a>
+<span class="sourceLineNo">015</span>import squidpony.squidmath.IntVLA;<a name="line.15"></a>
+<span class="sourceLineNo">016</span>import squidpony.squidmath.OrderedSet;<a name="line.16"></a>
+<span class="sourceLineNo">017</span>import squidpony.squidmath.RNG;<a name="line.17"></a>
+<span class="sourceLineNo">018</span><a name="line.18"></a>
+<span class="sourceLineNo">019</span>/**<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * Similar to MimicFill, this class can be used to imitate the style of an existing piece of data, but this works on<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * more than just booleans; it can produce similar styles of texture (its original use in SynTex), of map, of item<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * placement, and so on by specifying a different technique for differentiating two int values.<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * &lt;br&gt;<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * Two options are now available; the process() method allows the slow analyze() step to be computed once,<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * before the rest of processing is potentially done many times, but the new neoProcess() method produces<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * comparable or better results and is drastically faster even without needing analysis. This means<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * neoProcess(), based on P.F. Harrison's algorithm in SynTex, is strongly recommended now.<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * &lt;br&gt;<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * Example results of neoProcess(), with a procedural dungeon first and the mimic versions after it:<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * https://gist.github.com/tommyettinger/405336fb0fc74838d806c021aabe77da (you may need to click Raw and zoom<a name="line.30"></a>
+<span class="sourceLineNo">031</span> * out somewhat for it to render well).<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * &lt;br&gt;<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * Ported from https://github.com/mxgmn/SynTex by Tommy Ettinger on 6/9/2016.<a name="line.33"></a>
+<span class="sourceLineNo">034</span> */<a name="line.34"></a>
+<span class="sourceLineNo">035</span>public class DetailedMimic {<a name="line.35"></a>
+<span class="sourceLineNo">036</span><a name="line.36"></a>
+<span class="sourceLineNo">037</span>    /**<a name="line.37"></a>
+<span class="sourceLineNo">038</span>     * Constructor that uses an unseeded RNG and, without any instruction otherwise, assumes the ints this is asked to<a name="line.38"></a>
+<span class="sourceLineNo">039</span>     * compare are colors in RGBA8888 format. You can specify your own implementation of the AestheticDifference<a name="line.39"></a>
+<span class="sourceLineNo">040</span>     * interface (one function) and pass it to other constructors, as well.<a name="line.40"></a>
+<span class="sourceLineNo">041</span>     */<a name="line.41"></a>
+<span class="sourceLineNo">042</span>    public DetailedMimic()<a name="line.42"></a>
 <span class="sourceLineNo">043</span>    {<a name="line.43"></a>
-<span class="sourceLineNo">044</span>        this(diff, new RNG());<a name="line.44"></a>
+<span class="sourceLineNo">044</span>        this(AestheticDifference.rgba8888);<a name="line.44"></a>
 <span class="sourceLineNo">045</span>    }<a name="line.45"></a>
-<span class="sourceLineNo">046</span>    public DetailedMimic(AestheticDifference diff, RNG rng)<a name="line.46"></a>
-<span class="sourceLineNo">047</span>    {<a name="line.47"></a>
-<span class="sourceLineNo">048</span>        random = rng;<a name="line.48"></a>
-<span class="sourceLineNo">049</span>        difference = diff;<a name="line.49"></a>
-<span class="sourceLineNo">050</span>        analyzed = null;<a name="line.50"></a>
-<span class="sourceLineNo">051</span>    }<a name="line.51"></a>
-<span class="sourceLineNo">052</span><a name="line.52"></a>
-<span class="sourceLineNo">053</span>    public void analyze(int[] sample, int width, int height, int detailLevel, int proximity, boolean discrete)<a name="line.53"></a>
-<span class="sourceLineNo">054</span>    {<a name="line.54"></a>
-<span class="sourceLineNo">055</span>        if(detailLevel &gt; 0)<a name="line.55"></a>
-<span class="sourceLineNo">056</span>            analysis(sample, width, height, detailLevel, proximity, discrete);<a name="line.56"></a>
-<span class="sourceLineNo">057</span>    }<a name="line.57"></a>
-<span class="sourceLineNo">058</span><a name="line.58"></a>
-<span class="sourceLineNo">059</span>    public int[] process(int[] sample, int sampleWidth, int sampleHeight, int targetWidth, int targetHeight,<a name="line.59"></a>
-<span class="sourceLineNo">060</span>                         int detailLevel, int proximity, double temperature, boolean discrete)<a name="line.60"></a>
-<span class="sourceLineNo">061</span>    {<a name="line.61"></a>
-<span class="sourceLineNo">062</span>        if(detailLevel &gt; 0)<a name="line.62"></a>
-<span class="sourceLineNo">063</span>        {<a name="line.63"></a>
-<span class="sourceLineNo">064</span>            if(analyzed == null || analyzed.length != sampleWidth || analyzed.length == 0 ||<a name="line.64"></a>
-<span class="sourceLineNo">065</span>                    analyzed[0].length != sampleHeight)<a name="line.65"></a>
-<span class="sourceLineNo">066</span>                analyze(sample, sampleWidth, sampleHeight, detailLevel, proximity, discrete);<a name="line.66"></a>
-<span class="sourceLineNo">067</span>            return coherentSynthesis(sample, sampleWidth, sampleHeight, analyzed, proximity,<a name="line.67"></a>
-<span class="sourceLineNo">068</span>                    targetWidth, targetHeight, temperature, discrete);<a name="line.68"></a>
-<span class="sourceLineNo">069</span>        }<a name="line.69"></a>
-<span class="sourceLineNo">070</span>        else {<a name="line.70"></a>
-<span class="sourceLineNo">071</span>            return fullSynthesis(sample, sampleWidth, sampleHeight, proximity,<a name="line.71"></a>
-<span class="sourceLineNo">072</span>                    targetWidth, targetHeight, temperature, discrete);<a name="line.72"></a>
-<span class="sourceLineNo">073</span>        }<a name="line.73"></a>
-<span class="sourceLineNo">074</span>    }<a name="line.74"></a>
-<span class="sourceLineNo">075</span><a name="line.75"></a>
-<span class="sourceLineNo">076</span>    public int[] neoProcess(int[] sample, int sampleWidth, int sampleHeight, int targetWidth, int targetHeight,<a name="line.76"></a>
-<span class="sourceLineNo">077</span>                         int detailLevel, int proximity, boolean discrete)<a name="line.77"></a>
-<span class="sourceLineNo">078</span>    {<a name="line.78"></a>
-<span class="sourceLineNo">079</span>            return reSynthesis(sample, sampleWidth, sampleHeight, proximity, 20,<a name="line.79"></a>
-<span class="sourceLineNo">080</span>                    Math.max(1, detailLevel), discrete, targetWidth, targetHeight);<a name="line.80"></a>
-<span class="sourceLineNo">081</span>    }<a name="line.81"></a>
-<span class="sourceLineNo">082</span><a name="line.82"></a>
-<span class="sourceLineNo">083</span>    public RNG random;<a name="line.83"></a>
-<span class="sourceLineNo">084</span>    public AestheticDifference difference;<a name="line.84"></a>
-<span class="sourceLineNo">085</span>    private int[][] analyzed;<a name="line.85"></a>
-<span class="sourceLineNo">086</span><a name="line.86"></a>
-<span class="sourceLineNo">087</span>    private void analysis(int[] bitmap, int width, int height, int K, int N, boolean indexed)<a name="line.87"></a>
-<span class="sourceLineNo">088</span>    {<a name="line.88"></a>
-<span class="sourceLineNo">089</span>        int area = width * height;<a name="line.89"></a>
-<span class="sourceLineNo">090</span>        analyzed = new int[area][];<a name="line.90"></a>
-<span class="sourceLineNo">091</span>        OrderedSet&lt;Integer&gt; points = new OrderedSet&lt;&gt;(area);<a name="line.91"></a>
-<span class="sourceLineNo">092</span>        for (int i = 0; i &lt; area; i++) points.add(i);<a name="line.92"></a>
-<span class="sourceLineNo">093</span><a name="line.93"></a>
-<span class="sourceLineNo">094</span>        double[] similarities = new double[area * area];<a name="line.94"></a>
-<span class="sourceLineNo">095</span>        for (int i = 0; i &lt; area; i++) for (int j = 0; j &lt; area; j++)<a name="line.95"></a>
-<span class="sourceLineNo">096</span>            similarities[i * area + j] = similarities[j * area + i] != 0 ? similarities[j * area + i] :<a name="line.96"></a>
-<span class="sourceLineNo">097</span>                    similarity(i, bitmap, width, height, j, bitmap, width, height, N, null, indexed);<a name="line.97"></a>
-<span class="sourceLineNo">098</span><a name="line.98"></a>
-<span class="sourceLineNo">099</span>        for (int i = 0; i &lt; area; i++)<a name="line.99"></a>
-<span class="sourceLineNo">100</span>        {<a name="line.100"></a>
-<span class="sourceLineNo">101</span>            analyzed[i] = new int[K];<a name="line.101"></a>
-<span class="sourceLineNo">102</span>            OrderedSet&lt;Integer&gt; copy = new OrderedSet&lt;&gt;(points);<a name="line.102"></a>
-<span class="sourceLineNo">103</span><a name="line.103"></a>
-<span class="sourceLineNo">104</span>            analyzed[i][0] = i;<a name="line.104"></a>
-<span class="sourceLineNo">105</span>            copy.remove(i);<a name="line.105"></a>
-<span class="sourceLineNo">106</span><a name="line.106"></a>
-<span class="sourceLineNo">107</span>            for (int k = 1; k &lt; K; k++)<a name="line.107"></a>
-<span class="sourceLineNo">108</span>            {<a name="line.108"></a>
-<span class="sourceLineNo">109</span>                double max = -10000;<a name="line.109"></a>
-<span class="sourceLineNo">110</span>                int argmax = -1;<a name="line.110"></a>
-<span class="sourceLineNo">111</span><a name="line.111"></a>
-<span class="sourceLineNo">112</span>                for(Integer p : copy)<a name="line.112"></a>
-<span class="sourceLineNo">113</span>                {<a name="line.113"></a>
-<span class="sourceLineNo">114</span>                    double s = similarities[i * area + p];<a name="line.114"></a>
-<span class="sourceLineNo">115</span>                    if (s &gt; max)<a name="line.115"></a>
-<span class="sourceLineNo">116</span>                    {<a name="line.116"></a>
-<span class="sourceLineNo">117</span>                        max = s;<a name="line.117"></a>
-<span class="sourceLineNo">118</span>                        argmax = p;<a name="line.118"></a>
-<span class="sourceLineNo">119</span>                    }<a name="line.119"></a>
-<span class="sourceLineNo">120</span>                }<a name="line.120"></a>
-<span class="sourceLineNo">121</span><a name="line.121"></a>
-<span class="sourceLineNo">122</span>                analyzed[i][k] = argmax;<a name="line.122"></a>
-<span class="sourceLineNo">123</span>                copy.remove(argmax);<a name="line.123"></a>
-<span class="sourceLineNo">124</span>            }<a name="line.124"></a>
-<span class="sourceLineNo">125</span>        }<a name="line.125"></a>
-<span class="sourceLineNo">126</span>    }<a name="line.126"></a>
-<span class="sourceLineNo">127</span><a name="line.127"></a>
-<span class="sourceLineNo">128</span>    private int[] coherentSynthesis(int[] sample, int SW, int SH, int[][] sets, int N, int OW, int OH, double t, boolean indexed)<a name="line.128"></a>
-<span class="sourceLineNo">129</span>    {<a name="line.129"></a>
-<span class="sourceLineNo">130</span>        int[] result = new int[OW * OH];<a name="line.130"></a>
-<span class="sourceLineNo">131</span>        Integer[] origins = new Integer[OW * OH];<a name="line.131"></a>
-<span class="sourceLineNo">132</span>        boolean[][] mask = new boolean[SW][SH], cleanMask = new boolean[SW][SH];<a name="line.132"></a>
-<span class="sourceLineNo">133</span><a name="line.133"></a>
-<span class="sourceLineNo">134</span>        for (int i = 0; i &lt; OW * OH; i++)<a name="line.134"></a>
-<span class="sourceLineNo">135</span>        {<a name="line.135"></a>
-<span class="sourceLineNo">136</span>            int x = i % OW, y = i / OW;<a name="line.136"></a>
-<span class="sourceLineNo">137</span>            IntDoubleOrderedMap candidates = new IntDoubleOrderedMap();<a name="line.137"></a>
-<span class="sourceLineNo">138</span>            GwtCompatibility.insert2D(cleanMask, mask, 0, 0);<a name="line.138"></a>
-<span class="sourceLineNo">139</span><a name="line.139"></a>
-<span class="sourceLineNo">140</span>            for (int dy = -1; dy &lt;= 1; dy++){<a name="line.140"></a>
-<span class="sourceLineNo">141</span>                for (int dx = -1; dx &lt;= 1; dx++)<a name="line.141"></a>
-<span class="sourceLineNo">142</span>                {<a name="line.142"></a>
-<span class="sourceLineNo">143</span>                    int sx = (x + dx + OW) % OW, sy = (y + dy + OH) % OH;<a name="line.143"></a>
-<span class="sourceLineNo">144</span>                    Integer origin = origins[sy * OW + sx];<a name="line.144"></a>
-<span class="sourceLineNo">145</span>                    if ((dx != 0 || dy != 0) &amp;&amp; origin != null)<a name="line.145"></a>
-<span class="sourceLineNo">146</span>                    {<a name="line.146"></a>
-<span class="sourceLineNo">147</span>                        for (int pi = 0, p; pi &lt; sets[origin].length; pi++)<a name="line.147"></a>
-<span class="sourceLineNo">148</span>                        {<a name="line.148"></a>
-<span class="sourceLineNo">149</span>                            p = sets[origin][pi];<a name="line.149"></a>
-<span class="sourceLineNo">150</span>                            int ox = (p % SW - dx + SW) % SW, oy = (p / SW - dy + SH) % SH;<a name="line.150"></a>
-<span class="sourceLineNo">151</span>                            double s = similarity(oy * SW + ox, sample, SW, SH, i, result, OW, OH, N, origins, indexed);<a name="line.151"></a>
-<span class="sourceLineNo">152</span><a name="line.152"></a>
-<span class="sourceLineNo">153</span>                            if (!mask[ox][oy]) candidates.put(ox + oy * SW, Math.pow(100, s / t));<a name="line.153"></a>
-<span class="sourceLineNo">154</span>                            mask[ox][oy] = true;<a name="line.154"></a>
-<span class="sourceLineNo">155</span>                        }<a name="line.155"></a>
-<span class="sourceLineNo">156</span>                    }<a name="line.156"></a>
-<span class="sourceLineNo">157</span>                }<a name="line.157"></a>
-<span class="sourceLineNo">158</span>            }<a name="line.158"></a>
-<span class="sourceLineNo">159</span><a name="line.159"></a>
-<span class="sourceLineNo">160</span>            int shifted = candidates.isEmpty() ? random.nextInt(SW) + random.nextInt(SH) * SW : weightedRandom(candidates, random.nextDouble());<a name="line.160"></a>
-<span class="sourceLineNo">161</span>            origins[i] = shifted;<a name="line.161"></a>
-<span class="sourceLineNo">162</span>            result[i] = sample[shifted];<a name="line.162"></a>
-<span class="sourceLineNo">163</span>        }<a name="line.163"></a>
-<span class="sourceLineNo">164</span><a name="line.164"></a>
-<span class="sourceLineNo">165</span>        return result;<a name="line.165"></a>
-<span class="sourceLineNo">166</span>    }<a name="line.166"></a>
-<span class="sourceLineNo">167</span><a name="line.167"></a>
-<span class="sourceLineNo">168</span>    private int[] fullSynthesis(int[] sample, int SW, int SH, int N, int OW, int OH, double t, boolean indexed)<a name="line.168"></a>
-<span class="sourceLineNo">169</span>    {<a name="line.169"></a>
-<span class="sourceLineNo">170</span>        int[] result = new int[OW * OH];<a name="line.170"></a>
-<span class="sourceLineNo">171</span>        Integer[] origins = new Integer[OW * OH];<a name="line.171"></a>
-<span class="sourceLineNo">172</span><a name="line.172"></a>
-<span class="sourceLineNo">173</span>        if (!indexed) for (int y = 0; y &lt; OH; y++) {<a name="line.173"></a>
-<span class="sourceLineNo">174</span>            for (int x = 0; x &lt; OW; x++){<a name="line.174"></a>
-<span class="sourceLineNo">175</span>                if (y + N &gt;= OH)<a name="line.175"></a>
-<span class="sourceLineNo">176</span>                {<a name="line.176"></a>
-<span class="sourceLineNo">177</span>                    result[x + y * OW] = sample[random.nextInt(SW * SH)];<a name="line.177"></a>
-<span class="sourceLineNo">178</span>                    origins[x + y * OW] = -1;<a name="line.178"></a>
-<span class="sourceLineNo">179</span>                }<a name="line.179"></a>
-<span class="sourceLineNo">180</span>            }<a name="line.180"></a>
-<span class="sourceLineNo">181</span>        }<a name="line.181"></a>
-<span class="sourceLineNo">182</span><a name="line.182"></a>
-<span class="sourceLineNo">183</span>        for (int i = 0; i &lt; OW * OH; i++)<a name="line.183"></a>
-<span class="sourceLineNo">184</span>        {<a name="line.184"></a>
-<span class="sourceLineNo">185</span>            double[] candidates = new double[SW * SH];<a name="line.185"></a>
-<span class="sourceLineNo">186</span>            double max = -10000;<a name="line.186"></a>
-<span class="sourceLineNo">187</span>            int argmax = -1;<a name="line.187"></a>
-<span class="sourceLineNo">188</span><a name="line.188"></a>
-<span class="sourceLineNo">189</span>            for (int j = 0; j &lt; SW * SH; j++)<a name="line.189"></a>
-<span class="sourceLineNo">190</span>            {<a name="line.190"></a>
-<span class="sourceLineNo">191</span>                double s = similarity(j, sample, SW, SH, i, result, OW, OH, N, origins, indexed);<a name="line.191"></a>
-<span class="sourceLineNo">192</span>                if (s &gt; max)<a name="line.192"></a>
-<span class="sourceLineNo">193</span>                {<a name="line.193"></a>
-<span class="sourceLineNo">194</span>                    max = s;<a name="line.194"></a>
-<span class="sourceLineNo">195</span>                    argmax = j;<a name="line.195"></a>
-<span class="sourceLineNo">196</span>                }<a name="line.196"></a>
-<span class="sourceLineNo">197</span><a name="line.197"></a>
-<span class="sourceLineNo">198</span>                if (indexed) candidates[j] = Math.pow(100.0, s / t);<a name="line.198"></a>
+<span class="sourceLineNo">046</span><a name="line.46"></a>
+<span class="sourceLineNo">047</span>    /**<a name="line.47"></a>
+<span class="sourceLineNo">048</span>     * Constructor that uses an unseeded RNG (effectively a random seed) and the given AestheticDifference. An example<a name="line.48"></a>
+<span class="sourceLineNo">049</span>     * piece of code that implements an AestheticDifference is available in the docs for<a name="line.49"></a>
+<span class="sourceLineNo">050</span>     * {@link AestheticDifference#difference(int, int)}; it is also considered a functional interface if you use Java 8<a name="line.50"></a>
+<span class="sourceLineNo">051</span>     * or newer. You can also use the ready-made implementation {@link AestheticDifference#rgba8888} if you have int<a name="line.51"></a>
+<span class="sourceLineNo">052</span>     * data that represents RGBA8888 colors, which can be obtained from libGDX Colors or SColors in the display module.<a name="line.52"></a>
+<span class="sourceLineNo">053</span>     * @param diff an implementation of the AestheticDifference interface, such as {@link AestheticDifference#rgba8888};<a name="line.53"></a>
+<span class="sourceLineNo">054</span>     *             may be null, but that forces all calls to processing methods to treat discrete as true<a name="line.54"></a>
+<span class="sourceLineNo">055</span>     */<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    public DetailedMimic(AestheticDifference diff)<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    {<a name="line.57"></a>
+<span class="sourceLineNo">058</span>        this(diff, new RNG());<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    }<a name="line.59"></a>
+<span class="sourceLineNo">060</span><a name="line.60"></a>
+<span class="sourceLineNo">061</span>    /**<a name="line.61"></a>
+<span class="sourceLineNo">062</span>     * Constructor that uses the given RNG and the given AestheticDifference. An example<a name="line.62"></a>
+<span class="sourceLineNo">063</span>     * piece of code that implements an AestheticDifference is available in the docs for<a name="line.63"></a>
+<span class="sourceLineNo">064</span>     * {@link AestheticDifference#difference(int, int)}; it is also considered a functional interface if you use Java 8<a name="line.64"></a>
+<span class="sourceLineNo">065</span>     * or newer. You can also use the ready-made implementation {@link AestheticDifference#rgba8888} if you have int<a name="line.65"></a>
+<span class="sourceLineNo">066</span>     * data that represents RGBA8888 colors, which can be obtained from libGDX Colors or SColors in the display module.<a name="line.66"></a>
+<span class="sourceLineNo">067</span>     * @param diff an implementation of the AestheticDifference interface, such as {@link AestheticDifference#rgba8888};<a name="line.67"></a>
+<span class="sourceLineNo">068</span>     *             may be null, but that forces all calls to processing methods to treat discrete as true<a name="line.68"></a>
+<span class="sourceLineNo">069</span>     * @param rng an RNG to generate random factors; may be seeded to produce reliable output<a name="line.69"></a>
+<span class="sourceLineNo">070</span>     */<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    public DetailedMimic(AestheticDifference diff, RNG rng)<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    {<a name="line.72"></a>
+<span class="sourceLineNo">073</span>        random = rng;<a name="line.73"></a>
+<span class="sourceLineNo">074</span>        difference = diff;<a name="line.74"></a>
+<span class="sourceLineNo">075</span>        analyzed = null;<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    }<a name="line.76"></a>
+<span class="sourceLineNo">077</span><a name="line.77"></a>
+<span class="sourceLineNo">078</span>    /**<a name="line.78"></a>
+<span class="sourceLineNo">079</span>     * DISCOURAGED; use {@link #neoProcess(int[], int, int, int, int, int, int, boolean)} instead, which doesn't need a<a name="line.79"></a>
+<span class="sourceLineNo">080</span>     * separate analysis step.<a name="line.80"></a>
+<span class="sourceLineNo">081</span>     * Analyzes a sample as a 1D int array and stores the needed info to call<a name="line.81"></a>
+<span class="sourceLineNo">082</span>     * {@link #process(int[], int, int, int, int, int, int, double, boolean)} any number of times later on without<a name="line.82"></a>
+<span class="sourceLineNo">083</span>     * recalculating some heavy-weight information.<a name="line.83"></a>
+<span class="sourceLineNo">084</span>     * @param sample a 1D array of ints that can be compared by the AestheticDifference this uses (or any ints if<a name="line.84"></a>
+<span class="sourceLineNo">085</span>     *               discrete is true)<a name="line.85"></a>
+<span class="sourceLineNo">086</span>     * @param width the width of the area in sample this should use (sample can be interpreted as different shapes)<a name="line.86"></a>
+<span class="sourceLineNo">087</span>     * @param height the height of the area in sample this should use (sample can be interpreted as different shapes)<a name="line.87"></a>
+<span class="sourceLineNo">088</span>     * @param detailLevel how much detail to try for; if 0 or less this does nothing, 2 works well in general<a name="line.88"></a>
+<span class="sourceLineNo">089</span>     * @param proximity how far away to consider cells as affecting another; 3 works well<a name="line.89"></a>
+<span class="sourceLineNo">090</span>     * @param discrete false if this can produce ints other than those in the input; true if it uses a fixed set<a name="line.90"></a>
+<span class="sourceLineNo">091</span>     */<a name="line.91"></a>
+<span class="sourceLineNo">092</span>    public void analyze(int[] sample, int width, int height, int detailLevel, int proximity, boolean discrete)<a name="line.92"></a>
+<span class="sourceLineNo">093</span>    {<a name="line.93"></a>
+<span class="sourceLineNo">094</span>        discrete |= (difference == null);<a name="line.94"></a>
+<span class="sourceLineNo">095</span>        if(detailLevel &gt; 0)<a name="line.95"></a>
+<span class="sourceLineNo">096</span>            analysis(sample, width, height, detailLevel, proximity, discrete);<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    }<a name="line.97"></a>
+<span class="sourceLineNo">098</span>    /**<a name="line.98"></a>
+<span class="sourceLineNo">099</span>     * DISCOURAGED; use {@link #neoProcess(int[], int, int, int, int, int, int, boolean)} instead, which doesn't need a<a name="line.99"></a>
+<span class="sourceLineNo">100</span>     * separate analysis step.<a name="line.100"></a>
+<span class="sourceLineNo">101</span>     * Processes a sample as a 1D int array and returns a different 1D int array that mimics the input. If the last time<a name="line.101"></a>
+<span class="sourceLineNo">102</span>     * this was called used the same sample, sampleWidth, and sampleHeight parameters, or if<a name="line.102"></a>
+<span class="sourceLineNo">103</span>     * {@link #analyze(int[], int, int, int, int, boolean)} was called with its width equal to sampleWidth and its<a name="line.103"></a>
+<span class="sourceLineNo">104</span>     * height equal to sampleHeight, then this doesn't need to perform as many expensive calculations.<a name="line.104"></a>
+<span class="sourceLineNo">105</span>     * @param sample a 1D array of ints that can be compared by the AestheticDifference this uses (or any ints if<a name="line.105"></a>
+<span class="sourceLineNo">106</span>     *               discrete is true)<a name="line.106"></a>
+<span class="sourceLineNo">107</span>     * @param sampleWidth the width of the area in sample this should use (sample can be interpreted as different shapes)<a name="line.107"></a>
+<span class="sourceLineNo">108</span>     * @param sampleHeight the height of the area in sample this should use (sample can be interpreted as different shapes)<a name="line.108"></a>
+<span class="sourceLineNo">109</span>     * @param targetWidth the desired width of the output<a name="line.109"></a>
+<span class="sourceLineNo">110</span>     * @param targetHeight the desired height of the output<a name="line.110"></a>
+<span class="sourceLineNo">111</span>     * @param detailLevel how much detail to try for; if 0 or less this doesn't perform analysis and has somewhat lower<a name="line.111"></a>
+<span class="sourceLineNo">112</span>     *                    quality, but 2 works well in general<a name="line.112"></a>
+<span class="sourceLineNo">113</span>     * @param proximity how far away to consider cells as affecting another; 3 works well<a name="line.113"></a>
+<span class="sourceLineNo">114</span>     * @param temperature a level of unpredictability in the output relative to the input; must be greater than 0<a name="line.114"></a>
+<span class="sourceLineNo">115</span>     * @param discrete false if this can produce ints other than those in the input; true if it uses a fixed set<a name="line.115"></a>
+<span class="sourceLineNo">116</span>     * @return a new 1D int array that can be interpreted as having targetWidth and targetHeight, and mimics sample<a name="line.116"></a>
+<span class="sourceLineNo">117</span>     */<a name="line.117"></a>
+<span class="sourceLineNo">118</span>    public int[] process(int[] sample, int sampleWidth, int sampleHeight, int targetWidth, int targetHeight,<a name="line.118"></a>
+<span class="sourceLineNo">119</span>                         int detailLevel, int proximity, double temperature, boolean discrete)<a name="line.119"></a>
+<span class="sourceLineNo">120</span>    {<a name="line.120"></a>
+<span class="sourceLineNo">121</span>        discrete |= (difference == null);<a name="line.121"></a>
+<span class="sourceLineNo">122</span>        if(detailLevel &gt; 0)<a name="line.122"></a>
+<span class="sourceLineNo">123</span>        {<a name="line.123"></a>
+<span class="sourceLineNo">124</span>            if(analyzed == null || analyzed.length != sampleWidth || analyzed.length == 0 ||<a name="line.124"></a>
+<span class="sourceLineNo">125</span>                    analyzed[0].length != sampleHeight)<a name="line.125"></a>
+<span class="sourceLineNo">126</span>                analyze(sample, sampleWidth, sampleHeight, detailLevel, proximity, discrete);<a name="line.126"></a>
+<span class="sourceLineNo">127</span>            return coherentSynthesis(sample, sampleWidth, sampleHeight, analyzed, proximity,<a name="line.127"></a>
+<span class="sourceLineNo">128</span>                    targetWidth, targetHeight, temperature, discrete);<a name="line.128"></a>
+<span class="sourceLineNo">129</span>        }<a name="line.129"></a>
+<span class="sourceLineNo">130</span>        else {<a name="line.130"></a>
+<span class="sourceLineNo">131</span>            return fullSynthesis(sample, sampleWidth, sampleHeight, proximity,<a name="line.131"></a>
+<span class="sourceLineNo">132</span>                    targetWidth, targetHeight, temperature, discrete);<a name="line.132"></a>
+<span class="sourceLineNo">133</span>        }<a name="line.133"></a>
+<span class="sourceLineNo">134</span>    }<a name="line.134"></a>
+<span class="sourceLineNo">135</span><a name="line.135"></a>
+<span class="sourceLineNo">136</span>    /**<a name="line.136"></a>
+<span class="sourceLineNo">137</span>     * Processes a 1D int array representing 2D storage of values that can be compared by this object's<a name="line.137"></a>
+<span class="sourceLineNo">138</span>     * AestheticDifference (or any values if that is null or discrete is true), and returns a 1D array representing data<a name="line.138"></a>
+<span class="sourceLineNo">139</span>     * with potentially different dimensions but similar appearance to sample.<a name="line.139"></a>
+<span class="sourceLineNo">140</span>     * @param sample a 1D array of ints that can be compared by the AestheticDifference this uses (or any ints if<a name="line.140"></a>
+<span class="sourceLineNo">141</span>     *               discrete is true)<a name="line.141"></a>
+<span class="sourceLineNo">142</span>     * @param sampleWidth the width of the area in sample this should use (sample can be interpreted as different shapes)<a name="line.142"></a>
+<span class="sourceLineNo">143</span>     * @param sampleHeight the height of the area in sample this should use (sample can be interpreted as different shapes)<a name="line.143"></a>
+<span class="sourceLineNo">144</span>     * @param targetWidth the desired width of the output<a name="line.144"></a>
+<span class="sourceLineNo">145</span>     * @param targetHeight the desired height of the output<a name="line.145"></a>
+<span class="sourceLineNo">146</span>     * @param detailLevel how much detail to try for; here this will always be treated as at least 1<a name="line.146"></a>
+<span class="sourceLineNo">147</span>     * @param proximity how far away to consider cells as affecting another; 3 works well<a name="line.147"></a>
+<span class="sourceLineNo">148</span>     * @param discrete false if this can produce ints other than those in the input; true if it uses a fixed set<a name="line.148"></a>
+<span class="sourceLineNo">149</span>     * @return a new 1D int array that can be interpreted as having targetWidth and targetHeight, and mimics sample<a name="line.149"></a>
+<span class="sourceLineNo">150</span>     */<a name="line.150"></a>
+<span class="sourceLineNo">151</span>    public int[] neoProcess(int[] sample, int sampleWidth, int sampleHeight, int targetWidth, int targetHeight,<a name="line.151"></a>
+<span class="sourceLineNo">152</span>                         int detailLevel, int proximity, boolean discrete)<a name="line.152"></a>
+<span class="sourceLineNo">153</span>    {<a name="line.153"></a>
+<span class="sourceLineNo">154</span>            return reSynthesis(sample, sampleWidth, sampleHeight, proximity, 20,<a name="line.154"></a>
+<span class="sourceLineNo">155</span>                    Math.max(1, detailLevel), discrete || (difference == null), targetWidth, targetHeight);<a name="line.155"></a>
+<span class="sourceLineNo">156</span>    }<a name="line.156"></a>
+<span class="sourceLineNo">157</span><a name="line.157"></a>
+<span class="sourceLineNo">158</span>    public RNG random;<a name="line.158"></a>
+<span class="sourceLineNo">159</span>    public AestheticDifference difference;<a name="line.159"></a>
+<span class="sourceLineNo">160</span>    private int[][] analyzed;<a name="line.160"></a>
+<span class="sourceLineNo">161</span><a name="line.161"></a>
+<span class="sourceLineNo">162</span>    private void analysis(int[] bitmap, int width, int height, int K, int N, boolean indexed)<a name="line.162"></a>
+<span class="sourceLineNo">163</span>    {<a name="line.163"></a>
+<span class="sourceLineNo">164</span>        int area = width * height;<a name="line.164"></a>
+<span class="sourceLineNo">165</span>        analyzed = new int[area][];<a name="line.165"></a>
+<span class="sourceLineNo">166</span>        OrderedSet&lt;Integer&gt; points = new OrderedSet&lt;&gt;(area);<a name="line.166"></a>
+<span class="sourceLineNo">167</span>        for (int i = 0; i &lt; area; i++) points.add(i);<a name="line.167"></a>
+<span class="sourceLineNo">168</span><a name="line.168"></a>
+<span class="sourceLineNo">169</span>        double[] similarities = new double[area * area];<a name="line.169"></a>
+<span class="sourceLineNo">170</span>        for (int i = 0; i &lt; area; i++) for (int j = 0; j &lt; area; j++)<a name="line.170"></a>
+<span class="sourceLineNo">171</span>            similarities[i * area + j] = similarities[j * area + i] != 0 ? similarities[j * area + i] :<a name="line.171"></a>
+<span class="sourceLineNo">172</span>                    similarity(i, bitmap, width, height, j, bitmap, width, height, N, null, indexed);<a name="line.172"></a>
+<span class="sourceLineNo">173</span><a name="line.173"></a>
+<span class="sourceLineNo">174</span>        for (int i = 0; i &lt; area; i++)<a name="line.174"></a>
+<span class="sourceLineNo">175</span>        {<a name="line.175"></a>
+<span class="sourceLineNo">176</span>            analyzed[i] = new int[K];<a name="line.176"></a>
+<span class="sourceLineNo">177</span>            OrderedSet&lt;Integer&gt; copy = new OrderedSet&lt;&gt;(points);<a name="line.177"></a>
+<span class="sourceLineNo">178</span><a name="line.178"></a>
+<span class="sourceLineNo">179</span>            analyzed[i][0] = i;<a name="line.179"></a>
+<span class="sourceLineNo">180</span>            copy.remove(i);<a name="line.180"></a>
+<span class="sourceLineNo">181</span><a name="line.181"></a>
+<span class="sourceLineNo">182</span>            for (int k = 1; k &lt; K; k++)<a name="line.182"></a>
+<span class="sourceLineNo">183</span>            {<a name="line.183"></a>
+<span class="sourceLineNo">184</span>                double max = -10000;<a name="line.184"></a>
+<span class="sourceLineNo">185</span>                int argmax = -1;<a name="line.185"></a>
+<span class="sourceLineNo">186</span><a name="line.186"></a>
+<span class="sourceLineNo">187</span>                for(Integer p : copy)<a name="line.187"></a>
+<span class="sourceLineNo">188</span>                {<a name="line.188"></a>
+<span class="sourceLineNo">189</span>                    double s = similarities[i * area + p];<a name="line.189"></a>
+<span class="sourceLineNo">190</span>                    if (s &gt; max)<a name="line.190"></a>
+<span class="sourceLineNo">191</span>                    {<a name="line.191"></a>
+<span class="sourceLineNo">192</span>                        max = s;<a name="line.192"></a>
+<span class="sourceLineNo">193</span>                        argmax = p;<a name="line.193"></a>
+<span class="sourceLineNo">194</span>                    }<a name="line.194"></a>
+<span class="sourceLineNo">195</span>                }<a name="line.195"></a>
+<span class="sourceLineNo">196</span><a name="line.196"></a>
+<span class="sourceLineNo">197</span>                analyzed[i][k] = argmax;<a name="line.197"></a>
+<span class="sourceLineNo">198</span>                copy.remove(argmax);<a name="line.198"></a>
 <span class="sourceLineNo">199</span>            }<a name="line.199"></a>
-<span class="sourceLineNo">200</span><a name="line.200"></a>
-<span class="sourceLineNo">201</span>            if (indexed) argmax = weightedRandom(candidates, random.nextDouble());<a name="line.201"></a>
-<span class="sourceLineNo">202</span>            result[i] = sample[argmax];<a name="line.202"></a>
-<span class="sourceLineNo">203</span>            origins[i] = -1;<a name="line.203"></a>
-<span class="sourceLineNo">204</span>        }<a name="line.204"></a>
-<span class="sourceLineNo">205</span><a name="line.205"></a>
-<span class="sourceLineNo">206</span>        return result;<a name="line.206"></a>
-<span class="sourceLineNo">207</span>    }<a name="line.207"></a>
+<span class="sourceLineNo">200</span>        }<a name="line.200"></a>
+<span class="sourceLineNo">201</span>    }<a name="line.201"></a>
+<span class="sourceLineNo">202</span><a name="line.202"></a>
+<span class="sourceLineNo">203</span>    private int[] coherentSynthesis(int[] sample, int SW, int SH, int[][] sets, int N, int OW, int OH, double t, boolean indexed)<a name="line.203"></a>
+<span class="sourceLineNo">204</span>    {<a name="line.204"></a>
+<span class="sourceLineNo">205</span>        int[] result = new int[OW * OH];<a name="line.205"></a>
+<span class="sourceLineNo">206</span>        Integer[] origins = new Integer[OW * OH];<a name="line.206"></a>
+<span class="sourceLineNo">207</span>        boolean[][] mask = new boolean[SW][SH], cleanMask = new boolean[SW][SH];<a name="line.207"></a>
 <span class="sourceLineNo">208</span><a name="line.208"></a>
-<span class="sourceLineNo">209</span><a name="line.209"></a>
-<span class="sourceLineNo">210</span>    private int[] reSynthesis(int[] sample, int SW, int SH, int N, int M, int polish, boolean indexed, int OW, int OH)<a name="line.210"></a>
-<span class="sourceLineNo">211</span>    {<a name="line.211"></a>
-<span class="sourceLineNo">212</span>        IntVLA colors = new IntVLA();<a name="line.212"></a>
-<span class="sourceLineNo">213</span>        int[] indexedSample = new int[Math.min(SW * SH, sample.length)];<a name="line.213"></a>
-<span class="sourceLineNo">214</span>        for (int j = 0; j &lt; indexedSample.length; j++)<a name="line.214"></a>
-<span class="sourceLineNo">215</span>        {<a name="line.215"></a>
-<span class="sourceLineNo">216</span>            int color = sample[j];<a name="line.216"></a>
-<span class="sourceLineNo">217</span><a name="line.217"></a>
-<span class="sourceLineNo">218</span>            int i = 0;<a name="line.218"></a>
-<span class="sourceLineNo">219</span>            for (int cn = 0; cn &lt; colors.size; cn++)<a name="line.219"></a>
-<span class="sourceLineNo">220</span>            {<a name="line.220"></a>
-<span class="sourceLineNo">221</span>                if(colors.get(cn) == color) break;<a name="line.221"></a>
-<span class="sourceLineNo">222</span>                i++;<a name="line.222"></a>
-<span class="sourceLineNo">223</span>            }<a name="line.223"></a>
-<span class="sourceLineNo">224</span><a name="line.224"></a>
-<span class="sourceLineNo">225</span>            if (i == colors.size) colors.add(color);<a name="line.225"></a>
-<span class="sourceLineNo">226</span>            indexedSample[j] = i;<a name="line.226"></a>
-<span class="sourceLineNo">227</span>        }<a name="line.227"></a>
-<span class="sourceLineNo">228</span><a name="line.228"></a>
-<span class="sourceLineNo">229</span>        int colorsNumber = colors.size;<a name="line.229"></a>
-<span class="sourceLineNo">230</span><a name="line.230"></a>
-<span class="sourceLineNo">231</span>        double[][] colorMetric = null;<a name="line.231"></a>
-<span class="sourceLineNo">232</span>        if (!indexed &amp;&amp; colorsNumber &lt;= 1024)<a name="line.232"></a>
-<span class="sourceLineNo">233</span>        {<a name="line.233"></a>
-<span class="sourceLineNo">234</span>            colorMetric = new double[colorsNumber][colorsNumber];<a name="line.234"></a>
-<span class="sourceLineNo">235</span>            for (int x = 0; x &lt; colorsNumber; x++)<a name="line.235"></a>
-<span class="sourceLineNo">236</span>            {<a name="line.236"></a>
-<span class="sourceLineNo">237</span>                for (int y = 0; y &lt; colorsNumber; y++)<a name="line.237"></a>
-<span class="sourceLineNo">238</span>                {<a name="line.238"></a>
-<span class="sourceLineNo">239</span>                    int cx = colors.get(x), cy = colors.get(y);<a name="line.239"></a>
-<span class="sourceLineNo">240</span>                    colorMetric[x][y] = difference.difference(cx, cy);<a name="line.240"></a>
-<span class="sourceLineNo">241</span>                }<a name="line.241"></a>
-<span class="sourceLineNo">242</span>            }<a name="line.242"></a>
-<span class="sourceLineNo">243</span>        }<a name="line.243"></a>
-<span class="sourceLineNo">244</span><a name="line.244"></a>
-<span class="sourceLineNo">245</span>        int[] origins = new int[OW * OH];<a name="line.245"></a>
-<span class="sourceLineNo">246</span>        for (int i = 0; i &lt; origins.length; i++) origins[i] = -1;<a name="line.246"></a>
+<span class="sourceLineNo">209</span>        for (int i = 0; i &lt; OW * OH; i++)<a name="line.209"></a>
+<span class="sourceLineNo">210</span>        {<a name="line.210"></a>
+<span class="sourceLineNo">211</span>            int x = i % OW, y = i / OW;<a name="line.211"></a>
+<span class="sourceLineNo">212</span>            IntDoubleOrderedMap candidates = new IntDoubleOrderedMap();<a name="line.212"></a>
+<span class="sourceLineNo">213</span>            ArrayTools.insert(cleanMask, mask, 0, 0);<a name="line.213"></a>
+<span class="sourceLineNo">214</span><a name="line.214"></a>
+<span class="sourceLineNo">215</span>            for (int dy = -1; dy &lt;= 1; dy++){<a name="line.215"></a>
+<span class="sourceLineNo">216</span>                for (int dx = -1; dx &lt;= 1; dx++)<a name="line.216"></a>
+<span class="sourceLineNo">217</span>                {<a name="line.217"></a>
+<span class="sourceLineNo">218</span>                    int sx = (x + dx + OW) % OW, sy = (y + dy + OH) % OH;<a name="line.218"></a>
+<span class="sourceLineNo">219</span>                    Integer origin = origins[sy * OW + sx];<a name="line.219"></a>
+<span class="sourceLineNo">220</span>                    if ((dx != 0 || dy != 0) &amp;&amp; origin != null)<a name="line.220"></a>
+<span class="sourceLineNo">221</span>                    {<a name="line.221"></a>
+<span class="sourceLineNo">222</span>                        for (int pi = 0, p; pi &lt; sets[origin].length; pi++)<a name="line.222"></a>
+<span class="sourceLineNo">223</span>                        {<a name="line.223"></a>
+<span class="sourceLineNo">224</span>                            p = sets[origin][pi];<a name="line.224"></a>
+<span class="sourceLineNo">225</span>                            int ox = (p % SW - dx + SW) % SW, oy = (p / SW - dy + SH) % SH;<a name="line.225"></a>
+<span class="sourceLineNo">226</span>                            double s = similarity(oy * SW + ox, sample, SW, SH, i, result, OW, OH, N, origins, indexed);<a name="line.226"></a>
+<span class="sourceLineNo">227</span><a name="line.227"></a>
+<span class="sourceLineNo">228</span>                            if (!mask[ox][oy]) candidates.put(ox + oy * SW, Math.pow(100, s / t));<a name="line.228"></a>
+<span class="sourceLineNo">229</span>                            mask[ox][oy] = true;<a name="line.229"></a>
+<span class="sourceLineNo">230</span>                        }<a name="line.230"></a>
+<span class="sourceLineNo">231</span>                    }<a name="line.231"></a>
+<span class="sourceLineNo">232</span>                }<a name="line.232"></a>
+<span class="sourceLineNo">233</span>            }<a name="line.233"></a>
+<span class="sourceLineNo">234</span><a name="line.234"></a>
+<span class="sourceLineNo">235</span>            int shifted = candidates.isEmpty() ? random.nextInt(SW) + random.nextInt(SH) * SW : weightedRandom(candidates, random.nextDouble());<a name="line.235"></a>
+<span class="sourceLineNo">236</span>            origins[i] = shifted;<a name="line.236"></a>
+<span class="sourceLineNo">237</span>            result[i] = sample[shifted];<a name="line.237"></a>
+<span class="sourceLineNo">238</span>        }<a name="line.238"></a>
+<span class="sourceLineNo">239</span><a name="line.239"></a>
+<span class="sourceLineNo">240</span>        return result;<a name="line.240"></a>
+<span class="sourceLineNo">241</span>    }<a name="line.241"></a>
+<span class="sourceLineNo">242</span><a name="line.242"></a>
+<span class="sourceLineNo">243</span>    private int[] fullSynthesis(int[] sample, int SW, int SH, int N, int OW, int OH, double t, boolean indexed)<a name="line.243"></a>
+<span class="sourceLineNo">244</span>    {<a name="line.244"></a>
+<span class="sourceLineNo">245</span>        int[] result = new int[OW * OH];<a name="line.245"></a>
+<span class="sourceLineNo">246</span>        Integer[] origins = new Integer[OW * OH];<a name="line.246"></a>
 <span class="sourceLineNo">247</span><a name="line.247"></a>
-<span class="sourceLineNo">248</span>        int[] shuffle = new int[OW * OH];<a name="line.248"></a>
-<span class="sourceLineNo">249</span>        for (int i = 0; i &lt; shuffle.length; i++)<a name="line.249"></a>
-<span class="sourceLineNo">250</span>        {<a name="line.250"></a>
-<span class="sourceLineNo">251</span>            int j = random.nextIntHasty(i + 1);<a name="line.251"></a>
-<span class="sourceLineNo">252</span>            if (j != i) shuffle[i] = shuffle[j];<a name="line.252"></a>
-<span class="sourceLineNo">253</span>            shuffle[j] = i;<a name="line.253"></a>
-<span class="sourceLineNo">254</span>        }<a name="line.254"></a>
-<span class="sourceLineNo">255</span><a name="line.255"></a>
-<span class="sourceLineNo">256</span>        for (int round = 0; round &lt;= polish; round++) for (int counter = 0; counter &lt; shuffle.length; counter++)<a name="line.256"></a>
-<span class="sourceLineNo">257</span>        {<a name="line.257"></a>
-<span class="sourceLineNo">258</span>            int f = shuffle[counter];<a name="line.258"></a>
-<span class="sourceLineNo">259</span>            int fx = f % OW, fy = f / OW;<a name="line.259"></a>
-<span class="sourceLineNo">260</span>            int neighborsNumber = round &gt; 0 ? 8 : Math.min(8, counter);<a name="line.260"></a>
-<span class="sourceLineNo">261</span>            int neighborsFound = 0;<a name="line.261"></a>
-<span class="sourceLineNo">262</span><a name="line.262"></a>
-<span class="sourceLineNo">263</span>            int[] candidates = new int[neighborsNumber + M];<a name="line.263"></a>
-<span class="sourceLineNo">264</span><a name="line.264"></a>
-<span class="sourceLineNo">265</span>            if (neighborsNumber &gt; 0)<a name="line.265"></a>
-<span class="sourceLineNo">266</span>            {<a name="line.266"></a>
-<span class="sourceLineNo">267</span>                int[] neighbors = new int[neighborsNumber];<a name="line.267"></a>
-<span class="sourceLineNo">268</span>                int[] x = new int[4], y = new int[4];<a name="line.268"></a>
-<span class="sourceLineNo">269</span><a name="line.269"></a>
-<span class="sourceLineNo">270</span>                for (int radius = 1; neighborsFound &lt; neighborsNumber; radius++)<a name="line.270"></a>
-<span class="sourceLineNo">271</span>                {<a name="line.271"></a>
-<span class="sourceLineNo">272</span>                    x[0] = fx - radius;<a name="line.272"></a>
-<span class="sourceLineNo">273</span>                    y[0] = fy - radius;<a name="line.273"></a>
-<span class="sourceLineNo">274</span>                    x[1] = fx - radius;<a name="line.274"></a>
-<span class="sourceLineNo">275</span>                    y[1] = fy + radius;<a name="line.275"></a>
-<span class="sourceLineNo">276</span>                    x[2] = fx + radius;<a name="line.276"></a>
-<span class="sourceLineNo">277</span>                    y[2] = fy + radius;<a name="line.277"></a>
-<span class="sourceLineNo">278</span>                    x[3] = fx + radius;<a name="line.278"></a>
-<span class="sourceLineNo">279</span>                    y[3] = fy - radius;<a name="line.279"></a>
+<span class="sourceLineNo">248</span>        if (!indexed) for (int y = 0; y &lt; OH; y++) {<a name="line.248"></a>
+<span class="sourceLineNo">249</span>            for (int x = 0; x &lt; OW; x++){<a name="line.249"></a>
+<span class="sourceLineNo">250</span>                if (y + N &gt;= OH)<a name="line.250"></a>
+<span class="sourceLineNo">251</span>                {<a name="line.251"></a>
+<span class="sourceLineNo">252</span>                    result[x + y * OW] = sample[random.nextInt(SW * SH)];<a name="line.252"></a>
+<span class="sourceLineNo">253</span>                    origins[x + y * OW] = -1;<a name="line.253"></a>
+<span class="sourceLineNo">254</span>                }<a name="line.254"></a>
+<span class="sourceLineNo">255</span>            }<a name="line.255"></a>
+<span class="sourceLineNo">256</span>        }<a name="line.256"></a>
+<span class="sourceLineNo">257</span><a name="line.257"></a>
+<span class="sourceLineNo">258</span>        for (int i = 0; i &lt; OW * OH; i++)<a name="line.258"></a>
+<span class="sourceLineNo">259</span>        {<a name="line.259"></a>
+<span class="sourceLineNo">260</span>            double[] candidates = new double[SW * SH];<a name="line.260"></a>
+<span class="sourceLineNo">261</span>            double max = -10000;<a name="line.261"></a>
+<span class="sourceLineNo">262</span>            int argmax = -1;<a name="line.262"></a>
+<span class="sourceLineNo">263</span><a name="line.263"></a>
+<span class="sourceLineNo">264</span>            for (int j = 0; j &lt; SW * SH; j++)<a name="line.264"></a>
+<span class="sourceLineNo">265</span>            {<a name="line.265"></a>
+<span class="sourceLineNo">266</span>                double s = similarity(j, sample, SW, SH, i, result, OW, OH, N, origins, indexed);<a name="line.266"></a>
+<span class="sourceLineNo">267</span>                if (s &gt; max)<a name="line.267"></a>
+<span class="sourceLineNo">268</span>                {<a name="line.268"></a>
+<span class="sourceLineNo">269</span>                    max = s;<a name="line.269"></a>
+<span class="sourceLineNo">270</span>                    argmax = j;<a name="line.270"></a>
+<span class="sourceLineNo">271</span>                }<a name="line.271"></a>
+<span class="sourceLineNo">272</span><a name="line.272"></a>
+<span class="sourceLineNo">273</span>                if (indexed) candidates[j] = Math.pow(100.0, s / t);<a name="line.273"></a>
+<span class="sourceLineNo">274</span>            }<a name="line.274"></a>
+<span class="sourceLineNo">275</span><a name="line.275"></a>
+<span class="sourceLineNo">276</span>            if (indexed) argmax = weightedRandom(candidates, random.nextDouble());<a name="line.276"></a>
+<span class="sourceLineNo">277</span>            result[i] = sample[argmax];<a name="line.277"></a>
+<span class="sourceLineNo">278</span>            origins[i] = -1;<a name="line.278"></a>
+<span class="sourceLineNo">279</span>        }<a name="line.279"></a>
 <span class="sourceLineNo">280</span><a name="line.280"></a>
-<span class="sourceLineNo">281</span>                    for (int k = 0; k &lt; 2 * radius; k++)<a name="line.281"></a>
-<span class="sourceLineNo">282</span>                    {<a name="line.282"></a>
-<span class="sourceLineNo">283</span>                        for (int d = 0; d &lt; 4; d++)<a name="line.283"></a>
-<span class="sourceLineNo">284</span>                        {<a name="line.284"></a>
-<span class="sourceLineNo">285</span>                            x[d] = (x[d] + 10 * OW) % OW;<a name="line.285"></a>
-<span class="sourceLineNo">286</span>                            y[d] = (y[d] + 10 * OH) % OH;<a name="line.286"></a>
-<span class="sourceLineNo">287</span><a name="line.287"></a>
-<span class="sourceLineNo">288</span>                            if (neighborsFound &gt;= neighborsNumber) continue;<a name="line.288"></a>
-<span class="sourceLineNo">289</span>                            int point = x[d] + y[d] * OW;<a name="line.289"></a>
-<span class="sourceLineNo">290</span>                            if (origins[point] != -1)<a name="line.290"></a>
-<span class="sourceLineNo">291</span>                            {<a name="line.291"></a>
-<span class="sourceLineNo">292</span>                                neighbors[neighborsFound] = point;<a name="line.292"></a>
-<span class="sourceLineNo">293</span>                                neighborsFound++;<a name="line.293"></a>
-<span class="sourceLineNo">294</span>                            }<a name="line.294"></a>
-<span class="sourceLineNo">295</span>                        }<a name="line.295"></a>
-<span class="sourceLineNo">296</span><a name="line.296"></a>
-<span class="sourceLineNo">297</span>                        y[0]++;<a name="line.297"></a>
-<span class="sourceLineNo">298</span>                        x[1]++;<a name="line.298"></a>
-<span class="sourceLineNo">299</span>                        y[2]--;<a name="line.299"></a>
-<span class="sourceLineNo">300</span>                        x[3]--;<a name="line.300"></a>
-<span class="sourceLineNo">301</span>                    }<a name="line.301"></a>
-<span class="sourceLineNo">302</span>                }<a name="line.302"></a>
+<span class="sourceLineNo">281</span>        return result;<a name="line.281"></a>
+<span class="sourceLineNo">282</span>    }<a name="line.282"></a>
+<span class="sourceLineNo">283</span><a name="line.283"></a>
+<span class="sourceLineNo">284</span><a name="line.284"></a>
+<span class="sourceLineNo">285</span>    private int[] reSynthesis(int[] sample, int SW, int SH, int N, int M, int polish, boolean indexed, int OW, int OH)<a name="line.285"></a>
+<span class="sourceLineNo">286</span>    {<a name="line.286"></a>
+<span class="sourceLineNo">287</span>        IntVLA colors = new IntVLA();<a name="line.287"></a>
+<span class="sourceLineNo">288</span>        int[] indexedSample = new int[Math.min(SW * SH, sample.length)];<a name="line.288"></a>
+<span class="sourceLineNo">289</span>        for (int j = 0; j &lt; indexedSample.length; j++)<a name="line.289"></a>
+<span class="sourceLineNo">290</span>        {<a name="line.290"></a>
+<span class="sourceLineNo">291</span>            int color = sample[j];<a name="line.291"></a>
+<span class="sourceLineNo">292</span><a name="line.292"></a>
+<span class="sourceLineNo">293</span>            int i = 0;<a name="line.293"></a>
+<span class="sourceLineNo">294</span>            for (int cn = 0; cn &lt; colors.size; cn++)<a name="line.294"></a>
+<span class="sourceLineNo">295</span>            {<a name="line.295"></a>
+<span class="sourceLineNo">296</span>                if(colors.get(cn) == color) break;<a name="line.296"></a>
+<span class="sourceLineNo">297</span>                i++;<a name="line.297"></a>
+<span class="sourceLineNo">298</span>            }<a name="line.298"></a>
+<span class="sourceLineNo">299</span><a name="line.299"></a>
+<span class="sourceLineNo">300</span>            if (i == colors.size) colors.add(color);<a name="line.300"></a>
+<span class="sourceLineNo">301</span>            indexedSample[j] = i;<a name="line.301"></a>
+<span class="sourceLineNo">302</span>        }<a name="line.302"></a>
 <span class="sourceLineNo">303</span><a name="line.303"></a>
-<span class="sourceLineNo">304</span><a name="line.304"></a>
-<span class="sourceLineNo">305</span>                for (int n = 0; n &lt; neighborsNumber; n++)<a name="line.305"></a>
-<span class="sourceLineNo">306</span>                {<a name="line.306"></a>
-<span class="sourceLineNo">307</span>                    int cx = (origins[neighbors[n]] + (f - neighbors[n]) % OW + 100 * SW) % SW;<a name="line.307"></a>
-<span class="sourceLineNo">308</span>                    int cy = (origins[neighbors[n]] / SW + f / OW - neighbors[n] / OW + 100 * SH) % SH;<a name="line.308"></a>
-<span class="sourceLineNo">309</span>                    candidates[n] = cx + cy * SW;<a name="line.309"></a>
-<span class="sourceLineNo">310</span>                }<a name="line.310"></a>
-<span class="sourceLineNo">311</span>            }<a name="line.311"></a>
-<span class="sourceLineNo">312</span><a name="line.312"></a>
-<span class="sourceLineNo">313</span>            for (int m = 0; m &lt; M; m++) candidates[neighborsNumber + m] = random.nextIntHasty(SW * SH);<a name="line.313"></a>
-<span class="sourceLineNo">314</span><a name="line.314"></a>
-<span class="sourceLineNo">315</span>            double max = -1E+10;<a name="line.315"></a>
-<span class="sourceLineNo">316</span>            int argmax = -1;<a name="line.316"></a>
-<span class="sourceLineNo">317</span><a name="line.317"></a>
-<span class="sourceLineNo">318</span>            for (int c = 0; c &lt; candidates.length; c++)<a name="line.318"></a>
-<span class="sourceLineNo">319</span>            {<a name="line.319"></a>
-<span class="sourceLineNo">320</span>                double sum = random.nextDouble(0.000001);<a name="line.320"></a>
-<span class="sourceLineNo">321</span>                int ix = candidates[c] % SW, iy = candidates[c] / SW, jx = f % OW, jy = f / OW;<a name="line.321"></a>
-<span class="sourceLineNo">322</span>                int SX, SY, FX, FY, S, F;<a name="line.322"></a>
-<span class="sourceLineNo">323</span>                int origin;<a name="line.323"></a>
-<span class="sourceLineNo">324</span><a name="line.324"></a>
-<span class="sourceLineNo">325</span>                for (int dy = -N; dy &lt;= N; dy++)<a name="line.325"></a>
-<span class="sourceLineNo">326</span>                {<a name="line.326"></a>
-<span class="sourceLineNo">327</span>                    for (int dx = -N; dx &lt;= N; dx++)<a name="line.327"></a>
-<span class="sourceLineNo">328</span>                    {<a name="line.328"></a>
-<span class="sourceLineNo">329</span>                        if (dx != 0 || dy != 0)<a name="line.329"></a>
-<span class="sourceLineNo">330</span>                        {<a name="line.330"></a>
-<span class="sourceLineNo">331</span>                            SX = ix + dx;<a name="line.331"></a>
-<span class="sourceLineNo">332</span>                            if (SX &lt; 0) SX += SW;<a name="line.332"></a>
-<span class="sourceLineNo">333</span>                            else if (SX &gt;= SW) SX -= SW;<a name="line.333"></a>
-<span class="sourceLineNo">334</span><a name="line.334"></a>
-<span class="sourceLineNo">335</span>                            SY = iy + dy;<a name="line.335"></a>
-<span class="sourceLineNo">336</span>                            if (SY &lt; 0) SY += SH;<a name="line.336"></a>
-<span class="sourceLineNo">337</span>                            else if (SY &gt;= SH) SY -= SH;<a name="line.337"></a>
-<span class="sourceLineNo">338</span><a name="line.338"></a>
-<span class="sourceLineNo">339</span>                            FX = jx + dx;<a name="line.339"></a>
-<span class="sourceLineNo">340</span>                            if (FX &lt; 0) FX += OW;<a name="line.340"></a>
-<span class="sourceLineNo">341</span>                            else if (FX &gt;= OW) FX -= OW;<a name="line.341"></a>
-<span class="sourceLineNo">342</span><a name="line.342"></a>
-<span class="sourceLineNo">343</span>                            FY = jy + dy;<a name="line.343"></a>
-<span class="sourceLineNo">344</span>                            if (FY &lt; 0) FY += OH;<a name="line.344"></a>
-<span class="sourceLineNo">345</span>                            else if (FY &gt;= OH) FY -= OH;<a name="line.345"></a>
-<span class="sourceLineNo">346</span><a name="line.346"></a>
-<span class="sourceLineNo">347</span>                            S = SX + SY * SW;<a name="line.347"></a>
-<span class="sourceLineNo">348</span>                            F = FX + FY * OW;<a name="line.348"></a>
-<span class="sourceLineNo">349</span><a name="line.349"></a>
-<span class="sourceLineNo">350</span>                            origin = origins[F];<a name="line.350"></a>
-<span class="sourceLineNo">351</span>                            if (origin != -1)<a name="line.351"></a>
-<span class="sourceLineNo">352</span>                            {<a name="line.352"></a>
-<span class="sourceLineNo">353</span>                                if (indexed) sum += sample[origin] == sample[S] ? 1 : -1;<a name="line.353"></a>
-<span class="sourceLineNo">354</span>                                else if (colorMetric != null) sum += colorMetric[indexedSample[origin]][indexedSample[S]];<a name="line.354"></a>
-<span class="sourceLineNo">355</span>                                else sum += difference.difference(sample[origin], sample[S]);<a name="line.355"></a>
-<span class="sourceLineNo">356</span>                            }<a name="line.356"></a>
-<span class="sourceLineNo">357</span>                        }<a name="line.357"></a>
-<span class="sourceLineNo">358</span>                    }<a name="line.358"></a>
-<span class="sourceLineNo">359</span>                }<a name="line.359"></a>
-<span class="sourceLineNo">360</span><a name="line.360"></a>
-<span class="sourceLineNo">361</span>                if (sum &gt;= max)<a name="line.361"></a>
-<span class="sourceLineNo">362</span>                {<a name="line.362"></a>
-<span class="sourceLineNo">363</span>                    max = sum;<a name="line.363"></a>
-<span class="sourceLineNo">364</span>                    argmax = candidates[c];<a name="line.364"></a>
-<span class="sourceLineNo">365</span>                }<a name="line.365"></a>
-<span class="sourceLineNo">366</span>            }<a name="line.366"></a>
-<span class="sourceLineNo">367</span><a name="line.367"></a>
-<span class="sourceLineNo">368</span>            origins[f] = argmax;<a name="line.368"></a>
-<span class="sourceLineNo">369</span>        }<a name="line.369"></a>
-<span class="sourceLineNo">370</span><a name="line.370"></a>
-<span class="sourceLineNo">371</span>        int[] result = new int[OW * OH];<a name="line.371"></a>
-<span class="sourceLineNo">372</span>        for (int i = 0; i &lt; result.length; i++) result[i] = sample[origins[i]];<a name="line.372"></a>
-<span class="sourceLineNo">373</span>        return result;<a name="line.373"></a>
-<span class="sourceLineNo">374</span>    }<a name="line.374"></a>
-<span class="sourceLineNo">375</span><a name="line.375"></a>
-<span class="sourceLineNo">376</span>    private double similarity(int i1, int[] b1, int w1, int h1, int i2, int[] b2, int w2, int h2, int N, Integer[] origins, boolean indexed)<a name="line.376"></a>
-<span class="sourceLineNo">377</span>    {<a name="line.377"></a>
-<span class="sourceLineNo">378</span>        double sum = 0;<a name="line.378"></a>
-<span class="sourceLineNo">379</span>        int x1 = i1 % w1, y1 = i1 / w1, x2 = i2 % w2, y2 = i2 / w2;<a name="line.379"></a>
-<span class="sourceLineNo">380</span><a name="line.380"></a>
-<span class="sourceLineNo">381</span>        for (int dy = -N; dy &lt;= 0; dy++) for (int dx = -N; (dy &lt; 0 &amp;&amp; dx &lt;= N) || (dy == 0 &amp;&amp; dx &lt; 0); dx++)<a name="line.381"></a>
-<span class="sourceLineNo">382</span>        {<a name="line.382"></a>
-<span class="sourceLineNo">383</span>            int sx1 = (x1 + dx + w1) % w1, sy1 = (y1 + dy + h1) % h1;<a name="line.383"></a>
-<span class="sourceLineNo">384</span>            int sx2 = (x2 + dx + w2) % w2, sy2 = (y2 + dy + h2) % h2;<a name="line.384"></a>
-<span class="sourceLineNo">385</span><a name="line.385"></a>
-<span class="sourceLineNo">386</span>            int c1 = b1[sx1 + sy1 * w1];<a name="line.386"></a>
-<span class="sourceLineNo">387</span>            int c2 = b2[sx2 + sy2 * w2];<a name="line.387"></a>
-<span class="sourceLineNo">388</span><a name="line.388"></a>
-<span class="sourceLineNo">389</span>            if (origins == null || origins[sy2 * w2 + sx2] != null)<a name="line.389"></a>
-<span class="sourceLineNo">390</span>            {<a name="line.390"></a>
-<span class="sourceLineNo">391</span>                if (indexed)<a name="line.391"></a>
-<span class="sourceLineNo">392</span>                    sum += c1 == c2 ? 1 : -1;<a name="line.392"></a>
-<span class="sourceLineNo">393</span>                else<a name="line.393"></a>
-<span class="sourceLineNo">394</span>                    sum -= difference.difference(c1, c2);<a name="line.394"></a>
-<span class="sourceLineNo">395</span>                    /*<a name="line.395"></a>
-<span class="sourceLineNo">396</span>                    Color C1 = Color.FromArgb(c1), C2 = Color.FromArgb(c2);<a name="line.396"></a>
-<span class="sourceLineNo">397</span>                    sum -= (double)((C1.R - C2.R) * (C1.R - C2.R) + (C1.G - C2.G) * (C1.G - C2.G) + (C1.B - C2.B) * (C1.B - C2.B)) / 65536.0;<a name="line.397"></a>
-<span class="sourceLineNo">398</span>                    */<a name="line.398"></a>
-<span class="sourceLineNo">399</span>            }<a name="line.399"></a>
-<span class="sourceLineNo">400</span>        }<a name="line.400"></a>
-<span class="sourceLineNo">401</span><a name="line.401"></a>
-<span class="sourceLineNo">402</span>        return sum;<a name="line.402"></a>
-<span class="sourceLineNo">403</span>    }<a name="line.403"></a>
-<span class="sourceLineNo">404</span><a name="line.404"></a>
-<span class="sourceLineNo">405</span>    private static int weightedRandom(double[] array, double r)<a name="line.405"></a>
-<span class="sourceLineNo">406</span>    {<a name="line.406"></a>
-<span class="sourceLineNo">407</span>        double sum = 0;<a name="line.407"></a>
-<span class="sourceLineNo">408</span>        for (int j = 0; j &lt; array.length; j++)<a name="line.408"></a>
-<span class="sourceLineNo">409</span>            sum += Math.max(1.0, array[j]);<a name="line.409"></a>
-<span class="sourceLineNo">410</span><a name="line.410"></a>
-<span class="sourceLineNo">411</span>        for (int j = 0; j &lt; array.length; j++)<a name="line.411"></a>
-<span class="sourceLineNo">412</span>            array[j] /= sum;<a name="line.412"></a>
+<span class="sourceLineNo">304</span>        int colorsNumber = colors.size;<a name="line.304"></a>
+<span class="sourceLineNo">305</span><a name="line.305"></a>
+<span class="sourceLineNo">306</span>        double[][] colorMetric = null;<a name="line.306"></a>
+<span class="sourceLineNo">307</span>        if (!indexed &amp;&amp; colorsNumber &lt;= 1024)<a name="line.307"></a>
+<span class="sourceLineNo">308</span>        {<a name="line.308"></a>
+<span class="sourceLineNo">309</span>            colorMetric = new double[colorsNumber][colorsNumber];<a name="line.309"></a>
+<span class="sourceLineNo">310</span>            for (int x = 0; x &lt; colorsNumber; x++)<a name="line.310"></a>
+<span class="sourceLineNo">311</span>            {<a name="line.311"></a>
+<span class="sourceLineNo">312</span>                for (int y = 0; y &lt; colorsNumber; y++)<a name="line.312"></a>
+<span class="sourceLineNo">313</span>                {<a name="line.313"></a>
+<span class="sourceLineNo">314</span>                    int cx = colors.get(x), cy = colors.get(y);<a name="line.314"></a>
+<span class="sourceLineNo">315</span>                    colorMetric[x][y] = difference.difference(cx, cy);<a name="line.315"></a>
+<span class="sourceLineNo">316</span>                }<a name="line.316"></a>
+<span class="sourceLineNo">317</span>            }<a name="line.317"></a>
+<span class="sourceLineNo">318</span>        }<a name="line.318"></a>
+<span class="sourceLineNo">319</span><a name="line.319"></a>
+<span class="sourceLineNo">320</span>        int[] origins = new int[OW * OH];<a name="line.320"></a>
+<span class="sourceLineNo">321</span>        for (int i = 0; i &lt; origins.length; i++) origins[i] = -1;<a name="line.321"></a>
+<span class="sourceLineNo">322</span><a name="line.322"></a>
+<span class="sourceLineNo">323</span>        int[] shuffle = new int[OW * OH];<a name="line.323"></a>
+<span class="sourceLineNo">324</span>        for (int i = 0; i &lt; shuffle.length; i++)<a name="line.324"></a>
+<span class="sourceLineNo">325</span>        {<a name="line.325"></a>
+<span class="sourceLineNo">326</span>            int j = random.nextIntHasty(i + 1);<a name="line.326"></a>
+<span class="sourceLineNo">327</span>            if (j != i) shuffle[i] = shuffle[j];<a name="line.327"></a>
+<span class="sourceLineNo">328</span>            shuffle[j] = i;<a name="line.328"></a>
+<span class="sourceLineNo">329</span>        }<a name="line.329"></a>
+<span class="sourceLineNo">330</span><a name="line.330"></a>
+<span class="sourceLineNo">331</span>        for (int round = 0; round &lt;= polish; round++) for (int counter = 0; counter &lt; shuffle.length; counter++)<a name="line.331"></a>
+<span class="sourceLineNo">332</span>        {<a name="line.332"></a>
+<span class="sourceLineNo">333</span>            int f = shuffle[counter];<a name="line.333"></a>
+<span class="sourceLineNo">334</span>            int fx = f % OW, fy = f / OW;<a name="line.334"></a>
+<span class="sourceLineNo">335</span>            int neighborsNumber = round &gt; 0 ? 8 : Math.min(8, counter);<a name="line.335"></a>
+<span class="sourceLineNo">336</span>            int neighborsFound = 0;<a name="line.336"></a>
+<span class="sourceLineNo">337</span><a name="line.337"></a>
+<span class="sourceLineNo">338</span>            int[] candidates = new int[neighborsNumber + M];<a name="line.338"></a>
+<span class="sourceLineNo">339</span><a name="line.339"></a>
+<span class="sourceLineNo">340</span>            if (neighborsNumber &gt; 0)<a name="line.340"></a>
+<span class="sourceLineNo">341</span>            {<a name="line.341"></a>
+<span class="sourceLineNo">342</span>                int[] neighbors = new int[neighborsNumber];<a name="line.342"></a>
+<span class="sourceLineNo">343</span>                int[] x = new int[4], y = new int[4];<a name="line.343"></a>
+<span class="sourceLineNo">344</span><a name="line.344"></a>
+<span class="sourceLineNo">345</span>                for (int radius = 1; neighborsFound &lt; neighborsNumber; radius++)<a name="line.345"></a>
+<span class="sourceLineNo">346</span>                {<a name="line.346"></a>
+<span class="sourceLineNo">347</span>                    x[0] = fx - radius;<a name="line.347"></a>
+<span class="sourceLineNo">348</span>                    y[0] = fy - radius;<a name="line.348"></a>
+<span class="sourceLineNo">349</span>                    x[1] = fx - radius;<a name="line.349"></a>
+<span class="sourceLineNo">350</span>                    y[1] = fy + radius;<a name="line.350"></a>
+<span class="sourceLineNo">351</span>                    x[2] = fx + radius;<a name="line.351"></a>
+<span class="sourceLineNo">352</span>                    y[2] = fy + radius;<a name="line.352"></a>
+<span class="sourceLineNo">353</span>                    x[3] = fx + radius;<a name="line.353"></a>
+<span class="sourceLineNo">354</span>                    y[3] = fy - radius;<a name="line.354"></a>
+<span class="sourceLineNo">355</span><a name="line.355"></a>
+<span class="sourceLineNo">356</span>                    for (int k = 0; k &lt; 2 * radius; k++)<a name="line.356"></a>
+<span class="sourceLineNo">357</span>                    {<a name="line.357"></a>
+<span class="sourceLineNo">358</span>                        for (int d = 0; d &lt; 4; d++)<a name="line.358"></a>
+<span class="sourceLineNo">359</span>                        {<a name="line.359"></a>
+<span class="sourceLineNo">360</span>                            x[d] = (x[d] + 10 * OW) % OW;<a name="line.360"></a>
+<span class="sourceLineNo">361</span>                            y[d] = (y[d] + 10 * OH) % OH;<a name="line.361"></a>
+<span class="sourceLineNo">362</span><a name="line.362"></a>
+<span class="sourceLineNo">363</span>                            if (neighborsFound &gt;= neighborsNumber) continue;<a name="line.363"></a>
+<span class="sourceLineNo">364</span>                            int point = x[d] + y[d] * OW;<a name="line.364"></a>
+<span class="sourceLineNo">365</span>                            if (origins[point] != -1)<a name="line.365"></a>
+<span class="sourceLineNo">366</span>                            {<a name="line.366"></a>
+<span class="sourceLineNo">367</span>                                neighbors[neighborsFound] = point;<a name="line.367"></a>
+<span class="sourceLineNo">368</span>                                neighborsFound++;<a name="line.368"></a>
+<span class="sourceLineNo">369</span>                            }<a name="line.369"></a>
+<span class="sourceLineNo">370</span>                        }<a name="line.370"></a>
+<span class="sourceLineNo">371</span><a name="line.371"></a>
+<span class="sourceLineNo">372</span>                        y[0]++;<a name="line.372"></a>
+<span class="sourceLineNo">373</span>                        x[1]++;<a name="line.373"></a>
+<span class="sourceLineNo">374</span>                        y[2]--;<a name="line.374"></a>
+<span class="sourceLineNo">375</span>                        x[3]--;<a name="line.375"></a>
+<span class="sourceLineNo">376</span>                    }<a name="line.376"></a>
+<span class="sourceLineNo">377</span>                }<a name="line.377"></a>
+<span class="sourceLineNo">378</span><a name="line.378"></a>
+<span class="sourceLineNo">379</span><a name="line.379"></a>
+<span class="sourceLineNo">380</span>                for (int n = 0; n &lt; neighborsNumber; n++)<a name="line.380"></a>
+<span class="sourceLineNo">381</span>                {<a name="line.381"></a>
+<span class="sourceLineNo">382</span>                    int cx = (origins[neighbors[n]] + (f - neighbors[n]) % OW + 100 * SW) % SW;<a name="line.382"></a>
+<span class="sourceLineNo">383</span>                    int cy = (origins[neighbors[n]] / SW + f / OW - neighbors[n] / OW + 100 * SH) % SH;<a name="line.383"></a>
+<span class="sourceLineNo">384</span>                    candidates[n] = cx + cy * SW;<a name="line.384"></a>
+<span class="sourceLineNo">385</span>                }<a name="line.385"></a>
+<span class="sourceLineNo">386</span>            }<a name="line.386"></a>
+<span class="sourceLineNo">387</span><a name="line.387"></a>
+<span class="sourceLineNo">388</span>            for (int m = 0; m &lt; M; m++) candidates[neighborsNumber + m] = random.nextIntHasty(SW * SH);<a name="line.388"></a>
+<span class="sourceLineNo">389</span><a name="line.389"></a>
+<span class="sourceLineNo">390</span>            double max = -1E+10;<a name="line.390"></a>
+<span class="sourceLineNo">391</span>            int argmax = -1;<a name="line.391"></a>
+<span class="sourceLineNo">392</span><a name="line.392"></a>
+<span class="sourceLineNo">393</span>            for (int c = 0; c &lt; candidates.length; c++)<a name="line.393"></a>
+<span class="sourceLineNo">394</span>            {<a name="line.394"></a>
+<span class="sourceLineNo">395</span>                double sum = random.nextDouble(0.000001);<a name="line.395"></a>
+<span class="sourceLineNo">396</span>                int ix = candidates[c] % SW, iy = candidates[c] / SW, jx = f % OW, jy = f / OW;<a name="line.396"></a>
+<span class="sourceLineNo">397</span>                int SX, SY, FX, FY, S, F;<a name="line.397"></a>
+<span class="sourceLineNo">398</span>                int origin;<a name="line.398"></a>
+<span class="sourceLineNo">399</span><a name="line.399"></a>
+<span class="sourceLineNo">400</span>                for (int dy = -N; dy &lt;= N; dy++)<a name="line.400"></a>
+<span class="sourceLineNo">401</span>                {<a name="line.401"></a>
+<span class="sourceLineNo">402</span>                    for (int dx = -N; dx &lt;= N; dx++)<a name="line.402"></a>
+<span class="sourceLineNo">403</span>                    {<a name="line.403"></a>
+<span class="sourceLineNo">404</span>                        if (dx != 0 || dy != 0)<a name="line.404"></a>
+<span class="sourceLineNo">405</span>                        {<a name="line.405"></a>
+<span class="sourceLineNo">406</span>                            SX = ix + dx;<a name="line.406"></a>
+<span class="sourceLineNo">407</span>                            if (SX &lt; 0) SX += SW;<a name="line.407"></a>
+<span class="sourceLineNo">408</span>                            else if (SX &gt;= SW) SX -= SW;<a name="line.408"></a>
+<span class="sourceLineNo">409</span><a name="line.409"></a>
+<span class="sourceLineNo">410</span>                            SY = iy + dy;<a name="line.410"></a>
+<span class="sourceLineNo">411</span>                            if (SY &lt; 0) SY += SH;<a name="line.411"></a>
+<span class="sourceLineNo">412</span>                            else if (SY &gt;= SH) SY -= SH;<a name="line.412"></a>
 <span class="sourceLineNo">413</span><a name="line.413"></a>
-<span class="sourceLineNo">414</span>        int i = 0;<a name="line.414"></a>
-<span class="sourceLineNo">415</span>        double x = 0;<a name="line.415"></a>
-<span class="sourceLineNo">416</span><a name="line.416"></a>
-<span class="sourceLineNo">417</span>        while (i &lt; array.length)<a name="line.417"></a>
-<span class="sourceLineNo">418</span>        {<a name="line.418"></a>
-<span class="sourceLineNo">419</span>            x += array[i];<a name="line.419"></a>
-<span class="sourceLineNo">420</span>            if (r &lt;= x) return i;<a name="line.420"></a>
-<span class="sourceLineNo">421</span>            i++;<a name="line.421"></a>
-<span class="sourceLineNo">422</span>        }<a name="line.422"></a>
-<span class="sourceLineNo">423</span><a name="line.423"></a>
-<span class="sourceLineNo">424</span>        return 0;<a name="line.424"></a>
-<span class="sourceLineNo">425</span>    }<a name="line.425"></a>
-<span class="sourceLineNo">426</span><a name="line.426"></a>
-<span class="sourceLineNo">427</span>    private static int weightedRandom(IntDoubleOrderedMap dic, double r) {<a name="line.427"></a>
-<span class="sourceLineNo">428</span>        int[] ints = new int[dic.size()];<a name="line.428"></a>
-<span class="sourceLineNo">429</span>        double[] doubles = new double[dic.size()];<a name="line.429"></a>
-<span class="sourceLineNo">430</span>        dic.keySet().toArray(ints);<a name="line.430"></a>
-<span class="sourceLineNo">431</span>        dic.values().toArray(doubles);<a name="line.431"></a>
-<span class="sourceLineNo">432</span>        return ints[weightedRandom(doubles, r)];<a name="line.432"></a>
-<span class="sourceLineNo">433</span>    }<a name="line.433"></a>
-<span class="sourceLineNo">434</span>}<a name="line.434"></a>
+<span class="sourceLineNo">414</span>                            FX = jx + dx;<a name="line.414"></a>
+<span class="sourceLineNo">415</span>                            if (FX &lt; 0) FX += OW;<a name="line.415"></a>
+<span class="sourceLineNo">416</span>                            else if (FX &gt;= OW) FX -= OW;<a name="line.416"></a>
+<span class="sourceLineNo">417</span><a name="line.417"></a>
+<span class="sourceLineNo">418</span>                            FY = jy + dy;<a name="line.418"></a>
+<span class="sourceLineNo">419</span>                            if (FY &lt; 0) FY += OH;<a name="line.419"></a>
+<span class="sourceLineNo">420</span>                            else if (FY &gt;= OH) FY -= OH;<a name="line.420"></a>
+<span class="sourceLineNo">421</span><a name="line.421"></a>
+<span class="sourceLineNo">422</span>                            S = SX + SY * SW;<a name="line.422"></a>
+<span class="sourceLineNo">423</span>                            F = FX + FY * OW;<a name="line.423"></a>
+<span class="sourceLineNo">424</span><a name="line.424"></a>
+<span class="sourceLineNo">425</span>                            origin = origins[F];<a name="line.425"></a>
+<span class="sourceLineNo">426</span>                            if (origin != -1)<a name="line.426"></a>
+<span class="sourceLineNo">427</span>                            {<a name="line.427"></a>
+<span class="sourceLineNo">428</span>                                if (indexed) sum += sample[origin] == sample[S] ? 1 : -1;<a name="line.428"></a>
+<span class="sourceLineNo">429</span>                                else if (colorMetric != null) sum += colorMetric[indexedSample[origin]][indexedSample[S]];<a name="line.429"></a>
+<span class="sourceLineNo">430</span>                                else sum += difference.difference(sample[origin], sample[S]);<a name="line.430"></a>
+<span class="sourceLineNo">431</span>                            }<a name="line.431"></a>
+<span class="sourceLineNo">432</span>                        }<a name="line.432"></a>
+<span class="sourceLineNo">433</span>                    }<a name="line.433"></a>
+<span class="sourceLineNo">434</span>                }<a name="line.434"></a>
+<span class="sourceLineNo">435</span><a name="line.435"></a>
+<span class="sourceLineNo">436</span>                if (sum &gt;= max)<a name="line.436"></a>
+<span class="sourceLineNo">437</span>                {<a name="line.437"></a>
+<span class="sourceLineNo">438</span>                    max = sum;<a name="line.438"></a>
+<span class="sourceLineNo">439</span>                    argmax = candidates[c];<a name="line.439"></a>
+<span class="sourceLineNo">440</span>                }<a name="line.440"></a>
+<span class="sourceLineNo">441</span>            }<a name="line.441"></a>
+<span class="sourceLineNo">442</span><a name="line.442"></a>
+<span class="sourceLineNo">443</span>            origins[f] = argmax;<a name="line.443"></a>
+<span class="sourceLineNo">444</span>        }<a name="line.444"></a>
+<span class="sourceLineNo">445</span><a name="line.445"></a>
+<span class="sourceLineNo">446</span>        int[] result = new int[OW * OH];<a name="line.446"></a>
+<span class="sourceLineNo">447</span>        for (int i = 0; i &lt; result.length; i++) result[i] = sample[origins[i]];<a name="line.447"></a>
+<span class="sourceLineNo">448</span>        return result;<a name="line.448"></a>
+<span class="sourceLineNo">449</span>    }<a name="line.449"></a>
+<span class="sourceLineNo">450</span><a name="line.450"></a>
+<span class="sourceLineNo">451</span>    private double similarity(int i1, int[] b1, int w1, int h1, int i2, int[] b2, int w2, int h2, int N, Integer[] origins, boolean indexed)<a name="line.451"></a>
+<span class="sourceLineNo">452</span>    {<a name="line.452"></a>
+<span class="sourceLineNo">453</span>        double sum = 0;<a name="line.453"></a>
+<span class="sourceLineNo">454</span>        int x1 = i1 % w1, y1 = i1 / w1, x2 = i2 % w2, y2 = i2 / w2;<a name="line.454"></a>
+<span class="sourceLineNo">455</span><a name="line.455"></a>
+<span class="sourceLineNo">456</span>        for (int dy = -N; dy &lt;= 0; dy++) for (int dx = -N; (dy &lt; 0 &amp;&amp; dx &lt;= N) || (dy == 0 &amp;&amp; dx &lt; 0); dx++)<a name="line.456"></a>
+<span class="sourceLineNo">457</span>        {<a name="line.457"></a>
+<span class="sourceLineNo">458</span>            int sx1 = (x1 + dx + w1) % w1, sy1 = (y1 + dy + h1) % h1;<a name="line.458"></a>
+<span class="sourceLineNo">459</span>            int sx2 = (x2 + dx + w2) % w2, sy2 = (y2 + dy + h2) % h2;<a name="line.459"></a>
+<span class="sourceLineNo">460</span><a name="line.460"></a>
+<span class="sourceLineNo">461</span>            int c1 = b1[sx1 + sy1 * w1];<a name="line.461"></a>
+<span class="sourceLineNo">462</span>            int c2 = b2[sx2 + sy2 * w2];<a name="line.462"></a>
+<span class="sourceLineNo">463</span><a name="line.463"></a>
+<span class="sourceLineNo">464</span>            if (origins == null || origins[sy2 * w2 + sx2] != null)<a name="line.464"></a>
+<span class="sourceLineNo">465</span>            {<a name="line.465"></a>
+<span class="sourceLineNo">466</span>                if (indexed)<a name="line.466"></a>
+<span class="sourceLineNo">467</span>                    sum += c1 == c2 ? 1 : -1;<a name="line.467"></a>
+<span class="sourceLineNo">468</span>                else<a name="line.468"></a>
+<span class="sourceLineNo">469</span>                    sum -= difference.difference(c1, c2);<a name="line.469"></a>
+<span class="sourceLineNo">470</span>                    /*<a name="line.470"></a>
+<span class="sourceLineNo">471</span>                    Color C1 = Color.FromArgb(c1), C2 = Color.FromArgb(c2);<a name="line.471"></a>
+<span class="sourceLineNo">472</span>                    sum -= (double)((C1.R - C2.R) * (C1.R - C2.R) + (C1.G - C2.G) * (C1.G - C2.G) + (C1.B - C2.B) * (C1.B - C2.B)) / 65536.0;<a name="line.472"></a>
+<span class="sourceLineNo">473</span>                    */<a name="line.473"></a>
+<span class="sourceLineNo">474</span>            }<a name="line.474"></a>
+<span class="sourceLineNo">475</span>        }<a name="line.475"></a>
+<span class="sourceLineNo">476</span><a name="line.476"></a>
+<span class="sourceLineNo">477</span>        return sum;<a name="line.477"></a>
+<span class="sourceLineNo">478</span>    }<a name="line.478"></a>
+<span class="sourceLineNo">479</span><a name="line.479"></a>
+<span class="sourceLineNo">480</span>    static int weightedRandom(double[] array, double r)<a name="line.480"></a>
+<span class="sourceLineNo">481</span>    {<a name="line.481"></a>
+<span class="sourceLineNo">482</span>        double sum = 0;<a name="line.482"></a>
+<span class="sourceLineNo">483</span>        for (int j = 0; j &lt; array.length; j++)<a name="line.483"></a>
+<span class="sourceLineNo">484</span>            sum += Math.max(1.0, array[j]);<a name="line.484"></a>
+<span class="sourceLineNo">485</span><a name="line.485"></a>
+<span class="sourceLineNo">486</span>        for (int j = 0; j &lt; array.length; j++)<a name="line.486"></a>
+<span class="sourceLineNo">487</span>            array[j] /= sum;<a name="line.487"></a>
+<span class="sourceLineNo">488</span><a name="line.488"></a>
+<span class="sourceLineNo">489</span>        int i = 0;<a name="line.489"></a>
+<span class="sourceLineNo">490</span>        double x = 0;<a name="line.490"></a>
+<span class="sourceLineNo">491</span><a name="line.491"></a>
+<span class="sourceLineNo">492</span>        while (i &lt; array.length)<a name="line.492"></a>
+<span class="sourceLineNo">493</span>        {<a name="line.493"></a>
+<span class="sourceLineNo">494</span>            x += array[i];<a name="line.494"></a>
+<span class="sourceLineNo">495</span>            if (r &lt;= x) return i;<a name="line.495"></a>
+<span class="sourceLineNo">496</span>            i++;<a name="line.496"></a>
+<span class="sourceLineNo">497</span>        }<a name="line.497"></a>
+<span class="sourceLineNo">498</span><a name="line.498"></a>
+<span class="sourceLineNo">499</span>        return 0;<a name="line.499"></a>
+<span class="sourceLineNo">500</span>    }<a name="line.500"></a>
+<span class="sourceLineNo">501</span><a name="line.501"></a>
+<span class="sourceLineNo">502</span>    static int weightedRandom(IntDoubleOrderedMap dic, double r) {<a name="line.502"></a>
+<span class="sourceLineNo">503</span>        int[] ints = dic.keySet().toIntArray();<a name="line.503"></a>
+<span class="sourceLineNo">504</span>        double[] doubles =  dic.values().toDoubleArray();<a name="line.504"></a>
+<span class="sourceLineNo">505</span>        return ints[weightedRandom(doubles, r)];<a name="line.505"></a>
+<span class="sourceLineNo">506</span>    }<a name="line.506"></a>
+<span class="sourceLineNo">507</span><a name="line.507"></a>
+<span class="sourceLineNo">508</span>    /**<a name="line.508"></a>
+<span class="sourceLineNo">509</span>     * Utility method to produce 1D int arrays this can process when discrete is true or difference is null.<a name="line.509"></a>
+<span class="sourceLineNo">510</span>     * @param map a 2D char array<a name="line.510"></a>
+<span class="sourceLineNo">511</span>     * @return an int array that can be used as a sample<a name="line.511"></a>
+<span class="sourceLineNo">512</span>     */<a name="line.512"></a>
+<span class="sourceLineNo">513</span>    public static int[] convertCharToInt(char[][] map)<a name="line.513"></a>
+<span class="sourceLineNo">514</span>    {<a name="line.514"></a>
+<span class="sourceLineNo">515</span>        int w = map.length, h = map[0].length;<a name="line.515"></a>
+<span class="sourceLineNo">516</span>        int[] result = new int[w * h];<a name="line.516"></a>
+<span class="sourceLineNo">517</span>        for (int x = 0; x &lt; w; x++) {<a name="line.517"></a>
+<span class="sourceLineNo">518</span>            for (int y = 0; y &lt; h; y++) {<a name="line.518"></a>
+<span class="sourceLineNo">519</span>                result[x * h + y] = map[x][y];<a name="line.519"></a>
+<span class="sourceLineNo">520</span>            }<a name="line.520"></a>
+<span class="sourceLineNo">521</span>        }<a name="line.521"></a>
+<span class="sourceLineNo">522</span>        return result;<a name="line.522"></a>
+<span class="sourceLineNo">523</span>    }<a name="line.523"></a>
+<span class="sourceLineNo">524</span><a name="line.524"></a>
+<span class="sourceLineNo">525</span>    /**<a name="line.525"></a>
+<span class="sourceLineNo">526</span>     * Utility method that takes a 1D int array that represents chars (such as a sample produced by<a name="line.526"></a>
+<span class="sourceLineNo">527</span>     * {@link #convertCharToInt(char[][])} or, more likely, the result of processing such a sample with this class) and<a name="line.527"></a>
+<span class="sourceLineNo">528</span>     * returns a 2D char array with the requested width and height (which should match the targetWidth and targetHeight<a name="line.528"></a>
+<span class="sourceLineNo">529</span>     * given during processing).<a name="line.529"></a>
+<span class="sourceLineNo">530</span>     * @param arr a 1D int array that represents char values<a name="line.530"></a>
+<span class="sourceLineNo">531</span>     * @param w the width that arr can be interpreted as; should probably match the targetWidth given in processing<a name="line.531"></a>
+<span class="sourceLineNo">532</span>     * @param h the height that arr can be interpreted as; should probably match the targetHeight given in processing<a name="line.532"></a>
+<span class="sourceLineNo">533</span>     * @return a 2D char array with the given width and height, probably filled with the data from arr<a name="line.533"></a>
+<span class="sourceLineNo">534</span>     */<a name="line.534"></a>
+<span class="sourceLineNo">535</span>    public static char[][] convertIntToChar(int[] arr, int w, int h)<a name="line.535"></a>
+<span class="sourceLineNo">536</span>    {<a name="line.536"></a>
+<span class="sourceLineNo">537</span>        char[][] result = new char[w][h];<a name="line.537"></a>
+<span class="sourceLineNo">538</span>        if(arr == null)<a name="line.538"></a>
+<span class="sourceLineNo">539</span>            return result;<a name="line.539"></a>
+<span class="sourceLineNo">540</span>        for (int x = 0; x &lt; w; x++) {<a name="line.540"></a>
+<span class="sourceLineNo">541</span>            for (int y = 0; y &lt; h; y++) {<a name="line.541"></a>
+<span class="sourceLineNo">542</span>                if(x * h + y &gt;= arr.length)<a name="line.542"></a>
+<span class="sourceLineNo">543</span>                    return result;<a name="line.543"></a>
+<span class="sourceLineNo">544</span>                result[x][y] = (char) arr[x * h + y];<a name="line.544"></a>
+<span class="sourceLineNo">545</span>            }<a name="line.545"></a>
+<span class="sourceLineNo">546</span>        }<a name="line.546"></a>
+<span class="sourceLineNo">547</span>        return result;<a name="line.547"></a>
+<span class="sourceLineNo">548</span>    }<a name="line.548"></a>
+<span class="sourceLineNo">549</span>}<a name="line.549"></a>
 
 
 

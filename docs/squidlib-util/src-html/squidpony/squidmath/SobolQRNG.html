@@ -606,7 +606,7 @@
 <span class="sourceLineNo">598</span>    }<a name="line.598"></a>
 <span class="sourceLineNo">599</span>    /**<a name="line.599"></a>
 <span class="sourceLineNo">600</span>     * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the<a name="line.600"></a>
-<span class="sourceLineNo">601</span>     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to<a name="line.601"></a>
+<span class="sourceLineNo">601</span>     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to<a name="line.601"></a>
 <span class="sourceLineNo">602</span>     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.<a name="line.602"></a>
 <span class="sourceLineNo">603</span>     * @return a copy of this RandomnessSource<a name="line.603"></a>
 <span class="sourceLineNo">604</span>     */<a name="line.604"></a>
@@ -617,7 +617,32 @@
 <span class="sourceLineNo">609</span>        next.skipTo(count);<a name="line.609"></a>
 <span class="sourceLineNo">610</span>        return next;<a name="line.610"></a>
 <span class="sourceLineNo">611</span>    }<a name="line.611"></a>
-<span class="sourceLineNo">612</span>}<a name="line.612"></a>
+<span class="sourceLineNo">612</span>    @Override<a name="line.612"></a>
+<span class="sourceLineNo">613</span>    public String toString()<a name="line.613"></a>
+<span class="sourceLineNo">614</span>    {<a name="line.614"></a>
+<span class="sourceLineNo">615</span>        return "SobolQRNG with rank " + dimension + " and index " + count;<a name="line.615"></a>
+<span class="sourceLineNo">616</span>    }<a name="line.616"></a>
+<span class="sourceLineNo">617</span><a name="line.617"></a>
+<span class="sourceLineNo">618</span>    @Override<a name="line.618"></a>
+<span class="sourceLineNo">619</span>    public boolean equals(Object o) {<a name="line.619"></a>
+<span class="sourceLineNo">620</span>        if (this == o) return true;<a name="line.620"></a>
+<span class="sourceLineNo">621</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.621"></a>
+<span class="sourceLineNo">622</span><a name="line.622"></a>
+<span class="sourceLineNo">623</span>        SobolQRNG sobolQRNG = (SobolQRNG) o;<a name="line.623"></a>
+<span class="sourceLineNo">624</span><a name="line.624"></a>
+<span class="sourceLineNo">625</span>        if (dimension != sobolQRNG.dimension) return false;<a name="line.625"></a>
+<span class="sourceLineNo">626</span>        return (count == sobolQRNG.count);<a name="line.626"></a>
+<span class="sourceLineNo">627</span>    }<a name="line.627"></a>
+<span class="sourceLineNo">628</span><a name="line.628"></a>
+<span class="sourceLineNo">629</span>    @Override<a name="line.629"></a>
+<span class="sourceLineNo">630</span>    public int hashCode() {<a name="line.630"></a>
+<span class="sourceLineNo">631</span>        int result = dimension;<a name="line.631"></a>
+<span class="sourceLineNo">632</span>        result = 31 * result + count;<a name="line.632"></a>
+<span class="sourceLineNo">633</span>        result = 31 * result + CrossHash.Lightning.hash(direction);<a name="line.633"></a>
+<span class="sourceLineNo">634</span>        result = 31 * result + CrossHash.Lightning.hash(x);<a name="line.634"></a>
+<span class="sourceLineNo">635</span>        return result;<a name="line.635"></a>
+<span class="sourceLineNo">636</span>    }<a name="line.636"></a>
+<span class="sourceLineNo">637</span>}<a name="line.637"></a>
 
 
 

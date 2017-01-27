@@ -186,7 +186,7 @@
 <span class="sourceLineNo">178</span><a name="line.178"></a>
 <span class="sourceLineNo">179</span>    /**<a name="line.179"></a>
 <span class="sourceLineNo">180</span>     * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the<a name="line.180"></a>
-<span class="sourceLineNo">181</span>     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to<a name="line.181"></a>
+<span class="sourceLineNo">181</span>     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to<a name="line.181"></a>
 <span class="sourceLineNo">182</span>     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.<a name="line.182"></a>
 <span class="sourceLineNo">183</span>     *<a name="line.183"></a>
 <span class="sourceLineNo">184</span>     * @return a copy of this RandomnessSource<a name="line.184"></a>
@@ -199,7 +199,32 @@
 <span class="sourceLineNo">191</span>        return next;<a name="line.191"></a>
 <span class="sourceLineNo">192</span>    }<a name="line.192"></a>
 <span class="sourceLineNo">193</span><a name="line.193"></a>
-<span class="sourceLineNo">194</span>}<a name="line.194"></a>
+<span class="sourceLineNo">194</span>    @Override<a name="line.194"></a>
+<span class="sourceLineNo">195</span>    public boolean equals(Object o) {<a name="line.195"></a>
+<span class="sourceLineNo">196</span>        if (this == o) return true;<a name="line.196"></a>
+<span class="sourceLineNo">197</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.197"></a>
+<span class="sourceLineNo">198</span><a name="line.198"></a>
+<span class="sourceLineNo">199</span>        MersenneTwister that = (MersenneTwister) o;<a name="line.199"></a>
+<span class="sourceLineNo">200</span><a name="line.200"></a>
+<span class="sourceLineNo">201</span>        if (mtIndex != that.mtIndex) return false;<a name="line.201"></a>
+<span class="sourceLineNo">202</span>        if (!Arrays.equals(seed, that.seed)) return false;<a name="line.202"></a>
+<span class="sourceLineNo">203</span>        return Arrays.equals(mt, that.mt);<a name="line.203"></a>
+<span class="sourceLineNo">204</span>    }<a name="line.204"></a>
+<span class="sourceLineNo">205</span><a name="line.205"></a>
+<span class="sourceLineNo">206</span>    @Override<a name="line.206"></a>
+<span class="sourceLineNo">207</span>    public int hashCode() {<a name="line.207"></a>
+<span class="sourceLineNo">208</span>        int result = CrossHash.Lightning.hash(seed);<a name="line.208"></a>
+<span class="sourceLineNo">209</span>        result = 31 * result + CrossHash.Lightning.hash(mt);<a name="line.209"></a>
+<span class="sourceLineNo">210</span>        result = 31 * result + mtIndex;<a name="line.210"></a>
+<span class="sourceLineNo">211</span>        return result;<a name="line.211"></a>
+<span class="sourceLineNo">212</span>    }<a name="line.212"></a>
+<span class="sourceLineNo">213</span><a name="line.213"></a>
+<span class="sourceLineNo">214</span>    @Override<a name="line.214"></a>
+<span class="sourceLineNo">215</span>    public String toString()<a name="line.215"></a>
+<span class="sourceLineNo">216</span>    {<a name="line.216"></a>
+<span class="sourceLineNo">217</span>        return "MersenneTwister with hidden state (id is " + System.identityHashCode(this)  + ')';<a name="line.217"></a>
+<span class="sourceLineNo">218</span>    }<a name="line.218"></a>
+<span class="sourceLineNo">219</span>}<a name="line.219"></a>
 
 
 

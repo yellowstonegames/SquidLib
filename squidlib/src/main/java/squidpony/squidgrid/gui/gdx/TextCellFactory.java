@@ -19,7 +19,12 @@ import com.badlogic.gdx.utils.Disposable;
 import squidpony.IColorCenter;
 import squidpony.squidmath.OrderedMap;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+
+import static squidpony.squidgrid.gui.gdx.Filters.Utility.colorFromFloat;
 
 /**
  * Class for creating text blocks.
@@ -47,7 +52,15 @@ public class TextCellFactory implements Disposable {
      * The commonly used symbols in roguelike games.
      */
     public static final String DEFAULT_FITTING = "@!#$%^&*()_+1234567890-=~ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz;:,'\"{}?/\\ ",
-    LINE_FITTING = "┼├┤┴┬┌┐└┘│─", SQUID_FITTING = DEFAULT_FITTING + LINE_FITTING;
+    LINE_FITTING = "┼├┤┴┬┌┐└┘│─",
+            SQUID_FITTING = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmno"+
+                    "pqrstuvwxyz{|}~¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàá"+
+                    "âãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿĀāĂăĄąĆćĈĉĊċČčĎďĐđĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħĨĩĪīĬĭĮįİı"+
+                    "ĲĳĴĵĶķĹĺĻļĽľĿŀŁłŃńŅņŇňŊŋŌōŎŏŐőŒœŔŕŖŗŘřŚśŜŝŞşŠšŢţŤťŨũŪūŬŭŮůŰűŲųŴŵŶŷŸŹźŻżŽžſƒǺǻǼǽǾ"+
+                    "ǿȘșȚțȷˆˇˉˋ˘˙˚˛˜˝;΄΅Ά·ΈΉΊΌΎΏΐΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩΪΫάέήίΰαβγδεζηθικλμνξοπρςστυ"+
+                    "φχψωϊϋόύώЀЁЂЃЄЅІЇЈЉЊЋЌЍЎЏАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхц"+
+                    "чшщъыьэюяѐёђѓєѕіїјљњћќѝўџѢѣѲѳѴѵҐґẀẁẂẃẄẅỲỳ–—‘’‚‛“”„†‡•…‰‹›ⁿ₤€№™Ω℮←↑→↓∆−√≈─│┌┐└┘├┤"+
+                    "┬┴┼═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫■□▪▫▲▼◊○●◦♀♂♠♣♥♦♪";
 
 	/**
 	 * The {@link AssetManager} from where to load the font. Use it to share
@@ -71,6 +84,7 @@ public class TextCellFactory implements Disposable {
     private Label.LabelStyle style;
     protected OrderedMap<String, String> swap = new OrderedMap<>(32);
     protected char directionGlyph = '^';
+    protected OrderedMap<Character, TextureRegion> glyphTextures = new OrderedMap<>(16);
 
 
     /**
@@ -122,6 +136,7 @@ public class TextCellFactory implements Disposable {
         //next.modifiedHeight = modifiedHeight;
         next.smoothingMultiplier = smoothingMultiplier;
         next.scc = scc;
+        next.directionGlyph = directionGlyph;
         if(initializedBySize)
             next.initBySize();
         else if(initializedByFont)
@@ -853,6 +868,40 @@ public class TextCellFactory implements Disposable {
                 bmpFont.draw(batch, s, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width * s.length(), Align.center, false);
         }
     }
+    /**
+     * Use the specified Batch to draw a String (often just one char long) in the specified LibGDX Color, with x and y
+     * determining the world-space coordinates for the upper-left corner.
+     *
+     * @param batch the LibGDX Batch to do the drawing
+     * @param s the string to draw, often but not necessarily one char. Can be null to draw a solid block instead.
+     * @param encodedColor the LibGDX Color to use, converted to float as by {@link Color#toFloatBits()}
+     * @param x x of the upper-left corner of the region of text in world coordinates.
+     * @param y y of the upper-left corner of the region of text in world coordinates.
+     */
+    public void draw(Batch batch, String s, float encodedColor, float x, float y) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+
+        if (s == null) {
+            float orig = batch.getPackedColor();
+            batch.setColor(encodedColor);
+            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // descent * 1 / 3f
+            batch.setColor(orig);
+        } else if(s.length() > 0 && s.charAt(0) == '\0') {
+            float orig = batch.getPackedColor();
+            batch.setColor(encodedColor);
+            batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight); // descent * 1 / 3f
+            batch.setColor(orig);
+        } else
+        {
+            colorFromFloat(bmpFont.getColor(), encodedColor);
+            if(swap.containsKey(s))
+                bmpFont.draw(batch, swap.get(s), x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width * s.length(), Align.center, false);
+            else
+                bmpFont.draw(batch, s, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width * s.length(), Align.center, false);
+        }
+    }
 
     /**
      * Use the specified Batch to draw a TextureRegion with the default tint color (white, so un-tinted), with x and y
@@ -1167,7 +1216,7 @@ public class TextCellFactory implements Disposable {
      * @param loopTime the amount of time, in seconds, to spend looping through all colors in the list
      * @return the Actor, with no position set.
      */
-    public Actor makeDirectionMarker(Collection<Color> colors, float loopTime, boolean doubleWidth) {
+    public Image makeDirectionMarker(Collection<Color> colors, float loopTime, boolean doubleWidth) {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
@@ -1181,9 +1230,7 @@ public class TextCellFactory implements Disposable {
         ColorChangeImage im = new ColorChangeImage(dirMarker, loopTime, doubleWidth,
                 actualCellWidth, actualCellHeight + (distanceField ? 1 : 0), colors2);
         im.setAlign(2);
-        //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));
         im.setSize(actualCellWidth * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
-        // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
         return im;
     }
     /**
@@ -1191,16 +1238,70 @@ public class TextCellFactory implements Disposable {
      * @param color a Color to tint the '^' with
      * @return the Actor, with no position set.
      */
-    public Actor makeDirectionMarker(Color color) {
+    public Image makeDirectionMarker(Color color) {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
         Image im = new Image(dirMarker);
         im.setColor(scc.filter(color));
-        //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));
         im.setSize(actualCellWidth, actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
         im.setOrigin(1); //center
-        // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
+        return im;
+    }
+
+    public ColorChangeImage makeGlyphImage(char glyph, Color color)
+    {
+        return makeGlyphImage(glyph, color, false);
+    }
+    public ColorChangeImage makeGlyphImage(char glyph, Color color, boolean doubleWidth)
+    {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        TextureRegion tr;
+        if (glyphTextures.containsKey(glyph))
+        {
+            tr = glyphTextures.get(glyph);
+        }
+        else
+        {
+            BitmapFont.Glyph g = bmpFont.getData().getGlyph(glyph);
+            tr = new TextureRegion(bmpFont.getRegion(g.page), g.srcX, g.srcY, g.width, g.height);
+            glyphTextures.put(glyph, tr);
+        }
+
+        ColorChangeImage im = new ColorChangeImage(tr, 1, doubleWidth,
+                actualCellWidth, actualCellHeight + (distanceField ? 1 : 0), Collections.singletonList(scc.filter(color)));
+        im.setAlign(2);
+        im.setSize(actualCellWidth * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
+        return im;
+    }
+    public ColorChangeImage makeGlyphImage(char glyph, Collection<Color> colors, float loopTime, boolean doubleWidth) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        TextureRegion tr;
+        if (glyphTextures.containsKey(glyph))
+        {
+            tr = glyphTextures.get(glyph);
+        }
+        else
+        {
+            BitmapFont.Glyph g = bmpFont.getData().getGlyph(glyph);
+            tr = new TextureRegion(bmpFont.getRegion(g.page), g.srcX, g.srcY, g.width, g.height);
+            glyphTextures.put(glyph, tr);
+        }
+        ArrayList<Color> colors2 = null;
+        if (colors != null && !colors.isEmpty()) {
+            colors2 = new ArrayList<>(colors.size());
+            for (Color c : colors) {
+                colors2.add(scc.filter(c));
+            }
+        }
+        ColorChangeImage im = new ColorChangeImage(tr, loopTime, doubleWidth,
+                actualCellWidth, actualCellHeight + (distanceField ? 1 : 0), colors2);
+        im.setAlign(2);
+        im.setSize(actualCellWidth * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
         return im;
     }
 

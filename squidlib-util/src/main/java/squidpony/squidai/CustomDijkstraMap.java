@@ -110,6 +110,7 @@ public class CustomDijkstraMap implements Serializable {
     private boolean initialized = false;
 
     private int mappedCount = 0;
+    private double[] heuristics;
 
     /**
      * Construct a CustomDijkstraMap without a level to actually scan. If you use this constructor, you must call an
@@ -168,7 +169,7 @@ public class CustomDijkstraMap implements Serializable {
     }
 
     /**
-     * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
      * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here.
@@ -180,7 +181,7 @@ public class CustomDijkstraMap implements Serializable {
     }
 
     /**
-     * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
      * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here. Also takes an RNG that ensures predictable path choices given
@@ -194,7 +195,7 @@ public class CustomDijkstraMap implements Serializable {
     }
 
     /**
-     * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
      * char[][] where one char means a wall and anything else is a walkable tile. If you only have
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here. You can specify the character used for walls.
@@ -214,7 +215,7 @@ public class CustomDijkstraMap implements Serializable {
     }
 
     /**
-     * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
      * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here. This constructor specifies a distance measurement.
@@ -227,7 +228,7 @@ public class CustomDijkstraMap implements Serializable {
     }
 
     /**
-     * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
      * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here. Also takes a distance measurement and an RNG that ensures
@@ -271,6 +272,10 @@ public class CustomDijkstraMap implements Serializable {
         adjacency.costRules.putAndMoveToFirst('#', WALL);
 
         neighbors = adjacency.neighborMaps();
+        heuristics = new double[adjacency.directions.length];
+        for (int i = 0; i < heuristics.length; i++) {
+            heuristics[i] = adjacency.measurement.heuristic(adjacency.directions[i]);
+        }
         initialized = true;
         return this;
     }
@@ -320,7 +325,10 @@ public class CustomDijkstraMap implements Serializable {
             }
         }
         neighbors = adjacency.neighborMaps();
-        initialized = true;
+        heuristics = new double[adjacency.directions.length];
+        for (int i = 0; i < heuristics.length; i++) {
+            heuristics[i] = adjacency.measurement.heuristic(adjacency.directions[i]);
+        }initialized = true;
         return this;
     }
 
@@ -505,16 +513,44 @@ public class CustomDijkstraMap implements Serializable {
      * these areas should not be used to place NPCs or items and should be filled with walls). This uses the
      * current measurement.
      *
-     * @param impassable A Set of Position keys representing the locations of enemies or other moving obstacles to a
-     *                   path that cannot be moved through; this can be null if there are no such obstacles.
-     * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
+     * @param impassable An array of int keys (encoded by an Adjacency, usually) representing the locations of enemies
+     * or other moving obstacles to a path that cannot be moved through; this can be null (meaning no obstacles).
+     * @return A double array using the dimensions of what this knows about the physical map.
      */
     public double[] scan(int[] impassable) {
+        if(impassable == null)
+            return scanInternal(null, -1);
+        return scanInternal(impassable, impassable.length);
+    }
+    /**
+     * Recalculate the CustomDijkstra map and return it. Cells that were marked as goals with setGoal will have
+     * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+     * from goals will have a value equal to the distance from the nearest goal. The exceptions are walls,
+     * which will have a value defined by the WALL constant in this class, and areas that the scan was
+     * unable to reach, which will have a value defined by the DARK constant in this class (typically,
+     * these areas should not be used to place NPCs or items and should be filled with walls). This uses the
+     * current measurement.
+     *
+     * @param impassable An array of int keys (encoded by an Adjacency, usually) representing the locations of enemies
+     * or other moving obstacles to a path that cannot be moved through; this can be null (meaning no obstacles).
+     * @param usablePortion how much of impassable to use (if non-null); this should usually be {@code impassable.size}
+     * @return A double array using the dimensions of what this knows about the physical map.
+     */
+    public double[] scan(IntVLA impassable, int usablePortion) {
+        if(impassable == null)
+            return scanInternal(null, -1);
+        return scanInternal(impassable.items, Math.min(usablePortion, impassable.size));
+    }
+
+    protected double[] scanInternal(int[] impassable, int usable)
+    {
         if (!initialized) return null;
         Adjacency adjacency = this.adjacency;
 
         if (impassable != null) {
-            for (int i = 0; i <impassable.length; i++) {
+            if(usable > impassable.length)
+                usable = impassable.length;
+            for (int i = 0; i < usable; i++) {
                 adjacency.putAllVariants(closed, impassable[i], WALL);
             }
         }
@@ -525,7 +561,7 @@ public class CustomDijkstraMap implements Serializable {
             closed.remove(entry.getIntKey());
             gradientMap[entry.getIntKey()] = entry.getDoubleValue();
         }
-        double currentLowest = 999000, cs;
+        double currentLowest = 999000, cs, csm;
         IntDoubleOrderedMap lowest = new IntDoubleOrderedMap();
         int maxLength = gradientMap.length;
         for (int l = 0; l < maxLength; l++) {
@@ -562,16 +598,18 @@ public class CustomDijkstraMap implements Serializable {
                             continue;
                         if(adjacency.isBlocked(mid, d, neighbors, gradientMap, WALL))
                             continue;
-                        cs = lowest.get(costMap[near]);
-                        if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[mid] + cs < gradientMap[near]) {
-                            setFresh(near, cell.getDoubleValue() + cs);
+                        csm = lowest.get(costMap[mid]) * heuristics[d];
+                        cs = lowest.get(costMap[near]) * heuristics[d];
+                        if (!closed.containsKey(near) && !open.containsKey(near) &&
+                                (gradientMap[mid] = cell.getDoubleValue() + csm) + cs < gradientMap[near]) {
+                            setFresh(near, cell.getDoubleValue() + cs + csm);
                             ++numAssigned;
                             ++mappedCount;
                         }
                     }
                     else
                     {
-                        cs = lowest.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000));
+                        cs = lowest.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000)) * heuristics[d];
                         //double h = adjacency.measurement.heuristic(adjacency.directions[d]);
                         if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[cen] + cs < gradientMap[near]) {
                             setFresh(near, cell.getDoubleValue() + cs);
@@ -608,16 +646,45 @@ public class CustomDijkstraMap implements Serializable {
      * current measurement.
      *
      * @param limit      The maximum number of steps to scan outward from a goal.
-     * @param impassable A Set of Position keys representing the locations of enemies or other moving obstacles to a
-     *                   path that cannot be moved through; this can be null if there are no such obstacles.
-     * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
+     * @param impassable An array or vararg of int keys representing the locations of enemies or other moving obstacles
+     *                   to a path that cannot be moved through; this can be null if there are no such obstacles.
+     * @return A double array using the dimensions of what this knows about the physical map.
      */
     public double[] partialScan(int limit, int... impassable) {
+        if(impassable == null)
+            return partialScanInternal(limit, null, -1);
+        return partialScanInternal(limit, impassable, impassable.length);
+    }
+
+    /**
+     * Recalculate the CustomDijkstra map up to a limit and return it. Cells that were marked as goals with setGoal will have
+     * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+     * from goals will have a value equal to the distance from the nearest goal. If a cell would take more steps to
+     * reach than the given limit, it will have a value of DARK if it was passable instead of the distance. The
+     * exceptions are walls, which will have a value defined by the WALL constant in this class, and areas that the scan
+     * was unable to reach, which will have a value defined by the DARK constant in this class. This uses the
+     * current measurement.
+     *
+     * @param limit      The maximum number of steps to scan outward from a goal.
+     * @param impassable An IntVLA of int keys representing the locations of enemies or other moving obstacles
+     *                   to a path that cannot be moved through; this can be null if there are no such obstacles.
+     * @param usablePortion how much of impassable to use (if non-null); this should usually be {@code impassable.size}
+     * @return A double array using the dimensions of what this knows about the physical map.
+     */
+    public double[] partialScan(int limit, IntVLA impassable, int usablePortion) {
+        if(impassable == null)
+            return partialScanInternal(limit, null, -1);
+        return partialScanInternal(limit, impassable.items, Math.min(usablePortion, impassable.size));
+    }
+    protected double[] partialScanInternal(int limit, int[] impassable, int usable)
+    {
         if (!initialized) return null;
         Adjacency adjacency = this.adjacency;
 
         if (impassable != null) {
-            for (int i = 0; i <impassable.length; i++) {
+            if(usable > impassable.length)
+                usable = impassable.length;
+            for (int i = 0; i < usable; i++) {
                 adjacency.putAllVariants(closed, impassable[i], WALL);
             }
         }
@@ -628,7 +695,7 @@ public class CustomDijkstraMap implements Serializable {
             closed.remove(entry.getIntKey());
             gradientMap[entry.getIntKey()] = entry.getDoubleValue();
         }
-        double currentLowest = 999000, cs;
+        double currentLowest = 999000, cs, csm;
         IntDoubleOrderedMap lowest = new IntDoubleOrderedMap();
         int maxLength = gradientMap.length;
         for (int l = 0; l < maxLength; l++) {
@@ -647,7 +714,7 @@ public class CustomDijkstraMap implements Serializable {
         open.putAll(lowest);
         lowest = adjacency.costRules;
         int iter = 0;
-        while (numAssigned > 0 && iter < limit) {
+        while (numAssigned > 0 && iter++ < limit) {
             numAssigned = 0;
 
             for (IntDoubleOrderedMap.MapEntry cell : open.mapEntrySet()) {
@@ -661,21 +728,23 @@ public class CustomDijkstraMap implements Serializable {
                         continue;
                     if(adjacency.twoStepRule) {
                         near = fromNeighbors[d][mid = near];
+                        // Outside the map
                         if (!adjacency.validate(near))
-                            // Outside the map
                             continue;
                         if(adjacency.isBlocked(mid, d, neighbors, gradientMap, WALL))
                             continue;
-                        cs = lowest.get(costMap[near]);
-                        if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[mid] + cs < gradientMap[near]) {
-                            setFresh(near, cell.getDoubleValue() + cs);
+                        csm = lowest.get(costMap[mid]) * heuristics[d];
+                        cs = lowest.get(costMap[near]) * heuristics[d];
+                        if (!closed.containsKey(near) && !open.containsKey(near) &&
+                                (gradientMap[mid] = cell.getDoubleValue() + csm) + cs < gradientMap[near]) {
+                            setFresh(near, cell.getDoubleValue() + cs + csm);
                             ++numAssigned;
                             ++mappedCount;
                         }
                     }
                     else
                     {
-                        cs = lowest.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000));
+                        cs = lowest.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000)) * heuristics[d];
                         //double h = adjacency.measurement.heuristic(adjacency.directions[d]);
                         if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[cen] + cs < gradientMap[near]) {
                             setFresh(near, cell.getDoubleValue() + cs);
@@ -688,18 +757,17 @@ public class CustomDijkstraMap implements Serializable {
             open.clear();
             open.putAll(fresh);
             fresh.clear();
-            iter++;
         }
         closed.clear();
         open.clear();
 
         double[] gradientClone = new double[maxLength];
         for (int l = 0; l < maxLength; l++) {
-            if (gradientMap[l] == FLOOR) {
-                gradientMap[l] = DARK;
-            }
+            if (gradientMap[l] == FLOOR)
+                gradientClone[l] = DARK;
+            else
+                gradientClone[l] = gradientMap[l];
         }
-        System.arraycopy(gradientMap, 0, gradientClone, 0, maxLength);
         return gradientClone;
     }
 
@@ -969,13 +1037,49 @@ public class CustomDijkstraMap implements Serializable {
      * and that poses all sorts of issues for creatures trying to pathfind to it, not to mention the more
      * general issues of how to display a bisected, but mobile, creature.
      *
-     * @param impassable A Set of Position keys representing the locations of enemies or other moving obstacles to a
-     *                   path that cannot be moved through; this can be null if there are no such obstacles.
+     * @param impassable An array of encoded int keys representing the locations of enemies or other moving obstacles to
+     *                   a path that cannot be moved through; this can be null if there are no such obstacles.
      * @param size       The length of one side of a square creature using this to find a path, i.e. 2 for a 2x2 cell
      *                   creature. Non-square creatures are not supported because turning is really hard.
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
-    public double[] scan(int size, int[] impassable) {
+    public double[] scanLarge(int size, int[] impassable) {
+        if(impassable == null)
+            return scanLargeInternal(size, null, -1);
+        return scanLargeInternal(size, impassable, impassable.length);
+    }
+    /**
+     * Recalculate the CustomDijkstra map for a creature that is potentially larger than 1x1 cell and return it. The value of
+     * a cell in the returned CustomDijkstra map assumes that a creature is square, with a side length equal to the passed
+     * size, that its minimum-x, minimum-y cell is the starting cell, and that any cell with a distance number
+     * represents the distance for the creature's minimum-x, minimum-y cell to reach it. Cells that cannot be entered
+     * by the minimum-x, minimum-y cell because of sizing (such as a floor cell next to a maximum-x and/or maximum-y
+     * wall if size is &gt; 1) will be marked as DARK. Cells that were marked as goals with setGoal will have
+     * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+     * from goals will have a value equal to the distance from the nearest goal. The exceptions are walls,
+     * which will have a value defined by the WALL constant in this class, and areas that the scan was
+     * unable to reach, which will have a value defined by the DARK constant in this class. (typically,
+     * these areas should not be used to place NPCs or items and should be filled with walls). This uses the
+     * current measurement.
+     * <br>
+     * Portals and wrapping are not currently recommended in conjunction with multi-square creatures, since a
+     * 2x2 creature could easily occupy two cells on the east edge and two cells on the west edge of the map,
+     * and that poses all sorts of issues for creatures trying to pathfind to it, not to mention the more
+     * general issues of how to display a bisected, but mobile, creature.
+     *
+     * @param impassable An IntVLA where items are ints representing the locations of enemies or other moving obstacles
+     *                   to a path that cannot be moved through; this can be null if there are no such obstacles.
+     * @param size       The length of one side of a square creature using this to find a path, i.e. 2 for a 2x2 cell
+     *                   creature. Non-square creatures are not supported because turning is really hard.
+     * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
+     */
+    public double[] scanLarge(int size, IntVLA impassable, int usablePortion) {
+        if(impassable == null)
+            return scanLargeInternal(size, null, -1);
+        return scanLargeInternal(size, impassable.items, Math.min(usablePortion, impassable.size));
+    }
+    protected double[] scanLargeInternal(int size, int[] impassable, int usable)
+    {
         if (!initialized) return null;
 
         int[][] fromNeighbors = neighbors[0];
@@ -984,7 +1088,9 @@ public class CustomDijkstraMap implements Serializable {
         Adjacency adjacency = this.adjacency;
 
         if (impassable != null) {
-            for (int i = 0; i <impassable.length; i++) {
+            if(usable > impassable.length)
+                usable = impassable.length;
+            for (int i = 0; i < usable; i++) {
                 adjacency.putAllVariants(closed, impassable[i], WALL, -size);
             }
         }
@@ -1008,7 +1114,7 @@ public class CustomDijkstraMap implements Serializable {
                 }
             }
         }
-        double currentLowest = 999000, cs;
+        double currentLowest = 999000, cs, csm;
         IntDoubleOrderedMap lowest = new IntDoubleOrderedMap();
         int maxLength = gradientMap.length;
         for (int l = 0; l < maxLength; l++) {
@@ -1050,21 +1156,21 @@ public class CustomDijkstraMap implements Serializable {
                     //    continue;
                     if(adjacency.twoStepRule) {
                         near = fromNeighbors[d][mid = near];
+                        // Outside the map
                         if (!adjacency.validate(near))
-                            // Outside the map
                             continue;
-                        //if(adjacency.isBlocked(mid, d, neighbors, gradientMap, WALL))
-                        //    continue;
-                        cs = lowest.get(costMap[near]);
-                        if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[mid] + cs < gradientMap[near]) {
-                            setFresh(near, cell.getDoubleValue() + cs);
+                        csm = lowest.get(costMap[mid]) * heuristics[d];
+                        cs = lowest.get(costMap[near]) * heuristics[d];
+                        if (!closed.containsKey(near) && !open.containsKey(near) &&
+                                (gradientMap[mid] = cell.getDoubleValue() + csm) + cs < gradientMap[near]) {
+                            setFresh(near, cell.getDoubleValue() + cs + csm);
                             ++numAssigned;
                             ++mappedCount;
                         }
                     }
                     else
                     {
-                        cs = lowest.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000));
+                        cs = lowest.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000)) * heuristics[d];
                         //double h = adjacency.measurement.heuristic(adjacency.directions[d]);
                         if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[cen] + cs < gradientMap[near]) {
                             setFresh(near, cell.getDoubleValue() + cs);
@@ -1083,14 +1189,174 @@ public class CustomDijkstraMap implements Serializable {
 
         double[] gradientClone = new double[maxLength];
         for (int l = 0; l < maxLength; l++) {
-            if (gradientMap[l] == FLOOR) {
-                gradientMap[l] = DARK;
-            }
+            if (gradientMap[l] == FLOOR)
+                gradientClone[l] = DARK;
+            else
+                gradientClone[l] = gradientMap[l];
         }
-        System.arraycopy(gradientMap, 0, gradientClone, 0, maxLength);
         return gradientClone;
     }
 
+    /**
+     * Recalculate the CustomDijkstra map up to a limit and return it. Cells that were marked as goals with setGoal will have
+     * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+     * from goals will have a value equal to the distance from the nearest goal. If a cell would take more steps to
+     * reach than the given limit, it will have a value of DARK if it was passable instead of the distance. The
+     * exceptions are walls, which will have a value defined by the WALL constant in this class, and areas that the scan
+     * was unable to reach, which will have a value defined by the DARK constant in this class. This uses the
+     * current measurement.
+     *
+     * @param limit      The maximum number of steps to scan outward from a goal.
+     * @param impassable An array or vararg of int keys representing the locations of enemies or other moving obstacles
+     *                   to a path that cannot be moved through; this can be null if there are no such obstacles.
+     * @return A double array using the dimensions of what this knows about the physical map.
+     */
+    public double[] partialScanLarge(int size, int limit, int... impassable) {
+        if(impassable == null)
+            return partialScanLargeInternal(size, limit, null, -1);
+        return partialScanLargeInternal(size, limit, impassable, impassable.length);
+    }
+
+    /**
+     * Recalculate the CustomDijkstra map up to a limit and return it. Cells that were marked as goals with setGoal will have
+     * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+     * from goals will have a value equal to the distance from the nearest goal. If a cell would take more steps to
+     * reach than the given limit, it will have a value of DARK if it was passable instead of the distance. The
+     * exceptions are walls, which will have a value defined by the WALL constant in this class, and areas that the scan
+     * was unable to reach, which will have a value defined by the DARK constant in this class. This uses the
+     * current measurement.
+     *
+     * @param limit      The maximum number of steps to scan outward from a goal.
+     * @param impassable An IntVLA of int keys representing the locations of enemies or other moving obstacles
+     *                   to a path that cannot be moved through; this can be null if there are no such obstacles.
+     * @param usablePortion how much of impassable to use (if non-null); this should usually be {@code impassable.size}
+     * @return A double array using the dimensions of what this knows about the physical map.
+     */
+    public double[] partialScanLarge(int size, int limit, IntVLA impassable, int usablePortion) {
+        if(impassable == null)
+            return partialScanLargeInternal(size, limit, null, -1);
+        return partialScanLargeInternal(size, limit, impassable.items, Math.min(usablePortion, impassable.size));
+    }
+    protected double[] partialScanLargeInternal(int size, int limit, int[] impassable, int usable)
+    {
+        if (!initialized) return null;
+        Adjacency adjacency = this.adjacency;
+
+        if (impassable != null) {
+            if(usable > impassable.length)
+                usable = impassable.length;
+            for (int i = 0; i < usable; i++) {
+                adjacency.putAllVariants(closed, impassable[i], WALL, -size);
+            }
+        }
+        int[][] fromNeighbors = neighbors[0];
+        int near, cen, neighborCount = neighbors.length, mid, tmp, tmp2, xStore, yStore, rStore, nStore;
+        double valStore;
+
+        mappedCount = 0;
+
+        for (IntDoubleOrderedMap.MapEntry entry : goals.mapEntrySet()) {
+            tmp = entry.getIntKey();
+            xStore = adjacency.extractX(tmp);
+            yStore = adjacency.extractY(tmp);
+            rStore = adjacency.extractR(tmp);
+            nStore = adjacency.extractN(tmp);
+            valStore = entry.getDoubleValue();
+            for (int a = 0; a < size; a++) {
+                for (int b = 0; b < size; b++) {
+                    tmp2 = adjacency.composite(xStore - a, yStore - b, rStore, nStore);
+                    if (tmp2 >= 0) {
+                        closed.remove(tmp2);
+                        gradientMap[tmp2] = valStore;
+                        mappedCount++;
+                    }
+                }
+            }
+        }
+        double currentLowest = 999000, cs, csm;
+        IntDoubleOrderedMap lowest = new IntDoubleOrderedMap();
+        int maxLength = gradientMap.length;
+        for (int l = 0; l < maxLength; l++) {
+            if (gradientMap[l] > FLOOR && !goals.containsKey(l)) {
+                xStore = adjacency.extractX(l);
+                yStore = adjacency.extractY(l);
+                rStore = adjacency.extractR(l);
+                nStore = adjacency.extractN(l);
+                for (int a = 0; a < size; a++) {
+                    for (int b = 0; b < size; b++) {
+                        tmp2 = adjacency.composite(xStore - a, yStore - b, rStore, nStore);
+                        if (tmp2 >= 0)
+                            closed.put(tmp2, physicalMap[l]);
+                    }
+                }
+            }
+            else if (gradientMap[l] < currentLowest) {
+                currentLowest = gradientMap[l];
+                lowest.clear();
+                lowest.put(l, currentLowest);
+            } else if (gradientMap[l] == currentLowest) {
+                lowest.put(l, currentLowest);
+            }
+        }
+        int numAssigned = lowest.size();
+        open.putAll(lowest);
+        lowest = adjacency.costRules;
+        int iter = 0;
+        while (numAssigned > 0 && iter++ < limit) {
+            numAssigned = 0;
+
+
+            for (IntDoubleOrderedMap.MapEntry cell : open.mapEntrySet()) {
+                cen = cell.getIntKey();
+                for (int d = 0; d < neighborCount; d++) {
+                    near = fromNeighbors[d][cen];
+                    if (!adjacency.validate(near))
+                        // Outside the map
+                        continue;
+                    //if(adjacency.isBlocked(cen, d, neighbors, gradientMap, WALL))
+                    //    continue;
+                    if(adjacency.twoStepRule) {
+                        near = fromNeighbors[d][mid = near];
+                        // Outside the map
+                        if (!adjacency.validate(near))
+                            continue;
+                        csm = lowest.get(costMap[mid]) * heuristics[d];
+                        cs = lowest.get(costMap[near]) * heuristics[d];
+                        if (!closed.containsKey(near) && !open.containsKey(near) &&
+                                (gradientMap[mid] = cell.getDoubleValue() + csm) + cs < gradientMap[near]) {
+                            setFresh(near, cell.getDoubleValue() + cs + csm);
+                            ++numAssigned;
+                            ++mappedCount;
+                        }
+                    }
+                    else
+                    {
+                        cs = lowest.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000)) * heuristics[d];
+                        //double h = adjacency.measurement.heuristic(adjacency.directions[d]);
+                        if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[cen] + cs < gradientMap[near]) {
+                            setFresh(near, cell.getDoubleValue() + cs);
+                            ++numAssigned;
+                            ++mappedCount;
+                        }
+                    }
+                }
+            }
+            open.clear();
+            open.putAll(fresh);
+            fresh.clear();
+        }
+        closed.clear();
+        open.clear();
+
+        double[] gradientClone = new double[maxLength];
+        for (int l = 0; l < maxLength; l++) {
+            if (gradientMap[l] == FLOOR)
+                gradientClone[l] = DARK;
+            else
+                gradientClone[l] = gradientMap[l];
+        }
+        return gradientClone;
+    }
 
 
     /*
@@ -1235,7 +1501,34 @@ public class CustomDijkstraMap implements Serializable {
      * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.
      */
     public IntVLA findPath(int length, IntVLA impassable,
-                                     IntVLA onlyPassable, int start, int... targets) {
+                           IntVLA onlyPassable, int start, int... targets)
+    {
+        return findPath(length, -1, impassable, onlyPassable, start, targets);
+    }
+
+
+    /**
+     * Scans the dungeon using CustomDijkstraMap.scan with the listed goals and start point, and returns a list
+     * of Coord positions (using the current measurement) needed to get closer to the closest reachable
+     * goal. The maximum length of the returned list is given by length; if moving the full length of
+     * the list would place the mover in a position shared by one of the positions in onlyPassable
+     * (which is typically filled with friendly units that can be passed through in multi-tile-
+     * movement scenarios), it will recalculate a move so that it does not pass into that cell.
+     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+     * through, and will be ignored if there is a goal overlapping one.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
+     * @param length       the length of the path to calculate
+     * @param impassable   a Set of impassable Coord positions that may change (not constant like walls); can be null
+     * @param onlyPassable a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
+     * @param start        the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
+     * @param targets      a vararg or array of Coord that this will try to pathfind toward
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.
+     */
+    public IntVLA findPath(int length, int scanLimit, IntVLA impassable,
+                           IntVLA onlyPassable, int start, int... targets)
+    {
         if (!initialized) return null;
         path.clear();
         IntVLA impassable2;
@@ -1256,7 +1549,13 @@ public class CustomDijkstraMap implements Serializable {
             return new IntVLA(path);
         Adjacency adjacency = this.adjacency;
         int[][] toNeighbors = neighbors[1];
-        scan(impassable2.toArray());
+        if(length < 0)
+            length = 0;
+        if(scanLimit <= 0 || scanLimit < length)
+            scan(impassable2, impassable2.size);
+        else
+            partialScan(scanLimit, impassable2, impassable2.size);
+
         int currentPos = start, pt;
         double paidLength = 0.0;
         while (true) {
@@ -1270,6 +1569,8 @@ public class CustomDijkstraMap implements Serializable {
 
             for (int d = 0; d < adjacency.maxAdjacent; d++) {
                 pt = toNeighbors[reuse[d]][currentPos];
+                if(adjacency.twoStepRule)
+                    pt = toNeighbors[reuse[d]][pt];
                 if (gradientMap[pt] < best && !path.contains(pt)) {
                     best = gradientMap[pt];
                     choice = reuse[d];// adjacency.invertAdjacent[reuse[d]];
@@ -1281,6 +1582,8 @@ public class CustomDijkstraMap implements Serializable {
                 break;
             }
             currentPos = toNeighbors[choice][pt = currentPos];
+            if(adjacency.twoStepRule)
+                currentPos = toNeighbors[choice][currentPos];
             path.add(currentPos);
             paidLength += adjacency.costRules.get(costMap[currentPos] | (adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000));
             frustration++;
@@ -1288,7 +1591,7 @@ public class CustomDijkstraMap implements Serializable {
                 if (onlyPassable.contains(currentPos)) {
                     closed.put(currentPos, WALL);
                     impassable2.add(currentPos);
-                    return findPath(length, impassable2, onlyPassable, start, targets);
+                    return findPath(length, scanLimit, impassable2, onlyPassable, start, targets);
                 }
                 break;
             }
@@ -1299,6 +1602,101 @@ public class CustomDijkstraMap implements Serializable {
         goals.clear();
         return new IntVLA(path);
     }
+
+    /*
+     * Scans the dungeon using DijkstraMap.scan or DijkstraMap.partialScan with the listed goals and start
+     * point, and returns a list of Coord positions (using the current measurement) needed to get closer
+     * to the closest reachable goal. The maximum length of the returned list is given by length, which represents
+     * movement in a system where a single move can be multiple cells if length is greater than 1 and should usually
+     * be 1 in standard roguelikes; if moving the full length of the list would place the mover in a position shared
+     * by one of the positions in onlyPassable (which is typically filled with friendly units that can be passed
+     * through in multi-cell-movement scenarios), it will recalculate a move so that it does not pass into that cell.
+     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+     * through, and will be ignored if there is a goal overlapping one.
+     * The full map will only be scanned if scanLimit is 0 or less; for positive scanLimit values this will scan only
+     * that distance out from each goal, which can save processing time on maps where only a small part matters.
+     * Generally, scanLimit should be significantly greater than length.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
+     * @param length       the length of the path to calculate
+     * @param scanLimit    how many steps away from a goal to actually process; negative to process whole map
+     * @param impassable   a Set of impassable Coord positions that may change (not constant like walls); can be null
+     * @param onlyPassable a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
+     * @param start        the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
+     * @param targets      a vararg or array of Coord that this will try to pathfind toward
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.
+     */
+    /*
+    public ArrayList<Coord> findPath(int length, int scanLimit, Set<Coord> impassable,
+                                     Set<Coord> onlyPassable, Coord start, Coord... targets) {
+        if (!initialized) return null;
+        path.clear();
+        OrderedSet<Coord> impassable2;
+        if (impassable == null)
+            impassable2 = new OrderedSet<>();
+        else
+            impassable2 = new OrderedSet<>(impassable);
+        if (onlyPassable == null)
+            onlyPassable = new OrderedSet<>();
+
+        resetMap();
+        for (Coord goal : targets) {
+            setGoal(goal.x, goal.y);
+        }
+        if (goals.isEmpty())
+            return new ArrayList<>(path);
+        if(length < 0)
+            length = 0;
+        if(scanLimit <= 0 || scanLimit < length)
+            scan(impassable2);
+        else
+            partialScan(scanLimit, impassable2);
+        Coord currentPos = start;
+        double paidLength = 0.0;
+        while (true) {
+            if (frustration > 500) {
+                path.clear();
+                break;
+            }
+            double best = gradientMap[currentPos.x][currentPos.y];
+            final Direction[] dirs = appendDirToShuffle(rng);
+            int choice = rng.nextInt(measurement.directionCount() + 1);
+
+            for (int d = 0; d <= measurement.directionCount(); d++) {
+                Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
+                    if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
+                        best = gradientMap[pt.x][pt.y];
+                        choice = d;
+                    }
+                }
+            }
+
+            if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
+                path.clear();
+                break;
+            }
+            currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
+            path.add(currentPos);
+            paidLength += costMap[currentPos.x][currentPos.y];
+            frustration++;
+            if (paidLength > length - 1.0) {
+                if (onlyPassable.contains(currentPos)) {
+                    closed.put(currentPos.encode(), WALL);
+                    impassable2.add(currentPos);
+                    return findPath(length, scanLimit, impassable2, onlyPassable, start, targets);
+                }
+                break;
+            }
+            if (gradientMap[currentPos.x][currentPos.y] == 0)
+                break;
+        }
+        frustration = 0;
+        goals.clear();
+        return new ArrayList<>(path);
+    }
+    */
 
 
     // TODO: Tackle these next two once there's a CustomLOS class
@@ -1498,6 +1896,38 @@ public class CustomDijkstraMap implements Serializable {
      */
     public IntVLA findFleePath(int length, double preferLongerPaths, IntVLA impassable,
                                          IntVLA onlyPassable, int start, int... fearSources) {
+        return findFleePath(length, -1, preferLongerPaths, impassable, onlyPassable, start, fearSources);
+    }
+    /**
+     * Scans the dungeon using CustomDijkstraMap.scan with the listed fearSources and start point, and returns a list
+     * of Coord positions (using Manhattan distance) needed to get further from the closest fearSources, meant
+     * for running away. The maximum length of the returned list is given by length; if moving the full
+     * length of the list would place the mover in a position shared by one of the positions in onlyPassable
+     * (which is typically filled with friendly units that can be passed through in multi-tile-
+     * movement scenarios), it will recalculate a move so that it does not pass into that cell.
+     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+     * through, and will be ignored if there is a fearSource overlapping one. The preferLongerPaths parameter
+     * is meant to be tweaked and adjusted; higher values should make creatures prefer to escape out of
+     * doorways instead of hiding in the closest corner, and a value of 1.2 should be typical for many maps.
+     * The parameters preferLongerPaths, impassable, and the varargs used for fearSources will be cached, and
+     * any subsequent calls that use the same values as the last values passed will avoid recalculating
+     * unnecessary scans.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
+     *
+     * @param length            the length of the path to calculate
+     * @param scanLimit         how many steps away from a fear source to calculate; negative scans the whole map
+     * @param preferLongerPaths Set this to 1.2 if you aren't sure; it will probably need tweaking for different maps.
+     * @param impassable        a Set of impassable Coord positions that may change (not constant like walls); can be null
+     * @param onlyPassable      a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
+     * @param start             the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
+     * @param fearSources       a vararg or array of Coord positions to run away from
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes away from fear sources. Copy of path.
+     */
+    public IntVLA findFleePath(int length, int scanLimit, double preferLongerPaths, IntVLA impassable,
+                               IntVLA onlyPassable, int start, int... fearSources) {
+
         if (!initialized) return null;
         path.clear();
         IntVLA impassable2;
@@ -1526,13 +1956,20 @@ public class CustomDijkstraMap implements Serializable {
             }
             if (goals.isEmpty())
                 return new IntVLA(path);
-            int[] scanArray = impassable2.toArray();
-            scan(scanArray);
+            if(length < 0) length = 0;
+            if(scanLimit <= 0 || scanLimit < length)
+                cachedFleeMap = scan(impassable2, impassable2.size);
+            else
+                cachedFleeMap = partialScan(scanLimit, impassable2, impassable2.size);
 
             for (int l = 0; l < gradientMap.length; l++) {
                 gradientMap[l] *= (gradientMap[l] >= FLOOR) ? 1.0 : - preferLongerPaths;
             }
-            cachedFleeMap = scan(scanArray);
+            if(scanLimit <= 0 || scanLimit < length)
+                cachedFleeMap = scan(impassable2, impassable2.size);
+            else
+                cachedFleeMap = partialScan(scanLimit, impassable2, impassable2.size);
+
         }
         Adjacency adjacency = this.adjacency;
         int[][] toNeighbors = neighbors[1];
@@ -1568,7 +2005,7 @@ public class CustomDijkstraMap implements Serializable {
                 if (onlyPassable.contains(currentPos)) {
                     closed.put(currentPos, WALL);
                     impassable2.add(currentPos);
-                    return findFleePath(length, preferLongerPaths, impassable2, onlyPassable, start, fearSources);
+                    return findFleePath(length, scanLimit, preferLongerPaths, impassable2, onlyPassable, start, fearSources);
                 }
                 break;
             }
@@ -1603,7 +2040,36 @@ public class CustomDijkstraMap implements Serializable {
      * @return an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target. Copy of path.
      */
     public IntVLA findPathLarge (int size, int length, IntVLA impassable,
-                           IntVLA onlyPassable, int start, int... targets) {
+                                 IntVLA onlyPassable, int start, int... targets) {
+        return findPathLarge(size, length, -1, impassable, onlyPassable, start, targets);
+    }
+    /**
+     * Scans the dungeon using CustomDijkstraMap.scanLarge with the listed goals and start point, and returns a list
+     * of Coord positions (using the current measurement) needed to get closer to the closest reachable
+     * goal. The maximum length of the returned list is given by length; if moving the full length of
+     * the list would place the mover in a position shared by one of the positions in onlyPassable
+     * (which is typically filled with friendly units that can be passed through in multi-tile-
+     * movement scenarios), it will recalculate a move so that it does not pass into that cell.
+     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+     * through, and will be ignored if there is a goal overlapping one.
+     * The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The
+     * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &gt; 1, and
+     * all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
+     *
+     * @param size         the side length of the creature trying to find a path
+     * @param length       the length of the path to calculate
+     * @param scanLimit    how many steps away from a goal to calculate; negative scans the whole map
+     * @param impassable   a Set of impassable Coord positions that may change (not constant like walls); can be null
+     * @param onlyPassable a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
+     * @param start        the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
+     * @param targets      a vararg or array of Coord that this will try to pathfind toward
+     * @return an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target. Copy of path.
+     */
+    public IntVLA findPathLarge (int size, int length, int scanLimit, IntVLA impassable,
+                                 IntVLA onlyPassable, int start, int... targets) {
         if (!initialized) return null;
         path.clear();
         IntVLA impassable2;
@@ -1622,7 +2088,13 @@ public class CustomDijkstraMap implements Serializable {
             return new IntVLA(path);
         Adjacency adjacency = this.adjacency;
         int[][] toNeighbors = neighbors[1];
-        scan(size, impassable2.toArray());
+        if(length < 0)
+            length = 0;
+        if(scanLimit <= 0 || scanLimit < length)
+            scanLarge(size, impassable2, impassable2.size);
+        else
+            partialScanLarge(size, scanLimit, impassable2, impassable2.size);
+
         int currentPos = start, pt;
         double paidLength = 0.0;
         while (true) {
@@ -1655,7 +2127,7 @@ public class CustomDijkstraMap implements Serializable {
                 if (onlyPassable.contains(currentPos)) {
                     closed.put(currentPos, WALL);
                     impassable2.add(currentPos);
-                    return findPathLarge(size, length, impassable2, onlyPassable, start, targets);
+                    return findPathLarge(size, scanLimit, length, impassable2, onlyPassable, start, targets);
                 }
                 break;
             }
@@ -2013,7 +2485,7 @@ public class CustomDijkstraMap implements Serializable {
     }
     */
     /**
-     * Scans the dungeon using CustomDijkstraMap.scan with the listed fearSources and start point, and returns a list
+     * Scans the dungeon using CustomDijkstraMap.scanLarge with the listed fearSources and start point, and returns a list
      * of Coord positions (using Manhattan distance) needed to get further from the closest fearSources, meant
      * for running away. The maximum length of the returned list is given by length; if moving the full
      * length of the list would place the mover in a position shared by one of the positions in onlyPassable
@@ -2043,7 +2515,44 @@ public class CustomDijkstraMap implements Serializable {
      * @return an ArrayList of Coord that will contain the locations of this creature as it goes away from fear sources. Copy of path.
      */
     public IntVLA findFleePathLarge(int size, int length, double preferLongerPaths, IntVLA impassable,
-                                              IntVLA onlyPassable, int start, int... fearSources) {
+                                    IntVLA onlyPassable, int start, int... fearSources) {
+        return findFleePathLarge(size, length, -1, preferLongerPaths, impassable, onlyPassable, start, fearSources);
+    }
+
+
+    /**
+     * Scans the dungeon using CustomDijkstraMap.scanLarge with the listed fearSources and start point, and returns a list
+     * of Coord positions (using Manhattan distance) needed to get further from the closest fearSources, meant
+     * for running away. The maximum length of the returned list is given by length; if moving the full
+     * length of the list would place the mover in a position shared by one of the positions in onlyPassable
+     * (which is typically filled with friendly units that can be passed through in multi-tile-
+     * movement scenarios), it will recalculate a move so that it does not pass into that cell.
+     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+     * through, and will be ignored if there is a fearSource overlapping one. The preferLongerPaths parameter
+     * is meant to be tweaked and adjusted; higher values should make creatures prefer to escape out of
+     * doorways instead of hiding in the closest corner, and a value of 1.2 should be typical for many maps.
+     * The parameters size, preferLongerPaths, impassable, and the varargs used for fearSources will be cached, and
+     * any subsequent calls that use the same values as the last values passed will avoid recalculating
+     * unnecessary scans. Calls to findFleePath will cache as if size is 1, and may share a cache with this function.
+     * The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The
+     * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &gt; 1, and
+     * all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
+     *
+     * @param size              the side length of the creature trying the find a path
+     * @param length            the length of the path to calculate
+     * @param scanLimit         how many steps away from a goal to calculate; negative scans the whole map
+     * @param preferLongerPaths Set this to 1.2 if you aren't sure; it will probably need tweaking for different maps.
+     * @param impassable        a Set of impassable Coord positions that may change (not constant like walls); can be null
+     * @param onlyPassable      a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
+     * @param start             the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
+     * @param fearSources       a vararg or array of Coord positions to run away from
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes away from fear sources. Copy of path.
+     */
+    public IntVLA findFleePathLarge(int size, int length, int scanLimit, double preferLongerPaths, IntVLA impassable,
+                                    IntVLA onlyPassable, int start, int... fearSources) {
         if (!initialized) return null;
         path.clear();
         IntVLA impassable2;
@@ -2072,13 +2581,19 @@ public class CustomDijkstraMap implements Serializable {
             }
             if (goals.isEmpty())
                 return new IntVLA(path);
-            int[] scanArray = impassable2.toArray();
-            scan(size, scanArray);
+
+            if(scanLimit <= 0 || scanLimit < length)
+                cachedFleeMap = scanLarge(size, impassable2, impassable2.size);
+            else
+                cachedFleeMap = partialScanLarge(size, scanLimit, impassable2, impassable2.size);
 
             for (int l = 0; l < gradientMap.length; l++) {
                 gradientMap[l] *= (gradientMap[l] >= FLOOR) ? 1.0 : -preferLongerPaths;
             }
-            cachedFleeMap = scan(size, scanArray);
+            if(scanLimit <= 0 || scanLimit < length)
+                cachedFleeMap = scanLarge(size, impassable2, impassable2.size);
+            else
+                cachedFleeMap = partialScanLarge(size, scanLimit, impassable2, impassable2.size);
         }
         Adjacency adjacency = this.adjacency;
         int[][] toNeighbors = neighbors[1];
@@ -2114,7 +2629,7 @@ public class CustomDijkstraMap implements Serializable {
                 if (onlyPassable.contains(currentPos)) {
                     closed.put(currentPos, WALL);
                     impassable2.add(currentPos);
-                    return findFleePathLarge(size, length, preferLongerPaths, impassable2, onlyPassable, start, fearSources);
+                    return findFleePathLarge(size, scanLimit, length, preferLongerPaths, impassable2, onlyPassable, start, fearSources);
                 }
                 break;
             }

@@ -20,6 +20,9 @@ import squidpony.squidmath.*;
 import java.util.Arrays;
 import java.util.Random;
 
+import static squidpony.squidgrid.gui.gdx.Filters.Utility.floatGet;
+import static squidpony.squidgrid.gui.gdx.Filters.Utility.floatGetI;
+
 /**
  * Created by Tommy Ettinger on 8/20/2016.
  */
@@ -33,15 +36,25 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 28, rngMode = 0, noiseMode = 1;
+    private int hashMode = 30, rngMode = 0, noiseMode = 12;
     private CrossHash.Storm storm, stormA, stormB, stormC;
-    private int testType = 1;
+    private CrossHash.Chariot chariot, chariotA, chariotB, chariotC;
+    private final int[] coordinates = new int[2];
+    private final int[] coordinate = new int[1];
+
+    // 0 commonly used hashes
+    // 1 variants on Storm and other hashes
+    // 3 artistic visualizations of hash functions
+    // 4 noise
+    // 5 RNG results
+    private int testType = 0;
+
     private RandomnessSource fuzzy, random;
     private Random jreRandom;
     private RandomXS128 gdxRandom;
     private long seed;
     private int ctr = 0;
-    private boolean keepGoing = false;
+    private boolean keepGoing = true;
 
     public static double toDouble(long n) {
         return Double.longBitsToDouble(0x3FF0000000000000L | n >>> 12) - 1.0;
@@ -50,6 +63,21 @@ public class HashVisualizer extends ApplicationAdapter {
 
     public static float toFloat(int n) {
         return (Float.intBitsToFloat(0x3F800000 | n >>> 9) - 1.0f);
+    }
+
+    public static int mixHash(final int x, final int y)
+    {
+        int x2 = 0x9E3779B9 * x, y2 = 0x632BE5AB * y;
+        return ((x2 ^ y2) >>> ((x2 & 7) + (y2 & 7))) * 0x85157AF5;
+    }
+
+    public static int oldHash(final int x, final int y)
+    {
+        int hash = 7;
+        hash = 113 * hash + x;
+        hash = 113 * hash + y;
+        return hash;
+
     }
 
     /*
@@ -164,6 +192,10 @@ public class HashVisualizer extends ApplicationAdapter {
         stormA = CrossHash.Storm.alpha;
         stormB = CrossHash.Storm.beta;
         stormC = CrossHash.Storm.chi;
+        chariot = new CrossHash.Chariot();
+        chariotA = CrossHash.Chariot.alpha;
+        chariotB = CrossHash.Chariot.beta;
+        chariotC = CrossHash.Chariot.chi;
         fuzzy = new ThunderRNG(0xBEEFCAFEF00DCABAL);
         view = new ScreenViewport();
         stage = new Stage(view, batch);
@@ -175,15 +207,24 @@ public class HashVisualizer extends ApplicationAdapter {
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
                 switch (key) {
                     case SquidInput.ENTER:
-                        if (testType == 4) {
-                            noiseMode++;
-                            noiseMode &= 7;
-                        } else if (testType == 5) {
-                            rngMode++;
-                            rngMode %= 18;
-                        } else {
-                            hashMode++;
-                            hashMode %= 36;
+                        switch (testType)
+                        {
+                            case 4:
+                                noiseMode++;
+                                noiseMode %= 14;
+                                break;
+                            case 5:
+                                rngMode++;
+                                rngMode %= 20;
+                                break;
+                            case 0:
+                            case 1:
+                                hashMode++;
+                                hashMode %= 38;
+                                break;
+                            default:
+                                hashMode++;
+                                hashMode %= 28;
                         }
                         putMap();
                         //Gdx.graphics.requestRendering();
@@ -243,354 +284,407 @@ public class HashVisualizer extends ApplicationAdapter {
     public void putMap() {
         display.erase();
         overlay.erase();
-        int[] coordinates = new int[2], coordinate = new int[1];
         long code;
         float bright;
         int iBright;
-        int[][] map;
         int xx, yy;
         switch (testType) {
             case 1: {
                 switch (hashMode) {
                     case 0:
+                        Gdx.graphics.setTitle("Arrays.hashCode");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = Arrays.hashCode(coordinates) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 1:
+                        Gdx.graphics.setTitle("Storm (alpha)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = stormA.hash(coordinates) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 2:
+                        Gdx.graphics.setTitle("Storm (beta)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = stormB.hash(coordinates) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 3:
+                        Gdx.graphics.setTitle("Storm (chi)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = stormC.hash(coordinates) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 4:
+                        Gdx.graphics.setTitle("Arrays.hashCode");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = Arrays.hashCode(coordinate) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 5:
+                        Gdx.graphics.setTitle("Storm (alpha)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = stormA.hash(coordinate) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 6:
+                        Gdx.graphics.setTitle("Storm (beta)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = stormB.hash(coordinate) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 7:
+                        Gdx.graphics.setTitle("Storm (chi)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = stormC.hash(coordinate) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 8:
+                        Gdx.graphics.setTitle("Storm (alpha)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = stormA.hash64(coordinates) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 9:
+                        Gdx.graphics.setTitle("Storm (beta)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = stormB.hash64(coordinates) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 10:
+                        Gdx.graphics.setTitle("Storm (chi)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = stormC.hash64(coordinates) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 11:
+                        Gdx.graphics.setTitle("Storm (alpha)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = stormA.hash64(coordinate) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 12:
+                        Gdx.graphics.setTitle("Storm (beta)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = stormB.hash64(coordinate) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 13:
+                        Gdx.graphics.setTitle("Storm (chi)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = stormC.hash64(coordinate) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 14:
+                        Gdx.graphics.setTitle("Arrays.hashCode");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = Arrays.hashCode(coordinates) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 15:
+                        Gdx.graphics.setTitle("Storm (alpha)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = stormA.hash(coordinates) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 16:
+                        Gdx.graphics.setTitle("Storm (beta)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = stormB.hash(coordinates) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 17:
+                        Gdx.graphics.setTitle("Storm (chi)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = stormC.hash(coordinates) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 18:
+                        Gdx.graphics.setTitle("Arrays.hashCode");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = Arrays.hashCode(coordinate) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 19:
+                        Gdx.graphics.setTitle("Storm (alpha)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = stormA.hash(coordinate) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 20:
+                        Gdx.graphics.setTitle("Storm (beta)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = stormB.hash(coordinate) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 21:
+                        Gdx.graphics.setTitle("Storm (chi)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = stormC.hash(coordinate) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 22:
+                        Gdx.graphics.setTitle("Storm (alpha)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = stormA.hash64(coordinates) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 23:
+                        Gdx.graphics.setTitle("Storm (beta)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = stormB.hash64(coordinates) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 24:
+                        Gdx.graphics.setTitle("Storm (chi)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = stormC.hash64(coordinates) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 25:
+                        Gdx.graphics.setTitle("Storm (alpha)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = stormA.hash64(coordinate) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 26:
+                        Gdx.graphics.setTitle("Storm (beta)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = stormB.hash64(coordinate) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 27:
+                        Gdx.graphics.setTitle("Storm (chi)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = stormC.hash64(coordinate) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 28:
+                        Gdx.graphics.setTitle("Arrays.hashCode");
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = y;
-                                code = CrossHash.Falcon.hash(coordinates) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                coordinate[0] = (x << 9) | y;
+                                code = Arrays.hashCode(coordinate) & 0xFFFFFF00 | 255L;
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 29:
+                        Gdx.graphics.setTitle("Chariot (alpha)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = CrossHash.Falcon.hash(coordinate) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                code = chariotA.hash(coordinate) & 0xFFFFFF00 | 255L;
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 30:
+                        Gdx.graphics.setTitle("Chariot (beta)");
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = y;
-                                code = CrossHash.Falcon.hash64(coordinates) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                coordinate[0] = (x << 9) | y;
+                                code = chariotB.hash(coordinate) & 0xFFFFFF00 | 255L;
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 31:
+                        Gdx.graphics.setTitle("Chariot (chi)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = CrossHash.Falcon.hash64(coordinate) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                code = chariotC.hash(coordinate) & 0xFFFFFF00 | 255L;
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 32:
+                        Gdx.graphics.setTitle("Chariot (alpha)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = CrossHash.Wisp.hash(coordinates) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                code = chariotA.hash(coordinates) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 33:
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                coordinate[0] = (x << 9) | y;
-                                code = CrossHash.Wisp.hash(coordinate) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
-                            }
-                        }
-                        break;
-                    case 34:
+                        Gdx.graphics.setTitle("Chariot (beta)");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = CrossHash.Wisp.hash64(coordinates) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                code = chariotB.hash(coordinates) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 34:
+                        Gdx.graphics.setTitle("Chariot (chi)");
+                        for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
+                            for (int y = 0; y < height; y++) {
+                                coordinates[1] = y;
+                                code = chariotC.hash(coordinates) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 35:
+                        Gdx.graphics.setTitle("Chariot (alpha)");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = CrossHash.Wisp.hash64(coordinate) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                code = chariotA.hash(coordinate) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 36:
+                        Gdx.graphics.setTitle("Chariot (beta)");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                coordinate[0] = (x << 9) | y;
+                                code = chariotB.hash(coordinate) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 37:
+                        Gdx.graphics.setTitle("Chariot (chi)");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                coordinate[0] = (x << 9) | y;
+                                code = chariotC.hash(coordinate) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -605,7 +699,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = Arrays.hashCode(coordinates) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -615,7 +709,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.hash(coordinates) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -625,7 +719,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = storm.hash(coordinates) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -635,7 +729,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.Lightning.hash(coordinates) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -644,7 +738,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = Arrays.hashCode(coordinate) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -653,7 +747,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.hash(coordinate) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -662,7 +756,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = storm.hash(coordinate) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -671,7 +765,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.Lightning.hash(coordinate) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -681,7 +775,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.hash64(coordinates) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -691,7 +785,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = storm.hash64(coordinates) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -701,7 +795,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.Lightning.hash64(coordinates) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -710,7 +804,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.hash64(coordinate) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -719,7 +813,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = storm.hash64(coordinate) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -728,7 +822,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.Lightning.hash64(coordinate) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -738,7 +832,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = Arrays.hashCode(coordinates) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -748,7 +842,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.hash(coordinates) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -758,7 +852,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = storm.hash(coordinates) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -768,7 +862,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.Lightning.hash(coordinates) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -777,7 +871,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = Arrays.hashCode(coordinate) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -786,7 +880,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.hash(coordinate) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -795,7 +889,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = storm.hash(coordinate) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -804,7 +898,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.Lightning.hash(coordinate) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -814,7 +908,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.hash64(coordinates) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -824,7 +918,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = storm.hash64(coordinates) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -834,7 +928,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.Lightning.hash64(coordinates) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -843,7 +937,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.hash64(coordinate) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -852,7 +946,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = storm.hash64(coordinate) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -861,7 +955,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.Lightning.hash64(coordinate) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -871,7 +965,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.Falcon.hash(coordinates) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -880,7 +974,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.Falcon.hash(coordinate) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -890,7 +984,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.Falcon.hash64(coordinates) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -899,7 +993,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.Falcon.hash64(coordinate) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -910,7 +1004,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.Wisp.hash(coordinates) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -919,7 +1013,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.Wisp.hash(coordinate) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -929,7 +1023,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.Wisp.hash64(coordinates) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -938,9 +1032,31 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.Wisp.hash64(coordinate) & 0xFFFFFF00 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
+                        break;
+                    case 36:
+                        colorFactory.clearCache();
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = (mixHash(x, y) << 8) | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("mixHash, " + (width * height) + " cells, "
+                                + colorFactory.cacheSize() + " colors");
+                        break;
+                    case 37:
+                        colorFactory.clearCache();
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = (oldHash(x, y) << 8) | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("old Coord hash, " + (width * height) + " cells, "
+                                + colorFactory.cacheSize() + " colors");
                         break;
                 }
             }
@@ -948,7 +1064,8 @@ public class HashVisualizer extends ApplicationAdapter {
             case 4: { //Noise mode
                 switch (noiseMode) {
                     case 0:
-                        Gdx.graphics.setTitle("Perlin Noise, x3 zoom at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        Gdx.graphics.setTitle("Perlin Noise, x3 zoom at " + Gdx.graphics.getFramesPerSecond() +
+                                " FPS, cache size " + colorFactory.cacheSize());
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
@@ -956,39 +1073,39 @@ public class HashVisualizer extends ApplicationAdapter {
                                 bright = (float)
                                         (//PerlinNoise.noise(xx / 16.0, yy / 16.0) * 16 +
                                         //PerlinNoise.noise(xx / 8.0, yy / 8.0) * 8 +
-                                        PerlinNoise.noise(xx / 4.0, yy / 4.0) * 4 +
-                                        PerlinNoise.noise(xx / 2.0, yy / 2.0) * 2 +
+                                        PerlinNoise.noise(xx * 0.25, yy * 0.25) * 4 +
+                                        PerlinNoise.noise(xx * 0.5, yy * 0.5) * 2 +
                                         PerlinNoise.noise(xx, yy)
                                         + 7f) / 14f;
                                         //+ 15f) / 30f;
-                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
                         break;
                     case 1:
-                        Gdx.graphics.setTitle("Merlin Noise, no zoom at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        Gdx.graphics.setTitle("Merlin Noise, no zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
                                 iBright = MerlinNoise.noise2D(xx, yy);
-                                display.put(x, y, colorFactory.get(iBright, iBright, iBright));
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
                         break;
                     case 2:
-                        Gdx.graphics.setTitle("Merlin Noise, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        Gdx.graphics.setTitle("Merlin Noise, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
                                 iBright = MerlinNoise.noise2D(xx, yy, 3);
-                                display.put(x, y, colorFactory.get(iBright, iBright, iBright));
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
                         break;
                     case 3:
-                        Gdx.graphics.setTitle("Merlin Noise Alt, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        Gdx.graphics.setTitle("Merlin Noise Alt, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
@@ -999,34 +1116,34 @@ public class HashVisualizer extends ApplicationAdapter {
                                         + MerlinNoise.noise2D(x + 333 * 4, y + 333 * 4, 3) * 2
                                         + MerlinNoise.noise2D(x + 333 * 5, y + 333 * 5)) >> 4;*/
                                 iBright = MerlinNoise.noise2D_alt(xx, yy, 3);
-                                display.put(x, y, colorFactory.get(iBright, iBright, iBright));
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
                         break;
                     case 4:
-                        Gdx.graphics.setTitle("Merlin Noise 3D, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        Gdx.graphics.setTitle("Merlin Noise 3D, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = MerlinNoise.noise3D(x, y, ctr, 3);
-                                display.put(x, y, colorFactory.get(iBright, iBright, iBright));
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
                         break;
                     case 5:
-                        Gdx.graphics.setTitle("Merlin Noise Alt 3D, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        Gdx.graphics.setTitle("Merlin Noise Alt 3D, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = MerlinNoise.noise3D_alt(x, y, ctr, 3);
-                                display.put(x, y, colorFactory.get(iBright, iBright, iBright));
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
                         break;
                     case 6:
-                        Gdx.graphics.setTitle("Merlin Noise Alt 3D Emphasized, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        Gdx.graphics.setTitle("Merlin Noise Alt 3D Emphasized, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = MerlinNoise.noise3D_emphasized(x, y, ctr, 3);
-                                display.put(x, y, colorFactory.get(iBright, iBright, iBright));
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
                         break;
@@ -1036,7 +1153,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = map[x][y];
-                                display.put(x, y, colorFactory.get(iBright, iBright, iBright));
+                                display.put(x, y, floatGet(iBright, iBright, iBright));
                             }
                         }
                         break;
@@ -1048,26 +1165,134 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = map[x][y];
-                                display.put(x, y, colorFactory.get(iBright, iBright, iBright));
+                                display.put(x, y, floatGet(iBright, iBright, iBright));
                             }
                         }
                         break;*/
                     case 7:
-                        Gdx.graphics.setTitle("Perlin 3D Noise, x3 zoom at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        Gdx.graphics.setTitle("Perlin 3D Noise, x3 zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)
                                         (//PerlinNoise.noise(x / 8.0, y / 8.0, ctr * 0.125) * 8 +
-                                                PerlinNoise.noise(x / 4.0, y / 4.0, ctr * 0.125) * 4 +
-                                                PerlinNoise.noise(x / 2.0, y / 2.0, ctr * 0.125) * 2 +
-                                                PerlinNoise.noise(x, y, ctr * 0.125)
-                                        + 7f) / 14f;
+                                                PerlinNoise.noise(x * 0.25, y * 0.25, ctr * 0.3) * 4 +
+                                                        PerlinNoise.noise(x * 0.5, y * 0.5, ctr * 0.3) * 2 +
+                                                        PerlinNoise.noise(x, y, ctr * 0.3)
+                                                        + 7f) / 14f;
                                 //+ 15.0f) / 30f;
 
-                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
                         break;
+                    case 8:
+                        Gdx.graphics.setTitle("Perlin Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright = (float)
+                                        (//PerlinNoise.noise(xx / 16.0, yy / 16.0) * 16 +
+                                                //PerlinNoise.noise(xx / 8.0, yy / 8.0) * 8 +
+                                                //PerlinNoise.noise(xx / 4.0, yy / 4.0) * 4 +
+                                                //PerlinNoise.noise(xx / 2.0, yy / 2.0) * 2 +
+                                                PerlinNoise.noise(xx, yy)
+                                                        + 1f) / 2f;
+                                //+ 15f) / 30f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+
+                    case 9:
+                        Gdx.graphics.setTitle("Perlin 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float)
+                                        (//PerlinNoise.noise(x / 8.0, y / 8.0, ctr * 0.125) * 8 +
+                                                //PerlinNoise.noise(x / 4.0, y / 4.0, ctr * 0.125) * 4 +
+                                                //PerlinNoise.noise(x / 2.0, y / 2.0, ctr * 0.125) * 2 +
+                                                PerlinNoise.noise(x, y, ctr * 0.3)
+                                                        + 1f) / 2f;
+                                //+ 15.0f) / 30f;
+
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+
+                    case 10:
+                        Gdx.graphics.setTitle("Whirling 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float)
+                                        (//PerlinNoise.noise(x / 8.0, y / 8.0, ctr * 0.125) * 8 +
+                                                //PerlinNoise.noise(x / 4.0, y / 4.0, ctr * 0.125) * 4 +
+                                                //PerlinNoise.noise(x / 2.0, y / 2.0, ctr * 0.125) * 2 +
+                                                WhirlingNoise.noise(x * 0.125, y * 0.125, ctr  * 0.0375)
+                                                        + 1f) / 2f;
+                                //+ 15.0f) / 30f;
+
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+
+                    case 11:
+                        Gdx.graphics.setTitle("Whirling Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright = (float)
+                                        (//PerlinNoise.noise(xx / 16.0, yy / 16.0) * 16 +
+                                                //PerlinNoise.noise(xx / 8.0, yy / 8.0) * 8 +
+                                                //PerlinNoise.noise(xx / 4.0, yy / 4.0) * 4 +
+                                                //PerlinNoise.noise(xx / 2.0, yy / 2.0) * 2 +
+                                                WhirlingNoise.noise(xx * 0.125, yy * 0.125)
+                                                        + 1f) / 2f;
+                                //+ 15f) / 30f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+
+                    case 12:
+                        Gdx.graphics.setTitle("Whirling Alt 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float)
+                                        (//PerlinNoise.noise(x / 8.0, y / 8.0, ctr * 0.125) * 8 +
+                                                //PerlinNoise.noise(x / 4.0, y / 4.0, ctr * 0.125) * 4 +
+                                                //PerlinNoise.noise(x / 2.0, y / 2.0, ctr * 0.125) * 2 +
+                                                WhirlingNoise.noiseAlt(x * 0.125, y * 0.125, ctr  * 0.0375)
+                                                        + 1f) / 2f;
+                                //+ 15.0f) / 30f;
+
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+
+                    case 13:
+                        Gdx.graphics.setTitle("Whirling Alt Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright = (float)
+                                        (//PerlinNoise.noise(xx / 16.0, yy / 16.0) * 16 +
+                                                //PerlinNoise.noise(xx / 8.0, yy / 8.0) * 8 +
+                                                //PerlinNoise.noise(xx / 4.0, yy / 4.0) * 4 +
+                                                //PerlinNoise.noise(xx / 2.0, yy / 2.0) * 2 +
+                                                WhirlingNoise.noiseAlt(xx * 0.125, yy * 0.125)
+                                                        + 1f) / 2f;
+                                //+ 15f) / 30f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+
 
                     /*
                                         case 2:
@@ -1076,7 +1301,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = toFloat(random.next(32));
-                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
                         break;
@@ -1086,7 +1311,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = toFloat(random.next(32));
-                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
                         break;
@@ -1096,7 +1321,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = toFloat(random.next(32));
-                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
                         break;
@@ -1106,7 +1331,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = toFloat(random.next(32));
-                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
                         break;
@@ -1116,7 +1341,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = toFloat(random.next(32));
-                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
                         break;
@@ -1126,7 +1351,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = toFloat(random.next(32));
-                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
                         break;
@@ -1136,7 +1361,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = toFloat(gdxRandom.nextInt());
-                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
                         break;
@@ -1148,184 +1373,204 @@ public class HashVisualizer extends ApplicationAdapter {
             case 5: { //RNG mode
                 switch (rngMode) {
                     case 0:
-                        Gdx.graphics.setTitle("java.util.Random");
-                        jreRandom = new Random(seed);
+                        jreRandom = new Random(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = (jreRandom.nextInt() << 8) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("java.util.Random at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 1:
-                        Gdx.graphics.setTitle("ThunderRNG");
-                        random = new ThunderRNG(seed);
+                        random = new ThunderRNG(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = random.next(24) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("ThunderRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 2:
-                        Gdx.graphics.setTitle("LightRNG");
-                        random = new LightRNG(seed);
+                        random = new LightRNG(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = random.next(24) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("LightRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 3:
-                        Gdx.graphics.setTitle("XorRNG");
-                        random = new XorRNG(seed);
+                        random = new XorRNG(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = random.next(24) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("XorRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 4:
-                        Gdx.graphics.setTitle("XoRoRNG");
-                        random = new XoRoRNG(seed);
+                        random = new XoRoRNG(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = random.next(24) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("XoRoRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 5:
-                        Gdx.graphics.setTitle("PermutedRNG");
-                        random = new PermutedRNG(seed);
+                        random = new PermutedRNG(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = random.next(24) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("PermutedRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 6:
-                        Gdx.graphics.setTitle("LongPeriodRNG");
-                        random = new LongPeriodRNG(seed);
+                        random = new LongPeriodRNG(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = random.next(24) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("LongPeriodRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 7:
-                        Gdx.graphics.setTitle("IsaacRNG");
-                        random = new IsaacRNG(seed);
+                        random = new IsaacRNG(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = random.next(24) << 8 | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("IsaacRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 8:
-                        Gdx.graphics.setTitle("RandomXS128 from LibGDX");
-                        gdxRandom = new RandomXS128(seed);
+                        gdxRandom = new RandomXS128(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = (gdxRandom.nextInt() << 8) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("RandomXS128 from LibGDX at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 9:
-                        Gdx.graphics.setTitle("java.util.Random");
-                        jreRandom = new Random(seed);
+                        jreRandom = new Random(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = toFloat(jreRandom.nextInt());
-                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
+                        Gdx.graphics.setTitle("java.util.Random at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 10:
-                        Gdx.graphics.setTitle("ThunderRNG");
-                        random = new ThunderRNG(seed);
+                        random = new ThunderRNG(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = toFloat(random.next(32));
-                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
+                        Gdx.graphics.setTitle("ThunderRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 11:
-                        Gdx.graphics.setTitle("LightRNG");
-                        random = new LightRNG(seed);
+                        random = new LightRNG(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = toFloat(random.next(32));
-                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
+                        Gdx.graphics.setTitle("LightRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 12:
-                        Gdx.graphics.setTitle("XorRNG");
-                        random = new XorRNG(seed);
+                        random = new XorRNG(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = toFloat(random.next(32));
-                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
+                        Gdx.graphics.setTitle("XorRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 13:
-                        Gdx.graphics.setTitle("XoRoRNG");
-                        random = new XoRoRNG(seed);
+                        random = new XoRoRNG(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = toFloat(random.next(32));
-                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
+                        Gdx.graphics.setTitle("XoRoRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 14:
-                        Gdx.graphics.setTitle("PermutedRNG");
-                        random = new PermutedRNG(seed);
+                        random = new PermutedRNG(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = toFloat(random.next(32));
-                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
+                        Gdx.graphics.setTitle("PermutedRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 15:
-                        Gdx.graphics.setTitle("LongPeriodRNG");
-                        random = new LongPeriodRNG(seed);
+                        random = new LongPeriodRNG(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = toFloat(random.next(32));
-                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
+                        Gdx.graphics.setTitle("LongPeriodRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 16:
-                        Gdx.graphics.setTitle("IsaacRNG");
-                        random = new IsaacRNG(seed);
+                        random = new IsaacRNG(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = toFloat(random.next(32));
-                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
+                        Gdx.graphics.setTitle("IsaacRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 17:
-                        Gdx.graphics.setTitle("RandomXS128 from LibGDX");
-                        gdxRandom = new RandomXS128(seed);
+                        gdxRandom = new RandomXS128(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = toFloat(gdxRandom.nextInt());
-                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
+                        Gdx.graphics.setTitle("RandomXS128 from LibGDX at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        break;
+                    case 18:
+                        random = new PintRNG(ctr);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = random.next(24) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("PintRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        break;
+                    case 19:
+                        random = new PintRNG(ctr);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = toFloat(random.next(32));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        Gdx.graphics.setTitle("PintRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                 }
             }
@@ -1339,7 +1584,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = Arrays.hashCode(coordinates) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -1350,7 +1595,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.hash(coordinates) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -1361,7 +1606,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = storm.hash(coordinates) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -1372,7 +1617,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.Lightning.hash(coordinates) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -1383,7 +1628,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = Arrays.hashCode(coordinate) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -1394,7 +1639,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = CrossHash.hash(coordinate) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -1405,7 +1650,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = storm.hash(coordinate) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -1416,7 +1661,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = CrossHash.Lightning.hash(coordinate) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -1428,7 +1673,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.hash64(coordinates) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -1440,7 +1685,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = storm.hash64(coordinates) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -1452,7 +1697,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.Lightning.hash64(coordinates) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -1463,7 +1708,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = CrossHash.hash64(coordinate) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -1474,7 +1719,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = storm.hash64(coordinate) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -1485,7 +1730,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = CrossHash.Lightning.hash64(coordinate) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -1497,7 +1742,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = Arrays.hashCode(coordinates) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -1509,7 +1754,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.hash(coordinates) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -1521,7 +1766,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = storm.hash(coordinates) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -1533,7 +1778,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.Lightning.hash(coordinates) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -1544,7 +1789,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = Arrays.hashCode(coordinate) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -1555,7 +1800,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = CrossHash.hash(coordinate) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -1566,7 +1811,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = storm.hash(coordinate) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -1577,7 +1822,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = CrossHash.Lightning.hash(coordinate) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -1589,7 +1834,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.hash64(coordinates) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -1601,7 +1846,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = storm.hash64(coordinates) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         break;
@@ -1612,7 +1857,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.Lightning.hash64(coordinates) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -1623,7 +1868,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = CrossHash.hash64(coordinate) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -1634,7 +1879,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = storm.hash64(coordinate) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -1645,7 +1890,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = CrossHash.Lightning.hash64(coordinate) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, colorFactory.get(code));
+                                display.put(x, y, floatGet(code));
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -1653,7 +1898,7 @@ public class HashVisualizer extends ApplicationAdapter {
                 }
             }
         }
-
+        colorFactory.clearCache();
     }
 
     @Override
@@ -1694,7 +1939,7 @@ public class HashVisualizer extends ApplicationAdapter {
         config.title = "SquidLib Test: Hash Visualization";
         config.width = 512;
         config.height = 512;
-        config.foregroundFPS = 15;
+        config.foregroundFPS = 0;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);
         config.addIcon("Tentacle-128.png", Files.FileType.Internal);

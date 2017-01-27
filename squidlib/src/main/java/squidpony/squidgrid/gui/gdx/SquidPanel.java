@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Align;
+import squidpony.ArrayTools;
 import squidpony.IColorCenter;
 import squidpony.panel.IColoredString;
 import squidpony.panel.ISquidPanel;
@@ -42,8 +43,8 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     protected final int cellWidth, cellHeight;
     protected int gridWidth, gridHeight, gridOffsetX = 0, gridOffsetY = 0;
     protected final String[][] contents;
-    protected final Color[][] colors;
-    protected Color lightingColor = SColor.WHITE;
+    protected final float[][] colors;
+    protected Color lightingColor = SColor.WHITE, tmpColor = new Color();
     protected final TextCellFactory textFactory;
     protected float xOffset, yOffset;
     public final OrderedSet<AnimatedEntity> animatedEntities;
@@ -150,11 +151,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         cellHeight = MathUtils.round(textFactory.actualCellHeight);
 
         contents = new String[gridWidth][gridHeight];
-        colors = new Color[gridWidth][gridHeight];
-        for (int i = 0; i < gridWidth; i++) {
-            Arrays.fill(colors[i], scc.filter(Color.CLEAR));
-        }
-
+        colors = ArrayTools.fill(scc.filter(Color.CLEAR).toFloatBits(), gridWidth, gridHeight);
 
         int w = gridWidth * cellWidth;
         int h = gridHeight * cellHeight;
@@ -353,7 +350,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     public void erase() {
         for (int i = 0; i < contents.length; i++) {
             Arrays.fill(contents[i], "\0");
-            Arrays.fill(colors[i], Color.CLEAR);
+            Arrays.fill(colors[i], 0f);
             /*
             for (int j = 0; j < contents[i].length; j++) {
                 contents[i][j] = "\0";
@@ -365,12 +362,16 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
     @Override
 	public void clear(int x, int y) {
-        put(x, y, Color.CLEAR);
+        put(x, y, 0f);
     }
 
     @Override
-	public void put(int x, int y, Color color) {
+    public void put(int x, int y, Color color) {
         put(x, y, '\0', color);
+    }
+
+    public void put(int x, int y, float encodedColor) {
+        put(x, y, '\0', encodedColor);
     }
 
     public void put(int x, int y, Color color, float colorMultiplier) {
@@ -419,7 +420,22 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
             return;//skip if out of bounds
         }
         contents[x][y] = String.valueOf(c);
-        colors[x][y] = scc.filter(color);
+        colors[x][y] = scc.filter(color).toFloatBits();
+    }
+    /**
+     * Takes a unicode char for input.
+     *
+     * @param x
+     * @param y
+     * @param c
+     * @param encodedColor
+     */
+    public void put(int x, int y, char c, float encodedColor) {
+        if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) {
+            return;//skip if out of bounds
+        }
+        contents[x][y] = String.valueOf(c);
+        colors[x][y] = encodedColor;
     }
 
 	/**
@@ -433,7 +449,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
             return;//skip if out of bounds
         }
         contents[x][y] = String.valueOf(c);
-		colors[x][y] = scc.lerp(color, lightingColor, colorMultiplier);
+		colors[x][y] = scc.lerp(color, lightingColor, colorMultiplier).toFloatBits();
 	}
 
     @Override
@@ -480,12 +496,12 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     @Override
     public void draw (Batch batch, float parentAlpha) {
         textFactory.configureShader(batch);
-        Color tmp;
         int inc = onlyRenderEven ? 2 : 1;
         for (int x = gridOffsetX; x < gridWidth; x += inc) {
             for (int y = gridOffsetY; y < gridHeight; y += inc) {
-                tmp = scc.filter(colors[x][y]);
-                textFactory.draw(batch, contents[x][y], tmp, xOffset + /*- getX() + 1f * */ x * cellWidth,
+                textFactory.draw(batch, contents[x][y],
+                        colors[x][y],
+                        xOffset + /*- getX() + 1f * */ x * cellWidth,
                         yOffset + /*- getY() + 1f * */ (gridHeight - y) * cellHeight + 1f);
             }
         }
@@ -911,16 +927,20 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     	return createActor(x, y, contents[x][y], colors[x][y], doubleWidth);
     }
 
-	protected /* @Nullable */ Actor createActor(int x, int y, String name, Color color, boolean doubleWidth) {
-		if (name == null || name.isEmpty())
-			return null;
-		else {
-			final Actor a = textFactory.makeActor(name, scc.filter(color));
-			a.setName(name);
-			a.setPosition(adjustX(x, doubleWidth) - getX() * 2, adjustY(y) - getY() * 2);
-			addActor(a);
-			return a;
-		}
+    protected /* @Nullable */ Actor createActor(int x, int y, String name, Color color, boolean doubleWidth) {
+        if (name == null || name.isEmpty())
+            return null;
+        else {
+            final Actor a = textFactory.makeActor(name, scc.filter(color));
+            a.setName(name);
+            a.setPosition(adjustX(x, doubleWidth) - getX() * 2, adjustY(y) - getY() * 2);
+            addActor(a);
+            return a;
+        }
+    }
+
+    protected /* @Nullable */ Actor createActor(int x, int y, String name, float encodedColor, boolean doubleWidth) {
+        return createActor(x, y, name, Filters.Utility.colorFromFloat(tmpColor, encodedColor), doubleWidth);
     }
 
     public float adjustX(float x, boolean doubleWidth)
@@ -933,7 +953,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
     public float adjustY(float y)
     {
-        return (gridHeight - y - 1) * cellHeight + getY() + 1; // - textFactory.lineHeight //textFactory.lineTweak * 3f
+        return (gridHeight - y - 1) * cellHeight + getY() + 1 + cellHeight - textFactory.actualCellHeight; // - textFactory.lineHeight //textFactory.lineTweak * 3f
         //return (gridHeight - y - 1) * cellHeight + textFactory.getDescent() * 3 / 2f + getY();
     }
 
@@ -954,7 +974,12 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         animationCount--;
         int x = Math.round((a.getX() - getX()) / cellWidth),
                 y = gridHeight - (int)(a.getY() / cellHeight) - 1;
-//             y = gridHeight - (int)((a.getY() - getY()) / cellHeight) - 1;
+        if(onlyRenderEven)
+        {
+            // this just sets the least significant bit to 0, making any odd numbers even (decrementing)
+            x &= -2;
+            y &= -2;
+        }
         if(x < 0 || y < 0 || x >= contents.length || y >= contents[x].length)
             return;
         if (restoreSym)
@@ -968,6 +993,12 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         else
             ae.gridX = Math.round((ae.actor.getX() - getX()) / cellWidth);
         ae.gridY = gridHeight - (int)((ae.actor.getY() - getY()) / cellHeight) - 1;
+        if(onlyRenderEven)
+        {
+            // this just sets the least significant bit to 0, making any odd numbers even (decrementing)
+            ae.gridX &= -2;
+            ae.gridY &= -2;
+        }
         ae.animating = false;
         animationCount--;
     }
@@ -983,8 +1014,6 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         final Actor a = ae.actor;
         final float x = adjustX(ae.gridX, ae.doubleWidth),
                 y = adjustY(ae.gridY);
-        // ae.gridX * cellWidth + (int)getX(),
-        // (gridHeight - ae.gridY - 1) * cellHeight - 1 + (int)getY();
         if(a == null || ae.animating) return;
         duration = clampDuration(duration);
         animationCount++;
@@ -1067,7 +1096,6 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     {
         final Actor a = ae.actor;
         final float nextX = adjustX(newX, ae.doubleWidth), nextY = adjustY(newY);
-        //final int nextX = newX * cellWidth * ((ae.doubleWidth) ? 2 : 1) + (int)getX(), nextY = (gridHeight - newY - 1) * cellHeight - 1 + (int)getY();
         if(a == null || ae.animating) return;
         duration = clampDuration(duration);
         animationCount++;
@@ -1173,7 +1201,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     public void slide(int x, int y, final /* @Nullable */ String name, /* @Nullable */ Color color, int newX,
                       int newY, float duration, /* @Nullable */ Runnable postRunnable) {
         final Actor a = createActor(x, y, name == null ? contents[x][y] : name,
-                color == null ? colors[x][y] : color, false);
+                color == null ? Filters.Utility.colorFromFloat(tmpColor, colors[x][y]) : color, false);
         if (a == null)
             return;
 
@@ -1323,7 +1351,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      *
      * @param ae an AnimatedEntity returned by animateActor()
      * @param color what to transition ae's color towards, and then transition back from
-     * @param duration how long the total "round-trip" transition should take in milliseconds
+     * @param duration how long the total "round-trip" transition should take in seconds
      */
     public void tint(final AnimatedEntity ae, Color color, float duration) {
         final Actor a = ae.actor;
@@ -1347,11 +1375,11 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     /**
 	 * Like {@link #tint(int, int, Color, float)}, but waits for {@code delay}
 	 * (in seconds) before performing it.
-     * @param delay how long to wait in milliseconds before starting the effect
+     * @param delay how long to wait in seconds before starting the effect
      * @param x the x-coordinate of the cell to tint
      * @param y the y-coordinate of the cell to tint
      * @param color what to transition ae's color towards, and then transition back from
-     * @param duration how long the total "round-trip" transition should take in milliseconds
+     * @param duration how long the total "round-trip" transition should take in seconds
      */
     public void tint(float delay, int x, int y, Color color, float duration) {
         tint(delay, x, y, color, duration, null);
@@ -1361,11 +1389,11 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * Like {@link #tint(int, int, Color, float)}, but waits for {@code delay}
      * (in seconds) before performing it. Additionally, enqueue {@code postRunnable}
      * for running after the created action ends.
-     * @param delay how long to wait in milliseconds before starting the effect
+     * @param delay how long to wait in seconds before starting the effect
      * @param x the x-coordinate of the cell to tint
      * @param y the y-coordinate of the cell to tint
      * @param color what to transition ae's color towards, and then transition back from
-     * @param duration how long the total "round-trip" transition should take in milliseconds
+     * @param duration how long the total "round-trip" transition should take in seconds
      * @param postRunnable a Runnable to execute after the tint completes; may be null to do nothing.
      */
 
@@ -1408,7 +1436,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param color
      * @param duration
      */
-    public final void tint(int x, int y, Color color, float duration) {
+    public void tint(int x, int y, Color color, float duration) {
     	tint(0f, x, y, color, duration);
     }
 
@@ -1439,6 +1467,352 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 			}
 		})));
 	}
+
+    /**
+     * Create a new Actor at (x, y) that looks like glyph but can rotate, and immediately starts changing color from
+     * startColor to endColor and changing rotation from startRotation to endRotation, taking duration seconds to
+     * complete before removing the Actor.
+     * @param x the x position in cells; doesn't change
+     * @param y the y position in cells; doesn't change
+     * @param glyph the char to show (the same char throughout the effect, but it can rotate)
+     * @param startColor the starting Color
+     * @param endColor the Color to transition to
+     * @param startRotation the amount of rotation, in degrees, the glyph should start at
+     * @param endRotation the amount of rotation, in degrees, the glyph should end at
+     * @param duration the duration in seconds for the effect
+     */
+    public void summon(int x, int y, char glyph, Color startColor, Color endColor,
+                       float startRotation, float endRotation, float duration)
+    {
+        summon(x, y, x, y, glyph, startColor, endColor, false, startRotation, endRotation, duration);
+    }
+    /**
+     * Create a new Actor at (startX, startY) that looks like glyph but can rotate, sets its color, and immediately
+     * starts changing position so it ends on the cell (endX, endY) and changing rotation from startRotation to
+     * endRotation, taking duration seconds to complete before removing the Actor.
+     * @param startX the starting x position in cells
+     * @param startY the starting y position in cells
+     * @param endX the ending x position in cells
+     * @param endY the ending y position in cells
+     * @param glyph the char to show (the same char throughout the effect, but it can rotate)
+     * @param color the Color of the glyph throughout the effect
+     * @param startRotation the amount of rotation, in degrees, the glyph should start at
+     * @param endRotation the amount of rotation, in degrees, the glyph should end at
+     * @param duration the duration in seconds for the effect
+     */
+    public void summon(int startX, int startY, int endX, int endY, char glyph, Color color,
+                       float startRotation, float endRotation, float duration)
+    {
+        summon(startX, startY, endX, endY, glyph, color, color, false, startRotation, endRotation, duration);
+    }
+    /**
+     * Create a new Actor at (startX, startY) that looks like glyph but has the given rotation, and immediately starts
+     * changing color from startColor to endColor, and changing position so it ends on the cell (endX, endY), taking
+     * duration seconds to complete before removing the Actor.
+     * @param startX the starting x position in cells
+     * @param startY the starting y position in cells
+     * @param endX the ending x position in cells
+     * @param endY the ending y position in cells
+     * @param glyph the char to show (the same char throughout the effect, but it can rotate)
+     * @param startColor the starting Color
+     * @param endColor the Color to transition to
+     * @param rotation the amount of rotation, in degrees, the glyph should have throughout the effect
+     * @param duration the duration in seconds for the effect
+     */
+    public void summon(int startX, int startY, int endX, int endY, char glyph, Color startColor, Color endColor,
+                       float rotation, float duration)
+    {
+        summon(startX, startY, endX, endY, glyph, startColor, endColor, false, rotation, rotation, duration);
+    }
+    /**
+     * Create a new Actor at (startX, startY) that looks like glyph but can rotate, and immediately starts changing
+     * color from startColor to endColor, changing position so it ends on the cell (endX, endY), and changing rotation
+     * from startRotation to endRotation, taking duration seconds to complete before removing the Actor.
+     * @param startX the starting x position in cells
+     * @param startY the starting y position in cells
+     * @param endX the ending x position in cells
+     * @param endY the ending y position in cells
+     * @param glyph the char to show (the same char throughout the effect, but it can rotate)
+     * @param startColor the starting Color
+     * @param endColor the Color to transition to
+     * @param startRotation the amount of rotation, in degrees, the glyph should start at
+     * @param endRotation the amount of rotation, in degrees, the glyph should end at
+     * @param duration the duration in seconds for the effect
+     */
+    public void summon(int startX, int startY, int endX, int endY, char glyph, Color startColor, Color endColor,
+                       float startRotation, float endRotation, float duration)
+    {
+        summon(startX, startY, endX, endY, glyph, startColor, endColor, false, startRotation, endRotation, duration);
+    }
+    /**
+     * Create a new Actor at (startX, startY) that looks like glyph but can rotate, and immediately starts changing
+     * color from startColor to endColor, changing position so it ends on the cell (endX, endY), and changing rotation
+     * from startRotation to endRotation, taking duration seconds to complete before removing the Actor. Allows
+     * setting doubleWidth, which centers the created Actor in the space between the two glyphs in a cell.
+     * @param startX the starting x position in cells
+     * @param startY the starting y position in cells
+     * @param endX the ending x position in cells
+     * @param endY the ending y position in cells
+     * @param glyph the char to show (the same char throughout the effect, but it can rotate)
+     * @param startColor the starting Color
+     * @param endColor the Color to transition to
+     * @param doubleWidth true if this uses double-width cells, false in most cases
+     * @param startRotation the amount of rotation, in degrees, the glyph should start at
+     * @param endRotation the amount of rotation, in degrees, the glyph should end at
+     * @param duration the duration in seconds for the effect
+     */
+    public void summon(int startX, int startY, int endX, int endY, char glyph, Color startColor, Color endColor, boolean doubleWidth,
+                       float startRotation, float endRotation, float duration)
+    {
+        summon(0f, startX, startY, endX, endY, glyph, startColor, endColor, doubleWidth, startRotation, endRotation, duration);
+    }
+    /**
+     * Create a new Actor at (startX, startY) that looks like glyph but can rotate, and immediately starts changing
+     * color from startColor to endColor, changing position so it ends on the cell (endX, endY), and changing rotation
+     * from startRotation to endRotation, taking duration seconds to complete before removing the Actor. Allows
+     * setting doubleWidth, which centers the created Actor in the space between the two glyphs in a cell.
+     * @param delay amount of time, in seconds, to wait before starting the effect
+     * @param startX the starting x position in cells
+     * @param startY the starting y position in cells
+     * @param endX the ending x position in cells
+     * @param endY the ending y position in cells
+     * @param glyph the char to show (the same char throughout the effect, but it can rotate)
+     * @param startColor the starting Color
+     * @param endColor the Color to transition to
+     * @param doubleWidth true if this uses double-width cells, false in most cases
+     * @param startRotation the amount of rotation, in degrees, the glyph should start at
+     * @param endRotation the amount of rotation, in degrees, the glyph should end at
+     * @param duration the duration in seconds for the effect
+     */
+    public void summon(float delay, int startX, int startY, int endX, int endY, char glyph,
+                       Color startColor, Color endColor, boolean doubleWidth,
+                       float startRotation, float endRotation, float duration)
+
+    {
+        duration = clampDuration(duration);
+        animationCount++;
+        final ColorChangeImage
+                gi = textFactory.makeGlyphImage(glyph, scc.gradient(startColor, endColor, (int) (duration * 40)), duration * 1.1f, doubleWidth);
+        gi.setPosition(adjustX(startX, doubleWidth) - getX() * 2, adjustY(startY) - getY() * 2);
+        gi.setRotation(startRotation);
+        addActor(gi);
+        final int nbActions = 2 + (0 < delay ? 1 : 0);
+        final Action[] sequence = new Action[nbActions];
+        int index = 0;
+        if (0 < delay)
+            sequence[index++] = Actions.delay(delay);
+        sequence[index++] = Actions.parallel(
+                Actions.moveTo(adjustX(endX, doubleWidth) - getX() * 2, adjustY(endY) - getY() * 2, duration),
+                Actions.rotateTo(endRotation, duration));
+        sequence[index] = Actions.run(new Runnable() {
+            @Override
+            public void run() {
+                recallActor(gi, false);
+            }
+        });
+
+        gi.addAction(Actions.sequence(sequence));
+    }
+    /**
+     * Convenience method to produce an explosion, splash, or burst effect. Calls
+     * {@link #summon(float, int, int, int, int, char, Color, Color, boolean, float, float, float)} repeatedly with
+     * different parameters. As with summon(), this creates temporary Actors that change color, position, and rotation.
+     * This overload always moves Actors 1 cell away, which is a safe default, uses a "normal" amount of rotation for
+     * for all of the actors (a value of 1f if you used another overload), and always uses an end color that is a
+     * modified copy of startColor with 0 alpha (making the Actors all fade to transparent). The parameter
+     * eightWay determines whether this produces 4 (cardinal) or 8 (cardinal and diagonal) rotations and directions.
+     * @param x the starting, center, x-position to create all Actors at
+     * @param y the starting, center, y-position to create all Actors at
+     * @param eightWay if true, creates 8 Actors and moves them away in a square, otherwise, 4 Actors in a diamond
+     * @param glyph the char to make a rotate-able Actor of; should definitely be visible
+     * @param startColor the color to start the effect with
+     * @param duration how long, in seconds, the effect should last
+     */
+
+    public void burst(int x, int y, boolean eightWay, char glyph,
+                      Color startColor,
+                      float duration)
+    {
+        burst(0f, x, y, 1, eightWay, glyph, startColor, startColor.cpy().sub(0,0,0,1), false, 1f, duration);
+    }
+
+
+    /**
+     * Convenience method to produce an explosion, splash, or burst effect. Calls
+     * {@link #summon(float, int, int, int, int, char, Color, Color, boolean, float, float, float)} repeatedly with
+     * different parameters. As with summon(), this creates temporary Actors that change color, position, and rotation.
+     * This overload always moves Actors 1 cell away, which is a safe default, and uses a "normal" amount of rotation
+     * for all of the actors (a value of 1f if you used another overload). The parameter
+     * eightWay determines whether this produces 4 (cardinal) or 8 (cardinal and diagonal) rotations and directions.
+     * @param x the starting, center, x-position to create all Actors at
+     * @param y the starting, center, y-position to create all Actors at
+     * @param eightWay if true, creates 8 Actors and moves them away in a square, otherwise, 4 Actors in a diamond
+     * @param glyph the char to make a rotate-able Actor of; should definitely be visible
+     * @param startColor the color to start the effect with
+     * @param endColor the color to end the effect on
+     * @param duration how long, in seconds, the effect should last
+     */
+    public void burst(int x, int y, boolean eightWay, char glyph,
+                      Color startColor, Color endColor,
+                      float duration)
+    {
+        burst(0f, x, y, 1, eightWay, glyph, startColor, endColor, false, 1f, duration);
+    }
+
+    /**
+     * Convenience method to produce an explosion, splash, or burst effect. Calls
+     * {@link #summon(float, int, int, int, int, char, Color, Color, boolean, float, float, float)} repeatedly with
+     * different parameters. As with summon(), this creates temporary Actors that change color, position, and rotation.
+     * This overload always moves Actors 1 cell away, which is a safe default. Some parameters need explanation:
+     * eightWay determines whether this produces 4 (cardinal) or 8 (cardinal and diagonal) rotations and directions;
+     * rotationStrength can default to 1 if you want some rotation (which looks good) or 0 if you want the Actors to
+     * start at the correct rotation and not change that rotation over the course of the effect, but can be between 0
+     * and 1 or higher than 1 (negative values may also work).
+     * @param x the starting, center, x-position to create all Actors at
+     * @param y the starting, center, y-position to create all Actors at
+     * @param eightWay if true, creates 8 Actors and moves them away in a square, otherwise, 4 Actors in a diamond
+     * @param glyph the char to make a rotate-able Actor of; should definitely be visible
+     * @param startColor the color to start the effect with
+     * @param endColor the color to end the effect on
+     * @param rotationStrength how strongly to rotate the Actors; 0 is no rotation, 1 is a normal rotation
+     * @param duration how long, in seconds, the effect should last
+     */
+    public void burst(int x, int y, boolean eightWay, char glyph,
+                      Color startColor, Color endColor,
+                      float rotationStrength, float duration)
+    {
+        burst(0f, x, y, 1, eightWay, glyph, startColor, endColor, false, rotationStrength, duration);
+    }
+
+
+    /**
+     * Convenience method to produce an explosion, splash, or burst effect. Calls
+     * {@link #summon(float, int, int, int, int, char, Color, Color, boolean, float, float, float)} repeatedly with
+     * different parameters. As with summon(), this creates temporary Actors that change color, position, and rotation.
+     * Some parameters need explanation: distance is how many cells away to move the created Actors away from (x,y);
+     * eightWay determines whether this produces 4 (cardinal) or 8 (cardinal and diagonal) rotations and directions;
+     * rotationStrength can default to 1 if you want some rotation (which looks good) or 0 if you want the Actors to
+     * start at the correct rotation and not change that rotation over the course of the effect, but can be between 0
+     * and 1 or higher than 1 (negative values may also work).
+     * @param x the starting, center, x-position to create all Actors at
+     * @param y the starting, center, y-position to create all Actors at
+     * @param distance how far away, in cells, to move each actor from the center (Chebyshev distance, forming a square)
+     * @param eightWay if true, creates 8 Actors and moves them away in a square, otherwise, 4 Actors in a diamond
+     * @param glyph the char to make a rotate-able Actor of; should definitely be visible
+     * @param startColor the color to start the effect with
+     * @param endColor the color to end the effect on
+     * @param rotationStrength how strongly to rotate the Actors; 0 is no rotation, 1 is a normal rotation
+     * @param duration how long, in seconds, the effect should last
+     */
+    public void burst(int x, int y, int distance, boolean eightWay, char glyph,
+                      Color startColor, Color endColor,
+                      float rotationStrength, float duration)
+    {
+        burst(0f, x, y, distance, eightWay, glyph, startColor, endColor, false, rotationStrength, duration);
+    }
+
+
+    /**
+     * Convenience method to produce an explosion, splash, or burst effect. Calls
+     * {@link #summon(float, int, int, int, int, char, Color, Color, boolean, float, float, float)} repeatedly with
+     * different parameters. As with summon(), this creates temporary Actors that change color, position, and rotation.
+     * This overload always moves Actors 1 cell away, which is a safe default. Some parameters need explanation:
+     * eightWay determines whether this produces 4 (cardinal) or 8 (cardinal and diagonal) rotations and directions;
+     * rotationStrength can default to 1 if you want some rotation (which looks good) or 0 if you want the Actors to
+     * start at the correct rotation and not change that rotation over the course of the effect, but can be between 0
+     * and 1 or higher than 1 (negative values may also work).
+     * @param x the starting, center, x-position to create all Actors at
+     * @param y the starting, center, y-position to create all Actors at
+     * @param eightWay if true, creates 8 Actors and moves them away in a square, otherwise, 4 Actors in a diamond
+     * @param glyph the char to make a rotate-able Actor of; should definitely be visible
+     * @param startColor the color to start the effect with
+     * @param endColor the color to end the effect on
+     * @param doubleWidth true if this should use the double-width-cell technique, false in most cases
+     * @param rotationStrength how strongly to rotate the Actors; 0 is no rotation, 1 is a normal rotation
+     * @param duration how long, in seconds, the effect should last
+     */
+    public void burst(int x, int y, boolean eightWay, char glyph,
+                      Color startColor, Color endColor, boolean doubleWidth,
+                      float rotationStrength, float duration)
+    {
+        burst(0f, x, y, 1, eightWay, glyph, startColor, endColor, doubleWidth, rotationStrength, duration);
+    }
+
+    /**
+     * Convenience method to produce an explosion, splash, or burst effect. Calls
+     * {@link #summon(float, int, int, int, int, char, Color, Color, boolean, float, float, float)} repeatedly with
+     * different parameters. As with summon(), this creates temporary Actors that change color, position, and rotation.
+     * Some parameters need explanation: distance is how many cells away to move the created Actors away from (x,y);
+     * eightWay determines whether this produces 4 (cardinal) or 8 (cardinal and diagonal) rotations and directions;
+     * rotationStrength can default to 1 if you want some rotation (which looks good) or 0 if you want the Actors to
+     * start at the correct rotation and not change that rotation over the course of the effect, but can be between 0
+     * and 1 or higher than 1 (negative values may also work).
+     * @param x the starting, center, x-position to create all Actors at
+     * @param y the starting, center, y-position to create all Actors at
+     * @param distance how far away, in cells, to move each actor from the center (Chebyshev distance, forming a square)
+     * @param eightWay if true, creates 8 Actors and moves them away in a square, otherwise, 4 Actors in a diamond
+     * @param glyph the char to make a rotate-able Actor of; should definitely be visible
+     * @param startColor the color to start the effect with
+     * @param endColor the color to end the effect on
+     * @param doubleWidth true if this should use the double-width-cell technique, false in most cases
+     * @param rotationStrength how strongly to rotate the Actors; 0 is no rotation, 1 is a normal rotation
+     * @param duration how long, in seconds, the effect should last
+     */
+    public void burst(int x, int y, int distance, boolean eightWay, char glyph,
+                      Color startColor, Color endColor, boolean doubleWidth,
+                      float rotationStrength, float duration)
+    {
+        burst(0f, x, y, distance, eightWay, glyph, startColor, endColor, doubleWidth, rotationStrength, duration);
+    }
+
+    /**
+     * Convenience method to produce an explosion, splash, or burst effect. Calls
+     * {@link #summon(float, int, int, int, int, char, Color, Color, boolean, float, float, float)} repeatedly with
+     * different parameters. As with summon(), this creates temporary Actors that change color, position, and rotation.
+     * Some parameters need explanation: distance is how many cells away to move the created Actors away from (x,y);
+     * eightWay determines whether this produces 4 (cardinal) or 8 (cardinal and diagonal) rotations and directions;
+     * rotationStrength can default to 1 if you want some rotation (which looks good) or 0 if you want the Actors to
+     * start at the correct rotation and not change that rotation over the course of the effect, but can be between 0
+     * and 1 or higher than 1 (negative values may also work).
+     * @param delay amount of time, in seconds, to wait before starting the effect
+     * @param x the starting, center, x-position to create all Actors at
+     * @param y the starting, center, y-position to create all Actors at
+     * @param distance how far away, in cells, to move each actor from the center (Chebyshev distance, forming a square)
+     * @param eightWay if true, creates 8 Actors and moves them away in a square, otherwise, 4 Actors in a diamond
+     * @param glyph the char to make a rotate-able Actor of; should definitely be visible
+     * @param startColor the color to start the effect with
+     * @param endColor the color to end the effect on
+     * @param doubleWidth true if this should use the double-width-cell technique, false in most cases
+     * @param rotationStrength how strongly to rotate the Actors; 0 is no rotation, 1 is a normal rotation
+     * @param duration how long, in seconds, the effect should last
+     */
+    public void burst(float delay, int x, int y, int distance, boolean eightWay, char glyph,
+                      Color startColor, Color endColor, boolean doubleWidth,
+                      float rotationStrength, float duration)
+    {
+        Direction d;
+        if(eightWay)
+        {
+            for (int i = 0; i < 8; i++) {
+                d = Direction.CLOCKWISE[i];
+                summon(delay, x, y, x - d.deltaX * distance, y + d.deltaY * distance,
+                        glyph, startColor, endColor, doubleWidth,
+                        45f * i, 45f * (i - rotationStrength),
+                        duration);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < 4; i++) {
+                d = Direction.CARDINALS_CLOCKWISE[i];
+                summon(delay, x, y, x - d.deltaX * distance, y + d.deltaY * distance,
+                        glyph, startColor, endColor, doubleWidth,
+                        90f * i, 90f * (i - rotationStrength),
+                        duration);
+            }
+
+        }
+    }
 
 	@Override
     public boolean hasActiveAnimations() {
@@ -1499,7 +1873,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     }
     public Color getColorAt(int x, int y)
     {
-        return colors[x][y];
+        return Filters.Utility.colorFromFloat(tmpColor, colors[x][y]);
     }
 
     public Color getLightingColor() {

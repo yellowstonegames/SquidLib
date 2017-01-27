@@ -15,7 +15,7 @@
 <span class="sourceLineNo">007</span>import squidpony.squidmath.OrderedMap;<a name="line.7"></a>
 <span class="sourceLineNo">008</span><a name="line.8"></a>
 <span class="sourceLineNo">009</span>import java.util.ArrayList;<a name="line.9"></a>
-<span class="sourceLineNo">010</span>import java.util.Set;<a name="line.10"></a>
+<span class="sourceLineNo">010</span>import java.util.Collection;<a name="line.10"></a>
 <span class="sourceLineNo">011</span><a name="line.11"></a>
 <span class="sourceLineNo">012</span>/**<a name="line.12"></a>
 <span class="sourceLineNo">013</span> * Area of Effect interface meant to be implemented by various specific burst, line, flowing, and user-made AOE types.<a name="line.13"></a>
@@ -39,10 +39,10 @@
 <span class="sourceLineNo">031</span>     * that the Set of Points consist only of enemies that are within FOV, which cuts down a lot on the amount of checks<a name="line.31"></a>
 <span class="sourceLineNo">032</span>     * this needs to make; if the game doesn't restrict the player's FOV, this is still recommended (just with a larger<a name="line.32"></a>
 <span class="sourceLineNo">033</span>     * FOV radius) because it prevents checking enemies on the other side of the map and through multiple walls.<a name="line.33"></a>
-<span class="sourceLineNo">034</span>     * @param targets a Set of Points that are desirable targets to include in this AOE<a name="line.34"></a>
+<span class="sourceLineNo">034</span>     * @param targets a Collection (usually a Set) of Points that are desirable targets to include in this AOE<a name="line.34"></a>
 <span class="sourceLineNo">035</span>     * @return true if there could be at least one target within the AOE, false otherwise. Very approximate.<a name="line.35"></a>
 <span class="sourceLineNo">036</span>     */<a name="line.36"></a>
-<span class="sourceLineNo">037</span>    boolean mayContainTarget(Set&lt;Coord&gt; targets);<a name="line.37"></a>
+<span class="sourceLineNo">037</span>    boolean mayContainTarget(Collection&lt;Coord&gt; targets);<a name="line.37"></a>
 <span class="sourceLineNo">038</span><a name="line.38"></a>
 <span class="sourceLineNo">039</span>    /**<a name="line.39"></a>
 <span class="sourceLineNo">040</span>     * Returns a OrderedMap of Coord keys and ArrayList of Coord values, where each Coord key is an ideal location to<a name="line.40"></a>
@@ -64,7 +64,7 @@
 <span class="sourceLineNo">056</span>     * @param requiredExclusions a Set of Points that this tries strongly to avoid including in this AOE<a name="line.56"></a>
 <span class="sourceLineNo">057</span>     * @return a OrderedMap of Coord keys and ArrayList of Coord values where keys are ideal locations and values are the target points that will be hit when that key is used.<a name="line.57"></a>
 <span class="sourceLineNo">058</span>     */<a name="line.58"></a>
-<span class="sourceLineNo">059</span>    OrderedMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; idealLocations(Set&lt;Coord&gt; targets, Set&lt;Coord&gt; requiredExclusions);<a name="line.59"></a>
+<span class="sourceLineNo">059</span>    OrderedMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; idealLocations(Collection&lt;Coord&gt; targets, Collection&lt;Coord&gt; requiredExclusions);<a name="line.59"></a>
 <span class="sourceLineNo">060</span><a name="line.60"></a>
 <span class="sourceLineNo">061</span>    /**<a name="line.61"></a>
 <span class="sourceLineNo">062</span>     * A variant of idealLocations that takes two groups of desirable targets, and will rate locations by how many<a name="line.62"></a>
@@ -79,7 +79,7 @@
 <span class="sourceLineNo">071</span>     * @param requiredExclusions a Set of Points that this tries strongly to avoid including in this AOE<a name="line.71"></a>
 <span class="sourceLineNo">072</span>     * @return a OrderedMap of Coord keys and ArrayList of Coord values where keys are ideal locations and values are the target points that will be hit when that key is used.<a name="line.72"></a>
 <span class="sourceLineNo">073</span>     */<a name="line.73"></a>
-<span class="sourceLineNo">074</span>    OrderedMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; idealLocations(Set&lt;Coord&gt; priorityTargets, Set&lt;Coord&gt; lesserTargets, Set&lt;Coord&gt; requiredExclusions);<a name="line.74"></a>
+<span class="sourceLineNo">074</span>    OrderedMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; idealLocations(Collection&lt;Coord&gt; priorityTargets, Collection&lt;Coord&gt; lesserTargets, Collection&lt;Coord&gt; requiredExclusions);<a name="line.74"></a>
 <span class="sourceLineNo">075</span><a name="line.75"></a>
 <span class="sourceLineNo">076</span>    /**<a name="line.76"></a>
 <span class="sourceLineNo">077</span>     * This must be called before any other methods, and takes a char[][] with '#' for walls, anything else for floors.<a name="line.77"></a>

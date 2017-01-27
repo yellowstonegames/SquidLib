@@ -1,9 +1,11 @@
 package squidpony.squidgrid.zone;
 
-import java.util.List;
-
 import squidpony.squidgrid.zone.Zone.Skeleton;
 import squidpony.squidmath.Coord;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * A zone defined by a {@link List}.
@@ -20,6 +22,10 @@ public class ListZone extends Skeleton {
 		this.coords = coords;
 	}
 
+	public ListZone(Collection<Coord> coordCollection)
+	{
+		this.coords = new ArrayList<>(coordCollection);
+	}
 	@Override
 	public boolean isEmpty() {
 		return coords.isEmpty();
@@ -44,6 +50,35 @@ public class ListZone extends Skeleton {
 	public List<Coord> getAll() {
 		return coords;
 	}
+
+	/*
+	public ListZone expand(int distance)
+	{
+		if(distance <= 0)
+			return new ListZone(coords);
+		OrderedSet<Coord> distinct = new OrderedSet<>(coords);
+		for (Coord c : coords) {
+			distinct.add(c.translate(1, 0));
+			distinct.add(c.translate(-1, 0));
+			distinct.add(c.translate(0, 1));
+			distinct.add(c.translate(0, -1));
+		}
+		ArrayList<Coord> next = new ArrayList<>(distinct);
+		for (int i = 1; i < distance; i++) {
+			distinct.clear();
+			distinct.addAll(next);
+			for (Coord c : next) {
+				distinct.add(c.translate(1, 0));
+				distinct.add(c.translate(-1, 0));
+				distinct.add(c.translate(0, 1));
+				distinct.add(c.translate(0, -1));
+			}
+			next.clear();
+			next.addAll(distinct);
+		}
+		return new ListZone(next);
+	}
+	*/
 
 	@Override
 	public String toString() {

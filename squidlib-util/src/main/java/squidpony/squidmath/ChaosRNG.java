@@ -88,6 +88,6 @@ public class ChaosRNG implements RandomnessSource{
 
     @Override
     public String toString() {
-        return "ChaosRNG with state determined by the power of friendship";
+        return "ChaosRNG with hidden state (id is " + System.identityHashCode(this) + ')';
     }
 }
