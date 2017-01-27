@@ -2,6 +2,8 @@ package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
 
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.NumberUtils;
 import squidpony.IFilter;
 import squidpony.squidmath.LightRNG;
 
@@ -47,6 +49,7 @@ public class Filters {
             float v = (r + g + b) / 3f;
             return new Color(v, v, v, a);
         }
+
     }
 
     /**
@@ -121,6 +124,7 @@ public class Filters {
         public Color alter(float r, float g, float b, float a) {
             return new Color(r, g, b, a).lerp(state[0], state[1], state[2], state[3], state[4]);
         }
+
     }
     /**
      * A Filter that is constructed with a group of colors and linear-interpolates any color it is told to alter toward
@@ -295,6 +299,7 @@ public class Filters {
                     (h + v + s) * 0.35f + 0.7f,
                     a);
         }
+
     }
 
 
@@ -326,6 +331,7 @@ public class Filters {
                     globalSCC.getValue(r, g, b),
                     a);
         }
+
     }
 
     /**
@@ -340,9 +346,9 @@ public class Filters {
         }
         @Override
         public Color alter(float r, float g, float b, float a) {
-            return new Color(r - 0.1f + rng.nextInt(5) * 0.05f,
-                    g - 0.1f + rng.nextInt(5) * 0.05f,
-                    b - 0.1f + rng.nextInt(5) * 0.05f,
+            return new Color(r - 0.1f + rng.nextFloat() * 0.2f,
+                    g - 0.1f + rng.nextFloat() * 0.2f,
+                    b - 0.1f + rng.nextFloat() * 0.2f,
                     a);
         }
     }
@@ -368,10 +374,10 @@ public class Filters {
             state = new float[Math.min(r.length, Math.min(g.length, Math.min(b.length,
                     a.length))) * 4];
             for (int i = 0; i < state.length / 4; i++) {
-                state[i * 4] = r[i];
-                state[i * 4 + 1] = g[i];
-                state[i * 4 + 2] = b[i];
-                state[i * 4 + 3] = a[i];
+                state[i * 4] = MathUtils.clamp(r[i], 0f, 1f);
+                state[i * 4 + 1] = MathUtils.clamp(g[i], 0f, 1f);
+                state[i * 4 + 2] = MathUtils.clamp(b[i], 0f, 1f);
+                state[i * 4 + 3] = MathUtils.clamp(a[i], 0f, 1f);
             }
         }/**
          * Sets up a PaletteFilter with the exact colors to use as Colors. A convenient way to
@@ -381,7 +387,7 @@ public class Filters {
          */
         public PaletteFilter(Color[] colors) {
             state = new float[colors.length * 4];
-            for (int i = 0; i < state.length / 4; i++) {
+            for (int i = 0; i < colors.length; i++) {
                 state[i * 4] = colors[i].r;
                 state[i * 4 + 1] = colors[i].g;
                 state[i * 4 + 2] = colors[i].b;
@@ -401,7 +407,105 @@ public class Filters {
                 }
             }
             return new Color(state[choice], state[choice + 1], state[choice + 2],
-                    state[choice + 3]);
+                    a);
+        }
+    }
+    /**
+     * A Filter that alters primarily-red and primarily-green colors so they can be more easily be distinguished by
+     * people with at least some forms of red-green color-blindness (deuteranopia should be handled well, protanopia
+     * very well, and tritanopia may not benefit at all). Causes reds to be darkened and greens to be lightened if the
+     * other of the pair is not present in similar quantities (which is the case for yellows and blues).
+     */
+    public static class DistinctRedGreenFilter implements IFilter<Color> {
+        /**
+         * Constructs a DistinctRedGreenFilter. This class is a simple wrapper around a function that doesn't need
+         * member variables, so there should be little overhead with this filter.
+         */
+        public DistinctRedGreenFilter() {
+        }
+
+        @Override
+        public Color alter(float r, float g, float b, float a) {
+            float diff = g - r;
+            if(diff > 0.4f)
+                return new Color(Math.min(1f, r * (0.8f + diff * 0.5f)), Math.min(1f, g * (0.9f + diff * 0.5f)),
+                        Math.min(1f, b * (0.8f + diff * 0.5f)), a);
+            else if(diff < -0.3f)
+                return new Color(r * (0.6f - diff), g * (0.7f - diff),
+                        b * (0.7f - diff), a);
+            else
+                return new Color(r, g, b, a);
+        }
+    }
+    public static class Utility
+    {
+        /**
+         * Modifies the color parameter {@code changing} so its value is the one encoded in {@code value}. The way to
+         * obtain value for libGDX Color objects is with {@link Color#toFloatBits()}, which uses ABGR order, so this
+         * does some quick work to convert that to RGBA order and assign that into changing.
+         * @param changing a Color object that will be modified to have the given value
+         * @param value a value as a float that can be obtained by {@link Color#toFloatBits()}
+         * @return
+         */
+        public static Color colorFromFloat(Color changing, float value)
+        {
+            return changing.set(Integer.reverseBytes(NumberUtils.floatToIntColor(value)));
+        }
+
+        /**
+         * Gets a packed float representation of a color given as 4 RGBA float components. LibGDX expects ABGR format
+         * in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR, or ARGB. Generally,
+         * packed floats like what this returns are ABGR format, the kind that can be passed directly to
+         * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)} without constructing intermediate objects.
+         * SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that
+         * associates colors to cells; this has changed from earlier releases and should be much more efficient.
+         * @param r a float from 0.0 to 1.0 for red
+         * @param g a float from 0.0 to 1.0 for green
+         * @param b a float from 0.0 to 1.0 for blue
+         * @param a a float from 0.0 to 1.0 for alpha/opacity
+         * @return a packed float that can be given to the setColor method in LibGDX's Batch classes
+         */
+        public static float floatGet(float r, float g, float b, float a)
+        {
+            return NumberUtils.intToFloatColor(((int)(a * 255) << 24) | ((int)(b * 255) << 16)
+                    | ((int)(g * 255) << 8) | (int)(r * 255));
+        }
+        /**
+         * Gets a packed float representation of a color given an RGBA8888-format long. LibGDX expects ABGR format
+         * in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR, or ARGB. Generally,
+         * packed floats like what this returns are ABGR format, the kind that can be passed directly to
+         * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)} without constructing intermediate objects.
+         * SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that
+         * associates colors to cells; this has changed from earlier releases and should be much more efficient.
+         * <br>
+         * This method is probably not what you want unless you specifically have RGBA8888-format ints or longs that you
+         * want converted to packed floats. You probably should look at {@link #floatGet(float, float, float, float)} if
+         * you have alpha and/or float components, or {@link #floatGetI(int, int, int)} for the common case of the 3 RGB
+         * components as ints and alpha simply opaque.
+         * @param c a long with format {@code 32 unused bits, 8 red bits, 8 green bits, 8 blue bits, 7 alpha bits, 1 unused bit}
+         * @return a packed float that can be given to the setColor method in LibGDX's Batch classes
+         */
+        public static float floatGet(long c)
+        {
+            return NumberUtils.intToFloatColor((int)((c >>> 24 & 0xff) | (c >>> 8 & 0xff00) | (c << 8 & 0xff0000)
+                    | (c << 24 & 0xfe000000)));
+        }
+        /**
+         * Gets a packed float representation of a color given as 3 RGB int components, setting alpha to opaque. LibGDX
+         * expects ABGR format in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR,
+         * or ARGB. Generally, packed floats like what this returns are ABGR format, the kind that can be passed
+         * directly to {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)} without constructing intermediate
+         * objects. SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that
+         * associates colors to cells; this has changed from earlier releases and should be much more efficient.
+         * @param r an int from 0 to 255 (both inclusive) for red
+         * @param g an int from 0 to 255 (both inclusive) for green
+         * @param b an int from 0 to 255 (both inclusive) for blue
+         * @return a packed float that can be given to the setColor method in LibGDX's Batch classes
+         */
+        public static float floatGetI(int r, int g, int b)
+        {
+            return NumberUtils.intToFloatColor((r & 0xff) | (g << 8 & 0xff00) | (b << 16 & 0xff0000)
+                    | 0xfe000000);
         }
     }
 

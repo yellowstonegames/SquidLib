@@ -178,7 +178,7 @@ public class MersenneTwister implements RandomnessSource {
 
     /**
      * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
-     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
+     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to
      * copy the state so it isn't shared, usually, and produce a new value with the same exact state.
      *
      * @return a copy of this RandomnessSource
@@ -191,4 +191,29 @@ public class MersenneTwister implements RandomnessSource {
         return next;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MersenneTwister that = (MersenneTwister) o;
+
+        if (mtIndex != that.mtIndex) return false;
+        if (!Arrays.equals(seed, that.seed)) return false;
+        return Arrays.equals(mt, that.mt);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = CrossHash.Lightning.hash(seed);
+        result = 31 * result + CrossHash.Lightning.hash(mt);
+        result = 31 * result + mtIndex;
+        return result;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "MersenneTwister with hidden state (id is " + System.identityHashCode(this)  + ')';
+    }
 }

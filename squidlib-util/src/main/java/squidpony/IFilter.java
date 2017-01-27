@@ -11,7 +11,6 @@ package squidpony;
  * @see IColorCenter
  */
 public interface IFilter<T> {
-
 	/**
 	 * @param r
 	 *            The red component.
@@ -24,5 +23,4 @@ public interface IFilter<T> {
 	 * @return An alteration of {@code (r,g,b,a)}.
 	 */
 	T alter(float r, float g, float b, float a);
-
 }

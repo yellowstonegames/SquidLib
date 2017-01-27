@@ -19,9 +19,10 @@ import java.util.SortedSet;
 @Beta
 public class ProbabilityTable<T> implements Serializable {
     private static final long serialVersionUID = -1307656083434154736L;
-    private final OrderedMap<T, Integer> table;
-    private RNG rng;
-    private int total;
+    public final Arrangement<T> table;
+    public final IntVLA weights;
+    protected RNG rng;
+    protected int total;
 
     /**
      * Creates a new probability table.
@@ -38,7 +39,32 @@ public class ProbabilityTable<T> implements Serializable {
      */
     public ProbabilityTable(RNG rng) {
         this.rng = rng;
-        table = new OrderedMap<>();
+        table = new Arrangement<>(64, 0.75f);
+        weights = new IntVLA(64);
+        total = 0;
+    }
+
+    /**
+     * Creates a new probability table with the provided long seed used.
+     *
+     * @param seed the RNG seed as a long
+     */
+    public ProbabilityTable(long seed) {
+        this.rng = new StatefulRNG(seed);
+        table = new Arrangement<>(64, 0.75f);
+        weights = new IntVLA(64);
+        total = 0;
+    }
+
+    /**
+     * Creates a new probability table with the provided String seed used.
+     *
+     * @param seed the RNG seed as a String
+     */
+    public ProbabilityTable(String seed) {
+        this.rng = new StatefulRNG(CrossHash.Lightning.hash64(seed));
+        table = new Arrangement<>(64, 0.75f);
+        weights = new IntVLA(64);
         total = 0;
     }
 
@@ -54,10 +80,10 @@ public class ProbabilityTable<T> implements Serializable {
             return null;
         }
         int index = rng.nextInt(total);
-        for (T t : table.keySet()) {
-            index -= table.get(t);
+        for (int i = 0; i < table.size(); i++) {
+            index -= weights.get(i);
             if (index < 0) {
-                return t;
+                return table.keyAt(i);
             }
         }
         return null;//something went wrong, shouldn't have been able to get all the way through without finding an item
@@ -70,16 +96,21 @@ public class ProbabilityTable<T> implements Serializable {
      *
      * @param item the object to be added
      * @param weight the weight to be given to the added object
+     * @return this for chaining
      */
-    public void add(T item, int weight) {
-        Integer i = table.get(item);
-        if (i == null) {
-            i = weight;
+    public ProbabilityTable<T> add(T item, int weight) {
+        int i = table.getInt(item);
+        if (i < 0) {
+            table.add(item);
+            weights.add(Math.max(0, weight));
+            total += Math.max(0, weight);
         } else {
-            i += weight;
+            i = weights.get(i);
+            table.add(item);
+            weights.add(Math.max(0, i + weight));
+            total += Math.max(0, i + weight) - i;
         }
-        table.put(item, i);
-        total += weight;
+        return this;
     }
 
     /**
@@ -90,8 +121,8 @@ public class ProbabilityTable<T> implements Serializable {
      * @return the weight of the item, or zero
      */
     public int weight(T item) {
-        Integer i = table.get(item);
-        return i == null ? 0 : i;
+        int i = table.getInt(item);
+        return i < 0 ? 0 : weights.get(i);
     }
 
     /**
@@ -102,5 +133,16 @@ public class ProbabilityTable<T> implements Serializable {
      */
     public SortedSet<T> items() {
         return table.keySet();
+    }
+
+    /**
+     * Sets the current RNG to the given RNG. You may prefer using a StatefulRNG (typically passing one in the
+     * constructor, but you can pass one here too) and setting its state in other code, which does not require calling
+     * this method again when the StatefulRNG has its state set.
+     * @param random an RNG, typically with a seed you want control over; may be a StatefulRNG or some other subclass
+     */
+    public void setRandom(RNG random)
+    {
+        rng = random;
     }
 }

@@ -144,6 +144,16 @@ public class BasicDemo extends ApplicationAdapter {
                                 new String[]{".", ".", ".", "!", "?", "...", "..."}, 0.12, gridWidth - 4),
                         FakeLanguageGen.SWAHILI.sentence(4, 9, new String[]{",", ",", ",", ";", ";"},
                                 new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
+                        FakeLanguageGen.SOMALI.sentence(4, 9, new String[]{",", ",", ",", ";", ";"},
+                                new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
+                        FakeLanguageGen.HINDI_ROMANIZED.sentence(4, 9, new String[]{",", ",", ",", ";", ";"},
+                                new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
+                        FakeLanguageGen.NORSE.sentence(4, 9, new String[]{",", ",", ",", ";", ";"},
+                                new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
+                        FakeLanguageGen.INUKTITUT.sentence(4, 9, new String[]{",", ",", ",", ";", ";"},
+                                new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
+                        FakeLanguageGen.NAHUATL.sentence(4, 9, new String[]{",", ",", ",", ";", ";"},
+                                new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
                         FakeLanguageGen.FANTASY_NAME.sentence(4, 8, new String[]{",", ",", ",", ";", ";"},
                                 new String[]{".", ".", ".", "!", "?", "..."}, 0.22, gridWidth - 4),
                         FakeLanguageGen.FANCY_FANTASY_NAME.sentence(4, 8, new String[]{",", ",", ",", ";", ";"},
@@ -242,7 +252,7 @@ public class BasicDemo extends ApplicationAdapter {
                     }
                     awaitedMoves = new ArrayList<>(toCursor);
                 }
-                return false;
+                return true;
             }
 
             @Override

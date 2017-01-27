@@ -1660,6 +1660,34 @@ public class CoordPacker {
         }
         return packs;
     }
+    /**
+     * Quickly determines if an x,y position is true or false in one of the given packed arrays, without unpacking them,
+     * and returns a List of all packed arrays that contain the position.
+     * @param x between 0 and 255, inclusive
+     * @param y between 0 and 255, inclusive
+     * @param packed a Collection of short[] (as encoded by this class); null elements in packed will be skipped.
+     * @return an OrderedSet of all packed arrays that store true at the given x,y location.
+     */
+    public static OrderedSet<short[]> findManyPacked(int x, int y, Collection<short[]> packed)
+    {
+        OrderedSet<short[]> packs = new OrderedSet<>(packed.size(), CrossHash.shortHasher);
+        int hilbertDistance = posToHilbert(x, y);
+        for (short[] current : packed) {
+            if(current == null) continue;
+            int total = 0;
+            boolean on = false;
+            for (int p = 0; p < current.length; p++, on = !on) {
+                total += current[p] & 0xffff;
+                if (hilbertDistance < total)
+                {
+                    if(on)
+                        packs.add(current);
+                    break;
+                }
+            }
+        }
+        return packs;
+    }
 
     /**
      * Quickly determines if a region is contained in one of the given packed arrays, without unpacking them, and
@@ -1674,8 +1702,24 @@ public class CoordPacker {
         OrderedSet<short[]> packs = new OrderedSet<>(packed.length, CrossHash.shortHasher);
         for (int a = 0; a < packed.length; a++) {
             if(packed[a] == null) continue;
-            int total = 0;
             if(intersects(checking, packed[a]))
+                return true;
+        }
+        return false;
+    }
+    /**
+     * Quickly determines if a region is contained in one of the given packed arrays, without unpacking them, and
+     * returns true if the region checking has some overlap with any of the packed arrays, or false otherwise.
+     * @param checking the packed data to check for overlap with the other regions
+     * @param packed a Collection of short[], as encoded by this class; null elements in packed will be skipped
+     * @return true if checking overlaps with any of the packed arrays, or false otherwise
+     */
+    public static boolean regionsContain(short[] checking, Collection<short[]> packed)
+    {
+        OrderedSet<short[]> packs = new OrderedSet<>(packed.size(), CrossHash.shortHasher);
+        for (short[] current : packed) {
+            if(current == null) continue;
+            if(intersects(checking, current))
                 return true;
         }
         return false;

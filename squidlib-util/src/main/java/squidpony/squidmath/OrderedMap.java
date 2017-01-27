@@ -125,7 +125,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     /**
      * The default load factor of a hash table.
      */
-    public static final float DEFAULT_LOAD_FACTOR = .375f; // .1875f; // .75f;
+    public static final float DEFAULT_LOAD_FACTOR = .75f; // .1875f; // .75f;
     /**
      * The load factor for a (usually small) table that is meant to be particularly fast.
      */
@@ -416,10 +416,10 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             final K[] key = this.key;
             // The starting point.
             if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) != null) {
-                if (curr.equals(k))
+                if (hasher.areEqual(curr, k))
                     return pos;
                 while ((curr = key[pos = (pos + 1) & mask]) != null)
-                    if (curr.equals(k))
+                    if (hasher.areEqual(curr, k))
                         return pos;
             }
         }
@@ -435,8 +435,62 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             rehash(arraySize(size + 1, f));
         return -1;
     }
+    private int insertAt(final K k, final V v, final int idx) {
+        int pos;
+        if (k == null) {
+            if (containsNullKey)
+            {
+                fixOrder(n);
+                order.insert(idx, n);
+                return n;
+            }
+            containsNullKey = true;
+            pos = n;
+        } else {
+            K curr;
+            final K[] key = this.key;
+            // The starting point.
+            if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) != null) {
+                if (hasher.areEqual(curr, k))
+                {
+                    fixOrder(pos);
+                    order.insert(idx, pos);
+                    return pos;
+                }
+                while ((curr = key[pos = (pos + 1) & mask]) != null)
+                    if (hasher.areEqual(curr, k))
+                    {
+                        fixOrder(pos);
+                        order.insert(idx, pos);
+                        return pos;
+                    }
+            }
+        }
+        key[pos] = k;
+        value[pos] = v;
+        if (size == 0) {
+            first = last = pos;
+        }
+        order.insert(idx, pos);
+        if (size++ >= maxFill)
+            rehash(arraySize(size + 1, f));
+        return -1;
+    }
     public V put(final K k, final V v) {
         final int pos = insert(k, v);
+        if (pos < 0)
+            return defRetValue;
+        final V oldValue = value[pos];
+        value[pos] = v;
+        return oldValue;
+    }
+    public V putAt(final K k, final V v, final int idx) {
+        if(idx <= 0)
+            return putAndMoveToFirst(k, v);
+        else if(idx >= size)
+            return putAndMoveToLast(k, v);
+
+        final int pos = insertAt(k, v, idx);
         if (pos < 0)
             return defRetValue;
         final V oldValue = value[pos];
@@ -488,12 +542,12 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         // The starting point.
         if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
             return defRetValue;
-        if (k.equals(curr))
+        if (hasher.areEqual(k, curr))
             return removeEntry(pos);
         while (true) {
             if ((curr = key[pos = (pos + 1) & mask]) == null)
                 return defRetValue;
-            if (k.equals(curr))
+            if (hasher.areEqual(k, curr))
                 return removeEntry(pos);
         }
     }
@@ -627,7 +681,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         // The starting point.
         if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
             return defRetValue;
-        if (k.equals(curr)) {
+        if (hasher.areEqual(k, curr)) {
             moveIndexToFirst(pos);
             return value[pos];
         }
@@ -635,7 +689,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         while (true) {
             if ((curr = key[pos = (pos + 1) & mask]) == null)
                 return defRetValue;
-            if (k.equals(curr)) {
+            if (hasher.areEqual(k, curr)) {
                 moveIndexToFirst(pos);
                 return value[pos];
             }
@@ -664,7 +718,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         // The starting point.
         if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
             return defRetValue;
-        if (k.equals(curr)) {
+        if (hasher.areEqual(k, curr)) {
             moveIndexToLast(pos);
             return value[pos];
         }
@@ -672,7 +726,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         while (true) {
             if ((curr = key[pos = (pos + 1) & mask]) == null)
                 return defRetValue;
-            if (k.equals(curr)) {
+            if (hasher.areEqual(k, curr)) {
                 moveIndexToLast(pos);
                 return value[pos];
             }
@@ -703,12 +757,12 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             final K[] key = this.key;
             // The starting point.
             if (!((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)) {
-                if (curr.equals(k)) {
+                if (hasher.areEqual(curr, k)) {
                     moveIndexToFirst(pos);
                     return setValue(pos, v);
                 }
                 while (!((curr = key[pos = (pos + 1) & mask]) == null))
-                    if (curr.equals(k)) {
+                    if (hasher.areEqual(curr, k)) {
                         moveIndexToFirst(pos);
                         return setValue(pos, v);
                     }
@@ -755,12 +809,12 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             final K[] key = this.key;
             // The starting point.
             if (!((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)) {
-                if (curr.equals(k)) {
+                if (hasher.areEqual(curr, k)) {
                     moveIndexToLast(pos);
                     return setValue(pos, v);
                 }
                 while (!((curr = key[pos = (pos + 1) & mask]) == null))
-                    if (curr.equals(k)) {
+                    if (hasher.areEqual(curr, k)) {
                         moveIndexToLast(pos);
                         return setValue(pos, v);
                     }
@@ -777,7 +831,8 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             //link[pos] = ((last & 0xFFFFFFFFL) << 32) | (-1 & 0xFFFFFFFFL);
             last = pos;
         }
-        order.add(pos);
+        if(order.peek() != pos)
+            order.add(pos);
         if (size++ >= maxFill)
             rehash(arraySize(size, f));
         return defRetValue;
@@ -791,13 +846,13 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         // The starting point.
         if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
             return defRetValue;
-        if (k.equals(curr))
+        if (hasher.areEqual(k, curr))
             return value[pos];
         // There's always an unused entry.
         while (true) {
             if ((curr = key[pos = (pos + 1) & mask]) == null)
                 return defRetValue;
-            if (k.equals(curr))
+            if (hasher.areEqual(k, curr))
                 return value[pos];
         }
     }
@@ -811,13 +866,13 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         // The starting point.
         if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
             return false;
-        if (k.equals(curr))
+        if (hasher.areEqual(k, curr))
             return true;
         // There's always an unused entry.
         while (true) {
             if ((curr = key[pos = (pos + 1) & mask]) == null)
                 return false;
-            if (k.equals(curr))
+            if (hasher.areEqual(k, curr))
                 return true;
         }
     }
@@ -913,7 +968,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             Map.Entry<K, V> e = (Map.Entry<K, V>) o;
             return (key[index] == null
                     ? e.getKey() == null
-                    : key[index].equals(e.getKey()))
+                    : hasher.areEqual(key[index], e.getKey()))
                     && (value[index] == null
                     ? e.getValue() == null
                     : value[index].equals(e.getValue()));
@@ -932,41 +987,22 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
      * Modifies the ordering so that the given entry is removed. This method will complete in logarithmic time.
      *
      * @param i the index of an entry.
+     * @return the iteration-order index of the removed entry
      */
-    protected void fixOrder(final int i) {
+    protected int fixOrder(final int i) {
         if (size == 0) {
+            order.clear();
             first = last = -1;
-            return;
+            return 0;
         }
-        order.removeValue(i);
+        int idx = order.removeValue(i);
         if (first == i) {
             first = order.get(0);
-            //first = (int) link[i];
-            /*
-            if (0 <= first) {
-                // Special case of SET_PREV( link[ first ], -1 )
-                link[first] |= (-1 & 0xFFFFFFFFL) << 32;
-            }
-            return;
-            */
         }
         if (last == i) {
             last = order.peek();
-            //last = (int) (link[i] >>> 32);
-            /*if (0 <= last) {
-                // Special case of SET_NEXT( link[ last ], -1 )
-                link[last] |= -1 & 0xFFFFFFFFL;
-            }
-            return;
-            */
         }
-        /*
-        final long linki = link[i];
-        final int prev = (int) (linki >>> 32);
-        final int next = (int) linki;
-        link[prev] ^= ((link[prev] ^ (linki & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-        link[next] ^= ((link[next] ^ (linki & 0xFFFFFFFF00000000L)) & 0xFFFFFFFF00000000L);
-        */
+        return idx;
     }
 
     /**
@@ -980,34 +1016,20 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     protected void fixOrder(int s, int d) {
         if (size == 1) {
             first = last = d;
-            // Special case of SET_UPPER_LOWER( link[ d ], -1, -1 )
-            //link[d] = -1L;
             order.set(0, d);
         }
         else if (first == s) {
             first = d;
             order.set(0, d);
-            //link[(int) link[s]] ^= ((link[(int) link[s]] ^ ((d & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
-            //link[d] = link[s];
         }
         else if (last == s) {
             last = d;
             order.set(order.size - 1, d);
-            //link[(int) (link[s] >>> 32)] ^= ((link[(int) (link[s] >>> 32)] ^ (d & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-            //link[d] = link[s];
         }
         else
         {
             order.set(order.indexOf(s), d);
         }
-        /*
-        final long links = link[s];
-        final int prev = (int) (links >>> 32);
-        final int next = (int) links;
-        link[prev] ^= ((link[prev] ^ (d & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-        link[next] ^= ((link[next] ^ ((d & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
-        link[d] = links;
-        */
     }
 
     /**
@@ -1292,7 +1314,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             throw new UnsupportedOperationException();
         }
     }
-    private final class MapEntrySet
+    public final class MapEntrySet
             implements Cloneable, SortedSet<Entry<K, V>>, Set<Entry<K, V>>, Collection<Entry<K, V>>, Serializable {
         private static final long serialVersionUID = 0L;
         public EntryIterator iterator() {
@@ -1341,14 +1363,14 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             // The starting point.
             if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
                 return false;
-            if (k.equals(curr))
+            if (hasher.areEqual(k, curr))
                 return value[pos] == null ? v == null : value[pos]
                         .equals(v);
             // There's always an unused entry.
             while (true) {
                 if ((curr = key[pos = (pos + 1) & mask]) == null)
                     return false;
-                if (k.equals(curr))
+                if (hasher.areEqual(k, curr))
                     return value[pos] == null ? v == null : value[pos]
                             .equals(v);
             }
@@ -1375,7 +1397,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             // The starting point.
             if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
                 return false;
-            if (curr.equals(k)) {
+            if (hasher.areEqual(curr, k)) {
                 if (value[pos] == null ? v == null : value[pos]
                         .equals(v)) {
                     removeEntry(pos);
@@ -1386,7 +1408,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             while (true) {
                 if ((curr = key[pos = (pos + 1) & mask]) == null)
                     return false;
-                if (curr.equals(k)) {
+                if (hasher.areEqual(curr, k)) {
                     if (value[pos] == null ? v == null : value[pos]
                             .equals(v)) {
                         removeEntry(pos);
@@ -2551,10 +2573,10 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
 
             // The starting point.
             if (!((curr = key[rep = HashCommon.mix(hasher.hash(replacement)) & mask]) == null)) {
-                if (curr.equals(replacement))
+                if (hasher.areEqual(curr, replacement))
                     return v;
                 while (!((curr = key[rep = (rep + 1) & mask]) == null))
-                    if (curr.equals(replacement))
+                    if (hasher.areEqual(curr, replacement))
                         return v;
             }
             key[rep] = replacement;
@@ -2579,10 +2601,10 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             final K[] key = this.key;
             // The starting point.
             if ((curr = key[rep = HashCommon.mix(hasher.hash(replacement)) & mask]) != null) {
-                if (curr.equals(replacement))
+                if (hasher.areEqual(curr, replacement))
                     return v;
                 while ((curr = key[rep = (rep + 1) & mask]) != null)
-                    if (curr.equals(replacement))
+                    if (hasher.areEqual(curr, replacement))
                         return v;
             }
             key[rep] = replacement;
@@ -2592,14 +2614,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         fixOrder(n, rep);
         return v;
     }
-
-    /**
-     * Swaps a key, original, for another key, replacement, while keeping replacement at the same point in the iteration
-     * order as original and keeping it associated with the same value (which also keeps its iteration index).
-     * @param original the key to find and swap out
-     * @param replacement the key to replace original with
-     * @return the value associated with original before, and replacement now
-     */
+/*
     public V alter(final K original, final K replacement) {
         if (original == null) {
             if (containsNullKey) {
@@ -2608,21 +2623,83 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             else
                 return put(replacement, null);
         }
-        else if(original.equals(replacement))
+        else if(hasher.areEqual(original, replacement))
             return get(original);
+        K curr;
+        final K[] key = this.key;
+        int pos;
+
+        if ((curr = key[pos = HashCommon.mix(hasher.hash(original)) & mask]) == null)
+            return put(replacement, null);
+        if (hasher.areEqual(original, curr))
+            return alterEntry(pos, replacement);
+        while (true) {
+            if ((curr = key[pos = (pos + 1) & mask]) == null)
+                return put(replacement, null);
+            if (hasher.areEqual(original, curr))
+                return alterEntry(pos, replacement);
+        }
+    }
+    */
+    private int alterEntry(final int pos) {
+        value[pos] = null;
+        size--;
+        int idx = fixOrder(pos);
+        shiftKeys(pos);
+        return idx;
+    }
+    private int alterNullEntry() {
+        containsNullKey = false;
+        key[n] = null;
+        value[n] = null;
+        size--;
+        int idx = fixOrder(n);
+        return idx;
+    }
+    /**
+     * Swaps a key, original, for another key, replacement, while keeping replacement at the same point in the iteration
+     * order as original and keeping it associated with the same value (which also keeps its iteration index).
+     * @param original the key to find and swap out
+     * @param replacement the key to replace original with
+     * @return the value associated with original before, and replacement now
+     */
+    public V alter(final K original, final K replacement) {
+        V v;
+        int idx;
+        if (original == null) {
+            if (containsNullKey) {
+                v = value[n];
+                idx = alterNullEntry();
+                putAt(replacement, v, idx);
+                return v;
+            }
+            else
+                v = defRetValue;
+            return v;
+        }
         K curr;
         final K[] key = this.key;
         int pos;
         // The starting point.
         if ((curr = key[pos = HashCommon.mix(hasher.hash(original)) & mask]) == null)
-            return put(replacement, null);
-        if (original.equals(curr))
-            return alterEntry(pos, replacement);
+            return defRetValue;
+        if (hasher.areEqual(original, curr))
+        {
+            v = value[pos];
+            idx = alterEntry(pos);
+            putAt(replacement, v, idx);
+            return v;
+        }
         while (true) {
             if ((curr = key[pos = (pos + 1) & mask]) == null)
-                return put(replacement, null);
-            if (original.equals(curr))
-                return alterEntry(pos, replacement);
+                return defRetValue;
+            if (hasher.areEqual(original, curr))
+            {
+                v = value[pos];
+                idx = alterEntry(pos);
+                putAt(replacement, v, idx);
+                return v;
+            }
         }
     }
 

@@ -1,6 +1,6 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.GwtCompatibility;
+import squidpony.ArrayTools;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.CoordPacker;
 import squidpony.squidmath.PoissonDisk;
@@ -37,7 +37,7 @@ public class DenseRoomMapGenerator {
         this.rng = rng;
         this.width = Math.max(3, width);
         this.height = Math.max(3, height);
-        map = GwtCompatibility.fill2D('#', this.width, this.height);
+        map = ArrayTools.fill('#', this.width, this.height);
         environment = new int[this.width][this.height];
     }
 
@@ -69,7 +69,7 @@ public class DenseRoomMapGenerator {
             if (center.y - hnh != ny)
                 nh -= Math.abs(center.y - hnh - ny);
             if (nw >= 0 && nh >= 0) {
-                GwtCompatibility.insert2D(DungeonUtility.wallWrap(GwtCompatibility.fill2D('.', nw, nh)),
+                ArrayTools.insert(DungeonUtility.wallWrap(ArrayTools.fill('.', nw, nh)),
                         map, nx, ny);
                 //regions.add(CoordPacker.rectangle(nx, ny, nw, nh));
             }

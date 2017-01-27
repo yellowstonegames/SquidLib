@@ -125,6 +125,9 @@ public class DijkstraMap implements Serializable {
      * path toward a goal is impossible, this ArrayList will be empty.
      */
     public ArrayList<Coord> path = new ArrayList<>();
+
+    public boolean cutShort = false;
+
     /**
      * Goals are always marked with 0.
      */
@@ -220,7 +223,7 @@ public class DijkstraMap implements Serializable {
     }
 
     /**
-     * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
      * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here.
@@ -232,7 +235,7 @@ public class DijkstraMap implements Serializable {
     }
 
     /**
-     * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
      * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here. Also takes an RNG that ensures predictable path choices given
@@ -246,7 +249,7 @@ public class DijkstraMap implements Serializable {
     }
 
     /**
-     * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
      * char[][] where one char means a wall and anything else is a walkable tile. If you only have
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here. You can specify the character used for walls.
@@ -265,7 +268,7 @@ public class DijkstraMap implements Serializable {
     }
 
     /**
-     * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
      * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here. This constructor specifies a distance measurement.
@@ -278,7 +281,7 @@ public class DijkstraMap implements Serializable {
     }
 
     /**
-     * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
      * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here. Also takes a distance measurement and an RNG that ensures
@@ -560,6 +563,34 @@ public class DijkstraMap implements Serializable {
 
         goals.put(pt.encode(), GOAL);
     }
+    /**
+     * Marks many cells as goals for pathfinding, ignoring cells in walls or unreachable areas. More efficient than
+     * a loop that calls {@link #setGoal(Coord)} over and over, since this doesn't need to do a bounds check. The
+     * GreasedRegion passed to this should have the same width and height as this DijkstraMap.
+     *
+     * @param pts a GreasedRegion containing "on" cells to treat as goals; should have the same width and height as this
+     */
+    public void setGoals(GreasedRegion pts) {
+        if (!initialized || pts.width > width || pts.height > height) return;
+        int[] enc = new GreasedRegion(physicalMap, FLOOR).and(pts).asEncoded();
+        double[] gls = new double[enc.length];
+        Arrays.fill(gls, GOAL);
+        goals.putAll(enc, gls);
+    }
+
+    /**
+     * Marks many cells as goals for pathfinding, ignoring cells in walls or unreachable areas. Simply loops through
+     * pts and calls {@link #setGoal(Coord)} on each Coord in pts.
+     * If you have a GreasedRegion, you should use it with {@link #setGoals(GreasedRegion)}, which is faster.
+     * @param pts any Iterable of Coord, which can be a List, Set, Queue, etc. of Coords to mark as goals
+     */
+    public void setGoals(Iterable<Coord> pts) {
+        if (!initialized) return;
+        for(Coord c : pts)
+        {
+            setGoal(c);
+        }
+    }
 
     /**
      * Marks a cell's cost for pathfinding as cost, unless the cell is a wall or unreachable area (then it always sets
@@ -744,10 +775,10 @@ public class DijkstraMap implements Serializable {
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
-    public double[][] scan(Set<Coord> impassable) {
+    public double[][] scan(Collection<Coord> impassable) {
         if (!initialized) return null;
         if (impassable == null)
-            impassable = new OrderedSet<>();
+            impassable = Collections.emptySet();
         for (Coord pt : impassable) {
             closed.put(pt.encode(), WALL);
         }
@@ -845,7 +876,7 @@ public class DijkstraMap implements Serializable {
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
-    public double[][] partialScan(int limit, Set<Coord> impassable) {
+    public double[][] partialScan(int limit, Collection<Coord> impassable) {
         if (!initialized) return null;
         if (impassable == null)
             impassable = new OrderedSet<>();
@@ -944,7 +975,7 @@ public class DijkstraMap implements Serializable {
      * @param targets the Coords that this is trying to find; it will stop once it finds one
      * @return the Coord that it found first.
      */
-    public Coord findNearest(Coord start, Set<Coord> targets) {
+    public Coord findNearest(Coord start, Collection<Coord> targets) {
         if (!initialized) return null;
         if (targets == null)
             return null;
@@ -1034,6 +1065,7 @@ public class DijkstraMap implements Serializable {
      */
     public ArrayList<Coord> findShortcutPath(Coord start, Coord... targets) {
         if (targets.length == 0) {
+            cutShort = true;
             path.clear();
             return new ArrayList<>(path);
         }
@@ -1049,6 +1081,8 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d < measurement.directionCount() + 1; d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                if(!pt.isWithin(width, height))
+                    continue;
                 if (gradientMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -1058,8 +1092,9 @@ public class DijkstraMap implements Serializable {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path.clear();
-                break;
+                cutShort = true;
+                frustration = 0;
+                return new ArrayList<>(path);
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             if (gradientMap[currentPos.x][currentPos.y] == 0)
@@ -1068,6 +1103,7 @@ public class DijkstraMap implements Serializable {
             frustration++;
         }
         frustration = 0;
+        cutShort = false;
         Collections.reverse(path);
         return new ArrayList<>(path);
 
@@ -1083,11 +1119,11 @@ public class DijkstraMap implements Serializable {
      * @param targets the Coords that this is trying to find; it will stop once it finds enough (based on limit)
      * @return the Coords that it found first.
      */
-    public ArrayList<Coord> findNearestMultiple(Coord start, int limit, Set<Coord> targets) {
+    public ArrayList<Coord> findNearestMultiple(Coord start, int limit, Collection<Coord> targets) {
         if (!initialized) return null;
-        if (targets == null)
-            return null;
         ArrayList<Coord> found = new ArrayList<>(limit);
+        if (targets == null)
+            return found;
         if (targets.contains(start))
             return found;
         Coord start2 = start, adj, cen;
@@ -1171,7 +1207,7 @@ public class DijkstraMap implements Serializable {
      *                   creature. Non-square creatures are not supported because turning is really hard.
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
-    public double[][] scan(Set<Coord> impassable, int size) {
+    public double[][] scan(Collection<Coord> impassable, int size) {
         if (!initialized) return null;
         if (impassable == null)
             impassable = new OrderedSet<>();
@@ -1299,7 +1335,7 @@ public class DijkstraMap implements Serializable {
      * scenarios), it will recalculate a move so that it does not pass into that cell. The keys in impassable should
      * be the positions of enemies and obstacles that cannot be moved  through, and will be ignored if there is a goal
      * overlapping one. This overload always scans the whole map; use
-     * {@link #findPath(int, int, Set, Set, Coord, Coord...)} to scan a smaller area for performance reasons.
+     * {@link #findPath(int, int, Collection, Collection, Coord, Coord...)} to scan a smaller area for performance reasons.
      * <br>
      * This caches its result in a member field, path, which can be fetched after finding a path and will change with
      * each call to a pathfinding method.
@@ -1310,8 +1346,8 @@ public class DijkstraMap implements Serializable {
      * @param targets      a vararg or array of Coord that this will try to pathfind toward
      * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.
      */
-    public ArrayList<Coord> findPath(int length, Set<Coord> impassable,
-                                     Set<Coord> onlyPassable, Coord start, Coord... targets) {
+    public ArrayList<Coord> findPath(int length, Collection<Coord> impassable,
+                                     Collection<Coord> onlyPassable, Coord start, Coord... targets) {
         return findPath(length, -1, impassable, onlyPassable, start, targets);
     }
 
@@ -1339,24 +1375,27 @@ public class DijkstraMap implements Serializable {
      * @param targets      a vararg or array of Coord that this will try to pathfind toward
      * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.
      */
-    public ArrayList<Coord> findPath(int length, int scanLimit, Set<Coord> impassable,
-                                     Set<Coord> onlyPassable, Coord start, Coord... targets) {
+    public ArrayList<Coord> findPath(int length, int scanLimit, Collection<Coord> impassable,
+                                     Collection<Coord> onlyPassable, Coord start, Coord... targets) {
         if (!initialized) return null;
         path.clear();
-        OrderedSet<Coord> impassable2;
+        Collection<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new OrderedSet<>();
+            impassable2 = Collections.emptySet();
         else
-            impassable2 = new OrderedSet<>(impassable);
+            impassable2 = new GreasedRegion(width, height, impassable);
         if (onlyPassable == null)
-            onlyPassable = new OrderedSet<>();
+            onlyPassable = Collections.emptySet();
 
         resetMap();
         for (Coord goal : targets) {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
+        {
+            cutShort = true;
             return new ArrayList<>(path);
+        }
         if(length < 0)
             length = 0;
         if(scanLimit <= 0 || scanLimit < length)
@@ -1376,6 +1415,8 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                if(!pt.isWithin(width, height))
+                    continue;
                 if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -1385,8 +1426,9 @@ public class DijkstraMap implements Serializable {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path.clear();
-                break;
+                cutShort = true;
+                frustration = 0;
+                return new ArrayList<>(path);
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(currentPos);
@@ -1396,13 +1438,14 @@ public class DijkstraMap implements Serializable {
                 if (onlyPassable.contains(currentPos)) {
                     closed.put(currentPos.encode(), WALL);
                     impassable2.add(currentPos);
-                    return findPath(length, impassable2, onlyPassable, start, targets);
+                    return findPath(length, scanLimit, impassable2, onlyPassable, start, targets);
                 }
                 break;
             }
             if (gradientMap[currentPos.x][currentPos.y] == 0)
                 break;
         }
+        cutShort = false;
         frustration = 0;
         goals.clear();
         return new ArrayList<>(path);
@@ -1432,8 +1475,8 @@ public class DijkstraMap implements Serializable {
      * @param targets        a vararg or array of Coord that this will try to pathfind toward
      * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.
      */
-    public ArrayList<Coord> findAttackPath(int moveLength, int preferredRange, LOS los, Set<Coord> impassable,
-                                           Set<Coord> onlyPassable, Coord start, Coord... targets) {
+    public ArrayList<Coord> findAttackPath(int moveLength, int preferredRange, LOS los, Collection<Coord> impassable,
+                                           Collection<Coord> onlyPassable, Coord start, Coord... targets) {
         return findAttackPath(moveLength, preferredRange, preferredRange, los, impassable, onlyPassable, start, targets);
     }
 
@@ -1464,7 +1507,7 @@ public class DijkstraMap implements Serializable {
      * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.
      */
     public ArrayList<Coord> findAttackPath(int moveLength, int minPreferredRange, int maxPreferredRange, LOS los,
-                                           Set<Coord> impassable, Set<Coord> onlyPassable, Coord start, Coord... targets) {
+                                           Collection<Coord> impassable, Collection<Coord> onlyPassable, Coord start, Coord... targets) {
         if (!initialized) return null;
         if (minPreferredRange < 0) minPreferredRange = 0;
         if (maxPreferredRange < minPreferredRange) maxPreferredRange = minPreferredRange;
@@ -1477,20 +1520,23 @@ public class DijkstraMap implements Serializable {
             }
         }
         path.clear();
-        OrderedSet<Coord> impassable2;
+        Collection<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new OrderedSet<>();
+            impassable2 = Collections.emptySet();
         else
-            impassable2 = new OrderedSet<>(impassable);
+            impassable2 = new GreasedRegion(width, height, impassable);
         if (onlyPassable == null)
-            onlyPassable = new OrderedSet<>();
+            onlyPassable = Collections.emptySet();
 
         resetMap();
         for (Coord goal : targets) {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
+        {
+            cutShort = true;
             return new ArrayList<>(path);
+        }
 
         Measurement mess = measurement;
         if (measurement == Measurement.EUCLIDEAN) {
@@ -1534,6 +1580,8 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                if(!pt.isWithin(width, height))
+                    continue;
                 if (gradientMap[pt.x][pt.y] < best  && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -1543,8 +1591,9 @@ public class DijkstraMap implements Serializable {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path.clear();
-                break;
+                cutShort = true;
+                frustration = 0;
+                return new ArrayList<>(path);
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(Coord.get(currentPos.x, currentPos.y));
@@ -1564,6 +1613,7 @@ public class DijkstraMap implements Serializable {
             if (gradientMap[currentPos.x][currentPos.y] == 0)
                 break;
         }
+        cutShort = false;
         frustration = 0;
         goals.clear();
         return new ArrayList<>(path);
@@ -1613,7 +1663,7 @@ public class DijkstraMap implements Serializable {
      * @return an ArrayList of Coord that represents a path to travel to get to an ideal place to use tech. Copy of path.
      */
     public ArrayList<Coord> findTechniquePath(int moveLength, Technique tech, char[][] dungeon, LOS los,
-                                              Set<Coord> impassable, Set<Coord> allies, Coord start, Set<Coord> targets) {
+                                              Collection<Coord> impassable, Collection<Coord> allies, Coord start, Collection<Coord> targets) {
         if (!initialized) return null;
         tech.setMap(dungeon);
         double[][] resMap = new double[width][height];
@@ -1633,12 +1683,15 @@ public class DijkstraMap implements Serializable {
 
         path.clear();
         if (targets == null || targets.size() == 0)
+        {
+            cutShort = true;
             return new ArrayList<>(path);
-        OrderedSet<Coord> impassable2;
+        }
+        Collection<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new OrderedSet<>();
+            impassable2 = Collections.emptySet();
         else
-            impassable2 = new OrderedSet<>(impassable);
+            impassable2 = new GreasedRegion(width, height, impassable);
 
         if (allies == null)
             friends = new OrderedSet<>();
@@ -1656,7 +1709,10 @@ public class DijkstraMap implements Serializable {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
+        {
+            cutShort = true;
             return new ArrayList<>(path);
+        }
 
         Measurement mess = measurement;
         /*
@@ -1737,6 +1793,8 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                if(!pt.isWithin(width, height))
+                    continue;
                 if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -1754,8 +1812,9 @@ public class DijkstraMap implements Serializable {
                 break;
             }
             if (best > gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path.clear();
-                break;
+                cutShort = true;
+                frustration = 0;
+                return new ArrayList<>(path);
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(currentPos);
@@ -1773,6 +1832,7 @@ public class DijkstraMap implements Serializable {
 //            if(gradientMap[currentPos.x][currentPos.y] == 0)
 //                break;
         }
+        cutShort = false;
         frustration = 0;
         goals.clear();
         return new ArrayList<>(path);
@@ -1803,8 +1863,8 @@ public class DijkstraMap implements Serializable {
      * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.
      */
     @GwtIncompatible
-    public ArrayList<Coord> findAttackPath(int moveLength, int preferredRange, FOVCache cache, Set<Coord> impassable,
-                                           Set<Coord> onlyPassable, Coord start, Coord... targets) {
+    public ArrayList<Coord> findAttackPath(int moveLength, int preferredRange, FOVCache cache, Collection<Coord> impassable,
+                                           Collection<Coord> onlyPassable, Coord start, Coord... targets) {
         return findAttackPath(moveLength, preferredRange, preferredRange, cache, impassable, onlyPassable, start, targets);
     }
 
@@ -1835,26 +1895,29 @@ public class DijkstraMap implements Serializable {
      */
     @GwtIncompatible
     public ArrayList<Coord> findAttackPath(int moveLength, int minPreferredRange, int maxPreferredRange, FOVCache cache,
-                                           Set<Coord> impassable, Set<Coord> onlyPassable, Coord start, Coord... targets) {
+                                           Collection<Coord> impassable, Collection<Coord> onlyPassable, Coord start, Coord... targets) {
         if (!initialized) return null;
         if (minPreferredRange < 0) minPreferredRange = 0;
         if (maxPreferredRange < minPreferredRange) maxPreferredRange = minPreferredRange;
 
         path.clear();
-        OrderedSet<Coord> impassable2;
+        Collection<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new OrderedSet<>();
+            impassable2 = Collections.emptySet();
         else
-            impassable2 = new OrderedSet<>(impassable);
+            impassable2 = new GreasedRegion(width, height, impassable);
         if (onlyPassable == null)
-            onlyPassable = new OrderedSet<>();
+            onlyPassable = Collections.emptySet();
 
         resetMap();
         for (Coord goal : targets) {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
+        {
+            cutShort = true;
             return new ArrayList<>(path);
+        }
 
         Measurement mess = measurement;
         if (measurement == Measurement.EUCLIDEAN) {
@@ -1898,6 +1961,8 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                if(!pt.isWithin(width, height))
+                    continue;
                 if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -1907,8 +1972,9 @@ public class DijkstraMap implements Serializable {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path.clear();
-                break;
+                cutShort = true;
+                frustration = 0;
+                return new ArrayList<>(path);
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(Coord.get(currentPos.x, currentPos.y));
@@ -1928,6 +1994,7 @@ public class DijkstraMap implements Serializable {
             if (gradientMap[currentPos.x][currentPos.y] == 0)
                 break;
         }
+        cutShort = false;
         frustration = 0;
         goals.clear();
         return new ArrayList<>(path);
@@ -1967,8 +2034,8 @@ public class DijkstraMap implements Serializable {
      * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.
      */
     public ArrayList<Coord> findCoveredAttackPath(int moveLength, int minPreferredRange, int maxPreferredRange,
-                                                  double coverPreference, Set<Coord> impassable,
-                                                  Set<Coord> onlyPassable, Iterable<Threat> threats, Coord start,
+                                                  double coverPreference, Collection<Coord> impassable,
+                                                  Collection<Coord> onlyPassable, Iterable<Threat> threats, Coord start,
                                                   Coord... targets) {
         if (!initialized) return null;
 
@@ -1984,7 +2051,7 @@ public class DijkstraMap implements Serializable {
 
 
         path = new ArrayList<Coord>();
-        OrderedSet<Coord> impassable2;
+        Collection<Coord> impassable2;
         if (impassable == null)
             impassable2 = new OrderedSet<Coord>();
         else
@@ -1997,7 +2064,10 @@ public class DijkstraMap implements Serializable {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
+        {
+            cutShort = true;
             return new ArrayList<>(path);
+        }
 
         Measurement mess = measurement;
         if (measurement == Measurement.EUCLIDEAN) {
@@ -2064,6 +2134,8 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                if(!pt.isWithin(width, height))
+                    continue;
                 if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -2092,7 +2164,7 @@ public class DijkstraMap implements Serializable {
             return findCoveredAttackPath(moveLength, minPreferredRange, maxPreferredRange, coverPreference,
                     impassable2, onlyPassable, threats, start, targets);
         }
-
+        cutShort = false;
         frustration = 0;
         return new ArrayList<>(path);
     }
@@ -2130,8 +2202,8 @@ public class DijkstraMap implements Serializable {
      * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.
      */
     public ArrayList<Coord> findCoveredAttackPath(int moveLength, int preferredRange, double coverPreference,
-                                                  FOV fov, boolean seekDistantGoals, Set<Coord> impassable,
-                                                  Set<Coord> onlyPassable, List<Threat> threats, Coord start,
+                                                  FOV fov, boolean seekDistantGoals, Collection<Coord> impassable,
+                                                  Collection<Coord> onlyPassable, List<Threat> threats, Coord start,
                                                   Coord... targets) {
         return findCoveredAttackPath(moveLength, preferredRange, preferredRange, coverPreference, fov,
                 seekDistantGoals, impassable, onlyPassable, threats, start, targets);
@@ -2173,8 +2245,8 @@ public class DijkstraMap implements Serializable {
      * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.
      */
     public ArrayList<Coord> findCoveredAttackPath(int moveLength, int minPreferredRange, int maxPreferredRange,
-                                                  double coverPreference, FOV fov, boolean seekDistantGoals, Set<Coord> impassable,
-                                                  Set<Coord> onlyPassable, Iterable<Threat> threats, Coord start,
+                                                  double coverPreference, FOV fov, boolean seekDistantGoals, Collection<Coord> impassable,
+                                                  Collection<Coord> onlyPassable, Iterable<Threat> threats, Coord start,
                                                   Coord... targets) {
         if (!initialized) return null;
         if(fov == null) {
@@ -2193,7 +2265,7 @@ public class DijkstraMap implements Serializable {
 
 
         path = new ArrayList<Coord>();
-        OrderedSet<Coord> impassable2;
+        Collection<Coord> impassable2;
         if (impassable == null)
             impassable2 = new OrderedSet<Coord>();
         else
@@ -2206,7 +2278,10 @@ public class DijkstraMap implements Serializable {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
+        {
+            cutShort = true;
             return new ArrayList<>(path);
+        }
 
         Measurement mess = measurement;
         if (measurement == Measurement.EUCLIDEAN) {
@@ -2291,6 +2366,8 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                if(!pt.isWithin(width, height))
+                    continue;
                 if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -2319,7 +2396,7 @@ public class DijkstraMap implements Serializable {
             return findCoveredAttackPath(moveLength, minPreferredRange, maxPreferredRange, coverPreference,
                     fov, seekDistantGoals, impassable2, onlyPassable, threats, start, targets);
         }
-
+        cutShort = false;
         frustration = 0;
         return new ArrayList<>(path);
     }
@@ -2358,8 +2435,8 @@ public class DijkstraMap implements Serializable {
      */
     @GwtIncompatible
     public ArrayList<Coord> findCoveredAttackPath(int moveLength, int preferredRange, double coverPreference,
-                                                  FOVCache fov, boolean seekDistantGoals, Set<Coord> impassable,
-                                                  Set<Coord> onlyPassable, List<Threat> threats, Coord start,
+                                                  FOVCache fov, boolean seekDistantGoals, Collection<Coord> impassable,
+                                                  Collection<Coord> onlyPassable, List<Threat> threats, Coord start,
                                                   Coord... targets) {
         return findCoveredAttackPath(moveLength, preferredRange, preferredRange, coverPreference, fov,
                 seekDistantGoals, impassable, onlyPassable, threats, start, targets);
@@ -2402,8 +2479,8 @@ public class DijkstraMap implements Serializable {
      */
     @GwtIncompatible
     public ArrayList<Coord> findCoveredAttackPath(int moveLength, int minPreferredRange, int maxPreferredRange,
-                                                  double coverPreference, FOVCache fov, boolean seekDistantGoals, Set<Coord> impassable,
-                                                  Set<Coord> onlyPassable, List<Threat> threats, Coord start,
+                                                  double coverPreference, FOVCache fov, boolean seekDistantGoals, Collection<Coord> impassable,
+                                                  Collection<Coord> onlyPassable, List<Threat> threats, Coord start,
                                                   Coord... targets) {
         if (!initialized) return null;
         if(fov == null) {
@@ -2422,20 +2499,23 @@ public class DijkstraMap implements Serializable {
         }
 
         path.clear();
-        OrderedSet<Coord> impassable2;
+        Collection<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new OrderedSet<>();
+            impassable2 = Collections.emptySet();
         else
-            impassable2 = new OrderedSet<>(impassable);
+            impassable2 = new GreasedRegion(width, height, impassable);
         if (onlyPassable == null)
-            onlyPassable = new OrderedSet<>();
+            onlyPassable = Collections.emptySet();
 
         resetMap();
         for (Coord goal : targets) {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
+        {
+            cutShort = true;
             return new ArrayList<>(path);
+        }
 
         Measurement mess = measurement;
         if (measurement == Measurement.EUCLIDEAN) {
@@ -2519,6 +2599,8 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                if(!pt.isWithin(width, height))
+                    continue;
                 if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -2547,7 +2629,7 @@ public class DijkstraMap implements Serializable {
             return findCoveredAttackPath(moveLength, minPreferredRange, maxPreferredRange, coverPreference,
                     fov, seekDistantGoals, impassable2, onlyPassable, threats, start, targets);
         }
-
+        cutShort = false;
         frustration = 0;
         return new ArrayList<>(path);
     }
@@ -2591,12 +2673,12 @@ public class DijkstraMap implements Serializable {
      * @param impassable locations of enemies or mobile hazards/obstacles that aren't in the map as walls
      * @param allies     called onlyPassable in other methods, here it also represents allies for Technique things
      * @param start      the Coord the pathfinder starts at.
-     * @param targets    a Set of Coord, not an array of Coord or variable argument list as in other methods.
+     * @param targets    a Set (or any Collection) of Coord, not an array of Coord or variable argument list as in other methods.
      * @return an ArrayList of Coord that represents a path to travel to get to an ideal place to use tech. Copy of path.
      */
     @GwtIncompatible
     public ArrayList<Coord> findTechniquePath(int moveLength, Technique tech, char[][] dungeon, FOVCache cache,
-                                              Set<Coord> impassable, Set<Coord> allies, Coord start, Set<Coord> targets) {
+                                              Collection<Coord> impassable, Collection<Coord> allies, Coord start, Collection<Coord> targets) {
         if (!initialized) return null;
         tech.setMap(dungeon);
         if (cache != null)
@@ -2606,7 +2688,7 @@ public class DijkstraMap implements Serializable {
         double[][] userDistanceMap;
         double paidLength = 0.0;
 
-        OrderedSet<Coord> friends;
+        Collection<Coord> friends;
 
 
         for (int x = 0; x < width; x++) {
@@ -2618,17 +2700,20 @@ public class DijkstraMap implements Serializable {
 
         path.clear();
         if (targets == null || targets.size() == 0)
+        {
+            cutShort = true;
             return new ArrayList<>(path);
-        OrderedSet<Coord> impassable2;
+        }
+        Collection<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new OrderedSet<>();
+            impassable2 = Collections.emptySet();
         else
-            impassable2 = new OrderedSet<>(impassable);
+            impassable2 = new GreasedRegion(width, height, impassable);
 
         if (allies == null)
-            friends = new OrderedSet<>();
+            friends = Collections.emptySet();
         else {
-            friends = new OrderedSet<>(allies);
+            friends = new GreasedRegion(width, height, allies);
             friends.remove(start);
         }
 
@@ -2641,7 +2726,10 @@ public class DijkstraMap implements Serializable {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
+        {
+            cutShort = true;
             return new ArrayList<>(path);
+        }
 
         Measurement mess = measurement;
         /*
@@ -2722,6 +2810,8 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                if(!pt.isWithin(width, height))
+                    continue;
                 if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -2739,8 +2829,9 @@ public class DijkstraMap implements Serializable {
                 break;
             }
             if (best > gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path.clear();
-                break;
+                cutShort = true;
+                frustration = 0;
+                return new ArrayList<>(path);
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(currentPos);
@@ -2758,6 +2849,7 @@ public class DijkstraMap implements Serializable {
 //            if(gradientMap[currentPos.x][currentPos.y] == 0)
 //                break;
         }
+        cutShort = false;
         frustration = 0;
         goals.clear();
         return new ArrayList<>(path);
@@ -2765,7 +2857,7 @@ public class DijkstraMap implements Serializable {
 
 
     private double cachedLongerPaths = 1.2;
-    private Set<Coord> cachedImpassable = new OrderedSet<>();
+    private Collection<Coord> cachedImpassable = new OrderedSet<>();
     private Coord[] cachedFearSources;
     private double[][] cachedFleeMap;
     private int cachedSize = 1;
@@ -2796,8 +2888,8 @@ public class DijkstraMap implements Serializable {
      * @param fearSources       a vararg or array of Coord positions to run away from
      * @return an ArrayList of Coord that will contain the locations of this creature as it goes away from fear sources. Copy of path.
      */
-    public ArrayList<Coord> findFleePath(int length, double preferLongerPaths, Set<Coord> impassable,
-                                         Set<Coord> onlyPassable, Coord start, Coord... fearSources) {
+    public ArrayList<Coord> findFleePath(int length, double preferLongerPaths, Collection<Coord> impassable,
+                                         Collection<Coord> onlyPassable, Coord start, Coord... fearSources) {
         return findFleePath(length, -1, preferLongerPaths, impassable, onlyPassable, start, fearSources);
     }
 
@@ -2825,7 +2917,7 @@ public class DijkstraMap implements Serializable {
      * each call to a pathfinding method.
      *
      * @param length            the length of the path to calculate
-     * @param scanLimit         how many cells away from a fear source to calculate; negative scans the whole map
+     * @param scanLimit         how many steps away from a fear source to calculate; negative scans the whole map
      * @param preferLongerPaths Set this to 1.2 if you aren't sure; it will probably need tweaking for different maps.
      * @param impassable        a Set of impassable Coord positions that may change (not constant like walls); can be null
      * @param onlyPassable      a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
@@ -2833,19 +2925,20 @@ public class DijkstraMap implements Serializable {
      * @param fearSources       a vararg or array of Coord positions to run away from
      * @return an ArrayList of Coord that will contain the locations of this creature as it goes away from fear sources. Copy of path.
      */
-    public ArrayList<Coord> findFleePath(int length, int scanLimit, double preferLongerPaths, Set<Coord> impassable,
-                                         Set<Coord> onlyPassable, Coord start, Coord... fearSources) {
+    public ArrayList<Coord> findFleePath(int length, int scanLimit, double preferLongerPaths, Collection<Coord> impassable,
+                                         Collection<Coord> onlyPassable, Coord start, Coord... fearSources) {
         if (!initialized) return null;
         path.clear();
-        OrderedSet<Coord> impassable2;
+        Collection<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new OrderedSet<>();
+            impassable2 = Collections.emptySet();
         else
-            impassable2 = new OrderedSet<>(impassable);
+            impassable2 = new GreasedRegion(width, height, impassable);
 
         if (onlyPassable == null)
-            onlyPassable = new OrderedSet<>();
+            onlyPassable = Collections.emptySet();
         if (fearSources == null || fearSources.length < 1) {
+            cutShort = true;
             path.clear();
             return new ArrayList<>(path);
         }
@@ -2862,7 +2955,10 @@ public class DijkstraMap implements Serializable {
                 setGoal(goal.x, goal.y);
             }
             if (goals.isEmpty())
+            {
+                cutShort = true;
                 return new ArrayList<>(path);
+            }
 
             if(length < 0) length = 0;
             if(scanLimit <= 0 || scanLimit < length)
@@ -2895,6 +2991,8 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                if(!pt.isWithin(width, height))
+                    continue;
                 if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -2903,8 +3001,9 @@ public class DijkstraMap implements Serializable {
                 }
             }
             if (best >= gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path.clear();
-                break;
+                cutShort = true;
+                frustration = 0;
+                return new ArrayList<>(path);
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             if (path.size() > 0) {
@@ -2920,11 +3019,12 @@ public class DijkstraMap implements Serializable {
 
                     closed.put(currentPos.encode(), WALL);
                     impassable2.add(currentPos);
-                    return findFleePath(length, preferLongerPaths, impassable2, onlyPassable, start, fearSources);
+                    return findFleePath(length, scanLimit, preferLongerPaths, impassable2, onlyPassable, start, fearSources);
                 }
                 break;
             }
         }
+        cutShort = false;
         frustration = 0;
         goals.clear();
         return new ArrayList<>(path);
@@ -2955,25 +3055,28 @@ public class DijkstraMap implements Serializable {
      * @return an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target. Copy of path.
      */
 
-    public ArrayList<Coord> findPathLarge(int size, int length, Set<Coord> impassable,
-                                          Set<Coord> onlyPassable, Coord start, Coord... targets) {
+    public ArrayList<Coord> findPathLarge(int size, int length, Collection<Coord> impassable,
+                                          Collection<Coord> onlyPassable, Coord start, Coord... targets) {
         if (!initialized) return null;
         path.clear();
-        OrderedSet<Coord> impassable2;
+        Collection<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new OrderedSet<>();
+            impassable2 = Collections.emptySet();
         else
-            impassable2 = new OrderedSet<>(impassable);
+            impassable2 = new GreasedRegion(width, height, impassable);
 
         if (onlyPassable == null)
-            onlyPassable = new OrderedSet<>();
+            onlyPassable = Collections.emptySet();
 
         resetMap();
         for (Coord goal : targets) {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
+        {
+            cutShort = true;
             return new ArrayList<>(path);
+        }
 
         scan(impassable2, size);
         Coord currentPos = start;
@@ -2989,6 +3092,8 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                if(!pt.isWithin(width, height))
+                    continue;
                 if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -2998,8 +3103,9 @@ public class DijkstraMap implements Serializable {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path.clear();
-                break;
+                cutShort = true;
+                frustration = 0;
+                return new ArrayList<>(path);
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
 
@@ -3018,6 +3124,7 @@ public class DijkstraMap implements Serializable {
             if (gradientMap[currentPos.x][currentPos.y] == 0)
                 break;
         }
+        cutShort = false;
         frustration = 0;
         goals.clear();
         return new ArrayList<>(path);
@@ -3051,8 +3158,8 @@ public class DijkstraMap implements Serializable {
      * @param targets        a vararg or array of Coord that this will try to pathfind toward
      * @return an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target. Copy of path.
      */
-    public ArrayList<Coord> findAttackPathLarge(int size, int moveLength, int preferredRange, LOS los, Set<Coord> impassable,
-                                                Set<Coord> onlyPassable, Coord start, Coord... targets) {
+    public ArrayList<Coord> findAttackPathLarge(int size, int moveLength, int preferredRange, LOS los, Collection<Coord> impassable,
+                                                Collection<Coord> onlyPassable, Coord start, Coord... targets) {
         if (!initialized) return null;
         if (preferredRange < 0) preferredRange = 0;
         double[][] resMap = new double[width][height];
@@ -3064,21 +3171,24 @@ public class DijkstraMap implements Serializable {
             }
         }
         path.clear();
-        OrderedSet<Coord> impassable2;
+        Collection<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new OrderedSet<>();
+            impassable2 = Collections.emptySet();
         else
-            impassable2 = new OrderedSet<>(impassable);
+            impassable2 = new GreasedRegion(width, height, impassable);
 
         if (onlyPassable == null)
-            onlyPassable = new OrderedSet<>();
+            onlyPassable = Collections.emptySet();
 
         resetMap();
         for (Coord goal : targets) {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
+        {
+            cutShort = true;
             return new ArrayList<>(path);
+        }
 
         Measurement mess = measurement;
         if (measurement == Measurement.EUCLIDEAN) {
@@ -3125,6 +3235,8 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                if(!pt.isWithin(width, height))
+                    continue;
                 if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -3134,8 +3246,9 @@ public class DijkstraMap implements Serializable {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path.clear();
-                break;
+                cutShort = true;
+                frustration = 0;
+                return new ArrayList<>(path);
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(currentPos);
@@ -3153,6 +3266,7 @@ public class DijkstraMap implements Serializable {
             if (gradientMap[currentPos.x][currentPos.y] == 0)
                 break;
         }
+        cutShort = false;
         frustration = 0;
         goals.clear();
         return new ArrayList<>(path);
@@ -3189,7 +3303,7 @@ public class DijkstraMap implements Serializable {
      * @return an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target. Copy of path.
      */
     public ArrayList<Coord> findAttackPathLarge(int size, int moveLength, int minPreferredRange, int maxPreferredRange, LOS los,
-                                                Set<Coord> impassable, Set<Coord> onlyPassable, Coord start, Coord... targets) {
+                                                Collection<Coord> impassable, Collection<Coord> onlyPassable, Coord start, Coord... targets) {
         if (!initialized) return null;
         if (minPreferredRange < 0) minPreferredRange = 0;
         if (maxPreferredRange < minPreferredRange) maxPreferredRange = minPreferredRange;
@@ -3202,21 +3316,24 @@ public class DijkstraMap implements Serializable {
             }
         }
         path.clear();
-        OrderedSet<Coord> impassable2;
+        Collection<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new OrderedSet<>();
+            impassable2 = Collections.emptySet();
         else
-            impassable2 = new OrderedSet<>(impassable);
+            impassable2 = new GreasedRegion(width, height, impassable);
 
         if (onlyPassable == null)
-            onlyPassable = new OrderedSet<>();
+            onlyPassable = Collections.emptySet();
 
         resetMap();
         for (Coord goal : targets) {
             setGoal(goal);
         }
         if (goals.isEmpty())
+        {
+            cutShort = true;
             return new ArrayList<>(path);
+        }
 
         Measurement mess = measurement;
         if (measurement == Measurement.EUCLIDEAN) {
@@ -3264,6 +3381,8 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                if(!pt.isWithin(width, height))
+                    continue;
                 if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -3272,8 +3391,9 @@ public class DijkstraMap implements Serializable {
                 }
             }
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path.clear();
-                break;
+                cutShort = true;
+                frustration = 0;
+                return new ArrayList<>(path);
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
 
@@ -3293,6 +3413,7 @@ public class DijkstraMap implements Serializable {
             if (gradientMap[currentPos.x][currentPos.y] == 0)
                 break;
         }
+        cutShort = false;
         frustration = 0;
         goals.clear();
         return new ArrayList<>(path);
@@ -3328,19 +3449,20 @@ public class DijkstraMap implements Serializable {
      * @param fearSources       a vararg or array of Coord positions to run away from
      * @return an ArrayList of Coord that will contain the locations of this creature as it goes away from fear sources. Copy of path.
      */
-    public ArrayList<Coord> findFleePathLarge(int size, int length, double preferLongerPaths, Set<Coord> impassable,
-                                              Set<Coord> onlyPassable, Coord start, Coord... fearSources) {
+    public ArrayList<Coord> findFleePathLarge(int size, int length, double preferLongerPaths, Collection<Coord> impassable,
+                                              Collection<Coord> onlyPassable, Coord start, Coord... fearSources) {
         if (!initialized) return null;
         path.clear();
-        OrderedSet<Coord> impassable2;
+        Collection<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new OrderedSet<>();
+            impassable2 = Collections.emptySet();
         else
-            impassable2 = new OrderedSet<>(impassable);
+            impassable2 = new GreasedRegion(width, height, impassable);
 
         if (onlyPassable == null)
-            onlyPassable = new OrderedSet<>();
+            onlyPassable = Collections.emptySet();
         if (fearSources == null || fearSources.length < 1) {
+            cutShort = true;
             path.clear();
             return new ArrayList<>(path);
         }
@@ -3357,7 +3479,10 @@ public class DijkstraMap implements Serializable {
                 setGoal(goal.x, goal.y);
             }
             if (goals.isEmpty())
+            {
+                cutShort = true;
                 return new ArrayList<>(path);
+            }
 
             scan(impassable2, size);
 
@@ -3382,6 +3507,8 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                if(!pt.isWithin(width, height))
+                    continue;
                 if (gradientMap[pt.x][pt.y] < best && !impassable2.contains(pt)) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -3390,8 +3517,9 @@ public class DijkstraMap implements Serializable {
                 }
             }
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path.clear();
-                break;
+                cutShort = true;
+                frustration = 0;
+                return new ArrayList<>(path);
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
 
@@ -3413,6 +3541,7 @@ public class DijkstraMap implements Serializable {
                 break;
             }
         }
+        cutShort = false;
         frustration = 0;
         goals.clear();
         return new ArrayList<>(path);
@@ -3445,6 +3574,8 @@ public class DijkstraMap implements Serializable {
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                if(!pt.isWithin(width, height))
+                    continue;
                 if (gradientMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -3454,8 +3585,9 @@ public class DijkstraMap implements Serializable {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path.clear();
-                break;
+                cutShort = true;
+                frustration = 0;
+                return new ArrayList<>(path);
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(0, currentPos);
@@ -3464,8 +3596,8 @@ public class DijkstraMap implements Serializable {
             if (gradientMap[currentPos.x][currentPos.y] == 0)
                 break;
         }
-        frustration = 0;
-        return new ArrayList<>(path);
+        cutShort = false;
+        frustration = 0; return new ArrayList<>(path);
     }
 
     /**

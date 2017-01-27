@@ -1,6 +1,6 @@
 package squidpony.squidmath;
 
-import squidpony.GwtCompatibility;
+import squidpony.ArrayTools;
 import squidpony.annotation.GwtIncompatible;
 
 import java.io.Serializable;
@@ -593,7 +593,7 @@ public class RNG implements Serializable {
 
         int length = data.length;
         int n = Math.min(length, output.length);
-        int[] mapping = GwtCompatibility.range(n);
+        int[] mapping = ArrayTools.range(n);
         for (int i = 0; i < n; i++) {
             int r = nextInt(length);
             output[i] = data[mapping[r]];
@@ -679,7 +679,6 @@ public class RNG implements Serializable {
         return (random.nextLong() & 0x1fffffffffffffL) * DOUBLE_UNIT;
         // consider changing to this in a future version; it will break compatibility but should be fast/correct
         //return Double.longBitsToDouble(0x3FFL << 52 | random.nextLong() >>> 12) - 1.0;
-
     }
 
     /**
@@ -706,7 +705,7 @@ public class RNG implements Serializable {
      * @return a random boolean.
      */
     public boolean nextBoolean() {
-        return next(1) != 0;
+        return nextLong() < 0L;
     }
 
     /**
@@ -820,8 +819,91 @@ public class RNG implements Serializable {
         return new RNG(random.copy());
     }
 
+    /**
+     * Generates a random 64-bit long with a number of '1' bits (Hamming weight) approximately equal to bitCount.
+     * For example, calling this with a parameter of 32 will be equivalent to calling nextLong() on this object's
+     * RandomnessSource (it doesn't consider overridden nextLong() methods, where present, on subclasses of RNG).
+     * Calling this with a parameter of 16 will have on average 16 of the 64 bits in the returned long set to '1',
+     * distributed pseudo-randomly, while a parameter of 47 will have on average 47 bits set. This can be useful for
+     * certain code that uses bits to represent data but needs a different ratio of set bits to unset bits than 1:1.
+     * <br>
+     * Implementors should limit any overriding method to calling and returning super(), potentially storing any extra
+     * information they need to internally, but should not change the result. This works based on a delicate balance of
+     * the RandomnessSource producing bits with an even 50% chance of being set, regardless of position, and RNG
+     * subclasses that alter the odds won't work as expected here, particularly if those subclasses use doubles
+     * internally (which almost always produce less than 64 random bits). You should definitely avoid using certain
+     * RandomnessSources that aren't properly pseudo-random, such as any QRNG class (SobolQRNG and VanDerCorputQRNG,
+     * pretty much), since these won't fill all 64 bits with equal likelihood.
+     * @param bitCount an int, only considered if between 0 and 64, that is the average number of bits to set
+     * @return a 64-bit long that, on average, should have bitCount bits set to 1, potentially anywhere in the long
+     */
+    public long approximateBits(int bitCount)
+    {
+        if(bitCount <= 0)
+            return 0L;
+        if(bitCount >= 64)
+            return -1L;
+        if(bitCount == 32)
+            return random.nextLong();
+        boolean high = bitCount > 32;
+        int altered = (high ? 64 - bitCount : bitCount), lsb = Integer.lowestOneBit(altered);
+        long data = random.nextLong();
+        for (int i = lsb << 1; i <= 16; i <<= 1) {
+            if((altered & i) == 0)
+                data &= random.nextLong();
+            else
+                data |= random.nextLong();
+        }
+        return high ? ~(random.nextLong() & data) : (random.nextLong() & data);
+    }
+
+    /**
+     * Gets a somewhat-random long with exactly 32 bits set; in each pair of bits starting at bit 0 and bit 1, then bit
+     * 2 and bit 3, up to bit 62 and bit 3, one bit will be 1 and one bit will be 0 in each pair.
+     * @return a random long with 32 "1" bits, distributed so exactly one bit is "1" for each pair of bits
+     */
+    public long randomInterleave() {
+        long bits = nextLong() & 0xFFFFFFFFL, ib = ~bits & 0xFFFFFFFFL;
+        bits |= (bits << 16);
+        ib |= (ib << 16);
+        bits &= 0x0000FFFF0000FFFFL;
+        ib &= 0x0000FFFF0000FFFFL;
+        bits |= (bits << 8);
+        ib |= (ib << 8);
+        bits &= 0x00FF00FF00FF00FFL;
+        ib &= 0x00FF00FF00FF00FFL;
+        bits |= (bits << 4);
+        ib |= (ib << 4);
+        bits &= 0x0F0F0F0F0F0F0F0FL;
+        ib &= 0x0F0F0F0F0F0F0F0FL;
+        bits |= (bits << 2);
+        ib |= (ib << 2);
+        bits &= 0x3333333333333333L;
+        ib &= 0x3333333333333333L;
+        bits |= (bits << 1);
+        ib |= (ib << 1);
+        bits &= 0x5555555555555555L;
+        ib &= 0x5555555555555555L;
+        return (bits | (ib << 1));
+    }
+
     @Override
     public String toString() {
         return "RNG with Randomness Source " + random;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RNG)) return false;
+
+        RNG rng = (RNG) o;
+
+        return random.equals(rng.random);
+    }
+
+    @Override
+    public int hashCode() {
+        return random.hashCode();
     }
 }

@@ -21,7 +21,7 @@ public class DeckRNG extends StatefulRNG implements Serializable {
 	private static final long serialVersionUID = 7828346657944720807L;
     private int step;
     private long lastShuffledState;
-    private double[] baseDeck = new double[]{0.0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375,
+    private static final double[] baseDeck = new double[]{0.0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375,
                                              0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375},
             deck = new double[16];
 
@@ -564,12 +564,31 @@ public class DeckRNG extends StatefulRNG implements Serializable {
         ((LightRNG)random).setState(state);
         shuffleInPlace(deck);
         step = 0;
-
     }
 
     @Override
     public String toString() {
-        return "DeckRNG{state: 0x" + StringKit.hex(lastShuffledState) + "L}";
+        return "DeckRNG{state: 0x" + StringKit.hex(lastShuffledState) + "L, step: 0x" + StringKit.hex(step) + "}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        DeckRNG deckRNG = (DeckRNG) o;
+
+        if (step != deckRNG.step) return false;
+        return lastShuffledState == deckRNG.lastShuffledState;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = random.hashCode();
+        result = 31 * result + step;
+        result = 31 * result + (int) (lastShuffledState ^ (lastShuffledState >>> 32));
+        return result;
     }
 
     public int getStep() {

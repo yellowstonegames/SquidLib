@@ -18,38 +18,59 @@ SquidPony (http://squidpony.com)
 
 Thanks to TSMI and notostraca (Tommy Ettinger) of #rgrd for help in developing SquidLib.
 
-Portions of Bresenham methods are derived from Bob Pendletons C algorithm, which is in turn derived from Paul Heckberts algorithm ("Digital Line Drawing" from "Graphics Gems", Academic Press, 1990.
+Portions of Bresenham methods are derived from Bob Pendleton's C algorithm, which is in turn derived from Paul
+Heckbert's algorithm ("Digital Line Drawing" from "Graphics Gems", Academic Press, 1990.
 
-Portions of FOV and LOS classes are derived from works by Steven Blacken originally distributed as part of the Blacken Library for roguelike games under the Apache 2.0 license.
+Portions of FOV and LOS classes are derived from works by Steven Blacken originally distributed as part of the Blacken
+Library for roguelike games under the Apache 2.0 license.
 
-Portions of some classes are derived from works by Jice originally distributed in the libtcod library under the BSD license with the statement provided below in this document.
+Portions of some classes are derived from works by Jice originally distributed in the libtcod library under the BSD
+license with the statement provided below in this document.
 
 Portions of some classes are derived from works in the rot.js library with the statement provided below in this document.
 
-The @Beta annotation is from Google's Guava library under the Apache 2.0 license; the @GwtIncompatible annotation is probably from Google's GWT library or its documentation, but may also be from Guava.
+The @Beta annotation is from Google's Guava library under the Apache 2.0 license; the @GwtIncompatible annotation is
+probably from Google's GWT library or its documentation, but may also be from Guava.
 
 The JRotation class (no longer in SquidLib) was based on code by Savvas Dalkitsis on stackoverflow.com.
 
-The RNG class is based on the Mersenne Twister implementation by Daniel Dyer as part of the Uncommons Maths library, which is in turn based on the original C algorithm by Makoto Matsumoto and Takuji Nishimura.
+The RNG class is based on the Mersenne Twister implementation by Daniel Dyer as part of the Uncommons Maths library,
+which is in turn based on the original C algorithm by Makoto Matsumoto and Takuji Nishimura. Also from Uncommon Maths,
+the CombinationGenerator and PermutationGenerator classes; changes were made to PermutationGenerator based on techniques
+from user Joren on StackOverflow, http://stackoverflow.com/a/1506337 .
 
-The squidpony.squidgrid.mapping.styled package and the JSON resources are derived from Sean T. Barrett's Herringbone Wang Tiles library, part of the nothings set of libraries, which were released into the public domain.
+The squidpony.squidgrid.mapping.styled package and the JSON resources are derived from Sean T. Barrett's Herringbone
+Wang Tiles library, part of the nothings set of libraries, which were released into the public domain.
 
-The LightRNG class is based on SplitMix64.c by Sebastiano Vigna, released into the public domain and made available on http://xorshift.di.unimi.it/
+The LightRNG class is based on SplitMix64.c by Sebastiano Vigna, released into the public domain and made available on
+http://xorshift.di.unimi.it/
 
-The XorRNG class is based on the C implementation of XorShift 128+ by Sebastiano Vigna, released into the public domain and made available on http://xorshift.di.unimi.it/
-LongPeriodRNG is based on XorShift 1024* , XoRoRNG is based on XoRoShiRo 64+ , and the other credit for these is the same as XorRNG.
+The XorRNG class is based on the C implementation of XorShift 128+ by Sebastiano Vigna, released into the public domain
+and made available on http://xorshift.di.unimi.it/
+LongPeriodRNG is based on XorShift 1024* , XoRoRNG is based on XoRoShiRo 64+ , and the other credit for these is the
+same as XorRNG.
 
-The PermutedRNG class is based on the aforementioned SplitMix64.c by Sebastiano Vigna and on the paper, http://www.pcg-random.org/paper.html , describing PCG-Random and its methodology written by Melissa E. O'Neill.
+The PermutedRNG and PintRNG classes are based on the aforementioned SplitMix64.c by Sebastiano Vigna and on the paper,
+http://www.pcg-random.org/paper.html , describing PCG-Random and its methodology written by Melissa E. O'Neill.
 
-The SobolQRNG class and the resource in the resources/qrng folder were ported from Apache Commons Math, where Stephen Joe and Frances Kuo are credited for the implementation.
+The SobolQRNG class and the resource in the resources/qrng folder were ported from Apache Commons Math, where Stephen
+Joe and Frances Kuo are credited for the implementation.
 
-The IsaacRNG class is based off a Java implementation given for the Isaac cipher/RNG (usable for either) from http://www.burtleburtle.net/bob/rand/isaacafa.html (public domain); the version uses here is a mix of the C code in isaac64.c and the Java implementation by Bob Jenkins for 32-bit generation, and it produces 64 bits at a time in Java.
+The VanDerCorputQRNG class implements the sequence discovered by J.G. van der Corput in 1935, as well as the closely
+related Halton sequence; no other previous code is used here.
+
+The IsaacRNG class is based off a Java implementation given for the Isaac cipher/RNG (usable for either) from
+http://www.burtleburtle.net/bob/rand/isaacafa.html (public domain); the version uses here is a mix of the C code in
+isaac64.c and the Java implementation by Bob Jenkins for 32-bit generation, and it produces 64 bits at a time in Java.
+
+The JavaRNG class was contributed by Ben McLean to help compare the default JDK Random class with SquidLib's RNGs.
 
 The NeuralParticle and WeightedLetterNamegen classes are based on work by Ebyan Alvarez-Buylla .
 
 ShortSet, ShortVLA, and IntVLA are based closely off primitive-backed collections from libGDX, Apache-licensed.
 
-IntDoubleOrderedMap, OrderedMap, and OrderedSet are based on similar code from Sebastiano Vigna's fastutil library, https://github.com/vigna/fastutil .
+IntDoubleOrderedMap, OrderedMap, and OrderedSet are based on similar code from Sebastiano Vigna's fastutil library,
+https://github.com/vigna/fastutil .
 
 The DijkstraMap class is original but owes substantial credit to Edsger Dijkstra
 for creating the algorithm that shares his name, Brian Pender and Joshua Day for
@@ -59,8 +80,8 @@ turns out, subtly different from Dijkstra's Pathfinding Algorithm and is closer
 to Breadth-First Search, though it still produces what is usually called a
 Dijkstra Map by roguelike developers.
 
-The Spill class derives much of its implementation from DijkstraMap but also from
-techniques Joshua Day described for using randomized floodfill and a Lua implementation related to his postings on the subject.
+The Spill class derives much of its implementation from DijkstraMap but also from techniques Joshua Day described for
+using randomized floodfill and a Lua implementation related to his postings on the subject.
 
 The SoundMap class also derives much of its implementation from DijkstraMap but
 is otherwise practically novel.
@@ -71,12 +92,12 @@ to Brian Pender and Joshua Day.
 
 The hashing techniques used in CrossHash include FNV-1a, which is public domain
 and is the work of Glenn Fowler, Landon Curt Noll, and Phong Vo, site at
-http://www.isthe.com/chongo/tech/comp/fnv/index.html and SipHash, by Daniel
-Bernstein and Jean-Philippe Aumasson, CC0-licensed (close to public domain),
-site at https://131002.net/siphash/ , though specifically this uses code from
-https://github.com/nahi/siphash-java-inline , which is Apache licensed like
-SquidLib. Lightning hash, also in CrossHash, is not derived (at least not
-intentionally) from any other hashing algorithm.
+http://www.isthe.com/chongo/tech/comp/fnv/index.html and the Strongly Universal
+String Hashing technique developed by Daniel Lemire, called Chariot here, site
+at https://github.com/lemire/StronglyUniversalStringHashing , and various other
+classes have been improved using techniques posted by Daniel Lemire on his blog
+and GitHub. The Lightning, Storm, Falcon, and Wisp hashes, also in CrossHash,
+are not derived (at least not intentionally) from any other hashing algorithms.
 
 The phonetic locality-sensitive hashing of word sounds in NaturalLanguageCipher
 owes some credit to eudex, a Rust library for the same type of hashing which can
@@ -90,9 +111,21 @@ SquidKeys.ignoreInput), David Becker (found and fixed several GDX-related bugs),
 and Shane Chubb (found and fixed a bug in the LibGDX TextCellFactory).
 This is not a complete list of bugfix contributors.
 
+MixedGenerator is an extension and port of Drunkard's Walk dungeon generation code
+written by Michael Patraw; a more recent version of his code is available at
+https://github.com/mpatraw/butterfly . The version SquidLib extended was older and
+any newer code should probably derive from butterfly instead. Several other classes
+make use of MixedGenerator, and the Drunkard's Walk technique is very versatile.
+
 MimicFill and DetailedMimic are direct ports of https://github.com/mxgmn/ConvChain and
 https://github.com/mxgmn/SynTex from C# to Java; the former is public domain while the
-latter is MIT-licensed.
+latter is MIT-licensed. WaffleFill is a loose port of WaveFunctionCollapse by the same
+author, at https://github.com/mxgmn/WaveFunctionCollapse , which is MIT-licensed.
+
+The squidpony.squidgrid.mapping.locks package is extremely closely-derived from the
+MetaZelda project, which is 3-clause BSD-licensed; its license text is at the bottom
+of this file. Tom Coxon did a great job with handling complex puzzles, but we needed
+to fork the project to avoid duplicating large amounts of data structure code.
 
 A substantial amount of work on SquidLib has been done by smelC, https://github.com/smelc ,
 especially in the areas of color handling, text layout, and shape analysis for dungeons.
@@ -125,6 +158,10 @@ Ettinger and released into the public domain, except:
     original pixel art.
   * icons.png is derived from the many icons supplied by http://game-icons.net/ ; it has its own license and
     people to credit in a file distributed with it, icons-license.txt .
+  * A font provided in the assets was derived from Galaxsea Starlight Mono v3, which is CC-BY licensed and
+    requires attribution to the FontStruct user with the nickname 'dialNforNinja' if
+    Galaxsea-Starlight-Mono-v3_1-distance.png is used; a license file is distributed with it,
+    Galaxsea-Starlight-Mono-v3_1-license.txt and this should accompany anything that redistributes the font.
 
 libtcod 1.5.2 license text:
 Copyright (c) 2008,2009,2010,2012 Jice & Mingos
@@ -176,3 +213,29 @@ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
 OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+MetaZelda license text:
+Copyright (c) 2012, Tom Coxon
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of the <organization> nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL TOM COXON BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
