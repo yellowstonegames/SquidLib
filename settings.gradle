@@ -1,0 +1,3 @@
+include 'RegExodus'
+// This means RegExodus must be in a sibling directory
+project(':RegExodus').projectDir = new File('../RegExodus')
