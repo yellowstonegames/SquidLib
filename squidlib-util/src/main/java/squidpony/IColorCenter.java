@@ -518,7 +518,7 @@ public interface IColorCenter<T> {
         @Override
         public T filter(T c)
         {
-            return get(getRed(c), getGreen(c), getBlue(c), getAlpha(c));
+        	return c == null ? c : get(getRed(c), getGreen(c), getBlue(c), getAlpha(c));
         }
 
 
