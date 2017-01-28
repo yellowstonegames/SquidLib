@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -108,7 +108,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <hr>
 <br>
-<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/UIUtil.html#line.12">UIUtil</a>
+<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/UIUtil.html#line.16">UIUtil</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
@@ -176,6 +176,20 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/UIUtil.html#drawLimitedWidthText-com.badlogic.gdx.graphics.g2d.Batch-com.badlogic.gdx.graphics.g2d.BitmapFont-java.lang.String-com.badlogic.gdx.graphics.Color-int-float-float-float-">drawLimitedWidthText</a></span>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+                    com.badlogic.gdx.graphics.g2d.BitmapFont&nbsp;font,
+                    <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
+                    com.badlogic.gdx.graphics.Color&nbsp;color,
+                    int&nbsp;align,
+                    float&nbsp;width,
+                    float&nbsp;x,
+                    float&nbsp;y)</code>
+<div class="block">Writes <code>text</code> at <code>(x, y)</code> by cutting off using "…" if it gets
+ wider than <code>width</code>.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/UIUtil.html#drawMarginsAround-float-float-int-int-int-int-com.badlogic.gdx.graphics.Color-">drawMarginsAround</a></span>(float&nbsp;botLeftX,
                  float&nbsp;botLeftY,
                  int&nbsp;width,
@@ -186,7 +200,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <div class="block">Draws margins around a rectangle</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/UIUtil.html#drawMarginsAround-com.badlogic.gdx.graphics.glutils.ShapeRenderer-com.badlogic.gdx.scenes.scene2d.Actor-float-com.badlogic.gdx.graphics.Color-squidpony.squidgrid.gui.gdx.UIUtil.CornerStyle-">drawMarginsAround</a></span>(com.badlogic.gdx.graphics.glutils.ShapeRenderer&nbsp;renderer_,
                  com.badlogic.gdx.scenes.scene2d.Actor&nbsp;a,
@@ -196,7 +210,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <div class="block">Draws margins around an actor.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/UIUtil.html#drawMarginsAround-com.badlogic.gdx.graphics.glutils.ShapeRenderer-float-float-float-float-float-com.badlogic.gdx.graphics.Color-squidpony.squidgrid.gui.gdx.UIUtil.CornerStyle-">drawMarginsAround</a></span>(com.badlogic.gdx.graphics.glutils.ShapeRenderer&nbsp;renderer_,
                  float&nbsp;botLeftX,
@@ -207,7 +221,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
                  com.badlogic.gdx.graphics.Color&nbsp;color,
                  <a href="../../../../squidpony/squidgrid/gui/gdx/UIUtil.CornerStyle.html" title="enum in squidpony.squidgrid.gui.gdx">UIUtil.CornerStyle</a>&nbsp;cornerStyle)</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/UIUtil.html#drawMarginsAround-com.badlogic.gdx.graphics.glutils.ShapeRenderer-float-float-float-float-float-com.badlogic.gdx.graphics.Color-squidpony.squidgrid.gui.gdx.UIUtil.CornerStyle-float-float-">drawMarginsAround</a></span>(com.badlogic.gdx.graphics.glutils.ShapeRenderer&nbsp;renderer_,
                  float&nbsp;botLeftX,
@@ -220,7 +234,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
                  float&nbsp;zoomX,
                  float&nbsp;zoomY)</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/UIUtil.html#drawRectangle-float-float-float-float-com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType-com.badlogic.gdx.graphics.Color-">drawRectangle</a></span>(float&nbsp;botLeftX,
              float&nbsp;botLeftY,
@@ -232,7 +246,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  the occasion.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/UIUtil.html#drawRectangle-com.badlogic.gdx.graphics.glutils.ShapeRenderer-float-float-float-float-com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType-com.badlogic.gdx.graphics.Color-">drawRectangle</a></span>(com.badlogic.gdx.graphics.glutils.ShapeRenderer&nbsp;sRender_,
              float&nbsp;botLeftX,
@@ -272,7 +286,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>UIUtil</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/UIUtil.html#line.12">UIUtil</a>()</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/UIUtil.html#line.16">UIUtil</a>()</pre>
 </li>
 </ul>
 </li>
@@ -283,13 +297,42 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="drawLimitedWidthText-com.badlogic.gdx.graphics.g2d.Batch-com.badlogic.gdx.graphics.g2d.BitmapFont-java.lang.String-com.badlogic.gdx.graphics.Color-int-float-float-float-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>drawLimitedWidthText</h4>
+<pre>public static&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/UIUtil.html#line.38">drawLimitedWidthText</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+                                        com.badlogic.gdx.graphics.g2d.BitmapFont&nbsp;font,
+                                        <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
+                                        com.badlogic.gdx.graphics.Color&nbsp;color,
+                                        int&nbsp;align,
+                                        float&nbsp;width,
+                                        float&nbsp;x,
+                                        float&nbsp;y)</pre>
+<div class="block">Writes <code>text</code> at <code>(x, y)</code> by cutting off using "…" if it gets
+ wider than <code>width</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>batch</code> - </dd>
+<dd><code>font</code> - The font to use</dd>
+<dd><code>text</code> - The text to draw</dd>
+<dd><code>color</code> - The text's color</dd>
+<dd><code>align</code> - The alignment (see <code>Align</code>).</dd>
+<dd><code>width</code> - The desired width of the text</dd>
+<dd><code>x</code> - Where to draw</dd>
+<dd><code>y</code> - Where to draw</dd>
+</dl>
+</li>
+</ul>
 <a name="drawMarginsAround-com.badlogic.gdx.graphics.glutils.ShapeRenderer-com.badlogic.gdx.scenes.scene2d.Actor-float-com.badlogic.gdx.graphics.Color-squidpony.squidgrid.gui.gdx.UIUtil.CornerStyle-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>drawMarginsAround</h4>
-<pre>public static&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/UIUtil.html#line.26">drawMarginsAround</a>(com.badlogic.gdx.graphics.glutils.ShapeRenderer&nbsp;renderer_,
+<pre>public static&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/UIUtil.html#line.60">drawMarginsAround</a>(com.badlogic.gdx.graphics.glutils.ShapeRenderer&nbsp;renderer_,
                                      com.badlogic.gdx.scenes.scene2d.Actor&nbsp;a,
                                      float&nbsp;margin,
                                      com.badlogic.gdx.graphics.Color&nbsp;color,
@@ -311,7 +354,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>drawMarginsAround</h4>
-<pre>public static&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/UIUtil.html#line.50">drawMarginsAround</a>(float&nbsp;botLeftX,
+<pre>public static&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/UIUtil.html#line.84">drawMarginsAround</a>(float&nbsp;botLeftX,
                                      float&nbsp;botLeftY,
                                      int&nbsp;width,
                                      int&nbsp;height,
@@ -337,7 +380,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>drawMarginsAround</h4>
-<pre>public static&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/UIUtil.html#line.95">drawMarginsAround</a>(com.badlogic.gdx.graphics.glutils.ShapeRenderer&nbsp;renderer_,
+<pre>public static&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/UIUtil.html#line.129">drawMarginsAround</a>(com.badlogic.gdx.graphics.glutils.ShapeRenderer&nbsp;renderer_,
                                      float&nbsp;botLeftX,
                                      float&nbsp;botLeftY,
                                      float&nbsp;width,
@@ -365,7 +408,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>drawMarginsAround</h4>
-<pre>public static&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/UIUtil.html#line.125">drawMarginsAround</a>(com.badlogic.gdx.graphics.glutils.ShapeRenderer&nbsp;renderer_,
+<pre>public static&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/UIUtil.html#line.159">drawMarginsAround</a>(com.badlogic.gdx.graphics.glutils.ShapeRenderer&nbsp;renderer_,
                                      float&nbsp;botLeftX,
                                      float&nbsp;botLeftY,
                                      float&nbsp;width,
@@ -399,7 +442,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>drawRectangle</h4>
-<pre>public static&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/UIUtil.html#line.200">drawRectangle</a>(com.badlogic.gdx.graphics.glutils.ShapeRenderer&nbsp;sRender_,
+<pre>public static&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/UIUtil.html#line.235">drawRectangle</a>(com.badlogic.gdx.graphics.glutils.ShapeRenderer&nbsp;sRender_,
                                  float&nbsp;botLeftX,
                                  float&nbsp;botLeftY,
                                  float&nbsp;width,
@@ -410,7 +453,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>sRender_</code> - The renderer to use. If <code>null</code> a new one will be
-        allocated.</dd>
+            allocated.</dd>
 <dd><code>botLeftX</code> - The bottom left x of the rectangle.</dd>
 <dd><code>botLeftY</code> - The bottom left y of the rectangle.</dd>
 <dd><code>width</code> - The rectangle's width</dd>
@@ -426,7 +469,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>drawRectangle</h4>
-<pre>public static&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/UIUtil.html#line.239">drawRectangle</a>(float&nbsp;botLeftX,
+<pre>public static&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/UIUtil.html#line.274">drawRectangle</a>(float&nbsp;botLeftX,
                                  float&nbsp;botLeftY,
                                  float&nbsp;width,
                                  float&nbsp;height,
