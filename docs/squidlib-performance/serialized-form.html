@@ -125,6 +125,127 @@
 </li>
 </ul>
 </li>
+<li class="blockList"><a name="squidpony.performance.alternate.OptDijkstraMap">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/performance/alternate/OptDijkstraMap.html" title="class in squidpony.performance.alternate">squidpony.performance.alternate.OptDijkstraMap</a> extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>-2456306898212944440L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>adjacency</h4>
+<pre>squidpony.squidgrid.Adjacency adjacency</pre>
+</li>
+<li class="blockList">
+<h4>physicalMap</h4>
+<pre>int[] physicalMap</pre>
+<div class="block">Stores which parts of the map are accessible and which are not. Should not be changed unless the actual physical
+ terrain has changed. You should call initialize() with a new map instead of changing this directly.</div>
+</li>
+<li class="blockList">
+<h4>gradientMap</h4>
+<pre>int[] gradientMap</pre>
+<div class="block">The frequently-changing values that are often the point of using this class; goals will have a value of 0, and
+ any cells that can have a character reach a goal in n steps will have a value of n. Cells that cannot be
+ entered because they are solid will have a very high value equal to the WALL constant in this class, and cells
+ that cannot be entered because they cannot reach a goal will have a different very high value equal to the
+ DARK constant in this class.</div>
+</li>
+<li class="blockList">
+<h4>costMap</h4>
+<pre>int[] costMap</pre>
+<div class="block">This stores the entry cost multipliers for each cell; that is, a value of 1.0 is a normal, unmodified cell, but
+ a value of 0.5 can be entered easily (two cells of its cost can be entered for the cost of one 1.0 cell), and a
+ value of 2.0 can only be entered with difficulty (one cell of its cost can be entered for the cost of two 1.0
+ cells). Unlike the measurement field, this does affect the length of paths, as well as the numbers assigned
+ to gradientMap during a scan. The values for walls are identical to the value used by gradientMap, that is, this
+ class' WALL static final field. Floors, however, are never given FLOOR as a value, and default to 1.0 .</div>
+</li>
+<li class="blockList">
+<h4>neighbors</h4>
+<pre>int[][][] neighbors</pre>
+<div class="block">The neighbors map, as produced by adjacency; can be modified by passing neighbors as the first argument to
+ <code>Adjacency.portal(int[][][], int, int, boolean)</code> if you want to create portals between non-adjacent cells.</div>
+</li>
+<li class="blockList">
+<h4>height</h4>
+<pre>int height</pre>
+<div class="block">Height of the map. Exciting stuff. Don't change this, instead call initialize().</div>
+</li>
+<li class="blockList">
+<h4>width</h4>
+<pre>int width</pre>
+<div class="block">Width of the map. Exciting stuff. Don't change this, instead call initialize().</div>
+</li>
+<li class="blockList">
+<h4>path</h4>
+<pre>squidpony.squidmath.IntVLA path</pre>
+<div class="block">The latest path that was obtained by calling findPath(). It will not contain the value passed as a starting
+ cell; only steps that require movement will be included, and so if the path has not been found or a valid
+ path toward a goal is impossible, this ArrayList will be empty.</div>
+</li>
+<li class="blockList">
+<h4>goals</h4>
+<pre>squidpony.squidmath.IntVLA goals</pre>
+</li>
+<li class="blockList">
+<h4>fresh</h4>
+<pre>squidpony.squidmath.IntVLA fresh</pre>
+</li>
+<li class="blockList">
+<h4>rng</h4>
+<pre>squidpony.squidmath.RNG rng</pre>
+<div class="block">The RNG used to decide which one of multiple equally-short paths to take.</div>
+</li>
+<li class="blockList">
+<h4>frustration</h4>
+<pre>int frustration</pre>
+</li>
+<li class="blockList">
+<h4>reuse</h4>
+<pre>int[] reuse</pre>
+</li>
+<li class="blockList">
+<h4>initialized</h4>
+<pre>boolean initialized</pre>
+</li>
+<li class="blockList">
+<h4>mappedCount</h4>
+<pre>int mappedCount</pre>
+</li>
+<li class="blockList">
+<h4>heuristics</h4>
+<pre>int[] heuristics</pre>
+</li>
+<li class="blockList">
+<h4>cachedLongerPaths</h4>
+<pre>double cachedLongerPaths</pre>
+</li>
+<li class="blockList">
+<h4>cachedImpassable</h4>
+<pre>long cachedImpassable</pre>
+</li>
+<li class="blockList">
+<h4>cachedFearSources</h4>
+<pre>long cachedFearSources</pre>
+</li>
+<li class="blockList">
+<h4>cachedFleeMap</h4>
+<pre>int[] cachedFleeMap</pre>
+</li>
+<li class="blockListLast">
+<h4>cachedSize</h4>
+<pre>int cachedSize</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

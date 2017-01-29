@@ -80,6 +80,10 @@
 <dd>
 <div class="block">Used to remove all goals and undo any changes to gradientMap made by having a goal present.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/OptDijkstraMap.html#clearGoals--">clearGoals()</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/OptDijkstraMap.html" title="class in squidpony.performance.alternate">OptDijkstraMap</a></dt>
+<dd>
+<div class="block">Used to remove all goals and undo any changes to gradientMap made by having a goal present.</div>
+</dd>
 <dt><a href="../squidpony/performance/CoordPackerBenchmark.html" title="class in squidpony.performance"><span class="typeNameLink">CoordPackerBenchmark</span></a> - Class in <a href="../squidpony/performance/package-summary.html">squidpony.performance</a></dt>
 <dd>
 <div class="block">Benchmark                              Mode  Cnt           Score           Error     Units
@@ -112,6 +116,13 @@
 <dt><span class="memberNameLink"><a href="../squidpony/performance/CoordPackerBenchmark.html#CoordPackerBenchmark--">CoordPackerBenchmark()</a></span> - Constructor for class squidpony.performance.<a href="../squidpony/performance/CoordPackerBenchmark.html" title="class in squidpony.performance">CoordPackerBenchmark</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#costMap">costMap</a></span> - Variable in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
+<dd>
+<div class="block">This stores the entry cost multipliers for each cell; that is, a value of 1.0 is a normal, unmodified cell, but
+ a value of 0.5 can be entered easily (two cells of its cost can be entered for the cost of one 1.0 cell), and a
+ value of 2.0 can only be entered with difficulty (one cell of its cost can be entered for the cost of two 1.0
+ cells).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/OptDijkstraMap.html#costMap">costMap</a></span> - Variable in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/OptDijkstraMap.html" title="class in squidpony.performance.alternate">OptDijkstraMap</a></dt>
 <dd>
 <div class="block">This stores the entry cost multipliers for each cell; that is, a value of 1.0 is a normal, unmodified cell, but
  a value of 0.5 can be entered easily (two cells of its cost can be entered for the cost of one 1.0 cell), and a
