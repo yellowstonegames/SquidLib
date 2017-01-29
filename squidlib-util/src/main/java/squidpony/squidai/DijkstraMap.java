@@ -47,7 +47,7 @@ public class DijkstraMap implements Serializable {
          */
         EUCLIDEAN;
 
-        double heuristic(Direction target) {
+        public double heuristic(Direction target) {
             switch (this) {
                 case CHEBYSHEV:
                     return 1.0;
