@@ -506,7 +506,7 @@ public class OptDijkstraMap implements Serializable {
 
     protected void setFresh(final int pt, int counter) {
         if (!initialized || !adjacency.validate(pt)) return;
-        if(gradientMap[pt] >= counter && gradientMap[pt] != FLOOR)
+        if(gradientMap[pt] < counter && gradientMap[pt] < FLOOR)
             return;
         gradientMap[pt] = counter;
         fresh.add(pt);
@@ -521,7 +521,7 @@ public class OptDijkstraMap implements Serializable {
         } else {
             if (direction < 4)
                 return !adjacency.validate(start);
-            int[][] near = neighbors[1];
+            int[][] near = neighbors[0];
             switch (direction) {
                 case 4: //UP_LEFT
                     return (near[0][start] < 0 || gradientMap[near[0][start]] >= WALL)
@@ -651,8 +651,8 @@ public class OptDijkstraMap implements Serializable {
                             continue;
                         if(isBlocked(mid, d, rotations))
                             continue;
-                        csm = (int) (costs.get(costMap[mid]) * heuristics[d] + 0.999999999999999999999);
-                        cs = (int) (costs.get(costMap[near]) * heuristics[d] + 0.999999999999999999999);
+                        csm = (int) (costs.get(costMap[mid]) * heuristics[d] + 0.99999994);
+                        cs = (int) (costs.get(costMap[near]) * heuristics[d] + 0.99999994);
                         if ((gradientMap[mid] = dist + csm) + cs < gradientMap[near]) {
                             setFresh(near, dist + cs + csm);
                             ++numAssigned;
@@ -663,7 +663,7 @@ public class OptDijkstraMap implements Serializable {
                     {
                         cs = (int)
                                 (costs.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000))
-                                        * heuristics[d] + 0.999999999999999999999);
+                                        * heuristics[d] + 0.99999994);
                         //int h = adjacency.measurement.heuristic(adjacency.directions[d]);
                         if (gradientMap[cen] + cs < gradientMap[near]) {
                             setFresh(near, dist + cs);
@@ -800,8 +800,8 @@ public class OptDijkstraMap implements Serializable {
                             continue;
                         if(isBlocked(mid, d, rotations))
                             continue;
-                        csm = (int) (costs.get(costMap[mid]) * heuristics[d] + 0.999999999999999999999);
-                        cs = (int) (costs.get(costMap[near]) * heuristics[d] + 0.999999999999999999999);
+                        csm = (int) (costs.get(costMap[mid]) * heuristics[d] + 0.99999994);
+                        cs = (int) (costs.get(costMap[near]) * heuristics[d] + 0.99999994);
                         if ((gradientMap[mid] = dist + csm) + cs < gradientMap[near]) {
                             setFresh(near, dist + cs + csm);
                             ++numAssigned;
@@ -812,7 +812,7 @@ public class OptDijkstraMap implements Serializable {
                     {
                         cs = (int)
                                 (costs.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000))
-                                        * heuristics[d] + 0.999999999999999999999);
+                                        * heuristics[d] + 0.99999994);
                         //int h = adjacency.measurement.heuristic(adjacency.directions[d]);
                         if (gradientMap[cen] + cs < gradientMap[near]) {
                             setFresh(near, dist + cs);
@@ -2876,5 +2876,42 @@ public class OptDijkstraMap implements Serializable {
 
     public int getMappedCount() {
         return mappedCount;
+    }
+
+
+    public static void main(String[] args) {
+        squidpony.squidgrid.mapping.DungeonGenerator dungeonGen =
+                new squidpony.squidgrid.mapping.DungeonGenerator(40, 40, new RNG(0x1337BEEFDEAL));
+        char[][] map = dungeonGen.generate();
+        squidpony.squidgrid.mapping.DungeonUtility.debugPrint(map);
+        squidpony.squidmath.GreasedRegion floors = new squidpony.squidmath.GreasedRegion(map, '.');
+        System.out.println("Floors: " + floors.size());
+        System.out.println("Percentage walkable: " + floors.size() / 16.0 + "%");
+        Adjacency adj = new Adjacency.BasicAdjacency(40, 40, Measurement.EUCLIDEAN);
+        adj.blockingRule = 2;
+        RNG rng = new RNG(0x1337BEEF);
+        OptDijkstraMap dijkstra = new OptDijkstraMap(
+                map, adj, rng);
+        int[] scanned;
+        short[][] sMap = new short[40][40];
+        //for (int x = 1; x < 39; x++) {
+        //    for (int y = 1; y < 39; y++) {
+        squidpony.squidmath.Coord c = floors.singleRandom(rng);
+        dijkstra.setGoal(adj.composite(c.x, c.y, 0, 0));
+        scanned = dijkstra.scan(null);
+        dijkstra.clearGoals();
+        dijkstra.resetMap();
+        System.out.println("MAPPED: " + dijkstra.getMappedCount());
+        for (int i = 0; i < 1600; i++) {
+            sMap[adj.extractX(i)][adj.extractY(i)] = (scanned[i] >= FLOOR ? -999 : (short) scanned[i]);
+        }
+        for (int yy = 0; yy < 40; yy++) {
+            for (int xx = 0; xx < 40; xx++) {
+                System.out.print((sMap[xx][yy] == -999) ? "#### " : squidpony.StringKit.hex(sMap[xx][yy]) + ' ');
+            }
+            System.out.println();
+        }
+        //    }
+        //}
     }
 }
