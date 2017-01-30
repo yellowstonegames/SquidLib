@@ -87,11 +87,11 @@ public class ThinWallDemo extends ApplicationAdapter {
     /**
      * In number of cells
      */
-    private static final int width = 100;
+    private static final int width = 80;
     /**
      * In number of cells
      */
-    private static final int height = 35;
+    private static final int height = 30;
 
     private static final int overlapWidth = width * 2 - 1;
 
@@ -143,11 +143,11 @@ public class ThinWallDemo extends ApplicationAdapter {
         // manually if you use a constant internal zoom; here we use 1f for internal zoom 1, about 2/3f for zoom 2, and
         // about 1/2f for zoom 3. If you have more zooms as options for some reason, this formula should hold for many
         // cases but probably not all.
-        textFactory = DefaultResources.getStretchableCodeFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
+        textFactory = DefaultResources.getStretchableFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
                 .width(cellWidth).height(cellHeight).initBySize(); //.setDirectionGlyph('ˆ')
         // Creates a layered series of text grids in a SquidLayers object, using the previously set-up textFactory and
         // SquidColorCenters.
-        display = new SquidLayers(overlapWidth, overlapHeight, cellWidth>>1, cellHeight>>1,
+        display = new SquidLayers(overlapWidth, overlapHeight, (cellWidth>>1), (cellHeight>>1),
                 textFactory.copy(), bgCenter, fgCenter);
         display.getTextFactory().width(cellWidth).height(cellHeight).initBySize();
         display.getBackgroundLayer().setOnlyRenderEven(true);
@@ -159,8 +159,8 @@ public class ThinWallDemo extends ApplicationAdapter {
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        messages.setTextSize(cellWidth, cellHeight + INTERNAL_ZOOM);
-        display.setTextSize(cellWidth, cellHeight + INTERNAL_ZOOM);
+        messages.setTextSize(cellWidth + INTERNAL_ZOOM, cellHeight + INTERNAL_ZOOM);
+        display.setTextSize(cellWidth + INTERNAL_ZOOM, cellHeight + INTERNAL_ZOOM);
         //The subCell SquidPanel uses a smaller size here; the numbers 8 and 16 should change if cellWidth or cellHeight
         //change, and the INTERNAL_ZOOM multiplier keeps things sharp, the same as it does all over here.
         viewport = new StretchViewport(width * cellWidth, (height + messageHeight + 1) * cellHeight);

@@ -84,10 +84,38 @@ import java.util.concurrent.TimeUnit;
  * DijkstraBenchmark.measureTinyPathCustomDijkstra  avgt    3    14.551 ±  14.218  ms/op
  * DijkstraBenchmark.measureTinyPathDijkstra        avgt    3    28.658 ±  13.810  ms/op
  * DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3     1.245 ±   0.265  ms/op
+ *
+ * Benchmark                                        Mode  Cnt      Score       Error  Units
+ * DijkstraBenchmark.measurePathAStar2              avgt    3  53480.665 ± 18729.945  ms/op
+ * DijkstraBenchmark.measurePathCustomDijkstra      avgt    3   2723.753 ±   925.120  ms/op
+ * DijkstraBenchmark.measurePathDijkstra            avgt    3   3074.905 ±   540.216  ms/op
+ * DijkstraBenchmark.measurePathGDXAStar            avgt    3   1107.468 ±  1023.402  ms/op
+ * DijkstraBenchmark.measurePathOptDijkstra         avgt    3   1785.539 ±   292.576  ms/op // used int distances
+ * DijkstraBenchmark.measureScanCustomDijkstra      avgt    3   2646.074 ±   265.886  ms/op
+ * DijkstraBenchmark.measureScanDijkstra            avgt    3   2934.270 ±   299.965  ms/op
+ * DijkstraBenchmark.measureScanOptDijkstra         avgt    3   1681.452 ±   502.217  ms/op // used int distances
+ * DijkstraBenchmark.measureTinyPathAStar2          avgt    3     54.409 ±     6.358  ms/op
+ * DijkstraBenchmark.measureTinyPathCustomDijkstra  avgt    3    515.103 ±   483.498  ms/op
+ * DijkstraBenchmark.measureTinyPathDijkstra        avgt    3    612.636 ±   105.496  ms/op
+ * DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3      5.473 ±     1.066  ms/op
+ * DijkstraBenchmark.measureTinyPathOptDijkstra     avgt    3    126.647 ±    25.790  ms/op // used int distances
+ *
+ * Benchmark                                        Mode  Cnt     Score     Error  Units
+ * DijkstraBenchmark.measurePathCustomDijkstra      avgt    3  2622.331 ± 398.498  ms/op
+ * DijkstraBenchmark.measurePathDijkstra            avgt    3  2890.659 ± 621.237  ms/op
+ * DijkstraBenchmark.measurePathGDXAStar            avgt    3  1028.622 ±  80.724  ms/op
+ * DijkstraBenchmark.measurePathOptDijkstra         avgt    3  1685.116 ± 138.863  ms/op
+ * DijkstraBenchmark.measureScanCustomDijkstra      avgt    3  2559.513 ± 475.556  ms/op
+ * DijkstraBenchmark.measureScanDijkstra            avgt    3  2851.652 ± 760.477  ms/op
+ * DijkstraBenchmark.measureScanOptDijkstra         avgt    3  1349.320 ± 102.441  ms/op
+ * DijkstraBenchmark.measureTinyPathCustomDijkstra  avgt    3   490.634 ±  69.431  ms/op
+ * DijkstraBenchmark.measureTinyPathDijkstra        avgt    3   629.138 ± 153.702  ms/op
+ * DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3     5.444 ±   0.473  ms/op
+ * DijkstraBenchmark.measureTinyPathOptDijkstra     avgt    3   159.189 ±  15.194  ms/op
  */
 public class DijkstraBenchmark {
 
-    public static final int DIMENSION = 40, PATH_LENGTH = (DIMENSION - 2) * (DIMENSION - 2);
+    public static final int DIMENSION = 100, PATH_LENGTH = (DIMENSION - 2) * (DIMENSION - 2);
     public static DungeonGenerator dungeonGen =
             new DungeonGenerator(DIMENSION, DIMENSION, new StatefulRNG(0x1337BEEFDEAL));
     public static SerpentMapGenerator serpent = new SerpentMapGenerator(DIMENSION, DIMENSION,
@@ -376,6 +404,35 @@ public class DijkstraBenchmark {
         System.out.println(doTinyPathCustomDijkstra());
     }
 
+    public long doTinyPathOptDijkstra()
+    {
+        OptDijkstraMap dijkstra = new OptDijkstraMap(
+                map, adj, new StatefulRNG(new LightRNG(0x1337BEEF)));
+        Coord r;
+        int p;
+        long scanned = 0;
+        for (int x = 1; x < DIMENSION - 1; x++) {
+            for (int y = 1; y < DIMENSION - 1; y++) {
+                if (map[x][y] == '#')
+                    continue;
+                ((StatefulRNG) dijkstra.rng).setState((x << 20) | (y << 14) | (x * y));
+                r = nearbyMap[x][y];
+                p = adj.composite(r.x, r.y, 0, 0);
+                dijkstra.findPath(1,  9,null, null, p, adj.composite(x, y, 0, 0));
+                dijkstra.clearGoals();
+                dijkstra.resetMap();
+                scanned += dijkstra.path.size;
+            }
+        }
+        return scanned;
+    }
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureTinyPathOptDijkstra() throws InterruptedException {
+        System.out.println(doTinyPathOptDijkstra());
+    }
+
 
     public long doScanBoxedDijkstra()
     {
@@ -584,7 +641,7 @@ public class DijkstraBenchmark {
         return scanned;
     }
 
-    //@Benchmark
+    @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measurePathGDXAStar() throws InterruptedException {
@@ -616,7 +673,7 @@ public class DijkstraBenchmark {
         return scanned;
     }
 
-    //@Benchmark
+    @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureTinyPathGDXAStar() throws InterruptedException {
@@ -633,9 +690,9 @@ public class DijkstraBenchmark {
      *
      * a) Via the command line from the squidlib-performance module's root folder:
      *    $ mvn clean install
-     *    $ java -jar target/benchmarks.jar DijkstraBenchmark -wi 3 -i 3 -f 1
+     *    $ java -jar target/benchmarks.jar DijkstraBenchmark -wi 3 -i 3 -f 1 -gc true
      *
-     *    (we requested 3 warmup/measurement iterations, single fork)
+     *    (we requested 3 warmup/measurement iterations, single fork, garbage collect between benchmarks)
      *
      * b) Via the Java API:
      *    (see the JMH homepage for possible caveats when running from IDE:
@@ -648,6 +705,7 @@ public class DijkstraBenchmark {
                 .warmupIterations(3)
                 .measurementIterations(3)
                 .forks(1)
+                .shouldDoGC(true)
                 .build();
 
         new Runner(opt).run();

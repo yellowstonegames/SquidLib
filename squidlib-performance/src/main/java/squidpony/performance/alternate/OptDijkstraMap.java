@@ -49,7 +49,7 @@ public class OptDijkstraMap implements Serializable {
      * Stores which parts of the map are accessible and which are not. Should not be changed unless the actual physical
      * terrain has changed. You should call initialize() with a new map instead of changing this directly.
      */
-    public int[] physicalMap;
+    public double[] physicalMap;
     /**
      * The frequently-changing values that are often the point of using this class; goals will have a value of 0, and
      * any cells that can have a character reach a goal in n steps will have a value of n. Cells that cannot be
@@ -57,7 +57,7 @@ public class OptDijkstraMap implements Serializable {
      * that cannot be entered because they cannot reach a goal will have a different very high value equal to the
      * DARK constant in this class.
      */
-    public int[] gradientMap;
+    public double[] gradientMap;
     /**
      * This stores the entry cost multipliers for each cell; that is, a value of 1.0 is a normal, unmodified cell, but
      * a value of 0.5 can be entered easily (two cells of its cost can be entered for the cost of one 1.0 cell), and a
@@ -90,20 +90,20 @@ public class OptDijkstraMap implements Serializable {
     /**
      * Goals are always marked with 0.
      */
-    public static final int GOAL = 0;
+    public static final double GOAL = 0;
     /**
      * Floor cells, which include any walkable cell, are marked with a high number equal to 999200 .
      */
-    public static final int FLOOR = 999200;
+    public static final double FLOOR = 999200;
     /**
      * Walls, which are solid no-entry cells, are marked with a high number equal to 999500 .
      */
-    public static final int WALL = 999500;
+    public static final double WALL = 999500;
     /**
      * This is used to mark cells that the scan couldn't reach, and these dark cells are marked with a high number
      * equal to 999800 .
      */
-    public static final int DARK = 999800;
+    public static final double DARK = 999800;
 
     protected IntVLA goals = new IntVLA(256), fresh = new IntVLA(256);
 
@@ -118,7 +118,7 @@ public class OptDijkstraMap implements Serializable {
     private boolean initialized = false;
 
     private int mappedCount = 0;
-    private int[] heuristics;
+    private double[] heuristics;
 
     /**
      * Construct a CustomDijkstraMap without a level to actually scan. If you use this constructor, you must call an
@@ -144,7 +144,7 @@ public class OptDijkstraMap implements Serializable {
      *
      * @param level
      */
-    public OptDijkstraMap(final int[] level, int width, int height) {
+    public OptDijkstraMap(final double[] level, int width, int height) {
         this(level, new BasicAdjacency(width, height, Measurement.MANHATTAN));
     }
 
@@ -154,7 +154,7 @@ public class OptDijkstraMap implements Serializable {
      * @param level
      * @param adjacency
      */
-    public OptDijkstraMap(final int[] level, Adjacency adjacency) {
+    public OptDijkstraMap(final double[] level, Adjacency adjacency) {
         rng = new RNG();
         this.adjacency = adjacency;
         path = new IntVLA();
@@ -243,12 +243,12 @@ public class OptDijkstraMap implements Serializable {
      * @param level
      * @return
      */
-    public OptDijkstraMap initialize(final int[] level) {
+    public OptDijkstraMap initialize(final double[] level) {
         width = adjacency.width;
         height = adjacency.height;
         int len = level.length;
-        gradientMap = new int[len];
-        physicalMap = new int[len];
+        gradientMap = new double[len];
+        physicalMap = new double[len];
         costMap = new int[len];
         System.arraycopy(level, 0, gradientMap, 0, len);
         System.arraycopy(level, 0, physicalMap, 0, len);
@@ -258,11 +258,9 @@ public class OptDijkstraMap implements Serializable {
         adjacency.costRules.putAndMoveToFirst('#', WALL);
 
         neighbors = adjacency.neighborMaps();
-        heuristics = new int[adjacency.directions.length];
+        heuristics = new double[adjacency.directions.length];
         for (int i = 0; i < heuristics.length; i++) {
-            heuristics[i] = adjacency.measurement.equals(Measurement.EUCLIDEAN)
-                    ? (adjacency.directions[i].isDiagonal() ? 7 : 5)
-                    : 5;
+            heuristics[i] = adjacency.measurement.heuristic(adjacency.directions[i]);
         }
         initialized = true;
         return this;
@@ -294,8 +292,8 @@ public class OptDijkstraMap implements Serializable {
         width = level.length;
         height = level[0].length;
         int rot = adjacency.rotations, len = width*height*rot, dex;
-        gradientMap = new int[len];
-        physicalMap = new int[len];
+        gradientMap = new double[len];
+        physicalMap = new double[len];
         costMap = new int[len];
         IntDoubleOrderedMap cst = adjacency.costRules;
         cst.putAndMoveToFirst(alternateWall, WALL);
@@ -303,7 +301,7 @@ public class OptDijkstraMap implements Serializable {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 c = level[x][y];
-                int t = (c == alternateWall) ? WALL : FLOOR;
+                double t = (c == alternateWall) ? WALL : FLOOR;
                 for (int r = 0; r < rot; r++) {
                     dex = adjacency.composite(x, y, r, 0);
                     gradientMap[dex] = t;
@@ -313,11 +311,9 @@ public class OptDijkstraMap implements Serializable {
             }
         }
         neighbors = adjacency.neighborMaps();
-        heuristics = new int[adjacency.directions.length];
+        heuristics = new double[adjacency.directions.length];
         for (int i = 0; i < heuristics.length; i++) {
-            heuristics[i] = adjacency.measurement.equals(Measurement.EUCLIDEAN)
-                    ? (adjacency.directions[i].isDiagonal() ? 7 : 5)
-                    : 5;
+            heuristics[i] = adjacency.measurement.heuristic(adjacency.directions[i]);
         }
         initialized = true;
         return this;
@@ -436,24 +432,7 @@ public class OptDijkstraMap implements Serializable {
         if (physicalMap[pt] > FLOOR) {
             return;
         }
-        int rotations = adjacency.rotations;
-        if (rotations == 1) {
-            gradientMap[pt] = GOAL;
-            if(!goals.contains(pt))
-                goals.add(pt);
-        } else {
-            int ax, ay, comp;
-            ax = adjacency.extractX(pt);
-            ay = adjacency.extractY(pt);
-            for (int r = 0; r < rotations; r++) {
-                comp = adjacency.composite(ax, ay, r, 0);
-                if (adjacency.validate(comp)) {
-                    gradientMap[comp] = GOAL;
-                    if(!goals.contains(comp))
-                        goals.add(comp);
-                }
-            }
-        }
+        adjacency.putAllVariants(goals, gradientMap, pt, 0.0);
     }
 
     /**
@@ -504,7 +483,7 @@ public class OptDijkstraMap implements Serializable {
         }
     }
 
-    protected void setFresh(final int pt, int counter) {
+    protected void setFresh(final int pt, double counter) {
         if (!initialized || !adjacency.validate(pt)) return;
         if(gradientMap[pt] < counter && gradientMap[pt] < FLOOR)
             return;
@@ -512,7 +491,9 @@ public class OptDijkstraMap implements Serializable {
         fresh.add(pt);
     }
 
-    public boolean isBlocked(int start, int direction, int rotations) {
+    public boolean isBlocked(int start, int direction) {
+        return adjacency.isBlocked(start, direction, neighbors, gradientMap, WALL);
+        /*
         if (rotations != 1) {
             if (rotations <= 4 || (direction & 1) == 0)
                 return !adjacency.validate(start);
@@ -537,6 +518,7 @@ public class OptDijkstraMap implements Serializable {
                             && (near[3][start] < 0 || gradientMap[near[3][start]] >= WALL);
             }
         }
+        */
     }
 
     /**
@@ -552,7 +534,7 @@ public class OptDijkstraMap implements Serializable {
      * or other moving obstacles to a path that cannot be moved through; this can be null (meaning no obstacles).
      * @return An int array using the dimensions of what this knows about the physical map.
      */
-    public int[] scan(int[] impassable) {
+    public double[] scan(int[] impassable) {
         if(impassable == null)
             return scanInternal(null, -1);
         return scanInternal(impassable, impassable.length);
@@ -571,13 +553,13 @@ public class OptDijkstraMap implements Serializable {
      * @param usablePortion how much of impassable to use (if non-null); this should usually be {@code impassable.size}
      * @return An int array using the dimensions of what this knows about the physical map.
      */
-    public int[] scan(IntVLA impassable, int usablePortion) {
+    public double[] scan(IntVLA impassable, int usablePortion) {
         if(impassable == null)
             return scanInternal(null, -1);
         return scanInternal(impassable.items, Math.min(usablePortion, impassable.size));
     }
 
-    protected int[] scanInternal(int[] impassable, int usable)
+    protected double[] scanInternal(int[] impassable, int usable)
     {
         if (!initialized) return null;
         Adjacency adjacency = this.adjacency;
@@ -588,34 +570,15 @@ public class OptDijkstraMap implements Serializable {
         if (impassable != null) {
             if(usable > impassable.length)
                 usable = impassable.length;
-            if(rotations == 1)
-            {
-                int ai;
-                for (int i = 0; i < usable; i++) {
-                    ai = impassable[i];
-                    if(ai >= 0 && ai < gradLength)
-                        gradientMap[ai] = WALL;
-                }
-            }
-            else {
-                int ax, ay, ai, comp;
-                for (int i = 0; i < usable; i++) {
-                    ai = impassable[i];
-                    ax = adjacency.extractX(ai);
-                    ay = adjacency.extractY(ai);
-                    for (int r = 0; r < rotations; r++) {
-                        comp = adjacency.composite(ax, ay, r, 0);
-                        if (comp >= 0 && comp < gradLength)
-                            gradientMap[comp] = WALL;
-                    }
-                }
+            for (int i = 0; i < usable; i++) {
+                adjacency.putAllVariants(null, gradientMap, impassable[i], WALL);
             }
         }
         mappedCount = goals.size;
         for (int i = 0; i < mappedCount; i++) {
             gradientMap[goals.get(i)] = 0;
         }
-        int currentLowest = 999000, cs, csm;
+        double currentLowest = 999000, cs, csm, dist;
         fresh.clear();
         int maxLength = gradientMap.length;
         for (int l = 0; l < maxLength; l++) {
@@ -629,7 +592,7 @@ public class OptDijkstraMap implements Serializable {
                 }
             }
         }
-        int fsz, numAssigned = fresh.size, dist;
+        int fsz, numAssigned = fresh.size;
         IntDoubleOrderedMap costs = adjacency.costRules;
         while (numAssigned > 0) {
             numAssigned = 0;
@@ -642,17 +605,17 @@ public class OptDijkstraMap implements Serializable {
                     if (!adjacency.validate(near))
                     	// Outside the map
                     	continue;
-                    if(isBlocked(cen, d, rotations))
+                    if(isBlocked(cen, d))
                         continue;
                     if(adjacency.twoStepRule) {
                         near = fromNeighbors[d][mid = near];
                         // Outside the map
                         if (!adjacency.validate(near))
                             continue;
-                        if(isBlocked(mid, d, rotations))
+                        if(isBlocked(mid, d))
                             continue;
-                        csm = (int) (costs.get(costMap[mid]) * heuristics[d] + 0.99999994);
-                        cs = (int) (costs.get(costMap[near]) * heuristics[d] + 0.99999994);
+                        csm = (costs.get(costMap[mid]) * heuristics[d]);
+                        cs = (costs.get(costMap[near]) * heuristics[d]);
                         if ((gradientMap[mid] = dist + csm) + cs < gradientMap[near]) {
                             setFresh(near, dist + cs + csm);
                             ++numAssigned;
@@ -661,9 +624,8 @@ public class OptDijkstraMap implements Serializable {
                     }
                     else
                     {
-                        cs = (int)
-                                (costs.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000))
-                                        * heuristics[d] + 0.99999994);
+                        cs = (costs.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000))
+                                        * heuristics[d]);
                         //int h = adjacency.measurement.heuristic(adjacency.directions[d]);
                         if (gradientMap[cen] + cs < gradientMap[near]) {
                             setFresh(near, dist + cs);
@@ -675,7 +637,7 @@ public class OptDijkstraMap implements Serializable {
             }
         }
 
-        int[] gradientClone = new int[maxLength];
+        double[] gradientClone = new double[maxLength];
         for (int l = 0; l < maxLength; l++) {
             if (gradientMap[l] == FLOOR) {
                 gradientMap[l] = DARK;
@@ -699,7 +661,7 @@ public class OptDijkstraMap implements Serializable {
      *                   to a path that cannot be moved through; this can be null if there are no such obstacles.
      * @return A int array using the dimensions of what this knows about the physical map.
      */
-    public int[] partialScan(int limit, int... impassable) {
+    public double[] partialScan(int limit, int... impassable) {
         if(impassable == null)
             return partialScanInternal(limit, null, -1);
         return partialScanInternal(limit, impassable, impassable.length);
@@ -720,12 +682,12 @@ public class OptDijkstraMap implements Serializable {
      * @param usablePortion how much of impassable to use (if non-null); this should usually be {@code impassable.size}
      * @return A int array using the dimensions of what this knows about the physical map.
      */
-    public int[] partialScan(int limit, IntVLA impassable, int usablePortion) {
+    public double[] partialScan(int limit, IntVLA impassable, int usablePortion) {
         if(impassable == null)
             return partialScanInternal(limit, null, -1);
         return partialScanInternal(limit, impassable.items, Math.min(usablePortion, impassable.size));
     }
-    protected int[] partialScanInternal(int limit, int[] impassable, int usable)
+    protected double[] partialScanInternal(int limit, int[] impassable, int usable)
     {
         if (!initialized) return null;
         Adjacency adjacency = this.adjacency;
@@ -736,34 +698,15 @@ public class OptDijkstraMap implements Serializable {
         if (impassable != null) {
             if(usable > impassable.length)
                 usable = impassable.length;
-            if(rotations == 1)
-            {
-                int ai;
-                for (int i = 0; i < usable; i++) {
-                    ai = impassable[i];
-                    if(ai >= 0 && ai < gradLength)
-                        gradientMap[ai] = WALL;
-                }
-            }
-            else {
-                int ax, ay, ai, comp;
-                for (int i = 0; i < usable; i++) {
-                    ai = impassable[i];
-                    ax = adjacency.extractX(ai);
-                    ay = adjacency.extractY(ai);
-                    for (int r = 0; r < rotations; r++) {
-                        comp = adjacency.composite(ax, ay, r, 0);
-                        if (comp >= 0 && comp < gradLength)
-                            gradientMap[comp] = WALL;
-                    }
-                }
+            for (int i = 0; i < usable; i++) {
+                adjacency.putAllVariants(null, gradientMap, impassable[i], WALL);
             }
         }
         mappedCount = goals.size;
         for (int i = 0; i < mappedCount; i++) {
             gradientMap[goals.get(i)] = 0;
         }
-        int currentLowest = 999000, cs, csm;
+        double currentLowest = 999000, cs, csm, dist;
         fresh.clear();
         int maxLength = gradientMap.length;
         for (int l = 0; l < maxLength; l++) {
@@ -777,7 +720,7 @@ public class OptDijkstraMap implements Serializable {
                 }
             }
         }
-        int fsz, numAssigned = fresh.size, dist;
+        int fsz, numAssigned = fresh.size;
         IntDoubleOrderedMap costs = adjacency.costRules;
         int iter = 0;
         while (numAssigned > 0 && iter++ < limit) {
@@ -791,17 +734,17 @@ public class OptDijkstraMap implements Serializable {
                     if (!adjacency.validate(near))
                         // Outside the map
                         continue;
-                    if(isBlocked(cen, d, rotations))
+                    if(isBlocked(cen, d))
                         continue;
                     if(adjacency.twoStepRule) {
                         near = fromNeighbors[d][mid = near];
                         // Outside the map
                         if (!adjacency.validate(near))
                             continue;
-                        if(isBlocked(mid, d, rotations))
+                        if(isBlocked(mid, d))
                             continue;
-                        csm = (int) (costs.get(costMap[mid]) * heuristics[d] + 0.99999994);
-                        cs = (int) (costs.get(costMap[near]) * heuristics[d] + 0.99999994);
+                        csm = (costs.get(costMap[mid]) * heuristics[d]);
+                        cs = (costs.get(costMap[near]) * heuristics[d]);
                         if ((gradientMap[mid] = dist + csm) + cs < gradientMap[near]) {
                             setFresh(near, dist + cs + csm);
                             ++numAssigned;
@@ -810,9 +753,8 @@ public class OptDijkstraMap implements Serializable {
                     }
                     else
                     {
-                        cs = (int)
-                                (costs.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000))
-                                        * heuristics[d] + 0.99999994);
+                        cs = (costs.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000))
+                                        * heuristics[d]);
                         //int h = adjacency.measurement.heuristic(adjacency.directions[d]);
                         if (gradientMap[cen] + cs < gradientMap[near]) {
                             setFresh(near, dist + cs);
@@ -824,13 +766,13 @@ public class OptDijkstraMap implements Serializable {
             }
         }
 
-        int[] gradientClone = new int[maxLength];
+        double[] gradientClone = new double[maxLength];
         for (int l = 0; l < maxLength; l++) {
-            if (gradientMap[l] == FLOOR)
-                gradientClone[l] = gradientMap[l] = DARK;
-            else
-                gradientClone[l] = gradientMap[l];
+            if (gradientMap[l] == FLOOR) {
+                gradientMap[l] = DARK;
+            }
         }
+        System.arraycopy(gradientMap, 0, gradientClone, 0, maxLength);
         return gradientClone;
     }
 
@@ -1626,7 +1568,7 @@ public class OptDijkstraMap implements Serializable {
                 path.clear();
                 break;
             }
-            int best = gradientMap[currentPos];
+            double best = gradientMap[currentPos];
             rng.randomOrdering(adjacency.maxAdjacent, reuse);
             int choice = rng.nextIntHasty(adjacency.maxAdjacent);
 
@@ -1928,7 +1870,7 @@ public class OptDijkstraMap implements Serializable {
 
     private double cachedLongerPaths = 1.2;
     private long cachedImpassable = 0L, cachedFearSources = 0L;
-    private int[] cachedFleeMap;
+    private double[] cachedFleeMap;
     private int cachedSize = 1;
 
     /**
@@ -2043,7 +1985,7 @@ public class OptDijkstraMap implements Serializable {
                 path.clear();
                 break;
             }
-            int best = gradientMap[currentPos];
+            double best = gradientMap[currentPos];
             rng.randomOrdering(adjacency.maxAdjacent, reuse);
             int choice = rng.nextIntHasty(adjacency.maxAdjacent);
 
@@ -2863,7 +2805,7 @@ public class OptDijkstraMap implements Serializable {
             return fill;
 
         partialScan(radius);
-        int temp;
+        double temp;
         for (int l = 0; l < gradientMap.length; l++) {
             temp = gradientMap[l];
             if (temp < FLOOR) {
@@ -2892,7 +2834,7 @@ public class OptDijkstraMap implements Serializable {
         RNG rng = new RNG(0x1337BEEF);
         OptDijkstraMap dijkstra = new OptDijkstraMap(
                 map, adj, rng);
-        int[] scanned;
+        double[] scanned;
         short[][] sMap = new short[40][40];
         //for (int x = 1; x < 39; x++) {
         //    for (int y = 1; y < 39; y++) {
@@ -2903,7 +2845,7 @@ public class OptDijkstraMap implements Serializable {
         dijkstra.resetMap();
         System.out.println("MAPPED: " + dijkstra.getMappedCount());
         for (int i = 0; i < 1600; i++) {
-            sMap[adj.extractX(i)][adj.extractY(i)] = (scanned[i] >= FLOOR ? -999 : (short) scanned[i]);
+            sMap[adj.extractX(i)][adj.extractY(i)] = (scanned[i] >= FLOOR ? -999 : (short) (scanned[i] * 100));
         }
         for (int yy = 0; yy < 40; yy++) {
             for (int xx = 0; xx < 40; xx++) {
