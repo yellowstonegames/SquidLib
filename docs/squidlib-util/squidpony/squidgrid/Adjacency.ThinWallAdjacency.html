@@ -127,7 +127,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public static class <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.345">Adjacency.ThinWallAdjacency</a>
+<pre>public static class <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.404">Adjacency.ThinWallAdjacency</a>
 extends <a href="../../squidpony/squidgrid/Adjacency.BasicAdjacency.html" title="class in squidpony.squidgrid">Adjacency.BasicAdjacency</a>
 implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <dl>
@@ -213,14 +213,14 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;squidpony.squidgrid.<a href="../../squidpony/squidgrid/Adjacency.BasicAdjacency.html" title="class in squidpony.squidgrid">Adjacency.BasicAdjacency</a></h3>
-<code><a href="../../squidpony/squidgrid/Adjacency.BasicAdjacency.html#composite-int-int-int-int-">composite</a>, <a href="../../squidpony/squidgrid/Adjacency.BasicAdjacency.html#extractN-int-">extractN</a>, <a href="../../squidpony/squidgrid/Adjacency.BasicAdjacency.html#extractR-int-">extractR</a>, <a href="../../squidpony/squidgrid/Adjacency.BasicAdjacency.html#extractX-int-">extractX</a>, <a href="../../squidpony/squidgrid/Adjacency.BasicAdjacency.html#extractY-int-">extractY</a>, <a href="../../squidpony/squidgrid/Adjacency.BasicAdjacency.html#isBlocked-int-int-int:A:A:A-double:A-double-">isBlocked</a>, <a href="../../squidpony/squidgrid/Adjacency.BasicAdjacency.html#neighborMaps--">neighborMaps</a>, <a href="../../squidpony/squidgrid/Adjacency.BasicAdjacency.html#portal-int:A:A:A-int-int-boolean-">portal</a>, <a href="../../squidpony/squidgrid/Adjacency.BasicAdjacency.html#putAllVariants-squidpony.squidmath.IntDoubleOrderedMap-int-double-int-">putAllVariants</a>, <a href="../../squidpony/squidgrid/Adjacency.BasicAdjacency.html#validate-int-">validate</a></code></li>
+<code><a href="../../squidpony/squidgrid/Adjacency.BasicAdjacency.html#composite-int-int-int-int-">composite</a>, <a href="../../squidpony/squidgrid/Adjacency.BasicAdjacency.html#extractN-int-">extractN</a>, <a href="../../squidpony/squidgrid/Adjacency.BasicAdjacency.html#extractR-int-">extractR</a>, <a href="../../squidpony/squidgrid/Adjacency.BasicAdjacency.html#extractX-int-">extractX</a>, <a href="../../squidpony/squidgrid/Adjacency.BasicAdjacency.html#extractY-int-">extractY</a>, <a href="../../squidpony/squidgrid/Adjacency.BasicAdjacency.html#isBlocked-int-int-int:A:A:A-double:A-double-">isBlocked</a>, <a href="../../squidpony/squidgrid/Adjacency.BasicAdjacency.html#neighborMaps--">neighborMaps</a>, <a href="../../squidpony/squidgrid/Adjacency.BasicAdjacency.html#portal-int:A:A:A-int-int-boolean-">portal</a>, <a href="../../squidpony/squidgrid/Adjacency.BasicAdjacency.html#putAllVariants-squidpony.squidmath.IntDoubleOrderedMap-int-double-int-">putAllVariants</a>, <a href="../../squidpony/squidgrid/Adjacency.BasicAdjacency.html#putAllVariants-squidpony.squidmath.IntVLA-double:A-int-double-int-">putAllVariants</a>, <a href="../../squidpony/squidgrid/Adjacency.BasicAdjacency.html#validate-int-">validate</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.squidpony.squidgrid.Adjacency">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;squidpony.squidgrid.<a href="../../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a></h3>
-<code><a href="../../squidpony/squidgrid/Adjacency.html#addCostRule-char-double-">addCostRule</a>, <a href="../../squidpony/squidgrid/Adjacency.html#extractCoord-int-">extractCoord</a>, <a href="../../squidpony/squidgrid/Adjacency.html#putAllVariants-squidpony.squidmath.IntDoubleOrderedMap-int-double-">putAllVariants</a>, <a href="../../squidpony/squidgrid/Adjacency.html#show-int-">show</a>, <a href="../../squidpony/squidgrid/Adjacency.html#showMap-int:A-int-">showMap</a></code></li>
+<code><a href="../../squidpony/squidgrid/Adjacency.html#addCostRule-char-double-">addCostRule</a>, <a href="../../squidpony/squidgrid/Adjacency.html#extractCoord-int-">extractCoord</a>, <a href="../../squidpony/squidgrid/Adjacency.html#putAllVariants-squidpony.squidmath.IntDoubleOrderedMap-int-double-">putAllVariants</a>, <a href="../../squidpony/squidgrid/Adjacency.html#putAllVariants-squidpony.squidmath.IntVLA-double:A-int-double-">putAllVariants</a>, <a href="../../squidpony/squidgrid/Adjacency.html#show-int-">show</a>, <a href="../../squidpony/squidgrid/Adjacency.html#showMap-int:A-int-">showMap</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -249,7 +249,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ThinWallAdjacency</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.ThinWallAdjacency.html#line.352">ThinWallAdjacency</a>(int&nbsp;width,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.ThinWallAdjacency.html#line.411">ThinWallAdjacency</a>(int&nbsp;width,
                          int&nbsp;height,
                          <a href="../../squidpony/squidai/DijkstraMap.Measurement.html" title="enum in squidpony.squidai">DijkstraMap.Measurement</a>&nbsp;metric)</pre>
 </li>
@@ -268,7 +268,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>addCostRule</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.ThinWallAdjacency.html#line.359">addCostRule</a>(char&nbsp;tile,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.ThinWallAdjacency.html#line.418">addCostRule</a>(char&nbsp;tile,
                                        double&nbsp;cost,
                                        boolean&nbsp;isRotation)</pre>
 <dl>

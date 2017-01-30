@@ -121,7 +121,35 @@
  DijkstraBenchmark.measureTinyPathAStar2          avgt    3     8.278 ±   1.149  ms/op
  DijkstraBenchmark.measureTinyPathCustomDijkstra  avgt    3    14.551 ±  14.218  ms/op
  DijkstraBenchmark.measureTinyPathDijkstra        avgt    3    28.658 ±  13.810  ms/op
- DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3     1.245 ±   0.265  ms/op</div>
+ DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3     1.245 ±   0.265  ms/op
+
+ Benchmark                                        Mode  Cnt      Score       Error  Units
+ DijkstraBenchmark.measurePathAStar2              avgt    3  53480.665 ± 18729.945  ms/op
+ DijkstraBenchmark.measurePathCustomDijkstra      avgt    3   2723.753 ±   925.120  ms/op
+ DijkstraBenchmark.measurePathDijkstra            avgt    3   3074.905 ±   540.216  ms/op
+ DijkstraBenchmark.measurePathGDXAStar            avgt    3   1107.468 ±  1023.402  ms/op
+ DijkstraBenchmark.measurePathOptDijkstra         avgt    3   1785.539 ±   292.576  ms/op // used int distances
+ DijkstraBenchmark.measureScanCustomDijkstra      avgt    3   2646.074 ±   265.886  ms/op
+ DijkstraBenchmark.measureScanDijkstra            avgt    3   2934.270 ±   299.965  ms/op
+ DijkstraBenchmark.measureScanOptDijkstra         avgt    3   1681.452 ±   502.217  ms/op // used int distances
+ DijkstraBenchmark.measureTinyPathAStar2          avgt    3     54.409 ±     6.358  ms/op
+ DijkstraBenchmark.measureTinyPathCustomDijkstra  avgt    3    515.103 ±   483.498  ms/op
+ DijkstraBenchmark.measureTinyPathDijkstra        avgt    3    612.636 ±   105.496  ms/op
+ DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3      5.473 ±     1.066  ms/op
+ DijkstraBenchmark.measureTinyPathOptDijkstra     avgt    3    126.647 ±    25.790  ms/op // used int distances
+
+ Benchmark                                        Mode  Cnt     Score     Error  Units
+ DijkstraBenchmark.measurePathCustomDijkstra      avgt    3  2622.331 ± 398.498  ms/op
+ DijkstraBenchmark.measurePathDijkstra            avgt    3  2890.659 ± 621.237  ms/op
+ DijkstraBenchmark.measurePathGDXAStar            avgt    3  1028.622 ±  80.724  ms/op
+ DijkstraBenchmark.measurePathOptDijkstra         avgt    3  1685.116 ± 138.863  ms/op
+ DijkstraBenchmark.measureScanCustomDijkstra      avgt    3  2559.513 ± 475.556  ms/op
+ DijkstraBenchmark.measureScanDijkstra            avgt    3  2851.652 ± 760.477  ms/op
+ DijkstraBenchmark.measureScanOptDijkstra         avgt    3  1349.320 ± 102.441  ms/op
+ DijkstraBenchmark.measureTinyPathCustomDijkstra  avgt    3   490.634 ±  69.431  ms/op
+ DijkstraBenchmark.measureTinyPathDijkstra        avgt    3   629.138 ± 153.702  ms/op
+ DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3     5.444 ±   0.473  ms/op
+ DijkstraBenchmark.measureTinyPathOptDijkstra     avgt    3   159.189 ±  15.194  ms/op</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#DijkstraBenchmark--">DijkstraBenchmark()</a></span> - Constructor for class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
 <dd>&nbsp;</dd>
@@ -305,6 +333,8 @@
 <dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doTinyPathDijkstra--">doTinyPathDijkstra()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doTinyPathGDXAStar--">doTinyPathGDXAStar()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doTinyPathOptDijkstra--">doTinyPathOptDijkstra()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/CoordPackerBenchmark.html#doUnion--">doUnion()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/CoordPackerBenchmark.html" title="class in squidpony.performance">CoordPackerBenchmark</a></dt>
 <dd>&nbsp;</dd>

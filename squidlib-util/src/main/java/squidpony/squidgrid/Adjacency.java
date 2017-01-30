@@ -3,6 +3,7 @@ package squidpony.squidgrid;
 import squidpony.squidai.DijkstraMap.Measurement;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.IntDoubleOrderedMap;
+import squidpony.squidmath.IntVLA;
 
 import java.io.Serializable;
 
@@ -154,6 +155,12 @@ public abstract class Adjacency implements Serializable {
     }
     public abstract IntDoubleOrderedMap putAllVariants(IntDoubleOrderedMap map, int key, double value, int size);
 
+    public void putAllVariants(IntVLA list, double[] map, int key, double value)
+    {
+        putAllVariants(list, map, key, value,1);
+    }
+    public abstract void putAllVariants(IntVLA list, double[] map, int key, double value, int size);
+
     public int[] invertAdjacent;
 
     public String show(int data)
@@ -264,7 +271,7 @@ public abstract class Adjacency implements Serializable {
         public boolean isBlocked(int start, int direction, int[][][] neighbors, double[] map, double wall) {
             if(direction < 4)
                 return !validate(start);
-            int[][] near = neighbors[1];
+            int[][] near = neighbors[0];
             switch (direction)
             {
                 case 4: //UP_LEFT
@@ -339,6 +346,58 @@ public abstract class Adjacency implements Serializable {
                 }
             }
             return map;
+        }
+
+        @Override
+        public void putAllVariants(IntVLA list, double[] map, int key, double value, int size) {
+            int baseX = key % width, baseY = key / width, comp;
+            if (key >= 0 && baseY < height) {
+                if (size < 0) {
+                    if(list == null)
+                    {
+                        for (int x = size + 1; x <= 0; x++) {
+                            for (int y = size + 1; y <= 0; y++) {
+                                comp = composite(baseX + x, baseY + y, 0, 0);
+                                if (comp >= 0) {
+                                    map[comp] = value;
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        for (int x = size + 1; x <= 0; x++) {
+                            for (int y = size + 1; y <= 0; y++) {
+                                comp = composite(baseX + x, baseY + y, 0, 0);
+                                if (comp >= 0 && !list.contains(comp)) {
+                                    list.add(comp);
+                                    map[comp] = value;
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    if (list == null) {
+                        for (int x = 0; x < size; x++) {
+                            for (int y = 0; y < size; y++) {
+                                comp = composite(baseX + x, baseY + y, 0, 0);
+                                if (comp >= 0) {
+                                    map[comp] = value;
+                                }
+                            }
+                        }
+                    } else {
+                        for (int x = 0; x < size; x++) {
+                            for (int y = 0; y < size; y++) {
+                                comp = composite(baseX + x, baseY + y, 0, 0);
+                                if (comp >= 0 && !list.contains(comp)) {
+                                    list.add(comp);
+                                    map[comp] = value;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -454,8 +513,8 @@ public abstract class Adjacency implements Serializable {
             if(rotations <= 4 || (direction & 1) == 0)
                 return !validate(start);
 
-            return neighbors[1][0][start] < 0 || map[neighbors[1][0][start]] >= wall
-                    || neighbors[1][2][start] < 0 || map[neighbors[1][2][start]] >= wall;
+            return neighbors[0][0][start] < 0 || map[neighbors[0][0][start]] >= wall
+                    || neighbors[0][2][start] < 0 || map[neighbors[0][2][start]] >= wall;
         }
 
         @Override
@@ -486,6 +545,8 @@ public abstract class Adjacency implements Serializable {
                 costRules.put(tile, cost);
             return costRules;
         }
+
+
         @Override
         public IntDoubleOrderedMap putAllVariants(IntDoubleOrderedMap map, int key, double value, int size) {
             int baseX = (key >>> shift) % width, baseY = (key>>>shift) / width, comp;
@@ -521,6 +582,90 @@ public abstract class Adjacency implements Serializable {
                 }
             }
             return map;
+        }
+
+        @Override
+        public void putAllVariants(IntVLA list, double[] map, int key, double value, int size) {
+            int baseX = (key >>> shift) % width, baseY = (key>>>shift) / width, comp;
+            if (key >= 0 && baseY < height) {
+                if(size == 1)
+                {
+                    if(list == null)
+                    {
+                        for (int r = 0; r < rotations; r++) {
+                            comp = composite(baseX, baseY, r, 0);
+                            if(comp >= 0) {
+                                map[comp] = value;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int r = 0; r < rotations; r++) {
+                            comp = composite(baseX, baseY, r, 0);
+                            if(comp >= 0 && !list.contains(comp)) {
+                                list.add(comp);
+                                map[comp] = value;
+                            }
+                        }
+                    }
+                }
+                else if (size < 0) {
+                    if(list == null)
+                    {
+                        for (int x = size+1; x <= 0; x++) {
+                            for (int y = size+1; y <= 0; y++) {
+                                for (int r = 0; r < rotations; r++) {
+                                    comp = composite(baseX + x, baseY + y, r, 0);
+                                    if(comp >= 0) {
+                                        map[comp] = value;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        for (int x = size+1; x <= 0; x++) {
+                            for (int y = size+1; y <= 0; y++) {
+                                for (int r = 0; r < rotations; r++) {
+                                    comp = composite(baseX + x, baseY + y, r, 0);
+                                    if(comp >= 0 && !list.contains(comp)) {
+                                        list.add(comp);
+                                        map[comp] = value;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    if(list == null)
+                    {
+                        for (int x = 0; x < size; x++) {
+                            for (int y = 0; y < size; y++) {
+                                for (int r = 0; r < rotations; r++) {
+                                    comp = composite(baseX + x, baseY + y, r, 0);
+                                    if(comp >= 0) {
+                                        map[comp] = value;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        for (int x = 0; x < size; x++) {
+                            for (int y = 0; y < size; y++) {
+                                for (int r = 0; r < rotations; r++) {
+                                    comp = composite(baseX + x, baseY + y, r, 0);
+                                    if(comp >= 0 && !list.contains(comp)) {
+                                        list.add(comp);
+                                        map[comp] = value;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

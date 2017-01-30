@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":6,"i2":6,"i3":10,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":10,"i12":6,"i13":10,"i14":10,"i15":6};
+var methods = {"i0":10,"i1":6,"i2":6,"i3":10,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":10,"i12":6,"i13":10,"i14":6,"i15":10,"i16":10,"i17":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -117,7 +117,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public abstract class <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.46">Adjacency</a>
+<pre>public abstract class <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.47">Adjacency</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">Some classes need detailed information about what cells are considered adjacent to other cells, and may
@@ -379,15 +379,30 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
               int&nbsp;size)</code>&nbsp;</td>
 </tr>
 <tr id="i13" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Adjacency.html#putAllVariants-squidpony.squidmath.IntVLA-double:A-int-double-">putAllVariants</a></span>(<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;list,
+              double[]&nbsp;map,
+              int&nbsp;key,
+              double&nbsp;value)</code>&nbsp;</td>
+</tr>
+<tr id="i14" class="altColor">
+<td class="colFirst"><code>abstract void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Adjacency.html#putAllVariants-squidpony.squidmath.IntVLA-double:A-int-double-int-">putAllVariants</a></span>(<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;list,
+              double[]&nbsp;map,
+              int&nbsp;key,
+              double&nbsp;value,
+              int&nbsp;size)</code>&nbsp;</td>
+</tr>
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Adjacency.html#show-int-">show</a></span>(int&nbsp;data)</code>&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Adjacency.html#showMap-int:A-int-">showMap</a></span>(int[]&nbsp;map,
        int&nbsp;r)</code>&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>abstract boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Adjacency.html#validate-int-">validate</a></span>(int&nbsp;data)</code>&nbsp;</td>
 </tr>
@@ -419,7 +434,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>directions</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>[] <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.51">directions</a></pre>
+<pre>public&nbsp;<a href="../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>[] <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.52">directions</a></pre>
 <div class="block">The array of all possible directions this allows, regardless of cost.</div>
 </li>
 </ul>
@@ -429,7 +444,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>maxAdjacent</h4>
-<pre>public&nbsp;int <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.57">maxAdjacent</a></pre>
+<pre>public&nbsp;int <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.58">maxAdjacent</a></pre>
 <div class="block">The maximum number of states that can be considered adjacent; when rotations are present and have a
  cost this is almost always 3 (move forward, turn left, turn right), and in most other cases this is
  4 (when using Manhattan distance) or 8 (for other distance metrics).</div>
@@ -441,7 +456,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>twoStepRule</h4>
-<pre>public&nbsp;boolean <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.64">twoStepRule</a></pre>
+<pre>public&nbsp;boolean <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.65">twoStepRule</a></pre>
 <div class="block">Only needed for thin-wall maps; this requires two steps in the same direction to both be valid moves
  for that direction to be considered, and always moves the pathfinder two steps, typically to cells
  with even numbers for both x and y (where odd-number-position cells are used for edges or corners
@@ -454,7 +469,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>blockingRule</h4>
-<pre>public&nbsp;int <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.84">blockingRule</a></pre>
+<pre>public&nbsp;int <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.85">blockingRule</a></pre>
 <div class="block">If you want obstacles present in orthogonal cells to prevent pathfinding along the diagonal between them, this
  can be used to make single-cell diagonal walls non-viable to move through, or even to prevent diagonal movement if any
  one obstacle is orthogonally adjacent to both the start and target cell of a diagonal move.
@@ -480,7 +495,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>measurement</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidai/DijkstraMap.Measurement.html" title="enum in squidpony.squidai">DijkstraMap.Measurement</a> <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.92">measurement</a></pre>
+<pre>public&nbsp;<a href="../../squidpony/squidai/DijkstraMap.Measurement.html" title="enum in squidpony.squidai">DijkstraMap.Measurement</a> <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.93">measurement</a></pre>
 <div class="block">This affects how distance is measured on diagonal directions vs. orthogonal directions. MANHATTAN should form a
  diamond shape on a featureless map, while CHEBYSHEV and EUCLIDEAN will form a square. EUCLIDEAN does not affect
  the length of paths, though it will change the DijkstraMap's gradientMap to have many non-integer values, and
@@ -494,7 +509,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>width</h4>
-<pre>public&nbsp;int <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.96">width</a></pre>
+<pre>public&nbsp;int <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.97">width</a></pre>
 <div class="block">Can be changed if the map changes; you should get the neighbors from neighborMaps() again after changing this.</div>
 </li>
 </ul>
@@ -504,7 +519,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>height</h4>
-<pre>public&nbsp;int <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.100">height</a></pre>
+<pre>public&nbsp;int <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.101">height</a></pre>
 <div class="block">Can be changed if the map changes; you should get the neighbors from neighborMaps() again after changing this.</div>
 </li>
 </ul>
@@ -514,7 +529,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>rotations</h4>
-<pre>public&nbsp;int <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.104">rotations</a></pre>
+<pre>public&nbsp;int <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.105">rotations</a></pre>
 <div class="block">Can be changed if the map changes; you should get the neighbors from neighborMaps() again after changing this.</div>
 </li>
 </ul>
@@ -524,7 +539,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>depths</h4>
-<pre>public&nbsp;int <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.108">depths</a></pre>
+<pre>public&nbsp;int <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.109">depths</a></pre>
 <div class="block">Can be changed if the map changes; you should get the neighbors from neighborMaps() again after changing this.</div>
 </li>
 </ul>
@@ -534,7 +549,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>costRules</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a> <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.121">costRules</a></pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a> <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.122">costRules</a></pre>
 <div class="block">Used in place of a double[][] of costs in CustomDijkstraMap; allows you to set the costs to enter tiles (via
  <a href="../../squidpony/squidgrid/Adjacency.html#addCostRule-char-double-"><code>addCostRule(char, double)</code></a> or <a href="../../squidpony/squidgrid/Adjacency.html#addCostRule-char-double-boolean-"><code>addCostRule(char, double, boolean)</code></a> if the map has rotations).
  A cost of 1.0 is normal for most implementations; higher costs make a movement harder to perform and take more
@@ -552,7 +567,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>invertAdjacent</h4>
-<pre>public&nbsp;int[] <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.157">invertAdjacent</a></pre>
+<pre>public&nbsp;int[] <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.164">invertAdjacent</a></pre>
 </li>
 </ul>
 </li>
@@ -569,7 +584,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Adjacency</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.46">Adjacency</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.47">Adjacency</a>()</pre>
 </li>
 </ul>
 </li>
@@ -586,7 +601,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>extractX</h4>
-<pre>public abstract&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.123">extractX</a>(int&nbsp;data)</pre>
+<pre>public abstract&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.124">extractX</a>(int&nbsp;data)</pre>
 </li>
 </ul>
 <a name="extractY-int-">
@@ -595,7 +610,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>extractY</h4>
-<pre>public abstract&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.125">extractY</a>(int&nbsp;data)</pre>
+<pre>public abstract&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.126">extractY</a>(int&nbsp;data)</pre>
 </li>
 </ul>
 <a name="extractR-int-">
@@ -604,7 +619,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>extractR</h4>
-<pre>public abstract&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.127">extractR</a>(int&nbsp;data)</pre>
+<pre>public abstract&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.128">extractR</a>(int&nbsp;data)</pre>
 </li>
 </ul>
 <a name="extractN-int-">
@@ -613,7 +628,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>extractN</h4>
-<pre>public abstract&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.129">extractN</a>(int&nbsp;data)</pre>
+<pre>public abstract&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.130">extractN</a>(int&nbsp;data)</pre>
 </li>
 </ul>
 <a name="composite-int-int-int-int-">
@@ -622,7 +637,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>composite</h4>
-<pre>public abstract&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.131">composite</a>(int&nbsp;x,
+<pre>public abstract&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.132">composite</a>(int&nbsp;x,
                               int&nbsp;y,
                               int&nbsp;r,
                               int&nbsp;n)</pre>
@@ -634,7 +649,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>validate</h4>
-<pre>public abstract&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.133">validate</a>(int&nbsp;data)</pre>
+<pre>public abstract&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.134">validate</a>(int&nbsp;data)</pre>
 </li>
 </ul>
 <a name="extractCoord-int-">
@@ -643,7 +658,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>extractCoord</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.135">extractCoord</a>(int&nbsp;data)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.136">extractCoord</a>(int&nbsp;data)</pre>
 </li>
 </ul>
 <a name="neighborMaps--">
@@ -652,7 +667,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>neighborMaps</h4>
-<pre>public abstract&nbsp;int[][][]&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.139">neighborMaps</a>()</pre>
+<pre>public abstract&nbsp;int[][][]&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.140">neighborMaps</a>()</pre>
 </li>
 </ul>
 <a name="portal-int:A:A:A-int-int-boolean-">
@@ -661,7 +676,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>portal</h4>
-<pre>public abstract&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.141">portal</a>(int[][][]&nbsp;neighbors,
+<pre>public abstract&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.142">portal</a>(int[][][]&nbsp;neighbors,
                             int&nbsp;inputPortal,
                             int&nbsp;outputPortal,
                             boolean&nbsp;twoWay)</pre>
@@ -673,7 +688,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>isBlocked</h4>
-<pre>public abstract&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.143">isBlocked</a>(int&nbsp;start,
+<pre>public abstract&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.144">isBlocked</a>(int&nbsp;start,
                                   int&nbsp;direction,
                                   int[][][]&nbsp;neighbors,
                                   double[]&nbsp;map,
@@ -686,7 +701,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>addCostRule</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.145">addCostRule</a>(char&nbsp;tile,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.146">addCostRule</a>(char&nbsp;tile,
                                        double&nbsp;cost)</pre>
 </li>
 </ul>
@@ -696,7 +711,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>addCostRule</h4>
-<pre>public abstract&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.149">addCostRule</a>(char&nbsp;tile,
+<pre>public abstract&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.150">addCostRule</a>(char&nbsp;tile,
                                                 double&nbsp;cost,
                                                 boolean&nbsp;isRotation)</pre>
 </li>
@@ -707,7 +722,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>putAllVariants</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.151">putAllVariants</a>(<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;map,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.152">putAllVariants</a>(<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;map,
                                           int&nbsp;key,
                                           double&nbsp;value)</pre>
 </li>
@@ -718,10 +733,35 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>putAllVariants</h4>
-<pre>public abstract&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.155">putAllVariants</a>(<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;map,
+<pre>public abstract&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.156">putAllVariants</a>(<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;map,
                                                    int&nbsp;key,
                                                    double&nbsp;value,
                                                    int&nbsp;size)</pre>
+</li>
+</ul>
+<a name="putAllVariants-squidpony.squidmath.IntVLA-double:A-int-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>putAllVariants</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.158">putAllVariants</a>(<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;list,
+                           double[]&nbsp;map,
+                           int&nbsp;key,
+                           double&nbsp;value)</pre>
+</li>
+</ul>
+<a name="putAllVariants-squidpony.squidmath.IntVLA-double:A-int-double-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>putAllVariants</h4>
+<pre>public abstract&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.162">putAllVariants</a>(<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;list,
+                                    double[]&nbsp;map,
+                                    int&nbsp;key,
+                                    double&nbsp;value,
+                                    int&nbsp;size)</pre>
 </li>
 </ul>
 <a name="show-int-">
@@ -730,7 +770,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>show</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.159">show</a>(int&nbsp;data)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.166">show</a>(int&nbsp;data)</pre>
 </li>
 </ul>
 <a name="showMap-int:A-int-">
@@ -739,7 +779,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>showMap</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.173">showMap</a>(int[]&nbsp;map,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.180">showMap</a>(int[]&nbsp;map,
                       int&nbsp;r)</pre>
 </li>
 </ul>

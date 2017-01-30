@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":9,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":9,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -109,7 +109,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.88">DijkstraBenchmark</a>
+<pre>public class <a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.116">DijkstraBenchmark</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">Times:
  Benchmark                                        Mode  Cnt     Score     Error  Units
@@ -134,7 +134,35 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  DijkstraBenchmark.measureTinyPathAStar2          avgt    3     8.278 ±   1.149  ms/op
  DijkstraBenchmark.measureTinyPathCustomDijkstra  avgt    3    14.551 ±  14.218  ms/op
  DijkstraBenchmark.measureTinyPathDijkstra        avgt    3    28.658 ±  13.810  ms/op
- DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3     1.245 ±   0.265  ms/op</div>
+ DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3     1.245 ±   0.265  ms/op
+
+ Benchmark                                        Mode  Cnt      Score       Error  Units
+ DijkstraBenchmark.measurePathAStar2              avgt    3  53480.665 ± 18729.945  ms/op
+ DijkstraBenchmark.measurePathCustomDijkstra      avgt    3   2723.753 ±   925.120  ms/op
+ DijkstraBenchmark.measurePathDijkstra            avgt    3   3074.905 ±   540.216  ms/op
+ DijkstraBenchmark.measurePathGDXAStar            avgt    3   1107.468 ±  1023.402  ms/op
+ DijkstraBenchmark.measurePathOptDijkstra         avgt    3   1785.539 ±   292.576  ms/op // used int distances
+ DijkstraBenchmark.measureScanCustomDijkstra      avgt    3   2646.074 ±   265.886  ms/op
+ DijkstraBenchmark.measureScanDijkstra            avgt    3   2934.270 ±   299.965  ms/op
+ DijkstraBenchmark.measureScanOptDijkstra         avgt    3   1681.452 ±   502.217  ms/op // used int distances
+ DijkstraBenchmark.measureTinyPathAStar2          avgt    3     54.409 ±     6.358  ms/op
+ DijkstraBenchmark.measureTinyPathCustomDijkstra  avgt    3    515.103 ±   483.498  ms/op
+ DijkstraBenchmark.measureTinyPathDijkstra        avgt    3    612.636 ±   105.496  ms/op
+ DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3      5.473 ±     1.066  ms/op
+ DijkstraBenchmark.measureTinyPathOptDijkstra     avgt    3    126.647 ±    25.790  ms/op // used int distances
+
+ Benchmark                                        Mode  Cnt     Score     Error  Units
+ DijkstraBenchmark.measurePathCustomDijkstra      avgt    3  2622.331 ± 398.498  ms/op
+ DijkstraBenchmark.measurePathDijkstra            avgt    3  2890.659 ± 621.237  ms/op
+ DijkstraBenchmark.measurePathGDXAStar            avgt    3  1028.622 ±  80.724  ms/op
+ DijkstraBenchmark.measurePathOptDijkstra         avgt    3  1685.116 ± 138.863  ms/op
+ DijkstraBenchmark.measureScanCustomDijkstra      avgt    3  2559.513 ± 475.556  ms/op
+ DijkstraBenchmark.measureScanDijkstra            avgt    3  2851.652 ± 760.477  ms/op
+ DijkstraBenchmark.measureScanOptDijkstra         avgt    3  1349.320 ± 102.441  ms/op
+ DijkstraBenchmark.measureTinyPathCustomDijkstra  avgt    3   490.634 ±  69.431  ms/op
+ DijkstraBenchmark.measureTinyPathDijkstra        avgt    3   629.138 ± 153.702  ms/op
+ DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3     5.444 ±   0.473  ms/op
+ DijkstraBenchmark.measureTinyPathOptDijkstra     avgt    3   159.189 ±  15.194  ms/op</div>
 </li>
 </ul>
 </div>
@@ -290,72 +318,80 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/DijkstraBenchmark.html#doTinyPathGDXAStar--">doTinyPathGDXAStar</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i16" class="altColor">
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/DijkstraBenchmark.html#doTinyPathOptDijkstra--">doTinyPathOptDijkstra</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/DijkstraBenchmark.html#main-java.lang.String:A-">main</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)</code>&nbsp;</td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/DijkstraBenchmark.html#measurePathAStar--">measurePathAStar</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/DijkstraBenchmark.html#measurePathAStar2--">measurePathAStar2</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/DijkstraBenchmark.html#measurePathBoxedDijkstra--">measurePathBoxedDijkstra</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/DijkstraBenchmark.html#measurePathCustomDijkstra--">measurePathCustomDijkstra</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/DijkstraBenchmark.html#measurePathDijkstra--">measurePathDijkstra</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/DijkstraBenchmark.html#measurePathGDXAStar--">measurePathGDXAStar</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/DijkstraBenchmark.html#measurePathOptDijkstra--">measurePathOptDijkstra</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/DijkstraBenchmark.html#measureScanBoxedDijkstra--">measureScanBoxedDijkstra</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/DijkstraBenchmark.html#measureScanCustomDijkstra--">measureScanCustomDijkstra</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/DijkstraBenchmark.html#measureScanDijkstra--">measureScanDijkstra</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/DijkstraBenchmark.html#measureScanGreased--">measureScanGreased</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/DijkstraBenchmark.html#measureScanOptDijkstra--">measureScanOptDijkstra</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/DijkstraBenchmark.html#measureTinyPathAStar2--">measureTinyPathAStar2</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/DijkstraBenchmark.html#measureTinyPathCustomDijkstra--">measureTinyPathCustomDijkstra</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i32" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/DijkstraBenchmark.html#measureTinyPathDijkstra--">measureTinyPathDijkstra</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/DijkstraBenchmark.html#measureTinyPathGDXAStar--">measureTinyPathGDXAStar</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i34" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/DijkstraBenchmark.html#measureTinyPathOptDijkstra--">measureTinyPathOptDijkstra</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -385,7 +421,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>DIMENSION</h4>
-<pre>public static final&nbsp;int <a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.90">DIMENSION</a></pre>
+<pre>public static final&nbsp;int <a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.118">DIMENSION</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.performance.DijkstraBenchmark.DIMENSION">Constant Field Values</a></dd>
@@ -398,7 +434,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>PATH_LENGTH</h4>
-<pre>public static final&nbsp;int <a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.90">PATH_LENGTH</a></pre>
+<pre>public static final&nbsp;int <a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.118">PATH_LENGTH</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.performance.DijkstraBenchmark.PATH_LENGTH">Constant Field Values</a></dd>
@@ -411,7 +447,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>dungeonGen</h4>
-<pre>public static&nbsp;squidpony.squidgrid.mapping.DungeonGenerator <a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.91">dungeonGen</a></pre>
+<pre>public static&nbsp;squidpony.squidgrid.mapping.DungeonGenerator <a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.119">dungeonGen</a></pre>
 </li>
 </ul>
 <a name="serpent">
@@ -420,7 +456,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>serpent</h4>
-<pre>public static&nbsp;squidpony.squidgrid.mapping.SerpentMapGenerator <a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.93">serpent</a></pre>
+<pre>public static&nbsp;squidpony.squidgrid.mapping.SerpentMapGenerator <a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.121">serpent</a></pre>
 </li>
 </ul>
 <a name="map">
@@ -429,7 +465,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>map</h4>
-<pre>public static&nbsp;char[][] <a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.95">map</a></pre>
+<pre>public static&nbsp;char[][] <a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.123">map</a></pre>
 </li>
 </ul>
 <a name="astarMap">
@@ -438,7 +474,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>astarMap</h4>
-<pre>public static&nbsp;double[][] <a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.96">astarMap</a></pre>
+<pre>public static&nbsp;double[][] <a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.124">astarMap</a></pre>
 </li>
 </ul>
 <a name="floors">
@@ -447,7 +483,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>floors</h4>
-<pre>public static&nbsp;squidpony.squidmath.GreasedRegion <a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.97">floors</a></pre>
+<pre>public static&nbsp;squidpony.squidmath.GreasedRegion <a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.125">floors</a></pre>
 </li>
 </ul>
 <a name="nearbyMap">
@@ -456,7 +492,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>nearbyMap</h4>
-<pre>public static&nbsp;squidpony.squidmath.Coord[][] <a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.98">nearbyMap</a></pre>
+<pre>public static&nbsp;squidpony.squidmath.Coord[][] <a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.126">nearbyMap</a></pre>
 </li>
 </ul>
 <a name="customNearbyMap">
@@ -465,7 +501,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>customNearbyMap</h4>
-<pre>public static&nbsp;int[] <a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.99">customNearbyMap</a></pre>
+<pre>public static&nbsp;int[] <a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.127">customNearbyMap</a></pre>
 </li>
 </ul>
 <a name="adj">
@@ -474,7 +510,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>adj</h4>
-<pre>public static&nbsp;squidpony.squidgrid.Adjacency <a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.100">adj</a></pre>
+<pre>public static&nbsp;squidpony.squidgrid.Adjacency <a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.128">adj</a></pre>
 </li>
 </ul>
 </li>
@@ -491,7 +527,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>DijkstraBenchmark</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.88">DijkstraBenchmark</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.116">DijkstraBenchmark</a>()</pre>
 </li>
 </ul>
 </li>
@@ -508,7 +544,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doScanDijkstra</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.125">doScanDijkstra</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.153">doScanDijkstra</a>()</pre>
 </li>
 </ul>
 <a name="measureScanDijkstra--">
@@ -517,7 +553,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureScanDijkstra</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.149">measureScanDijkstra</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.177">measureScanDijkstra</a>()
                          throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -531,7 +567,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doScanCustomDijkstra</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.153">doScanCustomDijkstra</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.181">doScanCustomDijkstra</a>()</pre>
 </li>
 </ul>
 <a name="measureScanCustomDijkstra--">
@@ -540,7 +576,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureScanCustomDijkstra</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.176">measureScanCustomDijkstra</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.204">measureScanCustomDijkstra</a>()
                                throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -554,7 +590,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doScanOptDijkstra</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.179">doScanOptDijkstra</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.207">doScanOptDijkstra</a>()</pre>
 </li>
 </ul>
 <a name="measureScanOptDijkstra--">
@@ -563,7 +599,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureScanOptDijkstra</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.202">measureScanOptDijkstra</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.230">measureScanOptDijkstra</a>()
                             throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -577,7 +613,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doScanGreased</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.206">doScanGreased</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.234">doScanGreased</a>()</pre>
 </li>
 </ul>
 <a name="measureScanGreased--">
@@ -586,7 +622,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureScanGreased</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.224">measureScanGreased</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.252">measureScanGreased</a>()
                         throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -600,7 +636,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doPathDijkstra</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.228">doPathDijkstra</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.256">doPathDijkstra</a>()</pre>
 </li>
 </ul>
 <a name="measurePathDijkstra--">
@@ -609,7 +645,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measurePathDijkstra</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.255">measurePathDijkstra</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.283">measurePathDijkstra</a>()
                          throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -623,7 +659,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doTinyPathDijkstra</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.259">doTinyPathDijkstra</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.287">doTinyPathDijkstra</a>()</pre>
 </li>
 </ul>
 <a name="measureTinyPathDijkstra--">
@@ -632,7 +668,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureTinyPathDijkstra</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.283">measureTinyPathDijkstra</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.311">measureTinyPathDijkstra</a>()
                              throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -646,7 +682,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doPathCustomDijkstra</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.287">doPathCustomDijkstra</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.315">doPathCustomDijkstra</a>()</pre>
 </li>
 </ul>
 <a name="measurePathCustomDijkstra--">
@@ -655,7 +691,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measurePathCustomDijkstra</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.315">measurePathCustomDijkstra</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.343">measurePathCustomDijkstra</a>()
                                throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -669,7 +705,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doPathOptDijkstra</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.318">doPathOptDijkstra</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.346">doPathOptDijkstra</a>()</pre>
 </li>
 </ul>
 <a name="measurePathOptDijkstra--">
@@ -678,7 +714,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measurePathOptDijkstra</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.346">measurePathOptDijkstra</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.374">measurePathOptDijkstra</a>()
                             throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -692,7 +728,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doTinyPathCustomDijkstra</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.350">doTinyPathCustomDijkstra</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.378">doTinyPathCustomDijkstra</a>()</pre>
 </li>
 </ul>
 <a name="measureTinyPathCustomDijkstra--">
@@ -701,8 +737,31 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureTinyPathCustomDijkstra</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.375">measureTinyPathCustomDijkstra</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.403">measureTinyPathCustomDijkstra</a>()
                                    throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="doTinyPathOptDijkstra--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>doTinyPathOptDijkstra</h4>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.407">doTinyPathOptDijkstra</a>()</pre>
+</li>
+</ul>
+<a name="measureTinyPathOptDijkstra--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>measureTinyPathOptDijkstra</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.432">measureTinyPathOptDijkstra</a>()
+                                throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>
@@ -715,7 +774,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doScanBoxedDijkstra</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.380">doScanBoxedDijkstra</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.437">doScanBoxedDijkstra</a>()</pre>
 </li>
 </ul>
 <a name="measureScanBoxedDijkstra--">
@@ -724,7 +783,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureScanBoxedDijkstra</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.403">measureScanBoxedDijkstra</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.460">measureScanBoxedDijkstra</a>()
                               throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -738,7 +797,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doPathBoxedDijkstra</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.407">doPathBoxedDijkstra</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.464">doPathBoxedDijkstra</a>()</pre>
 </li>
 </ul>
 <a name="measurePathBoxedDijkstra--">
@@ -747,7 +806,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measurePathBoxedDijkstra</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.433">measurePathBoxedDijkstra</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.490">measurePathBoxedDijkstra</a>()
                               throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -761,7 +820,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doPathAStar</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.440">doPathAStar</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.497">doPathAStar</a>()</pre>
 </li>
 </ul>
 <a name="measurePathAStar--">
@@ -770,7 +829,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measurePathAStar</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.464">measurePathAStar</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.521">measurePathAStar</a>()
                       throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -784,7 +843,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doPathAStar2</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.468">doPathAStar2</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.525">doPathAStar2</a>()</pre>
 </li>
 </ul>
 <a name="measurePathAStar2--">
@@ -793,7 +852,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measurePathAStar2</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.492">measurePathAStar2</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.549">measurePathAStar2</a>()
                        throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -807,7 +866,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doTinyPathAStar2</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.496">doTinyPathAStar2</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.553">doTinyPathAStar2</a>()</pre>
 </li>
 </ul>
 <a name="measureTinyPathAStar2--">
@@ -816,7 +875,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureTinyPathAStar2</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.520">measureTinyPathAStar2</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.577">measureTinyPathAStar2</a>()
                            throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -830,7 +889,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doPathGDXAStar</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.559">doPathGDXAStar</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.616">doPathGDXAStar</a>()</pre>
 </li>
 </ul>
 <a name="measurePathGDXAStar--">
@@ -839,7 +898,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measurePathGDXAStar</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.590">measurePathGDXAStar</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.647">measurePathGDXAStar</a>()
                          throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -853,7 +912,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doTinyPathGDXAStar</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.594">doTinyPathGDXAStar</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.651">doTinyPathGDXAStar</a>()</pre>
 </li>
 </ul>
 <a name="measureTinyPathGDXAStar--">
@@ -862,7 +921,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureTinyPathGDXAStar</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.622">measureTinyPathGDXAStar</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.679">measureTinyPathGDXAStar</a>()
                              throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -876,7 +935,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>main</h4>
-<pre>public static&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.645">main</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)
+<pre>public static&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/DijkstraBenchmark.html#line.702">main</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)
                  throws org.openjdk.jmh.runner.RunnerException</pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>

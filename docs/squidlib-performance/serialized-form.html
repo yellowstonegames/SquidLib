@@ -143,13 +143,13 @@
 </li>
 <li class="blockList">
 <h4>physicalMap</h4>
-<pre>int[] physicalMap</pre>
+<pre>double[] physicalMap</pre>
 <div class="block">Stores which parts of the map are accessible and which are not. Should not be changed unless the actual physical
  terrain has changed. You should call initialize() with a new map instead of changing this directly.</div>
 </li>
 <li class="blockList">
 <h4>gradientMap</h4>
-<pre>int[] gradientMap</pre>
+<pre>double[] gradientMap</pre>
 <div class="block">The frequently-changing values that are often the point of using this class; goals will have a value of 0, and
  any cells that can have a character reach a goal in n steps will have a value of n. Cells that cannot be
  entered because they are solid will have a very high value equal to the WALL constant in this class, and cells
@@ -220,7 +220,7 @@
 </li>
 <li class="blockList">
 <h4>heuristics</h4>
-<pre>int[] heuristics</pre>
+<pre>double[] heuristics</pre>
 </li>
 <li class="blockList">
 <h4>cachedLongerPaths</h4>
@@ -236,7 +236,7 @@
 </li>
 <li class="blockList">
 <h4>cachedFleeMap</h4>
-<pre>int[] cachedFleeMap</pre>
+<pre>double[] cachedFleeMap</pre>
 </li>
 <li class="blockListLast">
 <h4>cachedSize</h4>

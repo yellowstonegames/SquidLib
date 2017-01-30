@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -122,7 +122,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public static class <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.365">Adjacency.RotationAdjacency</a>
+<pre>public static class <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.424">Adjacency.RotationAdjacency</a>
 extends <a href="../../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a>
 implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <dl>
@@ -252,6 +252,14 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
               int&nbsp;size)</code>&nbsp;</td>
 </tr>
 <tr id="i10" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Adjacency.RotationAdjacency.html#putAllVariants-squidpony.squidmath.IntVLA-double:A-int-double-int-">putAllVariants</a></span>(<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;list,
+              double[]&nbsp;map,
+              int&nbsp;key,
+              double&nbsp;value,
+              int&nbsp;size)</code>&nbsp;</td>
+</tr>
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Adjacency.RotationAdjacency.html#validate-int-">validate</a></span>(int&nbsp;data)</code>&nbsp;</td>
 </tr>
@@ -261,7 +269,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;squidpony.squidgrid.<a href="../../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a></h3>
-<code><a href="../../squidpony/squidgrid/Adjacency.html#addCostRule-char-double-">addCostRule</a>, <a href="../../squidpony/squidgrid/Adjacency.html#extractCoord-int-">extractCoord</a>, <a href="../../squidpony/squidgrid/Adjacency.html#putAllVariants-squidpony.squidmath.IntDoubleOrderedMap-int-double-">putAllVariants</a>, <a href="../../squidpony/squidgrid/Adjacency.html#show-int-">show</a>, <a href="../../squidpony/squidgrid/Adjacency.html#showMap-int:A-int-">showMap</a></code></li>
+<code><a href="../../squidpony/squidgrid/Adjacency.html#addCostRule-char-double-">addCostRule</a>, <a href="../../squidpony/squidgrid/Adjacency.html#extractCoord-int-">extractCoord</a>, <a href="../../squidpony/squidgrid/Adjacency.html#putAllVariants-squidpony.squidmath.IntDoubleOrderedMap-int-double-">putAllVariants</a>, <a href="../../squidpony/squidgrid/Adjacency.html#putAllVariants-squidpony.squidmath.IntVLA-double:A-int-double-">putAllVariants</a>, <a href="../../squidpony/squidgrid/Adjacency.html#show-int-">show</a>, <a href="../../squidpony/squidgrid/Adjacency.html#showMap-int:A-int-">showMap</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -290,7 +298,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>RotationAdjacency</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.RotationAdjacency.html#line.372">RotationAdjacency</a>(int&nbsp;width,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.RotationAdjacency.html#line.431">RotationAdjacency</a>(int&nbsp;width,
                          int&nbsp;height,
                          <a href="../../squidpony/squidai/DijkstraMap.Measurement.html" title="enum in squidpony.squidai">DijkstraMap.Measurement</a>&nbsp;metric)</pre>
 </li>
@@ -309,7 +317,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>extractX</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.RotationAdjacency.html#line.399">extractX</a>(int&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.RotationAdjacency.html#line.458">extractX</a>(int&nbsp;data)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/squidgrid/Adjacency.html#extractX-int-">extractX</a></code>&nbsp;in class&nbsp;<code><a href="../../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a></code></dd>
@@ -322,7 +330,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>extractY</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.RotationAdjacency.html#line.404">extractY</a>(int&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.RotationAdjacency.html#line.463">extractY</a>(int&nbsp;data)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/squidgrid/Adjacency.html#extractY-int-">extractY</a></code>&nbsp;in class&nbsp;<code><a href="../../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a></code></dd>
@@ -335,7 +343,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>extractR</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.RotationAdjacency.html#line.409">extractR</a>(int&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.RotationAdjacency.html#line.468">extractR</a>(int&nbsp;data)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/squidgrid/Adjacency.html#extractR-int-">extractR</a></code>&nbsp;in class&nbsp;<code><a href="../../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a></code></dd>
@@ -348,7 +356,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>extractN</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.RotationAdjacency.html#line.414">extractN</a>(int&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.RotationAdjacency.html#line.473">extractN</a>(int&nbsp;data)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/squidgrid/Adjacency.html#extractN-int-">extractN</a></code>&nbsp;in class&nbsp;<code><a href="../../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a></code></dd>
@@ -361,7 +369,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>composite</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.RotationAdjacency.html#line.419">composite</a>(int&nbsp;x,
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.RotationAdjacency.html#line.478">composite</a>(int&nbsp;x,
                      int&nbsp;y,
                      int&nbsp;r,
                      int&nbsp;n)</pre>
@@ -377,7 +385,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>validate</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.RotationAdjacency.html#line.426">validate</a>(int&nbsp;data)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.RotationAdjacency.html#line.485">validate</a>(int&nbsp;data)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/squidgrid/Adjacency.html#validate-int-">validate</a></code>&nbsp;in class&nbsp;<code><a href="../../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a></code></dd>
@@ -390,7 +398,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>neighborMaps</h4>
-<pre>public&nbsp;int[][][]&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.RotationAdjacency.html#line.431">neighborMaps</a>()</pre>
+<pre>public&nbsp;int[][][]&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.RotationAdjacency.html#line.490">neighborMaps</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/squidgrid/Adjacency.html#neighborMaps--">neighborMaps</a></code>&nbsp;in class&nbsp;<code><a href="../../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a></code></dd>
@@ -403,7 +411,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>isBlocked</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.RotationAdjacency.html#line.453">isBlocked</a>(int&nbsp;start,
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.RotationAdjacency.html#line.512">isBlocked</a>(int&nbsp;start,
                          int&nbsp;direction,
                          int[][][]&nbsp;neighbors,
                          double[]&nbsp;map,
@@ -420,7 +428,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>portal</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.RotationAdjacency.html#line.462">portal</a>(int[][][]&nbsp;neighbors,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.RotationAdjacency.html#line.521">portal</a>(int[][][]&nbsp;neighbors,
                    int&nbsp;inputPortal,
                    int&nbsp;outputPortal,
                    boolean&nbsp;twoWay)</pre>
@@ -436,7 +444,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>addCostRule</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.RotationAdjacency.html#line.482">addCostRule</a>(char&nbsp;tile,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.RotationAdjacency.html#line.541">addCostRule</a>(char&nbsp;tile,
                                        double&nbsp;cost,
                                        boolean&nbsp;isRotation)</pre>
 <dl>
@@ -448,16 +456,33 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <a name="putAllVariants-squidpony.squidmath.IntDoubleOrderedMap-int-double-int-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>putAllVariants</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.RotationAdjacency.html#line.490">putAllVariants</a>(<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;map,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.RotationAdjacency.html#line.551">putAllVariants</a>(<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;map,
                                           int&nbsp;key,
                                           double&nbsp;value,
                                           int&nbsp;size)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/squidgrid/Adjacency.html#putAllVariants-squidpony.squidmath.IntDoubleOrderedMap-int-double-int-">putAllVariants</a></code>&nbsp;in class&nbsp;<code><a href="../../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="putAllVariants-squidpony.squidmath.IntVLA-double:A-int-double-int-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>putAllVariants</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.RotationAdjacency.html#line.588">putAllVariants</a>(<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;list,
+                           double[]&nbsp;map,
+                           int&nbsp;key,
+                           double&nbsp;value,
+                           int&nbsp;size)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../squidpony/squidgrid/Adjacency.html#putAllVariants-squidpony.squidmath.IntVLA-double:A-int-double-int-">putAllVariants</a></code>&nbsp;in class&nbsp;<code><a href="../../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a></code></dd>
 </dl>
 </li>
 </ul>
