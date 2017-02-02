@@ -465,4 +465,8 @@ public class IntVLA implements Serializable, Cloneable {
     public static IntVLA with (int... array) {
         return new IntVLA(array);
     }
+
+    public boolean isEmpty() {
+        return size == 0;
+    }
 }

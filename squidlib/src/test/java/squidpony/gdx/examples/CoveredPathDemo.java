@@ -75,7 +75,7 @@ public class CoveredPathDemo extends ApplicationAdapter {
         cellWidth = 6;
         cellHeight = 12;
         display = new SquidLayers(width, height, cellWidth, cellHeight, DefaultResources.narrowName);
-        display.setAnimationDuration(0.09f);
+        display.setAnimationDuration(0.2f);
         display.addExtraLayer();
         stage = new Stage(new ScreenViewport(), batch);
 
@@ -324,12 +324,7 @@ public class CoveredPathDemo extends ApplicationAdapter {
                 visibleTargets.add(Coord.get(creature.entity.gridX, creature.entity.gridY));
             }
         }
-        Coord targetCell = null;
-        for(Coord vt : visibleTargets)
-        {
-            targetCell = vt;
-            break;
-        }
+        Coord targetCell = visibleTargets.getAt(0);
 
         if(targetCell != null) {
             whichTint.a = 0.5f;
@@ -343,6 +338,7 @@ public class CoveredPathDemo extends ApplicationAdapter {
                         successfulKill = ix;
                     }
                     mon.entity.setText(Integer.toString(currentHealth));
+                    break;
                 }
                 ix++;
             }
@@ -499,10 +495,10 @@ public class CoveredPathDemo extends ApplicationAdapter {
             framesWithoutAnimation = 0;
         }
 
-        // stage has its own batch and must be explicitly told to draw(). this also causes it to act().
+        // stage has its own batch and must be explicitly told to draw().
         stage.draw();
 
-        // disolay does not draw all AnimatedEntities by default.
+        // display does not draw all AnimatedEntities by default.
         batch.begin();
         for(AnimatedEntity mon : display.getAnimatedEntities(0)) {
             display.drawActor(batch, 1.0f, mon, 0);

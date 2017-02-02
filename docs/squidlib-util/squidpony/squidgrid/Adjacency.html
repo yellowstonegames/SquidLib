@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":6,"i2":6,"i3":10,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":10,"i12":6,"i13":10,"i14":6,"i15":10,"i16":10,"i17":6};
+var methods = {"i0":10,"i1":6,"i2":6,"i3":10,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":10,"i12":6,"i13":10,"i14":6,"i15":10,"i16":6,"i17":10,"i18":10,"i19":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -394,15 +394,28 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
               int&nbsp;size)</code>&nbsp;</td>
 </tr>
 <tr id="i15" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Adjacency.html#resetAllVariants-double:A-int:A-double:A-">resetAllVariants</a></span>(double[]&nbsp;map,
+                int[]&nbsp;keys,
+                double[]&nbsp;values)</code>&nbsp;</td>
+</tr>
+<tr id="i16" class="altColor">
+<td class="colFirst"><code>abstract void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Adjacency.html#resetAllVariants-double:A-int:A-double:A-int-">resetAllVariants</a></span>(double[]&nbsp;map,
+                int[]&nbsp;keys,
+                double[]&nbsp;values,
+                int&nbsp;size)</code>&nbsp;</td>
+</tr>
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Adjacency.html#show-int-">show</a></span>(int&nbsp;data)</code>&nbsp;</td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Adjacency.html#showMap-int:A-int-">showMap</a></span>(int[]&nbsp;map,
        int&nbsp;r)</code>&nbsp;</td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>abstract boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Adjacency.html#validate-int-">validate</a></span>(int&nbsp;data)</code>&nbsp;</td>
 </tr>
@@ -567,7 +580,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>invertAdjacent</h4>
-<pre>public&nbsp;int[] <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.164">invertAdjacent</a></pre>
+<pre>public&nbsp;int[] <a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.171">invertAdjacent</a></pre>
 </li>
 </ul>
 </li>
@@ -764,13 +777,36 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
                                     int&nbsp;size)</pre>
 </li>
 </ul>
+<a name="resetAllVariants-double:A-int:A-double:A-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>resetAllVariants</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.164">resetAllVariants</a>(double[]&nbsp;map,
+                             int[]&nbsp;keys,
+                             double[]&nbsp;values)</pre>
+</li>
+</ul>
+<a name="resetAllVariants-double:A-int:A-double:A-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>resetAllVariants</h4>
+<pre>public abstract&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.169">resetAllVariants</a>(double[]&nbsp;map,
+                                      int[]&nbsp;keys,
+                                      double[]&nbsp;values,
+                                      int&nbsp;size)</pre>
+</li>
+</ul>
 <a name="show-int-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>show</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.166">show</a>(int&nbsp;data)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.173">show</a>(int&nbsp;data)</pre>
 </li>
 </ul>
 <a name="showMap-int:A-int-">
@@ -779,7 +815,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>showMap</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.180">showMap</a>(int[]&nbsp;map,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Adjacency.html#line.187">showMap</a>(int[]&nbsp;map,
                       int&nbsp;r)</pre>
 </li>
 </ul>

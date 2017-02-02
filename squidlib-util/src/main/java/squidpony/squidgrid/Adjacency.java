@@ -161,6 +161,13 @@ public abstract class Adjacency implements Serializable {
     }
     public abstract void putAllVariants(IntVLA list, double[] map, int key, double value, int size);
 
+    public void resetAllVariants(double[] map, int[] keys, double[] values)
+    {
+        resetAllVariants(map, keys, values,1);
+    }
+
+    public abstract void resetAllVariants(double[] map, int[] keys, double[] values, int size);
+
     public int[] invertAdjacent;
 
     public String show(int data)
@@ -392,6 +399,36 @@ public abstract class Adjacency implements Serializable {
                                 if (comp >= 0 && !list.contains(comp)) {
                                     list.add(comp);
                                     map[comp] = value;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void resetAllVariants(double[] map, int[] keys, double[] values, int size) {
+            int key;
+            for (int i = 0; i < keys.length; i++) {
+                key = keys[i];
+                int baseX = key % width, baseY = key / width, comp;
+                if (key >= 0 && baseY < height) {
+                    if (size < 0) {
+                        for (int x = size + 1; x <= 0; x++) {
+                            for (int y = size + 1; y <= 0; y++) {
+                                comp = composite(baseX + x, baseY + y, 0, 0);
+                                if (comp >= 0) {
+                                    map[comp] = values[comp];
+                                }
+                            }
+                        }
+                    } else {
+                        for (int x = 0; x < size; x++) {
+                            for (int y = 0; y < size; y++) {
+                                comp = composite(baseX + x, baseY + y, 0, 0);
+                                if (comp >= 0) {
+                                    map[comp] = values[comp];
                                 }
                             }
                         }
@@ -659,6 +696,47 @@ public abstract class Adjacency implements Serializable {
                                     if(comp >= 0 && !list.contains(comp)) {
                                         list.add(comp);
                                         map[comp] = value;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void resetAllVariants(double[] map, int[] keys, double[] values, int size) {
+            int key;
+            for (int i = 0; i < keys.length; i++) {
+                key = keys[i];
+                int baseX = (key >>> shift) % width, baseY = (key >>> shift) / width, comp;
+                if (key >= 0 && baseY < height) {
+                    if (size == 1) {
+                        for (int r = 0; r < rotations; r++) {
+                            comp = composite(baseX, baseY, r, 0);
+                            if (comp >= 0) {
+                                map[comp] = values[comp];
+                            }
+                        }
+                    } else if (size < 0) {
+                        for (int x = size + 1; x <= 0; x++) {
+                            for (int y = size + 1; y <= 0; y++) {
+                                for (int r = 0; r < rotations; r++) {
+                                    comp = composite(baseX + x, baseY + y, r, 0);
+                                    if (comp >= 0) {
+                                        map[comp] = values[comp];
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        for (int x = 0; x < size; x++) {
+                            for (int y = 0; y < size; y++) {
+                                for (int r = 0; r < rotations; r++) {
+                                    comp = composite(baseX + x, baseY + y, r, 0);
+                                    if (comp >= 0) {
+                                        map[comp] = values[comp];
                                     }
                                 }
                             }

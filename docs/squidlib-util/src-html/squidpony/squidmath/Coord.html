@@ -59,12 +59,12 @@
 <span class="sourceLineNo">051</span>    {<a name="line.51"></a>
 <span class="sourceLineNo">052</span>        this(0, 0);<a name="line.52"></a>
 <span class="sourceLineNo">053</span>    }<a name="line.53"></a>
-<span class="sourceLineNo">054</span>    protected Coord(int x, int y)<a name="line.54"></a>
+<span class="sourceLineNo">054</span>    protected Coord(final int x, final int y)<a name="line.54"></a>
 <span class="sourceLineNo">055</span>    {<a name="line.55"></a>
 <span class="sourceLineNo">056</span>        this.x = x;<a name="line.56"></a>
 <span class="sourceLineNo">057</span>        this.y = y;<a name="line.57"></a>
 <span class="sourceLineNo">058</span>    }<a name="line.58"></a>
-<span class="sourceLineNo">059</span>    public static Coord get(int x, int y)<a name="line.59"></a>
+<span class="sourceLineNo">059</span>    public static Coord get(final int x, final int y)<a name="line.59"></a>
 <span class="sourceLineNo">060</span>    {<a name="line.60"></a>
 <span class="sourceLineNo">061</span>        if(x &gt;= -3 &amp;&amp; y &gt;= -3 &amp;&amp; x &lt; POOL.length - 3 &amp;&amp; y &lt; POOL[x + 3].length - 3)<a name="line.61"></a>
 <span class="sourceLineNo">062</span>            return POOL[x + 3][y + 3];<a name="line.62"></a>

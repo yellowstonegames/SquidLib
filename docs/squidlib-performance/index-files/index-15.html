@@ -88,6 +88,14 @@
 <dd>
 <div class="block">Recalculate the Dijkstra map for a creature that is potentially larger than 1x1 cell and return it.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#scan-java.util.Collection-">scan(Collection&lt;Coord&gt;)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Recalculate the Dijkstra map and return it.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#scan-java.util.Collection-int-">scan(Collection&lt;Coord&gt;, int)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Recalculate the Dijkstra map for a creature that is potentially larger than 1x1 cell and return it.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/OptDijkstraMap.html#scan-int:A-">scan(int[])</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/OptDijkstraMap.html" title="class in squidpony.performance.alternate">OptDijkstraMap</a></dt>
 <dd>
 <div class="block">Recalculate the CustomDijkstra map and return it.</div>
@@ -104,12 +112,28 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/WaypointBenchmark.html#serpent">serpent</a></span> - Static variable in class squidpony.performance.<a href="../squidpony/performance/WaypointBenchmark.html" title="class in squidpony.performance">WaypointBenchmark</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#setBlockingRequirement-int-">setBlockingRequirement(int)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">If you want obstacles present in orthogonal cells to prevent pathfinding along the diagonal between them, this
+ can be used to make thin diagonal walls non-viable to move through, or even to prevent diagonal movement if any
+ one obstacle is orthogonally adjacent to both the start and target cell of a diagonal move.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#setCost-squidpony.squidmath.Coord-double-">setCost(Coord, double)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
 <dd>
 <div class="block">Marks a cell's cost for pathfinding as cost, unless the cell is a wall or unreachable area (then it always sets
  the cost to the value of the WALL field).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#setCost-int-int-double-">setCost(int, int, double)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
+<dd>
+<div class="block">Marks a cell's cost for pathfinding as cost, unless the cell is a wall or unreachable area (then it always sets
+ the cost to the value of the WALL field).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#setCost-squidpony.squidmath.Coord-double-">setCost(Coord, double)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Marks a cell's cost for pathfinding as cost, unless the cell is a wall or unreachable area (then it always sets
+ the cost to the value of the WALL field).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#setCost-int-int-double-">setCost(int, int, double)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
 <dd>
 <div class="block">Marks a cell's cost for pathfinding as cost, unless the cell is a wall or unreachable area (then it always sets
  the cost to the value of the WALL field).</div>
@@ -124,6 +148,10 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#setFresh-squidpony.squidmath.Coord-double-">setFresh(Coord, double)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#setFresh-int-int-double-">setFresh(int, int, double)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#setFresh-squidpony.squidmath.Coord-double-">setFresh(Coord, double)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/OptDijkstraMap.html#setFresh-int-double-">setFresh(int, double)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/OptDijkstraMap.html" title="class in squidpony.performance.alternate">OptDijkstraMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#setGoal-int-int-">setGoal(int, int)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
@@ -134,11 +162,31 @@
 <dd>
 <div class="block">Marks a cell as a goal for pathfinding, unless the cell is a wall or unreachable area (then it does nothing).</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#setGoal-int-int-">setGoal(int, int)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Marks a cell as a goal for pathfinding, unless the cell is a wall or unreachable area (then it does nothing).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#setGoal-squidpony.squidmath.Coord-">setGoal(Coord)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Marks a cell as a goal for pathfinding, unless the cell is a wall or unreachable area (then it does nothing).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/OptDijkstraMap.html#setGoal-int-">setGoal(int)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/OptDijkstraMap.html" title="class in squidpony.performance.alternate">OptDijkstraMap</a></dt>
 <dd>
 <div class="block">Marks a cell as a goal for pathfinding, unless the cell is a wall or unreachable area (then it does nothing).</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#setGoals-squidpony.squidmath.GreasedRegion-">setGoals(GreasedRegion)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Marks many cells as goals for pathfinding, ignoring cells in walls or unreachable areas.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#setGoals-java.lang.Iterable-">setGoals(Iterable&lt;Coord&gt;)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Marks many cells as goals for pathfinding, ignoring cells in walls or unreachable areas.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#setOccupied-int-int-">setOccupied(int, int)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
+<dd>
+<div class="block">Marks a specific cell in gradientMap as completely impossible to enter.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#setOccupied-int-int-">setOccupied(int, int)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
 <dd>
 <div class="block">Marks a specific cell in gradientMap as completely impossible to enter.</div>
 </dd>

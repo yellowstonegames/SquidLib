@@ -81,6 +81,55 @@
 <div class="block">The neighbors map, as produced by adjacency; can be modified by passing neighbors as the first argument to
  <code>Adjacency.portal(int[][][], int, int, boolean)</code> if you want to create portals between non-adjacent cells.</div>
 </dd>
+<dt><a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate"><span class="typeNameLink">NextDijkstraMap</span></a> - Class in <a href="../squidpony/performance/alternate/package-summary.html">squidpony.performance.alternate</a></dt>
+<dd>
+<div class="block">An alternative to AStarSearch when you want to fully explore a search space, or when you want a gradient floodfill.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#NextDijkstraMap--">NextDijkstraMap()</a></span> - Constructor for class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Construct a DijkstraMap without a level to actually scan.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#NextDijkstraMap-squidpony.squidmath.RNG-">NextDijkstraMap(RNG)</a></span> - Constructor for class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Construct a DijkstraMap without a level to actually scan.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#NextDijkstraMap-double:A:A-">NextDijkstraMap(double[][])</a></span> - Constructor for class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Used to construct a DijkstraMap from the output of another.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#NextDijkstraMap-double:A:A-squidpony.performance.alternate.NextDijkstraMap.Measurement-">NextDijkstraMap(double[][], NextDijkstraMap.Measurement)</a></span> - Constructor for class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Used to construct a DijkstraMap from the output of another, specifying a distance calculation.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#NextDijkstraMap-char:A:A-">NextDijkstraMap(char[][])</a></span> - Constructor for class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
+ char[][] where '#' means a wall and anything else is a walkable tile.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#NextDijkstraMap-char:A:A-squidpony.squidmath.RNG-">NextDijkstraMap(char[][], RNG)</a></span> - Constructor for class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
+ char[][] where '#' means a wall and anything else is a walkable tile.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#NextDijkstraMap-char:A:A-char-">NextDijkstraMap(char[][], char)</a></span> - Constructor for class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
+ char[][] where one char means a wall and anything else is a walkable tile.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#NextDijkstraMap-char:A:A-squidpony.performance.alternate.NextDijkstraMap.Measurement-">NextDijkstraMap(char[][], NextDijkstraMap.Measurement)</a></span> - Constructor for class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
+ char[][] where '#' means a wall and anything else is a walkable tile.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#NextDijkstraMap-char:A:A-squidpony.performance.alternate.NextDijkstraMap.Measurement-squidpony.squidmath.RNG-">NextDijkstraMap(char[][], NextDijkstraMap.Measurement, RNG)</a></span> - Constructor for class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
+ char[][] where '#' means a wall and anything else is a walkable tile.</div>
+</dd>
+<dt><a href="../squidpony/performance/alternate/NextDijkstraMap.Measurement.html" title="enum in squidpony.performance.alternate"><span class="typeNameLink">NextDijkstraMap.Measurement</span></a> - Enum in <a href="../squidpony/performance/alternate/package-summary.html">squidpony.performance.alternate</a></dt>
+<dd>
+<div class="block">The type of heuristic to use.</div>
+</dd>
 <dt><a href="../squidpony/performance/NoiseBenchmark.html" title="class in squidpony.performance"><span class="typeNameLink">NoiseBenchmark</span></a> - Class in <a href="../squidpony/performance/package-summary.html">squidpony.performance</a></dt>
 <dd>
 <div class="block">Generating 64 million points of noise, each run

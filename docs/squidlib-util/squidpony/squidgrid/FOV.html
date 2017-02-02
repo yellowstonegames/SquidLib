@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":9,"i8":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":9,"i9":9,"i10":9,"i11":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -257,6 +257,16 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>static double[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/FOV.html#calculateFOV-double:A:A-double:A:A-int-int-">calculateFOV</a></span>(double[][]&nbsp;resistanceMap,
+            double[][]&nbsp;light,
+            int&nbsp;startx,
+            int&nbsp;starty)</code>
+<div class="block">Calculates the Field Of View for the provided map from the given x, y
+ coordinates.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>double[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/FOV.html#calculateFOV-double:A:A-int-int-">calculateFOV</a></span>(double[][]&nbsp;resistanceMap,
             int&nbsp;startx,
@@ -265,7 +275,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
  coordinates.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>double[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/FOV.html#calculateFOV-double:A:A-int-int-double-">calculateFOV</a></span>(double[][]&nbsp;resistanceMap,
             int&nbsp;startx,
@@ -275,7 +285,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
  coordinates.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>double[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/FOV.html#calculateFOV-double:A:A-int-int-double-squidpony.squidgrid.Radius-">calculateFOV</a></span>(double[][]&nbsp;resistanceMap,
             int&nbsp;startX,
@@ -286,7 +296,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
  coordinates.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>double[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/FOV.html#calculateFOV-double:A:A-int-int-double-squidpony.squidgrid.Radius-double-double-">calculateFOV</a></span>(double[][]&nbsp;resistanceMap,
             int&nbsp;startX,
@@ -299,7 +309,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
  coordinates.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>double[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/FOV.html#calculateLOSMap-double:A:A-int-int-">calculateLOSMap</a></span>(double[][]&nbsp;resistanceMap,
                int&nbsp;startX,
@@ -308,18 +318,41 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
  mixVisibleFOVs() to limit extra light sources to those visible from the starting point.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>static double[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/FOV.html#mixVisibleFOVs-double:A:A-double:A:A...-">mixVisibleFOVs</a></span>(double[][]&nbsp;losMap,
               double[][]...&nbsp;maps)</code>
 <div class="block">Adds together multiple FOV maps, but only adds to a position if it is visible in the given LOS map.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static double[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/FOV.html#mixVisibleFOVs-double:A:A-java.lang.Iterable-">mixVisibleFOVs</a></span>(double[][]&nbsp;losMap,
               <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;double[][]&gt;&nbsp;maps)</code>
 <div class="block">Adds together multiple FOV maps, but only adds to a position if it is visible in the given LOS map.</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>static double[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/FOV.html#reuseFOV-double:A:A-double:A:A-int-int-double-">reuseFOV</a></span>(double[][]&nbsp;resistanceMap,
+        double[][]&nbsp;light,
+        int&nbsp;startx,
+        int&nbsp;starty,
+        double&nbsp;radius)</code>
+<div class="block">Calculates the Field Of View for the provided map from the given x, y
+ coordinates.</div>
+</td>
+</tr>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code>static double[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/FOV.html#reuseFOV-double:A:A-double:A:A-int-int-double-squidpony.squidgrid.Radius-">reuseFOV</a></span>(double[][]&nbsp;resistanceMap,
+        double[][]&nbsp;light,
+        int&nbsp;startX,
+        int&nbsp;startY,
+        double&nbsp;radius,
+        <a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusTechnique)</code>
+<div class="block">Calculates the Field Of View for the provided map from the given x, y
+ coordinates.</div>
 </td>
 </tr>
 </table>
@@ -540,7 +573,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>calculateFOV</h4>
-<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.234">calculateFOV</a>(double[][]&nbsp;resistanceMap,
+<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.232">calculateFOV</a>(double[][]&nbsp;resistanceMap,
                                int&nbsp;startX,
                                int&nbsp;startY,
                                double&nbsp;radius,
@@ -569,13 +602,111 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 </dl>
 </li>
 </ul>
+<a name="calculateFOV-double:A:A-double:A:A-int-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>calculateFOV</h4>
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.305">calculateFOV</a>(double[][]&nbsp;resistanceMap,
+                                      double[][]&nbsp;light,
+                                      int&nbsp;startx,
+                                      int&nbsp;starty)</pre>
+<div class="block">Calculates the Field Of View for the provided map from the given x, y
+ coordinates. Assigns to, and returns, a light map where the values
+ represent a percentage of fully lit. Always uses shadowcasting FOV,
+ which allows this method to be static since it doesn't need to keep any
+ state around, and can reuse the state the user gives it via the
+ <code>light</code> parameter.
+ <br>
+ The starting point for the calculation is considered to be at the center
+ of the origin cell. Radius determinations based on Euclidean
+ calculations. The light will be treated as having infinite possible
+ radius.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>resistanceMap</code> - the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()</dd>
+<dd><code>startx</code> - the horizontal component of the starting location</dd>
+<dd><code>starty</code> - the vertical component of the starting location</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the computed light grid</dd>
+</dl>
+</li>
+</ul>
+<a name="reuseFOV-double:A:A-double:A:A-int-int-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>reuseFOV</h4>
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.327">reuseFOV</a>(double[][]&nbsp;resistanceMap,
+                                  double[][]&nbsp;light,
+                                  int&nbsp;startx,
+                                  int&nbsp;starty,
+                                  double&nbsp;radius)</pre>
+<div class="block">Calculates the Field Of View for the provided map from the given x, y
+ coordinates. Assigns to, and returns, a light map where the values
+ represent a percentage of fully lit. Always uses shadowcasting FOV,
+ which allows this method to be static since it doesn't need to keep any
+ state around, and can reuse the state the user gives it via the
+ <code>light</code> parameter.
+ <br>
+ The starting point for the calculation is considered to be at the center
+ of the origin cell. Radius determinations based on Euclidean
+ calculations.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>resistanceMap</code> - the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()</dd>
+<dd><code>startx</code> - the horizontal component of the starting location</dd>
+<dd><code>starty</code> - the vertical component of the starting location</dd>
+<dd><code>radius</code> - the distance the light will extend to</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the computed light grid</dd>
+</dl>
+</li>
+</ul>
+<a name="reuseFOV-double:A:A-double:A:A-int-int-double-squidpony.squidgrid.Radius-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>reuseFOV</h4>
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.351">reuseFOV</a>(double[][]&nbsp;resistanceMap,
+                                  double[][]&nbsp;light,
+                                  int&nbsp;startX,
+                                  int&nbsp;startY,
+                                  double&nbsp;radius,
+                                  <a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusTechnique)</pre>
+<div class="block">Calculates the Field Of View for the provided map from the given x, y
+ coordinates. Assigns to, and returns, a light map where the values
+ represent a percentage of fully lit. Always uses shadowcasting FOV,
+ which allows this method to be static since it doesn't need to keep any
+ state around, and can reuse the state the user gives it via the
+ <code>light</code> parameter.
+ <br>
+ The starting point for the calculation is considered to be at the center
+ of the origin cell. Radius determinations are determined by the provided
+ RadiusStrategy.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>resistanceMap</code> - the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()</dd>
+<dd><code>light</code> - the grid of cells to assign to; may have existing values, and 0.0 is used to mean "unlit"</dd>
+<dd><code>startX</code> - the horizontal component of the starting location</dd>
+<dd><code>startY</code> - the vertical component of the starting location</dd>
+<dd><code>radius</code> - the distance the light will extend to</dd>
+<dd><code>radiusTechnique</code> - provides a means to calculate the radius as desired</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the computed light grid, which is the same 2D array as the value assigned to <code>light</code></dd>
+</dl>
+</li>
+</ul>
 <a name="addFOVs-double:A:A...-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>addFOVs</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.591">addFOVs</a>(double[][]...&nbsp;maps)</pre>
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.676">addFOVs</a>(double[][]...&nbsp;maps)</pre>
 <div class="block">Adds multiple FOV maps together in the simplest way possible; does not check line-of-sight between FOV maps.
  Clamps the highest value for any single position at 1.0.</div>
 <dl>
@@ -592,7 +723,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>addFOVs</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.619">addFOVs</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;double[][]&gt;&nbsp;maps)</pre>
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.704">addFOVs</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;double[][]&gt;&nbsp;maps)</pre>
 <div class="block">Adds multiple FOV maps together in the simplest way possible; does not check line-of-sight between FOV maps.
  Clamps the highest value for any single position at 1.0.</div>
 <dl>
@@ -610,7 +741,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>mixVisibleFOVs</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.653">mixVisibleFOVs</a>(double[][]&nbsp;losMap,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.738">mixVisibleFOVs</a>(double[][]&nbsp;losMap,
                                         double[][]...&nbsp;maps)</pre>
 <div class="block">Adds together multiple FOV maps, but only adds to a position if it is visible in the given LOS map. Useful if
  you want distant lighting to be visible only if the player has line-of-sight to a lit cell. Typically the LOS map
@@ -631,7 +762,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>mixVisibleFOVs</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.683">mixVisibleFOVs</a>(double[][]&nbsp;losMap,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.768">mixVisibleFOVs</a>(double[][]&nbsp;losMap,
                                         <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;double[][]&gt;&nbsp;maps)</pre>
 <div class="block">Adds together multiple FOV maps, but only adds to a position if it is visible in the given LOS map. Useful if
  you want distant lighting to be visible only if the player has line-of-sight to a lit cell. Typically the LOS map
@@ -652,7 +783,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>calculateLOSMap</h4>
-<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.719">calculateLOSMap</a>(double[][]&nbsp;resistanceMap,
+<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.804">calculateLOSMap</a>(double[][]&nbsp;resistanceMap,
                                   int&nbsp;startX,
                                   int&nbsp;startY)</pre>
 <div class="block">Calculates what cells are visible from (startX,startY) using the given resistanceMap; this can be given to

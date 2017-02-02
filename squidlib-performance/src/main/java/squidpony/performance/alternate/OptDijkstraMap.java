@@ -564,8 +564,7 @@ public class OptDijkstraMap implements Serializable {
         if (!initialized) return null;
         Adjacency adjacency = this.adjacency;
         int[][] fromNeighbors = neighbors[0];
-        int near, cen, mid, neighborCount = fromNeighbors.length, rotations = adjacency.rotations,
-                gradLength = gradientMap.length;
+        int near, cen, mid, neighborCount = fromNeighbors.length;
 
         if (impassable != null) {
             if(usable > impassable.length)
@@ -637,6 +636,8 @@ public class OptDijkstraMap implements Serializable {
             }
         }
 
+        if (impassable != null)
+            adjacency.resetAllVariants(gradientMap, impassable, physicalMap);
         double[] gradientClone = new double[maxLength];
         for (int l = 0; l < maxLength; l++) {
             if (gradientMap[l] == FLOOR) {
@@ -692,8 +693,7 @@ public class OptDijkstraMap implements Serializable {
         if (!initialized) return null;
         Adjacency adjacency = this.adjacency;
         int[][] fromNeighbors = neighbors[0];
-        int near, cen, mid, neighborCount = fromNeighbors.length, rotations = adjacency.rotations,
-                gradLength = gradientMap.length;
+        int near, cen, mid, neighborCount = fromNeighbors.length;
 
         if (impassable != null) {
             if(usable > impassable.length)
@@ -766,6 +766,8 @@ public class OptDijkstraMap implements Serializable {
             }
         }
 
+        if (impassable != null)
+            adjacency.resetAllVariants(gradientMap, impassable, physicalMap);
         double[] gradientClone = new double[maxLength];
         for (int l = 0; l < maxLength; l++) {
             if (gradientMap[l] == FLOOR) {

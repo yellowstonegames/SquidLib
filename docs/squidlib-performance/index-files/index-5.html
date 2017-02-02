@@ -104,6 +104,19 @@
  a distance from a goal that is at least equal to minPreferredRange and no more than maxPreferredRange,
  which may go further from a goal if the minPreferredRange has not been met at the current distance.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#findAttackPath-int-int-squidpony.squidgrid.LOS-java.util.Collection-java.util.Collection-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findAttackPath(int, int, LOS, Collection&lt;Coord&gt;, Collection&lt;Coord&gt;, Coord, Coord...)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
+ of Coord positions (using the current measurement) needed to get closer to a goal, until preferredRange is
+ reached, or further from a goal if the preferredRange has not been met at the current distance.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#findAttackPath-int-int-int-squidpony.squidgrid.LOS-java.util.Collection-java.util.Collection-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findAttackPath(int, int, int, LOS, Collection&lt;Coord&gt;, Collection&lt;Coord&gt;, Coord, Coord...)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
+ of Coord positions (using the current measurement) needed to get closer to a goal, until a cell is reached with
+ a distance from a goal that is at least equal to minPreferredRange and no more than maxPreferredRange,
+ which may go further from a goal if the minPreferredRange has not been met at the current distance.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#findAttackPathLarge-int-int-int-squidpony.squidgrid.LOS-java.util.Set-java.util.Set-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findAttackPathLarge(int, int, int, LOS, Set&lt;Coord&gt;, Set&lt;Coord&gt;, Coord, Coord...)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
 <dd>
 <div class="block">Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
@@ -111,6 +124,19 @@
  reached, or further from a goal if the preferredRange has not been met at the current distance.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#findAttackPathLarge-int-int-int-int-squidpony.squidgrid.LOS-java.util.Set-java.util.Set-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findAttackPathLarge(int, int, int, int, LOS, Set&lt;Coord&gt;, Set&lt;Coord&gt;, Coord, Coord...)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
+<dd>
+<div class="block">Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
+ of Coord positions (using the current measurement) needed to get closer to a goal, until a cell is reached with
+ a distance from a goal that is at least equal to minPreferredRange and no more than maxPreferredRange,
+ which may go further from a goal if the minPreferredRange has not been met at the current distance.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#findAttackPathLarge-int-int-int-squidpony.squidgrid.LOS-java.util.Collection-java.util.Collection-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findAttackPathLarge(int, int, int, LOS, Collection&lt;Coord&gt;, Collection&lt;Coord&gt;, Coord, Coord...)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
+ of Coord positions (using the current measurement) needed to get closer to a goal, until preferredRange is
+ reached, or further from a goal if the preferredRange has not been met at the current distance.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#findAttackPathLarge-int-int-int-int-squidpony.squidgrid.LOS-java.util.Collection-java.util.Collection-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findAttackPathLarge(int, int, int, int, LOS, Collection&lt;Coord&gt;, Collection&lt;Coord&gt;, Coord, Coord...)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
 <dd>
 <div class="block">Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
  of Coord positions (using the current measurement) needed to get closer to a goal, until a cell is reached with
@@ -163,6 +189,18 @@
  of Coord positions (using Manhattan distance) needed to get further from the closest fearSources, meant
  for running away.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#findFleePath-int-double-java.util.Collection-java.util.Collection-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findFleePath(int, double, Collection&lt;Coord&gt;, Collection&lt;Coord&gt;, Coord, Coord...)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Scans the dungeon using DijkstraMap.scan with the listed fearSources and start point, and returns a list
+ of Coord positions (using Manhattan distance) needed to get further from the closest fearSources, meant
+ for running away.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#findFleePath-int-int-double-java.util.Collection-java.util.Collection-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findFleePath(int, int, double, Collection&lt;Coord&gt;, Collection&lt;Coord&gt;, Coord, Coord...)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Scans the dungeon using DijkstraMap.scan or DijkstraMap.partialScan with the listed fearSources and start
+ point, and returns a list of Coord positions (using this DijkstraMap's metric) needed to get further from
+ the closest fearSources, meant for running away.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/OptDijkstraMap.html#findFleePath-int-double-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findFleePath(int, double, IntVLA, IntVLA, int, int...)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/OptDijkstraMap.html" title="class in squidpony.performance.alternate">OptDijkstraMap</a></dt>
 <dd>
 <div class="block">Scans the dungeon using CustomDijkstraMap.scan with the listed fearSources and start point, and returns a list
@@ -181,7 +219,17 @@
  of Coord positions (using Manhattan distance) needed to get further from the closest fearSources, meant
  for running away.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#findFleePathLarge-int-int-double-java.util.Collection-java.util.Collection-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findFleePathLarge(int, int, double, Collection&lt;Coord&gt;, Collection&lt;Coord&gt;, Coord, Coord...)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Scans the dungeon using DijkstraMap.scan with the listed fearSources and start point, and returns a list
+ of Coord positions (using Manhattan distance) needed to get further from the closest fearSources, meant
+ for running away.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#findMeasurement-squidpony.squidgrid.Radius-">findMeasurement(Radius)</a></span> - Static method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
+<dd>
+<div class="block">Gets the appropriate DijkstraMap.Measurement to pass to a constructor if you already have a Radius.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#findMeasurement-squidpony.squidgrid.Radius-">findMeasurement(Radius)</a></span> - Static method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
 <dd>
 <div class="block">Gets the appropriate DijkstraMap.Measurement to pass to a constructor if you already have a Radius.</div>
 </dd>
@@ -197,7 +245,20 @@
 <dd>
 <div class="block">Recalculate the Dijkstra map until it reaches a Coord in targets, then returns the first target found.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#findNearest-squidpony.squidmath.Coord-java.util.Collection-">findNearest(Coord, Collection&lt;Coord&gt;)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Recalculate the Dijkstra map until it reaches a Coord in targets, then returns the first target found.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#findNearest-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findNearest(Coord, Coord...)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Recalculate the Dijkstra map until it reaches a Coord in targets, then returns the first target found.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#findNearestMultiple-squidpony.squidmath.Coord-int-java.util.Set-">findNearestMultiple(Coord, int, Set&lt;Coord&gt;)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
+<dd>
+<div class="block">Recalculate the Dijkstra map until it reaches a Coord in targets, then returns the first several targets found,
+ up to limit or less if the map is fully searched without finding enough.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#findNearestMultiple-squidpony.squidmath.Coord-int-java.util.Collection-">findNearestMultiple(Coord, int, Collection&lt;Coord&gt;)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
 <dd>
 <div class="block">Recalculate the Dijkstra map until it reaches a Coord in targets, then returns the first several targets found,
  up to limit or less if the map is fully searched without finding enough.</div>
@@ -207,6 +268,18 @@
 <div class="block">Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
  of Coord positions (using the current measurement) needed to get closer to the closest reachable
  goal.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#findPath-int-java.util.Collection-java.util.Collection-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findPath(int, Collection&lt;Coord&gt;, Collection&lt;Coord&gt;, Coord, Coord...)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
+ of Coord positions (using the current measurement) needed to get closer to the closest reachable
+ goal.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#findPath-int-int-java.util.Collection-java.util.Collection-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findPath(int, int, Collection&lt;Coord&gt;, Collection&lt;Coord&gt;, Coord, Coord...)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Scans the dungeon using DijkstraMap.scan or DijkstraMap.partialScan with the listed goals and start
+ point, and returns a list of Coord positions (using the current measurement) needed to get closer
+ to the closest reachable goal.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/OptDijkstraMap.html#findPath-int-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findPath(int, IntVLA, IntVLA, int, int...)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/OptDijkstraMap.html" title="class in squidpony.performance.alternate">OptDijkstraMap</a></dt>
 <dd>
@@ -226,11 +299,25 @@
  of Coord positions (using the current measurement) needed to get closer to the closest reachable
  goal.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#findPathLarge-int-int-java.util.Collection-java.util.Collection-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findPathLarge(int, int, Collection&lt;Coord&gt;, Collection&lt;Coord&gt;, Coord, Coord...)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
+ of Coord positions (using the current measurement) needed to get closer to the closest reachable
+ goal.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#findPathPreScanned-squidpony.squidmath.Coord-">findPathPreScanned(Coord)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
 <dd>
 <div class="block">Intended primarily for internal use.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#findPathPreScanned-squidpony.squidmath.Coord-">findPathPreScanned(Coord)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Intended primarily for internal use.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#findRadius-squidpony.performance.alternate.DijkstraMap.Measurement-">findRadius(DijkstraMap.Measurement)</a></span> - Static method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
+<dd>
+<div class="block">Gets the appropriate Radius corresponding to a DijkstraMap.Measurement.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#findRadius-squidpony.performance.alternate.NextDijkstraMap.Measurement-">findRadius(NextDijkstraMap.Measurement)</a></span> - Static method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
 <dd>
 <div class="block">Gets the appropriate Radius corresponding to a DijkstraMap.Measurement.</div>
 </dd>
@@ -242,9 +329,26 @@
 <dd>
 <div class="block">If you have a target or group of targets you want to pathfind to without scanning the full map, this can be good.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#findShortcutPath-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findShortcutPath(Coord, Coord...)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">If you have a target or group of targets you want to pathfind to without scanning the full map, this can be good.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#findTechniquePath-int-squidpony.squidai.Technique-char:A:A-squidpony.squidgrid.LOS-java.util.Collection-java.util.Collection-squidpony.squidmath.Coord-java.util.Collection-">findTechniquePath(int, Technique, char[][], LOS, Collection&lt;Coord&gt;, Collection&lt;Coord&gt;, Coord, Collection&lt;Coord&gt;)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
+ of Coord positions (using the current measurement) needed to get closer to a goal, where goals are
+ considered valid if they are at a valid range for the given Technique to hit at least one target
+ and ideal if that Technique can affect as many targets as possible from a cell that can be moved
+ to with at most movelength steps.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#floodFill-int-squidpony.squidmath.Coord...-">floodFill(int, Coord...)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
 <dd>
 <div class="block">A simple limited flood-fill that returns a LinkedHashMap of Coord keys to the Double values in the DijkstraMap, only
+ calculating out to a number of steps determined by limit.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#floodFill-int-squidpony.squidmath.Coord...-">floodFill(int, Coord...)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">A simple limited flood-fill that returns a OrderedMap of Coord keys to the Double values in the DijkstraMap, only
  calculating out to a number of steps determined by limit.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/OptDijkstraMap.html#floodFill-int-int...-">floodFill(int, int...)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/OptDijkstraMap.html" title="class in squidpony.performance.alternate">OptDijkstraMap</a></dt>
@@ -253,6 +357,10 @@
  calculating out to a number of steps determined by limit.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#FLOOR">FLOOR</a></span> - Static variable in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
+<dd>
+<div class="block">Floor cells, which include any walkable cell, are marked with a high number equal to 999200.0 .</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#FLOOR">FLOOR</a></span> - Static variable in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
 <dd>
 <div class="block">Floor cells, which include any walkable cell, are marked with a high number equal to 999200.0 .</div>
 </dd>
@@ -276,6 +384,10 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/FOVCacheBenchmark.html#FOVCacheBenchmark--">FOVCacheBenchmark()</a></span> - Constructor for class squidpony.performance.<a href="../squidpony/performance/FOVCacheBenchmark.html" title="class in squidpony.performance">FOVCacheBenchmark</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#fresh">fresh</a></span> - Variable in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Goals that pathfinding will seek out.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/OptDijkstraMap.html#fresh">fresh</a></span> - Variable in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/OptDijkstraMap.html" title="class in squidpony.performance.alternate">OptDijkstraMap</a></dt>
 <dd>&nbsp;</dd>
 </dl>
