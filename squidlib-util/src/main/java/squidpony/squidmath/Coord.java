@@ -51,12 +51,12 @@ public class Coord implements Serializable {
     {
         this(0, 0);
     }
-    protected Coord(int x, int y)
+    protected Coord(final int x, final int y)
     {
         this.x = x;
         this.y = y;
     }
-    public static Coord get(int x, int y)
+    public static Coord get(final int x, final int y)
     {
         if(x >= -3 && y >= -3 && x < POOL.length - 3 && y < POOL[x + 3].length - 3)
             return POOL[x + 3][y + 3];

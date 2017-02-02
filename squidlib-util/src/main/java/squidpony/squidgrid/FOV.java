@@ -182,14 +182,12 @@ public class FOV implements Serializable {
         initializeLightMap(width, height);
         light[startX][startY] = 1;//make the starting space full power
 
-        initializeNearLight(width, height);
-
-        boolean[][] nearLight = new boolean[width][height];
         switch (type) {
             case RIPPLE:
             case RIPPLE_LOOSE:
             case RIPPLE_TIGHT:
             case RIPPLE_VERY_LOOSE:
+                initializeNearLight(width, height);
                 doRippleFOV(light, rippleValue(type), startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, radiusTechnique);
                 break;
             case SHADOW:
@@ -247,13 +245,12 @@ public class FOV implements Serializable {
         initializeLightMap(width, height);
         light[startX][startY] = 1;//make the starting space full power
 
-        initializeNearLight(width, height);
-
         switch (type) {
             case RIPPLE:
             case RIPPLE_LOOSE:
             case RIPPLE_TIGHT:
             case RIPPLE_VERY_LOOSE:
+                initializeNearLight(width, height);
                 doRippleFOV(light, rippleValue(type), startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, radiusTechnique, angle2, span2);
                 break;
             case SHADOW:
@@ -286,11 +283,99 @@ public class FOV implements Serializable {
         return light;
     }
 
-	/**
+
+    /**
+     * Calculates the Field Of View for the provided map from the given x, y
+     * coordinates. Assigns to, and returns, a light map where the values
+     * represent a percentage of fully lit. Always uses shadowcasting FOV,
+     * which allows this method to be static since it doesn't need to keep any
+     * state around, and can reuse the state the user gives it via the
+     * {@code light} parameter.
+     * <br>
+     * The starting point for the calculation is considered to be at the center
+     * of the origin cell. Radius determinations based on Euclidean
+     * calculations. The light will be treated as having infinite possible
+     * radius.
+     *
+     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
+     * @param startx the horizontal component of the starting location
+     * @param starty the vertical component of the starting location
+     * @return the computed light grid
+     */
+    public static double[][] calculateFOV(double[][] resistanceMap, double[][] light, int startx, int starty) {
+        return reuseFOV(resistanceMap, light, startx, starty, Integer.MAX_VALUE, Radius.CIRCLE);
+    }
+
+    /**
+     * Calculates the Field Of View for the provided map from the given x, y
+     * coordinates. Assigns to, and returns, a light map where the values
+     * represent a percentage of fully lit. Always uses shadowcasting FOV,
+     * which allows this method to be static since it doesn't need to keep any
+     * state around, and can reuse the state the user gives it via the
+     * {@code light} parameter.
+     * <br>
+     * The starting point for the calculation is considered to be at the center
+     * of the origin cell. Radius determinations based on Euclidean
+     * calculations.
+     *
+     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
+     * @param startx the horizontal component of the starting location
+     * @param starty the vertical component of the starting location
+     * @param radius the distance the light will extend to
+     * @return the computed light grid
+     */
+    public static double[][] reuseFOV(double[][] resistanceMap, double[][] light, int startx, int starty, double radius) {
+        return reuseFOV(resistanceMap, light, startx, starty, radius, Radius.CIRCLE);
+    }
+
+
+    /**
+     * Calculates the Field Of View for the provided map from the given x, y
+     * coordinates. Assigns to, and returns, a light map where the values
+     * represent a percentage of fully lit. Always uses shadowcasting FOV,
+     * which allows this method to be static since it doesn't need to keep any
+     * state around, and can reuse the state the user gives it via the
+     * {@code light} parameter.
+     * <br>
+     * The starting point for the calculation is considered to be at the center
+     * of the origin cell. Radius determinations are determined by the provided
+     * RadiusStrategy.
+     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
+     * @param light the grid of cells to assign to; may have existing values, and 0.0 is used to mean "unlit"
+     * @param startX the horizontal component of the starting location
+     * @param startY the vertical component of the starting location
+     * @param radius the distance the light will extend to
+     * @param radiusTechnique provides a means to calculate the radius as desired
+     * @return the computed light grid, which is the same 2D array as the value assigned to {@code light}
+     */
+    public static double[][] reuseFOV(double[][] resistanceMap, double[][] light, int startX, int startY, double radius, Radius radiusTechnique) {
+
+        double rad = Math.max(1, radius);
+        double decay = 1.0 / rad;
+
+        light[startX][startY] = 1;//make the starting space full power
+
+
+        shadowCast(1, 1.0, 0.0, 0, 1, 1, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        shadowCast(1, 1.0, 0.0, 1, 0, 0, 1, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
+
+        shadowCast(1, 1.0, 0.0, 0, 1, -1, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        shadowCast(1, 1.0, 0.0, 1, 0, 0, -1, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
+
+        shadowCast(1, 1.0, 0.0, 0, -1, -1, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        shadowCast(1, 1.0, 0.0, -1, 0, 0, -1, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
+
+        shadowCast(1, 1.0, 0.0, 0, -1, 1, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        shadowCast(1, 1.0, 0.0, -1, 0, 0, 1, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        return light;
+    }
+
+
+    /**
 	 * @param width
-	 *            The width that {@link #lightMap} should have.
+	 *            The width that {@link #light} should have.
 	 * @param height
-	 *            The height that {@link #lightMap} should have.
+	 *            The height that {@link #light} should have.
 	 */
 	private void initializeLightMap(int width, int height) {
 		if (light == null)
@@ -311,9 +396,9 @@ public class FOV implements Serializable {
 
 	/**
 	 * @param width
-	 *            The width that {@link #nearLightMap} should have.
+	 *            The width that {@link #nearLight} should have.
 	 * @param height
-	 *            The height that {@link #nearLightMap} should have.
+	 *            The height that {@link #nearLight} should have.
 	 */
 	private void initializeNearLight(int width, int height) {
 		if (nearLight == null)
