@@ -51,7 +51,7 @@ public class SquidLayersTest extends ApplicationAdapter{
                 DefaultResources.getStretchableDejaVuFont());
         //new TextCellFactory().fontDistanceField("SourceCodePro-Medium-distance.fnt", "SourceCodePro-Medium-distance.png"));
                 //DefaultResources.getStretchableFont());
-        layers.setTextSize(cellWidth + 1, cellHeight + 4);
+        layers.setTextSize(cellWidth + 2, cellHeight + 4);
         //colors = DefaultResources.getSCC().rainbow(0.2f, 1.0f, 144);
         colors = DefaultResources.getSCC().loopingGradient(SColor.ATOMIC_TANGERINE, SColor.CRIMSON, 500);
         mColors = DefaultResources.getSCC().loopingGradient(SColor.SKY_BLUE, SColor.MAGIC_MINT, 523);
