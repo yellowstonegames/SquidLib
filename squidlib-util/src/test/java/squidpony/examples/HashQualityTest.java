@@ -78,6 +78,8 @@ public class HashQualityTest {
                 {-7}, {-7, -7}, {-7, -7, -7},
                 {-8}, {-8, -8}, {-8, -8, -8},
                 {-31}, {-31, -31}, {-31, -31, -31},
+                {127}, {127, 127}, {127, 127, 127},
+                {-128}, {(byte)0xC0}, {(byte)0xF0},
         };
         short[][] shorts = {
                 null,
@@ -101,6 +103,8 @@ public class HashQualityTest {
                 {-7}, {-7, -7}, {-7, -7, -7},
                 {-8}, {-8, -8}, {-8, -8, -8},
                 {-31}, {-31, -31}, {-31, -31, -31},
+                {0x7fff}, {0x7fff, 0x7fff}, {0x7fff, 0x7fff, 0x7fff},
+                {-0x8000}, {(short)0xC000}, {(short)0xFF00},
         };
         int[][] ints = {
                 null,
@@ -124,6 +128,8 @@ public class HashQualityTest {
                 {-7}, {-7, -7}, {-7, -7, -7},
                 {-8}, {-8, -8}, {-8, -8, -8},
                 {-31}, {-31, -31}, {-31, -31, -31},
+                {0x7fffffff}, {0x7fffffff, 0x7fffffff}, {0x7fffffff, 0x7fffffff, 0x7fffffff},
+                {0x80000000}, {0xC0000000}, {0xFF000000},
         };
         long[][] longs = {
                 null,
@@ -147,6 +153,10 @@ public class HashQualityTest {
                 {-7}, {-7, -7}, {-7, -7, -7},
                 {-8}, {-8, -8}, {-8, -8, -8},
                 {-31}, {-31, -31}, {-31, -31, -31},
+                {0x7fffffffffffffffL}, {0x7fffffffffffffffL, 0x7fffffffffffffffL}, {0x7fffffffffffffffL, 0x7fffffffffffffffL, 0x7fffffffffffffffL},
+                {0x8000000000000000L, 0x8000000000000000L, 0x8000000000000000L},
+                {0xC000000000000000L, 0xC000000000000000L, 0xC000000000000000L},
+                {0xFF00000000000000L, 0xFF00000000000000L, 0xFF00000000000000L},
         };
         Object[][] objects = {
             null,
@@ -227,6 +237,9 @@ public class HashQualityTest {
                 {new SquidID(5, 5), null},
                 {new SquidID(5, 5), null, new SquidID(5, 5), null},
                 {new SquidID(5, 5), null, new SquidID(5, 5), null, new SquidID(5, 5), null},
+
+                {Coord.get(0, 0)}, {Coord.get(0, 0), Coord.get(0, 0)}, {Coord.get(0, 0), Coord.get(0, 0), Coord.get(0, 0)},
+                {Coord.get(-1, -1)}, {Coord.get(-1, -1), Coord.get(-1, -1)}, {Coord.get(-1, -1), Coord.get(-1, -1), Coord.get(-1, -1)},
         };
         int len = bytes.length;
         for (int i = 0; i < len; i++) {
@@ -291,7 +304,6 @@ public class HashQualityTest {
             System.out.println("Wisp longs: " + CrossHash.Wisp.hash(longs[i]));
             System.out.println("Wisp objects: " + CrossHash.Wisp.hash(objects[i]));
         }
-
 
 
         int longHashLength = 0x80000, stringHashLength = 0xC0000;

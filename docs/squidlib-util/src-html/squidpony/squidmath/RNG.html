@@ -646,275 +646,274 @@
 <span class="sourceLineNo">638</span><a name="line.638"></a>
 <span class="sourceLineNo">639</span>        for (int i = 0; i &lt; n; i++)<a name="line.639"></a>
 <span class="sourceLineNo">640</span>        {<a name="line.640"></a>
-<span class="sourceLineNo">641</span>            int r = i + nextInt(n - i);<a name="line.641"></a>
-<span class="sourceLineNo">642</span>            int t = data[r];<a name="line.642"></a>
-<span class="sourceLineNo">643</span>            data[r] = data[i];<a name="line.643"></a>
-<span class="sourceLineNo">644</span>            data[i] = t;<a name="line.644"></a>
-<span class="sourceLineNo">645</span>        }<a name="line.645"></a>
-<span class="sourceLineNo">646</span>        int[] array = new int[Math.min(count, n)];<a name="line.646"></a>
-<span class="sourceLineNo">647</span>        System.arraycopy(data, 0, array, 0, Math.min(count, n));<a name="line.647"></a>
-<span class="sourceLineNo">648</span>        return array;<a name="line.648"></a>
-<span class="sourceLineNo">649</span>    }<a name="line.649"></a>
-<span class="sourceLineNo">650</span><a name="line.650"></a>
-<span class="sourceLineNo">651</span>    /**<a name="line.651"></a>
-<span class="sourceLineNo">652</span>     * @return a value from the gaussian distribution<a name="line.652"></a>
-<span class="sourceLineNo">653</span>     */<a name="line.653"></a>
-<span class="sourceLineNo">654</span>    public synchronized double nextGaussian() {<a name="line.654"></a>
-<span class="sourceLineNo">655</span>        if (haveNextNextGaussian) {<a name="line.655"></a>
-<span class="sourceLineNo">656</span>            haveNextNextGaussian = false;<a name="line.656"></a>
-<span class="sourceLineNo">657</span>            return nextNextGaussian;<a name="line.657"></a>
-<span class="sourceLineNo">658</span>        } else {<a name="line.658"></a>
-<span class="sourceLineNo">659</span>            double v1, v2, s;<a name="line.659"></a>
-<span class="sourceLineNo">660</span>            do {<a name="line.660"></a>
-<span class="sourceLineNo">661</span>                v1 = 2 * nextDouble() - 1; // between -1 and 1<a name="line.661"></a>
-<span class="sourceLineNo">662</span>                v2 = 2 * nextDouble() - 1; // between -1 and 1<a name="line.662"></a>
-<span class="sourceLineNo">663</span>                s = v1 * v1 + v2 * v2;<a name="line.663"></a>
-<span class="sourceLineNo">664</span>            } while (s &gt;= 1 || s == 0);<a name="line.664"></a>
-<span class="sourceLineNo">665</span>            double multiplier = Math.sqrt(-2 * Math.log(s) / s);<a name="line.665"></a>
-<span class="sourceLineNo">666</span>            nextNextGaussian = v2 * multiplier;<a name="line.666"></a>
-<span class="sourceLineNo">667</span>            haveNextNextGaussian = true;<a name="line.667"></a>
-<span class="sourceLineNo">668</span>            return v1 * multiplier;<a name="line.668"></a>
-<span class="sourceLineNo">669</span>        }<a name="line.669"></a>
-<span class="sourceLineNo">670</span>    }<a name="line.670"></a>
-<span class="sourceLineNo">671</span><a name="line.671"></a>
-<span class="sourceLineNo">672</span>    /**<a name="line.672"></a>
-<span class="sourceLineNo">673</span>     * This returns a maximum of 0.9999999999999999 because that is the largest<a name="line.673"></a>
-<span class="sourceLineNo">674</span>     * Double value that is less than 1.0<a name="line.674"></a>
-<span class="sourceLineNo">675</span>     *<a name="line.675"></a>
-<span class="sourceLineNo">676</span>     * @return a value between 0 (inclusive) and 0.9999999999999999 (inclusive)<a name="line.676"></a>
-<span class="sourceLineNo">677</span>     */<a name="line.677"></a>
-<span class="sourceLineNo">678</span>    public double nextDouble() {<a name="line.678"></a>
-<span class="sourceLineNo">679</span>        return (random.nextLong() &amp; 0x1fffffffffffffL) * DOUBLE_UNIT;<a name="line.679"></a>
-<span class="sourceLineNo">680</span>        // consider changing to this in a future version; it will break compatibility but should be fast/correct<a name="line.680"></a>
-<span class="sourceLineNo">681</span>        //return Double.longBitsToDouble(0x3FFL &lt;&lt; 52 | random.nextLong() &gt;&gt;&gt; 12) - 1.0;<a name="line.681"></a>
-<span class="sourceLineNo">682</span>    }<a name="line.682"></a>
-<span class="sourceLineNo">683</span><a name="line.683"></a>
-<span class="sourceLineNo">684</span>    /**<a name="line.684"></a>
-<span class="sourceLineNo">685</span>     * This returns a random double between 0.0 (inclusive) and max (exclusive).<a name="line.685"></a>
-<span class="sourceLineNo">686</span>     *<a name="line.686"></a>
-<span class="sourceLineNo">687</span>     * @return a value between 0 (inclusive) and max (exclusive)<a name="line.687"></a>
-<span class="sourceLineNo">688</span>     */<a name="line.688"></a>
-<span class="sourceLineNo">689</span>    public double nextDouble(double max) {<a name="line.689"></a>
-<span class="sourceLineNo">690</span>        return nextDouble() * max;<a name="line.690"></a>
-<span class="sourceLineNo">691</span>    }<a name="line.691"></a>
-<span class="sourceLineNo">692</span><a name="line.692"></a>
-<span class="sourceLineNo">693</span>    /**<a name="line.693"></a>
-<span class="sourceLineNo">694</span>     * This returns a maximum of 0.99999994 because that is the largest Float<a name="line.694"></a>
-<span class="sourceLineNo">695</span>     * value that is less than 1.0f<a name="line.695"></a>
-<span class="sourceLineNo">696</span>     *<a name="line.696"></a>
-<span class="sourceLineNo">697</span>     * @return a value between 0 (inclusive) and 0.99999994 (inclusive)<a name="line.697"></a>
-<span class="sourceLineNo">698</span>     */<a name="line.698"></a>
-<span class="sourceLineNo">699</span>    public float nextFloat() {<a name="line.699"></a>
-<span class="sourceLineNo">700</span>        return next(24) * FLOAT_UNIT;<a name="line.700"></a>
-<span class="sourceLineNo">701</span>    }<a name="line.701"></a>
-<span class="sourceLineNo">702</span><a name="line.702"></a>
-<span class="sourceLineNo">703</span>    /**<a name="line.703"></a>
-<span class="sourceLineNo">704</span>     * Get a random bit of state, interpreted as true or false with approximately equal likelihood.<a name="line.704"></a>
-<span class="sourceLineNo">705</span>     * @return a random boolean.<a name="line.705"></a>
-<span class="sourceLineNo">706</span>     */<a name="line.706"></a>
-<span class="sourceLineNo">707</span>    public boolean nextBoolean() {<a name="line.707"></a>
-<span class="sourceLineNo">708</span>        return nextLong() &lt; 0L;<a name="line.708"></a>
-<span class="sourceLineNo">709</span>    }<a name="line.709"></a>
-<span class="sourceLineNo">710</span><a name="line.710"></a>
-<span class="sourceLineNo">711</span>    /**<a name="line.711"></a>
-<span class="sourceLineNo">712</span>     * Get a random long between Long.MIN_VALUE to Long.MAX_VALUE (both inclusive).<a name="line.712"></a>
-<span class="sourceLineNo">713</span>     * @return a 64-bit random long.<a name="line.713"></a>
-<span class="sourceLineNo">714</span>     */<a name="line.714"></a>
-<span class="sourceLineNo">715</span>    public long nextLong() {<a name="line.715"></a>
-<span class="sourceLineNo">716</span>        return random.nextLong();<a name="line.716"></a>
-<span class="sourceLineNo">717</span>    }<a name="line.717"></a>
-<span class="sourceLineNo">718</span><a name="line.718"></a>
-<span class="sourceLineNo">719</span>    /**<a name="line.719"></a>
-<span class="sourceLineNo">720</span>     * Returns a random long below the given bound, or 0 if the bound is 0 or<a name="line.720"></a>
-<span class="sourceLineNo">721</span>     * negative.<a name="line.721"></a>
-<span class="sourceLineNo">722</span>     *<a name="line.722"></a>
-<span class="sourceLineNo">723</span>     * @param bound the upper bound (exclusive)<a name="line.723"></a>
-<span class="sourceLineNo">724</span>     * @return the found number<a name="line.724"></a>
-<span class="sourceLineNo">725</span>     */<a name="line.725"></a>
-<span class="sourceLineNo">726</span>    public long nextLong( final long bound ) {<a name="line.726"></a>
-<span class="sourceLineNo">727</span>        if ( bound &lt;= 0 ) return 0;<a name="line.727"></a>
-<span class="sourceLineNo">728</span>        long threshold = (0x7fffffffffffffffL - bound + 1) % bound;<a name="line.728"></a>
-<span class="sourceLineNo">729</span>        for (;;) {<a name="line.729"></a>
-<span class="sourceLineNo">730</span>            long bits = random.nextLong() &amp; 0x7fffffffffffffffL;<a name="line.730"></a>
-<span class="sourceLineNo">731</span>            if (bits &gt;= threshold)<a name="line.731"></a>
-<span class="sourceLineNo">732</span>                return bits % bound;<a name="line.732"></a>
-<span class="sourceLineNo">733</span>        }<a name="line.733"></a>
-<span class="sourceLineNo">734</span>    }<a name="line.734"></a>
-<span class="sourceLineNo">735</span>    /**<a name="line.735"></a>
-<span class="sourceLineNo">736</span>     * Returns a random non-negative integer below the given bound, or 0 if the bound is 0 or<a name="line.736"></a>
-<span class="sourceLineNo">737</span>     * negative.<a name="line.737"></a>
-<span class="sourceLineNo">738</span>     *<a name="line.738"></a>
-<span class="sourceLineNo">739</span>     * @param bound the upper bound (exclusive)<a name="line.739"></a>
-<span class="sourceLineNo">740</span>     * @return the found number<a name="line.740"></a>
-<span class="sourceLineNo">741</span>     */<a name="line.741"></a>
-<span class="sourceLineNo">742</span>    public int nextInt(final int bound) {<a name="line.742"></a>
-<span class="sourceLineNo">743</span>        if ( bound &lt;= 0 ) return 0;<a name="line.743"></a>
-<span class="sourceLineNo">744</span>        int threshold = (0x7fffffff - bound + 1) % bound;<a name="line.744"></a>
-<span class="sourceLineNo">745</span>        for (;;) {<a name="line.745"></a>
-<span class="sourceLineNo">746</span>            int bits = random.next(31);<a name="line.746"></a>
-<span class="sourceLineNo">747</span>            if (bits &gt;= threshold)<a name="line.747"></a>
-<span class="sourceLineNo">748</span>                return bits % bound;<a name="line.748"></a>
-<span class="sourceLineNo">749</span>        }<a name="line.749"></a>
-<span class="sourceLineNo">750</span>    }<a name="line.750"></a>
-<span class="sourceLineNo">751</span>    /**<a name="line.751"></a>
-<span class="sourceLineNo">752</span>     * Returns a random non-negative integer below the given bound, or 0 if the bound is 0.<a name="line.752"></a>
-<span class="sourceLineNo">753</span>     * Uses an aggressively optimized technique that has some bias, but mostly for values of<a name="line.753"></a>
-<span class="sourceLineNo">754</span>     * bound over 1 billion. This method is considered "hasty" since it should be faster than<a name="line.754"></a>
-<span class="sourceLineNo">755</span>     * nextInt() but gives up some statistical quality to do so. It also has undefined behavior<a name="line.755"></a>
-<span class="sourceLineNo">756</span>     * if bound is negative, though it will probably produce a negative number (just how<a name="line.756"></a>
-<span class="sourceLineNo">757</span>     * negative is an open question).<a name="line.757"></a>
-<span class="sourceLineNo">758</span>     * &lt;br&gt;<a name="line.758"></a>
-<span class="sourceLineNo">759</span>     * Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/<a name="line.759"></a>
-<span class="sourceLineNo">760</span>     * @param bound the upper bound (exclusive); behavior is undefined if bound is negative<a name="line.760"></a>
-<span class="sourceLineNo">761</span>     * @return the found number<a name="line.761"></a>
-<span class="sourceLineNo">762</span>     */<a name="line.762"></a>
-<span class="sourceLineNo">763</span>    public int nextIntHasty(final int bound) {<a name="line.763"></a>
-<span class="sourceLineNo">764</span>        return (int)((bound * (random.nextLong() &amp; 0x7FFFFFFFL)) &gt;&gt; 31);<a name="line.764"></a>
-<span class="sourceLineNo">765</span>    }<a name="line.765"></a>
-<span class="sourceLineNo">766</span><a name="line.766"></a>
-<span class="sourceLineNo">767</span>    /**<a name="line.767"></a>
-<span class="sourceLineNo">768</span>     * Gets a random Coord that has x between 0 (inclusive) and width (exclusive) and y between 0 (inclusive)<a name="line.768"></a>
-<span class="sourceLineNo">769</span>     * and height (exclusive). This makes one call to randomLong to generate (more than) 31 random bits for<a name="line.769"></a>
-<span class="sourceLineNo">770</span>     * each axis, and should be very fast. Remember that Coord values are cached in a pool that starts able to<a name="line.770"></a>
-<span class="sourceLineNo">771</span>     * hold up to 255 x and 255 y for positive values, and the pool should be grown with the static method<a name="line.771"></a>
-<span class="sourceLineNo">772</span>     * Coord.expandPool() in order to efficiently use larger Coord values. If width and height are very large,<a name="line.772"></a>
-<span class="sourceLineNo">773</span>     * greater than 100,000 for either, this particular method may show bias toward certain positions due to<a name="line.773"></a>
-<span class="sourceLineNo">774</span>     * the "hasty" technique used to reduce the random numbers to the given size, but because most maps in<a name="line.774"></a>
-<span class="sourceLineNo">775</span>     * tile-based games are relatively small, this technique should be fine.<a name="line.775"></a>
-<span class="sourceLineNo">776</span>     * &lt;br&gt;<a name="line.776"></a>
-<span class="sourceLineNo">777</span>     * Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/<a name="line.777"></a>
-<span class="sourceLineNo">778</span>     * @param width the upper bound (exclusive) for x coordinates<a name="line.778"></a>
-<span class="sourceLineNo">779</span>     * @param height the upper bound (exclusive) for y coordinates<a name="line.779"></a>
-<span class="sourceLineNo">780</span>     * @return a random Coord between (0,0) inclusive and (width,height) exclusive<a name="line.780"></a>
-<span class="sourceLineNo">781</span>     */<a name="line.781"></a>
-<span class="sourceLineNo">782</span>    public Coord nextCoord(int width, int height)<a name="line.782"></a>
-<span class="sourceLineNo">783</span>    {<a name="line.783"></a>
-<span class="sourceLineNo">784</span>        final long n = random.nextLong();<a name="line.784"></a>
-<span class="sourceLineNo">785</span>        return Coord.get((int)((width * (n &gt;&gt;&gt; 33)) &gt;&gt; 31), (int)((height * (n &amp; 0x7FFFFFFFL)) &gt;&gt; 31));<a name="line.785"></a>
-<span class="sourceLineNo">786</span>    }<a name="line.786"></a>
-<span class="sourceLineNo">787</span>    /**<a name="line.787"></a>
-<span class="sourceLineNo">788</span>     * Get a random integer between Integer.MIN_VALUE to Integer.MAX_VALUE (both inclusive).<a name="line.788"></a>
-<span class="sourceLineNo">789</span>     * @return a 32-bit random int.<a name="line.789"></a>
-<span class="sourceLineNo">790</span>     */<a name="line.790"></a>
-<span class="sourceLineNo">791</span>    public int nextInt() {<a name="line.791"></a>
-<span class="sourceLineNo">792</span>        return next(32);<a name="line.792"></a>
-<span class="sourceLineNo">793</span>    }<a name="line.793"></a>
-<span class="sourceLineNo">794</span><a name="line.794"></a>
-<span class="sourceLineNo">795</span>    /**<a name="line.795"></a>
-<span class="sourceLineNo">796</span>     * Get up to 32 bits (inclusive) of random state from the RandomnessSource.<a name="line.796"></a>
-<span class="sourceLineNo">797</span>     * @param bits 1 to 32<a name="line.797"></a>
-<span class="sourceLineNo">798</span>     * @return a random number that fits in the specified number of bits.<a name="line.798"></a>
-<span class="sourceLineNo">799</span>     */<a name="line.799"></a>
-<span class="sourceLineNo">800</span>    public int next(int bits) {<a name="line.800"></a>
-<span class="sourceLineNo">801</span>        return random.next(bits);<a name="line.801"></a>
-<span class="sourceLineNo">802</span>    }<a name="line.802"></a>
-<span class="sourceLineNo">803</span><a name="line.803"></a>
-<span class="sourceLineNo">804</span>    public RandomnessSource getRandomness() {<a name="line.804"></a>
-<span class="sourceLineNo">805</span>        return random;<a name="line.805"></a>
-<span class="sourceLineNo">806</span>    }<a name="line.806"></a>
-<span class="sourceLineNo">807</span><a name="line.807"></a>
-<span class="sourceLineNo">808</span>    public void setRandomness(RandomnessSource random) {<a name="line.808"></a>
-<span class="sourceLineNo">809</span>        this.random = random;<a name="line.809"></a>
-<span class="sourceLineNo">810</span>    }<a name="line.810"></a>
-<span class="sourceLineNo">811</span><a name="line.811"></a>
-<span class="sourceLineNo">812</span>    /**<a name="line.812"></a>
-<span class="sourceLineNo">813</span>     * Creates a copy of this RNG; it will generate the same random numbers, given the same calls in order, as this RNG<a name="line.813"></a>
-<span class="sourceLineNo">814</span>     * at the point copy() is called. The copy will not share references with this RNG.<a name="line.814"></a>
-<span class="sourceLineNo">815</span>     * @return a copy of this RNG<a name="line.815"></a>
-<span class="sourceLineNo">816</span>     */<a name="line.816"></a>
-<span class="sourceLineNo">817</span>    public RNG copy()<a name="line.817"></a>
-<span class="sourceLineNo">818</span>    {<a name="line.818"></a>
-<span class="sourceLineNo">819</span>        return new RNG(random.copy());<a name="line.819"></a>
-<span class="sourceLineNo">820</span>    }<a name="line.820"></a>
-<span class="sourceLineNo">821</span><a name="line.821"></a>
-<span class="sourceLineNo">822</span>    /**<a name="line.822"></a>
-<span class="sourceLineNo">823</span>     * Generates a random 64-bit long with a number of '1' bits (Hamming weight) approximately equal to bitCount.<a name="line.823"></a>
-<span class="sourceLineNo">824</span>     * For example, calling this with a parameter of 32 will be equivalent to calling nextLong() on this object's<a name="line.824"></a>
-<span class="sourceLineNo">825</span>     * RandomnessSource (it doesn't consider overridden nextLong() methods, where present, on subclasses of RNG).<a name="line.825"></a>
-<span class="sourceLineNo">826</span>     * Calling this with a parameter of 16 will have on average 16 of the 64 bits in the returned long set to '1',<a name="line.826"></a>
-<span class="sourceLineNo">827</span>     * distributed pseudo-randomly, while a parameter of 47 will have on average 47 bits set. This can be useful for<a name="line.827"></a>
-<span class="sourceLineNo">828</span>     * certain code that uses bits to represent data but needs a different ratio of set bits to unset bits than 1:1.<a name="line.828"></a>
-<span class="sourceLineNo">829</span>     * &lt;br&gt;<a name="line.829"></a>
-<span class="sourceLineNo">830</span>     * Implementors should limit any overriding method to calling and returning super(), potentially storing any extra<a name="line.830"></a>
-<span class="sourceLineNo">831</span>     * information they need to internally, but should not change the result. This works based on a delicate balance of<a name="line.831"></a>
-<span class="sourceLineNo">832</span>     * the RandomnessSource producing bits with an even 50% chance of being set, regardless of position, and RNG<a name="line.832"></a>
-<span class="sourceLineNo">833</span>     * subclasses that alter the odds won't work as expected here, particularly if those subclasses use doubles<a name="line.833"></a>
-<span class="sourceLineNo">834</span>     * internally (which almost always produce less than 64 random bits). You should definitely avoid using certain<a name="line.834"></a>
-<span class="sourceLineNo">835</span>     * RandomnessSources that aren't properly pseudo-random, such as any QRNG class (SobolQRNG and VanDerCorputQRNG,<a name="line.835"></a>
-<span class="sourceLineNo">836</span>     * pretty much), since these won't fill all 64 bits with equal likelihood.<a name="line.836"></a>
-<span class="sourceLineNo">837</span>     * @param bitCount an int, only considered if between 0 and 64, that is the average number of bits to set<a name="line.837"></a>
-<span class="sourceLineNo">838</span>     * @return a 64-bit long that, on average, should have bitCount bits set to 1, potentially anywhere in the long<a name="line.838"></a>
-<span class="sourceLineNo">839</span>     */<a name="line.839"></a>
-<span class="sourceLineNo">840</span>    public long approximateBits(int bitCount)<a name="line.840"></a>
-<span class="sourceLineNo">841</span>    {<a name="line.841"></a>
-<span class="sourceLineNo">842</span>        if(bitCount &lt;= 0)<a name="line.842"></a>
-<span class="sourceLineNo">843</span>            return 0L;<a name="line.843"></a>
-<span class="sourceLineNo">844</span>        if(bitCount &gt;= 64)<a name="line.844"></a>
-<span class="sourceLineNo">845</span>            return -1L;<a name="line.845"></a>
-<span class="sourceLineNo">846</span>        if(bitCount == 32)<a name="line.846"></a>
-<span class="sourceLineNo">847</span>            return random.nextLong();<a name="line.847"></a>
-<span class="sourceLineNo">848</span>        boolean high = bitCount &gt; 32;<a name="line.848"></a>
-<span class="sourceLineNo">849</span>        int altered = (high ? 64 - bitCount : bitCount), lsb = Integer.lowestOneBit(altered);<a name="line.849"></a>
-<span class="sourceLineNo">850</span>        long data = random.nextLong();<a name="line.850"></a>
-<span class="sourceLineNo">851</span>        for (int i = lsb &lt;&lt; 1; i &lt;= 16; i &lt;&lt;= 1) {<a name="line.851"></a>
-<span class="sourceLineNo">852</span>            if((altered &amp; i) == 0)<a name="line.852"></a>
-<span class="sourceLineNo">853</span>                data &amp;= random.nextLong();<a name="line.853"></a>
-<span class="sourceLineNo">854</span>            else<a name="line.854"></a>
-<span class="sourceLineNo">855</span>                data |= random.nextLong();<a name="line.855"></a>
-<span class="sourceLineNo">856</span>        }<a name="line.856"></a>
-<span class="sourceLineNo">857</span>        return high ? ~(random.nextLong() &amp; data) : (random.nextLong() &amp; data);<a name="line.857"></a>
-<span class="sourceLineNo">858</span>    }<a name="line.858"></a>
-<span class="sourceLineNo">859</span><a name="line.859"></a>
-<span class="sourceLineNo">860</span>    /**<a name="line.860"></a>
-<span class="sourceLineNo">861</span>     * Gets a somewhat-random long with exactly 32 bits set; in each pair of bits starting at bit 0 and bit 1, then bit<a name="line.861"></a>
-<span class="sourceLineNo">862</span>     * 2 and bit 3, up to bit 62 and bit 3, one bit will be 1 and one bit will be 0 in each pair.<a name="line.862"></a>
-<span class="sourceLineNo">863</span>     * @return a random long with 32 "1" bits, distributed so exactly one bit is "1" for each pair of bits<a name="line.863"></a>
-<span class="sourceLineNo">864</span>     */<a name="line.864"></a>
-<span class="sourceLineNo">865</span>    public long randomInterleave() {<a name="line.865"></a>
-<span class="sourceLineNo">866</span>        long bits = nextLong() &amp; 0xFFFFFFFFL, ib = ~bits &amp; 0xFFFFFFFFL;<a name="line.866"></a>
-<span class="sourceLineNo">867</span>        bits |= (bits &lt;&lt; 16);<a name="line.867"></a>
-<span class="sourceLineNo">868</span>        ib |= (ib &lt;&lt; 16);<a name="line.868"></a>
-<span class="sourceLineNo">869</span>        bits &amp;= 0x0000FFFF0000FFFFL;<a name="line.869"></a>
-<span class="sourceLineNo">870</span>        ib &amp;= 0x0000FFFF0000FFFFL;<a name="line.870"></a>
-<span class="sourceLineNo">871</span>        bits |= (bits &lt;&lt; 8);<a name="line.871"></a>
-<span class="sourceLineNo">872</span>        ib |= (ib &lt;&lt; 8);<a name="line.872"></a>
-<span class="sourceLineNo">873</span>        bits &amp;= 0x00FF00FF00FF00FFL;<a name="line.873"></a>
-<span class="sourceLineNo">874</span>        ib &amp;= 0x00FF00FF00FF00FFL;<a name="line.874"></a>
-<span class="sourceLineNo">875</span>        bits |= (bits &lt;&lt; 4);<a name="line.875"></a>
-<span class="sourceLineNo">876</span>        ib |= (ib &lt;&lt; 4);<a name="line.876"></a>
-<span class="sourceLineNo">877</span>        bits &amp;= 0x0F0F0F0F0F0F0F0FL;<a name="line.877"></a>
-<span class="sourceLineNo">878</span>        ib &amp;= 0x0F0F0F0F0F0F0F0FL;<a name="line.878"></a>
-<span class="sourceLineNo">879</span>        bits |= (bits &lt;&lt; 2);<a name="line.879"></a>
-<span class="sourceLineNo">880</span>        ib |= (ib &lt;&lt; 2);<a name="line.880"></a>
-<span class="sourceLineNo">881</span>        bits &amp;= 0x3333333333333333L;<a name="line.881"></a>
-<span class="sourceLineNo">882</span>        ib &amp;= 0x3333333333333333L;<a name="line.882"></a>
-<span class="sourceLineNo">883</span>        bits |= (bits &lt;&lt; 1);<a name="line.883"></a>
-<span class="sourceLineNo">884</span>        ib |= (ib &lt;&lt; 1);<a name="line.884"></a>
-<span class="sourceLineNo">885</span>        bits &amp;= 0x5555555555555555L;<a name="line.885"></a>
-<span class="sourceLineNo">886</span>        ib &amp;= 0x5555555555555555L;<a name="line.886"></a>
-<span class="sourceLineNo">887</span>        return (bits | (ib &lt;&lt; 1));<a name="line.887"></a>
-<span class="sourceLineNo">888</span>    }<a name="line.888"></a>
-<span class="sourceLineNo">889</span><a name="line.889"></a>
-<span class="sourceLineNo">890</span>    @Override<a name="line.890"></a>
-<span class="sourceLineNo">891</span>    public String toString() {<a name="line.891"></a>
-<span class="sourceLineNo">892</span>        return "RNG with Randomness Source " + random;<a name="line.892"></a>
-<span class="sourceLineNo">893</span>    }<a name="line.893"></a>
-<span class="sourceLineNo">894</span><a name="line.894"></a>
-<span class="sourceLineNo">895</span>    @Override<a name="line.895"></a>
-<span class="sourceLineNo">896</span>    public boolean equals(Object o) {<a name="line.896"></a>
-<span class="sourceLineNo">897</span>        if (this == o) return true;<a name="line.897"></a>
-<span class="sourceLineNo">898</span>        if (!(o instanceof RNG)) return false;<a name="line.898"></a>
-<span class="sourceLineNo">899</span><a name="line.899"></a>
-<span class="sourceLineNo">900</span>        RNG rng = (RNG) o;<a name="line.900"></a>
-<span class="sourceLineNo">901</span><a name="line.901"></a>
-<span class="sourceLineNo">902</span>        return random.equals(rng.random);<a name="line.902"></a>
-<span class="sourceLineNo">903</span>    }<a name="line.903"></a>
-<span class="sourceLineNo">904</span><a name="line.904"></a>
-<span class="sourceLineNo">905</span>    @Override<a name="line.905"></a>
-<span class="sourceLineNo">906</span>    public int hashCode() {<a name="line.906"></a>
-<span class="sourceLineNo">907</span>        return random.hashCode();<a name="line.907"></a>
-<span class="sourceLineNo">908</span>    }<a name="line.908"></a>
-<span class="sourceLineNo">909</span>}<a name="line.909"></a>
+<span class="sourceLineNo">641</span>            int r = i + nextInt(n - i), t = data[r];<a name="line.641"></a>
+<span class="sourceLineNo">642</span>            data[r] = data[i];<a name="line.642"></a>
+<span class="sourceLineNo">643</span>            data[i] = t;<a name="line.643"></a>
+<span class="sourceLineNo">644</span>        }<a name="line.644"></a>
+<span class="sourceLineNo">645</span>        int[] array = new int[Math.min(count, n)];<a name="line.645"></a>
+<span class="sourceLineNo">646</span>        System.arraycopy(data, 0, array, 0, Math.min(count, n));<a name="line.646"></a>
+<span class="sourceLineNo">647</span>        return array;<a name="line.647"></a>
+<span class="sourceLineNo">648</span>    }<a name="line.648"></a>
+<span class="sourceLineNo">649</span><a name="line.649"></a>
+<span class="sourceLineNo">650</span>    /**<a name="line.650"></a>
+<span class="sourceLineNo">651</span>     * @return a value from the gaussian distribution<a name="line.651"></a>
+<span class="sourceLineNo">652</span>     */<a name="line.652"></a>
+<span class="sourceLineNo">653</span>    public synchronized double nextGaussian() {<a name="line.653"></a>
+<span class="sourceLineNo">654</span>        if (haveNextNextGaussian) {<a name="line.654"></a>
+<span class="sourceLineNo">655</span>            haveNextNextGaussian = false;<a name="line.655"></a>
+<span class="sourceLineNo">656</span>            return nextNextGaussian;<a name="line.656"></a>
+<span class="sourceLineNo">657</span>        } else {<a name="line.657"></a>
+<span class="sourceLineNo">658</span>            double v1, v2, s;<a name="line.658"></a>
+<span class="sourceLineNo">659</span>            do {<a name="line.659"></a>
+<span class="sourceLineNo">660</span>                v1 = 2 * nextDouble() - 1; // between -1 and 1<a name="line.660"></a>
+<span class="sourceLineNo">661</span>                v2 = 2 * nextDouble() - 1; // between -1 and 1<a name="line.661"></a>
+<span class="sourceLineNo">662</span>                s = v1 * v1 + v2 * v2;<a name="line.662"></a>
+<span class="sourceLineNo">663</span>            } while (s &gt;= 1 || s == 0);<a name="line.663"></a>
+<span class="sourceLineNo">664</span>            double multiplier = Math.sqrt(-2 * Math.log(s) / s);<a name="line.664"></a>
+<span class="sourceLineNo">665</span>            nextNextGaussian = v2 * multiplier;<a name="line.665"></a>
+<span class="sourceLineNo">666</span>            haveNextNextGaussian = true;<a name="line.666"></a>
+<span class="sourceLineNo">667</span>            return v1 * multiplier;<a name="line.667"></a>
+<span class="sourceLineNo">668</span>        }<a name="line.668"></a>
+<span class="sourceLineNo">669</span>    }<a name="line.669"></a>
+<span class="sourceLineNo">670</span><a name="line.670"></a>
+<span class="sourceLineNo">671</span>    /**<a name="line.671"></a>
+<span class="sourceLineNo">672</span>     * This returns a maximum of 0.9999999999999999 because that is the largest<a name="line.672"></a>
+<span class="sourceLineNo">673</span>     * Double value that is less than 1.0<a name="line.673"></a>
+<span class="sourceLineNo">674</span>     *<a name="line.674"></a>
+<span class="sourceLineNo">675</span>     * @return a value between 0 (inclusive) and 0.9999999999999999 (inclusive)<a name="line.675"></a>
+<span class="sourceLineNo">676</span>     */<a name="line.676"></a>
+<span class="sourceLineNo">677</span>    public double nextDouble() {<a name="line.677"></a>
+<span class="sourceLineNo">678</span>        return (random.nextLong() &amp; 0x1fffffffffffffL) * DOUBLE_UNIT;<a name="line.678"></a>
+<span class="sourceLineNo">679</span>        // consider changing to this in a future version; it will break compatibility but should be fast/correct<a name="line.679"></a>
+<span class="sourceLineNo">680</span>        //return Double.longBitsToDouble(0x3FFL &lt;&lt; 52 | random.nextLong() &gt;&gt;&gt; 12) - 1.0;<a name="line.680"></a>
+<span class="sourceLineNo">681</span>    }<a name="line.681"></a>
+<span class="sourceLineNo">682</span><a name="line.682"></a>
+<span class="sourceLineNo">683</span>    /**<a name="line.683"></a>
+<span class="sourceLineNo">684</span>     * This returns a random double between 0.0 (inclusive) and max (exclusive).<a name="line.684"></a>
+<span class="sourceLineNo">685</span>     *<a name="line.685"></a>
+<span class="sourceLineNo">686</span>     * @return a value between 0 (inclusive) and max (exclusive)<a name="line.686"></a>
+<span class="sourceLineNo">687</span>     */<a name="line.687"></a>
+<span class="sourceLineNo">688</span>    public double nextDouble(double max) {<a name="line.688"></a>
+<span class="sourceLineNo">689</span>        return nextDouble() * max;<a name="line.689"></a>
+<span class="sourceLineNo">690</span>    }<a name="line.690"></a>
+<span class="sourceLineNo">691</span><a name="line.691"></a>
+<span class="sourceLineNo">692</span>    /**<a name="line.692"></a>
+<span class="sourceLineNo">693</span>     * This returns a maximum of 0.99999994 because that is the largest Float<a name="line.693"></a>
+<span class="sourceLineNo">694</span>     * value that is less than 1.0f<a name="line.694"></a>
+<span class="sourceLineNo">695</span>     *<a name="line.695"></a>
+<span class="sourceLineNo">696</span>     * @return a value between 0 (inclusive) and 0.99999994 (inclusive)<a name="line.696"></a>
+<span class="sourceLineNo">697</span>     */<a name="line.697"></a>
+<span class="sourceLineNo">698</span>    public float nextFloat() {<a name="line.698"></a>
+<span class="sourceLineNo">699</span>        return next(24) * FLOAT_UNIT;<a name="line.699"></a>
+<span class="sourceLineNo">700</span>    }<a name="line.700"></a>
+<span class="sourceLineNo">701</span><a name="line.701"></a>
+<span class="sourceLineNo">702</span>    /**<a name="line.702"></a>
+<span class="sourceLineNo">703</span>     * Get a random bit of state, interpreted as true or false with approximately equal likelihood.<a name="line.703"></a>
+<span class="sourceLineNo">704</span>     * @return a random boolean.<a name="line.704"></a>
+<span class="sourceLineNo">705</span>     */<a name="line.705"></a>
+<span class="sourceLineNo">706</span>    public boolean nextBoolean() {<a name="line.706"></a>
+<span class="sourceLineNo">707</span>        return nextLong() &lt; 0L;<a name="line.707"></a>
+<span class="sourceLineNo">708</span>    }<a name="line.708"></a>
+<span class="sourceLineNo">709</span><a name="line.709"></a>
+<span class="sourceLineNo">710</span>    /**<a name="line.710"></a>
+<span class="sourceLineNo">711</span>     * Get a random long between Long.MIN_VALUE to Long.MAX_VALUE (both inclusive).<a name="line.711"></a>
+<span class="sourceLineNo">712</span>     * @return a 64-bit random long.<a name="line.712"></a>
+<span class="sourceLineNo">713</span>     */<a name="line.713"></a>
+<span class="sourceLineNo">714</span>    public long nextLong() {<a name="line.714"></a>
+<span class="sourceLineNo">715</span>        return random.nextLong();<a name="line.715"></a>
+<span class="sourceLineNo">716</span>    }<a name="line.716"></a>
+<span class="sourceLineNo">717</span><a name="line.717"></a>
+<span class="sourceLineNo">718</span>    /**<a name="line.718"></a>
+<span class="sourceLineNo">719</span>     * Returns a random long below the given bound, or 0 if the bound is 0 or<a name="line.719"></a>
+<span class="sourceLineNo">720</span>     * negative.<a name="line.720"></a>
+<span class="sourceLineNo">721</span>     *<a name="line.721"></a>
+<span class="sourceLineNo">722</span>     * @param bound the upper bound (exclusive)<a name="line.722"></a>
+<span class="sourceLineNo">723</span>     * @return the found number<a name="line.723"></a>
+<span class="sourceLineNo">724</span>     */<a name="line.724"></a>
+<span class="sourceLineNo">725</span>    public long nextLong( final long bound ) {<a name="line.725"></a>
+<span class="sourceLineNo">726</span>        if ( bound &lt;= 0 ) return 0;<a name="line.726"></a>
+<span class="sourceLineNo">727</span>        long threshold = (0x7fffffffffffffffL - bound + 1) % bound;<a name="line.727"></a>
+<span class="sourceLineNo">728</span>        for (;;) {<a name="line.728"></a>
+<span class="sourceLineNo">729</span>            long bits = random.nextLong() &amp; 0x7fffffffffffffffL;<a name="line.729"></a>
+<span class="sourceLineNo">730</span>            if (bits &gt;= threshold)<a name="line.730"></a>
+<span class="sourceLineNo">731</span>                return bits % bound;<a name="line.731"></a>
+<span class="sourceLineNo">732</span>        }<a name="line.732"></a>
+<span class="sourceLineNo">733</span>    }<a name="line.733"></a>
+<span class="sourceLineNo">734</span>    /**<a name="line.734"></a>
+<span class="sourceLineNo">735</span>     * Returns a random non-negative integer below the given bound, or 0 if the bound is 0 or<a name="line.735"></a>
+<span class="sourceLineNo">736</span>     * negative.<a name="line.736"></a>
+<span class="sourceLineNo">737</span>     *<a name="line.737"></a>
+<span class="sourceLineNo">738</span>     * @param bound the upper bound (exclusive)<a name="line.738"></a>
+<span class="sourceLineNo">739</span>     * @return the found number<a name="line.739"></a>
+<span class="sourceLineNo">740</span>     */<a name="line.740"></a>
+<span class="sourceLineNo">741</span>    public int nextInt(final int bound) {<a name="line.741"></a>
+<span class="sourceLineNo">742</span>        if ( bound &lt;= 0 ) return 0;<a name="line.742"></a>
+<span class="sourceLineNo">743</span>        int threshold = (0x7fffffff - bound + 1) % bound;<a name="line.743"></a>
+<span class="sourceLineNo">744</span>        for (;;) {<a name="line.744"></a>
+<span class="sourceLineNo">745</span>            int bits = random.next(31);<a name="line.745"></a>
+<span class="sourceLineNo">746</span>            if (bits &gt;= threshold)<a name="line.746"></a>
+<span class="sourceLineNo">747</span>                return bits % bound;<a name="line.747"></a>
+<span class="sourceLineNo">748</span>        }<a name="line.748"></a>
+<span class="sourceLineNo">749</span>    }<a name="line.749"></a>
+<span class="sourceLineNo">750</span>    /**<a name="line.750"></a>
+<span class="sourceLineNo">751</span>     * Returns a random non-negative integer below the given bound, or 0 if the bound is 0.<a name="line.751"></a>
+<span class="sourceLineNo">752</span>     * Uses an aggressively optimized technique that has some bias, but mostly for values of<a name="line.752"></a>
+<span class="sourceLineNo">753</span>     * bound over 1 billion. This method is considered "hasty" since it should be faster than<a name="line.753"></a>
+<span class="sourceLineNo">754</span>     * nextInt() but gives up some statistical quality to do so. It also has undefined behavior<a name="line.754"></a>
+<span class="sourceLineNo">755</span>     * if bound is negative, though it will probably produce a negative number (just how<a name="line.755"></a>
+<span class="sourceLineNo">756</span>     * negative is an open question).<a name="line.756"></a>
+<span class="sourceLineNo">757</span>     * &lt;br&gt;<a name="line.757"></a>
+<span class="sourceLineNo">758</span>     * Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/<a name="line.758"></a>
+<span class="sourceLineNo">759</span>     * @param bound the upper bound (exclusive); behavior is undefined if bound is negative<a name="line.759"></a>
+<span class="sourceLineNo">760</span>     * @return the found number<a name="line.760"></a>
+<span class="sourceLineNo">761</span>     */<a name="line.761"></a>
+<span class="sourceLineNo">762</span>    public int nextIntHasty(final int bound) {<a name="line.762"></a>
+<span class="sourceLineNo">763</span>        return (int)((bound * (random.nextLong() &amp; 0x7FFFFFFFL)) &gt;&gt; 31);<a name="line.763"></a>
+<span class="sourceLineNo">764</span>    }<a name="line.764"></a>
+<span class="sourceLineNo">765</span><a name="line.765"></a>
+<span class="sourceLineNo">766</span>    /**<a name="line.766"></a>
+<span class="sourceLineNo">767</span>     * Gets a random Coord that has x between 0 (inclusive) and width (exclusive) and y between 0 (inclusive)<a name="line.767"></a>
+<span class="sourceLineNo">768</span>     * and height (exclusive). This makes one call to randomLong to generate (more than) 31 random bits for<a name="line.768"></a>
+<span class="sourceLineNo">769</span>     * each axis, and should be very fast. Remember that Coord values are cached in a pool that starts able to<a name="line.769"></a>
+<span class="sourceLineNo">770</span>     * hold up to 255 x and 255 y for positive values, and the pool should be grown with the static method<a name="line.770"></a>
+<span class="sourceLineNo">771</span>     * Coord.expandPool() in order to efficiently use larger Coord values. If width and height are very large,<a name="line.771"></a>
+<span class="sourceLineNo">772</span>     * greater than 100,000 for either, this particular method may show bias toward certain positions due to<a name="line.772"></a>
+<span class="sourceLineNo">773</span>     * the "hasty" technique used to reduce the random numbers to the given size, but because most maps in<a name="line.773"></a>
+<span class="sourceLineNo">774</span>     * tile-based games are relatively small, this technique should be fine.<a name="line.774"></a>
+<span class="sourceLineNo">775</span>     * &lt;br&gt;<a name="line.775"></a>
+<span class="sourceLineNo">776</span>     * Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/<a name="line.776"></a>
+<span class="sourceLineNo">777</span>     * @param width the upper bound (exclusive) for x coordinates<a name="line.777"></a>
+<span class="sourceLineNo">778</span>     * @param height the upper bound (exclusive) for y coordinates<a name="line.778"></a>
+<span class="sourceLineNo">779</span>     * @return a random Coord between (0,0) inclusive and (width,height) exclusive<a name="line.779"></a>
+<span class="sourceLineNo">780</span>     */<a name="line.780"></a>
+<span class="sourceLineNo">781</span>    public Coord nextCoord(int width, int height)<a name="line.781"></a>
+<span class="sourceLineNo">782</span>    {<a name="line.782"></a>
+<span class="sourceLineNo">783</span>        final long n = random.nextLong();<a name="line.783"></a>
+<span class="sourceLineNo">784</span>        return Coord.get((int)((width * (n &gt;&gt;&gt; 33)) &gt;&gt; 31), (int)((height * (n &amp; 0x7FFFFFFFL)) &gt;&gt; 31));<a name="line.784"></a>
+<span class="sourceLineNo">785</span>    }<a name="line.785"></a>
+<span class="sourceLineNo">786</span>    /**<a name="line.786"></a>
+<span class="sourceLineNo">787</span>     * Get a random integer between Integer.MIN_VALUE to Integer.MAX_VALUE (both inclusive).<a name="line.787"></a>
+<span class="sourceLineNo">788</span>     * @return a 32-bit random int.<a name="line.788"></a>
+<span class="sourceLineNo">789</span>     */<a name="line.789"></a>
+<span class="sourceLineNo">790</span>    public int nextInt() {<a name="line.790"></a>
+<span class="sourceLineNo">791</span>        return next(32);<a name="line.791"></a>
+<span class="sourceLineNo">792</span>    }<a name="line.792"></a>
+<span class="sourceLineNo">793</span><a name="line.793"></a>
+<span class="sourceLineNo">794</span>    /**<a name="line.794"></a>
+<span class="sourceLineNo">795</span>     * Get up to 32 bits (inclusive) of random state from the RandomnessSource.<a name="line.795"></a>
+<span class="sourceLineNo">796</span>     * @param bits 1 to 32<a name="line.796"></a>
+<span class="sourceLineNo">797</span>     * @return a random number that fits in the specified number of bits.<a name="line.797"></a>
+<span class="sourceLineNo">798</span>     */<a name="line.798"></a>
+<span class="sourceLineNo">799</span>    public int next(int bits) {<a name="line.799"></a>
+<span class="sourceLineNo">800</span>        return random.next(bits);<a name="line.800"></a>
+<span class="sourceLineNo">801</span>    }<a name="line.801"></a>
+<span class="sourceLineNo">802</span><a name="line.802"></a>
+<span class="sourceLineNo">803</span>    public RandomnessSource getRandomness() {<a name="line.803"></a>
+<span class="sourceLineNo">804</span>        return random;<a name="line.804"></a>
+<span class="sourceLineNo">805</span>    }<a name="line.805"></a>
+<span class="sourceLineNo">806</span><a name="line.806"></a>
+<span class="sourceLineNo">807</span>    public void setRandomness(RandomnessSource random) {<a name="line.807"></a>
+<span class="sourceLineNo">808</span>        this.random = random;<a name="line.808"></a>
+<span class="sourceLineNo">809</span>    }<a name="line.809"></a>
+<span class="sourceLineNo">810</span><a name="line.810"></a>
+<span class="sourceLineNo">811</span>    /**<a name="line.811"></a>
+<span class="sourceLineNo">812</span>     * Creates a copy of this RNG; it will generate the same random numbers, given the same calls in order, as this RNG<a name="line.812"></a>
+<span class="sourceLineNo">813</span>     * at the point copy() is called. The copy will not share references with this RNG.<a name="line.813"></a>
+<span class="sourceLineNo">814</span>     * @return a copy of this RNG<a name="line.814"></a>
+<span class="sourceLineNo">815</span>     */<a name="line.815"></a>
+<span class="sourceLineNo">816</span>    public RNG copy()<a name="line.816"></a>
+<span class="sourceLineNo">817</span>    {<a name="line.817"></a>
+<span class="sourceLineNo">818</span>        return new RNG(random.copy());<a name="line.818"></a>
+<span class="sourceLineNo">819</span>    }<a name="line.819"></a>
+<span class="sourceLineNo">820</span><a name="line.820"></a>
+<span class="sourceLineNo">821</span>    /**<a name="line.821"></a>
+<span class="sourceLineNo">822</span>     * Generates a random 64-bit long with a number of '1' bits (Hamming weight) approximately equal to bitCount.<a name="line.822"></a>
+<span class="sourceLineNo">823</span>     * For example, calling this with a parameter of 32 will be equivalent to calling nextLong() on this object's<a name="line.823"></a>
+<span class="sourceLineNo">824</span>     * RandomnessSource (it doesn't consider overridden nextLong() methods, where present, on subclasses of RNG).<a name="line.824"></a>
+<span class="sourceLineNo">825</span>     * Calling this with a parameter of 16 will have on average 16 of the 64 bits in the returned long set to '1',<a name="line.825"></a>
+<span class="sourceLineNo">826</span>     * distributed pseudo-randomly, while a parameter of 47 will have on average 47 bits set. This can be useful for<a name="line.826"></a>
+<span class="sourceLineNo">827</span>     * certain code that uses bits to represent data but needs a different ratio of set bits to unset bits than 1:1.<a name="line.827"></a>
+<span class="sourceLineNo">828</span>     * &lt;br&gt;<a name="line.828"></a>
+<span class="sourceLineNo">829</span>     * Implementors should limit any overriding method to calling and returning super(), potentially storing any extra<a name="line.829"></a>
+<span class="sourceLineNo">830</span>     * information they need to internally, but should not change the result. This works based on a delicate balance of<a name="line.830"></a>
+<span class="sourceLineNo">831</span>     * the RandomnessSource producing bits with an even 50% chance of being set, regardless of position, and RNG<a name="line.831"></a>
+<span class="sourceLineNo">832</span>     * subclasses that alter the odds won't work as expected here, particularly if those subclasses use doubles<a name="line.832"></a>
+<span class="sourceLineNo">833</span>     * internally (which almost always produce less than 64 random bits). You should definitely avoid using certain<a name="line.833"></a>
+<span class="sourceLineNo">834</span>     * RandomnessSources that aren't properly pseudo-random, such as any QRNG class (SobolQRNG and VanDerCorputQRNG,<a name="line.834"></a>
+<span class="sourceLineNo">835</span>     * pretty much), since these won't fill all 64 bits with equal likelihood.<a name="line.835"></a>
+<span class="sourceLineNo">836</span>     * @param bitCount an int, only considered if between 0 and 64, that is the average number of bits to set<a name="line.836"></a>
+<span class="sourceLineNo">837</span>     * @return a 64-bit long that, on average, should have bitCount bits set to 1, potentially anywhere in the long<a name="line.837"></a>
+<span class="sourceLineNo">838</span>     */<a name="line.838"></a>
+<span class="sourceLineNo">839</span>    public long approximateBits(int bitCount)<a name="line.839"></a>
+<span class="sourceLineNo">840</span>    {<a name="line.840"></a>
+<span class="sourceLineNo">841</span>        if(bitCount &lt;= 0)<a name="line.841"></a>
+<span class="sourceLineNo">842</span>            return 0L;<a name="line.842"></a>
+<span class="sourceLineNo">843</span>        if(bitCount &gt;= 64)<a name="line.843"></a>
+<span class="sourceLineNo">844</span>            return -1L;<a name="line.844"></a>
+<span class="sourceLineNo">845</span>        if(bitCount == 32)<a name="line.845"></a>
+<span class="sourceLineNo">846</span>            return random.nextLong();<a name="line.846"></a>
+<span class="sourceLineNo">847</span>        boolean high = bitCount &gt; 32;<a name="line.847"></a>
+<span class="sourceLineNo">848</span>        int altered = (high ? 64 - bitCount : bitCount), lsb = Integer.lowestOneBit(altered);<a name="line.848"></a>
+<span class="sourceLineNo">849</span>        long data = random.nextLong();<a name="line.849"></a>
+<span class="sourceLineNo">850</span>        for (int i = lsb &lt;&lt; 1; i &lt;= 16; i &lt;&lt;= 1) {<a name="line.850"></a>
+<span class="sourceLineNo">851</span>            if((altered &amp; i) == 0)<a name="line.851"></a>
+<span class="sourceLineNo">852</span>                data &amp;= random.nextLong();<a name="line.852"></a>
+<span class="sourceLineNo">853</span>            else<a name="line.853"></a>
+<span class="sourceLineNo">854</span>                data |= random.nextLong();<a name="line.854"></a>
+<span class="sourceLineNo">855</span>        }<a name="line.855"></a>
+<span class="sourceLineNo">856</span>        return high ? ~(random.nextLong() &amp; data) : (random.nextLong() &amp; data);<a name="line.856"></a>
+<span class="sourceLineNo">857</span>    }<a name="line.857"></a>
+<span class="sourceLineNo">858</span><a name="line.858"></a>
+<span class="sourceLineNo">859</span>    /**<a name="line.859"></a>
+<span class="sourceLineNo">860</span>     * Gets a somewhat-random long with exactly 32 bits set; in each pair of bits starting at bit 0 and bit 1, then bit<a name="line.860"></a>
+<span class="sourceLineNo">861</span>     * 2 and bit 3, up to bit 62 and bit 3, one bit will be 1 and one bit will be 0 in each pair.<a name="line.861"></a>
+<span class="sourceLineNo">862</span>     * @return a random long with 32 "1" bits, distributed so exactly one bit is "1" for each pair of bits<a name="line.862"></a>
+<span class="sourceLineNo">863</span>     */<a name="line.863"></a>
+<span class="sourceLineNo">864</span>    public long randomInterleave() {<a name="line.864"></a>
+<span class="sourceLineNo">865</span>        long bits = nextLong() &amp; 0xFFFFFFFFL, ib = ~bits &amp; 0xFFFFFFFFL;<a name="line.865"></a>
+<span class="sourceLineNo">866</span>        bits |= (bits &lt;&lt; 16);<a name="line.866"></a>
+<span class="sourceLineNo">867</span>        ib |= (ib &lt;&lt; 16);<a name="line.867"></a>
+<span class="sourceLineNo">868</span>        bits &amp;= 0x0000FFFF0000FFFFL;<a name="line.868"></a>
+<span class="sourceLineNo">869</span>        ib &amp;= 0x0000FFFF0000FFFFL;<a name="line.869"></a>
+<span class="sourceLineNo">870</span>        bits |= (bits &lt;&lt; 8);<a name="line.870"></a>
+<span class="sourceLineNo">871</span>        ib |= (ib &lt;&lt; 8);<a name="line.871"></a>
+<span class="sourceLineNo">872</span>        bits &amp;= 0x00FF00FF00FF00FFL;<a name="line.872"></a>
+<span class="sourceLineNo">873</span>        ib &amp;= 0x00FF00FF00FF00FFL;<a name="line.873"></a>
+<span class="sourceLineNo">874</span>        bits |= (bits &lt;&lt; 4);<a name="line.874"></a>
+<span class="sourceLineNo">875</span>        ib |= (ib &lt;&lt; 4);<a name="line.875"></a>
+<span class="sourceLineNo">876</span>        bits &amp;= 0x0F0F0F0F0F0F0F0FL;<a name="line.876"></a>
+<span class="sourceLineNo">877</span>        ib &amp;= 0x0F0F0F0F0F0F0F0FL;<a name="line.877"></a>
+<span class="sourceLineNo">878</span>        bits |= (bits &lt;&lt; 2);<a name="line.878"></a>
+<span class="sourceLineNo">879</span>        ib |= (ib &lt;&lt; 2);<a name="line.879"></a>
+<span class="sourceLineNo">880</span>        bits &amp;= 0x3333333333333333L;<a name="line.880"></a>
+<span class="sourceLineNo">881</span>        ib &amp;= 0x3333333333333333L;<a name="line.881"></a>
+<span class="sourceLineNo">882</span>        bits |= (bits &lt;&lt; 1);<a name="line.882"></a>
+<span class="sourceLineNo">883</span>        ib |= (ib &lt;&lt; 1);<a name="line.883"></a>
+<span class="sourceLineNo">884</span>        bits &amp;= 0x5555555555555555L;<a name="line.884"></a>
+<span class="sourceLineNo">885</span>        ib &amp;= 0x5555555555555555L;<a name="line.885"></a>
+<span class="sourceLineNo">886</span>        return (bits | (ib &lt;&lt; 1));<a name="line.886"></a>
+<span class="sourceLineNo">887</span>    }<a name="line.887"></a>
+<span class="sourceLineNo">888</span><a name="line.888"></a>
+<span class="sourceLineNo">889</span>    @Override<a name="line.889"></a>
+<span class="sourceLineNo">890</span>    public String toString() {<a name="line.890"></a>
+<span class="sourceLineNo">891</span>        return "RNG with Randomness Source " + random;<a name="line.891"></a>
+<span class="sourceLineNo">892</span>    }<a name="line.892"></a>
+<span class="sourceLineNo">893</span><a name="line.893"></a>
+<span class="sourceLineNo">894</span>    @Override<a name="line.894"></a>
+<span class="sourceLineNo">895</span>    public boolean equals(Object o) {<a name="line.895"></a>
+<span class="sourceLineNo">896</span>        if (this == o) return true;<a name="line.896"></a>
+<span class="sourceLineNo">897</span>        if (!(o instanceof RNG)) return false;<a name="line.897"></a>
+<span class="sourceLineNo">898</span><a name="line.898"></a>
+<span class="sourceLineNo">899</span>        RNG rng = (RNG) o;<a name="line.899"></a>
+<span class="sourceLineNo">900</span><a name="line.900"></a>
+<span class="sourceLineNo">901</span>        return random.equals(rng.random);<a name="line.901"></a>
+<span class="sourceLineNo">902</span>    }<a name="line.902"></a>
+<span class="sourceLineNo">903</span><a name="line.903"></a>
+<span class="sourceLineNo">904</span>    @Override<a name="line.904"></a>
+<span class="sourceLineNo">905</span>    public int hashCode() {<a name="line.905"></a>
+<span class="sourceLineNo">906</span>        return random.hashCode();<a name="line.906"></a>
+<span class="sourceLineNo">907</span>    }<a name="line.907"></a>
+<span class="sourceLineNo">908</span>}<a name="line.908"></a>
 
 
 
