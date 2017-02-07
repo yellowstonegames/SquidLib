@@ -968,6 +968,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("Falcon, hash on length 2");
                         break;
                     case 29:
                         for (int x = 0; x < width; x++) {
@@ -977,6 +978,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("Falcon, hash on length 1");
                         break;
                     case 30:
                         for (int x = 0; x < width; x++) {
@@ -987,6 +989,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("Falcon, hash64 on length 2");
                         break;
                     case 31:
                         for (int x = 0; x < width; x++) {
@@ -996,6 +999,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("Falcon, hash64 on length 1");
                         break;
 
                     case 32:
@@ -1007,6 +1011,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("Wisp, hash on length 2");
                         break;
                     case 33:
                         for (int x = 0; x < width; x++) {
@@ -1016,6 +1021,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("Wisp, hash on length 1");
                         break;
                     case 34:
                         for (int x = 0; x < width; x++) {
@@ -1026,6 +1032,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("Wisp, hash64 on length 2");
                         break;
                     case 35:
                         for (int x = 0; x < width; x++) {
@@ -1035,6 +1042,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("Wisp, hash64 on length 1");
                         break;
                     case 36:
                         colorFactory.clearCache();
@@ -1044,8 +1052,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("mixHash, " + (width * height) + " cells, "
-                                + colorFactory.cacheSize() + " colors");
+                        Gdx.graphics.setTitle("mixHash");
                         break;
                     case 37:
                         colorFactory.clearCache();
