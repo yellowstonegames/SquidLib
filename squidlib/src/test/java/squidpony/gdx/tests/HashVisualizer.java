@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Stack;
+import com.badlogic.gdx.utils.NumberUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.IFilter;
@@ -24,19 +24,56 @@ import static squidpony.squidgrid.gui.gdx.Filters.Utility.floatGet;
 import static squidpony.squidgrid.gui.gdx.Filters.Utility.floatGetI;
 
 /**
+ * Demo to help with visualizing hash/noise functions and RNG types. Most of the hashes work simply by treating the x,y
+ * point of a pixel in the window as either one or two ints and running the hash on an array of those ints. This helps
+ * find symmetry issues and cases where the range of numbers produced is smaller than it should be. When the term
+ * "visual testing" is used in {@link CrossHash}, this class is what it refers to.
+ * <br>
+ * <b>INSTRUCTIONS</b>
+ * <br>
+ * Press enter to go to the next test, s once or twice to demo a group of hash functions (hitting s while you're already
+ * demoing hashes will change to a different group), n to demo noise functions, r for RNG varieties, and a for artistic
+ * interpretations of hashes with limited color palettes. On anything that changes over time, you can hit alt-c to pause
+ * or resume (noise, RNG, and artistic demos all allow this), and if paused you can press c to advance one frame.
+ * <br>
+ * Some points of interest:
+ * <li>
+ *     <ul>Most of SquidLib's hashes produce what they should, colorful static. If patterns appear in the static, such
+ *     as bands of predictable color at specific intervals, that marks a problem.</ul>
+ *     <ul>The FNV-1a algorithm, which is what you get if you use CrossHash with no nested class specified, has
+ *     significant visual flaws, in addition to being the slowest hash here. With the mapping of ints to colors used in
+ *     this class, it generates 3 hues with much greater frequency, and also produces either rhombus or linear patterns,
+ *     depending on how the x,y point is encoded into the array that the demo hashes.</ul>
+ *     <ul>Java's built-in {@link Arrays#hashCode(int[])} function has abysmal visual quality, mostly looking like the
+ *     exact opposite of the colorful static that the hashes should produce.</ul>
+ *     <ul>RNG algorithms should mostly produce a lot of frames per second (determined by the efficiency of the
+ *     RandomnessSource), without showing repeats in some way (determined by the lowest period of any random bit).</ul>
+ *     <ul>Noise functions should have their own individual "flavor" that determines what uses they may be suited for.
+ *     While PerlinNoise is a tried-and-true standby for continuous noise, you may instead want a more chaotic/blocky
+ *     appearance for the noise, which MerlinNoise accomplishes somewhat. WhirlingNoise is faster variant on PerlinNoise
+ *     that tries to avoid certain patterns, particularly in 2D; judge for yourself if it succeeds. There's two colorful
+ *     versions of noise here. One samples 3D noise using the current x and y for a point at 3 different z values based
+ *     on the number of frames rendered, and uses those 3 numbers as the red, green, and blue channels. Another samples
+ *     3D noise only once, and interprets the single value as a 24-bit int representing a color. The first looks good!
+ *     It can be previewed at https://dl.dropboxusercontent.com/u/11914692/rainbow-perlin.gif , although the GIF format
+ *     reduces the visible color depth. The second doesn't look good at all, but may be handy for spotting quirks.</ul>
+ *     <ul>There are also "artistic interpretations" of the otherwise-chaotic hashes. Nice for getting ideas, they're a
+ *     sort of Rorschach-test-like concept.</ul>
+ * </li>
+ * <br>
  * Created by Tommy Ettinger on 8/20/2016.
  */
 public class HashVisualizer extends ApplicationAdapter {
     private SpriteBatch batch;
     private SquidColorCenter colorFactory;
-    private SquidPanel display, overlay;
+    private SquidPanel display;//, overlay;
     private int width, height;
     private int cellWidth, cellHeight;
     private SquidInput input;
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 30, rngMode = 0, noiseMode = 12;
+    private int hashMode = 30, rngMode = 0, noiseMode = 10;
     private CrossHash.Storm storm, stormA, stormB, stormC;
     private CrossHash.Chariot chariot, chariotA, chariotB, chariotC;
     private final int[] coordinates = new int[2];
@@ -47,7 +84,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions
     // 4 noise
     // 5 RNG results
-    private int testType = 0;
+    private int testType = 4;
 
     private RandomnessSource fuzzy, random;
     private Random jreRandom;
@@ -176,7 +213,7 @@ public class HashVisualizer extends ApplicationAdapter {
         cellWidth = 1;
         cellHeight = 1;
         display = new SquidPanel(width, height, cellWidth, cellHeight);
-        overlay = new SquidPanel(16, 8, DefaultResources.getStretchableFont().width(32).height(64).initBySize());
+        //overlay = new SquidPanel(16, 8, DefaultResources.getStretchableFont().width(32).height(64).initBySize());
         IFilter<Color> filter0 = new Filters.PaletteFilter(
                 new float[]{0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0.125f, 0.25f, 0.375f, 0.5f, 0.625f, 0.75f, 0.875f, 1f},
                 new float[]{0f, 0.125f, 0.25f, 0.375f, 0.5f, 0.625f, 0.75f, 0.875f, 1f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f,},
@@ -211,7 +248,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         {
                             case 4:
                                 noiseMode++;
-                                noiseMode %= 14;
+                                noiseMode %= 16;
                                 break;
                             case 5:
                                 rngMode++;
@@ -272,10 +309,11 @@ public class HashVisualizer extends ApplicationAdapter {
         Gdx.input.setInputProcessor(input);
         // and then add display, our one visual component, to the list of things that act in Stage.
         display.setPosition(0, 0);
-        overlay.setPosition(0, 0);
-        Stack stk = new Stack(display, overlay);
-        stage.addActor(stk);
-        stk.layout();
+        //overlay.setPosition(0, 0);
+        //Stack stk = new Stack(display, overlay);
+        //stage.addActor(stk);
+        //stk.layout();
+        stage.addActor(display);
         putMap();
         //Gdx.graphics.setContinuousRendering(false);
         //Gdx.graphics.requestRendering();
@@ -283,7 +321,7 @@ public class HashVisualizer extends ApplicationAdapter {
 
     public void putMap() {
         display.erase();
-        overlay.erase();
+        //overlay.erase();
         long code;
         float bright;
         int iBright;
@@ -1268,8 +1306,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("Whirling Alt 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = (float)
-                                        (//PerlinNoise.noise(x / 8.0, y / 8.0, ctr * 0.125) * 8 +
+                                bright = (//PerlinNoise.noise(x / 8.0, y / 8.0, ctr * 0.125) * 8 +
                                                 //PerlinNoise.noise(x / 4.0, y / 4.0, ctr * 0.125) * 4 +
                                                 //PerlinNoise.noise(x / 2.0, y / 2.0, ctr * 0.125) * 2 +
                                                 WhirlingNoise.noiseAlt(x * 0.125, y * 0.125, ctr  * 0.0375)
@@ -1287,8 +1324,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = (float)
-                                        (//PerlinNoise.noise(xx / 16.0, yy / 16.0) * 16 +
+                                bright = (//PerlinNoise.noise(xx / 16.0, yy / 16.0) * 16 +
                                                 //PerlinNoise.noise(xx / 8.0, yy / 8.0) * 8 +
                                                 //PerlinNoise.noise(xx / 4.0, yy / 4.0) * 4 +
                                                 //PerlinNoise.noise(xx / 2.0, yy / 2.0) * 2 +
@@ -1300,6 +1336,30 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
 
+                        //You can preview this at https://dl.dropboxusercontent.com/u/11914692/rainbow-perlin.gif
+                    case 14:
+                        Gdx.graphics.setTitle("Whirling 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y, floatGet(
+                                        (WhirlingNoise.noiseAlt(x * 0.0625, y * 0.0625, ctr  * 0.125) + 1f) * 0.5f,
+                                        (WhirlingNoise.noiseAlt(x * 0.0625, y * 0.0625, ctr  * 0.125 + 234.5) + 1f) * 0.5f,
+                                        (WhirlingNoise.noiseAlt(x * 0.0625, y * 0.0625, ctr  * 0.125 + 678.9) + 1f) * 0.5f,
+                                        1f));
+                            }
+                        }
+                        break;
+                    case 15:
+                        Gdx.graphics.setTitle("Whirling 3D Color Noise, one octave as all channels at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y,
+                                        NumberUtils.intToFloatColor(0xFE000000 |
+                                                (int)((WhirlingNoise.noise(x * 0.0625, y * 0.0625, ctr  * 0.125)
+                                                        + 1.0) * 8388607.5)));
+                            }
+                        }
+                        break;
 
                     /*
                                         case 2:
@@ -1914,8 +1974,7 @@ public class HashVisualizer extends ApplicationAdapter {
         Gdx.gl.glClearColor(bgColor.r / 255.0f, bgColor.g / 255.0f, bgColor.b / 255.0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         // not sure if this is always needed...
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        view.apply(true);
+        Gdx.gl.glDisable(GL20.GL_BLEND);
         // need to display the map every frame, since we clear the screen to avoid artifacts.
         if (testType == 3 || keepGoing) {
             ctr++;
@@ -1937,6 +1996,7 @@ public class HashVisualizer extends ApplicationAdapter {
         this.width = width;
         this.height = height;
         view.update(width, height, true);
+        view.apply(true);
         //display = new SquidPanel(this.width, this.height, cellWidth, cellHeight);
         //Gdx.graphics.requestRendering();
     }

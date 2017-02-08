@@ -19,12 +19,11 @@ import static squidpony.squidmath.PintRNG.determineBounded;
  */
 @Beta
 public class WhirlingNoise extends PerlinNoise {
-
     private static int fastFloor(double t) {
-        return t > 0 ? (int) t : (int) t - 1;
+        return t >= 0 ? (int) t : (int) t - 1;
     }
     private static int fastFloor(float t) {
-        return t > 0 ? (int) t : (int) t - 1;
+        return t >= 0 ? (int) t : (int) t - 1;
     }
     protected static final float root3 = 1.7320508f, root5 = 2.236068f,
             F2f = 0.5f * (root3 - 1f),
@@ -242,8 +241,8 @@ public class WhirlingNoise extends PerlinNoise {
 
 
     /**
-     * 2D simplex noise returning a float; slower than {@link #noise(double, double)}, so avoid this unless you
-     * absolutely need a float. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result
+     * 2D simplex noise returning a float; extremely similar to {@link #noise(double, double)}, but this may be slightly
+     * faster or slightly slower. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result
      * will be different when passing the same arguments to {@link PerlinNoise#noise(double, double)} and this method.
      *
      * @param x x input; works well if between 0.0 and 1.0, but anything is accepted
@@ -508,8 +507,10 @@ public class WhirlingNoise extends PerlinNoise {
     }
 
     /**
-     * 3D simplex noise returning a float; slower than {@link #noise(double, double, double)}, so avoid this unless you
-     * absolutely need a float.
+     * 3D simplex noise returning a float; extremely similar to {@link #noise(double, double, double)}, but this may
+     * be slightly faster or slightly slower. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of
+     * the result will be different when passing the same arguments to {@link PerlinNoise#noise(double, double, double)}
+     * and this method.
      *
      * @param x X input
      * @param y Y input
@@ -678,6 +679,151 @@ public class WhirlingNoise extends PerlinNoise {
         return 32f * (n0 + n1 + n2 + n3);
     }
 
+    /**
+     * 4D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
+     * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double, double)} and this
+     * method. Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in
+     * chunks because it uses a pseudo-random function (curiously, {@link PintRNG#determine(int)}, which is optimized
+     * for the limitations of GWT but is rather fast here) instead of a number chosen from a single 256-element array.
+     * @param x X input
+     * @param y Y input
+     * @param z Z input
+     * @param w W input (fourth-dimensional)
+     * @return noise from -1.0 to 1.0, inclusive
+     */
+    public static double noise(double x, double y, double z, double w) {
+        // The skewing and unskewing factors are hairy again for the 4D case
+
+        // Skew the (x,y,z,w) space to determine which cell of 24 simplices
+        // we're in
+        double s = (x + y + z + w) * F4; // Factor for 4D skewing
+        int i = fastFloor(x + s);
+        int j = fastFloor(y + s);
+        int k = fastFloor(z + s);
+        int l = fastFloor(w + s);
+        double t = (i + j + k + l) * G4; // Factor for 4D unskewing
+        double X0 = i - t; // Unskew the cell origin back to (x,y,z,w) space
+        double Y0 = j - t;
+        double Z0 = k - t;
+        double W0 = l - t;
+        double x0 = x - X0; // The x,y,z,w distances from the cell origin
+        double y0 = y - Y0;
+        double z0 = z - Z0;
+        double w0 = w - W0;
+        // For the 4D case, the simplex is a 4D shape I won't even try to
+        // describe.
+        // To find out which of the 24 possible simplices we're in, we need
+        // to
+        // determine the magnitude ordering of x0, y0, z0 and w0.
+        // The method below is a good way of finding the ordering of x,y,z,w
+        // and
+        // then find the correct traversal order for the simplex we’re in.
+        // First, six pair-wise comparisons are performed between each
+        // possible pair
+        // of the four coordinates, and the results are used to add up binary
+        // bits
+        // for an integer index.
+        int c = (x0 > y0 ? 32 : 0) | (x0 > z0 ? 16 : 0) | (y0 > z0 ? 8 : 0) |
+                (x0 > w0 ? 4 : 0) | (y0 > w0 ? 2 : 0) | (z0 > w0 ? 1 : 0);
+
+        // simplex[c] is a 4-vector with the numbers 0, 1, 2 and 3 in some
+        // order.
+        // Many values of c will never occur, since e.g. x>y>z>w makes x<z,
+        // y<w and x<w
+        // impossible. Only the 24 indices which have non-zero entries make
+        // any sense.
+        // We use a thresholding to set the coordinates in turn from the
+        // largest magnitude.
+        // The number 3 in the "simplex" array is at the position of the
+        // largest coordinate.
+
+        // The integer offsets for the second simplex corner
+        int i1 = simplex[c][0] >= 3 ? 1 : 0;
+        int j1 = simplex[c][1] >= 3 ? 1 : 0;
+        int k1 = simplex[c][2] >= 3 ? 1 : 0;
+        int l1 = simplex[c][3] >= 3 ? 1 : 0;
+        // The number 2 in the "simplex" array is at the second largest
+        // coordinate.
+
+        // The integer offsets for the third simplex corner
+        int i2 = simplex[c][0] >= 2 ? 1 : 0;
+        int j2 = simplex[c][1] >= 2 ? 1 : 0;
+        int k2 = simplex[c][2] >= 2 ? 1 : 0;
+        int l2 = simplex[c][3] >= 2 ? 1 : 0;
+        // The number 1 in the "simplex" array is at the second smallest
+        // coordinate.
+
+        // The integer offsets for the fourth simplex corner
+        int i3 = simplex[c][0] >= 1 ? 1 : 0;
+        int j3 = simplex[c][1] >= 1 ? 1 : 0;
+        int k3 = simplex[c][2] >= 1 ? 1 : 0;
+        int l3 = simplex[c][3] >= 1 ? 1 : 0;
+        // The fifth corner has all coordinate offsets = 1, so no need to
+        // look that up.
+        double x1 = x0 - i1 + G4; // Offsets for second corner in (x,y,z,w) coords
+        double y1 = y0 - j1 + G4;
+        double z1 = z0 - k1 + G4;
+        double w1 = w0 - l1 + G4;
+        double x2 = x0 - i2 + 2.0 * G4; // Offsets for third corner in (x,y,z,w) coords
+        double y2 = y0 - j2 + 2.0 * G4;
+        double z2 = z0 - k2 + 2.0 * G4;
+        double w2 = w0 - l2 + 2.0 * G4;
+        double x3 = x0 - i3 + 3.0 * G4; // Offsets for fourth corner in (x,y,z,w) coords
+        double y3 = y0 - j3 + 3.0 * G4;
+        double z3 = z0 - k3 + 3.0 * G4;
+        double w3 = w0 - l3 + 3.0 * G4;
+        double x4 = x0 - 1.0 + 4.0 * G4; // Offsets for last corner in (x,y,z,w) coords
+        double y4 = y0 - 1.0 + 4.0 * G4;
+        double z4 = z0 - 1.0 + 4.0 * G4;
+        double w4 = w0 - 1.0 + 4.0 * G4;
+
+        int gi0 = determine(i + determine(j + determine(k + determine(l)))) & 31;
+        int gi1 = determine(i + i1 + determine(j + j1 + determine(k + k1 + determine(l + l1)))) & 31;
+        int gi2 = determine(i + i2 + determine(j + j2 + determine(k + k2 + determine(l + l2)))) & 31;
+        int gi3 = determine(i + i3 + determine(j + j3 + determine(k + k3 + determine(l + l3)))) & 31;
+        int gi4 = determine(i + 1 + determine(j + 1 + determine(k + 1 + determine(l + 1)))) & 31;
+
+        // Noise contributions from the five corners are n0 to n4
+
+        // Calculate the contribution from the five corners
+        double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0, n0;
+        if (t0 < 0) {
+            n0 = 0.0;
+        } else {
+            t0 *= t0;
+            n0 = t0 * t0 * dot(grad4[gi0], x0, y0, z0, w0);
+        }
+        double t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1, n1;
+        if (t1 < 0) {
+            n1 = 0.0;
+        } else {
+            t1 *= t1;
+            n1 = t1 * t1 * dot(grad4[gi1], x1, y1, z1, w1);
+        }
+        double t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2,  n2;
+        if (t2 < 0) {
+            n2 = 0.0;
+        } else {
+            t2 *= t2;
+            n2 = t2 * t2 * dot(grad4[gi2], x2, y2, z2, w2);
+        }
+        double t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3, n3;
+        if (t3 < 0) {
+            n3 = 0.0;
+        } else {
+            t3 *= t3;
+            n3 = t3 * t3 * dot(grad4[gi3], x3, y3, z3, w3);
+        }
+        double t4 = 0.6 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4, n4;
+        if (t4 < 0) {
+            n4 = 0.0;
+        } else {
+            t4 *= t4;
+            n4 = t4 * t4 * dot(grad4[gi4], x4, y4, z4, w4);
+        }
+        // Sum up and scale the result to cover the range [-1,1]
+        return 27.0 * (n0 + n1 + n2 + n3 + n4);
+    }
 
     /*
     public static void main(String[] args)

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -261,20 +261,29 @@ extends <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squ
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>static float</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/WhirlingNoise.html#noiseAlt-double-double-">noiseAlt</a></span>(double&nbsp;x,
-        double&nbsp;y)</code>
-<div class="block">2D simplex noise returning a float; slower than <a href="../../squidpony/squidmath/WhirlingNoise.html#noise-double-double-"><code>noise(double, double)</code></a>, so avoid this unless you
- absolutely need a float.</div>
+<td class="colFirst"><code>static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/WhirlingNoise.html#noise-double-double-double-double-">noise</a></span>(double&nbsp;x,
+     double&nbsp;y,
+     double&nbsp;z,
+     double&nbsp;w)</code>
+<div class="block">4D simplex noise.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>static float</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/WhirlingNoise.html#noiseAlt-double-double-">noiseAlt</a></span>(double&nbsp;x,
+        double&nbsp;y)</code>
+<div class="block">2D simplex noise returning a float; extremely similar to <a href="../../squidpony/squidmath/WhirlingNoise.html#noise-double-double-"><code>noise(double, double)</code></a>, but this may be slightly
+ faster or slightly slower.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/WhirlingNoise.html#noiseAlt-double-double-double-">noiseAlt</a></span>(double&nbsp;x,
         double&nbsp;y,
         double&nbsp;z)</code>
-<div class="block">3D simplex noise returning a float; slower than <a href="../../squidpony/squidmath/WhirlingNoise.html#noise-double-double-double-"><code>noise(double, double, double)</code></a>, so avoid this unless you
- absolutely need a float.</div>
+<div class="block">3D simplex noise returning a float; extremely similar to <a href="../../squidpony/squidmath/WhirlingNoise.html#noise-double-double-double-"><code>noise(double, double, double)</code></a>, but this may
+ be slightly faster or slightly slower.</div>
 </td>
 </tr>
 </table>
@@ -283,7 +292,7 @@ extends <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squ
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;squidpony.squidmath.<a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squidpony.squidmath">PerlinNoise</a></h3>
-<code><a href="../../squidpony/squidmath/PerlinNoise.html#dot-double:A-double-double-">dot</a>, <a href="../../squidpony/squidmath/PerlinNoise.html#dot-int:A-double-double-double-">dot</a>, <a href="../../squidpony/squidmath/PerlinNoise.html#dot-int:A-double-double-double-double-">dot</a>, <a href="../../squidpony/squidmath/PerlinNoise.html#noise-double-double-double-double-">noise</a></code></li>
+<code><a href="../../squidpony/squidmath/PerlinNoise.html#dot-double:A-double-double-">dot</a>, <a href="../../squidpony/squidmath/PerlinNoise.html#dot-int:A-double-double-double-">dot</a>, <a href="../../squidpony/squidmath/PerlinNoise.html#dot-int:A-double-double-double-double-">dot</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -312,7 +321,7 @@ extends <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squ
 <ul class="blockList">
 <li class="blockList">
 <h4>root3</h4>
-<pre>protected static final&nbsp;float <a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.29">root3</a></pre>
+<pre>protected static final&nbsp;float <a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.28">root3</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.squidmath.WhirlingNoise.root3">Constant Field Values</a></dd>
@@ -325,7 +334,7 @@ extends <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squ
 <ul class="blockList">
 <li class="blockList">
 <h4>root5</h4>
-<pre>protected static final&nbsp;float <a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.29">root5</a></pre>
+<pre>protected static final&nbsp;float <a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.28">root5</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.squidmath.WhirlingNoise.root5">Constant Field Values</a></dd>
@@ -338,7 +347,7 @@ extends <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squ
 <ul class="blockList">
 <li class="blockList">
 <h4>F2f</h4>
-<pre>protected static final&nbsp;float <a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.30">F2f</a></pre>
+<pre>protected static final&nbsp;float <a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.29">F2f</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.squidmath.WhirlingNoise.F2f">Constant Field Values</a></dd>
@@ -351,7 +360,7 @@ extends <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squ
 <ul class="blockList">
 <li class="blockList">
 <h4>G2f</h4>
-<pre>protected static final&nbsp;float <a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.31">G2f</a></pre>
+<pre>protected static final&nbsp;float <a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.30">G2f</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.squidmath.WhirlingNoise.G2f">Constant Field Values</a></dd>
@@ -364,7 +373,7 @@ extends <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squ
 <ul class="blockList">
 <li class="blockList">
 <h4>F3f</h4>
-<pre>protected static final&nbsp;float <a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.32">F3f</a></pre>
+<pre>protected static final&nbsp;float <a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.31">F3f</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.squidmath.WhirlingNoise.F3f">Constant Field Values</a></dd>
@@ -377,7 +386,7 @@ extends <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squ
 <ul class="blockList">
 <li class="blockList">
 <h4>G3f</h4>
-<pre>protected static final&nbsp;float <a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.33">G3f</a></pre>
+<pre>protected static final&nbsp;float <a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.32">G3f</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.squidmath.WhirlingNoise.G3f">Constant Field Values</a></dd>
@@ -390,7 +399,7 @@ extends <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squ
 <ul class="blockList">
 <li class="blockList">
 <h4>F4f</h4>
-<pre>protected static final&nbsp;float <a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.34">F4f</a></pre>
+<pre>protected static final&nbsp;float <a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.33">F4f</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.squidmath.WhirlingNoise.F4f">Constant Field Values</a></dd>
@@ -403,7 +412,7 @@ extends <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squ
 <ul class="blockList">
 <li class="blockList">
 <h4>G4f</h4>
-<pre>protected static final&nbsp;float <a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.35">G4f</a></pre>
+<pre>protected static final&nbsp;float <a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.34">G4f</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.squidmath.WhirlingNoise.G4f">Constant Field Values</a></dd>
@@ -416,7 +425,7 @@ extends <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squ
 <ul class="blockList">
 <li class="blockList">
 <h4>unit1_4f</h4>
-<pre>protected static final&nbsp;float <a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.36">unit1_4f</a></pre>
+<pre>protected static final&nbsp;float <a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.35">unit1_4f</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.squidmath.WhirlingNoise.unit1_4f">Constant Field Values</a></dd>
@@ -429,7 +438,7 @@ extends <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squ
 <ul class="blockList">
 <li class="blockList">
 <h4>unit1_8f</h4>
-<pre>protected static final&nbsp;float <a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.36">unit1_8f</a></pre>
+<pre>protected static final&nbsp;float <a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.35">unit1_8f</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.squidmath.WhirlingNoise.unit1_8f">Constant Field Values</a></dd>
@@ -442,7 +451,7 @@ extends <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squ
 <ul class="blockList">
 <li class="blockList">
 <h4>unit3_8f</h4>
-<pre>protected static final&nbsp;float <a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.36">unit3_8f</a></pre>
+<pre>protected static final&nbsp;float <a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.35">unit3_8f</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.squidmath.WhirlingNoise.unit3_8f">Constant Field Values</a></dd>
@@ -455,7 +464,7 @@ extends <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squ
 <ul class="blockListLast">
 <li class="blockList">
 <h4>grad2f</h4>
-<pre>protected static final&nbsp;float[][] <a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.38">grad2f</a></pre>
+<pre>protected static final&nbsp;float[][] <a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.37">grad2f</a></pre>
 </li>
 </ul>
 </li>
@@ -489,7 +498,7 @@ extends <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squ
 <ul class="blockList">
 <li class="blockList">
 <h4>dotf</h4>
-<pre>protected static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.44">dotf</a>(float[]&nbsp;g,
+<pre>protected static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.43">dotf</a>(float[]&nbsp;g,
                             float&nbsp;x,
                             float&nbsp;y)</pre>
 </li>
@@ -500,7 +509,7 @@ extends <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squ
 <ul class="blockList">
 <li class="blockList">
 <h4>dotf</h4>
-<pre>protected static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.48">dotf</a>(int[]&nbsp;g,
+<pre>protected static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.47">dotf</a>(int[]&nbsp;g,
                             float&nbsp;x,
                             float&nbsp;y,
                             float&nbsp;z)</pre>
@@ -512,7 +521,7 @@ extends <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squ
 <ul class="blockList">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.159">noise</a>(double&nbsp;xin,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.158">noise</a>(double&nbsp;xin,
                            double&nbsp;yin)</pre>
 <div class="block">2D simplex noise. Unlike <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>, uses its parameters verbatim, so the scale of the result will be
  different when passing the same arguments to <a href="../../squidpony/squidmath/PerlinNoise.html#noise-double-double-"><code>PerlinNoise.noise(double, double)</code></a> and this method. Roughly
@@ -534,10 +543,10 @@ extends <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squ
 <ul class="blockList">
 <li class="blockList">
 <h4>noiseAlt</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.253">noiseAlt</a>(double&nbsp;x,
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.252">noiseAlt</a>(double&nbsp;x,
                              double&nbsp;y)</pre>
-<div class="block">2D simplex noise returning a float; slower than <a href="../../squidpony/squidmath/WhirlingNoise.html#noise-double-double-"><code>noise(double, double)</code></a>, so avoid this unless you
- absolutely need a float. Unlike <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>, uses its parameters verbatim, so the scale of the result
+<div class="block">2D simplex noise returning a float; extremely similar to <a href="../../squidpony/squidmath/WhirlingNoise.html#noise-double-double-"><code>noise(double, double)</code></a>, but this may be slightly
+ faster or slightly slower. Unlike <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>, uses its parameters verbatim, so the scale of the result
  will be different when passing the same arguments to <a href="../../squidpony/squidmath/PerlinNoise.html#noise-double-double-"><code>PerlinNoise.noise(double, double)</code></a> and this method.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -554,7 +563,7 @@ extends <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squ
 <ul class="blockList">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.349">noise</a>(double&nbsp;xin,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.348">noise</a>(double&nbsp;xin,
                            double&nbsp;yin,
                            double&nbsp;zin)</pre>
 <div class="block">3D simplex noise. Unlike <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>, uses its parameters verbatim, so the scale of the result will be
@@ -575,19 +584,47 @@ extends <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squ
 <a name="noiseAlt-double-double-double-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>noiseAlt</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.519">noiseAlt</a>(double&nbsp;x,
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.520">noiseAlt</a>(double&nbsp;x,
                              double&nbsp;y,
                              double&nbsp;z)</pre>
-<div class="block">3D simplex noise returning a float; slower than <a href="../../squidpony/squidmath/WhirlingNoise.html#noise-double-double-double-"><code>noise(double, double, double)</code></a>, so avoid this unless you
- absolutely need a float.</div>
+<div class="block">3D simplex noise returning a float; extremely similar to <a href="../../squidpony/squidmath/WhirlingNoise.html#noise-double-double-double-"><code>noise(double, double, double)</code></a>, but this may
+ be slightly faster or slightly slower. Unlike <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>, uses its parameters verbatim, so the scale of
+ the result will be different when passing the same arguments to <a href="../../squidpony/squidmath/PerlinNoise.html#noise-double-double-double-"><code>PerlinNoise.noise(double, double, double)</code></a>
+ and this method.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>x</code> - X input</dd>
 <dd><code>y</code> - Y input</dd>
 <dd><code>z</code> - Z input</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>noise from -1.0 to 1.0, inclusive</dd>
+</dl>
+</li>
+</ul>
+<a name="noise-double-double-double-double-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>noise</h4>
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.694">noise</a>(double&nbsp;x,
+                           double&nbsp;y,
+                           double&nbsp;z,
+                           double&nbsp;w)</pre>
+<div class="block">4D simplex noise. Unlike <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>, uses its parameters verbatim, so the scale of the result will be
+ different when passing the same arguments to <a href="../../squidpony/squidmath/PerlinNoise.html#noise-double-double-double-double-"><code>PerlinNoise.noise(double, double, double, double)</code></a> and this
+ method. Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in
+ chunks because it uses a pseudo-random function (curiously, <a href="../../squidpony/squidmath/PintRNG.html#determine-int-"><code>PintRNG.determine(int)</code></a>, which is optimized
+ for the limitations of GWT but is rather fast here) instead of a number chosen from a single 256-element array.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>x</code> - X input</dd>
+<dd><code>y</code> - Y input</dd>
+<dd><code>z</code> - Z input</dd>
+<dd><code>w</code> - W input (fourth-dimensional)</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>noise from -1.0 to 1.0, inclusive</dd>
 </dl>
