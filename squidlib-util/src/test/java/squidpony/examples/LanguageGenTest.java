@@ -170,6 +170,12 @@ public class LanguageGenTest {
         }
 
         rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.GOBLIN;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 4, 8, new String[]{",", ",", ";"},
+                    new String[]{".", ".", ".", ".", "?", "...", "..."}, 0.08));
+        }
+        rng.setState(0xf00df00L);
         flg = FakeLanguageGen.FANTASY_NAME;
         System.out.print(flg.word(rng, true, rng.between(2, 4)));
         for (int i = 1; i < 10; i++) {
@@ -183,7 +189,7 @@ public class LanguageGenTest {
         for (int i = 1; i < 10; i++) {
             System.out.print(", " + flg.word(rng, true, rng.between(2, 4)));
         }
-        System.out.println("...");
+        System.out.println("......");
         System.out.println('"' + FakeLanguageGen.ENGLISH.sentence(rng, 4, 7, new String[]{" -", ",", ",", ";"}, new String[]{"!", "!", "...", "...", ".", "?"}, 0.2) + "\",");
         System.out.println('"' + FakeLanguageGen.JAPANESE_ROMANIZED.sentence(rng, 4, 7, new String[]{" -", ",", ",", ";"}, new String[]{"!", "!", "...", "...", ".", "?"}, 0.2) + "\",");
         System.out.println('"' + FakeLanguageGen.FRENCH.sentence(rng, 5, 8, new String[]{" -", ",", ",", ";"}, new String[]{"!", "?", ".", "...", ".", "?"}, 0.1) + "\",");

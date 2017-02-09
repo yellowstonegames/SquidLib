@@ -1386,6 +1386,57 @@ public class FakeLanguageGen implements Serializable {
     public static final FakeLanguageGen FANCY_FANTASY_NAME = FANTASY_NAME.addAccents(0.47, 0.07).register();
 
     /**
+     * Fantasy language that might be suitable for stealthy humanoids, such as goblins, or as a secret language used
+     * by humans who want to avoid notice. Uses no "hard" sounds like "t" and "k", but also tries to avoid the flowing
+     * aesthetic of fantasy languages associated with elves. Tends toward clusters of consonants like "bl", "gm", "dg",
+     * and "rd".
+     * <br>
+     * Gwabdip dwupdagorg moglab yurufrub.
+     */
+    public static final FakeLanguageGen GOBLIN = new FakeLanguageGen(
+            new String[]{"a", "a", "a", "a",
+                    "e", "e",
+                    "i", "i", "i",
+                    "o", "o", "o", "o",
+                    "u", "u", "u", "u", "u", "u", "u",
+            },
+            new String[]{},
+            new String[]{"b", "g", "d", "m", "h", "n", "r", "v", "sh", "p", "w", "y", "f", "br", "dr", "gr", "pr", "fr",
+                    "br", "dr", "gr", "pr", "fr", "bl", "dw", "gl", "gw", "pl", "fl", "hr",
+                    "b", "g", "d", "m", "h", "n", "r", "b", "g", "d", "m", "h", "n", "r",
+                    "b", "g", "d", "m", "r", "b", "g", "d", "r",
+            },
+            new String[]{
+                    "br", "gr", "dr", "pr", "fr", "rb", "rd", "rg", "rp", "rf",
+                    "br", "gr", "dr", "rb", "rd", "rg",
+                    "mb", "mg", "md", "mp", "mf", "bm", "gm", "dm", "pm", "fm",
+                    "mb", "mg", "md", "bm", "gm", "dm",
+                    "bl", "gl", "dw", "pl", "fl", "lb", "ld", "lg", "lp", "lf",
+                    "bl", "gl", "dw", "lb", "ld", "lg",
+                    "nb", "ng", "nd", "np", "nf", "bn", "gn", "dn", "pn", "fn",
+                    "nb", "ng", "nd", "bn", "gn", "dn",
+                    "my", "gy", "by", "py", "mw", "gw", "bw", "pw",
+                    "bg", "gb", "bd", "db", "bf", "fb",
+                    "gd", "dg", "gp", "pg", "gf", "fg",
+                    "dp", "pd", "df", "fd",
+                    "pf", "fp",
+                    "bg", "gb", "bd", "db", "gd", "dg",
+                    "bg", "gb", "bd", "db", "gd", "dg",
+                    "bg", "gb", "bd", "db", "gd", "dg",
+                    "bg", "gb", "bd", "db", "gd", "dg",
+                    "bg", "gb", "bd", "db", "gd", "dg",
+            },
+            new String[]{
+                    "b", "g", "d", "m", "n", "r", "sh", "p", "f",
+                    "b", "g", "d", "m", "n", "r", "b", "g", "d", "m", "n", "r", "sh",
+                    "b", "g", "d", "m", "r", "b", "g", "d", "r",
+                    "rb", "rd", "rg", "rp", "rf", "lb", "ld", "lg", "lp", "lf",
+            },
+            new String[]{},
+            new String[]{}, new int[]{1, 2, 3, 4}, new double[]{3, 7, 5, 1}, 0.1, 0.15, 0.0, 0.0, null, true).register();
+
+
+    /**
      * Zero-arg constructor for a FakeLanguageGen; produces a FakeLanguageGen equivalent to FakeLanguageGen.ENGLISH .
      */
     public FakeLanguageGen() {
