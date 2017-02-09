@@ -421,25 +421,63 @@ public class NextDijkstraMap implements Serializable {
         return this;
     }
 
+    /**
+     * Internally, NextDijkstraMap uses int primitives instead of Coord objects, but the specific encoding depends on
+     * this NextDijkstraMap's width and height. This method converts from a Coord to an encoded int that stores the same
+     * information, but is specific to this width and height and is somewhat more efficient to work with.
+     * @param point a Coord to find an encoded int for
+     * @return an int that encodes the given Coord for this NextDijkstraMap's width and height
+     */
     public int encode(final Coord point)
     {
         return width * point.y + point.x;
     }
-
+    /**
+     * Internally, NextDijkstraMap uses int primitives instead of Coord objects, but the specific encoding depends on
+     * this NextDijkstraMap's width and height. This method converts from an x,y point to an encoded int that stores the
+     * same information, but is specific to this width and height and is somewhat more efficient to work with.
+     * @param x the x component of the point to find an encoded int for
+     * @param y the y component of the point to find an encoded int for
+     * @return an int that encodes the given x,y point for this NextDijkstraMap's width and height
+     */
     public int encode(final int x, final int y)
     {
         return width * y + x;
     }
 
+    /**
+     * If you for some reason have one of the internally-used ints produced by {@link #encode(Coord)}, this will convert
+     * it back to a Coord if you need it as such. You may prefer using {@link #decodeX(int)} and  {@link #decodeY(int)}
+     * to get the x and y components independently and without involving objects.
+     * @param encoded an encoded int specific to this NextDijkstraMap's height and width; see {@link #encode(Coord)}
+     * @return the Coord that represents the same x,y position that the given encoded int stores
+     */
     public Coord decode(final int encoded)
     {
         return Coord.get(encoded % width, encoded / width);
     }
 
+    /**
+     * If you for some reason have one of the internally-used ints produced by {@link #encode(Coord)}, this will decode
+     * the x component of the point encoded in that int. This is an extremely simple method that is equivalent to the
+     * code {@code encoded % width}, where width is a public field in this class. You probably would use this method in
+     * conjunction with {@link #decodeY(int)}, or would instead use {@link #decode(int)} to get a Coord.
+     * @param encoded an encoded int specific to this NextDijkstraMap's height and width; see {@link #encode(Coord)}
+     * @return the x component of the position that the given encoded int stores
+     */
     public int decodeX(final int encoded)
     {
         return encoded % width;
     }
+
+    /**
+     * If you for some reason have one of the internally-used ints produced by {@link #encode(Coord)}, this will decode
+     * the y component of the point encoded in that int. This is an extremely simple method that is equivalent to the
+     * code {@code encoded / width}, where width is a public field in this class. You probably would use this method in
+     * conjunction with {@link #decodeX(int)}, or would instead use {@link #decode(int)} to get a Coord.
+     * @param encoded an encoded int specific to this NextDijkstraMap's height and width; see {@link #encode(Coord)}
+     * @return the y component of the position that the given encoded int stores
+     */
     public int decodeY(final int encoded)
     {
         return encoded / width;
@@ -646,9 +684,9 @@ public class NextDijkstraMap implements Serializable {
     public void clearGoals() {
         if (!initialized)
             return;
-        int sz = goals.size;
+        int sz = goals.size, t;
         for (int i = 0; i < sz; i++) {
-            resetCell(decode(goals.pop()));
+            resetCell(decodeX(t = goals.pop()), decodeY(t));
         }
     }
 
@@ -673,9 +711,9 @@ public class NextDijkstraMap implements Serializable {
      * which will have a value defined by the WALL constant in this class, and areas that the scan was
      * unable to reach, which will have a value defined by the DARK constant in this class (typically,
      * these areas should not be used to place NPCs or items and should be filled with walls). This uses the
-     * current measurement.
+     * current measurement. The result is stored in the {@link #gradientMap} field and a copy is returned.
      *
-     * @param impassable A Set of Position keys representing the locations of enemies or other moving obstacles to a
+     * @param impassable A Collection of Coord keys representing the locations of enemies or other moving obstacles to a
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
@@ -770,10 +808,10 @@ public class NextDijkstraMap implements Serializable {
      * reach than the given limit, it will have a value of DARK if it was passable instead of the distance. The
      * exceptions are walls, which will have a value defined by the WALL constant in this class, and areas that the scan
      * was unable to reach, which will have a value defined by the DARK constant in this class. This uses the
-     * current measurement.
+     * current measurement. The result is stored in the {@link #gradientMap} field and a copy is returned.
      *
      * @param limit      The maximum number of steps to scan outward from a goal.
-     * @param impassable A Set of Position keys representing the locations of enemies or other moving obstacles to a
+     * @param impassable A Collection of Coord keys representing the locations of enemies or other moving obstacles to a
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
@@ -1095,9 +1133,9 @@ public class NextDijkstraMap implements Serializable {
      * which will have a value defined by the WALL constant in this class, and areas that the scan was
      * unable to reach, which will have a value defined by the DARK constant in this class. (typically,
      * these areas should not be used to place NPCs or items and should be filled with walls). This uses the
-     * current measurement.
+     * current measurement.  The result is stored in the {@link #gradientMap} field and a copy is returned.
      *
-     * @param impassable A Set of Position keys representing the locations of enemies or other moving obstacles to a
+     * @param impassable A Collection of Coord keys representing the locations of enemies or other moving obstacles to a
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
      * @param size       The length of one side of a square creature using this to find a path, i.e. 2 for a 2x2 cell
      *                   creature. Non-square creatures are not supported because turning is really hard.
@@ -1263,14 +1301,19 @@ public class NextDijkstraMap implements Serializable {
                                      Collection<Coord> onlyPassable, Coord start, Coord... targets) {
         if (!initialized) return null;
         path.clear();
+        if(length <= 0)
+            return path;
         Collection<Coord> impassable2;
         if (impassable == null)
-            impassable2 = Collections.emptySet();
+            impassable2 = new GreasedRegion(width, height);
         else
             impassable2 = new GreasedRegion(width, height, impassable);
         if (onlyPassable == null)
-            onlyPassable = Collections.emptySet();
-
+            onlyPassable = new GreasedRegion(width, height);
+        if(length == 1)
+        {
+            impassable2.addAll(onlyPassable);
+        }
         resetMap();
         for (Coord goal : targets) {
             setGoal(goal.x, goal.y);
@@ -2418,10 +2461,14 @@ public class NextDijkstraMap implements Serializable {
      * @return an ArrayList of Coord that make up the best path. Copy of path.
      */
     public ArrayList<Coord> findPathPreScanned(Coord target) {
-        if (!initialized || goals == null || goals.isEmpty()) return null;
-        RNG rng2 = new StatefulRNG(new LightRNG(0xf00d));
         path.clear();
+        if (!initialized || goals == null || goals.isEmpty()) return path;
         Coord currentPos = target;
+        if(gradientMap[currentPos.x][currentPos.y] <= FLOOR)
+            path.add(currentPos);
+        else
+            return path;
+        RNG rng2 = new StatefulRNG(0xf00d);
         while (true) {
             if (frustration > 2000) {
                 path.clear();

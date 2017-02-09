@@ -777,10 +777,10 @@ public class DijkstraMap implements Serializable {
      */
     public double[][] scan(Collection<Coord> impassable) {
         if (!initialized) return null;
-        if (impassable == null)
-            impassable = Collections.emptySet();
-        for (Coord pt : impassable) {
-            closed.put(pt.encode(), WALL);
+        if (impassable != null && !impassable.isEmpty()) {
+            for (Coord pt : impassable) {
+                closed.put(pt.encode(), WALL);
+            }
         }
         Coord dec, adj, cen;
         int enc;
@@ -878,13 +878,11 @@ public class DijkstraMap implements Serializable {
      */
     public double[][] partialScan(int limit, Collection<Coord> impassable) {
         if (!initialized) return null;
-        if (impassable == null)
-            impassable = new OrderedSet<>();
-        IntDoubleOrderedMap blocking = new IntDoubleOrderedMap(impassable.size());
-        for (Coord pt : impassable) {
-            blocking.put(pt.encode(), WALL);
+        if (impassable != null && !impassable.isEmpty()) {
+            for (Coord pt : impassable) {
+                closed.put(pt.encode(), WALL);
+            }
         }
-        closed.putAll(blocking);
         Coord dec, adj, cen;
         int enc;
 
@@ -3557,10 +3555,14 @@ public class DijkstraMap implements Serializable {
      * @return an ArrayList of Coord that make up the best path. Copy of path.
      */
     public ArrayList<Coord> findPathPreScanned(Coord target) {
-        if (!initialized || goals == null || goals.isEmpty()) return null;
-        RNG rng2 = new StatefulRNG(new LightRNG(0xf00d));
         path.clear();
+        if (!initialized || goals == null || goals.isEmpty()) return path;
         Coord currentPos = target;
+        if(gradientMap[currentPos.x][currentPos.y] <= FLOOR)
+            path.add(currentPos);
+        else
+            return path;
+        RNG rng2 = new StatefulRNG(0xf00d);
         while (true) {
             if (frustration > 2000) {
                 path.clear();
@@ -3595,7 +3597,8 @@ public class DijkstraMap implements Serializable {
                 break;
         }
         cutShort = false;
-        frustration = 0; return new ArrayList<>(path);
+        frustration = 0;
+        return new ArrayList<>(path);
     }
 
     /**
