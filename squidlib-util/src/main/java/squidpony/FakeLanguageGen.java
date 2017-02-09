@@ -1435,6 +1435,46 @@ public class FakeLanguageGen implements Serializable {
             new String[]{},
             new String[]{}, new int[]{1, 2, 3, 4}, new double[]{3, 7, 5, 1}, 0.1, 0.15, 0.0, 0.0, null, true).register();
 
+    /**
+     * Fantasy language that tries to imitate the various languages spoken by elves in J.R.R. Tolkien's works, using
+     * accented vowels occasionally and aiming for long, flowing, vowel-heavy words. It's called ELF because there isn't
+     * a consistent usage across fantasy and mythological sources of either "elvish", "elfish", "elven", "elfin", or any
+     * one adjective for "relating to an elf." In the GDX display module, the "smooth" and "unicode" fonts, among
+     * others, support all the accented characters you need for this.
+     * <br>
+     * Il ilthiê arel enya; meâlelail theasor arôreisa.
+     */
+    public static final FakeLanguageGen ELF = new FakeLanguageGen(
+            new String[]{"a", "a", "a", "e", "e", "e", "i", "i", "o", "a", "a", "a", "e", "e", "e", "i", "i", "o",
+                    "a", "a", "a", "e", "e", "e", "i", "i", "o", "a", "a", "a", "e", "e", "e", "i", "i", "o",
+                    "a", "a", "e", "e", "i", "o", "a", "a", "a", "e", "e", "e", "i", "i", "o",
+                    "ai", "ai", "ai", "ea", "ea", "ea", "ia", "ae"
+            },
+            new String[]{
+                    "ai", "ai", "ae", "ea", "ia", "ie",
+                    "â", "â", "ai", "âi", "aî", "aï", "î", "î", "ï", "ï", "îe", "iê", "ïe", "iê",
+                    "e", "ë", "ë", "ëa", "ê", "êa", "eâ", "ei", "eî", "o", "ô",
+                    "a", "a", "a", "e", "e", "e", "i", "i", "o", "a", "a", "a", "e", "e", "e", "i", "i", "o",
+                    "a", "a", "e", "e", "i", "o", "a", "a", "a", "e", "e", "e", "i", "i", "o",
+                    "ai", "ai", "ai", "ai", "ai", "ei", "ei", "ei", "ea", "ea", "ea", "ea",
+                    "ie", "ie", "ie", "ie", "ie", "ia", "ia", "ia", "ia"
+            },
+            new String[]{"l", "r", "n", "m", "th", "v", "s", "sh", "z", "f", "p", "h", "y", "c",
+                    "l", "r", "n", "m", "th", "v", "f", "y",
+                    "l", "r", "n", "m", "th", "v", "f",
+                    "l", "r", "n", "th", "l", "r", "n", "th",
+                    "l", "r", "n", "l", "r", "n", "l", "r", "n",
+                    "pl", "fy", "ly", "cl", "fr", "pr", "qu",
+            },
+            new String[]{"rm", "ln", "lv", "lth", "ml", "mv", "nv", "vr", "rv", "ny", "mn", "nm", "ns", "nth"},
+            new String[]{
+                    "l", "r", "n", "m", "th", "s",
+                    "l", "r", "n", "th", "l", "r", "n", "th",
+                    "l", "r", "n", "l", "r", "n", "l", "r", "n",
+                    "r", "n", "r", "n", "r", "n", "n", "n", "n", "n"
+            },
+            new String[]{},
+            new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{3, 6, 6, 3, 1}, 0.4, 0.3, 0.0, 0.0, null, true).register();
 
     /**
      * Zero-arg constructor for a FakeLanguageGen; produces a FakeLanguageGen equivalent to FakeLanguageGen.ENGLISH .

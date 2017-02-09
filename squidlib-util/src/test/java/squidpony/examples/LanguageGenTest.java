@@ -176,6 +176,12 @@ public class LanguageGenTest {
                     new String[]{".", ".", ".", ".", "?", "...", "..."}, 0.08));
         }
         rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.ELF;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 5, 10, new String[]{",", ",", ";"},
+                    new String[]{".", ".", ".", "?", "?", "...", "..."}, 0.18));
+        }
+        rng.setState(0xf00df00L);
         flg = FakeLanguageGen.FANTASY_NAME;
         System.out.print(flg.word(rng, true, rng.between(2, 4)));
         for (int i = 1; i < 10; i++) {
