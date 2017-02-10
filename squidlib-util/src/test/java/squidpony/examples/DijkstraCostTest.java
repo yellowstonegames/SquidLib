@@ -18,7 +18,7 @@ import java.util.HashMap;
 public class DijkstraCostTest {
     public static void main(String[] args) {
         for (DijkstraMap.Measurement m : DijkstraMap.Measurement.values()) {
-            LightRNG lrng = new LightRNG(0xdeadbeef0ffal);
+            LightRNG lrng = new LightRNG(0xdeadbeef0ffaL);
             RNG rng = new RNG(lrng);
             DungeonGenerator dg = new DungeonGenerator(40, 40, rng);
             dg.addWater(30);
@@ -72,8 +72,7 @@ public class DijkstraCostTest {
             System.out.println(dg);
 
 
-            lrng.setState(0x2deadbeef0ffal);
-            rng = new RNG(lrng);
+            lrng.setState(0x2deadbeef0ffaL);
             dg = new DungeonGenerator(40, 40, rng);
             dg.addWater(10);
             dg.addDoors(16, true);
@@ -135,8 +134,7 @@ public class DijkstraCostTest {
             System.out.println();
 
 
-            lrng.setState(0x2deadbeef0ffal);
-            rng = new RNG(lrng);
+            lrng.setState(0x2deadbeef0ffaL);
             dg = new DungeonGenerator(40, 40, rng);
             dg.addWater(40);
             dg.addDoors(10, true);

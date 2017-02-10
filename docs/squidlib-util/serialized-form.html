@@ -590,7 +590,7 @@
 <h3>Class <a href="squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">squidpony.squidai.DijkstraMap</a> extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
-<dd>-2456306898212944440L</dd>
+<dd>-2456306898212944441L</dd>
 </dl>
 <ul class="blockList">
 <li class="blockList">
@@ -619,13 +619,6 @@
  entered because they are solid will have a very high value equal to the WALL constant in this class, and cells
  that cannot be entered because they cannot reach a goal will have a different very high value equal to the
  DARK constant in this class.</div>
-</li>
-<li class="blockList">
-<h4>safetyMap</h4>
-<pre>double[][] safetyMap</pre>
-<div class="block">A 2D array of modifiers to apply to the perceived safety of an area; modifiers go up when deteriorate() is
- called, which makes the cells specified in that method call more dangerous (usually because staying in one place
- is perceived as risky).</div>
 </li>
 <li class="blockList">
 <h4>costMap</h4>
@@ -660,21 +653,15 @@
 </li>
 <li class="blockList">
 <h4>goals</h4>
-<pre><a href="squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a> goals</pre>
+<pre><a href="squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a> goals</pre>
 <div class="block">Goals that pathfinding will seek out. The Double value should almost always be 0.0 , the same as the static GOAL
  constant in this class.</div>
 </li>
 <li class="blockList">
 <h4>fresh</h4>
-<pre><a href="squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a> fresh</pre>
-</li>
-<li class="blockList">
-<h4>closed</h4>
-<pre><a href="squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a> closed</pre>
-</li>
-<li class="blockList">
-<h4>open</h4>
-<pre><a href="squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a> open</pre>
+<pre><a href="squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a> fresh</pre>
+<div class="block">Goals that pathfinding will seek out. The Double value should almost always be 0.0 , the same as the static GOAL
+ constant in this class.</div>
 </li>
 <li class="blockList">
 <h4>rng</h4>

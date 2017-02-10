@@ -162,6 +162,11 @@
 <dd>
 <div class="block">Seeds this DeckRNG using the RandomnessSource it is given.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#decode-int-">decode(int)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
+<dd>
+<div class="block">If you for some reason have one of the internally-used ints produced by <a href="../squidpony/squidai/DijkstraMap.html#encode-squidpony.squidmath.Coord-"><code>DijkstraMap.encode(Coord)</code></a>, this will convert
+ it back to a Coord if you need it as such.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Coord.html#decode-int-">decode(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></dt>
 <dd>
 <div class="block">This can take an int produced by <code>someCoord.encode()</code> and get the original Coord back out of it.</div>
@@ -220,6 +225,16 @@
 <div class="block">Given a long between 0 and the total number of permutations possible (see getBigTotalPermutations() for how to
  access this) and an int count of how many indices to find a permutation of, returns an array with the permutation
  of the indices described by the long as a special (factoradic) index into the possible permutations.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#decodeX-int-">decodeX(int)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
+<dd>
+<div class="block">If you for some reason have one of the internally-used ints produced by <a href="../squidpony/squidai/DijkstraMap.html#encode-squidpony.squidmath.Coord-"><code>DijkstraMap.encode(Coord)</code></a>, this will decode
+ the x component of the point encoded in that int.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#decodeY-int-">decodeY(int)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
+<dd>
+<div class="block">If you for some reason have one of the internally-used ints produced by <a href="../squidpony/squidai/DijkstraMap.html#encode-squidpony.squidmath.Coord-"><code>DijkstraMap.encode(Coord)</code></a>, this will decode
+ the y component of the point encoded in that int.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/MetsaMapFactory.html#DEEP_SEA_LEVEL">DEEP_SEA_LEVEL</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/MetsaMapFactory.html" title="class in squidpony.squidgrid.mapping">MetsaMapFactory</a></dt>
 <dd>&nbsp;</dd>
@@ -373,18 +388,6 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/DetailedMimic.html#DetailedMimic-squidpony.squidgrid.AestheticDifference-squidpony.squidmath.RNG-">DetailedMimic(AestheticDifference, RNG)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/DetailedMimic.html" title="class in squidpony.squidgrid">DetailedMimic</a></dt>
 <dd>
 <div class="block">Constructor that uses the given RNG and the given AestheticDifference.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#deteriorate-java.util.List-">deteriorate(List&lt;Coord&gt;)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
-<dd>
-<div class="block">Used in conjunction with methods that depend on finding cover, like findCoveredAttackPath(), this method causes
- specified risky points to be considered less safe, and will encourage a pathfinder to keep moving toward a goal
- instead of just staying in cover forever (or until an enemy moves around the cover and ambushes the pathfinder).</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#deteriorate-squidpony.squidmath.Coord...-">deteriorate(Coord...)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
-<dd>
-<div class="block">Used in conjunction with methods that depend on finding cover, like findCoveredAttackPath(), this method causes
- specified risky points to be considered less safe, and will encourage a pathfinder to keep moving toward a goal
- instead of just staying in cover forever (or until an enemy moves around the cover and ambushes the pathfinder).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#deteriorate-squidpony.squidmath.RNG-int-">deteriorate(RNG, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>

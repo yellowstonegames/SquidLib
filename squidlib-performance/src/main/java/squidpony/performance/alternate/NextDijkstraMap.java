@@ -1,22 +1,47 @@
 package squidpony.performance.alternate;
 
 import squidpony.ArrayTools;
-import squidpony.GwtCompatibility;
 import squidpony.squidai.Technique;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.LOS;
 import squidpony.squidgrid.Radius;
-import squidpony.squidmath.*;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.IntVLA;
+import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.OrderedMap;
+import squidpony.squidmath.OrderedSet;
+import squidpony.squidmath.RNG;
+import squidpony.squidmath.StatefulRNG;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * An alternative to AStarSearch when you want to fully explore a search space, or when you want a gradient floodfill.
  * It's currently significantly faster that AStarSearch, and also supports pathfinding to the nearest of multiple
  * goals, which is not possible with AStarSearch. This last feature enables a whole host of others, like pathfinding
  * for creatures that can attack targets between a specified minimum and maximum distance, and there's also the
- * standard uses of Dijkstra Maps such as finding ideal paths to run away.
+ * standard uses of Dijkstra Maps such as finding ideal paths to run away. One unique optimization made possible by
+ * Dijkstra Maps is for when only one endpoint of a path can change in some section of a game, such as when you want to
+ * draw a path from the player's current cell to the cell the mouse is over, and while the mouse can move quickly, the
+ * player doesn't move until instructed to. This can be done very efficiently by setting the player as a goal with
+ * {@link #setGoal(Coord)}, scanning the map to find distances with {@link #scan(Collection)}, and then as long as the
+ * player's position is unchanged (and no obstacles are added/moved), you can get the path by calling
+ * {@link #findPathPreScanned(Coord)} and giving it the mouse position as a Coord. If various parts of the path can
+ * change instead of just one (such as other NPCs moving around), then you should set a goal or goals and call
+ * {@link #findPath(int, Collection, Collection, Coord, Coord...)}. The parameters for this are used in various methods
+ * in this class with only slight differences: length is the length of path that can be moved "in one go," so 1 for most
+ * roguelikes and more for most strategy games, impassable used for enemies and solid moving obstacles, onlyPassable can
+ * be null in most roguelikes but in strategy games should contain ally positions that can be moved through as long as
+ * no one stops in them, start is the NPC's starting position, and targets is an array or vararg of Coord that the NPC
+ * should pathfind toward (it could be just one Coord, with or without explicitly putting it in an array, or it could be
+ * more and the NPC will pick the closest).
+ * <br>
  * As a bit of introduction, the article http://www.roguebasin.com/index.php?title=Dijkstra_Maps_Visualized can
  * provide some useful information on how these work and how to visualize the information they can produce, while
  * http://www.roguebasin.com/index.php?title=The_Incredible_Power_of_Dijkstra_Maps is an inspiring list of the
@@ -587,16 +612,22 @@ public class NextDijkstraMap implements Serializable {
 
     }
     /**
-     * Marks many cells as goals for pathfinding, ignoring cells in walls or unreachable areas. More efficient than
-     * a loop that calls {@link #setGoal(Coord)} over and over, since this doesn't need to do a bounds check. The
-     * GreasedRegion passed to this should have the same width and height as this DijkstraMap.
+     * Marks many cells as goals for pathfinding, ignoring cells in walls or unreachable areas. Possibly more efficient
+     * than a loop that calls {@link #setGoal(Coord)} over and over, since this doesn't need to do a bounds check. The
+     * GreasedRegion passed to this should have the same (or smaller) width and height as this DijkstraMap.
      *
      * @param pts a GreasedRegion containing "on" cells to treat as goals; should have the same width and height as this
      */
     public void setGoals(GreasedRegion pts) {
         if (!initialized || pts.width > width || pts.height > height) return;
         int[] enc = new GreasedRegion(physicalMap, FLOOR).and(pts).asTightEncoded();
-        goals.addAll(enc);
+        for(Coord c : pts)
+        {
+            if(physicalMap[c.x][c.y] <= FLOOR) {
+                goals.add(encode(c));
+                gradientMap[c.x][c.y] = 0.0;
+            }
+        }
     }
 
     /**
@@ -610,6 +641,19 @@ public class NextDijkstraMap implements Serializable {
         for(Coord c : pts)
         {
             setGoal(c);
+        }
+    }
+    /**
+     * Marks many cells as goals for pathfinding, ignoring cells in walls or unreachable areas. Simply loops through
+     * pts and calls {@link #setGoal(Coord)} on each Coord in pts.
+     * If you have a GreasedRegion, you should use it with {@link #setGoals(GreasedRegion)}, which is faster.
+     * @param pts an array of Coord to mark as goals
+     */
+    public void setGoals(Coord[] pts) {
+        if (!initialized) return;
+        for(int i = 0; i < pts.length; i++)
+        {
+            setGoal(pts[i]);
         }
     }
 
@@ -775,7 +819,7 @@ public class NextDijkstraMap implements Serializable {
                     }
                     double h = measurement.heuristic(dirs[d]);
                     cs = dist + h * costMap[adjX][adjY];
-                    if (cs < gradientMap[adjX][adjY]) {
+                    if (physicalMap[adjX][adjY] <= FLOOR && cs < gradientMap[adjX][adjY]) {
                         setFresh(adjX, adjY, cs);
                         ++numAssigned;
                         ++mappedCount;
@@ -877,7 +921,7 @@ public class NextDijkstraMap implements Serializable {
                     }
                     double h = measurement.heuristic(dirs[d]);
                     cs = dist + h * costMap[adjX][adjY];
-                    if (cs < gradientMap[adjX][adjY]) {
+                    if (physicalMap[adjX][adjY] <= FLOOR && cs < gradientMap[adjX][adjY]) {
                         setFresh(adjX, adjY, cs);
                         ++numAssigned;
                         ++mappedCount;
@@ -960,7 +1004,7 @@ public class NextDijkstraMap implements Serializable {
                     }
                     double h = measurement.heuristic(dirs[d]);
                     cs = dist + h * costMap[adjX][adjY];
-                    if (cs < gradientMap[adjX][adjY]) {
+                    if (physicalMap[adjX][adjY] <= FLOOR && cs < gradientMap[adjX][adjY]) {
                         ++mappedCount;
                         if (targets.contains(adj = Coord.get(adjX, adjY))) {
                             fresh.clear();
@@ -1103,7 +1147,7 @@ public class NextDijkstraMap implements Serializable {
                     }
                     double h = measurement.heuristic(dirs[d]);
                     cs = dist + h * costMap[adjX][adjY];
-                    if (cs < gradientMap[adjX][adjY]) {
+                    if (physicalMap[adjX][adjY] <= FLOOR && cs < gradientMap[adjX][adjY]) {
                         ++mappedCount;                         
                         if (targets.contains(adj = Coord.get(adjX, adjY))) {
                             found.add(adj);
@@ -1218,7 +1262,7 @@ public class NextDijkstraMap implements Serializable {
                     }
                     double h = measurement.heuristic(dirs[d]);
                     cs = dist + h * costMap[adjX][adjY];
-                    if (cs < gradientClone[adjX][adjY]) {
+                    if (physicalMap[adjX][adjY] <= FLOOR && cs < gradientClone[adjX][adjY]) {
                         setFresh(adjX, adjY, cs);
                         ++numAssigned;
                         ++mappedCount;
@@ -1860,12 +1904,11 @@ public class NextDijkstraMap implements Serializable {
         } else {
             cachedLongerPaths = preferLongerPaths;
             cachedImpassable = new OrderedSet<>(impassable2);
-            cachedFearSources = GwtCompatibility.cloneCoords(fearSources);
+            cachedFearSources = new Coord[fearSources.length];
+            System.arraycopy(fearSources, 0, cachedFearSources, 0, fearSources.length);
             cachedSize = 1;
             resetMap();
-            for (Coord goal : fearSources) {
-                setGoal(goal.x, goal.y);
-            }
+            setGoals(fearSources);
             if (goals.isEmpty())
             {
                 cutShort = true;
@@ -2376,12 +2419,11 @@ public class NextDijkstraMap implements Serializable {
         } else {
             cachedLongerPaths = preferLongerPaths;
             cachedImpassable = new OrderedSet<>(impassable2);
-            cachedFearSources = GwtCompatibility.cloneCoords(fearSources);
+            cachedFearSources = new Coord[fearSources.length];
+            System.arraycopy(fearSources, 0, cachedFearSources, 0, fearSources.length);
             cachedSize = size;
             resetMap();
-            for (Coord goal : fearSources) {
-                setGoal(goal.x, goal.y);
-            }
+            setGoals(fearSources);
             if (goals.isEmpty())
             {
                 cutShort = true;

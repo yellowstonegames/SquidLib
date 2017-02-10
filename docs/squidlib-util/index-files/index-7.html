@@ -354,19 +354,6 @@
  a distance from a goal that is at least equal to minPreferredRange and no more than maxPreferredRange,
  which may go further from a goal if the minPreferredRange has not been met at the current distance.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#findAttackPath-int-int-squidpony.squidgrid.FOVCache-java.util.Collection-java.util.Collection-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findAttackPath(int, int, FOVCache, Collection&lt;Coord&gt;, Collection&lt;Coord&gt;, Coord, Coord...)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
-<dd>
-<div class="block">Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
- of Coord positions (using the current measurement) needed to get closer to a goal, until preferredRange is
- reached, or further from a goal if the preferredRange has not been met at the current distance.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#findAttackPath-int-int-int-squidpony.squidgrid.FOVCache-java.util.Collection-java.util.Collection-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findAttackPath(int, int, int, FOVCache, Collection&lt;Coord&gt;, Collection&lt;Coord&gt;, Coord, Coord...)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
-<dd>
-<div class="block">Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
- of Coord positions (using the current measurement) needed to get closer to a goal, until a cell is reached with
- a distance from a goal that is at least equal to minPreferredRange and no more than maxPreferredRange,
- which may go further from a goal if the minPreferredRange has not been met at the current distance.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#findAttackPathLarge-int-int-int-squidpony.squidgrid.LOS-java.util.Collection-java.util.Collection-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findAttackPathLarge(int, int, int, LOS, Collection&lt;Coord&gt;, Collection&lt;Coord&gt;, Coord, Coord...)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
 <dd>
 <div class="block">Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
@@ -393,46 +380,6 @@
 <dd>
 <div class="block">Gets all the corridors this found during construction, returning them as an ArrayList of 2D char arrays, where an
  individual corridor is "masked" so only its contents have normal map chars and the rest have only '#'.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#findCoveredAttackPath-int-int-int-double-java.util.Collection-java.util.Collection-java.lang.Iterable-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findCoveredAttackPath(int, int, int, double, Collection&lt;Coord&gt;, Collection&lt;Coord&gt;, Iterable&lt;Threat&gt;, Coord, Coord...)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
-<dd>
-<div class="block">Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list of Coord
- positions (using the current measurement) needed to get closer to a goal while staying in areas that none of the
- given threats are able to see (which should prevent them from attacking), until a cell is reached with
- a distance from a goal that is at least equal to minPreferredRange and no more than maxPreferredRange,
- which may go further from a goal if the minPreferredRange has not been met at the current distance.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#findCoveredAttackPath-int-int-double-squidpony.squidgrid.FOV-boolean-java.util.Collection-java.util.Collection-java.util.List-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findCoveredAttackPath(int, int, double, FOV, boolean, Collection&lt;Coord&gt;, Collection&lt;Coord&gt;, List&lt;Threat&gt;, Coord, Coord...)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
-<dd>
-<div class="block">Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list of Coord
- positions (using the current measurement) needed to get closer to a goal while staying in areas that none of the
- given threats are able to see (which should prevent them from attacking), until a cell is reached with
- a distance from a goal that is at equal to preferredRange,
- which may go further from a goal if the preferredRange has not been met at the current distance.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#findCoveredAttackPath-int-int-int-double-squidpony.squidgrid.FOV-boolean-java.util.Collection-java.util.Collection-java.lang.Iterable-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findCoveredAttackPath(int, int, int, double, FOV, boolean, Collection&lt;Coord&gt;, Collection&lt;Coord&gt;, Iterable&lt;Threat&gt;, Coord, Coord...)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
-<dd>
-<div class="block">Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list of Coord
- positions (using the current measurement) needed to get closer to a goal while staying in areas that none of the
- given threats are able to see (which should prevent them from attacking), until a cell is reached with
- a distance from a goal that is at least equal to minPreferredRange and no more than maxPreferredRange,
- which may go further from a goal if the minPreferredRange has not been met at the current distance.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#findCoveredAttackPath-int-int-double-squidpony.squidgrid.FOVCache-boolean-java.util.Collection-java.util.Collection-java.util.List-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findCoveredAttackPath(int, int, double, FOVCache, boolean, Collection&lt;Coord&gt;, Collection&lt;Coord&gt;, List&lt;Threat&gt;, Coord, Coord...)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
-<dd>
-<div class="block">Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list of Coord
- positions (using the current measurement) needed to get closer to a goal while staying in areas that none of the
- given threats are able to see (which should prevent them from attacking), until a cell is reached with
- a distance from a goal that is at equal to preferredRange,
- which may go further from a goal if the preferredRange has not been met at the current distance.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#findCoveredAttackPath-int-int-int-double-squidpony.squidgrid.FOVCache-boolean-java.util.Collection-java.util.Collection-java.util.List-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findCoveredAttackPath(int, int, int, double, FOVCache, boolean, Collection&lt;Coord&gt;, Collection&lt;Coord&gt;, List&lt;Threat&gt;, Coord, Coord...)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
-<dd>
-<div class="block">Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list of Coord
- positions (using the current measurement) needed to get closer to a goal while staying in areas that none of the
- given threats are able to see (which should prevent them from attacking), until a cell is reached with
- a distance from a goal that is at least equal to minPreferredRange and no more than maxPreferredRange,
- which may go further from a goal if the minPreferredRange has not been met at the current distance.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/Placement.html#finder">finder</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/Placement.html" title="class in squidpony.squidgrid.mapping">Placement</a></dt>
 <dd>
@@ -610,14 +557,6 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/RoomLayout.html#findSwitch--">findSwitch()</a></span> - Method in class squidpony.squidgrid.mapping.locks.<a href="../squidpony/squidgrid/mapping/locks/RoomLayout.html" title="class in squidpony.squidgrid.mapping.locks">RoomLayout</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#findTechniquePath-int-squidpony.squidai.Technique-char:A:A-squidpony.squidgrid.LOS-java.util.Collection-java.util.Collection-squidpony.squidmath.Coord-java.util.Collection-">findTechniquePath(int, Technique, char[][], LOS, Collection&lt;Coord&gt;, Collection&lt;Coord&gt;, Coord, Collection&lt;Coord&gt;)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
-<dd>
-<div class="block">Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
- of Coord positions (using the current measurement) needed to get closer to a goal, where goals are
- considered valid if they are at a valid range for the given Technique to hit at least one target
- and ideal if that Technique can affect as many targets as possible from a cell that can be moved
- to with at most movelength steps.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#findTechniquePath-int-squidpony.squidai.Technique-char:A:A-squidpony.squidgrid.FOVCache-java.util.Collection-java.util.Collection-squidpony.squidmath.Coord-java.util.Collection-">findTechniquePath(int, Technique, char[][], FOVCache, Collection&lt;Coord&gt;, Collection&lt;Coord&gt;, Coord, Collection&lt;Coord&gt;)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
 <dd>
 <div class="block">Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
  of Coord positions (using the current measurement) needed to get closer to a goal, where goals are
@@ -873,6 +812,10 @@
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.html#FRENCH">FRENCH</a></span> - Static variable in class squidpony.<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></dt>
 <dd>
 <div class="block">Imitation modern French, using the (many) accented vowels that are present in the language.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#fresh">fresh</a></span> - Variable in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
+<dd>
+<div class="block">Goals that pathfinding will seek out.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordPacker.html#fringe-short:A-int-int-int-">fringe(short[], int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordPacker.html" title="class in squidpony.squidmath">CoordPacker</a></dt>
 <dd>
