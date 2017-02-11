@@ -84,17 +84,31 @@
 <div class="block">This is used to mark cells that the scan couldn't reach, and these dark cells are marked with a high number
  equal to 999800.0 .</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/OldDijkstraMap.html#DARK">DARK</a></span> - Static variable in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/OldDijkstraMap.html" title="class in squidpony.performance.alternate">OldDijkstraMap</a></dt>
+<dd>
+<div class="block">This is used to mark cells that the scan couldn't reach, and these dark cells are marked with a high number
+ equal to 999800.0 .</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/OptDijkstraMap.html#DARK">DARK</a></span> - Static variable in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/OptDijkstraMap.html" title="class in squidpony.performance.alternate">OptDijkstraMap</a></dt>
 <dd>
 <div class="block">This is used to mark cells that the scan couldn't reach, and these dark cells are marked with a high number
  equal to 999800 .</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#decode-int-">decode(int)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">If you for some reason have one of the internally-used ints produced by <a href="../squidpony/performance/alternate/NextDijkstraMap.html#encode-squidpony.squidmath.Coord-"><code>NextDijkstraMap.encode(Coord)</code></a>, this will convert
+ it back to a Coord if you need it as such.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#decodeX-int-">decodeX(int)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">If you for some reason have one of the internally-used ints produced by <a href="../squidpony/performance/alternate/NextDijkstraMap.html#encode-squidpony.squidmath.Coord-"><code>NextDijkstraMap.encode(Coord)</code></a>, this will decode
+ the x component of the point encoded in that int.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#decodeY-int-">decodeY(int)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">If you for some reason have one of the internally-used ints produced by <a href="../squidpony/performance/alternate/NextDijkstraMap.html#encode-squidpony.squidmath.Coord-"><code>NextDijkstraMap.encode(Coord)</code></a>, this will decode
+ the y component of the point encoded in that int.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#deteriorate-java.util.List-">deteriorate(List&lt;Coord&gt;)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
 <dd>
 <div class="block">Used in conjunction with methods that depend on finding cover, like findCoveredAttackPath(), this method causes
@@ -102,6 +116,18 @@
  instead of just staying in cover forever (or until an enemy moves around the cover and ambushes the pathfinder).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#deteriorate-squidpony.squidmath.Coord...-">deteriorate(Coord...)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
+<dd>
+<div class="block">Used in conjunction with methods that depend on finding cover, like findCoveredAttackPath(), this method causes
+ specified risky points to be considered less safe, and will encourage a pathfinder to keep moving toward a goal
+ instead of just staying in cover forever (or until an enemy moves around the cover and ambushes the pathfinder).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/OldDijkstraMap.html#deteriorate-java.util.List-">deteriorate(List&lt;Coord&gt;)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/OldDijkstraMap.html" title="class in squidpony.performance.alternate">OldDijkstraMap</a></dt>
+<dd>
+<div class="block">Used in conjunction with methods that depend on finding cover, like findCoveredAttackPath(), this method causes
+ specified risky points to be considered less safe, and will encourage a pathfinder to keep moving toward a goal
+ instead of just staying in cover forever (or until an enemy moves around the cover and ambushes the pathfinder).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/OldDijkstraMap.html#deteriorate-squidpony.squidmath.Coord...-">deteriorate(Coord...)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/OldDijkstraMap.html" title="class in squidpony.performance.alternate">OldDijkstraMap</a></dt>
 <dd>
 <div class="block">Used in conjunction with methods that depend on finding cover, like findCoveredAttackPath(), this method causes
  specified risky points to be considered less safe, and will encourage a pathfinder to keep moving toward a goal
@@ -160,7 +186,23 @@
  DijkstraBenchmark.measureTinyPathCustomDijkstra  avgt    3   490.634 ±  69.431  ms/op
  DijkstraBenchmark.measureTinyPathDijkstra        avgt    3   629.138 ± 153.702  ms/op
  DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3     5.444 ±   0.473  ms/op
- DijkstraBenchmark.measureTinyPathOptDijkstra     avgt    3   159.189 ±  15.194  ms/op</div>
+ DijkstraBenchmark.measureTinyPathOptDijkstra     avgt    3   159.189 ±  15.194  ms/op
+
+ Benchmark                                        Mode  Cnt     Score     Error  Units
+ DijkstraBenchmark.measurePathCustomDijkstra      avgt    3  3004.285 ± 632.953  ms/op
+ DijkstraBenchmark.measurePathDijkstra            avgt    3  1328.862 ± 285.102  ms/op //with "NextDijkstraMap" update
+ DijkstraBenchmark.measurePathGDXAStar            avgt    3  1207.328 ± 441.112  ms/op
+ DijkstraBenchmark.measurePathOldDijkstra         avgt    3  2463.782 ± 534.747  ms/op
+ DijkstraBenchmark.measurePathOptDijkstra         avgt    3  1957.263 ± 553.280  ms/op
+ DijkstraBenchmark.measureScanCustomDijkstra      avgt    3  2909.871 ± 636.707  ms/op
+ DijkstraBenchmark.measureScanDijkstra            avgt    3  1232.099 ± 393.546  ms/op //with "NextDijkstraMap" update
+ DijkstraBenchmark.measureScanOldDijkstra         avgt    3  2270.479 ± 961.130  ms/op
+ DijkstraBenchmark.measureScanOptDijkstra         avgt    3  1566.125 ± 218.588  ms/op
+ DijkstraBenchmark.measureTinyPathCustomDijkstra  avgt    3   516.101 ± 199.369  ms/op
+ DijkstraBenchmark.measureTinyPathDijkstra        avgt    3   189.029 ±  54.750  ms/op //with "NextDijkstraMap" update
+ DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3     5.834 ±   1.558  ms/op
+ DijkstraBenchmark.measureTinyPathOldDijkstra     avgt    3   676.074 ± 138.026  ms/op
+ DijkstraBenchmark.measureTinyPathOptDijkstra     avgt    3   174.504 ±  36.419  ms/op</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#DijkstraBenchmark--">DijkstraBenchmark()</a></span> - Constructor for class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
 <dd>&nbsp;</dd>
@@ -222,6 +264,8 @@
 <dt><span class="memberNameLink"><a href="../squidpony/performance/WaypointBenchmark.html#DIMENSION">DIMENSION</a></span> - Static variable in class squidpony.performance.<a href="../squidpony/performance/WaypointBenchmark.html" title="class in squidpony.performance">WaypointBenchmark</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.Measurement.html#directionCount--">directionCount()</a></span> - Method in enum squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.Measurement.html" title="enum in squidpony.performance.alternate">NextDijkstraMap.Measurement</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/OldDijkstraMap.Measurement.html#directionCount--">directionCount()</a></span> - Method in enum squidpony.performance.alternate.<a href="../squidpony/performance/alternate/OldDijkstraMap.Measurement.html" title="enum in squidpony.performance.alternate">OldDijkstraMap.Measurement</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/FOVCacheBenchmark.html#doCachedFOV--">doCachedFOV()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/FOVCacheBenchmark.html" title="class in squidpony.performance">FOVCacheBenchmark</a></dt>
 <dd>&nbsp;</dd>
@@ -295,7 +339,7 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doPathGDXAStar--">doPathGDXAStar()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doPathNextDijkstra--">doPathNextDijkstra()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doPathOldDijkstra--">doPathOldDijkstra()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doPathOptDijkstra--">doPathOptDijkstra()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
 <dd>&nbsp;</dd>
@@ -331,7 +375,7 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doScanGreased--">doScanGreased()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doScanNextDijkstra--">doScanNextDijkstra()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doScanOldDijkstra--">doScanOldDijkstra()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doScanOptDijkstra--">doScanOptDijkstra()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
 <dd>&nbsp;</dd>
@@ -351,7 +395,7 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doTinyPathGDXAStar--">doTinyPathGDXAStar()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doTinyPathNextDijkstra--">doTinyPathNextDijkstra()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doTinyPathOldDijkstra--">doTinyPathOldDijkstra()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/DijkstraBenchmark.html#doTinyPathOptDijkstra--">doTinyPathOptDijkstra()</a></span> - Method in class squidpony.performance.<a href="../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></dt>
 <dd>&nbsp;</dd>

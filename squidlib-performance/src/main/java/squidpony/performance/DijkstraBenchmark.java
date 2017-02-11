@@ -44,7 +44,7 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
-import squidpony.performance.alternate.NextDijkstraMap;
+import squidpony.performance.alternate.OldDijkstraMap;
 import squidpony.performance.alternate.OptDijkstraMap;
 import squidpony.squidmath.AStarSearch;
 import squidpony.squidai.CustomDijkstraMap;
@@ -113,6 +113,22 @@ import java.util.concurrent.TimeUnit;
  * DijkstraBenchmark.measureTinyPathDijkstra        avgt    3   629.138 ± 153.702  ms/op
  * DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3     5.444 ±   0.473  ms/op
  * DijkstraBenchmark.measureTinyPathOptDijkstra     avgt    3   159.189 ±  15.194  ms/op
+ *
+ * Benchmark                                        Mode  Cnt     Score     Error  Units
+ * DijkstraBenchmark.measurePathCustomDijkstra      avgt    3  3004.285 ± 632.953  ms/op
+ * DijkstraBenchmark.measurePathDijkstra            avgt    3  1328.862 ± 285.102  ms/op //with "NextDijkstraMap" update
+ * DijkstraBenchmark.measurePathGDXAStar            avgt    3  1207.328 ± 441.112  ms/op
+ * DijkstraBenchmark.measurePathOldDijkstra         avgt    3  2463.782 ± 534.747  ms/op
+ * DijkstraBenchmark.measurePathOptDijkstra         avgt    3  1957.263 ± 553.280  ms/op
+ * DijkstraBenchmark.measureScanCustomDijkstra      avgt    3  2909.871 ± 636.707  ms/op
+ * DijkstraBenchmark.measureScanDijkstra            avgt    3  1232.099 ± 393.546  ms/op //with "NextDijkstraMap" update
+ * DijkstraBenchmark.measureScanOldDijkstra         avgt    3  2270.479 ± 961.130  ms/op
+ * DijkstraBenchmark.measureScanOptDijkstra         avgt    3  1566.125 ± 218.588  ms/op
+ * DijkstraBenchmark.measureTinyPathCustomDijkstra  avgt    3   516.101 ± 199.369  ms/op
+ * DijkstraBenchmark.measureTinyPathDijkstra        avgt    3   189.029 ±  54.750  ms/op //with "NextDijkstraMap" update
+ * DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3     5.834 ±   1.558  ms/op
+ * DijkstraBenchmark.measureTinyPathOldDijkstra     avgt    3   676.074 ± 138.026  ms/op
+ * DijkstraBenchmark.measureTinyPathOptDijkstra     avgt    3   174.504 ±  36.419  ms/op
  */
 public class DijkstraBenchmark {
 
@@ -231,9 +247,9 @@ public class DijkstraBenchmark {
     public void measureScanOptDijkstra() throws InterruptedException {
         doScanOptDijkstra();
     }
-    public long doScanNextDijkstra()
+    public long doScanOldDijkstra()
     {
-        NextDijkstraMap dijkstra = new NextDijkstraMap(
+        OldDijkstraMap dijkstra = new OldDijkstraMap(
                 map, new StatefulRNG(0x1337BEEF));
         dijkstra.setBlockingRequirement(0);
 
@@ -255,8 +271,8 @@ public class DijkstraBenchmark {
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureScanNextDijkstra() throws InterruptedException {
-        doScanNextDijkstra();
+    public void measureScanOldDijkstra() throws InterruptedException {
+        doScanOldDijkstra();
     }
 
     public long doScanGreased()
@@ -415,9 +431,9 @@ public class DijkstraBenchmark {
         doPathOptDijkstra();
     }
 
-    public long doPathNextDijkstra()
+    public long doPathOldDijkstra()
     {
-        NextDijkstraMap dijkstra = new NextDijkstraMap(
+        OldDijkstraMap dijkstra = new OldDijkstraMap(
                 map, new StatefulRNG(new LightRNG(0x1337BEEF)));
         dijkstra.setBlockingRequirement(0);
         Coord r;
@@ -444,14 +460,14 @@ public class DijkstraBenchmark {
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measurePathNextDijkstra() throws InterruptedException {
-        //System.out.println(doPathNextDijkstra());
-        doPathNextDijkstra();
+    public void measurePathOldDijkstra() throws InterruptedException {
+        //System.out.println(doPathOldDijkstra());
+        doPathOldDijkstra();
     }
-    public long doTinyPathNextDijkstra()
+    public long doTinyPathOldDijkstra()
     {
-        NextDijkstraMap dijkstra = new NextDijkstraMap(
-                map, NextDijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(new LightRNG(0x1337BEEF)));
+        OldDijkstraMap dijkstra = new OldDijkstraMap(
+                map, OldDijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(new LightRNG(0x1337BEEF)));
         dijkstra.setBlockingRequirement(0);
         Coord r;
         long scanned = 0;
@@ -474,9 +490,9 @@ public class DijkstraBenchmark {
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureTinyPathNextDijkstra() throws InterruptedException {
-        //System.out.println(doTinyPathNextDijkstra());
-        doTinyPathNextDijkstra();
+    public void measureTinyPathOldDijkstra() throws InterruptedException {
+        //System.out.println(doTinyPathOldDijkstra());
+        doTinyPathOldDijkstra();
     }
 
     public long doTinyPathCustomDijkstra()

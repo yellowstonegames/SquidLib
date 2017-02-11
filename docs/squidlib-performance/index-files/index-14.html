@@ -86,6 +86,18 @@
  specified safer points to be considered more safe, and will make a pathfinder more likely to enter those places
  if they were considered dangerous earlier (due to calling deteriorate()).</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/OldDijkstraMap.html#relax-java.util.List-">relax(List&lt;Coord&gt;)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/OldDijkstraMap.html" title="class in squidpony.performance.alternate">OldDijkstraMap</a></dt>
+<dd>
+<div class="block">Used in conjunction with methods that depend on finding cover, like findCoveredAttackPath(), this method causes
+ specified safer points to be considered more safe, and will make a pathfinder more likely to enter those places
+ if they were considered dangerous earlier (due to calling deteriorate()).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/OldDijkstraMap.html#relax-squidpony.squidmath.Coord...-">relax(Coord...)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/OldDijkstraMap.html" title="class in squidpony.performance.alternate">OldDijkstraMap</a></dt>
+<dd>
+<div class="block">Used in conjunction with methods that depend on finding cover, like findCoveredAttackPath(), this method causes
+ specified safer points to be considered more safe, and will make a pathfinder more likely to enter those places
+ if they were considered dangerous earlier (due to calling deteriorate()).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/FOVCacheBenchmark.html#res">res</a></span> - Static variable in class squidpony.performance.<a href="../squidpony/performance/FOVCacheBenchmark.html" title="class in squidpony.performance">FOVCacheBenchmark</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#reset--">reset()</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
@@ -94,6 +106,11 @@
  relative to physicalMap.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#reset--">reset()</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">Resets this DijkstraMap to a state with no goals, no discovered path, and no changes made to gradientMap
+ relative to physicalMap.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/OldDijkstraMap.html#reset--">reset()</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/OldDijkstraMap.html" title="class in squidpony.performance.alternate">OldDijkstraMap</a></dt>
 <dd>
 <div class="block">Resets this DijkstraMap to a state with no goals, no discovered path, and no changes made to gradientMap
  relative to physicalMap.</div>
@@ -119,6 +136,14 @@
 <dd>
 <div class="block">Reverts a cell to the value stored in the original state of the level as known by physicalMap.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/OldDijkstraMap.html#resetCell-int-int-">resetCell(int, int)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/OldDijkstraMap.html" title="class in squidpony.performance.alternate">OldDijkstraMap</a></dt>
+<dd>
+<div class="block">Reverts a cell to the value stored in the original state of the level as known by physicalMap.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/OldDijkstraMap.html#resetCell-squidpony.squidmath.Coord-">resetCell(Coord)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/OldDijkstraMap.html" title="class in squidpony.performance.alternate">OldDijkstraMap</a></dt>
+<dd>
+<div class="block">Reverts a cell to the value stored in the original state of the level as known by physicalMap.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/OptDijkstraMap.html#resetCell-int-">resetCell(int)</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/OptDijkstraMap.html" title="class in squidpony.performance.alternate">OptDijkstraMap</a></dt>
 <dd>
 <div class="block">Reverts a cell to the value stored in the original state of the level as known by physicalMap.</div>
@@ -131,11 +156,19 @@
 <dd>
 <div class="block">Resets the gradientMap to its original value from physicalMap.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/OldDijkstraMap.html#resetMap--">resetMap()</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/OldDijkstraMap.html" title="class in squidpony.performance.alternate">OldDijkstraMap</a></dt>
+<dd>
+<div class="block">Resets the gradientMap to its original value from physicalMap.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/OptDijkstraMap.html#resetMap--">resetMap()</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/OptDijkstraMap.html" title="class in squidpony.performance.alternate">OptDijkstraMap</a></dt>
 <dd>
 <div class="block">Resets the gradientMap to its original value from physicalMap.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#resetSafetyMap--">resetSafetyMap()</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
+<dd>
+<div class="block">Resets the targetMap (which is only assigned in the first place if you use findTechniquePath() ).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/OldDijkstraMap.html#resetSafetyMap--">resetSafetyMap()</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/OldDijkstraMap.html" title="class in squidpony.performance.alternate">OldDijkstraMap</a></dt>
 <dd>
 <div class="block">Resets the targetMap (which is only assigned in the first place if you use findTechniquePath() ).</div>
 </dd>
@@ -147,11 +180,19 @@
 <dd>
 <div class="block">Resets the targetMap (which is only assigned in the first place if you use findTechniquePath() ).</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/OldDijkstraMap.html#resetTargetMap--">resetTargetMap()</a></span> - Method in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/OldDijkstraMap.html" title="class in squidpony.performance.alternate">OldDijkstraMap</a></dt>
+<dd>
+<div class="block">Resets the targetMap (which is only assigned in the first place if you use findTechniquePath() ).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/DijkstraMap.html#rng">rng</a></span> - Variable in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/DijkstraMap.html" title="class in squidpony.performance.alternate">DijkstraMap</a></dt>
 <dd>
 <div class="block">The RNG used to decide which one of multiple equally-short paths to take.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/NextDijkstraMap.html#rng">rng</a></span> - Variable in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/NextDijkstraMap.html" title="class in squidpony.performance.alternate">NextDijkstraMap</a></dt>
+<dd>
+<div class="block">The RNG used to decide which one of multiple equally-short paths to take.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/performance/alternate/OldDijkstraMap.html#rng">rng</a></span> - Variable in class squidpony.performance.alternate.<a href="../squidpony/performance/alternate/OldDijkstraMap.html" title="class in squidpony.performance.alternate">OldDijkstraMap</a></dt>
 <dd>
 <div class="block">The RNG used to decide which one of multiple equally-short paths to take.</div>
 </dd>
