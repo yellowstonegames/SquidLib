@@ -129,6 +129,25 @@ import java.util.concurrent.TimeUnit;
  * DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3     5.834 ±   1.558  ms/op
  * DijkstraBenchmark.measureTinyPathOldDijkstra     avgt    3   676.074 ± 138.026  ms/op
  * DijkstraBenchmark.measureTinyPathOptDijkstra     avgt    3   174.504 ±  36.419  ms/op
+ *
+ * This next section seems slower all around, probably because the group requires the number the calculations return to
+ * be printed (preventing the compiler from omitting certain parts as dead code). This should be more accurate.
+ *
+ * Benchmark                                        Mode  Cnt     Score      Error  Units
+ * DijkstraBenchmark.measurePathCustomDijkstra      avgt    3  5578.118 ± 1638.982  ms/op
+ * DijkstraBenchmark.measurePathDijkstra            avgt    3  1412.226 ±  116.214  ms/op //woo! (long paths here)
+ * DijkstraBenchmark.measurePathGDXAStar            avgt    3  2291.534 ±  526.744  ms/op //not the best any more!
+ * DijkstraBenchmark.measurePathOldDijkstra         avgt    3  4269.398 ±  258.163  ms/op
+ * DijkstraBenchmark.measurePathOptDijkstra         avgt    3  3608.808 ±  314.844  ms/op
+ * DijkstraBenchmark.measureScanCustomDijkstra      avgt    3  2621.239 ±   61.222  ms/op
+ * DijkstraBenchmark.measureScanDijkstra            avgt    3  1198.388 ±  245.992  ms/op
+ * DijkstraBenchmark.measureScanOldDijkstra         avgt    3  2007.153 ±  713.720  ms/op
+ * DijkstraBenchmark.measureScanOptDijkstra         avgt    3  1429.810 ±  293.400  ms/op
+ * DijkstraBenchmark.measureTinyPathCustomDijkstra  avgt    3   962.297 ±  168.867  ms/op
+ * DijkstraBenchmark.measureTinyPathDijkstra        avgt    3   185.928 ±  110.203  ms/op //not as good on short paths
+ * DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3    12.453 ±    3.873  ms/op
+ * DijkstraBenchmark.measureTinyPathOldDijkstra     avgt    3  1362.067 ±  176.038  ms/op
+ * DijkstraBenchmark.measureTinyPathOptDijkstra     avgt    3   376.765 ±   34.868  ms/op
  */
 public class DijkstraBenchmark {
 
@@ -140,6 +159,7 @@ public class DijkstraBenchmark {
     public static char[][] map;
     public static double[][] astarMap;
     public static GreasedRegion floors;
+    public static double floorCount;
     public static Coord[][] nearbyMap;
     public static int[] customNearbyMap;
     public static Adjacency adj;
@@ -147,8 +167,9 @@ public class DijkstraBenchmark {
         serpent.putWalledBoxRoomCarvers(1);
         map = dungeonGen.generate(serpent.generate());
         floors = new GreasedRegion(map, '.');
-        System.out.println("Floors: " + floors.size());
-        System.out.println("Percentage walkable: " + floors.size() * 100.0 / (DIMENSION * DIMENSION) + "%");
+        floorCount = floors.size();
+        System.out.println("Floors: " + floorCount);
+        System.out.println("Percentage walkable: " + floorCount * 100.0 / (DIMENSION * DIMENSION) + "%");
         astarMap = DungeonUtility.generateAStarCostMap(map, Collections.<Character, Double>emptyMap(), 1);
         nearbyMap = new Coord[DIMENSION][DIMENSION];
         customNearbyMap = new int[DIMENSION * DIMENSION];
@@ -192,7 +213,7 @@ public class DijkstraBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureScanDijkstra() throws InterruptedException {
-        doScanDijkstra();
+        System.out.println(doScanDijkstra());
     }
 
     public long doScanCustomDijkstra()
@@ -219,7 +240,7 @@ public class DijkstraBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureScanCustomDijkstra() throws InterruptedException {
-        doScanCustomDijkstra();
+        System.out.println(doScanCustomDijkstra());
     }
     public long doScanOptDijkstra()
     {
@@ -245,7 +266,7 @@ public class DijkstraBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureScanOptDijkstra() throws InterruptedException {
-        doScanOptDijkstra();
+        System.out.println(doScanOptDijkstra());
     }
     public long doScanOldDijkstra()
     {
@@ -272,7 +293,7 @@ public class DijkstraBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureScanOldDijkstra() throws InterruptedException {
-        doScanOldDijkstra();
+        System.out.println(doScanOldDijkstra());
     }
 
     public long doScanGreased()
@@ -294,18 +315,18 @@ public class DijkstraBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureScanGreased() throws InterruptedException {
-        doScanGreased();
+        System.out.println(doScanGreased());
     }
 
     public long doPathDijkstra()
     {
         DijkstraMap dijkstra = new DijkstraMap(
-                map, DijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(new LightRNG(0x1337BEEF)));
+                map, DijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(0x1337BEEF));
         dijkstra.setBlockingRequirement(0);
         Coord r;
         Coord[] tgts = new Coord[1];
         long scanned = 0;
-        DungeonUtility utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
+        DungeonUtility utility = new DungeonUtility(new StatefulRNG(0x1337BEEFDEAL));
         for (int x = 1; x < DIMENSION - 1; x++) {
             for (int y = 1; y < DIMENSION - 1; y++) {
                 if (map[x][y] == '#')
@@ -317,7 +338,6 @@ public class DijkstraBenchmark {
                 tgts[0] = Coord.get(x, y);
                 dijkstra.findPath(PATH_LENGTH, null, null, r, tgts);
                 dijkstra.clearGoals();
-                dijkstra.resetMap();
                 scanned += dijkstra.path.size();
             }
         }
@@ -327,14 +347,14 @@ public class DijkstraBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measurePathDijkstra() throws InterruptedException {
-        //System.out.println(doPathDijkstra());
+        System.out.println(doPathDijkstra() / floorCount);
         doPathDijkstra();
     }
 
     public long doTinyPathDijkstra()
     {
         DijkstraMap dijkstra = new DijkstraMap(
-                map, DijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(new LightRNG(0x1337BEEF)));
+                map, DijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(0x1337BEEF));
         dijkstra.setBlockingRequirement(0);
         Coord r;
         long scanned = 0;
@@ -346,7 +366,7 @@ public class DijkstraBenchmark {
                 ((StatefulRNG) dijkstra.rng).setState((x << 20) | (y << 14) | (x * y));
                 r = nearbyMap[x][y];
                 tgts[0] = Coord.get(x, y);
-                dijkstra.findPath(1, 9, null, null, r, tgts);
+                dijkstra.findPath(9, 9, null, null, r, tgts);
                 dijkstra.clearGoals();
                 dijkstra.resetMap();
                 scanned += dijkstra.path.size();
@@ -358,18 +378,18 @@ public class DijkstraBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureTinyPathDijkstra() throws InterruptedException {
-        //System.out.println(doTinyPathDijkstra());
+        System.out.println(doTinyPathDijkstra() / floorCount);
         doTinyPathDijkstra();
     }
 
     public long doPathCustomDijkstra()
     {
         CustomDijkstraMap dijkstra = new CustomDijkstraMap(
-                map, adj, new StatefulRNG(new LightRNG(0x1337BEEF)));
+                map, adj, new StatefulRNG(0x1337BEEF));
         Coord r;
         int p;
         long scanned = 0;
-        DungeonUtility utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
+        DungeonUtility utility = new DungeonUtility(new StatefulRNG(0x1337BEEFDEAL));
         int[] tgts = new int[1];
         for (int x = 1; x < DIMENSION - 1; x++) {
             for (int y = 1; y < DIMENSION - 1; y++) {
@@ -393,18 +413,18 @@ public class DijkstraBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measurePathCustomDijkstra() throws InterruptedException {
-        //System.out.println(doPathCustomDijkstra());
+        System.out.println(doPathCustomDijkstra() / floorCount);
         doPathCustomDijkstra();
     }
     public long doPathOptDijkstra()
     {
         OptDijkstraMap dijkstra = new OptDijkstraMap(
-                map, adj, new StatefulRNG(new LightRNG(0x1337BEEF)));
+                map, adj, new StatefulRNG(0x1337BEEF));
         Coord r;
         int p;
         long scanned = 0;
         int[] tgts = new int[1];
-        DungeonUtility utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
+        DungeonUtility utility = new DungeonUtility(new StatefulRNG(0x1337BEEFDEAL));
         for (int x = 1; x < DIMENSION - 1; x++) {
             for (int y = 1; y < DIMENSION - 1; y++) {
                 if (map[x][y] == '#')
@@ -427,19 +447,19 @@ public class DijkstraBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measurePathOptDijkstra() throws InterruptedException {
-        //System.out.println(doPathOptDijkstra());
+        System.out.println(doPathOptDijkstra() / floorCount);
         doPathOptDijkstra();
     }
 
     public long doPathOldDijkstra()
     {
         OldDijkstraMap dijkstra = new OldDijkstraMap(
-                map, new StatefulRNG(new LightRNG(0x1337BEEF)));
+                map, new StatefulRNG(0x1337BEEF));
         dijkstra.setBlockingRequirement(0);
         Coord r;
         long scanned = 0;
         Coord[] tgts = new Coord[1];
-        DungeonUtility utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
+        DungeonUtility utility = new DungeonUtility(new StatefulRNG(0x1337BEEFDEAL));
         for (int x = 1; x < DIMENSION - 1; x++) {
             for (int y = 1; y < DIMENSION - 1; y++) {
                 if (map[x][y] == '#')
@@ -451,7 +471,6 @@ public class DijkstraBenchmark {
                 tgts[0] = Coord.get(x, y);
                 dijkstra.findPath(PATH_LENGTH, null, null, r, tgts);
                 dijkstra.clearGoals();
-                dijkstra.resetMap();
                 scanned += dijkstra.path.size();
             }
         }
@@ -461,13 +480,13 @@ public class DijkstraBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measurePathOldDijkstra() throws InterruptedException {
-        //System.out.println(doPathOldDijkstra());
+        System.out.println(doPathOldDijkstra() / floorCount);
         doPathOldDijkstra();
     }
     public long doTinyPathOldDijkstra()
     {
         OldDijkstraMap dijkstra = new OldDijkstraMap(
-                map, OldDijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(new LightRNG(0x1337BEEF)));
+                map, OldDijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(0x1337BEEF));
         dijkstra.setBlockingRequirement(0);
         Coord r;
         long scanned = 0;
@@ -479,7 +498,7 @@ public class DijkstraBenchmark {
                 ((StatefulRNG) dijkstra.rng).setState((x << 20) | (y << 14) | (x * y));
                 r = nearbyMap[x][y];
                 tgts[0] = Coord.get(x, y);
-                dijkstra.findPath(1, 9, null, null, r, tgts);
+                dijkstra.findPath(9, 9, null, null, r, tgts);
                 dijkstra.clearGoals();
                 dijkstra.resetMap();
                 scanned += dijkstra.path.size();
@@ -491,14 +510,14 @@ public class DijkstraBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureTinyPathOldDijkstra() throws InterruptedException {
-        //System.out.println(doTinyPathOldDijkstra());
+        System.out.println(doTinyPathOldDijkstra() / floorCount);
         doTinyPathOldDijkstra();
     }
 
     public long doTinyPathCustomDijkstra()
     {
         CustomDijkstraMap dijkstra = new CustomDijkstraMap(
-                map, adj, new StatefulRNG(new LightRNG(0x1337BEEF)));
+                map, adj, new StatefulRNG(0x1337BEEF));
         Coord r;
         int p;
         long scanned = 0;
@@ -523,14 +542,14 @@ public class DijkstraBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureTinyPathCustomDijkstra() throws InterruptedException {
-        //System.out.println(doTinyPathCustomDijkstra());
+        System.out.println(doTinyPathCustomDijkstra() / floorCount);
         doTinyPathCustomDijkstra();
     }
 
     public long doTinyPathOptDijkstra()
     {
         OptDijkstraMap dijkstra = new OptDijkstraMap(
-                map, adj, new StatefulRNG(new LightRNG(0x1337BEEF)));
+                map, adj, new StatefulRNG(0x1337BEEF));
         Coord r;
         int p;
         long scanned = 0;
@@ -543,7 +562,7 @@ public class DijkstraBenchmark {
                 r = nearbyMap[x][y];
                 p = adj.composite(r.x, r.y, 0, 0);
                 tgts[0] = adj.composite(x, y, 0, 0);
-                dijkstra.findPath(1,  9,null, null, p, tgts);
+                dijkstra.findPath(9,  9,null, null, p, tgts);
                 dijkstra.clearGoals();
                 dijkstra.resetMap();
                 scanned += dijkstra.path.size;
@@ -555,7 +574,7 @@ public class DijkstraBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureTinyPathOptDijkstra() throws InterruptedException {
-        //System.out.println(doTinyPathOptDijkstra());
+        System.out.println(doTinyPathOptDijkstra() / floorCount);
         doTinyPathOptDijkstra();
     }
 
@@ -584,17 +603,17 @@ public class DijkstraBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureScanBoxedDijkstra() throws InterruptedException {
-        doScanBoxedDijkstra();
+        System.out.println(doScanBoxedDijkstra());
     }
 
     public long doPathBoxedDijkstra()
     {
         squidpony.performance.alternate.DijkstraMap dijkstra = new squidpony.performance.alternate.DijkstraMap(
-                map, squidpony.performance.alternate.DijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(new LightRNG(0x1337BEEF)));
+                map, squidpony.performance.alternate.DijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(0x1337BEEF));
         Coord r;
         long scanned = 0;
         Coord[] tgts = new Coord[1];
-        DungeonUtility utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
+        DungeonUtility utility = new DungeonUtility(new StatefulRNG(0x1337BEEFDEAL));
         for (int x = 1; x < DIMENSION - 1; x++) {
             for (int y = 1; y < DIMENSION - 1; y++) {
                 if (map[x][y] == '#')
@@ -628,7 +647,7 @@ public class DijkstraBenchmark {
         squidpony.performance.alternate.AStarSearch astar = new squidpony.performance.alternate.AStarSearch(astarMap, squidpony.performance.alternate.AStarSearch.SearchType.CHEBYSHEV);
         Coord r;
         long scanned = 0;
-        DungeonUtility utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
+        DungeonUtility utility = new DungeonUtility(new StatefulRNG(0x1337BEEFDEAL));
         Queue<Coord> latestPath;
         for (int x = 1; x < DIMENSION - 1; x++) {
             for (int y = 1; y < DIMENSION - 1; y++) {
@@ -648,7 +667,7 @@ public class DijkstraBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measurePathAStar() throws InterruptedException {
-        //System.out.println(doPathAStar());
+        System.out.println(doPathAStar() / floorCount);
         doPathAStar();
     }
 
@@ -657,7 +676,7 @@ public class DijkstraBenchmark {
         AStarSearch astar = new AStarSearch(astarMap, AStarSearch.SearchType.CHEBYSHEV);
         Coord r;
         long scanned = 0;
-        DungeonUtility utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
+        DungeonUtility utility = new DungeonUtility(new StatefulRNG(0x1337BEEFDEAL));
         Queue<Coord> latestPath;
         for (int x = 1; x < DIMENSION - 1; x++) {
             for (int y = 1; y < DIMENSION - 1; y++) {
@@ -686,7 +705,7 @@ public class DijkstraBenchmark {
         AStarSearch astar = new AStarSearch(astarMap, AStarSearch.SearchType.CHEBYSHEV);
         Coord r;
         long scanned = 0;
-        DungeonUtility utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
+        DungeonUtility utility = new DungeonUtility(new StatefulRNG(0x1337BEEFDEAL));
         Queue<Coord> latestPath;
         for (int x = 1; x < DIMENSION - 1; x++) {
             for (int y = 1; y < DIMENSION - 1; y++) {
@@ -706,7 +725,7 @@ public class DijkstraBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureTinyPathAStar2() throws InterruptedException {
-        //System.out.println(doTinyPathAStar2());
+        System.out.println(doTinyPathAStar2() / floorCount);
         doTinyPathAStar2();
     }
 
@@ -757,7 +776,7 @@ public class DijkstraBenchmark {
         };
         Coord r;
         long scanned = 0;
-        DungeonUtility utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
+        DungeonUtility utility = new DungeonUtility(new StatefulRNG(0x1337BEEFDEAL));
         for (int x = 1; x < DIMENSION - 1; x++) {
             for (int y = 1; y < DIMENSION - 1; y++) {
                 if (map[x][y] == '#')
@@ -777,7 +796,7 @@ public class DijkstraBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measurePathGDXAStar() throws InterruptedException {
-        //System.out.println(doPathGDXAStar());
+        System.out.println(doPathGDXAStar() / floorCount);
         doPathGDXAStar();
     }
 
@@ -810,7 +829,7 @@ public class DijkstraBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureTinyPathGDXAStar() throws InterruptedException {
-        //System.out.println(doTinyPathGDXAStar());
+        System.out.println(doTinyPathGDXAStar() / floorCount);
         doTinyPathGDXAStar();
     }
 
@@ -851,7 +870,7 @@ public class DijkstraBenchmark {
         PlannedAStar astar = new PlannedAStar(astarMap, AStarSearch.SearchType.CHEBYSHEV);
         Coord r;
         long scanned = 0;
-        DungeonUtility utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
+        DungeonUtility utility = new DungeonUtility(new StatefulRNG(0x1337BEEFDEAL));
         for (int x = 1; x < DIMENSION - 1; x++) {
             for (int y = 1; y < DIMENSION - 1; y++) {
                 if (map[x][y] == '#')

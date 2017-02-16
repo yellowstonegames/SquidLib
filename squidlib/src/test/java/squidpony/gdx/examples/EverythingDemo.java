@@ -525,13 +525,6 @@ public class EverythingDemo extends ApplicationAdapter {
                             FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 1, 3,
                                     new String[]{",", ",", ",", " -"}, new String[]{"!"}, 0.25) + "\"");
                 }
-                if(fovmap[pos.x][pos.y] > 0.1) {
-                    System.out.println("fov(" + pos.x+","+pos.y+")");
-                }
-                else
-                {
-                    System.out.println("state("+pos.x+","+pos.y+")");
-                }
                 getToPlayer.clearGoals();
                 nextMovePositions = getToPlayer.findPath(1, monplaces, null, pos, playerArray);
                 if (nextMovePositions != null && !nextMovePositions.isEmpty()) {

@@ -183,7 +183,10 @@
  DijkstraBenchmark.measureTinyPathDijkstra        avgt    3   189.029 ±  54.750  ms/op //with "NextDijkstraMap" update
  DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3     5.834 ±   1.558  ms/op
  DijkstraBenchmark.measureTinyPathOldDijkstra     avgt    3   676.074 ± 138.026  ms/op
- DijkstraBenchmark.measureTinyPathOptDijkstra     avgt    3   174.504 ±  36.419  ms/op</div>
+ DijkstraBenchmark.measureTinyPathOptDijkstra     avgt    3   174.504 ±  36.419  ms/op
+
+ This next section seems slower all around, probably because the group requires the number the calculations return to
+ be printed (preventing the compiler from omitting certain parts as dead code).</div>
 </td>
 </tr>
 <tr class="altColor">

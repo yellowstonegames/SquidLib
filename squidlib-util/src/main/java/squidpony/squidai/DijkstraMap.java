@@ -750,7 +750,37 @@ public class DijkstraMap implements Serializable {
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
     public double[][] scan(Collection<Coord> impassable) {
-        if (!initialized) return null;
+        scan(null, impassable);
+        double[][] gradientClone = new double[width][height];
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (gradientMap[x][y] == FLOOR) {
+                    gradientMap[x][y] = DARK;
+                }
+            }
+            System.arraycopy(gradientMap[x], 0, gradientClone[x], 0, height);
+        }
+
+        return gradientClone;
+    }
+
+    /**
+     * Recalculate the Dijkstra map and return it. Cells that were marked as goals with setGoal will have
+     * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+     * from goals will have a value equal to the distance from the nearest goal. The exceptions are walls,
+     * which will have a value defined by the WALL constant in this class, and areas that the scan was
+     * unable to reach, which will have a value defined by the DARK constant in this class (typically,
+     * these areas should not be used to place NPCs or items and should be filled with walls). This uses the
+     * current measurement. The result is stored in the {@link #gradientMap} field and a copy is returned.
+     *
+     * @param start a Coord representing the location of the pathfinder; may be null, which has this scan the whole map
+     * @param impassable A Collection of Coord keys representing the locations of enemies or other moving obstacles to a
+     *                   path that cannot be moved through; this can be null if there are no such obstacles.
+     * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
+     */
+    public void scan(final Coord start, Collection<Coord> impassable) {
+
+        if (!initialized) return;
         if (impassable != null && !impassable.isEmpty()) {
             for (Coord pt : impassable) {
                 gradientMap[pt.x][pt.y] = WALL;
@@ -811,6 +841,15 @@ public class DijkstraMap implements Serializable {
                         setFresh(adjX, adjY, cs);
                         ++numAssigned;
                         ++mappedCount;
+                        if(start != null && start.x == adjX && start.y == adjY)
+                        {
+                            if (impassable != null && !impassable.isEmpty()) {
+                                for (Coord pt : impassable) {
+                                    gradientMap[pt.x][pt.y] = physicalMap[pt.x][pt.y];
+                                }
+                            }
+                            return;
+                        }
                     }
                 }
             }
@@ -820,6 +859,24 @@ public class DijkstraMap implements Serializable {
                 gradientMap[pt.x][pt.y] = physicalMap[pt.x][pt.y];
             }
         }
+    }
+
+    /**
+     * Recalculate the Dijkstra map up to a limit and return it. Cells that were marked as goals with setGoal will have
+     * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+     * from goals will have a value equal to the distance from the nearest goal. If a cell would take more steps to
+     * reach than the given limit, it will have a value of DARK if it was passable instead of the distance. The
+     * exceptions are walls, which will have a value defined by the WALL constant in this class, and areas that the scan
+     * was unable to reach, which will have a value defined by the DARK constant in this class. This uses the
+     * current measurement. The result is stored in the {@link #gradientMap} field and a copy is returned.
+     *
+     * @param limit      The maximum number of steps to scan outward from a goal.
+     * @param impassable A Collection of Coord keys representing the locations of enemies or other moving obstacles to a
+     *                   path that cannot be moved through; this can be null if there are no such obstacles.
+     * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
+     */
+    public double[][] partialScan(final int limit, Collection<Coord> impassable) {
+        partialScan(null, limit, impassable);
         double[][] gradientClone = new double[width][height];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -842,13 +899,15 @@ public class DijkstraMap implements Serializable {
      * was unable to reach, which will have a value defined by the DARK constant in this class. This uses the
      * current measurement. The result is stored in the {@link #gradientMap} field and a copy is returned.
      *
+     * @param start a Coord representing the location of the pathfinder; may be null to have this scan more of the map
      * @param limit      The maximum number of steps to scan outward from a goal.
      * @param impassable A Collection of Coord keys representing the locations of enemies or other moving obstacles to a
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
-    public double[][] partialScan(final int limit, Collection<Coord> impassable) {
-        if (!initialized) return null;
+    public void partialScan(final Coord start, final int limit, Collection<Coord> impassable) {
+
+        if (!initialized) return;
         if (impassable != null && !impassable.isEmpty()) {
             for (Coord pt : impassable) {
                 gradientMap[pt.x][pt.y] = WALL;
@@ -913,6 +972,15 @@ public class DijkstraMap implements Serializable {
                         setFresh(adjX, adjY, cs);
                         ++numAssigned;
                         ++mappedCount;
+                        if(start != null && start.x == adjX && start.y == adjY)
+                        {
+                            if (impassable != null && !impassable.isEmpty()) {
+                                for (Coord pt : impassable) {
+                                    gradientMap[pt.x][pt.y] = physicalMap[pt.x][pt.y];
+                                }
+                            }
+                            return;
+                        }
                     }
                 }
             }
@@ -922,17 +990,6 @@ public class DijkstraMap implements Serializable {
                 gradientMap[pt.x][pt.y] = physicalMap[pt.x][pt.y];
             }
         }
-        double[][] gradientClone = new double[width][height];
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                if (gradientMap[x][y] == FLOOR) {
-                    gradientMap[x][y] = DARK;
-                }
-            }
-            System.arraycopy(gradientMap[x], 0, gradientClone[x], 0, height);
-        }
-
-        return gradientClone;
     }
 
     /**
@@ -1173,7 +1230,32 @@ public class DijkstraMap implements Serializable {
      *                   creature. Non-square creatures are not supported because turning is really hard.
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
-    public double[][] scan(Collection<Coord> impassable, int size) {
+    public double[][] scan(Collection<Coord> impassable, final int size) {
+        return scan(null, impassable, size);
+    }
+
+    /**
+     * Recalculate the Dijkstra map for a creature that is potentially larger than 1x1 cell and return it. The value of
+     * a cell in the returned Dijkstra map assumes that a creature is square, with a side length equal to the passed
+     * size, that its minimum-x, minimum-y cell is the starting cell, and that any cell with a distance number
+     * represents the distance for the creature's minimum-x, minimum-y cell to reach it. Cells that cannot be entered
+     * by the minimum-x, minimum-y cell because of sizing (such as a floor cell next to a maximum-x and/or maximum-y
+     * wall if size is &gt; 1) will be marked as DARK. Cells that were marked as goals with setGoal will have
+     * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+     * from goals will have a value equal to the distance from the nearest goal. The exceptions are walls,
+     * which will have a value defined by the WALL constant in this class, and areas that the scan was
+     * unable to reach, which will have a value defined by the DARK constant in this class. (typically,
+     * these areas should not be used to place NPCs or items and should be filled with walls). This uses the
+     * current measurement.  The result is stored in the {@link #gradientMap} field and a copy is returned.
+     *
+     * @param impassable A Collection of Coord keys representing the locations of enemies or other moving obstacles to a
+     *                   path that cannot be moved through; this can be null if there are no such obstacles.
+     * @param size       The length of one side of a square creature using this to find a path, i.e. 2 for a 2x2 cell
+     *                   creature. Non-square creatures are not supported because turning is really hard.
+     * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
+     */
+    public double[][] scan(final Coord start, Collection<Coord> impassable, final int size) {
+
         if (!initialized) return null;
         double[][] gradientClone = ArrayTools.copy(gradientMap);
         if (impassable != null && !impassable.isEmpty()) {
@@ -1254,6 +1336,15 @@ public class DijkstraMap implements Serializable {
                         setFresh(adjX, adjY, cs);
                         ++numAssigned;
                         ++mappedCount;
+                        if(start != null && start.x == adjX && start.y == adjY)
+                        {
+                            if (impassable != null && !impassable.isEmpty()) {
+                                for (Coord pt : impassable) {
+                                    gradientMap[pt.x][pt.y] = physicalMap[pt.x][pt.y];
+                                }
+                            }
+                            return ArrayTools.copy(gradientMap);
+                        }
                     }
                 }
             }
@@ -1356,9 +1447,9 @@ public class DijkstraMap implements Serializable {
         if(length < 0)
             length = 0;
         if(scanLimit <= 0 || scanLimit < length)
-            scan(impassable2);
+            scan(start, impassable2);
         else
-            partialScan(scanLimit, impassable2);
+            partialScan(start, scanLimit, impassable2);
         Coord currentPos = start;
         double paidLength = 0.0;
         while (true) {
@@ -2017,7 +2108,7 @@ public class DijkstraMap implements Serializable {
             return new ArrayList<>(path);
         }
 
-        scan(impassable2, size);
+        scan(start, impassable2, size);
         Coord currentPos = start;
         double paidLength = 0.0;
         while (true) {
