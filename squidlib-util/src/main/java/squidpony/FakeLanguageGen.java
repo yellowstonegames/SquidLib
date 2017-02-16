@@ -1433,7 +1433,7 @@ public class FakeLanguageGen implements Serializable {
                     "rb", "rd", "rg", "rp", "rf", "lb", "ld", "lg", "lp", "lf",
             },
             new String[]{},
-            new String[]{}, new int[]{1, 2, 3, 4}, new double[]{3, 7, 5, 1}, 0.1, 0.15, 0.0, 0.0, null, true).register();
+            new String[]{}, new int[]{1, 2, 3, 4}, new double[]{3, 7, 5, 1}, 0.1, 0.15, 0.0, 0.0, genericSanityChecks, true).register();
 
     /**
      * Fantasy language that tries to imitate the various languages spoken by elves in J.R.R. Tolkien's works, using
@@ -1474,7 +1474,108 @@ public class FakeLanguageGen implements Serializable {
                     "r", "n", "r", "n", "r", "n", "n", "n", "n", "n"
             },
             new String[]{},
-            new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{3, 6, 6, 3, 1}, 0.4, 0.3, 0.0, 0.0, null, true).register();
+            new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{3, 6, 6, 3, 1}, 0.4, 0.3, 0.0, 0.0, genericSanityChecks, true).register();
+    /**
+     * Fantasy language that might be suitable for a language spoken by demons, aggressive warriors, or people who seek
+     * to emulate or worship similar groups. The tendency here is for DEMONIC to be the language used by creatures that
+     * are considered evil because of their violence, while INFERNAL would be the language used by creatures that are
+     * considered evil because of their manipulation and deceit (DEMONIC being "chaotic evil" and INFERNAL being "lawful
+     * evil"). This uses lots of sounds that don't show up in natural languages very often, mixing harsh or guttural
+     * sounds like "kh" and "ghr" with rare sounds like "vr", "zv", and "tl". It uses vowel-splitting in a way that is
+     * similar to LOVECRAFT, sometimes producing sounds like "tsa'urz" or "khu'olk".
+     * <br>
+     * Vrirvoks xatughat ogz; olds xu'oz xorgogh!
+     */
+    public static final FakeLanguageGen DEMONIC = new FakeLanguageGen(
+            new String[]{"a", "a", "a", "a",
+                    "e",
+                    "i", "i",
+                    "o", "o", "o", "o", "o",
+                    "u", "u", "u", "u", "u",
+            },
+            new String[]{},
+            new String[]{
+                    "b", "bh", "d", "dh", "t", "tl", "ts", "k", "ch", "kh", "g", "gh", "f", "x", "s", "sh", "z", "r", "v", "y",
+                    "br", "bhr", "dr", "dhr", "tr", "tsr", "kr", "khr", "gr", "ghr", "fr", "shr", "vr",
+                    "bl", "bhl", "tsl", "kl", "chl", "khl", "gl", "ghl", "fl", "sl", "zl", "vl",
+                    "dz", "chf", "sf", "shf", "zv", "st", "sk",
+                    "t", "t", "t", "ts", "ts", "k", "k", "k", "kh", "kh", "kh", "kh", "khr", "kl", "kl", "kr", "kr",
+                    "z", "z", "z", "v", "v", "v", "zv", "zv", "vr", "vr", "vl", "vl", "dz", "sk", "sk", "sh", "shr",
+                    "x", "x", "x", "gh", "gh", "ghr",
+                    "t", "t", "t", "ts", "ts", "k", "k", "k", "kh", "kh", "kh", "kh", "khr", "kl", "kl", "kr", "kr",
+                    "z", "z", "z", "v", "v", "v", "zv", "zv", "vr", "vr", "vl", "vl", "dz", "sk", "sk", "sh", "shr",
+                    "x", "x", "x", "gh", "gh", "ghr",
+                    "t", "t", "t", "ts", "ts", "k", "k", "k", "kh", "kh", "kh", "kh", "khr", "kl", "kl", "kr", "kr",
+                    "z", "z", "z", "v", "v", "v", "zv", "zv", "vr", "vr", "vl", "vl", "dz", "sk", "sk", "sh", "shr",
+                    "x", "x", "x", "gh", "gh", "ghr",
+            },
+            new String[]{},
+            new String[]{
+                    "b", "bh", "d", "dh", "t", "lt", "k", "ch", "kh", "g", "gh", "f", "x", "s", "sh", "z", "r",
+                    "b", "bh", "d", "dh", "t", "lt", "k", "ch", "kh", "g", "gh", "f", "x", "s", "sh", "z", "r",
+                    "b", "bh", "d", "dh", "t", "lt", "k", "ch", "kh", "g", "gh", "f", "x", "s", "sh", "z", "r",
+                    "b", "bh", "d", "dh", "t", "lt", "k", "ch", "kh", "g", "gh", "f", "x", "s", "sh", "z", "r",
+                    "rb", "rbs", "rbh", "rd", "rds", "rdh", "rt", "rts", "rk", "rks", "rch", "rkh", "rg", "rsh", "rv", "rz",
+                    "lt", "lts", "lk", "lch", "lkh", "lg", "ls", "lz", "lx",
+                    "bs", "ds", "ts", "lts", "ks", "khs", "gs", "fs", "rs", "rx",
+                    "bs", "ds", "ts", "lts", "ks", "khs", "gs", "fs", "rs", "rx",
+                    "rbs", "rds", "rts", "rks", "rkhs", "rgs", "rfs", "rs", "rx",
+                    "lbs", "lds", "lts", "lks", "lkhs", "lgs", "lfs",
+                    "rdz", "rvz", "gz", "rgz", "vd", "kt",
+                    "t", "t", "t", "rt", "lt", "k", "k", "k", "k", "k", "kh", "kh", "kh", "kh", "kh", "rkh", "lk", "rk", "rk",
+                    "z", "z", "z", "z", "v", "rv", "rv", "dz", "ks", "sk", "sh",
+                    "x", "x", "x", "gh", "gh", "gh", "rgh",
+                    "ts", "ts", "ks", "ks", "khs",
+                    "t", "t", "t", "rt", "lt", "k", "k", "k", "k", "k", "kh", "kh", "kh", "kh", "kh", "rkh", "lk", "rk", "rk",
+                    "z", "z", "z", "z", "v", "rv", "rv", "dz", "ks", "sk", "sh",
+                    "x", "x", "x", "gh", "gh", "gh", "rgh",
+                    "ts", "ts", "ks", "ks", "khs",
+                    "t", "t", "t", "rt", "lt", "k", "k", "k", "k", "k", "kh", "kh", "kh", "kh", "kh", "rkh", "lk", "rk", "rk",
+                    "z", "z", "z", "z", "v", "rv", "rv", "dz", "ks", "sk", "sh",
+                    "x", "x", "x", "gh", "gh", "gh", "rgh",
+                    "ts", "ts", "ks", "ks", "khs",
+            },
+            new String[]{},
+            new String[]{"'"}, new int[]{1, 2, 3}, new double[]{6, 7, 3}, 0.05, 0.08, 0.11, 0.0, null, true).register();
+    /**
+     * Fantasy language that might be suitable for a language spoken by fiends, users of witchcraft, or people who seek
+     * to emulate or worship similar groups. The tendency here is for DEMONIC to be the language used by creatures that
+     * are considered evil because of their violence, while INFERNAL is the language used by creatures that are
+     * considered evil because of their manipulation and deceit (DEMONIC being "chaotic evil" and INFERNAL being "lawful
+     * evil"). The name INFERNAL refers to Dante's Inferno and the various naming conventions used for residents of Hell
+     * in the more-modern Christian traditions (as well as some of the stylistic conventions of Old Testament figures
+     * described as false idols, such as Moloch and Mammon). In an effort to make this distinct from the general style
+     * of names used in ancient Hebrew (since this is specifically meant for the names of villains as opposed to normal
+     * humans), we add in vowel splits as used in LOVECRAFT and DEMONIC, then add quite a few accented vowels. These
+     * traits make the language especially well-suited for "deal with the Devil" written bargains, where a single accent
+     * placed incorrectly could change the meaning of a contract and provide a way for a fiend to gain leverage.
+     * <br>
+     * Zézîzûth eke'iez áhìphon; úhiah îbbëphéh haîtemheû esmez...
+     */
+    public static final FakeLanguageGen INFERNAL = new FakeLanguageGen(
+            new String[]{
+                    "a", "a", "a", "à", "á", "â", "ä",
+                    "e", "e", "e", "e", "e", "e", "e", "e", "è", "é", "ê", "ë",
+                    "i", "i", "i", "i", "ì", "í", "î", "ï",
+                    "o", "o", "ò", "ó", "ô", "ö",
+                    "u", "u", "ù", "ú", "û", "ü",
+            },
+            new String[]{"æ", "ai", "aî", "i", "i", "î", "ï", "ia", "iâ", "ie", "iê", "eu", "eû", "u", "u", "û", "ü"},
+            new String[]{"b", "br", "d", "dr", "h", "m", "z", "k", "l", "ph", "t", "n", "y", "th", "s", "sh",
+                    "m", "m", "m", "z", "z", "l", "l", "l", "k", "k", "b", "d", "h", "h", "y", "th", "th", "s", "sh",
+            },
+            new String[]{
+                    "mm", "mm", "mm", "lb", "dd", "dd", "dd", "ddr", "bb", "bb", "bb", "bbr", "lz", "sm", "zr",
+                    "thsh", "lkh", "shm", "mh", "mh",
+            },
+            new String[]{
+                    "b", "d", "h", "m", "n", "z", "k", "l", "ph", "t", "th", "s", "sh", "kh",
+                    "h", "m", "n", "z", "l", "ph", "t", "th", "s",
+                    "h", "h", "h", "m", "m", "n", "n", "n", "n", "n", "l", "l", "l", "l", "l", "t", "t", "t",
+                    "th", "th", "s", "s", "z", "z", "z", "z",
+            },
+            new String[]{"ael", "im", "on", "oth", "et", "eus", "iel", "an", "is", "ub", "ez", "ath", "esh", "ekh", "uth", "ut"},
+            new String[]{"'"}, new int[]{1, 2, 3, 4}, new double[]{3, 5, 9, 4}, 0.75, 0.35, 0.17, 0.07, genericSanityChecks, true).register();
 
     /**
      * Zero-arg constructor for a FakeLanguageGen; produces a FakeLanguageGen equivalent to FakeLanguageGen.ENGLISH .

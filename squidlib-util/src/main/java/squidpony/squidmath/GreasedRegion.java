@@ -3510,6 +3510,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         result = 31 * result + (int) (yEndMask ^ (yEndMask >>> 32)); //not needed; purely dependent on height
         return result;
         */
+        /*
         long z = 0x632BE59BD9B4E019L, result = 1L;
         for (int i = 0; i < data.length; i++) {
             result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
@@ -3517,7 +3518,15 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         result ^= (z += (height + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
         result ^= (z += (width + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
         return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
-
+         */
+        long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
+        final int len = data.length;
+        for (int i = 0; i < len; i++) {
+            result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]);
+        }
+        result += (a ^= 0x8329C6EB9E6AD3E3L * height);
+        result += (a ^= 0x8329C6EB9E6AD3E3L * width);
+        return (int)((result *= (a | 1L)) ^ (result >>> 32));
     }
 
     public String serializeToString()
