@@ -26,6 +26,29 @@ import java.util.Collection;
  * you have a good grasp of bitwise operations and the performance implications, particularly in regard to memory
  * consumption, that higher-level and more convenient Java programming techniques have.
  * <br>
+ * NOTE 2: This class fills a role that is very similar to {@link GreasedRegion}, and there are times when code will do
+ * better using CoordPacker than GreasedRegion and vice versa. GreasedRegion uses objects and tries to change them
+ * in-place whenever possible instead of allocating new data; CoordPacker uses short[] values that it never changes
+ * in-place and frequently allocates new short[] values to represent data. GreasedRegion stores the full map without any
+ * compression beyond "one bit per cell" and always needs to store all cells on the map (sometimes slightly more);
+ * CoordPacker can compress some data to significantly less than one bit per cell, and doesn't care about the maximum
+ * bounds of the map as long as it fits inside a 256x256 square. GreasedRegion is significantly faster than CoordPacker
+ * when performing any operations that move, shrink, or expand an area, such as {@link #expand(short[], int, int, int)},
+ * {@link #retract(short[], int, int, int)}, and {@link #translate(short[], int, int, int, int)}. CoordPacker usually
+ * (not always) uses somewhat less memory than GreasedRegion, though both use very little unless the maps are very
+ * large or very numerous. Both can do essentially the same things, except that GreasedRegion has no equivalent to the
+ * {@link #packMulti(byte[][], int)} and other Multi kinds of method, no {@link #radiate(short[], short[], int)}, and no
+ * {@link #reachable(short[], short[], Reach)}, while CoordPacker has no equivalent to
+ * {@link GreasedRegion#expandSeriesToLimit()} and other ToLimit kinds of method, no
+ * {@link GreasedRegion#flip(int, int)}, no {@link GreasedRegion#deteriorate(RNG, int)}, no
+ * {@link GreasedRegion#insert(int, int, GreasedRegion)} (though CoordPacker can generally use
+ * {@link #unionPacked(short[], short[])} for that), and several other methods don't have equivalents. In general, you
+ * will probably find GreasedRegion more intuitive because it involves working with objects instead of a short[] that is
+ * treated like a particular kind of data, and the methods are also somewhat more clearly-named. GreasedRegion also
+ * implements Collection of Coord, while the short[] data can't implement anything. A way around this for CoordPacker is
+ * the {@link squidpony.squidgrid.zone.CoordPackerZone} class; both that and GreasedRegion implement the
+ * {@link squidpony.squidgrid.zone.Zone} interface, which ensures a way to get a List of Coord from the Zone.
+ * <br>
  * The pack() methods in this class take a 2D array with a clear division between cells in an "on" state and cells in an
  * "off" state, and they produce a very tightly compressed short array that can be losslessly decompressed with the
  * unpack() methods to a boolean 2D array that stores equivalent on/off data to the input. The packMulti() method in

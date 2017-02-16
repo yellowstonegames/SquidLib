@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
  * A small extension of OrderedMap that specifically handles {@code short[]} regions as produced by {@link CoordPacker}.
- * Th methods {@link #allAt(int, int)}, {@link #containsRegion(short[])}, and {@link #regionsContaining(int, int)} are
+ * The methods {@link #allAt(int, int)}, {@link #containsRegion(short[])}, and {@link #regionsContaining(int, int)} are
  * added here, and the minor extra work needed to handle array keys in OrderedMap is taken care of automatically.
  * {@link #toString()} also produces nicer output by default for this usage, with the keys printed in a usable way.
  * Created by Tommy Ettinger on 11/24/2016.
