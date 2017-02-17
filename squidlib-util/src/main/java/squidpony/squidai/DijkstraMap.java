@@ -121,6 +121,8 @@ public class DijkstraMap implements Serializable {
      * class' WALL static final field. Floors, however, are never given FLOOR as a value, and default to 1.0 .
      */
     public double[][] costMap = null;
+
+    public boolean standardCosts = true;
     /**
      * Height of the map. Exciting stuff. Don't change this, instead call initialize().
      */
@@ -309,6 +311,7 @@ public class DijkstraMap implements Serializable {
             System.arraycopy(level[x], 0, physicalMap[x], 0, height);
             Arrays.fill(costMap[x], 1.0);
         }
+        standardCosts = true;
         initialized = true;
         return this;
     }
@@ -336,6 +339,7 @@ public class DijkstraMap implements Serializable {
                 physicalMap[x][y] = t;
             }
         }
+        standardCosts = true;
         initialized = true;
         return this;
     }
@@ -365,6 +369,7 @@ public class DijkstraMap implements Serializable {
                 physicalMap[x][y] = t;
             }
         }
+        standardCosts = true;
         initialized = true;
         return this;
     }
@@ -381,11 +386,8 @@ public class DijkstraMap implements Serializable {
      */
     public DijkstraMap initializeCost(final char[][] level) {
         if (!initialized) throw new IllegalStateException("DijkstraMap must be initialized first!");
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                costMap[x][y] = (level[x][y] == '#') ? WALL : 1.0;
-            }
-        }
+        ArrayTools.fill(costMap, 1.0);
+        standardCosts = true;
         return this;
     }
 
@@ -404,11 +406,8 @@ public class DijkstraMap implements Serializable {
      */
     public DijkstraMap initializeCost(final char[][] level, char alternateWall) {
         if (!initialized) throw new IllegalStateException("DijkstraMap must be initialized first!");
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                costMap[x][y] = (level[x][y] == alternateWall) ? WALL : 1.0;
-            }
-        }
+        ArrayTools.fill(costMap, 1.0);
+        standardCosts = true;
         return this;
     }
 
@@ -418,7 +417,9 @@ public class DijkstraMap implements Serializable {
      * DijkstraMap, using the exact values given in costs as the values to enter cells, even if they aren't what this
      * class would assign normally -- walls and other impassable values should be given WALL as a value, however.
      * The costs can be accessed later by using costMap directly (which will have a valid value when this does not
-     * throw an exception), or by calling setCost().
+     * throw an exception), or by calling setCost(). Causes findPath() to always explore the full map instead of
+     * stopping as soon as it finds any path, since unequal costs could make some paths cost less but be discovered
+     * later in the pathfinding process.
      * <p/>
      * This method should be slightly more efficient than the other initializeCost methods.
      *
@@ -431,6 +432,7 @@ public class DijkstraMap implements Serializable {
         for (int x = 0; x < width; x++) {
             System.arraycopy(costs[x], 0, costMap[x], 0, height);
         }
+        standardCosts = false;
         return this;
     }
 
@@ -655,9 +657,11 @@ public class DijkstraMap implements Serializable {
     public void setCost(Coord pt, double cost) {
         if (!initialized || !pt.isWithin(width, height)) return;
         if (physicalMap[pt.x][pt.y] > FLOOR) {
-            costMap[pt.x][pt.y] = WALL;
+            costMap[pt.x][pt.y] = 1.0;
             return;
         }
+        if(cost != 1.0)
+            standardCosts = false;
         costMap[pt.x][pt.y] = cost;
     }
 
@@ -672,9 +676,11 @@ public class DijkstraMap implements Serializable {
     public void setCost(int x, int y, double cost) {
         if (!initialized || x < 0 || x >= width || y < 0 || y >= height) return;
         if (physicalMap[x][y] > FLOOR) {
-            costMap[x][y] = WALL;
+            costMap[x][y] = 1.0;
             return;
         }
+        if(cost != 1.0)
+            standardCosts = false;
         costMap[x][y] = cost;
     }
 
@@ -841,7 +847,7 @@ public class DijkstraMap implements Serializable {
                         setFresh(adjX, adjY, cs);
                         ++numAssigned;
                         ++mappedCount;
-                        if(start != null && start.x == adjX && start.y == adjY)
+                        if(start != null && start.x == adjX && start.y == adjY && standardCosts)
                         {
                             if (impassable != null && !impassable.isEmpty()) {
                                 for (Coord pt : impassable) {
@@ -972,7 +978,7 @@ public class DijkstraMap implements Serializable {
                         setFresh(adjX, adjY, cs);
                         ++numAssigned;
                         ++mappedCount;
-                        if(start != null && start.x == adjX && start.y == adjY)
+                        if(start != null && start.x == adjX && start.y == adjY && standardCosts)
                         {
                             if (impassable != null && !impassable.isEmpty()) {
                                 for (Coord pt : impassable) {
@@ -1336,7 +1342,7 @@ public class DijkstraMap implements Serializable {
                         setFresh(adjX, adjY, cs);
                         ++numAssigned;
                         ++mappedCount;
-                        if(start != null && start.x == adjX && start.y == adjY)
+                        if(start != null && start.x == adjX && start.y == adjY && standardCosts)
                         {
                             if (impassable != null && !impassable.isEmpty()) {
                                 for (Coord pt : impassable) {
