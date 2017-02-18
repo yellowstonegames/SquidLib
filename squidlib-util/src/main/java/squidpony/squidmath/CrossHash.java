@@ -665,13 +665,13 @@ public class CrossHash {
     }
 
     private static class BooleanHasher implements IHasher, Serializable {
-        private static final long serialVersionUID = 2L;
+        private static final long serialVersionUID = 3L;
 
         protected BooleanHasher() {
         }
 
         public int hash(final Object data) {
-            return (data instanceof boolean[]) ? CrossHash.Lightning.hash((boolean[]) data) : data.hashCode();
+            return (data instanceof boolean[]) ? CrossHash.Wisp.hash((boolean[]) data) : data.hashCode();
         }
 
         @Override
@@ -683,13 +683,13 @@ public class CrossHash {
     public static final IHasher booleanHasher = new BooleanHasher();
 
     private static class ByteHasher implements IHasher, Serializable {
-        private static final long serialVersionUID = 2L;
+        private static final long serialVersionUID = 3L;
 
         protected ByteHasher() {
         }
 
         public int hash(final Object data) {
-            return (data instanceof byte[]) ? CrossHash.Lightning.hash((byte[]) data) : data.hashCode();
+            return (data instanceof byte[]) ? CrossHash.Wisp.hash((byte[]) data) : data.hashCode();
         }
 
         @Override
@@ -704,13 +704,13 @@ public class CrossHash {
     public static final IHasher byteHasher = new ByteHasher();
 
     private static class ShortHasher implements IHasher, Serializable {
-        private static final long serialVersionUID = 2L;
+        private static final long serialVersionUID = 3L;
 
         protected ShortHasher() {
         }
 
         public int hash(final Object data) {
-            return (data instanceof short[]) ? CrossHash.Lightning.hash((short[]) data) : data.hashCode();
+            return (data instanceof short[]) ? CrossHash.Wisp.hash((short[]) data) : data.hashCode();
         }
 
         @Override
@@ -722,13 +722,13 @@ public class CrossHash {
     public static final IHasher shortHasher = new ShortHasher();
 
     private static class CharHasher implements IHasher, Serializable {
-        private static final long serialVersionUID = 2L;
+        private static final long serialVersionUID = 3L;
 
         protected CharHasher() {
         }
 
         public int hash(final Object data) {
-            return (data instanceof char[]) ? CrossHash.Lightning.hash((char[]) data) : data.hashCode();
+            return (data instanceof char[]) ? CrossHash.Wisp.hash((char[]) data) : data.hashCode();
         }
 
         @Override
@@ -740,13 +740,13 @@ public class CrossHash {
     public static final IHasher charHasher = new CharHasher();
 
     private static class IntHasher implements IHasher, Serializable {
-        private static final long serialVersionUID = 2L;
+        private static final long serialVersionUID = 3L;
 
         protected IntHasher() {
         }
 
         public int hash(final Object data) {
-            return (data instanceof int[]) ? CrossHash.Lightning.hash((int[]) data) : data.hashCode();
+            return (data instanceof int[]) ? CrossHash.Wisp.hash((int[]) data) : data.hashCode();
         }
 
         @Override
@@ -758,13 +758,13 @@ public class CrossHash {
     public static final IHasher intHasher = new IntHasher();
 
     private static class LongHasher implements IHasher, Serializable {
-        private static final long serialVersionUID = 2L;
+        private static final long serialVersionUID = 3L;
 
         protected LongHasher() {
         }
 
         public int hash(final Object data) {
-            return (data instanceof long[]) ? CrossHash.Lightning.hash((long[]) data) : data.hashCode();
+            return (data instanceof long[]) ? CrossHash.Wisp.hash((long[]) data) : data.hashCode();
         }
 
         @Override
@@ -776,13 +776,13 @@ public class CrossHash {
     public static final IHasher longHasher = new LongHasher();
 
     private static class FloatHasher implements IHasher, Serializable {
-        private static final long serialVersionUID = 2L;
+        private static final long serialVersionUID = 3L;
 
         protected FloatHasher() {
         }
 
         public int hash(final Object data) {
-            return (data instanceof float[]) ? CrossHash.Lightning.hash((float[]) data) : data.hashCode();
+            return (data instanceof float[]) ? CrossHash.Wisp.hash((float[]) data) : data.hashCode();
         }
 
         @Override
@@ -794,13 +794,13 @@ public class CrossHash {
     public static final IHasher floatHasher = new FloatHasher();
 
     private static class DoubleHasher implements IHasher, Serializable {
-        private static final long serialVersionUID = 2L;
+        private static final long serialVersionUID = 3L;
 
         protected DoubleHasher() {
         }
 
         public int hash(final Object data) {
-            return (data instanceof double[]) ? CrossHash.Lightning.hash((double[]) data) : data.hashCode();
+            return (data instanceof double[]) ? CrossHash.Wisp.hash((double[]) data) : data.hashCode();
         }
 
         @Override
@@ -812,13 +812,13 @@ public class CrossHash {
     public static final IHasher doubleHasher = new DoubleHasher();
 
     private static class Char2DHasher implements IHasher, Serializable {
-        private static final long serialVersionUID = 2L;
+        private static final long serialVersionUID = 3L;
 
         protected Char2DHasher() {
         }
 
         public int hash(final Object data) {
-            return (data instanceof char[][]) ? CrossHash.Lightning.hash((char[][]) data) : data.hashCode();
+            return (data instanceof char[][]) ? CrossHash.Wisp.hash((char[][]) data) : data.hashCode();
         }
 
         @Override
@@ -833,13 +833,13 @@ public class CrossHash {
     public static final IHasher char2DHasher = new Char2DHasher();
 
     private static class StringHasher implements IHasher, Serializable {
-        private static final long serialVersionUID = 2L;
+        private static final long serialVersionUID = 3L;
 
         protected StringHasher() {
         }
 
         public int hash(final Object data) {
-            return (data instanceof CharSequence) ? CrossHash.Lightning.hash((CharSequence) data) : data.hashCode();
+            return (data instanceof CharSequence) ? CrossHash.Wisp.hash((CharSequence) data) : data.hashCode();
         }
 
         @Override
@@ -851,13 +851,13 @@ public class CrossHash {
     public static final IHasher stringHasher = new StringHasher();
 
     private static class StringArrayHasher implements IHasher, Serializable {
-        private static final long serialVersionUID = 2L;
+        private static final long serialVersionUID = 3L;
 
         protected StringArrayHasher() {
         }
 
         public int hash(final Object data) {
-            return (data instanceof CharSequence[]) ? CrossHash.Lightning.hash((CharSequence[]) data) : data.hashCode();
+            return (data instanceof CharSequence[]) ? CrossHash.Wisp.hash((CharSequence[]) data) : data.hashCode();
         }
 
         @Override
@@ -872,7 +872,7 @@ public class CrossHash {
     public static final IHasher stringArrayHasher = new StringArrayHasher();
 
     public static class DefaultHasher implements IHasher, Serializable {
-        private static final long serialVersionUID = 2L;
+        private static final long serialVersionUID = 3L;
 
         protected DefaultHasher() {
         }
@@ -888,6 +888,49 @@ public class CrossHash {
     }
 
     public static final IHasher defaultHasher = new DefaultHasher();
+
+
+    private static class GeneralHasher implements IHasher, Serializable {
+        private static final long serialVersionUID = 3L;
+
+        protected GeneralHasher() {
+        }
+
+        public int hash(final Object data) {
+            return CrossHash.Wisp.hash(data);
+        }
+
+        @Override
+        public boolean areEqual(Object left, Object right) {
+            if(left == right) return true;
+            Class l = left.getClass(), r = right.getClass();
+            if(l == r)
+            {
+                if(l.isArray())
+                {
+                    if(left instanceof int[]) return Arrays.equals((int[]) left, (int[]) right);
+                    else if(left instanceof long[]) return Arrays.equals((long[]) left, (long[]) right);
+                    else if(left instanceof char[]) return Arrays.equals((char[]) left, (char[]) right);
+                    else if(left instanceof double[]) return Arrays.equals((double[]) left, (double[]) right);
+                    else if(left instanceof boolean[]) return Arrays.equals((boolean[]) left, (boolean[]) right);
+                    else if(left instanceof byte[]) return Arrays.equals((byte[]) left, (byte[]) right);
+                    else if(left instanceof float[]) return Arrays.equals((float[]) left, (float[]) right);
+                    else if(left instanceof short[]) return Arrays.equals((short[]) left, (short[]) right);
+                    else if(left instanceof char[][]) return equalityHelper((char[][]) left, (char[][]) right, charHasher);
+                    else if(left instanceof CharSequence[]) return equalityHelper((CharSequence[]) left, (CharSequence[]) right, stringHasher);
+                    else if(left instanceof Object[]) return Arrays.equals((Object[]) left, (Object[]) right);
+                }
+                return Objects.equals(left, right);
+            }
+            return false;
+        }
+    }
+
+    /**
+     * This IHasher is the one you should use if you aren't totally certain what types will go in an OrderedMap's keys
+     * or an OrderedSet's items, since it can handle mixes of elements.
+     */
+    public static final IHasher generalHasher = new GeneralHasher();
 
     /**
      * A quick, simple hashing function that seems to have good results. Like LightRNG, it stores a state that
@@ -2137,12 +2180,11 @@ public class CrossHash {
      * the only reason one would use the older version was speed without regard for quality, and it was marked as Beta,
      * a faster version makes sense to replace the slower one, rather than add yet another nested class in CrossHash.
      * <br>
-     * This is still considered a Beta version because it may still see improvements that change the results of any
-     * method call in this class. There may also be bugs or logical problems present in it, and fixing them would most
-     * likely change the results as well. If or when it gets out of Beta state, it may become the recommended way to
-     * hash arrays and array-like data in SquidLib.
+     * Wisp is no longer considered Beta-quality, and due to its speed and apparently very low collision rate in most
+     * arrays, it's recommended for usage in more places now. Code that used Lightning should in probably switch to Wisp
+     * if GWT is a potential target, since Wisp doesn't rely on having certain JVM optimizations that are probably only
+     * available on desktop platforms.
      */
-    @Beta
     public static class Wisp {
         public static long hash64(final boolean[] data) {
             if (data == null)
@@ -2310,6 +2352,13 @@ public class CrossHash {
             return result * (a | 1L) ^ (result >>> 27 | result << 37);
         }
 
+        public static long hash64(final Object data) {
+            if (data == null)
+                return 0L;
+            long a = 0x632BE59BD9B4E019L ^ 0x8329C6EB9E6AD3E3L * data.hashCode(), result = 0x9E3779B97F4A7C94L + a;
+            return result * (a | 1L) ^ (result >>> 27 | result << 37);
+        }
+
         public static int hash(final boolean[] data) {
             if (data == null)
                 return 0;
@@ -2473,6 +2522,13 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x85157AF5 * ((o = data[i]) == null ? -1 : o.hashCode()));
             }
+            return result * (a | 1) ^ (result >>> 11 | result << 21);
+        }
+
+        public static int hash(final Object data) {
+            if (data == null)
+                return 0;
+            int a = 0x632BE5AB ^ 0x85157AF5 * data.hashCode(), result = 0x9E3779B9 + a;
             return result * (a | 1) ^ (result >>> 11 | result << 21);
         }
     }

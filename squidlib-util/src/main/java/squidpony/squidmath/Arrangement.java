@@ -49,10 +49,6 @@ import java.util.*;
  * <p>
  * Additional methods, such as <code>getAndMoveToFirst()</code>, make it easy to use instances of this class as a cache (e.g., with LRU policy).
  * </p>
- * <p>The iterators provided by the views of this class using are type-specific {@linkplain ListIterator list iterators}, and can be started at any element <em>which is a key of the map</em>,
- * or a {@link NoSuchElementException} exception will be thrown. If, however, the provided element is not the first or last key in the set, the first access to the list index will require linear time,
- * as in the worst case the entire key set must be scanned in iteration order to retrieve the positional index of the starting key.
- * </p>
  * <br>
  * Thank you, Sebastiano Vigna, for making FastUtil available to the public with such high quality.
  * <br>
@@ -194,7 +190,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      * @param f the load factor.
      */
     public Arrangement(final Map<? extends K, ? extends Integer> m, final float f) {
-        this(m.size(), f);
+        this(m.size(), f, (m instanceof Arrangement) ? ((Arrangement) m).hasher : CrossHash.defaultHasher);
         putAll(m);
     }
 
@@ -204,7 +200,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      * @param m a {@link Map} to be copied into the new Arrangement.
      */
     public Arrangement(final Map<? extends K, ? extends Integer> m) {
-        this(m, DEFAULT_LOAD_FACTOR);
+        this(m, (m instanceof Arrangement) ? ((Arrangement) m).f : DEFAULT_LOAD_FACTOR, (m instanceof Arrangement) ? ((Arrangement) m).hasher : CrossHash.defaultHasher);
     }
 
     public Arrangement(final Arrangement<? extends K> a) {
