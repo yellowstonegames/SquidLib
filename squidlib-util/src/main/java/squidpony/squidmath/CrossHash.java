@@ -2152,7 +2152,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x8329C6EB9E6AD3E3L * (data[i] ? 0xC6BC279692B5CC83L : 0xAEF17502108EF2D9L));
             }
-            return result * (a | 1L);
+            return result * (a | 1L) ^ (result >>> 27 | result << 37);
         }
 
         public static long hash64(final byte[] data) {
@@ -2163,7 +2163,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]);
             }
-            return result * (a | 1L);
+            return result * (a | 1L) ^ (result >>> 27 | result << 37);
         }
 
         public static long hash64(final short[] data) {
@@ -2174,7 +2174,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]);
             }
-            return result * (a | 1L);
+            return result * (a | 1L) ^ (result >>> 27 | result << 37);
         }
 
         public static long hash64(final char[] data) {
@@ -2185,7 +2185,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]);
             }
-            return result * (a | 1L);
+            return result * (a | 1L) ^ (result >>> 27 | result << 37);
         }
 
         public static long hash64(final int[] data) {
@@ -2196,7 +2196,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]);
             }
-            return result * (a | 1L);
+            return result * (a | 1L) ^ (result >>> 27 | result << 37);
         }
 
         public static long hash64(final long[] data) {
@@ -2207,7 +2207,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]);
             }
-            return result * (a | 1L);
+            return result * (a | 1L) ^ (result >>> 27 | result << 37);
         }
 
         public static long hash64(final float[] data) {
@@ -2218,7 +2218,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x8329C6EB9E6AD3E3L * Float.floatToIntBits(data[i]));
             }
-            return result * (a | 1L);
+            return result * (a | 1L) ^ (result >>> 27 | result << 37);
         }
 
         public static long hash64(final double[] data) {
@@ -2229,7 +2229,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x8329C6EB9E6AD3E3L * Double.doubleToLongBits(data[i]));
             }
-            return result * (a | 1L);
+            return result * (a | 1L) ^ (result >>> 27 | result << 37);
         }
 
         public static long hash64(final CharSequence data) {
@@ -2240,7 +2240,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x8329C6EB9E6AD3E3L * data.charAt(i));
             }
-            return result * (a | 1L);
+            return result * (a | 1L) ^ (result >>> 27 | result << 37);
         }
 
         public static long hash64(final char[] data, final int start, final int end) {
@@ -2251,7 +2251,7 @@ public class CrossHash {
             for (int i = start; i < len; i++) {
                 result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]);
             }
-            return result * (a | 1L);
+            return result * (a | 1L) ^ (result >>> 27 | result << 37);
         }
 
         public static long hash64(final char[][] data) {
@@ -2262,7 +2262,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i]));
             }
-            return result * (a | 1L);
+            return result * (a | 1L) ^ (result >>> 27 | result << 37);
         }
 
         public static long hash64(final long[][] data) {
@@ -2273,7 +2273,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i]));
             }
-            return result * (a | 1L);
+            return result * (a | 1L) ^ (result >>> 27 | result << 37);
         }
 
         public static long hash64(final CharSequence[] data) {
@@ -2284,7 +2284,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i]));
             }
-            return result * (a | 1L);
+            return result * (a | 1L) ^ (result >>> 27 | result << 37);
         }
 
         public static long hash64(final CharSequence[]... data) {
@@ -2295,7 +2295,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i]));
             }
-            return result * (a | 1L);
+            return result * (a | 1L) ^ (result >>> 27 | result << 37);
         }
 
         public static long hash64(final Object[] data) {
@@ -2307,7 +2307,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x8329C6EB9E6AD3E3L * ((o = data[i]) == null ? -1L : o.hashCode()));
             }
-            return result * (a | 1L);
+            return result * (a | 1L) ^ (result >>> 27 | result << 37);
         }
 
         public static int hash(final boolean[] data) {
@@ -2318,7 +2318,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x85157AF5 * (data[i] ? 0x789ABCDE : 0x62E2AC0D));
             }
-            return result * (a | 1);
+            return result * (a | 1) ^ (result >>> 11 | result << 21);
         }
 
 
@@ -2330,7 +2330,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x85157AF5 * data[i]);
             }
-            return result * (a | 1);
+            return result * (a | 1) ^ (result >>> 11 | result << 21);
         }
 
         public static int hash(final short[] data) {
@@ -2341,7 +2341,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x85157AF5 * data[i]);
             }
-            return result * (a | 1);
+            return result * (a | 1) ^ (result >>> 11 | result << 21);
         }
 
         public static int hash(final char[] data) {
@@ -2352,7 +2352,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x85157AF5 * data[i]);
             }
-            return result * (a | 1);
+            return result * (a | 1) ^ (result >>> 11 | result << 21);
         }
         public static int hash(final int[] data) {
             if (data == null)
@@ -2362,7 +2362,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x85157AF5 * data[i]);
             }
-            return result * (a | 1);
+            return result * (a | 1) ^ (result >>> 11 | result << 21);
         }
 
         public static int hash(final long[] data) {
@@ -2373,7 +2373,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]);
             }
-            return (int)((result *= (a | 1L)) ^ (result >>> 32));
+            return (int)((result = (result * (a | 1L) ^ (result >>> 27 | result << 37))) ^ (result >>> 32));
         }
 
         public static int hash(final float[] data) {
@@ -2384,7 +2384,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x85157AF5 * Float.floatToIntBits(data[i]));
             }
-            return result * (a | 1);
+            return result * (a | 1) ^ (result >>> 11 | result << 21);
         }
 
         public static int hash(final double[] data) {
@@ -2395,7 +2395,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x8329C6EB9E6AD3E3L * Double.doubleToLongBits(data[i]));
             }
-            return (int)((result *= (a | 1L)) ^ (result >>> 32));
+            return (int)((result = (result * (a | 1L) ^ (result >>> 27 | result << 37))) ^ (result >>> 32));
         }
 
         public static int hash(final CharSequence data) {
@@ -2406,7 +2406,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x85157AF5 * data.charAt(i));
             }
-            return result * (a | 1);
+            return result * (a | 1) ^ (result >>> 11 | result << 21);
         }
 
         public static int hash(final char[] data, final int start, final int end) {
@@ -2417,7 +2417,7 @@ public class CrossHash {
             for (int i = start; i < len; i++) {
                 result += (a ^= 0x85157AF5 * data[i]);
             }
-            return result * (a | 1);
+            return result * (a | 1) ^ (result >>> 11 | result << 21);
         }
 
         public static int hash(final char[][] data) {
@@ -2428,7 +2428,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x85157AF5 * hash(data[i]));
             }
-            return result * (a | 1);
+            return result * (a | 1) ^ (result >>> 11 | result << 21);
         }
 
         public static int hash(final long[][] data) {
@@ -2439,7 +2439,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x85157AF5 * hash(data[i]));
             }
-            return result * (a | 1);
+            return result * (a | 1) ^ (result >>> 11 | result << 21);
         }
 
         public static int hash(final CharSequence[] data) {
@@ -2450,7 +2450,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x85157AF5 * hash(data[i]));
             }
-            return result * (a | 1);
+            return result * (a | 1) ^ (result >>> 11 | result << 21);
         }
 
         public static int hash(final CharSequence[]... data) {
@@ -2461,7 +2461,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x85157AF5 * hash(data[i]));
             }
-            return result * (a | 1);
+            return result * (a | 1) ^ (result >>> 11 | result << 21);
         }
 
         public static int hash(final Object[] data) {
@@ -2473,7 +2473,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x85157AF5 * ((o = data[i]) == null ? -1 : o.hashCode()));
             }
-            return result * (a | 1);
+            return result * (a | 1) ^ (result >>> 11 | result << 21);
         }
     }
 

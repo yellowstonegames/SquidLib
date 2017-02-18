@@ -84,7 +84,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
+    private int testType = 0;
 
     private RandomnessSource fuzzy, random;
     private Random jreRandom;
@@ -255,6 +255,9 @@ public class HashVisualizer extends ApplicationAdapter {
                                 rngMode %= 20;
                                 break;
                             case 0:
+                                hashMode++;
+                                hashMode %= 45;
+                                break;
                             case 1:
                                 hashMode++;
                                 hashMode %= 38;
@@ -482,7 +485,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = Arrays.hashCode(coordinates) & 0xFFFFFF00 | 255L;
+                                code = Arrays.hashCode(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -493,7 +496,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = stormA.hash(coordinates) & 0xFFFFFF00 | 255L;
+                                code = stormA.hash(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -504,7 +507,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = stormB.hash(coordinates) & 0xFFFFFF00 | 255L;
+                                code = stormB.hash(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -515,7 +518,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = stormC.hash(coordinates) & 0xFFFFFF00 | 255L;
+                                code = stormC.hash(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -525,7 +528,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = Arrays.hashCode(coordinate) & 0xFFFFFF00 | 255L;
+                                code = Arrays.hashCode(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -535,7 +538,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = stormA.hash(coordinate) & 0xFFFFFF00 | 255L;
+                                code = stormA.hash(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -545,7 +548,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = stormB.hash(coordinate) & 0xFFFFFF00 | 255L;
+                                code = stormB.hash(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -555,7 +558,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = stormC.hash(coordinate) & 0xFFFFFF00 | 255L;
+                                code = stormC.hash(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -566,7 +569,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = stormA.hash64(coordinates) & 0xFFFFFF00 | 255L;
+                                code = stormA.hash64(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -577,7 +580,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = stormB.hash64(coordinates) & 0xFFFFFF00 | 255L;
+                                code = stormB.hash64(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -588,7 +591,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = stormC.hash64(coordinates) & 0xFFFFFF00 | 255L;
+                                code = stormC.hash64(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -598,7 +601,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = stormA.hash64(coordinate) & 0xFFFFFF00 | 255L;
+                                code = stormA.hash64(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -608,7 +611,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = stormB.hash64(coordinate) & 0xFFFFFF00 | 255L;
+                                code = stormB.hash64(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -618,7 +621,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = stormC.hash64(coordinate) & 0xFFFFFF00 | 255L;
+                                code = stormC.hash64(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -628,7 +631,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = Arrays.hashCode(coordinate) & 0xFFFFFF00 | 255L;
+                                code = Arrays.hashCode(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -638,7 +641,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = chariotA.hash(coordinate) & 0xFFFFFF00 | 255L;
+                                code = chariotA.hash(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -648,7 +651,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = chariotB.hash(coordinate) & 0xFFFFFF00 | 255L;
+                                code = chariotB.hash(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -658,7 +661,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = chariotC.hash(coordinate) & 0xFFFFFF00 | 255L;
+                                code = chariotC.hash(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -740,6 +743,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("JDK, hash on length 2, low bits");
                         break;
                     case 1:
                         for (int x = 0; x < width; x++) {
@@ -750,6 +754,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("FNV, hash on length 2, low bits");
                         break;
                     case 2:
                         for (int x = 0; x < width; x++) {
@@ -760,6 +765,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("Storm, hash on length 2, low bits");
                         break;
                     case 3:
                         for (int x = 0; x < width; x++) {
@@ -770,6 +776,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("Lightning, hash on length 2, low bits");
                         break;
                     case 4:
                         for (int x = 0; x < width; x++) {
@@ -779,6 +786,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("JDK, hash on length 1, low bits");
                         break;
                     case 5:
                         for (int x = 0; x < width; x++) {
@@ -788,6 +796,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("FNV, hash on length 1, low bits");
                         break;
                     case 6:
                         for (int x = 0; x < width; x++) {
@@ -797,6 +806,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("Storm, hash on length 1, low bits");
                         break;
                     case 7:
                         for (int x = 0; x < width; x++) {
@@ -806,6 +816,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("Lightning, hash on length 1, low bits");
                         break;
                     case 8:
                         for (int x = 0; x < width; x++) {
@@ -816,6 +827,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("FNV, hash64 on length 2, low bits");
                         break;
                     case 9:
                         for (int x = 0; x < width; x++) {
@@ -826,6 +838,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("Storm, hash64 on length 2, low bits");
                         break;
                     case 10:
                         for (int x = 0; x < width; x++) {
@@ -836,6 +849,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("Lightning, hash64 on length 2, low bits");
                         break;
                     case 11:
                         for (int x = 0; x < width; x++) {
@@ -845,6 +859,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("FNV, hash64 on length 1, low bits");
                         break;
                     case 12:
                         for (int x = 0; x < width; x++) {
@@ -854,6 +869,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("Storm, hash64 on length 1, low bits");
                         break;
                     case 13:
                         for (int x = 0; x < width; x++) {
@@ -863,224 +879,238 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("Lightning, hash64 on length 1, low bits");
                         break;
                     case 14:
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = Arrays.hashCode(coordinates) & 0xFFFFFF00 | 255L;
+                                code = Arrays.hashCode(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("JDK, hash on length 2, high bits");
                         break;
                     case 15:
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = CrossHash.hash(coordinates) & 0xFFFFFF00 | 255L;
+                                code = CrossHash.hash(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("FNV, hash on length 2, high bits");
                         break;
                     case 16:
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = storm.hash(coordinates) & 0xFFFFFF00 | 255L;
+                                code = storm.hash(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("Storm, hash on length 2, high bits");
                         break;
                     case 17:
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = CrossHash.Lightning.hash(coordinates) & 0xFFFFFF00 | 255L;
+                                code = CrossHash.Lightning.hash(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("Lightning, hash on length 2, high bits");
                         break;
                     case 18:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = Arrays.hashCode(coordinate) & 0xFFFFFF00 | 255L;
+                                code = Arrays.hashCode(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("JDK, hash on length 1, high bits");
                         break;
                     case 19:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = CrossHash.hash(coordinate) & 0xFFFFFF00 | 255L;
+                                code = CrossHash.hash(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("FNV, hash on length 1, high bits");
                         break;
                     case 20:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = storm.hash(coordinate) & 0xFFFFFF00 | 255L;
+                                code = storm.hash(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("Storm, hash on length 1, high bits");
                         break;
                     case 21:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = CrossHash.Lightning.hash(coordinate) & 0xFFFFFF00 | 255L;
+                                code = CrossHash.Lightning.hash(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("Lightning, hash on length 1, high bits");
                         break;
                     case 22:
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = CrossHash.hash64(coordinates) & 0xFFFFFF00 | 255L;
+                                code = CrossHash.hash64(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("FNV, hash64 on length 2, high bits");
                         break;
                     case 23:
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = storm.hash64(coordinates) & 0xFFFFFF00 | 255L;
+                                code = storm.hash64(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("Storm, hash64 on length 2, high bits");
                         break;
                     case 24:
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = CrossHash.Lightning.hash64(coordinates) & 0xFFFFFF00 | 255L;
+                                code = CrossHash.Lightning.hash64(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("Lightning, hash64 on length 2, high bits");
                         break;
                     case 25:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = CrossHash.hash64(coordinate) & 0xFFFFFF00 | 255L;
+                                code = CrossHash.hash64(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("FNV, hash64 on length 1, high bits");
                         break;
                     case 26:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = storm.hash64(coordinate) & 0xFFFFFF00 | 255L;
+                                code = storm.hash64(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("Storm, hash64 on length 1, high bits");
                         break;
                     case 27:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = CrossHash.Lightning.hash64(coordinate) & 0xFFFFFF00 | 255L;
+                                code = CrossHash.Lightning.hash64(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
+                        Gdx.graphics.setTitle("Lightning, hash64 on length 1, high bits");
                         break;
                     case 28:
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = CrossHash.Falcon.hash(coordinates) & 0xFFFFFF00 | 255L;
+                                code = CrossHash.Falcon.hash(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("Falcon, hash on length 2");
+                        Gdx.graphics.setTitle("Falcon, hash on length 2, high bits");
                         break;
                     case 29:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = CrossHash.Falcon.hash(coordinate) & 0xFFFFFF00 | 255L;
+                                code = CrossHash.Falcon.hash(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("Falcon, hash on length 1");
+                        Gdx.graphics.setTitle("Falcon, hash on length 1, high bits");
                         break;
                     case 30:
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = CrossHash.Falcon.hash64(coordinates) & 0xFFFFFF00 | 255L;
+                                code = CrossHash.Falcon.hash64(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("Falcon, hash64 on length 2");
+                        Gdx.graphics.setTitle("Falcon, hash64 on length 2, high bits");
                         break;
                     case 31:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = CrossHash.Falcon.hash64(coordinate) & 0xFFFFFF00 | 255L;
+                                code = CrossHash.Falcon.hash64(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("Falcon, hash64 on length 1");
+                        Gdx.graphics.setTitle("Falcon, hash64 on length 1, high bits");
                         break;
-
                     case 32:
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = CrossHash.Wisp.hash(coordinates) & 0xFFFFFF00 | 255L;
+                                code = CrossHash.Wisp.hash(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("Wisp, hash on length 2");
+                        Gdx.graphics.setTitle("Wisp, hash on length 2, high bits");
                         break;
                     case 33:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = CrossHash.Wisp.hash(coordinate) & 0xFFFFFF00 | 255L;
+                                code = CrossHash.Wisp.hash(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("Wisp, hash on length 1");
+                        Gdx.graphics.setTitle("Wisp, hash on length 1, high bits");
                         break;
                     case 34:
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = CrossHash.Wisp.hash64(coordinates) & 0xFFFFFF00 | 255L;
+                                code = CrossHash.Wisp.hash64(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("Wisp, hash64 on length 2");
+                        Gdx.graphics.setTitle("Wisp, hash64 on length 2, high bits");
                         break;
                     case 35:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = CrossHash.Wisp.hash64(coordinate) & 0xFFFFFF00 | 255L;
+                                code = CrossHash.Wisp.hash64(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("Wisp, hash64 on length 1");
+                        Gdx.graphics.setTitle("Wisp, hash64 on length 1, high bits");
                         break;
                     case 36:
                         colorFactory.clearCache();
@@ -1093,15 +1123,88 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("mixHash");
                         break;
                     case 37:
-                        colorFactory.clearCache();
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = (oldHash(x, y) << 8) | 255L;
+                                coordinate[0] = (x << 9) | y;
+                                code = CrossHash.Wisp.hash(coordinate) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("old Coord hash, " + (width * height) + " cells, "
-                                + colorFactory.cacheSize() + " colors");
+                        Gdx.graphics.setTitle("Wisp, hash on length 1, low bits");
+                        break;
+                    case 38:
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                coordinate[0] = (x << 9) | y;
+                                code = CrossHash.Wisp.hash64(coordinate) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("Wisp, hash64 on length 1, low bits");
+                        break;
+                    case 39:
+                        for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
+                            for (int y = 0; y < height; y++) {
+                                coordinates[1] = y;
+                                code = CrossHash.Wisp.hash(coordinates) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("Wisp, hash on length 2, low bits");
+                        break;
+                    case 40:
+                        for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
+                            for (int y = 0; y < height; y++) {
+                                coordinates[1] = y;
+                                code = CrossHash.Wisp.hash64(coordinates) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("Wisp, hash64 on length 2, low bits");
+                        break;
+                    case 41:
+                        for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
+                            for (int y = 0; y < height; y++) {
+                                coordinates[1] = y;
+                                code = CrossHash.Falcon.hash(coordinates) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("Falcon, hash on length 2, low bits");
+                        break;
+                    case 42:
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                coordinate[0] = (x << 9) | y;
+                                code = CrossHash.Falcon.hash(coordinate) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("Falcon, hash on length 1, low bits");
+                        break;
+                    case 43:
+                        for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
+                            for (int y = 0; y < height; y++) {
+                                coordinates[1] = y;
+                                code = CrossHash.Falcon.hash64(coordinates) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("Falcon, hash64 on length 2, low bits");
+                        break;
+                    case 44:
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                coordinate[0] = (x << 9) | y;
+                                code = CrossHash.Falcon.hash64(coordinate) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("Falcon, hash64 on length 1, low bits");
                         break;
                 }
             }
