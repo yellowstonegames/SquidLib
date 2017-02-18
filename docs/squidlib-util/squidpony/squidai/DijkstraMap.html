@@ -268,16 +268,20 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidai/DijkstraMap.html#standardCosts">standardCosts</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidai/DijkstraMap.html#targetMap">targetMap</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidai/DijkstraMap.html#WALL">WALL</a></span></code>
 <div class="block">Walls, which are solid no-entry cells, are marked with a high number equal to 999500.0 .</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidai/DijkstraMap.html#width">width</a></span></code>
 <div class="block">Width of the map.</div>
@@ -905,13 +909,22 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
  class' WALL static final field. Floors, however, are never given FLOOR as a value, and default to 1.0 .</div>
 </li>
 </ul>
+<a name="standardCosts">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>standardCosts</h4>
+<pre>public&nbsp;boolean <a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.125">standardCosts</a></pre>
+</li>
+</ul>
 <a name="height">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>height</h4>
-<pre>public&nbsp;int <a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.127">height</a></pre>
+<pre>public&nbsp;int <a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.129">height</a></pre>
 <div class="block">Height of the map. Exciting stuff. Don't change this, instead call initialize().</div>
 </li>
 </ul>
@@ -921,7 +934,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>width</h4>
-<pre>public&nbsp;int <a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.131">width</a></pre>
+<pre>public&nbsp;int <a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.133">width</a></pre>
 <div class="block">Width of the map. Exciting stuff. Don't change this, instead call initialize().</div>
 </li>
 </ul>
@@ -931,7 +944,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>path</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt; <a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.137">path</a></pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt; <a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.139">path</a></pre>
 <div class="block">The latest path that was obtained by calling findPath(). It will not contain the value passed as a starting
  cell; only steps that require movement will be included, and so if the path has not been found or a valid
  path toward a goal is impossible, this ArrayList will be empty.</div>
@@ -943,7 +956,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>cutShort</h4>
-<pre>public&nbsp;boolean <a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.139">cutShort</a></pre>
+<pre>public&nbsp;boolean <a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.141">cutShort</a></pre>
 </li>
 </ul>
 <a name="GOAL">
@@ -952,7 +965,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>GOAL</h4>
-<pre>public static final&nbsp;double <a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.144">GOAL</a></pre>
+<pre>public static final&nbsp;double <a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.146">GOAL</a></pre>
 <div class="block">Goals are always marked with 0.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -966,7 +979,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>FLOOR</h4>
-<pre>public static final&nbsp;double <a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.148">FLOOR</a></pre>
+<pre>public static final&nbsp;double <a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.150">FLOOR</a></pre>
 <div class="block">Floor cells, which include any walkable cell, are marked with a high number equal to 999200.0 .</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -980,7 +993,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>WALL</h4>
-<pre>public static final&nbsp;double <a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.152">WALL</a></pre>
+<pre>public static final&nbsp;double <a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.154">WALL</a></pre>
 <div class="block">Walls, which are solid no-entry cells, are marked with a high number equal to 999500.0 .</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -994,7 +1007,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>DARK</h4>
-<pre>public static final&nbsp;double <a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.157">DARK</a></pre>
+<pre>public static final&nbsp;double <a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.159">DARK</a></pre>
 <div class="block">This is used to mark cells that the scan couldn't reach, and these dark cells are marked with a high number
  equal to 999800.0 .</div>
 <dl>
@@ -1009,7 +1022,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>goals</h4>
-<pre>protected&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a> <a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.162">goals</a></pre>
+<pre>protected&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a> <a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.164">goals</a></pre>
 <div class="block">Goals that pathfinding will seek out. The Double value should almost always be 0.0 , the same as the static GOAL
  constant in this class.</div>
 </li>
@@ -1020,7 +1033,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>fresh</h4>
-<pre>protected&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a> <a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.162">fresh</a></pre>
+<pre>protected&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a> <a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.164">fresh</a></pre>
 <div class="block">Goals that pathfinding will seek out. The Double value should almost always be 0.0 , the same as the static GOAL
  constant in this class.</div>
 </li>
@@ -1031,7 +1044,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>rng</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a> <a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.167">rng</a></pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a> <a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.169">rng</a></pre>
 <div class="block">The RNG used to decide which one of multiple equally-short paths to take.</div>
 </li>
 </ul>
@@ -1041,7 +1054,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>targetMap</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[][] <a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.169">targetMap</a></pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[][] <a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.171">targetMap</a></pre>
 </li>
 </ul>
 </li>
@@ -1058,7 +1071,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>DijkstraMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.183">DijkstraMap</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.185">DijkstraMap</a>()</pre>
 <div class="block">Construct a DijkstraMap without a level to actually scan. If you use this constructor, you must call an
  initialize() method before using this class.</div>
 </li>
@@ -1069,7 +1082,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>DijkstraMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.193">DijkstraMap</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.195">DijkstraMap</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</pre>
 <div class="block">Construct a DijkstraMap without a level to actually scan. This constructor allows you to specify an RNG before
  it is ever used in this class. If you use this constructor, you must call an initialize() method before using
  any other methods in the class.</div>
@@ -1081,7 +1094,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>DijkstraMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.203">DijkstraMap</a>(double[][]&nbsp;level)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.205">DijkstraMap</a>(double[][]&nbsp;level)</pre>
 <div class="block">Used to construct a DijkstraMap from the output of another.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1095,7 +1108,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>DijkstraMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.213">DijkstraMap</a>(double[][]&nbsp;level,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.215">DijkstraMap</a>(double[][]&nbsp;level,
                    <a href="../../squidpony/squidai/DijkstraMap.Measurement.html" title="enum in squidpony.squidai">DijkstraMap.Measurement</a>&nbsp;measurement)</pre>
 <div class="block">Used to construct a DijkstraMap from the output of another, specifying a distance calculation.</div>
 <dl>
@@ -1111,7 +1124,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>DijkstraMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.228">DijkstraMap</a>(char[][]&nbsp;level)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.230">DijkstraMap</a>(char[][]&nbsp;level)</pre>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile. If you only have
  a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
@@ -1128,7 +1141,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>DijkstraMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.242">DijkstraMap</a>(char[][]&nbsp;level,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.244">DijkstraMap</a>(char[][]&nbsp;level,
                    <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile. If you only have
@@ -1148,7 +1161,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>DijkstraMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.254">DijkstraMap</a>(char[][]&nbsp;level,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.256">DijkstraMap</a>(char[][]&nbsp;level,
                    char&nbsp;alternateWall)</pre>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where one char means a wall and anything else is a walkable tile. If you only have
@@ -1166,7 +1179,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>DijkstraMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.270">DijkstraMap</a>(char[][]&nbsp;level,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.272">DijkstraMap</a>(char[][]&nbsp;level,
                    <a href="../../squidpony/squidai/DijkstraMap.Measurement.html" title="enum in squidpony.squidai">DijkstraMap.Measurement</a>&nbsp;measurement)</pre>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile. If you only have
@@ -1185,7 +1198,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>DijkstraMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.284">DijkstraMap</a>(char[][]&nbsp;level,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.286">DijkstraMap</a>(char[][]&nbsp;level,
                    <a href="../../squidpony/squidai/DijkstraMap.Measurement.html" title="enum in squidpony.squidai">DijkstraMap.Measurement</a>&nbsp;measurement,
                    <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
@@ -1214,7 +1227,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>initialize</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a>&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.300">initialize</a>(double[][]&nbsp;level)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a>&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.302">initialize</a>(double[][]&nbsp;level)</pre>
 <div class="block">Used to initialize or re-initialize a DijkstraMap that needs a new PhysicalMap because it either wasn't given
  one when it was constructed, or because the contents of the terrain have changed permanently (not if a
  creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ).</div>
@@ -1231,7 +1244,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>initialize</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a>&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.324">initialize</a>(char[][]&nbsp;level)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a>&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.327">initialize</a>(char[][]&nbsp;level)</pre>
 <div class="block">Used to initialize or re-initialize a DijkstraMap that needs a new PhysicalMap because it either wasn't given
  one when it was constructed, or because the contents of the terrain have changed permanently (not if a
  creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ).</div>
@@ -1248,7 +1261,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>initialize</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a>&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.353">initialize</a>(char[][]&nbsp;level,
+<pre>public&nbsp;<a href="../../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a>&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.357">initialize</a>(char[][]&nbsp;level,
                               char&nbsp;alternateWall)</pre>
 <div class="block">Used to initialize or re-initialize a DijkstraMap that needs a new PhysicalMap because it either wasn't given
  one when it was constructed, or because the contents of the terrain have changed permanently (not if a
@@ -1268,7 +1281,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>initializeCost</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a>&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.382">initializeCost</a>(char[][]&nbsp;level)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a>&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.387">initializeCost</a>(char[][]&nbsp;level)</pre>
 <div class="block">Used to initialize the entry cost modifiers for games that require variable costs to enter squares. This expects
  a char[][] of the same exact dimensions as the 2D array that was used to previously initialize() this
  DijkstraMap, treating the '#' char as a wall (impassable) and anything else as having a normal cost to enter.
@@ -1288,7 +1301,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>initializeCost</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a>&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.405">initializeCost</a>(char[][]&nbsp;level,
+<pre>public&nbsp;<a href="../../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a>&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.407">initializeCost</a>(char[][]&nbsp;level,
                                   char&nbsp;alternateWall)</pre>
 <div class="block">Used to initialize the entry cost modifiers for games that require variable costs to enter squares. This expects
  a char[][] of the same exact dimensions as the 2D array that was used to previously initialize() this
@@ -1312,13 +1325,15 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>initializeCost</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a>&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.428">initializeCost</a>(double[][]&nbsp;costs)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a>&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.429">initializeCost</a>(double[][]&nbsp;costs)</pre>
 <div class="block">Used to initialize the entry cost modifiers for games that require variable costs to enter squares. This expects
  a double[][] of the same exact dimensions as the 2D array that was used to previously initialize() this
  DijkstraMap, using the exact values given in costs as the values to enter cells, even if they aren't what this
  class would assign normally -- walls and other impassable values should be given WALL as a value, however.
  The costs can be accessed later by using costMap directly (which will have a valid value when this does not
- throw an exception), or by calling setCost().
+ throw an exception), or by calling setCost(). Causes findPath() to always explore the full map instead of
+ stopping as soon as it finds any path, since unequal costs could make some paths cost less but be discovered
+ later in the pathfinding process.
  <p/>
  This method should be slightly more efficient than the other initializeCost methods.</div>
 <dl>
@@ -1335,7 +1350,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>encode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.444">encode</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;point)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.446">encode</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;point)</pre>
 <div class="block">Internally, DijkstraMap uses int primitives instead of Coord objects, but the specific encoding depends on
  this DijkstraMap's width and height. This method converts from a Coord to an encoded int that stores the same
  information, but is specific to this width and height and is somewhat more efficient to work with.</div>
@@ -1353,7 +1368,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>encode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.456">encode</a>(int&nbsp;x,
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.458">encode</a>(int&nbsp;x,
                   int&nbsp;y)</pre>
 <div class="block">Internally, DijkstraMap uses int primitives instead of Coord objects, but the specific encoding depends on
  this DijkstraMap's width and height. This method converts from an x,y point to an encoded int that stores the
@@ -1373,7 +1388,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>decode</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.468">decode</a>(int&nbsp;encoded)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.470">decode</a>(int&nbsp;encoded)</pre>
 <div class="block">If you for some reason have one of the internally-used ints produced by <a href="../../squidpony/squidai/DijkstraMap.html#encode-squidpony.squidmath.Coord-"><code>encode(Coord)</code></a>, this will convert
  it back to a Coord if you need it as such. You may prefer using <a href="../../squidpony/squidai/DijkstraMap.html#decodeX-int-"><code>decodeX(int)</code></a> and  <a href="../../squidpony/squidai/DijkstraMap.html#decodeY-int-"><code>decodeY(int)</code></a>
  to get the x and y components independently and without involving objects.</div>
@@ -1391,7 +1406,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>decodeX</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.481">decodeX</a>(int&nbsp;encoded)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.483">decodeX</a>(int&nbsp;encoded)</pre>
 <div class="block">If you for some reason have one of the internally-used ints produced by <a href="../../squidpony/squidai/DijkstraMap.html#encode-squidpony.squidmath.Coord-"><code>encode(Coord)</code></a>, this will decode
  the x component of the point encoded in that int. This is an extremely simple method that is equivalent to the
  code <code>encoded % width</code>, where width is a public field in this class. You probably would use this method in
@@ -1410,7 +1425,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>decodeY</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.494">decodeY</a>(int&nbsp;encoded)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.496">decodeY</a>(int&nbsp;encoded)</pre>
 <div class="block">If you for some reason have one of the internally-used ints produced by <a href="../../squidpony/squidai/DijkstraMap.html#encode-squidpony.squidmath.Coord-"><code>encode(Coord)</code></a>, this will decode
  the y component of the point encoded in that int. This is an extremely simple method that is equivalent to the
  code <code>encoded / width</code>, where width is a public field in this class. You probably would use this method in
@@ -1429,7 +1444,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>findMeasurement</h4>
-<pre>public static&nbsp;<a href="../../squidpony/squidai/DijkstraMap.Measurement.html" title="enum in squidpony.squidai">DijkstraMap.Measurement</a>&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.506">findMeasurement</a>(<a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radius)</pre>
+<pre>public static&nbsp;<a href="../../squidpony/squidai/DijkstraMap.Measurement.html" title="enum in squidpony.squidai">DijkstraMap.Measurement</a>&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.508">findMeasurement</a>(<a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radius)</pre>
 <div class="block">Gets the appropriate DijkstraMap.Measurement to pass to a constructor if you already have a Radius.
  Matches SQUARE or CUBE to CHEBYSHEV, DIAMOND or OCTAHEDRON to MANHATTAN, and CIRCLE or SPHERE to EUCLIDEAN.</div>
 <dl>
@@ -1446,7 +1461,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>findRadius</h4>
-<pre>public static&nbsp;<a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.522">findRadius</a>(<a href="../../squidpony/squidai/DijkstraMap.Measurement.html" title="enum in squidpony.squidai">DijkstraMap.Measurement</a>&nbsp;measurement)</pre>
+<pre>public static&nbsp;<a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.524">findRadius</a>(<a href="../../squidpony/squidai/DijkstraMap.Measurement.html" title="enum in squidpony.squidai">DijkstraMap.Measurement</a>&nbsp;measurement)</pre>
 <div class="block">Gets the appropriate Radius corresponding to a DijkstraMap.Measurement.
  Matches CHEBYSHEV to SQUARE, MANHATTAN to DIAMOND, and EUCLIDEAN to CIRCLE.</div>
 <dl>
@@ -1463,7 +1478,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>resetMap</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.536">resetMap</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.538">resetMap</a>()</pre>
 <div class="block">Resets the gradientMap to its original value from physicalMap.</div>
 </li>
 </ul>
@@ -1473,7 +1488,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>resetTargetMap</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.548">resetTargetMap</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.550">resetTargetMap</a>()</pre>
 <div class="block">Resets the targetMap (which is only assigned in the first place if you use findTechniquePath() ).</div>
 </li>
 </ul>
@@ -1483,7 +1498,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>reset</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.562">reset</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.564">reset</a>()</pre>
 <div class="block">Resets this DijkstraMap to a state with no goals, no discovered path, and no changes made to gradientMap
  relative to physicalMap.</div>
 </li>
@@ -1494,7 +1509,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>setGoal</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.577">setGoal</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.579">setGoal</a>(int&nbsp;x,
                     int&nbsp;y)</pre>
 <div class="block">Marks a cell as a goal for pathfinding, unless the cell is a wall or unreachable area (then it does nothing).</div>
 <dl>
@@ -1510,7 +1525,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>setGoal</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.592">setGoal</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.594">setGoal</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt)</pre>
 <div class="block">Marks a cell as a goal for pathfinding, unless the cell is a wall or unreachable area (then it does nothing).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1524,7 +1539,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>setGoals</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.609">setGoals</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;pts)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.611">setGoals</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;pts)</pre>
 <div class="block">Marks many cells as goals for pathfinding, ignoring cells in walls or unreachable areas. Possibly more efficient
  than a loop that calls <a href="../../squidpony/squidai/DijkstraMap.html#setGoal-squidpony.squidmath.Coord-"><code>setGoal(Coord)</code></a> over and over, since this doesn't need to do a bounds check. The
  GreasedRegion passed to this should have the same (or smaller) width and height as this DijkstraMap.</div>
@@ -1540,7 +1555,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>setGoals</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.627">setGoals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;pts)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.629">setGoals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;pts)</pre>
 <div class="block">Marks many cells as goals for pathfinding, ignoring cells in walls or unreachable areas. Simply loops through
  pts and calls <a href="../../squidpony/squidai/DijkstraMap.html#setGoal-squidpony.squidmath.Coord-"><code>setGoal(Coord)</code></a> on each Coord in pts.
  If you have a GreasedRegion, you should use it with <a href="../../squidpony/squidai/DijkstraMap.html#setGoals-squidpony.squidmath.GreasedRegion-"><code>setGoals(GreasedRegion)</code></a>, which is faster.</div>
@@ -1556,7 +1571,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>setGoals</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.640">setGoals</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;pts)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.642">setGoals</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;pts)</pre>
 <div class="block">Marks many cells as goals for pathfinding, ignoring cells in walls or unreachable areas. Simply loops through
  pts and calls <a href="../../squidpony/squidai/DijkstraMap.html#setGoal-squidpony.squidmath.Coord-"><code>setGoal(Coord)</code></a> on each Coord in pts.
  If you have a GreasedRegion, you should use it with <a href="../../squidpony/squidai/DijkstraMap.html#setGoals-squidpony.squidmath.GreasedRegion-"><code>setGoals(GreasedRegion)</code></a>, which is faster.</div>
@@ -1572,7 +1587,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>setCost</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.655">setCost</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.657">setCost</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt,
                     double&nbsp;cost)</pre>
 <div class="block">Marks a cell's cost for pathfinding as cost, unless the cell is a wall or unreachable area (then it always sets
  the cost to the value of the WALL field).</div>
@@ -1589,7 +1604,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>setCost</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.672">setCost</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.676">setCost</a>(int&nbsp;x,
                     int&nbsp;y,
                     double&nbsp;cost)</pre>
 <div class="block">Marks a cell's cost for pathfinding as cost, unless the cell is a wall or unreachable area (then it always sets
@@ -1608,7 +1623,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>setOccupied</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.687">setOccupied</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.693">setOccupied</a>(int&nbsp;x,
                         int&nbsp;y)</pre>
 <div class="block">Marks a specific cell in gradientMap as completely impossible to enter.</div>
 <dl>
@@ -1624,7 +1639,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>resetCell</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.698">resetCell</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.704">resetCell</a>(int&nbsp;x,
                       int&nbsp;y)</pre>
 <div class="block">Reverts a cell to the value stored in the original state of the level as known by physicalMap.</div>
 <dl>
@@ -1640,7 +1655,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>resetCell</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.708">resetCell</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.714">resetCell</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt)</pre>
 <div class="block">Reverts a cell to the value stored in the original state of the level as known by physicalMap.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1654,7 +1669,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>clearGoals</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.716">clearGoals</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.722">clearGoals</a>()</pre>
 <div class="block">Used to remove all goals and undo any changes to gradientMap made by having a goal present.</div>
 </li>
 </ul>
@@ -1664,7 +1679,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>setFresh</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.725">setFresh</a>(int&nbsp;x,
+<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.731">setFresh</a>(int&nbsp;x,
                         int&nbsp;y,
                         double&nbsp;counter)</pre>
 </li>
@@ -1675,7 +1690,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>setFresh</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.732">setFresh</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt,
+<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.738">setFresh</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt,
                         double&nbsp;counter)</pre>
 </li>
 </ul>
@@ -1685,7 +1700,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>scan</h4>
-<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.752">scan</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable)</pre>
+<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.758">scan</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable)</pre>
 <div class="block">Recalculate the Dijkstra map and return it. Cells that were marked as goals with setGoal will have
  a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
  from goals will have a value equal to the distance from the nearest goal. The exceptions are walls,
@@ -1708,7 +1723,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>scan</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.781">scan</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.787">scan</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
                  <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable)</pre>
 <div class="block">Recalculate the Dijkstra map and return it. Cells that were marked as goals with setGoal will have
  a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
@@ -1731,7 +1746,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>partialScan</h4>
-<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.878">partialScan</a>(int&nbsp;limit,
+<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.884">partialScan</a>(int&nbsp;limit,
                               <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable)</pre>
 <div class="block">Recalculate the Dijkstra map up to a limit and return it. Cells that were marked as goals with setGoal will have
  a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
@@ -1756,7 +1771,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>partialScan</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.908">partialScan</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.914">partialScan</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
                         int&nbsp;limit,
                         <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable)</pre>
 <div class="block">Recalculate the Dijkstra map up to a limit and return it. Cells that were marked as goals with setGoal will have
@@ -1781,7 +1796,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>findNearest</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.1003">findNearest</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.1009">findNearest</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
                          <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets)</pre>
 <div class="block">Recalculate the Dijkstra map until it reaches a Coord in targets, then returns the first target found.
  This uses the current measurement.</div>
@@ -1800,7 +1815,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>findNearest</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.1076">findNearest</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.1082">findNearest</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
                          <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;targets)</pre>
 <div class="block">Recalculate the Dijkstra map until it reaches a Coord in targets, then returns the first target found.
  This uses the current measurement.</div>
@@ -1819,7 +1834,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>findShortcutPath</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.1089">findShortcutPath</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.1095">findShortcutPath</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
                                          <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;targets)</pre>
 <div class="block">If you have a target or group of targets you want to pathfind to without scanning the full map, this can be good.
  It may find sub-optimal paths in the presence of costs to move into cells. It is useful when you want to move in
@@ -1839,7 +1854,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>findNearestMultiple</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.1145">findNearestMultiple</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.1151">findNearestMultiple</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
                                             int&nbsp;limit,
                                             <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets)</pre>
 <div class="block">Recalculate the Dijkstra map until it reaches a Coord in targets, then returns the first several targets found,
@@ -1861,7 +1876,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>scan</h4>
-<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.1233">scan</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable,
+<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.1239">scan</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable,
                        int&nbsp;size)</pre>
 <div class="block">Recalculate the Dijkstra map for a creature that is potentially larger than 1x1 cell and return it. The value of
  a cell in the returned Dijkstra map assumes that a creature is square, with a side length equal to the passed
@@ -1892,7 +1907,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>scan</h4>
-<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.1257">scan</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.1263">scan</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
                        <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable,
                        int&nbsp;size)</pre>
 <div class="block">Recalculate the Dijkstra map for a creature that is potentially larger than 1x1 cell and return it. The value of
@@ -1924,7 +1939,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>findPath</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.1394">findPath</a>(int&nbsp;length,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.1400">findPath</a>(int&nbsp;length,
                                  <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable,
                                  <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;onlyPassable,
                                  <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
@@ -1960,7 +1975,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>findPath</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.1423">findPath</a>(int&nbsp;length,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.1429">findPath</a>(int&nbsp;length,
                                  int&nbsp;scanLimit,
                                  <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable,
                                  <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;onlyPassable,
@@ -2000,7 +2015,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>findAttackPath</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.1525">findAttackPath</a>(int&nbsp;moveLength,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.1531">findAttackPath</a>(int&nbsp;moveLength,
                                        int&nbsp;preferredRange,
                                        <a href="../../squidpony/squidgrid/LOS.html" title="class in squidpony.squidgrid">LOS</a>&nbsp;los,
                                        <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable,
@@ -2040,7 +2055,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>findAttackPath</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.1556">findAttackPath</a>(int&nbsp;moveLength,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.1562">findAttackPath</a>(int&nbsp;moveLength,
                                        int&nbsp;minPreferredRange,
                                        int&nbsp;maxPreferredRange,
                                        <a href="../../squidpony/squidgrid/LOS.html" title="class in squidpony.squidgrid">LOS</a>&nbsp;los,
@@ -2083,7 +2098,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>findTechniquePath</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.1710">findTechniquePath</a>(int&nbsp;moveLength,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.1716">findTechniquePath</a>(int&nbsp;moveLength,
                                           <a href="../../squidpony/squidai/Technique.html" title="class in squidpony.squidai">Technique</a>&nbsp;tech,
                                           char[][]&nbsp;dungeon,
                                           <a href="../../squidpony/squidgrid/LOS.html" title="class in squidpony.squidgrid">LOS</a>&nbsp;los,
@@ -2143,7 +2158,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>findFleePath</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.1924">findFleePath</a>(int&nbsp;length,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.1930">findFleePath</a>(int&nbsp;length,
                                      double&nbsp;preferLongerPaths,
                                      <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable,
                                      <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;onlyPassable,
@@ -2184,7 +2199,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>findFleePath</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.1961">findFleePath</a>(int&nbsp;length,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.1967">findFleePath</a>(int&nbsp;length,
                                      int&nbsp;scanLimit,
                                      double&nbsp;preferLongerPaths,
                                      <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable,
@@ -2232,7 +2247,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>findPathLarge</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.2088">findPathLarge</a>(int&nbsp;size,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.2094">findPathLarge</a>(int&nbsp;size,
                                       int&nbsp;length,
                                       <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable,
                                       <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;onlyPassable,
@@ -2271,7 +2286,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>findAttackPathLarge</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.2189">findAttackPathLarge</a>(int&nbsp;size,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.2195">findAttackPathLarge</a>(int&nbsp;size,
                                             int&nbsp;moveLength,
                                             int&nbsp;preferredRange,
                                             <a href="../../squidpony/squidgrid/LOS.html" title="class in squidpony.squidgrid">LOS</a>&nbsp;los,
@@ -2316,7 +2331,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>findAttackPathLarge</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.2331">findAttackPathLarge</a>(int&nbsp;size,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.2337">findAttackPathLarge</a>(int&nbsp;size,
                                             int&nbsp;moveLength,
                                             int&nbsp;minPreferredRange,
                                             int&nbsp;maxPreferredRange,
@@ -2364,7 +2379,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>findFleePathLarge</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.2476">findFleePathLarge</a>(int&nbsp;size,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.2482">findFleePathLarge</a>(int&nbsp;size,
                                           int&nbsp;length,
                                           double&nbsp;preferLongerPaths,
                                           <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable,
@@ -2410,7 +2425,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>findPathPreScanned</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.2582">findPathPreScanned</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.2588">findPathPreScanned</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target)</pre>
 <div class="block">Intended primarily for internal use. Needs scan() to already be called and at least one goal to already be set,
  and does not restrict the length of the path or behave as if the pathfinder has allies or enemies.
  <br>
@@ -2430,7 +2445,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>floodFill</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.2637">floodFill</a>(int&nbsp;radius,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.2643">floodFill</a>(int&nbsp;radius,
                                    <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;starts)</pre>
 <div class="block">A simple limited flood-fill that returns a OrderedMap of Coord keys to the Double values in the DijkstraMap, only
  calculating out to a number of steps determined by limit. This can be useful if you need many flood-fills and
@@ -2450,7 +2465,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getMappedCount</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.2662">getMappedCount</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.2668">getMappedCount</a>()</pre>
 </li>
 </ul>
 <a name="getBlockingRequirement--">
@@ -2459,7 +2474,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getBlockingRequirement</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.2682">getBlockingRequirement</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.2688">getBlockingRequirement</a>()</pre>
 <div class="block">If you want obstacles present in orthogonal cells to prevent pathfinding along the diagonal between them, this
  can be used to make thin diagonal walls non-viable to move through, or even to prevent diagonal movement if any
  one obstacle is orthogonally adjacent to both the start and target cell of a diagonal move.
@@ -2485,7 +2500,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>setBlockingRequirement</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.2702">setBlockingRequirement</a>(int&nbsp;blockingRequirement)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.html#line.2708">setBlockingRequirement</a>(int&nbsp;blockingRequirement)</pre>
 <div class="block">If you want obstacles present in orthogonal cells to prevent pathfinding along the diagonal between them, this
  can be used to make thin diagonal walls non-viable to move through, or even to prevent diagonal movement if any
  one obstacle is orthogonally adjacent to both the start and target cell of a diagonal move.
