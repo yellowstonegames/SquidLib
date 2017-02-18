@@ -22,7 +22,9 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * A generic linked hash map with with a fast implementation, originally from fastutil as Object2ObjectLinkedOpenHashMap but modified to support indexed access.
+ * A generic linked hash map with with a fast implementation, originally from fastutil as Object2ObjectLinkedOpenHashMap
+ * but modified to support indexed access of keys, values, and entries, reordering, and optional hash strategies for
+ * array keys (which fastutil does differently).
  * <br>
  * <p>Instances of this class use a hash table to represent a map. The table is filled up to a specified <em>load factor</em>, and then doubled in size to accommodate new entries. If the table is
  * emptied below <em>one fourth</em> of the load factor, it is halved in size. However, halving is not performed when deleting entries from an iterator, as it would interfere with the iteration
@@ -41,9 +43,23 @@ import java.util.*;
  * </p>
  * <p>Additional methods, such as <code>getAndMoveToFirst()</code>, make it easy to use instances of this class as a cache (e.g., with LRU policy).
  * </p>
- * <p>The iterators provided by the views of this class using are type-specific {@linkplain ListIterator list iterators}, and can be started at any element <em>which is a key of the map</em>,
- * or a {@link NoSuchElementException} exception will be thrown. If, however, the provided element is not the first or last key in the set, the first access to the list index will require linear time,
- * as in the worst case the entire key set must be scanned in iteration order to retrieve the positional index of the starting key.
+ * <p>
+ * This class allows approximately constant-time lookup of keys or values by their index in the ordering, which can
+ * allow some novel usage of the data structure. {@link OrderedSet} can be used like a list of unique elements, keeping
+ * order like a list does but also allowing rapid checks for whether an item exists in the OrderedSet, and OrderedMap
+ * can be used like that but with values associated as well (where OrderedSet uses contains(), OrderedMap uses
+ * containsKey()). You can also set the key and value at a position with {@link #putAt(Object, Object, int)}, or alter
+ * the key while keeping its value and index the same with {@link #alter(Object, Object)}. Reordering works here too,
+ * both with completely random orders from {@link #shuffle(RNG)} or with a previously-generated ordering from
+ * {@link #reorder(int...)} (you can produce such an ordering for a given size and reuse it across multiple Ordered data
+ * structures with {@link RNG#randomOrdering(int)}).
+ * </p>
+ * <p>
+ * You can pass an {@link CrossHash.IHasher} instance such as {@link CrossHash#generalHasher} as an extra parameter to
+ * most of this class' constructors, which allows the OrderedMap to use arrays (usually primitive arrays) as keys. If
+ * you expect only one type of array, you can use an instance like {@link CrossHash#intHasher} to hash int arrays, or
+ * the aforementioned generalHasher to hash most kinds of arrays (it can't handle most multi-dimensional arrays well).
+ * If you aren't using arrays as keys, you don't need to give an IHasher to the constructor and can ignore this feature.
  * </p>
  * <br>
  * Thank you, Sebastiano Vigna, for making FastUtil available to the public with such high quality.
@@ -193,7 +209,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
      * @param f the load factor.
      */
     public OrderedMap(final Map<? extends K, ? extends V> m, final float f) {
-        this(m.size(), f);
+        this(m.size(), f, (m instanceof OrderedMap) ? ((OrderedMap) m).hasher : CrossHash.defaultHasher);
         putAll(m);
     }
 
@@ -203,7 +219,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
      * @param m a {@link Map} to be copied into the new OrderedMap.
      */
     public OrderedMap(final Map<? extends K, ? extends V> m) {
-        this(m, DEFAULT_LOAD_FACTOR);
+        this(m, (m instanceof OrderedMap) ? ((OrderedMap) m).f : DEFAULT_LOAD_FACTOR, (m instanceof OrderedMap) ? ((OrderedMap) m).hasher : CrossHash.defaultHasher);
     }
 
     /**
