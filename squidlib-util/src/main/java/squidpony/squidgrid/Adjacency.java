@@ -108,6 +108,12 @@ public abstract class Adjacency implements Serializable {
      */
     depths;
 
+    protected boolean standardCost = true;
+
+    public boolean hasStandardCost()
+    {
+        return standardCost;
+    }
     /**
      * Used in place of a double[][] of costs in CustomDijkstraMap; allows you to set the costs to enter tiles (via
      * {@link #addCostRule(char, double)} or {@link #addCostRule(char, double, boolean)} if the map has rotations).
@@ -115,6 +121,11 @@ public abstract class Adjacency implements Serializable {
      * time if the game uses that mechanic, while lower costs (which should always be greater than 0.0) make a move
      * easier to perform. Most games can do perfectly well with just 1.0 and 2.0, if they use this at all, plus possibly
      * a very high value for impossible moves (say, 9999.0 for something like a submarine trying to enter suburbia).
+     * <br>
+     * You should not alter costRules in most cases except through the Adjacency's addCostRule method; most Adjacency
+     * implementations will set a flag if any cost is set through addCostRule that is different from the default, and
+     * this flag determines early-stop behavior in pathfinding (it can be checked with {@link #hasStandardCost()}, but
+     * cannot be set directly).
      * <br>
      * Adjacency implementations are expected to set a reasonable default value for when missing keys are queried, using
      * {@link IntDoubleOrderedMap#defaultReturnValue(double)}; there may be a reason for user code to call this as well.
@@ -129,6 +140,17 @@ public abstract class Adjacency implements Serializable {
 
     public abstract int extractN(int data);
 
+    /**
+     * Encodes up to four components used by this Adjacency, putting them into one int.
+     * Returns -1 if the encoded position is out of bounds or otherwise invalid, otherwise any int is possible.
+     * You can get the individual values with {@link #extractX(int)}, {@link #extractY(int)}, {@link #extractR(int)},
+     * and {@link #extractN(int)}, though not all implementations use R and N.
+     * @param x the x component to encode
+     * @param y the y component to encode
+     * @param r the rotation component to encode; not all implementations use rotation and the max value varies
+     * @param n the bonus component to encode; this can be used for height or other extra data in some implementations
+     * @return the encoded position as an int; -1 if invalid, non-negative for valid positions
+     */
     public abstract int composite(int x, int y, int r, int n);
 
     public abstract boolean validate(int data);
@@ -163,10 +185,15 @@ public abstract class Adjacency implements Serializable {
 
     public void resetAllVariants(double[] map, int[] keys, double[] values)
     {
-        resetAllVariants(map, keys, values,1);
+        resetAllVariants(map, keys, keys.length, values,1);
     }
 
-    public abstract void resetAllVariants(double[] map, int[] keys, double[] values, int size);
+    public void resetAllVariants(double[] map, int[] keys, double[] values, int size)
+    {
+        resetAllVariants(map, keys, keys.length, values,1);
+    }
+
+    public abstract void resetAllVariants(double[] map, int[] keys, int usable, double[] values, int size);
 
     public int[] invertAdjacent;
 
@@ -327,6 +354,8 @@ public abstract class Adjacency implements Serializable {
         @Override
         public IntDoubleOrderedMap addCostRule(char tile, double cost, boolean isRotation) {
             costRules.put(tile, cost);
+            if(cost != costRules.defaultReturnValue())
+                standardCost = false;
             return costRules;
         }
 
@@ -408,9 +437,9 @@ public abstract class Adjacency implements Serializable {
         }
 
         @Override
-        public void resetAllVariants(double[] map, int[] keys, double[] values, int size) {
+        public void resetAllVariants(double[] map, int[] keys, int usable, double[] values, int size) {
             int key;
-            for (int i = 0; i < keys.length; i++) {
+            for (int i = 0; i < usable && i < keys.length; i++) {
                 key = keys[i];
                 int baseX = key % width, baseY = key / width, comp;
                 if (key >= 0 && baseY < height) {
@@ -454,6 +483,8 @@ public abstract class Adjacency implements Serializable {
         @Override
         public IntDoubleOrderedMap addCostRule(char tile, double cost, boolean isRotation) {
             costRules.put(tile, cost * 0.5);
+            if(cost * 0.5 != costRules.defaultReturnValue())
+                standardCost = false;
             return costRules;
         }
     }
@@ -577,9 +608,16 @@ public abstract class Adjacency implements Serializable {
         @Override
         public IntDoubleOrderedMap addCostRule(char tile, double cost, boolean isRotation) {
             if(isRotation)
+            {
                 costRules.put(tile | 0x10000, Math.max(0.001, cost));
-            else
+                if(Math.max(0.001, cost) != costRules.defaultReturnValue())
+                    standardCost = false;
+            }
+            else {
                 costRules.put(tile, cost);
+                if(cost != costRules.defaultReturnValue())
+                    standardCost = false;
+            }
             return costRules;
         }
 
@@ -706,9 +744,9 @@ public abstract class Adjacency implements Serializable {
         }
 
         @Override
-        public void resetAllVariants(double[] map, int[] keys, double[] values, int size) {
+        public void resetAllVariants(double[] map, int[] keys, int usable, double[] values, int size) {
             int key;
-            for (int i = 0; i < keys.length; i++) {
+            for (int i = 0; i < usable && i < keys.length; i++) {
                 key = keys[i];
                 int baseX = (key >>> shift) % width, baseY = (key >>> shift) / width, comp;
                 if (key >= 0 && baseY < height) {

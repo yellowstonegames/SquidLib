@@ -808,6 +808,10 @@
 <div class="block">Can be changed if the map changes; you should get the neighbors from neighborMaps() again after changing this.</div>
 </li>
 <li class="blockList">
+<h4>standardCost</h4>
+<pre>boolean standardCost</pre>
+</li>
+<li class="blockList">
 <h4>costRules</h4>
 <pre><a href="squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a> costRules</pre>
 <div class="block">Used in place of a double[][] of costs in CustomDijkstraMap; allows you to set the costs to enter tiles (via
@@ -816,6 +820,11 @@
  time if the game uses that mechanic, while lower costs (which should always be greater than 0.0) make a move
  easier to perform. Most games can do perfectly well with just 1.0 and 2.0, if they use this at all, plus possibly
  a very high value for impossible moves (say, 9999.0 for something like a submarine trying to enter suburbia).
+ <br>
+ You should not alter costRules in most cases except through the Adjacency's addCostRule method; most Adjacency
+ implementations will set a flag if any cost is set through addCostRule that is different from the default, and
+ this flag determines early-stop behavior in pathfinding (it can be checked with <a href="squidpony/squidgrid/Adjacency.html#hasStandardCost--"><code>Adjacency.hasStandardCost()</code></a>, but
+ cannot be set directly).
  <br>
  Adjacency implementations are expected to set a reasonable default value for when missing keys are queried, using
  <a href="squidpony/squidmath/IntDoubleOrderedMap.html#defaultReturnValue-double-"><code>IntDoubleOrderedMap.defaultReturnValue(double)</code></a>; there may be a reason for user code to call this as well.</div>
