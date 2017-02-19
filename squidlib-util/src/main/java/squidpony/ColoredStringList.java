@@ -22,12 +22,25 @@ public class ColoredStringList<T> extends ArrayList<IColoredString<T>> {
 		super();
 	}
 
+	public ColoredStringList(int expectedSize) {
+		super(expectedSize);
+	}
+
 	/**
 	 * @return A fresh empty instance.
 	 */
 	public static <T> ColoredStringList<T> create() {
 		return new ColoredStringList<T>();
 	}
+
+	/**
+	 * @param expectedSize
+	 * @return A fresh empty instance.
+	 */
+	public static <T> ColoredStringList<T> create(int expectedSize) {
+		return new ColoredStringList<T>(expectedSize);
+	}
+
 	/**
 	 * Appends {@code text} to {@code this}, without specifying its color.
 	 * 
