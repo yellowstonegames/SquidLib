@@ -755,7 +755,7 @@ public class DijkstraMap implements Serializable {
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
-    public double[][] scan(Collection<Coord> impassable) {
+    public double[][] scan(final Collection<Coord> impassable) {
         scan(null, impassable);
         double[][] gradientClone = new double[width][height];
         for (int x = 0; x < width; x++) {
@@ -784,7 +784,7 @@ public class DijkstraMap implements Serializable {
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
-    public void scan(final Coord start, Collection<Coord> impassable) {
+    public void scan(final Coord start, final Collection<Coord> impassable) {
 
         if (!initialized) return;
         if (impassable != null && !impassable.isEmpty()) {
@@ -881,7 +881,7 @@ public class DijkstraMap implements Serializable {
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
-    public double[][] partialScan(final int limit, Collection<Coord> impassable) {
+    public double[][] partialScan(final int limit, final Collection<Coord> impassable) {
         partialScan(null, limit, impassable);
         double[][] gradientClone = new double[width][height];
         for (int x = 0; x < width; x++) {
@@ -911,9 +911,9 @@ public class DijkstraMap implements Serializable {
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
-    public void partialScan(final Coord start, final int limit, Collection<Coord> impassable) {
+    public void partialScan(final Coord start, final int limit, final Collection<Coord> impassable) {
 
-        if (!initialized) return;
+        if (!initialized || limit <= 0) return;
         if (impassable != null && !impassable.isEmpty()) {
             for (Coord pt : impassable) {
                 gradientMap[pt.x][pt.y] = WALL;
@@ -1016,8 +1016,8 @@ public class DijkstraMap implements Serializable {
         Coord start2 = start;
         int xShift = width / 6, yShift = height / 6;
         while (physicalMap[start.x][start.y] >= WALL && frustration < 50) {
-            start2 = Coord.get(Math.min(Math.max(1, start.x + rng.nextInt(1 + xShift * 2) - xShift), width - 2),
-                    Math.min(Math.max(1, start.y + rng.nextInt(1 + yShift * 2) - yShift), height - 2));
+            start2 = Coord.get(Math.min(Math.max(1, start.x + rng.nextIntHasty(1 + xShift * 2) - xShift), width - 2),
+                    Math.min(Math.max(1, start.y + rng.nextIntHasty(1 + yShift * 2) - yShift), height - 2));
         }
         gradientMap[start2.x][start2.y] = 0.0;
         int adjX, adjY, cen, cenX, cenY;
@@ -1106,7 +1106,7 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(measurement.directionCount() + 1);
+            int choice = rng.nextIntHasty(measurement.directionCount() + 1);
 
             for (int d = 0; d < measurement.directionCount() + 1; d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -1159,8 +1159,8 @@ public class DijkstraMap implements Serializable {
         Coord start2 = start;
         int xShift = width / 6, yShift = height / 6;
         while (physicalMap[start.x][start.y] >= WALL && frustration < 50) {
-            start2 = Coord.get(Math.min(Math.max(1, start.x + rng.nextInt(1 + xShift * 2) - xShift), width - 2),
-                    Math.min(Math.max(1, start.y + rng.nextInt(1 + yShift * 2) - yShift), height - 2));
+            start2 = Coord.get(Math.min(Math.max(1, start.x + rng.nextIntHasty(1 + xShift * 2) - xShift), width - 2),
+                    Math.min(Math.max(1, start.y + rng.nextIntHasty(1 + yShift * 2) - yShift), height - 2));
         }
         gradientMap[start2.x][start2.y] = 0.0;
         int adjX, adjY, cen, cenX, cenY;
@@ -1236,8 +1236,19 @@ public class DijkstraMap implements Serializable {
      *                   creature. Non-square creatures are not supported because turning is really hard.
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
-    public double[][] scan(Collection<Coord> impassable, final int size) {
-        return scan(null, impassable, size);
+    public double[][] scan(final Collection<Coord> impassable, final int size) {
+        scan(null, impassable, size);
+        double[][] gradientClone = new double[width][height];
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (gradientMap[x][y] == FLOOR) {
+                    gradientMap[x][y] = DARK;
+                }
+            }
+            System.arraycopy(gradientMap[x], 0, gradientClone[x], 0, height);
+        }
+        return gradientClone;
+
     }
 
     /**
@@ -1260,9 +1271,9 @@ public class DijkstraMap implements Serializable {
      *                   creature. Non-square creatures are not supported because turning is really hard.
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
-    public double[][] scan(final Coord start, Collection<Coord> impassable, final int size) {
+    public void scan(final Coord start, final Collection<Coord> impassable, final int size) {
 
-        if (!initialized) return null;
+        if (!initialized) return;
         double[][] gradientClone = ArrayTools.copy(gradientMap);
         if (impassable != null && !impassable.isEmpty()) {
             for (Coord pt : impassable) {
@@ -1346,34 +1357,179 @@ public class DijkstraMap implements Serializable {
                         {
                             if (impassable != null && !impassable.isEmpty()) {
                                 for (Coord pt : impassable) {
-                                    gradientMap[pt.x][pt.y] = physicalMap[pt.x][pt.y];
+                                    for (int xs = pt.x, xi = 0; xi < size && xs >= 0; xs--, xi++) {
+                                        for (int ys = pt.y, yi = 0; yi < size && ys >= 0; ys--, yi++) {
+                                            gradientClone[xs][ys] = physicalMap[xs][ys];
+                                        }
+                                    }
                                 }
                             }
-                            return ArrayTools.copy(gradientMap);
+                            return;
                         }
                     }
                 }
             }
         }
+        // return;
+    }
+
+
+    /**
+     * Recalculate the Dijkstra map for a creature that is potentially larger than 1x1 cell and return it. The value of
+     * a cell in the returned Dijkstra map assumes that a creature is square, with a side length equal to the passed
+     * size, that its minimum-x, minimum-y cell is the starting cell, and that any cell with a distance number
+     * represents the distance for the creature's minimum-x, minimum-y cell to reach it. Cells that cannot be entered
+     * by the minimum-x, minimum-y cell because of sizing (such as a floor cell next to a maximum-x and/or maximum-y
+     * wall if size is &gt; 1) will be marked as DARK. Cells that were marked as goals with setGoal will have
+     * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+     * from goals will have a value equal to the distance from the nearest goal. The exceptions are walls,
+     * which will have a value defined by the WALL constant in this class, and areas that the scan was
+     * unable to reach, which will have a value defined by the DARK constant in this class. (typically,
+     * these areas should not be used to place NPCs or items and should be filled with walls). This uses the
+     * current measurement.  The result is stored in the {@link #gradientMap} field and a copy is returned.
+     *
+     * @param impassable A Collection of Coord keys representing the locations of enemies or other moving obstacles to a
+     *                   path that cannot be moved through; this can be null if there are no such obstacles.
+     * @param size       The length of one side of a square creature using this to find a path, i.e. 2 for a 2x2 cell
+     *                   creature. Non-square creatures are not supported because turning is really hard.
+     * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
+     */
+    public double[][] partialScan(final int limit, final Collection<Coord> impassable, final int size) {
+        scan(null, impassable, size);
+        double[][] gradientClone = new double[width][height];
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (gradientMap[x][y] == FLOOR) {
+                    gradientMap[x][y] = DARK;
+                }
+            }
+            System.arraycopy(gradientMap[x], 0, gradientClone[x], 0, height);
+        }
+        return gradientClone;
+
+    }
+
+    /**
+     * Recalculate the Dijkstra map for a creature that is potentially larger than 1x1 cell and return it. The value of
+     * a cell in the returned Dijkstra map assumes that a creature is square, with a side length equal to the passed
+     * size, that its minimum-x, minimum-y cell is the starting cell, and that any cell with a distance number
+     * represents the distance for the creature's minimum-x, minimum-y cell to reach it. Cells that cannot be entered
+     * by the minimum-x, minimum-y cell because of sizing (such as a floor cell next to a maximum-x and/or maximum-y
+     * wall if size is &gt; 1) will be marked as DARK. Cells that were marked as goals with setGoal will have
+     * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+     * from goals will have a value equal to the distance from the nearest goal. The exceptions are walls,
+     * which will have a value defined by the WALL constant in this class, and areas that the scan was
+     * unable to reach, which will have a value defined by the DARK constant in this class. (typically,
+     * these areas should not be used to place NPCs or items and should be filled with walls). This uses the
+     * current measurement.  The result is stored in the {@link #gradientMap} field and a copy is returned.
+     *
+     * @param impassable A Collection of Coord keys representing the locations of enemies or other moving obstacles to a
+     *                   path that cannot be moved through; this can be null if there are no such obstacles.
+     * @param size       The length of one side of a square creature using this to find a path, i.e. 2 for a 2x2 cell
+     *                   creature. Non-square creatures are not supported because turning is really hard.
+     * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
+     */
+    public void partialScan(final int limit, final Coord start, final Collection<Coord> impassable, final int size) {
+
+        if (!initialized || limit <= 0) return;
+        double[][] gradientClone = ArrayTools.copy(gradientMap);
         if (impassable != null && !impassable.isEmpty()) {
             for (Coord pt : impassable) {
-                for (int xs = pt.x, xi = 0; xi < size && xs >= 0; xs--, xi++) {
-                    for (int ys = pt.y, yi = 0; yi < size && ys >= 0; ys--, yi++) {
-                        gradientClone[xs][ys] = physicalMap[xs][ys];
+                gradientMap[pt.x][pt.y] = WALL;
+            }
+        }
+        for (int xx = size; xx < width; xx++) {
+            for (int yy = size; yy < height; yy++) {
+                if(gradientMap[xx][yy] > FLOOR) {
+                    for (int xs = xx, xi = 0; xi < size && xs >= 0; xs--, xi++) {
+                        for (int ys = yy, yi = 0; yi < size && ys >= 0; ys--, yi++) {
+                            gradientClone[xs][ys] = WALL;
+                        }
                     }
                 }
             }
         }
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                if (gradientClone[x][y] == FLOOR) {
-                    gradientClone[x][y] = DARK;
+        int dec, adjX, adjY, cen, cenX, cenY;
+
+        PER_GOAL:
+        for (int i = 0; i < goals.size; i++) {
+            dec = goals.get(i);
+            for (int xs = decodeX(dec), xi = 0; xi < size && xs >= 0; xs--, xi++) {
+                for (int ys = decodeY(dec), yi = 0; yi < size && ys >= 0; ys--, yi++) {
+                    if(physicalMap[xs][ys] > FLOOR)
+                        continue PER_GOAL;
+                    gradientClone[xs][ys] = GOAL;
                 }
             }
-            System.arraycopy(gradientClone[x], 0, gradientMap[x],0, height);
         }
+        double currentLowest = 999000, cs, dist;
+        fresh.clear();
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (gradientClone[x][y] <= FLOOR) {
+                    if (gradientClone[x][y] < currentLowest) {
+                        currentLowest = gradientClone[x][y];
+                        fresh.clear();
+                        fresh.add(encode(x, y));
+                    } else if (gradientClone[x][y] == currentLowest) {
+                        fresh.add(encode(x, y));
+                    }
+                }
+            }
+        }
+        int fsz, numAssigned = fresh.size;
+        mappedCount = goals.size;
+        Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
 
-        return gradientClone;
+        int iter = 0;
+        while (numAssigned > 0 && iter++ < limit) {
+            numAssigned = 0;
+            fsz = fresh.size;
+            for (int ci = fsz-1; ci >= 0; ci--) {
+                cen = fresh.removeIndex(ci);
+                cenX = decodeX(cen);
+                cenY = decodeY(cen);
+                dist = gradientClone[cenX][cenY];
+
+                for (int d = 0; d < dirs.length; d++) {
+                    adjX = cenX + dirs[d].deltaX;
+                    adjY = cenY + dirs[d].deltaY;
+                    if (adjX < 0 || adjY < 0 || width <= adjX || height <= adjY)
+                    	/* Outside the map */
+                        continue;
+                    if(d >= 4 && blockingRequirement > 0) // diagonal
+                    {
+                        if((gradientClone[adjX][cenY] > FLOOR ? 1 : 0)
+                                + (gradientClone[cenX][adjY] > FLOOR ? 1 : 0)
+                                >= blockingRequirement)
+                        {
+                            continue;
+                        }
+                    }
+                    double h = measurement.heuristic(dirs[d]);
+                    cs = dist + h * costMap[adjX][adjY];
+                    if (physicalMap[adjX][adjY] <= FLOOR && cs < gradientClone[adjX][adjY]) {
+                        setFresh(adjX, adjY, cs);
+                        ++numAssigned;
+                        ++mappedCount;
+                        if(start != null && start.x == adjX && start.y == adjY && standardCosts)
+                        {
+                            if (impassable != null && !impassable.isEmpty()) {
+                                for (Coord pt : impassable) {
+                                    for (int xs = pt.x, xi = 0; xi < size && xs >= 0; xs--, xi++) {
+                                        for (int ys = pt.y, yi = 0; yi < size && ys >= 0; ys--, yi++) {
+                                            gradientClone[xs][ys] = physicalMap[xs][ys];
+                                        }
+                                    }
+                                }
+                            }
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        // return;
     }
 
     /**
@@ -1465,7 +1621,7 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(measurement.directionCount() + 1);
+            int choice = rng.nextIntHasty(measurement.directionCount() + 1);
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -1629,7 +1785,7 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(measurement.directionCount() + 1);
+            int choice = rng.nextIntHasty(measurement.directionCount() + 1);
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -1847,7 +2003,7 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(measurement.directionCount() + 1);
+            int choice = rng.nextIntHasty(measurement.directionCount() + 1);
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -2025,7 +2181,7 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(measurement.directionCount() + 1);
+            int choice = rng.nextIntHasty(measurement.directionCount() + 1);
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -2091,8 +2247,13 @@ public class DijkstraMap implements Serializable {
      * @return an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target. Copy of path.
      */
 
-    public ArrayList<Coord> findPathLarge(int size, int length, Collection<Coord> impassable,
+    public ArrayList<Coord> findPathLarge(final int size, int length, Collection<Coord> impassable,
                                           Collection<Coord> onlyPassable, Coord start, Coord... targets) {
+        return findPathLarge(size, length, -1, impassable, onlyPassable, start, targets);
+    }
+    public ArrayList<Coord> findPathLarge(final int size, int length, final int scanLimit, Collection<Coord> impassable,
+                                          Collection<Coord> onlyPassable, Coord start, Coord... targets) {
+
         if (!initialized) return null;
         path.clear();
         Collection<Coord> impassable2;
@@ -2114,7 +2275,13 @@ public class DijkstraMap implements Serializable {
             return new ArrayList<>(path);
         }
 
-        scan(start, impassable2, size);
+        if(length < 0)
+            length = 0;
+        if(scanLimit <= 0 || scanLimit < length)
+            scan(start, impassable2, size);
+        else
+            partialScan(scanLimit, start, impassable2, size);
+
         Coord currentPos = start;
         double paidLength = 0.0;
         while (true) {
@@ -2124,7 +2291,7 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(measurement.directionCount() + 1);
+            int choice = rng.nextIntHasty(measurement.directionCount() + 1);
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -2265,7 +2432,7 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(measurement.directionCount() + 1);
+            int choice = rng.nextIntHasty(measurement.directionCount() + 1);
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -2409,7 +2576,7 @@ public class DijkstraMap implements Serializable {
 
             double best = gradientMap[currentPos.x][currentPos.y];
             final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(measurement.directionCount() + 1);
+            int choice = rng.nextIntHasty(measurement.directionCount() + 1);
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -2532,7 +2699,7 @@ public class DijkstraMap implements Serializable {
 
             double best = gradientMap[currentPos.x][currentPos.y];
             final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(measurement.directionCount() + 1);
+            int choice = rng.nextIntHasty(measurement.directionCount() + 1);
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -2601,7 +2768,7 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             final Direction[] dirs = appendDirToShuffle(rng2);
-            int choice = rng2.nextInt(measurement.directionCount() + 1);
+            int choice = rng2.nextIntHasty(measurement.directionCount() + 1);
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
