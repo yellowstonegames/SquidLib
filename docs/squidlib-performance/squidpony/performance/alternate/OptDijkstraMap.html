@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":10,"i6":9,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":9,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":9,"i6":10,"i7":10,"i8":10,"i9":10,"i10":9,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":9,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -375,12 +375,41 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 </td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>squidpony.squidmath.IntVLA</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#findFleePathLarge-int-int-int-int-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findFleePathLarge</a></span>(int&nbsp;size,
+                 int&nbsp;length,
+                 int&nbsp;scanLimit,
+                 int&nbsp;preferLongerPaths,
+                 squidpony.squidmath.IntVLA&nbsp;impassable,
+                 squidpony.squidmath.IntVLA&nbsp;onlyPassable,
+                 int&nbsp;start,
+                 int...&nbsp;fearSources)</code>
+<div class="block">Scans the dungeon using CustomDijkstraMap.scanLarge with the listed fearSources and start point, and returns a list
+ of Coord positions (using Manhattan distance) needed to get further from the closest fearSources, meant
+ for running away.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>squidpony.squidmath.IntVLA</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#findFleePathLarge-int-int-int-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findFleePathLarge</a></span>(int&nbsp;size,
+                 int&nbsp;length,
+                 int&nbsp;preferLongerPaths,
+                 squidpony.squidmath.IntVLA&nbsp;impassable,
+                 squidpony.squidmath.IntVLA&nbsp;onlyPassable,
+                 int&nbsp;start,
+                 int...&nbsp;fearSources)</code>
+<div class="block">Scans the dungeon using CustomDijkstraMap.scanLarge with the listed fearSources and start point, and returns a list
+ of Coord positions (using Manhattan distance) needed to get further from the closest fearSources, meant
+ for running away.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static squidpony.squidai.DijkstraMap.Measurement</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#findMeasurement-squidpony.squidgrid.Radius-">findMeasurement</a></span>(squidpony.squidgrid.Radius&nbsp;radius)</code>
 <div class="block">Gets the appropriate DijkstraMap.Measurement to pass to a constructor if you already have a Radius.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>squidpony.squidmath.IntVLA</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#findPath-int-int-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findPath</a></span>(int&nbsp;length,
         int&nbsp;scanLimit,
@@ -393,7 +422,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
  goal.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>squidpony.squidmath.IntVLA</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#findPath-int-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findPath</a></span>(int&nbsp;length,
         squidpony.squidmath.IntVLA&nbsp;impassable,
@@ -405,13 +434,40 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
  goal.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>squidpony.squidmath.IntVLA</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#findPathLarge-int-int-int-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findPathLarge</a></span>(int&nbsp;size,
+             int&nbsp;length,
+             int&nbsp;scanLimit,
+             squidpony.squidmath.IntVLA&nbsp;impassable,
+             squidpony.squidmath.IntVLA&nbsp;onlyPassable,
+             int&nbsp;start,
+             int...&nbsp;targets)</code>
+<div class="block">Scans the dungeon using CustomDijkstraMap.scanLarge with the listed goals and start point, and returns a list
+ of Coord positions (using the current measurement) needed to get closer to the closest reachable
+ goal.</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>squidpony.squidmath.IntVLA</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#findPathLarge-int-int-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findPathLarge</a></span>(int&nbsp;size,
+             int&nbsp;length,
+             squidpony.squidmath.IntVLA&nbsp;impassable,
+             squidpony.squidmath.IntVLA&nbsp;onlyPassable,
+             int&nbsp;start,
+             int...&nbsp;targets)</code>
+<div class="block">Scans the dungeon using CustomDijkstraMap.scan with the listed goals and start point, and returns a list
+ of Coord positions (using the current measurement) needed to get closer to the closest reachable
+ goal.</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>static squidpony.squidgrid.Radius</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#findRadius-squidpony.squidai.DijkstraMap.Measurement-">findRadius</a></span>(squidpony.squidai.DijkstraMap.Measurement&nbsp;measurement)</code>
 <div class="block">Gets the appropriate Radius corresponding to a DijkstraMap.Measurement.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>squidpony.squidmath.IntDoubleOrderedMap</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#floodFill-int-int...-">floodFill</a></span>(int&nbsp;radius,
          int...&nbsp;starts)</code>
@@ -419,11 +475,11 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
  calculating out to a number of steps determined by limit.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#getMappedCount--">getMappedCount</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html" title="class in squidpony.performance.alternate">OptDijkstraMap</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#initialize-char:A:A-">initialize</a></span>(char[][]&nbsp;level)</code>
 <div class="block">Used to initialize or re-initialize a CustomDijkstraMap that needs a new PhysicalMap because it either wasn't given
@@ -431,7 +487,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
  creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ).</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html" title="class in squidpony.performance.alternate">OptDijkstraMap</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#initialize-char:A:A-char-">initialize</a></span>(char[][]&nbsp;level,
           char&nbsp;alternateWall)</code>
@@ -440,7 +496,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
  creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ).</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html" title="class in squidpony.performance.alternate">OptDijkstraMap</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#initialize-double:A-">initialize</a></span>(double[]&nbsp;level)</code>
 <div class="block">Used to initialize or re-initialize a CustomDijkstraMap that needs a new PhysicalMap because it either wasn't given
@@ -448,28 +504,28 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
  creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ).</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html" title="class in squidpony.performance.alternate">OptDijkstraMap</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#initializeCost-char:A:A-">initializeCost</a></span>(char[][]&nbsp;level)</code>
 <div class="block">Used to initialize the entry cost modifiers for games that require variable costs to enter squares.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html" title="class in squidpony.performance.alternate">OptDijkstraMap</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#initializeCost-int:A-">initializeCost</a></span>(int[]&nbsp;tiles)</code>
 <div class="block">Used to initialize the entry cost modifiers for games that require variable costs to enter squares.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#isBlocked-int-int-">isBlocked</a></span>(int&nbsp;start,
          int&nbsp;direction)</code>&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#main-java.lang.String:A-">main</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)</code>&nbsp;</td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#partialScan-int-int-int:A-">partialScan</a></span>(int&nbsp;limit,
            int&nbsp;usable,
@@ -477,20 +533,21 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <div class="block">Recalculate the CustomDijkstra map up to a limit and return it.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#partialScan-int-squidpony.squidmath.IntVLA-">partialScan</a></span>(int&nbsp;limit,
            squidpony.squidmath.IntVLA&nbsp;impassable)</code>
 <div class="block">Recalculate the CustomDijkstra map up to a limit and return it.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
-<td class="colFirst"><code>protected double[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#partialScanInternal-int-int:A-int-">partialScanInternal</a></span>(int&nbsp;limit,
+<tr id="i22" class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#partialScanInternal-int-int-int:A-int-">partialScanInternal</a></span>(int&nbsp;start,
+                   int&nbsp;limit,
                    int[]&nbsp;impassable,
                    int&nbsp;usable)</code>&nbsp;</td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#partialScanLarge-int-int-int-int:A-">partialScanLarge</a></span>(int&nbsp;size,
                 int&nbsp;limit,
@@ -499,7 +556,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <div class="block">Recalculate the CustomDijkstra map for a creature that is potentially larger than 1x1 cell and return it.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#partialScanLarge-int-int-squidpony.squidmath.IntVLA-">partialScanLarge</a></span>(int&nbsp;size,
                 int&nbsp;limit,
@@ -508,51 +565,84 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
  return it.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>protected double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#partialScanLargeInternal-int-int-int:A-int-">partialScanLargeInternal</a></span>(int&nbsp;size,
                         int&nbsp;limit,
                         int[]&nbsp;impassable,
                         int&nbsp;usable)</code>&nbsp;</td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i26" class="altColor">
+<td class="colFirst"><code>double[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#partialScanToStart-int-int-int-int:A-">partialScanToStart</a></span>(int&nbsp;start,
+                  int&nbsp;limit,
+                  int&nbsp;usable,
+                  int[]&nbsp;impassable)</code>
+<div class="block">Recalculate the CustomDijkstra map up to a limit and return it.</div>
+</td>
+</tr>
+<tr id="i27" class="rowColor">
+<td class="colFirst"><code>double[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#partialScanToStart-int-int-squidpony.squidmath.IntVLA-">partialScanToStart</a></span>(int&nbsp;start,
+                  int&nbsp;limit,
+                  squidpony.squidmath.IntVLA&nbsp;impassable)</code>
+<div class="block">Recalculate the CustomDijkstra map up to a limit and return it.</div>
+</td>
+</tr>
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#reset--">reset</a></span>()</code>
 <div class="block">Resets this CustomDijkstraMap to a state with no goals, no discovered path, and no changes made to gradientMap
  relative to physicalMap.</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#resetCell-int-">resetCell</a></span>(int&nbsp;pt)</code>
 <div class="block">Reverts a cell to the value stored in the original state of the level as known by physicalMap.</div>
 </td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#resetMap--">resetMap</a></span>()</code>
 <div class="block">Resets the gradientMap to its original value from physicalMap.</div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#scan-int-int:A-">scan</a></span>(int&nbsp;usable,
     int[]&nbsp;impassable)</code>
 <div class="block">Recalculate the CustomDijkstra map and return it.</div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i32" class="altColor">
+<td class="colFirst"><code>double[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#scan-int-int-int:A-">scan</a></span>(int&nbsp;start,
+    int&nbsp;usable,
+    int[]&nbsp;impassable)</code>
+<div class="block">Recalculate the CustomDijkstra map and return it.</div>
+</td>
+</tr>
+<tr id="i33" class="rowColor">
+<td class="colFirst"><code>double[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#scan-int-squidpony.squidmath.IntVLA-">scan</a></span>(int&nbsp;start,
+    squidpony.squidmath.IntVLA&nbsp;impassable)</code>
+<div class="block">Recalculate the CustomDijkstra map and return it.</div>
+</td>
+</tr>
+<tr id="i34" class="altColor">
 <td class="colFirst"><code>double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#scan-squidpony.squidmath.IntVLA-">scan</a></span>(squidpony.squidmath.IntVLA&nbsp;impassable)</code>
 <div class="block">Recalculate the CustomDijkstra map and return it.</div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
-<td class="colFirst"><code>protected double[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#scanInternal-int:A-int-">scanInternal</a></span>(int[]&nbsp;impassable,
+<tr id="i35" class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#scanInternal-int-int:A-int-">scanInternal</a></span>(int&nbsp;start,
+            int[]&nbsp;impassable,
             int&nbsp;usable)</code>&nbsp;</td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i36" class="altColor">
 <td class="colFirst"><code>double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#scanLarge-int-int-int:A-">scanLarge</a></span>(int&nbsp;size,
          int&nbsp;usable,
@@ -560,20 +650,20 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <div class="block">Recalculate the CustomDijkstra map for a creature that is potentially larger than 1x1 cell and return it.</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i37" class="rowColor">
 <td class="colFirst"><code>double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#scanLarge-int-squidpony.squidmath.IntVLA-">scanLarge</a></span>(int&nbsp;size,
          squidpony.squidmath.IntVLA&nbsp;impassable)</code>
 <div class="block">Recalculate the CustomDijkstra map for a creature that is potentially larger than 1x1 cell and return it.</div>
 </td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i38" class="altColor">
 <td class="colFirst"><code>protected double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#scanLargeInternal-int-int:A-int-">scanLargeInternal</a></span>(int&nbsp;size,
                  int[]&nbsp;impassable,
                  int&nbsp;usable)</code>&nbsp;</td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i39" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#setCost-int-int-">setCost</a></span>(int&nbsp;pt,
        int&nbsp;tile)</code>
@@ -582,18 +672,18 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
  wall or unreachable area (then it always sets the cost to a value that should have the same cost as a wall).</div>
 </td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i40" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#setFresh-int-double-">setFresh</a></span>(int&nbsp;pt,
         double&nbsp;counter)</code>&nbsp;</td>
 </tr>
-<tr id="i33" class="rowColor">
+<tr id="i41" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#setGoal-int-">setGoal</a></span>(int&nbsp;pt)</code>
 <div class="block">Marks a cell as a goal for pathfinding, unless the cell is a wall or unreachable area (then it does nothing).</div>
 </td>
 </tr>
-<tr id="i34" class="altColor">
+<tr id="i42" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/performance/alternate/OptDijkstraMap.html#setOccupied-int-">setOccupied</a></span>(int&nbsp;pt)</code>
 <div class="block">Marks a specific cell in gradientMap as completely impossible to enter.</div>
@@ -1246,7 +1336,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>scan</h4>
-<pre>public&nbsp;double[]&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.565">scan</a>(squidpony.squidmath.IntVLA&nbsp;impassable)</pre>
+<pre>public&nbsp;double[]&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.575">scan</a>(squidpony.squidmath.IntVLA&nbsp;impassable)</pre>
 <div class="block">Recalculate the CustomDijkstra map and return it. Cells that were marked as goals with setGoal will have
  a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
  from goals will have a value equal to the distance from the nearest goal. The exceptions are walls,
@@ -1263,14 +1353,69 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 </dl>
 </li>
 </ul>
-<a name="scanInternal-int:A-int-">
+<a name="scan-int-int-int:A-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>scan</h4>
+<pre>public&nbsp;double[]&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.609">scan</a>(int&nbsp;start,
+                     int&nbsp;usable,
+                     int[]&nbsp;impassable)</pre>
+<div class="block">Recalculate the CustomDijkstra map and return it. Cells that were marked as goals with setGoal will have
+ a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+ from goals will have a value equal to the distance from the nearest goal. The exceptions are walls,
+ which will have a value defined by the WALL constant in this class, and areas that the scan was
+ unable to reach, which will have a value defined by the DARK constant in this class (typically,
+ these areas should not be used to place NPCs or items and should be filled with walls). This uses the
+ current measurement.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>start</code> - the encoded index of the start of the pathfinder; when this has a path from goal to start, it ends</dd>
+<dd><code>usable</code> - how much of impassable to actually use; should usually be equal to impassable.length, but can be
+               anything if impassable is null (then, it is ignored). This exists to differentiate this method from
+               the overload that takes an IntVLA when that argument is null, but also to give some flexibility.</dd>
+<dd><code>impassable</code> - An array of int keys (encoded by an Adjacency, usually) representing the locations of enemies
+ or other moving obstacles to a path that cannot be moved through; this can be null (meaning no obstacles).</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>An int array using the dimensions of what this knows about the physical map.</dd>
+</dl>
+</li>
+</ul>
+<a name="scan-int-squidpony.squidmath.IntVLA-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>scan</h4>
+<pre>public&nbsp;double[]&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.630">scan</a>(int&nbsp;start,
+                     squidpony.squidmath.IntVLA&nbsp;impassable)</pre>
+<div class="block">Recalculate the CustomDijkstra map and return it. Cells that were marked as goals with setGoal will have
+ a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+ from goals will have a value equal to the distance from the nearest goal. The exceptions are walls,
+ which will have a value defined by the WALL constant in this class, and areas that the scan was
+ unable to reach, which will have a value defined by the DARK constant in this class (typically,
+ these areas should not be used to place NPCs or items and should be filled with walls). This uses the
+ current measurement.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>start</code> - the encoded index of the start of the pathfinder; when this has a path from goal to start, it ends</dd>
+<dd><code>impassable</code> - An array of int keys (encoded by an Adjacency, usually) representing the locations of enemies
+ or other moving obstacles to a path that cannot be moved through; this can be null (meaning no obstacles).</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>An int array using the dimensions of what this knows about the physical map.</dd>
+</dl>
+</li>
+</ul>
+<a name="scanInternal-int-int:A-int-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>scanInternal</h4>
-<pre>protected&nbsp;double[]&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.571">scanInternal</a>(int[]&nbsp;impassable,
-                                int&nbsp;usable)</pre>
+<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.638">scanInternal</a>(int&nbsp;start,
+                            int[]&nbsp;impassable,
+                            int&nbsp;usable)</pre>
 </li>
 </ul>
 <a name="partialScan-int-int-int:A-">
@@ -1279,7 +1424,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>partialScan</h4>
-<pre>public&nbsp;double[]&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.677">partialScan</a>(int&nbsp;limit,
+<pre>public&nbsp;double[]&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.742">partialScan</a>(int&nbsp;limit,
                             int&nbsp;usable,
                             int[]&nbsp;impassable)</pre>
 <div class="block">Recalculate the CustomDijkstra map up to a limit and return it. Cells that were marked as goals with setGoal will have
@@ -1308,7 +1453,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>partialScan</h4>
-<pre>public&nbsp;double[]&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.697">partialScan</a>(int&nbsp;limit,
+<pre>public&nbsp;double[]&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.772">partialScan</a>(int&nbsp;limit,
                             squidpony.squidmath.IntVLA&nbsp;impassable)</pre>
 <div class="block">Recalculate the CustomDijkstra map up to a limit and return it. Cells that were marked as goals with setGoal will have
  a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
@@ -1327,15 +1472,74 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 </dl>
 </li>
 </ul>
-<a name="partialScanInternal-int-int:A-int-">
+<a name="partialScanToStart-int-int-int-int:A-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>partialScanToStart</h4>
+<pre>public&nbsp;double[]&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.807">partialScanToStart</a>(int&nbsp;start,
+                                   int&nbsp;limit,
+                                   int&nbsp;usable,
+                                   int[]&nbsp;impassable)</pre>
+<div class="block">Recalculate the CustomDijkstra map up to a limit and return it. Cells that were marked as goals with setGoal will have
+ a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+ from goals will have a value equal to the distance from the nearest goal. The exceptions are walls,
+ which will have a value defined by the WALL constant in this class, and areas that the scan was
+ unable to reach, which will have a value defined by the DARK constant in this class (typically,
+ these areas should not be used to place NPCs or items and should be filled with walls). This uses the
+ current measurement.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>start</code> - the encoded index of the start of the pathfinder; when this has a path from goal to start, it ends</dd>
+<dd><code>limit</code> - The maximum number of steps to scan outward from a goal.</dd>
+<dd><code>usable</code> - how much of impassable to actually use; should usually be equal to impassable.length, but can be
+               anything if impassable is null (then, it is ignored). This exists to differentiate this method from
+               the overload that takes an IntVLA when that argument is null, but also to give some flexibility.</dd>
+<dd><code>impassable</code> - An array of int keys (encoded by an Adjacency, usually) representing the locations of enemies
+ or other moving obstacles to a path that cannot be moved through; this can be null (meaning no obstacles).</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>An int array using the dimensions of what this knows about the physical map.</dd>
+</dl>
+</li>
+</ul>
+<a name="partialScanToStart-int-int-squidpony.squidmath.IntVLA-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>partialScanToStart</h4>
+<pre>public&nbsp;double[]&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.829">partialScanToStart</a>(int&nbsp;start,
+                                   int&nbsp;limit,
+                                   squidpony.squidmath.IntVLA&nbsp;impassable)</pre>
+<div class="block">Recalculate the CustomDijkstra map up to a limit and return it. Cells that were marked as goals with setGoal will have
+ a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+ from goals will have a value equal to the distance from the nearest goal. The exceptions are walls,
+ which will have a value defined by the WALL constant in this class, and areas that the scan was
+ unable to reach, which will have a value defined by the DARK constant in this class (typically,
+ these areas should not be used to place NPCs or items and should be filled with walls). This uses the
+ current measurement.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>start</code> - the encoded index of the start of the pathfinder; when this has a path from goal to start, it ends</dd>
+<dd><code>limit</code> - The maximum number of steps to scan outward from a goal.</dd>
+<dd><code>impassable</code> - An array of int keys (encoded by an Adjacency, usually) representing the locations of enemies
+ or other moving obstacles to a path that cannot be moved through; this can be null (meaning no obstacles).</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>An int array using the dimensions of what this knows about the physical map.</dd>
+</dl>
+</li>
+</ul>
+<a name="partialScanInternal-int-int-int:A-int-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>partialScanInternal</h4>
-<pre>protected&nbsp;double[]&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.702">partialScanInternal</a>(int&nbsp;limit,
-                                       int[]&nbsp;impassable,
-                                       int&nbsp;usable)</pre>
+<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.837">partialScanInternal</a>(int&nbsp;start,
+                                   int&nbsp;limit,
+                                   int[]&nbsp;impassable,
+                                   int&nbsp;usable)</pre>
 </li>
 </ul>
 <a name="scanLarge-int-int-int:A-">
@@ -1344,7 +1548,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>scanLarge</h4>
-<pre>public&nbsp;double[]&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.1068">scanLarge</a>(int&nbsp;size,
+<pre>public&nbsp;double[]&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.1201">scanLarge</a>(int&nbsp;size,
                           int&nbsp;usable,
                           int[]&nbsp;impassable)</pre>
 <div class="block">Recalculate the CustomDijkstra map for a creature that is potentially larger than 1x1 cell and return it. The value of
@@ -1384,7 +1588,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>scanLarge</h4>
-<pre>public&nbsp;double[]&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.1098">scanLarge</a>(int&nbsp;size,
+<pre>public&nbsp;double[]&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.1231">scanLarge</a>(int&nbsp;size,
                           squidpony.squidmath.IntVLA&nbsp;impassable)</pre>
 <div class="block">Recalculate the CustomDijkstra map for a creature that is potentially larger than 1x1 cell and return it. The value of
  a cell in the returned CustomDijkstra map assumes that a creature is square, with a side length equal to the passed
@@ -1420,7 +1624,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>scanLargeInternal</h4>
-<pre>protected&nbsp;double[]&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.1105">scanLargeInternal</a>(int&nbsp;size,
+<pre>protected&nbsp;double[]&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.1238">scanLargeInternal</a>(int&nbsp;size,
                                      int[]&nbsp;impassable,
                                      int&nbsp;usable)</pre>
 </li>
@@ -1431,7 +1635,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>partialScanLarge</h4>
-<pre>public&nbsp;double[]&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.1235">partialScanLarge</a>(int&nbsp;size,
+<pre>public&nbsp;double[]&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.1368">partialScanLarge</a>(int&nbsp;size,
                                  int&nbsp;limit,
                                  int&nbsp;usable,
                                  int[]&nbsp;impassable)</pre>
@@ -1473,7 +1677,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>partialScanLarge</h4>
-<pre>public&nbsp;double[]&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.1266">partialScanLarge</a>(int&nbsp;size,
+<pre>public&nbsp;double[]&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.1399">partialScanLarge</a>(int&nbsp;size,
                                  int&nbsp;limit,
                                  squidpony.squidmath.IntVLA&nbsp;impassable)</pre>
 <div class="block">Recalculate the CustomDijkstra map, up to a limit, for a creature that is potentially larger than 1x1 cell and
@@ -1511,7 +1715,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>partialScanLargeInternal</h4>
-<pre>protected&nbsp;double[]&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.1273">partialScanLargeInternal</a>(int&nbsp;size,
+<pre>protected&nbsp;double[]&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.1406">partialScanLargeInternal</a>(int&nbsp;size,
                                             int&nbsp;limit,
                                             int[]&nbsp;impassable,
                                             int&nbsp;usable)</pre>
@@ -1523,7 +1727,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>findPath</h4>
-<pre>public&nbsp;squidpony.squidmath.IntVLA&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.1393">findPath</a>(int&nbsp;length,
+<pre>public&nbsp;squidpony.squidmath.IntVLA&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.1526">findPath</a>(int&nbsp;length,
                                            squidpony.squidmath.IntVLA&nbsp;impassable,
                                            squidpony.squidmath.IntVLA&nbsp;onlyPassable,
                                            int&nbsp;start,
@@ -1557,7 +1761,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>findPath</h4>
-<pre>public&nbsp;squidpony.squidmath.IntVLA&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.1419">findPath</a>(int&nbsp;length,
+<pre>public&nbsp;squidpony.squidmath.IntVLA&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.1552">findPath</a>(int&nbsp;length,
                                            int&nbsp;scanLimit,
                                            squidpony.squidmath.IntVLA&nbsp;impassable,
                                            squidpony.squidmath.IntVLA&nbsp;onlyPassable,
@@ -1592,7 +1796,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>findFleePath</h4>
-<pre>public&nbsp;squidpony.squidmath.IntVLA&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.1692">findFleePath</a>(int&nbsp;length,
+<pre>public&nbsp;squidpony.squidmath.IntVLA&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.1825">findFleePath</a>(int&nbsp;length,
                                                double&nbsp;preferLongerPaths,
                                                squidpony.squidmath.IntVLA&nbsp;impassable,
                                                squidpony.squidmath.IntVLA&nbsp;onlyPassable,
@@ -1633,7 +1837,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>findFleePath</h4>
-<pre>public&nbsp;squidpony.squidmath.IntVLA&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.1723">findFleePath</a>(int&nbsp;length,
+<pre>public&nbsp;squidpony.squidmath.IntVLA&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.1856">findFleePath</a>(int&nbsp;length,
                                                int&nbsp;scanLimit,
                                                double&nbsp;preferLongerPaths,
                                                squidpony.squidmath.IntVLA&nbsp;impassable,
@@ -1670,13 +1874,187 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 </dl>
 </li>
 </ul>
+<a name="findPathLarge-int-int-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findPathLarge</h4>
+<pre>public&nbsp;squidpony.squidmath.IntVLA&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.1970">findPathLarge</a>(int&nbsp;size,
+                                                int&nbsp;length,
+                                                squidpony.squidmath.IntVLA&nbsp;impassable,
+                                                squidpony.squidmath.IntVLA&nbsp;onlyPassable,
+                                                int&nbsp;start,
+                                                int...&nbsp;targets)</pre>
+<div class="block">Scans the dungeon using CustomDijkstraMap.scan with the listed goals and start point, and returns a list
+ of Coord positions (using the current measurement) needed to get closer to the closest reachable
+ goal. The maximum length of the returned list is given by length; if moving the full length of
+ the list would place the mover in a position shared by one of the positions in onlyPassable
+ (which is typically filled with friendly units that can be passed through in multi-tile-
+ movement scenarios), it will recalculate a move so that it does not pass into that cell.
+ The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+ through, and will be ignored if there is a goal overlapping one.
+ The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The
+ parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &gt; 1, and
+ all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.
+ <br>
+ This caches its result in a member field, path, which can be fetched after finding a path and will change with
+ each call to a pathfinding method.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>size</code> - the side length of the creature trying to find a path</dd>
+<dd><code>length</code> - the length of the path to calculate</dd>
+<dd><code>impassable</code> - a Set of impassable Coord positions that may change (not constant like walls); can be null</dd>
+<dd><code>onlyPassable</code> - a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null</dd>
+<dd><code>start</code> - the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder</dd>
+<dd><code>targets</code> - a vararg or array of Coord that this will try to pathfind toward</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target. Copy of path.</dd>
+</dl>
+</li>
+</ul>
+<a name="findPathLarge-int-int-int-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findPathLarge</h4>
+<pre>public&nbsp;squidpony.squidmath.IntVLA&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.1999">findPathLarge</a>(int&nbsp;size,
+                                                int&nbsp;length,
+                                                int&nbsp;scanLimit,
+                                                squidpony.squidmath.IntVLA&nbsp;impassable,
+                                                squidpony.squidmath.IntVLA&nbsp;onlyPassable,
+                                                int&nbsp;start,
+                                                int...&nbsp;targets)</pre>
+<div class="block">Scans the dungeon using CustomDijkstraMap.scanLarge with the listed goals and start point, and returns a list
+ of Coord positions (using the current measurement) needed to get closer to the closest reachable
+ goal. The maximum length of the returned list is given by length; if moving the full length of
+ the list would place the mover in a position shared by one of the positions in onlyPassable
+ (which is typically filled with friendly units that can be passed through in multi-tile-
+ movement scenarios), it will recalculate a move so that it does not pass into that cell.
+ The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+ through, and will be ignored if there is a goal overlapping one.
+ The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The
+ parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &gt; 1, and
+ all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.
+ <br>
+ This caches its result in a member field, path, which can be fetched after finding a path and will change with
+ each call to a pathfinding method.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>size</code> - the side length of the creature trying to find a path</dd>
+<dd><code>length</code> - the length of the path to calculate</dd>
+<dd><code>scanLimit</code> - how many steps away from a goal to calculate; negative scans the whole map</dd>
+<dd><code>impassable</code> - a Set of impassable Coord positions that may change (not constant like walls); can be null</dd>
+<dd><code>onlyPassable</code> - a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null</dd>
+<dd><code>start</code> - the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder</dd>
+<dd><code>targets</code> - a vararg or array of Coord that this will try to pathfind toward</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target. Copy of path.</dd>
+</dl>
+</li>
+</ul>
+<a name="findFleePathLarge-int-int-int-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findFleePathLarge</h4>
+<pre>public&nbsp;squidpony.squidmath.IntVLA&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.2445">findFleePathLarge</a>(int&nbsp;size,
+                                                    int&nbsp;length,
+                                                    int&nbsp;preferLongerPaths,
+                                                    squidpony.squidmath.IntVLA&nbsp;impassable,
+                                                    squidpony.squidmath.IntVLA&nbsp;onlyPassable,
+                                                    int&nbsp;start,
+                                                    int...&nbsp;fearSources)</pre>
+<div class="block">Scans the dungeon using CustomDijkstraMap.scanLarge with the listed fearSources and start point, and returns a list
+ of Coord positions (using Manhattan distance) needed to get further from the closest fearSources, meant
+ for running away. The maximum length of the returned list is given by length; if moving the full
+ length of the list would place the mover in a position shared by one of the positions in onlyPassable
+ (which is typically filled with friendly units that can be passed through in multi-tile-
+ movement scenarios), it will recalculate a move so that it does not pass into that cell.
+ The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+ through, and will be ignored if there is a fearSource overlapping one. The preferLongerPaths parameter
+ is meant to be tweaked and adjusted; higher values should make creatures prefer to escape out of
+ doorways instead of hiding in the closest corner, and a value of 1.2 should be typical for many maps.
+ The parameters size, preferLongerPaths, impassable, and the varargs used for fearSources will be cached, and
+ any subsequent calls that use the same values as the last values passed will avoid recalculating
+ unnecessary scans. Calls to findFleePath will cache as if size is 1, and may share a cache with this function.
+ The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The
+ parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &gt; 1, and
+ all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.
+ <br>
+ This caches its result in a member field, path, which can be fetched after finding a path and will change with
+ each call to a pathfinding method.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>size</code> - the side length of the creature trying the find a path</dd>
+<dd><code>length</code> - the length of the path to calculate</dd>
+<dd><code>preferLongerPaths</code> - Set this to 1.2 if you aren't sure; it will probably need tweaking for different maps.</dd>
+<dd><code>impassable</code> - a Set of impassable Coord positions that may change (not constant like walls); can be null</dd>
+<dd><code>onlyPassable</code> - a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null</dd>
+<dd><code>start</code> - the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder</dd>
+<dd><code>fearSources</code> - a vararg or array of Coord positions to run away from</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an ArrayList of Coord that will contain the locations of this creature as it goes away from fear sources. Copy of path.</dd>
+</dl>
+</li>
+</ul>
+<a name="findFleePathLarge-int-int-int-int-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findFleePathLarge</h4>
+<pre>public&nbsp;squidpony.squidmath.IntVLA&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.2482">findFleePathLarge</a>(int&nbsp;size,
+                                                    int&nbsp;length,
+                                                    int&nbsp;scanLimit,
+                                                    int&nbsp;preferLongerPaths,
+                                                    squidpony.squidmath.IntVLA&nbsp;impassable,
+                                                    squidpony.squidmath.IntVLA&nbsp;onlyPassable,
+                                                    int&nbsp;start,
+                                                    int...&nbsp;fearSources)</pre>
+<div class="block">Scans the dungeon using CustomDijkstraMap.scanLarge with the listed fearSources and start point, and returns a list
+ of Coord positions (using Manhattan distance) needed to get further from the closest fearSources, meant
+ for running away. The maximum length of the returned list is given by length; if moving the full
+ length of the list would place the mover in a position shared by one of the positions in onlyPassable
+ (which is typically filled with friendly units that can be passed through in multi-tile-
+ movement scenarios), it will recalculate a move so that it does not pass into that cell.
+ The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+ through, and will be ignored if there is a fearSource overlapping one. The preferLongerPaths parameter
+ is meant to be tweaked and adjusted; higher values should make creatures prefer to escape out of
+ doorways instead of hiding in the closest corner, and a value of 1.2 should be typical for many maps.
+ The parameters size, preferLongerPaths, impassable, and the varargs used for fearSources will be cached, and
+ any subsequent calls that use the same values as the last values passed will avoid recalculating
+ unnecessary scans. Calls to findFleePath will cache as if size is 1, and may share a cache with this function.
+ The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The
+ parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &gt; 1, and
+ all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.
+ <br>
+ This caches its result in a member field, path, which can be fetched after finding a path and will change with
+ each call to a pathfinding method.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>size</code> - the side length of the creature trying the find a path</dd>
+<dd><code>length</code> - the length of the path to calculate</dd>
+<dd><code>scanLimit</code> - how many steps away from a goal to calculate; negative scans the whole map</dd>
+<dd><code>preferLongerPaths</code> - Set this to 1.2 if you aren't sure; it will probably need tweaking for different maps.</dd>
+<dd><code>impassable</code> - a Set of impassable Coord positions that may change (not constant like walls); can be null</dd>
+<dd><code>onlyPassable</code> - a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null</dd>
+<dd><code>start</code> - the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder</dd>
+<dd><code>fearSources</code> - a vararg or array of Coord positions to run away from</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an ArrayList of Coord that will contain the locations of this creature as it goes away from fear sources. Copy of path.</dd>
+</dl>
+</li>
+</ul>
 <a name="floodFill-int-int...-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>floodFill</h4>
-<pre>public&nbsp;squidpony.squidmath.IntDoubleOrderedMap&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.2585">floodFill</a>(int&nbsp;radius,
+<pre>public&nbsp;squidpony.squidmath.IntDoubleOrderedMap&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.2628">floodFill</a>(int&nbsp;radius,
                                                          int...&nbsp;starts)</pre>
 <div class="block">A simple limited flood-fill that returns a OrderedMap of Coord keys to the Double values in the CustomDijkstraMap, only
  calculating out to a number of steps determined by limit. This can be useful if you need many flood-fills and
@@ -1696,7 +2074,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getMappedCount</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.2609">getMappedCount</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.2652">getMappedCount</a>()</pre>
 </li>
 </ul>
 <a name="main-java.lang.String:A-">
@@ -1705,7 +2083,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>main</h4>
-<pre>public static&nbsp;void&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.2614">main</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)</pre>
+<pre>public static&nbsp;void&nbsp;<a href="../../../src-html/squidpony/performance/alternate/OptDijkstraMap.html#line.2657">main</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)</pre>
 </li>
 </ul>
 </li>

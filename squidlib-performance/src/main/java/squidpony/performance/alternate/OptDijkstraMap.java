@@ -546,8 +546,18 @@ public class OptDijkstraMap implements Serializable {
      */
     public double[] scan(int usable, int[] impassable) {
         if(impassable == null)
-            return scanInternal(null, -1);
-        return scanInternal(impassable, Math.min(usable, impassable.length));
+            scanInternal(-1, null, -1);
+        else
+            scanInternal(-1, impassable, Math.min(usable, impassable.length));
+        int maxLength = gradientMap.length;
+        double[] gradientClone = new double[maxLength];
+        for (int l = 0; l < maxLength; l++) {
+            if (gradientMap[l] == FLOOR) {
+                gradientMap[l] = DARK;
+            }
+        }
+        System.arraycopy(gradientMap, 0, gradientClone, 0, maxLength);
+        return gradientClone;
     }
     /**
      * Recalculate the CustomDijkstra map and return it. Cells that were marked as goals with setGoal will have
@@ -564,13 +574,70 @@ public class OptDijkstraMap implements Serializable {
      */
     public double[] scan(IntVLA impassable) {
         if(impassable == null)
-            return scanInternal(null, -1);
-        return scanInternal(impassable.items, impassable.size);
+            scanInternal(-1, null, -1);
+        else
+            scanInternal(-1, impassable.items, impassable.size);
+        int maxLength = gradientMap.length;
+        double[] gradientClone = new double[maxLength];
+        for (int l = 0; l < maxLength; l++) {
+            if (gradientMap[l] == FLOOR) {
+                gradientMap[l] = DARK;
+            }
+        }
+        System.arraycopy(gradientMap, 0, gradientClone, 0, maxLength);
+        return gradientClone;
+
     }
 
-    protected double[] scanInternal(int[] impassable, int usable)
+    /**
+     * Recalculate the CustomDijkstra map and return it. Cells that were marked as goals with setGoal will have
+     * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+     * from goals will have a value equal to the distance from the nearest goal. The exceptions are walls,
+     * which will have a value defined by the WALL constant in this class, and areas that the scan was
+     * unable to reach, which will have a value defined by the DARK constant in this class (typically,
+     * these areas should not be used to place NPCs or items and should be filled with walls). This uses the
+     * current measurement.
+     *
+     * @param start the encoded index of the start of the pathfinder; when this has a path from goal to start, it ends
+     * @param usable how much of impassable to actually use; should usually be equal to impassable.length, but can be
+     *               anything if impassable is null (then, it is ignored). This exists to differentiate this method from
+     *               the overload that takes an IntVLA when that argument is null, but also to give some flexibility.
+     * @param impassable An array of int keys (encoded by an Adjacency, usually) representing the locations of enemies
+     * or other moving obstacles to a path that cannot be moved through; this can be null (meaning no obstacles).
+     * @return An int array using the dimensions of what this knows about the physical map.
+     */
+    public double[] scan(int start, int usable, int[] impassable) {
+        if(impassable == null)
+            scanInternal(start, null, -1);
+        else
+            scanInternal(start, impassable, Math.min(usable, impassable.length));
+        return gradientMap;
+    }
+    /**
+     * Recalculate the CustomDijkstra map and return it. Cells that were marked as goals with setGoal will have
+     * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+     * from goals will have a value equal to the distance from the nearest goal. The exceptions are walls,
+     * which will have a value defined by the WALL constant in this class, and areas that the scan was
+     * unable to reach, which will have a value defined by the DARK constant in this class (typically,
+     * these areas should not be used to place NPCs or items and should be filled with walls). This uses the
+     * current measurement.
+     *
+     * @param start the encoded index of the start of the pathfinder; when this has a path from goal to start, it ends
+     * @param impassable An array of int keys (encoded by an Adjacency, usually) representing the locations of enemies
+     * or other moving obstacles to a path that cannot be moved through; this can be null (meaning no obstacles).
+     * @return An int array using the dimensions of what this knows about the physical map.
+     */
+    public double[] scan(int start, IntVLA impassable) {
+        if(impassable == null)
+            scanInternal(start, null, -1);
+        else
+            scanInternal(start, impassable.items, impassable.size);
+        return gradientMap;
+    }
+
+    protected void scanInternal(int start, int[] impassable, int usable)
     {
-        if (!initialized) return null;
+        if (!initialized) return;
         Adjacency adjacency = this.adjacency;
         int[][] fromNeighbors = neighbors[0];
         int near, cen, mid, neighborCount = fromNeighbors.length;
@@ -582,6 +649,7 @@ public class OptDijkstraMap implements Serializable {
                 adjacency.putAllVariants(null, gradientMap, impassable[i], WALL);
             }
         }
+        boolean standardCosts = adjacency.hasStandardCost();
         mappedCount = goals.size;
         for (int i = 0; i < mappedCount; i++) {
             gradientMap[goals.get(i)] = 0;
@@ -639,22 +707,19 @@ public class OptDijkstraMap implements Serializable {
                             setFresh(near, dist + cs);
                             ++numAssigned;
                             ++mappedCount;
+                            if(start == near && standardCosts)
+                            {
+                                if (impassable != null)
+                                    adjacency.resetAllVariants(gradientMap, impassable, usable, physicalMap, 1);
+                                return;
+                            }
                         }
                     }
                 }
             }
         }
-
         if (impassable != null)
             adjacency.resetAllVariants(gradientMap, impassable, usable, physicalMap, 1);
-        double[] gradientClone = new double[maxLength];
-        for (int l = 0; l < maxLength; l++) {
-            if (gradientMap[l] == FLOOR) {
-                gradientMap[l] = DARK;
-            }
-        }
-        System.arraycopy(gradientMap, 0, gradientClone, 0, maxLength);
-        return gradientClone;
     }
 
     /**
@@ -676,8 +741,18 @@ public class OptDijkstraMap implements Serializable {
      */
     public double[] partialScan(int limit, int usable, int[] impassable) {
         if(impassable == null)
-            return partialScanInternal(limit, null, -1);
-        return partialScanInternal(limit, impassable, Math.min(usable, impassable.length));
+            partialScanInternal(-1, limit, null, -1);
+        else
+            partialScanInternal(-1, -1, impassable, Math.min(usable, impassable.length));
+        int maxLength = gradientMap.length;
+        double[] gradientClone = new double[maxLength];
+        for (int l = 0; l < maxLength; l++) {
+            if (gradientMap[l] == FLOOR) {
+                gradientMap[l] = DARK;
+            }
+        }
+        System.arraycopy(gradientMap, 0, gradientClone, 0, maxLength);
+        return gradientClone;
     }
 
     /**
@@ -696,12 +771,72 @@ public class OptDijkstraMap implements Serializable {
      */
     public double[] partialScan(int limit, IntVLA impassable) {
         if(impassable == null)
-            return partialScanInternal(limit, null, -1);
-        return partialScanInternal(limit, impassable.items, impassable.size);
+            partialScanInternal(-1, limit, null, -1);
+        else
+            partialScanInternal(-1, limit, impassable.items, impassable.size);
+        int maxLength = gradientMap.length;
+        double[] gradientClone = new double[maxLength];
+        for (int l = 0; l < maxLength; l++) {
+            if (gradientMap[l] == FLOOR) {
+                gradientMap[l] = DARK;
+            }
+        }
+        System.arraycopy(gradientMap, 0, gradientClone, 0, maxLength);
+        return gradientClone;
     }
-    protected double[] partialScanInternal(int limit, int[] impassable, int usable)
+
+
+    /**
+     * Recalculate the CustomDijkstra map up to a limit and return it. Cells that were marked as goals with setGoal will have
+     * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+     * from goals will have a value equal to the distance from the nearest goal. The exceptions are walls,
+     * which will have a value defined by the WALL constant in this class, and areas that the scan was
+     * unable to reach, which will have a value defined by the DARK constant in this class (typically,
+     * these areas should not be used to place NPCs or items and should be filled with walls). This uses the
+     * current measurement.
+     *
+     * @param start the encoded index of the start of the pathfinder; when this has a path from goal to start, it ends
+     * @param limit      The maximum number of steps to scan outward from a goal.
+     * @param usable how much of impassable to actually use; should usually be equal to impassable.length, but can be
+     *               anything if impassable is null (then, it is ignored). This exists to differentiate this method from
+     *               the overload that takes an IntVLA when that argument is null, but also to give some flexibility.
+     * @param impassable An array of int keys (encoded by an Adjacency, usually) representing the locations of enemies
+     * or other moving obstacles to a path that cannot be moved through; this can be null (meaning no obstacles).
+     * @return An int array using the dimensions of what this knows about the physical map.
+     */
+    public double[] partialScanToStart(int start, int limit, int usable, int[] impassable) {
+        if(impassable == null)
+            partialScanInternal(start, limit, null, -1);
+        else
+            partialScanInternal(start, limit, impassable, Math.min(usable, impassable.length));
+        return gradientMap;
+    }
+    /**
+     * Recalculate the CustomDijkstra map up to a limit and return it. Cells that were marked as goals with setGoal will have
+     * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+     * from goals will have a value equal to the distance from the nearest goal. The exceptions are walls,
+     * which will have a value defined by the WALL constant in this class, and areas that the scan was
+     * unable to reach, which will have a value defined by the DARK constant in this class (typically,
+     * these areas should not be used to place NPCs or items and should be filled with walls). This uses the
+     * current measurement.
+     *
+     * @param start the encoded index of the start of the pathfinder; when this has a path from goal to start, it ends
+     * @param limit      The maximum number of steps to scan outward from a goal.
+     * @param impassable An array of int keys (encoded by an Adjacency, usually) representing the locations of enemies
+     * or other moving obstacles to a path that cannot be moved through; this can be null (meaning no obstacles).
+     * @return An int array using the dimensions of what this knows about the physical map.
+     */
+    public double[] partialScanToStart(int start, int limit, IntVLA impassable) {
+        if(impassable == null)
+            partialScanInternal(start, limit, null, -1);
+        else
+            partialScanInternal(start, limit, impassable.items, impassable.size);
+        return gradientMap;
+    }
+
+    protected void partialScanInternal(int start, int limit, int[] impassable, int usable)
     {
-        if (!initialized) return null;
+        if (!initialized) return;
         Adjacency adjacency = this.adjacency;
         int[][] fromNeighbors = neighbors[0];
         int near, cen, mid, neighborCount = fromNeighbors.length;
@@ -713,6 +848,7 @@ public class OptDijkstraMap implements Serializable {
                 adjacency.putAllVariants(null, gradientMap, impassable[i], WALL);
             }
         }
+        boolean standardCosts = adjacency.hasStandardCost();
         mappedCount = goals.size;
         for (int i = 0; i < mappedCount; i++) {
             gradientMap[goals.get(i)] = 0;
@@ -765,28 +901,25 @@ public class OptDijkstraMap implements Serializable {
                     else
                     {
                         cs = (costs.get(costMap[near] | (adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000))
-                                        * heuristics[d]);
+                                * heuristics[d]);
                         //int h = adjacency.measurement.heuristic(adjacency.directions[d]);
                         if (gradientMap[cen] + cs < gradientMap[near]) {
                             setFresh(near, dist + cs);
                             ++numAssigned;
                             ++mappedCount;
+                            if(start == near && standardCosts)
+                            {
+                                if (impassable != null)
+                                    adjacency.resetAllVariants(gradientMap, impassable, usable, physicalMap, 1);
+                                return;
+                            }
                         }
                     }
                 }
             }
         }
-
         if (impassable != null)
             adjacency.resetAllVariants(gradientMap, impassable, usable, physicalMap, 1);
-        double[] gradientClone = new double[maxLength];
-        for (int l = 0; l < maxLength; l++) {
-            if (gradientMap[l] == FLOOR) {
-                gradientMap[l] = DARK;
-            }
-        }
-        System.arraycopy(gradientMap, 0, gradientClone, 0, maxLength);
-        return gradientClone;
     }
 
     /*
@@ -1442,9 +1575,9 @@ public class OptDijkstraMap implements Serializable {
         if(length < 0)
             length = 0;
         if(scanLimit <= 0 || scanLimit < length)
-            scan(impassable2);
+            scanInternal(start, impassable2.items, impassable2.size);
         else
-            partialScan(scanLimit, impassable2);
+            partialScanInternal(start, scanLimit, impassable2.items, impassable2.size);
 
         int currentPos = start, pt;
         int paidLength = 0;
@@ -1755,7 +1888,7 @@ public class OptDijkstraMap implements Serializable {
             if(scanLimit <= 0 || scanLimit < length)
                 cachedFleeMap = scan(impassable2);
             else
-                cachedFleeMap = partialScan(scanLimit, impassable);
+                cachedFleeMap = partialScan(scanLimit, impassable2);
 
             for (int l = 0; l < gradientMap.length; l++) {
                 gradientMap[l] *= (gradientMap[l] >= FLOOR) ? 1 : - preferLongerPaths;
@@ -1809,130 +1942,130 @@ public class OptDijkstraMap implements Serializable {
         goals.clear();
         return new IntVLA(path);
     }
-//
-//    /**
-//     * Scans the dungeon using CustomDijkstraMap.scan with the listed goals and start point, and returns a list
-//     * of Coord positions (using the current measurement) needed to get closer to the closest reachable
-//     * goal. The maximum length of the returned list is given by length; if moving the full length of
-//     * the list would place the mover in a position shared by one of the positions in onlyPassable
-//     * (which is typically filled with friendly units that can be passed through in multi-tile-
-//     * movement scenarios), it will recalculate a move so that it does not pass into that cell.
-//     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
-//     * through, and will be ignored if there is a goal overlapping one.
-//     * The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The
-//     * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &gt; 1, and
-//     * all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.
-//     * <br>
-//     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
-//     * each call to a pathfinding method.
-//     *
-//     * @param size         the side length of the creature trying to find a path
-//     * @param length       the length of the path to calculate
-//     * @param impassable   a Set of impassable Coord positions that may change (not constant like walls); can be null
-//     * @param onlyPassable a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
-//     * @param start        the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
-//     * @param targets      a vararg or array of Coord that this will try to pathfind toward
-//     * @return an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target. Copy of path.
-//     */
-//    public IntVLA findPathLarge (int size, int length, IntVLA impassable,
-//                                 IntVLA onlyPassable, int start, int... targets) {
-//        return findPathLarge(size, length, -1, impassable, onlyPassable, start, targets);
-//    }
-//    /**
-//     * Scans the dungeon using CustomDijkstraMap.scanLarge with the listed goals and start point, and returns a list
-//     * of Coord positions (using the current measurement) needed to get closer to the closest reachable
-//     * goal. The maximum length of the returned list is given by length; if moving the full length of
-//     * the list would place the mover in a position shared by one of the positions in onlyPassable
-//     * (which is typically filled with friendly units that can be passed through in multi-tile-
-//     * movement scenarios), it will recalculate a move so that it does not pass into that cell.
-//     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
-//     * through, and will be ignored if there is a goal overlapping one.
-//     * The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The
-//     * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &gt; 1, and
-//     * all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.
-//     * <br>
-//     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
-//     * each call to a pathfinding method.
-//     *
-//     * @param size         the side length of the creature trying to find a path
-//     * @param length       the length of the path to calculate
-//     * @param scanLimit    how many steps away from a goal to calculate; negative scans the whole map
-//     * @param impassable   a Set of impassable Coord positions that may change (not constant like walls); can be null
-//     * @param onlyPassable a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
-//     * @param start        the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
-//     * @param targets      a vararg or array of Coord that this will try to pathfind toward
-//     * @return an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target. Copy of path.
-//     */
-//    public IntVLA findPathLarge (int size, int length, int scanLimit, IntVLA impassable,
-//                                 IntVLA onlyPassable, int start, int... targets) {
-//        if (!initialized) return null;
-//        path.clear();
-//        IntVLA impassable2;
-//        if (impassable == null)
-//            impassable2 = new IntVLA();
-//        else
-//            impassable2 = new IntVLA(impassable);
-//        if (onlyPassable == null)
-//            onlyPassable = new IntVLA();
-//
-//        resetMap();
-//        for (int g = 0; g < targets.length; g++) {
-//            setGoal(targets[g]);
-//        }
-//        if (goals.size == 0)
-//            return new IntVLA(path);
-//        Adjacency adjacency = this.adjacency;
-//        int[][] toNeighbors = neighbors[1];
-//        if(length < 0)
-//            length = 0;
-//        if(scanLimit <= 0 || scanLimit < length)
-//            scanLarge(size, impassable2, impassable2.size);
-//        else
-//            partialScanLarge(size, scanLimit, impassable2, impassable2.size);
-//
-//        int currentPos = start, pt;
-//        int paidLength = 0;
-//        while (true) {
-//            if (frustration > 500) {
-//                path.clear();
-//                break;
-//            }
-//            int best = gradientMap[currentPos];
-//            rng.randomOrdering(adjacency.maxAdjacent, reuse);
-//            int choice = rng.nextIntHasty(adjacency.maxAdjacent);
-//
-//            for (int d = 0; d < adjacency.maxAdjacent; d++) {
-//                pt = toNeighbors[reuse[d]][currentPos];
-//                if (gradientMap[pt] < best && !path.contains(pt)) {
-//                    best = gradientMap[pt];
-//                    choice = reuse[d];
-//                }
-//            }
-//
-//
-//            if (best >= gradientMap[currentPos] || physicalMap[toNeighbors[choice][currentPos]] > FLOOR) {
-//                path.clear();
-//                break;
-//            }
-//            currentPos = toNeighbors[choice][pt = currentPos];
-//            path.add(currentPos);
-//            paidLength += adjacency.costRules.get(costMap[currentPos] | (adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000));
-//            frustration++;
-//            if (paidLength > length - 1) {
-//                if (onlyPassable.contains(currentPos)) {
-//                    closed.put(currentPos, WALL);
-//                    impassable2.add(currentPos);
-//                    return findPathLarge(size, scanLimit, length, impassable2, onlyPassable, start, targets);
-//                }
-//                break;
-//            }
-//            if (gradientMap[currentPos] == 0)
-//                break;
-//        }
-//        frustration = 0;
-//        goals.clear();
-//        return new IntVLA(path);
-//    }
+
+    /**
+     * Scans the dungeon using CustomDijkstraMap.scan with the listed goals and start point, and returns a list
+     * of Coord positions (using the current measurement) needed to get closer to the closest reachable
+     * goal. The maximum length of the returned list is given by length; if moving the full length of
+     * the list would place the mover in a position shared by one of the positions in onlyPassable
+     * (which is typically filled with friendly units that can be passed through in multi-tile-
+     * movement scenarios), it will recalculate a move so that it does not pass into that cell.
+     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+     * through, and will be ignored if there is a goal overlapping one.
+     * The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The
+     * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &gt; 1, and
+     * all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
+     *
+     * @param size         the side length of the creature trying to find a path
+     * @param length       the length of the path to calculate
+     * @param impassable   a Set of impassable Coord positions that may change (not constant like walls); can be null
+     * @param onlyPassable a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
+     * @param start        the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
+     * @param targets      a vararg or array of Coord that this will try to pathfind toward
+     * @return an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target. Copy of path.
+     */
+    public IntVLA findPathLarge (int size, int length, IntVLA impassable,
+                                 IntVLA onlyPassable, int start, int... targets) {
+        return findPathLarge(size, length, -1, impassable, onlyPassable, start, targets);
+    }
+    /**
+     * Scans the dungeon using CustomDijkstraMap.scanLarge with the listed goals and start point, and returns a list
+     * of Coord positions (using the current measurement) needed to get closer to the closest reachable
+     * goal. The maximum length of the returned list is given by length; if moving the full length of
+     * the list would place the mover in a position shared by one of the positions in onlyPassable
+     * (which is typically filled with friendly units that can be passed through in multi-tile-
+     * movement scenarios), it will recalculate a move so that it does not pass into that cell.
+     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+     * through, and will be ignored if there is a goal overlapping one.
+     * The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The
+     * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &gt; 1, and
+     * all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
+     *
+     * @param size         the side length of the creature trying to find a path
+     * @param length       the length of the path to calculate
+     * @param scanLimit    how many steps away from a goal to calculate; negative scans the whole map
+     * @param impassable   a Set of impassable Coord positions that may change (not constant like walls); can be null
+     * @param onlyPassable a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
+     * @param start        the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
+     * @param targets      a vararg or array of Coord that this will try to pathfind toward
+     * @return an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target. Copy of path.
+     */
+    public IntVLA findPathLarge (int size, int length, int scanLimit, IntVLA impassable,
+                                 IntVLA onlyPassable, int start, int... targets) {
+        if (!initialized) return null;
+        path.clear();
+        IntVLA impassable2;
+        if (impassable == null)
+            impassable2 = new IntVLA();
+        else
+            impassable2 = new IntVLA(impassable);
+        if (onlyPassable == null)
+            onlyPassable = new IntVLA();
+
+        resetMap();
+        for (int g = 0; g < targets.length; g++) {
+            setGoal(targets[g]);
+        }
+        if (goals.size == 0)
+            return new IntVLA(path);
+        Adjacency adjacency = this.adjacency;
+        int[][] toNeighbors = neighbors[1];
+        if(length < 0)
+            length = 0;
+        if(scanLimit <= 0 || scanLimit < length)
+            scanLarge(size, impassable2);
+        else
+            partialScanLarge(size, scanLimit, impassable2);
+
+        int currentPos = start, pt;
+        int paidLength = 0;
+        while (true) {
+            if (frustration > 500) {
+                path.clear();
+                break;
+            }
+            double best = gradientMap[currentPos];
+            rng.randomOrdering(adjacency.maxAdjacent, reuse);
+            int choice = rng.nextIntHasty(adjacency.maxAdjacent);
+
+            for (int d = 0; d < adjacency.maxAdjacent; d++) {
+                pt = toNeighbors[reuse[d]][currentPos];
+                if (gradientMap[pt] < best && !path.contains(pt)) {
+                    best = gradientMap[pt];
+                    choice = reuse[d];
+                }
+            }
+
+
+            if (best >= gradientMap[currentPos] || physicalMap[toNeighbors[choice][currentPos]] > FLOOR) {
+                path.clear();
+                break;
+            }
+            currentPos = toNeighbors[choice][pt = currentPos];
+            path.add(currentPos);
+            paidLength += adjacency.costRules.get(costMap[currentPos] | (adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000));
+            frustration++;
+            if (paidLength > length - 1) {
+                if (onlyPassable.contains(currentPos)) {
+                    setOccupied(currentPos);
+                    impassable2.add(currentPos);
+                    return findPathLarge(size, scanLimit, length, impassable2, onlyPassable, start, targets);
+                }
+                break;
+            }
+            if (gradientMap[currentPos] == 0)
+                break;
+        }
+        frustration = 0;
+        goals.clear();
+        return new IntVLA(path);
+    }
 
     /*
     public ArrayList<Coord> findPathLarge(int size, int length, Set<Coord> impassable,
@@ -2279,250 +2412,160 @@ public class OptDijkstraMap implements Serializable {
         return new ArrayList<>(path);
     }
     */
-//    /**
-//     * Scans the dungeon using CustomDijkstraMap.scanLarge with the listed fearSources and start point, and returns a list
-//     * of Coord positions (using Manhattan distance) needed to get further from the closest fearSources, meant
-//     * for running away. The maximum length of the returned list is given by length; if moving the full
-//     * length of the list would place the mover in a position shared by one of the positions in onlyPassable
-//     * (which is typically filled with friendly units that can be passed through in multi-tile-
-//     * movement scenarios), it will recalculate a move so that it does not pass into that cell.
-//     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
-//     * through, and will be ignored if there is a fearSource overlapping one. The preferLongerPaths parameter
-//     * is meant to be tweaked and adjusted; higher values should make creatures prefer to escape out of
-//     * doorways instead of hiding in the closest corner, and a value of 1.2 should be typical for many maps.
-//     * The parameters size, preferLongerPaths, impassable, and the varargs used for fearSources will be cached, and
-//     * any subsequent calls that use the same values as the last values passed will avoid recalculating
-//     * unnecessary scans. Calls to findFleePath will cache as if size is 1, and may share a cache with this function.
-//     * The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The
-//     * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &gt; 1, and
-//     * all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.
-//     * <br>
-//     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
-//     * each call to a pathfinding method.
-//     *
-//     * @param size              the side length of the creature trying the find a path
-//     * @param length            the length of the path to calculate
-//     * @param preferLongerPaths Set this to 1.2 if you aren't sure; it will probably need tweaking for different maps.
-//     * @param impassable        a Set of impassable Coord positions that may change (not constant like walls); can be null
-//     * @param onlyPassable      a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
-//     * @param start             the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
-//     * @param fearSources       a vararg or array of Coord positions to run away from
-//     * @return an ArrayList of Coord that will contain the locations of this creature as it goes away from fear sources. Copy of path.
-//     */
-//    public IntVLA findFleePathLarge(int size, int length, int preferLongerPaths, IntVLA impassable,
-//                                    IntVLA onlyPassable, int start, int... fearSources) {
-//        return findFleePathLarge(size, length, -1, preferLongerPaths, impassable, onlyPassable, start, fearSources);
-//    }
-//
-//
-//    /**
-//     * Scans the dungeon using CustomDijkstraMap.scanLarge with the listed fearSources and start point, and returns a list
-//     * of Coord positions (using Manhattan distance) needed to get further from the closest fearSources, meant
-//     * for running away. The maximum length of the returned list is given by length; if moving the full
-//     * length of the list would place the mover in a position shared by one of the positions in onlyPassable
-//     * (which is typically filled with friendly units that can be passed through in multi-tile-
-//     * movement scenarios), it will recalculate a move so that it does not pass into that cell.
-//     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
-//     * through, and will be ignored if there is a fearSource overlapping one. The preferLongerPaths parameter
-//     * is meant to be tweaked and adjusted; higher values should make creatures prefer to escape out of
-//     * doorways instead of hiding in the closest corner, and a value of 1.2 should be typical for many maps.
-//     * The parameters size, preferLongerPaths, impassable, and the varargs used for fearSources will be cached, and
-//     * any subsequent calls that use the same values as the last values passed will avoid recalculating
-//     * unnecessary scans. Calls to findFleePath will cache as if size is 1, and may share a cache with this function.
-//     * The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The
-//     * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &gt; 1, and
-//     * all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.
-//     * <br>
-//     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
-//     * each call to a pathfinding method.
-//     *
-//     * @param size              the side length of the creature trying the find a path
-//     * @param length            the length of the path to calculate
-//     * @param scanLimit         how many steps away from a goal to calculate; negative scans the whole map
-//     * @param preferLongerPaths Set this to 1.2 if you aren't sure; it will probably need tweaking for different maps.
-//     * @param impassable        a Set of impassable Coord positions that may change (not constant like walls); can be null
-//     * @param onlyPassable      a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
-//     * @param start             the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
-//     * @param fearSources       a vararg or array of Coord positions to run away from
-//     * @return an ArrayList of Coord that will contain the locations of this creature as it goes away from fear sources. Copy of path.
-//     */
-//    public IntVLA findFleePathLarge(int size, int length, int scanLimit, int preferLongerPaths, IntVLA impassable,
-//                                    IntVLA onlyPassable, int start, int... fearSources) {
-//        if (!initialized) return null;
-//        path.clear();
-//        IntVLA impassable2;
-//        if (impassable == null)
-//            impassable2 = new IntVLA();
-//        else
-//            impassable2 = new IntVLA(impassable);
-//
-//        if (onlyPassable == null)
-//            onlyPassable = new IntVLA();
-//        if (fearSources == null || fearSources.length < 1) {
-//            path.clear();
-//            return new IntVLA(1);
-//        }
-//        if (cachedSize == size && preferLongerPaths == cachedLongerPaths && impassable2.hash64() == cachedImpassable &&
-//                CrossHash.Wisp.hash64(fearSources) == cachedFearSources) {
-//            gradientMap = cachedFleeMap;
-//        } else {
-//            cachedLongerPaths = preferLongerPaths;
-//            cachedImpassable = impassable2.hash64();
-//            cachedFearSources = CrossHash.Wisp.hash64(fearSources);
-//            cachedSize = size;
-//            resetMap();
-//            for (int g = 0; g < fearSources.length; g++) {
-//                setGoal(fearSources[g]);
-//            }
-//            if (goals.size == 0)
-//                return new IntVLA(path);
-//
-//            if(scanLimit <= 0 || scanLimit < length)
-//                cachedFleeMap = scanLarge(size, impassable2, impassable2.size);
-//            else
-//                cachedFleeMap = partialScanLarge(size, scanLimit, impassable2, impassable2.size);
-//
-//            for (int l = 0; l < gradientMap.length; l++) {
-//                gradientMap[l] *= (gradientMap[l] >= FLOOR) ? 1 : -preferLongerPaths;
-//            }
-//            if(scanLimit <= 0 || scanLimit < length)
-//                cachedFleeMap = scanLarge(size, impassable2, impassable2.size);
-//            else
-//                cachedFleeMap = partialScanLarge(size, scanLimit, impassable2, impassable2.size);
-//        }
-//        Adjacency adjacency = this.adjacency;
-//        int[][] toNeighbors = neighbors[1];
-//        int currentPos = start, pt;
-//        int paidLength = 0;
-//        while (true) {
-//            if (frustration > 500) {
-//                path.clear();
-//                break;
-//            }
-//            int best = gradientMap[currentPos];
-//            rng.randomOrdering(adjacency.maxAdjacent, reuse);
-//            int choice = rng.nextIntHasty(adjacency.maxAdjacent);
-//
-//            for (int d = 0; d < adjacency.maxAdjacent; d++) {
-//                pt = toNeighbors[reuse[d]][currentPos];
-//                if (gradientMap[pt] < best && !path.contains(pt)) {
-//                    best = gradientMap[pt];
-//                    choice = reuse[d];
-//                }
-//            }
-//
-//
-//            if (best >= gradientMap[currentPos] || physicalMap[toNeighbors[choice][currentPos]] > FLOOR) {
-//                path.clear();
-//                break;
-//            }
-//            currentPos = toNeighbors[choice][pt = currentPos];
-//            path.add(currentPos);
-//            paidLength += adjacency.costRules.get(costMap[currentPos] | (adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000));
-//            frustration++;
-//            if (paidLength > length - 1) {
-//                if (onlyPassable.contains(currentPos)) {
-//                    closed.put(currentPos, WALL);
-//                    impassable2.add(currentPos);
-//                    return findFleePathLarge(size, scanLimit, length, preferLongerPaths, impassable2, onlyPassable, start, fearSources);
-//                }
-//                break;
-//            }
-//        }
-//        frustration = 0;
-//        goals.clear();
-//        return new IntVLA(path);
-//    }
-/*
+    /**
+     * Scans the dungeon using CustomDijkstraMap.scanLarge with the listed fearSources and start point, and returns a list
+     * of Coord positions (using Manhattan distance) needed to get further from the closest fearSources, meant
+     * for running away. The maximum length of the returned list is given by length; if moving the full
+     * length of the list would place the mover in a position shared by one of the positions in onlyPassable
+     * (which is typically filled with friendly units that can be passed through in multi-tile-
+     * movement scenarios), it will recalculate a move so that it does not pass into that cell.
+     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+     * through, and will be ignored if there is a fearSource overlapping one. The preferLongerPaths parameter
+     * is meant to be tweaked and adjusted; higher values should make creatures prefer to escape out of
+     * doorways instead of hiding in the closest corner, and a value of 1.2 should be typical for many maps.
+     * The parameters size, preferLongerPaths, impassable, and the varargs used for fearSources will be cached, and
+     * any subsequent calls that use the same values as the last values passed will avoid recalculating
+     * unnecessary scans. Calls to findFleePath will cache as if size is 1, and may share a cache with this function.
+     * The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The
+     * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &gt; 1, and
+     * all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
+     *
+     * @param size              the side length of the creature trying the find a path
+     * @param length            the length of the path to calculate
+     * @param preferLongerPaths Set this to 1.2 if you aren't sure; it will probably need tweaking for different maps.
+     * @param impassable        a Set of impassable Coord positions that may change (not constant like walls); can be null
+     * @param onlyPassable      a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
+     * @param start             the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
+     * @param fearSources       a vararg or array of Coord positions to run away from
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes away from fear sources. Copy of path.
+     */
+    public IntVLA findFleePathLarge(int size, int length, int preferLongerPaths, IntVLA impassable,
+                                    IntVLA onlyPassable, int start, int... fearSources) {
+        return findFleePathLarge(size, length, -1, preferLongerPaths, impassable, onlyPassable, start, fearSources);
+    }
+
+
+    /**
+     * Scans the dungeon using CustomDijkstraMap.scanLarge with the listed fearSources and start point, and returns a list
+     * of Coord positions (using Manhattan distance) needed to get further from the closest fearSources, meant
+     * for running away. The maximum length of the returned list is given by length; if moving the full
+     * length of the list would place the mover in a position shared by one of the positions in onlyPassable
+     * (which is typically filled with friendly units that can be passed through in multi-tile-
+     * movement scenarios), it will recalculate a move so that it does not pass into that cell.
+     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+     * through, and will be ignored if there is a fearSource overlapping one. The preferLongerPaths parameter
+     * is meant to be tweaked and adjusted; higher values should make creatures prefer to escape out of
+     * doorways instead of hiding in the closest corner, and a value of 1.2 should be typical for many maps.
+     * The parameters size, preferLongerPaths, impassable, and the varargs used for fearSources will be cached, and
+     * any subsequent calls that use the same values as the last values passed will avoid recalculating
+     * unnecessary scans. Calls to findFleePath will cache as if size is 1, and may share a cache with this function.
+     * The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The
+     * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &gt; 1, and
+     * all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
+     *
+     * @param size              the side length of the creature trying the find a path
+     * @param length            the length of the path to calculate
+     * @param scanLimit         how many steps away from a goal to calculate; negative scans the whole map
+     * @param preferLongerPaths Set this to 1.2 if you aren't sure; it will probably need tweaking for different maps.
+     * @param impassable        a Set of impassable Coord positions that may change (not constant like walls); can be null
+     * @param onlyPassable      a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
+     * @param start             the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
+     * @param fearSources       a vararg or array of Coord positions to run away from
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes away from fear sources. Copy of path.
+     */
+    public IntVLA findFleePathLarge(int size, int length, int scanLimit, int preferLongerPaths, IntVLA impassable,
+                                    IntVLA onlyPassable, int start, int... fearSources) {
         if (!initialized) return null;
         path.clear();
-        OrderedSet<Coord> impassable2;
+        IntVLA impassable2;
         if (impassable == null)
-            impassable2 = new OrderedSet<>();
+            impassable2 = new IntVLA();
         else
-            impassable2 = new OrderedSet<>(impassable);
+            impassable2 = new IntVLA(impassable);
 
         if (onlyPassable == null)
-            onlyPassable = new OrderedSet<>();
+            onlyPassable = new IntVLA();
         if (fearSources == null || fearSources.length < 1) {
             path.clear();
-            return new ArrayList<>(path);
+            return new IntVLA(1);
         }
-        if (size == cachedSize && preferLongerPaths == cachedLongerPaths && impassable2.equals(cachedImpassable)
-                && Arrays.equals(fearSources, cachedFearSources)) {
+        if (cachedSize == size && preferLongerPaths == cachedLongerPaths && impassable2.hash64() == cachedImpassable &&
+                CrossHash.Wisp.hash64(fearSources) == cachedFearSources) {
             gradientMap = cachedFleeMap;
         } else {
             cachedLongerPaths = preferLongerPaths;
-            cachedImpassable = new OrderedSet<>(impassable2);
-            cachedFearSources = GwtCompatibility.cloneCoords(fearSources);
+            cachedImpassable = impassable2.hash64();
+            cachedFearSources = CrossHash.Wisp.hash64(fearSources);
             cachedSize = size;
             resetMap();
-            for (Coord goal : fearSources) {
-                setGoal(goal.x, goal.y);
+            for (int g = 0; g < fearSources.length; g++) {
+                setGoal(fearSources[g]);
             }
             if (goals.size == 0)
-                return new ArrayList<>(path);
+                return new IntVLA(path);
 
-            scan(impassable2, size);
+            if(scanLimit <= 0 || scanLimit < length)
+                cachedFleeMap = scanLarge(size, impassable2);
+            else
+                cachedFleeMap = partialScanLarge(size, scanLimit, impassable2);
 
-            for (int x = 0; x < gradientMap.length; x++) {
-                for (int y = 0; y < gradientMap[x].length; y++) {
-                    gradientMap[x][y] *= (gradientMap[x][y] >= FLOOR) ? 1 : (0 - preferLongerPaths);
-                }
+            for (int l = 0; l < gradientMap.length; l++) {
+                gradientMap[l] *= (gradientMap[l] >= FLOOR) ? 1 : -preferLongerPaths;
             }
-            cachedFleeMap = scan(impassable2, size);
+            if(scanLimit <= 0 || scanLimit < length)
+                cachedFleeMap = scanLarge(size, impassable2);
+            else
+                cachedFleeMap = partialScanLarge(size, scanLimit, impassable2);
         }
-        Coord currentPos = start;
+        Adjacency adjacency = this.adjacency;
+        int[][] toNeighbors = neighbors[1];
+        int currentPos = start, pt;
         int paidLength = 0;
         while (true) {
             if (frustration > 500) {
                 path.clear();
                 break;
             }
+            double best = gradientMap[currentPos];
+            rng.randomOrdering(adjacency.maxAdjacent, reuse);
+            int choice = rng.nextIntHasty(adjacency.maxAdjacent);
 
-            int best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(dirs.length);
-
-            for (int d = 0; d < dirs.length; d++) {
-                Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
-                if (gradientMap[pt.x][pt.y] < best) {
-                    if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
-                        best = gradientMap[pt.x][pt.y];
-                        choice = d;
-                    }
+            for (int d = 0; d < adjacency.maxAdjacent; d++) {
+                pt = toNeighbors[reuse[d]][currentPos];
+                if (gradientMap[pt] < best && !path.contains(pt)) {
+                    best = gradientMap[pt];
+                    choice = reuse[d];
                 }
             }
-            if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
+
+
+            if (best >= gradientMap[currentPos] || physicalMap[toNeighbors[choice][currentPos]] > FLOOR) {
                 path.clear();
                 break;
             }
-            currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
-
-            if (path.size() > 0) {
-                Coord last = path.get(path.size() - 1);
-                if (gradientMap[last.x][last.y] <= gradientMap[currentPos.x][currentPos.y])
-                    break;
-            }
+            currentPos = toNeighbors[choice][pt = currentPos];
             path.add(currentPos);
+            paidLength += adjacency.costRules.get(costMap[currentPos] | (adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000));
             frustration++;
-            paidLength += costMap[currentPos.x][currentPos.y];
             if (paidLength > length - 1) {
                 if (onlyPassable.contains(currentPos)) {
-
-                    closed.put(currentPos.encode(), WALL);
+                    setOccupied(currentPos);
                     impassable2.add(currentPos);
-                    return findFleePathLarge(size, length, preferLongerPaths, impassable2, onlyPassable, start, fearSources);
+                    return findFleePathLarge(size, scanLimit, length, preferLongerPaths, impassable2, onlyPassable, start, fearSources);
                 }
                 break;
             }
         }
         frustration = 0;
         goals.clear();
-        return new ArrayList<>(path);
+        return new IntVLA(path);
     }
-    */
-
 
     /*
      * Intended primarily for internal use. Needs scan() to already be called and at least one goal to already be set,
