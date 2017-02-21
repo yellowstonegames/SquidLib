@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
 <title>Source code</title>
-<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
 </head>
 <body>
 <div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span>package squidpony.squidai;<a name="line.1"></a>
+<pre><span class="sourceLineNo">001</span>package squidpony.performance.alternate;<a name="line.1"></a>
 <span class="sourceLineNo">002</span><a name="line.2"></a>
 <span class="sourceLineNo">003</span>import squidpony.annotation.Beta;<a name="line.3"></a>
 <span class="sourceLineNo">004</span>import squidpony.squidai.DijkstraMap.Measurement;<a name="line.4"></a>
@@ -2897,7 +2897,7 @@
 <span class="sourceLineNo">2889</span>        squidpony.squidmath.GreasedRegion floors = new squidpony.squidmath.GreasedRegion(map, '.');<a name="line.2889"></a>
 <span class="sourceLineNo">2890</span>        System.out.println("Floors: " + floors.size());<a name="line.2890"></a>
 <span class="sourceLineNo">2891</span>        System.out.println("Percentage walkable: " + floors.size() / 16.0 + "%");<a name="line.2891"></a>
-<span class="sourceLineNo">2892</span>        Adjacency adj = new BasicAdjacency(40, 40, Measurement.EUCLIDEAN);<a name="line.2892"></a>
+<span class="sourceLineNo">2892</span>        Adjacency adj = new Adjacency.BasicAdjacency(40, 40, Measurement.EUCLIDEAN);<a name="line.2892"></a>
 <span class="sourceLineNo">2893</span>        adj.blockingRule = 2;<a name="line.2893"></a>
 <span class="sourceLineNo">2894</span>        RNG rng = new RNG(0x1337BEEF);<a name="line.2894"></a>
 <span class="sourceLineNo">2895</span>        CustomDijkstraMap dijkstra = new CustomDijkstraMap(<a name="line.2895"></a>

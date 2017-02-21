@@ -134,9 +134,17 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#fresh">fresh</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
 <td class="colLast"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.html#goals">goals</a></span></code>
 <div class="block">Goals that pathfinding will seek out.</div>
 </td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#goals">goals</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
@@ -182,9 +190,10 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
-<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#findFleePathLarge-int-int-double-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findFleePathLarge</a></span>(int&nbsp;size,
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#findFleePathLarge-int-int-int-int-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findFleePathLarge</a></span>(int&nbsp;size,
                  int&nbsp;length,
-                 double&nbsp;preferLongerPaths,
+                 int&nbsp;scanLimit,
+                 int&nbsp;preferLongerPaths,
                  <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable,
                  <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;onlyPassable,
                  int&nbsp;start,
@@ -196,10 +205,9 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
-<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#findFleePathLarge-int-int-int-double-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findFleePathLarge</a></span>(int&nbsp;size,
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#findFleePathLarge-int-int-int-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findFleePathLarge</a></span>(int&nbsp;size,
                  int&nbsp;length,
-                 int&nbsp;scanLimit,
-                 double&nbsp;preferLongerPaths,
+                 int&nbsp;preferLongerPaths,
                  <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable,
                  <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;onlyPassable,
                  int&nbsp;start,
@@ -299,9 +307,10 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
-<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#findFleePathLarge-int-int-double-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findFleePathLarge</a></span>(int&nbsp;size,
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#findFleePathLarge-int-int-int-int-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findFleePathLarge</a></span>(int&nbsp;size,
                  int&nbsp;length,
-                 double&nbsp;preferLongerPaths,
+                 int&nbsp;scanLimit,
+                 int&nbsp;preferLongerPaths,
                  <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable,
                  <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;onlyPassable,
                  int&nbsp;start,
@@ -313,10 +322,9 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
-<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#findFleePathLarge-int-int-int-double-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findFleePathLarge</a></span>(int&nbsp;size,
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#findFleePathLarge-int-int-int-squidpony.squidmath.IntVLA-squidpony.squidmath.IntVLA-int-int...-">findFleePathLarge</a></span>(int&nbsp;size,
                  int&nbsp;length,
-                 int&nbsp;scanLimit,
-                 double&nbsp;preferLongerPaths,
+                 int&nbsp;preferLongerPaths,
                  <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable,
                  <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;onlyPassable,
                  int&nbsp;start,
@@ -380,33 +388,64 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>double[]</code></td>
-<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#partialScan-int-squidpony.squidmath.IntVLA-int-">partialScan</a></span>(int&nbsp;limit,
-           <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable,
-           int&nbsp;usablePortion)</code>
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#partialScan-int-squidpony.squidmath.IntVLA-">partialScan</a></span>(int&nbsp;limit,
+           <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable)</code>
 <div class="block">Recalculate the CustomDijkstra map up to a limit and return it.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>double[]</code></td>
-<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#partialScanLarge-int-int-squidpony.squidmath.IntVLA-int-">partialScanLarge</a></span>(int&nbsp;size,
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#partialScanLarge-int-int-squidpony.squidmath.IntVLA-">partialScanLarge</a></span>(int&nbsp;size,
                 int&nbsp;limit,
-                <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable,
-                int&nbsp;usablePortion)</code>
-<div class="block">Recalculate the CustomDijkstra map up to a limit and return it.</div>
+                <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable)</code>
+<div class="block">Recalculate the CustomDijkstra map, up to a limit, for a creature that is potentially larger than 1x1 cell and
+ return it.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>double[]</code></td>
-<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#scan-squidpony.squidmath.IntVLA-int-">scan</a></span>(<a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable,
-    int&nbsp;usablePortion)</code>
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#partialScanToStart-int-int-squidpony.squidmath.IntVLA-">partialScanToStart</a></span>(int&nbsp;limit,
+                  int&nbsp;start,
+                  <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable)</code>
+<div class="block">Recalculate the CustomDijkstra map up to a limit, stopping early if it has a path from a goal to start, and
+ return that map.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>double[]</code></td>
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#partialScanToStartLarge-int-int-int-squidpony.squidmath.IntVLA-">partialScanToStartLarge</a></span>(int&nbsp;size,
+                       int&nbsp;limit,
+                       int&nbsp;start,
+                       <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable)</code>
+<div class="block">Recalculate the CustomDijkstra map, up to a limit, for a creature that is potentially larger than 1x1 cell,
+ stopping early if a path is found between a goal and start, and return that map.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>double[]</code></td>
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#scan-squidpony.squidmath.IntVLA-">scan</a></span>(<a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable)</code>
 <div class="block">Recalculate the CustomDijkstra map and return it.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>double[]</code></td>
-<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#scanLarge-int-squidpony.squidmath.IntVLA-int-">scanLarge</a></span>(int&nbsp;size,
-         <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable,
-         int&nbsp;usablePortion)</code>
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#scanLarge-int-squidpony.squidmath.IntVLA-">scanLarge</a></span>(int&nbsp;size,
+         <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable)</code>
+<div class="block">Recalculate the CustomDijkstra map for a creature that is potentially larger than 1x1 cell and return it.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>double[]</code></td>
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#scanToStart-int-squidpony.squidmath.IntVLA-">scanToStart</a></span>(int&nbsp;start,
+           <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable)</code>
+<div class="block">Recalculate the CustomDijkstra map, stopping early if it has a path from a goal to start, and return that map.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>double[]</code></td>
+<td class="colLast"><span class="typeNameLabel">CustomDijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#scanToStartLarge-int-int-squidpony.squidmath.IntVLA-">scanToStartLarge</a></span>(int&nbsp;size,
+                int&nbsp;start,
+                <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;impassable)</code>
 <div class="block">Recalculate the CustomDijkstra map for a creature that is potentially larger than 1x1 cell and return it.</div>
 </td>
 </tr>

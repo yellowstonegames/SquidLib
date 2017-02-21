@@ -53,7 +53,7 @@
 <span class="sourceLineNo">045</span>import org.openjdk.jmh.runner.options.Options;<a name="line.45"></a>
 <span class="sourceLineNo">046</span>import org.openjdk.jmh.runner.options.OptionsBuilder;<a name="line.46"></a>
 <span class="sourceLineNo">047</span>import squidpony.performance.alternate.OldDijkstraMap;<a name="line.47"></a>
-<span class="sourceLineNo">048</span>import squidpony.performance.alternate.OptDijkstraMap;<a name="line.48"></a>
+<span class="sourceLineNo">048</span>import squidpony.performance.alternate.OldCustomDijkstraMap;<a name="line.48"></a>
 <span class="sourceLineNo">049</span>import squidpony.squidmath.AStarSearch;<a name="line.49"></a>
 <span class="sourceLineNo">050</span>import squidpony.squidai.CustomDijkstraMap;<a name="line.50"></a>
 <span class="sourceLineNo">051</span>import squidpony.squidai.DijkstraMap;<a name="line.51"></a>
@@ -250,9 +250,9 @@
 <span class="sourceLineNo">242</span>    public void measureScanCustomDijkstra() throws InterruptedException {<a name="line.242"></a>
 <span class="sourceLineNo">243</span>        System.out.println(doScanCustomDijkstra());<a name="line.243"></a>
 <span class="sourceLineNo">244</span>    }<a name="line.244"></a>
-<span class="sourceLineNo">245</span>    public long doScanOptDijkstra()<a name="line.245"></a>
+<span class="sourceLineNo">245</span>    public long doScanOldCustomDijkstra()<a name="line.245"></a>
 <span class="sourceLineNo">246</span>    {<a name="line.246"></a>
-<span class="sourceLineNo">247</span>        OptDijkstraMap dijkstra = new OptDijkstraMap(<a name="line.247"></a>
+<span class="sourceLineNo">247</span>        OldCustomDijkstraMap dijkstra = new OldCustomDijkstraMap(<a name="line.247"></a>
 <span class="sourceLineNo">248</span>                map, adj, new StatefulRNG(0x1337BEEF));<a name="line.248"></a>
 <span class="sourceLineNo">249</span><a name="line.249"></a>
 <span class="sourceLineNo">250</span>        long scanned = 0;<a name="line.250"></a>
@@ -273,8 +273,8 @@
 <span class="sourceLineNo">265</span>    @Benchmark<a name="line.265"></a>
 <span class="sourceLineNo">266</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.266"></a>
 <span class="sourceLineNo">267</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.267"></a>
-<span class="sourceLineNo">268</span>    public void measureScanOptDijkstra() throws InterruptedException {<a name="line.268"></a>
-<span class="sourceLineNo">269</span>        System.out.println(doScanOptDijkstra());<a name="line.269"></a>
+<span class="sourceLineNo">268</span>    public void measureScanOldCustomDijkstra() throws InterruptedException {<a name="line.268"></a>
+<span class="sourceLineNo">269</span>        System.out.println(doScanOldCustomDijkstra());<a name="line.269"></a>
 <span class="sourceLineNo">270</span>    }<a name="line.270"></a>
 <span class="sourceLineNo">271</span>    public long doScanOldDijkstra()<a name="line.271"></a>
 <span class="sourceLineNo">272</span>    {<a name="line.272"></a>
@@ -424,9 +424,9 @@
 <span class="sourceLineNo">416</span>        System.out.println(doPathCustomDijkstra() / floorCount);<a name="line.416"></a>
 <span class="sourceLineNo">417</span>        doPathCustomDijkstra();<a name="line.417"></a>
 <span class="sourceLineNo">418</span>    }<a name="line.418"></a>
-<span class="sourceLineNo">419</span>    public long doPathOptDijkstra()<a name="line.419"></a>
+<span class="sourceLineNo">419</span>    public long doPathOldCustomDijkstra()<a name="line.419"></a>
 <span class="sourceLineNo">420</span>    {<a name="line.420"></a>
-<span class="sourceLineNo">421</span>        OptDijkstraMap dijkstra = new OptDijkstraMap(<a name="line.421"></a>
+<span class="sourceLineNo">421</span>        OldCustomDijkstraMap dijkstra = new OldCustomDijkstraMap(<a name="line.421"></a>
 <span class="sourceLineNo">422</span>                map, adj, new StatefulRNG(0x1337BEEF));<a name="line.422"></a>
 <span class="sourceLineNo">423</span>        Coord r;<a name="line.423"></a>
 <span class="sourceLineNo">424</span>        int p;<a name="line.424"></a>
@@ -454,9 +454,9 @@
 <span class="sourceLineNo">446</span>    @Benchmark<a name="line.446"></a>
 <span class="sourceLineNo">447</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.447"></a>
 <span class="sourceLineNo">448</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.448"></a>
-<span class="sourceLineNo">449</span>    public void measurePathOptDijkstra() throws InterruptedException {<a name="line.449"></a>
-<span class="sourceLineNo">450</span>        System.out.println(doPathOptDijkstra() / floorCount);<a name="line.450"></a>
-<span class="sourceLineNo">451</span>        doPathOptDijkstra();<a name="line.451"></a>
+<span class="sourceLineNo">449</span>    public void measurePathOldCustomDijkstra() throws InterruptedException {<a name="line.449"></a>
+<span class="sourceLineNo">450</span>        System.out.println(doPathOldCustomDijkstra() / floorCount);<a name="line.450"></a>
+<span class="sourceLineNo">451</span>        doPathOldCustomDijkstra();<a name="line.451"></a>
 <span class="sourceLineNo">452</span>    }<a name="line.452"></a>
 <span class="sourceLineNo">453</span><a name="line.453"></a>
 <span class="sourceLineNo">454</span>    public long doPathOldDijkstra()<a name="line.454"></a>
@@ -554,9 +554,9 @@
 <span class="sourceLineNo">546</span>        doTinyPathCustomDijkstra();<a name="line.546"></a>
 <span class="sourceLineNo">547</span>    }<a name="line.547"></a>
 <span class="sourceLineNo">548</span><a name="line.548"></a>
-<span class="sourceLineNo">549</span>    public long doTinyPathOptDijkstra()<a name="line.549"></a>
+<span class="sourceLineNo">549</span>    public long doTinyPathOldCustomDijkstra()<a name="line.549"></a>
 <span class="sourceLineNo">550</span>    {<a name="line.550"></a>
-<span class="sourceLineNo">551</span>        OptDijkstraMap dijkstra = new OptDijkstraMap(<a name="line.551"></a>
+<span class="sourceLineNo">551</span>        OldCustomDijkstraMap dijkstra = new OldCustomDijkstraMap(<a name="line.551"></a>
 <span class="sourceLineNo">552</span>                map, adj, new StatefulRNG(0x1337BEEF));<a name="line.552"></a>
 <span class="sourceLineNo">553</span>        Coord r;<a name="line.553"></a>
 <span class="sourceLineNo">554</span>        int p;<a name="line.554"></a>
@@ -581,9 +581,9 @@
 <span class="sourceLineNo">573</span>    @Benchmark<a name="line.573"></a>
 <span class="sourceLineNo">574</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.574"></a>
 <span class="sourceLineNo">575</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.575"></a>
-<span class="sourceLineNo">576</span>    public void measureTinyPathOptDijkstra() throws InterruptedException {<a name="line.576"></a>
-<span class="sourceLineNo">577</span>        System.out.println(doTinyPathOptDijkstra() / floorCount);<a name="line.577"></a>
-<span class="sourceLineNo">578</span>        doTinyPathOptDijkstra();<a name="line.578"></a>
+<span class="sourceLineNo">576</span>    public void measureTinyPathOldCustomDijkstra() throws InterruptedException {<a name="line.576"></a>
+<span class="sourceLineNo">577</span>        System.out.println(doTinyPathOldCustomDijkstra() / floorCount);<a name="line.577"></a>
+<span class="sourceLineNo">578</span>        doTinyPathOldCustomDijkstra();<a name="line.578"></a>
 <span class="sourceLineNo">579</span>    }<a name="line.579"></a>
 <span class="sourceLineNo">580</span><a name="line.580"></a>
 <span class="sourceLineNo">581</span><a name="line.581"></a>

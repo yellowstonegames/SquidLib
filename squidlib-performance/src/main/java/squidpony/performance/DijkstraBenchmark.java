@@ -45,7 +45,7 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import squidpony.performance.alternate.OldDijkstraMap;
-import squidpony.performance.alternate.OptDijkstraMap;
+import squidpony.performance.alternate.OldCustomDijkstraMap;
 import squidpony.squidmath.AStarSearch;
 import squidpony.squidai.CustomDijkstraMap;
 import squidpony.squidai.DijkstraMap;
@@ -242,9 +242,9 @@ public class DijkstraBenchmark {
     public void measureScanCustomDijkstra() throws InterruptedException {
         System.out.println(doScanCustomDijkstra());
     }
-    public long doScanOptDijkstra()
+    public long doScanOldCustomDijkstra()
     {
-        OptDijkstraMap dijkstra = new OptDijkstraMap(
+        OldCustomDijkstraMap dijkstra = new OldCustomDijkstraMap(
                 map, adj, new StatefulRNG(0x1337BEEF));
 
         long scanned = 0;
@@ -265,8 +265,8 @@ public class DijkstraBenchmark {
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureScanOptDijkstra() throws InterruptedException {
-        System.out.println(doScanOptDijkstra());
+    public void measureScanOldCustomDijkstra() throws InterruptedException {
+        System.out.println(doScanOldCustomDijkstra());
     }
     public long doScanOldDijkstra()
     {
@@ -416,9 +416,9 @@ public class DijkstraBenchmark {
         System.out.println(doPathCustomDijkstra() / floorCount);
         doPathCustomDijkstra();
     }
-    public long doPathOptDijkstra()
+    public long doPathOldCustomDijkstra()
     {
-        OptDijkstraMap dijkstra = new OptDijkstraMap(
+        OldCustomDijkstraMap dijkstra = new OldCustomDijkstraMap(
                 map, adj, new StatefulRNG(0x1337BEEF));
         Coord r;
         int p;
@@ -446,9 +446,9 @@ public class DijkstraBenchmark {
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measurePathOptDijkstra() throws InterruptedException {
-        System.out.println(doPathOptDijkstra() / floorCount);
-        doPathOptDijkstra();
+    public void measurePathOldCustomDijkstra() throws InterruptedException {
+        System.out.println(doPathOldCustomDijkstra() / floorCount);
+        doPathOldCustomDijkstra();
     }
 
     public long doPathOldDijkstra()
@@ -546,9 +546,9 @@ public class DijkstraBenchmark {
         doTinyPathCustomDijkstra();
     }
 
-    public long doTinyPathOptDijkstra()
+    public long doTinyPathOldCustomDijkstra()
     {
-        OptDijkstraMap dijkstra = new OptDijkstraMap(
+        OldCustomDijkstraMap dijkstra = new OldCustomDijkstraMap(
                 map, adj, new StatefulRNG(0x1337BEEF));
         Coord r;
         int p;
@@ -573,9 +573,9 @@ public class DijkstraBenchmark {
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureTinyPathOptDijkstra() throws InterruptedException {
-        System.out.println(doTinyPathOptDijkstra() / floorCount);
-        doTinyPathOptDijkstra();
+    public void measureTinyPathOldCustomDijkstra() throws InterruptedException {
+        System.out.println(doTinyPathOldCustomDijkstra() / floorCount);
+        doTinyPathOldCustomDijkstra();
     }
 
 

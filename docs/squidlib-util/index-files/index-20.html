@@ -136,11 +136,11 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Coord.html#scale-int-int-">scale(int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/CustomDijkstraMap.html#scan-int:A-">scan(int[])</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/CustomDijkstraMap.html" title="class in squidpony.squidai">CustomDijkstraMap</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/CustomDijkstraMap.html#scan-int-int:A-">scan(int, int[])</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/CustomDijkstraMap.html" title="class in squidpony.squidai">CustomDijkstraMap</a></dt>
 <dd>
 <div class="block">Recalculate the CustomDijkstra map and return it.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/CustomDijkstraMap.html#scan-squidpony.squidmath.IntVLA-int-">scan(IntVLA, int)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/CustomDijkstraMap.html" title="class in squidpony.squidai">CustomDijkstraMap</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/CustomDijkstraMap.html#scan-squidpony.squidmath.IntVLA-">scan(IntVLA)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/CustomDijkstraMap.html" title="class in squidpony.squidai">CustomDijkstraMap</a></dt>
 <dd>
 <div class="block">Recalculate the CustomDijkstra map and return it.</div>
 </dd>
@@ -164,18 +164,34 @@
 <dd>
 <div class="block">Recalculate the sound map and return it.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/CustomDijkstraMap.html#scanInternal-int:A-int-">scanInternal(int[], int)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/CustomDijkstraMap.html" title="class in squidpony.squidai">CustomDijkstraMap</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/CustomDijkstraMap.html#scanInternal-int-int:A-int-">scanInternal(int, int[], int)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/CustomDijkstraMap.html" title="class in squidpony.squidai">CustomDijkstraMap</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/CustomDijkstraMap.html#scanLarge-int-int:A-">scanLarge(int, int[])</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/CustomDijkstraMap.html" title="class in squidpony.squidai">CustomDijkstraMap</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/CustomDijkstraMap.html#scanLarge-int-int-int:A-">scanLarge(int, int, int[])</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/CustomDijkstraMap.html" title="class in squidpony.squidai">CustomDijkstraMap</a></dt>
 <dd>
 <div class="block">Recalculate the CustomDijkstra map for a creature that is potentially larger than 1x1 cell and return it.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/CustomDijkstraMap.html#scanLarge-int-squidpony.squidmath.IntVLA-int-">scanLarge(int, IntVLA, int)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/CustomDijkstraMap.html" title="class in squidpony.squidai">CustomDijkstraMap</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/CustomDijkstraMap.html#scanLarge-int-squidpony.squidmath.IntVLA-">scanLarge(int, IntVLA)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/CustomDijkstraMap.html" title="class in squidpony.squidai">CustomDijkstraMap</a></dt>
 <dd>
 <div class="block">Recalculate the CustomDijkstra map for a creature that is potentially larger than 1x1 cell and return it.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/CustomDijkstraMap.html#scanLargeInternal-int-int:A-int-">scanLargeInternal(int, int[], int)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/CustomDijkstraMap.html" title="class in squidpony.squidai">CustomDijkstraMap</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/CustomDijkstraMap.html#scanLargeInternal-int-int-int:A-int-">scanLargeInternal(int, int, int[], int)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/CustomDijkstraMap.html" title="class in squidpony.squidai">CustomDijkstraMap</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/CustomDijkstraMap.html#scanToStart-int-int-int:A-">scanToStart(int, int, int[])</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/CustomDijkstraMap.html" title="class in squidpony.squidai">CustomDijkstraMap</a></dt>
+<dd>
+<div class="block">Recalculate the CustomDijkstra map, stopping early if it has a path from a goal to start, and return that map.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/CustomDijkstraMap.html#scanToStart-int-squidpony.squidmath.IntVLA-">scanToStart(int, IntVLA)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/CustomDijkstraMap.html" title="class in squidpony.squidai">CustomDijkstraMap</a></dt>
+<dd>
+<div class="block">Recalculate the CustomDijkstra map, stopping early if it has a path from a goal to start, and return that map.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/CustomDijkstraMap.html#scanToStartLarge-int-int-int-int:A-">scanToStartLarge(int, int, int, int[])</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/CustomDijkstraMap.html" title="class in squidpony.squidai">CustomDijkstraMap</a></dt>
+<dd>
+<div class="block">Recalculate the CustomDijkstra map for a creature that is potentially larger than 1x1 cell and return it.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/CustomDijkstraMap.html#scanToStartLarge-int-int-squidpony.squidmath.IntVLA-">scanToStartLarge(int, int, IntVLA)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/CustomDijkstraMap.html" title="class in squidpony.squidai">CustomDijkstraMap</a></dt>
+<dd>
+<div class="block">Recalculate the CustomDijkstra map for a creature that is potentially larger than 1x1 cell and return it.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/VanDerCorputQRNG.html#scramble">scramble</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/VanDerCorputQRNG.html" title="class in squidpony.squidmath">VanDerCorputQRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/SquidTags.html#SCREEN">SCREEN</a></span> - Static variable in class squidpony.<a href="../squidpony/SquidTags.html" title="class in squidpony">SquidTags</a></dt>
