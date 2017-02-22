@@ -552,4 +552,129 @@ public class ArrayTools {
         }
         return dest;
     }
+
+    /**
+     * Reverses the array given as a parameter, in-place, and returns the modified original.
+     * @param data an array that will be reversed in-place
+     * @return the array passed in, after reversal
+     */
+    public static boolean[] reverse(boolean[] data)
+    {
+        int sz;
+        if(data == null || (sz = data.length) <= 0) return data;
+        boolean t;
+        for (int i = 0, j = sz - 1; i < j; i++, j--) {
+            t = data[j];
+            data[j] = data[i];
+            data[i] = t;
+        }
+        return data;
+    }
+
+    /**
+     * Reverses the array given as a parameter, in-place, and returns the modified original.
+     * @param data an array that will be reversed in-place
+     * @return the array passed in, after reversal
+     */
+    public static char[] reverse(char[] data)
+    {
+        int sz;
+        if(data == null || (sz = data.length) <= 0) return data;
+        char t;
+        for (int i = 0, j = sz - 1; i < j; i++, j--) {
+            t = data[j];
+            data[j] = data[i];
+            data[i] = t;
+        }
+        return data;
+    }
+
+    /**
+     * Reverses the array given as a parameter, in-place, and returns the modified original.
+     * @param data an array that will be reversed in-place
+     * @return the array passed in, after reversal
+     */
+    public static float[] reverse(float[] data)
+    {
+        int sz;
+        if(data == null || (sz = data.length) <= 0) return data;
+        float t;
+        for (int i = 0, j = sz - 1; i < j; i++, j--) {
+            t = data[j];
+            data[j] = data[i];
+            data[i] = t;
+        }
+        return data;
+    }
+
+    /**
+     * Reverses the array given as a parameter, in-place, and returns the modified original.
+     * @param data an array that will be reversed in-place
+     * @return the array passed in, after reversal
+     */
+    public static double[] reverse(double[] data)
+    {
+        int sz;
+        if(data == null || (sz = data.length) <= 0) return data;
+        double t;
+        for (int i = 0, j = sz - 1; i < j; i++, j--) {
+            t = data[j];
+            data[j] = data[i];
+            data[i] = t;
+        }
+        return data;
+    }
+
+    /**
+     * Reverses the array given as a parameter, in-place, and returns the modified original.
+     * @param data an array that will be reversed in-place
+     * @return the array passed in, after reversal
+     */
+    public static int[] reverse(int[] data)
+    {
+        int sz;
+        if(data == null || (sz = data.length) <= 0) return data;
+        int t;
+        for (int i = 0, j = sz - 1; i < j; i++, j--) {
+            t = data[j];
+            data[j] = data[i];
+            data[i] = t;
+        }
+        return data;
+    }
+
+    /**
+     * Reverses the array given as a parameter, in-place, and returns the modified original.
+     * @param data an array that will be reversed in-place
+     * @return the array passed in, after reversal
+     */
+    public static byte[] reverse(byte[] data)
+    {
+        int sz;
+        if(data == null || (sz = data.length) <= 0) return data;
+        byte t;
+        for (int i = 0, j = sz - 1; i < j; i++, j--) {
+            t = data[j];
+            data[j] = data[i];
+            data[i] = t;
+        }
+        return data;
+    }
+    /**
+     * Reverses the array given as a parameter, in-place, and returns the modified original.
+     * @param data an array that will be reversed in-place
+     * @return the array passed in, after reversal
+     */
+    public static<T> T[] reverse(T[] data)
+    {
+        int sz;
+        if(data == null || (sz = data.length) <= 0) return data;
+        T t;
+        for (int i = 0, j = sz - 1; i < j; i++, j--) {
+            t = data[j];
+            data[j] = data[i];
+            data[i] = t;
+        }
+        return data;
+    }
 }
