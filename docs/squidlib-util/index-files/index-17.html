@@ -381,7 +381,12 @@
 <div class="block">Constructs a Placement using the given RoomFinder, which will have collections of rooms, corridors, and caves.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#placement">placement</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/SectionDungeonGenerator.html" title="class in squidpony.squidgrid.mapping">SectionDungeonGenerator</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Configured by this class after you call generate(), this Placement can be used to locate areas of the dungeon
+ that fit certain properties, like "out of sight from a door" or "a large flat section of wall that could be used
+ to place a straight-line object." You can use this as-needed; it does only a small amount of work at the start,
+ and does the calculations for what areas have certain properties on request.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#placeRooms-squidpony.squidgrid.mapping.locks.generators.LayoutGenerator.KeyLevelRoomMapping-int-">placeRooms(LayoutGenerator.KeyLevelRoomMapping, int)</a></span> - Method in class squidpony.squidgrid.mapping.locks.generators.<a href="../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html" title="class in squidpony.squidgrid.mapping.locks.generators">LayoutGenerator</a></dt>
 <dd>
 <div class="block">Fill the dungeon's space with rooms and doors (some locked).</div>
@@ -595,7 +600,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ProbabilityTable.html#ProbabilityTable--">ProbabilityTable()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a></dt>
 <dd>
-<div class="block">Creates a new probability table.</div>
+<div class="block">Creates a new probability table with a random seed.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ProbabilityTable.html#ProbabilityTable-squidpony.squidmath.RNG-">ProbabilityTable(RNG)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a></dt>
 <dd>

@@ -97,6 +97,22 @@
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a> in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> with type parameters of type <a href="../../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="../../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;? extends <a href="../../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">ProbabilityTable.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/ProbabilityTable.html#extraTable">extraTable</a></span></code>
+<div class="block">The set of items that can be produced indirectly from <a href="../../../squidpony/squidmath/ProbabilityTable.html#random--"><code>random()</code></a> (looking up values from inside
+ the nested tables).</div>
+</td>
+</tr>
+</tbody>
+</table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
 <caption><span>Methods in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> that return <a href="../../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -106,9 +122,58 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="../../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">ProbabilityTable.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/ProbabilityTable.html#add-squidpony.squidmath.ProbabilityTable-int-">add</a></span>(<a href="../../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;? extends <a href="../../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;table,
+   int&nbsp;weight)</code>
+<div class="block">Adds the given probability table as a possible set of results for this table.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="../../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">ProbabilityTable.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/ProbabilityTable.html#add-T-int-">add</a></span>(<a href="../../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&nbsp;item,
    int&nbsp;weight)</code>
 <div class="block">Adds the given item to the table.</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> that return types with arguments of type <a href="../../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;? extends <a href="../../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">ProbabilityTable.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/ProbabilityTable.html#tables--">tables</a></span>()</code>
+<div class="block">Provides a set of the nested ProbabilityTable values in this table, without reference
+ to their weight.</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> with parameters of type <a href="../../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="../../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">ProbabilityTable.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/ProbabilityTable.html#add-squidpony.squidmath.ProbabilityTable-int-">add</a></span>(<a href="../../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;? extends <a href="../../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;table,
+   int&nbsp;weight)</code>
+<div class="block">Adds the given probability table as a possible set of results for this table.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">ProbabilityTable.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/ProbabilityTable.html#contentEquals-squidpony.squidmath.ProbabilityTable-">contentEquals</a></span>(<a href="../../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;? extends <a href="../../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;o)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><span class="typeNameLabel">ProbabilityTable.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/ProbabilityTable.html#weight-squidpony.squidmath.ProbabilityTable-">weight</a></span>(<a href="../../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;? extends <a href="../../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;item)</code>
+<div class="block">Returns the weight of the item if the item is in the table.</div>
 </td>
 </tr>
 </tbody>

@@ -889,6 +889,22 @@ public class CrossHash {
 
     public static final IHasher defaultHasher = new DefaultHasher();
 
+    private static class IdentityHasher implements IHasher, Serializable
+    {
+        private static final long serialVersionUID = 3L;
+        protected IdentityHasher() { }
+
+        @Override
+        public int hash(Object data) {
+            return System.identityHashCode(data);
+        }
+
+        @Override
+        public boolean areEqual(Object left, Object right) {
+            return left == right;
+        }
+    }
+    public static final IHasher identityHasher = new IdentityHasher();
 
     private static class GeneralHasher implements IHasher, Serializable {
         private static final long serialVersionUID = 3L;

@@ -31,7 +31,10 @@ import static squidpony.squidmath.CoordPacker.*;
  * be used to turn a large section of what would otherwise be walls into a lake (of some character for deep lake cells
  * and some character for shallow lake cells), and corridors that cross the lake become bridges, shown as ':'. It should
  * be noted that because the lake fills walls, it doesn't change the connectivity of the map unless you can cross the
- * lake. Once you've added any features to the generator's effects list, call generate() to get a char[][] with the
+ * lake. There's also addMaze(), which does change the connectivity by replacing sections of impassable walls with
+ * twisty, maze-like passages.
+ * <br>
+ * Once you've added any features to the generator's effects list, call generate() to get a char[][] with the
  * desired dungeon map, using a fixed repertoire of chars to represent the different features, with the exception of the
  * customization that can be requested from addLake(). If you use the libGDX text-based display module, you can change
  * what chars are shown by using addSwap() in TextCellFactory. After calling generate(), you can safely get the values
@@ -41,6 +44,8 @@ import static squidpony.squidmath.CoordPacker.*;
  * since SectionDungeonGenerator only stores a temporary copy of the most recently-generated map. The DungeonUtility
  * field of this class, utility, is a convenient way of accessing the non-static methods in that class, such as
  * randomFloor(), without needing to create another DungeonUtility (this class creates one, so you don't have to).
+ * Similarly, the Placement field of this class, placement, can be used to find parts of a dungeon that fit certain
+ * qualities for the placement of items, terrain features, or NPCs.
  * <br>
  * Example map with a custom-representation lake: https://gist.github.com/tommyettinger/0055075f9de59c452d25
  * @see DungeonUtility this class exposes a DungeonUtility member; DungeonUtility also has many useful static methods
@@ -134,7 +139,16 @@ public class SectionDungeonGenerator {
     protected int environmentType = 1;
 
     protected char[][] dungeon = null;
+    /**
+     * Potentially important if you need to identify specific rooms, corridors, or cave areas in a map.
+     */
     public RoomFinder finder;
+    /**
+     * Configured by this class after you call generate(), this Placement can be used to locate areas of the dungeon
+     * that fit certain properties, like "out of sight from a door" or "a large flat section of wall that could be used
+     * to place a straight-line object." You can use this as-needed; it does only a small amount of work at the start,
+     * and does the calculations for what areas have certain properties on request.
+     */
     public Placement placement;
 
     /**

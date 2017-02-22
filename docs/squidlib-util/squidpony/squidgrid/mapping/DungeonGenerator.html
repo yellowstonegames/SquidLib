@@ -107,13 +107,9 @@ var activeTableTab = "activeTableTab";
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
-<dl>
-<dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../squidpony/squidgrid/mapping/LegacyDungeonGenerator.html" title="class in squidpony.squidgrid.mapping">LegacyDungeonGenerator</a></dd>
-</dl>
 <hr>
 <br>
-<pre>public class <a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.52">DungeonGenerator</a>
+<pre>public class <a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.50">DungeonGenerator</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">The primary way to create a more-complete dungeon, layering different effects and modifications on top of
  a DungeonBoneGen's dungeon or another dungeon without such effects. Also ensures only connected regions of the map
@@ -143,15 +139,13 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  As of March 6, 2016, the algorithm this uses to place water and grass was swapped for a more precise version. You no
  longer need to give this 150% in addWater or addGrass to effectively produce 100% water or grass, and this should be
  no more than 1.1% different from the percentage you request for any effects. If you need to reproduce dungeons with
- the same seed and get the same (imprecise) results as before this change, you can use a subclass of this,
- LegacyDungeonGenerator, which needs the same "150% means 100%, 75% means 50%" adjustments as before. The API should
- be identical, and both will return DungeonGenerator values when they return something for chaining.</div>
+ the same seed and get the same (imprecise) results as before this change, it's probably not possible unless you save
+ the previously-generated char[][] dungeons, since several other things may have changed as well.</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
 <dd>Eben Howard - http://squidpony.com - howard@squidpony.com, Tommy Ettinger - https://github.com/tommyettinger</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html" title="class in squidpony.squidgrid.mapping"><code>this class exposes a DungeonUtility member; DungeonUtility also has many useful static methods</code></a>, 
-<a href="../../../squidpony/squidgrid/mapping/LegacyDungeonGenerator.html" title="class in squidpony.squidgrid.mapping"><code>for the less-precise behavior; at least it's consistent</code></a></dd>
+<dd><a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html" title="class in squidpony.squidgrid.mapping"><code>this class exposes a DungeonUtility member; DungeonUtility also has many useful static methods</code></a></dd>
 </dl>
 </li>
 </ul>
@@ -451,7 +445,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>fx</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/EnumMap.html?is-external=true" title="class or interface in java.util">EnumMap</a>&lt;<a href="../../../squidpony/squidgrid/mapping/DungeonGenerator.FillEffect.html" title="enum in squidpony.squidgrid.mapping">DungeonGenerator.FillEffect</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt; <a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.88">fx</a></pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/EnumMap.html?is-external=true" title="class or interface in java.util">EnumMap</a>&lt;<a href="../../../squidpony/squidgrid/mapping/DungeonGenerator.FillEffect.html" title="enum in squidpony.squidgrid.mapping">DungeonGenerator.FillEffect</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt; <a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.86">fx</a></pre>
 <div class="block">The effects that will be applied when generate is called. Strongly prefer using addWater, addDoors, addTraps,
  and addGrass.</div>
 </li>
@@ -462,7 +456,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>gen</h4>
-<pre>protected&nbsp;<a href="../../../squidpony/squidgrid/mapping/styled/DungeonBoneGen.html" title="class in squidpony.squidgrid.mapping.styled">DungeonBoneGen</a> <a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.89">gen</a></pre>
+<pre>protected&nbsp;<a href="../../../squidpony/squidgrid/mapping/styled/DungeonBoneGen.html" title="class in squidpony.squidgrid.mapping.styled">DungeonBoneGen</a> <a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.87">gen</a></pre>
 </li>
 </ul>
 <a name="utility">
@@ -471,7 +465,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>utility</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html" title="class in squidpony.squidgrid.mapping">DungeonUtility</a> <a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.90">utility</a></pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/DungeonUtility.html" title="class in squidpony.squidgrid.mapping">DungeonUtility</a> <a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.88">utility</a></pre>
 </li>
 </ul>
 <a name="height">
@@ -480,7 +474,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>height</h4>
-<pre>protected&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.91">height</a></pre>
+<pre>protected&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.89">height</a></pre>
 </li>
 </ul>
 <a name="width">
@@ -489,7 +483,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>width</h4>
-<pre>protected&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.91">width</a></pre>
+<pre>protected&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.89">width</a></pre>
 </li>
 </ul>
 <a name="stairsUp">
@@ -498,7 +492,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>stairsUp</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a> <a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.92">stairsUp</a></pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a> <a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.90">stairsUp</a></pre>
 </li>
 </ul>
 <a name="stairsDown">
@@ -507,7 +501,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>stairsDown</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a> <a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.92">stairsDown</a></pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a> <a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.90">stairsDown</a></pre>
 </li>
 </ul>
 <a name="rng">
@@ -516,7 +510,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>rng</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a> <a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.93">rng</a></pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a> <a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.91">rng</a></pre>
 </li>
 </ul>
 <a name="rebuildSeed">
@@ -525,7 +519,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>rebuildSeed</h4>
-<pre>protected&nbsp;long <a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.94">rebuildSeed</a></pre>
+<pre>protected&nbsp;long <a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.92">rebuildSeed</a></pre>
 </li>
 </ul>
 <a name="seedFixed">
@@ -534,7 +528,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>seedFixed</h4>
-<pre>protected&nbsp;boolean <a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.95">seedFixed</a></pre>
+<pre>protected&nbsp;boolean <a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.93">seedFixed</a></pre>
 </li>
 </ul>
 <a name="dungeon">
@@ -543,7 +537,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>dungeon</h4>
-<pre>protected&nbsp;char[][] <a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.97">dungeon</a></pre>
+<pre>protected&nbsp;char[][] <a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.95">dungeon</a></pre>
 </li>
 </ul>
 </li>
@@ -560,7 +554,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>DungeonGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.153">DungeonGenerator</a>()</pre>
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.151">DungeonGenerator</a>()</pre>
 <div class="block">Make a DungeonGenerator with a LightRNG using a random seed, height 40, and width 40.</div>
 </li>
 </ul>
@@ -570,7 +564,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>DungeonGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.170">DungeonGenerator</a>(int&nbsp;width,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.168">DungeonGenerator</a>(int&nbsp;width,
                         int&nbsp;height)</pre>
 <div class="block">Make a DungeonGenerator with the given height and width; the RNG used for generating a dungeon and
  adding features will be a LightRNG using a random seed.</div>
@@ -587,7 +581,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>DungeonGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.182">DungeonGenerator</a>(int&nbsp;width,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.180">DungeonGenerator</a>(int&nbsp;width,
                         int&nbsp;height,
                         <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 <div class="block">Make a DungeonGenerator with the given height, width, and RNG. Use this if you want to seed the RNG.</div>
@@ -606,7 +600,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>DungeonGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.197">DungeonGenerator</a>(<a href="../../../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a>&nbsp;copying)</pre>
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.195">DungeonGenerator</a>(<a href="../../../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a>&nbsp;copying)</pre>
 <div class="block">Copies all fields from copying and makes a new DungeonGenerator.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -628,7 +622,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getDungeon</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.104">getDungeon</a>()</pre>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.102">getDungeon</a>()</pre>
 <div class="block">Get the most recently generated char[][] dungeon out of this class. The
  dungeon may be null if generate() or setDungeon() have not been called.</div>
 <dl>
@@ -643,7 +637,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getBareDungeon</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.112">getBareDungeon</a>()</pre>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.110">getBareDungeon</a>()</pre>
 <div class="block">Get the most recently generated char[][] dungeon out of this class without any chars other than '#' or '.', for
  walls and floors respectively. The dungeon may be null if generate() or setDungeon() have not been called.</div>
 <dl>
@@ -658,7 +652,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>setDungeon</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.120">setDungeon</a>(char[][]&nbsp;dungeon)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.118">setDungeon</a>(char[][]&nbsp;dungeon)</pre>
 <div class="block">Change the underlying char[][]; only affects the toString method, and of course getDungeon.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -672,7 +666,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getHeight</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.137">getHeight</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.135">getHeight</a>()</pre>
 <div class="block">Height of the dungeon in cells.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -686,7 +680,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getWidth</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.145">getWidth</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.143">getWidth</a>()</pre>
 <div class="block">Width of the dungeon in cells.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -700,7 +694,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>addWater</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.219">addWater</a>(int&nbsp;percentage)</pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.217">addWater</a>(int&nbsp;percentage)</pre>
 <div class="block">Turns the majority of the given percentage of floor cells into water cells, represented by '~'. Water will be
  clustered into a random number of pools, with more appearing if needed to fill the percentage.
  Each pool will have randomized volume that should fill or get very close to filling the requested
@@ -721,7 +715,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>addWater</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.238">addWater</a>(int&nbsp;percentage,
+<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.236">addWater</a>(int&nbsp;percentage,
                                  int&nbsp;islandSpacing)</pre>
 <div class="block">Turns the majority of the given percentage of floor cells into water cells, represented by '~'. Water will be
  clustered into a random number of pools, with more appearing if needed to fill the percentage. Each pool will
@@ -744,7 +738,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>addGrass</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.259">addGrass</a>(int&nbsp;percentage)</pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.257">addGrass</a>(int&nbsp;percentage)</pre>
 <div class="block">Turns the majority of the given percentage of floor cells into grass cells, represented by '"'. Grass will be
  clustered into a random number of patches, with more appearing if needed to fill the percentage. Each area will
  have randomized volume that should fill or get very close to filling the requested percentage,
@@ -764,7 +758,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>addBoulders</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.273">addBoulders</a>(int&nbsp;percentage)</pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.271">addBoulders</a>(int&nbsp;percentage)</pre>
 <div class="block">Turns the given percentage of floor cells not already adjacent to walls into wall cells, represented by '#'.
  If this DungeonGenerator previously had addBoulders called, the latest call will take precedence.</div>
 <dl>
@@ -781,7 +775,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>addDoors</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.292">addDoors</a>(int&nbsp;percentage,
+<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.290">addDoors</a>(int&nbsp;percentage,
                                  boolean&nbsp;doubleDoors)</pre>
 <div class="block">Turns the given percentage of viable doorways into doors, represented by '+' for doors that allow travel along
  the x-axis and '/' for doors that allow travel along the y-axis. If doubleDoors is true,
@@ -804,7 +798,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>addTraps</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.310">addTraps</a>(int&nbsp;percentage)</pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.308">addTraps</a>(int&nbsp;percentage)</pre>
 <div class="block">Turns the given percentage of open area floor cells into trap cells, represented by '^'. Corridors that have no
  possible way to move around a trap will not receive traps, ever. If this DungeonGenerator previously had
  addTraps called, the latest call will take precedence.</div>
@@ -823,7 +817,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>clearEffects</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.323">clearEffects</a>()</pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.321">clearEffects</a>()</pre>
 <div class="block">Removes any door, water, or trap insertion effects that this DungeonGenerator would put in future dungeons.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -837,7 +831,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>removeAdjacent</h4>
-<pre>protected&nbsp;<a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.329">removeAdjacent</a>(<a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;coll,
+<pre>protected&nbsp;<a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.327">removeAdjacent</a>(<a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;coll,
                                            <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt)</pre>
 </li>
 </ul>
@@ -847,7 +841,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>removeAdjacent</h4>
-<pre>protected&nbsp;<a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.340">removeAdjacent</a>(<a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;coll,
+<pre>protected&nbsp;<a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.338">removeAdjacent</a>(<a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;coll,
                                            <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt1,
                                            <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt2)</pre>
 </li>
@@ -858,7 +852,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>viableDoorways</h4>
-<pre>protected&nbsp;<a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.354">viableDoorways</a>(boolean&nbsp;doubleDoors,
+<pre>protected&nbsp;<a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.352">viableDoorways</a>(boolean&nbsp;doubleDoors,
                                            char[][]&nbsp;map)</pre>
 </li>
 </ul>
@@ -868,7 +862,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>generate</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.447">generate</a>()</pre>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.445">generate</a>()</pre>
 <div class="block">Generate a char[][] dungeon using TilesetType.DEFAULT_DUNGEON; this produces a dungeon appropriate for a level
  of ruins or a partially constructed dungeon. This uses '#' for walls, '.' for floors, '~' for deep water, ',' for
  shallow water, '^' for traps, '+' for doors that provide horizontal passage, and '/' for doors that provide
@@ -887,7 +881,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>generate</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.462">generate</a>(<a href="../../../squidpony/squidgrid/mapping/styled/TilesetType.html" title="enum in squidpony.squidgrid.mapping.styled">TilesetType</a>&nbsp;kind)</pre>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.460">generate</a>(<a href="../../../squidpony/squidgrid/mapping/styled/TilesetType.html" title="enum in squidpony.squidgrid.mapping.styled">TilesetType</a>&nbsp;kind)</pre>
 <div class="block">Generate a char[][] dungeon given a TilesetType; the comments in that class provide some opinions on what
  each TilesetType value could be used for in a game. This uses '#' for walls, '.' for floors, '~' for deep water,
  ',' for shallow water, '^' for traps, '+' for doors that provide horizontal passage, and '/' for doors that
@@ -910,7 +904,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>generate</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.487">generate</a>(char[][]&nbsp;baseDungeon)</pre>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.485">generate</a>(char[][]&nbsp;baseDungeon)</pre>
 <div class="block">Generate a char[][] dungeon with extra features given a baseDungeon that has already been generated.
  Typically, you want to call generate with a TilesetType or no argument for the easiest generation; this method
  is meant for adding features like water and doors to existing simple maps.
@@ -939,7 +933,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>generateRespectingStairs</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.549">generateRespectingStairs</a>(char[][]&nbsp;baseDungeon)</pre>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.547">generateRespectingStairs</a>(char[][]&nbsp;baseDungeon)</pre>
 <div class="block">Generate a char[][] dungeon with extra features given a baseDungeon that has already been generated, and that
  already has staircases represented by greater than and less than signs.
  Typically, you want to call generate with a TilesetType or no argument for the easiest generation; this method
@@ -963,7 +957,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getRebuildSeed</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.807">getRebuildSeed</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.805">getRebuildSeed</a>()</pre>
 <div class="block">Gets the seed that can be used to rebuild an identical dungeon to the latest one generated (or the seed that
  will be used to generate the first dungeon if none has been made yet). You can pass the long this returns to
  the setState() method on this class' rng field, which assuming all other calls to generate a dungeon are
@@ -986,7 +980,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.817">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.815">toString</a>()</pre>
 <div class="block">Provides a string representation of the latest generated dungeon.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>

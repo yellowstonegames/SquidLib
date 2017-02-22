@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -151,12 +151,25 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="../../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;? extends <a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ProbabilityTable.html#extraTable">extraTable</a></span></code>
+<div class="block">The set of items that can be produced indirectly from <a href="../../squidpony/squidmath/ProbabilityTable.html#random--"><code>random()</code></a> (looking up values from inside
+ the nested tables).</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ProbabilityTable.html#normalTotal">normalTotal</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ProbabilityTable.html#rng">rng</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ProbabilityTable.html#table">table</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ProbabilityTable.html#table">table</a></span></code>
+<div class="block">The set of items that can be produced directly from <a href="../../squidpony/squidmath/ProbabilityTable.html#random--"><code>random()</code></a> (without additional lookups).</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected int</code></td>
@@ -182,7 +195,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ProbabilityTable.html#ProbabilityTable--">ProbabilityTable</a></span>()</code>
-<div class="block">Creates a new probability table.</div>
+<div class="block">Creates a new probability table with a random seed.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -218,31 +231,63 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ProbabilityTable.html#add-squidpony.squidmath.ProbabilityTable-int-">add</a></span>(<a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;? extends <a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;table,
+   int&nbsp;weight)</code>
+<div class="block">Adds the given probability table as a possible set of results for this table.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ProbabilityTable.html#add-T-int-">add</a></span>(<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&nbsp;item,
    int&nbsp;weight)</code>
 <div class="block">Adds the given item to the table.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ProbabilityTable.html#contentEquals-squidpony.squidmath.ProbabilityTable-">contentEquals</a></span>(<a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;? extends <a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;o)</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ProbabilityTable.html#equals-java.lang.Object-">equals</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ProbabilityTable.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ProbabilityTable.html#items--">items</a></span>()</code>
 <div class="block">Provides a set of the items in this table, without reference to their
  weight.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ProbabilityTable.html#random--">random</a></span>()</code>
 <div class="block">Returns an object randomly based on assigned weights.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ProbabilityTable.html#setRandom-squidpony.squidmath.RNG-">setRandom</a></span>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</code>
 <div class="block">Sets the current RNG to the given RNG.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i8" class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;? extends <a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ProbabilityTable.html#tables--">tables</a></span>()</code>
+<div class="block">Provides a set of the nested ProbabilityTable values in this table, without reference
+ to their weight.</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ProbabilityTable.html#weight-squidpony.squidmath.ProbabilityTable-">weight</a></span>(<a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;? extends <a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;item)</code>
+<div class="block">Returns the weight of the item if the item is in the table.</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ProbabilityTable.html#weight-T-">weight</a></span>(<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&nbsp;item)</code>
 <div class="block">Returns the weight of the item if the item is in the table.</div>
@@ -254,7 +299,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
-<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#clone--" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#getClass--" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#notify--" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#notifyAll--" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait--" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait-long-" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait-long-int-" title="class or interface in java.lang">wait</a></code></li>
+<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#clone--" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#getClass--" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#notify--" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#notifyAll--" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait--" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait-long-" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait-long-int-" title="class or interface in java.lang">wait</a></code></li>
 </ul>
 </li>
 </ul>
@@ -276,7 +321,21 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>table</h4>
-<pre>public final&nbsp;<a href="../../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt; <a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.22">table</a></pre>
+<pre>public final&nbsp;<a href="../../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt; <a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.25">table</a></pre>
+<div class="block">The set of items that can be produced directly from <a href="../../squidpony/squidmath/ProbabilityTable.html#random--"><code>random()</code></a> (without additional lookups).</div>
+</li>
+</ul>
+<a name="extraTable">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>extraTable</h4>
+<pre>public final&nbsp;<a href="../../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;? extends <a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&gt; <a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.32">extraTable</a></pre>
+<div class="block">The set of items that can be produced indirectly from <a href="../../squidpony/squidmath/ProbabilityTable.html#random--"><code>random()</code></a> (looking up values from inside
+ the nested tables). Uses identity equality and hashes values by identity, which allows the nested tables to be
+ modified but makes looking them up more of a challenge at times (you need to pass the same object to
+ <a href="../../squidpony/squidmath/ProbabilityTable.html#weight-squidpony.squidmath.ProbabilityTable-"><code>weight(ProbabilityTable)</code></a> as you did to <a href="../../squidpony/squidmath/ProbabilityTable.html#add-squidpony.squidmath.ProbabilityTable-int-"><code>add(ProbabilityTable, int)</code></a>, though it may have changed).</div>
 </li>
 </ul>
 <a name="weights">
@@ -285,7 +344,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>weights</h4>
-<pre>public final&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a> <a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.23">weights</a></pre>
+<pre>public final&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a> <a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.33">weights</a></pre>
 </li>
 </ul>
 <a name="rng">
@@ -294,16 +353,25 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>rng</h4>
-<pre>protected&nbsp;<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a> <a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.24">rng</a></pre>
+<pre>protected&nbsp;<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a> <a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.34">rng</a></pre>
 </li>
 </ul>
 <a name="total">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>total</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.25">total</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.35">total</a></pre>
+</li>
+</ul>
+<a name="normalTotal">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>normalTotal</h4>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.35">normalTotal</a></pre>
 </li>
 </ul>
 </li>
@@ -320,8 +388,8 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>ProbabilityTable</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.30">ProbabilityTable</a>()</pre>
-<div class="block">Creates a new probability table.</div>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.40">ProbabilityTable</a>()</pre>
+<div class="block">Creates a new probability table with a random seed.</div>
 </li>
 </ul>
 <a name="ProbabilityTable-squidpony.squidmath.RNG-">
@@ -330,9 +398,9 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>ProbabilityTable</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.40">ProbabilityTable</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.50">ProbabilityTable</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 <div class="block">Creates a new probability table with the provided source of randomness
- used.</div>
+ used. Gets one random long from rng to use as an internal identifier.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>rng</code> - the source of randomness</dd>
@@ -345,7 +413,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>ProbabilityTable</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.52">ProbabilityTable</a>(long&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.64">ProbabilityTable</a>(long&nbsp;seed)</pre>
 <div class="block">Creates a new probability table with the provided long seed used.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -359,7 +427,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ProbabilityTable</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.64">ProbabilityTable</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.78">ProbabilityTable</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;seed)</pre>
 <div class="block">Creates a new probability table with the provided String seed used.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -381,7 +449,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>random</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.78">random</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.89">random</a>()</pre>
 <div class="block">Returns an object randomly based on assigned weights.
 
  Returns null if no elements have been put in the table.</div>
@@ -399,7 +467,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>add</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.101">add</a>(<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&nbsp;item,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.116">add</a>(<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&nbsp;item,
                                int&nbsp;weight)</pre>
 <div class="block">Adds the given item to the table.
 
@@ -413,6 +481,31 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 </dl>
 </li>
 </ul>
+<a name="add-squidpony.squidmath.ProbabilityTable-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>add</h4>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.150">add</a>(<a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;? extends <a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;table,
+                               int&nbsp;weight)</pre>
+<div class="block">Adds the given probability table as a possible set of results for this table.
+ The table parameter should not be the same object as this ProbabilityTable, nor should it contain cycles
+ that could reference this object from inside the values of table. This could cause serious issues that would
+ eventually terminate in a StackOverflowError if the cycles randomly repeated for too long. Only the first case
+ is checked for (if the contents of this and table are equivalent, it returns without doing anything; this also
+ happens if table is empty or null).
+
+ Weight must be greater than 0.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>table</code> - the ProbabilityTable to be added; should not be the same as this object (avoid cycles)</dd>
+<dd><code>weight</code> - the weight to be given to the added table</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this for chaining</dd>
+</dl>
+</li>
+</ul>
 <a name="weight-java.lang.Object-">
 <!--   -->
 </a><a name="weight-T-">
@@ -421,7 +514,24 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>weight</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.123">weight</a>(<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&nbsp;item)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.174">weight</a>(<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&nbsp;item)</pre>
+<div class="block">Returns the weight of the item if the item is in the table. Returns zero
+ of the item is not in the table.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>item</code> - the item searched for</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the weight of the item, or zero</dd>
+</dl>
+</li>
+</ul>
+<a name="weight-squidpony.squidmath.ProbabilityTable-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>weight</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.186">weight</a>(<a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;? extends <a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;item)</pre>
 <div class="block">Returns the weight of the item if the item is in the table. Returns zero
  of the item is not in the table.</div>
 <dl>
@@ -438,28 +548,78 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>items</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.134">items</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.197">items</a>()</pre>
 <div class="block">Provides a set of the items in this table, without reference to their
- weight.</div>
+ weight. Does not include nested ProbabilityTable values; for that, use tables().</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a "sorted" set of all items stored, really sorted in insertion order</dd>
 </dl>
 </li>
 </ul>
+<a name="tables--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>tables</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;? extends <a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.207">tables</a>()</pre>
+<div class="block">Provides a set of the nested ProbabilityTable values in this table, without reference
+ to their weight. Does not include normal values (non-table); for that, use items().</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a "sorted" set of all nested tables stored, really sorted in insertion order</dd>
+</dl>
+</li>
+</ul>
 <a name="setRandom-squidpony.squidmath.RNG-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>setRandom</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.144">setRandom</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.217">setRandom</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</pre>
 <div class="block">Sets the current RNG to the given RNG. You may prefer using a StatefulRNG (typically passing one in the
  constructor, but you can pass one here too) and setting its state in other code, which does not require calling
  this method again when the StatefulRNG has its state set.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>random</code> - an RNG, typically with a seed you want control over; may be a StatefulRNG or some other subclass</dd>
+</dl>
+</li>
+</ul>
+<a name="equals-java.lang.Object-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>equals</h4>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.223">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="contentEquals-squidpony.squidmath.ProbabilityTable-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>contentEquals</h4>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.235">contentEquals</a>(<a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;? extends <a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;o)</pre>
+</li>
+</ul>
+<a name="hashCode--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>hashCode</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.245">hashCode</a>()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
 </dl>
 </li>
 </ul>

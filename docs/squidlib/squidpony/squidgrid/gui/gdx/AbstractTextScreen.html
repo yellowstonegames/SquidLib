@@ -120,29 +120,19 @@ var activeTableTab = "activeTableTab";
 <dt>All Implemented Interfaces:</dt>
 <dd>com.badlogic.gdx.Screen</dd>
 </dl>
-<dl>
-<dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../../squidpony/squidgrid/gui/gdx/TextScreen.html" title="class in squidpony.squidgrid.gui.gdx">TextScreen</a></dd>
-</dl>
 <hr>
 <br>
-<pre>public abstract class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/AbstractTextScreen.html#line.27">AbstractTextScreen</a>&lt;T extends com.badlogic.gdx.graphics.Color&gt;
+<pre>public abstract class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/AbstractTextScreen.html#line.21">AbstractTextScreen</a>&lt;T extends com.badlogic.gdx.graphics.Color&gt;
 extends <a href="../../../../squidpony/squidgrid/gui/gdx/AbstractSquidScreen.html" title="class in squidpony.squidgrid.gui.gdx">AbstractSquidScreen</a>&lt;T&gt;</pre>
 <div class="block">A screen designed to write some text in full screen. This class supports text
  alignment (left, center, right) and text wrapping (see <a href="../../../../squidpony/squidgrid/gui/gdx/AbstractTextScreen.html#wrap-int-"><code>wrap(int)</code></a>).
- 
  <p>
- If you use libgdx <code>Color</code> as your type of color, you can use a less
- abstract subtype: <a href="../../../../squidpony/squidgrid/gui/gdx/TextScreen.html" title="class in squidpony.squidgrid.gui.gdx"><code>TextScreen</code></a>, but that relies on some older, less-pretty
- rendering done by the deprecated class <a href="../../../../squidpony/squidgrid/gui/gdx/GroupCombinedPanel.html" title="class in squidpony.squidgrid.gui.gdx"><code>GroupCombinedPanel</code></a>, and you may
- prefer using <a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html" title="class in squidpony.squidgrid.gui.gdx"><code>TextPanel</code></a> or sometimes <a href="../../../../squidpony/squidgrid/gui/gdx/LinesPanel.html" title="class in squidpony.squidgrid.gui.gdx"><code>LinesPanel</code></a> where you want
- to display more than a few words of legible wrapped text.
+ You may prefer using <a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html" title="class in squidpony.squidgrid.gui.gdx"><code>TextPanel</code></a> or sometimes <a href="../../../../squidpony/squidgrid/gui/gdx/LinesPanel.html" title="class in squidpony.squidgrid.gui.gdx"><code>LinesPanel</code></a> where
+ you want to display more than a few words of legible wrapped text.
  </p></div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
 <dd>smelC</dd>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../squidpony/squidgrid/gui/gdx/TextScreen.html" title="class in squidpony.squidgrid.gui.gdx"><code>TextScreen</code></a></dd>
 </dl>
 </li>
 </ul>
@@ -291,7 +281,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/AbstractSquidScreen.htm
 <ul class="blockList">
 <li class="blockList">
 <h4>text</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/AbstractTextScreen.html" title="type parameter in AbstractTextScreen">T</a> extends com.badlogic.gdx.graphics.Color&gt;&gt; <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/AbstractTextScreen.html#line.30">text</a></pre>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/AbstractTextScreen.html" title="type parameter in AbstractTextScreen">T</a> extends com.badlogic.gdx.graphics.Color&gt;&gt; <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/AbstractTextScreen.html#line.26">text</a></pre>
 <div class="block">Can contain null members (denoting empty lines)</div>
 </li>
 </ul>
@@ -301,7 +291,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/AbstractSquidScreen.htm
 <ul class="blockListLast">
 <li class="blockList">
 <h4>alignment</h4>
-<pre>protected&nbsp;int[] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/AbstractTextScreen.html#line.31">alignment</a></pre>
+<pre>protected&nbsp;int[] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/AbstractTextScreen.html#line.27">alignment</a></pre>
 </li>
 </ul>
 </li>
@@ -318,26 +308,24 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/AbstractSquidScreen.htm
 <ul class="blockListLast">
 <li class="blockList">
 <h4>AbstractTextScreen</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/AbstractTextScreen.html#line.53">AbstractTextScreen</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/AbstractSquidScreen.SquidScreenInput.html" title="class in squidpony.squidgrid.gui.gdx">AbstractSquidScreen.SquidScreenInput</a>&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/AbstractTextScreen.html" title="type parameter in AbstractTextScreen">T</a>&gt;&nbsp;ssi,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/AbstractTextScreen.html#line.44">AbstractTextScreen</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/AbstractSquidScreen.SquidScreenInput.html" title="class in squidpony.squidgrid.gui.gdx">AbstractSquidScreen.SquidScreenInput</a>&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/AbstractTextScreen.html" title="type parameter in AbstractTextScreen">T</a>&gt;&nbsp;ssi,
                           <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/AbstractTextScreen.html" title="type parameter in AbstractTextScreen">T</a>&gt;&gt;&nbsp;text,
                           int[]&nbsp;alignment)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>ssi</code> - See super class</dd>
 <dd><code>text</code> - The text to display. From top to bottom. Use <code>null</code>
-            members to jump lines.
- 
-            <p>
-            Give <code>null</code> if you wanna set it later (using
-            <a href="../../../../squidpony/squidgrid/gui/gdx/AbstractTextScreen.html#init-java.util.List-int:A-"><code>init(List, int[])</code></a>).
-            </p></dd>
+                  members to jump lines.
+                  <p>
+                  Give <code>null</code> if you want to set it later (using
+                  <a href="../../../../squidpony/squidgrid/gui/gdx/AbstractTextScreen.html#init-java.util.List-int:A-"><code>init(List, int[])</code></a>).
+                  </p></dd>
 <dd><code>alignment</code> - How to alignment members of <code>text</code>. -1 for left, 0 for
-            center, 1 for right. The default is to align left
- 
-            <p>
-            Give <code>null</code> if you wanna set it later (using
-            <a href="../../../../squidpony/squidgrid/gui/gdx/AbstractTextScreen.html#init-java.util.List-int:A-"><code>init(List, int[])</code></a>).
-            </p></dd>
+                  center, 1 for right. The default is to align left
+                  <p>
+                  Give <code>null</code> if you want to set it later (using
+                  <a href="../../../../squidpony/squidgrid/gui/gdx/AbstractTextScreen.html#init-java.util.List-int:A-"><code>init(List, int[])</code></a>).
+                  </p></dd>
 </dl>
 </li>
 </ul>
@@ -355,16 +343,16 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/AbstractSquidScreen.htm
 <ul class="blockList">
 <li class="blockList">
 <h4>init</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/AbstractTextScreen.html#line.71">init</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/AbstractTextScreen.html" title="type parameter in AbstractTextScreen">T</a>&gt;&gt;&nbsp;text,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/AbstractTextScreen.html#line.60">init</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/AbstractTextScreen.html" title="type parameter in AbstractTextScreen">T</a>&gt;&gt;&nbsp;text,
                  int[]&nbsp;alignment)</pre>
 <div class="block">You should call this method at most once. You should call this method
  only before rendering this screen.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>text</code> - The text to display. From top to bottom. Use <code>null</code>
-            members to jump lines.</dd>
+                  members to jump lines.</dd>
 <dd><code>alignment</code> - How to alignment members of <code>text</code>. -1 for left, 0 for
-            center, 1 for right. The default is to align left</dd>
+                  center, 1 for right. The default is to align left</dd>
 </dl>
 </li>
 </ul>
@@ -374,7 +362,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/AbstractSquidScreen.htm
 <ul class="blockList">
 <li class="blockList">
 <h4>wrap</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/AbstractTextScreen.html#line.86">wrap</a>(int&nbsp;width)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/AbstractTextScreen.html#line.73">wrap</a>(int&nbsp;width)</pre>
 <div class="block">Wraps the text inside <code>this</code> according to <code>width</code>. This
  screen's text must have been set already. This, of course, preserves the
  text alignment (if any).</div>
@@ -392,7 +380,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/AbstractSquidScreen.htm
 <ul class="blockList">
 <li class="blockList">
 <h4>toIntArray</h4>
-<pre>protected&nbsp;int[]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/AbstractTextScreen.html#line.119">toIntArray</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;l)</pre>
+<pre>protected&nbsp;int[]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/AbstractTextScreen.html#line.106">toIntArray</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;l)</pre>
 </li>
 </ul>
 <a name="toString--">
@@ -401,7 +389,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/AbstractSquidScreen.htm
 <ul class="blockListLast">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/AbstractTextScreen.html#line.128">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/AbstractTextScreen.html#line.115">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
