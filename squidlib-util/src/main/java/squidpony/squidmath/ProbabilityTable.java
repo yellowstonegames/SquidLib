@@ -19,13 +19,23 @@ import java.util.SortedSet;
 @Beta
 public class ProbabilityTable<T> implements Serializable {
     private static final long serialVersionUID = -1307656083434154736L;
+    /**
+     * The set of items that can be produced directly from {@link #random()} (without additional lookups).
+     */
     public final Arrangement<T> table;
+    /**
+     * The set of items that can be produced indirectly from {@link #random()} (looking up values from inside
+     * the nested tables). Uses identity equality and hashes values by identity, which allows the nested tables to be
+     * modified but makes looking them up more of a challenge at times (you need to pass the same object to
+     * {@link #weight(ProbabilityTable)} as you did to {@link #add(ProbabilityTable, int)}, though it may have changed).
+     */
+    public final Arrangement<ProbabilityTable<? extends T>> extraTable;
     public final IntVLA weights;
     protected RNG rng;
-    protected int total;
+    protected int total, normalTotal;
 
     /**
-     * Creates a new probability table.
+     * Creates a new probability table with a random seed.
      */
     public ProbabilityTable() {
         this(new StatefulRNG());
@@ -33,15 +43,17 @@ public class ProbabilityTable<T> implements Serializable {
 
     /**
      * Creates a new probability table with the provided source of randomness
-     * used.
+     * used. Gets one random long from rng to use as an internal identifier.
      *
      * @param rng the source of randomness
      */
     public ProbabilityTable(RNG rng) {
         this.rng = rng;
         table = new Arrangement<>(64, 0.75f);
+        extraTable = new Arrangement<>(16, 0.75f, CrossHash.identityHasher);
         weights = new IntVLA(64);
         total = 0;
+        normalTotal = 0;
     }
 
     /**
@@ -52,8 +64,10 @@ public class ProbabilityTable<T> implements Serializable {
     public ProbabilityTable(long seed) {
         this.rng = new StatefulRNG(seed);
         table = new Arrangement<>(64, 0.75f);
+        extraTable = new Arrangement<>(16, 0.75f, CrossHash.identityHasher);
         weights = new IntVLA(64);
         total = 0;
+        normalTotal = 0;
     }
 
     /**
@@ -62,10 +76,7 @@ public class ProbabilityTable<T> implements Serializable {
      * @param seed the RNG seed as a String
      */
     public ProbabilityTable(String seed) {
-        this.rng = new StatefulRNG(CrossHash.Lightning.hash64(seed));
-        table = new Arrangement<>(64, 0.75f);
-        weights = new IntVLA(64);
-        total = 0;
+        this(CrossHash.Lightning.hash64(seed));
     }
 
     /**
@@ -79,12 +90,16 @@ public class ProbabilityTable<T> implements Serializable {
         if (table.isEmpty()) {
             return null;
         }
-        int index = rng.nextInt(total);
-        for (int i = 0; i < table.size(); i++) {
+        int index = rng.nextInt(total), sz = table.size();
+        for (int i = 0; i < sz; i++) {
             index -= weights.get(i);
-            if (index < 0) {
+            if (index < 0)
                 return table.keyAt(i);
-            }
+        }
+        for (int i = 0; i < extraTable.size(); i++) {
+            index -= weights.get(sz + i);
+            if(index < 0)
+                return extraTable.keyAt(i).random();
         }
         return null;//something went wrong, shouldn't have been able to get all the way through without finding an item
     }
@@ -99,16 +114,52 @@ public class ProbabilityTable<T> implements Serializable {
      * @return this for chaining
      */
     public ProbabilityTable<T> add(T item, int weight) {
+        if(weight <= 0)
+            return this;
         int i = table.getInt(item);
         if (i < 0) {
+            weights.insert(table.size(), Math.max(0, weight));
             table.add(item);
+            int w = Math.max(0, weight);
+            total += w;
+            normalTotal += w;
+        } else {
+            int i2 = weights.get(i);
+            int w = Math.max(0, i2 + weight);
+            weights.set(i, w);
+            total += w - i2;
+            normalTotal += w - i2;
+        }
+        return this;
+    }
+
+    /**
+     * Adds the given probability table as a possible set of results for this table.
+     * The table parameter should not be the same object as this ProbabilityTable, nor should it contain cycles
+     * that could reference this object from inside the values of table. This could cause serious issues that would
+     * eventually terminate in a StackOverflowError if the cycles randomly repeated for too long. Only the first case
+     * is checked for (if the contents of this and table are equivalent, it returns without doing anything; this also
+     * happens if table is empty or null).
+     *
+     * Weight must be greater than 0.
+     *
+     * @param table the ProbabilityTable to be added; should not be the same as this object (avoid cycles)
+     * @param weight the weight to be given to the added table
+     * @return this for chaining
+     */
+    public ProbabilityTable<T> add(ProbabilityTable<? extends T> table, int weight) {
+        if(weight <= 0 || table == null || contentEquals(table) || table.total <= 0)
+            return this;
+        int i = extraTable.getInt(table);
+        if (i < 0) {
             weights.add(Math.max(0, weight));
+            extraTable.add(table);
             total += Math.max(0, weight);
         } else {
-            i = weights.get(i);
-            table.add(item);
-            weights.add(Math.max(0, i + weight));
-            total += Math.max(0, i + weight) - i;
+            int i2 = weights.get(i);
+            int w = Math.max(0, i2 + weight);
+            weights.set(i, w);
+            total += w - i2;
         }
         return this;
     }
@@ -126,13 +177,35 @@ public class ProbabilityTable<T> implements Serializable {
     }
 
     /**
+     * Returns the weight of the item if the item is in the table. Returns zero
+     * of the item is not in the table.
+     *
+     * @param item the item searched for
+     * @return the weight of the item, or zero
+     */
+    public int weight(ProbabilityTable<? extends T> item) {
+        int i = extraTable.getInt(item);
+        return i < 0 ? 0 : weights.get(i + table.size());
+    }
+
+    /**
      * Provides a set of the items in this table, without reference to their
-     * weight.
+     * weight. Does not include nested ProbabilityTable values; for that, use tables().
      *
      * @return a "sorted" set of all items stored, really sorted in insertion order
      */
     public SortedSet<T> items() {
         return table.keySet();
+    }
+
+    /**
+     * Provides a set of the nested ProbabilityTable values in this table, without reference
+     * to their weight. Does not include normal values (non-table); for that, use items().
+     *
+     * @return a "sorted" set of all nested tables stored, really sorted in insertion order
+     */
+    public SortedSet<ProbabilityTable<? extends T>> tables() {
+        return extraTable.keySet();
     }
 
     /**
@@ -144,5 +217,36 @@ public class ProbabilityTable<T> implements Serializable {
     public void setRandom(RNG random)
     {
         rng = random;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ProbabilityTable<?> that = (ProbabilityTable<?>) o;
+
+        if (!table.equals(that.table)) return false;
+        if (!extraTable.equals(that.extraTable)) return false;
+        if (!weights.equals(that.weights)) return false;
+        return rng != null ? rng.equals(that.rng) : that.rng == null;
+    }
+
+    public boolean contentEquals(ProbabilityTable<? extends T> o) {
+        if (this == o) return true;
+        if (o == null) return false;
+
+        if (!table.equals(o.table)) return false;
+        if (!extraTable.equals(o.extraTable)) return false;
+        return weights.equals(o.weights);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = table.hashCode();
+        result = 31 * result + extraTable.hashCode();
+        result = 31 * result + weights.hashCode();
+        result = 31 * result + (rng != null ? rng.hashCode() : 0);
+        return result;
     }
 }

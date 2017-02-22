@@ -23,6 +23,12 @@ package squidpony.squidmath;
  * sin and cosine of 15 points after the starting point and storing them as constants.
  * This definitely doesn't have a noticeable 45 degree angle artifact, though it does
  * have, to a lesser extent, some other minor artifacts.
+ * <br>
+ * You can also consider {@link WhirlingNoise} as an alternative, which can be faster
+ * and also reduces the likelihood of angular artifacts. WhirlingNoise does not scale its
+ * input (it doesn't need to), so it won't produce the same results as PerlinNoise for the
+ * same inputs, but it will produce similar shape, density, and aesthetic quality of noise.
+ * @see WhirlingNoise A subclass that has a faster implementation and some different qualities.
  */
 public class PerlinNoise {
 

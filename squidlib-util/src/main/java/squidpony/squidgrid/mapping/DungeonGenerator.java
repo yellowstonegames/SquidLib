@@ -40,11 +40,9 @@ import static squidpony.squidmath.CoordPacker.*;
  * As of March 6, 2016, the algorithm this uses to place water and grass was swapped for a more precise version. You no
  * longer need to give this 150% in addWater or addGrass to effectively produce 100% water or grass, and this should be
  * no more than 1.1% different from the percentage you request for any effects. If you need to reproduce dungeons with
- * the same seed and get the same (imprecise) results as before this change, you can use a subclass of this,
- * LegacyDungeonGenerator, which needs the same "150% means 100%, 75% means 50%" adjustments as before. The API should
- * be identical, and both will return DungeonGenerator values when they return something for chaining.
+ * the same seed and get the same (imprecise) results as before this change, it's probably not possible unless you save
+ * the previously-generated char[][] dungeons, since several other things may have changed as well.
  * @see squidpony.squidgrid.mapping.DungeonUtility this class exposes a DungeonUtility member; DungeonUtility also has many useful static methods
- * @see squidpony.squidgrid.mapping.LegacyDungeonGenerator for the less-precise behavior; at least it's consistent
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Tommy Ettinger - https://github.com/tommyettinger
