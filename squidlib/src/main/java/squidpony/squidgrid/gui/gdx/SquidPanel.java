@@ -271,16 +271,17 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
     @Override
     public void put(int xOffset, int yOffset, String string, Color foreground) {
+        if(string == null || string.isEmpty())
+            return;
         if (string.length() == 1) {
             put(xOffset, yOffset, string.charAt(0), foreground);
         }
         else
         {
-            char[][] temp = new char[string.length()][1];
+            float enc = scc.filter(foreground).toFloatBits();
             for (int i = 0; i < string.length(); i++) {
-                temp[i][0] = string.charAt(i);
+                put(xOffset + i, yOffset, string.charAt(i), enc);
             }
-            put(xOffset, yOffset, temp, foreground);
         }
     }
     public void put(int xOffset, int yOffset, String string, Color foreground, float colorMultiplier) {
@@ -289,11 +290,9 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         }
         else
         {
-            char[][] temp = new char[string.length()][1];
             for (int i = 0; i < string.length(); i++) {
-                temp[i][0] = string.charAt(i);
+                put(xOffset + i, yOffset, string.charAt(i), foreground, colorMultiplier);
             }
-            put(xOffset, yOffset, temp, foreground, colorMultiplier);
         }
     }
 
@@ -320,7 +319,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param string the characters to be displayed
      * @param vertical true if the text should be written vertically, from top to bottom
      */
-    public void placeVerticalString(int xOffset, int yOffset, String string, boolean vertical) {
+    public void put(int xOffset, int yOffset, String string, boolean vertical) {
         put(xOffset, yOffset, string, defaultForeground, vertical);
     }
 
@@ -338,9 +337,74 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     public void put(int xOffset, int yOffset, String string, Color foreground, boolean vertical) {
         if (vertical) {
-            put(xOffset, yOffset, new char[][]{string.toCharArray()}, foreground);
+            for (int i = 0; i < string.length(); i++) {
+                put(xOffset, yOffset + i, string.charAt(i), foreground);
+            }
         } else {
             put(xOffset, yOffset, string, foreground);
+        }
+    }
+
+    /**
+     * Puts the given string in the chosen direction, with the first character shown (not necessarily the first in the
+     * string) at the given offset. If you use {@link Direction#LEFT}, then this effectively reverses the String and
+     * prints it with the last character of the String at the minimum-x position, which is the same position that the
+     * first character would be if you printed normally or if you gave this RIGHT (x is xOffset, y is yOffset). Giving
+     * UP acts similarly to LEFT, but has the last character at the minimum-y position and has the first character below
+     * it. The diagonals act as you would expect, combining the behavior of one of UP or DOWN with one of LEFT or RIGHT.
+     * <br>
+     * Does not word wrap. Characters that are not renderable (due to being at negative offsets or offsets greater than
+     * the grid size) will not be shown but will not cause any malfunctions.
+     *
+     * @param xOffset the x coordinate of the first character
+     * @param yOffset the y coordinate of the first character
+     * @param string the characters to be displayed
+     * @param foreground the color to draw the characters
+     * @param direction the direction the text should be written in, such as {@link Direction#RIGHT} for normal layout
+     */
+    public void put(int xOffset, int yOffset, String string, Color foreground, Direction direction) {
+        float enc = scc.filter(foreground).toFloatBits();
+        switch (direction)
+        {
+            case DOWN:
+                for (int i = 0; i < string.length(); i++) {
+                    put(xOffset, yOffset + i, string.charAt(i), enc);
+                }
+                break;
+            case UP:
+                for (int i = 0, p = string.length() - 1; i < string.length(); i++, p--) {
+                    put(xOffset, yOffset + p, string.charAt(i), enc);
+                }
+                break;
+            case LEFT:
+                for (int i = 0, p = string.length() - 1; i < string.length(); i++, p--) {
+                    put(xOffset + p, yOffset, string.charAt(i), enc);
+                }
+                break;
+            case DOWN_RIGHT:
+                for (int i = 0; i < string.length(); i++) {
+                    put(xOffset + i, yOffset + i, string.charAt(i), enc);
+                }
+                break;
+            case UP_RIGHT:
+                for (int i = 0, p = string.length() - 1; i < string.length(); i++, p--) {
+                    put(xOffset + i, yOffset + p, string.charAt(i), enc);
+                }
+                break;
+            case UP_LEFT:
+                for (int i = 0, p = string.length() - 1; i < string.length(); i++, p--) {
+                    put(xOffset + p, yOffset + p, string.charAt(i), enc);
+                }
+                break;
+            case DOWN_LEFT:
+                for (int i = 0, p = string.length() - 1; i < string.length(); i++, p--) {
+                    put(xOffset + p, yOffset + i, string.charAt(i), enc);
+                }
+                break;
+            default:
+                for (int i = 0; i < string.length(); i++) {
+                    put(xOffset + i, yOffset, string.charAt(i), enc);
+                }
         }
     }
 
