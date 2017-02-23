@@ -7,19 +7,24 @@ import java.util.Arrays;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Customized extension of Random to allow for common roguelike operations.
- *
- * Uses the Mersenne Twister algorithm to provide superior results. Because of
- * the seed requirements for the MT, the seed setting methods and constructors
- * that take a long do not set the seed. The methods that use a byte[] to set
- * the seed must be used instead if a custom seed is desired.
+ * RandomnessSource using Mersenne Twister algorithm (not recommended).
+ * <br>
+ * Uses the Mersenne Twister algorithm to provide results with a longer period.
+ * Mersenne Twister has known statistical vulnerabilities, however, and this
+ * implementation is incredibly slow, which is why it is deprecated. You should
+ * use {@link LongPeriodRNG} for most of the cases that MersenneTwister would be
+ * good at in theory, or {@link IsaacRNG} for cases that need an extremely large
+ * period and cryptographic-like properties.
+ * <br>
  *
  * @author Daniel Dyer (Java Port)
  * @author Makoto Matsumoto and Takuji Nishimura (original C version)
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Lewis Potter
+ * @deprecated
  */
 @GwtIncompatible /* Because of SecureRandom */
+@Deprecated /* This code is really, really slow due to threading behavior, and should be avoided. */
 public class MersenneTwister implements RandomnessSource {
 
 	// The actual seed size isn't that important, but it should be a multiple of 4.

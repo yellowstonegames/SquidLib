@@ -54,7 +54,7 @@ project.sourceCompatibility = 1.7
 // In this section you declare the dependencies for your production and test code
 dependencies {
 	compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-    compile "com.github.tommyettinger:regexodus:0.1.7"
+    compile "com.github.tommyettinger:regexodus:0.1.8"
     compile "com.github.tommyettinger:blazingchain:1.4.4.1"
 	testCompile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
 	testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
