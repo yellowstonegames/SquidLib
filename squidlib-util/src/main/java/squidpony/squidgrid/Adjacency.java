@@ -159,6 +159,15 @@ public abstract class Adjacency implements Serializable {
         return Coord.get(extractX(data), extractY(data));
     }
 
+    public int move(int start, int x, int y, int r, int n)
+    {
+        return composite(extractX(start) + x, extractY(start) + y, extractR(start) + r, extractN(start) + n);
+    }
+    public int move(int start, int x, int y)
+    {
+        return move(start, x, y, 0, 0);
+    }
+
     public abstract int[][][] neighborMaps();
 
     public abstract void portal(int[][][] neighbors, int inputPortal, int outputPortal, boolean twoWay);
@@ -279,6 +288,14 @@ public abstract class Adjacency implements Serializable {
             if(x < 0 || y < 0 || x >= width || y >= height)
                 return -1;
             return y * width + x;
+        }
+
+        @Override
+        public int move(int start, int x, int y) {
+            int xx = (start % width) + x, yy = (start / width) + y;
+            if(xx < 0 || yy < 0 || xx >= width || yy >= height)
+                return -1;
+            return yy * width + xx;
         }
 
         @Override

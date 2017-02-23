@@ -15,7 +15,6 @@ import squidpony.panel.IColoredString;
 import squidpony.squidai.CustomDijkstraMap;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Adjacency;
-import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.gui.gdx.*;
@@ -137,16 +136,18 @@ public class ThinWallDemo extends ApplicationAdapter {
         //monsterMarkColors = fgCenter.loopingGradient(SColor.CRIMSON, SColor.ORANGE_RED, 64);
         batch = new SpriteBatch();
 
-        // getStretchableFont loads an embedded font, Inconsolata-LGC-Custom, that is a distance field font as mentioned
-        // earlier. We set the smoothing multiplier on it only because we are using internal zoom to increase sharpness
+        // getStretchableFont loads a font from the assets, Inconsolata-LGC-Custom (a distance field font as mentioned
+        // earlier). We set the smoothing multiplier on it only if we are using internal zoom to increase sharpness
         // on small details, but if the smoothing is incorrect some sizes look blurry or over-sharpened. This can be set
         // manually if you use a constant internal zoom; here we use 1f for internal zoom 1, about 2/3f for zoom 2, and
         // about 1/2f for zoom 3. If you have more zooms as options for some reason, this formula should hold for many
-        // cases but probably not all.
+        // cases but probably not all. We also add a swap here to replace '#', which is used for boulders and pillars,
+        // with a small Unicode box shape that looks better when it lies on the corner between walkable cells.
         textFactory = DefaultResources.getStretchableFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
-                .width(cellWidth).height(cellHeight).initBySize(); //.setDirectionGlyph('ˆ')
+                .width(cellWidth).height(cellHeight).initBySize().addSwap('#', '▫'); //.setDirectionGlyph('ˆ')
         // Creates a layered series of text grids in a SquidLayers object, using the previously set-up textFactory and
-        // SquidColorCenters.
+        // SquidColorCenters. We use the bitwise right shift operator instead of division by 2 because I want more
+        // people to know how to use bitwise operators; you can replace ">>1" with "/2" with no change in meaning.
         display = new SquidLayers(overlapWidth, overlapHeight, (cellWidth>>1), (cellHeight>>1),
                 textFactory.copy(), bgCenter, fgCenter);
         display.getTextFactory().width(cellWidth).height(cellHeight).initBySize();
@@ -281,13 +282,12 @@ public class ThinWallDemo extends ApplicationAdapter {
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
                 switch (key) {
-                    /*
                     case SquidInput.UP_ARROW:
                     case 'k':
                     case 'w':
                     case 'K':
                     case 'W': {
-                        move(0, -1);
+                        move(adjacency.move(player.pos, 0, -2));
                         break;
                     }
                     case SquidInput.DOWN_ARROW:
@@ -295,7 +295,7 @@ public class ThinWallDemo extends ApplicationAdapter {
                     case 's':
                     case 'J':
                     case 'S': {
-                        move(0, 1);
+                        move(adjacency.move(player.pos, 0, 2));
                         break;
                     }
                     case SquidInput.LEFT_ARROW:
@@ -303,7 +303,7 @@ public class ThinWallDemo extends ApplicationAdapter {
                     case 'a':
                     case 'H':
                     case 'A': {
-                        move(-1, 0);
+                        move(adjacency.move(player.pos, -2, 0));
                         break;
                     }
                     case SquidInput.RIGHT_ARROW:
@@ -311,35 +311,34 @@ public class ThinWallDemo extends ApplicationAdapter {
                     case 'd':
                     case 'L':
                     case 'D': {
-                        move(1, 0);
+                        move(adjacency.move(player.pos, 2, 0));
                         break;
                     }
 
                     case SquidInput.UP_LEFT_ARROW:
                     case 'y':
                     case 'Y': {
-                        move(-1, -1);
+                        move(adjacency.move(player.pos, -2, -2));
                         break;
                     }
                     case SquidInput.UP_RIGHT_ARROW:
                     case 'u':
                     case 'U': {
-                        move(1, -1);
+                        move(adjacency.move(player.pos, 2, -2));
                         break;
                     }
                     case SquidInput.DOWN_RIGHT_ARROW:
                     case 'n':
                     case 'N': {
-                        move(1, 1);
+                        move(adjacency.move(player.pos, 2, 2));
                         break;
                     }
                     case SquidInput.DOWN_LEFT_ARROW:
                     case 'b':
                     case 'B': {
-                        move(-1, 1);
+                        move(adjacency.move(player.pos, -2, 2));
                         break;
                     }
-                    */
                     case '?': {
                         toggleHelp();
                         break;
@@ -457,6 +456,10 @@ public class ThinWallDemo extends ApplicationAdapter {
                 player.move(pos);
                 if(monsters.remove(pos) != null)
                 {
+                    display.getForegroundLayer().burst(newX, newY, 1, true, '\'',
+                            SColor.BLOOD, SColor.BLOOD.cpy().sub(0,0,0,1), false, 1f, 1f);
+                    // the last statement is effectively equivalent to:
+                    /*
                     Direction d;
                     for (int i = 0; i < 8; i++) {
                         d = Direction.CLOCKWISE[i];
@@ -464,7 +467,8 @@ public class ThinWallDemo extends ApplicationAdapter {
                                 '\'', SColor.BLOOD, SColor.BLOOD.cpy().sub(0,0,0,1f),
                                 45f * i, 45f * (i-1),
                                 1f);
-                    }
+                    }*/
+                    // but it's a lot nicer to just call burst() when you want the radiating-out effect!
                 }
             }
             phase = Phase.PLAYER_ANIM;
