@@ -39,6 +39,8 @@ public class DataConverter extends Json {
         initialize(this);
     }
 
+    public static final Object INVALID = Float.NaN;
+
     public static void initialize(Json json)
     {
         json.addClassTag("#St", String.class);
@@ -230,10 +232,13 @@ public class DataConverter extends Json {
             @SuppressWarnings("unchecked")
             public OrderedMap read(Json json, JsonValue jsonData, Class type) {
                 if(jsonData == null || jsonData.isNull()) return null;
-                return Maker.makeOM(json.readValue("f", float.class, jsonData),
-                        json.readValue("k", null, jsonData),
-                        json.readValue("v", null, jsonData),
-                        json.readValue("r", Object[].class, jsonData));
+                float f = json.readValue("f", float.class, jsonData);
+                Object k = json.readValue("k", null, INVALID, jsonData);
+                Object v = json.readValue("v", null, INVALID, jsonData);
+                Object[] r = json.readValue("r", Object[].class, jsonData);
+                if(k == INVALID)
+                    return new OrderedMap(0, f);
+                return Maker.makeOM(f, k, v, r);
                 //return new OrderedMap(json.readValue(OrderedSet.class, jsonData.get("k")),
                 //        json.readValue(ArrayList.class, jsonData.get("v")), jsonData.getFloat("f"));
             }

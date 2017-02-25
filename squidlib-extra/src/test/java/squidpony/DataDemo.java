@@ -26,11 +26,14 @@ public class DataDemo extends ApplicationAdapter {
     private static String ROOT_DIR = "squidlib-extra/"; // "squidlib-extra/" if you're running this file from the parent project and "" if you're running from the squidlib-extra project directly
 
     @Override
+    @SuppressWarnings("unchecked")
     public void create() {
         super.create();
         DataConverter convert = new DataConverter(JsonWriter.OutputType.minimal);
         DataCompressor compress = new DataCompressor();
         OrderedMap<String, Adventurer> adventurers = new OrderedMap<>(200, 0.8f);
+        OrderedMap<String, String> empty = new OrderedMap<>(0, 0.5f);
+        StringStringMap empty2 = new StringStringMap(0, 0.5f);
         if(Gdx.files.local(ROOT_DIR + "src/test/resources/generated/UncompressedAdventurers.js").exists()) {
             OrderedMap<String, Adventurer> fromNormal = convert.fromJson(adventurers.getClass(),
                     Gdx.files.local(ROOT_DIR + "src/test/resources/generated/UncompressedAdventurers.js")),
@@ -41,6 +44,16 @@ public class DataDemo extends ApplicationAdapter {
                     System.out.println(fromNormal.getAt(i).serializeToString());
                 else
                     System.out.println(fromCompressed.getAt(i).serializeToString());
+            }
+            if (Gdx.files.local(ROOT_DIR + "src/test/resources/generated/EmptyOrderedMap.js").exists()) {
+                OrderedMap<String, String> emp = convert.fromJson(empty.getClass(),
+                        Gdx.files.local(ROOT_DIR + "src/test/resources/generated/EmptyOrderedMap.js"));
+                System.out.println(emp);
+            }
+            if (Gdx.files.local(ROOT_DIR + "src/test/resources/generated/EmptyStringStringMap.js").exists()) {
+                StringStringMap emp2 = convert.fromJson(empty2.getClass(),
+                        Gdx.files.local(ROOT_DIR + "src/test/resources/generated/EmptyStringStringMap.js"));
+                System.out.println(emp2);
             }
         }
         // write out the JSON files read from a tab-separated value file
@@ -58,6 +71,12 @@ public class DataDemo extends ApplicationAdapter {
 
         Gdx.files.local(ROOT_DIR + "src/test/resources/generated/PrettyAdventurers.js")
                 .writeString(convert.prettyPrint(adventurers), false, "UTF-8");
+
+        Gdx.files.local(ROOT_DIR + "src/test/resources/generated/EmptyOrderedMap.js")
+                .writeString(convert.toJson(empty, OrderedMap.class), false, "UTF-8");
+
+        Gdx.files.local(ROOT_DIR + "src/test/resources/generated/EmptyStringStringMap.js")
+                .writeString(convert.toJson(empty2, StringStringMap.class), false, "UTF-8");
 
         Gdx.app.exit();
     }
