@@ -40,10 +40,7 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.openjdk.jmh.runner.options.TimeValue;
-import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.PermutedRNG;
-import squidpony.squidmath.PintRNG;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.*;
 
 import java.util.concurrent.TimeUnit;
 
@@ -633,6 +630,79 @@ public class RNGBenchmark {
         iseed = 9000;
         doPermutedIntR();
     }
+
+
+    public long doLFSR()
+    {
+        LFSR rng = new LFSR(seed);
+
+        for (int i = 0; i < 1000000000; i++) {
+            seed += rng.nextLong();
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureLFSR() throws InterruptedException {
+        seed = 9000;
+        doLFSR();
+    }
+
+    public long doLFSRInt()
+    {
+        LFSR rng = new LFSR(iseed);
+
+        for (int i = 0; i < 1000000000; i++) {
+            iseed += rng.nextInt();
+        }
+        return iseed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureLFSRInt() throws InterruptedException {
+        iseed = 9000;
+        doLFSRInt();
+    }
+    public long doLFSRR()
+    {
+        RNG rng = new RNG(new LFSR(seed));
+
+        for (int i = 0; i < 1000000000; i++) {
+            seed += rng.nextLong();
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureLFSRR() throws InterruptedException {
+        seed = 9000;
+        doLFSRR();
+    }
+
+    public long doLFSRIntR()
+    {
+        RNG rng = new RNG(new LFSR(iseed));
+
+        for (int i = 0; i < 1000000000; i++) {
+            iseed += rng.nextInt();
+        }
+        return iseed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureLFSRIntR() throws InterruptedException {
+        iseed = 9000;
+        doLFSRIntR();
+    }
+
     /*
     public long doXor()
     {
