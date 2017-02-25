@@ -625,6 +625,8 @@ public class EverythingDemo extends ApplicationAdapter {
         IColoredString<Color> helping1 = new IColoredString.Impl<>("Use numpad or vi-keys (hjklyubn) to move.", Color.WHITE);
         IColoredString<Color> helping2 = new IColoredString.Impl<>("Use ? for help, f to change colors, q to quit.", Color.WHITE);
         IColoredString<Color> helping3 = new IColoredString.Impl<>("Click the top or bottom border of the lower message box to scroll.", Color.WHITE);
+        IColoredString<Color> helping4 = new IColoredString.Impl<>("Each Я is an AЯMED GUAЯD; bump into them to kill them.", Color.WHITE);
+        IColoredString<Color> helping5 = new IColoredString.Impl<>("If an Я starts its turn next to where you just moved, you take damage.", Color.WHITE);
 
         /* Some grey color */
         final Color bgColor = new Color(0.3f, 0.3f, 0.3f, 0.9f);
@@ -647,6 +649,8 @@ public class EverythingDemo extends ApplicationAdapter {
         text.add(helping1);
         text.add(helping2);
         text.add(helping3);
+        text.add(helping4);
+        text.add(helping5);
 
         final float w = width * cellWidth, aw = helping3.length() * cellWidth * 0.8f * INTERNAL_ZOOM;
         final float h = height * cellHeight, ah = cellHeight * 9f * INTERNAL_ZOOM;
@@ -677,7 +681,7 @@ public class EverythingDemo extends ApplicationAdapter {
             for (int j = 0; j < height; j++) {
                 overlapping = monsters.containsPosition(Coord.get(i, j)) || (player.gridX == i && player.gridY == j);
                 // if we see it now, we remember the cell and show a lit cell based on the fovmap value (between 0.0
-                // and 1.0), with 1.0 being almost pure white at +215 lightness and 0.0 being rather dark at -105.
+                // and 1.0), with 1.0 being brighter at +75 lightness and 0.0 being rather dark at -105.
                 if (fovmap[i][j] > 0.0) {
                     seen[i][j] = true;
                     display.put(i, j, (overlapping) ? ' ' : lineDungeon[i][j], fgCenter.filter(colors[i][j]), bgCenter.filter(bgColors[i][j]),
