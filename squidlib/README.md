@@ -8,19 +8,19 @@ SquidLib is used for Wyrm, Epigon, Attack the Geth, Assault Fish, [Dungeon Merce
 Documentation:
 ---
 Jars of javadocs are distributed with each release via Maven Central, and with the current latest via JitPack. You can
-get the docs and source of the latest version, 3.0.0-b7, in two parts for each; squidlib-util (the core of the library,
+get the docs and source of the latest version, 3.0.0-b8, in two parts for each; squidlib-util (the core of the library,
 and also the largest part) has its
-[docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-util/3.0.0-b7/squidlib-util-3.0.0-b7-javadoc.jar),
-and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-util/3.0.0-b7/squidlib-util-3.0.0-b7-sources.jar),
+[docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-util/3.0.0-b8/squidlib-util-3.0.0-b8-javadoc.jar),
+and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-util/3.0.0-b8/squidlib-util-3.0.0-b8-sources.jar),
 while squidlib (the display part of the library, named the way it is because depending on squidlib should also pull in
 squidlib-util to make it a "one-stop shop" dependency) has its
-[docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib/3.0.0-b7/squidlib-3.0.0-b7-javadoc.jar),
-and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib/3.0.0-b7/squidlib-3.0.0-b7-sources.jar).
+[docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib/3.0.0-b8/squidlib-3.0.0-b8-javadoc.jar),
+and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib/3.0.0-b8/squidlib-3.0.0-b8-sources.jar).
 The completely-optional squidlib-extra module (primarily used for serialization; relies on libGDX but doesn't use it for display) has its
-[docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.0-b7/squidlib-extra-3.0.0-b7-javadoc.jar),
-and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.0-b7/squidlib-extra-3.0.0-b7-sources.jar).
+[docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.0-b8/squidlib-extra-3.0.0-b8-javadoc.jar),
+and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.0-b8/squidlib-extra-3.0.0-b8-sources.jar).
 
-You can browse the javadocs of a recent commit (possibly newer than 3.0.0-b7, but no older)
+You can browse the javadocs of a recent commit (possibly newer than 3.0.0-b8, but no older)
 [here for squidlib-util](http://squidpony.github.io/SquidLib/squidlib-util/index.html),
 [here for squidlib](http://squidpony.github.io/SquidLib/squidlib/index.html), and
 [here for squidlib-extra](http://squidpony.github.io/SquidLib/squidlib-extra/index.html), though the docs here are
@@ -83,7 +83,7 @@ Current Features:
 -   Can get an arbitrary amount of blend between two colors
 -   Starting with 3.0.0 beta 2, you can alter colors automatically using Filters
 -   Starting with 3.0.0 beta 5, lots of options are available for generating gradients, including with Filters, and gradients that wrap around like a rainbow
--   In recent betas (7 at least), there's a filter that adjusts the brightness of red and green to help players with common forms of red-green colorblindness distinguish game objects that would otherwise be too similar
+-   In recent betas (7 onward), there's a filter that adjusts the brightness of red and green to help players with common forms of red-green colorblindness distinguish game objects that would otherwise be too similar
 -   SquidColorCenter (and potentially other IColorCenter implementations) allow finding and adjusting the hue, saturation, and value of colors
 
 ###Roguelike-Intended Toolkit
@@ -132,7 +132,7 @@ Current Features:
   -   DijkstraMap can be given a Technique that contains a minimum and maximum range, and an Area of Effect, and it will pathfind to a relatively good place to use that technique.
     -   There are many kinds of Area of Effect (AOE) provided, and given the right information, they can calculate the best place to position that AOE to hit as many targets as possible (not an easy task, but it gets calculated quickly).
   -   DijkstraMap can partially scan an area, stopping once it reaches a given distance.
-    -   As of beta 7, DijkstraMap finally incorporates the straightforward optimization of immediately stopping distance
+    -   Since beta 7, DijkstraMap finally incorporates the straightforward optimization of immediately stopping distance
         calculation once an ideal path has been found; the case of scanning the whole map intentionally is unaffected, though
         other optimizations made that faster too
     - It would seem like partial scanning is normally ideal, but there are cases where you can avoid multiple partial scans
@@ -140,8 +140,8 @@ Current Features:
       is used in BasicDemo (in the examples of the display module) to handle the highlighted path from the player to the mouse cursor
   -   Several classes support multi-cell creatures, including DijkstraMap
   -   DijkstraMap is currently recommended for pathfinding because it has been optimized more heavily than AStarSearch
-    -   Make that, much more heavily, as of beta 7; DijkstraMap can, depending on heuristic, beat even top-notch pathfinding algorithms like gdx-ai's indexed A* on long/winding enough paths.
-    -   AStarSearch has gotten some optimization, but is still much slower than DijkstraMap in beta 7
+    -   Make that, much more heavily, since beta 7; DijkstraMap can, depending on heuristic, beat even top-notch pathfinding algorithms like gdx-ai's indexed A* on long/winding enough paths.
+    -   AStarSearch has gotten some optimization, but is still much slower than DijkstraMap in betas 7 and 8
   -   CustomDijkstraMap allows pathfinding on unusual map types, such as ones where you can rotate in your cell but it takes time, or where there are thin walls
     -   See ThinWallDemo and RotationDemo in the display module's tests folder for examples; this is an advanced feature, though
 
@@ -205,7 +205,7 @@ Current Features:
   -   Using indexes instead of always using keys can be useful, but it also means that getting random values from these collections will behave as expected across platforms
   -   Most of these classes allow you to specify how keys are hashed and compared for equality, which permits using arrays as keys (if they aren't modified) or even allows the behavior of IdentityHashMap to be used with insertion ordering (which does allow keys to be modified, but has special requirements for accessing them)
     -   The class CrossHash includes multiple hashing algorithms and predefined IHasher values for various usages, which can be passed to many OrderedMap/Set constructors
-  -   SquidLib releases before beta 7 used LinkedHashMap and LinkedHashSet in place of OrderedMap and OrderedSet, and converting from beta 6 to beta 7 may entail some changes
+  -   SquidLib releases before beta 7 used LinkedHashMap and LinkedHashSet in place of OrderedMap and OrderedSet, and converting from beta 6 to beta 7 or later may entail some changes
 -   Maker, a small class in squidlib-util, helps construct these data structures more conveniently
 -   The serialization code in squidlib-extra is aware of these data structures and can serialize them efficiently and with less restrictions that normally apply to JSON (you can serialize non-String keys to our dialect of JSON with OrderedMap, for example)
   -   This code also provides ways to compress the JSON output using lz-string encoding, which performs very well here; it uses the tiny library [BlazingChain](https://github.com/tommyettinger/BlazingChain) to do this
@@ -264,7 +264,7 @@ configured the way libGDX prefers to work, and copy in any code you might alread
 
 Ideally, if you're just starting out you should use SquidSetup. Beta 6 has been added to SquidSetup.
 This is [the most recent, beta 6, release of the setup tool](https://github.com/SquidPony/SquidLib/releases/tag/v3.0.0-b6);
-beta 7 support is being added to the next build.
+beta 8 support is being added to the next build.
 This is [the new snapshot setup tool](https://github.com/tommyettinger/SquidSetup/releases/tag/v3.0.0-LATEST), which is
 good if you already understand Gradle, but especially if you want to test new features/fixes as they come in. It
 currently isn't named in the most accurate way; it actually downloads a fixed version from JitPack.io, but you can
@@ -275,7 +275,8 @@ an alternative to the current official libGDX setup that aims to have more featu
 replace the current SquidSetup for stable releases, and it is likely that the next significant change to SquidSetup will
 be to make it a simple fork of czyzby's setup tool that includes the assets and also gets the most recent version from
 JitPack if possible. The gdx-setup project also allows demo code to be more easily supplied, and some demos are in
-progress for SquidLib (one is already present in gdx-setup, but it is made for an earlier version of SquidLib).
+progress for SquidLib (one is already present in gdx-setup, but it is made for an earlier version of SquidLib; this is
+being remedied and gdx-setup should be ready to use beta 8 very soon).
 
 More information is available on the wiki here on Github, at the page on [Project Setup](https://github.com/SquidPony/SquidLib/wiki/Project-Setup).
 It may be somewhat out of date for now.

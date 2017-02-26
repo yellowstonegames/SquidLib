@@ -33,11 +33,11 @@ THE POSSIBILITY OF SUCH DAMAGE.
     <parent>
       <artifactId>squidlib-parent</artifactId>
       <groupId>com.squidpony</groupId>
-      <version>3.0.0-SNAPSHOT</version>
+      <version>3.0.0-b8</version>
     </parent>
 
     <artifactId>squidlib-performance</artifactId>
-    <version>3.0.0-SNAPSHOT</version>
+    <version>3.0.0-b8</version>
     <packaging>jar</packaging>
 
     <name>squidlib-performance</name>
@@ -74,7 +74,7 @@ THE POSSIBILITY OF SUCH DAMAGE.
         <dependency>
             <groupId>com.squidpony</groupId>
             <artifactId>squidlib</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
+            <version>3.0.0-b8</version>
         </dependency>
         <dependency>
             <groupId>com.badlogicgames.gdx</groupId>
