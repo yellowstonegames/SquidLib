@@ -83,21 +83,21 @@ public class FOV implements Serializable {
              * as fully transparent. Returns a percentage from 1.0 (center of
              * FOV) to 0.0 (outside of FOV).
              */
-    SHADOW = 5;
+            SHADOW = 5;
     private int type = SHADOW;
 
 	/**
 	 * Data allocated in the previous calls to the public API, if any. Used to
 	 * save allocations when multiple calls are done on the same instance.
 	 */
-    private double[][] light;
+    protected double[][] light;
 	/**
 	 * Data allocated in the previous calls to the public API, if any. Used to
 	 * save allocations when multiple calls are done on the same instance.
 	 */
-    private boolean[][] nearLight;
+    protected boolean[][] nearLight;
 
-    private static final Direction[] ccw = new Direction[]
+    protected static final Direction[] ccw = new Direction[]
             {Direction.UP_RIGHT, Direction.UP_LEFT, Direction.DOWN_LEFT, Direction.DOWN_RIGHT, Direction.UP_RIGHT},
             ccw_full = new Direction[]{Direction.RIGHT, Direction.UP_RIGHT, Direction.UP, Direction.UP_LEFT,
             Direction.LEFT, Direction.DOWN_LEFT, Direction.DOWN, Direction.DOWN_RIGHT};
@@ -172,7 +172,6 @@ public class FOV implements Serializable {
      * @return the computed light grid
      */
     public double[][] calculateFOV(double[][] resistanceMap, int startX, int startY, double radius, Radius radiusTechnique) {
-
         double rad = Math.max(1, radius);
         double decay = 1.0 / rad;
 
@@ -195,11 +194,8 @@ public class FOV implements Serializable {
                 // does not cause problems with brightness falloff because shadowcasting is on/off
 
                 // this should be fixed now, sorta. the distance is checked in the method this calls, so it doesn't ever
-                // run through more than 512 iterations of the radius-related loop (which seemed to be the only problem,
-                // running through billions of iterations when Integer/MAX_VALUE is given as a radius).
-                //if (rad > width + height){
-                //    rad = width + height;
-                //}
+                // run through more than (width + height) iterations of the radius-related loop (which seemed to be the
+                // only problem, running through billions of iterations when Integer/MAX_VALUE is given as a radius).
                 for (Direction d : Direction.DIAGONALS) {
                     shadowCast(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
                     shadowCast(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
@@ -254,15 +250,9 @@ public class FOV implements Serializable {
                 doRippleFOV(light, rippleValue(type), startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, radiusTechnique, angle2, span2);
                 break;
             case SHADOW:
-                // hotfix for too large radius -> set to longest possible straight-line Manhattan distance instead
-                // does not cause problems with brightness falloff because shadowcasting is on/off
-
                 // this should be fixed now, sorta. the distance is checked in the method this calls, so it doesn't ever
-                // run through more than 512 iterations of the radius-related loop (which seemed to be the only problem,
-                // running through billions of iterations when Integer/MAX_VALUE is given as a radius).
-                //if (rad > width + height){
-                //    rad = width + height;
-                //}
+                // run through more than (width + height) iterations of the radius-related loop (which seemed to be the
+                // only problem, running through billions of iterations when Integer/MAX_VALUE is given as a radius).
                 int ctr = 0;
                 boolean started = false;
                 for (Direction d : ccw) {
@@ -389,7 +379,7 @@ public class FOV implements Serializable {
 				 * Size did not change, we simply need to erase the previous
 				 * result
 				 */
-				ArrayTools.fill(light, 0d);
+				ArrayTools.fill(light, 0.0);
 			}
 		}
 	}

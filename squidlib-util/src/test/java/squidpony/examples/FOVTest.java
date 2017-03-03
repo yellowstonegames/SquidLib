@@ -1,13 +1,12 @@
 package squidpony.examples;
 
+import squidpony.ArrayTools;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidgrid.mapping.OrganicMapGenerator;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.OrderedSet;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidgrid.mapping.SerpentMapGenerator;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
 
@@ -25,7 +24,9 @@ public class FOVTest {
         dungeonGenerator.addWater(15);
         dungeonGenerator.addGrass(5);
         dungeonGenerator.addBoulders(5);
-        OrganicMapGenerator organic = new OrganicMapGenerator(width, height, rng);
+        SerpentMapGenerator organic = new SerpentMapGenerator(width, height, rng, 0.2);
+        organic.putWalledBoxRoomCarvers(4);
+        organic.putCaveCarvers(3);
         dungeonGenerator.generate(organic.generate());
         char[][] dungeon = dungeonGenerator.getDungeon();
         char[][] deco = DungeonUtility.doubleWidth(DungeonUtility.hashesToLines(dungeon, true));
@@ -36,15 +37,16 @@ public class FOVTest {
         double[][] resMap = DungeonUtility.generateResistances(dungeon);
         FOV fov = new FOV(FOV.SHADOW);
         ArrayList<double[][]> fovMaps = new ArrayList<>(8);
-        short[] floors = DungeonUtility.packedFloors(dungeon);
-        Coord pt = dungeonGenerator.utility.randomCell(floors);
+        GreasedRegion floors = new GreasedRegion(dungeon, '.');
+        Coord pt = floors.singleRandom(rng);
         Coord start = pt;
         OrderedSet<Coord> points = new OrderedSet<>(20);
-        double[][] losMap = fov.calculateLOSMap(resMap, pt.x, pt.y);
+        double[][] losMap = ArrayTools.copy(fov.calculateLOSMap(resMap, pt.x, pt.y));
+        LFSR tumbler = new LFSR(0x123456789ABCDEF0L);
         for (int i = 0; i < 20; i++) {
-            points.add(pt);
-            fovMaps.add(fov.calculateFOV(resMap, pt.x, pt.y, rng.between(4.0, 9.0), Radius.CIRCLE));
-            pt = dungeonGenerator.utility.randomCell(floors);
+            points.add(pt = floors.atFraction(tumbler.nextDouble()));
+            double rad = rng.between(5.0, 12.0);
+            fovMaps.add(ArrayTools.copy(fov.calculateFOV(resMap, pt.x, pt.y, rad, Radius.CIRCLE)));
         }
         double[][] result = FOV.mixVisibleFOVs(losMap, fovMaps);
         for (int y = 0; y < height; y++) {
@@ -72,33 +74,6 @@ public class FOVTest {
         }
         System.out.println("\n");
 
-        result = FOV.mixVisibleFOVs(losMap, fovMaps.toArray(new double[fovMaps.size()][][]));
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                if(dungeon[x][y] == '#')
-                {
-                    System.out.print(deco[x * 2][y]);
-                    System.out.print(deco[x * 2 + 1][y]);
-                }
-                else if (start.x == x && start.y == y)
-                {
-                    System.out.print("!!");
-                }
-                else if(points.contains(Coord.get(x, y)))
-                {
-                    System.out.print("**");
-                }
-                else
-                {
-                    System.out.print(' ');
-                    System.out.print(Math.round(result[x][y] * 9.4999));
-                }
-            }
-            System.out.println();
-        }
-
-        System.out.println("\n");
-
         result = FOV.addFOVs(fovMaps);
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -124,34 +99,7 @@ public class FOVTest {
             System.out.println();
         }
 
-
-        System.out.println("\n");
-
-        result = FOV.addFOVs(fovMaps.toArray(new double[fovMaps.size()][][]));
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                if(dungeon[x][y] == '#')
-                {
-                    System.out.print(deco[x * 2][y]);
-                    System.out.print(deco[x * 2 + 1][y]);
-                }
-                else if (start.x == x && start.y == y)
-                {
-                    System.out.print("!!");
-                }
-                else if(points.contains(Coord.get(x, y)))
-                {
-                    System.out.print("**");
-                }
-                else
-                {
-                    System.out.print(' ');
-                    System.out.print(Math.round(result[x][y] * 9.4999));
-                }
-            }
-            System.out.println();
-        }
-
         System.out.println();
+
     }
 }
