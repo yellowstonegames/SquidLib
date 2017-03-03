@@ -264,4 +264,15 @@ public class GreasedRegionTest {
         wrecked.remake(dataCross).disperseRandom(rng);
         printRegion(wrecked);
     }
+
+    @Test
+    public void testCorners() {
+        GreasedRegion beveled = new GreasedRegion(dataCross).removeCorners();
+        printRegion(beveled);
+        GreasedRegion other = new GreasedRegion(dataCross).expand().retract8way();
+        printRegion(other);
+        assertTrue(beveled.equals(other));
+        beveled.fill(true).removeCorners();
+        printRegion(beveled);
+    }
 }

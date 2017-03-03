@@ -513,6 +513,105 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             return this;
         }
     }
+
+    /**
+     * Constructs this GreasedRegion using a double[][] (this was made for use inside
+     * {@link squidpony.squidgrid.BevelFOV}) that only stores two relevant states:  an "on" state for values between
+     * lowerBound (inclusive) and upperBound (exclusive), and an "off" state for anything else. This variant scales the
+     * input so each "on" position in map produces a 2x2 on area if scale is 2, a 3x3 area if scale is 3, and so on.
+     * @param map a double[][] that may relate in some way to BevelFOV
+     * @param lowerBound lower inclusive; any double lower than this will be off, any equal to or greater than this,
+     *                   but less than upper, will be on
+     * @param upperBound upper exclusive; any double greater than or equal to this this will be off, any doubles both
+     *                   less than this and equal to or greater than lower will be on
+     * @param scale      the size of the square of cells in this that each "on" value in map will correspond to
+     */
+    public GreasedRegion(final double[][] map, final double lowerBound, final double upperBound, int scale)
+    {
+        scale = Math.min(63, Math.max(1, scale));
+        int baseWidth = map.length, baseHeight = map[0].length;
+        width =  baseWidth * scale;
+        height = baseHeight * scale;
+        ySections = (height + 63) >> 6;
+        yEndMask = -1L >>> (64 - (height & 63));
+        data = new long[width * ySections];
+        long shape = (1L << scale) - 1L, leftover;
+        for (int bx = 0, x = 0; bx < baseWidth; bx++, x += scale) {
+            for (int by = 0, y = 0; by < baseHeight; by++, y += scale) {
+                if(map[bx][by] >= lowerBound && map[bx][by] < upperBound) {
+                    for (int i = 0; i < scale; i++) {
+                        data[(x + i) * ySections + (y >> 6)] |= shape << (y & 63);
+                        if((leftover = (y + scale - 1 & 63) + 1) < (y & 63) + 1 && (y + leftover >> 6) < ySections)
+                        {
+                            data[(x + i) * ySections + (y >> 6) + 1] |= (1L << leftover) - 1L;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    /**
+     * Reassigns this GreasedRegion with the given rectangular double array, reusing the current data storage (without
+     * extra allocations) if {@code this.width == map.length * scale && this.height == map[0].length * scale}. The
+     * current values stored in this are always cleared, then cells are treated as on if they are greater than or equal
+     * to lower and less than upper, or off otherwise, before considering scaling. This variant scales the input so each
+     * "on" position in map produces a 2x2 on area if scale is 2, a 3x3 area if scale is 3, and so on.
+     * @param map a double[][] that may relate in some way to BevelFOV
+     * @param lowerBound lower inclusive; any double lower than this will be off, any equal to or greater than this,
+     *                   but less than upper, will be on
+     * @param upperBound upper exclusive; any double greater than or equal to this this will be off, any doubles both
+     *                   less than this and equal to or greater than lower will be on
+     * @param scale      the size of the square of cells in this that each "on" value in map will correspond to
+     * @return this for chaining
+     */
+    public GreasedRegion refill(final double[][] map, final double lowerBound, final double upperBound, int scale) {
+        scale = Math.min(63, Math.max(1, scale));
+        if (map != null && map.length > 0 && width == map.length * scale && height == map[0].length * scale) {
+            Arrays.fill(data, 0L);
+            double[] column;
+            int baseWidth = map.length, baseHeight = map[0].length;
+            long shape = (1L << scale) - 1L, leftover;
+            for (int bx = 0, x = 0; bx < baseWidth; bx++, x += scale) {
+                column = map[bx];
+                for (int by = 0, y = 0; by < baseHeight; by++, y += scale) {
+                    if(column[by] >= lowerBound && column[by] < upperBound) {
+                        for (int i = 0; i < scale; i++) {
+                            data[(x + i) * ySections + (y >> 6)] |= shape << (y & 63);
+                            if((leftover = (y + scale - 1 & 63) + 1) < (y & 63) + 1 && (y + leftover >> 6) < ySections)
+                            {
+                                data[(x + i) * ySections + (y >> 6) + 1] |= (1L << leftover) - 1L;
+                            }
+                        }
+                    }
+                }
+            }
+            return this;
+        } else {
+            int baseWidth = (map == null) ? 0 : map.length,
+                    baseHeight = (map == null || map.length <= 0) ? 0 : map[0].length;
+            width =  baseWidth * scale;
+            height = baseHeight * scale;
+            ySections = (height + 63) >> 6;
+            yEndMask = -1L >>> (64 - (height & 63));
+            data = new long[width * ySections];
+            long shape = (1L << scale) - 1L, leftover;
+            for (int bx = 0, x = 0; bx < baseWidth; bx++, x += scale) {
+                for (int by = 0, y = 0; by < baseHeight; by++, y += scale) {
+                    if(map[bx][by] >= lowerBound && map[bx][by] < upperBound) {
+                        for (int i = 0; i < scale; i++) {
+                            data[(x + i) * ySections + (y >> 6)] |= shape << (y & 63);
+                            if((leftover = (y + scale - 1 & 63)) < y && y < height - leftover)
+                            {
+                                data[(x + i) * ySections + (y >> 6) + 1] |= (1L << leftover) - 1L;
+                            }
+                        }
+                    }
+                }
+            }
+            return this;
+        }
+    }
+
     /**
      * Constructs a GreasedRegion with the given 1D boolean array, with the given width and height, where an [x][y]
      * position is obtained from bits given an index n with x = n / height, y = n % height, any value of true
@@ -2682,6 +2781,73 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return this;
     }
 
+    public GreasedRegion removeCorners()
+    {
+        if(width <= 2 || ySections <= 0)
+            return this;
+
+        long[] next = new long[width * ySections];
+        System.arraycopy(data, 0, next, 0, width * ySections);
+        for (int a = 0; a < ySections; a++) {
+            if(a > 0 && a < ySections - 1) {
+                next[a] &= (((data[a] << 1) | ((data[a - 1] & 0x8000000000000000L) >>> 63))
+                        & ((data[a] >>> 1) | ((data[a + 1] & 1L) << 63)));
+                next[(width - 1) * ySections + a] &= (((data[(width - 1) * ySections + a] << 1)
+                        | ((data[(width - 1) * ySections + a - 1] & 0x8000000000000000L) >>> 63))
+                        & ((data[(width - 1) * ySections + a] >>> 1)
+                        | ((data[(width - 1) * ySections + a + 1] & 1L) << 63)));
+                for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
+                    next[i] &= (((data[i] << 1) | ((data[i - 1] & 0x8000000000000000L) >>> 63))
+                            & ((data[i] >>> 1) | ((data[i + 1] & 1L) << 63)))
+                            | (data[i - ySections]
+                            & data[i + ySections]);
+                }
+            }
+            else if(a > 0) {
+                next[a] &= (((data[a] << 1) | ((data[a - 1] & 0x8000000000000000L) >>> 63))
+                        & (data[a] >>> 1));
+                next[(width - 1) * ySections + a] &= (((data[(width - 1) * ySections + a] << 1)
+                        | ((data[(width - 1) * ySections + a - 1] & 0x8000000000000000L) >>> 63))
+                        & (data[(width - 1) * ySections + a] >>> 1));
+                for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
+                    next[i] &= (((data[i] << 1) | ((data[i - 1] & 0x8000000000000000L) >>> 63))
+                            & (data[i] >>> 1))
+                            | (data[i - ySections]
+                            & data[i + ySections]);
+                }
+            }
+            else if(a < ySections - 1) {
+                next[a] &= ((data[a] << 1)
+                        & ((data[a] >>> 1)
+                        | ((data[a + 1] & 1L) << 63)));
+                next[(width - 1) * ySections + a] &= ((data[(width - 1) * ySections + a] << 1)
+                        & ((data[(width - 1) * ySections + a] >>> 1)
+                        | ((data[(width - 1) * ySections + a + 1] & 1L) << 63)));
+                for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
+                    next[i] &= ((data[i] << 1)
+                            & ((data[i] >>> 1) | ((data[i + 1] & 1L) << 63)))
+                            | (data[i - ySections]
+                            & data[i + ySections]);
+                }
+            }
+            else // only the case when ySections == 1
+            {
+                next[0] &= (data[0] << 1) & (data[0] >>> 1);
+                next[width-1] &= (data[width-1] << 1) & (data[width-1] >>> 1);
+                for (int i = 1+a; i < (width - 1); i++) {
+                    next[i] &= ((data[i] << 1) & (data[i] >>> 1)) | (data[i - ySections] & data[i + ySections]);
+                }
+            }
+        }
+
+        if(yEndMask != -1) {
+            for (int a = ySections - 1; a < next.length; a += ySections) {
+                next[a] &= yEndMask;
+            }
+        }
+        data = next;
+        return this;
+    }
 
     /**
      * If this GreasedRegion stores multiple unconnected "on" areas, this finds each isolated area (areas that
