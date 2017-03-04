@@ -1,0 +1,244 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import regexodus.Matcher;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import regexodus.Pattern;<a name="line.4"></a>
+<span class="sourceLineNo">005</span>import squidpony.squidmath.IntVLA;<a name="line.5"></a>
+<span class="sourceLineNo">006</span><a name="line.6"></a>
+<span class="sourceLineNo">007</span>import java.util.ArrayList;<a name="line.7"></a>
+<span class="sourceLineNo">008</span>import java.util.Iterator;<a name="line.8"></a>
+<span class="sourceLineNo">009</span><a name="line.9"></a>
+<span class="sourceLineNo">010</span>/**<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * A simple format parser for String-based configuration or data files where JSON is overkill.<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * Supports only one type, String, but allows each String to have arbitrary nested levels of<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * String children as if in sub-lists. You can interpret the Strings however you want, and<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * quoting each String isn't necessary if they are just one word ("bare words" are allowed).<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * &lt;br&gt;<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * Inspired strongly by STOB, http://stobml.org/ , but no code is shared and the format is<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * slightly different. The main differences are that ObText supports nested block comments<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * using the syntax /[delimiter/comment here/delimiter]/, and that it uses Python-like<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * "heredoc" syntax for raw strings surrounded by triple-apostrophes '''like this''' with<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * optional initial and final newlines in the raw string ignored. We use square brackets in<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * place of curly braces to mark children associated with a string.<a name="line.21"></a>
+<span class="sourceLineNo">022</span> */<a name="line.22"></a>
+<span class="sourceLineNo">023</span>public class ObText implements Iterable&lt;String&gt;{<a name="line.23"></a>
+<span class="sourceLineNo">024</span>    public static final Pattern pattern = Pattern.compile(<a name="line.24"></a>
+<span class="sourceLineNo">025</span>            "(?&gt;'''(?:[\n\u000C\f\r\u0085\u2028\u2029]|\r\n)?({=s}[\\d\\D]*?)(?:[\n\u000C\f\r\u0085\u2028\u2029]|\r\n)?''')" +<a name="line.25"></a>
+<span class="sourceLineNo">026</span>            "|(?&gt;'''({=s}[\\d\\D]*?)''')" +<a name="line.26"></a>
+<span class="sourceLineNo">027</span>            "|(?&gt;({=q}[\"'])({=s}[\\d\\D]*?)(?&lt;!\\\\){\\q})" +<a name="line.27"></a>
+<span class="sourceLineNo">028</span>            "|({=comment}(?&gt;//|^#!)(?&gt;\\V*))" +<a name="line.28"></a>
+<span class="sourceLineNo">029</span>            "|({=block}/\\[({=q}\\S*)/(?:[\\d\\D]*?)/{\\q}\\]/)" +<a name="line.29"></a>
+<span class="sourceLineNo">030</span>            "|({=s}[^\\s\\[\\]\"'#\\\\]+)" +<a name="line.30"></a>
+<span class="sourceLineNo">031</span>            "|({=o}\\[)" +<a name="line.31"></a>
+<span class="sourceLineNo">032</span>            "|({=c}\\])"<a name="line.32"></a>
+<span class="sourceLineNo">033</span><a name="line.33"></a>
+<span class="sourceLineNo">034</span>    );<a name="line.34"></a>
+<span class="sourceLineNo">035</span>    public static final Matcher m = pattern.matcher();<a name="line.35"></a>
+<span class="sourceLineNo">036</span><a name="line.36"></a>
+<span class="sourceLineNo">037</span>    protected final ArrayList&lt;String&gt; strings = new ArrayList&lt;String&gt;(64);<a name="line.37"></a>
+<span class="sourceLineNo">038</span>    protected final IntVLA neighbors = new IntVLA(64);<a name="line.38"></a>
+<span class="sourceLineNo">039</span>    private final IntVLA nesting = new IntVLA(16);<a name="line.39"></a>
+<span class="sourceLineNo">040</span>    public ObText()<a name="line.40"></a>
+<span class="sourceLineNo">041</span>    {<a name="line.41"></a>
+<span class="sourceLineNo">042</span><a name="line.42"></a>
+<span class="sourceLineNo">043</span>    }<a name="line.43"></a>
+<span class="sourceLineNo">044</span>    public ObText(CharSequence text)<a name="line.44"></a>
+<span class="sourceLineNo">045</span>    {<a name="line.45"></a>
+<span class="sourceLineNo">046</span>        parse(text);<a name="line.46"></a>
+<span class="sourceLineNo">047</span>    }<a name="line.47"></a>
+<span class="sourceLineNo">048</span>    public ObText parse(CharSequence text)<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    {<a name="line.49"></a>
+<span class="sourceLineNo">050</span>        m.setTarget(text);<a name="line.50"></a>
+<span class="sourceLineNo">051</span>        nesting.clear();<a name="line.51"></a>
+<span class="sourceLineNo">052</span>        int t = -1;<a name="line.52"></a>
+<span class="sourceLineNo">053</span>        while (m.find()) {<a name="line.53"></a>
+<span class="sourceLineNo">054</span>            if (m.isCaptured("s")) {<a name="line.54"></a>
+<span class="sourceLineNo">055</span>                strings.add(m.group("s"));<a name="line.55"></a>
+<span class="sourceLineNo">056</span>                neighbors.add(1);<a name="line.56"></a>
+<span class="sourceLineNo">057</span>            }<a name="line.57"></a>
+<span class="sourceLineNo">058</span>            else if(m.isCaptured("o"))<a name="line.58"></a>
+<span class="sourceLineNo">059</span>            {<a name="line.59"></a>
+<span class="sourceLineNo">060</span>                nesting.add(neighbors.size - 1);<a name="line.60"></a>
+<span class="sourceLineNo">061</span>            }<a name="line.61"></a>
+<span class="sourceLineNo">062</span>            else if(m.isCaptured("c"))<a name="line.62"></a>
+<span class="sourceLineNo">063</span>            {<a name="line.63"></a>
+<span class="sourceLineNo">064</span>                neighbors.incr(t = nesting.pop(), neighbors.size - t - 1);<a name="line.64"></a>
+<span class="sourceLineNo">065</span>                if(t &lt; neighbors.size - 1)<a name="line.65"></a>
+<span class="sourceLineNo">066</span>                    neighbors.set(neighbors.size-1, 0);<a name="line.66"></a>
+<span class="sourceLineNo">067</span>            }<a name="line.67"></a>
+<span class="sourceLineNo">068</span>        }<a name="line.68"></a>
+<span class="sourceLineNo">069</span>        return this;<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    }<a name="line.70"></a>
+<span class="sourceLineNo">071</span><a name="line.71"></a>
+<span class="sourceLineNo">072</span>    /**<a name="line.72"></a>
+<span class="sourceLineNo">073</span>     * Returns an iterator over elements of type {@code T}.<a name="line.73"></a>
+<span class="sourceLineNo">074</span>     *<a name="line.74"></a>
+<span class="sourceLineNo">075</span>     * @return an Iterator.<a name="line.75"></a>
+<span class="sourceLineNo">076</span>     */<a name="line.76"></a>
+<span class="sourceLineNo">077</span>    @Override<a name="line.77"></a>
+<span class="sourceLineNo">078</span>    public ItemIterator iterator() {<a name="line.78"></a>
+<span class="sourceLineNo">079</span>        return new ItemIterator();<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    }<a name="line.80"></a>
+<span class="sourceLineNo">081</span><a name="line.81"></a>
+<span class="sourceLineNo">082</span>    /**<a name="line.82"></a>
+<span class="sourceLineNo">083</span>     * A one-way iterator through this ObText's String items; note that this can be<a name="line.83"></a>
+<span class="sourceLineNo">084</span>     * instructed to descend into child sequences with {@link #child()}, which should<a name="line.84"></a>
+<span class="sourceLineNo">085</span>     * only be called after checking that a child exists with {@link #hasChild()}.<a name="line.85"></a>
+<span class="sourceLineNo">086</span>     * {@link #remove()} is not supported, but {@link #next()} and {@link #hasNext()}<a name="line.86"></a>
+<span class="sourceLineNo">087</span>     * are, of course.<a name="line.87"></a>
+<span class="sourceLineNo">088</span>     */<a name="line.88"></a>
+<span class="sourceLineNo">089</span>    public class ItemIterator implements Iterator&lt;String&gt;<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    {<a name="line.90"></a>
+<span class="sourceLineNo">091</span>        ItemIterator()<a name="line.91"></a>
+<span class="sourceLineNo">092</span>        {<a name="line.92"></a>
+<span class="sourceLineNo">093</span>        }<a name="line.93"></a>
+<span class="sourceLineNo">094</span>        ItemIterator(int i)<a name="line.94"></a>
+<span class="sourceLineNo">095</span>        {<a name="line.95"></a>
+<span class="sourceLineNo">096</span>            index = i % neighbors.size;<a name="line.96"></a>
+<span class="sourceLineNo">097</span>            current = index - 1;<a name="line.97"></a>
+<span class="sourceLineNo">098</span>        }<a name="line.98"></a>
+<span class="sourceLineNo">099</span>        int index = 0, current = -1;<a name="line.99"></a>
+<span class="sourceLineNo">100</span>        /**<a name="line.100"></a>
+<span class="sourceLineNo">101</span>         * Returns {@code true} if the iteration has more elements.<a name="line.101"></a>
+<span class="sourceLineNo">102</span>         * (In other words, returns {@code true} if {@link #next} would<a name="line.102"></a>
+<span class="sourceLineNo">103</span>         * return an element rather than throwing an exception.)<a name="line.103"></a>
+<span class="sourceLineNo">104</span>         *<a name="line.104"></a>
+<span class="sourceLineNo">105</span>         * @return {@code true} if the iteration has more elements<a name="line.105"></a>
+<span class="sourceLineNo">106</span>         */<a name="line.106"></a>
+<span class="sourceLineNo">107</span>        @Override<a name="line.107"></a>
+<span class="sourceLineNo">108</span>        public boolean hasNext() {<a name="line.108"></a>
+<span class="sourceLineNo">109</span>            return index &lt; neighbors.size &amp;&amp; (current &lt; 0 || neighbors.get(current) &gt; 0);<a name="line.109"></a>
+<span class="sourceLineNo">110</span>        }<a name="line.110"></a>
+<span class="sourceLineNo">111</span>        /**<a name="line.111"></a>
+<span class="sourceLineNo">112</span>         * Returns {@code true} if the ObText.Item has any child elements.<a name="line.112"></a>
+<span class="sourceLineNo">113</span>         * (In other words, returns {@code true} if {@link #child} would<a name="line.113"></a>
+<span class="sourceLineNo">114</span>         * return an element rather than throwing an exception.)<a name="line.114"></a>
+<span class="sourceLineNo">115</span>         *<a name="line.115"></a>
+<span class="sourceLineNo">116</span>         * @return {@code true} if this has any children<a name="line.116"></a>
+<span class="sourceLineNo">117</span>         */<a name="line.117"></a>
+<span class="sourceLineNo">118</span>        public boolean hasChild() {<a name="line.118"></a>
+<span class="sourceLineNo">119</span>            return index &lt; neighbors.size - 1 &amp;&amp; ((current &lt; 0 &amp;&amp; neighbors.get(0) &gt; 1) || neighbors.get(current) &gt; 1);<a name="line.119"></a>
+<span class="sourceLineNo">120</span>        }<a name="line.120"></a>
+<span class="sourceLineNo">121</span><a name="line.121"></a>
+<span class="sourceLineNo">122</span>        /**<a name="line.122"></a>
+<span class="sourceLineNo">123</span>         * Returns the next element in the iteration.<a name="line.123"></a>
+<span class="sourceLineNo">124</span>         *<a name="line.124"></a>
+<span class="sourceLineNo">125</span>         * @return the next element in the iteration<a name="line.125"></a>
+<span class="sourceLineNo">126</span>         * @throws java.util.NoSuchElementException if the iteration has no more elements<a name="line.126"></a>
+<span class="sourceLineNo">127</span>         */<a name="line.127"></a>
+<span class="sourceLineNo">128</span>        @Override<a name="line.128"></a>
+<span class="sourceLineNo">129</span>        public String next() {<a name="line.129"></a>
+<span class="sourceLineNo">130</span>            if(current &lt; 0)<a name="line.130"></a>
+<span class="sourceLineNo">131</span>            {<a name="line.131"></a>
+<span class="sourceLineNo">132</span>                if(strings.isEmpty())<a name="line.132"></a>
+<span class="sourceLineNo">133</span>                    throw new java.util.NoSuchElementException("No more sibling items in ObText object");<a name="line.133"></a>
+<span class="sourceLineNo">134</span>                current = 0;<a name="line.134"></a>
+<span class="sourceLineNo">135</span>                index = neighbors.get(0);<a name="line.135"></a>
+<span class="sourceLineNo">136</span>                return strings.get(0);<a name="line.136"></a>
+<span class="sourceLineNo">137</span>            }<a name="line.137"></a>
+<span class="sourceLineNo">138</span>            int i;<a name="line.138"></a>
+<span class="sourceLineNo">139</span>            if(index &gt;= neighbors.size || (i = neighbors.get(current)) &lt;= 0)<a name="line.139"></a>
+<span class="sourceLineNo">140</span>                throw new java.util.NoSuchElementException("No more sibling items in ObText object");<a name="line.140"></a>
+<span class="sourceLineNo">141</span>            index = i + (current = index);<a name="line.141"></a>
+<span class="sourceLineNo">142</span>            return strings.get(current);<a name="line.142"></a>
+<span class="sourceLineNo">143</span>        }<a name="line.143"></a>
+<span class="sourceLineNo">144</span>        /**<a name="line.144"></a>
+<span class="sourceLineNo">145</span>         * Returns the first child of this ObText.Item and descends into the sequence of child elements.<a name="line.145"></a>
+<span class="sourceLineNo">146</span>         *<a name="line.146"></a>
+<span class="sourceLineNo">147</span>         * @return the first child of this item<a name="line.147"></a>
+<span class="sourceLineNo">148</span>         * @throws java.util.NoSuchElementException if the iteration has no children<a name="line.148"></a>
+<span class="sourceLineNo">149</span>         */<a name="line.149"></a>
+<span class="sourceLineNo">150</span>        public String child() {<a name="line.150"></a>
+<span class="sourceLineNo">151</span>            if(current &lt; 0)<a name="line.151"></a>
+<span class="sourceLineNo">152</span>            {<a name="line.152"></a>
+<span class="sourceLineNo">153</span>                if(neighbors.size &lt;= 0 || neighbors.get(0) == 1)<a name="line.153"></a>
+<span class="sourceLineNo">154</span>                    throw new java.util.NoSuchElementException("No more sibling items in ObText object");<a name="line.154"></a>
+<span class="sourceLineNo">155</span>                current = 0;<a name="line.155"></a>
+<span class="sourceLineNo">156</span>                index = 1;<a name="line.156"></a>
+<span class="sourceLineNo">157</span>                return strings.get(1);<a name="line.157"></a>
+<span class="sourceLineNo">158</span>            }<a name="line.158"></a>
+<span class="sourceLineNo">159</span>            if(current &gt;= neighbors.size - 2 || neighbors.get(current) == 1)<a name="line.159"></a>
+<span class="sourceLineNo">160</span>                throw new java.util.NoSuchElementException("No more sibling items in ObText object");<a name="line.160"></a>
+<span class="sourceLineNo">161</span>            index = ++current + 1;<a name="line.161"></a>
+<span class="sourceLineNo">162</span>            return strings.get(current);<a name="line.162"></a>
+<span class="sourceLineNo">163</span>        }<a name="line.163"></a>
+<span class="sourceLineNo">164</span><a name="line.164"></a>
+<span class="sourceLineNo">165</span>        @Override<a name="line.165"></a>
+<span class="sourceLineNo">166</span>        public void remove() {<a name="line.166"></a>
+<span class="sourceLineNo">167</span>            throw new UnsupportedOperationException("remove() not supported");<a name="line.167"></a>
+<span class="sourceLineNo">168</span><a name="line.168"></a>
+<span class="sourceLineNo">169</span>        }<a name="line.169"></a>
+<span class="sourceLineNo">170</span>    }<a name="line.170"></a>
+<span class="sourceLineNo">171</span><a name="line.171"></a>
+<span class="sourceLineNo">172</span>}<a name="line.172"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>
