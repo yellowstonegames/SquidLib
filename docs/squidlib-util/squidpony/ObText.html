@@ -114,7 +114,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre><a href="../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../src-html/squidpony/ObText.html#line.60">ObText</a>
+public class <a href="../src-html/squidpony/ObText.html#line.67">ObText</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</pre>
 <div class="block">A simple format parser for String-based configuration or data files where JSON is overkill.
@@ -137,6 +137,13 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
  [it is possible [yes this is a good example]
  'escapes like \[\'\] all work'
  ]
+
+ comments are allowed // like this
+ comments can have different forms # like this
+ // block comments like in c are allowed
+ / * but because this example is in javadoc, this example is not actually a comment * /
+ // remove the spaces between each slash and asterisk to make the last line a comment.
+ /[delimit/or block comments with delimiters/delimit]/
 
  '''
  raw strings (heredocs) look like this normally.
@@ -297,7 +304,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>pattern</h4>
-<pre>public static final&nbsp;regexodus.Pattern <a href="../src-html/squidpony/ObText.html#line.61">pattern</a></pre>
+<pre>public static final&nbsp;regexodus.Pattern <a href="../src-html/squidpony/ObText.html#line.68">pattern</a></pre>
 </li>
 </ul>
 <a name="m">
@@ -306,7 +313,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>m</h4>
-<pre>public static final&nbsp;regexodus.Matcher <a href="../src-html/squidpony/ObText.html#line.72">m</a></pre>
+<pre>public static final&nbsp;regexodus.Matcher <a href="../src-html/squidpony/ObText.html#line.80">m</a></pre>
 </li>
 </ul>
 <a name="strings">
@@ -315,7 +322,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>strings</h4>
-<pre>protected final&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt; <a href="../src-html/squidpony/ObText.html#line.74">strings</a></pre>
+<pre>protected final&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt; <a href="../src-html/squidpony/ObText.html#line.82">strings</a></pre>
 </li>
 </ul>
 <a name="neighbors">
@@ -324,7 +331,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockListLast">
 <li class="blockList">
 <h4>neighbors</h4>
-<pre>protected final&nbsp;<a href="../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a> <a href="../src-html/squidpony/ObText.html#line.75">neighbors</a></pre>
+<pre>protected final&nbsp;<a href="../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a> <a href="../src-html/squidpony/ObText.html#line.83">neighbors</a></pre>
 </li>
 </ul>
 </li>
@@ -341,7 +348,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>ObText</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/ObText.html#line.77">ObText</a>()</pre>
+<pre>public&nbsp;<a href="../src-html/squidpony/ObText.html#line.85">ObText</a>()</pre>
 </li>
 </ul>
 <a name="ObText-java.lang.CharSequence-">
@@ -350,7 +357,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ObText</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/ObText.html#line.81">ObText</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</pre>
+<pre>public&nbsp;<a href="../src-html/squidpony/ObText.html#line.89">ObText</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</pre>
 </li>
 </ul>
 </li>
@@ -367,7 +374,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>parse</h4>
-<pre>public&nbsp;<a href="../squidpony/ObText.html" title="class in squidpony">ObText</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.85">parse</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</pre>
+<pre>public&nbsp;<a href="../squidpony/ObText.html" title="class in squidpony">ObText</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.93">parse</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</pre>
 </li>
 </ul>
 <a name="iterator--">
@@ -376,7 +383,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.
 <ul class="blockListLast">
 <li class="blockList">
 <h4>iterator</h4>
-<pre>public&nbsp;<a href="../squidpony/ObText.ItemIterator.html" title="class in squidpony">ObText.ItemIterator</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.115">iterator</a>()</pre>
+<pre>public&nbsp;<a href="../squidpony/ObText.ItemIterator.html" title="class in squidpony">ObText.ItemIterator</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.123">iterator</a>()</pre>
 <div class="block">Returns an iterator over elements of type <code>T</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
