@@ -31,6 +31,13 @@ import java.util.Iterator;
  * 'escapes like \[\'\] all work'
  * ]
  *
+ * comments are allowed // like this
+ * comments can have different forms # like this
+ * // block comments like in c are allowed
+ * / * but because this example is in javadoc, this example is not actually a comment * /
+ * // remove the spaces between each slash and asterisk to make the last line a comment.
+ * /[delimit/or block comments with delimiters/delimit]/
+ *
  * '''
  * raw strings (heredocs) look like this normally.
  *     they permit characters without escapes, ]][][[ \/\/\ ,
@@ -62,11 +69,12 @@ public class ObText implements Iterable<String>{
             "(?>'''(?:[\n\u000C\f\r\u0085\u2028\u2029]|\r\n)?({=s}.*?)(?:[\n\u000C\f\r\u0085\u2028\u2029]|\r\n)?''')" +
             "|(?>\\[\\[({=q}[^\\[\\]]*)\\[(?:[\n\u000C\f\r\u0085\u2028\u2029]|\r\n)?({=s}.*?)(?:[\n\u000C\f\r\u0085\u2028\u2029]|\r\n)?\\]{\\q}\\]\\])" +
             "|(?>({=q}[\"'])({=s}.*?)(?<!\\\\){\\q})" +
-            "|(?>(?>//|^#!)(?>\\V*))" +
+            "|(?>(?>//|#)(?>\\V*))" +
+            "|(?>/\\*(?:.*?)\\*/)" +
             "|(?>/\\[({=q}\\S*)/(?:.*?)/{\\q}\\]/)" +
             "|({=s}[^\\s\\[\\]\"'#\\\\]+)" +
             "|({=o}\\[)" +
-            "|({=c}\\])", REFlags.DOTALL | REFlags.MULTILINE | REFlags.UNICODE
+            "|({=c}\\])", REFlags.DOTALL | REFlags.UNICODE
 
     );
     public static final Matcher m = pattern.matcher();
