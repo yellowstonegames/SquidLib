@@ -117,7 +117,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public static class <a href="../../src-html/squidpony/squidmath/CrossHash.html#line.874">CrossHash.DefaultHasher</a>
+<pre>public static class <a href="../../src-html/squidpony/squidmath/CrossHash.html#line.875">CrossHash.DefaultHasher</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <dl>
@@ -205,7 +205,7 @@ implements <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="int
 <ul class="blockListLast">
 <li class="blockList">
 <h4>DefaultHasher</h4>
-<pre>protected&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.DefaultHasher.html#line.877">DefaultHasher</a>()</pre>
+<pre>protected&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.DefaultHasher.html#line.878">DefaultHasher</a>()</pre>
 </li>
 </ul>
 </li>
@@ -222,7 +222,7 @@ implements <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="int
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.DefaultHasher.html#line.880">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;data)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.DefaultHasher.html#line.881">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;data)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/CrossHash.IHasher.html#hash-java.lang.Object-">CrossHash.IHasher</a></code></span></div>
 <div class="block">If data is a type that this IHasher can specifically hash, this method should use that specific hash; in
  other situations, it should simply delegate to calling <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang"><code>Object.hashCode()</code></a> on data. The body of an
@@ -244,7 +244,7 @@ implements <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="int
 <ul class="blockListLast">
 <li class="blockList">
 <h4>areEqual</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.DefaultHasher.html#line.885">areEqual</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;left,
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.DefaultHasher.html#line.886">areEqual</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;left,
                         <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;right)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/CrossHash.IHasher.html#areEqual-java.lang.Object-java.lang.Object-">CrossHash.IHasher</a></code></span></div>
 <div class="block">Not all types you might want to use an IHasher on meaningfully implement .equals(), such as array types; in

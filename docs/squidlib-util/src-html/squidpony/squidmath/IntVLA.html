@@ -426,58 +426,59 @@
 <span class="sourceLineNo">418</span>            h = h * 31 + items[i];<a name="line.418"></a>
 <span class="sourceLineNo">419</span>        return h;<a name="line.419"></a>
 <span class="sourceLineNo">420</span>    }<a name="line.420"></a>
-<span class="sourceLineNo">421</span>    public long hash64 () {<a name="line.421"></a>
-<span class="sourceLineNo">422</span>        return CrossHash.Lightning.hash64(items);<a name="line.422"></a>
-<span class="sourceLineNo">423</span>    }<a name="line.423"></a>
-<span class="sourceLineNo">424</span><a name="line.424"></a>
-<span class="sourceLineNo">425</span>    @Override<a name="line.425"></a>
-<span class="sourceLineNo">426</span>        public boolean equals (Object object) {<a name="line.426"></a>
-<span class="sourceLineNo">427</span>        if (object == this) return true;<a name="line.427"></a>
-<span class="sourceLineNo">428</span>        if (!(object instanceof IntVLA)) return false;<a name="line.428"></a>
-<span class="sourceLineNo">429</span>        IntVLA array = (IntVLA)object;<a name="line.429"></a>
-<span class="sourceLineNo">430</span>        int n = size;<a name="line.430"></a>
-<span class="sourceLineNo">431</span>        if (n != array.size) return false;<a name="line.431"></a>
-<span class="sourceLineNo">432</span>        for (int i = 0; i &lt; n; i++)<a name="line.432"></a>
-<span class="sourceLineNo">433</span>            if (items[i] != array.items[i]) return false;<a name="line.433"></a>
-<span class="sourceLineNo">434</span>        return true;<a name="line.434"></a>
-<span class="sourceLineNo">435</span>    }<a name="line.435"></a>
-<span class="sourceLineNo">436</span><a name="line.436"></a>
-<span class="sourceLineNo">437</span>    @Override<a name="line.437"></a>
-<span class="sourceLineNo">438</span>        public String toString () {<a name="line.438"></a>
-<span class="sourceLineNo">439</span>        if (size == 0) return "[]";<a name="line.439"></a>
-<span class="sourceLineNo">440</span>        int[] items = this.items;<a name="line.440"></a>
-<span class="sourceLineNo">441</span>        StringBuilder buffer = new StringBuilder(32);<a name="line.441"></a>
-<span class="sourceLineNo">442</span>        buffer.append('[');<a name="line.442"></a>
-<span class="sourceLineNo">443</span>        buffer.append(items[0]);<a name="line.443"></a>
-<span class="sourceLineNo">444</span>        for (int i = 1; i &lt; size; i++) {<a name="line.444"></a>
-<span class="sourceLineNo">445</span>            buffer.append(", ");<a name="line.445"></a>
-<span class="sourceLineNo">446</span>            buffer.append(items[i]);<a name="line.446"></a>
-<span class="sourceLineNo">447</span>        }<a name="line.447"></a>
-<span class="sourceLineNo">448</span>        buffer.append(']');<a name="line.448"></a>
-<span class="sourceLineNo">449</span>        return buffer.toString();<a name="line.449"></a>
-<span class="sourceLineNo">450</span>    }<a name="line.450"></a>
-<span class="sourceLineNo">451</span><a name="line.451"></a>
-<span class="sourceLineNo">452</span>    public String toString (String separator) {<a name="line.452"></a>
-<span class="sourceLineNo">453</span>        if (size == 0) return "";<a name="line.453"></a>
-<span class="sourceLineNo">454</span>        int[] items = this.items;<a name="line.454"></a>
-<span class="sourceLineNo">455</span>        StringBuilder buffer = new StringBuilder(32);<a name="line.455"></a>
-<span class="sourceLineNo">456</span>        buffer.append(items[0]);<a name="line.456"></a>
-<span class="sourceLineNo">457</span>        for (int i = 1; i &lt; size; i++) {<a name="line.457"></a>
-<span class="sourceLineNo">458</span>            buffer.append(separator);<a name="line.458"></a>
-<span class="sourceLineNo">459</span>            buffer.append(items[i]);<a name="line.459"></a>
-<span class="sourceLineNo">460</span>        }<a name="line.460"></a>
-<span class="sourceLineNo">461</span>        return buffer.toString();<a name="line.461"></a>
-<span class="sourceLineNo">462</span>    }<a name="line.462"></a>
-<span class="sourceLineNo">463</span><a name="line.463"></a>
-<span class="sourceLineNo">464</span>    /** @see #IntVLA(int[]) */<a name="line.464"></a>
-<span class="sourceLineNo">465</span>    public static IntVLA with (int... array) {<a name="line.465"></a>
-<span class="sourceLineNo">466</span>        return new IntVLA(array);<a name="line.466"></a>
-<span class="sourceLineNo">467</span>    }<a name="line.467"></a>
-<span class="sourceLineNo">468</span><a name="line.468"></a>
-<span class="sourceLineNo">469</span>    public boolean isEmpty() {<a name="line.469"></a>
-<span class="sourceLineNo">470</span>        return size == 0;<a name="line.470"></a>
-<span class="sourceLineNo">471</span>    }<a name="line.471"></a>
-<span class="sourceLineNo">472</span>}<a name="line.472"></a>
+<span class="sourceLineNo">421</span><a name="line.421"></a>
+<span class="sourceLineNo">422</span>    public long hash64 () {<a name="line.422"></a>
+<span class="sourceLineNo">423</span>        return CrossHash.Lightning.hash64(items);<a name="line.423"></a>
+<span class="sourceLineNo">424</span>    }<a name="line.424"></a>
+<span class="sourceLineNo">425</span><a name="line.425"></a>
+<span class="sourceLineNo">426</span>    @Override<a name="line.426"></a>
+<span class="sourceLineNo">427</span>        public boolean equals (Object object) {<a name="line.427"></a>
+<span class="sourceLineNo">428</span>        if (object == this) return true;<a name="line.428"></a>
+<span class="sourceLineNo">429</span>        if (!(object instanceof IntVLA)) return false;<a name="line.429"></a>
+<span class="sourceLineNo">430</span>        IntVLA array = (IntVLA)object;<a name="line.430"></a>
+<span class="sourceLineNo">431</span>        int n = size;<a name="line.431"></a>
+<span class="sourceLineNo">432</span>        if (n != array.size) return false;<a name="line.432"></a>
+<span class="sourceLineNo">433</span>        for (int i = 0; i &lt; n; i++)<a name="line.433"></a>
+<span class="sourceLineNo">434</span>            if (items[i] != array.items[i]) return false;<a name="line.434"></a>
+<span class="sourceLineNo">435</span>        return true;<a name="line.435"></a>
+<span class="sourceLineNo">436</span>    }<a name="line.436"></a>
+<span class="sourceLineNo">437</span><a name="line.437"></a>
+<span class="sourceLineNo">438</span>    @Override<a name="line.438"></a>
+<span class="sourceLineNo">439</span>        public String toString () {<a name="line.439"></a>
+<span class="sourceLineNo">440</span>        if (size == 0) return "[]";<a name="line.440"></a>
+<span class="sourceLineNo">441</span>        int[] items = this.items;<a name="line.441"></a>
+<span class="sourceLineNo">442</span>        StringBuilder buffer = new StringBuilder(32);<a name="line.442"></a>
+<span class="sourceLineNo">443</span>        buffer.append('[');<a name="line.443"></a>
+<span class="sourceLineNo">444</span>        buffer.append(items[0]);<a name="line.444"></a>
+<span class="sourceLineNo">445</span>        for (int i = 1; i &lt; size; i++) {<a name="line.445"></a>
+<span class="sourceLineNo">446</span>            buffer.append(", ");<a name="line.446"></a>
+<span class="sourceLineNo">447</span>            buffer.append(items[i]);<a name="line.447"></a>
+<span class="sourceLineNo">448</span>        }<a name="line.448"></a>
+<span class="sourceLineNo">449</span>        buffer.append(']');<a name="line.449"></a>
+<span class="sourceLineNo">450</span>        return buffer.toString();<a name="line.450"></a>
+<span class="sourceLineNo">451</span>    }<a name="line.451"></a>
+<span class="sourceLineNo">452</span><a name="line.452"></a>
+<span class="sourceLineNo">453</span>    public String toString (String separator) {<a name="line.453"></a>
+<span class="sourceLineNo">454</span>        if (size == 0) return "";<a name="line.454"></a>
+<span class="sourceLineNo">455</span>        int[] items = this.items;<a name="line.455"></a>
+<span class="sourceLineNo">456</span>        StringBuilder buffer = new StringBuilder(32);<a name="line.456"></a>
+<span class="sourceLineNo">457</span>        buffer.append(items[0]);<a name="line.457"></a>
+<span class="sourceLineNo">458</span>        for (int i = 1; i &lt; size; i++) {<a name="line.458"></a>
+<span class="sourceLineNo">459</span>            buffer.append(separator);<a name="line.459"></a>
+<span class="sourceLineNo">460</span>            buffer.append(items[i]);<a name="line.460"></a>
+<span class="sourceLineNo">461</span>        }<a name="line.461"></a>
+<span class="sourceLineNo">462</span>        return buffer.toString();<a name="line.462"></a>
+<span class="sourceLineNo">463</span>    }<a name="line.463"></a>
+<span class="sourceLineNo">464</span><a name="line.464"></a>
+<span class="sourceLineNo">465</span>    /** @see #IntVLA(int[]) */<a name="line.465"></a>
+<span class="sourceLineNo">466</span>    public static IntVLA with (int... array) {<a name="line.466"></a>
+<span class="sourceLineNo">467</span>        return new IntVLA(array);<a name="line.467"></a>
+<span class="sourceLineNo">468</span>    }<a name="line.468"></a>
+<span class="sourceLineNo">469</span><a name="line.469"></a>
+<span class="sourceLineNo">470</span>    public boolean isEmpty() {<a name="line.470"></a>
+<span class="sourceLineNo">471</span>        return size == 0;<a name="line.471"></a>
+<span class="sourceLineNo">472</span>    }<a name="line.472"></a>
+<span class="sourceLineNo">473</span>}<a name="line.473"></a>
 
 
 

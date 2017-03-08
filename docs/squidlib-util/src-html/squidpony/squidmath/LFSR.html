@@ -186,7 +186,34 @@
 <span class="sourceLineNo">178</span>    public int hashCode() {<a name="line.178"></a>
 <span class="sourceLineNo">179</span>        return (int) (state ^ (state &gt;&gt;&gt; 32));<a name="line.179"></a>
 <span class="sourceLineNo">180</span>    }<a name="line.180"></a>
-<span class="sourceLineNo">181</span>}<a name="line.181"></a>
+<span class="sourceLineNo">181</span><a name="line.181"></a>
+<span class="sourceLineNo">182</span><a name="line.182"></a>
+<span class="sourceLineNo">183</span>    /**<a name="line.183"></a>
+<span class="sourceLineNo">184</span>     * Gets the next number that an LFSR would produce using {@link #nextLong()} if its state was {@code state}.<a name="line.184"></a>
+<span class="sourceLineNo">185</span>     * Does not allow state to be 0.<a name="line.185"></a>
+<span class="sourceLineNo">186</span>     * @param state any long other than 0<a name="line.186"></a>
+<span class="sourceLineNo">187</span>     * @return the next long that an LFSR would produce with the given state<a name="line.187"></a>
+<span class="sourceLineNo">188</span>     */<a name="line.188"></a>
+<span class="sourceLineNo">189</span>    public static long determine(long state)<a name="line.189"></a>
+<span class="sourceLineNo">190</span>    {<a name="line.190"></a>
+<span class="sourceLineNo">191</span><a name="line.191"></a>
+<span class="sourceLineNo">192</span>        long lsb = state &amp; 1L;<a name="line.192"></a>
+<span class="sourceLineNo">193</span>        state &gt;&gt;&gt;= 1;<a name="line.193"></a>
+<span class="sourceLineNo">194</span>        return state ^ (-lsb &amp; 0xD800000000000000L);<a name="line.194"></a>
+<span class="sourceLineNo">195</span>    }<a name="line.195"></a>
+<span class="sourceLineNo">196</span><a name="line.196"></a>
+<span class="sourceLineNo">197</span>    /**<a name="line.197"></a>
+<span class="sourceLineNo">198</span>     * Gets the next number that an LFSR would produce using {@link #nextInt(int)} if its state was {@code state} and<a name="line.198"></a>
+<span class="sourceLineNo">199</span>     * {@code bound} was passed to nextInt(). Does not allow state to be 0.<a name="line.199"></a>
+<span class="sourceLineNo">200</span>     * @param state any long other than 0<a name="line.200"></a>
+<span class="sourceLineNo">201</span>     * @param bound the exclusive bound on the result as an int; does better if the bound is not too high (below 10000?)<a name="line.201"></a>
+<span class="sourceLineNo">202</span>     * @return the next int that an LFSR would produce with the given state and bound<a name="line.202"></a>
+<span class="sourceLineNo">203</span>     */<a name="line.203"></a>
+<span class="sourceLineNo">204</span>    public static int determineBounded(final long state, final int bound)<a name="line.204"></a>
+<span class="sourceLineNo">205</span>    {<a name="line.205"></a>
+<span class="sourceLineNo">206</span>        return (int)((bound * ((state &gt;&gt;&gt; 1) &amp; 0x7FFFFFFFL)) &gt;&gt;&gt; 31);<a name="line.206"></a>
+<span class="sourceLineNo">207</span>    }<a name="line.207"></a>
+<span class="sourceLineNo">208</span>}<a name="line.208"></a>
 
 
 

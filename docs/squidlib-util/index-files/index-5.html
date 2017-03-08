@@ -369,6 +369,12 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#deserializeFromString-java.lang.String-">deserializeFromString(String)</a></span> - Static method in class squidpony.<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/ObText.html#deserializeFromString-java.lang.String-">deserializeFromString(String)</a></span> - Static method in class squidpony.<a href="../squidpony/ObText.html" title="class in squidpony">ObText</a></dt>
+<dd>
+<div class="block">Deserializes an ObText that was serialized by <a href="../squidpony/ObText.html#serializeToString--"><code>ObText.serializeToString()</code></a> or <a href="../squidpony/ObText.html#toString--"><code>ObText.toString()</code></a>, and will
+ ignore the prefix and suffix that toString appends for readability (these are "ObText object: [[[[ " and " ]]]]",
+ for reference).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#deserializeFromString-java.lang.String-">deserializeFromString(String)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOVCache.html#destroy--">destroy()</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOVCache.html" title="class in squidpony.squidgrid">FOVCache</a></dt>
@@ -399,6 +405,10 @@
 <div class="block">Randomly removes points from a GreasedRegion, with larger values for preservation keeping more of the existing
  shape intact.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/LFSR.html#determine-long-">determine(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LFSR.html" title="class in squidpony.squidmath">LFSR</a></dt>
+<dd>
+<div class="block">Gets the next number that an LFSR would produce using <a href="../squidpony/squidmath/LFSR.html#nextLong--"><code>LFSR.nextLong()</code></a> if its state was <code>state</code>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LightRNG.html#determine-long-">determine(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath">LightRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/PermutedRNG.html#determine-long-">determine(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/PermutedRNG.html" title="class in squidpony.squidmath">PermutedRNG</a></dt>
@@ -422,6 +432,11 @@
 <dd>
 <div class="block">Convenience method to get a double from the van der Corput sequence with the base 2 at the requested
  <code>index</code> without needing to construct a VanDerCorputQRNG.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/LFSR.html#determineBounded-long-int-">determineBounded(long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LFSR.html" title="class in squidpony.squidmath">LFSR</a></dt>
+<dd>
+<div class="block">Gets the next number that an LFSR would produce using <a href="../squidpony/squidmath/LFSR.html#nextInt-int-"><code>LFSR.nextInt(int)</code></a> if its state was <code>state</code> and
+ <code>bound</code> was passed to nextInt().</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LightRNG.html#determineBounded-long-int-">determineBounded(long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath">LightRNG</a></dt>
 <dd>&nbsp;</dd>

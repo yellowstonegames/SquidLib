@@ -4,6 +4,7 @@ import squidpony.annotation.Beta;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -2356,6 +2357,27 @@ public class CrossHash {
             return result * (a | 1L) ^ (result >>> 27 | result << 37);
         }
 
+        public static long hash64(final Iterable<? extends CharSequence> data) {
+            if (data == null)
+                return 0;
+            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
+            for (CharSequence datum : data) {
+                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(datum));
+            }
+            return result * (a | 1L) ^ (result >>> 27 | result << 37);
+        }
+
+        public static long hash64(final List<? extends CharSequence> data) {
+            if (data == null)
+                return 0;
+            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
+            final int len = data.size();
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data.get(i)));
+            }
+            return result * (a | 1L) ^ (result >>> 27 | result << 37);
+        }
+
         public static long hash64(final Object[] data) {
             if (data == null)
                 return 0;
@@ -2525,6 +2547,27 @@ public class CrossHash {
             final int len = data.length;
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x85157AF5 * hash(data[i]));
+            }
+            return result * (a | 1) ^ (result >>> 11 | result << 21);
+        }
+
+        public static int hash(final Iterable<? extends CharSequence> data) {
+            if (data == null)
+                return 0;
+            int result = 0x9E3779B9, a = 0x632BE5AB;
+            for (CharSequence datum : data) {
+                result += (a ^= 0x85157AF5 * hash(datum));
+            }
+            return result * (a | 1) ^ (result >>> 11 | result << 21);
+        }
+
+        public static int hash(final List<? extends CharSequence> data) {
+            if (data == null)
+                return 0;
+            int result = 0x9E3779B9, a = 0x632BE5AB;
+            final int len = data.size();
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x85157AF5 * hash(data.get(i)));
             }
             return result * (a | 1) ^ (result >>> 11 | result << 21);
         }

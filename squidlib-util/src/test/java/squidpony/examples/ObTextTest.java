@@ -31,10 +31,11 @@ public class ObTextTest {
                 "'''\n" +
                 "\n" +
                 "[[different[\n" +
-                "if you may need triple quotes\n" +
-                "    in the raw string, use a different syntax that allows delimiters.\n" +
+                "if you may need \"triple quotes\"\n" +
+                "    in the raw string, use a different syntax, [[delim[ ]delim]] , that allows delimiters.\n" +
                 "here, the delimiter is '''different''', just to be different.]different]]\n");
-        iterate(ot.iterator());
+        System.out.println(ObText.deserializeFromString(ot.toString()).toString());
+        //iterate(ot.iterator());
     }
     public static void iterate(ObText.ItemIterator it)
     {
@@ -47,4 +48,5 @@ public class ObTextTest {
                 iterate(it.children());
         }
     }
+
 }

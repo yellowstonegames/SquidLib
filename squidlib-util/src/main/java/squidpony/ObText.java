@@ -1,13 +1,14 @@
 package squidpony;
 
-import regexodus.Matcher;
-import regexodus.Pattern;
-import regexodus.REFlags;
+import regexodus.*;
 import squidpony.annotation.Beta;
+import squidpony.squidmath.CrossHash;
 import squidpony.squidmath.IntVLA;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import static squidpony.ArrayTools.letters;
 
 /**
  * A simple format parser for String-based configuration or data files where JSON is overkill.
@@ -75,9 +76,11 @@ public class ObText implements Iterable<String>{
             "|({=s}[^\\s\\[\\]\"'#\\\\]+)" +
             "|({=o}\\[)" +
             "|({=c}\\])", REFlags.DOTALL | REFlags.UNICODE
-
     );
+    protected static final Pattern illegalBareWord = Pattern.compile("[\\s\\[\\]\"'#\\\\]|(?:/[/\\*])"),
+            needsRaw = Pattern.compile("(?<!\\\\)[\\[\\]]|\\\\$");
     public static final Matcher m = pattern.matcher();
+    protected static final Matcher bare = illegalBareWord.matcher(), raw = needsRaw.matcher();
 
     protected final ArrayList<String> strings = new ArrayList<String>(64);
     protected final IntVLA neighbors = new IntVLA(64);
@@ -90,6 +93,12 @@ public class ObText implements Iterable<String>{
     {
         parse(text);
     }
+
+    /**
+     * Parses the given text (a String or other CharSequence) and appends it into this ObText.
+     * @param text a CharSequence (such as a String) using ObText formatting, as described in this class' JavaDocs
+     * @return this ObText object after appending the parsed text, for chaining
+     */
     public ObText parse(CharSequence text)
     {
         m.setTarget(text);
@@ -207,6 +216,146 @@ public class ObText implements Iterable<String>{
         public void remove() {
             throw new UnsupportedOperationException("remove() not supported");
 
+        }
+    }
+
+    // Used to generate randomized delimiters using up to 9 non-English letters.
+    // call while assigning your state with randomChars(state += 0x9E3779B97F4A7C15L, myChars)
+    // that assumes you have a 9-element char[] called myChars
+    // as long as z/state is deterministic (i.e. based on a hash), this should be too
+    private static void randomChars(long z, char[] mut)
+    {
+        z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
+        z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
+        z ^= (z >>> 31);
+
+        mut[0] = letters[(int)(128 + (z & 127))];
+        mut[1] = letters[(int)(128 + (z >>> 7 & 127))];
+        mut[2] = letters[(int)(128 + (z >>> 14 & 127))];
+        mut[3] = letters[(int)(128 + (z >>> 21 & 127))];
+        mut[4] = letters[(int)(128 + (z >>> 28 & 127))];
+        mut[5] = letters[(int)(128 + (z >>> 35 & 127))];
+        mut[6] = letters[(int)(128 + (z >>> 42 & 127))];
+        mut[7] = letters[(int)(128 + (z >>> 49 & 127))];
+        mut[8] = letters[(int)(128 + (z >>> 56 & 127))];
+    }
+
+    protected static void appendQuoted(StringBuilder sb, String text)
+    {
+        if(text == null || text.isEmpty()) {
+            sb.append("''");
+            return;
+        }
+        bare.setTarget(text);
+        if(!bare.find())
+            sb.append(text);
+        else
+        {
+            raw.setTarget(text);
+            if(raw.find()) {
+
+                if (text.contains("'''")) {
+                    long state = CrossHash.Wisp.hash64(text);
+                    char[] myChars = new char[9];
+                    int count;
+                    do {
+                        randomChars(state += 0x9E3779B97F4A7C15L, myChars);
+                        count = StringKit.containsPart(text, myChars, "]", "]]");
+                    } while (count == 12);
+                    sb.append("[[").append(myChars, 0, count).append("[\n").append(text).append("\n]")
+                            .append(myChars, 0, count).append("]]");
+                } else {
+                    sb.append("'''\n").append(text).append("\n'''");
+                }
+            }
+            else if(!text.contains("'"))
+            {
+                sb.append('\'').append(text).append('\'');
+            }
+            else
+            {
+                if(text.contains("\""))
+                {
+                    if(text.contains("'''"))
+                    {
+                        long state = CrossHash.Wisp.hash64(text);
+                        char[] myChars = new char[9];
+                        int count;
+                        do
+                        {
+                            randomChars(state += 0x9E3779B97F4A7C15L, myChars);
+                            count = StringKit.containsPart(text, myChars);
+                        }while(count == 9);
+                        sb.append("[[").append(myChars, 0, count).append("[\n").append(text).append("\n]")
+                                .append(myChars, 0, count).append("]]");
+                    }
+                    else
+                    {
+                        sb.append("'''\n").append(text).append("\n'''");
+                    }
+                }
+                else
+                {
+                    sb.append('"').append(text).append('"');
+                }
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "ObText object: [[[[\n" + serializeToString() + "\n]]]]";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ObText o2 = (ObText) o;
+
+        if (!strings.equals(o2.strings)) return false;
+        return neighbors.equals(o2.neighbors);
+    }
+
+    @Override
+    public int hashCode() {
+        return CrossHash.Wisp.hash(strings) + CrossHash.Wisp.hash(neighbors.items);
+    }
+
+    public String serializeToString()
+    {
+        StringBuilder sb = new StringBuilder(100);
+        iterate(sb, iterator());
+        return sb.toString();
+    }
+
+    /**
+     * Deserializes an ObText that was serialized by {@link #serializeToString()} or {@link #toString()}, and will
+     * ignore the prefix and suffix that toString appends for readability (these are "ObText object: [[[[ " and " ]]]]",
+     * for reference). This is otherwise the same as calling the constructor {@link #ObText(CharSequence)}.
+     * @param data a String that is usually produced by serializeToString or toString on an ObText
+     * @return a new ObText produced by parsing data (disregarding any prefix or suffix from toString() )
+     */
+    public static ObText deserializeFromString(String data)
+    {
+        if(data.startsWith("ObText object: [[[[\n"))
+        {
+            return new ObText(data.substring(20, data.length() - 5));
+        }
+        return new ObText(data);
+    }
+
+    private static void iterate(StringBuilder sb, ObText.ItemIterator it)
+    {
+        while (it.hasNext()) {
+            appendQuoted(sb, it.next());
+            sb.append('\n');
+            if (it.hasChild()) {
+                sb.append("[\n");
+                iterate(sb, it.children());
+                sb.append("]\n");
+            }
         }
     }
 

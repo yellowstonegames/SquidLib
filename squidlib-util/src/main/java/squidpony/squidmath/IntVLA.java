@@ -418,6 +418,7 @@ public class IntVLA implements Serializable, Cloneable {
             h = h * 31 + items[i];
         return h;
     }
+
     public long hash64 () {
         return CrossHash.Lightning.hash64(items);
     }
