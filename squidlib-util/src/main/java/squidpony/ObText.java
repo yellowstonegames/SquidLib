@@ -5,6 +5,7 @@ import squidpony.annotation.Beta;
 import squidpony.squidmath.CrossHash;
 import squidpony.squidmath.IntVLA;
 
+import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -15,11 +16,20 @@ import static squidpony.ArrayTools.letters;
  * Supports only one type, String, but allows each String to have arbitrary nested levels of
  * String children as if in sub-lists. You can interpret the Strings however you want, and
  * quoting each String isn't necessary if they are just one word ("bare words" are allowed).
+ * <br>
  * The main way of using this is to get an ObText.ItemIterator value using {@link #iterator()},
  * which acts as a normal Iterator over the top-level Strings (not children of anything), but
  * to call its {@link ItemIterator#hasChild()} method when you expect potential child elements,
  * then {@link ItemIterator#children()} to get another ItemIterator over the child elements if
  * you want to explore deeper.
+ * <br>
+ * This implements Collection of String but is (mostly) unmodifiable; you can call
+ * {@link #parse(CharSequence)} to append the results of parsing more formatted text, or call
+ * {@link #clear()} to remove all data. {@link #add(Object)} and {@link #remove(Object)} are
+ * not implemented and throw exceptions. A quirk of how this implements Collection is that it
+ * only considers the top-level Strings to be part of the Collection for length and for
+ * {@link #contains(Object)}, and will ignore child strings unless you access them via
+ * {@link ItemIterator#children()} on an item that has at least one child.
  * <br>
  * Format example:
  * <pre>
@@ -65,7 +75,7 @@ import static squidpony.ArrayTools.letters;
  * mark children associated with a string.
  */
 @Beta
-public class ObText implements Iterable<String>{
+public class ObText extends AbstractCollection<String>{
     public static final Pattern pattern = Pattern.compile(
             "(?>'''(?:[\n\u000C\f\r\u0085\u2028\u2029]|\r\n)?({=s}.*?)(?:[\n\u000C\f\r\u0085\u2028\u2029]|\r\n)?''')" +
             "|(?>\\[\\[({=q}[^\\[\\]]*)\\[(?:[\n\u000C\f\r\u0085\u2028\u2029]|\r\n)?({=s}.*?)(?:[\n\u000C\f\r\u0085\u2028\u2029]|\r\n)?\\]{\\q}\\]\\])" +
@@ -85,6 +95,7 @@ public class ObText implements Iterable<String>{
     protected final ArrayList<String> strings = new ArrayList<String>(64);
     protected final IntVLA neighbors = new IntVLA(64);
     private final IntVLA nesting = new IntVLA(16);
+    protected int length = 0;
     public ObText()
     {
 
@@ -108,6 +119,7 @@ public class ObText implements Iterable<String>{
             if (m.isCaptured("s")) {
                 strings.add(m.group("s"));
                 neighbors.add(1);
+                if(nesting.isEmpty()) length++;
             }
             else if(m.isCaptured("o"))
             {
@@ -121,6 +133,18 @@ public class ObText implements Iterable<String>{
             }
         }
         return this;
+    }
+
+    @Override
+    public void clear() {
+        strings.clear();
+        neighbors.clear();
+        length = 0;
+    }
+
+    @Override
+    public int size() {
+        return length;
     }
 
     /**
@@ -240,7 +264,7 @@ public class ObText implements Iterable<String>{
         mut[8] = letters[(int)(128 + (z >>> 56 & 127))];
     }
 
-    protected static void appendQuoted(StringBuilder sb, String text)
+    public static void appendQuoted(StringBuilder sb, String text)
     {
         if(text == null || text.isEmpty()) {
             sb.append("''");
@@ -358,5 +382,20 @@ public class ObText implements Iterable<String>{
             }
         }
     }
+
+    public static class Convert extends StringConvert<ObText>
+    {
+        @Override
+        public String stringify(ObText item) {
+            return item.serializeToString();
+        }
+
+        @Override
+        public ObText restore(String text) {
+            return ObText.deserializeFromString(text);
+        }
+    }
+
+    public static final StringConvert<ObText> convert = new Convert();
 
 }
