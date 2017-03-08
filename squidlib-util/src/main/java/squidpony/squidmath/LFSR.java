@@ -178,4 +178,31 @@ public class LFSR implements StatefulRandomness, Serializable {
     public int hashCode() {
         return (int) (state ^ (state >>> 32));
     }
+
+
+    /**
+     * Gets the next number that an LFSR would produce using {@link #nextLong()} if its state was {@code state}.
+     * Does not allow state to be 0.
+     * @param state any long other than 0
+     * @return the next long that an LFSR would produce with the given state
+     */
+    public static long determine(long state)
+    {
+
+        long lsb = state & 1L;
+        state >>>= 1;
+        return state ^ (-lsb & 0xD800000000000000L);
+    }
+
+    /**
+     * Gets the next number that an LFSR would produce using {@link #nextInt(int)} if its state was {@code state} and
+     * {@code bound} was passed to nextInt(). Does not allow state to be 0.
+     * @param state any long other than 0
+     * @param bound the exclusive bound on the result as an int; does better if the bound is not too high (below 10000?)
+     * @return the next int that an LFSR would produce with the given state and bound
+     */
+    public static int determineBounded(final long state, final int bound)
+    {
+        return (int)((bound * ((state >>> 1) & 0x7FFFFFFFL)) >>> 31);
+    }
 }

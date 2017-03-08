@@ -11,6 +11,63 @@ import java.util.Iterator;
  */
 public class StringKit {
 
+    /**
+     * Searches text for the exact contents of the char array search; returns true if text contains search.
+     * @param text a CharSequence, such as a String or StringBuilder, that might contain search
+     * @param search a char array to try to find in text
+     * @return true if search was found
+     */
+    public static boolean contains(CharSequence text, char[] search) {
+        return !(text == null || text.length() == 0 || search == null || search.length <= 0)
+                && containsPart(text, search, "", "") == search.length;
+    }
+
+    public static int containsPart(CharSequence text, char[] search)
+    {
+        return containsPart(text, search, "", "");
+    }
+    public static int containsPart(CharSequence text, char[] search, CharSequence prefix, CharSequence suffix)
+    {
+        if(prefix == null) prefix = "";
+        if(suffix == null) suffix = "";
+        int bl = prefix.length(), el = suffix.length();
+        if(text == null || text.length() == 0 || search == null || (search.length + bl + el <= 0))
+            return 0;
+        int sl = bl + search.length + el, tl = text.length() - sl, f = 0, sl2 = sl - el;
+        char s = (bl <= 0) ? (search.length <= 0 ? suffix.charAt(0) : search[0]) : prefix.charAt(0);
+        PRIMARY:
+        for (int i = 0; i <= tl; i++) {
+            if(text.charAt(i) == s)
+            {
+                for (int j = i+1, x = 1; x < sl; j++, x++) {
+                    if(x < bl)
+                    {
+                        if (text.charAt(j) != prefix.charAt(x)) {
+                            f = Math.max(f, x);
+                            continue PRIMARY;
+                        }
+                    }
+                    else if(x < sl2)
+                    {
+                        if (text.charAt(j) != search[x-bl]) {
+                            f = Math.max(f, x);
+                            continue PRIMARY;
+                        }
+                    }
+                    else
+                    {
+                        if (text.charAt(j) != suffix.charAt(x - sl2)) {
+                            f = Math.max(f, x);
+                            continue PRIMARY;
+                        }
+                    }
+                }
+                return sl;
+            }
+        }
+        return f;
+    }
+
     public static String join(CharSequence delimiter, CharSequence... elements) {
         if (elements == null || elements.length == 0) return "";
         StringBuilder sb = new StringBuilder(64);
