@@ -254,6 +254,12 @@ public class PintRNG implements RandomnessSource, StatefulRandomness, Serializab
         state ^= state >>> (4 + (state >>> 28));
         return ((state *= 277803737) >>> 22) ^ state;
     }
+    public static int determine(final int a, final int b)
+    {
+        int state = a * 0x9E3779B9 + b * 0x85157AF5;
+        state ^= state >>> (4 + (state >>> 28));
+        return ((state *= 277803737) >>> 22) ^ state;
+    }
 
     public static int determineBounded(int state, final int bound)
     {

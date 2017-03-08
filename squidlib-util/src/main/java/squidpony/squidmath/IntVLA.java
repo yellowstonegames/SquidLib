@@ -15,6 +15,8 @@
  ******************************************************************************/
 package squidpony.squidmath;
 
+import squidpony.StringConvert;
+import squidpony.StringKit;
 import squidpony.annotation.GwtIncompatible;
 
 import java.io.Serializable;
@@ -462,6 +464,26 @@ public class IntVLA implements Serializable, Cloneable {
         return buffer.toString();
     }
 
+    public static IntVLA deserializeFromString(String data)
+    {
+        int amount = StringKit.count(data, ",");
+        if (amount <= 0) return new IntVLA();
+        IntVLA iv = new IntVLA(amount+1);
+        int dl = 1, idx = -dl, idx2;
+        for (int i = 0; i < amount; i++) {
+            iv.add(Integer.parseInt(StringKit.safeSubstring(data, idx+dl, idx = data.indexOf(",", idx+dl))));
+        }
+        if((idx2 = data.indexOf(",", idx+dl)) < 0)
+        {
+            iv.add(Integer.parseInt(StringKit.safeSubstring(data, idx+dl, data.length())));
+        }
+        else
+        {
+            iv.add(Integer.parseInt(StringKit.safeSubstring(data, idx+dl, idx2)));
+        }
+        return iv;
+    }
+
     /** @see #IntVLA(int[]) */
     public static IntVLA with (int... array) {
         return new IntVLA(array);
@@ -470,4 +492,18 @@ public class IntVLA implements Serializable, Cloneable {
     public boolean isEmpty() {
         return size == 0;
     }
+
+    public static class Convert extends StringConvert<IntVLA>
+    {
+        @Override
+        public String stringify(IntVLA item) {
+            return item.toString(",");
+        }
+
+        @Override
+        public IntVLA restore(String text) {
+            return deserializeFromString(text);
+        }
+    }
+    public static final StringConvert<IntVLA> convert = new Convert();
 }

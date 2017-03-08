@@ -668,9 +668,10 @@ public class CrossHash {
     private static class BooleanHasher implements IHasher, Serializable {
         private static final long serialVersionUID = 3L;
 
-        protected BooleanHasher() {
+        BooleanHasher() {
         }
 
+        @Override
         public int hash(final Object data) {
             return (data instanceof boolean[]) ? CrossHash.Wisp.hash((boolean[]) data) : data.hashCode();
         }
@@ -686,9 +687,10 @@ public class CrossHash {
     private static class ByteHasher implements IHasher, Serializable {
         private static final long serialVersionUID = 3L;
 
-        protected ByteHasher() {
+        ByteHasher() {
         }
 
+        @Override
         public int hash(final Object data) {
             return (data instanceof byte[]) ? CrossHash.Wisp.hash((byte[]) data) : data.hashCode();
         }
@@ -707,9 +709,10 @@ public class CrossHash {
     private static class ShortHasher implements IHasher, Serializable {
         private static final long serialVersionUID = 3L;
 
-        protected ShortHasher() {
+        ShortHasher() {
         }
 
+        @Override
         public int hash(final Object data) {
             return (data instanceof short[]) ? CrossHash.Wisp.hash((short[]) data) : data.hashCode();
         }
@@ -725,9 +728,10 @@ public class CrossHash {
     private static class CharHasher implements IHasher, Serializable {
         private static final long serialVersionUID = 3L;
 
-        protected CharHasher() {
+        CharHasher() {
         }
 
+        @Override
         public int hash(final Object data) {
             return (data instanceof char[]) ? CrossHash.Wisp.hash((char[]) data) : data.hashCode();
         }
@@ -743,9 +747,10 @@ public class CrossHash {
     private static class IntHasher implements IHasher, Serializable {
         private static final long serialVersionUID = 3L;
 
-        protected IntHasher() {
+        IntHasher() {
         }
 
+        @Override
         public int hash(final Object data) {
             return (data instanceof int[]) ? CrossHash.Wisp.hash((int[]) data) : data.hashCode();
         }
@@ -761,9 +766,10 @@ public class CrossHash {
     private static class LongHasher implements IHasher, Serializable {
         private static final long serialVersionUID = 3L;
 
-        protected LongHasher() {
+        LongHasher() {
         }
 
+        @Override
         public int hash(final Object data) {
             return (data instanceof long[]) ? CrossHash.Wisp.hash((long[]) data) : data.hashCode();
         }
@@ -779,9 +785,10 @@ public class CrossHash {
     private static class FloatHasher implements IHasher, Serializable {
         private static final long serialVersionUID = 3L;
 
-        protected FloatHasher() {
+        FloatHasher() {
         }
 
+        @Override
         public int hash(final Object data) {
             return (data instanceof float[]) ? CrossHash.Wisp.hash((float[]) data) : data.hashCode();
         }
@@ -797,9 +804,10 @@ public class CrossHash {
     private static class DoubleHasher implements IHasher, Serializable {
         private static final long serialVersionUID = 3L;
 
-        protected DoubleHasher() {
+        DoubleHasher() {
         }
 
+        @Override
         public int hash(final Object data) {
             return (data instanceof double[]) ? CrossHash.Wisp.hash((double[]) data) : data.hashCode();
         }
@@ -815,9 +823,10 @@ public class CrossHash {
     private static class Char2DHasher implements IHasher, Serializable {
         private static final long serialVersionUID = 3L;
 
-        protected Char2DHasher() {
+        Char2DHasher() {
         }
 
+        @Override
         public int hash(final Object data) {
             return (data instanceof char[][]) ? CrossHash.Wisp.hash((char[][]) data) : data.hashCode();
         }
@@ -836,9 +845,10 @@ public class CrossHash {
     private static class StringHasher implements IHasher, Serializable {
         private static final long serialVersionUID = 3L;
 
-        protected StringHasher() {
+        StringHasher() {
         }
 
+        @Override
         public int hash(final Object data) {
             return (data instanceof CharSequence) ? CrossHash.Wisp.hash((CharSequence) data) : data.hashCode();
         }
@@ -854,9 +864,10 @@ public class CrossHash {
     private static class StringArrayHasher implements IHasher, Serializable {
         private static final long serialVersionUID = 3L;
 
-        protected StringArrayHasher() {
+        StringArrayHasher() {
         }
 
+        @Override
         public int hash(final Object data) {
             return (data instanceof CharSequence[]) ? CrossHash.Wisp.hash((CharSequence[]) data) : data.hashCode();
         }
@@ -872,12 +883,13 @@ public class CrossHash {
      */
     public static final IHasher stringArrayHasher = new StringArrayHasher();
 
-    public static class DefaultHasher implements IHasher, Serializable {
+    private static class DefaultHasher implements IHasher, Serializable {
         private static final long serialVersionUID = 3L;
 
-        protected DefaultHasher() {
+        DefaultHasher() {
         }
 
+        @Override
         public int hash(final Object data) {
             return data.hashCode();
         }
@@ -893,7 +905,7 @@ public class CrossHash {
     private static class IdentityHasher implements IHasher, Serializable
     {
         private static final long serialVersionUID = 3L;
-        protected IdentityHasher() { }
+        IdentityHasher() { }
 
         @Override
         public int hash(Object data) {
@@ -910,9 +922,10 @@ public class CrossHash {
     private static class GeneralHasher implements IHasher, Serializable {
         private static final long serialVersionUID = 3L;
 
-        protected GeneralHasher() {
+        GeneralHasher() {
         }
 
+        @Override
         public int hash(final Object data) {
             return CrossHash.Wisp.hash(data);
         }
