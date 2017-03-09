@@ -15,7 +15,6 @@
  */
 package squidpony.squidmath;
 
-import squidpony.annotation.Beta;
 import squidpony.annotation.GwtIncompatible;
 
 import java.io.Serializable;
@@ -68,7 +67,6 @@ import java.util.*;
  * @author Sebastiano Vigna (responsible for all the hard parts)
  * @author Tommy Ettinger (mostly responsible for squashing several layers of parent classes into one monster class)
  */
-@Beta
 public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, Cloneable {
     private static final long serialVersionUID = 0L;
     /**
@@ -870,6 +868,31 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
                 return defRetValue;
             if (hasher.areEqual(k, curr))
                 return value[pos];
+        }
+    }
+
+    protected int positionOf(final Object k) {
+        if (k == null)
+        {
+            if(containsNullKey)
+                return n;
+            else
+                return -1;
+        }
+        K curr;
+        final K[] key = this.key;
+        int pos;
+        // The starting point.
+        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+            return -1;
+        if (hasher.areEqual(k, curr))
+            return pos;
+        // There's always an unused entry.
+        while (true) {
+            if ((curr = key[pos = pos + 1 & mask]) == null)
+                return -1;
+            if (hasher.areEqual(k, curr))
+                return pos;
         }
     }
 

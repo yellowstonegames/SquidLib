@@ -420,6 +420,15 @@ public class IntVLA implements Serializable, Cloneable {
             h = h * 31 + items[i];
         return h;
     }
+    public int hashWisp () {
+        int[] data = this.items;
+        int result = 0x9E3779B9, a = 0x632BE5AB;
+        final int len = size;
+        for (int i = 0; i < len; i++) {
+            result += (a ^= 0x85157AF5 * data[i]);
+        }
+        return result * (a | 1) ^ (result >>> 11 | result << 21);
+    }
 
     public long hash64 () {
         return CrossHash.Lightning.hash64(items);

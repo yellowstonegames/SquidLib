@@ -15,6 +15,7 @@
  */
 package squidpony.squidmath;
 
+import squidpony.annotation.Beta;
 import squidpony.annotation.GwtIncompatible;
 
 import java.util.*;
@@ -48,7 +49,7 @@ import java.util.*;
  * This class implements the interface of a sorted set, so to allow easy access
  * of the iteration order: for instance, you can get the first element in
  * iteration order with {@code first()} without having to create an iterator;
- * however, this class partially violates the {@link java.util.SortedSet}
+ * however, this class partially violates the {@link SortedSet}
  * contract because all subset methods throw an exception and
  * {@link #comparator()} returns always <code>null</code>.
  * <p>
@@ -61,10 +62,10 @@ import java.util.*;
  * allow some novel usage of the data structure. OrderedSet can be used like a list of unique elements, keeping order
  * like a list does but also allowing rapid checks for whether an item exists in the OrderedSet, and {@link OrderedMap}
  * can be used like that but with values associated as well (where OrderedSet uses contains(), OrderedMap uses
- * containsKey()). You can also set the item at a position with {@link #addAt(Object, int)}, or alter an item while
- * keeping index the same with {@link #alter(Object, Object)}. Reordering works here too, both with completely random
- * orders from {@link #shuffle(RNG)} or with a previously-generated ordering from {@link #reorder(int...)} (you can
- * produce such an ordering for a given size and reuse it across multiple Ordered data structures with
+ * containsKey()). You can also set the item at a position with {@link #addAt(Object, Object, int)}, or alter an item
+ * while keeping index the same with {@link #alter(Object, Object, Object, Object)}. Reordering works here too, both with completely
+ * random orders from {@link #shuffle(RNG)} or with a previously-generated ordering from {@link #reorder(int...)} (you
+ * can produce such an ordering for a given size and reuse it across multiple Ordered data structures with
  * {@link RNG#randomOrdering(int)}).
  * </p>
  * <p>
@@ -82,13 +83,18 @@ import java.util.*;
  * @author Sebastiano Vigna (responsible for all the hard parts)
  * @author Tommy Ettinger (mostly responsible for squashing several layers of parent classes into one monster class)
  */
-public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Cloneable {
+@Beta
+public class TableSet<C, R> implements java.io.Serializable {
     private static final long serialVersionUID = 0L;
     /**
-     * The array of keys.
+     * The array of column keys.
      */
-    protected K[] key;
+    protected C[] cols;
     /**
+     * The array of row keys.
+     */
+    protected R[] rows;
+    /*
      * The array of values.
      */
     //protected V[] value;
@@ -148,7 +154,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      */
     public static final float VERY_FAST_LOAD_FACTOR = .25f;
 
-    protected CrossHash.IHasher hasher = null;
+    protected CrossHash.IHasher columnHasher = CrossHash.defaultHasher, rowHasher = CrossHash.defaultHasher;
 
     /**
      * Creates a new hash map.
@@ -160,7 +166,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      */
 
     @SuppressWarnings("unchecked")
-    public OrderedSet(final int expected, final float f) {
+    public TableSet(final int expected, final float f) {
         if (f <= 0 || f > 1)
             throw new IllegalArgumentException("Load factor must be greater than 0 and smaller than or equal to 1");
         if (expected < 0) throw new IllegalArgumentException("The expected number of elements must be nonnegative");
@@ -168,10 +174,10 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         n = arraySize(expected, f);
         mask = n - 1;
         maxFill = maxFill(n, f);
-        key = (K[]) new Object[n + 1];
+        cols = (C[]) new Object[n + 1];
+        rows = (R[]) new Object[n + 1];
         //link = new long[n + 1];
         order = new IntVLA(expected);
-        hasher = CrossHash.defaultHasher;
     }
 
     /**
@@ -180,7 +186,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      *
      * @param expected the expected number of elements in the hash set.
      */
-    public OrderedSet(final int expected) {
+    public TableSet(final int expected) {
         this(expected, DEFAULT_LOAD_FACTOR);
     }
 
@@ -189,108 +195,113 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      * {@link #DEFAULT_INITIAL_SIZE} elements and
      * {@link #DEFAULT_LOAD_FACTOR} as load factor.
      */
-    public OrderedSet() {
+    public TableSet() {
         this(DEFAULT_INITIAL_SIZE, DEFAULT_LOAD_FACTOR);
-    }
-
-    /**
-     * Creates a new hash set copying a given collection.
-     *
-     * @param c a {@link Collection} to be copied into the new hash set.
-     * @param f the load factor.
-     */
-    public OrderedSet(final Collection<? extends K> c,
-                      final float f) {
-        this(c.size(), f, (c instanceof OrderedSet) ? ((OrderedSet) c).hasher : CrossHash.defaultHasher);
-        addAll(c);
     }
 
     /**
      * Creates a new hash set with {@link #DEFAULT_LOAD_FACTOR} as load
      * factor copying a given collection.
      *
-     * @param c a {@link Collection} to be copied into the new hash set.
+     * @param t an existing (non-null) TableSet to be copied into the new TableSet.
      */
-    public OrderedSet(final Collection<? extends K> c) {
-        this(c, (c instanceof OrderedSet) ? ((OrderedSet) c).f : DEFAULT_LOAD_FACTOR, (c instanceof OrderedSet) ? ((OrderedSet) c).hasher : CrossHash.defaultHasher);
+    public TableSet(final TableSet<? extends C, ? extends R> t) {
+        this(t.size(), t.f);
+        int s = t.size();
+        for (int i = 0; i < s; i++) {
+            add(columnAt(i), rowAt(i));
+        }
     }
 
     /**
      * Creates a new hash set using elements provided by a type-specific
      * iterator.
      *
-     * @param i a type-specific iterator whose elements will fill the set.
+     * @param c an iterator whose elements will fill the set's columns
+     * @param r an iterator whose elements will fill the set's rows
      * @param f the load factor.
      */
-    public OrderedSet(final Iterator<? extends K> i, final float f) {
+    public TableSet(final Iterator<? extends C> c, final Iterator<? extends R> r, final float f) {
         this(DEFAULT_INITIAL_SIZE, f);
-        while (i.hasNext())
-            add(i.next());
+        while (c.hasNext() && r.hasNext())
+            add(c.next(), r.next());
     }
 
     /**
      * Creates a new hash set with {@link #DEFAULT_LOAD_FACTOR} as load
      * factor using elements provided by a type-specific iterator.
      *
-     * @param i a type-specific iterator whose elements will fill the set.
+     * @param c an iterator whose elements will fill the set's columns
+     * @param r an iterator whose elements will fill the set's rows
      */
-    public OrderedSet(final Iterator<? extends K> i) {
-        this(i, DEFAULT_LOAD_FACTOR);
+    public TableSet(final Iterator<? extends C> c, final Iterator<? extends R> r) {
+        this(c, r, DEFAULT_LOAD_FACTOR);
     }
 
     /**
      * Creates a new hash set and fills it with the elements of a given array.
      *
-     * @param a      an array whose elements will be used to fill the set.
-     * @param offset the first element to use.
-     * @param length the number of elements to use.
-     * @param f      the load factor.
+     * @param c        an array whose elements will be used to fill the set's columns
+     * @param offset_c the first element of r to use.
+     * @param r        an array whose elements will be used to fill the set's rows
+     * @param offset_r the first element of r to use.
+     * @param length   the number of elements to use in total.
+     * @param f        the load factor.
      */
-    public OrderedSet(final K[] a, final int offset,
-                      final int length, final float f) {
+    public TableSet(final C[] c, final int offset_c, final R[] r, final int offset_r,
+                    final int length, final float f) {
         this(length < 0 ? 0 : length, f);
-        if (a == null) throw new NullPointerException("Array passed to OrderedSet constructor cannot be null");
-        if (offset < 0) throw new ArrayIndexOutOfBoundsException("Offset (" + offset + ") is negative");
+        if (c == null || r == null) throw new NullPointerException("Array passed to TableSet constructor cannot be null");
+        if (offset_c < 0) throw new ArrayIndexOutOfBoundsException("Offset (" + offset_c + ") is negative");
+        if (offset_r < 0) throw new ArrayIndexOutOfBoundsException("Offset (" + offset_r + ") is negative");
         if (length < 0) throw new IllegalArgumentException("Length (" + length + ") is negative");
-        if (offset + length > a.length) {
+        if (offset_c + length > c.length) {
             throw new ArrayIndexOutOfBoundsException(
-                    "Last index (" + (offset + length) + ") is greater than array length (" + a.length + ")");
+                    "Last index (" + (offset_c + length) + ") is greater than array length (" + c.length + ")");
+        }
+        if (offset_r + length > r.length) {
+            throw new ArrayIndexOutOfBoundsException(
+                    "Last index (" + (offset_r + length) + ") is greater than array length (" + r.length + ")");
         }
         for (int i = 0; i < length; i++)
-            add(a[offset + i]);
+            add(c[offset_c + i], r[offset_r + i]);
     }
 
     /**
      * Creates a new hash set with {@link #DEFAULT_LOAD_FACTOR} as load
      * factor and fills it with the elements of a given array.
      *
-     * @param a      an array whose elements will be used to fill the set.
-     * @param offset the first element to use.
-     * @param length the number of elements to use.
+     * @param c        an array whose elements will be used to fill the set's columns
+     * @param offset_c the first element of r to use.
+     * @param r        an array whose elements will be used to fill the set's rows
+     * @param offset_r the first element of r to use.
+     * @param length   the number of elements to use in total.
      */
-    public OrderedSet(final K[] a, final int offset,
-                      final int length) {
-        this(a, offset, length, DEFAULT_LOAD_FACTOR);
+    public TableSet(final C[] c, final int offset_c, final R[] r, final int offset_r,
+                    final int length) {
+        this(c, offset_c, r, offset_r, length, DEFAULT_LOAD_FACTOR);
     }
 
     /**
      * Creates a new hash set copying the elements of an array.
      *
-     * @param a an array to be copied into the new hash set.
+     * @param c an array to be copied into the new hash set's columns
+     * @param r an array to be copied into the new hash set's rows
      * @param f the load factor.
      */
-    public OrderedSet(final K[] a, final float f) {
-        this(a, 0, a.length, f);
+    public TableSet(final C[] c, final R[] r, final float f) {
+        this(c, 0, r, 0, c.length, f);
     }
 
     /**
      * Creates a new hash set with {@link #DEFAULT_LOAD_FACTOR} as load
      * factor copying the elements of an array.
      *
-     * @param a an array to be copied into the new hash set.
+     * @param c an array to be copied into the new hash set's columns
+     * @param r an array to be copied into the new hash set's rows
      */
-    public OrderedSet(final K[] a) {
-        this(a, DEFAULT_LOAD_FACTOR);
+    public TableSet(final C[] c, final R[] r) {
+        this(c, r, DEFAULT_LOAD_FACTOR);
     }
 
     /**
@@ -300,10 +311,10 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      *
      * @param expected the expected number of elements in the hash set.
      * @param f        the load factor.
-     * @param hasher   used to hash items; typically only needed when K is an array, where CrossHash has implementations
+     * @param columnHasher   used to hash items; typically only needed when C is an array, where CrossHash has implementations
      */
     @SuppressWarnings("unchecked")
-    public OrderedSet(final int expected, final float f, CrossHash.IHasher hasher) {
+    public TableSet(final int expected, final float f, final CrossHash.IHasher columnHasher, final CrossHash.IHasher rowHasher) {
         if (f <= 0 || f > 1)
             throw new IllegalArgumentException("Load factor must be greater than 0 and smaller than or equal to 1");
         if (expected < 0) throw new IllegalArgumentException("The expected number of elements must be nonnegative");
@@ -311,30 +322,34 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         n = arraySize(expected, f);
         mask = n - 1;
         maxFill = maxFill(n, f);
-        key = (K[]) new Object[n + 1];
+        cols = (C[]) new Object[n + 1];
+        rows = (R[]) new Object[n + 1];
         //link = new long[n + 1];
         order = new IntVLA(expected);
-        this.hasher = hasher == null ? CrossHash.defaultHasher : hasher;
+        this.columnHasher = columnHasher == null ? CrossHash.defaultHasher : columnHasher;
+        this.rowHasher = rowHasher == null ? CrossHash.defaultHasher : rowHasher;
     }
 
     /**
      * Creates a new hash set with {@link #DEFAULT_LOAD_FACTOR} as load
      * factor.
      *
-     * @param hasher used to hash items; typically only needed when K is an array, where CrossHash has implementations
+     * @param columnHasher used to hash items for columns; typically only needed when C is an array, where CrossHash has implementations
+     * @param rowHasher    used to hash items for rows; typically only needed when C is an array, where CrossHash has implementations
      */
-    public OrderedSet(CrossHash.IHasher hasher) {
-        this(DEFAULT_INITIAL_SIZE, DEFAULT_LOAD_FACTOR, hasher);
+    public TableSet(final CrossHash.IHasher columnHasher, final CrossHash.IHasher rowHasher) {
+        this(DEFAULT_INITIAL_SIZE, DEFAULT_LOAD_FACTOR, columnHasher, rowHasher);
     }
 
     /**
      * Creates a new hash set with {@link #DEFAULT_LOAD_FACTOR} as load
      * factor.
      *
-     * @param hasher used to hash items; typically only needed when K is an array, where CrossHash has implementations
+     * @param columnHasher used to hash items for columns; typically only needed when C is an array, where CrossHash has implementations
+     * @param rowHasher    used to hash items for rows; typically only needed when C is an array, where CrossHash has implementations
      */
-    public OrderedSet(final int expected, CrossHash.IHasher hasher) {
-        this(expected, DEFAULT_LOAD_FACTOR, hasher);
+    public TableSet(final int expected, final CrossHash.IHasher columnHasher, final CrossHash.IHasher rowHasher) {
+        this(expected, DEFAULT_LOAD_FACTOR, columnHasher, rowHasher);
     }
 
     /**
@@ -342,12 +357,12 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      *
      * @param c      a {@link Collection} to be copied into the new hash set.
      * @param f      the load factor.
-     * @param hasher used to hash items; typically only needed when K is an array, where CrossHash has implementations
+     * @param columnHasher used to hash items; typically only needed when C is an array, where CrossHash has implementations
      */
-    public OrderedSet(final Collection<? extends K> c,
-                      final float f, CrossHash.IHasher hasher) {
-        this(c.size(), f, hasher);
-        addAll(c);
+    public TableSet(final Collection<? extends C> c, final Collection<? extends R> r,
+                    final float f, final CrossHash.IHasher columnHasher, final CrossHash.IHasher rowHasher) {
+        this(c.size(), f, columnHasher, rowHasher);
+        addAll(c, r);
     }
 
     /**
@@ -355,65 +370,78 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      * factor copying a given collection.
      *
      * @param c      a {@link Collection} to be copied into the new hash set.
-     * @param hasher used to hash items; typically only needed when K is an array, where CrossHash has implementations
+     * @param columnHasher used to hash items; typically only needed when C is an array, where CrossHash has implementations
      */
-    public OrderedSet(final Collection<? extends K> c, CrossHash.IHasher hasher) {
-        this(c, DEFAULT_LOAD_FACTOR, hasher);
+    public TableSet(final Collection<? extends C> c, final Collection<? extends R> r, final CrossHash.IHasher columnHasher, final CrossHash.IHasher rowHasher) {
+        this(c, r, DEFAULT_LOAD_FACTOR, columnHasher, rowHasher);
     }
 
     /**
      * Creates a new hash set and fills it with the elements of a given array.
      *
-     * @param a      an array whose elements will be used to fill the set.
-     * @param offset the first element to use.
-     * @param length the number of elements to use.
-     * @param f      the load factor.
+     * @param c        an array whose elements will be used to fill the set's columns
+     * @param offset_c the first element of r to use.
+     * @param r        an array whose elements will be used to fill the set's rows
+     * @param offset_r the first element of r to use.
+     * @param length   the number of elements to use in total.
+     * @param f        the load factor.
      */
-    public OrderedSet(final K[] a, final int offset,
-                      final int length, final float f, CrossHash.IHasher hasher) {
-        this(length < 0 ? 0 : length, f, hasher);
-        if (a == null) throw new NullPointerException("Array passed to OrderedSet constructor cannot be null");
-        if (offset < 0) throw new ArrayIndexOutOfBoundsException("Offset (" + offset + ") is negative");
+    public TableSet(final C[] c, final int offset_c, final R[] r, final int offset_r,
+                    final int length, final float f, final CrossHash.IHasher columnHasher, final CrossHash.IHasher rowHasher) {
+        this(length < 0 ? 0 : length, f, columnHasher, rowHasher);
+        if (c == null || r == null) throw new NullPointerException("Array passed to TableSet constructor cannot be null");
+        if (offset_c < 0) throw new ArrayIndexOutOfBoundsException("Offset (" + offset_c + ") is negative");
+        if (offset_r < 0) throw new ArrayIndexOutOfBoundsException("Offset (" + offset_r + ") is negative");
         if (length < 0) throw new IllegalArgumentException("Length (" + length + ") is negative");
-        if (offset + length > a.length) {
+        if (offset_c + length > c.length) {
             throw new ArrayIndexOutOfBoundsException(
-                    "Last index (" + (offset + length) + ") is greater than array length (" + a.length + ")");
+                    "Last index (" + (offset_c + length) + ") is greater than array length (" + c.length + ")");
+        }
+        if (offset_r + length > r.length) {
+            throw new ArrayIndexOutOfBoundsException(
+                    "Last index (" + (offset_r + length) + ") is greater than array length (" + r.length + ")");
         }
         for (int i = 0; i < length; i++)
-            add(a[offset + i]);
+            add(c[offset_c + i], r[offset_r + i]);
     }
 
     /**
      * Creates a new hash set with {@link #DEFAULT_LOAD_FACTOR} as load
      * factor and fills it with the elements of a given array.
      *
-     * @param a      an array whose elements will be used to fill the set.
-     * @param offset the first element to use.
-     * @param length the number of elements to use.
+     * @param c        an array whose elements will be used to fill the set's columns
+     * @param offset_c the first element of r to use.
+     * @param r        an array whose elements will be used to fill the set's rows
+     * @param offset_r the first element of r to use.
+     * @param length   the number of elements to use in total.
      */
-    public OrderedSet(final K[] a, final int offset,
-                      final int length, CrossHash.IHasher hasher) {
-        this(a, offset, length, DEFAULT_LOAD_FACTOR, hasher);
+    public TableSet(final C[] c, final int offset_c, final R[] r, final int offset_r,
+                    final int length, final CrossHash.IHasher columnHasher, final CrossHash.IHasher rowHasher) {
+        this(c, offset_c, r, offset_r, length, DEFAULT_LOAD_FACTOR, columnHasher, rowHasher);
     }
 
     /**
      * Creates a new hash set copying the elements of an array.
      *
-     * @param a an array to be copied into the new hash set.
-     * @param f the load factor.
+     * @param c        an array whose elements will be used to fill the set's columns
+     * @param r        an array whose elements will be used to fill the set's rows
+     * @param f        the load factor.
      */
-    public OrderedSet(final K[] a, final float f, CrossHash.IHasher hasher) {
-        this(a, 0, a.length, f, hasher);
+    public TableSet(final C[] c, final R[] r,
+                    final float f, final CrossHash.IHasher columnHasher, final CrossHash.IHasher rowHasher) {
+        this(c, 0, r, 0, c.length, f, columnHasher, rowHasher);
     }
 
     /**
      * Creates a new hash set with {@link #DEFAULT_LOAD_FACTOR} as load
      * factor copying the elements of an array.
      *
-     * @param a an array to be copied into the new hash set.
+     * @param c        an array whose elements will be used to fill the set's columns
+     * @param r        an array whose elements will be used to fill the set's rows
      */
-    public OrderedSet(final K[] a, CrossHash.IHasher hasher) {
-        this(a, DEFAULT_LOAD_FACTOR, hasher);
+    public TableSet(final C[] c, final R[] r,
+                    final CrossHash.IHasher columnHasher, final CrossHash.IHasher rowHasher) {
+        this(c, 0, r, 0, c.length, DEFAULT_LOAD_FACTOR, columnHasher, rowHasher);
     }
 
     private int realSize() {
@@ -438,43 +466,48 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
     /**
      * {@inheritDoc}
      */
-    public boolean addAll(Collection<? extends K> c) {
+    public boolean addAll(Collection<? extends C> c, Collection<? extends R> r) {
         // The resulting collection will be at least c.size() big
         if (f <= .5)
-            ensureCapacity(c.size()); // The resulting collection will be sized
+            ensureCapacity(Math.min(c.size(), r.size())); // The resulting collection will be sized
             // for c.size() elements
         else
-            tryCapacity(size() + c.size()); // The resulting collection will be
+            tryCapacity(size() + Math.min(c.size(), r.size())); // The resulting collection will be
         // tentatively sized for size() +
         // c.size() elements
         boolean retVal = false;
-        final Iterator<? extends K> i = c.iterator();
-        int n = c.size();
+        final Iterator<? extends C> i = c.iterator();
+        final Iterator<? extends R> j = r.iterator();
+        int n = Math.min(c.size(), r.size());
         while (n-- != 0)
-            if (add(i.next()))
+            if (add(i.next(), j.next()))
                 retVal = true;
         return retVal;
     }
 
-    public boolean add(final K k) {
+    public boolean add(final C c, final R r) {
         int pos;
-        if (k == null) {
+        if (c == null && r == null) {
             if (containsNull)
                 return false;
             pos = n;
             containsNull = true;
         } else {
-            K curr;
-            final K[] key = this.key;
+            C curr;
+            R rurr;
+            final C[] key = this.cols;
+            final R[] row = this.rows;
             // The starting point.
-            if (!((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)) {
-                if (hasher.areEqual(curr, k))
+            if ((curr = key[pos = PintRNG.determine(columnHasher.hash(c), rowHasher.hash(r)) & mask]) != null &&
+                    (rurr = row[pos]) != null) {
+                if (columnHasher.areEqual(curr, c) && rowHasher.areEqual(rurr, r))
                     return false;
-                while (!((curr = key[pos = pos + 1 & mask]) == null))
-                    if (hasher.areEqual(curr, k))
+                while (((curr = key[pos = pos + 1 & mask]) != null) && (rurr = row[pos]) != null)
+                    if (columnHasher.areEqual(curr, c) && rowHasher.areEqual(rurr, r))
                         return false;
             }
-            key[pos] = k;
+            key[pos] = c;
+            row[pos] = r;
         }
         if (size == 0) {
             first = last = pos;
@@ -487,85 +520,47 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         return true;
     }
 
-    public boolean addAt(final K k, final int idx) {
-        if (idx <= 0)
-            return addAndMoveToFirst(k);
-        else if (idx >= size)
-            return addAndMoveToLast(k);
+    public boolean addAt(final C c, final R r, int idx) {
+        if (idx < 0)
+            idx = 0;
+        else if (idx > size)
+            idx = size;
 
         int pos;
-        if (k == null) {
+        if (c == null && r == null) {
             if (containsNull)
                 return false;
             pos = n;
             containsNull = true;
         } else {
-            K curr;
-            final K[] key = this.key;
+            C curr;
+            R rurr;
+            final C[] key = this.cols;
+            final R[] row = this.rows;
             // The starting point.
-            if (!((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)) {
-                if (hasher.areEqual(curr, k))
+            if ((curr = key[pos = PintRNG.determine(columnHasher.hash(c), rowHasher.hash(r)) & mask]) != null &&
+                    (rurr = row[pos]) != null) {
+                if (columnHasher.areEqual(curr, c) && rowHasher.areEqual(rurr, r))
                     return false;
-                while (!((curr = key[pos = pos + 1 & mask]) == null))
-                    if (hasher.areEqual(curr, k))
+                while (((curr = key[pos = pos + 1 & mask]) != null) && (rurr = row[pos]) != null)
+                    if (columnHasher.areEqual(curr, c) && rowHasher.areEqual(rurr, r))
                         return false;
             }
-            key[pos] = k;
+            key[pos] = c;
+            row[pos] = r;
         }
-        order.insert(idx, pos);
+        if(idx == size) {
+            order.add(pos);
+            last = pos;
+        } else {
+            order.insert(idx, pos);
+        }
+        if (idx == 0) {
+            first = pos;
+        }
         if (size++ >= maxFill)
             rehash(arraySize(size + 1, f));
         return true;
-    }
-
-    /**
-     * Add a random element if not present, get the existing value if already
-     * present.
-     * <p>
-     * This is equivalent to (but faster than) doing a:
-     * <p>
-     * <pre>
-     * K exist = set.get(k);
-     * if (exist == null) {
-     * 	set.add(k);
-     * 	exist = k;
-     * }
-     * </pre>
-     */
-    public K addOrGet(final K k) {
-        int pos;
-        if (k == null) {
-            if (containsNull)
-                return key[n];
-            pos = n;
-            containsNull = true;
-        } else {
-            K curr;
-            final K[] key = this.key;
-            // The starting point.
-            if (!((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)) {
-                if (hasher.areEqual(curr, k))
-                    return curr;
-                while (!((curr = key[pos = pos + 1 & mask]) == null))
-                    if (hasher.areEqual(curr, k))
-                        return curr;
-            }
-            key[pos] = k;
-        }
-
-        if (size == 0) {
-            first = last = pos;
-            // Special case of SET_UPPER_LOWER( link[ pos ], -1, -1 );
-            //link[pos] = -1L;
-        } else {
-            //link[last] ^= ((link[last] ^ (pos & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-            //link[pos] = ((last & 0xFFFFFFFFL) << 32) | (-1 & 0xFFFFFFFFL);
-            last = pos;
-        }
-        order.add(pos);
-        if (size++ >= maxFill)
-            rehash(arraySize(size + 1, f));
-        return k;
     }
 
     /**
@@ -577,23 +572,26 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
     protected final void shiftKeys(int pos) {
         // Shift entries with the same hash.
         int last, slot;
-        K curr;
-        final K[] key = this.key;
+        C curr;
+        R rurr;
+        final C[] col = this.cols;
+        final R[] row = this.rows;
         for (; ; ) {
             pos = (last = pos) + 1 & mask;
             for (; ; ) {
-                if ((curr = key[pos]) == null) {
-                    key[last] = null;
+                if ((curr = col[pos]) == null || (rurr = row[pos]) == null) {
+                    col[last] = null;
+                    row[last] = null;
                     return;
                 }
-                slot = HashCommon.mix(hasher.hash(curr))
-                        & mask;
+                slot = PintRNG.determine(columnHasher.hash(curr), rowHasher.hash(rurr)) & mask;
                 if (last <= pos ? last >= slot || slot > pos : last >= slot
                         && slot > pos)
                     break;
                 pos = pos + 1 & mask;
             }
-            key[last] = curr;
+            col[last] = curr;
+            row[last] = rurr;
             fixOrder(pos, last);
         }
     }
@@ -609,7 +607,8 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
 
     private boolean removeNullEntry() {
         containsNull = false;
-        key[n] = null;
+        cols[n] = null;
+        rows[n] = null;
         size--;
         fixOrder(n);
         if (size < maxFill / 4 && n > DEFAULT_INITIAL_SIZE)
@@ -618,301 +617,85 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
     }
 
     @SuppressWarnings("unchecked")
-    protected boolean rem(final Object k) {
-        if (k == null)
+    public boolean remove(final Object c, final Object r) {
+        if (c == null && r == null)
             return containsNull && removeNullEntry();
-        K curr;
-        final K[] key = this.key;
+        C curr;
+        R rurr;
+        final C[] col = this.cols;
+        final R[] row = this.rows;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+        if ((curr = col[pos = PintRNG.determine(columnHasher.hash(c), rowHasher.hash(r)) & mask]) == null
+                || (rurr = row[pos]) == null)
             return false;
-        if (hasher.areEqual(k, curr))
+        if (columnHasher.areEqual(c, curr) && rowHasher.areEqual(r, rurr))
             return removeEntry(pos);
         while (true) {
-            if ((curr = key[pos = pos + 1 & mask]) == null)
+            if ((curr = col[pos = pos + 1 & mask]) == null || (rurr = row[pos]) == null)
                 return false;
-            if (hasher.areEqual(k, curr))
+            if (columnHasher.areEqual(c, curr) && rowHasher.areEqual(r, rurr))
                 return removeEntry(pos);
         }
     }
 
-    @Override
-    public boolean remove(final Object o) {
-        return rem(o);
-    }
-
-    /**
-     * Removes the first key in iteration order.
-     *
-     * @return the first key.
-     * @throws NoSuchElementException is this set is empty.
-     */
-    public K removeFirst() {
-        if (size == 0)
-            throw new NoSuchElementException();
-        final int pos = first;
-        order.removeIndex(0);
-        if (order.size > 0)
-            first = order.get(0);
-        else
-            first = -1;
-        // Abbreviated version of fixOrder(pos)
-        /*first = (int) link[pos];
-        if (0 <= first) {
-            // Special case of SET_PREV( link[ first ], -1 )
-            link[first] |= (-1 & 0xFFFFFFFFL) << 32;
-        }*/
-        final K k = key[pos];
-        size--;
-        if (k == null) {
-            containsNull = false;
-            key[n] = null;
-        } else
-            shiftKeys(pos);
-        if (size < maxFill / 4 && n > DEFAULT_INITIAL_SIZE)
-            rehash(n / 2);
-        return k;
-    }
-
-    /**
-     * Removes the the last key in iteration order.
-     *
-     * @return the last key.
-     * @throws NoSuchElementException is this set is empty.
-     */
-    public K removeLast() {
-        if (size == 0)
-            throw new NoSuchElementException();
-        final int pos = last;
-        order.pop();
-        if (order.size > 0)
-            last = order.get(order.size - 1);
-        else
-            last = -1;
-
-        // Abbreviated version of fixOrder(pos)
-        /*
-        last = (int) (link[pos] >>> 32);
-        if (0 <= last) {
-            // Special case of SET_NEXT( link[ last ], -1 )
-            link[last] |= -1 & 0xFFFFFFFFL;
-        }*/
-        final K k = key[pos];
-        size--;
-        if (k == null) {
-            containsNull = false;
-            key[n] = null;
-        } else
-            shiftKeys(pos);
-        if (size < maxFill / 4 && n > DEFAULT_INITIAL_SIZE)
-            rehash(n / 2);
-        return k;
-
-    }
-
-    private void moveIndexToFirst(final int i) {
-        if (size <= 1 || first == i)
-            return;
-        order.moveToFirst(i);
-        if (last == i) {
-            last = order.peek();
-            //last = (int) (link[i] >>> 32);
-            // Special case of SET_NEXT( link[ last ], -1 );
-            //link[last] |= -1 & 0xFFFFFFFFL;
-        }/* else {
-            final long linki = link[i];
-            final int prev = (int) (linki >>> 32);
-            final int next = (int) linki;
-            link[prev] ^= ((link[prev] ^ (linki & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-            link[next] ^= ((link[next] ^ (linki & 0xFFFFFFFF00000000L)) & 0xFFFFFFFF00000000L);
-        }
-        link[first] ^= ((link[first] ^ ((i & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
-        link[i] = ((-1 & 0xFFFFFFFFL) << 32) | (first & 0xFFFFFFFFL);
-        */
-        first = i;
-    }
-
-    private void moveIndexToLast(final int i) {
-        if (size <= 1 || last == i)
-            return;
-        order.moveToLast(i);
-        if (first == i) {
-            first = order.get(0);
-            //first = (int) link[i];
-            // Special case of SET_PREV( link[ first ], -1 );
-            //link[first] |= (-1 & 0xFFFFFFFFL) << 32;
-        } /*else {
-            final long linki = link[i];
-            final int prev = (int) (linki >>> 32);
-            final int next = (int) linki;
-            link[prev] ^= ((link[prev] ^ (linki & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-            link[next] ^= ((link[next] ^ (linki & 0xFFFFFFFF00000000L)) & 0xFFFFFFFF00000000L);
-        }
-        link[last] ^= ((link[last] ^ (i & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-        link[i] = ((last & 0xFFFFFFFFL) << 32) | (-1 & 0xFFFFFFFFL);
-        */
-        last = i;
-    }
-
-    /**
-     * Adds a key to the set; if the key is already present, it is moved to the
-     * first position of the iteration order.
-     *
-     * @param k the key.
-     * @return true if the key was not present.
-     */
-    public boolean addAndMoveToFirst(final K k) {
-        int pos;
-        if (k == null) {
-            if (containsNull) {
-                moveIndexToFirst(n);
-                return false;
-            }
-            containsNull = true;
-            pos = n;
-        } else {
-            // The starting point.
-            final K key[] = this.key;
-            pos = HashCommon.mix(hasher.hash(k)) & mask;
-            while (!(key[pos] == null)) {
-                if (hasher.areEqual(k, key[pos])) {
-                    moveIndexToFirst(pos);
-                    return false;
-                }
-                pos = pos + 1 & mask;
-            }
-        }
-        key[pos] = k;
-        if (size == 0) {
-            first = last = pos;
-            // Special case of SET_UPPER_LOWER( link[ pos ], -1, -1 );
-            //link[pos] = -1L;
-        } else {
-            //link[first] ^= ((link[first] ^ ((pos & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
-            //link[pos] = ((-1 & 0xFFFFFFFFL) << 32) | (first & 0xFFFFFFFFL);
-            first = pos;
-        }
-        order.insert(0, pos);
-        if (size++ >= maxFill)
-            rehash(arraySize(size, f));
-        return true;
-    }
-
-    /**
-     * Adds a key to the set; if the key is already present, it is moved to the
-     * last position of the iteration order.
-     *
-     * @param k the key.
-     * @return true if the key was not present.
-     */
-    public boolean addAndMoveToLast(final K k) {
-        int pos;
-        if (k == null) {
-            if (containsNull) {
-                moveIndexToLast(n);
-                return false;
-            }
-            containsNull = true;
-            pos = n;
-        } else {
-            // The starting point.
-            final K key[] = this.key;
-            pos = HashCommon.mix(hasher.hash(k)) & mask;
-            // There's always an unused entry.
-            while (!(key[pos] == null)) {
-                if (hasher.areEqual(k, key[pos])) {
-                    moveIndexToLast(pos);
-                    return false;
-                }
-                pos = pos + 1 & mask;
-            }
-        }
-        key[pos] = k;
-        if (size == 0) {
-            first = last = pos;
-            // Special case of SET_UPPER_LOWER( link[ pos ], -1, -1 );
-            //link[pos] = -1L;
-        } else {
-            //link[last] ^= ((link[last] ^ (pos & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-            //link[pos] = ((last & 0xFFFFFFFFL) << 32) | (-1 & 0xFFFFFFFFL);
-            last = pos;
-        }
-        order.add(pos);
-        if (size++ >= maxFill)
-            rehash(arraySize(size, f));
-        return true;
-    }
-
-    /**
-     * Returns the element of this set that is equal to the given key, or
-     * <code>null</code>.
-     *
-     * @return the element of this set that is equal to the given key, or
-     * <code>null</code>.
-     */
-    public K get(final Object k) {
-        if (k == null)
-            return key[n]; // This is correct independently of the value of
-        // containsNull and of the map being custom
-        K curr;
-        final K[] key = this.key;
-        int pos;
-        // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+    public C column(final Object c, final Object r) {
+        final int pos = positionOf(c, r);
+        if(pos == -1 || pos >= size)
             return null;
-        if (hasher.areEqual(k, curr))
-            return curr;
-        // There's always an unused entry.
-        while (true) {
-            if ((curr = key[pos = pos + 1 & mask]) == null)
-                return null;
-            if (hasher.areEqual(k, curr))
-                return curr;
-        }
+        return cols[pos];
     }
 
-    public boolean contains(final Object k) {
-        if (k == null)
+    public R row(final Object c, final Object r) {
+        final int pos = positionOf(c, r);
+        if(pos == -1 || pos >= size)
+            return null;
+        return rows[pos];
+    }
+
+    public boolean contains(final Object c, final Object r) {
+        if (c == null && r == null)
             return containsNull;
-        K curr;
-        final K[] key = this.key;
+        C curr;
+        R rurr;
+        final C[] col = this.cols;
+        final R[] row = this.rows;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+        if ((curr = col[pos = PintRNG.determine(columnHasher.hash(c), rowHasher.hash(r)) & mask]) == null
+                || (rurr = row[pos]) == null)
             return false;
-        if (hasher.areEqual(k, curr))
+        if (columnHasher.areEqual(c, curr) && rowHasher.areEqual(r, rurr))
             return true;
         // There's always an unused entry.
         while (true) {
-            if ((curr = key[pos = pos + 1 & mask]) == null)
+            if ((curr = col[pos = pos + 1 & mask]) == null || (rurr = row[pos]) == null)
                 return false;
-            if (hasher.areEqual(k, curr))
+            if (columnHasher.areEqual(c, curr) && rowHasher.areEqual(r, rurr))
                 return true;
         }
     }
 
-    protected int positionOf(final Object k) {
-        if (k == null)
-        {
-            if(containsNull)
-                return n;
-            else
-                return -1;
-        }
-        K curr;
-        final K[] key = this.key;
+    protected int positionOf(final Object c, final Object r) {
+
+        if (c == null && r == null)
+            return containsNull ? n : -1;
+        C curr;
+        R rurr;
+        final C[] col = this.cols;
+        final R[] row = this.rows;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+        if ((curr = col[pos = PintRNG.determine(columnHasher.hash(c), rowHasher.hash(r)) & mask]) == null
+                || (rurr = row[pos]) == null)
             return -1;
-        if (hasher.areEqual(k, curr))
+        if (columnHasher.areEqual(c, curr) && rowHasher.areEqual(r, rurr))
             return pos;
         // There's always an unused entry.
         while (true) {
-            if ((curr = key[pos = pos + 1 & mask]) == null)
+            if ((curr = col[pos = pos + 1 & mask]) == null || (rurr = row[pos]) == null)
                 return -1;
-            if (hasher.areEqual(k, curr))
+            if (columnHasher.areEqual(c, curr) && rowHasher.areEqual(r, rurr))
                 return pos;
         }
     }
@@ -928,7 +711,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             return;
         size = 0;
         containsNull = false;
-        Arrays.fill(key, null);
+        Arrays.fill(cols, null);
         first = last = -1;
         order.clear();
     }
@@ -945,23 +728,24 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      * @return <code>true</code> if this collection contains all elements of the
      * argument.
      */
-    public boolean containsAll(Collection<?> c) {
-        int n = c.size();
+    public boolean containsAll(Collection<?> c, Collection<?> r) {
+        int n = Math.min(c.size(), r.size());
         final Iterator<?> i = c.iterator();
+        final Iterator<?> j = r.iterator();
         while (n-- != 0)
-            if (!contains(i.next()))
+            if (!contains(i.next(), j.next()))
                 return false;
         return true;
     }
 
-    /**
+    /*
      * Retains in this collection only elements from the given collection.
      *
      * @param c a collection.
      * @return <code>true</code> if this collection changed as a result of the
      * call.
-     */
-    public boolean retainAll(Collection<?> c) {
+     * /
+    public boolean retainAll(Collection<?> c, Collection<?> r) {
         boolean retVal = false;
         int n = size();
         final Iterator<?> i = iterator();
@@ -973,6 +757,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         }
         return retVal;
     }
+    */
 
     /**
      * Remove from this collection all elements in the given collection. If the
@@ -982,12 +767,13 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      * @return <code>true</code> if this collection changed as a result of the
      * call.
      */
-    public boolean removeAll(Collection<?> c) {
+    public boolean removeAll(Collection<?> c, Collection<?> r) {
         boolean retVal = false;
-        int n = c.size();
+        int n = Math.min(c.size(), r.size());
         final Iterator<?> i = c.iterator();
+        final Iterator<?> j = r.iterator();
         while (n-- != 0)
-            if (remove(i.next()))
+            if (remove(i.next(), j.next()))
                 retVal = true;
         return retVal;
     }
@@ -1046,10 +832,10 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      *
      * @return the first element in iteration order.
      */
-    public K first() {
+    public C first() {
         if (size == 0)
             throw new NoSuchElementException();
-        return key[first];
+        return cols[first];
     }
 
     /**
@@ -1057,25 +843,25 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      *
      * @return the last element in iteration order.
      */
-    public K last() {
+    public C last() {
         if (size == 0)
             throw new NoSuchElementException();
-        return key[last];
+        return cols[last];
     }
 
-    public SortedSet<K> tailSet(K from) {
+    public SortedSet<C> tailSet(C from) {
         throw new UnsupportedOperationException();
     }
 
-    public SortedSet<K> headSet(K to) {
+    public SortedSet<C> headSet(C to) {
         throw new UnsupportedOperationException();
     }
 
-    public SortedSet<K> subSet(K from, K to) {
+    public SortedSet<C> subSet(C from, C to) {
         throw new UnsupportedOperationException();
     }
 
-    public Comparator<? super K> comparator() {
+    public Comparator<? super C> comparator() {
         return null;
     }
 
@@ -1086,16 +872,16 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      * This class provides a list iterator over a linked hash set. The
      * constructor runs in constant time.
      */
-    private class SetIterator implements ListIterator<K> {
+    private class SetIterator implements ListIterator<C> {
         /**
          * The entry that will be returned by the next call to
-         * {@link java.util.ListIterator#previous()} (or <code>null</code> if no
+         * {@link ListIterator#previous()} (or <code>null</code> if no
          * previous entry exists).
          */
         int prev = -1;
         /**
          * The entry that will be returned by the next call to
-         * {@link java.util.ListIterator#next()} (or <code>null</code> if no
+         * {@link ListIterator#next()} (or <code>null</code> if no
          * next entry exists).
          */
         int next = -1;
@@ -1105,7 +891,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
          */
         int curr = -1;
         /**
-         * The current index (in the sense of a {@link java.util.ListIterator}).
+         * The current index (in the sense of a {@link ListIterator}).
          * When -1, we do not know the current index.
          */
         int index = -1;
@@ -1123,7 +909,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             return prev != -1;
         }
 
-        public K next() {
+        public C next() {
             if (!hasNext())
                 throw new NoSuchElementException();
             curr = next;
@@ -1132,10 +918,10 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             else
                 next = order.get(index);//(int) link[curr];
             prev = curr;
-            return key[curr];
+            return cols[curr];
         }
 
-        public K previous() {
+        public C previous() {
             if (!hasPrevious())
                 throw new NoSuchElementException();
             curr = prev;
@@ -1144,7 +930,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             else
                 prev = order.get(index - 1);
             next = curr;
-            return key[curr];
+            return cols[curr];
         }
 
         private void ensureIndexKnown() {
@@ -1206,11 +992,11 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             curr = -1;
             if (pos == n) {
                 containsNull = false;
-                key[n] = null;
+                cols[n] = null;
                 //order.removeValue(pos);
             } else {
-                K curr;
-                final K[] key = OrderedSet.this.key;
+                C curr;
+                final C[] key = TableSet.this.cols;
                 // We have to horribly duplicate the shiftKeys() code because we
                 // need to update next/prev.
                 for (; ; ) {
@@ -1220,7 +1006,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
                             key[last] = null;
                             return;
                         }
-                        slot = HashCommon.mix(hasher.hash(curr)) & mask;
+                        slot = HashCommon.mix(columnHasher.hash(curr)) & mask;
                         if (last <= pos
                                 ? last >= slot || slot > pos
                                 : last >= slot && slot > pos)
@@ -1245,7 +1031,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
          * #add} have been called after the last call to {@code next} or
          * {@code previous}.
          *
-         * @param k the element with which to replace the last element returned by
+         * @param c the element with which to replace the last element returned by
          *          {@code next} or {@code previous}
          * @throws UnsupportedOperationException if the {@code set} operation
          *                                       is not supported by this list iterator
@@ -1259,7 +1045,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
          *                                       {@code next} or {@code previous}
          */
         @Override
-        public void set(K k) {
+        public void set(C c) {
             throw new UnsupportedOperationException("set() not supported on OrderedSet iterator");
         }
 
@@ -1275,7 +1061,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
          * (This call increases by one the value that would be returned by a
          * call to {@code nextIndex} or {@code previousIndex}.)
          *
-         * @param k the element to insert
+         * @param c the element to insert
          * @throws UnsupportedOperationException if the {@code add} method is
          *                                       not supported by this list iterator
          * @throws ClassCastException            if the class of the specified element
@@ -1284,12 +1070,12 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
          *                                       prevents it from being added to this list
          */
         @Override
-        public void add(K k) {
+        public void add(C c) {
             throw new UnsupportedOperationException("add() not supported on OrderedSet iterator");
         }
     }
 
-    public ListIterator<K> iterator() {
+    public ListIterator<C> iterator() {
         return new SetIterator();
     }
 
@@ -1366,21 +1152,21 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
 
     @SuppressWarnings("unchecked")
     protected void rehash(final int newN) {
-        final K key[] = this.key;
-        final int mask = newN - 1; // Note that this is used by the hashing
-        // macro
-        final K newKey[] = (K[]) new Object[newN + 1];
+        final C col[] = this.cols, newCol[] = (C[]) new Object[newN + 1];
+        final R row[] = this.rows, newRow[] = (R[]) new Object[newN + 1];
+        final int mask = newN - 1;
         int i, pos, sz = order.size, originalFirst = first, originalLast = last;
         for (int q = 0; q < sz; q++) {
             i = order.get(q);
-            if (key[i] == null)
+            if (col[i] == null)
                 pos = newN;
             else {
-                pos = HashCommon.mix(hasher.hash(key[i])) & mask;
-                while (!(newKey[pos] == null))
+                pos = PintRNG.determine(columnHasher.hash(col[i]), rowHasher.hash(row[i])) & mask;
+                while (!(newCol[pos] == null))
                     pos = pos + 1 & mask;
             }
-            newKey[pos] = key[i];
+            newCol[pos] = col[i];
+            newRow[pos] = row[i];
             order.set(q, pos);
             if (i == originalFirst)
                 first = pos;
@@ -1390,16 +1176,17 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         n = newN;
         this.mask = mask;
         maxFill = maxFill(n, f);
-        this.key = newKey;
+        this.cols = newCol;
+        this.rows = newRow;
     }
     /*
     @SuppressWarnings("unchecked")
     protected void rehash(final int newN) {
-        final K key[] = this.key;
+        final C key[] = this.key;
         final V value[] = this.value;
         final int mask = newN - 1; // Note that this is used by the hashing
         // macro
-        final K newKey[] = (K[]) new Object[newN + 1];
+        final C newKey[] = (C[]) new Object[newN + 1];
         final V newValue[] = (V[]) new Object[newN + 1];
         int i = first, prev = -1, newPrev = -1, t, pos;
         final long link[] = this.link;
@@ -1441,54 +1228,8 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
     }
     */
 
-    /**
-     * Returns a deep copy of this map.
-     * <p>
-     * <p>
-     * This method performs a deep copy of this hash map; the data stored in the
-     * map, however, is not cloned. Note that this makes a difference only for
-     * object keys.
-     *
-     * @return a deep copy of this map.
-     */
-    @SuppressWarnings("unchecked")
-    @GwtIncompatible
-    public Object clone() {
-        OrderedSet<K> c;
-        try {
-            c = (OrderedSet<K>) super.clone();
-            c.key = (K[]) new Object[n + 1];
-            System.arraycopy(key, 0, c.key, 0, n + 1);
-            c.order = (IntVLA) order.clone();
-            c.hasher = hasher;
-            return c;
-        } catch (Exception cantHappen) {
-            throw new UnsupportedOperationException(cantHappen + (cantHappen.getMessage() != null ?
-                    "; " + cantHappen.getMessage() : ""));
-        }
-    }
-
-    /**
-     * Returns a hash code for this set.
-     * <p>
-     * This method overrides the generic method provided by the superclass.
-     * Since <code>equals()</code> is not overriden, it is important that the
-     * value returned by this method is the same value as the one returned by
-     * the overriden method.
-     *
-     * @return a hash code for this set.
-     */
     public int hashCode() {
-        int h = 0;
-        for (int j = realSize(), i = 0; j-- != 0; ) {
-            while (key[i] == null)
-                i++;
-            if (this != key[i])
-                h += hasher.hash(key[i]);
-            i++;
-        }
-        // Zero / null have hash zero.
-        return h;
+        return order.hashWisp();
     }
 
     /**
@@ -1682,68 +1423,15 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
     }
 
     @Override
-    public Object[] toArray() {
-        final Object[] a = new Object[size()];
-        objectUnwrap(iterator(), a);
-        return a;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> T[] toArray(T[] a) {
-        final int size = size();
-        objectUnwrap(iterator(), a);
-        if (size < a.length)
-            a[size] = null;
-        return a;
-    }
-
-
-    /**
-     * Unwraps an iterator into an array starting at a given offset for a given number of elements.
-     * <p>
-     * <P>This method iterates over the given type-specific iterator and stores the elements returned, up to a maximum of <code>length</code>, in the given array starting at <code>offset</code>. The
-     * number of actually unwrapped elements is returned (it may be less than <code>max</code> if the iterator emits less than <code>max</code> elements).
-     *
-     * @param i      a type-specific iterator.
-     * @param array  an array to contain the output of the iterator.
-     * @param offset the first element of the array to be returned.
-     * @param max    the maximum number of elements to unwrap.
-     * @return the number of elements unwrapped.
-     */
-    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K array[], int offset, final int max) {
-        if (max < 0) throw new IllegalArgumentException("The maximum number of elements (" + max + ") is negative");
-        if (offset < 0 || offset + max > array.length) throw new IllegalArgumentException();
-        int j = max;
-        while (j-- != 0 && i.hasNext())
-            array[offset++] = i.next();
-        return max - j - 1;
-    }
-
-    /**
-     * Unwraps an iterator into an array.
-     * <p>
-     * <P>This method iterates over the given type-specific iterator and stores the elements returned in the given array. The iteration will stop when the iterator has no more elements or when the end
-     * of the array has been reached.
-     *
-     * @param i     a type-specific iterator.
-     * @param array an array to contain the output of the iterator.
-     * @return the number of elements unwrapped.
-     */
-    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K array[]) {
-        return objectUnwrap(i, array, 0, array.length);
-    }
-
-    @Override
     public String toString() {
         final StringBuilder s = new StringBuilder();
         int n = size(), i = 0;
         boolean first = true;
-        s.append("OrderedSet{");
+        s.append("TableSet{");
         while (i < n) {
             if (first) first = false;
             else s.append(", ");
-            s.append(getAt(i++));
+            s.append(columnAt(i)).append(" with ").append(rowAt(i++));
         }
         s.append("}");
         return s.toString();
@@ -1753,20 +1441,25 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
     public boolean equals(final Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof Set))
+        if (!(o instanceof TableSet))
             return false;
-        Set<?> s = (Set<?>) o;
-        if (s.size() != size())
+        TableSet<?, ?> s = (TableSet<?, ?>) o;
+        if (s.size() != size || columnHasher != s.columnHasher || rowHasher != s.rowHasher)
             return false;
-        return containsAll(s);
+        int p;
+        for (int i = 0; i < size; i++) {
+            if(!columnHasher.areEqual(cols[p = order.get(i)], s.cols[p]) || !rowHasher.areEqual(rows[p], s.rows[p]))
+                return false;
+        }
+        return true;
     }
 
     @GwtIncompatible
     private void writeObject(java.io.ObjectOutputStream s)
             throws java.io.IOException {
-        final ListIterator<K> i = iterator();
+        final ListIterator<C> i = iterator();
         s.defaultWriteObject();
-        s.writeObject(hasher);
+        s.writeObject(columnHasher);
         for (int j = size; j-- != 0; )
             s.writeObject(i.next());
     }
@@ -1776,25 +1469,25 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
     private void readObject(java.io.ObjectInputStream s)
             throws java.io.IOException, ClassNotFoundException {
         s.defaultReadObject();
-        hasher = (CrossHash.IHasher) s.readObject();
+        columnHasher = (CrossHash.IHasher) s.readObject();
         n = arraySize(size, f);
         maxFill = maxFill(n, f);
         mask = n - 1;
-        final K key[] = this.key = (K[]) new Object[n + 1];
+        final C key[] = this.cols = (C[]) new Object[n + 1];
         final IntVLA order = this.order = new IntVLA(n + 1);
         int prev = -1;
         first = last = -1;
-        K k;
+        C c;
         for (int i = size, pos; i-- != 0; ) {
-            k = (K) s.readObject();
-            if (k == null) {
+            c = (C) s.readObject();
+            if (c == null) {
                 pos = n;
                 containsNull = true;
             } else {
-                if (!(key[pos = HashCommon.mix(hasher.hash(k)) & mask] == null))
+                if (!(key[pos = HashCommon.mix(columnHasher.hash(c)) & mask] == null))
                     while (!(key[pos = pos + 1 & mask] == null)) ;
             }
-            key[pos] = k;
+            key[pos] = c;
             if (first != -1) {
                 last = pos;
             } else {
@@ -1810,12 +1503,24 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      * @param idx the index in the iteration order of the key to fetch
      * @return the key at the index, if the index is valid, otherwise null
      */
-    public K getAt(final int idx) {
+    public C columnAt(final int idx) {
         if (idx < 0 || idx >= order.size)
             return null;
-        final K[] key = this.key;
         // The starting point.
-        return key[order.get(idx)];
+        return this.cols[order.get(idx)];
+    }
+
+    /**
+     * Gets the item at the given index in the iteration order in constant time (random-access).
+     *
+     * @param idx the index in the iteration order of the key to fetch
+     * @return the key at the index, if the index is valid, otherwise null
+     */
+    public R rowAt(final int idx) {
+        if (idx < 0 || idx >= order.size)
+            return null;
+        // The starting point.
+        return this.rows[order.get(idx)];
     }
 
     /**
@@ -1829,7 +1534,9 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         if (idx < 0 || idx >= order.size)
             throw new NoSuchElementException();
         int pos = order.get(idx);
-        if (key[pos] == null) {
+        if(pos > n)
+            return false;
+        if (cols[pos] == null && rows[pos] == null) {
             if (containsNull)
                 return removeNullEntry();
             return false;
@@ -1843,8 +1550,18 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      * @param rng used to generate a random index for a value
      * @return a random value from this OrderedSet
      */
-    public K randomItem(RNG rng) {
-        return getAt(rng.nextInt(order.size));
+    public C randomColumn(RNG rng) {
+        return columnAt(rng.nextIntHasty(order.size));
+    }
+
+    /**
+     * Gets a random value from this OrderedSet in constant time, using the given RNG to generate a random number.
+     *
+     * @param rng used to generate a random index for a value
+     * @return a random value from this OrderedSet
+     */
+    public R randomRow(RNG rng) {
+        return rowAt(rng.nextIntHasty(order.size));
     }
 
     /**
@@ -1853,7 +1570,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      * @param rng used to generate a random ordering
      * @return this for chaining
      */
-    public OrderedSet<K> shuffle(RNG rng) {
+    public TableSet<C, R> shuffle(RNG rng) {
         if (size < 2 || rng == null)
             return this;
         order.shuffle(rng);
@@ -1879,64 +1596,74 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      *                 Set to have the value currently in this Set at the index specified by the value in ordering
      * @return this for chaining, after modifying it in-place
      */
-    public OrderedSet<K> reorder(int... ordering) {
+    public TableSet<C, R> reorder(int... ordering) {
         order.reorder(ordering);
         first = order.get(0);
         last = order.peek();
         return this;
     }
 
-    private boolean alterEntry(final int pos, final K replacement) {
+    private boolean alterEntry(final int pos, final C creplacement, final R rreplacement) {
         int rep;
-        if (replacement == null) {
+        if (creplacement == null && rreplacement == null) {
             if (containsNull)
                 return false;
             rep = n;
             containsNull = true;
         } else {
-            K curr;
-            final K[] key = this.key;
-            key[pos] = null;
+            C curr;
+            R rurr;
+            final C[] col = this.cols;
+            final R[] row = this.rows;
+            col[pos] = null;
+            row[pos] = null;
             // The starting point.
-            if (!((curr = key[rep = HashCommon.mix(hasher.hash(replacement)) & mask]) == null)) {
-                if (hasher.areEqual(curr, replacement))
+            if (((curr = col[rep = PintRNG.determine(columnHasher.hash(creplacement), rowHasher.hash(rreplacement))
+                    & mask]) != null) && (rurr = row[rep]) != null) {
+                if (columnHasher.areEqual(curr, creplacement) && rowHasher.areEqual(rurr, rreplacement))
                     return false;
-                while (!((curr = key[rep = rep + 1 & mask]) == null))
-                    if (hasher.areEqual(curr, replacement))
+                while ((curr = col[rep = rep + 1 & mask]) != null && (rurr = row[rep]) != null)
+                    if (columnHasher.areEqual(curr, creplacement) && rowHasher.areEqual(rurr, rreplacement))
                         return false;
             }
-            key[rep] = replacement;
+            col[rep] = creplacement;
+            row[rep] = rreplacement;
         }
         fixOrder(pos, rep);
         return true;
     }
 
-    private boolean alterNullEntry(final K replacement) {
+    private boolean alterNullEntry(final C creplacement, final R rreplacement) {
         containsNull = false;
-        key[n] = null;
+        cols[n] = null;
+        rows[n] = null;
         int rep;
-        if (replacement == null) {
+        if (creplacement == null && rreplacement == null) {
             rep = n;
             containsNull = true;
         } else {
-            K curr;
-            final K[] key = this.key;
+            C curr;
+            R rurr;
+            final C[] col = this.cols;
+            final R[] row = this.rows;
             // The starting point.
-            if (!((curr = key[rep = HashCommon.mix(hasher.hash(replacement)) & mask]) == null)) {
-                if (hasher.areEqual(curr, replacement))
+            if (((curr = col[rep = PintRNG.determine(columnHasher.hash(creplacement), rowHasher.hash(rreplacement))
+                    & mask]) != null) && (rurr = row[rep]) != null) {
+                if (columnHasher.areEqual(curr, creplacement) && rowHasher.areEqual(rurr, rreplacement))
                     return false;
-                while (!((curr = key[rep = rep + 1 & mask]) == null))
-                    if (hasher.areEqual(curr, replacement))
+                while ((curr = col[rep = rep + 1 & mask]) != null && (rurr = row[rep]) != null)
+                    if (columnHasher.areEqual(curr, creplacement) && rowHasher.areEqual(rurr, rreplacement))
                         return false;
             }
-            key[rep] = replacement;
+            col[rep] = creplacement;
+            row[rep] = rreplacement;
         }
         fixOrder(n, rep);
         return true;
     }
 
     /*
-    public boolean alter(K original, K replacement)
+    public boolean alter(C original, C replacement)
     {
         if (original == null) {
             if (containsNull) {
@@ -1947,8 +1674,8 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         }
         else if(hasher.areEqual(original, replacement))
             return false;
-        K curr;
-        final K[] key = this.key;
+        C curr;
+        final C[] key = this.key;
         int pos;
         // The starting point.
         if ((curr = key[pos = HashCommon.mix(hasher.hash(original)) & mask]) == null)
@@ -1973,7 +1700,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
 
     private int alterNullEntry() {
         containsNull = false;
-        key[n] = null;
+        cols[n] = null;
         size--;
         int idx = fixOrder(n);
         if (size < maxFill / 4 && n > DEFAULT_INITIAL_SIZE)
@@ -1982,19 +1709,22 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
     }
 
     /**
-     * Changes a K, original, to another, replacement, while keeping replacement at the same point in the ordering.
+     * Changes a pair of C and R, originalC and originalR, to another pair, replacementC and replacementR.
+     * Keeps the replacement at the same point in the ordering.
      *
-     * @param original    a K value that will be removed from this Set if present, and its iteration index remembered
-     * @param replacement another K value that will replace original at the remembered index
+     * @param originalC    the column part of a pair that will be removed from this TableSet if present, and its iteration index remembered
+     * @param originalR    the row part of a pair that will be removed from this TableSet if present, and its iteration index remembered
+     * @param replacementC another column value that will replace originalC at the remembered index
+     * @param replacementR another row value that will replace originalR at the remembered index
      * @return true if the Set changed, or false if it didn't (such as if the two arguments are equal, or replacement was already in the Set but original was not)
      */
-    public boolean alter(K original, K replacement) {
+    public boolean alter(C originalC, R originalR, C replacementC, R replacementR) {
         int idx;
-        if (original == null) {
+        if (originalC == null && originalR == null) {
             if (containsNull) {
-                if (replacement != null) {
+                if (replacementC != null && replacementR != null) {
                     idx = alterNullEntry();
-                    addAt(replacement, idx);
+                    addAt(replacementC, replacementR, idx);
                     return true;
                 } else
                     return false;
@@ -2002,25 +1732,28 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             ;
             return false;
         }
-        if (hasher.areEqual(original, replacement))
+        if (columnHasher.areEqual(originalC, replacementR) && rowHasher.areEqual(originalR, replacementR))
             return false;
-        K curr;
-        final K[] key = this.key;
+        C curr;
+        R rurr;
+        final C[] col = this.cols;
+        final R[] row = this.rows;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(original)) & mask]) == null)
+        if ((curr = col[pos = PintRNG.determine(columnHasher.hash(originalC), rowHasher.hash(originalR)) & mask]) == null
+                || (rurr = row[pos]) == null)
             return false;
-        if (hasher.areEqual(original, curr)) {
+        if (columnHasher.areEqual(originalC, curr) && rowHasher.areEqual(originalR, rurr)) {
             idx = alterEntry(pos);
-            addAt(replacement, idx);
+            addAt(replacementC, replacementR, idx);
             return true;
         }
         while (true) {
-            if ((curr = key[pos = pos + 1 & mask]) == null)
+            if ((curr = col[pos = pos + 1 & mask]) == null || (rurr = row[pos]) == null)
                 return false;
-            if (hasher.areEqual(original, curr)) {
+            if (columnHasher.areEqual(originalC, curr) && rowHasher.areEqual(originalR, rurr)) {
                 idx = alterEntry(pos);
-                addAt(replacement, idx);
+                addAt(replacementC, replacementR, idx);
                 return true;
             }
         }
