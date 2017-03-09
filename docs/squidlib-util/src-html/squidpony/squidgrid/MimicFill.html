@@ -285,7 +285,7 @@
 <span class="sourceLineNo">277</span>                field[x][y++] = (randomBits &amp; a) == 0;<a name="line.277"></a>
 <span class="sourceLineNo">278</span>                if(y &gt;= size)<a name="line.278"></a>
 <span class="sourceLineNo">279</span>                {<a name="line.279"></a>
-<span class="sourceLineNo">280</span>                    x++;<a name="line.280"></a>
+<span class="sourceLineNo">280</span>                    if(++x &gt;= size) break;<a name="line.280"></a>
 <span class="sourceLineNo">281</span>                    y = 0;<a name="line.281"></a>
 <span class="sourceLineNo">282</span>                }<a name="line.282"></a>
 <span class="sourceLineNo">283</span>            }<a name="line.283"></a>
@@ -849,7 +849,18 @@
 <span class="sourceLineNo">841</span>            boulders, cave, caves, chess, lessRooms, maze, quarterBlack,<a name="line.841"></a>
 <span class="sourceLineNo">842</span>            river, rooms, simpleMaze, simpleRooms, thickWalls, ruins, openRooms<a name="line.842"></a>
 <span class="sourceLineNo">843</span>    };<a name="line.843"></a>
-<span class="sourceLineNo">844</span>}<a name="line.844"></a>
+<span class="sourceLineNo">844</span><a name="line.844"></a>
+<span class="sourceLineNo">845</span>    /*<a name="line.845"></a>
+<span class="sourceLineNo">846</span>    // this would throw an ArrayIndexOutOfBoundsException before a fix added after beta 8<a name="line.846"></a>
+<span class="sourceLineNo">847</span>    public static void main(String[] args) {<a name="line.847"></a>
+<span class="sourceLineNo">848</span>        boolean[][] binarySample = new boolean[20][20];<a name="line.848"></a>
+<span class="sourceLineNo">849</span>        int length = 100;<a name="line.849"></a>
+<span class="sourceLineNo">850</span>        boolean[][] binaryOut = MimicFill.fill(binarySample, length, .01, 5, new RNG());<a name="line.850"></a>
+<span class="sourceLineNo">851</span>        squidpony.squidgrid.mapping.DungeonUtility.debugPrint(<a name="line.851"></a>
+<span class="sourceLineNo">852</span>                squidpony.squidgrid.mapping.DungeonUtility.hashesToLines(sampleToMap(binaryOut, '.', '#')));<a name="line.852"></a>
+<span class="sourceLineNo">853</span>    }<a name="line.853"></a>
+<span class="sourceLineNo">854</span>    */<a name="line.854"></a>
+<span class="sourceLineNo">855</span>}<a name="line.855"></a>
 
 
 

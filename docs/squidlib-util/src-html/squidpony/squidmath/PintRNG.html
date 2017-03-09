@@ -262,13 +262,19 @@
 <span class="sourceLineNo">254</span>        state ^= state &gt;&gt;&gt; (4 + (state &gt;&gt;&gt; 28));<a name="line.254"></a>
 <span class="sourceLineNo">255</span>        return ((state *= 277803737) &gt;&gt;&gt; 22) ^ state;<a name="line.255"></a>
 <span class="sourceLineNo">256</span>    }<a name="line.256"></a>
-<span class="sourceLineNo">257</span><a name="line.257"></a>
-<span class="sourceLineNo">258</span>    public static int determineBounded(int state, final int bound)<a name="line.258"></a>
-<span class="sourceLineNo">259</span>    {<a name="line.259"></a>
+<span class="sourceLineNo">257</span>    public static int determine(final int a, final int b)<a name="line.257"></a>
+<span class="sourceLineNo">258</span>    {<a name="line.258"></a>
+<span class="sourceLineNo">259</span>        int state = a * 0x9E3779B9 + b * 0x85157AF5;<a name="line.259"></a>
 <span class="sourceLineNo">260</span>        state ^= state &gt;&gt;&gt; (4 + (state &gt;&gt;&gt; 28));<a name="line.260"></a>
-<span class="sourceLineNo">261</span>        return (int)((bound * ((((state *= 277803737) &gt;&gt;&gt; 22) ^ state) &amp; 0x7FFFFFFFL)) &gt;&gt;&gt; 31);<a name="line.261"></a>
+<span class="sourceLineNo">261</span>        return ((state *= 277803737) &gt;&gt;&gt; 22) ^ state;<a name="line.261"></a>
 <span class="sourceLineNo">262</span>    }<a name="line.262"></a>
-<span class="sourceLineNo">263</span>}<a name="line.263"></a>
+<span class="sourceLineNo">263</span><a name="line.263"></a>
+<span class="sourceLineNo">264</span>    public static int determineBounded(int state, final int bound)<a name="line.264"></a>
+<span class="sourceLineNo">265</span>    {<a name="line.265"></a>
+<span class="sourceLineNo">266</span>        state ^= state &gt;&gt;&gt; (4 + (state &gt;&gt;&gt; 28));<a name="line.266"></a>
+<span class="sourceLineNo">267</span>        return (int)((bound * ((((state *= 277803737) &gt;&gt;&gt; 22) ^ state) &amp; 0x7FFFFFFFL)) &gt;&gt;&gt; 31);<a name="line.267"></a>
+<span class="sourceLineNo">268</span>    }<a name="line.268"></a>
+<span class="sourceLineNo">269</span>}<a name="line.269"></a>
 
 
 

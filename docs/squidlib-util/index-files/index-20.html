@@ -958,6 +958,11 @@
 <div class="block">Shifts left entries with the specified hash code, starting at the
  specified position, and empties the resulting free entry.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#shiftKeys-int-">shiftKeys(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
+<dd>
+<div class="block">Shifts left entries with the specified hash code, starting at the
+ specified position, and empties the resulting free entry.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/MonsterGen.html#SHOGGOTH">SHOGGOTH</a></span> - Static variable in class squidpony.<a href="../squidpony/MonsterGen.html" title="class in squidpony">MonsterGen</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/styled/Config.html#short_side_length">short_side_length</a></span> - Variable in class squidpony.squidgrid.mapping.styled.<a href="../squidpony/squidgrid/mapping/styled/Config.html" title="class in squidpony.squidgrid.mapping.styled">Config</a></dt>
@@ -1122,6 +1127,10 @@
 <dd>
 <div class="block">Shuffles a <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util"><code>Collection</code></a> of T using the Fisher-Yates algorithm.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#shuffle-squidpony.squidmath.RNG-">shuffle(RNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
+<dd>
+<div class="block">Randomly alters the iteration order for this OrderedSet using the given RNG to shuffle.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/RNG.html#shuffleInPlace-T:A-">shuffleInPlace(T[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
 <dd>
 <div class="block">Shuffles an array in place using the Fisher-Yates algorithm.</div>
@@ -1173,6 +1182,8 @@
 <div class="block">Gets the single <a href="../squidpony/squidgrid/mapping/locks/Symbol.html" title="class in squidpony.squidgrid.mapping.locks"><code>Symbol</code></a> needed to make this Condition and another
  Condition identical.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/ObText.html#size--">size()</a></span> - Method in class squidpony.<a href="../squidpony/ObText.html" title="class in squidpony">ObText</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/iterator/SquidIterators.CenteredSquare.html#size">size</a></span> - Variable in class squidpony.squidgrid.iterator.<a href="../squidpony/squidgrid/iterator/SquidIterators.CenteredSquare.html" title="class in squidpony.squidgrid.iterator">SquidIterators.CenteredSquare</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/util/Rect2I.html#size--">size()</a></span> - Method in class squidpony.squidgrid.mapping.locks.util.<a href="../squidpony/squidgrid/mapping/locks/util/Rect2I.html" title="class in squidpony.squidgrid.mapping.locks.util">Rect2I</a></dt>
@@ -1253,6 +1264,12 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortSet.html#size">size</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/ShortSet.html" title="class in squidpony.squidmath">ShortSet</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortVLA.html#size">size</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/ShortVLA.html" title="class in squidpony.squidmath">ShortVLA</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#size">size</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
+<dd>
+<div class="block">Number of entries in the set (including the key zero, if present).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#size--">size()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/Rectangle.Utils.html#SIZE_COMPARATOR">SIZE_COMPARATOR</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/Rectangle.Utils.html" title="class in squidpony.squidgrid.mapping">Rectangle.Utils</a></dt>
 <dd>
@@ -1800,7 +1817,23 @@
 <dd>
 <div class="block">Though the name suggests this only hashes String arrays, it can actually hash any CharSequence array as well.</div>
 </dd>
+<dt><a href="../squidpony/StringConvert.html" title="class in squidpony"><span class="typeNameLink">StringConvert</span></a>&lt;<a href="../squidpony/StringConvert.html" title="type parameter in StringConvert">T</a>&gt; - Class in <a href="../squidpony/package-summary.html">squidpony</a></dt>
+<dd>
+<div class="block">Used to standardize conversion for a given type, <code>T</code>, to and from a serialized String format.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/StringConvert.html#StringConvert--">StringConvert()</a></span> - Constructor for class squidpony.<a href="../squidpony/StringConvert.html" title="class in squidpony">StringConvert</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.html#stringHasher">stringHasher</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.html" title="class in squidpony.squidmath">CrossHash</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Convert.html#stringify-squidpony.FakeLanguageGen-">stringify(FakeLanguageGen)</a></span> - Method in class squidpony.<a href="../squidpony/FakeLanguageGen.Convert.html" title="class in squidpony">FakeLanguageGen.Convert</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/ObText.Convert.html#stringify-squidpony.ObText-">stringify(ObText)</a></span> - Method in class squidpony.<a href="../squidpony/ObText.Convert.html" title="class in squidpony">ObText.Convert</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.Convert.html#stringify-squidpony.squidmath.GreasedRegion-">stringify(GreasedRegion)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.Convert.html" title="class in squidpony.squidmath">GreasedRegion.Convert</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntVLA.Convert.html#stringify-squidpony.squidmath.IntVLA-">stringify(IntVLA)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntVLA.Convert.html" title="class in squidpony.squidmath">IntVLA.Convert</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/StringConvert.html#stringify-T-">stringify(T)</a></span> - Method in class squidpony.<a href="../squidpony/StringConvert.html" title="class in squidpony">StringConvert</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="../squidpony/StringKit.html" title="class in squidpony"><span class="typeNameLink">StringKit</span></a> - Class in <a href="../squidpony/package-summary.html">squidpony</a></dt>
 <dd>
@@ -1835,6 +1868,8 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedMap.MapEntrySet.html#subSet-java.util.Map.Entry-java.util.Map.Entry-">subSet(Map.Entry&lt;K, V&gt;, Map.Entry&lt;K, V&gt;)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedMap.MapEntrySet.html" title="class in squidpony.squidmath">OrderedMap.MapEntrySet</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedSet.html#subSet-K-K-">subSet(K, K)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#subSet-C-C-">subSet(C, C)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Coord.html#subtract-squidpony.squidmath.Coord-">subtract(Coord)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></dt>
 <dd>

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":9,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":9,"i25":9,"i26":10,"i27":42,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":9,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":9,"i25":9,"i26":10,"i27":10,"i28":42,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -113,8 +113,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre><a href="../../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.94">OrderedSet</a>&lt;K&gt;
+<pre>public class <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.85">OrderedSet</a>&lt;K&gt;
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;K&gt;, <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang">Cloneable</a></pre>
 <div class="block">A generic linked hash set with with a fast implementation, originally from fastutil as ObjectLinkedOpenHashSet but
@@ -600,12 +599,16 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 </td>
 </tr>
 <tr id="i26" class="altColor">
+<td class="colFirst"><code>protected int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedSet.html#positionOf-java.lang.Object-">positionOf</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</code>&nbsp;</td>
+</tr>
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedSet.html#randomItem-squidpony.squidmath.RNG-">randomItem</a></span>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
 <div class="block">Gets a random value from this OrderedSet in constant time, using the given RNG to generate a random number.</div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedSet.html#rehash--">rehash</a></span>()</code>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;
@@ -613,46 +616,46 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 </div>
 </td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedSet.html#rehash-int-">rehash</a></span>(int&nbsp;newN)</code>
 <div class="block">Rehashes the map.</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedSet.html#rem-java.lang.Object-">rem</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</code>&nbsp;</td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedSet.html#remove-java.lang.Object-">remove</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>&nbsp;</td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i32" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedSet.html#removeAll-java.util.Collection-">removeAll</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;c)</code>
 <div class="block">Remove from this collection all elements in the given collection.</div>
 </td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedSet.html#removeAt-int-">removeAt</a></span>(int&nbsp;idx)</code>
 <div class="block">Removes the item at the given index in the iteration order in not-exactly constant time (though it still should
  be efficient).</div>
 </td>
 </tr>
-<tr id="i33" class="rowColor">
+<tr id="i34" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedSet.html#removeFirst--">removeFirst</a></span>()</code>
 <div class="block">Removes the first key in iteration order.</div>
 </td>
 </tr>
-<tr id="i34" class="altColor">
+<tr id="i35" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedSet.html#removeLast--">removeLast</a></span>()</code>
 <div class="block">Removes the the last key in iteration order.</div>
 </td>
 </tr>
-<tr id="i35" class="rowColor">
+<tr id="i36" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedSet.html#reorder-int...-">reorder</a></span>(int...&nbsp;ordering)</code>
 <div class="block">Given an array or varargs of replacement indices for this OrderedSet's iteration order, reorders this so the
@@ -660,57 +663,57 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
  or too-large indices), the second item in the returned version is the same as <code>getAt(ordering[1])</code>, etc.</div>
 </td>
 </tr>
-<tr id="i36" class="altColor">
+<tr id="i37" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedSet.html#retainAll-java.util.Collection-">retainAll</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;c)</code>
 <div class="block">Retains in this collection only elements from the given collection.</div>
 </td>
 </tr>
-<tr id="i37" class="rowColor">
+<tr id="i38" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedSet.html#shiftKeys-int-">shiftKeys</a></span>(int&nbsp;pos)</code>
 <div class="block">Shifts left entries with the specified hash code, starting at the
  specified position, and empties the resulting free entry.</div>
 </td>
 </tr>
-<tr id="i38" class="altColor">
+<tr id="i39" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedSet.html#shuffle-squidpony.squidmath.RNG-">shuffle</a></span>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
 <div class="block">Randomly alters the iteration order for this OrderedSet using the given RNG to shuffle.</div>
 </td>
 </tr>
-<tr id="i39" class="rowColor">
+<tr id="i40" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedSet.html#size--">size</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i40" class="altColor">
+<tr id="i41" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedSet.html#subSet-K-K-">subSet</a></span>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;from,
       <a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;to)</code>&nbsp;</td>
 </tr>
-<tr id="i41" class="rowColor">
+<tr id="i42" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedSet.html#tailSet-K-">tailSet</a></span>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;from)</code>&nbsp;</td>
 </tr>
-<tr id="i42" class="altColor">
+<tr id="i43" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedSet.html#toArray--">toArray</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i43" class="rowColor">
+<tr id="i44" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedSet.html#toArray-T:A-">toArray</a></span>(T[]&nbsp;a)</code>&nbsp;</td>
 </tr>
-<tr id="i44" class="altColor">
+<tr id="i45" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedSet.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i45" class="rowColor">
+<tr id="i46" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedSet.html#trim--">trim</a></span>()</code>
 <div class="block">Rehashes the map, making the table as small as possible.</div>
 </td>
 </tr>
-<tr id="i46" class="altColor">
+<tr id="i47" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedSet.html#trim-int-">trim</a></span>(int&nbsp;n)</code>
 <div class="block">Rehashes this map if the table is too large.</div>
@@ -765,7 +768,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>key</h4>
-<pre>protected&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>[] <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.99">key</a></pre>
+<pre>protected&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>[] <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.90">key</a></pre>
 <div class="block">The array of keys.</div>
 </li>
 </ul>
@@ -775,7 +778,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>mask</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.107">mask</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.98">mask</a></pre>
 <div class="block">The mask for wrapping a position counter.</div>
 </li>
 </ul>
@@ -785,7 +788,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>containsNull</h4>
-<pre>protected&nbsp;boolean <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.111">containsNull</a></pre>
+<pre>protected&nbsp;boolean <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.102">containsNull</a></pre>
 <div class="block">Whether this set contains the key zero.</div>
 </li>
 </ul>
@@ -795,7 +798,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>first</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.115">first</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.106">first</a></pre>
 <div class="block">The index of the first entry in iteration order. It is valid iff <a href="../../squidpony/squidmath/OrderedSet.html#size"><code>size</code></a> is nonzero; otherwise, it contains -1.</div>
 </li>
 </ul>
@@ -805,7 +808,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>last</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.119">last</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.110">last</a></pre>
 <div class="block">The index of the last entry in iteration order. It is valid iff <a href="../../squidpony/squidmath/OrderedSet.html#size"><code>size</code></a> is nonzero; otherwise, it contains -1.</div>
 </li>
 </ul>
@@ -815,7 +818,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>order</h4>
-<pre>protected&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a> <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.125">order</a></pre>
+<pre>protected&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a> <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.116">order</a></pre>
 </li>
 </ul>
 <a name="n">
@@ -824,7 +827,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>n</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.129">n</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.120">n</a></pre>
 <div class="block">The current table size.</div>
 </li>
 </ul>
@@ -834,7 +837,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>maxFill</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.133">maxFill</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.124">maxFill</a></pre>
 <div class="block">Threshold after which we rehash. It must be the table size times <a href="../../squidpony/squidmath/OrderedSet.html#f"><code>f</code></a>.</div>
 </li>
 </ul>
@@ -844,7 +847,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>size</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.137">size</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.128">size</a></pre>
 <div class="block">Number of entries in the set (including the key zero, if present).</div>
 </li>
 </ul>
@@ -854,7 +857,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>f</h4>
-<pre>public final&nbsp;float <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.141">f</a></pre>
+<pre>public final&nbsp;float <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.132">f</a></pre>
 <div class="block">The acceptable load factor.</div>
 </li>
 </ul>
@@ -864,7 +867,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>DEFAULT_INITIAL_SIZE</h4>
-<pre>public static final&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.146">DEFAULT_INITIAL_SIZE</a></pre>
+<pre>public static final&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.137">DEFAULT_INITIAL_SIZE</a></pre>
 <div class="block">The initial default size of a hash table.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -878,7 +881,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>DEFAULT_LOAD_FACTOR</h4>
-<pre>public static final&nbsp;float <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.150">DEFAULT_LOAD_FACTOR</a></pre>
+<pre>public static final&nbsp;float <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.141">DEFAULT_LOAD_FACTOR</a></pre>
 <div class="block">The default load factor of a hash table.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -892,7 +895,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>FAST_LOAD_FACTOR</h4>
-<pre>public static final&nbsp;float <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.154">FAST_LOAD_FACTOR</a></pre>
+<pre>public static final&nbsp;float <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.145">FAST_LOAD_FACTOR</a></pre>
 <div class="block">The load factor for a (usually small) table that is meant to be particularly fast.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -906,7 +909,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>VERY_FAST_LOAD_FACTOR</h4>
-<pre>public static final&nbsp;float <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.158">VERY_FAST_LOAD_FACTOR</a></pre>
+<pre>public static final&nbsp;float <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.149">VERY_FAST_LOAD_FACTOR</a></pre>
 <div class="block">The load factor for a (usually very small) table that is meant to be extremely fast.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -920,7 +923,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hasher</h4>
-<pre>protected&nbsp;<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.160">hasher</a></pre>
+<pre>protected&nbsp;<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.151">hasher</a></pre>
 </li>
 </ul>
 </li>
@@ -937,7 +940,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedSet</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.172">OrderedSet</a>(int&nbsp;expected,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.163">OrderedSet</a>(int&nbsp;expected,
                   float&nbsp;f)</pre>
 <div class="block">Creates a new hash map.
  <p>
@@ -955,7 +958,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedSet</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.192">OrderedSet</a>(int&nbsp;expected)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.183">OrderedSet</a>(int&nbsp;expected)</pre>
 <div class="block">Creates a new hash set with <a href="../../squidpony/squidmath/OrderedSet.html#DEFAULT_LOAD_FACTOR"><code>DEFAULT_LOAD_FACTOR</code></a> as load
  factor.</div>
 <dl>
@@ -970,7 +973,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedSet</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.201">OrderedSet</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.192">OrderedSet</a>()</pre>
 <div class="block">Creates a new hash set with initial expected
  <a href="../../squidpony/squidmath/OrderedSet.html#DEFAULT_INITIAL_SIZE"><code>DEFAULT_INITIAL_SIZE</code></a> elements and
  <a href="../../squidpony/squidmath/OrderedSet.html#DEFAULT_LOAD_FACTOR"><code>DEFAULT_LOAD_FACTOR</code></a> as load factor.</div>
@@ -982,7 +985,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedSet</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.211">OrderedSet</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;? extends <a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.202">OrderedSet</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;? extends <a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c,
                   float&nbsp;f)</pre>
 <div class="block">Creates a new hash set copying a given collection.</div>
 <dl>
@@ -998,7 +1001,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedSet</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.223">OrderedSet</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;? extends <a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.214">OrderedSet</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;? extends <a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c)</pre>
 <div class="block">Creates a new hash set with <a href="../../squidpony/squidmath/OrderedSet.html#DEFAULT_LOAD_FACTOR"><code>DEFAULT_LOAD_FACTOR</code></a> as load
  factor copying a given collection.</div>
 <dl>
@@ -1013,7 +1016,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedSet</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.234">OrderedSet</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;? extends <a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;i,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.225">OrderedSet</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;? extends <a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;i,
                   float&nbsp;f)</pre>
 <div class="block">Creates a new hash set using elements provided by a type-specific
  iterator.</div>
@@ -1030,7 +1033,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedSet</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.246">OrderedSet</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;? extends <a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;i)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.237">OrderedSet</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;? extends <a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;i)</pre>
 <div class="block">Creates a new hash set with <a href="../../squidpony/squidmath/OrderedSet.html#DEFAULT_LOAD_FACTOR"><code>DEFAULT_LOAD_FACTOR</code></a> as load
  factor using elements provided by a type-specific iterator.</div>
 <dl>
@@ -1047,7 +1050,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedSet</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.258">OrderedSet</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>[]&nbsp;a,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.249">OrderedSet</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>[]&nbsp;a,
                   int&nbsp;offset,
                   int&nbsp;length,
                   float&nbsp;f)</pre>
@@ -1069,7 +1072,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedSet</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.280">OrderedSet</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>[]&nbsp;a,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.271">OrderedSet</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>[]&nbsp;a,
                   int&nbsp;offset,
                   int&nbsp;length)</pre>
 <div class="block">Creates a new hash set with <a href="../../squidpony/squidmath/OrderedSet.html#DEFAULT_LOAD_FACTOR"><code>DEFAULT_LOAD_FACTOR</code></a> as load
@@ -1090,7 +1093,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedSet</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.291">OrderedSet</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>[]&nbsp;a,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.282">OrderedSet</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>[]&nbsp;a,
                   float&nbsp;f)</pre>
 <div class="block">Creates a new hash set copying the elements of an array.</div>
 <dl>
@@ -1108,7 +1111,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedSet</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.301">OrderedSet</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>[]&nbsp;a)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.292">OrderedSet</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>[]&nbsp;a)</pre>
 <div class="block">Creates a new hash set with <a href="../../squidpony/squidmath/OrderedSet.html#DEFAULT_LOAD_FACTOR"><code>DEFAULT_LOAD_FACTOR</code></a> as load
  factor copying the elements of an array.</div>
 <dl>
@@ -1123,7 +1126,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedSet</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.315">OrderedSet</a>(int&nbsp;expected,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.306">OrderedSet</a>(int&nbsp;expected,
                   float&nbsp;f,
                   <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</pre>
 <div class="block">Creates a new hash map.
@@ -1143,7 +1146,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedSet</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.335">OrderedSet</a>(<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.326">OrderedSet</a>(<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</pre>
 <div class="block">Creates a new hash set with <a href="../../squidpony/squidmath/OrderedSet.html#DEFAULT_LOAD_FACTOR"><code>DEFAULT_LOAD_FACTOR</code></a> as load
  factor.</div>
 <dl>
@@ -1158,7 +1161,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedSet</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.345">OrderedSet</a>(int&nbsp;expected,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.336">OrderedSet</a>(int&nbsp;expected,
                   <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</pre>
 <div class="block">Creates a new hash set with <a href="../../squidpony/squidmath/OrderedSet.html#DEFAULT_LOAD_FACTOR"><code>DEFAULT_LOAD_FACTOR</code></a> as load
  factor.</div>
@@ -1174,7 +1177,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedSet</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.356">OrderedSet</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;? extends <a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.347">OrderedSet</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;? extends <a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c,
                   float&nbsp;f,
                   <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</pre>
 <div class="block">Creates a new hash set copying a given collection.</div>
@@ -1192,7 +1195,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedSet</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.369">OrderedSet</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;? extends <a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.360">OrderedSet</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;? extends <a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c,
                   <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</pre>
 <div class="block">Creates a new hash set with <a href="../../squidpony/squidmath/OrderedSet.html#DEFAULT_LOAD_FACTOR"><code>DEFAULT_LOAD_FACTOR</code></a> as load
  factor copying a given collection.</div>
@@ -1211,7 +1214,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedSet</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.381">OrderedSet</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>[]&nbsp;a,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.372">OrderedSet</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>[]&nbsp;a,
                   int&nbsp;offset,
                   int&nbsp;length,
                   float&nbsp;f,
@@ -1234,7 +1237,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedSet</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.403">OrderedSet</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>[]&nbsp;a,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.394">OrderedSet</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>[]&nbsp;a,
                   int&nbsp;offset,
                   int&nbsp;length,
                   <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</pre>
@@ -1256,7 +1259,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedSet</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.414">OrderedSet</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>[]&nbsp;a,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.405">OrderedSet</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>[]&nbsp;a,
                   float&nbsp;f,
                   <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</pre>
 <div class="block">Creates a new hash set copying the elements of an array.</div>
@@ -1275,7 +1278,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockListLast">
 <li class="blockList">
 <h4>OrderedSet</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.424">OrderedSet</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>[]&nbsp;a,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.415">OrderedSet</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>[]&nbsp;a,
                   <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</pre>
 <div class="block">Creates a new hash set with <a href="../../squidpony/squidmath/OrderedSet.html#DEFAULT_LOAD_FACTOR"><code>DEFAULT_LOAD_FACTOR</code></a> as load
  factor copying the elements of an array.</div>
@@ -1299,7 +1302,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>addAll</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.450">addAll</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;? extends <a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.441">addAll</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;? extends <a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true#addAll-java.util.Collection-" title="class or interface in java.util">addAll</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
@@ -1316,7 +1319,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>add</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.468">add</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;k)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.459">add</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;k)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true#add-E-" title="class or interface in java.util">add</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
@@ -1333,7 +1336,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>addAt</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.499">addAt</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;k,
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.490">addAt</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;k,
                      int&nbsp;idx)</pre>
 </li>
 </ul>
@@ -1345,7 +1348,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>addOrGet</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.544">addOrGet</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;k)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.535">addOrGet</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;k)</pre>
 <div class="block">Add a random element if not present, get the existing value if already
  present.
  <p>
@@ -1366,7 +1369,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>shiftKeys</h4>
-<pre>protected final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.586">shiftKeys</a>(int&nbsp;pos)</pre>
+<pre>protected final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.577">shiftKeys</a>(int&nbsp;pos)</pre>
 <div class="block">Shifts left entries with the specified hash code, starting at the
  specified position, and empties the resulting free entry.</div>
 <dl>
@@ -1381,7 +1384,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>rem</h4>
-<pre>protected&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.630">rem</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</pre>
+<pre>protected&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.621">rem</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</pre>
 </li>
 </ul>
 <a name="remove-java.lang.Object-">
@@ -1390,7 +1393,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>remove</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.650">remove</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.641">remove</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true#remove-java.lang.Object-" title="class or interface in java.util">remove</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
@@ -1405,7 +1408,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>removeFirst</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.660">removeFirst</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.651">removeFirst</a>()</pre>
 <div class="block">Removes the first key in iteration order.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1421,7 +1424,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>removeLast</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.693">removeLast</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.684">removeLast</a>()</pre>
 <div class="block">Removes the the last key in iteration order.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1439,7 +1442,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>addAndMoveToFirst</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.774">addAndMoveToFirst</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;k)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.765">addAndMoveToFirst</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;k)</pre>
 <div class="block">Adds a key to the set; if the key is already present, it is moved to the
  first position of the iteration order.</div>
 <dl>
@@ -1458,7 +1461,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>addAndMoveToLast</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.818">addAndMoveToLast</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;k)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.809">addAndMoveToLast</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;k)</pre>
 <div class="block">Adds a key to the set; if the key is already present, it is moved to the
  last position of the iteration order.</div>
 <dl>
@@ -1475,7 +1478,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>get</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.863">get</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.854">get</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</pre>
 <div class="block">Returns the element of this set that is equal to the given key, or
  <code>null</code>.</div>
 <dl>
@@ -1491,7 +1494,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>contains</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.884">contains</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.875">contains</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true#contains-java.lang.Object-" title="class or interface in java.util">contains</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
@@ -1500,13 +1503,22 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 </dl>
 </li>
 </ul>
+<a name="positionOf-java.lang.Object-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>positionOf</h4>
+<pre>protected&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.895">positionOf</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</pre>
+</li>
+</ul>
 <a name="clear--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>clear</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.910">clear</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.926">clear</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true#clear--" title="class or interface in java.util">clear</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
@@ -1521,7 +1533,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>size</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.920">size</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.936">size</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true#size--" title="class or interface in java.util">size</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
@@ -1536,7 +1548,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>containsAll</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.932">containsAll</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;c)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.948">containsAll</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;c)</pre>
 <div class="block">Checks whether this collection contains all elements from the given
  collection.</div>
 <dl>
@@ -1558,7 +1570,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>retainAll</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.948">retainAll</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;c)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.964">retainAll</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;c)</pre>
 <div class="block">Retains in this collection only elements from the given collection.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -1579,7 +1591,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>removeAll</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.969">removeAll</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;c)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.985">removeAll</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;c)</pre>
 <div class="block">Remove from this collection all elements in the given collection. If the
  collection is an instance of this class, it uses faster iterators.</div>
 <dl>
@@ -1601,7 +1613,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>isEmpty</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.979">isEmpty</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.995">isEmpty</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true#isEmpty--" title="class or interface in java.util">isEmpty</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
@@ -1616,7 +1628,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>fixOrder</h4>
-<pre>protected&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.989">fixOrder</a>(int&nbsp;i)</pre>
+<pre>protected&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1005">fixOrder</a>(int&nbsp;i)</pre>
 <div class="block">Modifies the link vector so that the given entry is removed. This method will complete in logarithmic time.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1630,7 +1642,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>fixOrder</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1013">fixOrder</a>(int&nbsp;s,
+<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1029">fixOrder</a>(int&nbsp;s,
                         int&nbsp;d)</pre>
 <div class="block">Modifies the ordering for a shift from s to d.
  <br>
@@ -1648,7 +1660,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>first</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1033">first</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1049">first</a>()</pre>
 <div class="block">Returns the first element of this set in iteration order.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -1664,7 +1676,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>last</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1044">last</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1060">last</a>()</pre>
 <div class="block">Returns the last element of this set in iteration order.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -1682,7 +1694,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>tailSet</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1050">tailSet</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;from)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1066">tailSet</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;from)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true#tailSet-E-" title="class or interface in java.util">tailSet</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
@@ -1697,7 +1709,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>headSet</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1054">headSet</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;to)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1070">headSet</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;to)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true#headSet-E-" title="class or interface in java.util">headSet</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
@@ -1712,7 +1724,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>subSet</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1058">subSet</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;from,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1074">subSet</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;from,
                            <a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;to)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -1726,7 +1738,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>comparator</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html?is-external=true" title="class or interface in java.util">Comparator</a>&lt;? super <a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1062">comparator</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html?is-external=true" title="class or interface in java.util">Comparator</a>&lt;? super <a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1078">comparator</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true#comparator--" title="class or interface in java.util">comparator</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
@@ -1739,7 +1751,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <ul class="blockList">
 <li class="blockList">
 <h4>iterator</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ListIterator.html?is-external=true" title="class or interface in java.util">ListIterator</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1276">iterator</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ListIterator.html?is-external=true" title="class or interface in java.util">ListIterator</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1292">iterator</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true#iterator--" title="class or interface in java.lang">iterator</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
@@ -1757,7 +1769,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet
 <li class="blockList">
 <h4>rehash</h4>
 <pre><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang">@Deprecated</a>
-public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1290">rehash</a>()</pre>
+public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1306">rehash</a>()</pre>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;<span class="deprecationComment">A no-op.</span></div>
 <div class="block">A no-op for backward compatibility. The kind of tables implemented by this class never need rehashing.
  <p>
@@ -1776,7 +1788,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.
 <ul class="blockList">
 <li class="blockList">
 <h4>trim</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1304">trim</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1320">trim</a>()</pre>
 <div class="block">Rehashes the map, making the table as small as possible.
  <p>
  <P>This method rehashes the table to the smallest size satisfying the load factor. It can be used when the set will not be changed anymore, so to optimize access speed and size.
@@ -1796,7 +1808,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.
 <ul class="blockList">
 <li class="blockList">
 <h4>trim</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1328">trim</a>(int&nbsp;n)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1344">trim</a>(int&nbsp;n)</pre>
 <div class="block">Rehashes this map if the table is too large.
  <p>
  <P>Let <var>N</var> be the smallest table size that can hold <code>max(n,<a href="../../squidpony/squidmath/OrderedSet.html#size--"><code>size()</code></a>)</code> entries, still satisfying the load factor. If the current table size is smaller than or equal to
@@ -1820,7 +1832,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.
 <ul class="blockList">
 <li class="blockList">
 <h4>rehash</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1352">rehash</a>(int&nbsp;newN)</pre>
+<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1368">rehash</a>(int&nbsp;newN)</pre>
 <div class="block">Rehashes the map.
  <p>
  <p>
@@ -1840,7 +1852,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.
 <ul class="blockList">
 <li class="blockList">
 <h4>clone</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1440">clone</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1456">clone</a>()</pre>
 <div class="block">Returns a deep copy of this map.
  <p>
  <p>
@@ -1861,7 +1873,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1465">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1481">hashCode</a>()</pre>
 <div class="block">Returns a hash code for this set.
  <p>
  This method overrides the generic method provided by the superclass.
@@ -1886,7 +1898,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.
 <ul class="blockList">
 <li class="blockList">
 <h4>maxFill</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1485">maxFill</a>(int&nbsp;n,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1501">maxFill</a>(int&nbsp;n,
                           float&nbsp;f)</pre>
 <div class="block">Returns the maximum number of entries that can be filled before rehashing.</div>
 <dl>
@@ -1904,7 +1916,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.
 <ul class="blockList">
 <li class="blockList">
 <h4>maxFill</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1498">maxFill</a>(long&nbsp;n,
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1514">maxFill</a>(long&nbsp;n,
                            float&nbsp;f)</pre>
 <div class="block">Returns the maximum number of entries that can be filled before rehashing.</div>
 <dl>
@@ -1922,7 +1934,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.
 <ul class="blockList">
 <li class="blockList">
 <h4>arraySize</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1512">arraySize</a>(int&nbsp;expected,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1528">arraySize</a>(int&nbsp;expected,
                             float&nbsp;f)</pre>
 <div class="block">Returns the least power of two smaller than or equal to 2<sup>30</sup> and larger than or equal to <code>Math.ceil( expected / f )</code>.</div>
 <dl>
@@ -1942,7 +1954,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.
 <ul class="blockList">
 <li class="blockList">
 <h4>toArray</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1669">toArray</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1685">toArray</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true#toArray--" title="class or interface in java.util">toArray</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
@@ -1959,7 +1971,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.
 <ul class="blockList">
 <li class="blockList">
 <h4>toArray</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;T[]&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1677">toArray</a>(T[]&nbsp;a)</pre>
+<pre>public&nbsp;&lt;T&gt;&nbsp;T[]&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1693">toArray</a>(T[]&nbsp;a)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true#toArray-T:A-" title="class or interface in java.util">toArray</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
@@ -1974,7 +1986,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1722">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1738">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -1987,7 +1999,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1737">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1753">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.util">equals</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></dd>
@@ -2004,7 +2016,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.
 <ul class="blockList">
 <li class="blockList">
 <h4>getAt</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1797">getAt</a>(int&nbsp;idx)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1813">getAt</a>(int&nbsp;idx)</pre>
 <div class="block">Gets the item at the given index in the iteration order in constant time (random-access).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2020,7 +2032,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.
 <ul class="blockList">
 <li class="blockList">
 <h4>removeAt</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1812">removeAt</a>(int&nbsp;idx)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1828">removeAt</a>(int&nbsp;idx)</pre>
 <div class="block">Removes the item at the given index in the iteration order in not-exactly constant time (though it still should
  be efficient).</div>
 <dl>
@@ -2037,7 +2049,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.
 <ul class="blockList">
 <li class="blockList">
 <h4>randomItem</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1830">randomItem</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1846">randomItem</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 <div class="block">Gets a random value from this OrderedSet in constant time, using the given RNG to generate a random number.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2053,7 +2065,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.
 <ul class="blockList">
 <li class="blockList">
 <h4>shuffle</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1840">shuffle</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1856">shuffle</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 <div class="block">Randomly alters the iteration order for this OrderedSet using the given RNG to shuffle.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2069,7 +2081,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.
 <ul class="blockList">
 <li class="blockList">
 <h4>reorder</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1866">reorder</a>(int...&nbsp;ordering)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1882">reorder</a>(int...&nbsp;ordering)</pre>
 <div class="block">Given an array or varargs of replacement indices for this OrderedSet's iteration order, reorders this so the
  first item in the returned version is the same as <code>getAt(ordering[0])</code> (with some care taken for negative
  or too-large indices), the second item in the returned version is the same as <code>getAt(ordering[1])</code>, etc.
@@ -2098,7 +2110,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.
 <ul class="blockListLast">
 <li class="blockList">
 <h4>alter</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1975">alter</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;original,
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedSet.html#line.1991">alter</a>(<a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;original,
                      <a href="../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&nbsp;replacement)</pre>
 <div class="block">Changes a K, original, to another, replacement, while keeping replacement at the same point in the ordering.</div>
 <dl>

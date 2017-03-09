@@ -93,6 +93,101 @@
 <div class="block">Provides a set of the nested ProbabilityTable values in this table, without reference
  to their weight.</div>
 </dd>
+<dt><a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath"><span class="typeNameLink">TableSet</span></a>&lt;<a href="../squidpony/squidmath/TableSet.html" title="type parameter in TableSet">C</a>,<a href="../squidpony/squidmath/TableSet.html" title="type parameter in TableSet">R</a>&gt; - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
+<dd>
+<div class="block">A generic linked hash set with with a fast implementation, originally from fastutil as ObjectLinkedOpenHashSet but
+ modified to support indexed access of items, reordering, and optional hash strategies for array keys (which fastutil
+ does differently).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#TableSet-int-float-">TableSet(int, float)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
+<dd>
+<div class="block">Creates a new hash map.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#TableSet-int-">TableSet(int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
+<dd>
+<div class="block">Creates a new hash set with <a href="../squidpony/squidmath/TableSet.html#DEFAULT_LOAD_FACTOR"><code>TableSet.DEFAULT_LOAD_FACTOR</code></a> as load
+ factor.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#TableSet--">TableSet()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
+<dd>
+<div class="block">Creates a new hash set with initial expected
+ <a href="../squidpony/squidmath/TableSet.html#DEFAULT_INITIAL_SIZE"><code>TableSet.DEFAULT_INITIAL_SIZE</code></a> elements and
+ <a href="../squidpony/squidmath/TableSet.html#DEFAULT_LOAD_FACTOR"><code>TableSet.DEFAULT_LOAD_FACTOR</code></a> as load factor.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#TableSet-squidpony.squidmath.TableSet-">TableSet(TableSet&lt;? extends C, ? extends R&gt;)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
+<dd>
+<div class="block">Creates a new hash set with <a href="../squidpony/squidmath/TableSet.html#DEFAULT_LOAD_FACTOR"><code>TableSet.DEFAULT_LOAD_FACTOR</code></a> as load
+ factor copying a given collection.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#TableSet-java.util.Iterator-java.util.Iterator-float-">TableSet(Iterator&lt;? extends C&gt;, Iterator&lt;? extends R&gt;, float)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
+<dd>
+<div class="block">Creates a new hash set using elements provided by a type-specific
+ iterator.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#TableSet-java.util.Iterator-java.util.Iterator-">TableSet(Iterator&lt;? extends C&gt;, Iterator&lt;? extends R&gt;)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
+<dd>
+<div class="block">Creates a new hash set with <a href="../squidpony/squidmath/TableSet.html#DEFAULT_LOAD_FACTOR"><code>TableSet.DEFAULT_LOAD_FACTOR</code></a> as load
+ factor using elements provided by a type-specific iterator.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#TableSet-C:A-int-R:A-int-int-float-">TableSet(C[], int, R[], int, int, float)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
+<dd>
+<div class="block">Creates a new hash set and fills it with the elements of a given array.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#TableSet-C:A-int-R:A-int-int-">TableSet(C[], int, R[], int, int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
+<dd>
+<div class="block">Creates a new hash set with <a href="../squidpony/squidmath/TableSet.html#DEFAULT_LOAD_FACTOR"><code>TableSet.DEFAULT_LOAD_FACTOR</code></a> as load
+ factor and fills it with the elements of a given array.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#TableSet-C:A-R:A-float-">TableSet(C[], R[], float)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
+<dd>
+<div class="block">Creates a new hash set copying the elements of an array.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#TableSet-C:A-R:A-">TableSet(C[], R[])</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
+<dd>
+<div class="block">Creates a new hash set with <a href="../squidpony/squidmath/TableSet.html#DEFAULT_LOAD_FACTOR"><code>TableSet.DEFAULT_LOAD_FACTOR</code></a> as load
+ factor copying the elements of an array.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#TableSet-int-float-squidpony.squidmath.CrossHash.IHasher-squidpony.squidmath.CrossHash.IHasher-">TableSet(int, float, CrossHash.IHasher, CrossHash.IHasher)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
+<dd>
+<div class="block">Creates a new hash map.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#TableSet-squidpony.squidmath.CrossHash.IHasher-squidpony.squidmath.CrossHash.IHasher-">TableSet(CrossHash.IHasher, CrossHash.IHasher)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
+<dd>
+<div class="block">Creates a new hash set with <a href="../squidpony/squidmath/TableSet.html#DEFAULT_LOAD_FACTOR"><code>TableSet.DEFAULT_LOAD_FACTOR</code></a> as load
+ factor.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#TableSet-int-squidpony.squidmath.CrossHash.IHasher-squidpony.squidmath.CrossHash.IHasher-">TableSet(int, CrossHash.IHasher, CrossHash.IHasher)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
+<dd>
+<div class="block">Creates a new hash set with <a href="../squidpony/squidmath/TableSet.html#DEFAULT_LOAD_FACTOR"><code>TableSet.DEFAULT_LOAD_FACTOR</code></a> as load
+ factor.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#TableSet-java.util.Collection-java.util.Collection-float-squidpony.squidmath.CrossHash.IHasher-squidpony.squidmath.CrossHash.IHasher-">TableSet(Collection&lt;? extends C&gt;, Collection&lt;? extends R&gt;, float, CrossHash.IHasher, CrossHash.IHasher)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
+<dd>
+<div class="block">Creates a new hash set copying a given collection.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#TableSet-java.util.Collection-java.util.Collection-squidpony.squidmath.CrossHash.IHasher-squidpony.squidmath.CrossHash.IHasher-">TableSet(Collection&lt;? extends C&gt;, Collection&lt;? extends R&gt;, CrossHash.IHasher, CrossHash.IHasher)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
+<dd>
+<div class="block">Creates a new hash set with <a href="../squidpony/squidmath/TableSet.html#DEFAULT_LOAD_FACTOR"><code>TableSet.DEFAULT_LOAD_FACTOR</code></a> as load
+ factor copying a given collection.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#TableSet-C:A-int-R:A-int-int-float-squidpony.squidmath.CrossHash.IHasher-squidpony.squidmath.CrossHash.IHasher-">TableSet(C[], int, R[], int, int, float, CrossHash.IHasher, CrossHash.IHasher)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
+<dd>
+<div class="block">Creates a new hash set and fills it with the elements of a given array.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#TableSet-C:A-int-R:A-int-int-squidpony.squidmath.CrossHash.IHasher-squidpony.squidmath.CrossHash.IHasher-">TableSet(C[], int, R[], int, int, CrossHash.IHasher, CrossHash.IHasher)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
+<dd>
+<div class="block">Creates a new hash set with <a href="../squidpony/squidmath/TableSet.html#DEFAULT_LOAD_FACTOR"><code>TableSet.DEFAULT_LOAD_FACTOR</code></a> as load
+ factor and fills it with the elements of a given array.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#TableSet-C:A-R:A-float-squidpony.squidmath.CrossHash.IHasher-squidpony.squidmath.CrossHash.IHasher-">TableSet(C[], R[], float, CrossHash.IHasher, CrossHash.IHasher)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
+<dd>
+<div class="block">Creates a new hash set copying the elements of an array.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#TableSet-C:A-R:A-squidpony.squidmath.CrossHash.IHasher-squidpony.squidmath.CrossHash.IHasher-">TableSet(C[], R[], CrossHash.IHasher, CrossHash.IHasher)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
+<dd>
+<div class="block">Creates a new hash set with <a href="../squidpony/squidmath/TableSet.html#DEFAULT_LOAD_FACTOR"><code>TableSet.DEFAULT_LOAD_FACTOR</code></a> as load
+ factor copying the elements of an array.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#tailMap-K-">tailMap(K)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#tailMap-int-">tailMap(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
@@ -112,6 +207,8 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedMap.MapEntrySet.html#tailSet-java.util.Map.Entry-">tailSet(Map.Entry&lt;K, V&gt;)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedMap.MapEntrySet.html" title="class in squidpony.squidmath">OrderedMap.MapEntrySet</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedSet.html#tailSet-K-">tailSet(K)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#tailSet-C-">tailSet(C)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#take-int-">take(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
@@ -518,6 +615,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/StatefulRNG.html#toString--">toString()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#toString--">toString()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThunderRNG.html#toString--">toString()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThunderRNG.html" title="class in squidpony.squidmath">ThunderRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/VanDerCorputQRNG.html#toString--">toString()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/VanDerCorputQRNG.html" title="class in squidpony.squidmath">VanDerCorputQRNG</a></dt>
@@ -619,6 +718,14 @@
 <div class="block">Rehashes the map, making the table as small as possible.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedSet.html#trim-int-">trim(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a></dt>
+<dd>
+<div class="block">Rehashes this map if the table is too large.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#trim--">trim()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
+<dd>
+<div class="block">Rehashes the map, making the table as small as possible.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#trim-int-">trim(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
 <dd>
 <div class="block">Rehashes this map if the table is too large.</div>
 </dd>

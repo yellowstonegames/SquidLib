@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":9,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":42,"i21":42,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":9,"i31":9,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":42,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10,"i50":10,"i51":10,"i52":10,"i53":10,"i54":10,"i55":10,"i56":10};
+var methods = {"i0":10,"i1":9,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":42,"i21":42,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":9,"i31":9,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":42,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10,"i50":10,"i51":10,"i52":10,"i53":10,"i54":10,"i55":10,"i56":10,"i57":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -117,8 +117,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre><a href="../../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.72">OrderedMap</a>&lt;K,V&gt;
+<pre>public class <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.70">OrderedMap</a>&lt;K,V&gt;
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true" title="class or interface in java.util">SortedMap</a>&lt;K,V&gt;, <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang">Cloneable</a></pre>
 <div class="block">A generic linked hash map with with a fast implementation, originally from fastutil as Object2ObjectLinkedOpenHashMap
@@ -651,15 +650,19 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 </td>
 </tr>
 <tr id="i32" class="altColor">
+<td class="colFirst"><code>protected int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#positionOf-java.lang.Object-">positionOf</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</code>&nbsp;</td>
+</tr>
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#put-K-V-">put</a></span>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;k,
    <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;v)</code>&nbsp;</td>
 </tr>
-<tr id="i33" class="rowColor">
+<tr id="i34" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#putAll-java.util.Map-">putAll</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,? extends <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;m)</code></td>
 </tr>
-<tr id="i34" class="altColor">
+<tr id="i35" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#putAndMoveToFirst-K-V-">putAndMoveToFirst</a></span>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;k,
                  <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;v)</code>
@@ -667,7 +670,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
  first position of the iteration order.</div>
 </td>
 </tr>
-<tr id="i35" class="rowColor">
+<tr id="i36" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#putAndMoveToLast-K-V-">putAndMoveToLast</a></span>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;k,
                 <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;v)</code>
@@ -675,31 +678,31 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
  last position of the iteration order.</div>
 </td>
 </tr>
-<tr id="i36" class="altColor">
+<tr id="i37" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#putAt-K-V-int-">putAt</a></span>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;k,
      <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;v,
      int&nbsp;idx)</code>&nbsp;</td>
 </tr>
-<tr id="i37" class="rowColor">
+<tr id="i38" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#randomEntry-squidpony.squidmath.RNG-">randomEntry</a></span>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
 <div class="block">Gets a random entry from this OrderedMap in constant time, using the given RNG to generate a random number.</div>
 </td>
 </tr>
-<tr id="i38" class="altColor">
+<tr id="i39" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#randomKey-squidpony.squidmath.RNG-">randomKey</a></span>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
 <div class="block">Gets a random key from this OrderedMap in constant time, using the given RNG to generate a random number.</div>
 </td>
 </tr>
-<tr id="i39" class="rowColor">
+<tr id="i40" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#randomValue-squidpony.squidmath.RNG-">randomValue</a></span>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
 <div class="block">Gets a random value from this OrderedMap in constant time, using the given RNG to generate a random number.</div>
 </td>
 </tr>
-<tr id="i40" class="altColor">
+<tr id="i41" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#rehash--">rehash</a></span>()</code>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;
@@ -707,36 +710,36 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 </div>
 </td>
 </tr>
-<tr id="i41" class="rowColor">
+<tr id="i42" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#rehash-int-">rehash</a></span>(int&nbsp;newN)</code>
 <div class="block">Rehashes the map.</div>
 </td>
 </tr>
-<tr id="i42" class="altColor">
+<tr id="i43" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#remove-java.lang.Object-">remove</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</code>&nbsp;</td>
 </tr>
-<tr id="i43" class="rowColor">
+<tr id="i44" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#removeAt-int-">removeAt</a></span>(int&nbsp;idx)</code>
 <div class="block">Removes the key and value at the given index in the iteration order in not-exactly constant time (though it still
  should be efficient).</div>
 </td>
 </tr>
-<tr id="i44" class="altColor">
+<tr id="i45" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#removeFirst--">removeFirst</a></span>()</code>
 <div class="block">Removes the mapping associated with the first key in iteration order.</div>
 </td>
 </tr>
-<tr id="i45" class="rowColor">
+<tr id="i46" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#removeLast--">removeLast</a></span>()</code>
 <div class="block">Removes the mapping associated with the last key in iteration order.</div>
 </td>
 </tr>
-<tr id="i46" class="altColor">
+<tr id="i47" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#reorder-int...-">reorder</a></span>(int...&nbsp;ordering)</code>
 <div class="block">Given an array or varargs of replacement indices for this OrderedMap's iteration order, reorders this so the
@@ -744,53 +747,53 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
  or too-large indices), the second item in the returned version is the same as <code>getAt(ordering[1])</code>, etc.</div>
 </td>
 </tr>
-<tr id="i47" class="rowColor">
+<tr id="i48" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#shiftKeys-int-">shiftKeys</a></span>(int&nbsp;pos)</code>
 <div class="block">Shifts left entries with the specified hash code, starting at the
  specified position, and empties the resulting free entry.</div>
 </td>
 </tr>
-<tr id="i48" class="altColor">
+<tr id="i49" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#shuffle-squidpony.squidmath.RNG-">shuffle</a></span>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
 <div class="block">Randomly alters the iteration order for this OrderedMap using the given RNG to shuffle.</div>
 </td>
 </tr>
-<tr id="i49" class="rowColor">
+<tr id="i50" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#size--">size</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i50" class="altColor">
+<tr id="i51" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true" title="class or interface in java.util">SortedMap</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#subMap-K-K-">subMap</a></span>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;from,
       <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;to)</code>&nbsp;</td>
 </tr>
-<tr id="i51" class="rowColor">
+<tr id="i52" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true" title="class or interface in java.util">SortedMap</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#tailMap-K-">tailMap</a></span>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;from)</code>&nbsp;</td>
 </tr>
-<tr id="i52" class="altColor">
+<tr id="i53" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i53" class="rowColor">
+<tr id="i54" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#trim--">trim</a></span>()</code>
 <div class="block">Rehashes the map, making the table as small as possible.</div>
 </td>
 </tr>
-<tr id="i54" class="altColor">
+<tr id="i55" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#trim-int-">trim</a></span>(int&nbsp;n)</code>
 <div class="block">Rehashes this map if the table is too large.</div>
 </td>
 </tr>
-<tr id="i55" class="rowColor">
+<tr id="i56" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#values--">values</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i56" class="altColor">
+<tr id="i57" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#valuesAsList--">valuesAsList</a></span>()</code>&nbsp;</td>
 </tr>
@@ -829,7 +832,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>key</h4>
-<pre>protected&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>[] <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.77">key</a></pre>
+<pre>protected&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>[] <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.75">key</a></pre>
 <div class="block">The array of keys.</div>
 </li>
 </ul>
@@ -839,7 +842,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>value</h4>
-<pre>protected&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>[] <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.81">value</a></pre>
+<pre>protected&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>[] <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.79">value</a></pre>
 <div class="block">The array of values.</div>
 </li>
 </ul>
@@ -849,7 +852,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>mask</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.85">mask</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.83">mask</a></pre>
 <div class="block">The mask for wrapping a position counter.</div>
 </li>
 </ul>
@@ -859,7 +862,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>containsNullKey</h4>
-<pre>protected&nbsp;boolean <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.89">containsNullKey</a></pre>
+<pre>protected&nbsp;boolean <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.87">containsNullKey</a></pre>
 <div class="block">Whether this set contains the key zero.</div>
 </li>
 </ul>
@@ -869,7 +872,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>first</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.93">first</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.91">first</a></pre>
 <div class="block">The index of the first entry in iteration order. It is valid iff <a href="../../squidpony/squidmath/OrderedMap.html#size"><code>size</code></a> is nonzero; otherwise, it contains -1.</div>
 </li>
 </ul>
@@ -879,7 +882,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>last</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.97">last</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.95">last</a></pre>
 <div class="block">The index of the last entry in iteration order. It is valid iff <a href="../../squidpony/squidmath/OrderedMap.html#size"><code>size</code></a> is nonzero; otherwise, it contains -1.</div>
 </li>
 </ul>
@@ -889,7 +892,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>order</h4>
-<pre>protected&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a> <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.103">order</a></pre>
+<pre>protected&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a> <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.101">order</a></pre>
 </li>
 </ul>
 <a name="n">
@@ -898,7 +901,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>n</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.107">n</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.105">n</a></pre>
 <div class="block">The current table size.</div>
 </li>
 </ul>
@@ -908,7 +911,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>maxFill</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.111">maxFill</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.109">maxFill</a></pre>
 <div class="block">Threshold after which we rehash. It must be the table size times <a href="../../squidpony/squidmath/OrderedMap.html#f"><code>f</code></a>.</div>
 </li>
 </ul>
@@ -918,7 +921,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>size</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.115">size</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.113">size</a></pre>
 <div class="block">Number of entries in the set (including the key zero, if present).</div>
 </li>
 </ul>
@@ -928,7 +931,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>f</h4>
-<pre>public final&nbsp;float <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.119">f</a></pre>
+<pre>public final&nbsp;float <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.117">f</a></pre>
 <div class="block">The acceptable load factor.</div>
 </li>
 </ul>
@@ -938,7 +941,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>entries</h4>
-<pre>protected volatile&nbsp;<a href="../../squidpony/squidmath/OrderedMap.MapEntrySet.html" title="class in squidpony.squidmath">OrderedMap.MapEntrySet</a> <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.123">entries</a></pre>
+<pre>protected volatile&nbsp;<a href="../../squidpony/squidmath/OrderedMap.MapEntrySet.html" title="class in squidpony.squidmath">OrderedMap.MapEntrySet</a> <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.121">entries</a></pre>
 <div class="block">Cached set of entries.</div>
 </li>
 </ul>
@@ -948,7 +951,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>keys</h4>
-<pre>protected volatile&nbsp;<a href="../../squidpony/squidmath/OrderedMap.KeySet.html" title="class in squidpony.squidmath">OrderedMap.KeySet</a> <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.127">keys</a></pre>
+<pre>protected volatile&nbsp;<a href="../../squidpony/squidmath/OrderedMap.KeySet.html" title="class in squidpony.squidmath">OrderedMap.KeySet</a> <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.125">keys</a></pre>
 <div class="block">Cached set of keys.</div>
 </li>
 </ul>
@@ -958,7 +961,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>values</h4>
-<pre>protected volatile&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt; <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.131">values</a></pre>
+<pre>protected volatile&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt; <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.129">values</a></pre>
 <div class="block">Cached collection of values.</div>
 </li>
 </ul>
@@ -968,7 +971,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>defRetValue</h4>
-<pre>protected&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a> <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.135">defRetValue</a></pre>
+<pre>protected&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a> <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.133">defRetValue</a></pre>
 <div class="block">Default return value.</div>
 </li>
 </ul>
@@ -978,7 +981,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>DEFAULT_INITIAL_SIZE</h4>
-<pre>public static final&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.140">DEFAULT_INITIAL_SIZE</a></pre>
+<pre>public static final&nbsp;int <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.138">DEFAULT_INITIAL_SIZE</a></pre>
 <div class="block">The initial default size of a hash table.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -992,7 +995,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>DEFAULT_LOAD_FACTOR</h4>
-<pre>public static final&nbsp;float <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.144">DEFAULT_LOAD_FACTOR</a></pre>
+<pre>public static final&nbsp;float <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.142">DEFAULT_LOAD_FACTOR</a></pre>
 <div class="block">The default load factor of a hash table.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1006,7 +1009,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>FAST_LOAD_FACTOR</h4>
-<pre>public static final&nbsp;float <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.148">FAST_LOAD_FACTOR</a></pre>
+<pre>public static final&nbsp;float <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.146">FAST_LOAD_FACTOR</a></pre>
 <div class="block">The load factor for a (usually small) table that is meant to be particularly fast.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1020,7 +1023,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>VERY_FAST_LOAD_FACTOR</h4>
-<pre>public static final&nbsp;float <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.152">VERY_FAST_LOAD_FACTOR</a></pre>
+<pre>public static final&nbsp;float <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.150">VERY_FAST_LOAD_FACTOR</a></pre>
 <div class="block">The load factor for a (usually very small) table that is meant to be extremely fast.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1034,7 +1037,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hasher</h4>
-<pre>protected&nbsp;<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.154">hasher</a></pre>
+<pre>protected&nbsp;<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.152">hasher</a></pre>
 </li>
 </ul>
 </li>
@@ -1051,7 +1054,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.174">OrderedMap</a>(int&nbsp;expected,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.172">OrderedMap</a>(int&nbsp;expected,
                   float&nbsp;f)</pre>
 <div class="block">Creates a new OrderedMap.
  <p>
@@ -1069,7 +1072,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.194">OrderedMap</a>(int&nbsp;expected)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.192">OrderedMap</a>(int&nbsp;expected)</pre>
 <div class="block">Creates a new OrderedMap with 0.75f as load factor.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1083,7 +1086,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.201">OrderedMap</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.199">OrderedMap</a>()</pre>
 <div class="block">Creates a new OrderedMap with initial expected 16 entries and 0.75f as load factor.</div>
 </li>
 </ul>
@@ -1093,7 +1096,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.211">OrderedMap</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,? extends <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;m,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.209">OrderedMap</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,? extends <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;m,
                   float&nbsp;f)</pre>
 <div class="block">Creates a new OrderedMap copying a given one.</div>
 <dl>
@@ -1109,7 +1112,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.221">OrderedMap</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,? extends <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;m)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.219">OrderedMap</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,? extends <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;m)</pre>
 <div class="block">Creates a new OrderedMap with 0.75f as load factor copying a given one.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1125,7 +1128,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.233">OrderedMap</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>[]&nbsp;keyArray,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.231">OrderedMap</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>[]&nbsp;keyArray,
                   <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>[]&nbsp;valueArray,
                   float&nbsp;f)</pre>
 <div class="block">Creates a new OrderedMap using the elements of two parallel arrays.</div>
@@ -1145,7 +1148,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.248">OrderedMap</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&gt;&nbsp;keyColl,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.246">OrderedMap</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&gt;&nbsp;keyColl,
                   <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;valueColl,
                   float&nbsp;f)</pre>
 <div class="block">Creates a new OrderedMap using the elements of two parallel arrays.</div>
@@ -1167,7 +1170,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.267">OrderedMap</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>[]&nbsp;keyArray,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.265">OrderedMap</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>[]&nbsp;keyArray,
                   <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>[]&nbsp;valueArray)</pre>
 <div class="block">Creates a new OrderedMap with 0.75f as load factor using the elements of two parallel arrays.</div>
 <dl>
@@ -1185,7 +1188,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.282">OrderedMap</a>(int&nbsp;expected,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.280">OrderedMap</a>(int&nbsp;expected,
                   float&nbsp;f,
                   <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</pre>
 <div class="block">Creates a new OrderedMap.
@@ -1205,7 +1208,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.302">OrderedMap</a>(int&nbsp;expected,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.300">OrderedMap</a>(int&nbsp;expected,
                   <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</pre>
 <div class="block">Creates a new OrderedMap with 0.75f as load factor.</div>
 <dl>
@@ -1221,7 +1224,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.309">OrderedMap</a>(<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.307">OrderedMap</a>(<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</pre>
 <div class="block">Creates a new OrderedMap with initial expected 16 entries and 0.75f as load factor.</div>
 </li>
 </ul>
@@ -1231,7 +1234,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.320">OrderedMap</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,? extends <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;m,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.318">OrderedMap</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,? extends <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;m,
                   float&nbsp;f,
                   <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</pre>
 <div class="block">Creates a new OrderedMap copying a given one.</div>
@@ -1249,7 +1252,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.330">OrderedMap</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,? extends <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;m,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.328">OrderedMap</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,? extends <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;m,
                   <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</pre>
 <div class="block">Creates a new OrderedMap with 0.75f as load factor copying a given one.</div>
 <dl>
@@ -1267,7 +1270,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>OrderedMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.343">OrderedMap</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>[]&nbsp;keyArray,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.341">OrderedMap</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>[]&nbsp;keyArray,
                   <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>[]&nbsp;valueArray,
                   float&nbsp;f,
                   <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</pre>
@@ -1291,7 +1294,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockListLast">
 <li class="blockList">
 <h4>OrderedMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.358">OrderedMap</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>[]&nbsp;keyArray,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.356">OrderedMap</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>[]&nbsp;keyArray,
                   <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>[]&nbsp;valueArray,
                   <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</pre>
 <div class="block">Creates a new OrderedMap with 0.75f as load factor using the elements of two parallel arrays.</div>
@@ -1321,7 +1324,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>defaultReturnValue</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.156">defaultReturnValue</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;rv)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.154">defaultReturnValue</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;rv)</pre>
 </li>
 </ul>
 <a name="defaultReturnValue--">
@@ -1330,7 +1333,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>defaultReturnValue</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.160">defaultReturnValue</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.158">defaultReturnValue</a>()</pre>
 </li>
 </ul>
 <a name="putAll-java.util.Map-">
@@ -1339,7 +1342,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>putAll</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.400">putAll</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,? extends <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;m)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.398">putAll</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,? extends <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;m)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#putAll-java.util.Map-" title="class or interface in java.util">putAll</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></dd>
@@ -1354,7 +1357,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.495">put</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;k,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.493">put</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;k,
              <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;v)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -1370,7 +1373,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>putAt</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.503">putAt</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;k,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.501">putAt</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;k,
                <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;v,
                int&nbsp;idx)</pre>
 </li>
@@ -1381,7 +1384,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>shiftKeys</h4>
-<pre>protected final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.523">shiftKeys</a>(int&nbsp;pos)</pre>
+<pre>protected final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.521">shiftKeys</a>(int&nbsp;pos)</pre>
 <div class="block">Shifts left entries with the specified hash code, starting at the
  specified position, and empties the resulting free entry.</div>
 <dl>
@@ -1396,7 +1399,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>remove</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.549">remove</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.547">remove</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#remove-java.lang.Object-" title="class or interface in java.util">remove</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></dd>
@@ -1409,7 +1412,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>removeFirst</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.583">removeFirst</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.581">removeFirst</a>()</pre>
 <div class="block">Removes the mapping associated with the first key in iteration order.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1426,7 +1429,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>removeLast</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.613">removeLast</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.611">removeLast</a>()</pre>
 <div class="block">Removes the mapping associated with the last key in iteration order.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1445,7 +1448,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>getAndMoveToFirst</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.686">getAndMoveToFirst</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;k)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.684">getAndMoveToFirst</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;k)</pre>
 <div class="block">Returns the value to which the given key is mapped; if the key is
  present, it is moved to the first position of the iteration order.</div>
 <dl>
@@ -1466,7 +1469,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>getAndMoveToLast</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.723">getAndMoveToLast</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;k)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.721">getAndMoveToLast</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;k)</pre>
 <div class="block">Returns the value to which the given key is mapped; if the key is
  present, it is moved to the last position of the iteration order.</div>
 <dl>
@@ -1487,7 +1490,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>putAndMoveToFirst</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.762">putAndMoveToFirst</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;k,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.760">putAndMoveToFirst</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;k,
                            <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;v)</pre>
 <div class="block">Adds a pair to the map; if the key is already present, it is moved to the
  first position of the iteration order.</div>
@@ -1509,7 +1512,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>putAndMoveToLast</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.814">putAndMoveToLast</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;k,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.812">putAndMoveToLast</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;k,
                           <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;v)</pre>
 <div class="block">Adds a pair to the map; if the key is already present, it is moved to the
  last position of the iteration order.</div>
@@ -1529,11 +1532,20 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>get</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.856">get</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.854">get</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#get-java.lang.Object-" title="class or interface in java.util">get</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></dd>
 </dl>
+</li>
+</ul>
+<a name="positionOf-java.lang.Object-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>positionOf</h4>
+<pre>protected&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.874">positionOf</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</pre>
 </li>
 </ul>
 <a name="containsKey-java.lang.Object-">
@@ -1542,7 +1554,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>containsKey</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.876">containsKey</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.899">containsKey</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;k)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#containsKey-java.lang.Object-" title="class or interface in java.util">containsKey</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></dd>
@@ -1555,7 +1567,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>containsValue</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.895">containsValue</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;v)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.918">containsValue</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;v)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#containsValue-java.lang.Object-" title="class or interface in java.util">containsValue</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></dd>
@@ -1568,7 +1580,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>clear</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.913">clear</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.936">clear</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#clear--" title="class or interface in java.util">clear</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></dd>
@@ -1581,7 +1593,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>size</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.924">size</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.947">size</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#size--" title="class or interface in java.util">size</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></dd>
@@ -1594,7 +1606,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>isEmpty</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.928">isEmpty</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.951">isEmpty</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#isEmpty--" title="class or interface in java.util">isEmpty</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></dd>
@@ -1608,7 +1620,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <li class="blockList">
 <h4>growthFactor</h4>
 <pre><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang">@Deprecated</a>
-public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.939">growthFactor</a>(int&nbsp;growthFactor)</pre>
+public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.962">growthFactor</a>(int&nbsp;growthFactor)</pre>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;<span class="deprecationComment">Since <code>fastutil</code> 6.1.0, hash tables are doubled when they are too full.</span></div>
 <div class="block">A no-op for backward compatibility.</div>
 <dl>
@@ -1624,7 +1636,7 @@ public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.htm
 <li class="blockList">
 <h4>growthFactor</h4>
 <pre><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang">@Deprecated</a>
-public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.950">growthFactor</a>()</pre>
+public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.973">growthFactor</a>()</pre>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;<span class="deprecationComment">Since <code>fastutil</code> 6.1.0, hash tables are doubled when they are too full.</span></div>
 <div class="block">Gets the growth factor (2).</div>
 <dl>
@@ -1641,7 +1653,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html
 <ul class="blockList">
 <li class="blockList">
 <h4>fixOrder</h4>
-<pre>protected&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1008">fixOrder</a>(int&nbsp;i)</pre>
+<pre>protected&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1031">fixOrder</a>(int&nbsp;i)</pre>
 <div class="block">Modifies the ordering so that the given entry is removed. This method will complete in logarithmic time.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1657,7 +1669,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html
 <ul class="blockList">
 <li class="blockList">
 <h4>fixOrder</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1032">fixOrder</a>(int&nbsp;s,
+<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1055">fixOrder</a>(int&nbsp;s,
                         int&nbsp;d)</pre>
 <div class="block">Modifies the ordering for a shift from s to d.
  <br>
@@ -1675,7 +1687,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html
 <ul class="blockList">
 <li class="blockList">
 <h4>firstKey</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1056">firstKey</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1079">firstKey</a>()</pre>
 <div class="block">Returns the first key of this map in iteration order.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -1691,7 +1703,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html
 <ul class="blockList">
 <li class="blockList">
 <h4>lastKey</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1066">lastKey</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1089">lastKey</a>()</pre>
 <div class="block">Returns the last key of this map in iteration order.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -1707,7 +1719,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html
 <ul class="blockList">
 <li class="blockList">
 <h4>comparator</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html?is-external=true" title="class or interface in java.util">Comparator</a>&lt;? super <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1071">comparator</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html?is-external=true" title="class or interface in java.util">Comparator</a>&lt;? super <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1094">comparator</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true#comparator--" title="class or interface in java.util">comparator</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true" title="class or interface in java.util">SortedMap</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></dd>
@@ -1722,7 +1734,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html
 <ul class="blockList">
 <li class="blockList">
 <h4>tailMap</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true" title="class or interface in java.util">SortedMap</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1074">tailMap</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;from)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true" title="class or interface in java.util">SortedMap</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1097">tailMap</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;from)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true#tailMap-K-" title="class or interface in java.util">tailMap</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true" title="class or interface in java.util">SortedMap</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></dd>
@@ -1737,7 +1749,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html
 <ul class="blockList">
 <li class="blockList">
 <h4>headMap</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true" title="class or interface in java.util">SortedMap</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1077">headMap</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;to)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true" title="class or interface in java.util">SortedMap</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1100">headMap</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;to)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true#headMap-K-" title="class or interface in java.util">headMap</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true" title="class or interface in java.util">SortedMap</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></dd>
@@ -1752,7 +1764,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html
 <ul class="blockList">
 <li class="blockList">
 <h4>subMap</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true" title="class or interface in java.util">SortedMap</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1080">subMap</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;from,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true" title="class or interface in java.util">SortedMap</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1103">subMap</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;from,
                              <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;to)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -1766,7 +1778,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html
 <ul class="blockList">
 <li class="blockList">
 <h4>entrySet</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1577">entrySet</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1600">entrySet</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#entrySet--" title="class or interface in java.util">entrySet</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></dd>
@@ -1781,7 +1793,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html
 <ul class="blockList">
 <li class="blockList">
 <h4>mapEntrySet</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.MapEntrySet.html" title="class in squidpony.squidmath">OrderedMap.MapEntrySet</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1581">mapEntrySet</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.MapEntrySet.html" title="class in squidpony.squidmath">OrderedMap.MapEntrySet</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1604">mapEntrySet</a>()</pre>
 </li>
 </ul>
 <a name="keySet--">
@@ -1790,7 +1802,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html
 <ul class="blockList">
 <li class="blockList">
 <h4>keySet</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.KeySet.html" title="class in squidpony.squidmath">OrderedMap.KeySet</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1816">keySet</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.KeySet.html" title="class in squidpony.squidmath">OrderedMap.KeySet</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1839">keySet</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#keySet--" title="class or interface in java.util">keySet</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></dd>
@@ -1805,7 +1817,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html
 <ul class="blockList">
 <li class="blockList">
 <h4>keysAsOrderedSet</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1821">keysAsOrderedSet</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1844">keysAsOrderedSet</a>()</pre>
 </li>
 </ul>
 <a name="values--">
@@ -1814,7 +1826,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html
 <ul class="blockList">
 <li class="blockList">
 <h4>values</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1870">values</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1893">values</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#values--" title="class or interface in java.util">values</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></dd>
@@ -1829,7 +1841,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html
 <ul class="blockList">
 <li class="blockList">
 <h4>valuesAsList</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1875">valuesAsList</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1898">valuesAsList</a>()</pre>
 </li>
 </ul>
 <a name="rehash--">
@@ -1839,7 +1851,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html
 <li class="blockList">
 <h4>rehash</h4>
 <pre><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang">@Deprecated</a>
-public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1894">rehash</a>()</pre>
+public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1917">rehash</a>()</pre>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;<span class="deprecationComment">A no-op.</span></div>
 <div class="block">A no-op for backward compatibility. The kind of tables implemented by this class never need rehashing.
  <p>
@@ -1858,7 +1870,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.
 <ul class="blockList">
 <li class="blockList">
 <h4>trim</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1908">trim</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1931">trim</a>()</pre>
 <div class="block">Rehashes the map, making the table as small as possible.
  <p>
  <P>This method rehashes the table to the smallest size satisfying the load factor. It can be used when the set will not be changed anymore, so to optimize access speed and size.
@@ -1878,7 +1890,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.
 <ul class="blockList">
 <li class="blockList">
 <h4>trim</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1932">trim</a>(int&nbsp;n)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1955">trim</a>(int&nbsp;n)</pre>
 <div class="block">Rehashes this map if the table is too large.
  <p>
  <P>Let <var>N</var> be the smallest table size that can hold <code>max(n,<a href="../../squidpony/squidmath/OrderedMap.html#size--"><code>size()</code></a>)</code> entries, still satisfying the load factor. If the current table size is smaller than or equal to
@@ -1902,7 +1914,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.
 <ul class="blockList">
 <li class="blockList">
 <h4>rehash</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1957">rehash</a>(int&nbsp;newN)</pre>
+<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.1980">rehash</a>(int&nbsp;newN)</pre>
 <div class="block">Rehashes the map.
 
  <P>
@@ -1922,7 +1934,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.
 <ul class="blockList">
 <li class="blockList">
 <h4>clone</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2048">clone</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2071">clone</a>()</pre>
 <div class="block">Returns a deep copy of this map.
 
  <P>
@@ -1943,7 +1955,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2074">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2097">hashCode</a>()</pre>
 <div class="block">Returns a hash code for this map.
 
  This method overrides the generic method provided by the superclass.
@@ -1966,7 +1978,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.
 <ul class="blockList">
 <li class="blockList">
 <h4>maxFill</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2098">maxFill</a>(int&nbsp;n,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2121">maxFill</a>(int&nbsp;n,
                           float&nbsp;f)</pre>
 <div class="block">Returns the maximum number of entries that can be filled before rehashing.</div>
 <dl>
@@ -1984,7 +1996,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.
 <ul class="blockList">
 <li class="blockList">
 <h4>maxFill</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2111">maxFill</a>(long&nbsp;n,
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2134">maxFill</a>(long&nbsp;n,
                            float&nbsp;f)</pre>
 <div class="block">Returns the maximum number of entries that can be filled before rehashing.</div>
 <dl>
@@ -2002,7 +2014,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.
 <ul class="blockList">
 <li class="blockList">
 <h4>arraySize</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2125">arraySize</a>(int&nbsp;expected,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2148">arraySize</a>(int&nbsp;expected,
                             float&nbsp;f)</pre>
 <div class="block">Returns the least power of two smaller than or equal to 2<sup>30</sup> and larger than or equal to <code>Math.ceil( expected / f )</code>.</div>
 <dl>
@@ -2022,7 +2034,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2369">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2392">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -2035,7 +2047,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2383">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2406">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.util">equals</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></dd>
@@ -2050,7 +2062,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.
 <ul class="blockList">
 <li class="blockList">
 <h4>getAt</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2454">getAt</a>(int&nbsp;idx)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2477">getAt</a>(int&nbsp;idx)</pre>
 <div class="block">Gets the value at the given index in the iteration order in constant time (random-access).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2066,7 +2078,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.
 <ul class="blockList">
 <li class="blockList">
 <h4>keyAt</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2468">keyAt</a>(int&nbsp;idx)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2491">keyAt</a>(int&nbsp;idx)</pre>
 <div class="block">Gets the key at the given index in the iteration order in constant time (random-access).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2082,7 +2094,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.
 <ul class="blockList">
 <li class="blockList">
 <h4>entryAt</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2480">entryAt</a>(int&nbsp;idx)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2503">entryAt</a>(int&nbsp;idx)</pre>
 <div class="block">Gets the key-value Map.Entry at the given index in the iteration order in constant time (random-access).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2098,7 +2110,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.
 <ul class="blockList">
 <li class="blockList">
 <h4>removeAt</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2493">removeAt</a>(int&nbsp;idx)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2516">removeAt</a>(int&nbsp;idx)</pre>
 <div class="block">Removes the key and value at the given index in the iteration order in not-exactly constant time (though it still
  should be efficient).</div>
 <dl>
@@ -2115,7 +2127,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.
 <ul class="blockList">
 <li class="blockList">
 <h4>randomValue</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2510">randomValue</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2533">randomValue</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 <div class="block">Gets a random value from this OrderedMap in constant time, using the given RNG to generate a random number.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2131,7 +2143,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.
 <ul class="blockList">
 <li class="blockList">
 <h4>randomKey</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2520">randomKey</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2543">randomKey</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 <div class="block">Gets a random key from this OrderedMap in constant time, using the given RNG to generate a random number.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2147,7 +2159,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.
 <ul class="blockList">
 <li class="blockList">
 <h4>randomEntry</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2530">randomEntry</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2553">randomEntry</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 <div class="block">Gets a random entry from this OrderedMap in constant time, using the given RNG to generate a random number.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2163,7 +2175,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.
 <ul class="blockList">
 <li class="blockList">
 <h4>shuffle</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2540">shuffle</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2563">shuffle</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 <div class="block">Randomly alters the iteration order for this OrderedMap using the given RNG to shuffle.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2179,7 +2191,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.
 <ul class="blockList">
 <li class="blockList">
 <h4>reorder</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2566">reorder</a>(int...&nbsp;ordering)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2589">reorder</a>(int...&nbsp;ordering)</pre>
 <div class="block">Given an array or varargs of replacement indices for this OrderedMap's iteration order, reorders this so the
  first item in the returned version is the same as <code>getAt(ordering[0])</code> (with some care taken for negative
  or too-large indices), the second item in the returned version is the same as <code>getAt(ordering[1])</code>, etc.
@@ -2208,7 +2220,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.
 <ul class="blockList">
 <li class="blockList">
 <h4>alter</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2682">alter</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;original,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2705">alter</a>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;original,
                <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;replacement)</pre>
 <div class="block">Swaps a key, original, for another key, replacement, while keeping replacement at the same point in the iteration
  order as original and keeping it associated with the same value (which also keeps its iteration index).</div>
@@ -2227,7 +2239,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getMany</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2722">getMany</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&gt;&nbsp;keys)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2745">getMany</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&gt;&nbsp;keys)</pre>
 </li>
 </ul>
 </li>
