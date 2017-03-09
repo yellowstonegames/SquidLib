@@ -277,7 +277,7 @@ public class MimicFill {
                 field[x][y++] = (randomBits & a) == 0;
                 if(y >= size)
                 {
-                    x++;
+                    if(++x >= size) break;
                     y = 0;
                 }
             }
@@ -841,4 +841,15 @@ public class MimicFill {
             boulders, cave, caves, chess, lessRooms, maze, quarterBlack,
             river, rooms, simpleMaze, simpleRooms, thickWalls, ruins, openRooms
     };
+
+    /*
+    // this would throw an ArrayIndexOutOfBoundsException before a fix added after beta 8
+    public static void main(String[] args) {
+        boolean[][] binarySample = new boolean[20][20];
+        int length = 100;
+        boolean[][] binaryOut = MimicFill.fill(binarySample, length, .01, 5, new RNG());
+        squidpony.squidgrid.mapping.DungeonUtility.debugPrint(
+                squidpony.squidgrid.mapping.DungeonUtility.hashesToLines(sampleToMap(binaryOut, '.', '#')));
+    }
+    */
 }
