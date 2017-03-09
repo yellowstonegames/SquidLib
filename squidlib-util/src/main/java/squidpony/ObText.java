@@ -89,7 +89,7 @@ public class ObText extends AbstractCollection<String>{
     );
     protected static final Pattern illegalBareWord = Pattern.compile("[\\s\\[\\]\"'#\\\\]|(?:/[/\\*])"),
             needsRaw = Pattern.compile("(?<!\\\\)[\\[\\]]|\\\\$");
-    public static final Matcher m = pattern.matcher();
+    protected static final Matcher m = pattern.matcher();
     protected static final Matcher bare = illegalBareWord.matcher(), raw = needsRaw.matcher();
 
     protected final ArrayList<String> strings = new ArrayList<String>(64);

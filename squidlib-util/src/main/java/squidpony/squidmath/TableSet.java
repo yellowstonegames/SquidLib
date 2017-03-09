@@ -1229,7 +1229,7 @@ public class TableSet<C, R> implements java.io.Serializable {
     */
 
     public int hashCode() {
-        return order.hashWisp();
+        return CrossHash.Wisp.hash(cols) * 967 + CrossHash.Wisp.hash(rows) * 31 + order.hashWisp();
     }
 
     /**
