@@ -5,6 +5,7 @@ import squidpony.annotation.Beta;
 import squidpony.squidmath.CrossHash;
 import squidpony.squidmath.IntVLA;
 
+import java.io.Reader;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -87,6 +88,10 @@ public class ObText extends AbstractCollection<String>{
             "|({=o}\\[)" +
             "|({=c}\\])", REFlags.DOTALL | REFlags.UNICODE
     );
+
+    public static final int stringId = pattern.groupId("s"),
+            openId = pattern.groupId("o"), closeId = pattern.groupId("c");
+
     protected static final Pattern illegalBareWord = Pattern.compile("[\\s\\[\\]\"'#\\\\]|(?:/[/\\*])"),
             needsRaw = Pattern.compile("(?<!\\\\)[\\[\\]]|\\\\$");
     protected static final Matcher m = pattern.matcher();
@@ -116,16 +121,16 @@ public class ObText extends AbstractCollection<String>{
         nesting.clear();
         int t = -1;
         while (m.find()) {
-            if (m.isCaptured("s")) {
-                strings.add(m.group("s"));
+            if (m.isCaptured(stringId)) {
+                strings.add(m.group(stringId));
                 neighbors.add(1);
                 if(nesting.isEmpty()) length++;
             }
-            else if(m.isCaptured("o"))
+            else if(m.isCaptured(openId))
             {
                 nesting.add(neighbors.size - 1);
             }
-            else if(m.isCaptured("c"))
+            else if(m.isCaptured(closeId))
             {
                 neighbors.incr(t = nesting.pop(), neighbors.size - t - 1);
                 if(t < neighbors.size - 1)
@@ -397,5 +402,132 @@ public class ObText extends AbstractCollection<String>{
     }
 
     public static final StringConvert<ObText> convert = new Convert();
+
+    /**
+     * Can be used to help reading sequences of Strings with ObText-style quotation marking their boundaries.
+     * This returns a {@link ContentMatcher} object that you must call setTarget on before using it.
+     * The argument(s) to setTarget should be the text that might contain quotes, heredoc-style quotes, or just bare
+     * words. Calling {@link ContentMatcher#find()} will try to find the next String, returning false if there's nothing
+     * left or returning true and advancing the search if a String was found. The String might be a special term in some
+     * cases, like "[" and "]" without quotes being syntax in ObText that don't contain usable Strings. That's why,
+     * after a String was found with find(), you should check {@link ContentMatcher#hasMatch()} to verify that a match
+     * was successful, and if that's true, then you can call {@link ContentMatcher#getMatch()} to get the un-quoted
+     * contents of the next String in the target.
+     * @return a {@link ContentMatcher} that must have one of its setTarget() methods called before it can be used
+     */
+    public static ContentMatcher makeMatcher()
+    {
+        return new ContentMatcher();
+    }
+    /**
+     * Can be used to help reading sequences of Strings with ObText-style quotation marking their boundaries.
+     * This returns a {@link ContentMatcher} object that is already configured to read from {@code text}.
+     * The {@code text} should contain Strings that may be surrounded by quotes, heredoc-style quotes, or just bare
+     * words. Calling {@link ContentMatcher#find()} will try to find the next String, returning false if there's nothing
+     * left or returning true and advancing the search if a String was found. The String might be a special term in some
+     * cases, like "[" and "]" without quotes being syntax in ObText that don't contain usable Strings. That's why,
+     * after a String was found with find(), you should check {@link ContentMatcher#hasMatch()} to verify that a match
+     * was successful, and if that's true, then you can call {@link ContentMatcher#getMatch()} to get the un-quoted
+     * contents of the next String in the target.
+     * @param text the target String that should probably have at least one sub-string that might be quoted
+     * @return a {@link ContentMatcher} that can be used immediately by calling {@link ContentMatcher#find()}
+     */
+    public static ContentMatcher makeMatcher(CharSequence text)
+    {
+        return new ContentMatcher(text);
+    }
+
+    public static class ContentMatcher extends Matcher {
+
+        /**
+         * Constructs a ContentMatcher that will need to have its target set with {@link #setTarget(CharSequence)} or
+         * one of its overloads. The target should contain multiple substrings that may have quotation around them; this
+         * class is meant to skip the quotation in ObText's style.
+         */
+        public ContentMatcher()
+        {
+            super(pattern);
+        }
+
+        /**
+         * Constructs a ContentMatcher that already has its target set to {@code text}.
+         * @param text the CharSequence, such as a String, to find possibly-quoted Strings in.
+         */
+        public ContentMatcher(CharSequence text)
+        {
+            super(pattern, text);
+        }
+
+        /**
+         * Supplies a text to search in/match with.
+         * Resets current search position to zero.
+         *
+         * @param text - a data
+         * @see Matcher#setTarget(Matcher, int)
+         * @see Matcher#setTarget(CharSequence, int, int)
+         * @see Matcher#setTarget(char[], int, int)
+         * @see Matcher#setTarget(Reader, int)
+         */
+        @Override
+        public void setTarget(CharSequence text) {
+            super.setTarget(text);
+        }
+
+        /**
+         * Supplies a text to search in/match with, as a part of String.
+         * Resets current search position to zero.
+         *
+         * @param text  - a data source
+         * @param start - where the target starts
+         * @param len   - how long is the target
+         * @see Matcher#setTarget(Matcher, int)
+         * @see Matcher#setTarget(CharSequence)
+         * @see Matcher#setTarget(char[], int, int)
+         * @see Matcher#setTarget(Reader, int)
+         */
+        @Override
+        public void setTarget(CharSequence text, int start, int len) {
+            super.setTarget(text, start, len);
+        }
+
+        /**
+         * Supplies a text to search in/match with, as a part of char array.
+         * Resets current search position to zero.
+         *
+         * @param text  - a data source
+         * @param start - where the target starts
+         * @param len   - how long is the target
+         * @see Matcher#setTarget(Matcher, int)
+         * @see Matcher#setTarget(CharSequence)
+         * @see Matcher#setTarget(CharSequence, int, int)
+         * @see Matcher#setTarget(Reader, int)
+         */
+        @Override
+        public void setTarget(char[] text, int start, int len) {
+            super.setTarget(text, start, len);
+        }
+
+        /**
+         * Returns true if {@link #find()} has returned true and the found text is a usable String (not some syntax).
+         * If this returns true, you can reasonably get a (possibly empty) String using {@link #getMatch()}.
+         * @return true if there is a usable String found that can be obtained with {@link #getMatch()}
+         */
+        public boolean hasMatch()
+        {
+            return isCaptured(stringId);
+        }
+
+        /**
+         * Returns the contents of the latest String successfully found with {@link #find()}, without quotation.
+         * You should typically call {@link #hasMatch()} even if find() has returned true, to ensure there is a valid
+         * String that can be acquired (this will return an empty String if hasMatch() returns false, but an empty
+         * String is also potentially a valid result in a successful match, so it should be distinguished).
+         * @return the contents of the latest String successfully found with {@link #find()}
+         */
+        public String getMatch()
+        {
+            return group(stringId);
+        }
+    }
 
 }
