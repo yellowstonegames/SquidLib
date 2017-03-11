@@ -454,7 +454,7 @@ public class StringKit {
      * early, this behaves as you would expect for a number with less digits, and simply doesn't fill the larger places.
      * @param cs a CharSequence, such as a String, containing only hex digits with an optional sign (no 0x at the start)
      * @param start the (inclusive) first character position in cs to read
-     * @param end the (exclusive) last character position in cs to read (this stops after 16 characters if end is too large)
+     * @param end the (exclusive) last character position in cs to read (this stops after 8 or 9 characters if end is too large, depending on sign)
      * @return the int that cs represents
      */
     public static int intFromHex(final CharSequence cs, final int start, int end)
@@ -511,7 +511,7 @@ public class StringKit {
      * early, this behaves as you would expect for a number with less digits, and simply doesn't fill the larger places.
      * @param cs a char array containing only hex digits with an optional sign (no 0x at the start)
      * @param start the (inclusive) first character position in cs to read
-     * @param end the (exclusive) last character position in cs to read (this stops after 16 characters if end is too large)
+     * @param end the (exclusive) last character position in cs to read (this stops after 8 or 9 characters if end is too large, depending on sign)
      * @return the int that cs represents
      */
     public static int intFromHex(final char[] cs, final int start, int end)
@@ -547,6 +547,80 @@ public class StringKit {
                 return data * len;
             data <<= 4;
             data |= h;
+        }
+        return data * len;
+    }
+    /**
+     * Reads in a CharSequence containing only decimal digits (0-9) with an optional sign at the start and returns the
+     * int they represent, reading at most 10 characters (11 if there is a sign) and returning the result if valid, or 0
+     * if nothing could be read. The leading sign can be '+' or '-' if present. This can technically be used to handle
+     * unsigned integers in decimal format, but it isn't the intended purpose. If you do use it for handling unsigned
+     * ints, 2147483647 is normally the highest positive int and -2147483648 the lowest negative one, but if you give
+     * this a number between 2147483647 and {@code 2147483647 + 2147483648}, it will interpret it as a negative number
+     * that fits in bounds using the normal rules for converting between signed and unsigned numbers.
+     * <br>
+     * Should be fairly close to the JDK's Integer.parseInt method, but this also supports CharSequence data instead of
+     * just String data, and ignores chars after the number. This doesn't throw on invalid input, either, instead
+     * returning 0 if the first char is not a decimal digit, or stopping the parse process early if a non-decimal-digit
+     * char is read before the end of cs is reached. If the parse is stopped early, this behaves as you would expect for
+     * a number with less digits, and simply doesn't fill the larger places.
+     * @param cs a CharSequence, such as a String, containing only digits 0-9 with an optional sign
+     * @return the int that cs represents
+     */
+    public static int intFromDec(final CharSequence cs) {
+        return intFromDec(cs, 0, cs.length());
+    }
+    /**
+     * Reads in a CharSequence containing only decimal digits (0-9) with an optional sign at the start and returns the
+     * int they represent, reading at most 10 characters (11 if there is a sign) and returning the result if valid, or 0
+     * if nothing could be read. The leading sign can be '+' or '-' if present. This can technically be used to handle
+     * unsigned integers in decimal format, but it isn't the intended purpose. If you do use it for handling unsigned
+     * ints, 2147483647 is normally the highest positive int and -2147483648 the lowest negative one, but if you give
+     * this a number between 2147483647 and {@code 2147483647 + 2147483648}, it will interpret it as a negative number
+     * that fits in bounds using the normal rules for converting between signed and unsigned numbers.
+     * <br>
+     * Should be fairly close to the JDK's Integer.parseInt method, but this also supports CharSequence data instead of
+     * just String data, and allows specifying a start and end. This doesn't throw on invalid input, either, instead
+     * returning 0 if the first char is not a decimal digit, or stopping the parse process early if a non-decimal-digit
+     * char is read before end is reached. If the parse is stopped early, this behaves as you would expect for a number
+     * with less digits, and simply doesn't fill the larger places.
+     * @param cs a CharSequence, such as a String, containing only digits 0-9 with an optional sign
+     * @param start the (inclusive) first character position in cs to read
+     * @param end the (exclusive) last character position in cs to read (this stops after 10 or 11 characters if end is too large, depending on sign)
+     * @return the int that cs represents
+     */
+    public static int intFromDec(final CharSequence cs, final int start, int end)
+    {
+        int len, h, lim = 10;
+        if(cs == null || start < 0 || end <=0 || end - start <= 0
+                || (len = cs.length()) - start <= 0 || end > len)
+            return 0;
+        char c = cs.charAt(start);
+        if(c == '-')
+        {
+            len = -1;
+            h = 0;
+            ++end;
+            lim = 11;
+        }
+        else if(c == '+')
+        {
+            len = 1;
+            h = 0;
+            ++end;
+            lim = 11;
+        }
+        else if(c > 102 || (h = hexCodes[c]) < 0 || h > 9)
+            return 0;
+        else
+        {
+            len = 1;
+        }
+        int data = h;
+        for (int i = start; i < end && i < start + lim; i++) {
+            if((c = cs.charAt(i)) > 102 || (h = hexCodes[c]) < 0 || h > 9)
+                return data * len;
+            data = data * 10 + h;
         }
         return data * len;
     }

@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Align;
 import squidpony.ArrayTools;
 import squidpony.IColorCenter;
+import squidpony.StringKit;
 import squidpony.panel.IColoredString;
 import squidpony.panel.ISquidPanel;
 import squidpony.squidgrid.Direction;
@@ -2096,5 +2097,187 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
     public void setOnlyRenderEven(boolean onlyRenderEven) {
         this.onlyRenderEven = onlyRenderEven;
+    }
+
+    /**
+     * Gets a "snapshot" of the data represented by this SquidPanel; stores the dimensions, the char data, and the color
+     * data in a way that can be set back to a SquidPanel using {@link #setFromSnapshot(String, int, int, int, int)} or
+     * its overload that takes a StringBuilder. The actual contents of the returned StringBuilder are unlikely to be
+     * legible in any way if read as text, and are meant to be concise and stable across versions.
+     * @return a StringBuilder representation of this SquidPanel's data that can be passed later to {@link #setFromSnapshot(StringBuilder, int, int, int, int)} or converted to String and passed to its overload
+     */
+    public StringBuilder getSnapshot()
+    {
+        return getSnapshot(0, 0, gridWidth, gridHeight);
+    }
+    /**
+     * Gets a "snapshot" of the data represented by this SquidPanel; stores the dimensions, the char data, and the color
+     * data in a way that can be set back to a SquidPanel using {@link #setFromSnapshot(String, int, int, int, int)} or
+     * its overload that takes a StringBuilder. The actual contents of the returned StringBuilder are unlikely to be
+     * legible in any way if read as text, and are meant to be concise and stable across versions. This overload allows
+     * the first x and y position used to be specified, as well as the width and height to use (the actual width and
+     * height stored may be different if this SquidPanel's gridWidth and/or gridHeight are smaller than the width and/or
+     * height given).
+     * @param startX the first x position to use in the snapshot, inclusive
+     * @param startY the first y position to use in the snapshot, inclusive
+     * @param width how wide the snapshot area should be; x positions from startX to startX + width - 1 will be used
+     * @param height how tall the snapshot area should be; y positions from startY to startY + height - 1 will be used
+     * @return a StringBuilder representation of this SquidPanel's data that can be passed later to {@link #setFromSnapshot(StringBuilder, int, int, int, int)} or converted to String and passed to its overload
+     */
+    public StringBuilder getSnapshot(int startX, int startY, int width, int height) {
+        width = Math.min(gridWidth - startX, width);
+        height = Math.min(gridHeight - startY, height);
+        StringBuilder sb = new StringBuilder(width * height * 9 + 12);
+        sb.append(width).append('x').append(height).append(':');
+        for (int x = startX, i = 0; i < width; x++, i++) {
+            sb.append(contents[x], startY, height);
+        }
+        char[] reuse = new char[8];
+        for (int x = startX, i = 0; i < width; x++, i++) {
+            for (int y = startY, j = 0; j < height; y++, j++) {
+                sb.append(SColor.floatToChars(reuse, colors[x][y]));
+            }
+        }
+        return sb;
+    }
+
+    /**
+     * Given a "snapshot" from {@link #getSnapshot(int, int, int, int)}, this assigns the chars and colors in this
+     * SquidPanel from 0,0 (inclusive) up to the dimensions stored in the snapshot to match the snapshot's data.
+     * @param snapshot a StringBuilder in a special format as produced by {@link #getSnapshot(int, int, int, int)}
+     * @return this after setting, for chaining
+     */
+    public SquidPanel setFromSnapshot(StringBuilder snapshot)
+    {
+        return setFromSnapshot(snapshot, 0, 0, -1, -1);
+    }
+    /**
+     * Given a "snapshot" from {@link #getSnapshot(int, int, int, int)}, this assigns the chars and colors in this
+     * SquidPanel from the position given by putX,putY (inclusive) up to the dimensions stored in the snapshot
+     * (considering putX and putY as offsets) so they have the values stored in the snapshot.
+     * @param snapshot a StringBuilder in a special format as produced by {@link #getSnapshot(int, int, int, int)}
+     * @param putX where to start placing the data from the snapshot, x position
+     * @param putY where to start placing the data from the snapshot, y position
+     * @return this after setting, for chaining
+     */
+    public SquidPanel setFromSnapshot(StringBuilder snapshot, int putX, int putY)
+    {
+        return setFromSnapshot(snapshot, putX, putY, -1, -1);
+    }
+    /**
+     * Given a "snapshot" from {@link #getSnapshot(int, int, int, int)}, this assigns the chars and colors in this
+     * SquidPanel from the position given by putX,putY (inclusive) to putX+limitWidth,putY+limitHeight (exclusive) so
+     * they have the values stored in the snapshot. If limitWidth or limitHeight is negative, this uses the full width
+     * and height of the snapshot (stopping early if it would extend past the gridWidth or gridHeight of this
+     * SquidPanel).
+     * @param snapshot a StringBuilder in a special format as produced by {@link #getSnapshot(int, int, int, int)}
+     * @param putX where to start placing the data from the snapshot, x position
+     * @param putY where to start placing the data from the snapshot, y position
+     * @param limitWidth if negative, uses all of snapshot's width as possible, otherwise restricts the width allowed
+     * @param limitHeight if negative, uses all of snapshot's height as possible, otherwise restricts the height allowed
+     * @return this after setting, for chaining
+     */
+    public SquidPanel setFromSnapshot(StringBuilder snapshot, int putX, int putY, int limitWidth, int limitHeight)
+    {
+        if(putX >= gridWidth || putY >= gridHeight || snapshot == null || snapshot.length() < 4) return this;
+        if(putX < 0) putX = 0;
+        if(putY < 0) putY = 0;
+        int start = snapshot.indexOf(":")+1, width = StringKit.intFromDec(snapshot),
+                height = StringKit.intFromDec(snapshot, snapshot.indexOf("x") + 1, start),
+                run = start;
+        if(limitWidth < 0)
+            limitWidth = Math.min(width, gridWidth - putX);
+        else
+            limitWidth = Math.min(limitWidth, Math.min(width, gridWidth - putX));
+
+        if(limitHeight < 0)
+            limitHeight = Math.min(height, gridHeight - putY);
+        else
+            limitHeight = Math.min(limitHeight, Math.min(height, gridHeight - putY));
+        for (int x = putX, i = 0; i < limitWidth; x++, i++, run += height) {
+            snapshot.getChars(run, run + limitHeight, contents[x], putY);
+        }
+        run = start + width * height;
+        for (int x = putX, i = 0; i < limitWidth; x++, i++) {
+            for (int y = putY, j = 0; j < limitHeight; y++, j++) {
+                colors[x][y] = SColor.charsToFloat(snapshot, run);
+                run += 8;
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Given a "snapshot" from {@link #getSnapshot(int, int, int, int)}, this assigns the chars and colors in this
+     * SquidPanel from 0,0 (inclusive) up to the dimensions stored in the snapshot to match the snapshot's data.
+     * <br>
+     * This overload takes a String instead of a StringBuilder for potentially-easier loading from files.
+     * @param snapshot a String in a special format as produced by {@link #getSnapshot(int, int, int, int)}
+     * @return this after setting, for chaining
+     */
+    public SquidPanel setFromSnapshot(String snapshot)
+    {
+        return setFromSnapshot(snapshot, 0, 0, -1, -1);
+    }
+    /**
+     * Given a "snapshot" from {@link #getSnapshot(int, int, int, int)}, this assigns the chars and colors in this
+     * SquidPanel from the position given by putX,putY (inclusive) up to the dimensions stored in the snapshot
+     * (considering putX and putY as offsets) so they have the values stored in the snapshot.
+     * <br>
+     * This overload takes a String instead of a StringBuilder for potentially-easier loading from files.
+     * @param snapshot a String in a special format as produced by {@link #getSnapshot(int, int, int, int)}
+     * @param putX where to start placing the data from the snapshot, x position
+     * @param putY where to start placing the data from the snapshot, y position
+     * @return this after setting, for chaining
+     */
+    public SquidPanel setFromSnapshot(String snapshot, int putX, int putY)
+    {
+        return setFromSnapshot(snapshot, putX, putY, -1, -1);
+    }
+
+    /**
+     * Given a "snapshot" from {@link #getSnapshot(int, int, int, int)}, this assigns the chars and colors in this
+     * SquidPanel from the position given by putX,putY (inclusive) to putX+limitWidth,putY+limitHeight (exclusive) so
+     * they have the values stored in the snapshot. If limitWidth or limitHeight is negative, this uses the full width
+     * and height of the snapshot (stopping early if it would extend past the gridWidth or gridHeight of this
+     * SquidPanel).
+     * <br>
+     * This overload takes a String instead of a StringBuilder for potentially-easier loading from files.
+     * @param snapshot a String in a special format as produced by {@link #getSnapshot(int, int, int, int)}
+     * @param putX where to start placing the data from the snapshot, x position
+     * @param putY where to start placing the data from the snapshot, y position
+     * @param limitWidth if negative, uses all of snapshot's width as possible, otherwise restricts the width allowed
+     * @param limitHeight if negative, uses all of snapshot's height as possible, otherwise restricts the height allowed
+     * @return this after setting, for chaining
+     */
+
+    public SquidPanel setFromSnapshot(String snapshot, int putX, int putY, int limitWidth, int limitHeight)
+    {
+        if(putX >= gridWidth || putY >= gridHeight || snapshot == null || snapshot.length() < 4) return this;
+        if(putX < 0) putX = 0;
+        if(putY < 0) putY = 0;
+        int start = snapshot.indexOf(":")+1, width = StringKit.intFromDec(snapshot),
+                height = StringKit.intFromDec(snapshot, snapshot.indexOf("x") + 1, start),
+                run = start;
+        if(limitWidth < 0)
+            limitWidth = Math.min(width, gridWidth - putX);
+        else
+            limitWidth = Math.min(limitWidth, Math.min(width, gridWidth - putX));
+
+        if(limitHeight < 0)
+            limitHeight = Math.min(height, gridHeight - putY);
+        else
+            limitHeight = Math.min(limitHeight, Math.min(height, gridHeight - putY));
+        for (int x = putX, i = 0; i < limitWidth; x++, i++, run += height) {
+            snapshot.getChars(run, run + limitHeight, contents[x], putY);
+        }
+        run = start + width * height;
+        for (int x = putX, i = 0; i < limitWidth; x++, i++) {
+            for (int y = putY, j = 0; j < limitHeight; y++, j++) {
+                colors[x][y] = SColor.charsToFloat(snapshot, run);
+                run += 8;
+            }
+        }
+        return this;
     }
 }

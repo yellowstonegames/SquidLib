@@ -6856,6 +6856,22 @@ public class SColor extends Color {
         return NumberUtils.intToFloatColor(
                 Integer.reverseBytes(StringKit.intFromHex(data, offset, Math.min(data.length, offset+8))));
     }
+    /**
+     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} and use them
+     * to construct a packed float in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most
+     * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set
+     * the current color used by a Batch for tinting.
+     * @param data a CharSequence that must not be null and must have length of at least 8
+     * @param offset where to start reading from in data; there must be at least 8 items between offset and data.length()
+     * @return a float in packed ABGR8888 format
+     */
+
+    public static float charsToFloat(final CharSequence data, final int offset)
+    {
+        return NumberUtils.intToFloatColor(
+                Integer.reverseBytes(StringKit.intFromHex(data, offset, Math.min(data.length(), offset+8))));
+    }
 
     /**
      * Gets a packed float representation of a color given as 4 RGBA float components. LibGDX expects ABGR format
