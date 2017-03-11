@@ -1,6 +1,8 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.utils.NumberUtils;
+import squidpony.StringKit;
 import squidpony.squidmath.CrossHash;
 
 /**
@@ -6733,6 +6735,205 @@ public class SColor extends Color {
     public SColor(int r, int g, int b, int a, String name) {
         super(r / 255f, g / 255f, b / 255f, a / 255f);
         this.name = name;
+    }
+
+    /**
+     * Modifies the color parameter {@code changing} so its value is the one encoded in {@code value}. The way to
+     * obtain value for libGDX Color objects is with {@link Color#toFloatBits()}, which uses ABGR order, so this
+     * does some quick work to convert that to RGBA order and assign that into changing.
+     * @param changing a Color object that will be modified to have the given value
+     * @param value a value as a float that can be obtained by {@link Color#toFloatBits()}
+     * @return
+     */
+    public static Color colorFromFloat(Color changing, float value)
+    {
+        return changing.set(Integer.reverseBytes(NumberUtils.floatToIntColor(value)));
+    }
+    static final char[] digits = {
+            '0', '1', '2', '3', '4', '5', '6', '7',
+            '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+
+    /**
+     * Stores the value of color in the char[] {@code changing}, using RGBA8888 format with two hex digits per channel.
+     * This means that changing must be at least length 8 (this doesn't check for efficiency reasons), and that the
+     * first two chars represent the red channel from 0 to 255, then the next two are green, then blue. The alpha
+     * channel is a special case because it represents alpha values between 0 and 254, and effectively rounds down to
+     * the nearest even number if an odd number value was somehow given to it. For example, opaque white will be shown
+     * as "FFFFFFFE", and pure red with 50% alpha will be shown as "FF00007E".
+     * <br>
+     * The value of {@code color} should be the same type used internally in libGDX and SquidLib, that is, an ABGR
+     * packed float that could be passed directly to {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}.
+     *
+     * @param changing a char array that will be changed in place; must not be null and must have length of at least 8
+     * @param color a color
+     * @return
+     */
+    public static char[] floatToChars(final char[] changing, final float color)
+    {
+        final int i = NumberUtils.floatToIntColor(color);
+        changing[1] = digits[i & 15];
+        changing[0] = digits[(i >>> 4) & 15];
+        changing[3] = digits[(i >>> 8) & 15];
+        changing[2] = digits[(i >>> 12) & 15];
+        changing[5] = digits[(i >>> 16) & 15];
+        changing[4] = digits[(i >>> 20) & 15];
+        changing[7] = digits[(i >>> 24) & 14]; // mask is 14 due to libGDX avoiding floats that can be NaN
+        changing[6] = digits[i >>> 28];
+        return changing;
+    }
+
+    /**
+     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} and use them
+     * to construct an int in RGBA8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most
+     * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set
+     * the current color used by a Batch for tinting.
+     * @param data a char array that must not be null and must have length of at least 8
+     * @param offset where to start reading from in data; there must be at least 8 items between offset and data.length
+     * @return an int in RGBA8888 format
+     */
+    public static int charsToRGBA(final char[] data, final int offset)
+    {
+        return StringKit.intFromHex(data, offset, Math.min(data.length, offset+8));
+    }
+
+    /**
+     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} and use them
+     * to construct an int in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most
+     * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set
+     * the current color used by a Batch for tinting.
+     * @param data a char array that must not be null and must have length of at least 8
+     * @param offset where to start reading from in data; there must be at least 8 items between offset and data.length
+     * @return an int in ABGR8888 format
+     */
+    public static int charsToABGR(final char[] data, final int offset)
+    {
+        return Integer.reverseBytes(StringKit.intFromHex(data, offset, Math.min(data.length, offset+8)));
+    }
+
+    /**
+     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} and use them
+     * to construct an int in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most
+     * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set
+     * the current color used by a Batch for tinting.
+     * @param data a char array that must not be null and must have length of at least 8
+     * @return an int in ABGR8888 format
+     */
+    public static int charsToABGR(final char[] data)
+    {
+        return Integer.reverseBytes(StringKit.intFromHex(data, 0, 8));
+    }
+    /**
+     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} and use them
+     * to construct a packed float in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most
+     * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set
+     * the current color used by a Batch for tinting.
+     * @param data a char array that must not be null and must have length of at least 8
+     * @return a float in packed ABGR8888 format
+     */
+
+    public static float charsToFloat(final char[] data)
+    {
+        return NumberUtils.intToFloatColor(
+                Integer.reverseBytes(StringKit.intFromHex(data, 0, 8)));
+    }
+    /**
+     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} and use them
+     * to construct a packed float in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most
+     * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set
+     * the current color used by a Batch for tinting.
+     * @param data a char array that must not be null and must have length of at least 8
+     * @param offset where to start reading from in data; there must be at least 8 items between offset and data.length
+     * @return a float in packed ABGR8888 format
+     */
+
+    public static float charsToFloat(final char[] data, final int offset)
+    {
+        return NumberUtils.intToFloatColor(
+                Integer.reverseBytes(StringKit.intFromHex(data, offset, Math.min(data.length, offset+8))));
+    }
+
+    /**
+     * Gets a packed float representation of a color given as 4 RGBA float components. LibGDX expects ABGR format
+     * in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR, or ARGB. Generally,
+     * packed floats like what this returns are ABGR format, the kind that can be passed directly to
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)} without constructing intermediate objects.
+     * SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that
+     * associates colors to cells; this has changed from earlier releases and should be much more efficient.
+     * @param r a float from 0.0 to 1.0 for red
+     * @param g a float from 0.0 to 1.0 for green
+     * @param b a float from 0.0 to 1.0 for blue
+     * @param a a float from 0.0 to 1.0 for alpha/opacity
+     * @return a packed float that can be given to the setColor method in LibGDX's Batch classes
+     */
+    public static float floatGet(float r, float g, float b, float a)
+    {
+        return NumberUtils.intToFloatColor(((int)(a * 255) << 24) | ((int)(b * 255) << 16)
+                | ((int)(g * 255) << 8) | (int)(r * 255));
+    }
+
+    /**
+     * Gets a packed float representation of a color given an RGBA8888-format long. LibGDX expects ABGR format
+     * in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR, or ARGB. Generally,
+     * packed floats like what this returns are ABGR format, the kind that can be passed directly to
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)} without constructing intermediate objects.
+     * SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that
+     * associates colors to cells; this has changed from earlier releases and should be much more efficient.
+     * <br>
+     * This method is probably not what you want unless you specifically have RGBA8888-format longs that you
+     * want converted to packed floats. You probably should look at {@link #floatGet(float, float, float, float)} if
+     * you have alpha and/or float components, or {@link #floatGetI(int, int, int)} for the common case of the 3 RGB
+     * components as ints and alpha simply opaque.
+     * @param c a long with format {@code 32 unused bits, 8 red bits, 8 green bits, 8 blue bits, 7 alpha bits, 1 unused bit}
+     * @return a packed float that can be given to the setColor method in LibGDX's Batch classes
+     */
+    public static float floatGet(long c)
+    {
+        return NumberUtils.intToFloatColor((int)((c >>> 24 & 0xff) | (c >>> 8 & 0xff00) | (c << 8 & 0xff0000)
+                | (c << 24 & 0xfe000000)));
+    }
+
+    /**
+     * Gets a packed float representation of a color given an RGBA8888-format int. LibGDX expects ABGR format
+     * in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR, or ARGB. Generally,
+     * packed floats like what this returns are ABGR format, the kind that can be passed directly to
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)} without constructing intermediate objects.
+     * SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that
+     * associates colors to cells; this has changed from earlier releases and should be much more efficient.
+     * <br>
+     * This method is probably not what you want unless you specifically have RGBA8888-format ints that you
+     * want converted to packed floats. You probably should look at {@link #floatGet(float, float, float, float)} if
+     * you have alpha and/or float components, or {@link #floatGetI(int, int, int)} for the common case of the 3 RGB
+     * components as ints and alpha simply opaque.
+     * @param c an int with format {@code 8 red bits, 8 green bits, 8 blue bits, 7 alpha bits, 1 unused bit}
+     * @return a packed float that can be given to the setColor method in LibGDX's Batch classes
+     */
+    public static float floatGet(int c)
+    {
+        return NumberUtils.intToFloatColor((c >>> 24 & 0xff) | (c >>> 8 & 0xff00) | (c << 8 & 0xff0000)
+                | (c << 24 & 0xfe000000));
+    }
+
+    /**
+     * Gets a packed float representation of a color given as 3 RGB int components, setting alpha to opaque. LibGDX
+     * expects ABGR format in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR,
+     * or ARGB. Generally, packed floats like what this returns are ABGR format, the kind that can be passed
+     * directly to {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)} without constructing intermediate
+     * objects. SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that
+     * associates colors to cells; this has changed from earlier releases and should be much more efficient.
+     * @param r an int from 0 to 255 (both inclusive) for red
+     * @param g an int from 0 to 255 (both inclusive) for green
+     * @param b an int from 0 to 255 (both inclusive) for blue
+     * @return a packed float that can be given to the setColor method in LibGDX's Batch classes
+     */
+    public static float floatGetI(int r, int g, int b)
+    {
+        return NumberUtils.intToFloatColor((r & 0xff) | (g << 8 & 0xff00) | (b << 16 & 0xff0000)
+                | 0xfe000000);
     }
 
     @Override

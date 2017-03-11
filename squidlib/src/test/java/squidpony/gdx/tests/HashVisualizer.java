@@ -20,8 +20,8 @@ import squidpony.squidmath.*;
 import java.util.Arrays;
 import java.util.Random;
 
-import static squidpony.squidgrid.gui.gdx.Filters.Utility.floatGet;
-import static squidpony.squidgrid.gui.gdx.Filters.Utility.floatGetI;
+import static squidpony.squidgrid.gui.gdx.SColor.floatGet;
+import static squidpony.squidgrid.gui.gdx.SColor.floatGetI;
 
 /**
  * Demo to help with visualizing hash/noise functions and RNG types. Most of the hashes work simply by treating the x,y

@@ -222,7 +222,7 @@ public class StringKit {
         return splat;
     }
 
-    private static final String mask64 = "0000000000000000000000000000000000000000000000000000000000000000",
+    public static final String mask64 = "0000000000000000000000000000000000000000000000000000000000000000",
             mask32 = "00000000000000000000000000000000",
             mask16 = "0000000000000000",
             mask8 = "00000000";
@@ -332,62 +332,223 @@ public class StringKit {
         return mask8.substring(0, 8 - h.length()) + h;
     }
     private static final int[] hexCodes = new int[]
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-             0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 0, 0, 0, 0, 0,
-             0, 10, 11, 12, 13, 14, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-             0, 10, 11, 12, 13, 14, 15};
+            {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+             -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+             -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+              0, 1, 2, 3, 4, 5, 6, 7, 8, 9,-1,-1,-1,-1,-1,-1,
+             -1,10,11,12,13,14,15,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+             -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+             -1,10,11,12,13,14,15};
 
     /**
-     * Reads in a CharSequence containing only hex digits (only 0-9, a-f, and A-F) and returns the long they represent,
-     * reading at most 16 characters and returning the result if valid or 0 otherwise. This does not represent negative
-     * numbers except as they are printed by such methods as String.format given a %x in the formatting string, or this
-     * class' {@link #hex(long)} method; that is, if the first char of a 16-char CharSequence is a hex digit 8 or
-     * higher, then the whole number represents a negative number, using two's complement and so on. This means
-     * "FFFFFFFFFFFFFFFF" would return the long -1 when passed to this.
+     * Reads in a CharSequence containing only hex digits (only 0-9, a-f, and A-F) with an optional sign at the start
+     * and returns the long they represent, reading at most 16 characters (17 if there is a sign) and returning the
+     * result if valid, or 0 if nothing could be read. The leading sign can be '+' or '-' if present. This can also
+     * represent negative numbers as they are printed by such methods as String.format given a %x in the formatting
+     * string, or this class' {@link #hex(long)} method; that is, if the first char of a 16-char (or longer)
+     * CharSequence is a hex digit 8 or higher, then the whole number represents a negative number, using two's
+     * complement and so on. This means "FFFFFFFFFFFFFFFF" would return the long -1 when passed to this, though you
+     * could also simply use "-1 ".
      * <br>
-     * Should be fairly close to Java 8's Long.parseUnsignedLong method, which is a bizarre omission from earlier JDKs.
-     * This doesn't throw on invalid input, though, instead returning 0.
-     * @param cs a CharSequence, such as a String, containing only hex digits (no 0x at the start)
+     * Should be fairly close to Java 8's Long.parseUnsignedLong method, which is an odd omission from earlier JDKs.
+     * This doesn't throw on invalid input, though, instead returning 0 if the first char is not a hex digit, or
+     * stopping the parse process early if a non-hex-digit char is read before the end of cs is reached. If the parse is
+     * stopped early, this behaves as you would expect for a number with less digits, and simply doesn't fill the larger
+     * places.
+     * @param cs a CharSequence, such as a String, containing only hex digits with an optional sign (no 0x at the start)
      * @return the long that cs represents
      */
-    public static long longFromHex(CharSequence cs) {
+    public static long longFromHex(final CharSequence cs) {
         return longFromHex(cs, 0, cs.length());
     }
     /**
-     * Reads in a CharSequence containing only hex digits (only 0-9, a-f, and A-F) and returns the long they represent,
-     * reading at most 16 characters and returning the result if valid or 0 otherwise. This does not represent negative
-     * numbers except as they are printed by such methods as String.format given a %x in the formatting string, or this
-     * class' {@link #hex(long)} method; that is, if the first char of a 16-char CharSequence is a hex digit 8 or
-     * higher, then the whole number represents a negative number, using two's complement and so on. This means
-     * "FFFFFFFFFFFFFFFF" would return the long -1 when passed to this.
+     * Reads in a CharSequence containing only hex digits (only 0-9, a-f, and A-F) with an optional sign at the start
+     * and returns the long they represent, reading at most 16 characters (17 if there is a sign) and returning the
+     * result if valid, or 0 if nothing could be read. The leading sign can be '+' or '-' if present. This can also
+     * represent negative numbers as they are printed by such methods as String.format given a %x in the formatting
+     * string, or this class' {@link #hex(long)} method; that is, if the first char of a 16-char (or longer)
+     * CharSequence is a hex digit 8 or higher, then the whole number represents a negative number, using two's
+     * complement and so on. This means "FFFFFFFFFFFFFFFF" would return the long -1 when passed to this, though you
+     * could also simply use "-1 ". If you use both '-' at the start and have the most significant digit as 8 or higher,
+     * such as with "-FFFFFFFFFFFFFFFF", then both indicate a negative number, but the digits will be processed first
+     * (producing -1) and then the whole thing will be multiplied by -1 to flip the sign again (returning 1).
      * <br>
-     * Should be fairly close to Java 8's Long.parseUnsignedLong method, which is a bizarre omission from earlier JDKs.
-     * This doesn't throw on invalid input, though, instead returning 0.
-     * @param cs a CharSequence, such as a String, containing only hex digits (no 0x at the start)
-     * @param start the first character position in cs to read from
-     * @param end the last character position in cs to read from (this stops after 16 characters if end is too large)
+     * Should be fairly close to Java 8's Long.parseUnsignedLong method, which is an odd omission from earlier JDKs.
+     * This doesn't throw on invalid input, though, instead returning 0 if the first char is not a hex digit, or
+     * stopping the parse process early if a non-hex-digit char is read before end is reached. If the parse is stopped
+     * early, this behaves as you would expect for a number with less digits, and simply doesn't fill the larger places.
+     * @param cs a CharSequence, such as a String, containing only hex digits with an optional sign (no 0x at the start)
+     * @param start the (inclusive) first character position in cs to read
+     * @param end the (exclusive) last character position in cs to read (this stops after 16 characters if end is too large)
      * @return the long that cs represents
      */
-    public static long longFromHex(CharSequence cs, final int start, final int end)
+    public static long longFromHex(final CharSequence cs, final int start, int end) {
+        int len, h, lim = 8;
+        if (cs == null || start < 0 || end <= 0 || end - start <= 0
+                || (len = cs.length()) - start <= 0 || end > len)
+            return 0;
+        char c = cs.charAt(start);
+        if (c == '-') {
+            len = -1;
+            h = 0;
+            ++end;
+            lim = 9;
+        } else if (c == '+') {
+            len = 1;
+            h = 0;
+            ++end;
+            lim = 9;
+        } else if (c > 102 || (h = hexCodes[c]) < 0)
+            return 0;
+        else {
+            len = 1;
+        }
+        long data = h;
+        for (int i = start; i < end && i < start + lim; i++) {
+            if ((c = cs.charAt(i)) > 102 || (h = hexCodes[c]) < 0)
+                return data * len;
+            data <<= 4;
+            data |= h;
+        }
+        return data * len;
+    }
+
+    /**
+     * Reads in a CharSequence containing only hex digits (only 0-9, a-f, and A-F) with an optional sign at the start
+     * and returns the int they represent, reading at most 8 characters (9 if there is a sign) and returning the result
+     * if valid, or 0 if nothing could be read. The leading sign can be '+' or '-' if present. This can also represent
+     * negative numbers as they are printed by such methods as String.format given a %x in the formatting string, or
+     * this class' {@link #hex(int)} method; that is, if the first digit of an 8-char (or longer) CharSequence is a hex
+     * digit 8 or higher, then the whole number represents a negative number, using two's complement and so on. This
+     * means "FFFFFFFF" would return the int -1 when passed to this, though you could also simply use "-1 ". If you use
+     * both '-' at the start and have the most significant digit as 8 or higher, such as with "-FFFFFFFF", then both
+     * indicate a negative number, but the digits will be processed first (producing -1) and then the whole thing will
+     * be multiplied by -1 to flip the sign again (returning 1).
+     * <br>
+     * Should be fairly close to Java 8's Integer.parseUnsignedInt method, which is an odd omission from earlier JDKs.
+     * This doesn't throw on invalid input, though, instead returning 0 if the first char is not a hex digit, or
+     * stopping the parse process early if a non-hex-digit char is read before the end of cs is reached. If the parse is
+     * stopped early, this behaves as you would expect for a number with less digits, and simply doesn't fill the larger
+     * places.
+     * @param cs a CharSequence, such as a String, containing only hex digits with an optional sign (no 0x at the start)
+     * @return the int that cs represents
+     */
+    public static int intFromHex(final CharSequence cs) {
+        return intFromHex(cs, 0, cs.length());
+    }
+    /**
+     * Reads in a CharSequence containing only hex digits (only 0-9, a-f, and A-F) with an optional sign at the start
+     * and returns the int they represent, reading at most 8 characters (9 if there is a sign) and returning the result
+     * if valid, or 0 if nothing could be read. The leading sign can be '+' or '-' if present. This can also represent
+     * negative numbers as they are printed by such methods as String.format given a %x in the formatting string, or
+     * this class' {@link #hex(int)} method; that is, if the first digit of an 8-char (or longer) CharSequence is a hex
+     * digit 8 or higher, then the whole number represents a negative number, using two's complement and so on. This
+     * means "FFFFFFFF" would return the int -1 when passed to this, though you could also simply use "-1 ". If you use
+     * both '-' at the start and have the most significant digit as 8 or higher, such as with "-FFFFFFFF", then both
+     * indicate a negative number, but the digits will be processed first (producing -1) and then the whole thing will
+     * be multiplied by -1 to flip the sign again (returning 1).
+     * <br>
+     * Should be fairly close to Java 8's Integer.parseUnsignedInt method, which is an odd omission from earlier JDKs.
+     * This doesn't throw on invalid input, though, instead returning 0 if the first char is not a hex digit, or
+     * stopping the parse process early if a non-hex-digit char is read before end is reached. If the parse is stopped
+     * early, this behaves as you would expect for a number with less digits, and simply doesn't fill the larger places.
+     * @param cs a CharSequence, such as a String, containing only hex digits with an optional sign (no 0x at the start)
+     * @param start the (inclusive) first character position in cs to read
+     * @param end the (exclusive) last character position in cs to read (this stops after 16 characters if end is too large)
+     * @return the int that cs represents
+     */
+    public static int intFromHex(final CharSequence cs, final int start, int end)
     {
-        int len;
+        int len, h, lim = 8;
         if(cs == null || start < 0 || end <=0 || end - start <= 0
                 || (len = cs.length()) - start <= 0 || end > len)
             return 0;
         char c = cs.charAt(start);
-        if(c > 102)
-            return 0;
-        long data = hexCodes[c];
-        for (int i = start+1; i < end && i < 16; i++) {
-            if((c = cs.charAt(i)) > 102)
-                return 0;
-            data <<= 4;
-            data |= hexCodes[c];
+        if(c == '-')
+        {
+            len = -1;
+            h = 0;
+            ++end;
+            lim = 9;
         }
-        return data;
+        else if(c == '+')
+        {
+            len = 1;
+            h = 0;
+            ++end;
+            lim = 9;
+        }
+        else if(c > 102 || (h = hexCodes[c]) < 0)
+            return 0;
+        else
+        {
+            len = 1;
+        }
+        int data = h;
+        for (int i = start; i < end && i < start + lim; i++) {
+            if((c = cs.charAt(i)) > 102 || (h = hexCodes[c]) < 0)
+                return data * len;
+            data <<= 4;
+            data |= h;
+        }
+        return data * len;
+    }
+    /**
+     * Reads in a char[] containing only hex digits (only 0-9, a-f, and A-F) with an optional sign at the start
+     * and returns the int they represent, reading at most 8 characters (9 if there is a sign) and returning the result
+     * if valid, or 0 if nothing could be read. The leading sign can be '+' or '-' if present. This can also represent
+     * negative numbers as they are printed by such methods as String.format given a %x in the formatting string, or
+     * this class' {@link #hex(int)} method; that is, if the first digit of an 8-char (or longer) char[] is a hex
+     * digit 8 or higher, then the whole number represents a negative number, using two's complement and so on. This
+     * means "FFFFFFFF" would return the int -1 when passed to this, though you could also simply use "-1 ". If you use
+     * both '-' at the start and have the most significant digit as 8 or higher, such as with "-FFFFFFFF", then both
+     * indicate a negative number, but the digits will be processed first (producing -1) and then the whole thing will
+     * be multiplied by -1 to flip the sign again (returning 1).
+     * <br>
+     * Should be fairly close to Java 8's Integer.parseUnsignedInt method, which is an odd omission from earlier JDKs.
+     * This doesn't throw on invalid input, though, instead returning 0 if the first char is not a hex digit, or
+     * stopping the parse process early if a non-hex-digit char is read before end is reached. If the parse is stopped
+     * early, this behaves as you would expect for a number with less digits, and simply doesn't fill the larger places.
+     * @param cs a char array containing only hex digits with an optional sign (no 0x at the start)
+     * @param start the (inclusive) first character position in cs to read
+     * @param end the (exclusive) last character position in cs to read (this stops after 16 characters if end is too large)
+     * @return the int that cs represents
+     */
+    public static int intFromHex(final char[] cs, final int start, int end)
+    {
+        int len, h, lim = 8;
+        if(cs == null || start < 0 || end <=0 || end - start <= 0
+                || (len = cs.length) - start <= 0 || end > len)
+            return 0;
+        char c = cs[start];
+        if(c == '-')
+        {
+            len = -1;
+            h = 0;
+            ++end;
+            lim = 9;
+        }
+        else if(c == '+')
+        {
+            len = 1;
+            h = 0;
+            ++end;
+            lim = 9;
+        }
+        else if(c > 102 || (h = hexCodes[c]) < 0)
+            return 0;
+        else
+        {
+            len = 1;
+        }
+        int data = h;
+        for (int i = start; i < end && i < start + lim; i++) {
+            if((c = cs[i]) > 102 || (h = hexCodes[c]) < 0)
+                return data * len;
+            data <<= 4;
+            data |= h;
+        }
+        return data * len;
     }
     /**
      * Reads in a CharSequence containing only binary digits (only 0 and 1) and returns the long they represent,
