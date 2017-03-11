@@ -230,7 +230,7 @@
 <span class="sourceLineNo">222</span>        return splat;<a name="line.222"></a>
 <span class="sourceLineNo">223</span>    }<a name="line.223"></a>
 <span class="sourceLineNo">224</span><a name="line.224"></a>
-<span class="sourceLineNo">225</span>    private static final String mask64 = "0000000000000000000000000000000000000000000000000000000000000000",<a name="line.225"></a>
+<span class="sourceLineNo">225</span>    public static final String mask64 = "0000000000000000000000000000000000000000000000000000000000000000",<a name="line.225"></a>
 <span class="sourceLineNo">226</span>            mask32 = "00000000000000000000000000000000",<a name="line.226"></a>
 <span class="sourceLineNo">227</span>            mask16 = "0000000000000000",<a name="line.227"></a>
 <span class="sourceLineNo">228</span>            mask8 = "00000000";<a name="line.228"></a>
@@ -340,365 +340,600 @@
 <span class="sourceLineNo">332</span>        return mask8.substring(0, 8 - h.length()) + h;<a name="line.332"></a>
 <span class="sourceLineNo">333</span>    }<a name="line.333"></a>
 <span class="sourceLineNo">334</span>    private static final int[] hexCodes = new int[]<a name="line.334"></a>
-<span class="sourceLineNo">335</span>            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,<a name="line.335"></a>
-<span class="sourceLineNo">336</span>             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,<a name="line.336"></a>
-<span class="sourceLineNo">337</span>             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,<a name="line.337"></a>
-<span class="sourceLineNo">338</span>             0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 0, 0, 0, 0, 0,<a name="line.338"></a>
-<span class="sourceLineNo">339</span>             0, 10, 11, 12, 13, 14, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0,<a name="line.339"></a>
-<span class="sourceLineNo">340</span>             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,<a name="line.340"></a>
-<span class="sourceLineNo">341</span>             0, 10, 11, 12, 13, 14, 15};<a name="line.341"></a>
+<span class="sourceLineNo">335</span>            {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,<a name="line.335"></a>
+<span class="sourceLineNo">336</span>             -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,<a name="line.336"></a>
+<span class="sourceLineNo">337</span>             -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,<a name="line.337"></a>
+<span class="sourceLineNo">338</span>              0, 1, 2, 3, 4, 5, 6, 7, 8, 9,-1,-1,-1,-1,-1,-1,<a name="line.338"></a>
+<span class="sourceLineNo">339</span>             -1,10,11,12,13,14,15,-1,-1,-1,-1,-1,-1,-1,-1,-1,<a name="line.339"></a>
+<span class="sourceLineNo">340</span>             -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,<a name="line.340"></a>
+<span class="sourceLineNo">341</span>             -1,10,11,12,13,14,15};<a name="line.341"></a>
 <span class="sourceLineNo">342</span><a name="line.342"></a>
 <span class="sourceLineNo">343</span>    /**<a name="line.343"></a>
-<span class="sourceLineNo">344</span>     * Reads in a CharSequence containing only hex digits (only 0-9, a-f, and A-F) and returns the long they represent,<a name="line.344"></a>
-<span class="sourceLineNo">345</span>     * reading at most 16 characters and returning the result if valid or 0 otherwise. This does not represent negative<a name="line.345"></a>
-<span class="sourceLineNo">346</span>     * numbers except as they are printed by such methods as String.format given a %x in the formatting string, or this<a name="line.346"></a>
-<span class="sourceLineNo">347</span>     * class' {@link #hex(long)} method; that is, if the first char of a 16-char CharSequence is a hex digit 8 or<a name="line.347"></a>
-<span class="sourceLineNo">348</span>     * higher, then the whole number represents a negative number, using two's complement and so on. This means<a name="line.348"></a>
-<span class="sourceLineNo">349</span>     * "FFFFFFFFFFFFFFFF" would return the long -1 when passed to this.<a name="line.349"></a>
-<span class="sourceLineNo">350</span>     * &lt;br&gt;<a name="line.350"></a>
-<span class="sourceLineNo">351</span>     * Should be fairly close to Java 8's Long.parseUnsignedLong method, which is a bizarre omission from earlier JDKs.<a name="line.351"></a>
-<span class="sourceLineNo">352</span>     * This doesn't throw on invalid input, though, instead returning 0.<a name="line.352"></a>
-<span class="sourceLineNo">353</span>     * @param cs a CharSequence, such as a String, containing only hex digits (no 0x at the start)<a name="line.353"></a>
-<span class="sourceLineNo">354</span>     * @return the long that cs represents<a name="line.354"></a>
-<span class="sourceLineNo">355</span>     */<a name="line.355"></a>
-<span class="sourceLineNo">356</span>    public static long longFromHex(CharSequence cs) {<a name="line.356"></a>
-<span class="sourceLineNo">357</span>        return longFromHex(cs, 0, cs.length());<a name="line.357"></a>
-<span class="sourceLineNo">358</span>    }<a name="line.358"></a>
-<span class="sourceLineNo">359</span>    /**<a name="line.359"></a>
-<span class="sourceLineNo">360</span>     * Reads in a CharSequence containing only hex digits (only 0-9, a-f, and A-F) and returns the long they represent,<a name="line.360"></a>
-<span class="sourceLineNo">361</span>     * reading at most 16 characters and returning the result if valid or 0 otherwise. This does not represent negative<a name="line.361"></a>
-<span class="sourceLineNo">362</span>     * numbers except as they are printed by such methods as String.format given a %x in the formatting string, or this<a name="line.362"></a>
-<span class="sourceLineNo">363</span>     * class' {@link #hex(long)} method; that is, if the first char of a 16-char CharSequence is a hex digit 8 or<a name="line.363"></a>
-<span class="sourceLineNo">364</span>     * higher, then the whole number represents a negative number, using two's complement and so on. This means<a name="line.364"></a>
-<span class="sourceLineNo">365</span>     * "FFFFFFFFFFFFFFFF" would return the long -1 when passed to this.<a name="line.365"></a>
-<span class="sourceLineNo">366</span>     * &lt;br&gt;<a name="line.366"></a>
-<span class="sourceLineNo">367</span>     * Should be fairly close to Java 8's Long.parseUnsignedLong method, which is a bizarre omission from earlier JDKs.<a name="line.367"></a>
-<span class="sourceLineNo">368</span>     * This doesn't throw on invalid input, though, instead returning 0.<a name="line.368"></a>
-<span class="sourceLineNo">369</span>     * @param cs a CharSequence, such as a String, containing only hex digits (no 0x at the start)<a name="line.369"></a>
-<span class="sourceLineNo">370</span>     * @param start the first character position in cs to read from<a name="line.370"></a>
-<span class="sourceLineNo">371</span>     * @param end the last character position in cs to read from (this stops after 16 characters if end is too large)<a name="line.371"></a>
-<span class="sourceLineNo">372</span>     * @return the long that cs represents<a name="line.372"></a>
-<span class="sourceLineNo">373</span>     */<a name="line.373"></a>
-<span class="sourceLineNo">374</span>    public static long longFromHex(CharSequence cs, final int start, final int end)<a name="line.374"></a>
-<span class="sourceLineNo">375</span>    {<a name="line.375"></a>
-<span class="sourceLineNo">376</span>        int len;<a name="line.376"></a>
-<span class="sourceLineNo">377</span>        if(cs == null || start &lt; 0 || end &lt;=0 || end - start &lt;= 0<a name="line.377"></a>
-<span class="sourceLineNo">378</span>                || (len = cs.length()) - start &lt;= 0 || end &gt; len)<a name="line.378"></a>
-<span class="sourceLineNo">379</span>            return 0;<a name="line.379"></a>
-<span class="sourceLineNo">380</span>        char c = cs.charAt(start);<a name="line.380"></a>
-<span class="sourceLineNo">381</span>        if(c &gt; 102)<a name="line.381"></a>
-<span class="sourceLineNo">382</span>            return 0;<a name="line.382"></a>
-<span class="sourceLineNo">383</span>        long data = hexCodes[c];<a name="line.383"></a>
-<span class="sourceLineNo">384</span>        for (int i = start+1; i &lt; end &amp;&amp; i &lt; 16; i++) {<a name="line.384"></a>
-<span class="sourceLineNo">385</span>            if((c = cs.charAt(i)) &gt; 102)<a name="line.385"></a>
-<span class="sourceLineNo">386</span>                return 0;<a name="line.386"></a>
-<span class="sourceLineNo">387</span>            data &lt;&lt;= 4;<a name="line.387"></a>
-<span class="sourceLineNo">388</span>            data |= hexCodes[c];<a name="line.388"></a>
-<span class="sourceLineNo">389</span>        }<a name="line.389"></a>
-<span class="sourceLineNo">390</span>        return data;<a name="line.390"></a>
-<span class="sourceLineNo">391</span>    }<a name="line.391"></a>
-<span class="sourceLineNo">392</span>    /**<a name="line.392"></a>
-<span class="sourceLineNo">393</span>     * Reads in a CharSequence containing only binary digits (only 0 and 1) and returns the long they represent,<a name="line.393"></a>
-<span class="sourceLineNo">394</span>     * reading at most 64 characters and returning the result if valid or 0 otherwise. The first digit is considered<a name="line.394"></a>
-<span class="sourceLineNo">395</span>     * the sign bit iff cs is 64 chars long.<a name="line.395"></a>
-<span class="sourceLineNo">396</span>     * &lt;br&gt;<a name="line.396"></a>
-<span class="sourceLineNo">397</span>     * Should be fairly close to Java 8's Long.parseUnsignedLong method, which is a bizarre omission from earlier JDKs.<a name="line.397"></a>
-<span class="sourceLineNo">398</span>     * This doesn't throw on invalid input, though, instead returning 0.<a name="line.398"></a>
-<span class="sourceLineNo">399</span>     * @param cs a CharSequence, such as a String, containing only binary digits (nothing at the start)<a name="line.399"></a>
-<span class="sourceLineNo">400</span>     * @return the long that cs represents<a name="line.400"></a>
-<span class="sourceLineNo">401</span>     */<a name="line.401"></a>
-<span class="sourceLineNo">402</span>    public static long longFromBin(CharSequence cs)<a name="line.402"></a>
-<span class="sourceLineNo">403</span>    {<a name="line.403"></a>
-<span class="sourceLineNo">404</span>        return longFromBin(cs, 0, cs.length());<a name="line.404"></a>
-<span class="sourceLineNo">405</span>    }<a name="line.405"></a>
-<span class="sourceLineNo">406</span><a name="line.406"></a>
-<span class="sourceLineNo">407</span>    /**<a name="line.407"></a>
-<span class="sourceLineNo">408</span>     * Reads in a CharSequence containing only binary digits (only 0 and 1) and returns the long they represent,<a name="line.408"></a>
-<span class="sourceLineNo">409</span>     * reading at most 64 characters and returning the result if valid or 0 otherwise. The first digit is considered<a name="line.409"></a>
-<span class="sourceLineNo">410</span>     * the sign bit iff cs is 64 chars long.<a name="line.410"></a>
-<span class="sourceLineNo">411</span>     * &lt;br&gt;<a name="line.411"></a>
-<span class="sourceLineNo">412</span>     * Should be fairly close to Java 8's Long.parseUnsignedLong method, which is a bizarre omission from earlier JDKs.<a name="line.412"></a>
-<span class="sourceLineNo">413</span>     * This doesn't throw on invalid input, though, instead returning 0.<a name="line.413"></a>
-<span class="sourceLineNo">414</span>     * @param cs a CharSequence, such as a String, containing only binary digits (nothing at the start)<a name="line.414"></a>
-<span class="sourceLineNo">415</span>     * @param start the first character position in cs to read from<a name="line.415"></a>
-<span class="sourceLineNo">416</span>     * @param end the last character position in cs to read from (this stops after 64 characters if end is too large)<a name="line.416"></a>
-<span class="sourceLineNo">417</span>     * @return the long that cs represents<a name="line.417"></a>
-<span class="sourceLineNo">418</span>     */<a name="line.418"></a>
-<span class="sourceLineNo">419</span>    public static long longFromBin(CharSequence cs, final int start, final int end)<a name="line.419"></a>
-<span class="sourceLineNo">420</span>    {<a name="line.420"></a>
-<span class="sourceLineNo">421</span>        int len;<a name="line.421"></a>
-<span class="sourceLineNo">422</span>        if(cs == null || start &lt; 0 || end &lt;=0 || end - start &lt;= 0<a name="line.422"></a>
-<span class="sourceLineNo">423</span>                || (len = cs.length()) - start &lt;= 0 || end &gt; len)<a name="line.423"></a>
-<span class="sourceLineNo">424</span>            return 0;<a name="line.424"></a>
-<span class="sourceLineNo">425</span>        char c = cs.charAt(start);<a name="line.425"></a>
-<span class="sourceLineNo">426</span>        if(c &lt; '0' || c &gt; '1')<a name="line.426"></a>
-<span class="sourceLineNo">427</span>            return 0;<a name="line.427"></a>
-<span class="sourceLineNo">428</span>        long data = hexCodes[c];<a name="line.428"></a>
-<span class="sourceLineNo">429</span>        for (int i = start+1; i &lt; end &amp;&amp; i &lt; 64; i++) {<a name="line.429"></a>
-<span class="sourceLineNo">430</span>            if((c = cs.charAt(i)) &lt; '0' || c &gt; '1')<a name="line.430"></a>
-<span class="sourceLineNo">431</span>                return 0;<a name="line.431"></a>
-<span class="sourceLineNo">432</span>            data &lt;&lt;= 1;<a name="line.432"></a>
-<span class="sourceLineNo">433</span>            data |= c - '0';<a name="line.433"></a>
-<span class="sourceLineNo">434</span>        }<a name="line.434"></a>
-<span class="sourceLineNo">435</span>        return data;<a name="line.435"></a>
-<span class="sourceLineNo">436</span>    }<a name="line.436"></a>
-<span class="sourceLineNo">437</span><a name="line.437"></a>
-<span class="sourceLineNo">438</span>    /**<a name="line.438"></a>
-<span class="sourceLineNo">439</span>     * Base-64 encodes number and stores that string representation in buf starting at offset; uses 11 chars.<a name="line.439"></a>
-<span class="sourceLineNo">440</span>     *<a name="line.440"></a>
-<span class="sourceLineNo">441</span>     * @param number the long to encode<a name="line.441"></a>
-<span class="sourceLineNo">442</span>     * @param offset the first position to set in buf<a name="line.442"></a>
-<span class="sourceLineNo">443</span>     * @param buf    a char array that should be non-null and have length of at least offset + 11<a name="line.443"></a>
-<span class="sourceLineNo">444</span>     * @return buf, after modifying it in-place<a name="line.444"></a>
-<span class="sourceLineNo">445</span>     */<a name="line.445"></a>
-<span class="sourceLineNo">446</span>    public static char[] b64Encode(long number, int offset, char[] buf) {<a name="line.446"></a>
-<span class="sourceLineNo">447</span>        if (buf != null &amp;&amp; buf.length &gt;= 11 - offset) {<a name="line.447"></a>
-<span class="sourceLineNo">448</span>            buf[offset] = keyBase64[(int) (number &gt;&gt;&gt; 60)];<a name="line.448"></a>
-<span class="sourceLineNo">449</span>            buf[offset + 1] = keyBase64[(int) (0x3f &amp; number &gt;&gt;&gt; 54)];<a name="line.449"></a>
-<span class="sourceLineNo">450</span>            buf[offset + 2] = keyBase64[(int) (0x3f &amp; number &gt;&gt;&gt; 48)];<a name="line.450"></a>
-<span class="sourceLineNo">451</span>            buf[offset + 3] = keyBase64[(int) (0x3f &amp; number &gt;&gt;&gt; 42)];<a name="line.451"></a>
-<span class="sourceLineNo">452</span>            buf[offset + 4] = keyBase64[(int) (0x3f &amp; number &gt;&gt;&gt; 36)];<a name="line.452"></a>
-<span class="sourceLineNo">453</span>            buf[offset + 5] = keyBase64[(int) (0x3f &amp; number &gt;&gt;&gt; 30)];<a name="line.453"></a>
-<span class="sourceLineNo">454</span>            buf[offset + 6] = keyBase64[(int) (0x3f &amp; number &gt;&gt;&gt; 24)];<a name="line.454"></a>
-<span class="sourceLineNo">455</span>            buf[offset + 7] = keyBase64[(int) (0x3f &amp; number &gt;&gt;&gt; 18)];<a name="line.455"></a>
-<span class="sourceLineNo">456</span>            buf[offset + 8] = keyBase64[(int) (0x3f &amp; number &gt;&gt;&gt; 12)];<a name="line.456"></a>
-<span class="sourceLineNo">457</span>            buf[offset + 9] = keyBase64[(int) (0x3f &amp; number &gt;&gt;&gt; 6)];<a name="line.457"></a>
-<span class="sourceLineNo">458</span>            buf[offset + 10] = keyBase64[(int) (0x3f &amp; number)];<a name="line.458"></a>
-<span class="sourceLineNo">459</span>        }<a name="line.459"></a>
-<span class="sourceLineNo">460</span>        return buf;<a name="line.460"></a>
-<span class="sourceLineNo">461</span>    }<a name="line.461"></a>
-<span class="sourceLineNo">462</span><a name="line.462"></a>
-<span class="sourceLineNo">463</span><a name="line.463"></a>
-<span class="sourceLineNo">464</span>    /**<a name="line.464"></a>
-<span class="sourceLineNo">465</span>     * Base-64 encodes number and stores that string representation in buf starting at offset; uses 11 chars.<a name="line.465"></a>
-<span class="sourceLineNo">466</span>     *<a name="line.466"></a>
-<span class="sourceLineNo">467</span>     * @param number the double to encode<a name="line.467"></a>
-<span class="sourceLineNo">468</span>     * @param offset the first position to set in buf<a name="line.468"></a>
-<span class="sourceLineNo">469</span>     * @param buf    a char array that should be non-null and have length of at least offset + 11<a name="line.469"></a>
-<span class="sourceLineNo">470</span>     * @return buf, after modifying it in-place<a name="line.470"></a>
-<span class="sourceLineNo">471</span>     */<a name="line.471"></a>
-<span class="sourceLineNo">472</span>    public static char[] b64Encode(double number, int offset, char[] buf) {<a name="line.472"></a>
-<span class="sourceLineNo">473</span>        return b64Encode(Double.doubleToLongBits(number), offset, buf);<a name="line.473"></a>
-<span class="sourceLineNo">474</span>    }<a name="line.474"></a>
-<span class="sourceLineNo">475</span><a name="line.475"></a>
-<span class="sourceLineNo">476</span>    /**<a name="line.476"></a>
-<span class="sourceLineNo">477</span>     * Base-64 encodes number and stores that string representation in buf starting at offset; uses 6 chars.<a name="line.477"></a>
-<span class="sourceLineNo">478</span>     *<a name="line.478"></a>
-<span class="sourceLineNo">479</span>     * @param number the int to encode<a name="line.479"></a>
-<span class="sourceLineNo">480</span>     * @param offset the first position to set in buf<a name="line.480"></a>
-<span class="sourceLineNo">481</span>     * @param buf    a char array that should be non-null and have length of at least offset + 6<a name="line.481"></a>
-<span class="sourceLineNo">482</span>     * @return buf, after modifying it in-place<a name="line.482"></a>
-<span class="sourceLineNo">483</span>     */<a name="line.483"></a>
-<span class="sourceLineNo">484</span>    public static char[] b64Encode(int number, int offset, char[] buf) {<a name="line.484"></a>
-<span class="sourceLineNo">485</span>        if (buf != null &amp;&amp; buf.length &gt;= 6 - offset) {<a name="line.485"></a>
-<span class="sourceLineNo">486</span>            buf[offset] = keyBase64[number &gt;&gt;&gt; 30];<a name="line.486"></a>
-<span class="sourceLineNo">487</span>            buf[offset + 1] = keyBase64[0x3f &amp; number &gt;&gt;&gt; 24];<a name="line.487"></a>
-<span class="sourceLineNo">488</span>            buf[offset + 2] = keyBase64[0x3f &amp; number &gt;&gt;&gt; 18];<a name="line.488"></a>
-<span class="sourceLineNo">489</span>            buf[offset + 3] = keyBase64[0x3f &amp; number &gt;&gt;&gt; 12];<a name="line.489"></a>
-<span class="sourceLineNo">490</span>            buf[offset + 4] = keyBase64[0x3f &amp; number &gt;&gt;&gt; 6];<a name="line.490"></a>
-<span class="sourceLineNo">491</span>            buf[offset + 5] = keyBase64[0x3f &amp; number];<a name="line.491"></a>
-<span class="sourceLineNo">492</span>        }<a name="line.492"></a>
-<span class="sourceLineNo">493</span>        return buf;<a name="line.493"></a>
-<span class="sourceLineNo">494</span>    }<a name="line.494"></a>
-<span class="sourceLineNo">495</span><a name="line.495"></a>
+<span class="sourceLineNo">344</span>     * Reads in a CharSequence containing only hex digits (only 0-9, a-f, and A-F) with an optional sign at the start<a name="line.344"></a>
+<span class="sourceLineNo">345</span>     * and returns the long they represent, reading at most 16 characters (17 if there is a sign) and returning the<a name="line.345"></a>
+<span class="sourceLineNo">346</span>     * result if valid, or 0 if nothing could be read. The leading sign can be '+' or '-' if present. This can also<a name="line.346"></a>
+<span class="sourceLineNo">347</span>     * represent negative numbers as they are printed by such methods as String.format given a %x in the formatting<a name="line.347"></a>
+<span class="sourceLineNo">348</span>     * string, or this class' {@link #hex(long)} method; that is, if the first char of a 16-char (or longer)<a name="line.348"></a>
+<span class="sourceLineNo">349</span>     * CharSequence is a hex digit 8 or higher, then the whole number represents a negative number, using two's<a name="line.349"></a>
+<span class="sourceLineNo">350</span>     * complement and so on. This means "FFFFFFFFFFFFFFFF" would return the long -1 when passed to this, though you<a name="line.350"></a>
+<span class="sourceLineNo">351</span>     * could also simply use "-1 ".<a name="line.351"></a>
+<span class="sourceLineNo">352</span>     * &lt;br&gt;<a name="line.352"></a>
+<span class="sourceLineNo">353</span>     * Should be fairly close to Java 8's Long.parseUnsignedLong method, which is an odd omission from earlier JDKs.<a name="line.353"></a>
+<span class="sourceLineNo">354</span>     * This doesn't throw on invalid input, though, instead returning 0 if the first char is not a hex digit, or<a name="line.354"></a>
+<span class="sourceLineNo">355</span>     * stopping the parse process early if a non-hex-digit char is read before the end of cs is reached. If the parse is<a name="line.355"></a>
+<span class="sourceLineNo">356</span>     * stopped early, this behaves as you would expect for a number with less digits, and simply doesn't fill the larger<a name="line.356"></a>
+<span class="sourceLineNo">357</span>     * places.<a name="line.357"></a>
+<span class="sourceLineNo">358</span>     * @param cs a CharSequence, such as a String, containing only hex digits with an optional sign (no 0x at the start)<a name="line.358"></a>
+<span class="sourceLineNo">359</span>     * @return the long that cs represents<a name="line.359"></a>
+<span class="sourceLineNo">360</span>     */<a name="line.360"></a>
+<span class="sourceLineNo">361</span>    public static long longFromHex(final CharSequence cs) {<a name="line.361"></a>
+<span class="sourceLineNo">362</span>        return longFromHex(cs, 0, cs.length());<a name="line.362"></a>
+<span class="sourceLineNo">363</span>    }<a name="line.363"></a>
+<span class="sourceLineNo">364</span>    /**<a name="line.364"></a>
+<span class="sourceLineNo">365</span>     * Reads in a CharSequence containing only hex digits (only 0-9, a-f, and A-F) with an optional sign at the start<a name="line.365"></a>
+<span class="sourceLineNo">366</span>     * and returns the long they represent, reading at most 16 characters (17 if there is a sign) and returning the<a name="line.366"></a>
+<span class="sourceLineNo">367</span>     * result if valid, or 0 if nothing could be read. The leading sign can be '+' or '-' if present. This can also<a name="line.367"></a>
+<span class="sourceLineNo">368</span>     * represent negative numbers as they are printed by such methods as String.format given a %x in the formatting<a name="line.368"></a>
+<span class="sourceLineNo">369</span>     * string, or this class' {@link #hex(long)} method; that is, if the first char of a 16-char (or longer)<a name="line.369"></a>
+<span class="sourceLineNo">370</span>     * CharSequence is a hex digit 8 or higher, then the whole number represents a negative number, using two's<a name="line.370"></a>
+<span class="sourceLineNo">371</span>     * complement and so on. This means "FFFFFFFFFFFFFFFF" would return the long -1 when passed to this, though you<a name="line.371"></a>
+<span class="sourceLineNo">372</span>     * could also simply use "-1 ". If you use both '-' at the start and have the most significant digit as 8 or higher,<a name="line.372"></a>
+<span class="sourceLineNo">373</span>     * such as with "-FFFFFFFFFFFFFFFF", then both indicate a negative number, but the digits will be processed first<a name="line.373"></a>
+<span class="sourceLineNo">374</span>     * (producing -1) and then the whole thing will be multiplied by -1 to flip the sign again (returning 1).<a name="line.374"></a>
+<span class="sourceLineNo">375</span>     * &lt;br&gt;<a name="line.375"></a>
+<span class="sourceLineNo">376</span>     * Should be fairly close to Java 8's Long.parseUnsignedLong method, which is an odd omission from earlier JDKs.<a name="line.376"></a>
+<span class="sourceLineNo">377</span>     * This doesn't throw on invalid input, though, instead returning 0 if the first char is not a hex digit, or<a name="line.377"></a>
+<span class="sourceLineNo">378</span>     * stopping the parse process early if a non-hex-digit char is read before end is reached. If the parse is stopped<a name="line.378"></a>
+<span class="sourceLineNo">379</span>     * early, this behaves as you would expect for a number with less digits, and simply doesn't fill the larger places.<a name="line.379"></a>
+<span class="sourceLineNo">380</span>     * @param cs a CharSequence, such as a String, containing only hex digits with an optional sign (no 0x at the start)<a name="line.380"></a>
+<span class="sourceLineNo">381</span>     * @param start the (inclusive) first character position in cs to read<a name="line.381"></a>
+<span class="sourceLineNo">382</span>     * @param end the (exclusive) last character position in cs to read (this stops after 16 characters if end is too large)<a name="line.382"></a>
+<span class="sourceLineNo">383</span>     * @return the long that cs represents<a name="line.383"></a>
+<span class="sourceLineNo">384</span>     */<a name="line.384"></a>
+<span class="sourceLineNo">385</span>    public static long longFromHex(final CharSequence cs, final int start, int end) {<a name="line.385"></a>
+<span class="sourceLineNo">386</span>        int len, h, lim = 8;<a name="line.386"></a>
+<span class="sourceLineNo">387</span>        if (cs == null || start &lt; 0 || end &lt;= 0 || end - start &lt;= 0<a name="line.387"></a>
+<span class="sourceLineNo">388</span>                || (len = cs.length()) - start &lt;= 0 || end &gt; len)<a name="line.388"></a>
+<span class="sourceLineNo">389</span>            return 0;<a name="line.389"></a>
+<span class="sourceLineNo">390</span>        char c = cs.charAt(start);<a name="line.390"></a>
+<span class="sourceLineNo">391</span>        if (c == '-') {<a name="line.391"></a>
+<span class="sourceLineNo">392</span>            len = -1;<a name="line.392"></a>
+<span class="sourceLineNo">393</span>            h = 0;<a name="line.393"></a>
+<span class="sourceLineNo">394</span>            ++end;<a name="line.394"></a>
+<span class="sourceLineNo">395</span>            lim = 9;<a name="line.395"></a>
+<span class="sourceLineNo">396</span>        } else if (c == '+') {<a name="line.396"></a>
+<span class="sourceLineNo">397</span>            len = 1;<a name="line.397"></a>
+<span class="sourceLineNo">398</span>            h = 0;<a name="line.398"></a>
+<span class="sourceLineNo">399</span>            ++end;<a name="line.399"></a>
+<span class="sourceLineNo">400</span>            lim = 9;<a name="line.400"></a>
+<span class="sourceLineNo">401</span>        } else if (c &gt; 102 || (h = hexCodes[c]) &lt; 0)<a name="line.401"></a>
+<span class="sourceLineNo">402</span>            return 0;<a name="line.402"></a>
+<span class="sourceLineNo">403</span>        else {<a name="line.403"></a>
+<span class="sourceLineNo">404</span>            len = 1;<a name="line.404"></a>
+<span class="sourceLineNo">405</span>        }<a name="line.405"></a>
+<span class="sourceLineNo">406</span>        long data = h;<a name="line.406"></a>
+<span class="sourceLineNo">407</span>        for (int i = start; i &lt; end &amp;&amp; i &lt; start + lim; i++) {<a name="line.407"></a>
+<span class="sourceLineNo">408</span>            if ((c = cs.charAt(i)) &gt; 102 || (h = hexCodes[c]) &lt; 0)<a name="line.408"></a>
+<span class="sourceLineNo">409</span>                return data * len;<a name="line.409"></a>
+<span class="sourceLineNo">410</span>            data &lt;&lt;= 4;<a name="line.410"></a>
+<span class="sourceLineNo">411</span>            data |= h;<a name="line.411"></a>
+<span class="sourceLineNo">412</span>        }<a name="line.412"></a>
+<span class="sourceLineNo">413</span>        return data * len;<a name="line.413"></a>
+<span class="sourceLineNo">414</span>    }<a name="line.414"></a>
+<span class="sourceLineNo">415</span><a name="line.415"></a>
+<span class="sourceLineNo">416</span>    /**<a name="line.416"></a>
+<span class="sourceLineNo">417</span>     * Reads in a CharSequence containing only hex digits (only 0-9, a-f, and A-F) with an optional sign at the start<a name="line.417"></a>
+<span class="sourceLineNo">418</span>     * and returns the int they represent, reading at most 8 characters (9 if there is a sign) and returning the result<a name="line.418"></a>
+<span class="sourceLineNo">419</span>     * if valid, or 0 if nothing could be read. The leading sign can be '+' or '-' if present. This can also represent<a name="line.419"></a>
+<span class="sourceLineNo">420</span>     * negative numbers as they are printed by such methods as String.format given a %x in the formatting string, or<a name="line.420"></a>
+<span class="sourceLineNo">421</span>     * this class' {@link #hex(int)} method; that is, if the first digit of an 8-char (or longer) CharSequence is a hex<a name="line.421"></a>
+<span class="sourceLineNo">422</span>     * digit 8 or higher, then the whole number represents a negative number, using two's complement and so on. This<a name="line.422"></a>
+<span class="sourceLineNo">423</span>     * means "FFFFFFFF" would return the int -1 when passed to this, though you could also simply use "-1 ". If you use<a name="line.423"></a>
+<span class="sourceLineNo">424</span>     * both '-' at the start and have the most significant digit as 8 or higher, such as with "-FFFFFFFF", then both<a name="line.424"></a>
+<span class="sourceLineNo">425</span>     * indicate a negative number, but the digits will be processed first (producing -1) and then the whole thing will<a name="line.425"></a>
+<span class="sourceLineNo">426</span>     * be multiplied by -1 to flip the sign again (returning 1).<a name="line.426"></a>
+<span class="sourceLineNo">427</span>     * &lt;br&gt;<a name="line.427"></a>
+<span class="sourceLineNo">428</span>     * Should be fairly close to Java 8's Integer.parseUnsignedInt method, which is an odd omission from earlier JDKs.<a name="line.428"></a>
+<span class="sourceLineNo">429</span>     * This doesn't throw on invalid input, though, instead returning 0 if the first char is not a hex digit, or<a name="line.429"></a>
+<span class="sourceLineNo">430</span>     * stopping the parse process early if a non-hex-digit char is read before the end of cs is reached. If the parse is<a name="line.430"></a>
+<span class="sourceLineNo">431</span>     * stopped early, this behaves as you would expect for a number with less digits, and simply doesn't fill the larger<a name="line.431"></a>
+<span class="sourceLineNo">432</span>     * places.<a name="line.432"></a>
+<span class="sourceLineNo">433</span>     * @param cs a CharSequence, such as a String, containing only hex digits with an optional sign (no 0x at the start)<a name="line.433"></a>
+<span class="sourceLineNo">434</span>     * @return the int that cs represents<a name="line.434"></a>
+<span class="sourceLineNo">435</span>     */<a name="line.435"></a>
+<span class="sourceLineNo">436</span>    public static int intFromHex(final CharSequence cs) {<a name="line.436"></a>
+<span class="sourceLineNo">437</span>        return intFromHex(cs, 0, cs.length());<a name="line.437"></a>
+<span class="sourceLineNo">438</span>    }<a name="line.438"></a>
+<span class="sourceLineNo">439</span>    /**<a name="line.439"></a>
+<span class="sourceLineNo">440</span>     * Reads in a CharSequence containing only hex digits (only 0-9, a-f, and A-F) with an optional sign at the start<a name="line.440"></a>
+<span class="sourceLineNo">441</span>     * and returns the int they represent, reading at most 8 characters (9 if there is a sign) and returning the result<a name="line.441"></a>
+<span class="sourceLineNo">442</span>     * if valid, or 0 if nothing could be read. The leading sign can be '+' or '-' if present. This can also represent<a name="line.442"></a>
+<span class="sourceLineNo">443</span>     * negative numbers as they are printed by such methods as String.format given a %x in the formatting string, or<a name="line.443"></a>
+<span class="sourceLineNo">444</span>     * this class' {@link #hex(int)} method; that is, if the first digit of an 8-char (or longer) CharSequence is a hex<a name="line.444"></a>
+<span class="sourceLineNo">445</span>     * digit 8 or higher, then the whole number represents a negative number, using two's complement and so on. This<a name="line.445"></a>
+<span class="sourceLineNo">446</span>     * means "FFFFFFFF" would return the int -1 when passed to this, though you could also simply use "-1 ". If you use<a name="line.446"></a>
+<span class="sourceLineNo">447</span>     * both '-' at the start and have the most significant digit as 8 or higher, such as with "-FFFFFFFF", then both<a name="line.447"></a>
+<span class="sourceLineNo">448</span>     * indicate a negative number, but the digits will be processed first (producing -1) and then the whole thing will<a name="line.448"></a>
+<span class="sourceLineNo">449</span>     * be multiplied by -1 to flip the sign again (returning 1).<a name="line.449"></a>
+<span class="sourceLineNo">450</span>     * &lt;br&gt;<a name="line.450"></a>
+<span class="sourceLineNo">451</span>     * Should be fairly close to Java 8's Integer.parseUnsignedInt method, which is an odd omission from earlier JDKs.<a name="line.451"></a>
+<span class="sourceLineNo">452</span>     * This doesn't throw on invalid input, though, instead returning 0 if the first char is not a hex digit, or<a name="line.452"></a>
+<span class="sourceLineNo">453</span>     * stopping the parse process early if a non-hex-digit char is read before end is reached. If the parse is stopped<a name="line.453"></a>
+<span class="sourceLineNo">454</span>     * early, this behaves as you would expect for a number with less digits, and simply doesn't fill the larger places.<a name="line.454"></a>
+<span class="sourceLineNo">455</span>     * @param cs a CharSequence, such as a String, containing only hex digits with an optional sign (no 0x at the start)<a name="line.455"></a>
+<span class="sourceLineNo">456</span>     * @param start the (inclusive) first character position in cs to read<a name="line.456"></a>
+<span class="sourceLineNo">457</span>     * @param end the (exclusive) last character position in cs to read (this stops after 8 or 9 characters if end is too large, depending on sign)<a name="line.457"></a>
+<span class="sourceLineNo">458</span>     * @return the int that cs represents<a name="line.458"></a>
+<span class="sourceLineNo">459</span>     */<a name="line.459"></a>
+<span class="sourceLineNo">460</span>    public static int intFromHex(final CharSequence cs, final int start, int end)<a name="line.460"></a>
+<span class="sourceLineNo">461</span>    {<a name="line.461"></a>
+<span class="sourceLineNo">462</span>        int len, h, lim = 8;<a name="line.462"></a>
+<span class="sourceLineNo">463</span>        if(cs == null || start &lt; 0 || end &lt;=0 || end - start &lt;= 0<a name="line.463"></a>
+<span class="sourceLineNo">464</span>                || (len = cs.length()) - start &lt;= 0 || end &gt; len)<a name="line.464"></a>
+<span class="sourceLineNo">465</span>            return 0;<a name="line.465"></a>
+<span class="sourceLineNo">466</span>        char c = cs.charAt(start);<a name="line.466"></a>
+<span class="sourceLineNo">467</span>        if(c == '-')<a name="line.467"></a>
+<span class="sourceLineNo">468</span>        {<a name="line.468"></a>
+<span class="sourceLineNo">469</span>            len = -1;<a name="line.469"></a>
+<span class="sourceLineNo">470</span>            h = 0;<a name="line.470"></a>
+<span class="sourceLineNo">471</span>            ++end;<a name="line.471"></a>
+<span class="sourceLineNo">472</span>            lim = 9;<a name="line.472"></a>
+<span class="sourceLineNo">473</span>        }<a name="line.473"></a>
+<span class="sourceLineNo">474</span>        else if(c == '+')<a name="line.474"></a>
+<span class="sourceLineNo">475</span>        {<a name="line.475"></a>
+<span class="sourceLineNo">476</span>            len = 1;<a name="line.476"></a>
+<span class="sourceLineNo">477</span>            h = 0;<a name="line.477"></a>
+<span class="sourceLineNo">478</span>            ++end;<a name="line.478"></a>
+<span class="sourceLineNo">479</span>            lim = 9;<a name="line.479"></a>
+<span class="sourceLineNo">480</span>        }<a name="line.480"></a>
+<span class="sourceLineNo">481</span>        else if(c &gt; 102 || (h = hexCodes[c]) &lt; 0)<a name="line.481"></a>
+<span class="sourceLineNo">482</span>            return 0;<a name="line.482"></a>
+<span class="sourceLineNo">483</span>        else<a name="line.483"></a>
+<span class="sourceLineNo">484</span>        {<a name="line.484"></a>
+<span class="sourceLineNo">485</span>            len = 1;<a name="line.485"></a>
+<span class="sourceLineNo">486</span>        }<a name="line.486"></a>
+<span class="sourceLineNo">487</span>        int data = h;<a name="line.487"></a>
+<span class="sourceLineNo">488</span>        for (int i = start; i &lt; end &amp;&amp; i &lt; start + lim; i++) {<a name="line.488"></a>
+<span class="sourceLineNo">489</span>            if((c = cs.charAt(i)) &gt; 102 || (h = hexCodes[c]) &lt; 0)<a name="line.489"></a>
+<span class="sourceLineNo">490</span>                return data * len;<a name="line.490"></a>
+<span class="sourceLineNo">491</span>            data &lt;&lt;= 4;<a name="line.491"></a>
+<span class="sourceLineNo">492</span>            data |= h;<a name="line.492"></a>
+<span class="sourceLineNo">493</span>        }<a name="line.493"></a>
+<span class="sourceLineNo">494</span>        return data * len;<a name="line.494"></a>
+<span class="sourceLineNo">495</span>    }<a name="line.495"></a>
 <span class="sourceLineNo">496</span>    /**<a name="line.496"></a>
-<span class="sourceLineNo">497</span>     * Base-64 encodes number and stores that string representation in buf starting at offset; uses 6 chars.<a name="line.497"></a>
-<span class="sourceLineNo">498</span>     *<a name="line.498"></a>
-<span class="sourceLineNo">499</span>     * @param number the float to encode<a name="line.499"></a>
-<span class="sourceLineNo">500</span>     * @param offset the first position to set in buf<a name="line.500"></a>
-<span class="sourceLineNo">501</span>     * @param buf    a char array that should be non-null and have length of at least offset + 6<a name="line.501"></a>
-<span class="sourceLineNo">502</span>     * @return buf, after modifying it in-place<a name="line.502"></a>
-<span class="sourceLineNo">503</span>     */<a name="line.503"></a>
-<span class="sourceLineNo">504</span>    public static char[] b64Encode(float number, int offset, char[] buf) {<a name="line.504"></a>
-<span class="sourceLineNo">505</span>        return b64Encode(Float.floatToIntBits(number), offset, buf);<a name="line.505"></a>
-<span class="sourceLineNo">506</span>    }<a name="line.506"></a>
-<span class="sourceLineNo">507</span><a name="line.507"></a>
-<span class="sourceLineNo">508</span>    /**<a name="line.508"></a>
-<span class="sourceLineNo">509</span>     * Base-64 encodes number and stores that string representation in buf starting at offset; uses 3 chars.<a name="line.509"></a>
-<span class="sourceLineNo">510</span>     *<a name="line.510"></a>
-<span class="sourceLineNo">511</span>     * @param number the int to encode<a name="line.511"></a>
-<span class="sourceLineNo">512</span>     * @param offset the first position to set in buf<a name="line.512"></a>
-<span class="sourceLineNo">513</span>     * @param buf    a char array that should be non-null and have length of at least offset + 3<a name="line.513"></a>
-<span class="sourceLineNo">514</span>     * @return buf, after modifying it in-place<a name="line.514"></a>
-<span class="sourceLineNo">515</span>     */<a name="line.515"></a>
-<span class="sourceLineNo">516</span>    public static char[] b64Encode(short number, int offset, char[] buf) {<a name="line.516"></a>
-<span class="sourceLineNo">517</span>        if (buf != null &amp;&amp; buf.length &gt;= 3 - offset) {<a name="line.517"></a>
-<span class="sourceLineNo">518</span>            buf[offset] = keyBase64[number &gt;&gt;&gt; 12];<a name="line.518"></a>
-<span class="sourceLineNo">519</span>            buf[offset + 1] = keyBase64[0x3f &amp; number &gt;&gt;&gt; 6];<a name="line.519"></a>
-<span class="sourceLineNo">520</span>            buf[offset + 2] = keyBase64[0x3f &amp; number];<a name="line.520"></a>
-<span class="sourceLineNo">521</span>        }<a name="line.521"></a>
-<span class="sourceLineNo">522</span>        return buf;<a name="line.522"></a>
-<span class="sourceLineNo">523</span>    }<a name="line.523"></a>
-<span class="sourceLineNo">524</span><a name="line.524"></a>
-<span class="sourceLineNo">525</span>    /**<a name="line.525"></a>
-<span class="sourceLineNo">526</span>     * Base-64 encodes glyph and stores that string representation in buf starting at offset; uses 3 chars.<a name="line.526"></a>
-<span class="sourceLineNo">527</span>     *<a name="line.527"></a>
-<span class="sourceLineNo">528</span>     * @param glyph  the char to encode<a name="line.528"></a>
-<span class="sourceLineNo">529</span>     * @param offset the first position to set in buf<a name="line.529"></a>
-<span class="sourceLineNo">530</span>     * @param buf    a char array that should be non-null and have length of at least offset + 3<a name="line.530"></a>
-<span class="sourceLineNo">531</span>     * @return buf, after modifying it in-place<a name="line.531"></a>
-<span class="sourceLineNo">532</span>     */<a name="line.532"></a>
-<span class="sourceLineNo">533</span>    public static char[] b64Encode(char glyph, int offset, char[] buf) {<a name="line.533"></a>
-<span class="sourceLineNo">534</span>        if (buf != null &amp;&amp; buf.length &gt;= 4 - offset) {<a name="line.534"></a>
-<span class="sourceLineNo">535</span>            buf[offset] = keyBase64[glyph &gt;&gt;&gt; 12];<a name="line.535"></a>
-<span class="sourceLineNo">536</span>            buf[offset + 1] = keyBase64[0x3f &amp; glyph &gt;&gt;&gt; 6];<a name="line.536"></a>
-<span class="sourceLineNo">537</span>            buf[offset + 2] = keyBase64[0x3f &amp; glyph];<a name="line.537"></a>
-<span class="sourceLineNo">538</span>        }<a name="line.538"></a>
-<span class="sourceLineNo">539</span>        return buf;<a name="line.539"></a>
-<span class="sourceLineNo">540</span>    }<a name="line.540"></a>
-<span class="sourceLineNo">541</span><a name="line.541"></a>
-<span class="sourceLineNo">542</span>    /**<a name="line.542"></a>
-<span class="sourceLineNo">543</span>     * Base-64 encodes number and stores that string representation in buf starting at offset; uses 2 chars.<a name="line.543"></a>
-<span class="sourceLineNo">544</span>     *<a name="line.544"></a>
-<span class="sourceLineNo">545</span>     * @param number the byte to encode<a name="line.545"></a>
-<span class="sourceLineNo">546</span>     * @param offset the first position to set in buf<a name="line.546"></a>
-<span class="sourceLineNo">547</span>     * @param buf    a char array that should be non-null and have length of at least offset + 2<a name="line.547"></a>
-<span class="sourceLineNo">548</span>     * @return buf, after modifying it in-place<a name="line.548"></a>
-<span class="sourceLineNo">549</span>     */<a name="line.549"></a>
-<span class="sourceLineNo">550</span>    public static char[] b64Encode(byte number, int offset, char[] buf) {<a name="line.550"></a>
-<span class="sourceLineNo">551</span>        if (buf != null &amp;&amp; buf.length &gt;= 2 - offset) {<a name="line.551"></a>
-<span class="sourceLineNo">552</span>            buf[offset] = keyBase64[number &gt;&gt;&gt; 6];<a name="line.552"></a>
-<span class="sourceLineNo">553</span>            buf[offset + 1] = keyBase64[0x3f &amp; number];<a name="line.553"></a>
-<span class="sourceLineNo">554</span>        }<a name="line.554"></a>
-<span class="sourceLineNo">555</span>        return buf;<a name="line.555"></a>
-<span class="sourceLineNo">556</span><a name="line.556"></a>
-<span class="sourceLineNo">557</span>    }<a name="line.557"></a>
-<span class="sourceLineNo">558</span><a name="line.558"></a>
-<span class="sourceLineNo">559</span>    /**<a name="line.559"></a>
-<span class="sourceLineNo">560</span>     * Decodes 11 characters from data starting from offset to get a long encoded as base-64.<a name="line.560"></a>
-<span class="sourceLineNo">561</span>     * @param data a char array that should be have length of at least offset + 11<a name="line.561"></a>
-<span class="sourceLineNo">562</span>     * @param offset where in data to start reading from<a name="line.562"></a>
-<span class="sourceLineNo">563</span>     * @return the decoded long<a name="line.563"></a>
-<span class="sourceLineNo">564</span>     */<a name="line.564"></a>
-<span class="sourceLineNo">565</span>    public static long b64DecodeLong(char[] data, int offset) {<a name="line.565"></a>
-<span class="sourceLineNo">566</span>        return (data == null || data.length &lt; 11 + offset) ? 0L :<a name="line.566"></a>
-<span class="sourceLineNo">567</span>                (((long)data[offset]) &lt;&lt; 60)<a name="line.567"></a>
-<span class="sourceLineNo">568</span>                        | ((0x3fL &amp; data[offset + 1]) &lt;&lt; 54)<a name="line.568"></a>
-<span class="sourceLineNo">569</span>                        | ((0x3fL &amp; data[offset + 2]) &lt;&lt; 48)<a name="line.569"></a>
-<span class="sourceLineNo">570</span>                        | ((0x3fL &amp; data[offset + 3]) &lt;&lt; 42)<a name="line.570"></a>
-<span class="sourceLineNo">571</span>                        | ((0x3fL &amp; data[offset + 4]) &lt;&lt; 36)<a name="line.571"></a>
-<span class="sourceLineNo">572</span>                        | ((0x3fL &amp; data[offset + 5]) &lt;&lt; 30)<a name="line.572"></a>
-<span class="sourceLineNo">573</span>                        | ((0x3fL &amp; data[offset + 6]) &lt;&lt; 24)<a name="line.573"></a>
-<span class="sourceLineNo">574</span>                        | ((0x3fL &amp; data[offset + 7]) &lt;&lt; 18)<a name="line.574"></a>
-<span class="sourceLineNo">575</span>                        | ((0x3fL &amp; data[offset + 8]) &lt;&lt; 12)<a name="line.575"></a>
-<span class="sourceLineNo">576</span>                        | ((0x3fL &amp; data[offset + 9]) &lt;&lt; 6)<a name="line.576"></a>
-<span class="sourceLineNo">577</span>                        | (0x3fL &amp; data[offset + 10]);<a name="line.577"></a>
-<span class="sourceLineNo">578</span>    }<a name="line.578"></a>
-<span class="sourceLineNo">579</span><a name="line.579"></a>
-<span class="sourceLineNo">580</span>    /**<a name="line.580"></a>
-<span class="sourceLineNo">581</span>     * Decodes 11 characters from data starting from offset to get a double encoded as base-64.<a name="line.581"></a>
-<span class="sourceLineNo">582</span>     * @param data a char array that should be have length of at least offset + 11<a name="line.582"></a>
-<span class="sourceLineNo">583</span>     * @param offset where in data to start reading from<a name="line.583"></a>
-<span class="sourceLineNo">584</span>     * @return the decoded double<a name="line.584"></a>
-<span class="sourceLineNo">585</span>     */<a name="line.585"></a>
-<span class="sourceLineNo">586</span>    public static double b64DecodeDouble(char[] data, int offset) {<a name="line.586"></a>
-<span class="sourceLineNo">587</span>        return (data == null || data.length &lt; 11 + offset) ? 0.0 :<a name="line.587"></a>
-<span class="sourceLineNo">588</span>                Double.longBitsToDouble((((long) data[offset]) &lt;&lt; 60)<a name="line.588"></a>
-<span class="sourceLineNo">589</span>                        | ((0x3fL &amp; data[offset + 1]) &lt;&lt; 54)<a name="line.589"></a>
-<span class="sourceLineNo">590</span>                        | ((0x3fL &amp; data[offset + 2]) &lt;&lt; 48)<a name="line.590"></a>
-<span class="sourceLineNo">591</span>                        | ((0x3fL &amp; data[offset + 3]) &lt;&lt; 42)<a name="line.591"></a>
-<span class="sourceLineNo">592</span>                        | ((0x3fL &amp; data[offset + 4]) &lt;&lt; 36)<a name="line.592"></a>
-<span class="sourceLineNo">593</span>                        | ((0x3fL &amp; data[offset + 5]) &lt;&lt; 30)<a name="line.593"></a>
-<span class="sourceLineNo">594</span>                        | ((0x3fL &amp; data[offset + 6]) &lt;&lt; 24)<a name="line.594"></a>
-<span class="sourceLineNo">595</span>                        | ((0x3fL &amp; data[offset + 7]) &lt;&lt; 18)<a name="line.595"></a>
-<span class="sourceLineNo">596</span>                        | ((0x3fL &amp; data[offset + 8]) &lt;&lt; 12)<a name="line.596"></a>
-<span class="sourceLineNo">597</span>                        | ((0x3fL &amp; data[offset + 9]) &lt;&lt; 6)<a name="line.597"></a>
-<span class="sourceLineNo">598</span>                        | (0x3fL &amp; data[offset + 10]));<a name="line.598"></a>
-<span class="sourceLineNo">599</span>    }<a name="line.599"></a>
-<span class="sourceLineNo">600</span><a name="line.600"></a>
-<span class="sourceLineNo">601</span>    /**<a name="line.601"></a>
-<span class="sourceLineNo">602</span>     * Decodes 6 characters from data starting from offset to get an int encoded as base-64.<a name="line.602"></a>
-<span class="sourceLineNo">603</span>     * @param data a char array that should be have length of at least offset + 6<a name="line.603"></a>
-<span class="sourceLineNo">604</span>     * @param offset where in data to start reading from<a name="line.604"></a>
-<span class="sourceLineNo">605</span>     * @return the decoded int<a name="line.605"></a>
-<span class="sourceLineNo">606</span>     */<a name="line.606"></a>
-<span class="sourceLineNo">607</span>    public static int b64DecodeInt(char[] data, int offset) {<a name="line.607"></a>
-<span class="sourceLineNo">608</span>        return (data == null || data.length &lt; 6 + offset) ? 0 :<a name="line.608"></a>
-<span class="sourceLineNo">609</span>                ((data[offset]) &lt;&lt; 30)<a name="line.609"></a>
-<span class="sourceLineNo">610</span>                        | ((0x3f &amp; data[offset + 1]) &lt;&lt; 24)<a name="line.610"></a>
-<span class="sourceLineNo">611</span>                        | ((0x3f &amp; data[offset + 2]) &lt;&lt; 18)<a name="line.611"></a>
-<span class="sourceLineNo">612</span>                        | ((0x3f &amp; data[offset + 3]) &lt;&lt; 12)<a name="line.612"></a>
-<span class="sourceLineNo">613</span>                        | ((0x3f &amp; data[offset + 4]) &lt;&lt; 6)<a name="line.613"></a>
-<span class="sourceLineNo">614</span>                        | (0x3f &amp; data[offset + 5]);<a name="line.614"></a>
-<span class="sourceLineNo">615</span>    }<a name="line.615"></a>
-<span class="sourceLineNo">616</span><a name="line.616"></a>
-<span class="sourceLineNo">617</span>    /**<a name="line.617"></a>
-<span class="sourceLineNo">618</span>     * Decodes 6 characters from data starting from offset to get a float encoded as base-64.<a name="line.618"></a>
-<span class="sourceLineNo">619</span>     * @param data a char array that should be have length of at least offset + 6<a name="line.619"></a>
-<span class="sourceLineNo">620</span>     * @param offset where in data to start reading from<a name="line.620"></a>
-<span class="sourceLineNo">621</span>     * @return the decoded float<a name="line.621"></a>
-<span class="sourceLineNo">622</span>     */<a name="line.622"></a>
-<span class="sourceLineNo">623</span>    public static float b64DecodeFloat(char[] data, int offset) {<a name="line.623"></a>
-<span class="sourceLineNo">624</span>        return (data == null || data.length &lt; 6 + offset) ? 0f :<a name="line.624"></a>
-<span class="sourceLineNo">625</span>                Float.intBitsToFloat(((data[offset]) &lt;&lt; 30)<a name="line.625"></a>
-<span class="sourceLineNo">626</span>                        | ((0x3f &amp; data[offset + 1]) &lt;&lt; 24)<a name="line.626"></a>
-<span class="sourceLineNo">627</span>                        | ((0x3f &amp; data[offset + 2]) &lt;&lt; 18)<a name="line.627"></a>
-<span class="sourceLineNo">628</span>                        | ((0x3f &amp; data[offset + 3]) &lt;&lt; 12)<a name="line.628"></a>
-<span class="sourceLineNo">629</span>                        | ((0x3f &amp; data[offset + 4]) &lt;&lt; 6)<a name="line.629"></a>
-<span class="sourceLineNo">630</span>                        | (0x3f &amp; data[offset + 5]));<a name="line.630"></a>
-<span class="sourceLineNo">631</span>    }<a name="line.631"></a>
-<span class="sourceLineNo">632</span><a name="line.632"></a>
-<span class="sourceLineNo">633</span>    /**<a name="line.633"></a>
-<span class="sourceLineNo">634</span>     * Decodes 3 characters from data starting from offset to get a short encoded as base-64.<a name="line.634"></a>
-<span class="sourceLineNo">635</span>     * @param data a char array that should be have length of at least offset + 3<a name="line.635"></a>
-<span class="sourceLineNo">636</span>     * @param offset where in data to start reading from<a name="line.636"></a>
-<span class="sourceLineNo">637</span>     * @return the decoded short<a name="line.637"></a>
-<span class="sourceLineNo">638</span>     */<a name="line.638"></a>
-<span class="sourceLineNo">639</span>    public static short b64DecodeShort(char[] data, int offset) {<a name="line.639"></a>
-<span class="sourceLineNo">640</span>        return (short) ((data == null || data.length &lt; 3 + offset) ? 0 :<a name="line.640"></a>
-<span class="sourceLineNo">641</span>                ((data[offset]) &lt;&lt; 12)<a name="line.641"></a>
-<span class="sourceLineNo">642</span>                        | ((0x3f &amp; data[offset + 1]) &lt;&lt; 6)<a name="line.642"></a>
-<span class="sourceLineNo">643</span>                        | (0x3f &amp; data[offset + 2]));<a name="line.643"></a>
-<span class="sourceLineNo">644</span>    }<a name="line.644"></a>
-<span class="sourceLineNo">645</span>    /**<a name="line.645"></a>
-<span class="sourceLineNo">646</span>     * Decodes 3 characters from data starting from offset to get a char encoded as base-64.<a name="line.646"></a>
-<span class="sourceLineNo">647</span>     * @param data a char array that should be have length of at least offset + 3<a name="line.647"></a>
-<span class="sourceLineNo">648</span>     * @param offset where in data to start reading from<a name="line.648"></a>
-<span class="sourceLineNo">649</span>     * @return the decoded char<a name="line.649"></a>
-<span class="sourceLineNo">650</span>     */<a name="line.650"></a>
-<span class="sourceLineNo">651</span>    public static char b64DecodeChar(char[] data, int offset) {<a name="line.651"></a>
-<span class="sourceLineNo">652</span>        return (char) ((data == null || data.length &lt; 3 + offset) ? 0 :<a name="line.652"></a>
-<span class="sourceLineNo">653</span>                ((data[offset]) &lt;&lt; 12)<a name="line.653"></a>
-<span class="sourceLineNo">654</span>                        | ((0x3f &amp; data[offset + 1]) &lt;&lt; 6)<a name="line.654"></a>
-<span class="sourceLineNo">655</span>                        | (0x3f &amp; data[offset + 2]));<a name="line.655"></a>
-<span class="sourceLineNo">656</span>    }<a name="line.656"></a>
-<span class="sourceLineNo">657</span><a name="line.657"></a>
-<span class="sourceLineNo">658</span>    /**<a name="line.658"></a>
-<span class="sourceLineNo">659</span>     * Decodes 2 characters from data starting from offset to get a byte encoded as base-64.<a name="line.659"></a>
-<span class="sourceLineNo">660</span>     * @param data a char array that should be have length of at least offset + 2<a name="line.660"></a>
-<span class="sourceLineNo">661</span>     * @param offset where in data to start reading from<a name="line.661"></a>
-<span class="sourceLineNo">662</span>     * @return the decoded byte<a name="line.662"></a>
-<span class="sourceLineNo">663</span>     */<a name="line.663"></a>
-<span class="sourceLineNo">664</span>    public static byte b64DecodeByte(char[] data, int offset) {<a name="line.664"></a>
-<span class="sourceLineNo">665</span>        return (byte) ((data == null || data.length &lt; 2 + offset) ? 0 :<a name="line.665"></a>
-<span class="sourceLineNo">666</span>                ((data[offset]) &lt;&lt; 6)<a name="line.666"></a>
-<span class="sourceLineNo">667</span>                        | (0x3f &amp; data[offset + 1]));<a name="line.667"></a>
-<span class="sourceLineNo">668</span>    }<a name="line.668"></a>
-<span class="sourceLineNo">669</span><a name="line.669"></a>
-<span class="sourceLineNo">670</span>    public static String hexHash(boolean... array) {<a name="line.670"></a>
-<span class="sourceLineNo">671</span>        return hex(CrossHash.hash64(array));<a name="line.671"></a>
-<span class="sourceLineNo">672</span>    }<a name="line.672"></a>
-<span class="sourceLineNo">673</span><a name="line.673"></a>
-<span class="sourceLineNo">674</span>    public static String hexHash(byte... array) {<a name="line.674"></a>
-<span class="sourceLineNo">675</span>        return hex(CrossHash.hash64(array));<a name="line.675"></a>
-<span class="sourceLineNo">676</span>    }<a name="line.676"></a>
-<span class="sourceLineNo">677</span><a name="line.677"></a>
-<span class="sourceLineNo">678</span>    public static String hexHash(short... array) {<a name="line.678"></a>
-<span class="sourceLineNo">679</span>        return hex(CrossHash.hash64(array));<a name="line.679"></a>
-<span class="sourceLineNo">680</span>    }<a name="line.680"></a>
-<span class="sourceLineNo">681</span><a name="line.681"></a>
-<span class="sourceLineNo">682</span>    public static String hexHash(char... array) {<a name="line.682"></a>
-<span class="sourceLineNo">683</span>        return hex(CrossHash.hash64(array));<a name="line.683"></a>
-<span class="sourceLineNo">684</span>    }<a name="line.684"></a>
-<span class="sourceLineNo">685</span><a name="line.685"></a>
-<span class="sourceLineNo">686</span>    public static String hexHash(int... array) {<a name="line.686"></a>
-<span class="sourceLineNo">687</span>        return hex(CrossHash.hash64(array));<a name="line.687"></a>
-<span class="sourceLineNo">688</span>    }<a name="line.688"></a>
-<span class="sourceLineNo">689</span><a name="line.689"></a>
-<span class="sourceLineNo">690</span>    public static String hexHash(long... array) {<a name="line.690"></a>
-<span class="sourceLineNo">691</span>        return hex(CrossHash.hash64(array));<a name="line.691"></a>
-<span class="sourceLineNo">692</span>    }<a name="line.692"></a>
-<span class="sourceLineNo">693</span>}<a name="line.693"></a>
+<span class="sourceLineNo">497</span>     * Reads in a char[] containing only hex digits (only 0-9, a-f, and A-F) with an optional sign at the start<a name="line.497"></a>
+<span class="sourceLineNo">498</span>     * and returns the int they represent, reading at most 8 characters (9 if there is a sign) and returning the result<a name="line.498"></a>
+<span class="sourceLineNo">499</span>     * if valid, or 0 if nothing could be read. The leading sign can be '+' or '-' if present. This can also represent<a name="line.499"></a>
+<span class="sourceLineNo">500</span>     * negative numbers as they are printed by such methods as String.format given a %x in the formatting string, or<a name="line.500"></a>
+<span class="sourceLineNo">501</span>     * this class' {@link #hex(int)} method; that is, if the first digit of an 8-char (or longer) char[] is a hex<a name="line.501"></a>
+<span class="sourceLineNo">502</span>     * digit 8 or higher, then the whole number represents a negative number, using two's complement and so on. This<a name="line.502"></a>
+<span class="sourceLineNo">503</span>     * means "FFFFFFFF" would return the int -1 when passed to this, though you could also simply use "-1 ". If you use<a name="line.503"></a>
+<span class="sourceLineNo">504</span>     * both '-' at the start and have the most significant digit as 8 or higher, such as with "-FFFFFFFF", then both<a name="line.504"></a>
+<span class="sourceLineNo">505</span>     * indicate a negative number, but the digits will be processed first (producing -1) and then the whole thing will<a name="line.505"></a>
+<span class="sourceLineNo">506</span>     * be multiplied by -1 to flip the sign again (returning 1).<a name="line.506"></a>
+<span class="sourceLineNo">507</span>     * &lt;br&gt;<a name="line.507"></a>
+<span class="sourceLineNo">508</span>     * Should be fairly close to Java 8's Integer.parseUnsignedInt method, which is an odd omission from earlier JDKs.<a name="line.508"></a>
+<span class="sourceLineNo">509</span>     * This doesn't throw on invalid input, though, instead returning 0 if the first char is not a hex digit, or<a name="line.509"></a>
+<span class="sourceLineNo">510</span>     * stopping the parse process early if a non-hex-digit char is read before end is reached. If the parse is stopped<a name="line.510"></a>
+<span class="sourceLineNo">511</span>     * early, this behaves as you would expect for a number with less digits, and simply doesn't fill the larger places.<a name="line.511"></a>
+<span class="sourceLineNo">512</span>     * @param cs a char array containing only hex digits with an optional sign (no 0x at the start)<a name="line.512"></a>
+<span class="sourceLineNo">513</span>     * @param start the (inclusive) first character position in cs to read<a name="line.513"></a>
+<span class="sourceLineNo">514</span>     * @param end the (exclusive) last character position in cs to read (this stops after 8 or 9 characters if end is too large, depending on sign)<a name="line.514"></a>
+<span class="sourceLineNo">515</span>     * @return the int that cs represents<a name="line.515"></a>
+<span class="sourceLineNo">516</span>     */<a name="line.516"></a>
+<span class="sourceLineNo">517</span>    public static int intFromHex(final char[] cs, final int start, int end)<a name="line.517"></a>
+<span class="sourceLineNo">518</span>    {<a name="line.518"></a>
+<span class="sourceLineNo">519</span>        int len, h, lim = 8;<a name="line.519"></a>
+<span class="sourceLineNo">520</span>        if(cs == null || start &lt; 0 || end &lt;=0 || end - start &lt;= 0<a name="line.520"></a>
+<span class="sourceLineNo">521</span>                || (len = cs.length) - start &lt;= 0 || end &gt; len)<a name="line.521"></a>
+<span class="sourceLineNo">522</span>            return 0;<a name="line.522"></a>
+<span class="sourceLineNo">523</span>        char c = cs[start];<a name="line.523"></a>
+<span class="sourceLineNo">524</span>        if(c == '-')<a name="line.524"></a>
+<span class="sourceLineNo">525</span>        {<a name="line.525"></a>
+<span class="sourceLineNo">526</span>            len = -1;<a name="line.526"></a>
+<span class="sourceLineNo">527</span>            h = 0;<a name="line.527"></a>
+<span class="sourceLineNo">528</span>            ++end;<a name="line.528"></a>
+<span class="sourceLineNo">529</span>            lim = 9;<a name="line.529"></a>
+<span class="sourceLineNo">530</span>        }<a name="line.530"></a>
+<span class="sourceLineNo">531</span>        else if(c == '+')<a name="line.531"></a>
+<span class="sourceLineNo">532</span>        {<a name="line.532"></a>
+<span class="sourceLineNo">533</span>            len = 1;<a name="line.533"></a>
+<span class="sourceLineNo">534</span>            h = 0;<a name="line.534"></a>
+<span class="sourceLineNo">535</span>            ++end;<a name="line.535"></a>
+<span class="sourceLineNo">536</span>            lim = 9;<a name="line.536"></a>
+<span class="sourceLineNo">537</span>        }<a name="line.537"></a>
+<span class="sourceLineNo">538</span>        else if(c &gt; 102 || (h = hexCodes[c]) &lt; 0)<a name="line.538"></a>
+<span class="sourceLineNo">539</span>            return 0;<a name="line.539"></a>
+<span class="sourceLineNo">540</span>        else<a name="line.540"></a>
+<span class="sourceLineNo">541</span>        {<a name="line.541"></a>
+<span class="sourceLineNo">542</span>            len = 1;<a name="line.542"></a>
+<span class="sourceLineNo">543</span>        }<a name="line.543"></a>
+<span class="sourceLineNo">544</span>        int data = h;<a name="line.544"></a>
+<span class="sourceLineNo">545</span>        for (int i = start; i &lt; end &amp;&amp; i &lt; start + lim; i++) {<a name="line.545"></a>
+<span class="sourceLineNo">546</span>            if((c = cs[i]) &gt; 102 || (h = hexCodes[c]) &lt; 0)<a name="line.546"></a>
+<span class="sourceLineNo">547</span>                return data * len;<a name="line.547"></a>
+<span class="sourceLineNo">548</span>            data &lt;&lt;= 4;<a name="line.548"></a>
+<span class="sourceLineNo">549</span>            data |= h;<a name="line.549"></a>
+<span class="sourceLineNo">550</span>        }<a name="line.550"></a>
+<span class="sourceLineNo">551</span>        return data * len;<a name="line.551"></a>
+<span class="sourceLineNo">552</span>    }<a name="line.552"></a>
+<span class="sourceLineNo">553</span>    /**<a name="line.553"></a>
+<span class="sourceLineNo">554</span>     * Reads in a CharSequence containing only decimal digits (0-9) with an optional sign at the start and returns the<a name="line.554"></a>
+<span class="sourceLineNo">555</span>     * int they represent, reading at most 10 characters (11 if there is a sign) and returning the result if valid, or 0<a name="line.555"></a>
+<span class="sourceLineNo">556</span>     * if nothing could be read. The leading sign can be '+' or '-' if present. This can technically be used to handle<a name="line.556"></a>
+<span class="sourceLineNo">557</span>     * unsigned integers in decimal format, but it isn't the intended purpose. If you do use it for handling unsigned<a name="line.557"></a>
+<span class="sourceLineNo">558</span>     * ints, 2147483647 is normally the highest positive int and -2147483648 the lowest negative one, but if you give<a name="line.558"></a>
+<span class="sourceLineNo">559</span>     * this a number between 2147483647 and {@code 2147483647 + 2147483648}, it will interpret it as a negative number<a name="line.559"></a>
+<span class="sourceLineNo">560</span>     * that fits in bounds using the normal rules for converting between signed and unsigned numbers.<a name="line.560"></a>
+<span class="sourceLineNo">561</span>     * &lt;br&gt;<a name="line.561"></a>
+<span class="sourceLineNo">562</span>     * Should be fairly close to the JDK's Integer.parseInt method, but this also supports CharSequence data instead of<a name="line.562"></a>
+<span class="sourceLineNo">563</span>     * just String data, and ignores chars after the number. This doesn't throw on invalid input, either, instead<a name="line.563"></a>
+<span class="sourceLineNo">564</span>     * returning 0 if the first char is not a decimal digit, or stopping the parse process early if a non-decimal-digit<a name="line.564"></a>
+<span class="sourceLineNo">565</span>     * char is read before the end of cs is reached. If the parse is stopped early, this behaves as you would expect for<a name="line.565"></a>
+<span class="sourceLineNo">566</span>     * a number with less digits, and simply doesn't fill the larger places.<a name="line.566"></a>
+<span class="sourceLineNo">567</span>     * @param cs a CharSequence, such as a String, containing only digits 0-9 with an optional sign<a name="line.567"></a>
+<span class="sourceLineNo">568</span>     * @return the int that cs represents<a name="line.568"></a>
+<span class="sourceLineNo">569</span>     */<a name="line.569"></a>
+<span class="sourceLineNo">570</span>    public static int intFromDec(final CharSequence cs) {<a name="line.570"></a>
+<span class="sourceLineNo">571</span>        return intFromDec(cs, 0, cs.length());<a name="line.571"></a>
+<span class="sourceLineNo">572</span>    }<a name="line.572"></a>
+<span class="sourceLineNo">573</span>    /**<a name="line.573"></a>
+<span class="sourceLineNo">574</span>     * Reads in a CharSequence containing only decimal digits (0-9) with an optional sign at the start and returns the<a name="line.574"></a>
+<span class="sourceLineNo">575</span>     * int they represent, reading at most 10 characters (11 if there is a sign) and returning the result if valid, or 0<a name="line.575"></a>
+<span class="sourceLineNo">576</span>     * if nothing could be read. The leading sign can be '+' or '-' if present. This can technically be used to handle<a name="line.576"></a>
+<span class="sourceLineNo">577</span>     * unsigned integers in decimal format, but it isn't the intended purpose. If you do use it for handling unsigned<a name="line.577"></a>
+<span class="sourceLineNo">578</span>     * ints, 2147483647 is normally the highest positive int and -2147483648 the lowest negative one, but if you give<a name="line.578"></a>
+<span class="sourceLineNo">579</span>     * this a number between 2147483647 and {@code 2147483647 + 2147483648}, it will interpret it as a negative number<a name="line.579"></a>
+<span class="sourceLineNo">580</span>     * that fits in bounds using the normal rules for converting between signed and unsigned numbers.<a name="line.580"></a>
+<span class="sourceLineNo">581</span>     * &lt;br&gt;<a name="line.581"></a>
+<span class="sourceLineNo">582</span>     * Should be fairly close to the JDK's Integer.parseInt method, but this also supports CharSequence data instead of<a name="line.582"></a>
+<span class="sourceLineNo">583</span>     * just String data, and allows specifying a start and end. This doesn't throw on invalid input, either, instead<a name="line.583"></a>
+<span class="sourceLineNo">584</span>     * returning 0 if the first char is not a decimal digit, or stopping the parse process early if a non-decimal-digit<a name="line.584"></a>
+<span class="sourceLineNo">585</span>     * char is read before end is reached. If the parse is stopped early, this behaves as you would expect for a number<a name="line.585"></a>
+<span class="sourceLineNo">586</span>     * with less digits, and simply doesn't fill the larger places.<a name="line.586"></a>
+<span class="sourceLineNo">587</span>     * @param cs a CharSequence, such as a String, containing only digits 0-9 with an optional sign<a name="line.587"></a>
+<span class="sourceLineNo">588</span>     * @param start the (inclusive) first character position in cs to read<a name="line.588"></a>
+<span class="sourceLineNo">589</span>     * @param end the (exclusive) last character position in cs to read (this stops after 10 or 11 characters if end is too large, depending on sign)<a name="line.589"></a>
+<span class="sourceLineNo">590</span>     * @return the int that cs represents<a name="line.590"></a>
+<span class="sourceLineNo">591</span>     */<a name="line.591"></a>
+<span class="sourceLineNo">592</span>    public static int intFromDec(final CharSequence cs, final int start, int end)<a name="line.592"></a>
+<span class="sourceLineNo">593</span>    {<a name="line.593"></a>
+<span class="sourceLineNo">594</span>        int len, h, lim = 10;<a name="line.594"></a>
+<span class="sourceLineNo">595</span>        if(cs == null || start &lt; 0 || end &lt;=0 || end - start &lt;= 0<a name="line.595"></a>
+<span class="sourceLineNo">596</span>                || (len = cs.length()) - start &lt;= 0 || end &gt; len)<a name="line.596"></a>
+<span class="sourceLineNo">597</span>            return 0;<a name="line.597"></a>
+<span class="sourceLineNo">598</span>        char c = cs.charAt(start);<a name="line.598"></a>
+<span class="sourceLineNo">599</span>        if(c == '-')<a name="line.599"></a>
+<span class="sourceLineNo">600</span>        {<a name="line.600"></a>
+<span class="sourceLineNo">601</span>            len = -1;<a name="line.601"></a>
+<span class="sourceLineNo">602</span>            h = 0;<a name="line.602"></a>
+<span class="sourceLineNo">603</span>            ++end;<a name="line.603"></a>
+<span class="sourceLineNo">604</span>            lim = 11;<a name="line.604"></a>
+<span class="sourceLineNo">605</span>        }<a name="line.605"></a>
+<span class="sourceLineNo">606</span>        else if(c == '+')<a name="line.606"></a>
+<span class="sourceLineNo">607</span>        {<a name="line.607"></a>
+<span class="sourceLineNo">608</span>            len = 1;<a name="line.608"></a>
+<span class="sourceLineNo">609</span>            h = 0;<a name="line.609"></a>
+<span class="sourceLineNo">610</span>            ++end;<a name="line.610"></a>
+<span class="sourceLineNo">611</span>            lim = 11;<a name="line.611"></a>
+<span class="sourceLineNo">612</span>        }<a name="line.612"></a>
+<span class="sourceLineNo">613</span>        else if(c &gt; 102 || (h = hexCodes[c]) &lt; 0 || h &gt; 9)<a name="line.613"></a>
+<span class="sourceLineNo">614</span>            return 0;<a name="line.614"></a>
+<span class="sourceLineNo">615</span>        else<a name="line.615"></a>
+<span class="sourceLineNo">616</span>        {<a name="line.616"></a>
+<span class="sourceLineNo">617</span>            len = 1;<a name="line.617"></a>
+<span class="sourceLineNo">618</span>        }<a name="line.618"></a>
+<span class="sourceLineNo">619</span>        int data = h;<a name="line.619"></a>
+<span class="sourceLineNo">620</span>        for (int i = start; i &lt; end &amp;&amp; i &lt; start + lim; i++) {<a name="line.620"></a>
+<span class="sourceLineNo">621</span>            if((c = cs.charAt(i)) &gt; 102 || (h = hexCodes[c]) &lt; 0 || h &gt; 9)<a name="line.621"></a>
+<span class="sourceLineNo">622</span>                return data * len;<a name="line.622"></a>
+<span class="sourceLineNo">623</span>            data = data * 10 + h;<a name="line.623"></a>
+<span class="sourceLineNo">624</span>        }<a name="line.624"></a>
+<span class="sourceLineNo">625</span>        return data * len;<a name="line.625"></a>
+<span class="sourceLineNo">626</span>    }<a name="line.626"></a>
+<span class="sourceLineNo">627</span>    /**<a name="line.627"></a>
+<span class="sourceLineNo">628</span>     * Reads in a CharSequence containing only binary digits (only 0 and 1) and returns the long they represent,<a name="line.628"></a>
+<span class="sourceLineNo">629</span>     * reading at most 64 characters and returning the result if valid or 0 otherwise. The first digit is considered<a name="line.629"></a>
+<span class="sourceLineNo">630</span>     * the sign bit iff cs is 64 chars long.<a name="line.630"></a>
+<span class="sourceLineNo">631</span>     * &lt;br&gt;<a name="line.631"></a>
+<span class="sourceLineNo">632</span>     * Should be fairly close to Java 8's Long.parseUnsignedLong method, which is a bizarre omission from earlier JDKs.<a name="line.632"></a>
+<span class="sourceLineNo">633</span>     * This doesn't throw on invalid input, though, instead returning 0.<a name="line.633"></a>
+<span class="sourceLineNo">634</span>     * @param cs a CharSequence, such as a String, containing only binary digits (nothing at the start)<a name="line.634"></a>
+<span class="sourceLineNo">635</span>     * @return the long that cs represents<a name="line.635"></a>
+<span class="sourceLineNo">636</span>     */<a name="line.636"></a>
+<span class="sourceLineNo">637</span>    public static long longFromBin(CharSequence cs)<a name="line.637"></a>
+<span class="sourceLineNo">638</span>    {<a name="line.638"></a>
+<span class="sourceLineNo">639</span>        return longFromBin(cs, 0, cs.length());<a name="line.639"></a>
+<span class="sourceLineNo">640</span>    }<a name="line.640"></a>
+<span class="sourceLineNo">641</span><a name="line.641"></a>
+<span class="sourceLineNo">642</span>    /**<a name="line.642"></a>
+<span class="sourceLineNo">643</span>     * Reads in a CharSequence containing only binary digits (only 0 and 1) and returns the long they represent,<a name="line.643"></a>
+<span class="sourceLineNo">644</span>     * reading at most 64 characters and returning the result if valid or 0 otherwise. The first digit is considered<a name="line.644"></a>
+<span class="sourceLineNo">645</span>     * the sign bit iff cs is 64 chars long.<a name="line.645"></a>
+<span class="sourceLineNo">646</span>     * &lt;br&gt;<a name="line.646"></a>
+<span class="sourceLineNo">647</span>     * Should be fairly close to Java 8's Long.parseUnsignedLong method, which is a bizarre omission from earlier JDKs.<a name="line.647"></a>
+<span class="sourceLineNo">648</span>     * This doesn't throw on invalid input, though, instead returning 0.<a name="line.648"></a>
+<span class="sourceLineNo">649</span>     * @param cs a CharSequence, such as a String, containing only binary digits (nothing at the start)<a name="line.649"></a>
+<span class="sourceLineNo">650</span>     * @param start the first character position in cs to read from<a name="line.650"></a>
+<span class="sourceLineNo">651</span>     * @param end the last character position in cs to read from (this stops after 64 characters if end is too large)<a name="line.651"></a>
+<span class="sourceLineNo">652</span>     * @return the long that cs represents<a name="line.652"></a>
+<span class="sourceLineNo">653</span>     */<a name="line.653"></a>
+<span class="sourceLineNo">654</span>    public static long longFromBin(CharSequence cs, final int start, final int end)<a name="line.654"></a>
+<span class="sourceLineNo">655</span>    {<a name="line.655"></a>
+<span class="sourceLineNo">656</span>        int len;<a name="line.656"></a>
+<span class="sourceLineNo">657</span>        if(cs == null || start &lt; 0 || end &lt;=0 || end - start &lt;= 0<a name="line.657"></a>
+<span class="sourceLineNo">658</span>                || (len = cs.length()) - start &lt;= 0 || end &gt; len)<a name="line.658"></a>
+<span class="sourceLineNo">659</span>            return 0;<a name="line.659"></a>
+<span class="sourceLineNo">660</span>        char c = cs.charAt(start);<a name="line.660"></a>
+<span class="sourceLineNo">661</span>        if(c &lt; '0' || c &gt; '1')<a name="line.661"></a>
+<span class="sourceLineNo">662</span>            return 0;<a name="line.662"></a>
+<span class="sourceLineNo">663</span>        long data = hexCodes[c];<a name="line.663"></a>
+<span class="sourceLineNo">664</span>        for (int i = start+1; i &lt; end &amp;&amp; i &lt; 64; i++) {<a name="line.664"></a>
+<span class="sourceLineNo">665</span>            if((c = cs.charAt(i)) &lt; '0' || c &gt; '1')<a name="line.665"></a>
+<span class="sourceLineNo">666</span>                return 0;<a name="line.666"></a>
+<span class="sourceLineNo">667</span>            data &lt;&lt;= 1;<a name="line.667"></a>
+<span class="sourceLineNo">668</span>            data |= c - '0';<a name="line.668"></a>
+<span class="sourceLineNo">669</span>        }<a name="line.669"></a>
+<span class="sourceLineNo">670</span>        return data;<a name="line.670"></a>
+<span class="sourceLineNo">671</span>    }<a name="line.671"></a>
+<span class="sourceLineNo">672</span><a name="line.672"></a>
+<span class="sourceLineNo">673</span>    /**<a name="line.673"></a>
+<span class="sourceLineNo">674</span>     * Base-64 encodes number and stores that string representation in buf starting at offset; uses 11 chars.<a name="line.674"></a>
+<span class="sourceLineNo">675</span>     *<a name="line.675"></a>
+<span class="sourceLineNo">676</span>     * @param number the long to encode<a name="line.676"></a>
+<span class="sourceLineNo">677</span>     * @param offset the first position to set in buf<a name="line.677"></a>
+<span class="sourceLineNo">678</span>     * @param buf    a char array that should be non-null and have length of at least offset + 11<a name="line.678"></a>
+<span class="sourceLineNo">679</span>     * @return buf, after modifying it in-place<a name="line.679"></a>
+<span class="sourceLineNo">680</span>     */<a name="line.680"></a>
+<span class="sourceLineNo">681</span>    public static char[] b64Encode(long number, int offset, char[] buf) {<a name="line.681"></a>
+<span class="sourceLineNo">682</span>        if (buf != null &amp;&amp; buf.length &gt;= 11 - offset) {<a name="line.682"></a>
+<span class="sourceLineNo">683</span>            buf[offset] = keyBase64[(int) (number &gt;&gt;&gt; 60)];<a name="line.683"></a>
+<span class="sourceLineNo">684</span>            buf[offset + 1] = keyBase64[(int) (0x3f &amp; number &gt;&gt;&gt; 54)];<a name="line.684"></a>
+<span class="sourceLineNo">685</span>            buf[offset + 2] = keyBase64[(int) (0x3f &amp; number &gt;&gt;&gt; 48)];<a name="line.685"></a>
+<span class="sourceLineNo">686</span>            buf[offset + 3] = keyBase64[(int) (0x3f &amp; number &gt;&gt;&gt; 42)];<a name="line.686"></a>
+<span class="sourceLineNo">687</span>            buf[offset + 4] = keyBase64[(int) (0x3f &amp; number &gt;&gt;&gt; 36)];<a name="line.687"></a>
+<span class="sourceLineNo">688</span>            buf[offset + 5] = keyBase64[(int) (0x3f &amp; number &gt;&gt;&gt; 30)];<a name="line.688"></a>
+<span class="sourceLineNo">689</span>            buf[offset + 6] = keyBase64[(int) (0x3f &amp; number &gt;&gt;&gt; 24)];<a name="line.689"></a>
+<span class="sourceLineNo">690</span>            buf[offset + 7] = keyBase64[(int) (0x3f &amp; number &gt;&gt;&gt; 18)];<a name="line.690"></a>
+<span class="sourceLineNo">691</span>            buf[offset + 8] = keyBase64[(int) (0x3f &amp; number &gt;&gt;&gt; 12)];<a name="line.691"></a>
+<span class="sourceLineNo">692</span>            buf[offset + 9] = keyBase64[(int) (0x3f &amp; number &gt;&gt;&gt; 6)];<a name="line.692"></a>
+<span class="sourceLineNo">693</span>            buf[offset + 10] = keyBase64[(int) (0x3f &amp; number)];<a name="line.693"></a>
+<span class="sourceLineNo">694</span>        }<a name="line.694"></a>
+<span class="sourceLineNo">695</span>        return buf;<a name="line.695"></a>
+<span class="sourceLineNo">696</span>    }<a name="line.696"></a>
+<span class="sourceLineNo">697</span><a name="line.697"></a>
+<span class="sourceLineNo">698</span><a name="line.698"></a>
+<span class="sourceLineNo">699</span>    /**<a name="line.699"></a>
+<span class="sourceLineNo">700</span>     * Base-64 encodes number and stores that string representation in buf starting at offset; uses 11 chars.<a name="line.700"></a>
+<span class="sourceLineNo">701</span>     *<a name="line.701"></a>
+<span class="sourceLineNo">702</span>     * @param number the double to encode<a name="line.702"></a>
+<span class="sourceLineNo">703</span>     * @param offset the first position to set in buf<a name="line.703"></a>
+<span class="sourceLineNo">704</span>     * @param buf    a char array that should be non-null and have length of at least offset + 11<a name="line.704"></a>
+<span class="sourceLineNo">705</span>     * @return buf, after modifying it in-place<a name="line.705"></a>
+<span class="sourceLineNo">706</span>     */<a name="line.706"></a>
+<span class="sourceLineNo">707</span>    public static char[] b64Encode(double number, int offset, char[] buf) {<a name="line.707"></a>
+<span class="sourceLineNo">708</span>        return b64Encode(Double.doubleToLongBits(number), offset, buf);<a name="line.708"></a>
+<span class="sourceLineNo">709</span>    }<a name="line.709"></a>
+<span class="sourceLineNo">710</span><a name="line.710"></a>
+<span class="sourceLineNo">711</span>    /**<a name="line.711"></a>
+<span class="sourceLineNo">712</span>     * Base-64 encodes number and stores that string representation in buf starting at offset; uses 6 chars.<a name="line.712"></a>
+<span class="sourceLineNo">713</span>     *<a name="line.713"></a>
+<span class="sourceLineNo">714</span>     * @param number the int to encode<a name="line.714"></a>
+<span class="sourceLineNo">715</span>     * @param offset the first position to set in buf<a name="line.715"></a>
+<span class="sourceLineNo">716</span>     * @param buf    a char array that should be non-null and have length of at least offset + 6<a name="line.716"></a>
+<span class="sourceLineNo">717</span>     * @return buf, after modifying it in-place<a name="line.717"></a>
+<span class="sourceLineNo">718</span>     */<a name="line.718"></a>
+<span class="sourceLineNo">719</span>    public static char[] b64Encode(int number, int offset, char[] buf) {<a name="line.719"></a>
+<span class="sourceLineNo">720</span>        if (buf != null &amp;&amp; buf.length &gt;= 6 - offset) {<a name="line.720"></a>
+<span class="sourceLineNo">721</span>            buf[offset] = keyBase64[number &gt;&gt;&gt; 30];<a name="line.721"></a>
+<span class="sourceLineNo">722</span>            buf[offset + 1] = keyBase64[0x3f &amp; number &gt;&gt;&gt; 24];<a name="line.722"></a>
+<span class="sourceLineNo">723</span>            buf[offset + 2] = keyBase64[0x3f &amp; number &gt;&gt;&gt; 18];<a name="line.723"></a>
+<span class="sourceLineNo">724</span>            buf[offset + 3] = keyBase64[0x3f &amp; number &gt;&gt;&gt; 12];<a name="line.724"></a>
+<span class="sourceLineNo">725</span>            buf[offset + 4] = keyBase64[0x3f &amp; number &gt;&gt;&gt; 6];<a name="line.725"></a>
+<span class="sourceLineNo">726</span>            buf[offset + 5] = keyBase64[0x3f &amp; number];<a name="line.726"></a>
+<span class="sourceLineNo">727</span>        }<a name="line.727"></a>
+<span class="sourceLineNo">728</span>        return buf;<a name="line.728"></a>
+<span class="sourceLineNo">729</span>    }<a name="line.729"></a>
+<span class="sourceLineNo">730</span><a name="line.730"></a>
+<span class="sourceLineNo">731</span>    /**<a name="line.731"></a>
+<span class="sourceLineNo">732</span>     * Base-64 encodes number and stores that string representation in buf starting at offset; uses 6 chars.<a name="line.732"></a>
+<span class="sourceLineNo">733</span>     *<a name="line.733"></a>
+<span class="sourceLineNo">734</span>     * @param number the float to encode<a name="line.734"></a>
+<span class="sourceLineNo">735</span>     * @param offset the first position to set in buf<a name="line.735"></a>
+<span class="sourceLineNo">736</span>     * @param buf    a char array that should be non-null and have length of at least offset + 6<a name="line.736"></a>
+<span class="sourceLineNo">737</span>     * @return buf, after modifying it in-place<a name="line.737"></a>
+<span class="sourceLineNo">738</span>     */<a name="line.738"></a>
+<span class="sourceLineNo">739</span>    public static char[] b64Encode(float number, int offset, char[] buf) {<a name="line.739"></a>
+<span class="sourceLineNo">740</span>        return b64Encode(Float.floatToIntBits(number), offset, buf);<a name="line.740"></a>
+<span class="sourceLineNo">741</span>    }<a name="line.741"></a>
+<span class="sourceLineNo">742</span><a name="line.742"></a>
+<span class="sourceLineNo">743</span>    /**<a name="line.743"></a>
+<span class="sourceLineNo">744</span>     * Base-64 encodes number and stores that string representation in buf starting at offset; uses 3 chars.<a name="line.744"></a>
+<span class="sourceLineNo">745</span>     *<a name="line.745"></a>
+<span class="sourceLineNo">746</span>     * @param number the int to encode<a name="line.746"></a>
+<span class="sourceLineNo">747</span>     * @param offset the first position to set in buf<a name="line.747"></a>
+<span class="sourceLineNo">748</span>     * @param buf    a char array that should be non-null and have length of at least offset + 3<a name="line.748"></a>
+<span class="sourceLineNo">749</span>     * @return buf, after modifying it in-place<a name="line.749"></a>
+<span class="sourceLineNo">750</span>     */<a name="line.750"></a>
+<span class="sourceLineNo">751</span>    public static char[] b64Encode(short number, int offset, char[] buf) {<a name="line.751"></a>
+<span class="sourceLineNo">752</span>        if (buf != null &amp;&amp; buf.length &gt;= 3 - offset) {<a name="line.752"></a>
+<span class="sourceLineNo">753</span>            buf[offset] = keyBase64[number &gt;&gt;&gt; 12];<a name="line.753"></a>
+<span class="sourceLineNo">754</span>            buf[offset + 1] = keyBase64[0x3f &amp; number &gt;&gt;&gt; 6];<a name="line.754"></a>
+<span class="sourceLineNo">755</span>            buf[offset + 2] = keyBase64[0x3f &amp; number];<a name="line.755"></a>
+<span class="sourceLineNo">756</span>        }<a name="line.756"></a>
+<span class="sourceLineNo">757</span>        return buf;<a name="line.757"></a>
+<span class="sourceLineNo">758</span>    }<a name="line.758"></a>
+<span class="sourceLineNo">759</span><a name="line.759"></a>
+<span class="sourceLineNo">760</span>    /**<a name="line.760"></a>
+<span class="sourceLineNo">761</span>     * Base-64 encodes glyph and stores that string representation in buf starting at offset; uses 3 chars.<a name="line.761"></a>
+<span class="sourceLineNo">762</span>     *<a name="line.762"></a>
+<span class="sourceLineNo">763</span>     * @param glyph  the char to encode<a name="line.763"></a>
+<span class="sourceLineNo">764</span>     * @param offset the first position to set in buf<a name="line.764"></a>
+<span class="sourceLineNo">765</span>     * @param buf    a char array that should be non-null and have length of at least offset + 3<a name="line.765"></a>
+<span class="sourceLineNo">766</span>     * @return buf, after modifying it in-place<a name="line.766"></a>
+<span class="sourceLineNo">767</span>     */<a name="line.767"></a>
+<span class="sourceLineNo">768</span>    public static char[] b64Encode(char glyph, int offset, char[] buf) {<a name="line.768"></a>
+<span class="sourceLineNo">769</span>        if (buf != null &amp;&amp; buf.length &gt;= 4 - offset) {<a name="line.769"></a>
+<span class="sourceLineNo">770</span>            buf[offset] = keyBase64[glyph &gt;&gt;&gt; 12];<a name="line.770"></a>
+<span class="sourceLineNo">771</span>            buf[offset + 1] = keyBase64[0x3f &amp; glyph &gt;&gt;&gt; 6];<a name="line.771"></a>
+<span class="sourceLineNo">772</span>            buf[offset + 2] = keyBase64[0x3f &amp; glyph];<a name="line.772"></a>
+<span class="sourceLineNo">773</span>        }<a name="line.773"></a>
+<span class="sourceLineNo">774</span>        return buf;<a name="line.774"></a>
+<span class="sourceLineNo">775</span>    }<a name="line.775"></a>
+<span class="sourceLineNo">776</span><a name="line.776"></a>
+<span class="sourceLineNo">777</span>    /**<a name="line.777"></a>
+<span class="sourceLineNo">778</span>     * Base-64 encodes number and stores that string representation in buf starting at offset; uses 2 chars.<a name="line.778"></a>
+<span class="sourceLineNo">779</span>     *<a name="line.779"></a>
+<span class="sourceLineNo">780</span>     * @param number the byte to encode<a name="line.780"></a>
+<span class="sourceLineNo">781</span>     * @param offset the first position to set in buf<a name="line.781"></a>
+<span class="sourceLineNo">782</span>     * @param buf    a char array that should be non-null and have length of at least offset + 2<a name="line.782"></a>
+<span class="sourceLineNo">783</span>     * @return buf, after modifying it in-place<a name="line.783"></a>
+<span class="sourceLineNo">784</span>     */<a name="line.784"></a>
+<span class="sourceLineNo">785</span>    public static char[] b64Encode(byte number, int offset, char[] buf) {<a name="line.785"></a>
+<span class="sourceLineNo">786</span>        if (buf != null &amp;&amp; buf.length &gt;= 2 - offset) {<a name="line.786"></a>
+<span class="sourceLineNo">787</span>            buf[offset] = keyBase64[number &gt;&gt;&gt; 6];<a name="line.787"></a>
+<span class="sourceLineNo">788</span>            buf[offset + 1] = keyBase64[0x3f &amp; number];<a name="line.788"></a>
+<span class="sourceLineNo">789</span>        }<a name="line.789"></a>
+<span class="sourceLineNo">790</span>        return buf;<a name="line.790"></a>
+<span class="sourceLineNo">791</span><a name="line.791"></a>
+<span class="sourceLineNo">792</span>    }<a name="line.792"></a>
+<span class="sourceLineNo">793</span><a name="line.793"></a>
+<span class="sourceLineNo">794</span>    /**<a name="line.794"></a>
+<span class="sourceLineNo">795</span>     * Decodes 11 characters from data starting from offset to get a long encoded as base-64.<a name="line.795"></a>
+<span class="sourceLineNo">796</span>     * @param data a char array that should be have length of at least offset + 11<a name="line.796"></a>
+<span class="sourceLineNo">797</span>     * @param offset where in data to start reading from<a name="line.797"></a>
+<span class="sourceLineNo">798</span>     * @return the decoded long<a name="line.798"></a>
+<span class="sourceLineNo">799</span>     */<a name="line.799"></a>
+<span class="sourceLineNo">800</span>    public static long b64DecodeLong(char[] data, int offset) {<a name="line.800"></a>
+<span class="sourceLineNo">801</span>        return (data == null || data.length &lt; 11 + offset) ? 0L :<a name="line.801"></a>
+<span class="sourceLineNo">802</span>                (((long)data[offset]) &lt;&lt; 60)<a name="line.802"></a>
+<span class="sourceLineNo">803</span>                        | ((0x3fL &amp; data[offset + 1]) &lt;&lt; 54)<a name="line.803"></a>
+<span class="sourceLineNo">804</span>                        | ((0x3fL &amp; data[offset + 2]) &lt;&lt; 48)<a name="line.804"></a>
+<span class="sourceLineNo">805</span>                        | ((0x3fL &amp; data[offset + 3]) &lt;&lt; 42)<a name="line.805"></a>
+<span class="sourceLineNo">806</span>                        | ((0x3fL &amp; data[offset + 4]) &lt;&lt; 36)<a name="line.806"></a>
+<span class="sourceLineNo">807</span>                        | ((0x3fL &amp; data[offset + 5]) &lt;&lt; 30)<a name="line.807"></a>
+<span class="sourceLineNo">808</span>                        | ((0x3fL &amp; data[offset + 6]) &lt;&lt; 24)<a name="line.808"></a>
+<span class="sourceLineNo">809</span>                        | ((0x3fL &amp; data[offset + 7]) &lt;&lt; 18)<a name="line.809"></a>
+<span class="sourceLineNo">810</span>                        | ((0x3fL &amp; data[offset + 8]) &lt;&lt; 12)<a name="line.810"></a>
+<span class="sourceLineNo">811</span>                        | ((0x3fL &amp; data[offset + 9]) &lt;&lt; 6)<a name="line.811"></a>
+<span class="sourceLineNo">812</span>                        | (0x3fL &amp; data[offset + 10]);<a name="line.812"></a>
+<span class="sourceLineNo">813</span>    }<a name="line.813"></a>
+<span class="sourceLineNo">814</span><a name="line.814"></a>
+<span class="sourceLineNo">815</span>    /**<a name="line.815"></a>
+<span class="sourceLineNo">816</span>     * Decodes 11 characters from data starting from offset to get a double encoded as base-64.<a name="line.816"></a>
+<span class="sourceLineNo">817</span>     * @param data a char array that should be have length of at least offset + 11<a name="line.817"></a>
+<span class="sourceLineNo">818</span>     * @param offset where in data to start reading from<a name="line.818"></a>
+<span class="sourceLineNo">819</span>     * @return the decoded double<a name="line.819"></a>
+<span class="sourceLineNo">820</span>     */<a name="line.820"></a>
+<span class="sourceLineNo">821</span>    public static double b64DecodeDouble(char[] data, int offset) {<a name="line.821"></a>
+<span class="sourceLineNo">822</span>        return (data == null || data.length &lt; 11 + offset) ? 0.0 :<a name="line.822"></a>
+<span class="sourceLineNo">823</span>                Double.longBitsToDouble((((long) data[offset]) &lt;&lt; 60)<a name="line.823"></a>
+<span class="sourceLineNo">824</span>                        | ((0x3fL &amp; data[offset + 1]) &lt;&lt; 54)<a name="line.824"></a>
+<span class="sourceLineNo">825</span>                        | ((0x3fL &amp; data[offset + 2]) &lt;&lt; 48)<a name="line.825"></a>
+<span class="sourceLineNo">826</span>                        | ((0x3fL &amp; data[offset + 3]) &lt;&lt; 42)<a name="line.826"></a>
+<span class="sourceLineNo">827</span>                        | ((0x3fL &amp; data[offset + 4]) &lt;&lt; 36)<a name="line.827"></a>
+<span class="sourceLineNo">828</span>                        | ((0x3fL &amp; data[offset + 5]) &lt;&lt; 30)<a name="line.828"></a>
+<span class="sourceLineNo">829</span>                        | ((0x3fL &amp; data[offset + 6]) &lt;&lt; 24)<a name="line.829"></a>
+<span class="sourceLineNo">830</span>                        | ((0x3fL &amp; data[offset + 7]) &lt;&lt; 18)<a name="line.830"></a>
+<span class="sourceLineNo">831</span>                        | ((0x3fL &amp; data[offset + 8]) &lt;&lt; 12)<a name="line.831"></a>
+<span class="sourceLineNo">832</span>                        | ((0x3fL &amp; data[offset + 9]) &lt;&lt; 6)<a name="line.832"></a>
+<span class="sourceLineNo">833</span>                        | (0x3fL &amp; data[offset + 10]));<a name="line.833"></a>
+<span class="sourceLineNo">834</span>    }<a name="line.834"></a>
+<span class="sourceLineNo">835</span><a name="line.835"></a>
+<span class="sourceLineNo">836</span>    /**<a name="line.836"></a>
+<span class="sourceLineNo">837</span>     * Decodes 6 characters from data starting from offset to get an int encoded as base-64.<a name="line.837"></a>
+<span class="sourceLineNo">838</span>     * @param data a char array that should be have length of at least offset + 6<a name="line.838"></a>
+<span class="sourceLineNo">839</span>     * @param offset where in data to start reading from<a name="line.839"></a>
+<span class="sourceLineNo">840</span>     * @return the decoded int<a name="line.840"></a>
+<span class="sourceLineNo">841</span>     */<a name="line.841"></a>
+<span class="sourceLineNo">842</span>    public static int b64DecodeInt(char[] data, int offset) {<a name="line.842"></a>
+<span class="sourceLineNo">843</span>        return (data == null || data.length &lt; 6 + offset) ? 0 :<a name="line.843"></a>
+<span class="sourceLineNo">844</span>                ((data[offset]) &lt;&lt; 30)<a name="line.844"></a>
+<span class="sourceLineNo">845</span>                        | ((0x3f &amp; data[offset + 1]) &lt;&lt; 24)<a name="line.845"></a>
+<span class="sourceLineNo">846</span>                        | ((0x3f &amp; data[offset + 2]) &lt;&lt; 18)<a name="line.846"></a>
+<span class="sourceLineNo">847</span>                        | ((0x3f &amp; data[offset + 3]) &lt;&lt; 12)<a name="line.847"></a>
+<span class="sourceLineNo">848</span>                        | ((0x3f &amp; data[offset + 4]) &lt;&lt; 6)<a name="line.848"></a>
+<span class="sourceLineNo">849</span>                        | (0x3f &amp; data[offset + 5]);<a name="line.849"></a>
+<span class="sourceLineNo">850</span>    }<a name="line.850"></a>
+<span class="sourceLineNo">851</span><a name="line.851"></a>
+<span class="sourceLineNo">852</span>    /**<a name="line.852"></a>
+<span class="sourceLineNo">853</span>     * Decodes 6 characters from data starting from offset to get a float encoded as base-64.<a name="line.853"></a>
+<span class="sourceLineNo">854</span>     * @param data a char array that should be have length of at least offset + 6<a name="line.854"></a>
+<span class="sourceLineNo">855</span>     * @param offset where in data to start reading from<a name="line.855"></a>
+<span class="sourceLineNo">856</span>     * @return the decoded float<a name="line.856"></a>
+<span class="sourceLineNo">857</span>     */<a name="line.857"></a>
+<span class="sourceLineNo">858</span>    public static float b64DecodeFloat(char[] data, int offset) {<a name="line.858"></a>
+<span class="sourceLineNo">859</span>        return (data == null || data.length &lt; 6 + offset) ? 0f :<a name="line.859"></a>
+<span class="sourceLineNo">860</span>                Float.intBitsToFloat(((data[offset]) &lt;&lt; 30)<a name="line.860"></a>
+<span class="sourceLineNo">861</span>                        | ((0x3f &amp; data[offset + 1]) &lt;&lt; 24)<a name="line.861"></a>
+<span class="sourceLineNo">862</span>                        | ((0x3f &amp; data[offset + 2]) &lt;&lt; 18)<a name="line.862"></a>
+<span class="sourceLineNo">863</span>                        | ((0x3f &amp; data[offset + 3]) &lt;&lt; 12)<a name="line.863"></a>
+<span class="sourceLineNo">864</span>                        | ((0x3f &amp; data[offset + 4]) &lt;&lt; 6)<a name="line.864"></a>
+<span class="sourceLineNo">865</span>                        | (0x3f &amp; data[offset + 5]));<a name="line.865"></a>
+<span class="sourceLineNo">866</span>    }<a name="line.866"></a>
+<span class="sourceLineNo">867</span><a name="line.867"></a>
+<span class="sourceLineNo">868</span>    /**<a name="line.868"></a>
+<span class="sourceLineNo">869</span>     * Decodes 3 characters from data starting from offset to get a short encoded as base-64.<a name="line.869"></a>
+<span class="sourceLineNo">870</span>     * @param data a char array that should be have length of at least offset + 3<a name="line.870"></a>
+<span class="sourceLineNo">871</span>     * @param offset where in data to start reading from<a name="line.871"></a>
+<span class="sourceLineNo">872</span>     * @return the decoded short<a name="line.872"></a>
+<span class="sourceLineNo">873</span>     */<a name="line.873"></a>
+<span class="sourceLineNo">874</span>    public static short b64DecodeShort(char[] data, int offset) {<a name="line.874"></a>
+<span class="sourceLineNo">875</span>        return (short) ((data == null || data.length &lt; 3 + offset) ? 0 :<a name="line.875"></a>
+<span class="sourceLineNo">876</span>                ((data[offset]) &lt;&lt; 12)<a name="line.876"></a>
+<span class="sourceLineNo">877</span>                        | ((0x3f &amp; data[offset + 1]) &lt;&lt; 6)<a name="line.877"></a>
+<span class="sourceLineNo">878</span>                        | (0x3f &amp; data[offset + 2]));<a name="line.878"></a>
+<span class="sourceLineNo">879</span>    }<a name="line.879"></a>
+<span class="sourceLineNo">880</span>    /**<a name="line.880"></a>
+<span class="sourceLineNo">881</span>     * Decodes 3 characters from data starting from offset to get a char encoded as base-64.<a name="line.881"></a>
+<span class="sourceLineNo">882</span>     * @param data a char array that should be have length of at least offset + 3<a name="line.882"></a>
+<span class="sourceLineNo">883</span>     * @param offset where in data to start reading from<a name="line.883"></a>
+<span class="sourceLineNo">884</span>     * @return the decoded char<a name="line.884"></a>
+<span class="sourceLineNo">885</span>     */<a name="line.885"></a>
+<span class="sourceLineNo">886</span>    public static char b64DecodeChar(char[] data, int offset) {<a name="line.886"></a>
+<span class="sourceLineNo">887</span>        return (char) ((data == null || data.length &lt; 3 + offset) ? 0 :<a name="line.887"></a>
+<span class="sourceLineNo">888</span>                ((data[offset]) &lt;&lt; 12)<a name="line.888"></a>
+<span class="sourceLineNo">889</span>                        | ((0x3f &amp; data[offset + 1]) &lt;&lt; 6)<a name="line.889"></a>
+<span class="sourceLineNo">890</span>                        | (0x3f &amp; data[offset + 2]));<a name="line.890"></a>
+<span class="sourceLineNo">891</span>    }<a name="line.891"></a>
+<span class="sourceLineNo">892</span><a name="line.892"></a>
+<span class="sourceLineNo">893</span>    /**<a name="line.893"></a>
+<span class="sourceLineNo">894</span>     * Decodes 2 characters from data starting from offset to get a byte encoded as base-64.<a name="line.894"></a>
+<span class="sourceLineNo">895</span>     * @param data a char array that should be have length of at least offset + 2<a name="line.895"></a>
+<span class="sourceLineNo">896</span>     * @param offset where in data to start reading from<a name="line.896"></a>
+<span class="sourceLineNo">897</span>     * @return the decoded byte<a name="line.897"></a>
+<span class="sourceLineNo">898</span>     */<a name="line.898"></a>
+<span class="sourceLineNo">899</span>    public static byte b64DecodeByte(char[] data, int offset) {<a name="line.899"></a>
+<span class="sourceLineNo">900</span>        return (byte) ((data == null || data.length &lt; 2 + offset) ? 0 :<a name="line.900"></a>
+<span class="sourceLineNo">901</span>                ((data[offset]) &lt;&lt; 6)<a name="line.901"></a>
+<span class="sourceLineNo">902</span>                        | (0x3f &amp; data[offset + 1]));<a name="line.902"></a>
+<span class="sourceLineNo">903</span>    }<a name="line.903"></a>
+<span class="sourceLineNo">904</span><a name="line.904"></a>
+<span class="sourceLineNo">905</span>    public static String hexHash(boolean... array) {<a name="line.905"></a>
+<span class="sourceLineNo">906</span>        return hex(CrossHash.hash64(array));<a name="line.906"></a>
+<span class="sourceLineNo">907</span>    }<a name="line.907"></a>
+<span class="sourceLineNo">908</span><a name="line.908"></a>
+<span class="sourceLineNo">909</span>    public static String hexHash(byte... array) {<a name="line.909"></a>
+<span class="sourceLineNo">910</span>        return hex(CrossHash.hash64(array));<a name="line.910"></a>
+<span class="sourceLineNo">911</span>    }<a name="line.911"></a>
+<span class="sourceLineNo">912</span><a name="line.912"></a>
+<span class="sourceLineNo">913</span>    public static String hexHash(short... array) {<a name="line.913"></a>
+<span class="sourceLineNo">914</span>        return hex(CrossHash.hash64(array));<a name="line.914"></a>
+<span class="sourceLineNo">915</span>    }<a name="line.915"></a>
+<span class="sourceLineNo">916</span><a name="line.916"></a>
+<span class="sourceLineNo">917</span>    public static String hexHash(char... array) {<a name="line.917"></a>
+<span class="sourceLineNo">918</span>        return hex(CrossHash.hash64(array));<a name="line.918"></a>
+<span class="sourceLineNo">919</span>    }<a name="line.919"></a>
+<span class="sourceLineNo">920</span><a name="line.920"></a>
+<span class="sourceLineNo">921</span>    public static String hexHash(int... array) {<a name="line.921"></a>
+<span class="sourceLineNo">922</span>        return hex(CrossHash.hash64(array));<a name="line.922"></a>
+<span class="sourceLineNo">923</span>    }<a name="line.923"></a>
+<span class="sourceLineNo">924</span><a name="line.924"></a>
+<span class="sourceLineNo">925</span>    public static String hexHash(long... array) {<a name="line.925"></a>
+<span class="sourceLineNo">926</span>        return hex(CrossHash.hash64(array));<a name="line.926"></a>
+<span class="sourceLineNo">927</span>    }<a name="line.927"></a>
+<span class="sourceLineNo">928</span>}<a name="line.928"></a>
 
 
 
