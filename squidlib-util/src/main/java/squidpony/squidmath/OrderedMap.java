@@ -871,6 +871,27 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         }
     }
 
+
+    public V getOrDefault(final Object k, final V defaultValue) {
+        if (k == null)
+            return containsNullKey ? value[n] : defaultValue;
+        K curr;
+        final K[] key = this.key;
+        int pos;
+        // The starting point.
+        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+            return defaultValue;
+        if (hasher.areEqual(k, curr))
+            return value[pos];
+        // There's always an unused entry.
+        while (true) {
+            if ((curr = key[pos = (pos + 1) & mask]) == null)
+                return defaultValue;
+            if (hasher.areEqual(k, curr))
+                return value[pos];
+        }
+    }
+
     protected int positionOf(final Object k) {
         if (k == null)
         {
