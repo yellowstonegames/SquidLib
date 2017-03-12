@@ -1056,6 +1056,10 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/DungeonUtility.html#getRandomCell-squidpony.squidmath.RNG-char:A:A-java.util.Set-int-">getRandomCell(RNG, char[][], Set&lt;Character&gt;, int)</a></span> - Static method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/DungeonUtility.html" title="class in squidpony.squidgrid.mapping">DungeonUtility</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/RNG.html#getRandomCellsIterable-int-int-int-">getRandomCellsIterable(int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
+<dd>
+<div class="block">Use that to get random cells in a rectangular map.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Region.html#getRandomCoord-squidpony.squidmath.RNG-">getRandomCoord(RNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Region.html" title="class in squidpony.squidmath">Region</a></dt>
 <dd>
 <div class="block">Gets a single random Coord from this using the given RNG (which can be seeded); returns null if this is empty.</div>
@@ -1155,6 +1159,22 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/RNG.html#getRandomStartIterable-java.util.List-">getRandomStartIterable(List&lt;T&gt;)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
 <dd>
 <div class="block">Get an Iterable that starts at a random location in list and continues on through list in its current order.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/RNG.html#getRandomUniqueCells-int-int-int-int-">getRandomUniqueCells(int, int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
+<dd>
+<div class="block">Gets an array of unique Coords, from (startX,startY) inclusive to (startX+width,startY+height) exclusive, in a
+ random order, with the array containing <code>width * height</code> items.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/RNG.html#getRandomUniqueCells-int-int-int-int-int-">getRandomUniqueCells(int, int, int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
+<dd>
+<div class="block">Gets an array of unique Coords, from (startX,startY) inclusive to (startX+width,startY+height) exclusive, in a
+ random order, with the array containing <code>Math.min(width * height, size)</code> items.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/RNG.html#getRandomUniqueCells-int-int-int-int-squidpony.squidmath.Coord:A-">getRandomUniqueCells(int, int, int, int, Coord[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
+<dd>
+<div class="block">Assigns to dest an array of unique Coords, from (startX,startY) inclusive to (startX+width,startY+height)
+ exclusive, in a random order, with dest after this is called containing the lesser of <code>width * height</code> or
+ <code>dest.length</code> items.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Region.html#getRaw--">getRaw()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Region.html" title="class in squidpony.squidmath">Region</a></dt>
 <dd>
