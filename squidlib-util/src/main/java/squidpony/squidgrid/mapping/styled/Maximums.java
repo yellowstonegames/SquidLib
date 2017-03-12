@@ -8,7 +8,7 @@ public class Maximums {
     public int h, v;
 
     /**
-     * Probably not something you will construct manually. See DungeonGen .
+     * Probably not something you will construct manually. See DungeonBoneGen .
      */
     public Maximums() {
         h = 64;

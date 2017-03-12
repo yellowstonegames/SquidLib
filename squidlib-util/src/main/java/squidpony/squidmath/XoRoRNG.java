@@ -9,24 +9,37 @@ package squidpony.squidmath;
 
 import squidpony.StringKit;
 
+import java.io.Serializable;
+
 /**
  * A port of Blackman and Vigna's xoroshiro 128+ generator; should be very fast and produce high-quality output.
  * Testing shows it is within 5% the speed of LightRNG, sometimes faster and sometimes slower, and has a larger period.
  * It's called XoRo because it involves Xor as well as Rotate operations on the 128-bit pseudo-random state.
+ * <br>
+ * Machines without access to efficient bitwise rotation (such as all desktop JREs and some JDKs run specifying the
+ * {@code -client} flag or that default to the client VM, which includes practically all 32-bit Windows JREs but almost
+ * no 64-bit JREs or JDKs) may benefit from using XorRNG over XoRoRNG. LightRNG should continue to be very fast, but has
+ * a significantly shorter period (the amount of random numbers it will go through before repeating), at
+ * {@code pow(2, 64)} as opposed to XorRNG and XoRoRNG's {@code pow(2, 128)}, but LightRNG also allows the current RNG
+ * state to be retrieved and altered with {@code getState()} and {@code setState()}. For most cases, you should decide
+ * between LightRNG and XoRoRNG based on your needs for period length and state manipulation (LightRNG is also used
+ * internally by almost all StatefulRNG objects).
+ * <br>
  * Original version at http://xoroshiro.di.unimi.it/xoroshiro128plus.c
  * Written in 2016 by David Blackman and Sebastiano Vigna (vigna@acm.org)
+ *
  * @author Sebastiano Vigna
  * @author David Blackman
  * @author Tommy Ettinger
  */
-public class XoRoRNG implements RandomnessSource {
+public class XoRoRNG implements RandomnessSource, Serializable {
 
 	private static final long DOUBLE_MASK = (1L << 53) - 1;
     private static final double NORM_53 = 1. / (1L << 53);
     private static final long FLOAT_MASK = (1L << 24) - 1;
     private static final double NORM_24 = 1. / (1L << 24);
 
-	private static final long serialVersionUID = 1018744536171610261L;
+	private static final long serialVersionUID = 1018744536171610262L;
 
     private long state0, state1;
 
@@ -61,7 +74,7 @@ public class XoRoRNG implements RandomnessSource {
 
     /**
      * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
-     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
+     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to
      * copy the state so it isn't shared, usually, and produce a new value with the same exact state.
      *
      * @return a copy of this RandomnessSource
@@ -132,7 +145,7 @@ public class XoRoRNG implements RandomnessSource {
     }
 
     public boolean nextBoolean() {
-        return (nextLong() & 1) != 0L;
+        return nextLong() < 0L;
     }
 
     public void nextBytes(final byte[] bytes) {
@@ -146,9 +159,7 @@ public class XoRoRNG implements RandomnessSource {
     }
 
     /**
-     * Sets the seed of this generator. Passing this 0 will just set it to -1
-     * instead.
-     *
+     * Sets the seed of this generator using one long, running that through LightRNG's algorithm twice to get the state.
      * @param seed the number to use as the seed
      */
     public void setSeed(final long seed) {
@@ -158,7 +169,7 @@ public class XoRoRNG implements RandomnessSource {
         z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
         z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
         state0 = z ^ (z >>> 31);
-        state += state0 + 0x9E3779B97F4A7C15L;
+        state += 0x9E3779B97F4A7C15L;
         z = state;
         z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
         z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
@@ -168,5 +179,23 @@ public class XoRoRNG implements RandomnessSource {
     @Override
     public String toString() {
         return "XoRoRNG with state hash 0x" + StringKit.hexHash(state0, state1) + 'L';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        XoRoRNG xoRoRNG = (XoRoRNG) o;
+
+        if (state0 != xoRoRNG.state0) return false;
+        return state1 == xoRoRNG.state1;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (state0 ^ (state0 >>> 32));
+        result = 31 * result + (int) (state1 ^ (state1 >>> 32));
+        return result;
     }
 }

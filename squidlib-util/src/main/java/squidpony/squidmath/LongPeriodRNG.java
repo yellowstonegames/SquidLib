@@ -2,6 +2,7 @@ package squidpony.squidmath;
 
 import squidpony.StringKit;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
@@ -27,9 +28,9 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 3/21/2016.
  * Ported from CC0-licensed C code by Sebastiano Vigna, at http://xorshift.di.unimi.it/xorshift1024star.c
  */
-public class LongPeriodRNG implements RandomnessSource {
+public class LongPeriodRNG implements RandomnessSource, Serializable {
 
-    public long[] state = new long[16];
+    public final long[] state = new long[16];
     public int choice;
     private static final long serialVersionUID = 163524490381383244L;
     private static final long jumpTable[] = {0x84242f96eca9c41dL,
@@ -53,14 +54,14 @@ public class LongPeriodRNG implements RandomnessSource {
      * Builds a LongPeriodRNG and initializes this class' 1024 bits of state with many calls to a SplitMix64-based RNG
      * with a random seed influenced by Math.random() and also the time (in milliseconds to keep GWT compatibility),
      * mixing Math.random() calls in to alter the SplitMix64 state at uneven intervals.
+     *
      * @param seed a 64-bit seed; can be any value.
      */
     public LongPeriodRNG(long seed) {
         reseed(seed);
     }
 
-    public void reseed()
-    {
+    public void reseed() {
         LightRNG lr = new LightRNG(System.currentTimeMillis() ^
                 (Double.doubleToLongBits(Math.random()) << 32) |
                 (Double.doubleToLongBits(Math.random()) & 0xffffffffL));
@@ -71,14 +72,15 @@ public class LongPeriodRNG implements RandomnessSource {
         state[0] = ts;
         for (int i = 1; i < 16; i++) {
             //Chosen by trial and error to unevenly reseed 4 times, where i is 2, 5, 10, or 13
-            if((6 & (i * 1281783497376652987L)) == 6)
+            if ((6 & (i * 1281783497376652987L)) == 6)
                 lr.state ^= (Double.doubleToLongBits(Math.random()) << 32) |
-                    (Double.doubleToLongBits(Math.random()) & 0xffffffffL);
+                        (Double.doubleToLongBits(Math.random()) & 0xffffffffL);
             state[i] = lr.nextLong() ^ lr.nextLong() ^ lr.nextLong();
             state[i - 1] ^= state[i];
-            if(state[i - 1] == 0) state[i - 1]++;
+            if (state[i - 1] == 0) state[i - 1]++;
         }
     }
+
     /**
      * Reinitializes this class' 1024 bits of state with the given seed passed into SplitMix64, the algorithm also used by
      * LightRNG. A different algorithm is used in actual number generating code, which is a recommended technique to
@@ -87,9 +89,10 @@ public class LongPeriodRNG implements RandomnessSource {
      * @param seed a 64-bit seed; can be any value.
      */
     public void reseed(long seed) {
-        state = init(seed);
+        init(seed);
         choice = (int) (seed & 15);
     }
+
     /**
      * Builds a LongPeriodRNG and initializes this class' 1024 bits of state with the given seed, using a different
      * strategy depending on the seed. If seed is null, this uses the same state as any other null seed. If seed is a
@@ -114,43 +117,27 @@ public class LongPeriodRNG implements RandomnessSource {
      *
      * @param seed a String seed; can be any value, but produces the best results if it at least 16 characters long
      */
-    public void reseed(String seed)
-    {
-        if (seed == null) {
-            state = new long[]{0x0101, 0x1212, 0x2323, 0x3434, 0x4545, 0x5656, 0x6767, 0x7878,
-                    0x8989, 0x9A9A, 0xABAB, 0xBCBC, 0xCDCD, 0xDEDE, 0xEFEF, 0xF0F0};
+    public void reseed(String seed) {
+        int len;
+        if (seed == null || (len = seed.length()) == 0) {
+            init(0x632BE59BD9B4E019L);
             choice = 0;
         } else {
-            int len = seed.length();
             if (len < 16) {
-                long h = CrossHash.hash64(seed);
-                state = init(h);
+                long h = CrossHash.Falcon.hash64(seed);
+                init(h);
                 choice = (int) (h & 15);
             } else {
                 char[] chars = seed.toCharArray();
-                state = new long[]
-                        {
-                                validate(CrossHash.hash64(chars)),
-                                validate(CrossHash.hash64(chars, len / 16, len)),
-                                validate(CrossHash.hash64(chars, 2 * len / 16, len)),
-                                validate(CrossHash.hash64(chars, 3 * len / 16, len)),
-                                validate(CrossHash.hash64(chars, 4 * len / 16, len)),
-                                validate(CrossHash.hash64(chars, 5 * len / 16, len)),
-                                validate(CrossHash.hash64(chars, 6 * len / 16, len)),
-                                validate(CrossHash.hash64(chars, 7 * len / 16, len)),
-                                validate(CrossHash.hash64(chars, 8 * len / 16, len)),
-                                validate(CrossHash.hash64(chars, 9 * len / 16, len)),
-                                validate(CrossHash.hash64(chars, 10 * len / 16, len)),
-                                validate(CrossHash.hash64(chars, 11 * len / 16, len)),
-                                validate(CrossHash.hash64(chars, 12 * len / 16, len)),
-                                validate(CrossHash.hash64(chars, 13 * len / 16, len)),
-                                validate(CrossHash.hash64(chars, 14 * len / 16, len)),
-                                validate(CrossHash.hash64(chars, 15 * len / 16, len)),
-                        };
+                state[0] = validate(CrossHash.Falcon.hash64(chars));
+                for (int i = 0; i < 16; i++) {
+                    state[i] = validate(CrossHash.Falcon.hash64(chars, i * len >> 4, len));
+                }
                 choice = (int) (state[0] & 15);
             }
         }
     }
+
     /**
      * Builds a LongPeriodRNG and initializes this class' 1024 bits of state with the given seed as a long array, which
      * may or may not have 16 elements (though it is less wasteful to run this with 16 longs since that is exactly 1024
@@ -158,6 +145,7 @@ public class LongPeriodRNG implements RandomnessSource {
      * has fewer than 16 elements, this repeats earlier elements once it runs out of unused longs. If seed has 16 or more
      * elements, this exclusive-ors elements after the sixteenth with longs it has already placed into the state, causing
      * all elements of the seed to have an effect on the state, and making the 16-element case copy all longs exactly.
+     *
      * @param seed a long array seed; can have any number of elements, though 16 is ideal
      */
     public LongPeriodRNG(long[] seed) {
@@ -171,64 +159,63 @@ public class LongPeriodRNG implements RandomnessSource {
      * elements, this repeats earlier elements once it runs out of unused longs. If seed has 16 or more elements, this
      * exclusive-ors elements after the sixteenth with longs it has already placed into the state, causing all elements of
      * the seed to have an effect on the state, and making the 16-element case copy all longs exactly.
+     *
      * @param seed a long array seed; can have any number of elements, though 16 is ideal
      */
-    public void reseed(long[] seed)
-    {
-        if (seed == null || seed.length == 0) {
-            state = new long[]{0x0101, 0x1212, 0x2323, 0x3434, 0x4545, 0x5656, 0x6767, 0x7878,
-                    0x8989, 0x9A9A, 0xABAB, 0xBCBC, 0xCDCD, 0xDEDE, 0xEFEF, 0xF0F0};
+    public void reseed(long[] seed) {
+        int len;
+        if (seed == null || (len = seed.length) == 0) {
+            init(0x632BE59BD9B4E019L);
             choice = 0;
-        } else if(seed.length < 16)
-        {
-            for (int i = 0, s = 0; i < 16; i++, s = (s+1) % seed.length) {
+        } else if (len < 16) {
+            for (int i = 0, s = 0; i < 16; i++, s++) {
                 state[i] = seed[s];
-                if(state[i] == 0) state[i]++;
+                if (state[i] == 0) state[i]++;
+                if(s == len) s = 0;
             }
             choice = (int) (state[0] & 15);
-        }
-        else
-        {
-            for (int i = 0, s = 0; s < seed.length; s++, i = (i+1) % 16) {
+        } else {
+            for (int i = 0, s = 0; s < len; s++, i = (i + 1) & 15) {
                 state[i] ^= seed[s];
-                if(state[i] == 0) state[i]++;
+                if (state[i] == 0) state[i]++;
             }
             choice = (int) (state[0] & 15);
         }
     }
 
-    private static long validate(long seed)
-    {
-        if(seed == 0) return 1;
+    private static long validate(long seed) {
+        if (seed == 0) return 1;
         else return seed;
     }
-    private static long[] init(long seed)
-    {
-        long[] state = new long[16];
+
+    private void init(long seed) {
+        long z;
+        seed ^= seed >>> (5 + (seed >>> 59));
+        seed = ((seed *= 0xAEF17502108EF2D9L) >>> 43) ^ seed;
         for (int i = 0; i < 16; i++) {
-            long z = seed += 0x9E3779B97F4A7C15L;
+            z = (seed += 0x9E3779B97F4A7C15L);
             z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
             z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
             state[i] = z ^ (z >>> 31);
-            if(state[i] == 0) state[i]++;
+            if (state[i] == 0) state[i]++;
         }
-        return state;
     }
-    public LongPeriodRNG(LongPeriodRNG other)
-    {
+
+    public LongPeriodRNG(LongPeriodRNG other) {
         choice = other.choice;
         System.arraycopy(other.state, 0, state, 0, 16);
     }
 
     @Override
-    public int next( int bits ) {
-        return (int)( nextLong() & ( 1L << bits ) - 1 );
+    public int next(int bits) {
+        return (int) (nextLong() & (1L << bits) - 1);
     }
 
     /**
      * Can return any long, positive or negative, of any size permissible in a 64-bit signed integer.
      * <br>
      * Written by Sebastiano Vigna, from http://xorshift.di.unimi.it/xorshift1024star.c
+     *
      * @return any long, all 64 bits are random
      */
     @Override
@@ -261,38 +248,40 @@ public class LongPeriodRNG implements RandomnessSource {
      * generate 2^512 non-overlapping subsequences for parallel computations. Alters the state of this object.
      * <br>
      * Written by Sebastiano Vigna, from http://xorshift.di.unimi.it/xorshift1024star.c , don't ask how it works.
-     * */
+     */
     public void jump() {
 
-        long[] t = new long[16];
-        for(int i = 0; i < 16; i++)
-        for(int b = 0; b < 64; b++) {
-            if ((jumpTable[i] & 1L << b) != 0) {
-                for (int j = 0; j < 16; j++)
-                    t[j] ^= state[(j + choice) & 15];
+        long[] t = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        for (int i = 0; i < 16; i++)
+            for (int b = 0; b < 64; b++) {
+                if ((jumpTable[i] & 1L << b) != 0) {
+                    for (int j = 0; j < 16; j++)
+                        t[j] ^= state[(j + choice) & 15];
+                }
+                nextLong();
             }
-            nextLong();
-        }
 
-        for(int j = 0; j < 16; j++)
+        for (int j = 0; j < 16; j++)
             state[(j + choice) & 15] = t[j];
     }
 
     /**
-     * Creates many LongPeriodRNG objects in an array, where each will generate a sequence of 2 to the 512 numbers that
+     * Creates many LongPeriodRNG objects in an array, where each will generate a sequence of pow(2, 512) numbers that
      * will not overlap with other sequences in the array. The number of items in the array is specified by count.
+     *
      * @param count the number of LongPeriodRNG objects to generate in the array.
      * @return an array of LongPeriodRNG where none of the RNGs will generate overlapping sequences.
      */
-    public static LongPeriodRNG[] createMany(int count)
-    {
-        if(count < 1) count = 1;
+    public static LongPeriodRNG[] createMany(int count) {
+        if (count < 1) count = 1;
         LongPeriodRNG origin = new LongPeriodRNG();
         LongPeriodRNG[] values = new LongPeriodRNG[count];
-        for (int i = 0; i < count; i++) {
+        for (int i = count - 1; i > 0; i--) {
             values[i] = new LongPeriodRNG(origin);
             origin.jump();
         }
+        values[0] = origin;
+
         return values;
     }
 
@@ -303,19 +292,20 @@ public class LongPeriodRNG implements RandomnessSource {
      * massive period this class supports. Essentially, each LongPeriodRNG in the array will generate a different random
      * sequence relative to any other element of the array, but the sequences are reproducible if the same seed is given
      * to this method a different time (useful for testing).
+     *
      * @param count the number of LongPeriodRNG objects to generate in the array.
-     * @param seed the RNG seed that will determine the different sequences the returned LongPeriodRNG objects produce
+     * @param seed  the RNG seed that will determine the different sequences the returned LongPeriodRNG objects produce
      * @return an array of LongPeriodRNG where none of the RNGs will generate overlapping sequences.
      */
-    public static LongPeriodRNG[] createMany(int count, long seed)
-    {
-        if(count < 1) count = 1;
+    public static LongPeriodRNG[] createMany(int count, long seed) {
+        if (count < 1) count = 1;
         LongPeriodRNG origin = new LongPeriodRNG(seed);
         LongPeriodRNG[] values = new LongPeriodRNG[count];
-        for (int i = 0; i < count; i++) {
+        for (int i = count - 1; i > 0; i--) {
             values[i] = new LongPeriodRNG(origin);
             origin.jump();
         }
+        values[0] = origin;
         return values;
     }
 
@@ -326,19 +316,20 @@ public class LongPeriodRNG implements RandomnessSource {
      * massive period this class supports. Essentially, each LongPeriodRNG in the array will generate a different random
      * sequence relative to any other element of the array, but the sequences are reproducible if the same seed is given
      * to this method a different time (useful for testing).
+     *
      * @param count the number of LongPeriodRNG objects to generate in the array.
-     * @param seed the RNG seed that will determine the different sequences the returned LongPeriodRNG objects produce
+     * @param seed  the RNG seed that will determine the different sequences the returned LongPeriodRNG objects produce
      * @return an array of LongPeriodRNG where none of the RNGs will generate overlapping sequences.
      */
-    public static LongPeriodRNG[] createMany(int count, String seed)
-    {
-        if(count < 1) count = 1;
+    public static LongPeriodRNG[] createMany(int count, String seed) {
+        if (count < 1) count = 1;
         LongPeriodRNG origin = new LongPeriodRNG(seed);
         LongPeriodRNG[] values = new LongPeriodRNG[count];
-        for (int i = 0; i < count; i++) {
+        for (int i = count - 1; i > 0; i--) {
             values[i] = new LongPeriodRNG(origin);
             origin.jump();
         }
+        values[0] = origin;
         return values;
     }
 
@@ -349,19 +340,20 @@ public class LongPeriodRNG implements RandomnessSource {
      * massive period this class supports. Essentially, each LongPeriodRNG in the array will generate a different random
      * sequence relative to any other element of the array, but the sequences are reproducible if the same seed is given
      * to this method a different time (useful for testing).
+     *
      * @param count the number of LongPeriodRNG objects to generate in the array.
-     * @param seed the RNG seed that will determine the different sequences the returned LongPeriodRNG objects produce
+     * @param seed  the RNG seed that will determine the different sequences the returned LongPeriodRNG objects produce
      * @return an array of LongPeriodRNG where none of the RNGs will generate overlapping sequences.
      */
-    public static LongPeriodRNG[] createMany(int count, long[] seed)
-    {
-        if(count < 1) count = 1;
+    public static LongPeriodRNG[] createMany(int count, long[] seed) {
+        if (count < 1) count = 1;
         LongPeriodRNG origin = new LongPeriodRNG(seed);
         LongPeriodRNG[] values = new LongPeriodRNG[count];
-        for (int i = 0; i < count; i++) {
+        for (int i = count - 1; i > 0; i--) {
             values[i] = new LongPeriodRNG(origin);
             origin.jump();
         }
+        values[0] = origin;
         return values;
     }
 
@@ -385,8 +377,6 @@ public class LongPeriodRNG implements RandomnessSource {
 
     @Override
     public int hashCode() {
-        int result = CrossHash.Lightning.hash(state);
-        result = 31 * result + choice;
-        return result;
+        return CrossHash.Storm.predefined[choice].hash(state);
     }
 }

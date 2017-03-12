@@ -178,7 +178,8 @@ public class ColorChangeImage extends Image {
         this.loopTime = loopTime;
         setSize(texture.getRegionWidth(), texture.getRegionHeight());
         setOrigin(doubleWidth ? 16 : 1); //Align.right or Align.center
-    }/**
+    }
+    /**
      * Creates an image stretched and aligned center, that will use the specified list of colors.
      *
      * @param texture the texture to use
@@ -231,7 +232,28 @@ public class ColorChangeImage extends Image {
         setSize(texture.getRegionWidth(), texture.getRegionHeight());
         setOrigin(doubleWidth ? 16 : 1); //Align.right or Align.center
     }
+    /**
+     * Creates an image stretched and aligned center, that will use the specified list of colors.
+     *
+     * @param texture the texture to use
+     * @param loopTime the amount of time, in seconds, to spend transitioning through the colors before repeating
+     * @param doubleWidth true if this takes up two grid cells; only matters if you use {@link AnimatedEntity#setDirection(Direction)}
+     * @param colors a List of Color, such as one returned by SquidColorCenter's gradient or rainbow methods
+     */
+    public ColorChangeImage(TextureRegion texture, float loopTime, boolean doubleWidth, float width, float height, Color... colors) {
 
+        super(texture);
+
+        if(colors == null || colors.length == 0)
+            this.colors = DefaultResources.getSCC().rainbow(12);
+        else {
+            this.colors = new ArrayList<>(colors.length);
+            Collections.addAll(this.colors, colors);
+        }
+        this.loopTime = loopTime;
+        setSize(width, height);
+        setOrigin(doubleWidth ? 16 : 1); //Align.right or Align.center
+    }
     /**
      * Returns the color the actor will be tinted when drawn. Takes the Color from the List of Color this was constructed
      * with or assigned with setColors, not the normal Actor color assigned with setColor.

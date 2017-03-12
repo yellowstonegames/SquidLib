@@ -21,43 +21,40 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 
-/** A viewport that scales the world using {@link Scaling}.
- * <p>
- * {@link Scaling#fit} keeps the aspect ratio by scaling the world up to fit the screen, adding black bars (letterboxing) for the
- * remaining space.
- * <p>
- * {@link Scaling#fill} keeps the aspect ratio by scaling the world up to take the whole screen (some of the world may be off
- * screen).
- * <p>
- * {@link Scaling#stretch} does not keep the aspect ratio, the world is scaled to take the whole screen.
- * <p>
- * {@link Scaling#none} keeps the aspect ratio by using a fixed size world (the world may not fill the screen or some of the world
- * may be off screen).
+/** A viewport that scales the world using {@link Scaling#stretch} on a sub-region of the screen.
+ * Does not keep the aspect ratio, the world is scaled to take up the requested region of the screen.
  * @author Daniel Holderbaum
  * @author Nathan Sweet
  * Created by Tommy Ettinger on 4/16/2016.
  */
 public class ShrinkPartViewport extends ScalingViewport {
-    public float barWidth;
+    public float barWidth, barHeight;
     /** Creates a new viewport using a new {@link OrthographicCamera}. */
     public ShrinkPartViewport (float worldWidth, float worldHeight, float barWidth) {
         this(worldWidth, worldHeight, barWidth, new OrthographicCamera());
     }
+    public ShrinkPartViewport (float worldWidth, float worldHeight, float barWidth, float barHeight) {
+        this(worldWidth, worldHeight, barWidth, barHeight, new OrthographicCamera());
+    }
 
     public ShrinkPartViewport (float worldWidth, float worldHeight, float barWidth, Camera camera) {
+        this(worldWidth, worldHeight, barWidth, 0f, camera);
+    }
+
+    public ShrinkPartViewport (float worldWidth, float worldHeight, float barWidth, float barHeight, Camera camera) {
         super(Scaling.stretch, worldWidth, worldHeight, camera);
         this.barWidth = barWidth;
+        this.barHeight = barHeight;
     }
 
     @Override
     public void update (int screenWidth, int screenHeight, boolean centerCamera) {
-        Vector2 scaled = Scaling.stretch.apply(getWorldWidth(), getWorldHeight(), screenWidth - barWidth * 2, screenHeight);
+        Vector2 scaled = Scaling.stretch.apply(getWorldWidth(), getWorldHeight(),
+                screenWidth - barWidth * 2, screenHeight - barHeight * 2);
         int viewportWidth = Math.round(scaled.x);
         int viewportHeight = Math.round(scaled.y);
-
         // Center.
-        setScreenBounds((screenWidth - viewportWidth) / 2, (screenHeight - viewportHeight) / 2, viewportWidth, viewportHeight);
-
+        setScreenBounds((screenWidth - viewportWidth) >> 1, (screenHeight - viewportHeight) >> 1, viewportWidth, viewportHeight);
         apply(true);
     }
 

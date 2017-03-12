@@ -11,10 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import squidpony.ArrayTools;
 import squidpony.FakeLanguageGen;
 import squidpony.panel.IColoredString;
 import squidpony.squidai.DijkstraMap;
-import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.SpatialMap;
@@ -80,7 +80,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private double[][] res;
     private int[][] lights;
     private Color[][] colors, bgColors;
-    private double[][] fovmap, pathMap;
+    private double[][] fovmap, pathMap, monPathMap;
     private AnimatedEntity player;
     private FOV fov;
     /**
@@ -130,7 +130,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // next, we populate the colorCenters array with the SquidColorCenters that will modify any colors we request
         // of them using the filter we specify. Only one SquidColorCenter will be used at any time for foreground, and
         // sometimes another will be used for background.
-        colorCenters = new SquidColorCenter[18];
+        colorCenters = new SquidColorCenter[20];
         // MultiLerpFilter here is given two colors to tint everything toward one of; this is meant to reproduce the
         // "Hollywood action movie poster" style of using primarily light orange (explosions) and gray-blue (metal).
 
@@ -173,17 +173,17 @@ public class EverythingDemo extends ApplicationAdapter {
         colorCenters[12] = new SquidColorCenter(new Filters.WiggleFilter());
         colorCenters[13] = colorCenters[12];
 
-        // SaturationFilter here is used to de-saturate the colors slightly. Background is less saturated.
+        // PaletteFilter here is used to limit colors to specific sets.
 
-        colorCenters[14] = new SquidColorCenter(new Filters.PaletteFilter(SColor.BLUE_GREEN_SERIES));
-        colorCenters[15] = new SquidColorCenter(new Filters.PaletteFilter(SColor.ACHROMATIC_SERIES));
+        colorCenters[14] = new SquidColorCenter(new Filters.PaletteFilter(SColor.DAWNBRINGER_16));
+        colorCenters[15] = new SquidColorCenter(new Filters.PaletteFilter(SColor.DAWNBRINGER_16));
 
         colorCenters[16] = DefaultResources.getSCC();
         colorCenters[17] = colorCenters[16];
 
-        fgCenter = colorCenters[16];
-        bgCenter = colorCenters[17];
-        currentCenter = 8;
+        colorCenters[18] = new SquidColorCenter(new Filters.DistinctRedGreenFilter());
+        colorCenters[19] = colorCenters[18];
+
         batch = new SpriteBatch();
         width = 90;
         height = 30;
@@ -236,6 +236,15 @@ public class EverythingDemo extends ApplicationAdapter {
                 " Click the top or bottom border of this box to scroll.");
         counter = 0;
 
+        // The display is almost all set up, so now we can tell it to use the filtered color centers we want.
+        // 8 is unfiltered. You can change this to 0-7 to use different filters, or press 'f' in play.
+        currentCenter = 8;
+
+        fgCenter = colorCenters[currentCenter * 2];
+        bgCenter = colorCenters[currentCenter * 2 + 1];
+        display.setFGColorCenter(fgCenter);
+        display.setBGColorCenter(bgCenter);
+
         dungeonGen = new DungeonGenerator(width, height, rng);
         dungeonGen.addWater(30, 6);
         dungeonGen.addGrass(5);
@@ -272,6 +281,7 @@ public class EverythingDemo extends ApplicationAdapter {
         getToPlayer.rng = rng;
         getToPlayer.setGoal(pl);
         pathMap = getToPlayer.scan(null);
+        monPathMap = ArrayTools.copy(pathMap);
 
         player = display.animateActor(pl.x, pl.y, '@',
                 fgCenter.loopingGradient(SColor.CAPE_JASMINE, SColor.HAN_PURPLE, 45), 1.5f, false);
@@ -381,7 +391,9 @@ public class EverythingDemo extends ApplicationAdapter {
                     }
                     case 'f':
                     case 'F': {
-                        currentCenter = (currentCenter + 1) % 9;
+                        currentCenter = (currentCenter + 1) % 10;
+                        //currentCenter = (currentCenter + 1 & 1) + 8; // for testing red-green color blindness filter
+
                         // idx is 3 when we use the HallucinateFilter, which needs special work
                         changingColors = currentCenter == 3;
                         fgCenter = colorCenters[currentCenter * 2];
@@ -494,23 +506,17 @@ public class EverythingDemo extends ApplicationAdapter {
     private void postMove() {
 
         phase = Phase.MONSTER_ANIM;
-        // The next two lines are important to avoid monsters treating cells the player WAS in as goals.
-        getToPlayer.clearGoals();
-        getToPlayer.resetMap();
-        // now that goals are cleared, we can mark the current player position as a goal.
-        getToPlayer.setGoal(player.gridX, player.gridY);
-        // this is an important piece of DijkstraMap usage; the argument is a Set of Points for squares that
-        // temporarily cannot be moved through (not walls, which are automatically known because the map char[][]
-        // was passed to the DijkstraMap constructor, but things like moving creatures and objects).
+        Coord[] playerArray = {Coord.get(player.gridX, player.gridY)};
         OrderedSet<Coord> monplaces = monsters.positions();
-
-        pathMap = getToPlayer.scan(monplaces);
+        int monCount = monplaces.size();
 
         // recalculate FOV, store it in fovmap for the render to use.
         fovmap = fov.calculateFOV(res, player.gridX, player.gridY, 8, Radius.SQUARE);
         // handle monster turns
-        ArrayList<Coord> nextMovePositions = new ArrayList<>(25);
-        for (Coord pos : monsters.positions()) {
+        ArrayList<Coord> nextMovePositions;
+        for(int ci = 0; ci < monCount; ci++)
+        {
+            Coord pos = monplaces.removeFirst();
             Monster mon = monsters.get(pos);
             // monster values are used to store their aggression, 1 for actively stalking the player, 0 for not.
             if (mon.state > 0 || fovmap[pos.x][pos.y] > 0.1) {
@@ -519,19 +525,47 @@ public class EverythingDemo extends ApplicationAdapter {
                             FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 1, 3,
                                     new String[]{",", ",", ",", " -"}, new String[]{"!"}, 0.25) + "\"");
                 }
+                getToPlayer.clearGoals();
+                nextMovePositions = getToPlayer.findPath(1, monplaces, null, pos, playerArray);
+                if (nextMovePositions != null && !nextMovePositions.isEmpty()) {
+                    Coord tmp = nextMovePositions.get(0);
+                    // if we would move into the player, instead damage the player and give newMons the current
+                    // position of this monster.
+                    if (tmp.x == player.gridX && tmp.y == player.gridY) {
+                        display.tint(player.gridX, player.gridY, SColor.PURE_CRIMSON, 0, 0.415f);
+                        health--;
+                        //player.setText("" + health);
+                        monsters.positionalModify(pos, mon.change(1));
+                        monplaces.add(pos);
+                    }
+                    // otherwise store the new position in newMons.
+                    else {
+                        /*if (fovmap[mon.getKey().x][mon.getKey().y] > 0.0) {
+                            display.put(mon.getKey().x, mon.getKey().y, 'M', 11);
+                        }*/
+                        monsters.positionalModify(pos, mon.change(1));
+                        monsters.move(pos, tmp);
+                        display.slide(mon.entity, tmp.x, tmp.y);
+                        monplaces.add(tmp);
+                    }
+                } else {
+                    monsters.positionalModify(pos, mon.change(1));
+                    monplaces.add(pos);
+                }
+                /*
                 // this block is used to ensure that the monster picks the best path, or a random choice if there
                 // is more than one equally good best option.
                 Direction choice = null;
-                double best = 9999.0;
+                double best = 9990.0;
                 Direction[] ds = new Direction[8];
                 rng.shuffle(Direction.OUTWARDS, ds);
                 for (Direction d : ds) {
                     Coord tmp = pos.translate(d);
-                    if (pathMap[tmp.x][tmp.y] < best &&
+                    if (monPathMap[tmp.x][tmp.y] < best &&
                             !checkOverlap(mon, tmp.x, tmp.y, nextMovePositions)) {
                         // pathMap is a 2D array of doubles where 0 is the goal (the player).
                         // we use best to store which option is closest to the goal.
-                        best = pathMap[tmp.x][tmp.y];
+                        best = monPathMap[tmp.x][tmp.y];
                         choice = d;
                     }
                 }
@@ -547,9 +581,6 @@ public class EverythingDemo extends ApplicationAdapter {
                     }
                     // otherwise store the new position in newMons.
                     else {
-                        /*if (fovmap[mon.getKey().x][mon.getKey().y] > 0.0) {
-                            display.put(mon.getKey().x, mon.getKey().y, 'M', 11);
-                        }*/
                         nextMovePositions.add(tmp);
                         monsters.positionalModify(pos, mon.change(1));
                         monsters.move(pos, tmp);
@@ -559,6 +590,10 @@ public class EverythingDemo extends ApplicationAdapter {
                 } else {
                     monsters.positionalModify(pos, mon.change(1));
                 }
+                */
+            }
+            else {
+                monplaces.add(pos);
             }
         }
 
@@ -590,6 +625,8 @@ public class EverythingDemo extends ApplicationAdapter {
         IColoredString<Color> helping1 = new IColoredString.Impl<>("Use numpad or vi-keys (hjklyubn) to move.", Color.WHITE);
         IColoredString<Color> helping2 = new IColoredString.Impl<>("Use ? for help, f to change colors, q to quit.", Color.WHITE);
         IColoredString<Color> helping3 = new IColoredString.Impl<>("Click the top or bottom border of the lower message box to scroll.", Color.WHITE);
+        IColoredString<Color> helping4 = new IColoredString.Impl<>("Each Я is an AЯMED GUAЯD; bump into them to kill them.", Color.WHITE);
+        IColoredString<Color> helping5 = new IColoredString.Impl<>("If an Я starts its turn next to where you just moved, you take damage.", Color.WHITE);
 
         /* Some grey color */
         final Color bgColor = new Color(0.3f, 0.3f, 0.3f, 0.9f);
@@ -612,6 +649,8 @@ public class EverythingDemo extends ApplicationAdapter {
         text.add(helping1);
         text.add(helping2);
         text.add(helping3);
+        text.add(helping4);
+        text.add(helping5);
 
         final float w = width * cellWidth, aw = helping3.length() * cellWidth * 0.8f * INTERNAL_ZOOM;
         final float h = height * cellHeight, ah = cellHeight * 9f * INTERNAL_ZOOM;
@@ -642,7 +681,7 @@ public class EverythingDemo extends ApplicationAdapter {
             for (int j = 0; j < height; j++) {
                 overlapping = monsters.containsPosition(Coord.get(i, j)) || (player.gridX == i && player.gridY == j);
                 // if we see it now, we remember the cell and show a lit cell based on the fovmap value (between 0.0
-                // and 1.0), with 1.0 being almost pure white at +215 lightness and 0.0 being rather dark at -105.
+                // and 1.0), with 1.0 being brighter at +75 lightness and 0.0 being rather dark at -105.
                 if (fovmap[i][j] > 0.0) {
                     seen[i][j] = true;
                     display.put(i, j, (overlapping) ? ' ' : lineDungeon[i][j], fgCenter.filter(colors[i][j]), bgCenter.filter(bgColors[i][j]),
@@ -653,10 +692,14 @@ public class EverythingDemo extends ApplicationAdapter {
                 }
             }
         }
-        for (Coord pt : toCursor) {
+        Coord pt = null;
+        for (int i = 0; i < toCursor.size(); i++) {
+            pt = toCursor.get(i);
             // use a brighter light to trace the path to the cursor, from 170 max lightness to 0 min.
             display.highlight(pt.x, pt.y, lights[pt.x][pt.y] + (int) (170 * fovmap[pt.x][pt.y]));
         }
+        //if(pt != null)
+        //    display.putString(0, 0, String.valueOf(monPathMap[pt.x][pt.y]));
     }
 
     @Override

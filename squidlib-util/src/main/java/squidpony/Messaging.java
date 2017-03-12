@@ -428,12 +428,14 @@ public class Messaging {
     /**
      * Takes message and replaces any of the special terms this recognizes, like @, ^, and $, with the appropriately-
      * conjugated terms for the given user, their associated NounTrait, the given target, and their NounTrait. Also
-     * replaces each occurrence of "~" with
-     * @param message the message to transform; should contain "@", "^", or "$" in it, at least, to be replaced
+     * replaces the nth occurrence of "~" with the matching nth item in extra, so the first "~" is replaced with the
+     * first item in extra, the second "~" with the second item, and so on until one is exhausted.
+     * @param message the message to transform; should contain "@", "^", "$", or "~" in it, at least, to be replaced
      * @param user the name of the user for cases where it can replace text like "@" or "@Name"
      * @param userTrait the {@link NounTrait} enum that determines how user should be referred to
      * @param target the name of the target for cases where it can replace text like "^" or "^Name"
      * @param targetTrait the {@link NounTrait} enum that determines how the target should be referred to
+     * @param extra an array or vararg of String where the nth item in extra will replace the nth occurrence of "~"
      * @return a String resulting from the processing of message
      */
     public static String transform(CharSequence message, String user, NounTrait userTrait, String target, NounTrait targetTrait, String... extra)
@@ -443,8 +445,9 @@ public class Messaging {
         String text = ur.replace(tr.replace(message));
         if(extra != null && extra.length > 0)
         {
+            Matcher m = Pattern.compile("~").matcher(text);
             for (int i = 0; i < extra.length; i++) {
-                text = text.replaceFirst("~", extra[i]);
+                text = m.replaceFirst(extra[i]);
             }
         }
         return text;
@@ -629,17 +632,17 @@ public class Messaging {
             {
                 String[] others = irregular.get(match.group("other"));
                 if(others != null && others.length == 11)
-                {
                     dest.append(others[trait.ordinal()]);
-                }
+                else
+                    match.getGroup(0, dest);
             }
             else if(match.isCaptured("Other"))
             {
                 String[] others = irregular.get(match.group("Other").toLowerCase());
                 if(others != null && others.length == 11)
-                {
                     appendCapitalized(others[trait.ordinal()], dest);
-                }
+                else
+                    match.getGroup(0, dest);
             }
             else
                 match.getGroup(0, dest);

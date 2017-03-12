@@ -10,7 +10,7 @@ public class Tileset {
     public Tile[] h_tiles, v_tiles;
 
     /**
-     * Probably not something you will construct manually. See DungeonGen .
+     * Probably not something you will construct manually. See DungeonBoneGen .
      */
     public Tileset() {
         config = new Config();
