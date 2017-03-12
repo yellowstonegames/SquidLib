@@ -205,10 +205,6 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.ContentMatcher.html" title="class in squidpony">ObText.ContentMatcher</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.Convert.html" title="class in squidpony">ObText.Convert</a></span></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.ItemIterator.html" title="class in squidpony">ObText.ItemIterator</a></span></code>
 <div class="block">A one-way iterator through this ObText's String items.</div>
@@ -534,7 +530,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>convert</h4>
-<pre>public static final&nbsp;<a href="../squidpony/StringConvert.html" title="class in squidpony">StringConvert</a>&lt;<a href="../squidpony/ObText.html" title="class in squidpony">ObText</a>&gt; <a href="../src-html/squidpony/ObText.html#line.404">convert</a></pre>
+<pre>public static final&nbsp;<a href="../squidpony/StringConvert.html" title="class in squidpony">StringConvert</a>&lt;<a href="../squidpony/ObText.html" title="class in squidpony">ObText</a>&gt; <a href="../src-html/squidpony/ObText.html#line.391">convert</a></pre>
 </li>
 </ul>
 </li>
@@ -723,7 +719,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 <ul class="blockList">
 <li class="blockList">
 <h4>makeMatcher</h4>
-<pre>public static&nbsp;<a href="../squidpony/ObText.ContentMatcher.html" title="class in squidpony">ObText.ContentMatcher</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.418">makeMatcher</a>()</pre>
+<pre>public static&nbsp;<a href="../squidpony/ObText.ContentMatcher.html" title="class in squidpony">ObText.ContentMatcher</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.416">makeMatcher</a>()</pre>
 <div class="block">Can be used to help reading sequences of Strings with ObText-style quotation marking their boundaries.
  This returns a <a href="../squidpony/ObText.ContentMatcher.html" title="class in squidpony"><code>ObText.ContentMatcher</code></a> object that you must call setTarget on before using it.
  The argument(s) to setTarget should be the text that might contain quotes, heredoc-style quotes, or just bare
@@ -745,7 +741,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>makeMatcher</h4>
-<pre>public static&nbsp;<a href="../squidpony/ObText.ContentMatcher.html" title="class in squidpony">ObText.ContentMatcher</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.435">makeMatcher</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</pre>
+<pre>public static&nbsp;<a href="../squidpony/ObText.ContentMatcher.html" title="class in squidpony">ObText.ContentMatcher</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.433">makeMatcher</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</pre>
 <div class="block">Can be used to help reading sequences of Strings with ObText-style quotation marking their boundaries.
  This returns a <a href="../squidpony/ObText.ContentMatcher.html" title="class in squidpony"><code>ObText.ContentMatcher</code></a> object that is already configured to read from <code>text</code>.
  The <code>text</code> should contain Strings that may be surrounded by quotes, heredoc-style quotes, or just bare

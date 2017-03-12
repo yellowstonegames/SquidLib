@@ -83,6 +83,12 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><a href="#squidpony">squidpony</a></td>
+<td class="colLast">
+<div class="block">Utilities that don't fit elsewhere in SquidLib, like text manipulation, some interfaces, and compatibility code.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#squidpony.squidmath">squidpony.squidmath</a></td>
 <td class="colLast">
 <div class="block">A very broad package containing random number generators, geometry tools, and some classes for combinatorics.</div>
@@ -93,6 +99,24 @@
 </li>
 <li class="blockList">
 <ul class="blockList">
+<li class="blockList"><a name="squidpony">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> in <a href="../../../squidpony/package-summary.html">squidpony</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../squidpony/package-summary.html">squidpony</a> declared as <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a></code></td>
+<td class="colLast"><span class="typeNameLabel">StringConvert.</span><code><span class="memberNameLink"><a href="../../../squidpony/StringConvert.html#spaceIgnoringHasher">spaceIgnoringHasher</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="squidpony.squidmath">
 <!--   -->
 </a>
@@ -168,20 +192,24 @@
 <td class="colLast"><span class="typeNameLabel">CrossHash.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CrossHash.html#longHasher">longHasher</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a></code></td>
+<td class="colLast"><span class="typeNameLabel">CrossHash.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CrossHash.html#objectArrayHasher">objectArrayHasher</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a></code></td>
 <td class="colLast"><span class="typeNameLabel">TableSet.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/TableSet.html#rowHasher">rowHasher</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CrossHash.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CrossHash.html#shortHasher">shortHasher</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CrossHash.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CrossHash.html#stringArrayHasher">stringArrayHasher</a></span></code>
 <div class="block">Though the name suggests this only hashes String arrays, it can actually hash any CharSequence array as well.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CrossHash.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CrossHash.html#stringHasher">stringHasher</a></span></code>&nbsp;</td>
 </tr>
@@ -258,31 +286,43 @@
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/K2.html#K2-int-float-squidpony.squidmath.CrossHash.IHasher-squidpony.squidmath.CrossHash.IHasher-">K2</a></span>(int&nbsp;expected,
+  float&nbsp;f,
+  <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasherA,
+  <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasherB)</code>
+<div class="block">Constructs a K2 with the expected number of indices to hold (the number of A and number of B items are always
+ equal, and this will be more efficient if expected is greater than that number), the load factor to use,
+ between 0.1f and 0.8f usually (using load factors higher than 0.8f can cause problems), and two IHasher
+ implementations, such as <a href="../../../squidpony/squidmath/CrossHash.html#generalHasher"><code>CrossHash.generalHasher</code></a>, that will be used to hash and compare for equality with
+ A keys and B keys, respectively.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrderedMap.html#OrderedMap-squidpony.squidmath.CrossHash.IHasher-">OrderedMap</a></span>(<a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</code>
 <div class="block">Creates a new OrderedMap with initial expected 16 entries and 0.75f as load factor.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrderedMap.html#OrderedMap-int-squidpony.squidmath.CrossHash.IHasher-">OrderedMap</a></span>(int&nbsp;expected,
           <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</code>
 <div class="block">Creates a new OrderedMap with 0.75f as load factor.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrderedMap.html#OrderedMap-int-float-squidpony.squidmath.CrossHash.IHasher-">OrderedMap</a></span>(int&nbsp;expected,
           float&nbsp;f,
           <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</code>
 <div class="block">Creates a new OrderedMap.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrderedMap.html#OrderedMap-K:A-V:A-squidpony.squidmath.CrossHash.IHasher-">OrderedMap</a></span>(<a href="../../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>[]&nbsp;keyArray,
           <a href="../../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>[]&nbsp;valueArray,
           <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</code>
 <div class="block">Creates a new OrderedMap with 0.75f as load factor using the elements of two parallel arrays.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrderedMap.html#OrderedMap-K:A-V:A-float-squidpony.squidmath.CrossHash.IHasher-">OrderedMap</a></span>(<a href="../../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>[]&nbsp;keyArray,
           <a href="../../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>[]&nbsp;valueArray,
           float&nbsp;f,
@@ -290,68 +330,68 @@
 <div class="block">Creates a new OrderedMap using the elements of two parallel arrays.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrderedMap.html#OrderedMap-java.util.Map-squidpony.squidmath.CrossHash.IHasher-">OrderedMap</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="../../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,? extends <a href="../../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;m,
           <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</code>
 <div class="block">Creates a new OrderedMap with 0.75f as load factor copying a given one.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrderedMap.html#OrderedMap-java.util.Map-float-squidpony.squidmath.CrossHash.IHasher-">OrderedMap</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="../../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,? extends <a href="../../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;m,
           float&nbsp;f,
           <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</code>
 <div class="block">Creates a new OrderedMap copying a given one.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrderedSet.html#OrderedSet-java.util.Collection-squidpony.squidmath.CrossHash.IHasher-">OrderedSet</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;? extends <a href="../../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c,
           <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</code>
 <div class="block">Creates a new hash set with <a href="../../../squidpony/squidmath/OrderedSet.html#DEFAULT_LOAD_FACTOR"><code>OrderedSet.DEFAULT_LOAD_FACTOR</code></a> as load
  factor copying a given collection.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrderedSet.html#OrderedSet-java.util.Collection-float-squidpony.squidmath.CrossHash.IHasher-">OrderedSet</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;? extends <a href="../../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;&nbsp;c,
           float&nbsp;f,
           <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</code>
 <div class="block">Creates a new hash set copying a given collection.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrderedSet.html#OrderedSet-squidpony.squidmath.CrossHash.IHasher-">OrderedSet</a></span>(<a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</code>
 <div class="block">Creates a new hash set with <a href="../../../squidpony/squidmath/OrderedSet.html#DEFAULT_LOAD_FACTOR"><code>OrderedSet.DEFAULT_LOAD_FACTOR</code></a> as load
  factor.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrderedSet.html#OrderedSet-int-squidpony.squidmath.CrossHash.IHasher-">OrderedSet</a></span>(int&nbsp;expected,
           <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</code>
 <div class="block">Creates a new hash set with <a href="../../../squidpony/squidmath/OrderedSet.html#DEFAULT_LOAD_FACTOR"><code>OrderedSet.DEFAULT_LOAD_FACTOR</code></a> as load
  factor.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrderedSet.html#OrderedSet-int-float-squidpony.squidmath.CrossHash.IHasher-">OrderedSet</a></span>(int&nbsp;expected,
           float&nbsp;f,
           <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</code>
 <div class="block">Creates a new hash map.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrderedSet.html#OrderedSet-K:A-squidpony.squidmath.CrossHash.IHasher-">OrderedSet</a></span>(<a href="../../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>[]&nbsp;a,
           <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</code>
 <div class="block">Creates a new hash set with <a href="../../../squidpony/squidmath/OrderedSet.html#DEFAULT_LOAD_FACTOR"><code>OrderedSet.DEFAULT_LOAD_FACTOR</code></a> as load
  factor copying the elements of an array.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrderedSet.html#OrderedSet-K:A-float-squidpony.squidmath.CrossHash.IHasher-">OrderedSet</a></span>(<a href="../../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>[]&nbsp;a,
           float&nbsp;f,
           <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasher)</code>
 <div class="block">Creates a new hash set copying the elements of an array.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrderedSet.html#OrderedSet-K:A-int-int-squidpony.squidmath.CrossHash.IHasher-">OrderedSet</a></span>(<a href="../../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>[]&nbsp;a,
           int&nbsp;offset,
           int&nbsp;length,
@@ -360,7 +400,7 @@
  factor and fills it with the elements of a given array.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrderedSet.html#OrderedSet-K:A-int-int-float-squidpony.squidmath.CrossHash.IHasher-">OrderedSet</a></span>(<a href="../../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>[]&nbsp;a,
           int&nbsp;offset,
           int&nbsp;length,
@@ -369,7 +409,7 @@
 <div class="block">Creates a new hash set and fills it with the elements of a given array.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/TableSet.html#TableSet-C:A-int-R:A-int-int-squidpony.squidmath.CrossHash.IHasher-squidpony.squidmath.CrossHash.IHasher-">TableSet</a></span>(<a href="../../../squidpony/squidmath/TableSet.html" title="type parameter in TableSet">C</a>[]&nbsp;c,
         int&nbsp;offset_c,
         <a href="../../../squidpony/squidmath/TableSet.html" title="type parameter in TableSet">R</a>[]&nbsp;r,
@@ -381,7 +421,7 @@
  factor and fills it with the elements of a given array.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/TableSet.html#TableSet-C:A-int-R:A-int-int-float-squidpony.squidmath.CrossHash.IHasher-squidpony.squidmath.CrossHash.IHasher-">TableSet</a></span>(<a href="../../../squidpony/squidmath/TableSet.html" title="type parameter in TableSet">C</a>[]&nbsp;c,
         int&nbsp;offset_c,
         <a href="../../../squidpony/squidmath/TableSet.html" title="type parameter in TableSet">R</a>[]&nbsp;r,
@@ -393,7 +433,7 @@
 <div class="block">Creates a new hash set and fills it with the elements of a given array.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/TableSet.html#TableSet-C:A-R:A-squidpony.squidmath.CrossHash.IHasher-squidpony.squidmath.CrossHash.IHasher-">TableSet</a></span>(<a href="../../../squidpony/squidmath/TableSet.html" title="type parameter in TableSet">C</a>[]&nbsp;c,
         <a href="../../../squidpony/squidmath/TableSet.html" title="type parameter in TableSet">R</a>[]&nbsp;r,
         <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;columnHasher,
@@ -402,7 +442,7 @@
  factor copying the elements of an array.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/TableSet.html#TableSet-C:A-R:A-float-squidpony.squidmath.CrossHash.IHasher-squidpony.squidmath.CrossHash.IHasher-">TableSet</a></span>(<a href="../../../squidpony/squidmath/TableSet.html" title="type parameter in TableSet">C</a>[]&nbsp;c,
         <a href="../../../squidpony/squidmath/TableSet.html" title="type parameter in TableSet">R</a>[]&nbsp;r,
         float&nbsp;f,
@@ -411,7 +451,7 @@
 <div class="block">Creates a new hash set copying the elements of an array.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/TableSet.html#TableSet-java.util.Collection-java.util.Collection-squidpony.squidmath.CrossHash.IHasher-squidpony.squidmath.CrossHash.IHasher-">TableSet</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;? extends <a href="../../../squidpony/squidmath/TableSet.html" title="type parameter in TableSet">C</a>&gt;&nbsp;c,
         <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;? extends <a href="../../../squidpony/squidmath/TableSet.html" title="type parameter in TableSet">R</a>&gt;&nbsp;r,
         <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;columnHasher,
@@ -420,7 +460,7 @@
  factor copying a given collection.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/TableSet.html#TableSet-java.util.Collection-java.util.Collection-float-squidpony.squidmath.CrossHash.IHasher-squidpony.squidmath.CrossHash.IHasher-">TableSet</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;? extends <a href="../../../squidpony/squidmath/TableSet.html" title="type parameter in TableSet">C</a>&gt;&nbsp;c,
         <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;? extends <a href="../../../squidpony/squidmath/TableSet.html" title="type parameter in TableSet">R</a>&gt;&nbsp;r,
         float&nbsp;f,
@@ -429,14 +469,14 @@
 <div class="block">Creates a new hash set copying a given collection.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/TableSet.html#TableSet-squidpony.squidmath.CrossHash.IHasher-squidpony.squidmath.CrossHash.IHasher-">TableSet</a></span>(<a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;columnHasher,
         <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;rowHasher)</code>
 <div class="block">Creates a new hash set with <a href="../../../squidpony/squidmath/TableSet.html#DEFAULT_LOAD_FACTOR"><code>TableSet.DEFAULT_LOAD_FACTOR</code></a> as load
  factor.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/TableSet.html#TableSet-int-squidpony.squidmath.CrossHash.IHasher-squidpony.squidmath.CrossHash.IHasher-">TableSet</a></span>(int&nbsp;expected,
         <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;columnHasher,
         <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;rowHasher)</code>
@@ -444,7 +484,7 @@
  factor.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/TableSet.html#TableSet-int-float-squidpony.squidmath.CrossHash.IHasher-squidpony.squidmath.CrossHash.IHasher-">TableSet</a></span>(int&nbsp;expected,
         float&nbsp;f,
         <a href="../../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;columnHasher,

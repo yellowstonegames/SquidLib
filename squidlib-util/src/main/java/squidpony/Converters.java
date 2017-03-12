@@ -1,7 +1,6 @@
 package squidpony;
 
-import squidpony.squidmath.OrderedMap;
-import squidpony.squidmath.OrderedSet;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
 
@@ -12,10 +11,17 @@ import java.util.ArrayList;
  * the more general-use data structures.
  * Created by Tommy Ettinger on 3/9/2017.
  */
+@SuppressWarnings("unchecked")
 public class Converters {
-    public static <K> StringConvert<OrderedSet<K>> convertOrderedSet(final StringConvert<K> convert)
+    public static <K> StringConvert<OrderedSet<K>> convertOrderedSet(final Class<K> type)
     {
-        return new StringConvert<OrderedSet<K>>() {
+        Class[] types = StringConvert.asArray(OrderedSet.class, type);
+        StringConvert found = StringConvert.lookup(types);
+        if(found != null)
+            return found; // in this case we've already created a StringConvert for this type combination
+        final StringConvert<K> convert = (StringConvert<K>) StringConvert.lookup(type);
+
+        return new StringConvert<OrderedSet<K>>(types) {
             @Override
             public String stringify(OrderedSet<K> item) {
                 StringBuilder sb = new StringBuilder(100);
@@ -46,9 +52,16 @@ public class Converters {
             }
         };
     }
-    public static <K, V> StringConvert<OrderedMap<K, V>> convertOrderedMap(final StringConvert<K> convertK, final StringConvert<V> convertV)
+    public static <K, V> StringConvert<OrderedMap<K, V>> convertOrderedMap(final Class<K> typeK, final Class<V> typeV)
     {
-        return new StringConvert<OrderedMap<K, V>>() {
+        Class[] types = StringConvert.asArray(OrderedSet.class, typeK, typeV);
+        StringConvert found = StringConvert.lookup(types);
+        if(found != null)
+            return found; // in this case we've already created a StringConvert for this type combination
+        final StringConvert<K> convertK = (StringConvert<K>) StringConvert.lookup(typeK);
+        final StringConvert<V> convertV = (StringConvert<V>) StringConvert.lookup(typeV);
+
+        return new StringConvert<OrderedMap<K, V>>(types) {
             @Override
             public String stringify(OrderedMap<K, V> item) {
                 StringBuilder sb = new StringBuilder(100);
@@ -90,9 +103,14 @@ public class Converters {
             }
         };
     }
-    public static <K> StringConvert<ArrayList<K>> convertArrayList(final StringConvert<K> convert)
+    public static <K> StringConvert<ArrayList<K>> convertArrayList(final Class<K> type)
     {
-        return new StringConvert<ArrayList<K>>() {
+        Class[] types = StringConvert.asArray(ArrayList.class, type);
+        StringConvert found = StringConvert.lookup(types);
+        if(found != null)
+            return found; // in this case we've already created a StringConvert for this type combination
+        final StringConvert<K> convert = (StringConvert<K>) StringConvert.lookup(type);
+        return new StringConvert<ArrayList<K>>(types) {
             @Override
             public String stringify(ArrayList<K> item) {
                 StringBuilder sb = new StringBuilder(100);
@@ -124,10 +142,71 @@ public class Converters {
         };
     }
 
+    public static final StringConvert<Coord> convertCoord = new StringConvert<Coord>(Coord.class) {
+        @Override
+        public String stringify(Coord item) {
+            return item.x + "," + item.y;
+        }
+
+        @Override
+        public Coord restore(String text) {
+            return Coord.get(StringKit.intFromDec(text), StringKit.intFromDec(text, text.indexOf(',') + 1, text.length()));
+        }
+    };
+
+    public static final StringConvert<Coord[]> convertArrayCoord = new StringConvert<Coord[]>(Coord[].class) {
+        @Override
+        public String stringify(Coord[] item) {
+            int len = item.length;
+            StringBuilder sb = new StringBuilder(len * 5);
+            for (int i = 0; i < len;) {
+                sb.append(item[i].x).append(',').append(item[i].y);
+                if(++i < len)
+                    sb.append(';');
+            }
+            return sb.toString();
+        }
+
+        @Override
+        public Coord[] restore(String text) {
+            Coord[] coords = new Coord[StringKit.count(text, ';') + 1];
+            int start = -1, end = text.indexOf(',');
+            for (int i = 0; i < coords.length; i++) {
+                coords[i] = Coord.get(StringKit.intFromDec(text, start+1, end),
+                        StringKit.intFromDec(text, end+1, (start = text.indexOf(';', end+1))));
+                end = text.indexOf(',', start+1);
+            }
+            return coords;
+        }
+    };
+
+    public static final StringConvert<GreasedRegion> convertGreasedRegion = new StringConvert<GreasedRegion>(GreasedRegion.class) {
+        @Override
+        public String stringify(GreasedRegion item) {
+            return item.serializeToString();
+        }
+
+        @Override
+        public GreasedRegion restore(String text) {
+            return GreasedRegion.deserializeFromString(text);
+        }
+    };
+    public static final StringConvert<IntVLA> convertIntVLA = new StringConvert<IntVLA>(IntVLA.class) {
+        @Override
+        public String stringify(IntVLA item) {
+            return item.toString(",");
+        }
+
+        @Override
+        public IntVLA restore(String text) {
+            return IntVLA.deserializeFromString(text);
+        }
+    };
+
     /**
      * Simple implementation to help when passing StringConverts around with data that is already a String.
      */
-    public static final StringConvert<String> convertString = new StringConvert<String>() {
+    public static final StringConvert<String> convertString = new StringConvert<String>(String.class) {
         @Override
         public String stringify(String item) {
             return item;
@@ -139,7 +218,7 @@ public class Converters {
         }
     };
 
-    public static final StringConvert<Boolean> convertBoolean = new StringConvert<Boolean>() {
+    public static final StringConvert<Boolean> convertBoolean = new StringConvert<Boolean>(Boolean.class) {
         @Override
         public String stringify(Boolean item) {
             return item.toString();
@@ -151,7 +230,7 @@ public class Converters {
         }
     };
 
-    public static final StringConvert<Byte> convertByte = new StringConvert<Byte>() {
+    public static final StringConvert<Byte> convertByte = new StringConvert<Byte>(Byte.class) {
         @Override
         public String stringify(Byte item) {
             return item.toString();
@@ -163,7 +242,7 @@ public class Converters {
         }
     };
 
-    public static final StringConvert<Short> convertShort = new StringConvert<Short>() {
+    public static final StringConvert<Short> convertShort = new StringConvert<Short>(Short.class) {
         @Override
         public String stringify(Short item) {
             return item.toString();
@@ -175,7 +254,7 @@ public class Converters {
         }
     };
 
-    public static final StringConvert<Integer> convertInt = new StringConvert<Integer>() {
+    public static final StringConvert<Integer> convertInt = new StringConvert<Integer>(Integer.class) {
         @Override
         public String stringify(Integer item) {
             return item.toString();
@@ -187,7 +266,7 @@ public class Converters {
         }
     };
 
-    public static final StringConvert<Long> convertLong = new StringConvert<Long>() {
+    public static final StringConvert<Long> convertLong = new StringConvert<Long>(Long.class) {
         @Override
         public String stringify(Long item) {
             return item.toString();
@@ -199,7 +278,7 @@ public class Converters {
         }
     };
     
-    public static final StringConvert<Float> convertFloat = new StringConvert<Float>() {
+    public static final StringConvert<Float> convertFloat = new StringConvert<Float>(Float.class) {
         @Override
         public String stringify(Float item) {
             return item.toString();
@@ -211,7 +290,7 @@ public class Converters {
         }
     };
     
-    public static final StringConvert<Double> convertDouble = new StringConvert<Double>() {
+    public static final StringConvert<Double> convertDouble = new StringConvert<Double>(Double.class) {
         @Override
         public String stringify(Double item) {
             return item.toString();
@@ -223,7 +302,7 @@ public class Converters {
         }
     };
     
-    public static final StringConvert<Character> convertChar = new StringConvert<Character>() {
+    public static final StringConvert<Character> convertChar = new StringConvert<Character>(Character.class) {
         @Override
         public String stringify(Character item) {
             return item.toString();
@@ -235,7 +314,7 @@ public class Converters {
         }
     };
 
-    public static final StringConvert<boolean[]> convertArrayBoolean = new StringConvert<boolean[]>() {
+    public static final StringConvert<boolean[]> convertArrayBoolean = new StringConvert<boolean[]>(boolean[].class) {
         @Override
         public String stringify(boolean[] item) {
             return StringKit.join(",", item);
@@ -262,7 +341,7 @@ public class Converters {
         }
     };
 
-    public static final StringConvert<byte[]> convertArrayByte = new StringConvert<byte[]>() {
+    public static final StringConvert<byte[]> convertArrayByte = new StringConvert<byte[]>(byte[].class) {
         @Override
         public String stringify(byte[] item) {
             return StringKit.join(",", item);
@@ -290,7 +369,7 @@ public class Converters {
     };
 
 
-    public static final StringConvert<short[]> convertArrayShort = new StringConvert<short[]>() {
+    public static final StringConvert<short[]> convertArrayShort = new StringConvert<short[]>(short[].class) {
         @Override
         public String stringify(short[] item) {
             return StringKit.join(",", item);
@@ -317,7 +396,7 @@ public class Converters {
         }
     };
 
-    public static final StringConvert<int[]> convertArrayInt = new StringConvert<int[]>() {
+    public static final StringConvert<int[]> convertArrayInt = new StringConvert<int[]>(int[].class) {
         @Override
         public String stringify(int[] item) {
             return StringKit.join(",", item);
@@ -345,7 +424,7 @@ public class Converters {
     };
 
 
-    public static final StringConvert<long[]> convertArrayLong = new StringConvert<long[]>() {
+    public static final StringConvert<long[]> convertArrayLong = new StringConvert<long[]>(long[].class) {
         @Override
         public String stringify(long[] item) {
             return StringKit.join(",", item);
@@ -372,7 +451,7 @@ public class Converters {
         }
     };
 
-    public static final StringConvert<float[]> convertArrayFloat = new StringConvert<float[]>() {
+    public static final StringConvert<float[]> convertArrayFloat = new StringConvert<float[]>(float[].class) {
         @Override
         public String stringify(float[] item) {
             return StringKit.join(",", item);
@@ -399,7 +478,7 @@ public class Converters {
         }
     };
 
-    public static final StringConvert<double[]> convertArrayDouble = new StringConvert<double[]>() {
+    public static final StringConvert<double[]> convertArrayDouble = new StringConvert<double[]>(double[].class) {
         @Override
         public String stringify(double[] item) {
             return StringKit.join(",", item);
@@ -427,7 +506,7 @@ public class Converters {
     };
 
 
-    public static final StringConvert<char[]> convertArrayChar = new StringConvert<char[]>() {
+    public static final StringConvert<char[]> convertArrayChar = new StringConvert<char[]>(char[].class) {
         @Override
         public String stringify(char[] item) {
             return String.valueOf(item);

@@ -310,15 +310,19 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.html#shortHasher">shortHasher</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.html#objectArrayHasher">objectArrayHasher</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.html#shortHasher">shortHasher</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.html#stringArrayHasher">stringArrayHasher</a></span></code>
 <div class="block">Though the name suggests this only hashes String arrays, it can actually hash any CharSequence array as well.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.html#stringHasher">stringHasher</a></span></code>&nbsp;</td>
 </tr>
@@ -603,13 +607,22 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <div class="block">Though the name suggests this only hashes String arrays, it can actually hash any CharSequence array as well.</div>
 </li>
 </ul>
+<a name="objectArrayHasher">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>objectArrayHasher</h4>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../../src-html/squidpony/squidmath/CrossHash.html#line.902">objectArrayHasher</a></pre>
+</li>
+</ul>
 <a name="defaultHasher">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>defaultHasher</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../../src-html/squidpony/squidmath/CrossHash.html#line.903">defaultHasher</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../../src-html/squidpony/squidmath/CrossHash.html#line.921">defaultHasher</a></pre>
 </li>
 </ul>
 <a name="identityHasher">
@@ -618,7 +631,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>identityHasher</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../../src-html/squidpony/squidmath/CrossHash.html#line.920">identityHasher</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../../src-html/squidpony/squidmath/CrossHash.html#line.938">identityHasher</a></pre>
 </li>
 </ul>
 <a name="generalHasher">
@@ -627,7 +640,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>generalHasher</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../../src-html/squidpony/squidmath/CrossHash.html#line.963">generalHasher</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../../src-html/squidpony/squidmath/CrossHash.html#line.981">generalHasher</a></pre>
 <div class="block">This IHasher is the one you should use if you aren't totally certain what types will go in an OrderedMap's keys
  or an OrderedSet's items, since it can handle mixes of elements.</div>
 </li>

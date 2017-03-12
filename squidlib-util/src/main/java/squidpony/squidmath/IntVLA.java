@@ -480,15 +480,15 @@ public class IntVLA implements Serializable, Cloneable {
         IntVLA iv = new IntVLA(amount+1);
         int dl = 1, idx = -dl, idx2;
         for (int i = 0; i < amount; i++) {
-            iv.add(Integer.parseInt(StringKit.safeSubstring(data, idx+dl, idx = data.indexOf(",", idx+dl))));
+            iv.add(StringKit.intFromDec(data, idx+dl, idx = data.indexOf(",", idx+dl)));
         }
         if((idx2 = data.indexOf(",", idx+dl)) < 0)
         {
-            iv.add(Integer.parseInt(StringKit.safeSubstring(data, idx+dl, data.length())));
+            iv.add(StringKit.intFromDec(data, idx+dl, data.length()));
         }
         else
         {
-            iv.add(Integer.parseInt(StringKit.safeSubstring(data, idx+dl, idx2)));
+            iv.add(StringKit.intFromDec(data, idx+dl, idx2));
         }
         return iv;
     }
@@ -502,17 +502,4 @@ public class IntVLA implements Serializable, Cloneable {
         return size == 0;
     }
 
-    public static class Convert extends StringConvert<IntVLA>
-    {
-        @Override
-        public String stringify(IntVLA item) {
-            return item.toString(",");
-        }
-
-        @Override
-        public IntVLA restore(String text) {
-            return deserializeFromString(text);
-        }
-    }
-    public static final StringConvert<IntVLA> convert = new Convert();
 }

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6,"i12":6,"i13":6,"i14":6,"i15":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6,"i12":6,"i13":6,"i14":6,"i15":6,"i16":6,"i17":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -169,93 +169,105 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.htm
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#append-char-">append</a></span>(char&nbsp;c)</code>
+<div class="block">A convenience alias for <code>append(c, null)</code>.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#append-char-T-">append</a></span>(char&nbsp;c,
       <a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&nbsp;color)</code>
 <div class="block">Mutates <code>this</code> by appending <code>c</code> to it.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#append-squidpony.panel.IColoredString-">append</a></span>(<a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&gt;&nbsp;other)</code>
 <div class="block">Mutates <code>this</code> by appending <code>other</code> to it.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#append-java.lang.String-">append</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</code>
+<div class="block">A convenience alias for <code>append(text, null)</code>.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#append-java.lang.String-T-">append</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
       <a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&nbsp;color)</code>
 <div class="block">Mutates <code>this</code> by appending <code>text</code> to it.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#appendFloat-float-T-">appendFloat</a></span>(float&nbsp;f,
            <a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&nbsp;color)</code>
 <div class="block">Mutates <code>this</code> by appending <code>f</code> to it.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#appendInt-int-T-">appendInt</a></span>(int&nbsp;i,
          <a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&nbsp;color)</code>
 <div class="block">Mutates <code>this</code> by appending <code>i</code> to it.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#clear--">clear</a></span>()</code>
 <div class="block">Empties <code>this</code>.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#colorAt-int-">colorAt</a></span>(int&nbsp;index)</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#isEmpty--">isEmpty</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#justify-int-">justify</a></span>(int&nbsp;width)</code>
 <div class="block">This method does NOT guarantee that the result's length is <code>width</code>.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#lastColor--">lastColor</a></span>()</code>
 <div class="block">This method is typically more efficient than <a href="../../squidpony/panel/IColoredString.html#colorAt-int-"><code>colorAt(int)</code></a>.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#length--">length</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#present--">present</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#presentWithMarkup-squidpony.panel.IMarkup-">presentWithMarkup</a></span>(<a href="../../squidpony/panel/IMarkup.html" title="interface in squidpony.panel">IMarkup</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&gt;&nbsp;markup)</code>
 <div class="block">Given some way of converting from a T value to an in-line markup tag, returns a string representation of
  this IColoredString with in-line markup representing colors.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#replaceColor-T-T-">replaceColor</a></span>(<a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&nbsp;old,
             <a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&nbsp;new_)</code>
 <div class="block">Replace color <code>old</code> by <code>new_</code> in all buckets of <code>this</code>.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#setLength-int-">setLength</a></span>(int&nbsp;len)</code>
 <div class="block">Deletes all content after index <code>len</code> (if any).</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#wrap-int-">wrap</a></span>(int&nbsp;width)</code>&nbsp;</td>
 </tr>
@@ -281,6 +293,20 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.htm
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="append-char-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>append</h4>
+<pre>void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.24">append</a>(char&nbsp;c)</pre>
+<div class="block">A convenience alias for <code>append(c, null)</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>text</code> - </dd>
+</dl>
+</li>
+</ul>
 <a name="append-char-java.lang.Object-">
 <!--   -->
 </a><a name="append-char-T-">
@@ -289,13 +315,27 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.htm
 <ul class="blockList">
 <li class="blockList">
 <h4>append</h4>
-<pre>void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.27">append</a>(char&nbsp;c,
+<pre>void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.34">append</a>(char&nbsp;c,
             <a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&nbsp;color)</pre>
 <div class="block">Mutates <code>this</code> by appending <code>c</code> to it.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>c</code> - The text to append.</dd>
 <dd><code>color</code> - <code>text</code>'s color. Or <code>null</code> to let the panel decide.</dd>
+</dl>
+</li>
+</ul>
+<a name="append-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>append</h4>
+<pre>void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.41">append</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</pre>
+<div class="block">A convenience alias for <code>append(text, null)</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>text</code> - </dd>
 </dl>
 </li>
 </ul>
@@ -307,7 +347,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.htm
 <ul class="blockList">
 <li class="blockList">
 <h4>append</h4>
-<pre>void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.38">append</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
+<pre>void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.52">append</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
             <a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&nbsp;color)</pre>
 <div class="block">Mutates <code>this</code> by appending <code>text</code> to it. Does nothing if
  <code>text</code> is <code>null</code>.</div>
@@ -326,7 +366,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.htm
 <ul class="blockList">
 <li class="blockList">
 <h4>appendInt</h4>
-<pre>void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.48">appendInt</a>(int&nbsp;i,
+<pre>void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.62">appendInt</a>(int&nbsp;i,
                <a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&nbsp;color)</pre>
 <div class="block">Mutates <code>this</code> by appending <code>i</code> to it.</div>
 <dl>
@@ -344,7 +384,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.htm
 <ul class="blockList">
 <li class="blockList">
 <h4>appendFloat</h4>
-<pre>void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.58">appendFloat</a>(float&nbsp;f,
+<pre>void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.72">appendFloat</a>(float&nbsp;f,
                  <a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&nbsp;color)</pre>
 <div class="block">Mutates <code>this</code> by appending <code>f</code> to it.</div>
 <dl>
@@ -360,7 +400,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.htm
 <ul class="blockList">
 <li class="blockList">
 <h4>append</h4>
-<pre>void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.65">append</a>(<a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&gt;&nbsp;other)</pre>
+<pre>void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.79">append</a>(<a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&gt;&nbsp;other)</pre>
 <div class="block">Mutates <code>this</code> by appending <code>other</code> to it.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -376,7 +416,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.htm
 <ul class="blockList">
 <li class="blockList">
 <h4>replaceColor</h4>
-<pre>void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.75">replaceColor</a>(<a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&nbsp;old,
+<pre>void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.89">replaceColor</a>(<a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&nbsp;old,
                   <a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&nbsp;new_)</pre>
 <div class="block">Replace color <code>old</code> by <code>new_</code> in all buckets of <code>this</code>.</div>
 <dl>
@@ -392,7 +432,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.htm
 <ul class="blockList">
 <li class="blockList">
 <h4>setLength</h4>
-<pre>void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.82">setLength</a>(int&nbsp;len)</pre>
+<pre>void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.96">setLength</a>(int&nbsp;len)</pre>
 <div class="block">Deletes all content after index <code>len</code> (if any).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -406,7 +446,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.htm
 <ul class="blockList">
 <li class="blockList">
 <h4>isEmpty</h4>
-<pre>boolean&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.87">isEmpty</a>()</pre>
+<pre>boolean&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.101">isEmpty</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>true</code> if <a href="../../squidpony/panel/IColoredString.html#present--"><code>present()</code></a> is <code>""</code>.</dd>
@@ -419,7 +459,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.htm
 <ul class="blockList">
 <li class="blockList">
 <h4>wrap</h4>
-<pre><a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.97">wrap</a>(int&nbsp;width)</pre>
+<pre><a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.111">wrap</a>(int&nbsp;width)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>width</code> - A positive integer</dd>
@@ -437,7 +477,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.htm
 <ul class="blockList">
 <li class="blockList">
 <h4>justify</h4>
-<pre><a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&gt;&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.109">justify</a>(int&nbsp;width)</pre>
+<pre><a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&gt;&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.123">justify</a>(int&nbsp;width)</pre>
 <div class="block">This method does NOT guarantee that the result's length is <code>width</code>.
  It is impossible to do correct justifying if <code>this</code>'s length is
  greater than <code>width</code> or if <code>this</code> has no space character.</div>
@@ -457,7 +497,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.htm
 <ul class="blockList">
 <li class="blockList">
 <h4>clear</h4>
-<pre>void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.114">clear</a>()</pre>
+<pre>void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.128">clear</a>()</pre>
 <div class="block">Empties <code>this</code>.</div>
 </li>
 </ul>
@@ -467,7 +507,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.htm
 <ul class="blockList">
 <li class="blockList">
 <h4>lastColor</h4>
-<pre><a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.121">lastColor</a>()</pre>
+<pre><a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.135">lastColor</a>()</pre>
 <div class="block">This method is typically more efficient than <a href="../../squidpony/panel/IColoredString.html#colorAt-int-"><code>colorAt(int)</code></a>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -481,7 +521,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.htm
 <ul class="blockList">
 <li class="blockList">
 <h4>colorAt</h4>
-<pre><a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.129">colorAt</a>(int&nbsp;index)</pre>
+<pre><a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.143">colorAt</a>(int&nbsp;index)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>index</code> - </dd>
@@ -498,7 +538,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.htm
 <ul class="blockList">
 <li class="blockList">
 <h4>length</h4>
-<pre>int&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.134">length</a>()</pre>
+<pre>int&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.148">length</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The length of text.</dd>
@@ -511,7 +551,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.htm
 <ul class="blockList">
 <li class="blockList">
 <h4>present</h4>
-<pre><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.139">present</a>()</pre>
+<pre><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.153">present</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The text that <code>this</code> represents.</dd>
@@ -524,7 +564,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.htm
 <ul class="blockListLast">
 <li class="blockList">
 <h4>presentWithMarkup</h4>
-<pre><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.147">presentWithMarkup</a>(<a href="../../squidpony/panel/IMarkup.html" title="interface in squidpony.panel">IMarkup</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&gt;&nbsp;markup)</pre>
+<pre><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.161">presentWithMarkup</a>(<a href="../../squidpony/panel/IMarkup.html" title="interface in squidpony.panel">IMarkup</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&gt;&nbsp;markup)</pre>
 <div class="block">Given some way of converting from a T value to an in-line markup tag, returns a string representation of
  this IColoredString with in-line markup representing colors.</div>
 <dl>

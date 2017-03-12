@@ -3520,18 +3520,17 @@ public class FakeLanguageGen implements Serializable {
         }
     }
 
-    public static class Convert extends StringConvert<FakeLanguageGen>
+    public static final StringConvert<FakeLanguageGen> convert = new StringConvert<FakeLanguageGen>(FakeLanguageGen.class)
     {
         @Override
         public String stringify(FakeLanguageGen item) {
-            return item.summary;
-        }
+        return item.summary;
+    }
 
         @Override
         public FakeLanguageGen restore(String text) {
-            return FakeLanguageGen.deserializeFromString(text);
-        }
+        return FakeLanguageGen.deserializeFromString(text);
     }
-    public static final StringConvert<FakeLanguageGen> convert = new Convert();
+    };
 
 }

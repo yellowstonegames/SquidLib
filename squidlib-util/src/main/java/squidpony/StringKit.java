@@ -171,9 +171,36 @@ public class StringKit {
         }
         return sb.toString();
     }
+
+    /**
+     * Scans repeatedly in {@code source} for the String {@code search}, not scanning the same char twice except as part
+     * of a larger String, and returns the number of instances of search that were found, or 0 if source is null or if
+     * search is null or empty.
+     * @param source a String to look through
+     * @param search a String to look for
+     * @return the number of times search was found in source
+     */
     public static int count(String source, String search)
     {
         if(source == null || search == null || source.isEmpty() || search.isEmpty())
+            return 0;
+        int amount = 0, idx = -1;
+        while ((idx = source.indexOf(search, idx+1)) >= 0)
+            ++amount;
+        return amount;
+    }
+
+    /**
+     * Scans repeatedly in {@code source} for the codepoint {@code search} (which is usually a char literal), not
+     * scanning the same section twice, and returns the number of instances of search that were found, or 0 if source is
+     * null.
+     * @param source a String to look through
+     * @param search a codepoint or char to look for
+     * @return the number of times search was found in source
+     */
+    public static int count(String source, int search)
+    {
+        if(source == null || source.isEmpty())
             return 0;
         int amount = 0, idx = -1;
         while ((idx = source.indexOf(search, idx+1)) >= 0)

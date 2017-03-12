@@ -3528,21 +3528,20 @@
 <span class="sourceLineNo">3520</span>        }<a name="line.3520"></a>
 <span class="sourceLineNo">3521</span>    }<a name="line.3521"></a>
 <span class="sourceLineNo">3522</span><a name="line.3522"></a>
-<span class="sourceLineNo">3523</span>    public static class Convert extends StringConvert&lt;FakeLanguageGen&gt;<a name="line.3523"></a>
+<span class="sourceLineNo">3523</span>    public static final StringConvert&lt;FakeLanguageGen&gt; convert = new StringConvert&lt;FakeLanguageGen&gt;(FakeLanguageGen.class)<a name="line.3523"></a>
 <span class="sourceLineNo">3524</span>    {<a name="line.3524"></a>
 <span class="sourceLineNo">3525</span>        @Override<a name="line.3525"></a>
 <span class="sourceLineNo">3526</span>        public String stringify(FakeLanguageGen item) {<a name="line.3526"></a>
-<span class="sourceLineNo">3527</span>            return item.summary;<a name="line.3527"></a>
-<span class="sourceLineNo">3528</span>        }<a name="line.3528"></a>
+<span class="sourceLineNo">3527</span>        return item.summary;<a name="line.3527"></a>
+<span class="sourceLineNo">3528</span>    }<a name="line.3528"></a>
 <span class="sourceLineNo">3529</span><a name="line.3529"></a>
 <span class="sourceLineNo">3530</span>        @Override<a name="line.3530"></a>
 <span class="sourceLineNo">3531</span>        public FakeLanguageGen restore(String text) {<a name="line.3531"></a>
-<span class="sourceLineNo">3532</span>            return FakeLanguageGen.deserializeFromString(text);<a name="line.3532"></a>
-<span class="sourceLineNo">3533</span>        }<a name="line.3533"></a>
-<span class="sourceLineNo">3534</span>    }<a name="line.3534"></a>
-<span class="sourceLineNo">3535</span>    public static final StringConvert&lt;FakeLanguageGen&gt; convert = new Convert();<a name="line.3535"></a>
-<span class="sourceLineNo">3536</span><a name="line.3536"></a>
-<span class="sourceLineNo">3537</span>}<a name="line.3537"></a>
+<span class="sourceLineNo">3532</span>        return FakeLanguageGen.deserializeFromString(text);<a name="line.3532"></a>
+<span class="sourceLineNo">3533</span>    }<a name="line.3533"></a>
+<span class="sourceLineNo">3534</span>    };<a name="line.3534"></a>
+<span class="sourceLineNo">3535</span><a name="line.3535"></a>
+<span class="sourceLineNo">3536</span>}<a name="line.3536"></a>
 
 
 
