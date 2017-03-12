@@ -19,14 +19,15 @@ import java.util.*;
  */
 public class RNG implements Serializable {
 
-    protected static final double DOUBLE_UNIT = 1.0 / (1L << 53);
-    protected static final float FLOAT_UNIT = 1.0f / (1 << 24);
-    protected RandomnessSource random;
-    protected double nextNextGaussian;
-    protected boolean haveNextNextGaussian = false;
-    protected Random ran = null;
+	protected static final double DOUBLE_UNIT = 1.0 / (1L << 53);
+	protected static final float FLOAT_UNIT = 1.0f / (1 << 24);
+	protected RandomnessSource random;
+	protected double nextNextGaussian;
+	protected boolean haveNextNextGaussian = false;
+	protected Random ran = null;
 
     private static final long serialVersionUID = 2352426757973945149L;
+
 
     /**
      * Default constructor; uses SplitMix64, which is of high quality, but low period (which rarely matters for games),
@@ -297,8 +298,9 @@ public class RNG implements Serializable {
 	 * then null is returned.
 	 *
 	 * <p>
-	 * Beware that this method allocates a copy of {@code list}, hence it's
-	 * quite costly.
+	 * Requires iterating through a random amount of the elements in set, so
+	 * performance depends on the size of set but is likely to be decent. This
+	 * is mostly meant for internal use, the same as ShortSet.
 	 * </p>
 	 *
 	 * @param <T> the type of the returned object
@@ -337,8 +339,9 @@ public class RNG implements Serializable {
             return Collections.<T>emptyList();
 
 		/*
-		 * Collections.rotate should prefer the best-performing way to rotate l, which would be an in-place
-		 * modification for ArrayLists and an append to a sublist for Lists that don't support efficient random access.
+		 * Collections.rotate should prefer the best-performing way to rotate l,
+		 * which would be an in-place modification for ArrayLists and an append
+		 * to a sublist for Lists that don't support efficient random access.
 		 */
         List<T> l2 = new ArrayList<>(l);
         Collections.rotate(l2, nextInt(sz));
