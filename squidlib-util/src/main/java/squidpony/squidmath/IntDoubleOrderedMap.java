@@ -337,6 +337,12 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             put(e.getIntKey(), e.getDoubleValue());
         }
     }
+    public void putAll(int[] k, double[] v)
+    {
+        for (int i = 0, length = Math.min(k.length, v.length); i < length; i++)
+            this.put(k[i], v[i]);
+
+    }
 
     private int insert(final int k, final double v) {
         int pos;

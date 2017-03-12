@@ -107,12 +107,16 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="#squidpony.squidgrid.mapping.locks.generators">squidpony.squidgrid.mapping.locks.generators</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#squidpony.squidgrid.mapping.styled">squidpony.squidgrid.mapping.styled</a></td>
 <td class="colLast">
 <div class="block">Support code for working with tiled dungeon generation; normally only TilesetType is used outside SquidLib.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#squidpony.squidmath">squidpony.squidmath</a></td>
 <td class="colLast">
 <div class="block">A very broad package containing random number generators, geometry tools, and some classes for combinatorics.</div>
@@ -338,14 +342,14 @@
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#CustomDijkstraMap-char:A:A-squidpony.squidgrid.Adjacency-squidpony.squidmath.RNG-">CustomDijkstraMap</a></span>(char[][]&nbsp;level,
                  <a href="../../../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a>&nbsp;adjacency,
                  <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CustomDijkstraMap.html#CustomDijkstraMap-char:A:A-squidpony.squidmath.RNG-">CustomDijkstraMap</a></span>(char[][]&nbsp;level,
                  <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </td>
 </tr>
@@ -358,14 +362,14 @@
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.html#DijkstraMap-char:A:A-squidpony.squidai.DijkstraMap.Measurement-squidpony.squidmath.RNG-">DijkstraMap</a></span>(char[][]&nbsp;level,
            <a href="../../../squidpony/squidai/DijkstraMap.Measurement.html" title="enum in squidpony.squidai">DijkstraMap.Measurement</a>&nbsp;measurement,
            <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.html#DijkstraMap-char:A:A-squidpony.squidmath.RNG-">DijkstraMap</a></span>(char[][]&nbsp;level,
            <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </td>
 </tr>
@@ -451,35 +455,49 @@
     int&nbsp;size,
     double&nbsp;temperature,
     int&nbsp;iterations,
-    <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</code>&nbsp;</td>
+    <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</code>
+<div class="block">The main part of MimicFill; generates a 2D boolean array that mimics the patterns present in the 2D boolean array
+ sample, but can produce a larger or smaller output 2D array than the sample.</div>
+</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static boolean[]</code></td>
+<td class="colLast"><span class="typeNameLabel">MimicFill.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/MimicFill.html#fillSolo-boolean:A:A-int-double-int-squidpony.squidmath.RNG-">fillSolo</a></span>(boolean[][]&nbsp;sample,
+        int&nbsp;size,
+        double&nbsp;temperature,
+        int&nbsp;iterations,
+        <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</code>
+<div class="block">The main part of MimicFill; generates a 1D boolean array that, when used correctly, mimics the patterns present
+ in the 2D boolean array sample, but can produce a larger or smaller output 1D array than the sample.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Radius.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/Radius.html#onUnitShape-double-squidpony.squidmath.RNG-">onUnitShape</a></span>(double&nbsp;distance,
            <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord3D.html" title="class in squidpony.squidmath">Coord3D</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Radius.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/Radius.html#onUnitShape3D-double-squidpony.squidmath.RNG-">onUnitShape3D</a></span>(double&nbsp;distance,
              <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidgrid/SpatialMap.html" title="type parameter in SpatialMap">E</a></code></td>
 <td class="colLast"><span class="typeNameLabel">SpatialMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/SpatialMap.html#randomElement-squidpony.squidmath.RNG-">randomElement</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidgrid/SpatialMap.SpatialTriple.html" title="class in squidpony.squidgrid">SpatialMap.SpatialTriple</a>&lt;<a href="../../../squidpony/squidgrid/SpatialMap.html" title="type parameter in SpatialMap">I</a>,<a href="../../../squidpony/squidgrid/SpatialMap.html" title="type parameter in SpatialMap">E</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">SpatialMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/SpatialMap.html#randomEntry-squidpony.squidmath.RNG-">randomEntry</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidgrid/SpatialMap.html" title="type parameter in SpatialMap">I</a></code></td>
 <td class="colLast"><span class="typeNameLabel">SpatialMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/SpatialMap.html#randomIdentity-squidpony.squidmath.RNG-">randomIdentity</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">SpatialMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/SpatialMap.html#randomPosition-squidpony.squidmath.RNG-">randomPosition</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">Splash.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/Splash.html#spill-squidpony.squidmath.RNG-char:A:A-squidpony.squidmath.Coord-int-int-">spill</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
      char[][]&nbsp;level,
@@ -487,7 +505,7 @@
      int&nbsp;volume,
      int&nbsp;drunks)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">Splash.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/Splash.html#spill-squidpony.squidmath.RNG-char:A:A-squidpony.squidmath.Coord-int-java.util.Set-int-">spill</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
      char[][]&nbsp;level,
@@ -505,14 +523,16 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/DetailedMimic.html#DetailedMimic-squidpony.squidgrid.mapping.AestheticDifference-squidpony.squidmath.RNG-">DetailedMimic</a></span>(<a href="../../../squidpony/squidgrid/mapping/AestheticDifference.html" title="interface in squidpony.squidgrid.mapping">AestheticDifference</a>&nbsp;diff,
-             <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/DetailedMimic.html#DetailedMimic-squidpony.squidgrid.AestheticDifference-squidpony.squidmath.RNG-">DetailedMimic</a></span>(<a href="../../../squidpony/squidgrid/AestheticDifference.html" title="interface in squidpony.squidgrid">AestheticDifference</a>&nbsp;diff,
+             <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
+<div class="block">Constructor that uses the given RNG and the given AestheticDifference.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/MultiSpill.html#MultiSpill-char:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.RNG-">MultiSpill</a></span>(char[][]&nbsp;level,
           <a href="../../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid">Spill.Measurement</a>&nbsp;measurement,
           <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</code>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </td>
 </tr>
@@ -537,7 +557,7 @@
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/Spill.html#Spill-char:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.RNG-">Spill</a></span>(char[][]&nbsp;level,
      <a href="../../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid">Spill.Measurement</a>&nbsp;measurement,
      <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</code>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </td>
 </tr>
@@ -679,17 +699,18 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/LegacyDungeonGenerator.html#LegacyDungeonGenerator-int-int-squidpony.squidmath.RNG-">LegacyDungeonGenerator</a></span>(int&nbsp;width,
-                      int&nbsp;height,
-                      <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
-<div class="block">Make a DungeonGenerator with the given height, width, and RNG.</div>
-</td>
-</tr>
-<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MixedGenerator.html#MixedGenerator-int-int-squidpony.squidmath.RNG-">MixedGenerator</a></span>(int&nbsp;width,
               int&nbsp;height,
               <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
+<div class="block">This prepares a map generator that will generate a map with the given width and height, using the given RNG.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MixedGenerator.html#MixedGenerator-int-int-squidpony.squidmath.RNG-squidpony.squidgrid.mapping.locks.IRoomLayout-float-">MixedGenerator</a></span>(int&nbsp;width,
+              int&nbsp;height,
+              <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+              <a href="../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks">IRoomLayout</a>&nbsp;layout,
+              float&nbsp;roomSizeMultiplier)</code>
 <div class="block">This prepares a map generator that will generate a map with the given width and height, using the given RNG.</div>
 </td>
 </tr>
@@ -852,6 +873,39 @@
 </tbody>
 </table>
 </li>
+<li class="blockList"><a name="squidpony.squidgrid.mapping.locks.generators">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a> in <a href="../../../squidpony/squidgrid/mapping/locks/generators/package-summary.html">squidpony.squidgrid.mapping.locks.generators</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../squidpony/squidgrid/mapping/locks/generators/package-summary.html">squidpony.squidgrid.mapping.locks.generators</a> declared as <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></code></td>
+<td class="colLast"><span class="typeNameLabel">LayoutGenerator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#random">random</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../squidpony/squidgrid/mapping/locks/generators/package-summary.html">squidpony.squidgrid.mapping.locks.generators</a> with parameters of type <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#LayoutGenerator-squidpony.squidmath.RNG-squidpony.squidgrid.mapping.locks.constraints.ILayoutConstraints-">LayoutGenerator</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+               <a href="../../../squidpony/squidgrid/mapping/locks/constraints/ILayoutConstraints.html" title="interface in squidpony.squidgrid.mapping.locks.constraints">ILayoutConstraints</a>&nbsp;constraints)</code>
+<div class="block">Creates a LayoutGenerator with a given random seed and places
+ specific constraints on <a href="../../../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks"><code>IRoomLayout</code></a>s it generates.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="squidpony.squidgrid.mapping.styled">
 <!--   -->
 </a>
@@ -909,7 +963,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#DungeonBoneGen-squidpony.squidmath.RNG-">DungeonBoneGen</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</code>
-<div class="block">Constructs a DungeonGen that uses the given squidpony.squidmath.RNG.</div>
+<div class="block">Constructs a DungeonBoneGen that uses the given squidpony.squidmath.RNG.</div>
 </td>
 </tr>
 </tbody>
@@ -965,6 +1019,10 @@
 <td class="colLast"><span class="typeNameLabel">RandomBias.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/RandomBias.html#rng">rng</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></code></td>
+<td class="colLast"><span class="typeNameLabel">ProbabilityTable.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/ProbabilityTable.html#rng">rng</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GapShuffler.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GapShuffler.html#rng">rng</a></span></code>&nbsp;</td>
 </tr>
@@ -1022,6 +1080,22 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#deteriorate-squidpony.squidmath.RNG-int-">deteriorate</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+           int&nbsp;preservation)</code>
+<div class="block">Randomly removes points from a GreasedRegion, with larger values for preservation keeping more of the existing
+ shape intact.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#disperseRandom-squidpony.squidmath.RNG-">disperseRandom</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</code>
+<div class="block">Removes "on" cells that are nearby other "on" cells, with a random factor to which bits are actually turned off
+ that still ensures exactly half of the bits are kept as-is (the one exception is when height is an odd number,
+ which makes the bottom row slightly random).</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Region.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Region.html#getRandomCoord-squidpony.squidmath.RNG-">getRandomCoord</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
 <div class="block">Gets a single random Coord from this using the given RNG (which can be seeded); returns null if this is empty.</div>
@@ -1069,54 +1143,60 @@
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/TableSet.html" title="type parameter in TableSet">C</a></code></td>
+<td class="colLast"><span class="typeNameLabel">TableSet.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/TableSet.html#randomColumn-squidpony.squidmath.RNG-">randomColumn</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
+<div class="block">Gets a random value from this OrderedSet in constant time, using the given RNG to generate a random number.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">OrderedMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrderedMap.html#randomEntry-squidpony.squidmath.RNG-">randomEntry</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
 <div class="block">Gets a random entry from this OrderedMap in constant time, using the given RNG to generate a random number.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">Arrangement.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Arrangement.html#randomEntry-squidpony.squidmath.RNG-">randomEntry</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
 <div class="block">Gets a random entry from this Arrangement in constant time, using the given RNG to generate a random number.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a></code></td>
 <td class="colLast"><span class="typeNameLabel">OrderedSet.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrderedSet.html#randomItem-squidpony.squidmath.RNG-">randomItem</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
 <div class="block">Gets a random value from this OrderedSet in constant time, using the given RNG to generate a random number.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
 <td class="colLast"><span class="typeNameLabel">MultiKey.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/MultiKey.html#randomKey-int-squidpony.squidmath.RNG-">randomKey</a></span>(int&nbsp;which,
          <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</code>
 <div class="block">Gets a random key from the keyset specified by which using the given RNG.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a></code></td>
 <td class="colLast"><span class="typeNameLabel">OrderedMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrderedMap.html#randomKey-squidpony.squidmath.RNG-">randomKey</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
 <div class="block">Gets a random key from this OrderedMap in constant time, using the given RNG to generate a random number.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
 <td class="colLast"><span class="typeNameLabel">MultiKey.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/MultiKey.html#randomKey-squidpony.squidmath.RNG-">randomKey</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</code>
 <div class="block">Gets a random key from a random keyset in this MultiKey using the given RNG.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Arrangement.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Arrangement.html#randomKey-squidpony.squidmath.RNG-">randomKey</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
 <div class="block">Gets a random key from this Arrangement in constant time, using the given RNG to generate a random number.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#randomPortion-squidpony.squidmath.RNG-int-">randomPortion</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
              int&nbsp;size)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">CoordPacker.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CoordPacker.html#randomPortion-short:A-int-squidpony.squidmath.RNG-">randomPortion</a></span>(short[]&nbsp;packed,
              int&nbsp;size,
@@ -1125,10 +1205,16 @@
  and returns a List of Coord with a count equal to size (or less if there aren't enough "on" cells).</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/K2V1.html" title="type parameter in K2V1">Q</a></code></td>
 <td class="colLast"><span class="typeNameLabel">K2V1.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/K2V1.html#randomQ-squidpony.squidmath.RNG-">randomQ</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</code>
 <div class="block">Gets a random Q from this K2V1 using the given RNG.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/TableSet.html" title="type parameter in TableSet">R</a></code></td>
+<td class="colLast"><span class="typeNameLabel">TableSet.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/TableSet.html#randomRow-squidpony.squidmath.RNG-">randomRow</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
+<div class="block">Gets a random value from this OrderedSet in constant time, using the given RNG to generate a random number.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -1192,6 +1278,26 @@
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#refill-squidpony.squidmath.RNG-double-int-int-">refill</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random,
+      double&nbsp;fraction,
+      int&nbsp;width,
+      int&nbsp;height)</code>
+<div class="block">Reassigns this GreasedRegion randomly, reusing the current data storage (without extra allocations) if this.width
+ == width and this.height == height, while trying to set the given fraction of cells to on.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#refill-squidpony.squidmath.RNG-int-int-">refill</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random,
+      int&nbsp;width,
+      int&nbsp;height)</code>
+<div class="block">Reassigns this GreasedRegion by filling it with random values from random, reusing the current data storage
+ (without extra allocations) if this.width == width and this.height == height, and typically assigning
+ approximately half of the cells in this to "on" and the rest to off.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">PoissonDisk.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/PoissonDisk.html#sampleCircle-squidpony.squidmath.Coord-float-float-int-int-int-squidpony.squidmath.RNG-">sampleCircle</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
             float&nbsp;radius,
@@ -1235,8 +1341,20 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">ProbabilityTable.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/ProbabilityTable.html#setRandom-squidpony.squidmath.RNG-">setRandom</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</code>
+<div class="block">Sets the current RNG to the given RNG.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">Dice.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Dice.html#setRandom-squidpony.squidmath.RNG-">setRandom</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
 <div class="block">Sets the random number generator to be used.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a>&lt;<a href="../../../squidpony/squidmath/TableSet.html" title="type parameter in TableSet">C</a>,<a href="../../../squidpony/squidmath/TableSet.html" title="type parameter in TableSet">R</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">TableSet.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/TableSet.html#shuffle-squidpony.squidmath.RNG-">shuffle</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
+<div class="block">Randomly alters the iteration order for this OrderedSet using the given RNG to shuffle.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -1335,6 +1453,22 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#GreasedRegion-squidpony.squidmath.RNG-double-int-int-">GreasedRegion</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random,
+             double&nbsp;fraction,
+             int&nbsp;width,
+             int&nbsp;height)</code>
+<div class="block">Constructor for a random GreasedRegion of the given width and height, trying to set the given fraction of cells
+ to on.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#GreasedRegion-squidpony.squidmath.RNG-int-int-">GreasedRegion</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random,
+             int&nbsp;width,
+             int&nbsp;height)</code>
+<div class="block">Constructor for a random GreasedRegion of the given width and height.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/NeuralParticle.html#NeuralParticle-int-int-int-squidpony.squidmath.RNG-">NeuralParticle</a></span>(int&nbsp;width,
               int&nbsp;height,
               int&nbsp;maxDistance,
@@ -1412,6 +1546,6 @@
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

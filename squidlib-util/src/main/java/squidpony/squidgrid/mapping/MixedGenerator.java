@@ -1,7 +1,13 @@
 package squidpony.squidgrid.mapping;
 
+import squidpony.ArrayTools;
 import squidpony.squidgrid.Direction;
+import squidpony.squidgrid.mapping.locks.Edge;
+import squidpony.squidgrid.mapping.locks.IRoomLayout;
+import squidpony.squidgrid.mapping.locks.Room;
+import squidpony.squidgrid.mapping.locks.util.Rect2I;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.IntVLA;
 import squidpony.squidmath.PoissonDisk;
 import squidpony.squidmath.RNG;
 
@@ -68,7 +74,7 @@ public class MixedGenerator {
     protected boolean generated = false;
     protected int[][] environment;
     protected boolean[][] marked, walled, fixedRooms;
-    protected List<Long> points;
+    protected IntVLA points;
     protected int totalPoints;
 
     /**
@@ -133,10 +139,10 @@ public class MixedGenerator {
             System.arraycopy(environment[0], 0, environment[i], 0, height);
         }
         totalPoints = sequence.size() - 1;
-        points = new ArrayList<>(totalPoints);
+        points = new IntVLA(totalPoints);
         for (int i = 0; i < totalPoints; i++) {
             Coord c1 = sequence.get(i), c2 = sequence.get(i + 1);
-            points.add(((c1.x & 0xffL) << 24) | ((c1.y & 0xff) << 16) | ((c2.x & 0xff) << 8) | (c2.y & 0xff));
+            points.add(((c1.x & 0xff) << 24) | ((c1.y & 0xff) << 16) | ((c2.x & 0xff) << 8) | (c2.y & 0xff));
         }
         carvers = new EnumMap<>(CarverType.class);
     }
@@ -175,8 +181,8 @@ public class MixedGenerator {
                           float roomSizeMultiplier) {
         this.width = width;
         this.height = height;
-        this.roomWidth = (width / 64.0f) * roomSizeMultiplier;
-        this.roomHeight = (height / 64.0f) * roomSizeMultiplier;
+        roomWidth = (width / 64.0f) * roomSizeMultiplier;
+        roomHeight = (height / 64.0f) * roomSizeMultiplier;
         if(width <= 2 || height <= 2)
             throw new IllegalStateException("width and height must be greater than 2");
         this.rng = rng;
@@ -196,13 +202,84 @@ public class MixedGenerator {
         {
             totalPoints += vals.size();
         }
-        points = new ArrayList<>(totalPoints);
+        points = new IntVLA(totalPoints);
         for (Map.Entry<Coord, List<Coord>> kv : connections.entrySet()) {
             Coord c1 = kv.getKey();
             for (Coord c2 : kv.getValue()) {
-                points.add(((c1.x & 0xffL) << 24) | ((c1.y & 0xff) << 16) | ((c2.x & 0xff) << 8) | (c2.y & 0xff));
+                points.add(((c1.x & 0xff) << 24) | ((c1.y & 0xff) << 16) | ((c2.x & 0xff) << 8) | (c2.y & 0xff));
             }
         }
+        carvers = new EnumMap<>(CarverType.class);
+    }
+
+    /**
+     * This prepares a map generator that will generate a map with the given width and height, using the given RNG.
+     * This version of the constructor uses an {@link squidpony.squidgrid.mapping.locks.IRoomLayout} to set up rooms,
+     * almost always produced by {@link squidpony.squidgrid.mapping.locks.generators.LayoutGenerator}. This method does
+     * alter the individual Room objects inside layout, making the center of each room match where that center is placed
+     * in the dungeon this generates. You call the different carver-adding methods to affect what the dungeon will look
+     * like, i.e. {@link #putCaveCarvers(int)}, {@link #putBoxRoomCarvers(int)} , {@link #putRoundRoomCarvers(int)},
+     * {@link #putWalledBoxRoomCarvers(int)}, and {@link #putWalledRoundRoomCarvers(int)}, defaulting to only caves if
+     * none are called (using rooms is recommended for this constructor). You call generate() after adding carvers,
+     * which returns a char[][] for a map and sets the environment to be fetched with {@link #getEnvironment()}, which
+     * is usually needed for {@link SectionDungeonGenerator} to correctly place doors and various other features.
+     * @param width the width of the final map in cells
+     * @param height the height of the final map in cells
+     * @param rng an RNG object to use for random choices; this make a lot of random choices.
+     * @param layout an IRoomLayout that will almost always be produced by LayoutGenerator; the rooms will be altered
+     * @param roomSizeMultiplier a float multiplier that will be applied to each room's width and height
+     * @see SerpentMapGenerator a class that uses this technique
+     */
+    public MixedGenerator(int width, int height, RNG rng, IRoomLayout layout,
+                          float roomSizeMultiplier) {
+        this.width = width;
+        this.height = height;
+        Rect2I bounds = layout.getExtentBounds();
+        int offX = bounds.getBottomLeft().x, offY = bounds.getBottomLeft().y;
+        float rw = (width) / (bounds.width+1f), rh = (height) / (bounds.height+1f);
+        this.roomWidth = roomSizeMultiplier * rw * 0.125f;
+        this.roomHeight = roomSizeMultiplier * rh * 0.125f;
+        if(width <= 2 || height <= 2)
+            throw new IllegalStateException("width and height must be greater than 2");
+        this.rng = rng;
+        dungeon = new char[width][height];
+        environment = new int[width][height];
+        marked = new boolean[width][height];
+        walled = new boolean[width][height];
+        fixedRooms = new boolean[width][height];
+        ArrayTools.fill(dungeon, '#');
+        ArrayTools.fill(environment, UNTOUCHED);
+        totalPoints = layout.roomCount();
+        points = new IntVLA(totalPoints);
+        Coord c2;
+        Set<Room> rooms = layout.getRooms(), removing = new HashSet<>(rooms);
+        Room t;
+        for (Room room : rooms) {
+            Coord c1 = room.getCenter();
+            if (!bounds.contains(c1)) {
+                removing.remove(room);
+            }
+            else {
+                room.setCenter(Coord.get(
+                        (int) ((c1.x - offX + 0.75f) * (rw)) & 0xff,
+                        (int) ((c1.y - offY + 0.75f) * (rh)) & 0xff));
+            }
+        }
+
+        for (Room room : rooms) {
+            Coord c1 = room.getCenter();
+            for (Edge e : room.getEdges()) {
+                if (removing.contains(t = layout.get(e.getTargetRoomId()))) {
+                    c2 = t.getCenter();
+                    points.add((c1.x << 24)
+                            | (c1.y << 16)
+                            | (c2.x << 8)
+                            | c2.y);
+                }
+            }
+            removing.remove(room);
+        }
+        totalPoints = points.size;
         carvers = new EnumMap<>(CarverType.class);
     }
 
@@ -317,10 +394,10 @@ public class MixedGenerator {
         else
             allCarvings = rng.shuffle(allCarvings, new CarverType[allCarvings.length]);
 
-        for (int p = 0, c = 0; p < totalPoints; p++, c = ++c % totalLength) {
-            long pair = points.get(p);
-            Coord start = Coord.get((int)(pair >> 24) & 0xff, (int)(pair >> 16) & 0xff),
-                  end   = Coord.get((int)(pair >> 8) & 0xff, (int)pair & 0xff);
+        for (int p = 0, c = 0; p < totalPoints; p++, c = (c+1) % totalLength) {
+            int pair = points.get(p);
+            Coord start = Coord.get(pair >>> 24 & 0xff, pair >>> 16 & 0xff),
+                  end   = Coord.get(pair >>> 8 & 0xff, pair & 0xff);
             CarverType ct = allCarvings[c];
             Direction dir;
             switch (ct)

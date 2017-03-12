@@ -107,6 +107,10 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="#squidpony.squidgrid.mapping.locks.constraints">squidpony.squidgrid.mapping.locks.constraints</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#squidpony.squidmath">squidpony.squidmath</a></td>
 <td class="colLast">
 <div class="block">A very broad package containing random number generators, geometry tools, and some classes for combinatorics.</div>
@@ -133,7 +137,7 @@
 <td class="colLast"><span class="typeNameLabel">Thesaurus.</span><code><span class="memberNameLink"><a href="../../../squidpony/Thesaurus.html#categories">categories</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static <a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&gt;</code></td>
+<td class="colFirst"><code>static <a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">Thesaurus.</span><code><span class="memberNameLink"><a href="../../../squidpony/Thesaurus.html#languages">languages</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -161,11 +165,51 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static &lt;K,V&gt;&nbsp;<a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">Maker.</span><code><span class="memberNameLink"><a href="../../../squidpony/Maker.html#makeOM-float-K-V-java.lang.Object...-">makeOM</a></span>(float&nbsp;factor,
+      K&nbsp;k0,
+      V&nbsp;v0,
+      <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>...&nbsp;rest)</code>
+<div class="block">Makes an OrderedMap (OM) with the given load factor (which should be between 0.1 and 0.9), key and value types
+ inferred from the types of k0 and v0, and considers all remaining parameters key-value pairs, casting the Objects
+ at positions 0, 2, 4...</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static &lt;K,V&gt;&nbsp;<a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">Maker.</span><code><span class="memberNameLink"><a href="../../../squidpony/Maker.html#makeOM-K-V-java.lang.Object...-">makeOM</a></span>(K&nbsp;k0,
       V&nbsp;v0,
       <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>...&nbsp;rest)</code>
 <div class="block">Makes an OrderedMap (OM) with key and value types inferred from the types of k0 and v0, and considers all
  parameters key-value pairs, casting the Objects at positions 0, 2, 4...</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../squidpony/package-summary.html">squidpony</a> that return types with arguments of type <a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static &lt;K,V&gt;&nbsp;<a href="../../../squidpony/StringConvert.html" title="class in squidpony">StringConvert</a>&lt;<a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">Converters.</span><code><span class="memberNameLink"><a href="../../../squidpony/Converters.html#convertOrderedMap-squidpony.StringConvert-squidpony.StringConvert-">convertOrderedMap</a></span>(<a href="../../../squidpony/StringConvert.html" title="class in squidpony">StringConvert</a>&lt;K&gt;&nbsp;convertK,
+                 <a href="../../../squidpony/StringConvert.html" title="class in squidpony">StringConvert</a>&lt;V&gt;&nbsp;convertV)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../squidpony/package-summary.html">squidpony</a> with parameters of type <a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
+<td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../../squidpony/FakeLanguageGen.Modifier.html#replacementTable-squidpony.squidmath.OrderedMap-">replacementTable</a></span>(<a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;map)</code>
+<div class="block">Creates a Modifier that will replace the nth String key in map with the nth value.</div>
 </td>
 </tr>
 </tbody>
@@ -255,9 +299,105 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">Technique.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/Technique.html#idealLocations-squidpony.squidmath.Coord-java.util.Set-java.util.Set-">idealLocations</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;user,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>
+<td class="colLast"><span class="typeNameLabel">PointAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/PointAOE.html#idealLocations-java.util.Collection-java.util.Collection-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">LineAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/LineAOE.html#idealLocations-java.util.Collection-java.util.Collection-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">ConeAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/ConeAOE.html#idealLocations-java.util.Collection-java.util.Collection-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">CloudAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CloudAOE.html#idealLocations-java.util.Collection-java.util.Collection-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">BurstAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/BurstAOE.html#idealLocations-java.util.Collection-java.util.Collection-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">BlastAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/BlastAOE.html#idealLocations-java.util.Collection-java.util.Collection-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">BeamAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/BeamAOE.html#idealLocations-java.util.Collection-java.util.Collection-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">AOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/AOE.html#idealLocations-java.util.Collection-java.util.Collection-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>
+<div class="block">Returns a OrderedMap of Coord keys and ArrayList of Coord values, where each Coord key is an ideal location to
+ hit as many of the Points in targets as possible without hitting any Points in requiredExclusions, and each value
+ is the collection of targets that will be hit if the associated key is used.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">PointAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/PointAOE.html#idealLocations-java.util.Collection-java.util.Collection-java.util.Collection-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;priorityTargets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;lesserTargets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">LineAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/LineAOE.html#idealLocations-java.util.Collection-java.util.Collection-java.util.Collection-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;priorityTargets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;lesserTargets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">ConeAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/ConeAOE.html#idealLocations-java.util.Collection-java.util.Collection-java.util.Collection-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;priorityTargets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;lesserTargets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">CloudAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CloudAOE.html#idealLocations-java.util.Collection-java.util.Collection-java.util.Collection-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;priorityTargets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;lesserTargets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">BurstAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/BurstAOE.html#idealLocations-java.util.Collection-java.util.Collection-java.util.Collection-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;priorityTargets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;lesserTargets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">BlastAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/BlastAOE.html#idealLocations-java.util.Collection-java.util.Collection-java.util.Collection-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;priorityTargets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;lesserTargets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">BeamAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/BeamAOE.html#idealLocations-java.util.Collection-java.util.Collection-java.util.Collection-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;priorityTargets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;lesserTargets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">AOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/AOE.html#idealLocations-java.util.Collection-java.util.Collection-java.util.Collection-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;priorityTargets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;lesserTargets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>
+<div class="block">A variant of idealLocations that takes two groups of desirable targets, and will rate locations by how many
+ priorityTargets are in the AOE, then by how many lesserTargets are in the AOE, and will only consider locations
+ that do not affect a Coord in requiredExclusions.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">Technique.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/Technique.html#idealLocations-squidpony.squidmath.Coord-java.util.Collection-java.util.Collection-">idealLocations</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;user,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>
 <div class="block">Get a mapping of Coord keys representing locations to apply this Technique to, to ArrayList of Coord values
  representing which targets (by their location) are effected by choosing that Coord.</div>
 </td>
@@ -270,102 +410,6 @@
               <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>
 <div class="block">Get a mapping of Coord keys representing locations to apply this Technique to, to ArrayList of Coord values
  representing which targets (by their location) are effected by choosing that Coord.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">PointAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/PointAOE.html#idealLocations-java.util.Set-java.util.Set-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">LineAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/LineAOE.html#idealLocations-java.util.Set-java.util.Set-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">ConeAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/ConeAOE.html#idealLocations-java.util.Set-java.util.Set-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">CloudAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CloudAOE.html#idealLocations-java.util.Set-java.util.Set-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">BurstAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/BurstAOE.html#idealLocations-java.util.Set-java.util.Set-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">BlastAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/BlastAOE.html#idealLocations-java.util.Set-java.util.Set-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">BeamAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/BeamAOE.html#idealLocations-java.util.Set-java.util.Set-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">AOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/AOE.html#idealLocations-java.util.Set-java.util.Set-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>
-<div class="block">Returns a OrderedMap of Coord keys and ArrayList of Coord values, where each Coord key is an ideal location to
- hit as many of the Points in targets as possible without hitting any Points in requiredExclusions, and each value
- is the collection of targets that will be hit if the associated key is used.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">PointAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/PointAOE.html#idealLocations-java.util.Set-java.util.Set-java.util.Set-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;priorityTargets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;lesserTargets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">LineAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/LineAOE.html#idealLocations-java.util.Set-java.util.Set-java.util.Set-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;priorityTargets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;lesserTargets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">ConeAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/ConeAOE.html#idealLocations-java.util.Set-java.util.Set-java.util.Set-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;priorityTargets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;lesserTargets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">CloudAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CloudAOE.html#idealLocations-java.util.Set-java.util.Set-java.util.Set-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;priorityTargets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;lesserTargets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">BurstAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/BurstAOE.html#idealLocations-java.util.Set-java.util.Set-java.util.Set-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;priorityTargets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;lesserTargets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">BlastAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/BlastAOE.html#idealLocations-java.util.Set-java.util.Set-java.util.Set-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;priorityTargets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;lesserTargets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">BeamAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/BeamAOE.html#idealLocations-java.util.Set-java.util.Set-java.util.Set-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;priorityTargets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;lesserTargets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">AOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/AOE.html#idealLocations-java.util.Set-java.util.Set-java.util.Set-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;priorityTargets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;lesserTargets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>
-<div class="block">A variant of idealLocations that takes two groups of desirable targets, and will rate locations by how many
- priorityTargets are in the AOE, then by how many lesserTargets are in the AOE, and will only consider locations
- that do not affect a Coord in requiredExclusions.</div>
 </td>
 </tr>
 </tbody>
@@ -436,9 +480,9 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">MultiSpill.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/MultiSpill.html#start-squidpony.squidmath.OrderedMap-int-java.util.Set-">start</a></span>(<a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;entries,
+<td class="colLast"><span class="typeNameLabel">MultiSpill.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/MultiSpill.html#start-squidpony.squidmath.OrderedMap-int-java.util.Collection-">start</a></span>(<a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;entries,
      int&nbsp;volume,
-     <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable)</code>
+     <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable)</code>
 <div class="block">Recalculate the spillMap and return the spreadPattern.</div>
 </td>
 </tr>
@@ -548,10 +592,47 @@
 </tbody>
 </table>
 </li>
+<li class="blockList"><a name="squidpony.squidgrid.mapping.locks.constraints">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a> in <a href="../../../squidpony/squidgrid/mapping/locks/constraints/package-summary.html">squidpony.squidgrid.mapping.locks.constraints</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../squidpony/squidgrid/mapping/locks/constraints/package-summary.html">squidpony.squidgrid.mapping.locks.constraints</a> declared as <a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,<a href="../../../squidpony/squidgrid/mapping/locks/constraints/FreeformConstraints.Group.html" title="class in squidpony.squidgrid.mapping.locks.constraints">FreeformConstraints.Group</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">FreeformConstraints.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/constraints/FreeformConstraints.html#groups">groups</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">ColorMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/constraints/ColorMap.html#map">map</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="squidpony.squidmath">
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a> in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subclasses, and an explanation">
+<caption><span>Subclasses of <a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a> in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/RegionMap.html" title="class in squidpony.squidmath">RegionMap</a>&lt;V&gt;</span></code>
+<div class="block">A small extension of OrderedMap that specifically handles <code>short[]</code> regions as produced by <a href="../../../squidpony/squidmath/CoordPacker.html" title="class in squidpony.squidmath"><code>CoordPacker</code></a>.</div>
+</td>
+</tr>
+</tbody>
+</table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
 <caption><span>Methods in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> that return <a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -633,6 +714,6 @@
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

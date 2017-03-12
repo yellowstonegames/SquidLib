@@ -200,755 +200,765 @@
 <span class="sourceLineNo">192</span>            new Replacer(Pattern.compile("e$"), "", false),<a name="line.192"></a>
 <span class="sourceLineNo">193</span>            new Replacer(Pattern.compile("^[pc]([nts])"), "$1"),<a name="line.193"></a>
 <span class="sourceLineNo">194</span>            new Replacer(Pattern.compile("^fth"), "t", false),<a name="line.194"></a>
-<span class="sourceLineNo">195</span>    }, conjugationProc = {<a name="line.195"></a>
+<span class="sourceLineNo">195</span>    }, conjugationProc = { // 17 is REFlags.UNICODE | REFlags.IGNORE_CASE<a name="line.195"></a>
 <span class="sourceLineNo">196</span>            new Replacer(Pattern.compile("([^àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]+)" +<a name="line.196"></a>
 <span class="sourceLineNo">197</span>                    "([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])\\2" +<a name="line.197"></a>
-<span class="sourceLineNo">198</span>                    "([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])", REFlags.UNICODE | REFlags.IGNORE_CASE), "$1$2$1$2$3"),<a name="line.198"></a>
+<span class="sourceLineNo">198</span>                    "([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])", 17), "$1$2$1$2$3"),<a name="line.198"></a>
 <span class="sourceLineNo">199</span>            new Replacer(Pattern.compile("([^àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]+)" +<a name="line.199"></a>
 <span class="sourceLineNo">200</span>                    "([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])" +<a name="line.200"></a>
-<span class="sourceLineNo">201</span>                    "([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])\\3", REFlags.UNICODE | REFlags.IGNORE_CASE), "$1$2$3$1$3"),<a name="line.201"></a>
+<span class="sourceLineNo">201</span>                    "([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])\\3", 17), "$1$2$3$1$3"),<a name="line.201"></a>
 <span class="sourceLineNo">202</span>            new Replacer(Pattern.compile("([^àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]{3})" +<a name="line.202"></a>
-<span class="sourceLineNo">203</span>                    "(?:[^àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]+)", REFlags.UNICODE | REFlags.IGNORE_CASE), "$1"),<a name="line.203"></a>
+<span class="sourceLineNo">203</span>                    "(?:[^àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]+)", 17), "$1"),<a name="line.203"></a>
 <span class="sourceLineNo">204</span>            new Replacer(Pattern.compile("([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])" +<a name="line.204"></a>
-<span class="sourceLineNo">205</span>                    "([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])(?:\\1\\2)+", REFlags.UNICODE | REFlags.IGNORE_CASE), "$1$2"),<a name="line.205"></a>
-<span class="sourceLineNo">206</span>    };<a name="line.206"></a>
-<span class="sourceLineNo">207</span><a name="line.207"></a>
-<span class="sourceLineNo">208</span>    static final long[] bigrams = {<a name="line.208"></a>
-<span class="sourceLineNo">209</span>//a<a name="line.209"></a>
-<span class="sourceLineNo">210</span>            5, 22, 20, 22, 21, 22, 22, 5, 11, 20, 22, 4, 22, 22, 20, 22, 4, 4, 22, 22, 5, 22, 5, 22, 20, 22, 8,<a name="line.210"></a>
-<span class="sourceLineNo">211</span>//b<a name="line.211"></a>
-<span class="sourceLineNo">212</span>            52, 52, 52, 52, 52, 52, 52, 53, 52, 52, 52, 52, 52, 52, 52, 52, 52, 52, 52, 52, 52, 52, 52, 52, 52, 52, 52,<a name="line.212"></a>
-<span class="sourceLineNo">213</span>//c<a name="line.213"></a>
-<span class="sourceLineNo">214</span>            58, 58, 58, 58, 33, 58, 39, 58, 32, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58,<a name="line.214"></a>
-<span class="sourceLineNo">215</span>//d<a name="line.215"></a>
-<span class="sourceLineNo">216</span>            60, 60, 60, 60, 60, 60, 60, 61, 60, 39, 60, 60, 60, 60, 60, 60, 60, 60, 60, 63, 60, 60, 60, 60, 60, 60, 60,<a name="line.216"></a>
-<span class="sourceLineNo">217</span>//e<a name="line.217"></a>
-<span class="sourceLineNo">218</span>            19, 6, 18, 6, 19, 6, 6, 7, 19, 6, 6, 6, 6, 6, 18, 6, 6, 6, 6, 6, 16, 6, 6, 6, 6, 6, 0,<a name="line.218"></a>
-<span class="sourceLineNo">219</span>//f<a name="line.219"></a>
-<span class="sourceLineNo">220</span>            42, 42, 42, 42, 42, 42, 42, 43, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42,<a name="line.220"></a>
-<span class="sourceLineNo">221</span>//g<a name="line.221"></a>
-<span class="sourceLineNo">222</span>            56, 56, 56, 56, 56, 56, 56, 41, 56, 56, 56, 56, 56, 51, 56, 56, 56, 56, 56, 57, 56, 56, 56, 56, 56, 56, 56,<a name="line.222"></a>
-<span class="sourceLineNo">223</span>//h<a name="line.223"></a>
-<span class="sourceLineNo">224</span>            24, 53, 59, 61, 24, 43, 57, 24, 24, 39, 59, 31, 49, 51, 24, 55, 47, 29, 33, 63, 24, 41, 27, 47, 51, 35, 0,<a name="line.224"></a>
-<span class="sourceLineNo">225</span>//i<a name="line.225"></a>
-<span class="sourceLineNo">226</span>            16, 16, 16, 16, 11, 16, 16, 17, 11, 16, 16, 16, 16, 16, 18, 16, 16, 2, 16, 16, 16, 16, 16, 16, 18, 16, 18,<a name="line.226"></a>
-<span class="sourceLineNo">227</span>//j<a name="line.227"></a>
-<span class="sourceLineNo">228</span>            38, 38, 38, 38, 38, 38, 38, 39, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38,<a name="line.228"></a>
-<span class="sourceLineNo">229</span>//k<a name="line.229"></a>
-<span class="sourceLineNo">230</span>            58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58,<a name="line.230"></a>
-<span class="sourceLineNo">231</span>//l<a name="line.231"></a>
-<span class="sourceLineNo">232</span>            30, 30, 30, 30, 30, 30, 30, 31, 30, 30, 30, 31, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30,<a name="line.232"></a>
-<span class="sourceLineNo">233</span>//m<a name="line.233"></a>
-<span class="sourceLineNo">234</span>            48, 49, 48, 48, 48, 48, 48, 49, 48, 48, 48, 48, 48, 49, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48,<a name="line.234"></a>
-<span class="sourceLineNo">235</span>//n<a name="line.235"></a>
-<span class="sourceLineNo">236</span>            50, 50, 50, 50, 50, 50, 50, 51, 50, 50, 50, 50, 50, 51, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 51, 50, 50,<a name="line.236"></a>
-<span class="sourceLineNo">237</span>//o<a name="line.237"></a>
-<span class="sourceLineNo">238</span>            14, 4, 4, 4, 14, 4, 4, 15, 2, 4, 4, 14, 4, 4, 2, 4, 4, 14, 4, 4, 12, 4, 14, 4, 4, 4, 14,<a name="line.238"></a>
-<span class="sourceLineNo">239</span>//p<a name="line.239"></a>
-<span class="sourceLineNo">240</span>            54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54,<a name="line.240"></a>
-<span class="sourceLineNo">241</span>//q<a name="line.241"></a>
-<span class="sourceLineNo">242</span>            46, 46, 46, 46, 46, 46, 46, 47, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 47, 46, 46, 46, 46,<a name="line.242"></a>
-<span class="sourceLineNo">243</span>//r<a name="line.243"></a>
-<span class="sourceLineNo">244</span>            28, 28, 28, 28, 28, 28, 28, 29, 28, 28, 28, 28, 28, 28, 28, 28, 28, 29, 28, 28, 28, 28, 28, 28, 28, 28, 28,<a name="line.244"></a>
-<span class="sourceLineNo">245</span>//s<a name="line.245"></a>
-<span class="sourceLineNo">246</span>            32, 32, 32, 34, 32, 32, 32, 37, 32, 32, 32, 32, 34, 32, 32, 32, 32, 32, 33, 32, 32, 32, 32, 32, 32, 34, 34,<a name="line.246"></a>
-<span class="sourceLineNo">247</span>//t<a name="line.247"></a>
-<span class="sourceLineNo">248</span>            62, 62, 62, 63, 62, 62, 62, 45, 62, 62, 62, 58, 62, 62, 62, 62, 62, 62, 62, 63, 62, 62, 62, 47, 62, 62, 62,<a name="line.248"></a>
-<span class="sourceLineNo">249</span>//u<a name="line.249"></a>
-<span class="sourceLineNo">250</span>            26, 8, 8, 8, 12, 8, 8, 9, 26, 8, 8, 2, 8, 8, 2, 8, 8, 2, 8, 8, 13, 8, 13, 8, 8, 8, 12,<a name="line.250"></a>
-<span class="sourceLineNo">251</span>//v<a name="line.251"></a>
-<span class="sourceLineNo">252</span>            40, 40, 40, 40, 40, 40, 40, 41, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 41, 40, 40, 40, 40, 40,<a name="line.252"></a>
-<span class="sourceLineNo">253</span>//w<a name="line.253"></a>
-<span class="sourceLineNo">254</span>            26, 53, 59, 61, 26, 43, 57, 24, 26, 39, 59, 31, 49, 51, 26, 55, 47, 29, 35, 63, 24, 41, 27, 47, 51, 35, 0,<a name="line.254"></a>
-<span class="sourceLineNo">255</span>//x<a name="line.255"></a>
-<span class="sourceLineNo">256</span>            46, 46, 46, 46, 46, 46, 46, 47, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 47, 46, 46, 46,<a name="line.256"></a>
-<span class="sourceLineNo">257</span>//y<a name="line.257"></a>
-<span class="sourceLineNo">258</span>            50, 50, 50, 50, 50, 50, 50, 51, 50, 50, 50, 50, 50, 51, 50, 50, 50, 50, 50, 50, 50, 50, 46, 50, 51, 50, 50,<a name="line.258"></a>
-<span class="sourceLineNo">259</span>//z<a name="line.259"></a>
-<span class="sourceLineNo">260</span>            34, 34, 34, 34, 34, 34, 34, 39, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 35, 34, 34, 34, 34, 34, 34, 34, 34,<a name="line.260"></a>
-<span class="sourceLineNo">261</span>    };<a name="line.261"></a>
-<span class="sourceLineNo">262</span><a name="line.262"></a>
-<span class="sourceLineNo">263</span><a name="line.263"></a>
-<span class="sourceLineNo">264</span>    // not an OrderedMap because this should never be need a random element to be requested<a name="line.264"></a>
-<span class="sourceLineNo">265</span>    /**<a name="line.265"></a>
-<span class="sourceLineNo">266</span>     * The mapping of lower-case word keys to lower-case word values, where keys are in the source language and values<a name="line.266"></a>
-<span class="sourceLineNo">267</span>     * are generated by language.<a name="line.267"></a>
-<span class="sourceLineNo">268</span>     */<a name="line.268"></a>
-<span class="sourceLineNo">269</span>    public HashMap&lt;String, String&gt; table,<a name="line.269"></a>
-<span class="sourceLineNo">270</span>    /**<a name="line.270"></a>
-<span class="sourceLineNo">271</span>     * The mapping of lower-case word keys to lower-case word values, where keys are generated by language and values<a name="line.271"></a>
-<span class="sourceLineNo">272</span>     * are in the source language. Can be used as a complete vocabulary when passed to decipher.<a name="line.272"></a>
-<span class="sourceLineNo">273</span>     */<a name="line.273"></a>
-<span class="sourceLineNo">274</span>    reverse;<a name="line.274"></a>
-<span class="sourceLineNo">275</span>    private static final Pattern wordMatch = Pattern.compile("(\\pL+)|(\\pL[\\pL-]*\\pL)");<a name="line.275"></a>
-<span class="sourceLineNo">276</span><a name="line.276"></a>
-<span class="sourceLineNo">277</span>    /**<a name="line.277"></a>
-<span class="sourceLineNo">278</span>     * The degree of vocabulary to cache to speed up future searches at the expense of memory usage.<a name="line.278"></a>
-<span class="sourceLineNo">279</span>     * &lt;ul&gt;<a name="line.279"></a>
-<span class="sourceLineNo">280</span>     * &lt;li&gt;2 will cache source words to generated words in table, and generated to source in reverse.&lt;/li&gt;<a name="line.280"></a>
-<span class="sourceLineNo">281</span>     * &lt;li&gt;1 will cache source words to generated words in table, and won't write to reverse.&lt;/li&gt;<a name="line.281"></a>
-<span class="sourceLineNo">282</span>     * &lt;li&gt;0 won't write to table or reverse.&lt;/li&gt;<a name="line.282"></a>
-<span class="sourceLineNo">283</span>     * &lt;/ul&gt;<a name="line.283"></a>
-<span class="sourceLineNo">284</span>     * Defaults to 2, writing to both table and reverse.<a name="line.284"></a>
-<span class="sourceLineNo">285</span>     */<a name="line.285"></a>
-<span class="sourceLineNo">286</span>    public int cacheLevel = 2;<a name="line.286"></a>
-<span class="sourceLineNo">287</span><a name="line.287"></a>
-<span class="sourceLineNo">288</span>    public final long shift;<a name="line.288"></a>
-<span class="sourceLineNo">289</span><a name="line.289"></a>
-<span class="sourceLineNo">290</span>    /**<a name="line.290"></a>
-<span class="sourceLineNo">291</span>     * Constructs a LanguageCipher that will generate English-like or Dutch-like text by default.<a name="line.291"></a>
-<span class="sourceLineNo">292</span>     */<a name="line.292"></a>
-<span class="sourceLineNo">293</span>    public NaturalLanguageCipher()<a name="line.293"></a>
-<span class="sourceLineNo">294</span>    {<a name="line.294"></a>
-<span class="sourceLineNo">295</span>        this(FakeLanguageGen.ENGLISH);<a name="line.295"></a>
-<span class="sourceLineNo">296</span>    }<a name="line.296"></a>
-<span class="sourceLineNo">297</span><a name="line.297"></a>
-<span class="sourceLineNo">298</span>    /**<a name="line.298"></a>
-<span class="sourceLineNo">299</span>     * Constructs a LanguageCipher that will use the given style of language generator to produce its text.<a name="line.299"></a>
-<span class="sourceLineNo">300</span>     * @param language a FakeLanguageGen, typically one of the static constants in that class or a mix of them.<a name="line.300"></a>
+<span class="sourceLineNo">205</span>                    "([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])(?:\\1\\2)+", 17), "$1$2"),<a name="line.205"></a>
+<span class="sourceLineNo">206</span>            new Replacer(Pattern.compile("[æǽœìíîïĩīĭįıiùúûüũūŭůűųuýÿŷỳy]([æǽœýÿŷỳy])", 17), "$1"),<a name="line.206"></a>
+<span class="sourceLineNo">207</span>            new Replacer(Pattern.compile("q([ùúûüũūŭůűųu])$", 17), "q$1e"),<a name="line.207"></a>
+<span class="sourceLineNo">208</span>            new Replacer(Pattern.compile("([ìíîïĩīĭįıi])[ìíîïĩīĭįıi]", 17), "$1"),<a name="line.208"></a>
+<span class="sourceLineNo">209</span>            new Replacer(Pattern.compile("([æǽœìíîïĩīĭįıiùúûüũūŭůűųuýÿŷỳy])[wŵẁẃẅ]$", 17), "$1"),<a name="line.209"></a>
+<span class="sourceLineNo">210</span>            new Replacer(Pattern.compile("([ùúûüũūŭůűųu])([òóôõöøōŏőǿo])", 17), "$2$1"),<a name="line.210"></a>
+<span class="sourceLineNo">211</span>            new Replacer(Pattern.compile("[àáâãäåāăąǻaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőǿoùúûüũūŭůűųuýÿŷỳy]([æǽœ])", 17), "$1"),<a name="line.211"></a>
+<span class="sourceLineNo">212</span>            new Replacer(Pattern.compile("([æǽœ])[àáâãäåāăąǻaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőǿoùúûüũūŭůűųuýÿŷỳy]", 17), "$1"),<a name="line.212"></a>
+<span class="sourceLineNo">213</span>            new Replacer(Pattern.compile("([wŵẁẃẅ])[wŵẁẃẅ]", 17), "$1"),<a name="line.213"></a>
+<span class="sourceLineNo">214</span>            new Replacer(Pattern.compile("q{2,}", 17), "q")<a name="line.214"></a>
+<span class="sourceLineNo">215</span>    };<a name="line.215"></a>
+<span class="sourceLineNo">216</span><a name="line.216"></a>
+<span class="sourceLineNo">217</span>    static final long[] bigrams = {<a name="line.217"></a>
+<span class="sourceLineNo">218</span>//a<a name="line.218"></a>
+<span class="sourceLineNo">219</span>            5, 22, 20, 22, 21, 22, 22, 5, 11, 20, 22, 4, 22, 22, 20, 22, 4, 4, 22, 22, 5, 22, 5, 22, 20, 22, 8,<a name="line.219"></a>
+<span class="sourceLineNo">220</span>//b<a name="line.220"></a>
+<span class="sourceLineNo">221</span>            52, 52, 52, 52, 52, 52, 52, 53, 52, 52, 52, 52, 52, 52, 52, 52, 52, 52, 52, 52, 52, 52, 52, 52, 52, 52, 52,<a name="line.221"></a>
+<span class="sourceLineNo">222</span>//c<a name="line.222"></a>
+<span class="sourceLineNo">223</span>            58, 58, 58, 58, 33, 58, 39, 58, 32, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58,<a name="line.223"></a>
+<span class="sourceLineNo">224</span>//d<a name="line.224"></a>
+<span class="sourceLineNo">225</span>            60, 60, 60, 60, 60, 60, 60, 61, 60, 39, 60, 60, 60, 60, 60, 60, 60, 60, 60, 63, 60, 60, 60, 60, 60, 60, 60,<a name="line.225"></a>
+<span class="sourceLineNo">226</span>//e<a name="line.226"></a>
+<span class="sourceLineNo">227</span>            19, 6, 18, 6, 19, 6, 6, 7, 19, 6, 6, 6, 6, 6, 18, 6, 6, 6, 6, 6, 16, 6, 6, 6, 6, 6, 0,<a name="line.227"></a>
+<span class="sourceLineNo">228</span>//f<a name="line.228"></a>
+<span class="sourceLineNo">229</span>            42, 42, 42, 42, 42, 42, 42, 43, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42,<a name="line.229"></a>
+<span class="sourceLineNo">230</span>//g<a name="line.230"></a>
+<span class="sourceLineNo">231</span>            56, 56, 56, 56, 56, 56, 56, 41, 56, 56, 56, 56, 56, 51, 56, 56, 56, 56, 56, 57, 56, 56, 56, 56, 56, 56, 56,<a name="line.231"></a>
+<span class="sourceLineNo">232</span>//h<a name="line.232"></a>
+<span class="sourceLineNo">233</span>            24, 53, 59, 61, 24, 43, 57, 24, 24, 39, 59, 31, 49, 51, 24, 55, 47, 29, 33, 63, 24, 41, 27, 47, 51, 35, 0,<a name="line.233"></a>
+<span class="sourceLineNo">234</span>//i<a name="line.234"></a>
+<span class="sourceLineNo">235</span>            16, 16, 16, 16, 11, 16, 16, 17, 11, 16, 16, 16, 16, 16, 18, 16, 16, 2, 16, 16, 16, 16, 16, 16, 18, 16, 18,<a name="line.235"></a>
+<span class="sourceLineNo">236</span>//j<a name="line.236"></a>
+<span class="sourceLineNo">237</span>            38, 38, 38, 38, 38, 38, 38, 39, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38,<a name="line.237"></a>
+<span class="sourceLineNo">238</span>//k<a name="line.238"></a>
+<span class="sourceLineNo">239</span>            58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58,<a name="line.239"></a>
+<span class="sourceLineNo">240</span>//l<a name="line.240"></a>
+<span class="sourceLineNo">241</span>            30, 30, 30, 30, 30, 30, 30, 31, 30, 30, 30, 31, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30,<a name="line.241"></a>
+<span class="sourceLineNo">242</span>//m<a name="line.242"></a>
+<span class="sourceLineNo">243</span>            48, 49, 48, 48, 48, 48, 48, 49, 48, 48, 48, 48, 48, 49, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48,<a name="line.243"></a>
+<span class="sourceLineNo">244</span>//n<a name="line.244"></a>
+<span class="sourceLineNo">245</span>            50, 50, 50, 50, 50, 50, 50, 51, 50, 50, 50, 50, 50, 51, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 51, 50, 50,<a name="line.245"></a>
+<span class="sourceLineNo">246</span>//o<a name="line.246"></a>
+<span class="sourceLineNo">247</span>            14, 4, 4, 4, 14, 4, 4, 15, 2, 4, 4, 14, 4, 4, 2, 4, 4, 14, 4, 4, 12, 4, 14, 4, 4, 4, 14,<a name="line.247"></a>
+<span class="sourceLineNo">248</span>//p<a name="line.248"></a>
+<span class="sourceLineNo">249</span>            54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54,<a name="line.249"></a>
+<span class="sourceLineNo">250</span>//q<a name="line.250"></a>
+<span class="sourceLineNo">251</span>            46, 46, 46, 46, 46, 46, 46, 47, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 47, 46, 46, 46, 46,<a name="line.251"></a>
+<span class="sourceLineNo">252</span>//r<a name="line.252"></a>
+<span class="sourceLineNo">253</span>            28, 28, 28, 28, 28, 28, 28, 29, 28, 28, 28, 28, 28, 28, 28, 28, 28, 29, 28, 28, 28, 28, 28, 28, 28, 28, 28,<a name="line.253"></a>
+<span class="sourceLineNo">254</span>//s<a name="line.254"></a>
+<span class="sourceLineNo">255</span>            32, 32, 32, 34, 32, 32, 32, 37, 32, 32, 32, 32, 34, 32, 32, 32, 32, 32, 33, 32, 32, 32, 32, 32, 32, 34, 34,<a name="line.255"></a>
+<span class="sourceLineNo">256</span>//t<a name="line.256"></a>
+<span class="sourceLineNo">257</span>            62, 62, 62, 63, 62, 62, 62, 45, 62, 62, 62, 58, 62, 62, 62, 62, 62, 62, 62, 63, 62, 62, 62, 47, 62, 62, 62,<a name="line.257"></a>
+<span class="sourceLineNo">258</span>//u<a name="line.258"></a>
+<span class="sourceLineNo">259</span>            26, 8, 8, 8, 12, 8, 8, 9, 26, 8, 8, 2, 8, 8, 2, 8, 8, 2, 8, 8, 13, 8, 13, 8, 8, 8, 12,<a name="line.259"></a>
+<span class="sourceLineNo">260</span>//v<a name="line.260"></a>
+<span class="sourceLineNo">261</span>            40, 40, 40, 40, 40, 40, 40, 41, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 41, 40, 40, 40, 40, 40,<a name="line.261"></a>
+<span class="sourceLineNo">262</span>//w<a name="line.262"></a>
+<span class="sourceLineNo">263</span>            26, 53, 59, 61, 26, 43, 57, 24, 26, 39, 59, 31, 49, 51, 26, 55, 47, 29, 35, 63, 24, 41, 27, 47, 51, 35, 0,<a name="line.263"></a>
+<span class="sourceLineNo">264</span>//x<a name="line.264"></a>
+<span class="sourceLineNo">265</span>            46, 46, 46, 46, 46, 46, 46, 47, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 47, 46, 46, 46,<a name="line.265"></a>
+<span class="sourceLineNo">266</span>//y<a name="line.266"></a>
+<span class="sourceLineNo">267</span>            50, 50, 50, 50, 50, 50, 50, 51, 50, 50, 50, 50, 50, 51, 50, 50, 50, 50, 50, 50, 50, 50, 46, 50, 51, 50, 50,<a name="line.267"></a>
+<span class="sourceLineNo">268</span>//z<a name="line.268"></a>
+<span class="sourceLineNo">269</span>            34, 34, 34, 34, 34, 34, 34, 39, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 35, 34, 34, 34, 34, 34, 34, 34, 34,<a name="line.269"></a>
+<span class="sourceLineNo">270</span>    };<a name="line.270"></a>
+<span class="sourceLineNo">271</span><a name="line.271"></a>
+<span class="sourceLineNo">272</span><a name="line.272"></a>
+<span class="sourceLineNo">273</span>    // not an OrderedMap because this should never be need a random element to be requested<a name="line.273"></a>
+<span class="sourceLineNo">274</span>    /**<a name="line.274"></a>
+<span class="sourceLineNo">275</span>     * The mapping of lower-case word keys to lower-case word values, where keys are in the source language and values<a name="line.275"></a>
+<span class="sourceLineNo">276</span>     * are generated by language.<a name="line.276"></a>
+<span class="sourceLineNo">277</span>     */<a name="line.277"></a>
+<span class="sourceLineNo">278</span>    public HashMap&lt;String, String&gt; table,<a name="line.278"></a>
+<span class="sourceLineNo">279</span>    /**<a name="line.279"></a>
+<span class="sourceLineNo">280</span>     * The mapping of lower-case word keys to lower-case word values, where keys are generated by language and values<a name="line.280"></a>
+<span class="sourceLineNo">281</span>     * are in the source language. Can be used as a complete vocabulary when passed to decipher.<a name="line.281"></a>
+<span class="sourceLineNo">282</span>     */<a name="line.282"></a>
+<span class="sourceLineNo">283</span>    reverse;<a name="line.283"></a>
+<span class="sourceLineNo">284</span>    private static final Pattern wordMatch = Pattern.compile("(\\pL+)|(\\pL[\\pL-]*\\pL)");<a name="line.284"></a>
+<span class="sourceLineNo">285</span><a name="line.285"></a>
+<span class="sourceLineNo">286</span>    /**<a name="line.286"></a>
+<span class="sourceLineNo">287</span>     * The degree of vocabulary to cache to speed up future searches at the expense of memory usage.<a name="line.287"></a>
+<span class="sourceLineNo">288</span>     * &lt;ul&gt;<a name="line.288"></a>
+<span class="sourceLineNo">289</span>     * &lt;li&gt;2 will cache source words to generated words in table, and generated to source in reverse.&lt;/li&gt;<a name="line.289"></a>
+<span class="sourceLineNo">290</span>     * &lt;li&gt;1 will cache source words to generated words in table, and won't write to reverse.&lt;/li&gt;<a name="line.290"></a>
+<span class="sourceLineNo">291</span>     * &lt;li&gt;0 won't write to table or reverse.&lt;/li&gt;<a name="line.291"></a>
+<span class="sourceLineNo">292</span>     * &lt;/ul&gt;<a name="line.292"></a>
+<span class="sourceLineNo">293</span>     * Defaults to 2, writing to both table and reverse.<a name="line.293"></a>
+<span class="sourceLineNo">294</span>     */<a name="line.294"></a>
+<span class="sourceLineNo">295</span>    public int cacheLevel = 2;<a name="line.295"></a>
+<span class="sourceLineNo">296</span><a name="line.296"></a>
+<span class="sourceLineNo">297</span>    public final long shift;<a name="line.297"></a>
+<span class="sourceLineNo">298</span><a name="line.298"></a>
+<span class="sourceLineNo">299</span>    /**<a name="line.299"></a>
+<span class="sourceLineNo">300</span>     * Constructs a LanguageCipher that will generate English-like or Dutch-like text by default.<a name="line.300"></a>
 <span class="sourceLineNo">301</span>     */<a name="line.301"></a>
-<span class="sourceLineNo">302</span>    public NaturalLanguageCipher(FakeLanguageGen language)<a name="line.302"></a>
+<span class="sourceLineNo">302</span>    public NaturalLanguageCipher()<a name="line.302"></a>
 <span class="sourceLineNo">303</span>    {<a name="line.303"></a>
-<span class="sourceLineNo">304</span>        this(language, 0);<a name="line.304"></a>
+<span class="sourceLineNo">304</span>        this(FakeLanguageGen.ENGLISH);<a name="line.304"></a>
 <span class="sourceLineNo">305</span>    }<a name="line.305"></a>
 <span class="sourceLineNo">306</span><a name="line.306"></a>
-<span class="sourceLineNo">307</span>    private Pattern[] additionalPrefixChecks = {<a name="line.307"></a>
-<span class="sourceLineNo">308</span>            //17 is REFlags.UNICODE | REFlags.IGNORE_CASE<a name="line.308"></a>
-<span class="sourceLineNo">309</span>            Pattern.compile("(?:(?:[pрρ][hн])|[fd])[aаαiτιuμυνv]$", 17),<a name="line.309"></a>
-<span class="sourceLineNo">310</span>            Pattern.compile("[kкκcсςq][uμυνv]$", 17),<a name="line.310"></a>
-<span class="sourceLineNo">311</span>            Pattern.compile("[bъыбвβЪЫБ][iτι][tтτг]$", 17),<a name="line.311"></a>
-<span class="sourceLineNo">312</span>            Pattern.compile("[sξζzcсς](?:[hн]?)[iτιyуλγУ]$", 17),<a name="line.312"></a>
-<span class="sourceLineNo">313</span>            Pattern.compile("[aаαΛ][nи][aаαΛiτιyуλγУuμυνvoоюσο]*$", 17),<a name="line.313"></a>
-<span class="sourceLineNo">314</span>            Pattern.compile("[tтτΓг][iτιyуλγУ]+$", 17),<a name="line.314"></a>
-<span class="sourceLineNo">315</span>            Pattern.compile("[cсςkкκq][lι]?[iτιyуλγУ]+$", 17),<a name="line.315"></a>
-<span class="sourceLineNo">316</span>            Pattern.compile("[aаαΛ][sξζz]$", 17),<a name="line.316"></a>
-<span class="sourceLineNo">317</span>            Pattern.compile("[nиfvν][iτιyуλγУaаαΛ]+$", 17),<a name="line.317"></a>
-<span class="sourceLineNo">318</span>            Pattern.compile("[pрρ][eезξεЗΣoоюσοiτιyуλγУuμυνv]+$", 17),<a name="line.318"></a>
-<span class="sourceLineNo">319</span>            Pattern.compile("[g][hн]?[aаαΛeезξεЗΣyуλγУ]+$", 17),<a name="line.319"></a>
-<span class="sourceLineNo">320</span>            Pattern.compile("[wψшщuμυνv](?:[hн]?)[aаαΛeезξεЗΣoоюσοuμυνv]+$", 17),<a name="line.320"></a>
-<span class="sourceLineNo">321</span>    }, additionalSuffixChecks = {<a name="line.321"></a>
-<span class="sourceLineNo">322</span>            Pattern.compile("^[aаαeезξεЗΣoоюσοuμυ]*[nи]*[tтτΓгdgkкκcсςq]", 17),<a name="line.322"></a>
-<span class="sourceLineNo">323</span>            Pattern.compile("^[iτιyуλγУaаαΛ]*[gj]", 17),<a name="line.323"></a>
-<span class="sourceLineNo">324</span>            Pattern.compile("^[nи]..?[Ssξlιζz]", 17),<a name="line.324"></a>
-<span class="sourceLineNo">325</span>            Pattern.compile("^[iτιyуλγУaаαΛ][dtтτΓг]", 17),<a name="line.325"></a>
-<span class="sourceLineNo">326</span>            Pattern.compile("^[iτιyуλγУaаαΛ][kкκcсςq][kкκcсςq]", 17),<a name="line.326"></a>
-<span class="sourceLineNo">327</span>            Pattern.compile("^[uμυ]*[mм]", 17),<a name="line.327"></a>
-<span class="sourceLineNo">328</span>    };<a name="line.328"></a>
-<span class="sourceLineNo">329</span><a name="line.329"></a>
-<span class="sourceLineNo">330</span>    private String addPart(String original, int syllables)<a name="line.330"></a>
-<span class="sourceLineNo">331</span>    {<a name="line.331"></a>
-<span class="sourceLineNo">332</span>        String done;<a name="line.332"></a>
-<span class="sourceLineNo">333</span>        Pattern[] checks = null;<a name="line.333"></a>
-<span class="sourceLineNo">334</span>        if(original.endsWith("-"))<a name="line.334"></a>
-<span class="sourceLineNo">335</span>        {<a name="line.335"></a>
-<span class="sourceLineNo">336</span>            checks = additionalPrefixChecks;<a name="line.336"></a>
-<span class="sourceLineNo">337</span>        }<a name="line.337"></a>
-<span class="sourceLineNo">338</span>        else if(original.startsWith("-"))<a name="line.338"></a>
-<span class="sourceLineNo">339</span>        {<a name="line.339"></a>
-<span class="sourceLineNo">340</span>            checks = additionalSuffixChecks;<a name="line.340"></a>
-<span class="sourceLineNo">341</span>        }<a name="line.341"></a>
-<span class="sourceLineNo">342</span>        syllables &lt;&lt;= 1;<a name="line.342"></a>
-<span class="sourceLineNo">343</span>        do {<a name="line.343"></a>
-<span class="sourceLineNo">344</span>            done = language.word(rng, false, syllables &gt;&gt; 1, checks);<a name="line.344"></a>
-<span class="sourceLineNo">345</span>            if(cacheLevel &lt; 2 || ++syllables &gt; 5)<a name="line.345"></a>
-<span class="sourceLineNo">346</span>                break;<a name="line.346"></a>
-<span class="sourceLineNo">347</span>        }while(reverse.containsKey(done));<a name="line.347"></a>
-<span class="sourceLineNo">348</span>        switch (cacheLevel) {<a name="line.348"></a>
-<span class="sourceLineNo">349</span>            case 2: reverse.put(done, original);<a name="line.349"></a>
-<span class="sourceLineNo">350</span>            case 1: table.put(original, done);<a name="line.350"></a>
+<span class="sourceLineNo">307</span>    /**<a name="line.307"></a>
+<span class="sourceLineNo">308</span>     * Constructs a LanguageCipher that will use the given style of language generator to produce its text.<a name="line.308"></a>
+<span class="sourceLineNo">309</span>     * @param language a FakeLanguageGen, typically one of the static constants in that class or a mix of them.<a name="line.309"></a>
+<span class="sourceLineNo">310</span>     */<a name="line.310"></a>
+<span class="sourceLineNo">311</span>    public NaturalLanguageCipher(FakeLanguageGen language)<a name="line.311"></a>
+<span class="sourceLineNo">312</span>    {<a name="line.312"></a>
+<span class="sourceLineNo">313</span>        this(language, 0);<a name="line.313"></a>
+<span class="sourceLineNo">314</span>    }<a name="line.314"></a>
+<span class="sourceLineNo">315</span><a name="line.315"></a>
+<span class="sourceLineNo">316</span>    private Pattern[] additionalPrefixChecks = {<a name="line.316"></a>
+<span class="sourceLineNo">317</span>            //17 is REFlags.UNICODE | REFlags.IGNORE_CASE<a name="line.317"></a>
+<span class="sourceLineNo">318</span>            Pattern.compile("(?:(?:[pрρ][hн])|[fd])[aаαiτιuμυνv]$", 17),<a name="line.318"></a>
+<span class="sourceLineNo">319</span>            Pattern.compile("[kкκcсςq][uμυνv]$", 17),<a name="line.319"></a>
+<span class="sourceLineNo">320</span>            Pattern.compile("[bъыбвβЪЫБ][iτι][tтτг]$", 17),<a name="line.320"></a>
+<span class="sourceLineNo">321</span>            Pattern.compile("[sξζzcсς](?:[hн]?)[iτιyуλγУ]$", 17),<a name="line.321"></a>
+<span class="sourceLineNo">322</span>            Pattern.compile("[aаαΛ][nи][aаαΛiτιyуλγУuμυνvoоюσο]*$", 17),<a name="line.322"></a>
+<span class="sourceLineNo">323</span>            Pattern.compile("[tтτΓг][iτιyуλγУ]+$", 17),<a name="line.323"></a>
+<span class="sourceLineNo">324</span>            Pattern.compile("[cсςkкκq][lι]?[iτιyуλγУ]+$", 17),<a name="line.324"></a>
+<span class="sourceLineNo">325</span>            Pattern.compile("[aаαΛ][sξζz]$", 17),<a name="line.325"></a>
+<span class="sourceLineNo">326</span>            Pattern.compile("[nиfvν][iτιyуλγУaаαΛ]+$", 17),<a name="line.326"></a>
+<span class="sourceLineNo">327</span>            Pattern.compile("[pрρ][eезξεЗΣoоюσοiτιyуλγУuμυνv]+$", 17),<a name="line.327"></a>
+<span class="sourceLineNo">328</span>            Pattern.compile("[g][hн]?[aаαΛeезξεЗΣyуλγУ]+$", 17),<a name="line.328"></a>
+<span class="sourceLineNo">329</span>            Pattern.compile("[wψшщuμυνv](?:[hн]?)[aаαΛeезξεЗΣoоюσοuμυνv]+$", 17),<a name="line.329"></a>
+<span class="sourceLineNo">330</span>    }, additionalSuffixChecks = {<a name="line.330"></a>
+<span class="sourceLineNo">331</span>            Pattern.compile("^(?:[aаαeезξεЗΣoоюσοuμυ]*)(?:[nи]+)[tтτΓгdgkкκcсςq]", 17),<a name="line.331"></a>
+<span class="sourceLineNo">332</span>            Pattern.compile("^(?:[aаαeезξεЗΣoоюσοuμυ]+)(?:[nи]*)[tтτΓгdgkкκcсςq]", 17),<a name="line.332"></a>
+<span class="sourceLineNo">333</span>            Pattern.compile("^(?:[iτιyуλγУaаαΛ]*)[gj]", 17),<a name="line.333"></a>
+<span class="sourceLineNo">334</span>            Pattern.compile("^[nи]..?[Ssξlιζz]", 17),<a name="line.334"></a>
+<span class="sourceLineNo">335</span>            Pattern.compile("^[iτιyуλγУaаαΛ][dtтτΓг]", 17),<a name="line.335"></a>
+<span class="sourceLineNo">336</span>            Pattern.compile("^[iτιyуλγУaаαΛ][kкκcсςq][kкκcсςq]", 17),<a name="line.336"></a>
+<span class="sourceLineNo">337</span>            Pattern.compile("^[uμυ]*[mм]", 17),<a name="line.337"></a>
+<span class="sourceLineNo">338</span>    };<a name="line.338"></a>
+<span class="sourceLineNo">339</span><a name="line.339"></a>
+<span class="sourceLineNo">340</span>    private String addPart(String original, int syllables)<a name="line.340"></a>
+<span class="sourceLineNo">341</span>    {<a name="line.341"></a>
+<span class="sourceLineNo">342</span>        String done;<a name="line.342"></a>
+<span class="sourceLineNo">343</span>        Pattern[] checks = null;<a name="line.343"></a>
+<span class="sourceLineNo">344</span>        if(original.endsWith("-"))<a name="line.344"></a>
+<span class="sourceLineNo">345</span>        {<a name="line.345"></a>
+<span class="sourceLineNo">346</span>            checks = additionalPrefixChecks;<a name="line.346"></a>
+<span class="sourceLineNo">347</span>        }<a name="line.347"></a>
+<span class="sourceLineNo">348</span>        else if(original.startsWith("-"))<a name="line.348"></a>
+<span class="sourceLineNo">349</span>        {<a name="line.349"></a>
+<span class="sourceLineNo">350</span>            checks = additionalSuffixChecks;<a name="line.350"></a>
 <span class="sourceLineNo">351</span>        }<a name="line.351"></a>
-<span class="sourceLineNo">352</span>        return done;<a name="line.352"></a>
-<span class="sourceLineNo">353</span>    }<a name="line.353"></a>
-<span class="sourceLineNo">354</span>    /**<a name="line.354"></a>
-<span class="sourceLineNo">355</span>     * Constructs a LanguageCipher that will use the given style of language generator to produce its text.<a name="line.355"></a>
-<span class="sourceLineNo">356</span>     * @param language a FakeLanguageGen, typically one of the static constants in that class or a mix of them.<a name="line.356"></a>
-<span class="sourceLineNo">357</span>     * @param shift any long; this will be used to alter the specific words generated unless it is 0<a name="line.357"></a>
-<span class="sourceLineNo">358</span>     */<a name="line.358"></a>
-<span class="sourceLineNo">359</span>    public NaturalLanguageCipher(FakeLanguageGen language, long shift)<a name="line.359"></a>
-<span class="sourceLineNo">360</span>    {<a name="line.360"></a>
-<span class="sourceLineNo">361</span>        this.shift = shift;<a name="line.361"></a>
-<span class="sourceLineNo">362</span>        this.language = language.copy();<a name="line.362"></a>
-<span class="sourceLineNo">363</span>        rs = new SemiRandom(0xDF58476D1CE4E5B9L + shift);<a name="line.363"></a>
-<span class="sourceLineNo">364</span>        rng = new RNG(rs);<a name="line.364"></a>
-<span class="sourceLineNo">365</span>        table = new HashMap&lt;&gt;(512);<a name="line.365"></a>
-<span class="sourceLineNo">366</span>        reverse = new HashMap&lt;&gt;(512);<a name="line.366"></a>
-<span class="sourceLineNo">367</span>        pluralSuffix = addPart("-s", 0);<a name="line.367"></a>
-<span class="sourceLineNo">368</span>        nounySuffix = addPart("-y", 0);<a name="line.368"></a>
-<span class="sourceLineNo">369</span>        nounicSuffix = addPart("-ic", 0);<a name="line.369"></a>
-<span class="sourceLineNo">370</span>        nouniveSuffix = addPart("-ive", 0);<a name="line.370"></a>
-<span class="sourceLineNo">371</span>        nounistSuffix = addPart("-ist", 0);<a name="line.371"></a>
-<span class="sourceLineNo">372</span>        nounismSuffix = addPart("-ism", 1 + (rng.nextIntHasty(3) &gt;&gt; 1));<a name="line.372"></a>
-<span class="sourceLineNo">373</span>        nounenSuffix = addPart("-en", 0);<a name="line.373"></a>
-<span class="sourceLineNo">374</span>        verbedSuffix = addPart("-ed", 0);<a name="line.374"></a>
-<span class="sourceLineNo">375</span>        verberSuffix = addPart("-er", 0);<a name="line.375"></a>
-<span class="sourceLineNo">376</span>        verbingSuffix = addPart("-ing", 1);<a name="line.376"></a>
-<span class="sourceLineNo">377</span>        verbmentSuffix = addPart("-ment", 0);<a name="line.377"></a>
-<span class="sourceLineNo">378</span>        verbationSuffix = addPart("-ation", rng.nextIntHasty(2) + 1);<a name="line.378"></a>
-<span class="sourceLineNo">379</span>        adjectivelySuffix = addPart("-ly", 0);<a name="line.379"></a>
-<span class="sourceLineNo">380</span>        adjectivestSuffix = addPart("-est", 0);<a name="line.380"></a>
-<span class="sourceLineNo">381</span>        reverbPrefix = addPart("re-", 0);<a name="line.381"></a>
-<span class="sourceLineNo">382</span>        ennounPrefix = addPart("en-", 0);<a name="line.382"></a>
-<span class="sourceLineNo">383</span>        preverbPrefix = addPart("pre-", 0);<a name="line.383"></a>
-<span class="sourceLineNo">384</span>        proverbPrefix = addPart("pro-", 0);<a name="line.384"></a>
-<span class="sourceLineNo">385</span>        postverbPrefix = addPart("post-", 0);<a name="line.385"></a>
-<span class="sourceLineNo">386</span>        antiverbPrefix = addPart("anti-", 2 - (rng.nextIntHasty(3) &gt;&gt; 1));<a name="line.386"></a>
-<span class="sourceLineNo">387</span>        disnounPrefix = addPart("dis-", 0);<a name="line.387"></a>
-<span class="sourceLineNo">388</span>        table.clear();<a name="line.388"></a>
-<span class="sourceLineNo">389</span>        reverse.clear();<a name="line.389"></a>
-<span class="sourceLineNo">390</span>    }<a name="line.390"></a>
-<span class="sourceLineNo">391</span><a name="line.391"></a>
-<span class="sourceLineNo">392</span>    /**<a name="line.392"></a>
-<span class="sourceLineNo">393</span>     * Copies another LanguageCipher and constructs this one with the information in the other. Copies the dictionary<a name="line.393"></a>
-<span class="sourceLineNo">394</span>     * of known words, as well as the FakeLanguageGen style and everything else.<a name="line.394"></a>
-<span class="sourceLineNo">395</span>     * @param other a previously-constructed LanguageCipher.<a name="line.395"></a>
-<span class="sourceLineNo">396</span>     */<a name="line.396"></a>
-<span class="sourceLineNo">397</span>    public NaturalLanguageCipher(NaturalLanguageCipher other)<a name="line.397"></a>
-<span class="sourceLineNo">398</span>    {<a name="line.398"></a>
-<span class="sourceLineNo">399</span>        language = other.language.copy();<a name="line.399"></a>
-<span class="sourceLineNo">400</span>        rs = new SemiRandom();<a name="line.400"></a>
-<span class="sourceLineNo">401</span>        rng = new RNG(rs);<a name="line.401"></a>
-<span class="sourceLineNo">402</span>        table = new HashMap&lt;&gt;(other.table);<a name="line.402"></a>
-<span class="sourceLineNo">403</span>        reverse = new HashMap&lt;&gt;(other.reverse);<a name="line.403"></a>
-<span class="sourceLineNo">404</span>        shift = other.shift;<a name="line.404"></a>
-<span class="sourceLineNo">405</span>        pluralSuffix = other.pluralSuffix;<a name="line.405"></a>
-<span class="sourceLineNo">406</span>        nounySuffix = other.nounySuffix;<a name="line.406"></a>
-<span class="sourceLineNo">407</span>        nounicSuffix = other.nounicSuffix;<a name="line.407"></a>
-<span class="sourceLineNo">408</span>        nouniveSuffix = other.nouniveSuffix;<a name="line.408"></a>
-<span class="sourceLineNo">409</span>        nounistSuffix = other.nounistSuffix;<a name="line.409"></a>
-<span class="sourceLineNo">410</span>        nounismSuffix = other.nounismSuffix;<a name="line.410"></a>
-<span class="sourceLineNo">411</span>        nounenSuffix = other.nounenSuffix;<a name="line.411"></a>
-<span class="sourceLineNo">412</span>        verbedSuffix = other.verbedSuffix;<a name="line.412"></a>
-<span class="sourceLineNo">413</span>        verberSuffix = other.verberSuffix;<a name="line.413"></a>
-<span class="sourceLineNo">414</span>        verbingSuffix = other.verbingSuffix;<a name="line.414"></a>
-<span class="sourceLineNo">415</span>        verbmentSuffix = other.verbmentSuffix;<a name="line.415"></a>
-<span class="sourceLineNo">416</span>        verbationSuffix = other.verbationSuffix;<a name="line.416"></a>
-<span class="sourceLineNo">417</span>        adjectivelySuffix = other.adjectivelySuffix;<a name="line.417"></a>
-<span class="sourceLineNo">418</span>        adjectivestSuffix = other.adjectivestSuffix;<a name="line.418"></a>
-<span class="sourceLineNo">419</span>        reverbPrefix = other.reverbPrefix;<a name="line.419"></a>
-<span class="sourceLineNo">420</span>        ennounPrefix = other.ennounPrefix;<a name="line.420"></a>
-<span class="sourceLineNo">421</span>        preverbPrefix = other.preverbPrefix;<a name="line.421"></a>
-<span class="sourceLineNo">422</span>        postverbPrefix = other.postverbPrefix;<a name="line.422"></a>
-<span class="sourceLineNo">423</span>        proverbPrefix = other.proverbPrefix;<a name="line.423"></a>
-<span class="sourceLineNo">424</span>        antiverbPrefix = other.antiverbPrefix;<a name="line.424"></a>
-<span class="sourceLineNo">425</span>        disnounPrefix = other.disnounPrefix;<a name="line.425"></a>
-<span class="sourceLineNo">426</span>    }<a name="line.426"></a>
-<span class="sourceLineNo">427</span><a name="line.427"></a>
-<span class="sourceLineNo">428</span>    public static long phoneticHash64(char[] data, int start, int end)<a name="line.428"></a>
-<span class="sourceLineNo">429</span>    {<a name="line.429"></a>
-<span class="sourceLineNo">430</span>        long h = 0, b = 0;<a name="line.430"></a>
-<span class="sourceLineNo">431</span>        if(data == null || end &lt;= start || start &gt;= data.length)<a name="line.431"></a>
-<span class="sourceLineNo">432</span>            return h;<a name="line.432"></a>
-<span class="sourceLineNo">433</span>        int current, next, count = 0, used = 0;<a name="line.433"></a>
-<span class="sourceLineNo">434</span>        long got, vc = 0;<a name="line.434"></a>
-<span class="sourceLineNo">435</span>        boolean vowelStream = false;<a name="line.435"></a>
-<span class="sourceLineNo">436</span>        for (int i = start; i &lt; end &amp;&amp; count &lt; 10; i++, count++) { // &amp;&amp; vc &lt; 7<a name="line.436"></a>
-<span class="sourceLineNo">437</span>            current = data[i] - 'a';<a name="line.437"></a>
-<span class="sourceLineNo">438</span>            if(current &gt; 26)<a name="line.438"></a>
-<span class="sourceLineNo">439</span>                continue;<a name="line.439"></a>
-<span class="sourceLineNo">440</span>            if(i + 1 &lt; end) {<a name="line.440"></a>
-<span class="sourceLineNo">441</span>                if((next = data[i + 1] - 'a') &gt; 26)<a name="line.441"></a>
-<span class="sourceLineNo">442</span>                    continue;<a name="line.442"></a>
-<span class="sourceLineNo">443</span>            }<a name="line.443"></a>
-<span class="sourceLineNo">444</span>            else<a name="line.444"></a>
-<span class="sourceLineNo">445</span>                next = 26;<a name="line.445"></a>
-<span class="sourceLineNo">446</span>            got = bigrams[27 * current + next];<a name="line.446"></a>
-<span class="sourceLineNo">447</span>            if(got == 0)<a name="line.447"></a>
-<span class="sourceLineNo">448</span>                continue;<a name="line.448"></a>
-<span class="sourceLineNo">449</span>            h &lt;&lt;= 6;<a name="line.449"></a>
-<span class="sourceLineNo">450</span>            //b &lt;&lt;= 3;<a name="line.450"></a>
-<span class="sourceLineNo">451</span>            got = bigrams[27 * current + next];<a name="line.451"></a>
-<span class="sourceLineNo">452</span>            i += got &amp; 1L;<a name="line.452"></a>
-<span class="sourceLineNo">453</span>            h |= got &gt;&gt;= 1;<a name="line.453"></a>
-<span class="sourceLineNo">454</span>            used++;<a name="line.454"></a>
-<span class="sourceLineNo">455</span>            //used += 5;<a name="line.455"></a>
-<span class="sourceLineNo">456</span>            if(count == 0) {<a name="line.456"></a>
-<span class="sourceLineNo">457</span>                vowelStream = got &gt; 0 &amp;&amp; got &lt; 12;<a name="line.457"></a>
-<span class="sourceLineNo">458</span>            }else if (vowelStream != (got &gt; 0 &amp;&amp; got &lt; 12)) {<a name="line.458"></a>
-<span class="sourceLineNo">459</span>                vc+= vowelStream ? 1 : 0;<a name="line.459"></a>
-<span class="sourceLineNo">460</span>                vowelStream = !vowelStream;<a name="line.460"></a>
-<span class="sourceLineNo">461</span>            }<a name="line.461"></a>
-<span class="sourceLineNo">462</span>            //b |= (got &gt;&gt; 2);<a name="line.462"></a>
-<span class="sourceLineNo">463</span>        }<a name="line.463"></a>
-<span class="sourceLineNo">464</span>        vc += vowelStream ? 1 : 0;<a name="line.464"></a>
-<span class="sourceLineNo">465</span><a name="line.465"></a>
-<span class="sourceLineNo">466</span>        if(used &gt; 0 &amp;&amp; count &gt; 0) {<a name="line.466"></a>
-<span class="sourceLineNo">467</span>            got = h;<a name="line.467"></a>
-<span class="sourceLineNo">468</span>            for (; count &lt; 11; count += used) {<a name="line.468"></a>
-<span class="sourceLineNo">469</span>                h |= got &lt;&lt; (6 * count);<a name="line.469"></a>
-<span class="sourceLineNo">470</span>            }<a name="line.470"></a>
-<span class="sourceLineNo">471</span>            h &amp;= 0xFFFFFFFFFFFFFFFL; // 60 bits<a name="line.471"></a>
-<span class="sourceLineNo">472</span>        }<a name="line.472"></a>
-<span class="sourceLineNo">473</span>        /*b &amp;= ~(-1 &lt;&lt; (35-Math.min(used, 35)));<a name="line.473"></a>
-<span class="sourceLineNo">474</span>        if(used &lt;= 20)<a name="line.474"></a>
-<span class="sourceLineNo">475</span>            b ^= b &lt;&lt; 8;<a name="line.475"></a>
-<span class="sourceLineNo">476</span>        h ^= ((vc &amp; 7L) &lt;&lt; 39) | (b &lt;&lt; (used + 3));<a name="line.476"></a>
-<span class="sourceLineNo">477</span>        */<a name="line.477"></a>
-<span class="sourceLineNo">478</span>        vc = Math.max(1L, vc);<a name="line.478"></a>
-<span class="sourceLineNo">479</span>        return h | ((vc &amp; 15L) &lt;&lt; 60);<a name="line.479"></a>
-<span class="sourceLineNo">480</span>    }<a name="line.480"></a>
-<span class="sourceLineNo">481</span><a name="line.481"></a>
-<span class="sourceLineNo">482</span>    String conjugate(String data, long mods)<a name="line.482"></a>
-<span class="sourceLineNo">483</span>    {<a name="line.483"></a>
-<span class="sourceLineNo">484</span>        if(data == null)<a name="line.484"></a>
-<span class="sourceLineNo">485</span>            return "";<a name="line.485"></a>
-<span class="sourceLineNo">486</span>        StringBuilder sb = new StringBuilder(data);<a name="line.486"></a>
-<span class="sourceLineNo">487</span><a name="line.487"></a>
-<span class="sourceLineNo">488</span>        if((mods &amp; ENNOUN) != 0)<a name="line.488"></a>
-<span class="sourceLineNo">489</span>        {<a name="line.489"></a>
-<span class="sourceLineNo">490</span>            sb.insert(0, ennounPrefix);<a name="line.490"></a>
-<span class="sourceLineNo">491</span>        }<a name="line.491"></a>
-<span class="sourceLineNo">492</span>        if((mods &amp; DISNOUN) != 0)<a name="line.492"></a>
-<span class="sourceLineNo">493</span>        {<a name="line.493"></a>
-<span class="sourceLineNo">494</span>            sb.insert(0, disnounPrefix);<a name="line.494"></a>
-<span class="sourceLineNo">495</span>        }<a name="line.495"></a>
-<span class="sourceLineNo">496</span>        if((mods &amp; REVERB) != 0)<a name="line.496"></a>
-<span class="sourceLineNo">497</span>        {<a name="line.497"></a>
-<span class="sourceLineNo">498</span>            sb.insert(0, reverbPrefix);<a name="line.498"></a>
-<span class="sourceLineNo">499</span>        }<a name="line.499"></a>
-<span class="sourceLineNo">500</span>        if((mods &amp; ANTIVERB) != 0)<a name="line.500"></a>
-<span class="sourceLineNo">501</span>        {<a name="line.501"></a>
-<span class="sourceLineNo">502</span>            sb.insert(0, antiverbPrefix);<a name="line.502"></a>
-<span class="sourceLineNo">503</span>        }<a name="line.503"></a>
-<span class="sourceLineNo">504</span>        if((mods &amp; PROVERB) != 0)<a name="line.504"></a>
-<span class="sourceLineNo">505</span>        {<a name="line.505"></a>
-<span class="sourceLineNo">506</span>            sb.insert(0, proverbPrefix);<a name="line.506"></a>
-<span class="sourceLineNo">507</span>        }<a name="line.507"></a>
-<span class="sourceLineNo">508</span>        if((mods &amp; POSTVERB) != 0)<a name="line.508"></a>
-<span class="sourceLineNo">509</span>        {<a name="line.509"></a>
-<span class="sourceLineNo">510</span>            sb.insert(0, postverbPrefix);<a name="line.510"></a>
-<span class="sourceLineNo">511</span>        }<a name="line.511"></a>
-<span class="sourceLineNo">512</span>        if((mods &amp; PREVERB) != 0)<a name="line.512"></a>
-<span class="sourceLineNo">513</span>        {<a name="line.513"></a>
-<span class="sourceLineNo">514</span>            sb.insert(0, preverbPrefix);<a name="line.514"></a>
-<span class="sourceLineNo">515</span>        }<a name="line.515"></a>
-<span class="sourceLineNo">516</span>        if((mods &amp; NOUNEN) != 0) {<a name="line.516"></a>
-<span class="sourceLineNo">517</span>            sb.append(nounenSuffix);<a name="line.517"></a>
-<span class="sourceLineNo">518</span>        }<a name="line.518"></a>
-<span class="sourceLineNo">519</span>        if((mods &amp; VERBER) != 0) {<a name="line.519"></a>
-<span class="sourceLineNo">520</span>            sb.append(verberSuffix);<a name="line.520"></a>
+<span class="sourceLineNo">352</span>        syllables &lt;&lt;= 1;<a name="line.352"></a>
+<span class="sourceLineNo">353</span>        do {<a name="line.353"></a>
+<span class="sourceLineNo">354</span>            done = language.word(rng, false, syllables &gt;&gt; 1, checks);<a name="line.354"></a>
+<span class="sourceLineNo">355</span>            if(cacheLevel &lt; 2 || ++syllables &gt; 5)<a name="line.355"></a>
+<span class="sourceLineNo">356</span>                break;<a name="line.356"></a>
+<span class="sourceLineNo">357</span>        }while(reverse.containsKey(done));<a name="line.357"></a>
+<span class="sourceLineNo">358</span>        switch (cacheLevel) {<a name="line.358"></a>
+<span class="sourceLineNo">359</span>            case 2: reverse.put(done, original);<a name="line.359"></a>
+<span class="sourceLineNo">360</span>            case 1: table.put(original, done);<a name="line.360"></a>
+<span class="sourceLineNo">361</span>        }<a name="line.361"></a>
+<span class="sourceLineNo">362</span>        return done;<a name="line.362"></a>
+<span class="sourceLineNo">363</span>    }<a name="line.363"></a>
+<span class="sourceLineNo">364</span>    /**<a name="line.364"></a>
+<span class="sourceLineNo">365</span>     * Constructs a LanguageCipher that will use the given style of language generator to produce its text.<a name="line.365"></a>
+<span class="sourceLineNo">366</span>     * @param language a FakeLanguageGen, typically one of the static constants in that class or a mix of them.<a name="line.366"></a>
+<span class="sourceLineNo">367</span>     * @param shift any long; this will be used to alter the specific words generated unless it is 0<a name="line.367"></a>
+<span class="sourceLineNo">368</span>     */<a name="line.368"></a>
+<span class="sourceLineNo">369</span>    public NaturalLanguageCipher(FakeLanguageGen language, long shift)<a name="line.369"></a>
+<span class="sourceLineNo">370</span>    {<a name="line.370"></a>
+<span class="sourceLineNo">371</span>        this.shift = shift;<a name="line.371"></a>
+<span class="sourceLineNo">372</span>        this.language = language.copy();<a name="line.372"></a>
+<span class="sourceLineNo">373</span>        rs = new SemiRandom(0xDF58476D1CE4E5B9L + shift);<a name="line.373"></a>
+<span class="sourceLineNo">374</span>        rng = new RNG(rs);<a name="line.374"></a>
+<span class="sourceLineNo">375</span>        table = new HashMap&lt;&gt;(512);<a name="line.375"></a>
+<span class="sourceLineNo">376</span>        reverse = new HashMap&lt;&gt;(512);<a name="line.376"></a>
+<span class="sourceLineNo">377</span>        pluralSuffix = addPart("-s", 0);<a name="line.377"></a>
+<span class="sourceLineNo">378</span>        nounySuffix = addPart("-y", 0);<a name="line.378"></a>
+<span class="sourceLineNo">379</span>        nounicSuffix = addPart("-ic", 0);<a name="line.379"></a>
+<span class="sourceLineNo">380</span>        nouniveSuffix = addPart("-ive", 0);<a name="line.380"></a>
+<span class="sourceLineNo">381</span>        nounistSuffix = addPart("-ist", 0);<a name="line.381"></a>
+<span class="sourceLineNo">382</span>        nounismSuffix = addPart("-ism", 1 + (rng.nextIntHasty(3) &gt;&gt; 1));<a name="line.382"></a>
+<span class="sourceLineNo">383</span>        nounenSuffix = addPart("-en", 0);<a name="line.383"></a>
+<span class="sourceLineNo">384</span>        verbedSuffix = addPart("-ed", 0);<a name="line.384"></a>
+<span class="sourceLineNo">385</span>        verberSuffix = addPart("-er", 0);<a name="line.385"></a>
+<span class="sourceLineNo">386</span>        verbingSuffix = addPart("-ing", 1);<a name="line.386"></a>
+<span class="sourceLineNo">387</span>        verbmentSuffix = addPart("-ment", 0);<a name="line.387"></a>
+<span class="sourceLineNo">388</span>        verbationSuffix = addPart("-ation", rng.nextIntHasty(2) + 1);<a name="line.388"></a>
+<span class="sourceLineNo">389</span>        adjectivelySuffix = addPart("-ly", 0);<a name="line.389"></a>
+<span class="sourceLineNo">390</span>        adjectivestSuffix = addPart("-est", 0);<a name="line.390"></a>
+<span class="sourceLineNo">391</span>        reverbPrefix = addPart("re-", 0);<a name="line.391"></a>
+<span class="sourceLineNo">392</span>        ennounPrefix = addPart("en-", 0);<a name="line.392"></a>
+<span class="sourceLineNo">393</span>        preverbPrefix = addPart("pre-", 0);<a name="line.393"></a>
+<span class="sourceLineNo">394</span>        proverbPrefix = addPart("pro-", 0);<a name="line.394"></a>
+<span class="sourceLineNo">395</span>        postverbPrefix = addPart("post-", 0);<a name="line.395"></a>
+<span class="sourceLineNo">396</span>        antiverbPrefix = addPart("anti-", 2 - (rng.nextIntHasty(3) &gt;&gt; 1));<a name="line.396"></a>
+<span class="sourceLineNo">397</span>        disnounPrefix = addPart("dis-", 0);<a name="line.397"></a>
+<span class="sourceLineNo">398</span>        table.clear();<a name="line.398"></a>
+<span class="sourceLineNo">399</span>        reverse.clear();<a name="line.399"></a>
+<span class="sourceLineNo">400</span>    }<a name="line.400"></a>
+<span class="sourceLineNo">401</span><a name="line.401"></a>
+<span class="sourceLineNo">402</span>    /**<a name="line.402"></a>
+<span class="sourceLineNo">403</span>     * Copies another LanguageCipher and constructs this one with the information in the other. Copies the dictionary<a name="line.403"></a>
+<span class="sourceLineNo">404</span>     * of known words, as well as the FakeLanguageGen style and everything else.<a name="line.404"></a>
+<span class="sourceLineNo">405</span>     * @param other a previously-constructed LanguageCipher.<a name="line.405"></a>
+<span class="sourceLineNo">406</span>     */<a name="line.406"></a>
+<span class="sourceLineNo">407</span>    public NaturalLanguageCipher(NaturalLanguageCipher other)<a name="line.407"></a>
+<span class="sourceLineNo">408</span>    {<a name="line.408"></a>
+<span class="sourceLineNo">409</span>        language = other.language.copy();<a name="line.409"></a>
+<span class="sourceLineNo">410</span>        rs = new SemiRandom();<a name="line.410"></a>
+<span class="sourceLineNo">411</span>        rng = new RNG(rs);<a name="line.411"></a>
+<span class="sourceLineNo">412</span>        table = new HashMap&lt;&gt;(other.table);<a name="line.412"></a>
+<span class="sourceLineNo">413</span>        reverse = new HashMap&lt;&gt;(other.reverse);<a name="line.413"></a>
+<span class="sourceLineNo">414</span>        shift = other.shift;<a name="line.414"></a>
+<span class="sourceLineNo">415</span>        pluralSuffix = other.pluralSuffix;<a name="line.415"></a>
+<span class="sourceLineNo">416</span>        nounySuffix = other.nounySuffix;<a name="line.416"></a>
+<span class="sourceLineNo">417</span>        nounicSuffix = other.nounicSuffix;<a name="line.417"></a>
+<span class="sourceLineNo">418</span>        nouniveSuffix = other.nouniveSuffix;<a name="line.418"></a>
+<span class="sourceLineNo">419</span>        nounistSuffix = other.nounistSuffix;<a name="line.419"></a>
+<span class="sourceLineNo">420</span>        nounismSuffix = other.nounismSuffix;<a name="line.420"></a>
+<span class="sourceLineNo">421</span>        nounenSuffix = other.nounenSuffix;<a name="line.421"></a>
+<span class="sourceLineNo">422</span>        verbedSuffix = other.verbedSuffix;<a name="line.422"></a>
+<span class="sourceLineNo">423</span>        verberSuffix = other.verberSuffix;<a name="line.423"></a>
+<span class="sourceLineNo">424</span>        verbingSuffix = other.verbingSuffix;<a name="line.424"></a>
+<span class="sourceLineNo">425</span>        verbmentSuffix = other.verbmentSuffix;<a name="line.425"></a>
+<span class="sourceLineNo">426</span>        verbationSuffix = other.verbationSuffix;<a name="line.426"></a>
+<span class="sourceLineNo">427</span>        adjectivelySuffix = other.adjectivelySuffix;<a name="line.427"></a>
+<span class="sourceLineNo">428</span>        adjectivestSuffix = other.adjectivestSuffix;<a name="line.428"></a>
+<span class="sourceLineNo">429</span>        reverbPrefix = other.reverbPrefix;<a name="line.429"></a>
+<span class="sourceLineNo">430</span>        ennounPrefix = other.ennounPrefix;<a name="line.430"></a>
+<span class="sourceLineNo">431</span>        preverbPrefix = other.preverbPrefix;<a name="line.431"></a>
+<span class="sourceLineNo">432</span>        postverbPrefix = other.postverbPrefix;<a name="line.432"></a>
+<span class="sourceLineNo">433</span>        proverbPrefix = other.proverbPrefix;<a name="line.433"></a>
+<span class="sourceLineNo">434</span>        antiverbPrefix = other.antiverbPrefix;<a name="line.434"></a>
+<span class="sourceLineNo">435</span>        disnounPrefix = other.disnounPrefix;<a name="line.435"></a>
+<span class="sourceLineNo">436</span>    }<a name="line.436"></a>
+<span class="sourceLineNo">437</span><a name="line.437"></a>
+<span class="sourceLineNo">438</span>    public static long phoneticHash64(char[] data, int start, int end)<a name="line.438"></a>
+<span class="sourceLineNo">439</span>    {<a name="line.439"></a>
+<span class="sourceLineNo">440</span>        long h = 0, b = 0;<a name="line.440"></a>
+<span class="sourceLineNo">441</span>        if(data == null || end &lt;= start || start &gt;= data.length)<a name="line.441"></a>
+<span class="sourceLineNo">442</span>            return h;<a name="line.442"></a>
+<span class="sourceLineNo">443</span>        int current, next, count = 0, used = 0;<a name="line.443"></a>
+<span class="sourceLineNo">444</span>        long got, vc = 0;<a name="line.444"></a>
+<span class="sourceLineNo">445</span>        boolean vowelStream = false;<a name="line.445"></a>
+<span class="sourceLineNo">446</span>        for (int i = start; i &lt; end &amp;&amp; count &lt; 10; i++, count++) { // &amp;&amp; vc &lt; 7<a name="line.446"></a>
+<span class="sourceLineNo">447</span>            current = data[i] - 'a';<a name="line.447"></a>
+<span class="sourceLineNo">448</span>            if(current &gt; 26)<a name="line.448"></a>
+<span class="sourceLineNo">449</span>                continue;<a name="line.449"></a>
+<span class="sourceLineNo">450</span>            if(i + 1 &lt; end) {<a name="line.450"></a>
+<span class="sourceLineNo">451</span>                if((next = data[i + 1] - 'a') &gt; 26)<a name="line.451"></a>
+<span class="sourceLineNo">452</span>                    continue;<a name="line.452"></a>
+<span class="sourceLineNo">453</span>            }<a name="line.453"></a>
+<span class="sourceLineNo">454</span>            else<a name="line.454"></a>
+<span class="sourceLineNo">455</span>                next = 26;<a name="line.455"></a>
+<span class="sourceLineNo">456</span>            got = bigrams[27 * current + next];<a name="line.456"></a>
+<span class="sourceLineNo">457</span>            if(got == 0)<a name="line.457"></a>
+<span class="sourceLineNo">458</span>                continue;<a name="line.458"></a>
+<span class="sourceLineNo">459</span>            h &lt;&lt;= 6;<a name="line.459"></a>
+<span class="sourceLineNo">460</span>            //b &lt;&lt;= 3;<a name="line.460"></a>
+<span class="sourceLineNo">461</span>            got = bigrams[27 * current + next];<a name="line.461"></a>
+<span class="sourceLineNo">462</span>            i += got &amp; 1L;<a name="line.462"></a>
+<span class="sourceLineNo">463</span>            h |= got &gt;&gt;= 1;<a name="line.463"></a>
+<span class="sourceLineNo">464</span>            used++;<a name="line.464"></a>
+<span class="sourceLineNo">465</span>            //used += 5;<a name="line.465"></a>
+<span class="sourceLineNo">466</span>            if(count == 0) {<a name="line.466"></a>
+<span class="sourceLineNo">467</span>                vowelStream = got &gt; 0 &amp;&amp; got &lt; 12;<a name="line.467"></a>
+<span class="sourceLineNo">468</span>            }else if (vowelStream != (got &gt; 0 &amp;&amp; got &lt; 12)) {<a name="line.468"></a>
+<span class="sourceLineNo">469</span>                vc+= vowelStream ? 1 : 0;<a name="line.469"></a>
+<span class="sourceLineNo">470</span>                vowelStream = !vowelStream;<a name="line.470"></a>
+<span class="sourceLineNo">471</span>            }<a name="line.471"></a>
+<span class="sourceLineNo">472</span>            //b |= (got &gt;&gt; 2);<a name="line.472"></a>
+<span class="sourceLineNo">473</span>        }<a name="line.473"></a>
+<span class="sourceLineNo">474</span>        vc += vowelStream ? 1 : 0;<a name="line.474"></a>
+<span class="sourceLineNo">475</span><a name="line.475"></a>
+<span class="sourceLineNo">476</span>        if(used &gt; 0 &amp;&amp; count &gt; 0) {<a name="line.476"></a>
+<span class="sourceLineNo">477</span>            got = h;<a name="line.477"></a>
+<span class="sourceLineNo">478</span>            for (; count &lt; 11; count += used) {<a name="line.478"></a>
+<span class="sourceLineNo">479</span>                h |= got &lt;&lt; (6 * count);<a name="line.479"></a>
+<span class="sourceLineNo">480</span>            }<a name="line.480"></a>
+<span class="sourceLineNo">481</span>            h &amp;= 0xFFFFFFFFFFFFFFFL; // 60 bits<a name="line.481"></a>
+<span class="sourceLineNo">482</span>        }<a name="line.482"></a>
+<span class="sourceLineNo">483</span>        /*b &amp;= ~(-1 &lt;&lt; (35-Math.min(used, 35)));<a name="line.483"></a>
+<span class="sourceLineNo">484</span>        if(used &lt;= 20)<a name="line.484"></a>
+<span class="sourceLineNo">485</span>            b ^= b &lt;&lt; 8;<a name="line.485"></a>
+<span class="sourceLineNo">486</span>        h ^= ((vc &amp; 7L) &lt;&lt; 39) | (b &lt;&lt; (used + 3));<a name="line.486"></a>
+<span class="sourceLineNo">487</span>        */<a name="line.487"></a>
+<span class="sourceLineNo">488</span>        vc = Math.max(1L, vc);<a name="line.488"></a>
+<span class="sourceLineNo">489</span>        return h | ((vc &amp; 15L) &lt;&lt; 60);<a name="line.489"></a>
+<span class="sourceLineNo">490</span>    }<a name="line.490"></a>
+<span class="sourceLineNo">491</span><a name="line.491"></a>
+<span class="sourceLineNo">492</span>    String conjugate(String data, long mods)<a name="line.492"></a>
+<span class="sourceLineNo">493</span>    {<a name="line.493"></a>
+<span class="sourceLineNo">494</span>        if(data == null)<a name="line.494"></a>
+<span class="sourceLineNo">495</span>            return "";<a name="line.495"></a>
+<span class="sourceLineNo">496</span>        StringBuilder sb = new StringBuilder(data);<a name="line.496"></a>
+<span class="sourceLineNo">497</span><a name="line.497"></a>
+<span class="sourceLineNo">498</span>        if((mods &amp; ENNOUN) != 0)<a name="line.498"></a>
+<span class="sourceLineNo">499</span>        {<a name="line.499"></a>
+<span class="sourceLineNo">500</span>            sb.insert(0, ennounPrefix);<a name="line.500"></a>
+<span class="sourceLineNo">501</span>        }<a name="line.501"></a>
+<span class="sourceLineNo">502</span>        if((mods &amp; DISNOUN) != 0)<a name="line.502"></a>
+<span class="sourceLineNo">503</span>        {<a name="line.503"></a>
+<span class="sourceLineNo">504</span>            sb.insert(0, disnounPrefix);<a name="line.504"></a>
+<span class="sourceLineNo">505</span>        }<a name="line.505"></a>
+<span class="sourceLineNo">506</span>        if((mods &amp; REVERB) != 0)<a name="line.506"></a>
+<span class="sourceLineNo">507</span>        {<a name="line.507"></a>
+<span class="sourceLineNo">508</span>            sb.insert(0, reverbPrefix);<a name="line.508"></a>
+<span class="sourceLineNo">509</span>        }<a name="line.509"></a>
+<span class="sourceLineNo">510</span>        if((mods &amp; ANTIVERB) != 0)<a name="line.510"></a>
+<span class="sourceLineNo">511</span>        {<a name="line.511"></a>
+<span class="sourceLineNo">512</span>            sb.insert(0, antiverbPrefix);<a name="line.512"></a>
+<span class="sourceLineNo">513</span>        }<a name="line.513"></a>
+<span class="sourceLineNo">514</span>        if((mods &amp; PROVERB) != 0)<a name="line.514"></a>
+<span class="sourceLineNo">515</span>        {<a name="line.515"></a>
+<span class="sourceLineNo">516</span>            sb.insert(0, proverbPrefix);<a name="line.516"></a>
+<span class="sourceLineNo">517</span>        }<a name="line.517"></a>
+<span class="sourceLineNo">518</span>        if((mods &amp; POSTVERB) != 0)<a name="line.518"></a>
+<span class="sourceLineNo">519</span>        {<a name="line.519"></a>
+<span class="sourceLineNo">520</span>            sb.insert(0, postverbPrefix);<a name="line.520"></a>
 <span class="sourceLineNo">521</span>        }<a name="line.521"></a>
-<span class="sourceLineNo">522</span>        if((mods &amp; VERBMENT) != 0) {<a name="line.522"></a>
-<span class="sourceLineNo">523</span>            sb.append(verbmentSuffix);<a name="line.523"></a>
-<span class="sourceLineNo">524</span>        }<a name="line.524"></a>
-<span class="sourceLineNo">525</span>        if((mods &amp; VERBATION) != 0) {<a name="line.525"></a>
-<span class="sourceLineNo">526</span>            sb.append(verbationSuffix);<a name="line.526"></a>
-<span class="sourceLineNo">527</span>        }<a name="line.527"></a>
-<span class="sourceLineNo">528</span>        if((mods &amp; NOUNIVE) != 0) {<a name="line.528"></a>
-<span class="sourceLineNo">529</span>            sb.append(nouniveSuffix);<a name="line.529"></a>
-<span class="sourceLineNo">530</span>        }<a name="line.530"></a>
-<span class="sourceLineNo">531</span>        if((mods &amp; NOUNISM) != 0) {<a name="line.531"></a>
-<span class="sourceLineNo">532</span>            sb.append(nounismSuffix);<a name="line.532"></a>
-<span class="sourceLineNo">533</span>        }<a name="line.533"></a>
-<span class="sourceLineNo">534</span>        if((mods &amp; NOUNIST) != 0) {<a name="line.534"></a>
-<span class="sourceLineNo">535</span>            sb.append(nounistSuffix);<a name="line.535"></a>
-<span class="sourceLineNo">536</span>        }<a name="line.536"></a>
-<span class="sourceLineNo">537</span>        if((mods &amp; NOUNIC) != 0) {<a name="line.537"></a>
-<span class="sourceLineNo">538</span>            sb.append(nounicSuffix);<a name="line.538"></a>
-<span class="sourceLineNo">539</span>        }<a name="line.539"></a>
-<span class="sourceLineNo">540</span>        if((mods &amp; ADJECTIVEST) != 0) {<a name="line.540"></a>
-<span class="sourceLineNo">541</span>            sb.append(adjectivestSuffix);<a name="line.541"></a>
-<span class="sourceLineNo">542</span>        }<a name="line.542"></a>
-<span class="sourceLineNo">543</span>        if((mods &amp; VERBED) != 0) {<a name="line.543"></a>
-<span class="sourceLineNo">544</span>            sb.append(verbedSuffix);<a name="line.544"></a>
-<span class="sourceLineNo">545</span>        }<a name="line.545"></a>
-<span class="sourceLineNo">546</span>        if((mods &amp; VERBING) != 0) {<a name="line.546"></a>
-<span class="sourceLineNo">547</span>            sb.append(verbingSuffix);<a name="line.547"></a>
-<span class="sourceLineNo">548</span>        }<a name="line.548"></a>
-<span class="sourceLineNo">549</span>        if((mods &amp; NOUNY) != 0) {<a name="line.549"></a>
-<span class="sourceLineNo">550</span>            sb.append(nounySuffix);<a name="line.550"></a>
-<span class="sourceLineNo">551</span>        }<a name="line.551"></a>
-<span class="sourceLineNo">552</span>        if((mods &amp; ADJECTIVELY) != 0) {<a name="line.552"></a>
-<span class="sourceLineNo">553</span>            sb.append(adjectivelySuffix);<a name="line.553"></a>
-<span class="sourceLineNo">554</span>        }<a name="line.554"></a>
-<span class="sourceLineNo">555</span>        if((mods &amp; PLURAL) != 0) {<a name="line.555"></a>
-<span class="sourceLineNo">556</span>            sb.append(pluralSuffix);<a name="line.556"></a>
-<span class="sourceLineNo">557</span>        }<a name="line.557"></a>
-<span class="sourceLineNo">558</span>        String done = sb.toString();<a name="line.558"></a>
-<span class="sourceLineNo">559</span>        for(int conproc = 0; conproc &lt; conjugationProc.length; conproc++)<a name="line.559"></a>
-<span class="sourceLineNo">560</span>        {<a name="line.560"></a>
-<span class="sourceLineNo">561</span>            done = conjugationProc[conproc].replace(done);<a name="line.561"></a>
-<span class="sourceLineNo">562</span>        }<a name="line.562"></a>
-<span class="sourceLineNo">563</span>        return done;<a name="line.563"></a>
-<span class="sourceLineNo">564</span>    }<a name="line.564"></a>
-<span class="sourceLineNo">565</span>    /**<a name="line.565"></a>
-<span class="sourceLineNo">566</span>     * Given a word in the source language (usually English), looks up an existing translation for that word, or if none<a name="line.566"></a>
-<span class="sourceLineNo">567</span>     * exists, generates a new word based on the hash of the source word and this LanguageCipher's FakeLanguageGen.<a name="line.567"></a>
-<span class="sourceLineNo">568</span>     * @param source a word in the source language<a name="line.568"></a>
-<span class="sourceLineNo">569</span>     * @return a word in the fake language<a name="line.569"></a>
-<span class="sourceLineNo">570</span>     */<a name="line.570"></a>
-<span class="sourceLineNo">571</span>    public String lookup(String source)<a name="line.571"></a>
-<span class="sourceLineNo">572</span>    {<a name="line.572"></a>
-<span class="sourceLineNo">573</span>        if(source == null || source.isEmpty())<a name="line.573"></a>
-<span class="sourceLineNo">574</span>            return "";<a name="line.574"></a>
-<span class="sourceLineNo">575</span>        String s2 = source.toLowerCase(), ciphered;<a name="line.575"></a>
-<span class="sourceLineNo">576</span>        if(table.containsKey(s2))<a name="line.576"></a>
-<span class="sourceLineNo">577</span>            ciphered = table.get(s2);<a name="line.577"></a>
-<span class="sourceLineNo">578</span>        else {<a name="line.578"></a>
-<span class="sourceLineNo">579</span>            CharSequence altered = FakeLanguageGen.removeAccents(s2);<a name="line.579"></a>
-<span class="sourceLineNo">580</span>            for (int i = 0; i &lt; preproc.length; i++) {<a name="line.580"></a>
-<span class="sourceLineNo">581</span>                altered = preproc[i].replace(altered);<a name="line.581"></a>
-<span class="sourceLineNo">582</span>            }<a name="line.582"></a>
-<span class="sourceLineNo">583</span><a name="line.583"></a>
-<span class="sourceLineNo">584</span>            char[] sc = ((String)altered).toCharArray(), scO = s2.toCharArray();<a name="line.584"></a>
-<span class="sourceLineNo">585</span>            int start = 0, end = sc.length, endO = scO.length;<a name="line.585"></a>
-<span class="sourceLineNo">586</span>            long mods = 0;<a name="line.586"></a>
-<span class="sourceLineNo">587</span>            /*<a name="line.587"></a>
-<span class="sourceLineNo">588</span>            boolean plural = false, verbing = false, verbed = false, verber = false, verbation = false,<a name="line.588"></a>
-<span class="sourceLineNo">589</span>                    verbment = false, nouny = false, nounen = false, nounist = false, nounism = false,<a name="line.589"></a>
-<span class="sourceLineNo">590</span>                    nounic = false, nounive = false, adjectively = false, adjectivest = false,<a name="line.590"></a>
-<span class="sourceLineNo">591</span>                    //prefixes<a name="line.591"></a>
-<span class="sourceLineNo">592</span>                    reverb = false, ennoun = false, preverb = false, postverb = false,<a name="line.592"></a>
-<span class="sourceLineNo">593</span>                    proverb = false, antiverb = false, disnoun = false;<a name="line.593"></a>
-<span class="sourceLineNo">594</span>            */<a name="line.594"></a>
-<span class="sourceLineNo">595</span>            if(end &gt;= 4 &amp;&amp; endO &gt;= 4 &amp;&amp; sc[end-1]=='s')<a name="line.595"></a>
-<span class="sourceLineNo">596</span>            {<a name="line.596"></a>
-<span class="sourceLineNo">597</span>                mods |= PLURAL;<a name="line.597"></a>
-<span class="sourceLineNo">598</span>                end--;<a name="line.598"></a>
-<span class="sourceLineNo">599</span>                endO--;<a name="line.599"></a>
-<span class="sourceLineNo">600</span>                if(scO[endO-1] == 'e')<a name="line.600"></a>
-<span class="sourceLineNo">601</span>                {<a name="line.601"></a>
-<span class="sourceLineNo">602</span>                    end--;<a name="line.602"></a>
-<span class="sourceLineNo">603</span>                    endO--;<a name="line.603"></a>
-<span class="sourceLineNo">604</span>                }<a name="line.604"></a>
-<span class="sourceLineNo">605</span>            }<a name="line.605"></a>
-<span class="sourceLineNo">606</span>            if(end &gt;= 5 &amp;&amp; endO &gt;= 5 &amp;&amp; sc[end - 2] == 'l' &amp;&amp; sc[end-1] == 'y')<a name="line.606"></a>
-<span class="sourceLineNo">607</span>            {<a name="line.607"></a>
-<span class="sourceLineNo">608</span>                mods |= ADJECTIVELY;<a name="line.608"></a>
-<span class="sourceLineNo">609</span>                end -= 2;<a name="line.609"></a>
-<span class="sourceLineNo">610</span>                endO -= 2;<a name="line.610"></a>
-<span class="sourceLineNo">611</span>            }<a name="line.611"></a>
-<span class="sourceLineNo">612</span>            /*<a name="line.612"></a>
-<span class="sourceLineNo">613</span>            else if(end &gt;= 4 &amp;&amp; endO &gt;= 4 &amp;&amp; scO[endO-1] == 'y')<a name="line.613"></a>
-<span class="sourceLineNo">614</span>            {<a name="line.614"></a>
-<span class="sourceLineNo">615</span>                mods |= NOUNY;<a name="line.615"></a>
-<span class="sourceLineNo">616</span>                end--;<a name="line.616"></a>
-<span class="sourceLineNo">617</span>                endO--;<a name="line.617"></a>
-<span class="sourceLineNo">618</span>            }*/<a name="line.618"></a>
-<span class="sourceLineNo">619</span>            if(end &gt;= 5 &amp;&amp; endO &gt;= 5 &amp;&amp; scO[endO-3] == 'i' &amp;&amp; scO[endO-2] == 'n' &amp;&amp; scO[endO-1]=='g')<a name="line.619"></a>
-<span class="sourceLineNo">620</span>            {<a name="line.620"></a>
-<span class="sourceLineNo">621</span>                mods |= VERBING;<a name="line.621"></a>
-<span class="sourceLineNo">622</span>                end-=3;<a name="line.622"></a>
-<span class="sourceLineNo">623</span>                endO -= 3;<a name="line.623"></a>
-<span class="sourceLineNo">624</span>            }<a name="line.624"></a>
-<span class="sourceLineNo">625</span>            if(end &gt;= 4 &amp;&amp; endO &gt;= 4 &amp;&amp; (scO[endO-3] == 'a' || scO[endO-3] == 'o') &amp;&amp; scO[endO-2] == 'd' &amp;&amp; scO[endO-1]=='e')<a name="line.625"></a>
-<span class="sourceLineNo">626</span>            {<a name="line.626"></a>
-<span class="sourceLineNo">627</span>                mods |= VERBED;<a name="line.627"></a>
-<span class="sourceLineNo">628</span>                end-=3;<a name="line.628"></a>
-<span class="sourceLineNo">629</span>                endO-=3;<a name="line.629"></a>
-<span class="sourceLineNo">630</span>            }<a name="line.630"></a>
-<span class="sourceLineNo">631</span>            else if(end &gt;= 4 &amp;&amp; endO &gt;= 4 &amp;&amp; scO[endO-2] == 'e' &amp;&amp; scO[endO-1] == 'd')<a name="line.631"></a>
-<span class="sourceLineNo">632</span>            {<a name="line.632"></a>
-<span class="sourceLineNo">633</span>                mods |= VERBED;<a name="line.633"></a>
-<span class="sourceLineNo">634</span>                end-=2;<a name="line.634"></a>
-<span class="sourceLineNo">635</span>                endO-=2;<a name="line.635"></a>
-<span class="sourceLineNo">636</span>            }<a name="line.636"></a>
-<span class="sourceLineNo">637</span>            else if(end &gt;= 5 &amp;&amp; endO &gt;= 5 &amp;&amp; sc[end - 3] == 'e' &amp;&amp; sc[end - 2] == 's' &amp;&amp; sc[end-1] == 't')<a name="line.637"></a>
-<span class="sourceLineNo">638</span>            {<a name="line.638"></a>
-<span class="sourceLineNo">639</span>                mods |= ADJECTIVEST;<a name="line.639"></a>
-<span class="sourceLineNo">640</span>                end -= 3;<a name="line.640"></a>
-<span class="sourceLineNo">641</span>                endO -= 3;<a name="line.641"></a>
-<span class="sourceLineNo">642</span>            }<a name="line.642"></a>
-<span class="sourceLineNo">643</span>            if(end &gt;= 5 &amp;&amp; endO &gt;= 5 &amp;&amp; scO[endO-2] == 'i' &amp;&amp; scO[endO-1] == 'c')<a name="line.643"></a>
-<span class="sourceLineNo">644</span>            {<a name="line.644"></a>
-<span class="sourceLineNo">645</span>                mods |=NOUNIC;<a name="line.645"></a>
-<span class="sourceLineNo">646</span>                end -= 2;<a name="line.646"></a>
-<span class="sourceLineNo">647</span>                endO-=2;<a name="line.647"></a>
-<span class="sourceLineNo">648</span>            }<a name="line.648"></a>
-<span class="sourceLineNo">649</span>            else if(end &gt;= 6 &amp;&amp; endO &gt;= 6 &amp;&amp; scO[endO-3] == 'i' &amp;&amp; scO[endO-2] == 'v' &amp;&amp; scO[endO-1] == 'e') {<a name="line.649"></a>
-<span class="sourceLineNo">650</span>                mods |= NOUNIVE;<a name="line.650"></a>
-<span class="sourceLineNo">651</span>                end -= 3;<a name="line.651"></a>
-<span class="sourceLineNo">652</span>                endO -= 3;<a name="line.652"></a>
-<span class="sourceLineNo">653</span>                if (end &gt;= 4 &amp;&amp; endO &gt;= 4 &amp;&amp; (scO[endO - 2] == 'a' || scO[endO - 2] == 'i') &amp;&amp; scO[endO - 1] == 't') {<a name="line.653"></a>
-<span class="sourceLineNo">654</span>                    end -= 2;<a name="line.654"></a>
-<span class="sourceLineNo">655</span>                    endO -= 2;<a name="line.655"></a>
-<span class="sourceLineNo">656</span>                }<a name="line.656"></a>
-<span class="sourceLineNo">657</span>            }<a name="line.657"></a>
-<span class="sourceLineNo">658</span>            if(end &gt;= 5 &amp;&amp; sc[end-3] == 'i' &amp;&amp; sc[end-2] == 's' &amp;&amp; sc[end-1] == 't')<a name="line.658"></a>
-<span class="sourceLineNo">659</span>            {<a name="line.659"></a>
-<span class="sourceLineNo">660</span>                mods |=NOUNIST;<a name="line.660"></a>
+<span class="sourceLineNo">522</span>        if((mods &amp; PREVERB) != 0)<a name="line.522"></a>
+<span class="sourceLineNo">523</span>        {<a name="line.523"></a>
+<span class="sourceLineNo">524</span>            sb.insert(0, preverbPrefix);<a name="line.524"></a>
+<span class="sourceLineNo">525</span>        }<a name="line.525"></a>
+<span class="sourceLineNo">526</span>        if((mods &amp; NOUNEN) != 0) {<a name="line.526"></a>
+<span class="sourceLineNo">527</span>            sb.append(nounenSuffix);<a name="line.527"></a>
+<span class="sourceLineNo">528</span>        }<a name="line.528"></a>
+<span class="sourceLineNo">529</span>        if((mods &amp; VERBER) != 0) {<a name="line.529"></a>
+<span class="sourceLineNo">530</span>            sb.append(verberSuffix);<a name="line.530"></a>
+<span class="sourceLineNo">531</span>        }<a name="line.531"></a>
+<span class="sourceLineNo">532</span>        if((mods &amp; VERBMENT) != 0) {<a name="line.532"></a>
+<span class="sourceLineNo">533</span>            sb.append(verbmentSuffix);<a name="line.533"></a>
+<span class="sourceLineNo">534</span>        }<a name="line.534"></a>
+<span class="sourceLineNo">535</span>        if((mods &amp; VERBATION) != 0) {<a name="line.535"></a>
+<span class="sourceLineNo">536</span>            sb.append(verbationSuffix);<a name="line.536"></a>
+<span class="sourceLineNo">537</span>        }<a name="line.537"></a>
+<span class="sourceLineNo">538</span>        if((mods &amp; NOUNIVE) != 0) {<a name="line.538"></a>
+<span class="sourceLineNo">539</span>            sb.append(nouniveSuffix);<a name="line.539"></a>
+<span class="sourceLineNo">540</span>        }<a name="line.540"></a>
+<span class="sourceLineNo">541</span>        if((mods &amp; NOUNISM) != 0) {<a name="line.541"></a>
+<span class="sourceLineNo">542</span>            sb.append(nounismSuffix);<a name="line.542"></a>
+<span class="sourceLineNo">543</span>        }<a name="line.543"></a>
+<span class="sourceLineNo">544</span>        if((mods &amp; NOUNIST) != 0) {<a name="line.544"></a>
+<span class="sourceLineNo">545</span>            sb.append(nounistSuffix);<a name="line.545"></a>
+<span class="sourceLineNo">546</span>        }<a name="line.546"></a>
+<span class="sourceLineNo">547</span>        if((mods &amp; NOUNIC) != 0) {<a name="line.547"></a>
+<span class="sourceLineNo">548</span>            sb.append(nounicSuffix);<a name="line.548"></a>
+<span class="sourceLineNo">549</span>        }<a name="line.549"></a>
+<span class="sourceLineNo">550</span>        if((mods &amp; ADJECTIVEST) != 0) {<a name="line.550"></a>
+<span class="sourceLineNo">551</span>            sb.append(adjectivestSuffix);<a name="line.551"></a>
+<span class="sourceLineNo">552</span>        }<a name="line.552"></a>
+<span class="sourceLineNo">553</span>        if((mods &amp; VERBED) != 0) {<a name="line.553"></a>
+<span class="sourceLineNo">554</span>            sb.append(verbedSuffix);<a name="line.554"></a>
+<span class="sourceLineNo">555</span>        }<a name="line.555"></a>
+<span class="sourceLineNo">556</span>        if((mods &amp; VERBING) != 0) {<a name="line.556"></a>
+<span class="sourceLineNo">557</span>            sb.append(verbingSuffix);<a name="line.557"></a>
+<span class="sourceLineNo">558</span>        }<a name="line.558"></a>
+<span class="sourceLineNo">559</span>        if((mods &amp; NOUNY) != 0) {<a name="line.559"></a>
+<span class="sourceLineNo">560</span>            sb.append(nounySuffix);<a name="line.560"></a>
+<span class="sourceLineNo">561</span>        }<a name="line.561"></a>
+<span class="sourceLineNo">562</span>        if((mods &amp; ADJECTIVELY) != 0) {<a name="line.562"></a>
+<span class="sourceLineNo">563</span>            sb.append(adjectivelySuffix);<a name="line.563"></a>
+<span class="sourceLineNo">564</span>        }<a name="line.564"></a>
+<span class="sourceLineNo">565</span>        if((mods &amp; PLURAL) != 0) {<a name="line.565"></a>
+<span class="sourceLineNo">566</span>            sb.append(pluralSuffix);<a name="line.566"></a>
+<span class="sourceLineNo">567</span>        }<a name="line.567"></a>
+<span class="sourceLineNo">568</span>        String done = sb.toString();<a name="line.568"></a>
+<span class="sourceLineNo">569</span>        for(int conproc = 0; conproc &lt; conjugationProc.length; conproc++)<a name="line.569"></a>
+<span class="sourceLineNo">570</span>        {<a name="line.570"></a>
+<span class="sourceLineNo">571</span>            done = conjugationProc[conproc].replace(done);<a name="line.571"></a>
+<span class="sourceLineNo">572</span>        }<a name="line.572"></a>
+<span class="sourceLineNo">573</span>        return done;<a name="line.573"></a>
+<span class="sourceLineNo">574</span>    }<a name="line.574"></a>
+<span class="sourceLineNo">575</span>    /**<a name="line.575"></a>
+<span class="sourceLineNo">576</span>     * Given a word in the source language (usually English), looks up an existing translation for that word, or if none<a name="line.576"></a>
+<span class="sourceLineNo">577</span>     * exists, generates a new word based on the hash of the source word and this LanguageCipher's FakeLanguageGen.<a name="line.577"></a>
+<span class="sourceLineNo">578</span>     * @param source a word in the source language<a name="line.578"></a>
+<span class="sourceLineNo">579</span>     * @return a word in the fake language<a name="line.579"></a>
+<span class="sourceLineNo">580</span>     */<a name="line.580"></a>
+<span class="sourceLineNo">581</span>    public String lookup(String source)<a name="line.581"></a>
+<span class="sourceLineNo">582</span>    {<a name="line.582"></a>
+<span class="sourceLineNo">583</span>        if(source == null || source.isEmpty())<a name="line.583"></a>
+<span class="sourceLineNo">584</span>            return "";<a name="line.584"></a>
+<span class="sourceLineNo">585</span>        String s2 = source.toLowerCase(), ciphered;<a name="line.585"></a>
+<span class="sourceLineNo">586</span>        if(table.containsKey(s2))<a name="line.586"></a>
+<span class="sourceLineNo">587</span>            ciphered = table.get(s2);<a name="line.587"></a>
+<span class="sourceLineNo">588</span>        else {<a name="line.588"></a>
+<span class="sourceLineNo">589</span>            CharSequence altered = FakeLanguageGen.removeAccents(s2);<a name="line.589"></a>
+<span class="sourceLineNo">590</span>            for (int i = 0; i &lt; preproc.length; i++) {<a name="line.590"></a>
+<span class="sourceLineNo">591</span>                altered = preproc[i].replace(altered);<a name="line.591"></a>
+<span class="sourceLineNo">592</span>            }<a name="line.592"></a>
+<span class="sourceLineNo">593</span><a name="line.593"></a>
+<span class="sourceLineNo">594</span>            char[] sc = ((String)altered).toCharArray(), scO = s2.toCharArray();<a name="line.594"></a>
+<span class="sourceLineNo">595</span>            int start = 0, end = sc.length, endO = scO.length;<a name="line.595"></a>
+<span class="sourceLineNo">596</span>            long mods = 0;<a name="line.596"></a>
+<span class="sourceLineNo">597</span>            /*<a name="line.597"></a>
+<span class="sourceLineNo">598</span>            boolean plural = false, verbing = false, verbed = false, verber = false, verbation = false,<a name="line.598"></a>
+<span class="sourceLineNo">599</span>                    verbment = false, nouny = false, nounen = false, nounist = false, nounism = false,<a name="line.599"></a>
+<span class="sourceLineNo">600</span>                    nounic = false, nounive = false, adjectively = false, adjectivest = false,<a name="line.600"></a>
+<span class="sourceLineNo">601</span>                    //prefixes<a name="line.601"></a>
+<span class="sourceLineNo">602</span>                    reverb = false, ennoun = false, preverb = false, postverb = false,<a name="line.602"></a>
+<span class="sourceLineNo">603</span>                    proverb = false, antiverb = false, disnoun = false;<a name="line.603"></a>
+<span class="sourceLineNo">604</span>            */<a name="line.604"></a>
+<span class="sourceLineNo">605</span>            if(end &gt;= 4 &amp;&amp; endO &gt;= 4 &amp;&amp; sc[end-1]=='s')<a name="line.605"></a>
+<span class="sourceLineNo">606</span>            {<a name="line.606"></a>
+<span class="sourceLineNo">607</span>                mods |= PLURAL;<a name="line.607"></a>
+<span class="sourceLineNo">608</span>                end--;<a name="line.608"></a>
+<span class="sourceLineNo">609</span>                endO--;<a name="line.609"></a>
+<span class="sourceLineNo">610</span>                if(scO[endO-1] == 'e')<a name="line.610"></a>
+<span class="sourceLineNo">611</span>                {<a name="line.611"></a>
+<span class="sourceLineNo">612</span>                    end--;<a name="line.612"></a>
+<span class="sourceLineNo">613</span>                    endO--;<a name="line.613"></a>
+<span class="sourceLineNo">614</span>                }<a name="line.614"></a>
+<span class="sourceLineNo">615</span>            }<a name="line.615"></a>
+<span class="sourceLineNo">616</span>            if(end &gt;= 5 &amp;&amp; endO &gt;= 5 &amp;&amp; sc[end - 2] == 'l' &amp;&amp; sc[end-1] == 'y')<a name="line.616"></a>
+<span class="sourceLineNo">617</span>            {<a name="line.617"></a>
+<span class="sourceLineNo">618</span>                mods |= ADJECTIVELY;<a name="line.618"></a>
+<span class="sourceLineNo">619</span>                end -= 2;<a name="line.619"></a>
+<span class="sourceLineNo">620</span>                endO -= 2;<a name="line.620"></a>
+<span class="sourceLineNo">621</span>            }<a name="line.621"></a>
+<span class="sourceLineNo">622</span>            /*<a name="line.622"></a>
+<span class="sourceLineNo">623</span>            else if(end &gt;= 4 &amp;&amp; endO &gt;= 4 &amp;&amp; scO[endO-1] == 'y')<a name="line.623"></a>
+<span class="sourceLineNo">624</span>            {<a name="line.624"></a>
+<span class="sourceLineNo">625</span>                mods |= NOUNY;<a name="line.625"></a>
+<span class="sourceLineNo">626</span>                end--;<a name="line.626"></a>
+<span class="sourceLineNo">627</span>                endO--;<a name="line.627"></a>
+<span class="sourceLineNo">628</span>            }*/<a name="line.628"></a>
+<span class="sourceLineNo">629</span>            if(end &gt;= 5 &amp;&amp; endO &gt;= 5 &amp;&amp; scO[endO-3] == 'i' &amp;&amp; scO[endO-2] == 'n' &amp;&amp; scO[endO-1]=='g')<a name="line.629"></a>
+<span class="sourceLineNo">630</span>            {<a name="line.630"></a>
+<span class="sourceLineNo">631</span>                mods |= VERBING;<a name="line.631"></a>
+<span class="sourceLineNo">632</span>                end-=3;<a name="line.632"></a>
+<span class="sourceLineNo">633</span>                endO -= 3;<a name="line.633"></a>
+<span class="sourceLineNo">634</span>            }<a name="line.634"></a>
+<span class="sourceLineNo">635</span>            if(end &gt;= 4 &amp;&amp; endO &gt;= 4 &amp;&amp; (scO[endO-3] == 'a' || scO[endO-3] == 'o') &amp;&amp; scO[endO-2] == 'd' &amp;&amp; scO[endO-1]=='e')<a name="line.635"></a>
+<span class="sourceLineNo">636</span>            {<a name="line.636"></a>
+<span class="sourceLineNo">637</span>                mods |= VERBED;<a name="line.637"></a>
+<span class="sourceLineNo">638</span>                end-=3;<a name="line.638"></a>
+<span class="sourceLineNo">639</span>                endO-=3;<a name="line.639"></a>
+<span class="sourceLineNo">640</span>            }<a name="line.640"></a>
+<span class="sourceLineNo">641</span>            else if(end &gt;= 4 &amp;&amp; endO &gt;= 4 &amp;&amp; scO[endO-2] == 'e' &amp;&amp; scO[endO-1] == 'd')<a name="line.641"></a>
+<span class="sourceLineNo">642</span>            {<a name="line.642"></a>
+<span class="sourceLineNo">643</span>                mods |= VERBED;<a name="line.643"></a>
+<span class="sourceLineNo">644</span>                end-=2;<a name="line.644"></a>
+<span class="sourceLineNo">645</span>                endO-=2;<a name="line.645"></a>
+<span class="sourceLineNo">646</span>            }<a name="line.646"></a>
+<span class="sourceLineNo">647</span>            else if(end &gt;= 5 &amp;&amp; endO &gt;= 5 &amp;&amp; sc[end - 3] == 'e' &amp;&amp; sc[end - 2] == 's' &amp;&amp; sc[end-1] == 't')<a name="line.647"></a>
+<span class="sourceLineNo">648</span>            {<a name="line.648"></a>
+<span class="sourceLineNo">649</span>                mods |= ADJECTIVEST;<a name="line.649"></a>
+<span class="sourceLineNo">650</span>                end -= 3;<a name="line.650"></a>
+<span class="sourceLineNo">651</span>                endO -= 3;<a name="line.651"></a>
+<span class="sourceLineNo">652</span>            }<a name="line.652"></a>
+<span class="sourceLineNo">653</span>            if(end &gt;= 5 &amp;&amp; endO &gt;= 5 &amp;&amp; scO[endO-2] == 'i' &amp;&amp; scO[endO-1] == 'c')<a name="line.653"></a>
+<span class="sourceLineNo">654</span>            {<a name="line.654"></a>
+<span class="sourceLineNo">655</span>                mods |=NOUNIC;<a name="line.655"></a>
+<span class="sourceLineNo">656</span>                end -= 2;<a name="line.656"></a>
+<span class="sourceLineNo">657</span>                endO-=2;<a name="line.657"></a>
+<span class="sourceLineNo">658</span>            }<a name="line.658"></a>
+<span class="sourceLineNo">659</span>            else if(end &gt;= 6 &amp;&amp; endO &gt;= 6 &amp;&amp; scO[endO-3] == 'i' &amp;&amp; scO[endO-2] == 'v' &amp;&amp; scO[endO-1] == 'e') {<a name="line.659"></a>
+<span class="sourceLineNo">660</span>                mods |= NOUNIVE;<a name="line.660"></a>
 <span class="sourceLineNo">661</span>                end -= 3;<a name="line.661"></a>
-<span class="sourceLineNo">662</span>                endO-=3;<a name="line.662"></a>
-<span class="sourceLineNo">663</span>                if(endO &gt;= 5 &amp;&amp; scO[endO-2] == 'i' &amp;&amp; scO[endO-1] == 'v')<a name="line.663"></a>
-<span class="sourceLineNo">664</span>                {<a name="line.664"></a>
-<span class="sourceLineNo">665</span>                    mods |= NOUNIVE;<a name="line.665"></a>
-<span class="sourceLineNo">666</span>                    end-=2;<a name="line.666"></a>
-<span class="sourceLineNo">667</span>                    endO-=2;<a name="line.667"></a>
-<span class="sourceLineNo">668</span>                }<a name="line.668"></a>
-<span class="sourceLineNo">669</span>            }<a name="line.669"></a>
-<span class="sourceLineNo">670</span>            if(end &gt;= 5 &amp;&amp; sc[end-3] == 'i' &amp;&amp; sc[end-2] == 's' &amp;&amp; sc[end-1] == 'm')<a name="line.670"></a>
-<span class="sourceLineNo">671</span>            {<a name="line.671"></a>
-<span class="sourceLineNo">672</span>                mods |=NOUNISM;<a name="line.672"></a>
-<span class="sourceLineNo">673</span>                end -= 3;<a name="line.673"></a>
-<span class="sourceLineNo">674</span>                endO -= 3;<a name="line.674"></a>
-<span class="sourceLineNo">675</span>                if(endO &gt;= 5 &amp;&amp; scO[endO-2] == 'i' &amp;&amp; scO[endO-1] == 'v')<a name="line.675"></a>
-<span class="sourceLineNo">676</span>                {<a name="line.676"></a>
-<span class="sourceLineNo">677</span>                    mods |= NOUNIVE;<a name="line.677"></a>
-<span class="sourceLineNo">678</span>                    end-=2;<a name="line.678"></a>
-<span class="sourceLineNo">679</span>                    endO-=2;<a name="line.679"></a>
-<span class="sourceLineNo">680</span>                }<a name="line.680"></a>
-<span class="sourceLineNo">681</span><a name="line.681"></a>
-<span class="sourceLineNo">682</span>            }<a name="line.682"></a>
-<span class="sourceLineNo">683</span>            if(end &gt;= 8 &amp;&amp; endO &gt;= 8 &amp;&amp; (scO[endO - 4] == 't' || scO[endO - 4] == 's' || scO[endO - 4] == 'c') &amp;&amp; scO[endO-3] == 'i' &amp;&amp; scO[endO-2] == 'o' &amp;&amp; scO[endO-1]=='n')<a name="line.683"></a>
-<span class="sourceLineNo">684</span>            {<a name="line.684"></a>
-<span class="sourceLineNo">685</span>                mods |=VERBATION;<a name="line.685"></a>
-<span class="sourceLineNo">686</span>                end-=4;<a name="line.686"></a>
-<span class="sourceLineNo">687</span>                endO -= 4;<a name="line.687"></a>
-<span class="sourceLineNo">688</span>            }<a name="line.688"></a>
-<span class="sourceLineNo">689</span>            if(end &gt;= 6 &amp;&amp; sc[end-4] == 'm' &amp;&amp; sc[end-3] == 'e' &amp;&amp; sc[end-2] == 'n' &amp;&amp; sc[end-1] == 't')<a name="line.689"></a>
-<span class="sourceLineNo">690</span>            {<a name="line.690"></a>
-<span class="sourceLineNo">691</span>                mods |=VERBMENT;<a name="line.691"></a>
-<span class="sourceLineNo">692</span>                end-=4;<a name="line.692"></a>
-<span class="sourceLineNo">693</span>                endO -= 4;<a name="line.693"></a>
-<span class="sourceLineNo">694</span>            }<a name="line.694"></a>
-<span class="sourceLineNo">695</span>            if(end &gt;= 7 &amp;&amp; endO &gt;= 7 &amp;&amp; scO[endO-3] == 'i' &amp;&amp; scO[endO-2] == 'a' &amp;&amp; scO[endO-1]=='n')<a name="line.695"></a>
-<span class="sourceLineNo">696</span>            {<a name="line.696"></a>
-<span class="sourceLineNo">697</span>                mods |=VERBER;<a name="line.697"></a>
-<span class="sourceLineNo">698</span>                end-=3;<a name="line.698"></a>
-<span class="sourceLineNo">699</span>                endO-=3;<a name="line.699"></a>
-<span class="sourceLineNo">700</span>            }<a name="line.700"></a>
-<span class="sourceLineNo">701</span>            else if(end &gt;= 4 &amp;&amp; endO &gt;= 4 &amp;&amp; (sc[end-2] == 'e' || sc[end-2] == 'o') &amp;&amp; sc[end-1] == 'r')<a name="line.701"></a>
-<span class="sourceLineNo">702</span>            {<a name="line.702"></a>
-<span class="sourceLineNo">703</span>                mods |= VERBER;<a name="line.703"></a>
-<span class="sourceLineNo">704</span>                end-=2;<a name="line.704"></a>
-<span class="sourceLineNo">705</span>            }<a name="line.705"></a>
-<span class="sourceLineNo">706</span>            if(end &gt;= 4 &amp;&amp; sc[end-2] == 'e' &amp;&amp; sc[end-1]=='n')<a name="line.706"></a>
-<span class="sourceLineNo">707</span>            {<a name="line.707"></a>
-<span class="sourceLineNo">708</span>                mods |=NOUNEN;<a name="line.708"></a>
-<span class="sourceLineNo">709</span>                end-=2;<a name="line.709"></a>
+<span class="sourceLineNo">662</span>                endO -= 3;<a name="line.662"></a>
+<span class="sourceLineNo">663</span>                if (end &gt;= 4 &amp;&amp; endO &gt;= 4 &amp;&amp; (scO[endO - 2] == 'a' || scO[endO - 2] == 'i') &amp;&amp; scO[endO - 1] == 't') {<a name="line.663"></a>
+<span class="sourceLineNo">664</span>                    end -= 2;<a name="line.664"></a>
+<span class="sourceLineNo">665</span>                    endO -= 2;<a name="line.665"></a>
+<span class="sourceLineNo">666</span>                }<a name="line.666"></a>
+<span class="sourceLineNo">667</span>            }<a name="line.667"></a>
+<span class="sourceLineNo">668</span>            if(end &gt;= 5 &amp;&amp; sc[end-3] == 'i' &amp;&amp; sc[end-2] == 's' &amp;&amp; sc[end-1] == 't')<a name="line.668"></a>
+<span class="sourceLineNo">669</span>            {<a name="line.669"></a>
+<span class="sourceLineNo">670</span>                mods |=NOUNIST;<a name="line.670"></a>
+<span class="sourceLineNo">671</span>                end -= 3;<a name="line.671"></a>
+<span class="sourceLineNo">672</span>                endO-=3;<a name="line.672"></a>
+<span class="sourceLineNo">673</span>                if(endO &gt;= 5 &amp;&amp; scO[endO-2] == 'i' &amp;&amp; scO[endO-1] == 'v')<a name="line.673"></a>
+<span class="sourceLineNo">674</span>                {<a name="line.674"></a>
+<span class="sourceLineNo">675</span>                    mods |= NOUNIVE;<a name="line.675"></a>
+<span class="sourceLineNo">676</span>                    end-=2;<a name="line.676"></a>
+<span class="sourceLineNo">677</span>                    endO-=2;<a name="line.677"></a>
+<span class="sourceLineNo">678</span>                }<a name="line.678"></a>
+<span class="sourceLineNo">679</span>            }<a name="line.679"></a>
+<span class="sourceLineNo">680</span>            if(end &gt;= 5 &amp;&amp; sc[end-3] == 'i' &amp;&amp; sc[end-2] == 's' &amp;&amp; sc[end-1] == 'm')<a name="line.680"></a>
+<span class="sourceLineNo">681</span>            {<a name="line.681"></a>
+<span class="sourceLineNo">682</span>                mods |=NOUNISM;<a name="line.682"></a>
+<span class="sourceLineNo">683</span>                end -= 3;<a name="line.683"></a>
+<span class="sourceLineNo">684</span>                endO -= 3;<a name="line.684"></a>
+<span class="sourceLineNo">685</span>                if(endO &gt;= 5 &amp;&amp; scO[endO-2] == 'i' &amp;&amp; scO[endO-1] == 'v')<a name="line.685"></a>
+<span class="sourceLineNo">686</span>                {<a name="line.686"></a>
+<span class="sourceLineNo">687</span>                    mods |= NOUNIVE;<a name="line.687"></a>
+<span class="sourceLineNo">688</span>                    end-=2;<a name="line.688"></a>
+<span class="sourceLineNo">689</span>                    endO-=2;<a name="line.689"></a>
+<span class="sourceLineNo">690</span>                }<a name="line.690"></a>
+<span class="sourceLineNo">691</span><a name="line.691"></a>
+<span class="sourceLineNo">692</span>            }<a name="line.692"></a>
+<span class="sourceLineNo">693</span>            if(end &gt;= 8 &amp;&amp; endO &gt;= 8 &amp;&amp; (scO[endO - 4] == 't' || scO[endO - 4] == 's' || scO[endO - 4] == 'c') &amp;&amp; scO[endO-3] == 'i' &amp;&amp; scO[endO-2] == 'o' &amp;&amp; scO[endO-1]=='n')<a name="line.693"></a>
+<span class="sourceLineNo">694</span>            {<a name="line.694"></a>
+<span class="sourceLineNo">695</span>                mods |=VERBATION;<a name="line.695"></a>
+<span class="sourceLineNo">696</span>                end-=4;<a name="line.696"></a>
+<span class="sourceLineNo">697</span>                endO -= 4;<a name="line.697"></a>
+<span class="sourceLineNo">698</span>            }<a name="line.698"></a>
+<span class="sourceLineNo">699</span>            if(end &gt;= 6 &amp;&amp; sc[end-4] == 'm' &amp;&amp; sc[end-3] == 'e' &amp;&amp; sc[end-2] == 'n' &amp;&amp; sc[end-1] == 't')<a name="line.699"></a>
+<span class="sourceLineNo">700</span>            {<a name="line.700"></a>
+<span class="sourceLineNo">701</span>                mods |=VERBMENT;<a name="line.701"></a>
+<span class="sourceLineNo">702</span>                end-=4;<a name="line.702"></a>
+<span class="sourceLineNo">703</span>                endO -= 4;<a name="line.703"></a>
+<span class="sourceLineNo">704</span>            }<a name="line.704"></a>
+<span class="sourceLineNo">705</span>            if(end &gt;= 7 &amp;&amp; endO &gt;= 7 &amp;&amp; scO[endO-3] == 'i' &amp;&amp; scO[endO-2] == 'a' &amp;&amp; scO[endO-1]=='n')<a name="line.705"></a>
+<span class="sourceLineNo">706</span>            {<a name="line.706"></a>
+<span class="sourceLineNo">707</span>                mods |=VERBER;<a name="line.707"></a>
+<span class="sourceLineNo">708</span>                end-=3;<a name="line.708"></a>
+<span class="sourceLineNo">709</span>                endO-=3;<a name="line.709"></a>
 <span class="sourceLineNo">710</span>            }<a name="line.710"></a>
-<span class="sourceLineNo">711</span>            if(end - start &gt;= 5 &amp;&amp; sc[start] == 'p' &amp;&amp; sc[start+1] == 'r' &amp;&amp; sc[start+2] == 'e')<a name="line.711"></a>
+<span class="sourceLineNo">711</span>            else if(end &gt;= 4 &amp;&amp; endO &gt;= 4 &amp;&amp; (sc[end-2] == 'e' || sc[end-2] == 'o') &amp;&amp; sc[end-1] == 'r')<a name="line.711"></a>
 <span class="sourceLineNo">712</span>            {<a name="line.712"></a>
-<span class="sourceLineNo">713</span>                mods |=PREVERB;<a name="line.713"></a>
-<span class="sourceLineNo">714</span>                start += 3;<a name="line.714"></a>
+<span class="sourceLineNo">713</span>                mods |= VERBER;<a name="line.713"></a>
+<span class="sourceLineNo">714</span>                end-=2;<a name="line.714"></a>
 <span class="sourceLineNo">715</span>            }<a name="line.715"></a>
-<span class="sourceLineNo">716</span>            if(end - start &gt;= 6 &amp;&amp; sc[start] == 'p' &amp;&amp; sc[start+1] == 'o' &amp;&amp; sc[start+2] == 's' &amp;&amp; sc[start+3] == 't')<a name="line.716"></a>
+<span class="sourceLineNo">716</span>            if(end &gt;= 4 &amp;&amp; sc[end-2] == 'e' &amp;&amp; sc[end-1]=='n')<a name="line.716"></a>
 <span class="sourceLineNo">717</span>            {<a name="line.717"></a>
-<span class="sourceLineNo">718</span>                mods |= POSTVERB;<a name="line.718"></a>
-<span class="sourceLineNo">719</span>                start += 4;<a name="line.719"></a>
+<span class="sourceLineNo">718</span>                mods |=NOUNEN;<a name="line.718"></a>
+<span class="sourceLineNo">719</span>                end-=2;<a name="line.719"></a>
 <span class="sourceLineNo">720</span>            }<a name="line.720"></a>
-<span class="sourceLineNo">721</span><a name="line.721"></a>
-<span class="sourceLineNo">722</span>            if(end - start &gt;= 5 &amp;&amp; sc[start] == 'p' &amp;&amp; sc[start+1] == 'r' &amp;&amp; sc[start+2] == 'o')<a name="line.722"></a>
-<span class="sourceLineNo">723</span>            {<a name="line.723"></a>
-<span class="sourceLineNo">724</span>                mods |= PROVERB;<a name="line.724"></a>
-<span class="sourceLineNo">725</span>                start += 3;<a name="line.725"></a>
-<span class="sourceLineNo">726</span>            }<a name="line.726"></a>
-<span class="sourceLineNo">727</span>            else {<a name="line.727"></a>
-<span class="sourceLineNo">728</span>                if (end - start &gt;= 6 &amp;&amp; sc[start] == 'a' &amp;&amp; sc[start + 1] == 'n' &amp;&amp; sc[start + 2] == 't' &amp;&amp; sc[start + 3] == 'i') {<a name="line.728"></a>
-<span class="sourceLineNo">729</span>                    mods |= ANTIVERB;<a name="line.729"></a>
-<span class="sourceLineNo">730</span>                    start += 4;<a name="line.730"></a>
-<span class="sourceLineNo">731</span>                }<a name="line.731"></a>
-<span class="sourceLineNo">732</span>                else if (end - start &gt;= 8 &amp;&amp; sc[start] == 'c' &amp;&amp; sc[start + 1] == 'o' &amp;&amp; sc[start + 2] == 'n' &amp;&amp; sc[start + 3] == 't' &amp;&amp; sc[start + 4] == 'r' &amp;&amp; sc[start + 5] == 'a') {<a name="line.732"></a>
-<span class="sourceLineNo">733</span>                    mods |= ANTIVERB;<a name="line.733"></a>
-<span class="sourceLineNo">734</span>                    start += 6;<a name="line.734"></a>
-<span class="sourceLineNo">735</span>                }<a name="line.735"></a>
+<span class="sourceLineNo">721</span>            if(end - start &gt;= 5 &amp;&amp; sc[start] == 'p' &amp;&amp; sc[start+1] == 'r' &amp;&amp; sc[start+2] == 'e')<a name="line.721"></a>
+<span class="sourceLineNo">722</span>            {<a name="line.722"></a>
+<span class="sourceLineNo">723</span>                mods |=PREVERB;<a name="line.723"></a>
+<span class="sourceLineNo">724</span>                start += 3;<a name="line.724"></a>
+<span class="sourceLineNo">725</span>            }<a name="line.725"></a>
+<span class="sourceLineNo">726</span>            if(end - start &gt;= 6 &amp;&amp; sc[start] == 'p' &amp;&amp; sc[start+1] == 'o' &amp;&amp; sc[start+2] == 's' &amp;&amp; sc[start+3] == 't')<a name="line.726"></a>
+<span class="sourceLineNo">727</span>            {<a name="line.727"></a>
+<span class="sourceLineNo">728</span>                mods |= POSTVERB;<a name="line.728"></a>
+<span class="sourceLineNo">729</span>                start += 4;<a name="line.729"></a>
+<span class="sourceLineNo">730</span>            }<a name="line.730"></a>
+<span class="sourceLineNo">731</span><a name="line.731"></a>
+<span class="sourceLineNo">732</span>            if(end - start &gt;= 5 &amp;&amp; sc[start] == 'p' &amp;&amp; sc[start+1] == 'r' &amp;&amp; sc[start+2] == 'o')<a name="line.732"></a>
+<span class="sourceLineNo">733</span>            {<a name="line.733"></a>
+<span class="sourceLineNo">734</span>                mods |= PROVERB;<a name="line.734"></a>
+<span class="sourceLineNo">735</span>                start += 3;<a name="line.735"></a>
 <span class="sourceLineNo">736</span>            }<a name="line.736"></a>
-<span class="sourceLineNo">737</span>            if(end - start &gt;= 4 &amp;&amp; sc[start] == 'r' &amp;&amp; sc[start+1] == 'e')<a name="line.737"></a>
-<span class="sourceLineNo">738</span>            {<a name="line.738"></a>
-<span class="sourceLineNo">739</span>                mods |= REVERB;<a name="line.739"></a>
-<span class="sourceLineNo">740</span>                start += 2;<a name="line.740"></a>
-<span class="sourceLineNo">741</span>            }<a name="line.741"></a>
-<span class="sourceLineNo">742</span>            if(end - start &gt;= 5 &amp;&amp; sc[start] == 'd' &amp;&amp; sc[start+1] == 'i' &amp;&amp; sc[start+2] == 's')<a name="line.742"></a>
-<span class="sourceLineNo">743</span>            {<a name="line.743"></a>
-<span class="sourceLineNo">744</span>                mods |= DISNOUN;<a name="line.744"></a>
-<span class="sourceLineNo">745</span>                start += 3;<a name="line.745"></a>
+<span class="sourceLineNo">737</span>            else {<a name="line.737"></a>
+<span class="sourceLineNo">738</span>                if (end - start &gt;= 6 &amp;&amp; sc[start] == 'a' &amp;&amp; sc[start + 1] == 'n' &amp;&amp; sc[start + 2] == 't' &amp;&amp; sc[start + 3] == 'i') {<a name="line.738"></a>
+<span class="sourceLineNo">739</span>                    mods |= ANTIVERB;<a name="line.739"></a>
+<span class="sourceLineNo">740</span>                    start += 4;<a name="line.740"></a>
+<span class="sourceLineNo">741</span>                }<a name="line.741"></a>
+<span class="sourceLineNo">742</span>                else if (end - start &gt;= 8 &amp;&amp; sc[start] == 'c' &amp;&amp; sc[start + 1] == 'o' &amp;&amp; sc[start + 2] == 'n' &amp;&amp; sc[start + 3] == 't' &amp;&amp; sc[start + 4] == 'r' &amp;&amp; sc[start + 5] == 'a') {<a name="line.742"></a>
+<span class="sourceLineNo">743</span>                    mods |= ANTIVERB;<a name="line.743"></a>
+<span class="sourceLineNo">744</span>                    start += 6;<a name="line.744"></a>
+<span class="sourceLineNo">745</span>                }<a name="line.745"></a>
 <span class="sourceLineNo">746</span>            }<a name="line.746"></a>
-<span class="sourceLineNo">747</span>            if(end - start &gt;= 4 &amp;&amp; sc[start] == 'u' &amp;&amp; sc[start+1] == 'n')<a name="line.747"></a>
+<span class="sourceLineNo">747</span>            if(end - start &gt;= 4 &amp;&amp; sc[start] == 'r' &amp;&amp; sc[start+1] == 'e')<a name="line.747"></a>
 <span class="sourceLineNo">748</span>            {<a name="line.748"></a>
-<span class="sourceLineNo">749</span>                mods |= ANTIVERB;<a name="line.749"></a>
+<span class="sourceLineNo">749</span>                mods |= REVERB;<a name="line.749"></a>
 <span class="sourceLineNo">750</span>                start += 2;<a name="line.750"></a>
 <span class="sourceLineNo">751</span>            }<a name="line.751"></a>
-<span class="sourceLineNo">752</span>            if(end - start &gt;= 4 &amp;&amp; (sc[start] == 'e' || sc[start] == 'i') &amp;&amp; sc[start+1] == 'n')<a name="line.752"></a>
+<span class="sourceLineNo">752</span>            if(end - start &gt;= 5 &amp;&amp; sc[start] == 'd' &amp;&amp; sc[start+1] == 'i' &amp;&amp; sc[start+2] == 's')<a name="line.752"></a>
 <span class="sourceLineNo">753</span>            {<a name="line.753"></a>
-<span class="sourceLineNo">754</span>                mods |= ENNOUN;<a name="line.754"></a>
-<span class="sourceLineNo">755</span>                start += 2;<a name="line.755"></a>
+<span class="sourceLineNo">754</span>                mods |= DISNOUN;<a name="line.754"></a>
+<span class="sourceLineNo">755</span>                start += 3;<a name="line.755"></a>
 <span class="sourceLineNo">756</span>            }<a name="line.756"></a>
-<span class="sourceLineNo">757</span>            long h = phoneticHash64(sc, start, end) ^ (shift &amp; 0xFFFFFFFFFFFFFFFL) ^ (shift &gt;&gt;&gt; 14), frustration = 0;<a name="line.757"></a>
-<span class="sourceLineNo">758</span>            //System.out.print(source + ":" + ((h &gt;&gt;&gt; 60) &amp; 7) + ":" + StringKit.hex(h) + ", ");<a name="line.758"></a>
-<span class="sourceLineNo">759</span>            rs.setState(h);<a name="line.759"></a>
-<span class="sourceLineNo">760</span>            do {<a name="line.760"></a>
-<span class="sourceLineNo">761</span>                ciphered = conjugate(language.word(rng, false, (int) Math.ceil((h &gt;&gt;&gt; 60) / (0.9 + 0.5 * rng.nextDouble()))), mods);<a name="line.761"></a>
-<span class="sourceLineNo">762</span>                if(cacheLevel &lt; 2 || frustration++ &gt; 9)<a name="line.762"></a>
-<span class="sourceLineNo">763</span>                    break;<a name="line.763"></a>
-<span class="sourceLineNo">764</span>            }while (reverse.containsKey(ciphered));<a name="line.764"></a>
-<span class="sourceLineNo">765</span>            switch (cacheLevel) {<a name="line.765"></a>
-<span class="sourceLineNo">766</span>                case 2: reverse.put(ciphered, s2);<a name="line.766"></a>
-<span class="sourceLineNo">767</span>                case 1: table.put(s2, ciphered);<a name="line.767"></a>
-<span class="sourceLineNo">768</span>            }<a name="line.768"></a>
-<span class="sourceLineNo">769</span>        }<a name="line.769"></a>
-<span class="sourceLineNo">770</span>        char[] chars = ciphered.toCharArray();<a name="line.770"></a>
-<span class="sourceLineNo">771</span>        // Lu is the upper case letter category in Unicode; we're using regexodus for this because GWT won't<a name="line.771"></a>
-<span class="sourceLineNo">772</span>        // respect unicode case data on its own (see<a name="line.772"></a>
-<span class="sourceLineNo">773</span>        // https://github.com/gwtproject/gwt/blob/2.6.1/user/super/com/google/gwt/emul/java/lang/Character.java#L54-L61<a name="line.773"></a>
-<span class="sourceLineNo">774</span>        // ). We are using GWT to capitalize, though, which appears to work in practice and the docs agree.<a name="line.774"></a>
-<span class="sourceLineNo">775</span>        if(Category.Lu.contains(source.charAt(0)))<a name="line.775"></a>
-<span class="sourceLineNo">776</span>            chars[0] = Character.toUpperCase(chars[0]);<a name="line.776"></a>
-<span class="sourceLineNo">777</span>        if(source.length() &gt; 1 &amp;&amp; Category.Lu.contains(source.charAt(1))) {<a name="line.777"></a>
-<span class="sourceLineNo">778</span>            for (int i = 1; i &lt; chars.length; i++) {<a name="line.778"></a>
-<span class="sourceLineNo">779</span>                chars[i] = Character.toUpperCase(chars[i]);<a name="line.779"></a>
-<span class="sourceLineNo">780</span>            }<a name="line.780"></a>
-<span class="sourceLineNo">781</span>        }<a name="line.781"></a>
-<span class="sourceLineNo">782</span>        return new String(chars);<a name="line.782"></a>
-<span class="sourceLineNo">783</span>    }<a name="line.783"></a>
-<span class="sourceLineNo">784</span><a name="line.784"></a>
-<span class="sourceLineNo">785</span>    /**<a name="line.785"></a>
-<span class="sourceLineNo">786</span>     * Given a String, StringBuilder, or other CharSequence that should contain words in the source language, this<a name="line.786"></a>
-<span class="sourceLineNo">787</span>     * translates each word to the fake language, using existing translations if previous calls to cipher() or lookup()<a name="line.787"></a>
-<span class="sourceLineNo">788</span>     * had translated that word.<a name="line.788"></a>
-<span class="sourceLineNo">789</span>     * @param text a CharSequence, such as a String, that contains words in the source language<a name="line.789"></a>
-<span class="sourceLineNo">790</span>     * @return a String of the translated text.<a name="line.790"></a>
-<span class="sourceLineNo">791</span>     */<a name="line.791"></a>
-<span class="sourceLineNo">792</span>    public String cipher(String text)<a name="line.792"></a>
-<span class="sourceLineNo">793</span>    {<a name="line.793"></a>
-<span class="sourceLineNo">794</span>        Replacer rep = wordMatch.replacer(new CipherSubstitution());<a name="line.794"></a>
-<span class="sourceLineNo">795</span>        return rep.replace(text.replace('-', '\u2013'));<a name="line.795"></a>
-<span class="sourceLineNo">796</span>    }<a name="line.796"></a>
-<span class="sourceLineNo">797</span><a name="line.797"></a>
-<span class="sourceLineNo">798</span>    private class CipherSubstitution implements Substitution<a name="line.798"></a>
-<span class="sourceLineNo">799</span>    {<a name="line.799"></a>
-<span class="sourceLineNo">800</span>        @Override<a name="line.800"></a>
-<span class="sourceLineNo">801</span>        public void appendSubstitution(MatchResult match, TextBuffer dest) {<a name="line.801"></a>
-<span class="sourceLineNo">802</span>            dest.append(lookup(match.group(0)));<a name="line.802"></a>
-<span class="sourceLineNo">803</span>        }<a name="line.803"></a>
-<span class="sourceLineNo">804</span>    }<a name="line.804"></a>
-<span class="sourceLineNo">805</span>    private class DecipherSubstition implements Substitution<a name="line.805"></a>
-<span class="sourceLineNo">806</span>    {<a name="line.806"></a>
-<span class="sourceLineNo">807</span>        private final Map&lt;String, String&gt; vocabulary;<a name="line.807"></a>
-<span class="sourceLineNo">808</span>        DecipherSubstition(final Map&lt;String, String&gt; vocabulary)<a name="line.808"></a>
-<span class="sourceLineNo">809</span>        {<a name="line.809"></a>
-<span class="sourceLineNo">810</span>            this.vocabulary = vocabulary;<a name="line.810"></a>
-<span class="sourceLineNo">811</span>        }<a name="line.811"></a>
-<span class="sourceLineNo">812</span>        public void appendSubstitution(MatchResult match, TextBuffer dest) {<a name="line.812"></a>
-<span class="sourceLineNo">813</span>            String translated = match.group(0);<a name="line.813"></a>
-<span class="sourceLineNo">814</span>            if(translated == null) {<a name="line.814"></a>
-<span class="sourceLineNo">815</span>                return;<a name="line.815"></a>
-<span class="sourceLineNo">816</span>            }<a name="line.816"></a>
-<span class="sourceLineNo">817</span>            translated = translated.toLowerCase();<a name="line.817"></a>
-<span class="sourceLineNo">818</span>            translated = vocabulary.get(translated);<a name="line.818"></a>
-<span class="sourceLineNo">819</span>            if(translated == null) {<a name="line.819"></a>
-<span class="sourceLineNo">820</span>                dest.append(match.group(0));<a name="line.820"></a>
-<span class="sourceLineNo">821</span>                return;<a name="line.821"></a>
-<span class="sourceLineNo">822</span>            }<a name="line.822"></a>
-<span class="sourceLineNo">823</span>            char[] chars = translated.toCharArray();<a name="line.823"></a>
-<span class="sourceLineNo">824</span>            if(Category.Lu.contains(match.charAt(0)))<a name="line.824"></a>
-<span class="sourceLineNo">825</span>                chars[0] = Character.toUpperCase(chars[0]);<a name="line.825"></a>
-<span class="sourceLineNo">826</span>            if(match.length() &gt; 1 &amp;&amp; Category.Lu.contains(match.charAt(1))) {<a name="line.826"></a>
-<span class="sourceLineNo">827</span>                for (int i = 1; i &lt; chars.length; i++) {<a name="line.827"></a>
-<span class="sourceLineNo">828</span>                    chars[i] = Character.toUpperCase(chars[i]);<a name="line.828"></a>
-<span class="sourceLineNo">829</span>                }<a name="line.829"></a>
-<span class="sourceLineNo">830</span>            }<a name="line.830"></a>
-<span class="sourceLineNo">831</span>            dest.append(chars, 0, chars.length);<a name="line.831"></a>
-<span class="sourceLineNo">832</span>        }<a name="line.832"></a>
-<span class="sourceLineNo">833</span>    }<a name="line.833"></a>
-<span class="sourceLineNo">834</span><a name="line.834"></a>
-<span class="sourceLineNo">835</span>    /**<a name="line.835"></a>
-<span class="sourceLineNo">836</span>     * Deciphers words in an already-ciphered text with a given String-to-String Map for a vocabulary. This Map could be<a name="line.836"></a>
-<span class="sourceLineNo">837</span>     * the reverse field of this LanguageCipher, which would give a complete translation, or it could be a<a name="line.837"></a>
-<span class="sourceLineNo">838</span>     * partially-complete or partially-correct vocabulary of words the player has learned. The vocabulary should<a name="line.838"></a>
-<span class="sourceLineNo">839</span>     * typically have entries added using the quick and accurate learnTranslations() method, unless you want to add<a name="line.839"></a>
-<span class="sourceLineNo">840</span>     * translations one word at a time (then use learnTranslation() ) or you want incorrect or biased translations added<a name="line.840"></a>
-<span class="sourceLineNo">841</span>     * (then use mismatchTranslation() ). You don't need to use one of these methods if you just pass the whole of the<a name="line.841"></a>
-<span class="sourceLineNo">842</span>     * reverse field as a vocabulary, which will translate every word. If making your own vocabulary without the learn<a name="line.842"></a>
-<span class="sourceLineNo">843</span>     * methods, the keys need to be lower-case because while regex Patterns can be case-insensitive, Map lookups cannot.<a name="line.843"></a>
-<span class="sourceLineNo">844</span>     * @param text a text in the fake language<a name="line.844"></a>
-<span class="sourceLineNo">845</span>     * @param vocabulary a Map of Strings in the fake language to Strings in the source language<a name="line.845"></a>
-<span class="sourceLineNo">846</span>     * @return a deciphered version of text that has any words as keys in vocabulary translated to the source language<a name="line.846"></a>
-<span class="sourceLineNo">847</span>     */<a name="line.847"></a>
-<span class="sourceLineNo">848</span>    public String decipher(String text, final Map&lt;String, String&gt; vocabulary)<a name="line.848"></a>
-<span class="sourceLineNo">849</span>    {<a name="line.849"></a>
-<span class="sourceLineNo">850</span>        Pattern pat;<a name="line.850"></a>
-<span class="sourceLineNo">851</span>        Replacer rep;<a name="line.851"></a>
-<span class="sourceLineNo">852</span>        StringBuilder sb = new StringBuilder(128);<a name="line.852"></a>
-<span class="sourceLineNo">853</span>        sb.append("(?:");<a name="line.853"></a>
-<span class="sourceLineNo">854</span>        for(String k : vocabulary.keySet())<a name="line.854"></a>
-<span class="sourceLineNo">855</span>        {<a name="line.855"></a>
-<span class="sourceLineNo">856</span>            sb.append("(?:\\Q");<a name="line.856"></a>
-<span class="sourceLineNo">857</span>            sb.append(k);<a name="line.857"></a>
-<span class="sourceLineNo">858</span>            sb.append("\\E)|");<a name="line.858"></a>
-<span class="sourceLineNo">859</span>        }<a name="line.859"></a>
-<span class="sourceLineNo">860</span>        sb.deleteCharAt(sb.length() - 1);<a name="line.860"></a>
-<span class="sourceLineNo">861</span>        sb.append(')');<a name="line.861"></a>
-<span class="sourceLineNo">862</span><a name="line.862"></a>
-<span class="sourceLineNo">863</span>        pat = Pattern.compile("(?&lt;![\\pL\\&amp;-])(?=[\\pL\\&amp;-])" + sb + "(?![\\pL\\&amp;-])", "ui");<a name="line.863"></a>
-<span class="sourceLineNo">864</span><a name="line.864"></a>
-<span class="sourceLineNo">865</span>        rep = pat.replacer(new DecipherSubstition(vocabulary));<a name="line.865"></a>
-<span class="sourceLineNo">866</span>        return rep.replace(text);<a name="line.866"></a>
-<span class="sourceLineNo">867</span>    }<a name="line.867"></a>
-<span class="sourceLineNo">868</span><a name="line.868"></a>
-<span class="sourceLineNo">869</span>    /**<a name="line.869"></a>
-<span class="sourceLineNo">870</span>     * Adds a translation pair to vocabulary so it can be used in decipher, giving a correct translation for sourceWord.<a name="line.870"></a>
-<span class="sourceLineNo">871</span>     * Modifies vocabulary in-place and returns this LanguageCipher for chaining. Can be used to correct a mismatched<a name="line.871"></a>
-<span class="sourceLineNo">872</span>     * translation added to vocabulary with mismatchTranslation.<a name="line.872"></a>
-<span class="sourceLineNo">873</span>     * @param vocabulary a Map of String keys to String values that will be modified in-place<a name="line.873"></a>
-<span class="sourceLineNo">874</span>     * @param sourceWord a word in the source language, typically English; the meaning will be "learned" for decipher<a name="line.874"></a>
-<span class="sourceLineNo">875</span>     * @return this, for chaining<a name="line.875"></a>
-<span class="sourceLineNo">876</span>     */<a name="line.876"></a>
-<span class="sourceLineNo">877</span>    public NaturalLanguageCipher learnTranslation(Map&lt;String, String&gt; vocabulary, String sourceWord)<a name="line.877"></a>
-<span class="sourceLineNo">878</span>    {<a name="line.878"></a>
-<span class="sourceLineNo">879</span>        vocabulary.put(lookup(sourceWord.toLowerCase()), sourceWord);<a name="line.879"></a>
-<span class="sourceLineNo">880</span>        return this;<a name="line.880"></a>
-<span class="sourceLineNo">881</span>    }<a name="line.881"></a>
-<span class="sourceLineNo">882</span><a name="line.882"></a>
-<span class="sourceLineNo">883</span>    /**<a name="line.883"></a>
-<span class="sourceLineNo">884</span>     * Adds translation pairs to vocabulary so it can be used in decipher, giving a correct translation for sourceWords.<a name="line.884"></a>
-<span class="sourceLineNo">885</span>     * Modifies vocabulary in-place and returns this LanguageCipher for chaining. Can be used to correct mismatched<a name="line.885"></a>
-<span class="sourceLineNo">886</span>     * translations added to vocabulary with mismatchTranslation.<a name="line.886"></a>
-<span class="sourceLineNo">887</span>     * @param vocabulary a Map of String keys to String values that will be modified in-place<a name="line.887"></a>
-<span class="sourceLineNo">888</span>     * @param sourceWords an array or vararg of words in the source language, typically English; their meanings will<a name="line.888"></a>
-<span class="sourceLineNo">889</span>     *                    be "learned" for decipher<a name="line.889"></a>
-<span class="sourceLineNo">890</span>     * @return this, for chaining<a name="line.890"></a>
-<span class="sourceLineNo">891</span>     */<a name="line.891"></a>
-<span class="sourceLineNo">892</span>    public NaturalLanguageCipher learnTranslations(Map&lt;String, String&gt; vocabulary, String... sourceWords)<a name="line.892"></a>
-<span class="sourceLineNo">893</span>    {<a name="line.893"></a>
-<span class="sourceLineNo">894</span>        for (int i = 0; i &lt; sourceWords.length; i++) {<a name="line.894"></a>
-<span class="sourceLineNo">895</span>            learnTranslation(vocabulary, sourceWords[i]);<a name="line.895"></a>
-<span class="sourceLineNo">896</span>        }<a name="line.896"></a>
-<span class="sourceLineNo">897</span>        return this;<a name="line.897"></a>
-<span class="sourceLineNo">898</span>    }<a name="line.898"></a>
-<span class="sourceLineNo">899</span><a name="line.899"></a>
-<span class="sourceLineNo">900</span>    /**<a name="line.900"></a>
-<span class="sourceLineNo">901</span>     * Adds translation pairs to vocabulary so it can be used in decipher, giving a correct translation for sourceWords.<a name="line.901"></a>
-<span class="sourceLineNo">902</span>     * Modifies vocabulary in-place and returns this LanguageCipher for chaining. Can be used to correct mismatched<a name="line.902"></a>
-<span class="sourceLineNo">903</span>     * translations added to vocabulary with mismatchTranslation.<a name="line.903"></a>
-<span class="sourceLineNo">904</span>     * @param vocabulary a Map of String keys to String values that will be modified in-place<a name="line.904"></a>
-<span class="sourceLineNo">905</span>     * @param sourceWords an Iterable of words in the source language, typically English; their meanings will be<a name="line.905"></a>
-<span class="sourceLineNo">906</span>     *                   "learned" for decipher<a name="line.906"></a>
-<span class="sourceLineNo">907</span>     * @return this, for chaining<a name="line.907"></a>
-<span class="sourceLineNo">908</span>     */<a name="line.908"></a>
-<span class="sourceLineNo">909</span>    public NaturalLanguageCipher learnTranslations(Map&lt;String, String&gt; vocabulary, Iterable&lt;String&gt; sourceWords)<a name="line.909"></a>
-<span class="sourceLineNo">910</span>    {<a name="line.910"></a>
-<span class="sourceLineNo">911</span>        for (String s : sourceWords) {<a name="line.911"></a>
-<span class="sourceLineNo">912</span>            learnTranslation(vocabulary, s);<a name="line.912"></a>
-<span class="sourceLineNo">913</span>        }<a name="line.913"></a>
-<span class="sourceLineNo">914</span>        return this;<a name="line.914"></a>
-<span class="sourceLineNo">915</span>    }<a name="line.915"></a>
-<span class="sourceLineNo">916</span><a name="line.916"></a>
-<span class="sourceLineNo">917</span>    /**<a name="line.917"></a>
-<span class="sourceLineNo">918</span>     * Adds a translation pair to vocabulary so it can be used in decipher, giving a typically-incorrect translation for<a name="line.918"></a>
-<span class="sourceLineNo">919</span>     * correctWord where it provides mismatchWord instead when the ciphered version of correctWord appears.<a name="line.919"></a>
-<span class="sourceLineNo">920</span>     * Modifies vocabulary in-place and returns this LanguageCipher for chaining. You can use learnTranslation() to<a name="line.920"></a>
-<span class="sourceLineNo">921</span>     * correct a mismatched vocabulary word, or mismatchTranslation() again to change the mismatched word.<a name="line.921"></a>
-<span class="sourceLineNo">922</span>     * @param vocabulary a Map of String keys to String values that will be modified in-place<a name="line.922"></a>
-<span class="sourceLineNo">923</span>     * @param correctWord a word in the source language, typically English; where the ciphered version of this<a name="line.923"></a>
-<span class="sourceLineNo">924</span>     *                    appears and the text is deciphered, mismatchWord will be used instead<a name="line.924"></a>
-<span class="sourceLineNo">925</span>     * @param mismatchWord a String that will be used for deciphering in place of the translation of correctWord.<a name="line.925"></a>
-<span class="sourceLineNo">926</span>     * @return this, for chaining<a name="line.926"></a>
-<span class="sourceLineNo">927</span>     */<a name="line.927"></a>
-<span class="sourceLineNo">928</span>    public NaturalLanguageCipher mismatchTranslation(Map&lt;String, String&gt; vocabulary, String correctWord, String mismatchWord)<a name="line.928"></a>
-<span class="sourceLineNo">929</span>    {<a name="line.929"></a>
-<span class="sourceLineNo">930</span>        vocabulary.put(lookup(correctWord.toLowerCase()), mismatchWord);<a name="line.930"></a>
-<span class="sourceLineNo">931</span>        return this;<a name="line.931"></a>
-<span class="sourceLineNo">932</span>    }<a name="line.932"></a>
-<span class="sourceLineNo">933</span><a name="line.933"></a>
-<span class="sourceLineNo">934</span>    public int getCacheLevel() {<a name="line.934"></a>
-<span class="sourceLineNo">935</span>        return cacheLevel;<a name="line.935"></a>
-<span class="sourceLineNo">936</span>    }<a name="line.936"></a>
-<span class="sourceLineNo">937</span><a name="line.937"></a>
-<span class="sourceLineNo">938</span>    public void setCacheLevel(int cacheLevel) {<a name="line.938"></a>
-<span class="sourceLineNo">939</span>        if(cacheLevel &gt;= 2) this.cacheLevel = 2;<a name="line.939"></a>
-<span class="sourceLineNo">940</span>        else if(cacheLevel &lt;= 0) this.cacheLevel = 0;<a name="line.940"></a>
-<span class="sourceLineNo">941</span>        else this.cacheLevel = cacheLevel;<a name="line.941"></a>
+<span class="sourceLineNo">757</span>            if(end - start &gt;= 4 &amp;&amp; sc[start] == 'u' &amp;&amp; sc[start+1] == 'n')<a name="line.757"></a>
+<span class="sourceLineNo">758</span>            {<a name="line.758"></a>
+<span class="sourceLineNo">759</span>                mods |= ANTIVERB;<a name="line.759"></a>
+<span class="sourceLineNo">760</span>                start += 2;<a name="line.760"></a>
+<span class="sourceLineNo">761</span>            }<a name="line.761"></a>
+<span class="sourceLineNo">762</span>            if(end - start &gt;= 4 &amp;&amp; (sc[start] == 'e' || sc[start] == 'i') &amp;&amp; sc[start+1] == 'n')<a name="line.762"></a>
+<span class="sourceLineNo">763</span>            {<a name="line.763"></a>
+<span class="sourceLineNo">764</span>                mods |= ENNOUN;<a name="line.764"></a>
+<span class="sourceLineNo">765</span>                start += 2;<a name="line.765"></a>
+<span class="sourceLineNo">766</span>            }<a name="line.766"></a>
+<span class="sourceLineNo">767</span>            long h = phoneticHash64(sc, start, end) ^ (shift &amp; 0xFFFFFFFFFFFFFFFL) ^ (shift &gt;&gt;&gt; 14), frustration = 0;<a name="line.767"></a>
+<span class="sourceLineNo">768</span>            //System.out.print(source + ":" + ((h &gt;&gt;&gt; 60) &amp; 7) + ":" + StringKit.hex(h) + ", ");<a name="line.768"></a>
+<span class="sourceLineNo">769</span>            rs.setState(h);<a name="line.769"></a>
+<span class="sourceLineNo">770</span>            do {<a name="line.770"></a>
+<span class="sourceLineNo">771</span>                ciphered = conjugate(language.word(rng, false, (int) Math.ceil((h &gt;&gt;&gt; 60) / (0.9 + 0.5 * rng.nextDouble()))), mods);<a name="line.771"></a>
+<span class="sourceLineNo">772</span>                if(cacheLevel &lt; 2 || frustration++ &gt; 9)<a name="line.772"></a>
+<span class="sourceLineNo">773</span>                    break;<a name="line.773"></a>
+<span class="sourceLineNo">774</span>            }while (reverse.containsKey(ciphered));<a name="line.774"></a>
+<span class="sourceLineNo">775</span>            switch (cacheLevel) {<a name="line.775"></a>
+<span class="sourceLineNo">776</span>                case 2: reverse.put(ciphered, s2);<a name="line.776"></a>
+<span class="sourceLineNo">777</span>                case 1: table.put(s2, ciphered);<a name="line.777"></a>
+<span class="sourceLineNo">778</span>            }<a name="line.778"></a>
+<span class="sourceLineNo">779</span>        }<a name="line.779"></a>
+<span class="sourceLineNo">780</span>        char[] chars = ciphered.toCharArray();<a name="line.780"></a>
+<span class="sourceLineNo">781</span>        // Lu is the upper case letter category in Unicode; we're using regexodus for this because GWT won't<a name="line.781"></a>
+<span class="sourceLineNo">782</span>        // respect unicode case data on its own (see<a name="line.782"></a>
+<span class="sourceLineNo">783</span>        // https://github.com/gwtproject/gwt/blob/2.6.1/user/super/com/google/gwt/emul/java/lang/Character.java#L54-L61<a name="line.783"></a>
+<span class="sourceLineNo">784</span>        // ). We are using GWT to capitalize, though, which appears to work in practice and the docs agree.<a name="line.784"></a>
+<span class="sourceLineNo">785</span>        if(Category.Lu.contains(source.charAt(0)))<a name="line.785"></a>
+<span class="sourceLineNo">786</span>            chars[0] = Character.toUpperCase(chars[0]);<a name="line.786"></a>
+<span class="sourceLineNo">787</span>        if(source.length() &gt; 1 &amp;&amp; Category.Lu.contains(source.charAt(1))) {<a name="line.787"></a>
+<span class="sourceLineNo">788</span>            for (int i = 1; i &lt; chars.length; i++) {<a name="line.788"></a>
+<span class="sourceLineNo">789</span>                chars[i] = Character.toUpperCase(chars[i]);<a name="line.789"></a>
+<span class="sourceLineNo">790</span>            }<a name="line.790"></a>
+<span class="sourceLineNo">791</span>        }<a name="line.791"></a>
+<span class="sourceLineNo">792</span>        return new String(chars);<a name="line.792"></a>
+<span class="sourceLineNo">793</span>    }<a name="line.793"></a>
+<span class="sourceLineNo">794</span><a name="line.794"></a>
+<span class="sourceLineNo">795</span>    /**<a name="line.795"></a>
+<span class="sourceLineNo">796</span>     * Given a String, StringBuilder, or other CharSequence that should contain words in the source language, this<a name="line.796"></a>
+<span class="sourceLineNo">797</span>     * translates each word to the fake language, using existing translations if previous calls to cipher() or lookup()<a name="line.797"></a>
+<span class="sourceLineNo">798</span>     * had translated that word.<a name="line.798"></a>
+<span class="sourceLineNo">799</span>     * @param text a CharSequence, such as a String, that contains words in the source language<a name="line.799"></a>
+<span class="sourceLineNo">800</span>     * @return a String of the translated text.<a name="line.800"></a>
+<span class="sourceLineNo">801</span>     */<a name="line.801"></a>
+<span class="sourceLineNo">802</span>    public String cipher(String text)<a name="line.802"></a>
+<span class="sourceLineNo">803</span>    {<a name="line.803"></a>
+<span class="sourceLineNo">804</span>        Replacer rep = wordMatch.replacer(new CipherSubstitution());<a name="line.804"></a>
+<span class="sourceLineNo">805</span>        return rep.replace(text.replace('-', '\u2013'));<a name="line.805"></a>
+<span class="sourceLineNo">806</span>    }<a name="line.806"></a>
+<span class="sourceLineNo">807</span><a name="line.807"></a>
+<span class="sourceLineNo">808</span>    private class CipherSubstitution implements Substitution<a name="line.808"></a>
+<span class="sourceLineNo">809</span>    {<a name="line.809"></a>
+<span class="sourceLineNo">810</span>        @Override<a name="line.810"></a>
+<span class="sourceLineNo">811</span>        public void appendSubstitution(MatchResult match, TextBuffer dest) {<a name="line.811"></a>
+<span class="sourceLineNo">812</span>            dest.append(lookup(match.group(0)));<a name="line.812"></a>
+<span class="sourceLineNo">813</span>        }<a name="line.813"></a>
+<span class="sourceLineNo">814</span>    }<a name="line.814"></a>
+<span class="sourceLineNo">815</span>    private class DecipherSubstition implements Substitution<a name="line.815"></a>
+<span class="sourceLineNo">816</span>    {<a name="line.816"></a>
+<span class="sourceLineNo">817</span>        private final Map&lt;String, String&gt; vocabulary;<a name="line.817"></a>
+<span class="sourceLineNo">818</span>        DecipherSubstition(final Map&lt;String, String&gt; vocabulary)<a name="line.818"></a>
+<span class="sourceLineNo">819</span>        {<a name="line.819"></a>
+<span class="sourceLineNo">820</span>            this.vocabulary = vocabulary;<a name="line.820"></a>
+<span class="sourceLineNo">821</span>        }<a name="line.821"></a>
+<span class="sourceLineNo">822</span>        public void appendSubstitution(MatchResult match, TextBuffer dest) {<a name="line.822"></a>
+<span class="sourceLineNo">823</span>            String translated = match.group(0);<a name="line.823"></a>
+<span class="sourceLineNo">824</span>            if(translated == null) {<a name="line.824"></a>
+<span class="sourceLineNo">825</span>                return;<a name="line.825"></a>
+<span class="sourceLineNo">826</span>            }<a name="line.826"></a>
+<span class="sourceLineNo">827</span>            translated = translated.toLowerCase();<a name="line.827"></a>
+<span class="sourceLineNo">828</span>            translated = vocabulary.get(translated);<a name="line.828"></a>
+<span class="sourceLineNo">829</span>            if(translated == null) {<a name="line.829"></a>
+<span class="sourceLineNo">830</span>                dest.append(match.group(0));<a name="line.830"></a>
+<span class="sourceLineNo">831</span>                return;<a name="line.831"></a>
+<span class="sourceLineNo">832</span>            }<a name="line.832"></a>
+<span class="sourceLineNo">833</span>            char[] chars = translated.toCharArray();<a name="line.833"></a>
+<span class="sourceLineNo">834</span>            if(Category.Lu.contains(match.charAt(0)))<a name="line.834"></a>
+<span class="sourceLineNo">835</span>                chars[0] = Character.toUpperCase(chars[0]);<a name="line.835"></a>
+<span class="sourceLineNo">836</span>            if(match.length() &gt; 1 &amp;&amp; Category.Lu.contains(match.charAt(1))) {<a name="line.836"></a>
+<span class="sourceLineNo">837</span>                for (int i = 1; i &lt; chars.length; i++) {<a name="line.837"></a>
+<span class="sourceLineNo">838</span>                    chars[i] = Character.toUpperCase(chars[i]);<a name="line.838"></a>
+<span class="sourceLineNo">839</span>                }<a name="line.839"></a>
+<span class="sourceLineNo">840</span>            }<a name="line.840"></a>
+<span class="sourceLineNo">841</span>            dest.append(chars, 0, chars.length);<a name="line.841"></a>
+<span class="sourceLineNo">842</span>        }<a name="line.842"></a>
+<span class="sourceLineNo">843</span>    }<a name="line.843"></a>
+<span class="sourceLineNo">844</span><a name="line.844"></a>
+<span class="sourceLineNo">845</span>    /**<a name="line.845"></a>
+<span class="sourceLineNo">846</span>     * Deciphers words in an already-ciphered text with a given String-to-String Map for a vocabulary. This Map could be<a name="line.846"></a>
+<span class="sourceLineNo">847</span>     * the reverse field of this LanguageCipher, which would give a complete translation, or it could be a<a name="line.847"></a>
+<span class="sourceLineNo">848</span>     * partially-complete or partially-correct vocabulary of words the player has learned. The vocabulary should<a name="line.848"></a>
+<span class="sourceLineNo">849</span>     * typically have entries added using the quick and accurate learnTranslations() method, unless you want to add<a name="line.849"></a>
+<span class="sourceLineNo">850</span>     * translations one word at a time (then use learnTranslation() ) or you want incorrect or biased translations added<a name="line.850"></a>
+<span class="sourceLineNo">851</span>     * (then use mismatchTranslation() ). You don't need to use one of these methods if you just pass the whole of the<a name="line.851"></a>
+<span class="sourceLineNo">852</span>     * reverse field as a vocabulary, which will translate every word. If making your own vocabulary without the learn<a name="line.852"></a>
+<span class="sourceLineNo">853</span>     * methods, the keys need to be lower-case because while regex Patterns can be case-insensitive, Map lookups cannot.<a name="line.853"></a>
+<span class="sourceLineNo">854</span>     * @param text a text in the fake language<a name="line.854"></a>
+<span class="sourceLineNo">855</span>     * @param vocabulary a Map of Strings in the fake language to Strings in the source language<a name="line.855"></a>
+<span class="sourceLineNo">856</span>     * @return a deciphered version of text that has any words as keys in vocabulary translated to the source language<a name="line.856"></a>
+<span class="sourceLineNo">857</span>     */<a name="line.857"></a>
+<span class="sourceLineNo">858</span>    public String decipher(String text, final Map&lt;String, String&gt; vocabulary)<a name="line.858"></a>
+<span class="sourceLineNo">859</span>    {<a name="line.859"></a>
+<span class="sourceLineNo">860</span>        Pattern pat;<a name="line.860"></a>
+<span class="sourceLineNo">861</span>        Replacer rep;<a name="line.861"></a>
+<span class="sourceLineNo">862</span>        StringBuilder sb = new StringBuilder(128);<a name="line.862"></a>
+<span class="sourceLineNo">863</span>        sb.append("(?:");<a name="line.863"></a>
+<span class="sourceLineNo">864</span>        for(String k : vocabulary.keySet())<a name="line.864"></a>
+<span class="sourceLineNo">865</span>        {<a name="line.865"></a>
+<span class="sourceLineNo">866</span>            sb.append("(?:\\Q");<a name="line.866"></a>
+<span class="sourceLineNo">867</span>            sb.append(k);<a name="line.867"></a>
+<span class="sourceLineNo">868</span>            sb.append("\\E)|");<a name="line.868"></a>
+<span class="sourceLineNo">869</span>        }<a name="line.869"></a>
+<span class="sourceLineNo">870</span>        sb.deleteCharAt(sb.length() - 1);<a name="line.870"></a>
+<span class="sourceLineNo">871</span>        sb.append(')');<a name="line.871"></a>
+<span class="sourceLineNo">872</span><a name="line.872"></a>
+<span class="sourceLineNo">873</span>        pat = Pattern.compile("(?&lt;![\\pL\\&amp;-])(?=[\\pL\\&amp;-])" + sb + "(?![\\pL\\&amp;-])", "ui");<a name="line.873"></a>
+<span class="sourceLineNo">874</span><a name="line.874"></a>
+<span class="sourceLineNo">875</span>        rep = pat.replacer(new DecipherSubstition(vocabulary));<a name="line.875"></a>
+<span class="sourceLineNo">876</span>        return rep.replace(text);<a name="line.876"></a>
+<span class="sourceLineNo">877</span>    }<a name="line.877"></a>
+<span class="sourceLineNo">878</span><a name="line.878"></a>
+<span class="sourceLineNo">879</span>    /**<a name="line.879"></a>
+<span class="sourceLineNo">880</span>     * Adds a translation pair to vocabulary so it can be used in decipher, giving a correct translation for sourceWord.<a name="line.880"></a>
+<span class="sourceLineNo">881</span>     * Modifies vocabulary in-place and returns this LanguageCipher for chaining. Can be used to correct a mismatched<a name="line.881"></a>
+<span class="sourceLineNo">882</span>     * translation added to vocabulary with mismatchTranslation.<a name="line.882"></a>
+<span class="sourceLineNo">883</span>     * @param vocabulary a Map of String keys to String values that will be modified in-place<a name="line.883"></a>
+<span class="sourceLineNo">884</span>     * @param sourceWord a word in the source language, typically English; the meaning will be "learned" for decipher<a name="line.884"></a>
+<span class="sourceLineNo">885</span>     * @return this, for chaining<a name="line.885"></a>
+<span class="sourceLineNo">886</span>     */<a name="line.886"></a>
+<span class="sourceLineNo">887</span>    public NaturalLanguageCipher learnTranslation(Map&lt;String, String&gt; vocabulary, String sourceWord)<a name="line.887"></a>
+<span class="sourceLineNo">888</span>    {<a name="line.888"></a>
+<span class="sourceLineNo">889</span>        vocabulary.put(lookup(sourceWord.toLowerCase()), sourceWord);<a name="line.889"></a>
+<span class="sourceLineNo">890</span>        return this;<a name="line.890"></a>
+<span class="sourceLineNo">891</span>    }<a name="line.891"></a>
+<span class="sourceLineNo">892</span><a name="line.892"></a>
+<span class="sourceLineNo">893</span>    /**<a name="line.893"></a>
+<span class="sourceLineNo">894</span>     * Adds translation pairs to vocabulary so it can be used in decipher, giving a correct translation for sourceWords.<a name="line.894"></a>
+<span class="sourceLineNo">895</span>     * Modifies vocabulary in-place and returns this LanguageCipher for chaining. Can be used to correct mismatched<a name="line.895"></a>
+<span class="sourceLineNo">896</span>     * translations added to vocabulary with mismatchTranslation.<a name="line.896"></a>
+<span class="sourceLineNo">897</span>     * @param vocabulary a Map of String keys to String values that will be modified in-place<a name="line.897"></a>
+<span class="sourceLineNo">898</span>     * @param sourceWords an array or vararg of words in the source language, typically English; their meanings will<a name="line.898"></a>
+<span class="sourceLineNo">899</span>     *                    be "learned" for decipher<a name="line.899"></a>
+<span class="sourceLineNo">900</span>     * @return this, for chaining<a name="line.900"></a>
+<span class="sourceLineNo">901</span>     */<a name="line.901"></a>
+<span class="sourceLineNo">902</span>    public NaturalLanguageCipher learnTranslations(Map&lt;String, String&gt; vocabulary, String... sourceWords)<a name="line.902"></a>
+<span class="sourceLineNo">903</span>    {<a name="line.903"></a>
+<span class="sourceLineNo">904</span>        for (int i = 0; i &lt; sourceWords.length; i++) {<a name="line.904"></a>
+<span class="sourceLineNo">905</span>            learnTranslation(vocabulary, sourceWords[i]);<a name="line.905"></a>
+<span class="sourceLineNo">906</span>        }<a name="line.906"></a>
+<span class="sourceLineNo">907</span>        return this;<a name="line.907"></a>
+<span class="sourceLineNo">908</span>    }<a name="line.908"></a>
+<span class="sourceLineNo">909</span><a name="line.909"></a>
+<span class="sourceLineNo">910</span>    /**<a name="line.910"></a>
+<span class="sourceLineNo">911</span>     * Adds translation pairs to vocabulary so it can be used in decipher, giving a correct translation for sourceWords.<a name="line.911"></a>
+<span class="sourceLineNo">912</span>     * Modifies vocabulary in-place and returns this LanguageCipher for chaining. Can be used to correct mismatched<a name="line.912"></a>
+<span class="sourceLineNo">913</span>     * translations added to vocabulary with mismatchTranslation.<a name="line.913"></a>
+<span class="sourceLineNo">914</span>     * @param vocabulary a Map of String keys to String values that will be modified in-place<a name="line.914"></a>
+<span class="sourceLineNo">915</span>     * @param sourceWords an Iterable of words in the source language, typically English; their meanings will be<a name="line.915"></a>
+<span class="sourceLineNo">916</span>     *                   "learned" for decipher<a name="line.916"></a>
+<span class="sourceLineNo">917</span>     * @return this, for chaining<a name="line.917"></a>
+<span class="sourceLineNo">918</span>     */<a name="line.918"></a>
+<span class="sourceLineNo">919</span>    public NaturalLanguageCipher learnTranslations(Map&lt;String, String&gt; vocabulary, Iterable&lt;String&gt; sourceWords)<a name="line.919"></a>
+<span class="sourceLineNo">920</span>    {<a name="line.920"></a>
+<span class="sourceLineNo">921</span>        for (String s : sourceWords) {<a name="line.921"></a>
+<span class="sourceLineNo">922</span>            learnTranslation(vocabulary, s);<a name="line.922"></a>
+<span class="sourceLineNo">923</span>        }<a name="line.923"></a>
+<span class="sourceLineNo">924</span>        return this;<a name="line.924"></a>
+<span class="sourceLineNo">925</span>    }<a name="line.925"></a>
+<span class="sourceLineNo">926</span><a name="line.926"></a>
+<span class="sourceLineNo">927</span>    /**<a name="line.927"></a>
+<span class="sourceLineNo">928</span>     * Adds a translation pair to vocabulary so it can be used in decipher, giving a typically-incorrect translation for<a name="line.928"></a>
+<span class="sourceLineNo">929</span>     * correctWord where it provides mismatchWord instead when the ciphered version of correctWord appears.<a name="line.929"></a>
+<span class="sourceLineNo">930</span>     * Modifies vocabulary in-place and returns this LanguageCipher for chaining. You can use learnTranslation() to<a name="line.930"></a>
+<span class="sourceLineNo">931</span>     * correct a mismatched vocabulary word, or mismatchTranslation() again to change the mismatched word.<a name="line.931"></a>
+<span class="sourceLineNo">932</span>     * @param vocabulary a Map of String keys to String values that will be modified in-place<a name="line.932"></a>
+<span class="sourceLineNo">933</span>     * @param correctWord a word in the source language, typically English; where the ciphered version of this<a name="line.933"></a>
+<span class="sourceLineNo">934</span>     *                    appears and the text is deciphered, mismatchWord will be used instead<a name="line.934"></a>
+<span class="sourceLineNo">935</span>     * @param mismatchWord a String that will be used for deciphering in place of the translation of correctWord.<a name="line.935"></a>
+<span class="sourceLineNo">936</span>     * @return this, for chaining<a name="line.936"></a>
+<span class="sourceLineNo">937</span>     */<a name="line.937"></a>
+<span class="sourceLineNo">938</span>    public NaturalLanguageCipher mismatchTranslation(Map&lt;String, String&gt; vocabulary, String correctWord, String mismatchWord)<a name="line.938"></a>
+<span class="sourceLineNo">939</span>    {<a name="line.939"></a>
+<span class="sourceLineNo">940</span>        vocabulary.put(lookup(correctWord.toLowerCase()), mismatchWord);<a name="line.940"></a>
+<span class="sourceLineNo">941</span>        return this;<a name="line.941"></a>
 <span class="sourceLineNo">942</span>    }<a name="line.942"></a>
-<span class="sourceLineNo">943</span>}<a name="line.943"></a>
+<span class="sourceLineNo">943</span><a name="line.943"></a>
+<span class="sourceLineNo">944</span>    public int getCacheLevel() {<a name="line.944"></a>
+<span class="sourceLineNo">945</span>        return cacheLevel;<a name="line.945"></a>
+<span class="sourceLineNo">946</span>    }<a name="line.946"></a>
+<span class="sourceLineNo">947</span><a name="line.947"></a>
+<span class="sourceLineNo">948</span>    public void setCacheLevel(int cacheLevel) {<a name="line.948"></a>
+<span class="sourceLineNo">949</span>        if(cacheLevel &gt;= 2) this.cacheLevel = 2;<a name="line.949"></a>
+<span class="sourceLineNo">950</span>        else if(cacheLevel &lt;= 0) this.cacheLevel = 0;<a name="line.950"></a>
+<span class="sourceLineNo">951</span>        else this.cacheLevel = cacheLevel;<a name="line.951"></a>
+<span class="sourceLineNo">952</span>    }<a name="line.952"></a>
+<span class="sourceLineNo">953</span>}<a name="line.953"></a>
 
 
 

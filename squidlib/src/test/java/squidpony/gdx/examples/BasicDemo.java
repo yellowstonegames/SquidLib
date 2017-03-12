@@ -15,7 +15,7 @@ import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
-import squidpony.squidmath.CoordPacker;
+import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.RNG;
 
 import java.util.ArrayList;
@@ -106,24 +106,66 @@ public class BasicDemo extends ApplicationAdapter {
         //When we draw, we may want to use a nicer representation of walls. DungeonUtility has lots of useful methods
         //for modifying char[][] dungeon grids, and this one takes each '#' and replaces it with a box-drawing character.
         lineDungeon = DungeonUtility.hashesToLines(decoDungeon);
-        // it's more efficient to get random floors from a packed set containing only (compressed) floor positions.
-        short[] placement = CoordPacker.pack(bareDungeon, '.');
         //Coord is the type we use as a general 2D point, usually in a dungeon.
-        //Because we know dungeons won't be incredibly huge, Coord performs best for x and y values less than 256.
+        //Because we know dungeons won't be incredibly huge, Coord performs best for x and y values less than 256, but
+        // by default it can also handle some negative x and y values (-3 is the lowest it can efficiently store). You
+        // can call Coord.expandPool() or Coord.expandPoolTo() if you need larger maps to be just as fast.
         cursor = Coord.get(-1, -1);
+        // here, we need to get a random floor cell to place the player upon, without the possibility of putting him
+        // inside a wall. There are a few ways to do this in SquidLib. The most straightforward way is to randomly
+        // choose x and y positions until a floor is found, but particularly on dungeons with few floor cells, this can
+        // have serious problems -- if it takes too long to find a floor cell, either it needs to be able to figure out
+        // that random choice isn't working and instead choose the first it finds in simple iteration, or potentially
+        // keep trying forever on an all-wall map. There are better ways! These involve using a kind of specific storage
+        // for points or regions, getting that to store only floors, and finding a random cell from that collection of
+        // floors. The two kinds of such storage used commonly in SquidLib are the "packed data" as short[] produced by
+        // CoordPacker (which use very little memory, but can be slow, and are treated as unchanging by CoordPacker so
+        // any change makes a new array), and GreasedRegion objects (which use slightly more memory, tend to be faster
+        // on almost all operations compared to the same operations with CoordPacker, and default to changing the
+        // GreasedRegion object when you call a method on it instead of making a new one). Even though CoordPacker
+        // sometimes has better documentation, GreasedRegion is generally a better choice; it was added to address
+        // shortcomings in CoordPacker, particularly for speed, and the worst-case scenarios for data in CoordPacker are
+        // no problem whatsoever for GreasedRegion. CoordPacker is called that because it compresses the information
+        // for nearby Coords into a smaller amount of memory. GreasedRegion is called that because it encodes regions,
+        // but is "greasy" both in the fatty-food sense of using more space, and in the "greased lightning" sense of
+        // being especially fast. Both of them can be seen as storing regions of points in 2D space as "on" and "off."
+
+        // Here we fill a GreasedRegion so it stores the cells that contain a floor, the '.' char, as "on."
+        GreasedRegion placement = new GreasedRegion(bareDungeon, '.');
         //player is, here, just a Coord that stores his position. In a real game, you would probably have a class for
-        //creatures, and possibly a subclass for the player.
-        player = dungeonGen.utility.randomCell(placement);
+        //creatures, and possibly a subclass for the player. The singleRandom() method on GreasedRegion finds one Coord
+        // in that region that is "on," or -1,-1 if there are no such cells. It takes an RNG object as a parameter, and
+        // if you gave a seed to the RNG constructor, then the cell this chooses will be reliable for testing. If you
+        // don't seed the RNG, any valid cell should be possible.
+        player = placement.singleRandom(rng);
         //This is used to allow clicks or taps to take the player to the desired area.
-        toCursor = new ArrayList<>(100);
-        awaitedMoves = new ArrayList<>(100);
+        toCursor = new ArrayList<>(200);
+        //When a path is confirmed by clicking, we draw from this List to find which cell is next to move into.
+        awaitedMoves = new ArrayList<>(200);
         //DijkstraMap is the pathfinding swiss-army knife we use here to find a path to the latest cursor position.
+        //DijkstraMap.Measurement is an enum that determines the possibility or preference to enter diagonals. Here, the
+        // MANHATTAN value is used, which means 4-way movement only, no diagonals possible. Alternatives are CHEBYSHEV,
+        // which allows 8 directions of movement at the same cost for all directions, and EUCLIDEAN, which allows 8
+        // directions, but will prefer orthogonal moves unless diagonal ones are clearly closer "as the crow flies."
         playerToCursor = new DijkstraMap(decoDungeon, DijkstraMap.Measurement.MANHATTAN);
+        //These next two lines mark the player as something we want paths to go to or from, and get the distances to the
+        // player from all walkable cells in the dungeon.
+        playerToCursor.setGoal(player);
+        playerToCursor.scan(null);
+
+        //The next three lines set the background color for anything we don't draw on, but also create 2D arrays of the
+        //same size as decoDungeon that store simple indexes into a common list of colors, using the colors that looks
+        // up as the colors for the cell with the same x and y.
         bgColor = SColor.DARK_SLATE_GRAY;
         colorIndices = DungeonUtility.generatePaletteIndices(decoDungeon);
         bgColorIndices = DungeonUtility.generateBGPaletteIndices(decoDungeon);
         // this creates an array of sentences, where each imitates a different sort of language or mix of languages.
         // this serves to demonstrate the large amount of glyphs SquidLib supports.
+        // there's no need to put much effort into understanding this section yet, and many games won't use the language
+        // generation code at all. If you want to know what this does, the parameters are:
+        // minimum words in a sentence, maximum words in a sentence, "mid" punctuation that can be after a word (like a
+        // comma), "end" punctuation that can be at the end of a sentence, frequency of "mid" punctuation (the chance in
+        // 1.0 that a word will have something like a comma appended after it), and the limit on how many chars to use.
         lang = new String[]
                 {
                         FakeLanguageGen.ENGLISH.sentence(5, 10, new String[]{",", ",", ",", ";"},
@@ -143,6 +185,16 @@ public class BasicDemo extends ApplicationAdapter {
                         FakeLanguageGen.JAPANESE_ROMANIZED.sentence(5, 13, new String[]{",", ",", ",", ",", ";"},
                                 new String[]{".", ".", ".", "!", "?", "...", "..."}, 0.12, gridWidth - 4),
                         FakeLanguageGen.SWAHILI.sentence(4, 9, new String[]{",", ",", ",", ";", ";"},
+                                new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
+                        FakeLanguageGen.SOMALI.sentence(4, 9, new String[]{",", ",", ",", ";", ";"},
+                                new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
+                        FakeLanguageGen.HINDI_ROMANIZED.sentence(4, 9, new String[]{",", ",", ",", ";", ";"},
+                                new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
+                        FakeLanguageGen.NORSE.sentence(4, 9, new String[]{",", ",", ",", ";", ";"},
+                                new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
+                        FakeLanguageGen.INUKTITUT.sentence(4, 9, new String[]{",", ",", ",", ";", ";"},
+                                new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
+                        FakeLanguageGen.NAHUATL.sentence(4, 9, new String[]{",", ",", ",", ";", ";"},
                                 new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
                         FakeLanguageGen.FANTASY_NAME.sentence(4, 8, new String[]{",", ",", ",", ";", ";"},
                                 new String[]{".", ".", ".", "!", "?", "..."}, 0.22, gridWidth - 4),
@@ -236,13 +288,16 @@ public class BasicDemo extends ApplicationAdapter {
                 if(awaitedMoves.isEmpty()) {
                     if (toCursor.isEmpty()) {
                         cursor = Coord.get(screenX, screenY);
-                        //This uses DijkstraMap.findPath to get a possibly long path from the current player position
-                        //to the position the user clicked on.
-                        toCursor = playerToCursor.findPath(100, null, null, player, cursor);
+                        //This uses DijkstraMap.findPathPreScannned() to get a path as a List of Coord from the current
+                        // player position to the position the user clicked on. The "PreScanned" part is an optimization
+                        // that's special to DijkstraMap; because the whole map has already been fully analyzed by the
+                        // DijkstraMap.scan() method at the start of the program, and re-calculated whenever the player
+                        // moves, we only need to do a fraction of the work to find the best path with that info.
+                        toCursor = playerToCursor.findPathPreScanned(cursor);
                     }
-                    awaitedMoves = new ArrayList<>(toCursor);
+                    awaitedMoves.addAll(toCursor);
                 }
-                return false;
+                return true;
             }
 
             @Override
@@ -250,8 +305,8 @@ public class BasicDemo extends ApplicationAdapter {
                 return mouseMoved(screenX, screenY);
             }
 
-            // causes the path to the mouse position to become highlighted (toCursor contains a list of points that
-            // receive highlighting). Uses DijkstraMap.findPath() to find the path, which is surprisingly fast.
+            // causes the path to the mouse position to become highlighted (toCursor contains a list of Coords that
+            // receive highlighting). Uses DijkstraMap.findPathPreScanned() to find the path, which is rather fast.
             @Override
             public boolean mouseMoved(int screenX, int screenY) {
                 if(!awaitedMoves.isEmpty())
@@ -261,7 +316,13 @@ public class BasicDemo extends ApplicationAdapter {
                     return false;
                 }
                 cursor = Coord.get(screenX, screenY);
-                toCursor = playerToCursor.findPath(100, null, null, player, cursor);
+                //This uses DijkstraMap.findPathPreScannned() to get a path as a List of Coord from the current
+                // player position to the position the user clicked on. The "PreScanned" part is an optimization
+                // that's special to DijkstraMap; because the whole map has already been fully analyzed by the
+                // DijkstraMap.scan() method at the start of the program, and re-calculated whenever the player
+                // moves, we only need to do a fraction of the work to find the best path with that info.
+
+                toCursor = playerToCursor.findPathPreScanned(cursor);
                 return false;
             }
         }));
@@ -284,6 +345,8 @@ public class BasicDemo extends ApplicationAdapter {
         if (newX >= 0 && newY >= 0 && newX < gridWidth && newY < gridHeight
                 && bareDungeon[newX][newY] != '#')
         {
+            // changing the player Coord is all we need to do here, because we re-calculate the distances to the player
+            // from all other cells only when we need to, that is, when the movement is finished (see render() ).
             player = player.translate(xmod, ymod);
         }
         // loops through the text snippets displayed whenever the player moves
@@ -328,7 +391,7 @@ public class BasicDemo extends ApplicationAdapter {
         // if the user clicked, we have a list of moves to perform.
         if(!awaitedMoves.isEmpty())
         {
-            // this doesn't check for input, but instead processes and removes Points from awaitedMoves.
+            // this doesn't check for input, but instead processes and removes Coords from awaitedMoves.
             secondsWithoutMoves += Gdx.graphics.getDeltaTime();
             if (secondsWithoutMoves >= 0.1) {
                 secondsWithoutMoves = 0;
@@ -336,14 +399,33 @@ public class BasicDemo extends ApplicationAdapter {
                 toCursor.remove(0);
                 move(m.x - player.x, m.y - player.y);
             }
+            // this only happens if we just removed the last Coord from awaitedMoves, and it's only then that we need to
+            // re-calculate the distances from all cells to the player. We don't need to calculate this information on
+            // each part of a many-cell move (just the end), nor do we need to calculate it whenever the mouse moves.
+            if(awaitedMoves.isEmpty())
+            {
+                // the next two lines remove any lingering data needed for earlier paths
+                playerToCursor.clearGoals();
+                playerToCursor.resetMap();
+                // the next line marks the player as a "goal" cell, which seems counter-intuitive, but it works because all
+                // cells will try to find the distance between themselves and the nearest goal, and once this is found, the
+                // distances don't change as long as the goals don't change. Since the mouse will move and new paths will be
+                // found, but the player doesn't move until a cell is clicked, the "goal" is the non-changing cell, so the
+                // player's position, and the "target" of a pathfinding method like DijkstraMap.findPathPreScanned() is the
+                // currently-moused-over cell, which we only need to set where the mouse is being handled.
+                playerToCursor.setGoal(player);
+                playerToCursor.scan(null);
+            }
         }
         // if we are waiting for the player's input and get input, process it.
         else if(input.hasNext()) {
             input.next();
         }
 
-        // stage has its own batch and must be explicitly told to draw(). this also causes it to act().
+        // stage has its own batch and must be explicitly told to draw().
         stage.draw();
+        // certain classes that use scene2d.ui widgets need to be told to act() to process input.
+        stage.act();
     }
 
     @Override

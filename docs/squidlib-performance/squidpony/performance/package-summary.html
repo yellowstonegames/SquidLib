@@ -115,7 +115,79 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../squidpony/performance/DijkstraBenchmark.html" title="class in squidpony.performance">DijkstraBenchmark</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Times:
+ Benchmark                                        Mode  Cnt     Score     Error  Units
+ DijkstraBenchmark.measurePathAStar               avgt    3  5083.488 ± 997.886  ms/op
+ DijkstraBenchmark.measurePathAStar2              avgt    3   485.639 ±  21.579  ms/op
+ DijkstraBenchmark.measurePathCustomDijkstra      avgt    3   104.302 ±  12.242  ms/op
+ DijkstraBenchmark.measurePathDijkstra            avgt    3   113.594 ±   4.293  ms/op
+ DijkstraBenchmark.measurePathGDXAStar            avgt    3    29.972 ±   0.370  ms/op
+ DijkstraBenchmark.measureTinyPathAStar2          avgt    3     7.099 ±   0.192  ms/op
+ DijkstraBenchmark.measureTinyPathCustomDijkstra  avgt    3    12.209 ±  22.552  ms/op
+ DijkstraBenchmark.measureTinyPathDijkstra        avgt    3    25.559 ±   1.930  ms/op
+ DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3     1.119 ±   0.100  ms/op
+
+ December 21 2016, different hardware:
+ Benchmark                                        Mode  Cnt     Score      Error  Units
+ DijkstraBenchmark.measurePathAStar               avgt    3  5850.311 ± 404.757  ms/op
+ DijkstraBenchmark.measurePathAStar2              avgt    3   560.238 ± 189.030  ms/op
+ DijkstraBenchmark.measurePathBoxedDijkstra       avgt    3   209.980 ±  66.035  ms/op // not tested before
+ DijkstraBenchmark.measurePathCustomDijkstra      avgt    3   121.427 ±  38.127  ms/op
+ DijkstraBenchmark.measurePathDijkstra            avgt    3   130.467 ±  88.321  ms/op
+ DijkstraBenchmark.measurePathGDXAStar            avgt    3    34.108 ±  17.086  ms/op
+ DijkstraBenchmark.measureTinyPathAStar2          avgt    3     8.278 ±   1.149  ms/op
+ DijkstraBenchmark.measureTinyPathCustomDijkstra  avgt    3    14.551 ±  14.218  ms/op
+ DijkstraBenchmark.measureTinyPathDijkstra        avgt    3    28.658 ±  13.810  ms/op
+ DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3     1.245 ±   0.265  ms/op
+
+ Benchmark                                        Mode  Cnt      Score       Error  Units
+ DijkstraBenchmark.measurePathAStar2              avgt    3  53480.665 ± 18729.945  ms/op
+ DijkstraBenchmark.measurePathCustomDijkstra      avgt    3   2723.753 ±   925.120  ms/op
+ DijkstraBenchmark.measurePathDijkstra            avgt    3   3074.905 ±   540.216  ms/op
+ DijkstraBenchmark.measurePathGDXAStar            avgt    3   1107.468 ±  1023.402  ms/op
+ DijkstraBenchmark.measurePathOptDijkstra         avgt    3   1785.539 ±   292.576  ms/op // used int distances
+ DijkstraBenchmark.measureScanCustomDijkstra      avgt    3   2646.074 ±   265.886  ms/op
+ DijkstraBenchmark.measureScanDijkstra            avgt    3   2934.270 ±   299.965  ms/op
+ DijkstraBenchmark.measureScanOptDijkstra         avgt    3   1681.452 ±   502.217  ms/op // used int distances
+ DijkstraBenchmark.measureTinyPathAStar2          avgt    3     54.409 ±     6.358  ms/op
+ DijkstraBenchmark.measureTinyPathCustomDijkstra  avgt    3    515.103 ±   483.498  ms/op
+ DijkstraBenchmark.measureTinyPathDijkstra        avgt    3    612.636 ±   105.496  ms/op
+ DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3      5.473 ±     1.066  ms/op
+ DijkstraBenchmark.measureTinyPathOptDijkstra     avgt    3    126.647 ±    25.790  ms/op // used int distances
+
+ Benchmark                                        Mode  Cnt     Score     Error  Units
+ DijkstraBenchmark.measurePathCustomDijkstra      avgt    3  2622.331 ± 398.498  ms/op
+ DijkstraBenchmark.measurePathDijkstra            avgt    3  2890.659 ± 621.237  ms/op
+ DijkstraBenchmark.measurePathGDXAStar            avgt    3  1028.622 ±  80.724  ms/op
+ DijkstraBenchmark.measurePathOptDijkstra         avgt    3  1685.116 ± 138.863  ms/op
+ DijkstraBenchmark.measureScanCustomDijkstra      avgt    3  2559.513 ± 475.556  ms/op
+ DijkstraBenchmark.measureScanDijkstra            avgt    3  2851.652 ± 760.477  ms/op
+ DijkstraBenchmark.measureScanOptDijkstra         avgt    3  1349.320 ± 102.441  ms/op
+ DijkstraBenchmark.measureTinyPathCustomDijkstra  avgt    3   490.634 ±  69.431  ms/op
+ DijkstraBenchmark.measureTinyPathDijkstra        avgt    3   629.138 ± 153.702  ms/op
+ DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3     5.444 ±   0.473  ms/op
+ DijkstraBenchmark.measureTinyPathOptDijkstra     avgt    3   159.189 ±  15.194  ms/op
+
+ Benchmark                                        Mode  Cnt     Score     Error  Units
+ DijkstraBenchmark.measurePathCustomDijkstra      avgt    3  3004.285 ± 632.953  ms/op
+ DijkstraBenchmark.measurePathDijkstra            avgt    3  1328.862 ± 285.102  ms/op //with "NextDijkstraMap" update
+ DijkstraBenchmark.measurePathGDXAStar            avgt    3  1207.328 ± 441.112  ms/op
+ DijkstraBenchmark.measurePathOldDijkstra         avgt    3  2463.782 ± 534.747  ms/op
+ DijkstraBenchmark.measurePathOptDijkstra         avgt    3  1957.263 ± 553.280  ms/op
+ DijkstraBenchmark.measureScanCustomDijkstra      avgt    3  2909.871 ± 636.707  ms/op
+ DijkstraBenchmark.measureScanDijkstra            avgt    3  1232.099 ± 393.546  ms/op //with "NextDijkstraMap" update
+ DijkstraBenchmark.measureScanOldDijkstra         avgt    3  2270.479 ± 961.130  ms/op
+ DijkstraBenchmark.measureScanOptDijkstra         avgt    3  1566.125 ± 218.588  ms/op
+ DijkstraBenchmark.measureTinyPathCustomDijkstra  avgt    3   516.101 ± 199.369  ms/op
+ DijkstraBenchmark.measureTinyPathDijkstra        avgt    3   189.029 ±  54.750  ms/op //with "NextDijkstraMap" update
+ DijkstraBenchmark.measureTinyPathGDXAStar        avgt    3     5.834 ±   1.558  ms/op
+ DijkstraBenchmark.measureTinyPathOldDijkstra     avgt    3   676.074 ± 138.026  ms/op
+ DijkstraBenchmark.measureTinyPathOptDijkstra     avgt    3   174.504 ±  36.419  ms/op
+
+ This next section seems slower all around, probably because the group requires the number the calculations return to
+ be printed (preventing the compiler from omitting certain parts as dead code).</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../squidpony/performance/FOVCacheBenchmark.html" title="class in squidpony.performance">FOVCacheBenchmark</a></td>
@@ -189,6 +261,21 @@
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="../../squidpony/performance/NoiseBenchmark.html" title="class in squidpony.performance">NoiseBenchmark</a></td>
+<td class="colLast">
+<div class="block">Generating 64 million points of noise, each run
+ Benchmark                            Mode  Cnt     Score     Error  Units
+ NoiseBenchmark.measureMerlin2D       avgt    4   734.085 ±  58.096  ms/op // different type of result, not smooth
+ NoiseBenchmark.measureMerlin3D       avgt    4  1082.559 ± 143.629  ms/op // different type of result, not smooth
+ NoiseBenchmark.measurePerlin2D       avgt    4  2100.514 ±  55.326  ms/op
+ NoiseBenchmark.measurePerlin3D       avgt    4  3385.798 ±  77.035  ms/op
+ NoiseBenchmark.measureWhirling2D     avgt    4  1609.510 ± 134.049  ms/op // best smooth 2D
+ NoiseBenchmark.measureWhirling3D     avgt    4  2808.307 ± 121.119  ms/op // best smooth 3D
+ NoiseBenchmark.measureWhirlingAlt2D  avgt    4  1758.283 ± 117.308  ms/op
+ NoiseBenchmark.measureWhirlingAlt3D  avgt    4  2895.686 ±  98.599  ms/op</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="../../squidpony/performance/RNGBenchmark.html" title="class in squidpony.performance">RNGBenchmark</a></td>
 <td class="colLast">
 <div class="block">Benchmark                         Mode  Cnt            Score            Error  Units
@@ -365,10 +452,32 @@
  RNGBenchmark.measureXoRo         avgt    3  1182.115 ± 146.899  ms/op
  RNGBenchmark.measureXoRoInt      avgt    3  1382.232 ±  68.132  ms/op
  RNGBenchmark.measureXoRoIntR     avgt    3  1458.964 ±  10.307  ms/op
- RNGBenchmark.measureXoRoR        avgt    3  1249.812 ± 450.441  ms/op</div>
+ RNGBenchmark.measureXoRoR        avgt    3  1249.812 ± 450.441  ms/op
+
+ Benchmark                        Mode  Cnt     Score     Error  Units
+ RNGBenchmark.measureGDX          avgt    5  1443.180 ±  21.341  ms/op
+ RNGBenchmark.measureGDXInt       avgt    5  1389.316 ±  28.694  ms/op
+ RNGBenchmark.measureLight        avgt    5  1322.170 ±  17.512  ms/op
+ RNGBenchmark.measureLightInt     avgt    5  1321.347 ±   8.074  ms/op
+ RNGBenchmark.measureLightIntR    avgt    5  1497.184 ±  63.809  ms/op
+ RNGBenchmark.measureLightR       avgt    5  1319.403 ±  16.077  ms/op
+ RNGBenchmark.measurePermuted     avgt    5  1678.603 ±  19.053  ms/op
+ RNGBenchmark.measurePermutedInt  avgt    5  1759.054 ± 253.032  ms/op
+ RNGBenchmark.measurePint         avgt    5  4433.747 ±  12.294  ms/op
+ RNGBenchmark.measurePintInt      avgt    5  1788.244 ±  14.589  ms/op
+ RNGBenchmark.measurePintIntR     avgt    5  1791.904 ±  36.237  ms/op
+ RNGBenchmark.measurePintR        avgt    5  4581.224 ±  77.325  ms/op
+ RNGBenchmark.measureThunder      avgt    5   914.464 ±   6.066  ms/op
+ RNGBenchmark.measureThunderInt   avgt    5  1075.635 ±  19.411  ms/op
+ RNGBenchmark.measureThunderIntR  avgt    5  1156.366 ±  10.684  ms/op
+ RNGBenchmark.measureThunderR     avgt    5   992.199 ±   5.749  ms/op
+ RNGBenchmark.measureXoRo         avgt    5  1353.115 ±  14.770  ms/op
+ RNGBenchmark.measureXoRoInt      avgt    5  1440.937 ±  26.151  ms/op
+ RNGBenchmark.measureXoRoIntR     avgt    5  1551.285 ±  45.324  ms/op
+ RNGBenchmark.measureXoRoR        avgt    5  1415.288 ±  28.783  ms/op</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../squidpony/performance/WaypointBenchmark.html" title="class in squidpony.performance">WaypointBenchmark</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -424,6 +533,6 @@
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

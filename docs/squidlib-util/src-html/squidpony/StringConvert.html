@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>/**<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * Used to standardize conversion for a given type, {@code T}, to and from a serialized String format.<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * This abstract class should usually be made concrete by a single-purpose class (not the type T itself).<a name="line.5"></a>
+<span class="sourceLineNo">006</span> */<a name="line.6"></a>
+<span class="sourceLineNo">007</span>public abstract class StringConvert&lt;T&gt; {<a name="line.7"></a>
+<span class="sourceLineNo">008</span>    public StringConvert() {};<a name="line.8"></a>
+<span class="sourceLineNo">009</span>    public abstract String stringify(T item);<a name="line.9"></a>
+<span class="sourceLineNo">010</span>    public abstract T restore(String text);<a name="line.10"></a>
+<span class="sourceLineNo">011</span>}<a name="line.11"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

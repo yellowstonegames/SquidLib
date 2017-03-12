@@ -113,7 +113,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.23">AStarSearch</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.40">AStarSearch</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">Performs A* search.
@@ -122,13 +122,30 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
  value to reduce the total search space. If the heuristic is too large then
  the optimal path is not guaranteed to be returned.
  <br>
- NOTE: Due to implementation problems, this class is atypically slow for A* and 34x slower than DijkstraMap on the
- same inputs. It may be improved in future versions, but for now you should strongly prefer DijkstraMap.</div>
+ This implementation outperforms DijkstraMap (it can be about 8x faster) on relatively short
+ paths (8 or less cells), but when an especially long path is requested (20 or more cells),
+ this can be slower by a significant degree (it can be 10x slower for paths of 40-50 cells).
+ This replaces an earlier version of AStarSearch that was almost always slower than
+ DijkstraMap and had serious issues. One issue was recursion-related, and previously led to
+ very long paths taking 200x as much time as DijkstraMap instead of this version's comparably
+ modest 10x slowdown on the same paths. That recursion-related issue could have caused
+ StackOverflowExceptions to be thrown when finding very long paths, though that may not have
+ occurred "in the wild." The only caveat to the optimizations here is that an AStarSearch
+ object has slightly more state that it stores now, though it also reuses more state and
+ produces less garbage data to collect.
+ <br>
+ If you want pathfinding over an arbitrary graph or need really fast searches, you may want
+ to use gdx-ai's pathfinding code in its <code>com.badlogic.gdx.ai.pfa</code> package. Their
+ <code>IndexedAStarPathFinder</code> class outperforms all of the pathfinders in squidlib in all
+ cases tested, though it has less features than DijkstraMap. You would need a dependency on
+ gdx-ai and libGDX, which the squidlib-util module does not have, but if you use the squidlib
+ display module, then you already depend on libGDX.</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
-<dd>Eben Howard - http://squidpony.com - howard@squidpony.com</dd>
+<dd>Eben Howard - http://squidpony.com - howard@squidpony.com, Tommy Ettinger - optimized code</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai"><code>a faster pathfinding algorithm with more features.</code></a>, 
+<dd><a href="../../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai"><code>a sometimes-faster pathfinding algorithm that can pathfind to multiple goals</code></a>, 
+<a href="../../squidpony/squidai/CustomDijkstraMap.html" title="class in squidpony.squidai"><code>an alternative to DijkstraMap; faster and supports complex adjacency rules</code></a>, 
 <a href="../../serialized-form.html#squidpony.squidmath.AStarSearch">Serialized Form</a></dd>
 </dl>
 </li>
@@ -171,6 +188,14 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/AStarSearch.html#dirs">dirs</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected double[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/AStarSearch.html#gCache">gCache</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/AStarSearch.html#height">height</a></span></code>&nbsp;</td>
 </tr>
@@ -179,11 +204,11 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/AStarSearch.html#map">map</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html?is-external=true" title="class or interface in java.util">HashSet</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colFirst"><code>protected <a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/AStarSearch.html#open">open</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[][]</code></td>
+<td class="colFirst"><code>protected byte[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/AStarSearch.html#parent">parent</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -317,7 +342,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>map</h4>
-<pre>protected final&nbsp;double[][] <a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.51">map</a></pre>
+<pre>protected final&nbsp;double[][] <a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.68">map</a></pre>
 </li>
 </ul>
 <a name="open">
@@ -326,7 +351,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>open</h4>
-<pre>protected final&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html?is-external=true" title="class or interface in java.util">HashSet</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt; <a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.52">open</a></pre>
+<pre>protected final&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt; <a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.69">open</a></pre>
 </li>
 </ul>
 <a name="width">
@@ -335,7 +360,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>width</h4>
-<pre>protected final&nbsp;int <a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.53">width</a></pre>
+<pre>protected final&nbsp;int <a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.70">width</a></pre>
 </li>
 </ul>
 <a name="height">
@@ -344,7 +369,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>height</h4>
-<pre>protected final&nbsp;int <a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.53">height</a></pre>
+<pre>protected final&nbsp;int <a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.70">height</a></pre>
 </li>
 </ul>
 <a name="parent">
@@ -353,7 +378,16 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>parent</h4>
-<pre>protected&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[][] <a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.54">parent</a></pre>
+<pre>protected&nbsp;byte[][] <a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.71">parent</a></pre>
+</li>
+</ul>
+<a name="gCache">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>gCache</h4>
+<pre>protected&nbsp;double[][] <a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.72">gCache</a></pre>
 </li>
 </ul>
 <a name="start">
@@ -362,7 +396,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>start</h4>
-<pre>protected&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a> <a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.55">start</a></pre>
+<pre>protected transient&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a> <a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.73">start</a></pre>
 </li>
 </ul>
 <a name="target">
@@ -371,16 +405,25 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>target</h4>
-<pre>protected&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a> <a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.55">target</a></pre>
+<pre>protected transient&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a> <a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.73">target</a></pre>
 </li>
 </ul>
 <a name="type">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>type</h4>
-<pre>protected final&nbsp;<a href="../../squidpony/squidmath/AStarSearch.SearchType.html" title="enum in squidpony.squidmath">AStarSearch.SearchType</a> <a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.56">type</a></pre>
+<pre>protected final&nbsp;<a href="../../squidpony/squidmath/AStarSearch.SearchType.html" title="enum in squidpony.squidmath">AStarSearch.SearchType</a> <a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.74">type</a></pre>
+</li>
+</ul>
+<a name="dirs">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>dirs</h4>
+<pre>protected&nbsp;<a href="../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>[] <a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.75">dirs</a></pre>
 </li>
 </ul>
 </li>
@@ -397,7 +440,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>AStarSearch</h4>
-<pre>protected&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.58">AStarSearch</a>()</pre>
+<pre>protected&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.80">AStarSearch</a>()</pre>
 </li>
 </ul>
 <a name="AStarSearch-double:A:A-squidpony.squidmath.AStarSearch.SearchType-">
@@ -406,7 +449,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>AStarSearch</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.81">AStarSearch</a>(double[][]&nbsp;map,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.108">AStarSearch</a>(double[][]&nbsp;map,
                    <a href="../../squidpony/squidmath/AStarSearch.SearchType.html" title="enum in squidpony.squidmath">AStarSearch.SearchType</a>&nbsp;type)</pre>
 <div class="block">Builds a pathing object to run searches on.
 
@@ -439,7 +482,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>path</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Queue.html?is-external=true" title="class or interface in java.util">Queue</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.102">path</a>(int&nbsp;startx,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Queue.html?is-external=true" title="class or interface in java.util">Queue</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.143">path</a>(int&nbsp;startx,
                          int&nbsp;starty,
                          int&nbsp;targetx,
                          int&nbsp;targety)</pre>
@@ -462,7 +505,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>path</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Queue.html?is-external=true" title="class or interface in java.util">Queue</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.113">path</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Queue.html?is-external=true" title="class or interface in java.util">Queue</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.154">path</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
                          <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target)</pre>
 <div class="block">Finds an A* path to the target from the start. If no path is possible,
  returns null.</div>
@@ -481,7 +524,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>g</h4>
-<pre>protected&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.195">g</a>(int&nbsp;x,
+<pre>protected&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.234">g</a>(int&nbsp;x,
                    int&nbsp;y)</pre>
 <div class="block">Finds the g value (start to current) for the given location.
 
@@ -500,7 +543,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>h</h4>
-<pre>protected&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.219">h</a>(int&nbsp;x,
+<pre>protected&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.262">h</a>(int&nbsp;x,
                    int&nbsp;y)</pre>
 <div class="block">Returns the heuristic distance from the current cell to the goal location\
  using the current calculation type.</div>
@@ -519,7 +562,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>f</h4>
-<pre>protected&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.246">f</a>(int&nbsp;x,
+<pre>protected&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.289">f</a>(int&nbsp;x,
                    int&nbsp;y)</pre>
 <div class="block">Combines g and h to get the estimated distance from start to goal going on the current route.</div>
 <dl>
@@ -539,7 +582,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>smallestF</h4>
-<pre>protected&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.257">smallestF</a>()</pre>
+<pre>protected&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.300">smallestF</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the current open point with the smallest F</dd>
@@ -552,7 +595,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.276">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.324">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -628,6 +671,6 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

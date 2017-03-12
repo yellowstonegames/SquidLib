@@ -1,0 +1,200 @@
+Abjurer	Ward field, better spread	Earth spells, better duration	Superior Grimoire, acts as Shield	Magic counter, may inflict Nullify	1	1	4	2
+Acrobat	Unarmed attacks, strong against moving	Dominance from movement	Superior Utility Harness, acts as Sandals	Speed tricks, better speed	2	3	1	2
+Adept	Hex cantrips, may inflict Curse	Holy cantrips, better accuracy	Craft primal, upgrade Totem	Foraging, identify primal	1	1	2	4
+Agent	Unarmed attacks, disrupting	Melee counter, may inflict Disarm	Superior Suit, acts as Black Belt	Speed tricks, may inflict Confuse	3	3	2	0
+Alchemist	Thrown attacks, may inflict Sicken	Craft potions, identify potions	Craft prototypes, upgrade Acid	Superior Bomb Set, better accuracy	1	3	0	4
+Anarchist	Thrown attacks, disrupting	Infuse weapons with Entropy, uses SP	Break items to regain SP, ruin mundane	Raise disruption caused by allies	4	1	1	2
+Annihilator	Entropy spells, better damage	Stance, suffer Hunger, better damage	Break items to regain SP, limitless Fury Froth	Power arcana, better damage	1	2	3	2
+Arborist	Axe attacks, Plant bane	Nature Base, limitless Nut	Foraging, identify wooden	Superior Greataxe, better accuracy	2	2	1	3
+Archer	Bow attacks, better range	Precision tricks, may inflict Pin	Superior Bow, better damage	Superior Quiver, better accuracy	0	4	1	3
+Architect	Staff attacks, Construct bane	Trap attacks, dominating	Reveal, maintenance	Limitless Safety Rune, identify stone	2	3	2	1
+Ardent	Saber attacks, dominating	Raise dominance earned by allies	Superior Saber, Holy element	Superior Heavy Armor, acts as Encyclopedia	3	1	2	2
+Armorer	Bludgeon attacks, strong against armor	Craft armor, upgrade Heavy Armor	Superior Light Armor, better resist	Superior Hammer, better damage	4	2	0	2
+Arrow Sage	Bow attacks, better accuracy	Infuse weapons with Wind, pause required	Superior Quiver, better speed	Upgrade Quiver, identify styles	0	3	3	2
+Artificer	Bludgeon attacks, better damage	Infuse weapons with Earth, uses SP	Craft arcane, identify stone	Twin Hammer, better accuracy	3	0	4	1
+Ascetic	Hunger aura, better duration	Dominance from movement	Party is immune to Hunger when fielded	Limitless Pure Water, identify divine	0	0	4	4
+Assassin	Knife attacks, better speed	Infuse weapons with Poison, ambush required	Superior Stealth Garb, acts as Utility Harness	Superior Dagger Set, better accuracy	3	3	0	2
+Astrologer	Cosmic spells, may inflict Curse	Fortune cantrips, better accuracy	Superior Orb, acts as Encyclopedia	Lucky boost, better range	0	2	4	2
+Atomic Mage	Atomic spells, may inflict Sicken	Power arcana, better accuracy	Limitless Uranium Ore, sap items	Party is immune to Atomic when fielded	1	3	0	4
+Avenger	Knife attacks, Fiend bane	Melee counter, better damage	Cleanse items, identify divine	Superior Dagger Set, Holy element	3	0	2	3
+Baffler	Whip attacks, may inflict Disarm	Precision tricks, may inflict Confuse	Superior Cape, better speed	Slow affliction, better speed	3	4	0	1
+Baker	Bludgeon attacks, may inflict Daze	Restaurant Base, upgrade Cake	Craft food, upgrade Bread	Limitless Bread, identify food	3	1	1	3
+Balancer	Spear attacks, Celestial bane	Cosmic cantrips, Fiend bane	Superior Polearm, acts as Scepter	Magic counter, may inflict Curse	3	1	4	0
+Barbarian	Axe attacks, better damage	Stance, suffer Berserk, better damage	Break items to dominate, limitless Meat	Unarmed attacks, may inflict Daze	4	0	0	4
+Bard	Daze aura, better accuracy	Sound cantrips, disrupting	Superior Instrument, better speed	Charm affliction, better duration	1	2	3	2
+Bartender	Lucky field, better duration	Unarmed attacks, may inflict Daze	Restaurant Base, cleanse items	Limitless Beer, identify potions	2	2	0	4
+Beguiler	Charm aura, better duration	Dominance from enemy ailments	Superior Elegant Garb, acts as Orb	Hex cantrips, better accuracy	1	1	3	3
+Berserker	Wild attacks, better damage	Stance, suffer Berserk, better speed	Superior Cloak, acts as Totem	Immune to Poison, Fear, Pain	4	0	2	2
+Binder	Vile attacks, may inflict Curse	Cosmic spells, Celestial bane	Superior Crown, acts as Grimoire	Academy base, identify occult	3	2	3	0
+Bladesmith	Blade attacks, dominating	Precision tricks, may inflict Disarm	Craft weapons, upgrade Katana	Upgrade Longsword, upgrade Broadsword	4	2	0	2
+Blighter	Sicken aura, better duration	Poison cantrips, Plant bane	Wasting cantrips, Animal bane	Defile items, identify primal	3	1	0	4
+Blood Mage	Wasting spells, may inflict Curse	Stance, suffer Bloodlet, better speed	Limitless Serum, identify potions	Hex cantrips, better accuracy	1	1	2	4
+Bodyguard	Unarmed attacks, may inflict Disarm	Dominance from taking damage	Superior Suit, acts as Light Armor	Melee counter, better speed	4	1	1	2
+Bomber	Thrown attacks, better spread	Trap attacks, better damage	Superior Bomb Set, better damage	Craft prototypes, upgrade Sticky Flame	0	4	3	1
+Bone Mage	Wasting spells, dominating	Melee counter, better damage	Superior Light Armor, acts as Armor Spikes	Ward boost, better duration	3	2	1	2
+Bowyer	Bow attacks, better damage	Craft weapons, upgrade Quiver	Superior Bow, better speed	Upgrade Bow, upgrade Crossbow	2	4	0	2
+Brahmin	Serene field, better duration	Dominance from enemies using skills	Limitless Prayer Bead, identify written	Academy base, limitless Pure Water	2	2	3	1
+Brewer	Confuse aura, better accuracy	Restaurant Base, limitless Beer	Craft potions, upgrade Liquor	Sicken affliction, better accuracy	3	1	1	3
+Brute	Unarmed attacks, better damage	Melee counter, disrupting	Break items to disrupt, ruin mundane	Immune to Sicken, Scorn, Pain	4	1	0	3
+Butcher	Knife attacks, Animal bane	Craft foods, upgrade Meat	Ruin mundane, poach monsters	Superior Carving Knife, better damage	3	1	0	4
+Cackling Witch	Curse aura, better duration	Hex cantrips, disrupting	Defile items, recharge items	Sound cantrips, better spread	1	0	4	3
+Cannoneer	Gun attacks, better range	Power tricks, better accuracy	Superior Cannon, better damage	Limitless Blast Powder, break items to disrupt	2	4	0	2
+Cantor	Ward field, better accuracy	Holy cantrips, dominating	Superior Instrument, acts as Crystal	Sound cantrips, better duration	2	1	4	1
+Cavalier	Spear attacks, dominating	Dominance from being seen	Superior Lance, better damage	Power tricks, better speed	3	2	1	2
+Chaser	Spear attacks, may inflict Slow	Dominance from movement	Foraging, poach monsters	Superior Totem, acts as Sandals	3	1	1	3
+Cheesemaker	Sicken aura, better duration	Dominance from enemy ailments	Craft foods, upgrade Cheese	Foraging, defile items	1	1	2	4
+Chronomancer	Slow aura, better accuracy	Time spells, better duration	Party is immune to Slow when fielded	Stance, suffer Curse, better speed	0	3	3	2
+Churchless Cleric	Holy spells, disrupting	Cleanse items, recharge items	Party is immune to Wasting when fielded	Staff attacks, better speed	2	1	4	1
+Confectioner	Haste field, better spread	Restaurant Base, limitless Candy	Craft foods, upgrade Candy	Pin affliction, better accuracy	1	3	1	3
+Conjurer	Earth spells, dominating	Wind spells, disrupting	Limitless Acid, identify arcane	Water spells, better accuracy	2	1	3	2
+Crossbowman	Bow attacks, strong against armor	Stance, suffer Slow, better accuracy	Superior Crossbow, better range	Precision tricks, may inflict Slow	1	4	1	2
+Daggermaster	Knife attacks, better accuracy	Speed tricks, may inflict Bloodlet	Superior Dagger Set, better speed	Melee counter, may inflict Disarm	3	3	1	1
+Dark Mage	Blind aura, better accuracy	Shadow spells, better accuracy	Party is immune to Blind when fielded	Superior Orb, better damage	0	4	4	0
+Dawnblade	Saber attacks, better accuracy	Time cantrips, better duration	Superior Saber, Light element	Serene boost, better accuracy	4	2	2	0
+Death Knight	Blade attacks, may inflict Pain	Infuse weapons with Wasting, uses SP	Superior Broadsword, better damage	Power tricks, better accuracy	3	2	0	3
+Demonwearer	Vile attacks, better speed	Whip attacks, may inflict Pain	Superior Cape, acts as Armor Spikes	Melee counter, better damage	4	2	0	2
+Diplomat	Charm aura, dominating	Superior Marque, acts as Elegant Garb	Party is immune to Scorn when fielded	Limitless Shackle Glyph, identify written	1	2	4	1
+Disciple	Saber attacks, strong against armor	Wind cantrips, better speed	Superior Saber, acts as Light Armor	Ranged counter, better speed	2	2	2	2
+Diviner	Gun attacks, better accuracy	Fortune spells, better duration	Superior Cannon, better range	Identify arcane, reveal	0	3	4	1
+Doctor	Knife attacks, better accuracy	Party is immune to Pain when fielded	Preserve corpses, poach monsters	Academy base, limitless Liquor	2	1	1	4
+Doomsayer	Fear aura, better spread	Hex cantrips, disrupting	Defile items, identify occult	Superior Hat, acts as Orb	1	1	3	3
+Dracomancer	Staff attacks, dominating	Fire cantrips, better spread	Superior Staff, acts as Scepter	Fear affliction, better duration	3	1	3	1
+Dressmaker	Slow aura, dominating	Dominance from being seen	Craft clothing, upgrade Elegant Garb	Disarm affliction, better accuracy	3	1	4	0
+Druid	Wild attacks, dominating	Nature Base, limitless Fruit	Foraging, identify primal	Limitless Armor Seed, poach monsters	3	0	1	4
+Duskblade	Saber attacks, better speed	Hex spells, dominating	Superior Saber, Atomic element	Melee counter, disrupting	4	3	0	1
+Earth Mage	Earth spells, may inflict Pin	Power arcana, better damage	Reveal, maintenance	Limitless Rumble Stone, identify stone	2	1	3	2
+Elite Trooper	Unarmed attacks, better speed	Gun attacks, better damage	Superior Heavy Armor, acts as Musket	Speed tricks, better accuracy	3	3	0	2
+Empath	Confuse aura, disrupting	Fortune cantrips, dominating	Party is immune to Confuse when fielded	Raise dominance earned by allies	1	1	3	3
+Enforcer	Order spells, may inflict Pin	Precision arcana, dominating	Superior Grimoire, better accuracy	Nullify affliction, better accuracy	0	2	4	2
+Eternalist	Time cantrips, better accuracy	Craft occult, upgrade Soul Smoke	Preserve corpses, identify occult	Academy base, upgrade Grimoire	2	2	1	3
+Evangelist	Inspire field, better duration	Dominance from taking damage	Party is immune to Fear when fielded	Confuse affliction, better accuracy	1	1	2	4
+Evoker	Storm spells, better speed	Power arcana, better spread	Superior Scepter, better accuracy	Fire spells, better damage	1	3	3	1
+Exemplar	Unarmed attacks, dominating	Infuse weapons with Atomic, uses SP	Superior Crown, acts as Light Armor	Melee counter, better damage	3	2	3	0
+Exorcist	Holy spells, Fiend bane	Limitless Pure Water, preserve corpses	Immune to Wasting, Curse, Fear	Angelic attacks, disrupting	2	0	4	2
+Fencer	Saber attacks, disrupting	Speed tricks, better accuracy	Superior Saber, better accuracy	Melee counter, better speed	4	2	1	1
+Feytouched	Charm aura, better accuracy	Hex cantrips, dominating	Immune to Charm, Confuse, Berserk	Scorn affliction, better speed	0	2	2	4
+Fire Mage	Fire spells, better spread	Power arcana, disrupting	Party is immune to Fire when fielded	Limitless Sticky Flame, cleanse items	1	2	4	1
+Fisherman	Thrown attacks, Animal bane	Trap attacks, better accuracy	Limitless Fish, poach monsters	Superior Net, better speed	2	3	0	3
+Fishmonger	Knife attacks, may inflict Scorn	Restaurant Base, upgrade Fish	Limitless Fish, maintenance	Raise disruption caused by allies	3	1	1	3
+Fist Fighter	Unarmed attacks, better damage	Speed tricks, may inflict Daze	Limitless Liquor, identify styles	Melee counter, may inflict Confuse	4	1	0	3
+Gadgeteer	Bow attacks, disrupting	Craft prototypes, upgrade Crossbow	Superior Utility Harness, acts as Light Armor	Trap attacks, better speed	2	4	1	1
+Gambler	Lucky field, better accuracy	Fortune cantrips, better speed	Superior Hat, acts as Grimoire	Hex cantrips, better speed	1	2	3	2
+Gatekeeper	Ward field, better speed	Cosmic spells, Fiend bane	Cleanse items, maintenance	Superior Fossil Fang, acts as Totem	1	0	4	3
+Gatherer	Reduce disruption affecting allies	Nature Base, limitless Fruit	Limitless Nut, identify food	Limitless Vegetable, foraging	2	1	1	4
+Geometer	Serene field, dominating	Reveal, maintenance	Limitless Safety Rune, cleanse items	Fortune cantrips, better range	2	3	3	0
+Gladiator	Blade attacks, better speed	Power tricks, dominating	Superior Shortsword, better damage	Melee counter, may inflict Scorn	4	1	0	3
+Haberdasher	Inspire field, better duration	Dominance from being seen	Craft clothing, upgrade Hat	Charm affliction, better accuracy	1	2	3	2
+Harlequin	Fear aura, better accuracy	Thrown attacks, disrupting	Superior Bomb Set, better speed	Speed tricks, may inflict Curse	2	3	0	3
+Havoc Mage	Confuse aura, better spread	Whip attacks, disrupting	Entropy spells, better damage	Superior Flail, acts as Scepter	3	1	1	3
+Hedge Mage	Cosmic cantrips, better accuracy	Holy cantrips, disrupting	Craft potions, upgrade Ambrosia	Cleanse items, foraging	1	1	3	3
+Herder	Staff attacks, dominating	Dominance from movement	Party is immune to Confuse when fielded	Raise dominance earned by allies	2	1	1	4
+Hive Caller	Pain aura, disrupting	Poison cantrips, better accuracy	Superior Light Armor, acts as Cloak	Nature base, limitless Honey	1	2	1	4
+Holy Cleric	Holy spells, dominating	Magic counter, disrupting	Cleanse items, identify divine	Reduce disruption affecting allies	1	1	4	2
+Hooligan	Thrown attacks, disrupting	Break items to disrupt, limitless Egg	Limitless Beer, ruin mundane	Raise disruption caused by allies	2	3	0	3
+Hoplite	Spear attacks, better damage	Bludgeon attacks, may inflict Daze	Melee counter, dominating	Superior Shield, better accuracy	4	1	1	2
+Hunter	Bow attacks, Animal bane	Nature Base, upgrade Meat	Precision tricks, better damage	Limitless Meat, poach monsters	1	3	0	4
+Hurler	Thrown attacks, better damage	Speed tricks, better accuracy	Superior Javelin Set, better range	Superior Handaxe Set, better speed	1	4	0	3
+Ice Master	Water spells, may inflict Slow	Precision arcana, dominating	Limitless Pure Water, preserve corpses	Limitless Cold Snap, sap items	0	2	3	3
+Ice Stalker	Thrown attacks, may inflict Curse	Infuse weapons with Water, ambush required	Superior Javelin Set, better damage	Superior Stealth Garb, acts as Cloak	2	2	0	4
+Illusionist	Confuse aura, dominating	Light cantrips, may inflict Daze	Party is immune to Confuse when fielded	Superior Orb, acts as Amulet	0	4	3	1
+Impaler	Spear attacks, may inflict Pin	Power tricks, better accuracy	Superior Longspear, better damage	Melee counter, better speed	3	2	0	3
+Inquisitor	Bow attacks, dominating	Infuse weapons with Holy, pause required	Superior Crossbow, better accuracy	Superior Relic, acts as Amulet	1	2	3	2
+Jeweler	Scorn aura, better accuracy	Craft stone, upgrade Crystal	Limitless Uranium Ore, identify stone	Upgrade Orb, upgrade Crown	2	2	4	0
+Juggernaut	Bow attacks, better accuracy	Melee counter, better damage	Superior Heavy Armor, acts as Armor Spikes	Superior Crossbow, better damage	4	3	0	1
+Justiciar	Spear attacks, dominating	Infuse weapons with Order, uses SP	Limitless Shackle Glyph, maintenance	Superior Marque, acts as Encyclopedia	3	1	2	2
+Kensei	Blade attacks, better accuracy	Speed tricks, may inflict Disarm	Superior Katana, better damage	Dominance from enemies using skills	4	2	1	1
+Khan	Bow attacks, dominating	Dominance from movement	Superior Bow, better range	Power tricks, better speed	1	4	0	3
+Kineticist	Wind cantrips, better speed	Precision arcana, may inflict Slow	Party is immune to Pin when fielded	Superior Crystal, acts as Sandals	1	4	2	1
+Lasher	Whip attacks, dominating	Dominance from being seen	Superior Whip, better accuracy	Superior Light Armor, acts as Crown	3	2	1	2
+Liberator	Blade attacks, disrupting	Party is immune to Slow when fielded	Superior Broadsword, better speed	Speed tricks, may inflict Disarm	2	1	2	3
+Light Mage	Light spells, better accuracy	Precision arcana, may inflict Blind	Limitless Sun Drop, recharge items	Superior Elegant Garb, acts as Robe	1	2	4	1
+Lorekeeper	Raise dominance earned by allies	Craft written, upgrade Encyclopedia	Party is immune to Berserk when fielded	Academy base, limitless Forbidden Scroll	2	2	4	0
+Magekiller	Knife attacks, may inflict Nullify	Superior Carving Knife, better damage	Limitless Dispel Gel, identify arcane	Magic counter, better speed	1	1	4	2
+Maharaja	Inspire field, dominating	Dominance from being seen	Superior Elegant Garb, acts as Crown	Limitless Pure Water, acquire valuable	2	1	4	1
+Marauder	Thrown attacks, strong against moving	Speed tricks, disrupting	Superior Handaxe Set, better damage	Raise disruption caused by allies	3	3	0	2
+Marksman	Bow attacks, better accuracy	Precision tricks, better speed	Superior Crossbow, better range	Ranged counter, better damage	2	4	1	1
+Martial Savant	Unarmed attacks, better accuracy	Melee counter, better damage	Superior Cloak, acts as Black Belt	Precision tricks, better speed	4	4	0	0
+Mask Maker	Fear aura, disrupting	Axe attacks, dominating	Craft primal, upgrade Mask	Superior Hatchet, better accuracy	2	0	3	3
+Mastermind	Confuse aura, dominating	Raise dominance earned by allies	Reveal, identify valuable	Party is immune to Confuse when fielded	2	3	3	0
+Merchant	Charm aura, disrupting	Acquire arcane, maintenance	Acquire mundane, identify valuable	Confuse affliction, better speed	2	2	2	2
+Merged Warrior	Blade attacks, better damage	Melee counter, Earth element	Immune to Hunger, Pain, Bloodlet	Superior Heavy Armor, acts as Utility Harness	4	1	0	3
+Metamancer	Energize field, better accuracy	Magic counter, better speed	Party is immune to Nullify when fielded	Curse affliction, better accuracy	0	0	4	4
+Mindblade	Knife attacks, dominating	Wind cantrips, better accuracy	Superior Dagger Set, acts as Orb	Precision tricks, may inflict Confuse	3	3	1	1
+Mirror Mage	Light spells, better spread	Magic counter, may inflict Curse	Party is immune to Light when fielded	Superior Robe, acts as Light Armor	1	3	4	0
+Mob Boss	Bludgeon attacks, dominating	Raise dominance earned by allies	Superior Hat, acts as Crown	Limitless Liquor, acquire valuable	3	1	0	4
+Monk	Unarmed attacks, better speed	Melee counter, Void element	Superior Black Belt, acts as Light Armor	Dominance from movement	4	1	1	2
+Mugger	Knife attacks, dominating	Power tricks, disrupting	Acquire mundane, ruin mundane	Raise disruption caused by allies	3	3	0	2
+Musketeer	Gun attacks, strong against armor	Precision tricks, better damage	Superior Musket, better range	Superior Heavy Armor, acts as Mask	1	4	2	1
+Mutant	Fear aura, disrupting	Atomic cantrips, better damage	Party is immune to Atomic when fielded	Immune to Nullify, Pain, Sicken	2	2	0	4
+Mystic	Unarmed attacks, disrupting	Fortune cantrips, better duration	Superior Sandals, acts as Black Belt	Superior Robe, acts as Crystal	3	0	4	1
+Natural Cleric	Holy cantrips, better speed	Nature Base, identify primal	Foraging, identify divine	Earth cantrips, disrupting	0	1	4	3
+Necromancer	Wasting spells, dominating	Raise dominance earned by allies	Superior Grimoire, better damage	Power arcana, better accuracy	2	2	1	3
+Nihang	Blade attacks, better speed	Melee counter, disrupting	Superior Chakram Set, better damage	Superior Shortsword, better accuracy	2	4	0	2
+Ninja	Thrown attacks, disrupting	Speed tricks, better accuracy	Superior Shuriken Set, better speed	Trap attacks, may inflict Blind	3	3	1	1
+Noble	Inspire field, dominating	Raise dominance earned by allies	Superior Crown, acts as Marque	Limitless Wine, acquire valuable	2	3	3	0
+Officer	Inspire field, better spread	Saber attacks, dominating	Party is immune to Fear when fielded	Superior Scimitar, better accuracy	3	2	1	2
+Orthodox Cleric	Holy spells, dominating	Superior Symbol, acts as Crown	Craft divine, identify divine	Power arcana, better spread	2	1	4	1
+Paladin	Inspire field, better accuracy	Blade attacks, Fiend Bane	Superior Longsword, Holy element	Superior Heavy Armor, better resist	3	0	3	2
+Pantheon Acolyte	Holy cantrips, disrupting	Speed arcana, dominating	Superior Symbol, acts as Scepter	Angelic attacks, may inflict Confuse	1	3	3	1
+Phantom	Knife attacks, may inflict Bloodlet	Shadow cantrips, better speed	Superior Carving Knife, Shadow element	Superior Stealth Garb, acts as Mask	2	4	1	1
+Philosopher	Void cantrips, may inflict Confuse	Magic counter, dominating	Superior Grimoire, better accuracy	Academy base, identify arcane	1	3	4	0
+Pirate	Saber attacks, disrupting	Melee counter, better damage	Limitless Black Spot, identify valuable	Raise disruption caused by allies	4	1	0	3
+Pistoleer	Gun attacks, disrupting	Ranged counter, better accuracy	Superior Derringer Set, better range	Speed tricks, better damage	2	4	1	1
+Plains Ravager	Thrown attacks, may inflict Fear	Power tricks, disrupting	Superior Handaxe Set, better speed	Party is immune to Fear when fielded	3	2	0	3
+Poison Oracle	Knife attacks, may inflict Curse	Fortune cantrips, dominating	Limitless Egg, foraging	Superior Carving Knife, Poison element	2	1	2	3
+Pole Master	Staff attacks, may inflict Daze	Melee counter, better speed	Superior Pole, better damage	Power tricks, better speed	4	0	0	4
+Powderwitch	Gun attacks, may inflict Fear	Hex cantrips, better accuracy	Craft prototypes, upgrade Blast Powder	Superior Pistol, better range	0	3	2	3
+Prophet	Aware field, better accuracy	Reduce disruption affecting allies	Party is immune to Daze when fielded	Confuse affliction, better duration	0	4	2	2
+Quilter	Whip attacks, may inflict Slow	Superior Cape, better accuracy	Craft clothing, upgrade Cloak	Superior Robe, acts as Crystal	3	1	4	0
+Raider	Axe attacks, disrupting	Power tricks, may inflict Fear	Limitless Liquor, acquire mundane	Raise disruption caused by allies	3	2	0	3
+Ranger	Blade attacks, better speed	Speed tricks, better damage	Twin Shortsword, better accuracy	Superior Cloak, acts as Stealth Garb	3	1	0	4
+Remaker	Holy cantrips, dominating	Limitless Prayer Bead, recharge items	Craft divine, upgrade Relic	Angelic attacks, better damage	2	2	4	0
+Revolutionary	Inspire field, better speed	Blade attacks, disrupting	Party is immune to Order when fielded	Speed tricks, better damage	2	2	1	3
+Rogue	Knife attacks, better speed	Precision tricks, disrupting	Superior Dagger Set, better accuracy	Acquire valuable, identify valuable	3	3	1	1
+Runeknife	Knife attacks, Construct bane	Infuse weapons with Void, uses SP	Superior Carving Knife, better damage	Time cantrips, better speed	3	1	3	1
+Samurai	Blade attacks, better speed	Superior Heavy Armor, acts as Sandals	Superior Katana, acts as Marque	Melee counter, better accuracy	4	0	3	1
+Sand Soldier	Blade attacks, may inflict Confuse	Melee counter, Fire element	Superior Scimitar, better speed	Immune to Fire, Poison, Bloodlet	4	2	0	2
+Scar Warrior	Spear attacks, may inflict Fear	Stance, suffer Bloodlet, better damage	Superior Longspear, better speed	Melee counter, better damage	3	1	0	4
+Scout	Aware field, better speed	Bow attacks, may inflict Slow	Superior Stealth Garb, acts as Cloak	Speed tricks, disrupting	0	4	0	4
+Sentinel	Spear attacks, better accuracy	Melee counter, dominating	Party is immune to Entropy when fielded	Aware boost, better speed	4	1	2	1
+Shaman	Holy spells, better speed	Fortune spells, better duration	Superior Mask, acts as Grimoire	Speed arcana, disrupting	1	0	3	4
+Shaper	Poison cantrips, may inflict Sicken	Craft potions, upgrade Serum	Limitless Egg, acquire wooden	Party is immune to Poison when fielded	3	1	0	4
+Shapeshifter	Wild attacks, may inflict Confuse	Vile attacks, better damage	Immune to Poison, Bloodlet, Slow	Angelic attacks, better accuracy	2	2	0	4
+Shieldbearer	Bludgeon attacks, dominating	Superior Shield, acts as Crystal	Superior Heavy Armor, better resist	Melee counter, may inflict Daze	4	2	0	2
+Shock Mage	Storm spells, better accuracy	Speed arcana, better damage	Recharge items, sap items	Magic counter, may inflict Daze	1	2	4	1
+Skin Mage	Whip attacks, may inflict Sicken	Wasting spells, better speed	Superior Cape, acts as Grimoire	Limitless Meat, identify occult	2	2	1	3
+Skirmisher	Thrown attacks, may inflict Confuse	Speed tricks, disrupting	Superior Dagger Set, better speed	Trap attacks, disrupting	3	3	0	2
+Slime Mage	Sicken aura, disrupting	Poison spells, better accuracy	Defile items, cleanse items	Superior Crystal, acts as Light Armor	1	1	2	4
+Sohei	Spear attacks, better speed	Infuse weapons with Fire, pause required	Superior Polearm, better accuracy	Melee counter, dominating	4	1	1	2
+Sommelier	Scorn aura, dominating	Restaurant Base, upgrade Wine	Limitless Wine, identify potions	Limitless Cheese, cleanse items	0	4	4	0
+Sound Mage	Daze aura, disrupting	Sound spells, better spread	Party is immune to Sound when fielded	Superior Instrument, better accuracy	1	1	3	3
+Spellthief	Time cantrips, may inflict Nullify	Magic counter, disrupting	Recharge items, sap items	Superior Orb, acts as Robe	1	2	4	1
+Spike Knight	Unarmed attacks, may inflict Bloodlet	Melee counter, better accuracy	Superior Armor Spikes, acts as Black Belt	Superior Heavy Armor, better resist	4	2	0	2
+Spirit Drummer	Haste field, better duration	Sound spells, better speed	Superior Instrument, acts as Sandals	Party is immune to Slow when fielded	1	1	3	3
+Staffguard	Staff attacks, better damage	Order cantrips, dominating	Superior Staff, acts as Orb	Superior Heavy Armor, acts as Crystal	3	1	3	1
+Stage Magician	Confuse aura, disrupting	Dominance from being seen	Superior Hat, acts as Scepter	Superior Suit, acts as Elegant Garb	3	4	0	1
+Swamp Lord	Water cantrips, may inflict Sicken	Poison cantrips, dominating	Defile items, foraging	Power arcana, better spread	2	2	0	4
+Swashbuckler	Saber attacks, may inflict Scorn	Melee counter, better accuracy	Superior Saber, better speed	Speed tricks, disrupting	4	3	1	0
+Swordmaster	Blade attacks, better accuracy	Power tricks, better speed	Superior Longsword, better damage	Melee counter, may inflict Bloodlet	4	2	0	2
+Tailor	Ward field, better duration	Reduce disruption affecting allies	Craft clothing, upgrade Suit	Upgrade Stealth Garb, identify clothing	2	2	3	1
+Tamer	Whip attacks, Animal bane	Nature Base, foraging	Superior Whip, acts as Totem	Power tricks, dominating	3	1	0	4
+Telepath	Aware field, dominating	Dominance from enemies using skills	Superior Crystal, acts as Marque	Charm affliction, better speed	0	2	4	2
+Theologist	Holy spells, better accuracy	Power arcana, dominating	Superior Symbol, acts as Grimoire	Magic counter, Fiend bane	2	2	4	0
+Thief	Unarmed attacks, may inflict Disarm	Limitless Safety Rune, acquire mundane	Superior Stealth Garb, acts as Black Belt	Speed tricks, disrupting	2	3	2	1
+Thunderfury	Axe attacks, may inflict Daze	Infuse weapons with Storm, uses SP	Superior Greataxe, better damage	Power tricks, dominating	3	2	0	3
+Totem Incarnate	Wild attacks, better damage	Superior Totem, acts as Light Armor	Immune to Earth, Fear, Pain	Party is immune to Curse when fielded	2	0	2	4
+Trapper	Thrown attacks, better accuracy	Trap attacks, may inflict Slow	Limitless Shackle Glyph, reveal	Superior Handaxe Set, better damage	0	3	1	4
+Trickster	Confuse aura, disrupting	Thrown attacks, better speed	Superior Razor Deck, better accuracy	Ranged counter, disrupting	1	4	2	1
+Truenamer	Cosmic cantrips, may inflict Curse	Sound cantrips, better accuracy	Craft written, upgrade Grimoire	Academy base, identify written	1	3	4	0
+Unbeliever	Gun attacks, Celestial bane	Superior Pistol, better speed	Immune to Holy, Order, Curse	Precision tricks, may inflict Nullify	0	2	4	2
+Viking	Axe attacks, better damage	Power tricks, disrupting	Superior Greataxe, better damage	Superior Hat, acts as Light Armor	4	1	0	3
+Void Mage	Void spells, may inflict Nullify	Precision arcana, better duration	Immune to Void, Nullify, Scorn	Superior Orb, better speed	0	1	4	3
+Warden	Spear attacks, dominating	Nature Base, foraging	Melee counter, Earth element	Superior Heavy Armor, acts as Totem	4	0	1	3
+Warlock	Wasting cantrips, may inflict Curse	Precision arcana, better speed	Superior Scepter, better accuracy	Limitless Fury Froth, defile items	1	4	2	1
+Water Mage	Water spells, better accuracy	Power arcana, better spread	Limitless Pure Water, cleanse items	Party is immune to Water when fielded	2	1	2	3
+Wild Mage	Lucky field, better spread	Storm cantrips, disrupting	Break items to regain SP, limitless Candy	Raise disruption caused by allies	2	2	3	1
+Wind Mage	Wind spells, better speed	Ranged counter, better damage	Superior Orb, acts as Sandals	Speed arcana, better accuracy	0	4	3	1
+Xenomancer	Cosmic spells, may inflict Hunger	Magic counter, dominating	Immune to Nullify, Confuse, Daze	Superior Amulet, acts as Robe	0	1	4	3
+Yakuza	Blade attacks, may inflict Fear	Superior Suit, acts as Mask	Superior Katana, better speed	Party is immune to Pain when fielded	3	2	0	3
+Zealot	Knife attacks, may inflict Pain	Power tricks, better speed	Superior Carving Knife, Holy element	Immune to Fear, Pain, Scorn	3	2	0	3
+Zen Sniper	Bow attacks, strong against moving	Unarmed attacks, better speed	Superior Bow, acts as Black Belt	Ranged counter, better accuracy	2	4	1	1

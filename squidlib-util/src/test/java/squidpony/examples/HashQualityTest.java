@@ -1,10 +1,8 @@
 package squidpony.examples;
 
 import squidpony.FakeLanguageGen;
-import squidpony.squidmath.CrossHash;
-import squidpony.squidmath.IntDoubleOrderedMap;
-import squidpony.squidmath.LongPeriodRNG;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidgrid.Radius;
+import squidpony.squidmath.*;
 
 import java.util.Arrays;
 
@@ -56,7 +54,8 @@ public class HashQualityTest {
     public static void main(String[] args)
     {
         CrossHash.Storm storm = CrossHash.Storm.chi;
-        /*
+        CrossHash.Chariot chariot = CrossHash.Chariot.theta;
+
         byte[][] bytes = {
                 null,
                 {},
@@ -79,6 +78,8 @@ public class HashQualityTest {
                 {-7}, {-7, -7}, {-7, -7, -7},
                 {-8}, {-8, -8}, {-8, -8, -8},
                 {-31}, {-31, -31}, {-31, -31, -31},
+                {127}, {127, 127}, {127, 127, 127},
+                {-128}, {(byte)0xC0}, {(byte)0xF0},
         };
         short[][] shorts = {
                 null,
@@ -102,6 +103,8 @@ public class HashQualityTest {
                 {-7}, {-7, -7}, {-7, -7, -7},
                 {-8}, {-8, -8}, {-8, -8, -8},
                 {-31}, {-31, -31}, {-31, -31, -31},
+                {0x7fff}, {0x7fff, 0x7fff}, {0x7fff, 0x7fff, 0x7fff},
+                {-0x8000}, {(short)0xC000}, {(short)0xFF00},
         };
         int[][] ints = {
                 null,
@@ -125,6 +128,8 @@ public class HashQualityTest {
                 {-7}, {-7, -7}, {-7, -7, -7},
                 {-8}, {-8, -8}, {-8, -8, -8},
                 {-31}, {-31, -31}, {-31, -31, -31},
+                {0x7fffffff}, {0x7fffffff, 0x7fffffff}, {0x7fffffff, 0x7fffffff, 0x7fffffff},
+                {0x80000000}, {0xC0000000}, {0xFF000000},
         };
         long[][] longs = {
                 null,
@@ -148,6 +153,10 @@ public class HashQualityTest {
                 {-7}, {-7, -7}, {-7, -7, -7},
                 {-8}, {-8, -8}, {-8, -8, -8},
                 {-31}, {-31, -31}, {-31, -31, -31},
+                {0x7fffffffffffffffL}, {0x7fffffffffffffffL, 0x7fffffffffffffffL}, {0x7fffffffffffffffL, 0x7fffffffffffffffL, 0x7fffffffffffffffL},
+                {0x8000000000000000L, 0x8000000000000000L, 0x8000000000000000L},
+                {0xC000000000000000L, 0xC000000000000000L, 0xC000000000000000L},
+                {0xFF00000000000000L, 0xFF00000000000000L, 0xFF00000000000000L},
         };
         Object[][] objects = {
             null,
@@ -228,6 +237,9 @@ public class HashQualityTest {
                 {new SquidID(5, 5), null},
                 {new SquidID(5, 5), null, new SquidID(5, 5), null},
                 {new SquidID(5, 5), null, new SquidID(5, 5), null, new SquidID(5, 5), null},
+
+                {Coord.get(0, 0)}, {Coord.get(0, 0), Coord.get(0, 0)}, {Coord.get(0, 0), Coord.get(0, 0), Coord.get(0, 0)},
+                {Coord.get(-1, -1)}, {Coord.get(-1, -1), Coord.get(-1, -1)}, {Coord.get(-1, -1), Coord.get(-1, -1), Coord.get(-1, -1)},
         };
         int len = bytes.length;
         for (int i = 0; i < len; i++) {
@@ -273,15 +285,35 @@ public class HashQualityTest {
             System.out.println("Falcon longs: " + CrossHash.Falcon.hash(longs[i]));
             System.out.println("Falcon objects: " + CrossHash.Falcon.hash(objects[i]));
         }
-        */
 
-        int longHashLength = 0x100000, stringHashLength = 0xC0000;
+
+        for (int i = 0; i < len; i++) {
+            System.out.println(Arrays.toString(longs[i]));
+            System.out.println("Chariot bytes: " + chariot.hash(bytes[i]));
+            System.out.println("Chariot shorts: " + chariot.hash(shorts[i]));
+            System.out.println("Chariot ints: " + chariot.hash(ints[i]));
+            System.out.println("Chariot longs: " + chariot.hash(longs[i]));
+            System.out.println("Chariot objects: " + chariot.hash(objects[i]));
+        }
+
+        for (int i = 0; i < len; i++) {
+            System.out.println(Arrays.toString(longs[i]));
+            System.out.println("Wisp bytes: " + CrossHash.Wisp.hash(bytes[i]));
+            System.out.println("Wisp shorts: " + CrossHash.Wisp.hash(shorts[i]));
+            System.out.println("Wisp ints: " + CrossHash.Wisp.hash(ints[i]));
+            System.out.println("Wisp longs: " + CrossHash.Wisp.hash(longs[i]));
+            System.out.println("Wisp objects: " + CrossHash.Wisp.hash(objects[i]));
+        }
+
+
+        int longHashLength = 0x80000, stringHashLength = 0xC0000;
         IntDoubleOrderedMap colliderJDK = new IntDoubleOrderedMap(longHashLength, 0.75f),
                 colliderFNV = new IntDoubleOrderedMap(longHashLength, 0.75f),
                 colliderLit = new IntDoubleOrderedMap(longHashLength, 0.75f),
                 colliderSto = new IntDoubleOrderedMap(longHashLength, 0.75f),
                 colliderFal = new IntDoubleOrderedMap(longHashLength, 0.75f),
-                colliderWis = new IntDoubleOrderedMap(longHashLength, 0.75f);
+                colliderWis = new IntDoubleOrderedMap(longHashLength, 0.75f),
+                colliderCha = new IntDoubleOrderedMap(longHashLength, 0.75f);
         LongPeriodRNG lprng = new LongPeriodRNG();
 
         System.out.println("Long Hashing:");
@@ -297,6 +329,7 @@ public class HashQualityTest {
                 colliderSto.put(storm.hash(lprng.state) & mask, i);
                 colliderFal.put(CrossHash.Falcon.hash(lprng.state) & mask, i);
                 colliderWis.put(CrossHash.Wisp.hash(lprng.state) & mask, i);
+                colliderCha.put(chariot.hash(lprng.state) & mask, i);
             }
             System.out.println("JDK collisions, " + bits + "-bit: " + (longHashLength - colliderJDK.size()));
             System.out.println("FNV collisions, " + bits + "-bit: " + (longHashLength - colliderFNV.size()));
@@ -304,6 +337,7 @@ public class HashQualityTest {
             System.out.println("Sto collisions, " + bits + "-bit: " + (longHashLength - colliderSto.size()));
             System.out.println("Fal collisions, " + bits + "-bit: " + (longHashLength - colliderFal.size()));
             System.out.println("Wis collisions, " + bits + "-bit: " + (longHashLength - colliderWis.size()));
+            System.out.println("Cha collisions, " + bits + "-bit: " + (longHashLength - colliderCha.size()));
             System.out.println();
             colliderJDK.clear();
             colliderFNV.clear();
@@ -311,6 +345,7 @@ public class HashQualityTest {
             colliderSto.clear();
             colliderFal.clear();
             colliderWis.clear();
+            colliderCha.clear();
         }
 
         System.out.println("\nString Hashing:");
@@ -333,6 +368,7 @@ public class HashQualityTest {
             colliderSto.put(storm.hash(massive, s, s+e+32) & restrict, i);
             colliderFal.put(CrossHash.Falcon.hash(massive, s, s+e+32) & restrict, i);
             colliderWis.put(CrossHash.Wisp.hash(massive, s, s+e+32) & restrict, i);
+            colliderCha.put(chariot.hash(massive, s, s+e+32) & restrict, i);
             if(e >= 0x1fd)
                 s += 7;
         }
@@ -343,6 +379,7 @@ public class HashQualityTest {
         System.out.println("Sto collisions, 32-bit: " + (stringHashLength - colliderSto.size()));
         System.out.println("Fal collisions, 32-bit: " + (stringHashLength - colliderFal.size()));
         System.out.println("Wis collisions, 32-bit: " + (stringHashLength - colliderWis.size()));
+        System.out.println("Cha collisions, 32-bit: " + (stringHashLength - colliderCha.size()));
         System.out.println();
         colliderJDK.clear();
         colliderFNV.clear();
@@ -350,6 +387,7 @@ public class HashQualityTest {
         colliderSto.clear();
         colliderFal.clear();
         colliderWis.clear();
+        colliderCha.clear();
 
         System.out.println("Japanese-ish text, Romanized");
         srng.setState(0x1337CAFE);
@@ -363,6 +401,7 @@ public class HashQualityTest {
             colliderSto.put(storm.hash(massive, s, s+e+32) & restrict, i);
             colliderFal.put(CrossHash.Falcon.hash(massive, s, s+e+32) & restrict, i);
             colliderWis.put(CrossHash.Wisp.hash(massive, s, s+e+32) & restrict, i);
+            colliderCha.put(chariot.hash(massive, s, s+e+32) & restrict, i);
             if(e >= 0x1fd)
                 s += 7;
         }
@@ -373,6 +412,7 @@ public class HashQualityTest {
         System.out.println("Sto collisions, 32-bit: " + (stringHashLength - colliderSto.size()));
         System.out.println("Fal collisions, 32-bit: " + (stringHashLength - colliderFal.size()));
         System.out.println("Wis collisions, 32-bit: " + (stringHashLength - colliderWis.size()));
+        System.out.println("Cha collisions, 32-bit: " + (stringHashLength - colliderCha.size()));
         System.out.println();
         colliderJDK.clear();
         colliderFNV.clear();
@@ -380,6 +420,7 @@ public class HashQualityTest {
         colliderSto.clear();
         colliderFal.clear();
         colliderWis.clear();
+        colliderCha.clear();
 
         System.out.println("Unicode-heavy fantasy text");
         srng.setState(0x1337CAFE);
@@ -394,6 +435,7 @@ public class HashQualityTest {
             colliderSto.put(storm.hash(massive, s, s+e+32) & restrict, i);
             colliderFal.put(CrossHash.Falcon.hash(massive, s, s+e+32) & restrict, i);
             colliderWis.put(CrossHash.Wisp.hash(massive, s, s+e+32) & restrict, i);
+            colliderCha.put(chariot.hash(massive, s, s+e+32) & restrict, i);
             if(e >= 0x1fd)
                 s += 7;
         }
@@ -404,6 +446,7 @@ public class HashQualityTest {
         System.out.println("Sto collisions, 32-bit: " + (stringHashLength - colliderSto.size()));
         System.out.println("Fal collisions, 32-bit: " + (stringHashLength - colliderFal.size()));
         System.out.println("Wis collisions, 32-bit: " + (stringHashLength - colliderWis.size()));
+        System.out.println("Cha collisions, 32-bit: " + (stringHashLength - colliderCha.size()));
         System.out.println();
         colliderJDK.clear();
         colliderFNV.clear();
@@ -411,6 +454,7 @@ public class HashQualityTest {
         colliderSto.clear();
         colliderFal.clear();
         colliderWis.clear();
+        colliderCha.clear();
 
         System.out.println("English text");
         srng.setState(0x1337CAFE);
@@ -424,6 +468,7 @@ public class HashQualityTest {
             colliderSto.put(storm.hash(massive, s, s+e+32) & restrict, i);
             colliderFal.put(CrossHash.Falcon.hash(massive, s, s+e+32) & restrict, i);
             colliderWis.put(CrossHash.Wisp.hash(massive, s, s+e+32) & restrict, i);
+            colliderCha.put(chariot.hash(massive, s, s+e+32) & restrict, i);
             if(e >= 0x1fd)
                 s += 7;
         }
@@ -434,6 +479,7 @@ public class HashQualityTest {
         System.out.println("Sto collisions, 32-bit: " + (stringHashLength - colliderSto.size()));
         System.out.println("Fal collisions, 32-bit: " + (stringHashLength - colliderFal.size()));
         System.out.println("Wis collisions, 32-bit: " + (stringHashLength - colliderWis.size()));
+        System.out.println("Cha collisions, 32-bit: " + (stringHashLength - colliderCha.size()));
         System.out.println();
         colliderJDK.clear();
         colliderFNV.clear();
@@ -441,6 +487,7 @@ public class HashQualityTest {
         colliderSto.clear();
         colliderFal.clear();
         colliderWis.clear();
+        colliderCha.clear();
 
         /*
         System.out.println("Unicode fantasy as UTF-8 bytes");

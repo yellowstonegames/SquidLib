@@ -156,6 +156,44 @@ public class LanguageGenTest {
         }
 
         rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.NORSE.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_NORSE);
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 5, 12, new String[]{",", ",", ";"},
+                    new String[]{".", ".", "!", "?", "..."}, 0.15));
+        }
+
+        rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.NAHUATL;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 5, 10, new String[]{",", ",", ";"},
+                    new String[]{".", ".", "!", "?", "..."}, 0.1));
+        }
+
+        rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.GOBLIN;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 4, 8, new String[]{",", ",", ";"},
+                    new String[]{".", ".", ".", ".", "?", "...", "..."}, 0.08));
+        }
+        rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.ELF;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 5, 10, new String[]{",", ",", ";"},
+                    new String[]{".", ".", ".", "?", "?", "...", "..."}, 0.18));
+        }
+        rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.DEMONIC;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 5, 10, new String[]{",", ",", ";"},
+                    new String[]{".", ".", "!", "!", "!", "..."}, 0.07));
+        }
+        rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.INFERNAL;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 5, 10, new String[]{",", ",", ";"},
+                    new String[]{".", ".", "?", "?", "!", "...", "..."}, 0.2));
+        }
+        rng.setState(0xf00df00L);
         flg = FakeLanguageGen.FANTASY_NAME;
         System.out.print(flg.word(rng, true, rng.between(2, 4)));
         for (int i = 1; i < 10; i++) {
@@ -169,7 +207,7 @@ public class LanguageGenTest {
         for (int i = 1; i < 10; i++) {
             System.out.print(", " + flg.word(rng, true, rng.between(2, 4)));
         }
-        System.out.println("...");
+        System.out.println("......");
         System.out.println('"' + FakeLanguageGen.ENGLISH.sentence(rng, 4, 7, new String[]{" -", ",", ",", ";"}, new String[]{"!", "!", "...", "...", ".", "?"}, 0.2) + "\",");
         System.out.println('"' + FakeLanguageGen.JAPANESE_ROMANIZED.sentence(rng, 4, 7, new String[]{" -", ",", ",", ";"}, new String[]{"!", "!", "...", "...", ".", "?"}, 0.2) + "\",");
         System.out.println('"' + FakeLanguageGen.FRENCH.sentence(rng, 5, 8, new String[]{" -", ",", ",", ";"}, new String[]{"!", "?", ".", "...", ".", "?"}, 0.1) + "\",");
@@ -206,6 +244,12 @@ public class LanguageGenTest {
         flg = FakeLanguageGen.NORSE;
         System.out.println('"' + flg.sentence(rng, 4, 7, new String[]{",", ",", ";"},
                 new String[]{"!", "?", ".", ".", "."}, 0.15) + "\",");
+        flg = FakeLanguageGen.NORSE.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_NORSE);
+        System.out.println('"' + flg.sentence(rng, 4, 7, new String[]{",", ",", ";"},
+                new String[]{"!", "?", ".", ".", "."}, 0.15) + "\",");
+        flg = FakeLanguageGen.NAHUATL;
+        System.out.println('"' + flg.sentence(rng, 3, 6, new String[]{",", ",", ";"},
+                new String[]{"!", "?", ".", ".", "."}, 0.1) + "\",");
 
         rng.setState(0xf00df00L);
         flg = FakeLanguageGen.HINDI_ROMANIZED;
@@ -236,7 +280,6 @@ public class LanguageGenTest {
                 FakeLanguageGen.FANTASY_NAME,
                 FakeLanguageGen.FANCY_FANTASY_NAME,
                 FakeLanguageGen.ARABIC_ROMANIZED,
-                FakeLanguageGen.ARABIC_ROMANIZED.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_ARABIC),
                 FakeLanguageGen.HINDI_ROMANIZED.removeAccents(),
                 FakeLanguageGen.RUSSIAN_ROMANIZED.mix(FakeLanguageGen.SOMALI, 0.25),
                 FakeLanguageGen.GREEK_ROMANIZED.mix(FakeLanguageGen.HINDI_ROMANIZED.removeAccents(), 0.5),
@@ -254,12 +297,6 @@ public class LanguageGenTest {
                 FakeLanguageGen.JAPANESE_ROMANIZED.addModifiers(FakeLanguageGen.Modifier.DOUBLE_VOWELS),
                 FakeLanguageGen.SOMALI.addModifiers(FakeLanguageGen.modifier("([kd])h", "$1"),
                         FakeLanguageGen.modifier("([pfsgkcb])([aeiouy])", "$1l$2", 0.35),
-                        /*FakeLanguageGen.modifier("a+", "á", 0.18),
-                        FakeLanguageGen.modifier("e+", "é", 0.18),
-                        FakeLanguageGen.modifier("i+", "í", 0.18),
-                        FakeLanguageGen.modifier("o+", "ó", 0.18),
-                        FakeLanguageGen.modifier("u+", "ú", 0.18),*/
-                        //FakeLanguageGen.modifier("aa", "au"),
                         FakeLanguageGen.modifier("ii", "ai"),
                         FakeLanguageGen.modifier("uu", "ia"),
                         FakeLanguageGen.modifier("([aeo])\\1", "$1"),
@@ -293,6 +330,8 @@ public class LanguageGenTest {
                 FakeLanguageGen.randomLanguage(CrossHash.Lightning.hash64("The Roar Of That Slumbering Shadow That Mankind Wills Itself To Forget")),
                 FakeLanguageGen.INUKTITUT,
                 FakeLanguageGen.NORSE,
+                FakeLanguageGen.NORSE.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_NORSE),
+                FakeLanguageGen.NAHUATL
                 //FakeLanguageGen.RUSSIAN_ROMANIZED.mix(FakeLanguageGen.GREEK_ROMANIZED, 0.4),
                 //FakeLanguageGen.LOVECRAFT.mix(FakeLanguageGen.RUSSIAN_ROMANIZED, 0.4),
                 //FakeLanguageGen.randomLanguage(new StatefulRNG(2252637788195L)),

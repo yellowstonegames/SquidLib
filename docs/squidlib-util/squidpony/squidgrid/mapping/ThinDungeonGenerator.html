@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../squidpony/squidgrid/mapping/Terrain.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../squidpony/squidgrid/mapping/TiledLevel.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li>Next&nbsp;Class</li>
 </ul>
 <ul class="navList">
 <li><a href="../../../index.html?squidpony/squidgrid/mapping/ThinDungeonGenerator.html" target="_top">Frames</a></li>
@@ -114,7 +114,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <hr>
 <br>
-<pre>public class <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.9">ThinDungeonGenerator</a>
+<pre>public class <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.10">ThinDungeonGenerator</a>
 extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html" title="class in squidpony.squidgrid.mapping">SectionDungeonGenerator</a></pre>
 <div class="block">Created by Tommy Ettinger on 8/7/2016.</div>
 </li>
@@ -283,14 +283,21 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html" title="class in squidpony.squidgrid.mapping">SectionDungeonGenerator</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/ThinDungeonGenerator.html#addDoors-int-boolean-">addDoors</a></span>(int&nbsp;percentage,
+        boolean&nbsp;doubleDoors)</code>
+<div class="block">Doors are not supported by this class.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>protected char[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/ThinDungeonGenerator.html#innerGenerate--">innerGenerate</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>char[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/ThinDungeonGenerator.html#makeThin--">makeThin</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/ThinDungeonGenerator.html#toString--">toString</a></span>()</code>
 <div class="block">Provides a string representation of the latest generated dungeon.</div>
@@ -302,7 +309,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;squidpony.squidgrid.mapping.<a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html" title="class in squidpony.squidgrid.mapping">SectionDungeonGenerator</a></h3>
-<code><a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#addBoulders-int-int-">addBoulders</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#addDoors-int-boolean-">addDoors</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#addGrass-int-int-">addGrass</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#addLake-int-">addLake</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#addLake-int-char-char-">addLake</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#addMaze-int-">addMaze</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#addTraps-int-int-">addTraps</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#addWater-int-int-">addWater</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#addWater-int-int-int-">addWater</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#clearEffects--">clearEffects</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#generate--">generate</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#generate-char:A:A-int:A:A-">generate</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#generate-squidpony.squidgrid.mapping.styled.TilesetType-">generate</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#generateRespectingStairs-char:A:A-int:A:A-">generateRespectingStairs</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#getBareDungeon--">getBareDungeon</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#getDungeon--">getDungeon</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#getHeight--">getHeight</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#getRebuildSeed--">getRebuildSeed</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#getWidth--">getWidth</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#innerGenerate-char:A:A-java.util.EnumMap-">innerGenerate</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#makeDoors-java.util.ArrayList-java.util.ArrayList-char:A:A-char:A:A-">makeDoors</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#makeLake-java.util.ArrayList-java.util.ArrayList-">makeLake</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#removeAdjacent-squidpony.squidmath.OrderedSet-squidpony.squidmath.Coord-">removeAdjacent</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#removeAdjacent-squidpony.squidmath.OrderedSet-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">removeAdjacent</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#removeNearby-squidpony.squidmath.OrderedSet-char:A:A-">removeNearby</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#setDungeon-char:A:A-">setDungeon</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#viableDoorways-boolean-char:A:A-char:A:A-char:A:A-">viableDoorways</a></code></li>
+<code><a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#addBoulders-int-int-">addBoulders</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#addGrass-int-int-">addGrass</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#addLake-int-">addLake</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#addLake-int-char-char-">addLake</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#addMaze-int-">addMaze</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#addTraps-int-int-">addTraps</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#addWater-int-int-">addWater</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#addWater-int-int-int-">addWater</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#clearEffects--">clearEffects</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#generate--">generate</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#generate-char:A:A-int:A:A-">generate</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#generate-squidpony.squidgrid.mapping.styled.TilesetType-">generate</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#generateRespectingStairs-char:A:A-int:A:A-">generateRespectingStairs</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#getBareDungeon--">getBareDungeon</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#getDungeon--">getDungeon</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#getHeight--">getHeight</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#getRebuildSeed--">getRebuildSeed</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#getWidth--">getWidth</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#innerGenerate-char:A:A-java.util.EnumMap-">innerGenerate</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#makeDoors-java.util.ArrayList-java.util.ArrayList-char:A:A-char:A:A-">makeDoors</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#makeLake-java.util.ArrayList-java.util.ArrayList-">makeLake</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#removeAdjacent-squidpony.squidmath.OrderedSet-squidpony.squidmath.Coord-">removeAdjacent</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#removeAdjacent-squidpony.squidmath.OrderedSet-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">removeAdjacent</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#removeNearby-squidpony.squidmath.OrderedSet-char:A:A-">removeNearby</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#setDungeon-char:A:A-">setDungeon</a>, <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#viableDoorways-boolean-char:A:A-char:A:A-char:A:A-">viableDoorways</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -331,7 +338,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>ROOM_WALL_RETRACT</h4>
-<pre>public static final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.11">ROOM_WALL_RETRACT</a></pre>
+<pre>public static final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.12">ROOM_WALL_RETRACT</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.ThinDungeonGenerator.ROOM_WALL_RETRACT">Constant Field Values</a></dd>
@@ -344,7 +351,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>ROOM_WALL_NORMAL</h4>
-<pre>public static final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.11">ROOM_WALL_NORMAL</a></pre>
+<pre>public static final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.12">ROOM_WALL_NORMAL</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.ThinDungeonGenerator.ROOM_WALL_NORMAL">Constant Field Values</a></dd>
@@ -357,7 +364,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>ROOM_WALL_EXPAND</h4>
-<pre>public static final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.11">ROOM_WALL_EXPAND</a></pre>
+<pre>public static final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.12">ROOM_WALL_EXPAND</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.ThinDungeonGenerator.ROOM_WALL_EXPAND">Constant Field Values</a></dd>
@@ -370,7 +377,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>ROOM_WALL_CHAOTIC</h4>
-<pre>public static final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.11">ROOM_WALL_CHAOTIC</a></pre>
+<pre>public static final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.12">ROOM_WALL_CHAOTIC</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.ThinDungeonGenerator.ROOM_WALL_CHAOTIC">Constant Field Values</a></dd>
@@ -383,7 +390,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>CORRIDOR_WALL_RETRACT</h4>
-<pre>public static final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.12">CORRIDOR_WALL_RETRACT</a></pre>
+<pre>public static final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.13">CORRIDOR_WALL_RETRACT</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.ThinDungeonGenerator.CORRIDOR_WALL_RETRACT">Constant Field Values</a></dd>
@@ -396,7 +403,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>CORRIDOR_WALL_NORMAL</h4>
-<pre>public static final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.12">CORRIDOR_WALL_NORMAL</a></pre>
+<pre>public static final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.13">CORRIDOR_WALL_NORMAL</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.ThinDungeonGenerator.CORRIDOR_WALL_NORMAL">Constant Field Values</a></dd>
@@ -409,7 +416,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>CORRIDOR_WALL_EXPAND</h4>
-<pre>public static final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.12">CORRIDOR_WALL_EXPAND</a></pre>
+<pre>public static final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.13">CORRIDOR_WALL_EXPAND</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.ThinDungeonGenerator.CORRIDOR_WALL_EXPAND">Constant Field Values</a></dd>
@@ -422,7 +429,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>CORRIDOR_WALL_CHAOTIC</h4>
-<pre>public static final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.12">CORRIDOR_WALL_CHAOTIC</a></pre>
+<pre>public static final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.13">CORRIDOR_WALL_CHAOTIC</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.ThinDungeonGenerator.CORRIDOR_WALL_CHAOTIC">Constant Field Values</a></dd>
@@ -435,7 +442,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>CAVE_WALL_RETRACT</h4>
-<pre>public static final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.13">CAVE_WALL_RETRACT</a></pre>
+<pre>public static final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.14">CAVE_WALL_RETRACT</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.ThinDungeonGenerator.CAVE_WALL_RETRACT">Constant Field Values</a></dd>
@@ -448,7 +455,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>CAVE_WALL_NORMAL</h4>
-<pre>public static final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.13">CAVE_WALL_NORMAL</a></pre>
+<pre>public static final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.14">CAVE_WALL_NORMAL</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.ThinDungeonGenerator.CAVE_WALL_NORMAL">Constant Field Values</a></dd>
@@ -461,7 +468,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>CAVE_WALL_EXPAND</h4>
-<pre>public static final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.13">CAVE_WALL_EXPAND</a></pre>
+<pre>public static final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.14">CAVE_WALL_EXPAND</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.ThinDungeonGenerator.CAVE_WALL_EXPAND">Constant Field Values</a></dd>
@@ -474,7 +481,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>CAVE_WALL_CHAOTIC</h4>
-<pre>public static final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.13">CAVE_WALL_CHAOTIC</a></pre>
+<pre>public static final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.14">CAVE_WALL_CHAOTIC</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.ThinDungeonGenerator.CAVE_WALL_CHAOTIC">Constant Field Values</a></dd>
@@ -487,7 +494,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockListLast">
 <li class="blockList">
 <h4>wallShapes</h4>
-<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.14">wallShapes</a></pre>
+<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.15">wallShapes</a></pre>
 </li>
 </ul>
 </li>
@@ -504,7 +511,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>ThinDungeonGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.19">ThinDungeonGenerator</a>()</pre>
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.20">ThinDungeonGenerator</a>()</pre>
 <div class="block">Make a DungeonGenerator with a LightRNG using a random seed, height 40, and width 40.</div>
 </li>
 </ul>
@@ -514,7 +521,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>ThinDungeonGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.29">ThinDungeonGenerator</a>(int&nbsp;width,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.30">ThinDungeonGenerator</a>(int&nbsp;width,
                             int&nbsp;height)</pre>
 <div class="block">Make a DungeonGenerator with the given height and width; the RNG used for generating a dungeon and
  adding features will be a LightRNG using a random seed.</div>
@@ -531,7 +538,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>ThinDungeonGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.40">ThinDungeonGenerator</a>(int&nbsp;width,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.41">ThinDungeonGenerator</a>(int&nbsp;width,
                             int&nbsp;height,
                             <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 <div class="block">Make a DungeonGenerator with the given height, width, and RNG. Use this if you want to seed the RNG.</div>
@@ -549,7 +556,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>ThinDungeonGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.64">ThinDungeonGenerator</a>(int&nbsp;width,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.65">ThinDungeonGenerator</a>(int&nbsp;width,
                             int&nbsp;height,
                             int&nbsp;roomShape,
                             int&nbsp;corridorShape,
@@ -582,7 +589,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>ThinDungeonGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.93">ThinDungeonGenerator</a>(int&nbsp;width,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.94">ThinDungeonGenerator</a>(int&nbsp;width,
                             int&nbsp;height,
                             <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
                             int&nbsp;roomShape,
@@ -616,7 +623,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ThinDungeonGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.106">ThinDungeonGenerator</a>(<a href="../../../squidpony/squidgrid/mapping/ThinDungeonGenerator.html" title="class in squidpony.squidgrid.mapping">ThinDungeonGenerator</a>&nbsp;copying)</pre>
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.107">ThinDungeonGenerator</a>(<a href="../../../squidpony/squidgrid/mapping/ThinDungeonGenerator.html" title="class in squidpony.squidgrid.mapping">ThinDungeonGenerator</a>&nbsp;copying)</pre>
 <div class="block">Copies all fields from copying and makes a new DungeonGenerator.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -632,13 +639,39 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="addDoors-int-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addDoors</h4>
+<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html" title="class in squidpony.squidgrid.mapping">SectionDungeonGenerator</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.125">addDoors</a>(int&nbsp;percentage,
+                                        boolean&nbsp;doubleDoors)</pre>
+<div class="block">Doors are not supported by this class. There's a lot of confusing and ambiguous situations that can easily
+ result from trying to automatically place doors when any given map could need doors on walkable cells, prefer
+ doors between walkable cells aligned to walls, have mixes of "expanded", "retracted", and "normal" wall change
+ modes, or any number of other issues. There are also some very confusing cases where automatically-placed doors,
+ if this class tries to reposition them in retracted-wall mode (or in any case where rooms and corridors don't
+ have the same change mode), wind up hanging in the middle of a room or with partial connecting walls but not any
+ sensible layout. If you want doors here, you should assign them yourself how you see fit.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#addDoors-int-boolean-">addDoors</a></code>&nbsp;in class&nbsp;<code><a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html" title="class in squidpony.squidgrid.mapping">SectionDungeonGenerator</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>percentage</code> - ignored.</dd>
+<dd><code>doubleDoors</code> - ignored.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this for chaining.</dd>
+</dl>
+</li>
+</ul>
 <a name="makeThin--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>makeThin</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.111">makeThin</a>()</pre>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.131">makeThin</a>()</pre>
 </li>
 </ul>
 <a name="innerGenerate--">
@@ -647,7 +680,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>innerGenerate</h4>
-<pre>protected&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.558">innerGenerate</a>()</pre>
+<pre>protected&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.844">innerGenerate</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#innerGenerate--">innerGenerate</a></code>&nbsp;in class&nbsp;<code><a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html" title="class in squidpony.squidgrid.mapping">SectionDungeonGenerator</a></code></dd>
@@ -660,7 +693,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockListLast">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.574">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.860">toString</a>()</pre>
 <div class="block">Provides a string representation of the latest generated dungeon.
  Because the spaces between occupy-able cells, when walkable, use the control character U+0006
  to indicate that they're not meant to be displayed, this replaces any instances of that character
@@ -703,7 +736,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../squidpony/squidgrid/mapping/Terrain.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../squidpony/squidgrid/mapping/TiledLevel.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li>Next&nbsp;Class</li>
 </ul>
 <ul class="navList">
 <li><a href="../../../index.html?squidpony/squidgrid/mapping/ThinDungeonGenerator.html" target="_top">Frames</a></li>
@@ -743,6 +776,6 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

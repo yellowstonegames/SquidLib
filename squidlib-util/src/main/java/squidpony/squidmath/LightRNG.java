@@ -10,6 +10,8 @@ package squidpony.squidmath;
 
 import squidpony.StringKit;
 
+import java.io.Serializable;
+
 /**
  * This is a SplittableRandom-style generator, meant to have a tiny state
  * that permits storing many different generators with low overhead.
@@ -38,7 +40,7 @@ import squidpony.StringKit;
  * @author Sebastiano Vigna
  * @author Tommy Ettinger
  */
-public class LightRNG implements RandomnessSource, StatefulRandomness
+public class LightRNG implements RandomnessSource, StatefulRandomness, Serializable
 {
 	/** 2 raised to the 53, - 1. */
     private static final long DOUBLE_MASK = ( 1L << 53 ) - 1;
@@ -81,7 +83,7 @@ public class LightRNG implements RandomnessSource, StatefulRandomness
 
     /**
      * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
-     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
+     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to
      * copy the state so it isn't shared, usually, and produce a new value with the same exact state.
      *
      * @return a copy of this RandomnessSource
@@ -181,7 +183,7 @@ public class LightRNG implements RandomnessSource, StatefulRandomness
      * @return a random true or false value.
      */
     public boolean nextBoolean() {
-        return ( nextLong() & 1 ) != 0L;
+        return nextLong() < 0L;
     }
 
     /**
@@ -224,14 +226,18 @@ public class LightRNG implements RandomnessSource, StatefulRandomness
     }
 
     /**
-     * Advances or rolls back the LightRNG's state without actually generating numbers. Skip forward
-     * or backward a number of steps specified by advance, where a step is equal to one call to nextInt().
-     * @param advance Number of future generations to skip past. Can be negative to backtrack.
-     * @return the state after skipping.
+     * Advances or rolls back the LightRNG's state without actually generating each number. Skip forward
+     * or backward a number of steps specified by advance, where a step is equal to one call to nextLong(),
+     * and returns the random number produced at that step (you can get the state with {@link #getState()}).
+     *
+     * @param advance Number of future generations to skip over; can be negative to backtrack, 0 gets the most recent generated number
+     * @return the random long generated after skipping advance numbers
      */
-    public long skip(long advance)
-    {
-        return state += 0x9E3779B97F4A7C15L * advance;
+    public long skip(long advance) {
+        long z = (state += 0x9E3779B97F4A7C15L * advance);
+        z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
+        z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
+        return z ^ (z >>> 31);
     }
 
 
@@ -248,11 +254,33 @@ public class LightRNG implements RandomnessSource, StatefulRandomness
         LightRNG lightRNG = (LightRNG) o;
 
         return state == lightRNG.state;
-
     }
 
     @Override
     public int hashCode() {
         return (int) (state ^ (state >>> 32));
     }
+
+    public static long determine(long state)
+    {
+        state = (((state += 0x9E3779B97F4A7C15L) >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
+        state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
+        return state ^ (state >>> 31);
+    }
+
+    public static long determine(final int a, final int b)
+    {
+        long state = 0x9E3779B97F4A7C15L + (a & 0xFFFFFFFFL) + ((long)b << 32);
+        state = ((state >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
+        state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
+        return state ^ (state >>> 31);
+    }
+
+    public static int determineBounded(long state, final int bound)
+    {
+        state = (((state += 0x9E3779B97F4A7C15L) >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
+        state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
+        return (int)((bound * ((state ^ (state >>> 31)) & 0x7FFFFFFFL)) >>> 31);
+    }
+
 }

@@ -614,67 +614,67 @@
 <span class="sourceLineNo">606</span>    public boolean equals(Object o) {<a name="line.606"></a>
 <span class="sourceLineNo">607</span>        if (this == o) return true;<a name="line.607"></a>
 <span class="sourceLineNo">608</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.608"></a>
-<span class="sourceLineNo">609</span><a name="line.609"></a>
-<span class="sourceLineNo">610</span>        EditRNG editRNG = (EditRNG) o;<a name="line.610"></a>
-<span class="sourceLineNo">611</span><a name="line.611"></a>
-<span class="sourceLineNo">612</span>        if (Double.compare(editRNG.expected, expected) != 0) return false;<a name="line.612"></a>
-<span class="sourceLineNo">613</span>        return Double.compare(editRNG.centrality, centrality) == 0 &amp;&amp; Double.compare(editRNG.rawLatest, rawLatest) == 0;<a name="line.613"></a>
-<span class="sourceLineNo">614</span><a name="line.614"></a>
+<span class="sourceLineNo">609</span>        if (!super.equals(o)) return false;<a name="line.609"></a>
+<span class="sourceLineNo">610</span><a name="line.610"></a>
+<span class="sourceLineNo">611</span>        EditRNG editRNG = (EditRNG) o;<a name="line.611"></a>
+<span class="sourceLineNo">612</span><a name="line.612"></a>
+<span class="sourceLineNo">613</span>        if (Double.compare(editRNG.expected, expected) != 0) return false;<a name="line.613"></a>
+<span class="sourceLineNo">614</span>        return Double.compare(editRNG.centrality, centrality) == 0;<a name="line.614"></a>
 <span class="sourceLineNo">615</span>    }<a name="line.615"></a>
 <span class="sourceLineNo">616</span><a name="line.616"></a>
 <span class="sourceLineNo">617</span>    @Override<a name="line.617"></a>
 <span class="sourceLineNo">618</span>    public int hashCode() {<a name="line.618"></a>
-<span class="sourceLineNo">619</span>        int result;<a name="line.619"></a>
+<span class="sourceLineNo">619</span>        int result = super.hashCode() * 31;<a name="line.619"></a>
 <span class="sourceLineNo">620</span>        long temp;<a name="line.620"></a>
 <span class="sourceLineNo">621</span>        temp = Double.doubleToLongBits(expected);<a name="line.621"></a>
-<span class="sourceLineNo">622</span>        result = (int) (temp ^ (temp &gt;&gt;&gt; 32));<a name="line.622"></a>
+<span class="sourceLineNo">622</span>        result += (int) (temp ^ (temp &gt;&gt;&gt; 32));<a name="line.622"></a>
 <span class="sourceLineNo">623</span>        temp = Double.doubleToLongBits(centrality);<a name="line.623"></a>
 <span class="sourceLineNo">624</span>        result = 31 * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));<a name="line.624"></a>
-<span class="sourceLineNo">625</span>        temp = Double.doubleToLongBits(rawLatest);<a name="line.625"></a>
-<span class="sourceLineNo">626</span>        result = 31 * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));<a name="line.626"></a>
-<span class="sourceLineNo">627</span>        return result;<a name="line.627"></a>
-<span class="sourceLineNo">628</span>    }<a name="line.628"></a>
-<span class="sourceLineNo">629</span><a name="line.629"></a>
-<span class="sourceLineNo">630</span>    /**<a name="line.630"></a>
-<span class="sourceLineNo">631</span>     * Shuffle an array using the Fisher-Yates algorithm. Not GWT-compatible; use the overload that takes two arrays.<a name="line.631"></a>
-<span class="sourceLineNo">632</span>     * &lt;br&gt;<a name="line.632"></a>
-<span class="sourceLineNo">633</span>     * https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle<a name="line.633"></a>
-<span class="sourceLineNo">634</span>     *<a name="line.634"></a>
-<span class="sourceLineNo">635</span>     * @param elements an array of T; will not be modified<a name="line.635"></a>
-<span class="sourceLineNo">636</span>     * @return a shuffled copy of elements<a name="line.636"></a>
-<span class="sourceLineNo">637</span>     */<a name="line.637"></a>
-<span class="sourceLineNo">638</span>    @GwtIncompatible<a name="line.638"></a>
-<span class="sourceLineNo">639</span>    @Override<a name="line.639"></a>
-<span class="sourceLineNo">640</span>    public &lt;T&gt; T[] shuffle(T[] elements) {<a name="line.640"></a>
-<span class="sourceLineNo">641</span>        return super.shuffle(elements);<a name="line.641"></a>
-<span class="sourceLineNo">642</span>    }<a name="line.642"></a>
-<span class="sourceLineNo">643</span><a name="line.643"></a>
-<span class="sourceLineNo">644</span>    /**<a name="line.644"></a>
-<span class="sourceLineNo">645</span>     * Generates a random permutation of the range from 0 (inclusive) to length (exclusive).<a name="line.645"></a>
-<span class="sourceLineNo">646</span>     * Useful for passing to OrderedMap or OrderedSet's reorder() methods.<a name="line.646"></a>
-<span class="sourceLineNo">647</span>     *<a name="line.647"></a>
-<span class="sourceLineNo">648</span>     * @param length the size of the ordering to produce<a name="line.648"></a>
-<span class="sourceLineNo">649</span>     * @return a random ordering containing all ints from 0 to length (exclusive)<a name="line.649"></a>
-<span class="sourceLineNo">650</span>     */<a name="line.650"></a>
-<span class="sourceLineNo">651</span>    @Override<a name="line.651"></a>
-<span class="sourceLineNo">652</span>    public int[] randomOrdering(int length) {<a name="line.652"></a>
-<span class="sourceLineNo">653</span>        return super.randomOrdering(length);<a name="line.653"></a>
-<span class="sourceLineNo">654</span>    }<a name="line.654"></a>
-<span class="sourceLineNo">655</span><a name="line.655"></a>
-<span class="sourceLineNo">656</span>    /**<a name="line.656"></a>
-<span class="sourceLineNo">657</span>     * Returns a random non-negative integer below the given bound, or 0 if the bound is 0.<a name="line.657"></a>
-<span class="sourceLineNo">658</span>     * Uses a slightly optimized technique. This method is considered "hasty" since<a name="line.658"></a>
-<span class="sourceLineNo">659</span>     * it should be faster than nextInt() doesn't check for "less-valid" bounds values. It also<a name="line.659"></a>
-<span class="sourceLineNo">660</span>     * has undefined behavior if bound is negative, though it will probably produce a negative<a name="line.660"></a>
-<span class="sourceLineNo">661</span>     * number (just how negative is an open question).<a name="line.661"></a>
-<span class="sourceLineNo">662</span>     *<a name="line.662"></a>
-<span class="sourceLineNo">663</span>     * @param bound the upper bound (exclusive); behavior is undefined if bound is negative<a name="line.663"></a>
-<span class="sourceLineNo">664</span>     * @return the found number<a name="line.664"></a>
-<span class="sourceLineNo">665</span>     */<a name="line.665"></a>
-<span class="sourceLineNo">666</span>    @Override<a name="line.666"></a>
-<span class="sourceLineNo">667</span>    public int nextIntHasty(int bound) {<a name="line.667"></a>
-<span class="sourceLineNo">668</span>        return (int)(nextDouble() * bound);<a name="line.668"></a>
-<span class="sourceLineNo">669</span>    }<a name="line.669"></a>
+<span class="sourceLineNo">625</span>        return result;<a name="line.625"></a>
+<span class="sourceLineNo">626</span>    }<a name="line.626"></a>
+<span class="sourceLineNo">627</span><a name="line.627"></a>
+<span class="sourceLineNo">628</span>    /**<a name="line.628"></a>
+<span class="sourceLineNo">629</span>     * Shuffle an array using the Fisher-Yates algorithm. Not GWT-compatible; use the overload that takes two arrays.<a name="line.629"></a>
+<span class="sourceLineNo">630</span>     * &lt;br&gt;<a name="line.630"></a>
+<span class="sourceLineNo">631</span>     * https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle<a name="line.631"></a>
+<span class="sourceLineNo">632</span>     *<a name="line.632"></a>
+<span class="sourceLineNo">633</span>     * @param elements an array of T; will not be modified<a name="line.633"></a>
+<span class="sourceLineNo">634</span>     * @return a shuffled copy of elements<a name="line.634"></a>
+<span class="sourceLineNo">635</span>     */<a name="line.635"></a>
+<span class="sourceLineNo">636</span>    @GwtIncompatible<a name="line.636"></a>
+<span class="sourceLineNo">637</span>    @Override<a name="line.637"></a>
+<span class="sourceLineNo">638</span>    public &lt;T&gt; T[] shuffle(T[] elements) {<a name="line.638"></a>
+<span class="sourceLineNo">639</span>        return super.shuffle(elements);<a name="line.639"></a>
+<span class="sourceLineNo">640</span>    }<a name="line.640"></a>
+<span class="sourceLineNo">641</span><a name="line.641"></a>
+<span class="sourceLineNo">642</span>    /**<a name="line.642"></a>
+<span class="sourceLineNo">643</span>     * Generates a random permutation of the range from 0 (inclusive) to length (exclusive).<a name="line.643"></a>
+<span class="sourceLineNo">644</span>     * Useful for passing to OrderedMap or OrderedSet's reorder() methods.<a name="line.644"></a>
+<span class="sourceLineNo">645</span>     *<a name="line.645"></a>
+<span class="sourceLineNo">646</span>     * @param length the size of the ordering to produce<a name="line.646"></a>
+<span class="sourceLineNo">647</span>     * @return a random ordering containing all ints from 0 to length (exclusive)<a name="line.647"></a>
+<span class="sourceLineNo">648</span>     */<a name="line.648"></a>
+<span class="sourceLineNo">649</span>    @Override<a name="line.649"></a>
+<span class="sourceLineNo">650</span>    public int[] randomOrdering(int length) {<a name="line.650"></a>
+<span class="sourceLineNo">651</span>        return super.randomOrdering(length);<a name="line.651"></a>
+<span class="sourceLineNo">652</span>    }<a name="line.652"></a>
+<span class="sourceLineNo">653</span><a name="line.653"></a>
+<span class="sourceLineNo">654</span>    /**<a name="line.654"></a>
+<span class="sourceLineNo">655</span>     * Returns a random non-negative integer below the given bound, or 0 if the bound is 0.<a name="line.655"></a>
+<span class="sourceLineNo">656</span>     * Uses a slightly optimized technique. This method is considered "hasty" since<a name="line.656"></a>
+<span class="sourceLineNo">657</span>     * it should be faster than nextInt() doesn't check for "less-valid" bounds values. It also<a name="line.657"></a>
+<span class="sourceLineNo">658</span>     * has undefined behavior if bound is negative, though it will probably produce a negative<a name="line.658"></a>
+<span class="sourceLineNo">659</span>     * number (just how negative is an open question).<a name="line.659"></a>
+<span class="sourceLineNo">660</span>     *<a name="line.660"></a>
+<span class="sourceLineNo">661</span>     * @param bound the upper bound (exclusive); behavior is undefined if bound is negative<a name="line.661"></a>
+<span class="sourceLineNo">662</span>     * @return the found number<a name="line.662"></a>
+<span class="sourceLineNo">663</span>     */<a name="line.663"></a>
+<span class="sourceLineNo">664</span>    @Override<a name="line.664"></a>
+<span class="sourceLineNo">665</span>    public int nextIntHasty(int bound) {<a name="line.665"></a>
+<span class="sourceLineNo">666</span>        return (int)(nextDouble() * bound);<a name="line.666"></a>
+<span class="sourceLineNo">667</span>    }<a name="line.667"></a>
+<span class="sourceLineNo">668</span><a name="line.668"></a>
+<span class="sourceLineNo">669</span><a name="line.669"></a>
 <span class="sourceLineNo">670</span>}<a name="line.670"></a>
 
 

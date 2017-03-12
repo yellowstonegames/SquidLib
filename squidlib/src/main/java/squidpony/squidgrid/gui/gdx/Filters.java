@@ -2,6 +2,8 @@ package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
 
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.NumberUtils;
 import squidpony.IFilter;
 import squidpony.squidmath.LightRNG;
 
@@ -47,6 +49,7 @@ public class Filters {
             float v = (r + g + b) / 3f;
             return new Color(v, v, v, a);
         }
+
     }
 
     /**
@@ -121,6 +124,7 @@ public class Filters {
         public Color alter(float r, float g, float b, float a) {
             return new Color(r, g, b, a).lerp(state[0], state[1], state[2], state[3], state[4]);
         }
+
     }
     /**
      * A Filter that is constructed with a group of colors and linear-interpolates any color it is told to alter toward
@@ -295,6 +299,7 @@ public class Filters {
                     (h + v + s) * 0.35f + 0.7f,
                     a);
         }
+
     }
 
 
@@ -326,6 +331,7 @@ public class Filters {
                     globalSCC.getValue(r, g, b),
                     a);
         }
+
     }
 
     /**
@@ -340,9 +346,9 @@ public class Filters {
         }
         @Override
         public Color alter(float r, float g, float b, float a) {
-            return new Color(r - 0.1f + rng.nextInt(5) * 0.05f,
-                    g - 0.1f + rng.nextInt(5) * 0.05f,
-                    b - 0.1f + rng.nextInt(5) * 0.05f,
+            return new Color(r - 0.1f + rng.nextFloat() * 0.2f,
+                    g - 0.1f + rng.nextFloat() * 0.2f,
+                    b - 0.1f + rng.nextFloat() * 0.2f,
                     a);
         }
     }
@@ -368,10 +374,10 @@ public class Filters {
             state = new float[Math.min(r.length, Math.min(g.length, Math.min(b.length,
                     a.length))) * 4];
             for (int i = 0; i < state.length / 4; i++) {
-                state[i * 4] = r[i];
-                state[i * 4 + 1] = g[i];
-                state[i * 4 + 2] = b[i];
-                state[i * 4 + 3] = a[i];
+                state[i * 4] = MathUtils.clamp(r[i], 0f, 1f);
+                state[i * 4 + 1] = MathUtils.clamp(g[i], 0f, 1f);
+                state[i * 4 + 2] = MathUtils.clamp(b[i], 0f, 1f);
+                state[i * 4 + 3] = MathUtils.clamp(a[i], 0f, 1f);
             }
         }/**
          * Sets up a PaletteFilter with the exact colors to use as Colors. A convenient way to
@@ -381,7 +387,7 @@ public class Filters {
          */
         public PaletteFilter(Color[] colors) {
             state = new float[colors.length * 4];
-            for (int i = 0; i < state.length / 4; i++) {
+            for (int i = 0; i < colors.length; i++) {
                 state[i * 4] = colors[i].r;
                 state[i * 4 + 1] = colors[i].g;
                 state[i * 4 + 2] = colors[i].b;
@@ -401,8 +407,39 @@ public class Filters {
                 }
             }
             return new Color(state[choice], state[choice + 1], state[choice + 2],
-                    state[choice + 3]);
+                    a);
         }
+    }
+    /**
+     * A Filter that alters primarily-red and primarily-green colors so they can be more easily be distinguished by
+     * people with at least some forms of red-green color-blindness (deuteranopia should be handled well, protanopia
+     * very well, and tritanopia may not benefit at all). Causes reds to be darkened and greens to be lightened if the
+     * other of the pair is not present in similar quantities (which is the case for yellows and blues).
+     */
+    public static class DistinctRedGreenFilter implements IFilter<Color> {
+        /**
+         * Constructs a DistinctRedGreenFilter. This class is a simple wrapper around a function that doesn't need
+         * member variables, so there should be little overhead with this filter.
+         */
+        public DistinctRedGreenFilter() {
+        }
+
+        @Override
+        public Color alter(float r, float g, float b, float a) {
+            float diff = g - r;
+            if(diff > 0.4f)
+                return new Color(Math.min(1f, r * (0.8f + diff * 0.5f)), Math.min(1f, g * (0.9f + diff * 0.5f)),
+                        Math.min(1f, b * (0.8f + diff * 0.5f)), a);
+            else if(diff < -0.3f)
+                return new Color(r * (0.6f - diff), g * (0.7f - diff),
+                        b * (0.7f - diff), a);
+            else
+                return new Color(r, g, b, a);
+        }
+    }
+    public static class Utility
+    {
+
     }
 
 }
