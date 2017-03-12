@@ -388,8 +388,7 @@ public class ObText extends AbstractCollection<String>{
         }
     }
 
-    public static class Convert extends StringConvert<ObText>
-    {
+    public static final StringConvert<ObText> convert = new StringConvert<ObText>(ObText.class) {
         @Override
         public String stringify(ObText item) {
             return item.serializeToString();
@@ -399,9 +398,8 @@ public class ObText extends AbstractCollection<String>{
         public ObText restore(String text) {
             return ObText.deserializeFromString(text);
         }
-    }
 
-    public static final StringConvert<ObText> convert = new Convert();
+    };
 
     /**
      * Can be used to help reading sequences of Strings with ObText-style quotation marking their boundaries.

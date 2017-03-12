@@ -883,6 +883,24 @@ public class CrossHash {
      */
     public static final IHasher stringArrayHasher = new StringArrayHasher();
 
+    private static class ObjectArrayHasher implements IHasher, Serializable {
+        private static final long serialVersionUID = 3L;
+
+        ObjectArrayHasher() {
+        }
+
+        @Override
+        public int hash(final Object data) {
+            return (data instanceof Object[]) ? CrossHash.Wisp.hash((Object[]) data) : data.hashCode();
+        }
+
+        @Override
+        public boolean areEqual(Object left, Object right) {
+            return left == right || ((left instanceof Object[] && right instanceof Object[]) && Arrays.equals((Object[]) left, (Object[]) right) || Objects.equals(left, right));
+        }
+    }
+    public static final IHasher objectArrayHasher = new ObjectArrayHasher();
+
     private static class DefaultHasher implements IHasher, Serializable {
         private static final long serialVersionUID = 3L;
 

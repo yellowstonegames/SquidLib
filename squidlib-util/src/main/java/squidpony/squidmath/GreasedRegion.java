@@ -1,7 +1,6 @@
 package squidpony.squidmath;
 
 import squidpony.ArrayTools;
-import squidpony.StringConvert;
 import squidpony.StringKit;
 import squidpony.annotation.Beta;
 import squidpony.squidgrid.Radius;
@@ -3929,18 +3928,4 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             throw new UnsupportedOperationException("remove() is not supported on this Iterator.");
         }
     }
-
-    public static class Convert extends StringConvert<GreasedRegion>
-    {
-        @Override
-        public String stringify(GreasedRegion item) {
-            return item.serializeToString();
-        }
-
-        @Override
-        public GreasedRegion restore(String text) {
-            return GreasedRegion.deserializeFromString(text);
-        }
-    }
-    public static final StringConvert<GreasedRegion> convert = new Convert();
 }
