@@ -73,11 +73,12 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 30, rngMode = 0, noiseMode = 10;
+    private int hashMode = 43, rngMode = 0, noiseMode = 10;
     private CrossHash.Storm storm, stormA, stormB, stormC;
     private CrossHash.Chariot chariot, chariotA, chariotB, chariotC;
     private final int[] coordinates = new int[2];
     private final int[] coordinate = new int[1];
+    private final double[] doubleCoordinates = new double[2], doubleCoordinate = new double[1];
 
     // 0 commonly used hashes
     // 1 variants on Storm and other hashes
@@ -256,7 +257,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 break;
                             case 0:
                                 hashMode++;
-                                hashMode %= 45;
+                                hashMode %= 61; // 45
                                 break;
                             case 1:
                                 hashMode++;
@@ -1113,7 +1114,6 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("Wisp, hash64 on length 1, high bits");
                         break;
                     case 36:
-                        colorFactory.clearCache();
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = (mixHash(x, y) << 8) | 255L;
@@ -1205,6 +1205,176 @@ public class HashVisualizer extends ApplicationAdapter {
                             }
                         }
                         Gdx.graphics.setTitle("Falcon, hash64 on length 1, low bits");
+                        break;
+
+                    case 45:
+                        for (int x = 0; x < width; x++) {
+                            doubleCoordinates[0] = Math.sqrt(x);
+                            for (int y = 0; y < height; y++) {
+                                doubleCoordinates[1] = Math.sqrt(y);
+                                code = CrossHash.Wisp.hash(doubleCoordinates) & 0xFFFFFF00L | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("Wisp Double, hash on length 2, high bits");
+                        break;
+                    case 46:
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                doubleCoordinate[0] = Math.sqrt((x << 9) | y);
+                                code = CrossHash.Wisp.hash(doubleCoordinate) & 0xFFFFFF00L | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("Wisp Double, hash on length 1, high bits");
+                        break;
+                    case 47:
+                        for (int x = 0; x < width; x++) {
+                            doubleCoordinates[0] = Math.sqrt(x);
+                            for (int y = 0; y < height; y++) {
+                                doubleCoordinates[1] = Math.sqrt(y);
+                                code = CrossHash.Wisp.hash64(doubleCoordinates) & 0xFFFFFF00L | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("Wisp Double, hash64 on length 2, high bits");
+                        break;
+                    case 48:
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                doubleCoordinate[0] = Math.sqrt((x << 9) | y);
+                                code = CrossHash.Wisp.hash64(doubleCoordinate) & 0xFFFFFF00L | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("Wisp Double, hash64 on length 1, high bits");
+                        break;
+                    case 49:
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                doubleCoordinate[0] = Math.sqrt((x << 9) | y);
+                                code = CrossHash.Wisp.hash(doubleCoordinate) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("Wisp Double, hash on length 1, low bits");
+                        break;
+                    case 50:
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                doubleCoordinate[0] = Math.sqrt((x << 9) | y);
+                                code = CrossHash.Wisp.hash64(doubleCoordinate) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("Wisp Double, hash64 on length 1, low bits");
+                        break;
+                    case 51:
+                        for (int x = 0; x < width; x++) {
+                            doubleCoordinates[0] = Math.sqrt(x);
+                            for (int y = 0; y < height; y++) {
+                                doubleCoordinates[1] = Math.sqrt(y);
+                                code = CrossHash.Wisp.hash(doubleCoordinates) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("Wisp Double, hash on length 2, low bits");
+                        break;
+                    case 52:
+                        for (int x = 0; x < width; x++) {
+                            doubleCoordinates[0] = Math.sqrt(x);
+                            for (int y = 0; y < height; y++) {
+                                doubleCoordinates[1] = Math.sqrt(y);
+                                code = CrossHash.Wisp.hash64(doubleCoordinates) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("Wisp Double, hash64 on length 2, low bits");
+                        break;
+
+                    case 53:
+                        for (int x = 0; x < width; x++) {
+                            doubleCoordinates[0] = Math.sqrt(x);
+                            for (int y = 0; y < height; y++) {
+                                doubleCoordinates[1] = Math.sqrt(y);
+                                code = CrossHash.Wisp.hashAlt(doubleCoordinates) & 0xFFFFFF00L | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("Wisp Double Alt, hash on length 2, high bits");
+                        break;
+                    case 54:
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                doubleCoordinate[0] = Math.sqrt((x << 9) | y);
+                                code = CrossHash.Wisp.hashAlt(doubleCoordinate) & 0xFFFFFF00L | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("Wisp Double Alt, hash on length 1, high bits");
+                        break;
+                    case 55:
+                        for (int x = 0; x < width; x++) {
+                            doubleCoordinates[0] = Math.sqrt(x);
+                            for (int y = 0; y < height; y++) {
+                                doubleCoordinates[1] = Math.sqrt(y);
+                                code = CrossHash.Wisp.hash64Alt(doubleCoordinates) & 0xFFFFFF00L | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("Wisp Double Alt, hash64 on length 2, high bits");
+                        break;
+                    case 56:
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                doubleCoordinate[0] = Math.sqrt((x << 9) | y);
+                                code = CrossHash.Wisp.hash64Alt(doubleCoordinate) & 0xFFFFFF00L | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("Wisp Double Alt, hash64 on length 1, high bits");
+                        break;
+                    case 57:
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                doubleCoordinate[0] = Math.sqrt((x << 9) | y);
+                                code = CrossHash.Wisp.hashAlt(doubleCoordinate) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("Wisp Double Alt, hash on length 1, low bits");
+                        break;
+                    case 58:
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                doubleCoordinate[0] = Math.sqrt((x << 9) | y);
+                                code = CrossHash.Wisp.hash64Alt(doubleCoordinate) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("Wisp Double Alt, hash64 on length 1, low bits");
+                        break;
+                    case 59:
+                        for (int x = 0; x < width; x++) {
+                            doubleCoordinates[0] = Math.sqrt(x);
+                            for (int y = 0; y < height; y++) {
+                                doubleCoordinates[1] = Math.sqrt(y);
+                                code = CrossHash.Wisp.hashAlt(doubleCoordinates) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("Wisp Double Alt, hash on length 2, low bits");
+                        break;
+                    case 60:
+                        for (int x = 0; x < width; x++) {
+                            doubleCoordinates[0] = Math.sqrt(x);
+                            for (int y = 0; y < height; y++) {
+                                doubleCoordinates[1] = Math.sqrt(y);
+                                code = CrossHash.Wisp.hash64Alt(doubleCoordinates) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("Wisp Double Alt, hash64 on length 2, low bits");
                         break;
                 }
             }
