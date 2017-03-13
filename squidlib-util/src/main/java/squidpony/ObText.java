@@ -388,7 +388,7 @@ public class ObText extends AbstractCollection<String>{
         }
     }
 
-    public static final StringConvert<ObText> convert = new StringConvert<ObText>(ObText.class) {
+    public static final StringConvert<ObText> convert = new StringConvert<ObText>("ObText") {
         @Override
         public String stringify(ObText item) {
             return item.serializeToString();
