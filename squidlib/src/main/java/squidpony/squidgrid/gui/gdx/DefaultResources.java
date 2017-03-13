@@ -63,7 +63,7 @@ public class DefaultResources implements LifecycleListener {
 
     private TextCellFactory distanceNarrow = null, distanceSquare = null, typewriterDistanceNarrow = null,
             distancePrint = null, distanceClean = null, distanceCode = null, distanceDejaVu = null,
-            distanceSciFi = null, distanceOrbit = null;
+            distanceSciFi = null, distanceOrbit = null, distanceLean = null, distanceSlab = null;
     private TextureAtlas iconAtlas = null;
     public static final String squareName = "Zodiac-Square-12x12.fnt", squareTexture = "Zodiac-Square-12x12.png",
             narrowName = "Rogue-Zodiac-6x12.fnt", narrowTexture = "Rogue-Zodiac-6x12_0.png",
@@ -92,7 +92,11 @@ public class DefaultResources implements LifecycleListener {
             distanceFieldSciFi = "Galaxsea-Starlight-Mono-v3_1-distance.fnt",
             distanceFieldSciFiTexture = "Galaxsea-Starlight-Mono-v3_1-distance.png",
             distanceFieldOrbit = "Orbitron-distance.fnt",
-            distanceFieldOrbitTexture = "Orbitron-distance.png";
+            distanceFieldOrbitTexture = "Orbitron-distance.png",
+            distanceFieldLean = "Iosevka-distance.fnt",
+            distanceFieldLeanTexture = "Iosevka-distance.png",
+            distanceFieldSlab = "Iosevka-Slab-distance.fnt",
+            distanceFieldSlabTexture = "Iosevka-Slab-distance.png";
     public static String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n"
             + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n"
             + "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n"
@@ -409,6 +413,8 @@ public class DefaultResources implements LifecycleListener {
      * Returns a TextCellFactory already configured to use a square font that should scale cleanly to many sizes. Caches
      * the result for later calls.
      * <br>
+     * Preview: http://i.imgur.com/DD1RkPa.png
+     * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * distance field font technique this uses can work.
      * <br>
@@ -436,6 +442,8 @@ public class DefaultResources implements LifecycleListener {
     /**
      * Returns a TextCellFactory already configured to use a narrow font (twice as tall as it is wide) that should scale
      * cleanly to many sizes. Caches the result for later calls.
+     * <br>
+     * Preview: http://i.imgur.com/dvEEMqo.png
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * distance field font technique this uses can work.
@@ -468,6 +476,8 @@ public class DefaultResources implements LifecycleListener {
      * Returns a TextCellFactory already configured to use a narrow typewriter-style serif font that should scale
      * cleanly to many sizes. Caches the result for later calls.
      * <br>
+     * Preview: http://i.imgur.com/oN2gRci.png
+     * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * distance field font technique this uses can work.
      * <br>
@@ -497,12 +507,14 @@ public class DefaultResources implements LifecycleListener {
     /**
      * Returns a TextCellFactory already configured to use a highly-legible fixed-width font with broad Unicode support
      * that should scale cleanly to many sizes. Caches the result for later calls. The font used is Source Code Pro, an
-     * open-source (SIL Open Font License) typeface by Adobe, and it has the best Unicode support of any fixed-width
-     * font used by SquidLib. It may be a good choice for science-fiction games because of its modern feel, but the
+     * open-source (SIL Open Font License) typeface by Adobe, and it has good Unicode support among the fixed-width
+     * fonts used by SquidLib. It may be a good choice for science-fiction games because of its modern feel, but the
      * legibility enhancements made so the font could be usable in text editors also are nice for all text-based games.
      * The high glyph count means the part of the image for each glyph is smaller, though, so this may look slightly
      * pixelated if it starts small and is resized to much larger. A cell width of 15 and cell height of 27 is ideal;
      * this allows the font to resize fairly well to larger sizes using Viewports.
+     * <br>
+     * Preview: http://i.imgur.com/VC0xn2r.png
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * distance field font technique this uses can work.
@@ -530,6 +542,85 @@ public class DefaultResources implements LifecycleListener {
             return instance.distanceCode.copy();
         return null;
     }
+    /**
+     * Returns a TextCellFactory already configured to use a highly-legible fixed-width font with good Unicode support
+     * and a thin, geometric style, that should scale cleanly to many sizes. Caches the result for later calls. The font
+     * used is Iosevka, an open-source (SIL Open Font License) typeface by Belleve Invis (see
+     * https://be5invis.github.io/Iosevka/ ), and it uses several customizations thanks to Iosevka's special build
+     * process. It supports a lot of glyphs, including quite a bit of extended Latin, Greek, and Cyrillic, but also
+     * circled letters and digits and the necessary box drawing characters. The high glyph count means the part of the
+     * image for each glyph is smaller, though, so this may look slightly pixelated if it starts small and is resized to
+     * much larger. A cell width of 11 and cell height of 20 is ideal (or some approximate multiple of that aspect
+     * ratio); this allows the font to resize fairly well to larger sizes using Viewports.
+     * <br>
+     * Preview: http://i.imgur.com/sm0ULbU.png
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-distance.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-distance.png</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font Iosevka.ttf
+     */
+    public static TextCellFactory getStretchableLeanFont()
+    {
+        initialize();
+        if(instance.distanceLean == null)
+        {
+            try {
+                instance.distanceLean = new TextCellFactory()
+                        .fontDistanceField(distanceFieldLean, distanceFieldLeanTexture);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.distanceLean != null)
+            return instance.distanceLean.copy();
+        return null;
+    }
+
+    /**
+     * Returns a TextCellFactory already configured to use a highly-legible fixed-width font with good Unicode support
+     * and a slab-serif geometric style, that should scale cleanly to many sizes. Caches the result for later calls. The
+     * font used is Iosevka with Slab style, an open-source (SIL Open Font License) typeface by Belleve Invis (see
+     * https://be5invis.github.io/Iosevka/ ), and it uses several customizations thanks to Iosevka's special build
+     * process. It supports a lot of glyphs, including quite a bit of extended Latin, Greek, and Cyrillic, but also
+     * circled letters and digits and the necessary box drawing characters. The high glyph count means the part of the
+     * image for each glyph is smaller, though, so this may look slightly pixelated if it starts small and is resized to
+     * much larger. A cell width of 11 and cell height of 20 is ideal (or some approximate multiple of that aspect
+     * ratio); this allows the font to resize fairly well to larger sizes using Viewports.
+     * <br>
+     * Preview: http://i.imgur.com/5kb697p.png
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-distance.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-distance.png</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font Iosevka.ttf
+     */
+    public static TextCellFactory getStretchableSlabFont()
+    {
+        initialize();
+        if(instance.distanceSlab == null)
+        {
+            try {
+                instance.distanceSlab = new TextCellFactory()
+                        .fontDistanceField(distanceFieldSlab, distanceFieldSlabTexture);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.distanceSlab != null)
+            return instance.distanceSlab.copy();
+        return null;
+    }
 
     /**
      * Returns a TextCellFactory already configured to use a font with extremely wide Unicode support that should scale
@@ -539,6 +630,8 @@ public class DefaultResources implements LifecycleListener {
      * SquidPanel or SquidLayers may need to be increased 1-5 pixels past what the cell width and height are; this can
      * be done with {@link SquidPanel#setTextSize(int, int)} or {@link SquidLayers#setTextSize(int, int)}, giving 1-2
      * more than the cell width for x and 3-5 more than the cell height for y.
+     * <br>
+     * Preview: http://i.imgur.com/1haETOe.png
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * distance field font technique this uses can work.
@@ -620,6 +713,8 @@ public class DefaultResources implements LifecycleListener {
      * fonts used in many novels' main texts, and that should scale cleanly to many sizes. Meant to be used in variable-
      * width displays like TextPanel. Caches the result for later calls.
      * <br>
+     * Preview: http://i.imgur.com/eIYYt8C.png
+     * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * distance field font technique this uses can work.
      * <br>
@@ -649,6 +744,8 @@ public class DefaultResources implements LifecycleListener {
      * Returns a TextCellFactory already configured to use a variable-width sans-serif font that should have a blocky,
      * futuristic look (based on the font Orbitron), and that should scale cleanly to many sizes. Meant to be used in
      * variable-width displays like TextPanel. Caches the result for later calls.
+     * <br>
+     * Preview: http://i.imgur.com/grJhoMs.png
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * distance field font technique this uses can work.
@@ -681,10 +778,12 @@ public class DefaultResources implements LifecycleListener {
      * slightly jumbled without certain layout features. Meant to be used in variable-width displays like TextPanel, but
      * currently you should prefer getStretchablePrintFont() for legibility. Caches the result for later calls.
      * <br>
+     * Preview: http://i.imgur.com/GF5qQxn.png
+     * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
-     * distance field font technique this uses can work. Sets the smoothing multiplier to 0.4f; if you set the smoothing
+     * distance field font technique this uses can work. Sets the smoothing multiplier to 0.8f; if you set the smoothing
      * multiplier yourself, it should be similarly smaller than what other fonts use (most fonts are 1.0, so multiplying
-     * whatever you would normally set the smoothing multiplier to by 0.4f should work).
+     * whatever you would normally set the smoothing multiplier to by 0.8f should work).
      * <br>
      * Needs files:
      * <ul>
@@ -698,7 +797,7 @@ public class DefaultResources implements LifecycleListener {
         if (instance.distanceClean == null) {
             try {
                 instance.distanceClean = new TextCellFactory().fontDistanceField(distanceFieldClean, distanceFieldCleanTexture)
-                        .setSmoothingMultiplier(0.8f).height(30).width(7);
+                        .setSmoothingMultiplier(0.8f).height(30).width(5);
             } catch (Exception e) {
                 e.printStackTrace();
             }
