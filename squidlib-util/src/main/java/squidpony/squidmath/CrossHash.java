@@ -2311,6 +2311,26 @@ public class CrossHash {
             return result * (a | 1L) ^ (result >>> 27 | result << 37);
         }
 
+        /**
+         * The hashAlt and hash64Alt methods for floating-point number arrays have better visual hashing properties than
+         * hash and hash64, but are somewhat slower on desktop. They may be drastically faster than hash and hash64 on
+         * GWT, however, because they don't use {@link Double#doubleToLongBits(double)} or its equivalent for Floats,
+         * and those methods have much more complex implementations on GWT than on desktop Java.
+         * @param data a float array to hash
+         * @return a 64-bit hash code of data
+         */
+        public static long hash64Alt(final float[] data) {
+            if (data == null)
+                return 0;
+            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
+            final int len = data.length;
+            double t;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x8329C6EB9E6AD3E3L * ((long) (-0xD0E8.9D2D311E289Fp-25 * (t = data[i]) + t * -0x1.39b4dce80194cp9)));
+            }
+            return result * (a | 1L) ^ (result >>> 27 | result << 37);
+        }
+
         public static long hash64(final double[] data) {
             if (data == null)
                 return 0;
@@ -2318,6 +2338,26 @@ public class CrossHash {
             final int len = data.length;
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x8329C6EB9E6AD3E3L * Double.doubleToLongBits(data[i]));
+            }
+            return result * (a | 1L) ^ (result >>> 27 | result << 37);
+        }
+
+        /**
+         * The hashAlt and hash64Alt methods for floating-point number arrays have better visual hashing properties than
+         * hash and hash64, but are somewhat slower on desktop. They may be drastically faster than hash and hash64 on
+         * GWT, however, because they don't use {@link Double#doubleToLongBits(double)} or its equivalent for Floats,
+         * and those methods have much more complex implementations on GWT than on desktop Java.
+         * @param data a double array to hash
+         * @return a 64-bit hash code of data
+         */
+        public static long hash64Alt(final double[] data) {
+            if (data == null)
+                return 0;
+            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
+            final int len = data.length;
+            double t;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x8329C6EB9E6AD3E3L * ((long) (-0xD0E8.9D2D311E289Fp-25 * (t = data[i]) + t * -0x1.39b4dce80194cp9)));
             }
             return result * (a | 1L) ^ (result >>> 27 | result << 37);
         }
@@ -2505,6 +2545,26 @@ public class CrossHash {
             return result * (a | 1) ^ (result >>> 11 | result << 21);
         }
 
+        /**
+         * The hashAlt and hash64Alt methods for floating-point number arrays have better visual hashing properties than
+         * hash and hash64, but are somewhat slower on desktop. They may be drastically faster than hash and hash64 on
+         * GWT, however, because they don't use {@link Double#doubleToLongBits(double)} or its equivalent for Floats,
+         * and those methods have much more complex implementations on GWT than on desktop Java.
+         * @param data a float array to hash
+         * @return a 32-bit hash code of data
+         */
+        public static int hashAlt(final float[] data) {
+            if (data == null)
+                return 0;
+            int result = 0x9E3779B9, a = 0x632BE5AB;
+            final int len = data.length;
+            double t;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x85157AF5 * ((int) (-0xD0E8.9D2D311E289Fp-25f * (t = data[i]) + t * -0x1.39b4dce80194cp9f)));
+            }
+            return result * (a | 1) ^ (result >>> 11 | result << 21);
+        }
+
         public static int hash(final double[] data) {
             if (data == null)
                 return 0;
@@ -2512,6 +2572,26 @@ public class CrossHash {
             final int len = data.length;
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x8329C6EB9E6AD3E3L * Double.doubleToLongBits(data[i]));
+            }
+            return (int)((result = (result * (a | 1L) ^ (result >>> 27 | result << 37))) ^ (result >>> 32));
+        }
+
+        /**
+         * The hashAlt and hash64Alt methods for floating-point number arrays have better visual hashing properties than
+         * hash and hash64, but are somewhat slower on desktop. They may be drastically faster than hash and hash64 on
+         * GWT, however, because they don't use {@link Double#doubleToLongBits(double)} or its equivalent for Floats,
+         * and those methods have much more complex implementations on GWT than on desktop Java.
+         * @param data a double array to hash
+         * @return a 32-bit hash code of data
+         */
+        public static int hashAlt(final double[] data) {
+            if (data == null)
+                return 0;
+            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
+            final int len = data.length;
+            double t;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x8329C6EB9E6AD3E3L * ((long) (-0xD0E8.9D2D311E289Fp-25 * (t = data[i]) + t * -0x1.39b4dce80194cp9)));
             }
             return (int)((result = (result * (a | 1L) ^ (result >>> 27 | result << 37))) ^ (result >>> 32));
         }

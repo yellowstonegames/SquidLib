@@ -42,6 +42,7 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.openjdk.jmh.runner.options.TimeValue;
 import squidpony.squidmath.CrossHash;
 import squidpony.squidmath.LongPeriodRNG;
+import squidpony.squidmath.ThunderRNG;
 
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
@@ -406,6 +407,94 @@ public class HashBenchmark {
         doWispInt();
     }
 
+    public long doWispDouble32()
+    {
+        final ThunderRNG rng = new ThunderRNG(seed);
+        double[] data = new double[16];
+        for (int i = 0; i < 1000000; i++) {
+            for (int j = 0; j < 16; j++) {
+                data[j] = rng.nextDouble();
+                seed += data[j] * 1024;
+            }
+            seed += CrossHash.Wisp.hash(data);
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureWispDouble32() throws InterruptedException {
+        seed = 9000;
+        doWispDouble32();
+    }
+
+    public long doWispDouble32Alt()
+    {
+        final ThunderRNG rng = new ThunderRNG(seed);
+        double[] data = new double[16];
+        for (int i = 0; i < 1000000; i++) {
+            for (int j = 0; j < 16; j++) {
+                data[j] = rng.nextDouble();
+                seed += data[j] * 1024;
+            }
+            seed += CrossHash.Wisp.hashAlt(data);
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureWispDouble32Alt() throws InterruptedException {
+        seed = 9000;
+        doWispDouble32Alt();
+    }
+
+    public long doWispDouble64()
+    {
+        final ThunderRNG rng = new ThunderRNG(seed);
+        double[] data = new double[16];
+        for (int i = 0; i < 1000000; i++) {
+            for (int j = 0; j < 16; j++) {
+                data[j] = rng.nextDouble();
+                seed += data[j] * 1024;
+            }
+            seed += CrossHash.Wisp.hash64(data);
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureWispDouble64() throws InterruptedException {
+        seed = 9000;
+        doWispDouble64();
+    }
+
+    public long doWispDouble64Alt()
+    {
+        final ThunderRNG rng = new ThunderRNG(seed);
+        double[] data = new double[16];
+        for (int i = 0; i < 1000000; i++) {
+            for (int j = 0; j < 16; j++) {
+                data[j] = rng.nextDouble();
+                seed += data[j] * 1024;
+            }
+            seed += CrossHash.Wisp.hash64Alt(data);
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureWispDouble64Alt() throws InterruptedException {
+        seed = 9000;
+        doWispDouble64Alt();
+    }
+
     public long doControl()
     {
         final LongPeriodRNG rng = new LongPeriodRNG(iseed);
@@ -422,6 +511,27 @@ public class HashBenchmark {
     public void measureControl() throws InterruptedException {
         iseed = 9000;
         doControl();
+    }
+
+    public long doControlDouble()
+    {
+        final ThunderRNG rng = new ThunderRNG(seed);
+        double[] data = new double[16];
+        for (int i = 0; i < 1000000; i++) {
+            for (int j = 0; j < 16; j++) {
+                data[j] = rng.nextDouble();
+                seed += data[j] * 1024;
+            }
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureControlDouble() throws InterruptedException {
+        seed = 9000;
+        doControlDouble();
     }
 
 
