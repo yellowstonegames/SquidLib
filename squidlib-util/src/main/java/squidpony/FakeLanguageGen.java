@@ -3520,7 +3520,7 @@ public class FakeLanguageGen implements Serializable {
         }
     }
 
-    public static final StringConvert<FakeLanguageGen> convert = new StringConvert<FakeLanguageGen>(FakeLanguageGen.class)
+    public static final StringConvert<FakeLanguageGen> convert = new StringConvert<FakeLanguageGen>("FakeLanguageGen")
     {
         @Override
         public String stringify(FakeLanguageGen item) {
