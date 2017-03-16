@@ -73,19 +73,20 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 43, rngMode = 0, noiseMode = 10;
+    private int hashMode = 43, rngMode = 0, noiseMode = 16;
     private CrossHash.Storm storm, stormA, stormB, stormC;
     private CrossHash.Chariot chariot, chariotA, chariotB, chariotC;
     private final int[] coordinates = new int[2];
     private final int[] coordinate = new int[1];
     private final double[] doubleCoordinates = new double[2], doubleCoordinate = new double[1];
+    private final float[] seamless = new float[64 * 64 * 3];
 
     // 0 commonly used hashes
     // 1 variants on Storm and other hashes
     // 3 artistic visualizations of hash functions
     // 4 noise
     // 5 RNG results
-    private int testType = 0;
+    private int testType = 4;
 
     private RandomnessSource fuzzy, random;
     private Random jreRandom;
@@ -249,7 +250,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         {
                             case 4:
                                 noiseMode++;
-                                noiseMode %= 16;
+                                noiseMode %= 20;
                                 break;
                             case 5:
                                 rngMode++;
@@ -1630,6 +1631,95 @@ public class HashVisualizer extends ApplicationAdapter {
                                         NumberUtils.intToFloatColor(0xFE000000 |
                                                 (int)((WhirlingNoise.noise(x * 0.0625, y * 0.0625, ctr  * 0.125)
                                                         + 1.0) * 8388607.5)));
+                            }
+                        }
+                        break;
+                    case 16: {
+                        Gdx.graphics.setTitle("Seeded Seamless 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        double p, q, r = ctr * 0.03125 * 0.0625,
+                                dx_div_2pi = 2.0 * 0.15915494309189535,
+                                dy_div_2pi = 2.0 * 0.15915494309189535,
+                                dz_div_2pi = 16.0 * 0.15915494309189535,
+                                ps, pc,
+                                qs, qc,
+                                rs = Math.sin(r * 6.283185307179586) * dz_div_2pi, rc = Math.cos(r * 6.283185307179586) * dz_div_2pi;
+                        int idx = 0;
+                        for (int x = 0; x < 64; x++) {
+                            p = x * 0.015625;
+                            ps = Math.sin(p * 6.283185307179586) * dx_div_2pi;
+                            pc = Math.cos(p * 6.283185307179586) * dx_div_2pi;
+                            for (int y = 0; y < 64; y++) {
+                                q = y * 0.015625;
+                                qs = Math.sin(q * 6.283185307179586) * dy_div_2pi;
+                                qc = Math.cos(q * 6.283185307179586) * dy_div_2pi;
+                                seamless[idx++] = (float) (SeededNoise.noise(pc, ps, qc, qs, rc, rs, 1234) * 0.5) + 0.5f;
+                                seamless[idx++] = (float) (SeededNoise.noise(pc, ps, qc, qs, rc, rs, 54321) * 0.5) + 0.5f;
+                                seamless[idx++] = (float) (SeededNoise.noise(pc, ps, qc, qs, rc, rs, 1234321) * 0.5) + 0.5f;
+                            }
+                        }
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                idx = ((x & 63) << 6 | (y & 63)) * 3;
+                                display.put(x, y,
+                                        floatGet(seamless[idx], seamless[idx + 1], seamless[idx + 2], 1.0f));
+                            }
+                        }
+                    }
+                        break;
+                    case 17: {
+                        Gdx.graphics.setTitle("Seeded Seamless 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        double p, q, r = ctr * 0.03125 * 0.0625,
+                                dx_div_2pi = 2.0 * 0.15915494309189535,
+                                dy_div_2pi = 2.0 * 0.15915494309189535,
+                                dz_div_2pi = 16.0 * 0.15915494309189535,
+                                ps, pc,
+                                qs, qc,
+                                rs = Math.sin(r * 6.283185307179586) * dz_div_2pi, rc = Math.cos(r * 6.283185307179586) * dz_div_2pi;
+                        int idx = 0;
+                        for (int x = 0; x < 64; x++) {
+                            p = x * 0.015625;
+                            ps = Math.sin(p * 6.283185307179586) * dx_div_2pi;
+                            pc = Math.cos(p * 6.283185307179586) * dx_div_2pi;
+                            for (int y = 0; y < 64; y++) {
+                                q = y * 0.015625;
+                                qs = Math.sin(q * 6.283185307179586) * dy_div_2pi;
+                                qc = Math.cos(q * 6.283185307179586) * dy_div_2pi;
+                                seamless[idx++] = (float) (SeededNoise.noise(pc, ps, qc, qs, rc, rs, 123456) * 0.5) + 0.5f;
+                            }
+                        }
+
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = seamless[((x & 63) << 6 | (y & 63))];
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                    }
+                        break;
+                    case 18:
+                        Gdx.graphics.setTitle("Seeded 6D as 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y,
+                                        floatGet(
+                                                ((float)SeededNoise.noise(x * 0.03125 + 20, y * 0.03125 + 30, ctr * 0.05125 + 10, 0.0, 0.0, 0.0,1234) * 0.50f) + 0.50f,
+                                                ((float)SeededNoise.noise(x * 0.03125 + 30, y * 0.03125 + 10, ctr * 0.05125 + 20, 0.0, 0.0, 0.0,54321) * 0.50f) + 0.50f,
+                                                ((float)SeededNoise.noise(x * 0.03125 + 10, y * 0.03125 + 20, ctr * 0.05125 + 30, 0.0, 0.0, 0.0,1234321) * 0.50f) + 0.50f,
+                                                1.0f));
+                            }
+                        }
+                        break;
+                    case 19:
+                        Gdx.graphics.setTitle("Seeded 6D as 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float)(/*SeededNoise.seamless3D(x * 0.0625, y * 0.0625, ctr  * 0.05125,
+                                        20.0, 20.0, 20.0, 12) * 0.5
+                                        + SeededNoise.seamless3D(x * 0.125, y * 0.125, ctr  * 0.05125,
+                                        40.0, 40.0, 20.0, 1234)
+                                        + */SeededNoise.noise(x * 0.03125, y * 0.03125, ctr  * 0.05125,
+                                        0.0, 0.0, 0.0, 123456) * 0.50f) + 0.50f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
                         break;

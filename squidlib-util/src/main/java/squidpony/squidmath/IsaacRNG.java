@@ -249,8 +249,21 @@ public class IsaacRNG implements RandomnessSource {
         return results[count];
     }
 
+    /**
+     * Generates and returns a block of 255 pseudo-random long values.
+     * @return an array of 255 pseudo-random longs, with all bits possible
+     */
+    public final long[] nextBlock()
+    {
+        regen();
+        final long[] block = new long[SIZE-1];
+        System.arraycopy(results, 1, block, 0, SIZE-1);
+        count = 0;
+        return block;
+    }
+
     @Override
-    public int next( int bits ) {
+    public final int next( int bits ) {
         //return (int)( nextLong() >>> (64 - bits) );
         return (int)( nextLong() & ( 1L << bits ) - 1 );
     }

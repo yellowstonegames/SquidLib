@@ -56,9 +56,7 @@ public class LFSR implements StatefulRandomness, Serializable {
 
     @Override
     public long nextLong() {
-        long lsb = state & 1L;
-        state >>>= 1;
-        return (state ^= -lsb & 0xD800000000000000L);
+        return state = (state >>> 1 ^ (-(state & 1L) & 0xD800000000000000L));
     }
 
     /**
@@ -179,7 +177,6 @@ public class LFSR implements StatefulRandomness, Serializable {
         return (int) (state ^ (state >>> 32));
     }
 
-
     /**
      * Gets the next number that an LFSR would produce using {@link #nextLong()} if its state was {@code state}.
      * Does not allow state to be 0.
@@ -188,10 +185,18 @@ public class LFSR implements StatefulRandomness, Serializable {
      */
     public static long determine(long state)
     {
+        return state >>> 1 ^ (-(state & 1L) & 0xD800000000000000L);
+    }
 
-        long lsb = state & 1L;
-        state >>>= 1;
-        return state ^ (-lsb & 0xD800000000000000L);
+    /**
+     * Gets the next number from 1 to 255 that a different kind of LFSR would produce if its state was {@code state}.
+     * Does not allow state to be 0. If given all byte values except 0 as arguments, will produce all ints 1-255.
+     * @param state any byte other than 0
+     * @return the next int between 1 and 255 that an LFSR would produce with the given state
+     */
+    public static int determineByte(byte state)
+    {
+        return state >>> 1 ^ (-(state & 1) & 0xB8);
     }
 
     /**
