@@ -44,7 +44,7 @@ public class WhirlingNoise extends PerlinNoise {
         return g[0] * x + g[1] * y;
     }
 
-    protected static float dotf(final int g[], float x, final float y, final float z) {
+    protected static float dotf(final int g[], final float x, final float y, final float z) {
         return g[0] * x + g[1] * y + g[2] * z;
     }
 
@@ -66,81 +66,6 @@ public class WhirlingNoise extends PerlinNoise {
 
         //return (t + 0.5 + high - low) * 0.5;
         return t * t * t * (t * (t * 6 - 15) + 10);
-    }
-    public static double noise(final double x, final double y, final long seed) {
-        int x0 = fastFloor(x);
-        int y0 = fastFloor(y);
-        int x1 = x0 + 1;
-        int y1 = y0 + 1;
-
-
-        long v1 = rawNoise(x0, y0, seed);
-        long v2 = rawNoise(x1, y0, seed);
-        double d1 = Float.intBitsToFloat(0x40000000 | (int)(v1 & 0x7FFFFF)) - 3.0; //-1 to 1
-        double d2 = Float.intBitsToFloat(0x40000000 | (int)(v2 & 0x7FFFFF)) - 3.0; //-1 to 1
-        double p1 = Float.intBitsToFloat(0x3F800000 | (int)(v1 >>> 32 & 0x7FFFFF)) - 1.0; //0 to 1.0
-        double p2 = Float.intBitsToFloat(0x3F800000 | (int)(v2 >>> 32 & 0x7FFFFF)) - 1.0; //0 to 1.0
-        double xs = interpolate(x - x0, p1, p2);
-        double xy1 = lerp(xs, d1, d2);
-        v1 = rawNoise(x0, y1, seed);
-        v2 = rawNoise(x1, y1, seed);
-        p2 = Float.intBitsToFloat(0x3F800000 | (int)(v1 >>> 32 & 0x7FFFFF)) - 1.0; //0 to 1.0
-        d1 = Float.intBitsToFloat(0x40000000 | (int)(v1 & 0x7FFFFF)) - 3.0;
-        d2 = Float.intBitsToFloat(0x40000000 | (int)(v2 & 0x7FFFFF)) - 3.0;
-        double xy2 = lerp(xs, d1, d2);
-
-        return lerp(interpolate(y - y0, p1, p2), xy1, xy2);
-    }
-    public static double noise(final double x, final double y, final double z, final long seed) {
-        int x0 = fastFloor(x);
-        int y0 = fastFloor(y);
-        int z0 = fastFloor(z);
-        int x1 = x0 + 1;
-        int y1 = y0 + 1;
-        int z1 = z0 + 1;
-
-        long v1 = rawNoise(x0, y0, z0, seed);
-        long v2 = rawNoise(x1, y0, z0, seed);
-        double d1 = Float.intBitsToFloat(0x40000000 | (int)(v1 & 0x7FFFFF)) - 2.0; //0.0 to 2.0
-        double d2 = Float.intBitsToFloat(0x40000000 | (int)(v2 & 0x7FFFFF)) - 2.0; //0.0 to 2.0
-        double pa = Float.intBitsToFloat(0x3F800000 | (int)(v1 >>> 32 & 0x7FFFFF)); //1.0 to 2.0
-        double pb = Float.intBitsToFloat(0x3F800000 | (int)(v2 >>> 32 & 0x7FFFFF)); //1.0 to 2.0
-        double xs = interpolate(x - x0);
-        double xy1 = lerp(xs, d1*pa, d2*pb);
-        double weight = lerp(xs, pa, pb);
-        v1 = rawNoise(x0, y1, z0, seed);
-        v2 = rawNoise(x1, y1, z0, seed);
-        d1 = Float.intBitsToFloat(0x40000000 | (int)(v1 & 0x7FFFFF)) - 2.0; //0.0 to 2.0
-        d2 = Float.intBitsToFloat(0x40000000 | (int)(v2 & 0x7FFFFF)) - 2.0; //0.0 to 2.0
-        pa = Float.intBitsToFloat(0x3F800000 | (int)(v1 >>> 32 & 0x7FFFFF)); //1.0 to 2.0
-        pb = Float.intBitsToFloat(0x3F800000 | (int)(v2 >>> 32 & 0x7FFFFF)); //1.0 to 2.0
-        double xy2 = lerp(xs, d1*pa, d2*pb);
-        double ys = interpolate(y - y0);
-
-        weight = lerp(ys, weight, lerp(xs, pa, pb));
-        double xyz1 = lerp(ys, xy1, xy2);
-
-
-        v1 = rawNoise(x0, y0, z1, seed);
-        v2 = rawNoise(x1, y0, z1, seed);
-        d1 = Float.intBitsToFloat(0x40000000 | (int)(v1 & 0x7FFFFF)) - 2.0; //0.0 to 2.0
-        d2 = Float.intBitsToFloat(0x40000000 | (int)(v2 & 0x7FFFFF)) - 2.0; //0.0 to 2.0
-        pa = Float.intBitsToFloat(0x3F800000 | (int)(v1 >>> 32 & 0x7FFFFF)); //1.0 to 2.0
-        pb = Float.intBitsToFloat(0x3F800000 | (int)(v2 >>> 32 & 0x7FFFFF)); //1.0 to 2.0
-        xy1 = lerp(xs, d1*pa, d2*pb);
-        double weight2 = lerp(xs, pa, pb);
-
-        v1 = rawNoise(x0, y1, z1, seed);
-        v2 = rawNoise(x1, y1, z1, seed);
-        d1 = Float.intBitsToFloat(0x40000000 | (int)(v1 & 0x7FFFFF)) - 2.0; //0.0 to 2.0
-        d2 = Float.intBitsToFloat(0x40000000 | (int)(v2 & 0x7FFFFF)) - 2.0; //0.0 to 2.0
-        pa = Float.intBitsToFloat(0x3F800000 | (int)(v1 >>> 32 & 0x7FFFFF)); //1.0 to 2.0
-        pb = Float.intBitsToFloat(0x3F800000 | (int)(v2 >>> 32 & 0x7FFFFF)); //1.0 to 2.0
-        xy2 = lerp(xs, d1*pa, d2*pb);
-        weight2 = lerp(ys, weight2, lerp(xs, pa, pb));
-        double xyz2 = lerp(ys, xy1, xy2);
-        double zs = interpolate(z - z0);
-        return lerp(zs, xyz1, xyz2) / (lerp(zs, weight, weight2)) - 1.0;
     }
     */
 
