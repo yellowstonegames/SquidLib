@@ -73,13 +73,15 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 43, rngMode = 0, noiseMode = 16;
+    private int hashMode = 43, rngMode = 0, noiseMode = 24;
     private CrossHash.Storm storm, stormA, stormB, stormC;
     private CrossHash.Chariot chariot, chariotA, chariotB, chariotC;
     private final int[] coordinates = new int[2];
     private final int[] coordinate = new int[1];
     private final double[] doubleCoordinates = new double[2], doubleCoordinate = new double[1];
     private final double[][][][] seamless = new double[3][64][64][64];
+    private final Noise.Noise2D ridged2D = Noise.ridged2D(SeededNoise.instance, 2, 1.25);
+    private final Noise.Noise3D ridged3D = Noise.ridged3D(SeededNoise.instance, 2, 1.25);
 
     // 0 commonly used hashes
     // 1 variants on Storm and other hashes
@@ -253,7 +255,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         {
                             case 4:
                                 noiseMode++;
-                                noiseMode %= 28;
+                                noiseMode %= 32;
                                 switch (noiseMode)
                                 {
                                     case 16:
@@ -1703,7 +1705,7 @@ public class HashVisualizer extends ApplicationAdapter {
 
 
                     case 16: {
-                        Gdx.graphics.setTitle("Seeded Seamless 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Seamless 3D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -1727,7 +1729,7 @@ public class HashVisualizer extends ApplicationAdapter {
                     }
                         break;
                     case 18:
-                        Gdx.graphics.setTitle("Seeded 6D as 3D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded 6D as 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -1778,7 +1780,7 @@ public class HashVisualizer extends ApplicationAdapter {
                     }
                     break;
                     case 22:
-                        Gdx.graphics.setTitle("Seeded 4D as 3D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded 4D as 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -1806,7 +1808,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
 
                     case 24:
-                        Gdx.graphics.setTitle("Seeded 3D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -1854,6 +1856,61 @@ public class HashVisualizer extends ApplicationAdapter {
                                         + SeededNoise.seamless3D(x * 0.125, y * 0.125, ctr  * 0.05125,
                                         40.0, 40.0, 20.0, 1234)
                                         + */SeededNoise.noise(x * 0.03125 + ctr  * 0.05125, y * 0.03125 + ctr  * 0.05125,
+                                        123456) * 0.5 + 0.5);
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+
+                    case 28:
+                        Gdx.graphics.setTitle("Seeded Ridged 3D Color Noise, two octaves per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y,
+                                        floatGet(
+                                                ((float)ridged3D.getNoiseWithSeed(x * 0.03125 + 20, y * 0.03125 + 30, ctr * 0.05125 + 10, 1234) * 0.50f) + 0.50f,
+                                                ((float)ridged3D.getNoiseWithSeed(x * 0.03125 + 30, y * 0.03125 + 10, ctr * 0.05125 + 20, 54321) * 0.50f) + 0.50f,
+                                                ((float)ridged3D.getNoiseWithSeed(x * 0.03125 + 10, y * 0.03125 + 20, ctr * 0.05125 + 30, 1234321) * 0.50f) + 0.50f,
+                                                1.0f));
+                            }
+                        }
+                        break;
+                    case 29:
+                        Gdx.graphics.setTitle("Seeded Ridged 3D Noise, two octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float)(/*SeededNoise.seamless3D(x * 0.0625, y * 0.0625, ctr  * 0.05125,
+                                        20.0, 20.0, 20.0, 12) * 0.5
+                                        + SeededNoise.seamless3D(x * 0.125, y * 0.125, ctr  * 0.05125,
+                                        40.0, 40.0, 20.0, 1234)
+                                        + */ridged3D.getNoiseWithSeed(x * 0.03125, y * 0.03125, ctr  * 0.05125,
+                                        123456) * 0.50f) + 0.50f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 30:
+                        Gdx.graphics.setTitle("Seeded Ridged 2D Color Noise, two octaves per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y,
+                                        floatGet(
+                                                (float)(ridged2D.getNoiseWithSeed(x * 0.03125 + 20 + ctr * 0.05125, y * 0.03125 + 30 + ctr * 0.05125, 1234) * 0.5 + 0.5),
+                                                (float)(ridged2D.getNoiseWithSeed(x * 0.03125 + 30 + ctr * 0.05125, y * 0.03125 + 10 + ctr * 0.05125, 54321) * 0.5 + 0.5),
+                                                (float)(ridged2D.getNoiseWithSeed(x * 0.03125 + 10 + ctr * 0.05125, y * 0.03125 + 20 + ctr * 0.05125, 1234321) * 0.5 + 0.5),
+                                                1.0f));
+                            }
+                        }
+                        break;
+                    case 31:
+                        Gdx.graphics.setTitle("Seeded Ridged 2D Noise, two octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float)(/*SeededNoise.seamless3D(x * 0.0625, y * 0.0625, ctr  * 0.05125,
+                                        20.0, 20.0, 20.0, 12) * 0.5
+                                        + SeededNoise.seamless3D(x * 0.125, y * 0.125, ctr  * 0.05125,
+                                        40.0, 40.0, 20.0, 1234)
+                                        + */ridged2D.getNoiseWithSeed(x * 0.03125 + ctr  * 0.05125, y * 0.03125 + ctr  * 0.05125,
                                         123456) * 0.5 + 0.5);
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
