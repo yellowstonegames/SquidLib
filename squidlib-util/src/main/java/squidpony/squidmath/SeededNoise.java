@@ -57,9 +57,43 @@ package squidpony.squidmath;
  * http://accidentalnoise.sourceforge.net/index.html . Both Joise and ANL have many features that SquidLib has not (yet)
  * incorporated, but now that SquidLib has seamless noise, that's a nice feature that would have needed Joise before.
  */
-public class SeededNoise {
+public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise6D {
 
-    private SeededNoise() {
+    private final int defaultSeed;
+    public static final SeededNoise instance = new SeededNoise();
+
+    public SeededNoise() {
+        defaultSeed = 0x1337BEEF;
+    }
+    public SeededNoise(int seed)
+    {
+        defaultSeed = seed;
+    }
+
+    public double getNoise(final double x, final double y) {
+        return noise(x, y, defaultSeed);
+    }
+    public double getNoise(final double x, final double y, final double z) {
+        return noise(x, y, z, defaultSeed);
+    }
+    public double getNoise(final double x, final double y, final double z, final double w) {
+        return noise(x, y, z, w, defaultSeed);
+    }
+    public double getNoise(final double x, final double y, final double z, final double w, final double u, final double v) {
+        return noise(x, y, z, w, u, v, defaultSeed);
+    }
+
+    public double getNoiseWithSeed(final double x, final double y, final int seed) {
+        return noise(x, y, seed);
+    }
+    public double getNoiseWithSeed(final double x, final double y, final double z, final int seed) {
+        return noise(x, y, z, seed);
+    }
+    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final int seed) {
+        return noise(x, y, z, w, seed);
+    }
+    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, final int seed) {
+        return noise(x, y, z, w, u, v, seed);
     }
 
     protected static final double[] gradient2DLUT = {0, 1, 0, -1,
@@ -1613,6 +1647,19 @@ public class SeededNoise {
      * @return {@code fill}, after assigning it with seamless-bounded noise
      */
     public static double[][] seamless2D(final double[][] fill, final int seed, final int octaves) {
+        return seamless2D(fill, seed, octaves, instance);
+    }
+
+    /**
+     * Fills the given 2D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
+     * boundaries. This overload doesn't care what you use for x or y axes, it uses the exact size of fill fully.
+     * Allows a seed to change the generated noise.
+     * @param fill a 2D array of double; must be rectangular, so it's a good idea to create with {@code new double[width][height]} or something similar
+     * @param seed an int seed that affects the noise produced, with different seeds producing very different noise
+     * @param octaves how many runs of differently sized and weighted noise generations to apply to the same area
+     * @return {@code fill}, after assigning it with seamless-bounded noise
+     */
+    public static double[][] seamless2D(final double[][] fill, final int seed, final int octaves, final Noise.Noise4D generator) {
         final int height, width;
         if (fill == null || (width = fill.length) <= 0 || (height = fill[0].length) <= 0
                 || octaves <= 0 || octaves >= 63)
@@ -1634,7 +1681,7 @@ public class SeededNoise {
                     q = y * i_h;
                     qs = Math.sin(q) * i_s;
                     qc = Math.cos(q) * i_s;
-                    fill[x][y] += SeededNoise.noise(pc, ps, qc, qs, seed2) * s;
+                    fill[x][y] += generator.getNoiseWithSeed(pc, ps, qc, qs, seed2) * s;
                 }
             }
         }
@@ -1677,6 +1724,19 @@ public class SeededNoise {
      * @return {@code fill}, after assigning it with seamless-bounded noise
      */
     public static double[][][] seamless3D(final double[][][] fill, final int seed, final int octaves) {
+        return seamless3D(fill, seed, octaves, instance);
+    }
+
+    /**
+     * Fills the given 3D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
+     * boundaries. This overload doesn't care what you use for x, y, or z axes, it uses the exact size of fill fully.
+     * Allows a seed to change the generated noise.
+     * @param fill a 3D array of double; must be rectangular, so it's a good idea to create with {@code new double[depth][width][height]} or something similar
+     * @param seed an int seed that affects the noise produced, with different seeds producing very different noise
+     * @param octaves how many runs of differently sized and weighted noise generations to apply to the same area
+     * @return {@code fill}, after assigning it with seamless-bounded noise
+     */
+    public static double[][][] seamless3D(final double[][][] fill, final int seed, final int octaves, final Noise.Noise6D generator) {
         final int depth, height, width;
         if(fill == null || (depth = fill.length) <= 0 || (width = fill[0].length) <= 0 || (height = fill[0][0].length) <= 0
                 || octaves <= 0 || octaves >= 63)
@@ -1702,7 +1762,7 @@ public class SeededNoise {
                         r = z * i_d;
                         rs = Math.sin(r) * i_s;
                         rc = Math.cos(r) * i_s;
-                        fill[z][x][y] += SeededNoise.noise(pc, ps, qc, qs, rc, rs, seed2) * s;
+                        fill[z][x][y] += generator.getNoiseWithSeed(pc, ps, qc, qs, rc, rs, seed2) * s;
                     }
                 }
             }

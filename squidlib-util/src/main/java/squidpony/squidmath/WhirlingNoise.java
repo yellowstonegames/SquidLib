@@ -18,7 +18,7 @@ import static squidpony.squidmath.PintRNG.determineBounded;
  * Created by Tommy Ettinger on 12/14/2016.
  */
 @Beta
-public class WhirlingNoise extends PerlinNoise {
+public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D {
     private static int fastFloor(double t) {
         return t >= 0 ? (int) t : (int) t - 1;
     }
@@ -76,11 +76,91 @@ public class WhirlingNoise extends PerlinNoise {
      * it uses a pseudo-random function (curiously, {@link PintRNG#determine(int)}, which is optimized for the
      * limitations of GWT but is rather fast here) instead of a number chosen from a single 256-element array.
      *
-     * @param xin x input; works well if between 0.0 and 1.0, but anything is accepted
-     * @param yin y input; works well if between 0.0 and 1.0, but anything is accepted
+     * @param x X input; works well if between 0.0 and 1.0, but anything is accepted
+     * @param y Y input; works well if between 0.0 and 1.0, but anything is accepted
      * @return noise from -1.0 to 1.0, inclusive
      */
-    public static double noise(double xin, double yin) {
+    public double getNoise(final double x, final double y) {
+        return noise(x, y);
+    }
+
+    /**
+     * Identical to {@link #getNoise(double, double)}; ignores seed.
+     * @param x X input; works well if between 0.0 and 1.0, but anything is accepted
+     * @param y Y input; works well if between 0.0 and 1.0, but anything is accepted
+     * @param seed ignored entirely.
+     * @return noise from -1.0 to 1.0, inclusive
+     */
+    public double getNoiseWithSeed(final double x, final double y, final int seed) {
+        return noise(x, y);
+    }
+    /**
+     * 3D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
+     * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double)} and this method.
+     * Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks
+     * because it uses a pseudo-random function (curiously, {@link PintRNG#determine(int)}, which is optimized for the
+     * limitations of GWT but is rather fast here) instead of a number chosen from a single 256-element array.
+     * @param x X input
+     * @param y Y input
+     * @param z Z input
+     * @return noise from -1.0 to 1.0, inclusive
+     */
+    public double getNoise(final double x, final double y, final double z) {
+        return noise(x, y, z);
+    }
+    /**
+     * Identical to {@link #getNoise(double, double, double)}; ignores seed.
+     * @param x X input
+     * @param y Y input
+     * @param z Z input
+     * @param seed ignored entirely.
+     * @return noise from -1.0 to 1.0, inclusive
+     */
+    public double getNoiseWithSeed(final double x, final double y, final double z, final int seed) {
+        return noise(x, y, z);
+    }
+
+    /**
+     * 4D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
+     * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double)} and this method.
+     * Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks
+     * because it uses a pseudo-random function (curiously, {@link PintRNG#determine(int)}, which is optimized for the
+     * limitations of GWT but is rather fast here) instead of a number chosen from a single 256-element array.
+     * @param x X input
+     * @param y Y input
+     * @param z Z input
+     * @param w W input (fourth-dimension)
+     * @return noise from -1.0 to 1.0, inclusive
+     */
+    public double getNoise(final double x, final double y, final double z, final double w) {
+        return noise(x, y, z, w);
+    }
+    /**
+     * Identical to {@link #getNoise(double, double, double, double)}; ignores seed.
+     * @param x X input
+     * @param y Y input
+     * @param z Z input
+     * @param w W input (fourth-dimension)
+     * @param seed ignored entirely.
+     * @return noise from -1.0 to 1.0, inclusive
+     */
+    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final int seed) {
+        return noise(x, y, z, w);
+    }
+
+
+    /**
+     * 2D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
+     * different when passing the same arguments to {@link PerlinNoise#noise(double, double)} and this method. Roughly
+     * 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks because
+     * it uses a pseudo-random function (curiously, {@link PintRNG#determine(int)}, which is optimized for the
+     * limitations of GWT but is rather fast here) instead of a number chosen from a single 256-element array.
+     *
+     * @param xin X input; works well if between 0.0 and 1.0, but anything is accepted
+     * @param yin Y input; works well if between 0.0 and 1.0, but anything is accepted
+     * @return noise from -1.0 to 1.0, inclusive
+     */
+    public static double noise(final double xin, final double yin) {
         //xin *= epi;
         //yin *= epi;
         double noise0, noise1, noise2; // from the three corners
@@ -270,7 +350,7 @@ public class WhirlingNoise extends PerlinNoise {
      * @param zin Z input
      * @return noise from -1.0 to 1.0, inclusive
      */
-    public static double noise(double xin, double yin, double zin) {
+    public static double noise(final double xin, final double yin, final double zin) {
         //xin *= epi;
         //yin *= epi;
         //zin *= epi;
