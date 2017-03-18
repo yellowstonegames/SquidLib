@@ -6737,6 +6737,29 @@ public class SColor extends Color {
         this.name = name;
     }
 
+
+    /**
+     * Possible replacement for {@link NumberUtils#intToFloatColor(int)} that is much less complex on GWT.
+     * For reference, see GWT's source for {@link Float#intBitsToFloat(int)},
+     * https://gwt.googlesource.com/gwt/+/2.8.0/user/super/com/google/gwt/emul/java/lang/Float.java#96 ,
+     * which involves multiple if statements, temporary variables, creates a long (slow on GWT), and finally passes off
+     * control to another method. There's also {@link #rgbToFloatColor(int)} if you don't need to worry about alpha.
+     * @param bits the int to convert to float; only bits in the mask 0xfeffffff will be used
+     * @return the float that can be used to represent the given bits
+     */
+    public static float intToFloatColor(final int bits)
+    {
+        return (1f - (bits >>> 30 & 2)) * (0x1.0p0f + 0x0.000002p0f * (bits & 0x7fffff)) *
+                ((bits & 0x40000000) == 0
+                        ? (((bits >> 29 & 1) == 1 ? 1 : 0x1.0p-64f) * ((bits >> 28 & 1) == 1 ? 1 : 0x1.0p-32f) * ((bits >> 27 & 1) == 1 ? 1 : 0x1.0p-16f) * ((bits >> 26 & 1) == 1 ? 1 : 0x1.0p-8f) * ((bits >> 25 & 1) == 1 ? 1 : 0x1.0p-4f) * 0x1.0p-2f * ((bits >> 23 & 1) == 1 ? 1 : 0x1.0p-1f))
+                        : (((bits >> 29 & 1) == 1 ? 0x1.0p64f : 1) * ((bits >> 28 & 1) == 1 ? 0x1.0p32f : 1) * ((bits >> 27 & 1) == 1 ? 0x1.0p16f : 1) * ((bits >> 26 & 1) == 1 ? 0x1.0p8f : 1) * ((bits >> 25 & 1) == 1 ? 0x1.0p4f : 1) * 0x1.0p2f * ((bits >> 23 & 1) == 1 ? 1 : 0x1.0p-1f))
+                );
+    }
+    public static float rgbToFloatColor(final int rgb)
+    {
+        return -(0x1.0p125f + 0x0.000002p125f * (rgb & 0x7fffff)) * ((rgb >> 23 & 1) + 1);
+    }
+
     /**
      * Modifies the color parameter {@code changing} so its value is the one encoded in {@code value}. The way to
      * obtain value for libGDX Color objects is with {@link Color#toFloatBits()}, which uses ABGR order, so this
@@ -6837,7 +6860,7 @@ public class SColor extends Color {
 
     public static float charsToFloat(final char[] data)
     {
-        return NumberUtils.intToFloatColor(
+        return /*NumberUtils.intToFloatColor*/intToFloatColor(
                 Integer.reverseBytes(StringKit.intFromHex(data, 0, 8)));
     }
     /**
@@ -6853,7 +6876,7 @@ public class SColor extends Color {
 
     public static float charsToFloat(final char[] data, final int offset)
     {
-        return NumberUtils.intToFloatColor(
+        return /*NumberUtils.intToFloatColor*/intToFloatColor(
                 Integer.reverseBytes(StringKit.intFromHex(data, offset, Math.min(data.length, offset+8))));
     }
     /**
@@ -6869,7 +6892,7 @@ public class SColor extends Color {
 
     public static float charsToFloat(final CharSequence data, final int offset)
     {
-        return NumberUtils.intToFloatColor(
+        return /*NumberUtils.intToFloatColor*/intToFloatColor(
                 Integer.reverseBytes(StringKit.intFromHex(data, offset, Math.min(data.length(), offset+8))));
     }
 
@@ -6888,7 +6911,7 @@ public class SColor extends Color {
      */
     public static float floatGet(float r, float g, float b, float a)
     {
-        return NumberUtils.intToFloatColor(((int)(a * 255) << 24) | ((int)(b * 255) << 16)
+        return /*NumberUtils.intToFloatColor*/intToFloatColor(((int)(a * 255) << 24) | ((int)(b * 255) << 16)
                 | ((int)(g * 255) << 8) | (int)(r * 255));
     }
 
@@ -6909,7 +6932,7 @@ public class SColor extends Color {
      */
     public static float floatGet(long c)
     {
-        return NumberUtils.intToFloatColor((int)((c >>> 24 & 0xff) | (c >>> 8 & 0xff00) | (c << 8 & 0xff0000)
+        return /*NumberUtils.intToFloatColor*/intToFloatColor((int)((c >>> 24 & 0xff) | (c >>> 8 & 0xff00) | (c << 8 & 0xff0000)
                 | (c << 24 & 0xfe000000)));
     }
 
@@ -6930,7 +6953,7 @@ public class SColor extends Color {
      */
     public static float floatGet(int c)
     {
-        return NumberUtils.intToFloatColor((c >>> 24 & 0xff) | (c >>> 8 & 0xff00) | (c << 8 & 0xff0000)
+        return /*NumberUtils.intToFloatColor*/intToFloatColor((c >>> 24 & 0xff) | (c >>> 8 & 0xff00) | (c << 8 & 0xff0000)
                 | (c << 24 & 0xfe000000));
     }
 
@@ -6948,8 +6971,8 @@ public class SColor extends Color {
      */
     public static float floatGetI(int r, int g, int b)
     {
-        return NumberUtils.intToFloatColor((r & 0xff) | (g << 8 & 0xff00) | (b << 16 & 0xff0000)
-                | 0xfe000000);
+        return /*NumberUtils.intToFloatColor((r & 0xff) | (g << 8 & 0xff00) | (b << 16 & 0xff0000)
+                | 0xfe000000);*/ rgbToFloatColor((b & 0xff) | (g << 8 & 0xff00) | (r << 16));
     }
 
     @Override
@@ -6969,7 +6992,7 @@ public class SColor extends Color {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 31 * hash + CrossHash.Falcon.hash(name);
+        hash = 31 * hash + CrossHash.Wisp.hash(name);
         hash += 31 * hash + toIntBits();
         return hash;
     }

@@ -452,6 +452,32 @@ public class ArrayTools {
     }
 
     /**
+     * Fills {@code array3d} with {@code value}.
+     * Not to be confused with {@link #fill(double[][], double)}, which fills a 2D array instead of a 3D one, or with
+     * {@link #fill(double, int, int)}, which makes a new 2D array.
+     * @param array3d a 3D array that will be modified in-place
+     * @param value the value to fill all of array3d with
+     */
+    public static void fill(double[][][] array3d, double value) {
+        final int depth = array3d.length;
+        final int width = depth == 0 ? 0 : array3d[0].length;
+        final int height = width == 0 ? 0 : array3d[0][0].length;
+        if(depth > 0 && width > 0) {
+            for (int i = 0; i < height; i++) {
+                array3d[0][0][i] = value;
+            }
+        }
+        for (int x = 1; x < width; x++) {
+            System.arraycopy(array3d[0][0], 0, array3d[0][x], 0, height);
+        }
+        for (int z = 1; z < depth; z++) {
+            for (int x = 0; x < width; x++) {
+                System.arraycopy(array3d[0][0], 0, array3d[z][x], 0, height);
+            }
+        }
+    }
+
+    /**
      * Fills {@code array2d} with {@code value}.
      * Not to be confused with {@link #fill(int, int, int)}, which makes a new 2D array.
      * @param array2d a 2D array that will be modified in-place
