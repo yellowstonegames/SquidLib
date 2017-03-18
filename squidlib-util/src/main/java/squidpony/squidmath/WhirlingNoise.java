@@ -19,6 +19,9 @@ import static squidpony.squidmath.PintRNG.determineBounded;
  */
 @Beta
 public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D {
+
+    public static final WhirlingNoise instance = new WhirlingNoise();
+
     private static int fastFloor(double t) {
         return t >= 0 ? (int) t : (int) t - 1;
     }

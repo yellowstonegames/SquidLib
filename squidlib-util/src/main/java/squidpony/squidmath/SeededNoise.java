@@ -1152,9 +1152,9 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
      */
     public static int hash(final int x, final int y, final int seed) {
         int a = 0x632BE5AB,
-                result = 0x9E3779B9 + (a ^= 0x85157AF5 * x);
-        result += (a ^= 0x85157AF5 * y);
-        result += (a ^= 0x85157AF5 * seed);
+                result = 0x9E3779B9 + (a ^= 0x85157AF5 * x)
+                        + (a ^= 0x85157AF5 * y)
+                        + (a ^= 0x85157AF5 * seed);
         return (result * a) >>> 24;
     }
     /**
@@ -1167,10 +1167,10 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
      */
     public static int hash(final int x, final int y, final int z, final int seed) {
         int a = 0x632BE5AB,
-                result = 0x9E3779B9 + (a ^= 0x85157AF5 * x);
-        result += (a ^= 0x85157AF5 * y);
-        result += (a ^= 0x85157AF5 * z);
-        result += (a ^= 0x85157AF5 * seed);
+                result = 0x9E3779B9 + (a ^= 0x85157AF5 * x)
+                        + (a ^= 0x85157AF5 * y)
+                        + (a ^= 0x85157AF5 * z)
+                        + (a ^= 0x85157AF5 * seed);
         return (result * a) >>> 24;
     }
     /**
@@ -1184,11 +1184,11 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
      */
     public static int hash(final int x, final int y, final int z, final int w, final int seed) {
         int a = 0x632BE5AB,
-                result = 0x9E3779B9 + (a ^= 0x85157AF5 * x);
-        result += (a ^= 0x85157AF5 * y);
-        result += (a ^= 0x85157AF5 * z);
-        result += (a ^= 0x85157AF5 * w);
-        result += (a ^= 0x85157AF5 * seed);
+                result = 0x9E3779B9 + (a ^= 0x85157AF5 * x)
+                        + (a ^= 0x85157AF5 * y)
+                        + (a ^= 0x85157AF5 * z)
+                        + (a ^= 0x85157AF5 * w)
+                        + (a ^= 0x85157AF5 * seed);
         return (result * a) >>> 24;
     }
     /**
@@ -1204,13 +1204,13 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
      */
     public static int hash(final int x, final int y, final int z, final int w, final int u, final int v, final int seed) {
         int a = 0x632BE5AB,
-                result = 0x9E3779B9 + (a ^= 0x85157AF5 * x);
-        result += (a ^= 0x85157AF5 * y);
-        result += (a ^= 0x85157AF5 * z);
-        result += (a ^= 0x85157AF5 * w);
-        result += (a ^= 0x85157AF5 * u);
-        result += (a ^= 0x85157AF5 * v);
-        result += (a ^= 0x85157AF5 * seed);
+                result = 0x9E3779B9 + (a ^= 0x85157AF5 * x)
+                        + (a ^= 0x85157AF5 * y)
+                        + (a ^= 0x85157AF5 * z)
+                        + (a ^= 0x85157AF5 * w)
+                        + (a ^= 0x85157AF5 * u)
+                        + (a ^= 0x85157AF5 * v)
+                        + (a ^= 0x85157AF5 * seed);
         return (result * a) >>> 24;
         //return 0xFF & (result * (a | 1) ^ (result >>> 11));
     }
@@ -1653,7 +1653,10 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
     /**
      * Fills the given 2D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
      * boundaries. This overload doesn't care what you use for x or y axes, it uses the exact size of fill fully.
-     * Allows a seed to change the generated noise.
+     * Allows a seed to change the generated noise. DOES NOT clear the values in fill, so if it already has non-zero
+     * elements, the result will be different than if it had been cleared beforehand. That does allow you to utilize
+     * this method to add multiple seamless noise values on top of each other, though that allows values to go above or
+     * below the normal minimum and maximum (-1.0 to 1.0).
      * @param fill a 2D array of double; must be rectangular, so it's a good idea to create with {@code new double[width][height]} or something similar
      * @param seed an int seed that affects the noise produced, with different seeds producing very different noise
      * @param octaves how many runs of differently sized and weighted noise generations to apply to the same area
