@@ -6,8 +6,9 @@
      <inherits name='squidlib-util' />
   -->
 <module>
-    <source path="squidpony"/>
     <inherits name="regexodus"/>
+    <super-source path="emu" />
+    <source path="squidpony"/>
     <!--
     <extend-configuration-property name="gdx.reflect.include" value="squidpony" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath" />
