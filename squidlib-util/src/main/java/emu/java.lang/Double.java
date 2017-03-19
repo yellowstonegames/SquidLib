@@ -51,4 +51,4 @@ public final class Double extends Number implements Comparable<Double> {
         wia.set(1, (int)(bits & 0xffffffffL));
         return wfa.get(0);
     }
-}}
+}
