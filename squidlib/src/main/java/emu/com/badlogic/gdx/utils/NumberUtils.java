@@ -15,6 +15,8 @@
  ******************************************************************************/
 
 package com.badlogic.gdx.utils;
+import com.google.gwt.corp.compatibility.Numbers;
+import squidpony.squidmath.NumberTools;
 
 public final class NumberUtils {
 
@@ -46,7 +48,7 @@ public final class NumberUtils {
      * @return the bits that represent that double as a long
      */
     public static long doubleToLongBits (double value) {
-        return Double.doubleToLongBits(value);
+        return NumberTools.doubleToLongBits(value);
     }
 
     /**
@@ -55,6 +57,6 @@ public final class NumberUtils {
      * @return the double that the given long bits represent
      */
     public static double longBitsToDouble (long value) {
-        return Double.longBitsToDouble(value);
+        return NumberTools.longBitsToDouble(value);
     }
 }
