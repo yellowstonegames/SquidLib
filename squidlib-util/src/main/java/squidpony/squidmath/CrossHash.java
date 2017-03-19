@@ -2533,23 +2533,24 @@ public class CrossHash {
             }
             return (int)((result = (result * (a | 1L) ^ (result >>> 27 | result << 37))) ^ (result >>> 32));
         }
-
+        /**
+         * This method is reasonable in quality and speed on desktop, though it has some visual hashing artifacts.
+         * The hashAlt method for float arrays has better visual hashing properties than this one, but it is somewhat
+         * slower on desktop. Because hashAlt turns out to be faster on GWT, super-sourcing is used to replace calls to
+         * {@link Wisp#hash(float[])} with calls to {@link Wisp#hashAlt(float[])} on GWT only. This changes the results
+         * between desktop/Android and GWT, but GWT was different anyway due to how it handles math being... "special."
+         * @param data a float array to hash
+         * @return a 32-bit hash code of data
+         */
         public static int hash(final float[] data) {
-            if (data == null)
-                return 0;
-            int result = 0x9E3779B9, a = 0x632BE5AB;
-            final int len = data.length;
-            for (int i = 0; i < len; i++) {
-                result += (a ^= 0x85157AF5 * NumberTools.floatToIntBits(data[i]));
-            }
-            return result * (a | 1) ^ (result >>> 11 | result << 21);
+            return NumberTools.hashWisp(data);
         }
 
         /**
-         * The hashAlt and hash64Alt methods for floating-point number arrays have better visual hashing properties than
-         * hash and hash64, but are somewhat slower on desktop. They may be drastically faster than hash and hash64 on
-         * GWT, however, because they don't use {@link Double#doubleToLongBits(double)} or its equivalent for Floats,
-         * and those methods have much more complex implementations on GWT than on desktop Java.
+         * This method is identical to {@link Wisp#hash(float[])} on desktop, but unlike that method, it will not be
+         * super-sourced on GWT. This makes it slower (sometimes significantly so) on GWT, but using this method on GWT
+         * will behave closer to how it behaves on desktop than using {@link Wisp#hash(float[])} on GWT. GWT will
+         * probably not produce the same numbers anyway, because its math is "special."
          * @param data a float array to hash
          * @return a 32-bit hash code of data
          */
@@ -2566,12 +2567,26 @@ public class CrossHash {
         }
 
         /**
-         * The implementation of this method changed after 3.0.0-b8, so the numbers it produces will be different.
-         * It is faster and now lacks a visual-hashing artifact that could have been a symptom of a deeper problem.
+         * This method is identical to {@link Wisp#hashAlt(double[])} on desktop, but is super-sourced on GWT, replacing
+         * the implementation only on that platform, to avoid math with 64-bit longs. This means this method, though not
+         * {@link Wisp#hashAlt(double[])}, will have different results for the same input on desktop/Android versus on
+         * GWT. GWT was different anyway, though, due to how it handles math being generally "special."
          * @param data a double array to hash
          * @return a 32-bit hash code of data
          */
         public static int hash(final double[] data) {
+            return NumberTools.hashWisp(data);
+        }
+
+        /**
+         * This method is identical to {@link Wisp#hash(double[])} on desktop, but unlike that method, it will not be
+         * super-sourced on GWT. This makes it slower (sometimes significantly so) on GWT, but using this method on GWT
+         * will behave closer to how it behaves on desktop than using {@link Wisp#hash(double[])} on GWT. GWT will
+         * probably not produce the same numbers anyway, because its math is "special."
+         * @param data a double array to hash
+         * @return a 32-bit hash code of data
+         */
+        public static int hashAlt(final double[] data) {
             if (data == null)
                 return 0;
             long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
@@ -2581,17 +2596,6 @@ public class CrossHash {
                 result += (a ^= 0x8329C6EB9E6AD3E3L * ((long) (-0xD0E8.9D2D311E289Fp-25 * (t = data[i]) + t * -0x1.39b4dce80194cp9)));
             }
             return (int)((result = (result * (a | 1L) ^ (result >>> 27 | result << 37))) ^ (result >>> 32));
-        }
-
-        /**
-         * This method is identical to {@link Wisp#hash(double[])} on desktop, but is super-sourced on GWT, replacing
-         * the implementation only on that platform, to avoid math with 64-bit longs. This means this method, though not
-         * {@link Wisp#hash(double[])}, will have different results for the same input on desktop/Android versus on GWT.
-         * @param data a double array to hash
-         * @return a 32-bit hash code of data
-         */
-        public static int hashAlt(final double[] data) {
-            return NumberTools.hashWisp(data);
         }
 
         public static int hash(final CharSequence data) {
