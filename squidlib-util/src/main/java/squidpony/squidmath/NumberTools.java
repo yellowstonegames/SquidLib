@@ -38,6 +38,19 @@ public class NumberTools {
     {
         return Float.intBitsToFloat(bits);
     }
+
+    static int hashWisp(final float[] data)
+    {
+        if (data == null)
+            return 0;
+        int result = 0x9E3779B9, a = 0x632BE5AB;
+        final int len = data.length;
+        for (int i = 0; i < len; i++) {
+            result += (a ^= 0x85157AF5 * Float.floatToIntBits(data[i]));
+        }
+        return result * (a | 1) ^ (result >>> 11 | result << 21);
+    }
+
     static int hashWisp(final double[] data)
     {
         if (data == null)
