@@ -6746,242 +6746,303 @@
 <span class="sourceLineNo">6738</span>    }<a name="line.6738"></a>
 <span class="sourceLineNo">6739</span><a name="line.6739"></a>
 <span class="sourceLineNo">6740</span>    /**<a name="line.6740"></a>
-<span class="sourceLineNo">6741</span>     * Modifies the color parameter {@code changing} so its value is the one encoded in {@code value}. The way to<a name="line.6741"></a>
-<span class="sourceLineNo">6742</span>     * obtain value for libGDX Color objects is with {@link Color#toFloatBits()}, which uses ABGR order, so this<a name="line.6742"></a>
-<span class="sourceLineNo">6743</span>     * does some quick work to convert that to RGBA order and assign that into changing.<a name="line.6743"></a>
-<span class="sourceLineNo">6744</span>     * @param changing a Color object that will be modified to have the given value<a name="line.6744"></a>
-<span class="sourceLineNo">6745</span>     * @param value a value as a float that can be obtained by {@link Color#toFloatBits()}<a name="line.6745"></a>
-<span class="sourceLineNo">6746</span>     * @return<a name="line.6746"></a>
-<span class="sourceLineNo">6747</span>     */<a name="line.6747"></a>
-<span class="sourceLineNo">6748</span>    public static Color colorFromFloat(Color changing, float value)<a name="line.6748"></a>
-<span class="sourceLineNo">6749</span>    {<a name="line.6749"></a>
-<span class="sourceLineNo">6750</span>        return changing.set(Integer.reverseBytes(NumberUtils.floatToIntColor(value)));<a name="line.6750"></a>
-<span class="sourceLineNo">6751</span>    }<a name="line.6751"></a>
-<span class="sourceLineNo">6752</span>    static final char[] digits = {<a name="line.6752"></a>
-<span class="sourceLineNo">6753</span>            '0', '1', '2', '3', '4', '5', '6', '7',<a name="line.6753"></a>
-<span class="sourceLineNo">6754</span>            '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};<a name="line.6754"></a>
-<span class="sourceLineNo">6755</span><a name="line.6755"></a>
-<span class="sourceLineNo">6756</span>    /**<a name="line.6756"></a>
-<span class="sourceLineNo">6757</span>     * Stores the value of color in the char[] {@code changing}, using RGBA8888 format with two hex digits per channel.<a name="line.6757"></a>
-<span class="sourceLineNo">6758</span>     * This means that changing must be at least length 8 (this doesn't check for efficiency reasons), and that the<a name="line.6758"></a>
-<span class="sourceLineNo">6759</span>     * first two chars represent the red channel from 0 to 255, then the next two are green, then blue. The alpha<a name="line.6759"></a>
-<span class="sourceLineNo">6760</span>     * channel is a special case because it represents alpha values between 0 and 254, and effectively rounds down to<a name="line.6760"></a>
-<span class="sourceLineNo">6761</span>     * the nearest even number if an odd number value was somehow given to it. For example, opaque white will be shown<a name="line.6761"></a>
-<span class="sourceLineNo">6762</span>     * as "FFFFFFFE", and pure red with 50% alpha will be shown as "FF00007E".<a name="line.6762"></a>
-<span class="sourceLineNo">6763</span>     * &lt;br&gt;<a name="line.6763"></a>
-<span class="sourceLineNo">6764</span>     * The value of {@code color} should be the same type used internally in libGDX and SquidLib, that is, an ABGR<a name="line.6764"></a>
-<span class="sourceLineNo">6765</span>     * packed float that could be passed directly to {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}.<a name="line.6765"></a>
-<span class="sourceLineNo">6766</span>     *<a name="line.6766"></a>
-<span class="sourceLineNo">6767</span>     * @param changing a char array that will be changed in place; must not be null and must have length of at least 8<a name="line.6767"></a>
-<span class="sourceLineNo">6768</span>     * @param color a color<a name="line.6768"></a>
-<span class="sourceLineNo">6769</span>     * @return<a name="line.6769"></a>
-<span class="sourceLineNo">6770</span>     */<a name="line.6770"></a>
-<span class="sourceLineNo">6771</span>    public static char[] floatToChars(final char[] changing, final float color)<a name="line.6771"></a>
-<span class="sourceLineNo">6772</span>    {<a name="line.6772"></a>
-<span class="sourceLineNo">6773</span>        final int i = NumberUtils.floatToIntColor(color);<a name="line.6773"></a>
-<span class="sourceLineNo">6774</span>        changing[1] = digits[i &amp; 15];<a name="line.6774"></a>
-<span class="sourceLineNo">6775</span>        changing[0] = digits[(i &gt;&gt;&gt; 4) &amp; 15];<a name="line.6775"></a>
-<span class="sourceLineNo">6776</span>        changing[3] = digits[(i &gt;&gt;&gt; 8) &amp; 15];<a name="line.6776"></a>
-<span class="sourceLineNo">6777</span>        changing[2] = digits[(i &gt;&gt;&gt; 12) &amp; 15];<a name="line.6777"></a>
-<span class="sourceLineNo">6778</span>        changing[5] = digits[(i &gt;&gt;&gt; 16) &amp; 15];<a name="line.6778"></a>
-<span class="sourceLineNo">6779</span>        changing[4] = digits[(i &gt;&gt;&gt; 20) &amp; 15];<a name="line.6779"></a>
-<span class="sourceLineNo">6780</span>        changing[7] = digits[(i &gt;&gt;&gt; 24) &amp; 14]; // mask is 14 due to libGDX avoiding floats that can be NaN<a name="line.6780"></a>
-<span class="sourceLineNo">6781</span>        changing[6] = digits[i &gt;&gt;&gt; 28];<a name="line.6781"></a>
-<span class="sourceLineNo">6782</span>        return changing;<a name="line.6782"></a>
-<span class="sourceLineNo">6783</span>    }<a name="line.6783"></a>
-<span class="sourceLineNo">6784</span><a name="line.6784"></a>
-<span class="sourceLineNo">6785</span>    /**<a name="line.6785"></a>
-<span class="sourceLineNo">6786</span>     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} and use them<a name="line.6786"></a>
-<span class="sourceLineNo">6787</span>     * to construct an int in RGBA8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most<a name="line.6787"></a>
-<span class="sourceLineNo">6788</span>     * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like<a name="line.6788"></a>
-<span class="sourceLineNo">6789</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set<a name="line.6789"></a>
-<span class="sourceLineNo">6790</span>     * the current color used by a Batch for tinting.<a name="line.6790"></a>
-<span class="sourceLineNo">6791</span>     * @param data a char array that must not be null and must have length of at least 8<a name="line.6791"></a>
-<span class="sourceLineNo">6792</span>     * @param offset where to start reading from in data; there must be at least 8 items between offset and data.length<a name="line.6792"></a>
-<span class="sourceLineNo">6793</span>     * @return an int in RGBA8888 format<a name="line.6793"></a>
-<span class="sourceLineNo">6794</span>     */<a name="line.6794"></a>
-<span class="sourceLineNo">6795</span>    public static int charsToRGBA(final char[] data, final int offset)<a name="line.6795"></a>
-<span class="sourceLineNo">6796</span>    {<a name="line.6796"></a>
-<span class="sourceLineNo">6797</span>        return StringKit.intFromHex(data, offset, Math.min(data.length, offset+8));<a name="line.6797"></a>
-<span class="sourceLineNo">6798</span>    }<a name="line.6798"></a>
-<span class="sourceLineNo">6799</span><a name="line.6799"></a>
-<span class="sourceLineNo">6800</span>    /**<a name="line.6800"></a>
-<span class="sourceLineNo">6801</span>     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} and use them<a name="line.6801"></a>
-<span class="sourceLineNo">6802</span>     * to construct an int in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most<a name="line.6802"></a>
-<span class="sourceLineNo">6803</span>     * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like<a name="line.6803"></a>
-<span class="sourceLineNo">6804</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set<a name="line.6804"></a>
-<span class="sourceLineNo">6805</span>     * the current color used by a Batch for tinting.<a name="line.6805"></a>
-<span class="sourceLineNo">6806</span>     * @param data a char array that must not be null and must have length of at least 8<a name="line.6806"></a>
-<span class="sourceLineNo">6807</span>     * @param offset where to start reading from in data; there must be at least 8 items between offset and data.length<a name="line.6807"></a>
-<span class="sourceLineNo">6808</span>     * @return an int in ABGR8888 format<a name="line.6808"></a>
-<span class="sourceLineNo">6809</span>     */<a name="line.6809"></a>
-<span class="sourceLineNo">6810</span>    public static int charsToABGR(final char[] data, final int offset)<a name="line.6810"></a>
-<span class="sourceLineNo">6811</span>    {<a name="line.6811"></a>
-<span class="sourceLineNo">6812</span>        return Integer.reverseBytes(StringKit.intFromHex(data, offset, Math.min(data.length, offset+8)));<a name="line.6812"></a>
-<span class="sourceLineNo">6813</span>    }<a name="line.6813"></a>
-<span class="sourceLineNo">6814</span><a name="line.6814"></a>
-<span class="sourceLineNo">6815</span>    /**<a name="line.6815"></a>
-<span class="sourceLineNo">6816</span>     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} and use them<a name="line.6816"></a>
-<span class="sourceLineNo">6817</span>     * to construct an int in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most<a name="line.6817"></a>
-<span class="sourceLineNo">6818</span>     * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like<a name="line.6818"></a>
-<span class="sourceLineNo">6819</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set<a name="line.6819"></a>
-<span class="sourceLineNo">6820</span>     * the current color used by a Batch for tinting.<a name="line.6820"></a>
-<span class="sourceLineNo">6821</span>     * @param data a char array that must not be null and must have length of at least 8<a name="line.6821"></a>
-<span class="sourceLineNo">6822</span>     * @return an int in ABGR8888 format<a name="line.6822"></a>
-<span class="sourceLineNo">6823</span>     */<a name="line.6823"></a>
-<span class="sourceLineNo">6824</span>    public static int charsToABGR(final char[] data)<a name="line.6824"></a>
-<span class="sourceLineNo">6825</span>    {<a name="line.6825"></a>
-<span class="sourceLineNo">6826</span>        return Integer.reverseBytes(StringKit.intFromHex(data, 0, 8));<a name="line.6826"></a>
-<span class="sourceLineNo">6827</span>    }<a name="line.6827"></a>
-<span class="sourceLineNo">6828</span>    /**<a name="line.6828"></a>
-<span class="sourceLineNo">6829</span>     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} and use them<a name="line.6829"></a>
-<span class="sourceLineNo">6830</span>     * to construct a packed float in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most<a name="line.6830"></a>
-<span class="sourceLineNo">6831</span>     * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like<a name="line.6831"></a>
-<span class="sourceLineNo">6832</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set<a name="line.6832"></a>
-<span class="sourceLineNo">6833</span>     * the current color used by a Batch for tinting.<a name="line.6833"></a>
-<span class="sourceLineNo">6834</span>     * @param data a char array that must not be null and must have length of at least 8<a name="line.6834"></a>
-<span class="sourceLineNo">6835</span>     * @return a float in packed ABGR8888 format<a name="line.6835"></a>
-<span class="sourceLineNo">6836</span>     */<a name="line.6836"></a>
-<span class="sourceLineNo">6837</span><a name="line.6837"></a>
-<span class="sourceLineNo">6838</span>    public static float charsToFloat(final char[] data)<a name="line.6838"></a>
-<span class="sourceLineNo">6839</span>    {<a name="line.6839"></a>
-<span class="sourceLineNo">6840</span>        return NumberUtils.intToFloatColor(<a name="line.6840"></a>
-<span class="sourceLineNo">6841</span>                Integer.reverseBytes(StringKit.intFromHex(data, 0, 8)));<a name="line.6841"></a>
-<span class="sourceLineNo">6842</span>    }<a name="line.6842"></a>
-<span class="sourceLineNo">6843</span>    /**<a name="line.6843"></a>
-<span class="sourceLineNo">6844</span>     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} and use them<a name="line.6844"></a>
-<span class="sourceLineNo">6845</span>     * to construct a packed float in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most<a name="line.6845"></a>
-<span class="sourceLineNo">6846</span>     * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like<a name="line.6846"></a>
-<span class="sourceLineNo">6847</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set<a name="line.6847"></a>
-<span class="sourceLineNo">6848</span>     * the current color used by a Batch for tinting.<a name="line.6848"></a>
-<span class="sourceLineNo">6849</span>     * @param data a char array that must not be null and must have length of at least 8<a name="line.6849"></a>
-<span class="sourceLineNo">6850</span>     * @param offset where to start reading from in data; there must be at least 8 items between offset and data.length<a name="line.6850"></a>
-<span class="sourceLineNo">6851</span>     * @return a float in packed ABGR8888 format<a name="line.6851"></a>
-<span class="sourceLineNo">6852</span>     */<a name="line.6852"></a>
-<span class="sourceLineNo">6853</span><a name="line.6853"></a>
-<span class="sourceLineNo">6854</span>    public static float charsToFloat(final char[] data, final int offset)<a name="line.6854"></a>
-<span class="sourceLineNo">6855</span>    {<a name="line.6855"></a>
-<span class="sourceLineNo">6856</span>        return NumberUtils.intToFloatColor(<a name="line.6856"></a>
-<span class="sourceLineNo">6857</span>                Integer.reverseBytes(StringKit.intFromHex(data, offset, Math.min(data.length, offset+8))));<a name="line.6857"></a>
-<span class="sourceLineNo">6858</span>    }<a name="line.6858"></a>
-<span class="sourceLineNo">6859</span>    /**<a name="line.6859"></a>
-<span class="sourceLineNo">6860</span>     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} and use them<a name="line.6860"></a>
-<span class="sourceLineNo">6861</span>     * to construct a packed float in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most<a name="line.6861"></a>
-<span class="sourceLineNo">6862</span>     * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like<a name="line.6862"></a>
-<span class="sourceLineNo">6863</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set<a name="line.6863"></a>
-<span class="sourceLineNo">6864</span>     * the current color used by a Batch for tinting.<a name="line.6864"></a>
-<span class="sourceLineNo">6865</span>     * @param data a CharSequence that must not be null and must have length of at least 8<a name="line.6865"></a>
-<span class="sourceLineNo">6866</span>     * @param offset where to start reading from in data; there must be at least 8 items between offset and data.length()<a name="line.6866"></a>
-<span class="sourceLineNo">6867</span>     * @return a float in packed ABGR8888 format<a name="line.6867"></a>
-<span class="sourceLineNo">6868</span>     */<a name="line.6868"></a>
-<span class="sourceLineNo">6869</span><a name="line.6869"></a>
-<span class="sourceLineNo">6870</span>    public static float charsToFloat(final CharSequence data, final int offset)<a name="line.6870"></a>
-<span class="sourceLineNo">6871</span>    {<a name="line.6871"></a>
-<span class="sourceLineNo">6872</span>        return NumberUtils.intToFloatColor(<a name="line.6872"></a>
-<span class="sourceLineNo">6873</span>                Integer.reverseBytes(StringKit.intFromHex(data, offset, Math.min(data.length(), offset+8))));<a name="line.6873"></a>
+<span class="sourceLineNo">6741</span>     * Get an index from the exponent part of the int {@code bits} representing a float with<a name="line.6741"></a>
+<span class="sourceLineNo">6742</span>     * {@code ((bits &gt;&gt; 24 &amp; 0x7e) | (bits &gt;&gt; 23 &amp; 1))}<a name="line.6742"></a>
+<span class="sourceLineNo">6743</span>     */<a name="line.6743"></a>
+<span class="sourceLineNo">6744</span>    private static final float[] multipliers = {<a name="line.6744"></a>
+<span class="sourceLineNo">6745</span>            0x0.8p-126f, 0x1.0p-126f, 0x1.0p-123f, 0x1.0p-122f, 0x1.0p-119f, 0x1.0p-118f, 0x1.0p-115f, 0x1.0p-114f,<a name="line.6745"></a>
+<span class="sourceLineNo">6746</span>            0x1.0p-111f, 0x1.0p-110f, 0x1.0p-107f, 0x1.0p-106f, 0x1.0p-103f, 0x1.0p-102f, 0x1.0p-99f, 0x1.0p-98f,<a name="line.6746"></a>
+<span class="sourceLineNo">6747</span>            0x1.0p-95f, 0x1.0p-94f, 0x1.0p-91f, 0x1.0p-90f, 0x1.0p-87f, 0x1.0p-86f, 0x1.0p-83f, 0x1.0p-82f,<a name="line.6747"></a>
+<span class="sourceLineNo">6748</span>            0x1.0p-79f, 0x1.0p-78f, 0x1.0p-75f, 0x1.0p-74f, 0x1.0p-71f, 0x1.0p-70f, 0x1.0p-67f, 0x1.0p-66f,<a name="line.6748"></a>
+<span class="sourceLineNo">6749</span>            0x1.0p-63f, 0x1.0p-62f, 0x1.0p-59f, 0x1.0p-58f, 0x1.0p-55f, 0x1.0p-54f, 0x1.0p-51f, 0x1.0p-50f,<a name="line.6749"></a>
+<span class="sourceLineNo">6750</span>            0x1.0p-47f, 0x1.0p-46f, 0x1.0p-43f, 0x1.0p-42f, 0x1.0p-39f, 0x1.0p-38f, 0x1.0p-35f, 0x1.0p-34f,<a name="line.6750"></a>
+<span class="sourceLineNo">6751</span>            0x1.0p-31f, 0x1.0p-30f, 0x1.0p-27f, 0x1.0p-26f, 0x1.0p-23f, 0x1.0p-22f, 0x1.0p-19f, 0x1.0p-18f,<a name="line.6751"></a>
+<span class="sourceLineNo">6752</span>            0x1.0p-15f, 0x1.0p-14f, 0x1.0p-11f, 0x1.0p-10f, 0x1.0p-7f, 0x1.0p-6f, 0x1.0p-3f, 0x1.0p-2f,<a name="line.6752"></a>
+<span class="sourceLineNo">6753</span>            0x1.0p1f, 0x1.0p2f, 0x1.0p5f, 0x1.0p6f, 0x1.0p9f, 0x1.0p10f, 0x1.0p13f, 0x1.0p14f,<a name="line.6753"></a>
+<span class="sourceLineNo">6754</span>            0x1.0p17f, 0x1.0p18f, 0x1.0p21f, 0x1.0p22f, 0x1.0p25f, 0x1.0p26f, 0x1.0p29f, 0x1.0p30f,<a name="line.6754"></a>
+<span class="sourceLineNo">6755</span>            0x1.0p33f, 0x1.0p34f, 0x1.0p37f, 0x1.0p38f, 0x1.0p41f, 0x1.0p42f, 0x1.0p45f, 0x1.0p46f,<a name="line.6755"></a>
+<span class="sourceLineNo">6756</span>            0x1.0p49f, 0x1.0p50f, 0x1.0p53f, 0x1.0p54f, 0x1.0p57f, 0x1.0p58f, 0x1.0p61f, 0x1.0p62f,<a name="line.6756"></a>
+<span class="sourceLineNo">6757</span>            0x1.0p65f, 0x1.0p66f, 0x1.0p69f, 0x1.0p70f, 0x1.0p73f, 0x1.0p74f, 0x1.0p77f, 0x1.0p78f,<a name="line.6757"></a>
+<span class="sourceLineNo">6758</span>            0x1.0p81f, 0x1.0p82f, 0x1.0p85f, 0x1.0p86f, 0x1.0p89f, 0x1.0p90f, 0x1.0p93f, 0x1.0p94f,<a name="line.6758"></a>
+<span class="sourceLineNo">6759</span>            0x1.0p97f, 0x1.0p98f, 0x1.0p101f, 0x1.0p102f, 0x1.0p105f, 0x1.0p106f, 0x1.0p109f, 0x1.0p110f,<a name="line.6759"></a>
+<span class="sourceLineNo">6760</span>            0x1.0p113f, 0x1.0p114f, 0x1.0p117f, 0x1.0p118f, 0x1.0p121f, 0x1.0p122f, 0x1.0p125f, 0x1.0p126f};<a name="line.6760"></a>
+<span class="sourceLineNo">6761</span><a name="line.6761"></a>
+<span class="sourceLineNo">6762</span>    /**<a name="line.6762"></a>
+<span class="sourceLineNo">6763</span>     * Use {@link #intToFloatColor(int)} instead, it's twice as fast on desktop, but still 3x slower than the JDK method<a name="line.6763"></a>
+<span class="sourceLineNo">6764</span>     * {@link Float#intBitsToFloat(int)}. {@link com.badlogic.gdx.utils.NumberUtils#intToFloatColor(int)} is now<a name="line.6764"></a>
+<span class="sourceLineNo">6765</span>     * super-sourced on GWT with a drastically simpler replacement than the original GWT code, and will use the JDK's<a name="line.6765"></a>
+<span class="sourceLineNo">6766</span>     * implementation on desktop where it is much faster, so using NumberUtils should be the way to go.<a name="line.6766"></a>
+<span class="sourceLineNo">6767</span>     * @param bits the int to convert to float; only bits in the mask 0xfeffffff will be used<a name="line.6767"></a>
+<span class="sourceLineNo">6768</span>     * @return the float that can be used to represent the given bits<a name="line.6768"></a>
+<span class="sourceLineNo">6769</span>     */<a name="line.6769"></a>
+<span class="sourceLineNo">6770</span>    public static float intToFloatColorAlt(final int bits)<a name="line.6770"></a>
+<span class="sourceLineNo">6771</span>    {<a name="line.6771"></a>
+<span class="sourceLineNo">6772</span>        return (1f - (bits &gt;&gt;&gt; 30 &amp; 2)) * (0x1.0p0f + 0x0.000002p0f * (bits &amp; 0x7fffff)) *<a name="line.6772"></a>
+<span class="sourceLineNo">6773</span>                ((bits &amp; 0x40000000) == 0<a name="line.6773"></a>
+<span class="sourceLineNo">6774</span>                        ? (((bits &gt;&gt; 29 &amp; 1) == 1 ? 1 : 0x1.0p-64f) * ((bits &gt;&gt; 28 &amp; 1) == 1 ? 1 : 0x1.0p-32f) * ((bits &gt;&gt; 27 &amp; 1) == 1 ? 1 : 0x1.0p-16f) * ((bits &gt;&gt; 26 &amp; 1) == 1 ? 1 : 0x1.0p-8f) * ((bits &gt;&gt; 25 &amp; 1) == 1 ? 1 : 0x1.0p-4f) * 0x1.0p-2f * ((bits &gt;&gt; 23 &amp; 1) == 1 ? 1 : 0x1.0p-1f))<a name="line.6774"></a>
+<span class="sourceLineNo">6775</span>                        : (((bits &gt;&gt; 29 &amp; 1) == 1 ? 0x1.0p64f : 1) * ((bits &gt;&gt; 28 &amp; 1) == 1 ? 0x1.0p32f : 1) * ((bits &gt;&gt; 27 &amp; 1) == 1 ? 0x1.0p16f : 1) * ((bits &gt;&gt; 26 &amp; 1) == 1 ? 0x1.0p8f : 1) * ((bits &gt;&gt; 25 &amp; 1) == 1 ? 0x1.0p4f : 1) * 0x1.0p2f * ((bits &gt;&gt; 23 &amp; 1) == 1 ? 1 : 0x1.0p-1f))<a name="line.6775"></a>
+<span class="sourceLineNo">6776</span>                );<a name="line.6776"></a>
+<span class="sourceLineNo">6777</span>    }<a name="line.6777"></a>
+<span class="sourceLineNo">6778</span>    /**<a name="line.6778"></a>
+<span class="sourceLineNo">6779</span>     * Possible replacement for {@link NumberUtils#intToFloatColor(int)} that is much less complex on GWT; shouldn't be<a name="line.6779"></a>
+<span class="sourceLineNo">6780</span>     * called directly and you should default to {@link com.badlogic.gdx.utils.NumberUtils#intToFloatColor(int)}. That<a name="line.6780"></a>
+<span class="sourceLineNo">6781</span>     * method is now super-sourced on GWT with a this method as a much simpler replacement for the original GWT code,<a name="line.6781"></a>
+<span class="sourceLineNo">6782</span>     * but will not replace the JDK's implementation on desktop where it is much faster. Using NumberUtils should be the<a name="line.6782"></a>
+<span class="sourceLineNo">6783</span>     * way to go. For reference, see GWT's source for {@link Float#intBitsToFloat(int)},<a name="line.6783"></a>
+<span class="sourceLineNo">6784</span>     * https://gwt.googlesource.com/gwt/+/2.8.0/user/super/com/google/gwt/emul/java/lang/Float.java#96 ,<a name="line.6784"></a>
+<span class="sourceLineNo">6785</span>     * which involves multiple if statements, temporary variables, creates a long (slow on GWT), and finally passes off<a name="line.6785"></a>
+<span class="sourceLineNo">6786</span>     * control to another method. There's also {@link #rgbToFloatColor(int)} if you don't need to worry about alpha.<a name="line.6786"></a>
+<span class="sourceLineNo">6787</span>     *<a name="line.6787"></a>
+<span class="sourceLineNo">6788</span>     * @param bits the int to convert to float; only bits in the mask 0xfeffffff will be used<a name="line.6788"></a>
+<span class="sourceLineNo">6789</span>     * @return the float that can be used to represent the given bits<a name="line.6789"></a>
+<span class="sourceLineNo">6790</span>     */<a name="line.6790"></a>
+<span class="sourceLineNo">6791</span>    public static float intToFloatColor(final int bits)<a name="line.6791"></a>
+<span class="sourceLineNo">6792</span>    {<a name="line.6792"></a>
+<span class="sourceLineNo">6793</span>        return (1 - (bits &gt;&gt;&gt; 30 &amp; 2)) * (1f + 0x0.000002p0f * (bits &amp; 0x7fffff)) *<a name="line.6793"></a>
+<span class="sourceLineNo">6794</span>                multipliers[(bits &gt;&gt; 24 &amp; 0x7e) | (bits &gt;&gt; 23 &amp; 1)];<a name="line.6794"></a>
+<span class="sourceLineNo">6795</span>    }<a name="line.6795"></a>
+<span class="sourceLineNo">6796</span>    public static float rgbToFloatColor(final int rgb)<a name="line.6796"></a>
+<span class="sourceLineNo">6797</span>    {<a name="line.6797"></a>
+<span class="sourceLineNo">6798</span>        return -(0x1.0p125f + 0x0.000002p125f * (rgb &amp; 0x7fffff)) * ((rgb &gt;&gt; 23 &amp; 1) + 1);<a name="line.6798"></a>
+<span class="sourceLineNo">6799</span>    }<a name="line.6799"></a>
+<span class="sourceLineNo">6800</span><a name="line.6800"></a>
+<span class="sourceLineNo">6801</span>    /**<a name="line.6801"></a>
+<span class="sourceLineNo">6802</span>     * Modifies the color parameter {@code changing} so its value is the one encoded in {@code value}. The way to<a name="line.6802"></a>
+<span class="sourceLineNo">6803</span>     * obtain value for libGDX Color objects is with {@link Color#toFloatBits()}, which uses ABGR order, so this<a name="line.6803"></a>
+<span class="sourceLineNo">6804</span>     * does some quick work to convert that to RGBA order and assign that into changing.<a name="line.6804"></a>
+<span class="sourceLineNo">6805</span>     * @param changing a Color object that will be modified to have the given value<a name="line.6805"></a>
+<span class="sourceLineNo">6806</span>     * @param value a value as a float that can be obtained by {@link Color#toFloatBits()}<a name="line.6806"></a>
+<span class="sourceLineNo">6807</span>     * @return<a name="line.6807"></a>
+<span class="sourceLineNo">6808</span>     */<a name="line.6808"></a>
+<span class="sourceLineNo">6809</span>    public static Color colorFromFloat(Color changing, float value)<a name="line.6809"></a>
+<span class="sourceLineNo">6810</span>    {<a name="line.6810"></a>
+<span class="sourceLineNo">6811</span>        return changing.set(Integer.reverseBytes(NumberUtils.floatToIntColor(value)));<a name="line.6811"></a>
+<span class="sourceLineNo">6812</span>    }<a name="line.6812"></a>
+<span class="sourceLineNo">6813</span>    static final char[] digits = {<a name="line.6813"></a>
+<span class="sourceLineNo">6814</span>            '0', '1', '2', '3', '4', '5', '6', '7',<a name="line.6814"></a>
+<span class="sourceLineNo">6815</span>            '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};<a name="line.6815"></a>
+<span class="sourceLineNo">6816</span><a name="line.6816"></a>
+<span class="sourceLineNo">6817</span>    /**<a name="line.6817"></a>
+<span class="sourceLineNo">6818</span>     * Stores the value of color in the char[] {@code changing}, using RGBA8888 format with two hex digits per channel.<a name="line.6818"></a>
+<span class="sourceLineNo">6819</span>     * This means that changing must be at least length 8 (this doesn't check for efficiency reasons), and that the<a name="line.6819"></a>
+<span class="sourceLineNo">6820</span>     * first two chars represent the red channel from 0 to 255, then the next two are green, then blue. The alpha<a name="line.6820"></a>
+<span class="sourceLineNo">6821</span>     * channel is a special case because it represents alpha values between 0 and 254, and effectively rounds down to<a name="line.6821"></a>
+<span class="sourceLineNo">6822</span>     * the nearest even number if an odd number value was somehow given to it. For example, opaque white will be shown<a name="line.6822"></a>
+<span class="sourceLineNo">6823</span>     * as "FFFFFFFE", and pure red with 50% alpha will be shown as "FF00007E".<a name="line.6823"></a>
+<span class="sourceLineNo">6824</span>     * &lt;br&gt;<a name="line.6824"></a>
+<span class="sourceLineNo">6825</span>     * The value of {@code color} should be the same type used internally in libGDX and SquidLib, that is, an ABGR<a name="line.6825"></a>
+<span class="sourceLineNo">6826</span>     * packed float that could be passed directly to {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}.<a name="line.6826"></a>
+<span class="sourceLineNo">6827</span>     *<a name="line.6827"></a>
+<span class="sourceLineNo">6828</span>     * @param changing a char array that will be changed in place; must not be null and must have length of at least 8<a name="line.6828"></a>
+<span class="sourceLineNo">6829</span>     * @param color a color<a name="line.6829"></a>
+<span class="sourceLineNo">6830</span>     * @return<a name="line.6830"></a>
+<span class="sourceLineNo">6831</span>     */<a name="line.6831"></a>
+<span class="sourceLineNo">6832</span>    public static char[] floatToChars(final char[] changing, final float color)<a name="line.6832"></a>
+<span class="sourceLineNo">6833</span>    {<a name="line.6833"></a>
+<span class="sourceLineNo">6834</span>        final int i = NumberUtils.floatToIntColor(color);<a name="line.6834"></a>
+<span class="sourceLineNo">6835</span>        changing[1] = digits[i &amp; 15];<a name="line.6835"></a>
+<span class="sourceLineNo">6836</span>        changing[0] = digits[(i &gt;&gt;&gt; 4) &amp; 15];<a name="line.6836"></a>
+<span class="sourceLineNo">6837</span>        changing[3] = digits[(i &gt;&gt;&gt; 8) &amp; 15];<a name="line.6837"></a>
+<span class="sourceLineNo">6838</span>        changing[2] = digits[(i &gt;&gt;&gt; 12) &amp; 15];<a name="line.6838"></a>
+<span class="sourceLineNo">6839</span>        changing[5] = digits[(i &gt;&gt;&gt; 16) &amp; 15];<a name="line.6839"></a>
+<span class="sourceLineNo">6840</span>        changing[4] = digits[(i &gt;&gt;&gt; 20) &amp; 15];<a name="line.6840"></a>
+<span class="sourceLineNo">6841</span>        changing[7] = digits[(i &gt;&gt;&gt; 24) &amp; 14]; // mask is 14 due to libGDX avoiding floats that can be NaN<a name="line.6841"></a>
+<span class="sourceLineNo">6842</span>        changing[6] = digits[i &gt;&gt;&gt; 28];<a name="line.6842"></a>
+<span class="sourceLineNo">6843</span>        return changing;<a name="line.6843"></a>
+<span class="sourceLineNo">6844</span>    }<a name="line.6844"></a>
+<span class="sourceLineNo">6845</span><a name="line.6845"></a>
+<span class="sourceLineNo">6846</span>    /**<a name="line.6846"></a>
+<span class="sourceLineNo">6847</span>     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} and use them<a name="line.6847"></a>
+<span class="sourceLineNo">6848</span>     * to construct an int in RGBA8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most<a name="line.6848"></a>
+<span class="sourceLineNo">6849</span>     * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like<a name="line.6849"></a>
+<span class="sourceLineNo">6850</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set<a name="line.6850"></a>
+<span class="sourceLineNo">6851</span>     * the current color used by a Batch for tinting.<a name="line.6851"></a>
+<span class="sourceLineNo">6852</span>     * @param data a char array that must not be null and must have length of at least 8<a name="line.6852"></a>
+<span class="sourceLineNo">6853</span>     * @param offset where to start reading from in data; there must be at least 8 items between offset and data.length<a name="line.6853"></a>
+<span class="sourceLineNo">6854</span>     * @return an int in RGBA8888 format<a name="line.6854"></a>
+<span class="sourceLineNo">6855</span>     */<a name="line.6855"></a>
+<span class="sourceLineNo">6856</span>    public static int charsToRGBA(final char[] data, final int offset)<a name="line.6856"></a>
+<span class="sourceLineNo">6857</span>    {<a name="line.6857"></a>
+<span class="sourceLineNo">6858</span>        return StringKit.intFromHex(data, offset, Math.min(data.length, offset+8));<a name="line.6858"></a>
+<span class="sourceLineNo">6859</span>    }<a name="line.6859"></a>
+<span class="sourceLineNo">6860</span><a name="line.6860"></a>
+<span class="sourceLineNo">6861</span>    /**<a name="line.6861"></a>
+<span class="sourceLineNo">6862</span>     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} and use them<a name="line.6862"></a>
+<span class="sourceLineNo">6863</span>     * to construct an int in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most<a name="line.6863"></a>
+<span class="sourceLineNo">6864</span>     * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like<a name="line.6864"></a>
+<span class="sourceLineNo">6865</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set<a name="line.6865"></a>
+<span class="sourceLineNo">6866</span>     * the current color used by a Batch for tinting.<a name="line.6866"></a>
+<span class="sourceLineNo">6867</span>     * @param data a char array that must not be null and must have length of at least 8<a name="line.6867"></a>
+<span class="sourceLineNo">6868</span>     * @param offset where to start reading from in data; there must be at least 8 items between offset and data.length<a name="line.6868"></a>
+<span class="sourceLineNo">6869</span>     * @return an int in ABGR8888 format<a name="line.6869"></a>
+<span class="sourceLineNo">6870</span>     */<a name="line.6870"></a>
+<span class="sourceLineNo">6871</span>    public static int charsToABGR(final char[] data, final int offset)<a name="line.6871"></a>
+<span class="sourceLineNo">6872</span>    {<a name="line.6872"></a>
+<span class="sourceLineNo">6873</span>        return Integer.reverseBytes(StringKit.intFromHex(data, offset, Math.min(data.length, offset+8)));<a name="line.6873"></a>
 <span class="sourceLineNo">6874</span>    }<a name="line.6874"></a>
 <span class="sourceLineNo">6875</span><a name="line.6875"></a>
 <span class="sourceLineNo">6876</span>    /**<a name="line.6876"></a>
-<span class="sourceLineNo">6877</span>     * Gets a packed float representation of a color given as 4 RGBA float components. LibGDX expects ABGR format<a name="line.6877"></a>
-<span class="sourceLineNo">6878</span>     * in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR, or ARGB. Generally,<a name="line.6878"></a>
-<span class="sourceLineNo">6879</span>     * packed floats like what this returns are ABGR format, the kind that can be passed directly to<a name="line.6879"></a>
-<span class="sourceLineNo">6880</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)} without constructing intermediate objects.<a name="line.6880"></a>
-<span class="sourceLineNo">6881</span>     * SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that<a name="line.6881"></a>
-<span class="sourceLineNo">6882</span>     * associates colors to cells; this has changed from earlier releases and should be much more efficient.<a name="line.6882"></a>
-<span class="sourceLineNo">6883</span>     * @param r a float from 0.0 to 1.0 for red<a name="line.6883"></a>
-<span class="sourceLineNo">6884</span>     * @param g a float from 0.0 to 1.0 for green<a name="line.6884"></a>
-<span class="sourceLineNo">6885</span>     * @param b a float from 0.0 to 1.0 for blue<a name="line.6885"></a>
-<span class="sourceLineNo">6886</span>     * @param a a float from 0.0 to 1.0 for alpha/opacity<a name="line.6886"></a>
-<span class="sourceLineNo">6887</span>     * @return a packed float that can be given to the setColor method in LibGDX's Batch classes<a name="line.6887"></a>
-<span class="sourceLineNo">6888</span>     */<a name="line.6888"></a>
-<span class="sourceLineNo">6889</span>    public static float floatGet(float r, float g, float b, float a)<a name="line.6889"></a>
-<span class="sourceLineNo">6890</span>    {<a name="line.6890"></a>
-<span class="sourceLineNo">6891</span>        return NumberUtils.intToFloatColor(((int)(a * 255) &lt;&lt; 24) | ((int)(b * 255) &lt;&lt; 16)<a name="line.6891"></a>
-<span class="sourceLineNo">6892</span>                | ((int)(g * 255) &lt;&lt; 8) | (int)(r * 255));<a name="line.6892"></a>
-<span class="sourceLineNo">6893</span>    }<a name="line.6893"></a>
-<span class="sourceLineNo">6894</span><a name="line.6894"></a>
-<span class="sourceLineNo">6895</span>    /**<a name="line.6895"></a>
-<span class="sourceLineNo">6896</span>     * Gets a packed float representation of a color given an RGBA8888-format long. LibGDX expects ABGR format<a name="line.6896"></a>
-<span class="sourceLineNo">6897</span>     * in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR, or ARGB. Generally,<a name="line.6897"></a>
-<span class="sourceLineNo">6898</span>     * packed floats like what this returns are ABGR format, the kind that can be passed directly to<a name="line.6898"></a>
-<span class="sourceLineNo">6899</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)} without constructing intermediate objects.<a name="line.6899"></a>
-<span class="sourceLineNo">6900</span>     * SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that<a name="line.6900"></a>
-<span class="sourceLineNo">6901</span>     * associates colors to cells; this has changed from earlier releases and should be much more efficient.<a name="line.6901"></a>
-<span class="sourceLineNo">6902</span>     * &lt;br&gt;<a name="line.6902"></a>
-<span class="sourceLineNo">6903</span>     * This method is probably not what you want unless you specifically have RGBA8888-format longs that you<a name="line.6903"></a>
-<span class="sourceLineNo">6904</span>     * want converted to packed floats. You probably should look at {@link #floatGet(float, float, float, float)} if<a name="line.6904"></a>
-<span class="sourceLineNo">6905</span>     * you have alpha and/or float components, or {@link #floatGetI(int, int, int)} for the common case of the 3 RGB<a name="line.6905"></a>
-<span class="sourceLineNo">6906</span>     * components as ints and alpha simply opaque.<a name="line.6906"></a>
-<span class="sourceLineNo">6907</span>     * @param c a long with format {@code 32 unused bits, 8 red bits, 8 green bits, 8 blue bits, 7 alpha bits, 1 unused bit}<a name="line.6907"></a>
-<span class="sourceLineNo">6908</span>     * @return a packed float that can be given to the setColor method in LibGDX's Batch classes<a name="line.6908"></a>
-<span class="sourceLineNo">6909</span>     */<a name="line.6909"></a>
-<span class="sourceLineNo">6910</span>    public static float floatGet(long c)<a name="line.6910"></a>
-<span class="sourceLineNo">6911</span>    {<a name="line.6911"></a>
-<span class="sourceLineNo">6912</span>        return NumberUtils.intToFloatColor((int)((c &gt;&gt;&gt; 24 &amp; 0xff) | (c &gt;&gt;&gt; 8 &amp; 0xff00) | (c &lt;&lt; 8 &amp; 0xff0000)<a name="line.6912"></a>
-<span class="sourceLineNo">6913</span>                | (c &lt;&lt; 24 &amp; 0xfe000000)));<a name="line.6913"></a>
-<span class="sourceLineNo">6914</span>    }<a name="line.6914"></a>
-<span class="sourceLineNo">6915</span><a name="line.6915"></a>
-<span class="sourceLineNo">6916</span>    /**<a name="line.6916"></a>
-<span class="sourceLineNo">6917</span>     * Gets a packed float representation of a color given an RGBA8888-format int. LibGDX expects ABGR format<a name="line.6917"></a>
-<span class="sourceLineNo">6918</span>     * in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR, or ARGB. Generally,<a name="line.6918"></a>
-<span class="sourceLineNo">6919</span>     * packed floats like what this returns are ABGR format, the kind that can be passed directly to<a name="line.6919"></a>
-<span class="sourceLineNo">6920</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)} without constructing intermediate objects.<a name="line.6920"></a>
-<span class="sourceLineNo">6921</span>     * SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that<a name="line.6921"></a>
-<span class="sourceLineNo">6922</span>     * associates colors to cells; this has changed from earlier releases and should be much more efficient.<a name="line.6922"></a>
-<span class="sourceLineNo">6923</span>     * &lt;br&gt;<a name="line.6923"></a>
-<span class="sourceLineNo">6924</span>     * This method is probably not what you want unless you specifically have RGBA8888-format ints that you<a name="line.6924"></a>
-<span class="sourceLineNo">6925</span>     * want converted to packed floats. You probably should look at {@link #floatGet(float, float, float, float)} if<a name="line.6925"></a>
-<span class="sourceLineNo">6926</span>     * you have alpha and/or float components, or {@link #floatGetI(int, int, int)} for the common case of the 3 RGB<a name="line.6926"></a>
-<span class="sourceLineNo">6927</span>     * components as ints and alpha simply opaque.<a name="line.6927"></a>
-<span class="sourceLineNo">6928</span>     * @param c an int with format {@code 8 red bits, 8 green bits, 8 blue bits, 7 alpha bits, 1 unused bit}<a name="line.6928"></a>
-<span class="sourceLineNo">6929</span>     * @return a packed float that can be given to the setColor method in LibGDX's Batch classes<a name="line.6929"></a>
-<span class="sourceLineNo">6930</span>     */<a name="line.6930"></a>
-<span class="sourceLineNo">6931</span>    public static float floatGet(int c)<a name="line.6931"></a>
+<span class="sourceLineNo">6877</span>     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} and use them<a name="line.6877"></a>
+<span class="sourceLineNo">6878</span>     * to construct an int in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most<a name="line.6878"></a>
+<span class="sourceLineNo">6879</span>     * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like<a name="line.6879"></a>
+<span class="sourceLineNo">6880</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set<a name="line.6880"></a>
+<span class="sourceLineNo">6881</span>     * the current color used by a Batch for tinting.<a name="line.6881"></a>
+<span class="sourceLineNo">6882</span>     * @param data a char array that must not be null and must have length of at least 8<a name="line.6882"></a>
+<span class="sourceLineNo">6883</span>     * @return an int in ABGR8888 format<a name="line.6883"></a>
+<span class="sourceLineNo">6884</span>     */<a name="line.6884"></a>
+<span class="sourceLineNo">6885</span>    public static int charsToABGR(final char[] data)<a name="line.6885"></a>
+<span class="sourceLineNo">6886</span>    {<a name="line.6886"></a>
+<span class="sourceLineNo">6887</span>        return Integer.reverseBytes(StringKit.intFromHex(data, 0, 8));<a name="line.6887"></a>
+<span class="sourceLineNo">6888</span>    }<a name="line.6888"></a>
+<span class="sourceLineNo">6889</span>    /**<a name="line.6889"></a>
+<span class="sourceLineNo">6890</span>     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} and use them<a name="line.6890"></a>
+<span class="sourceLineNo">6891</span>     * to construct a packed float in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most<a name="line.6891"></a>
+<span class="sourceLineNo">6892</span>     * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like<a name="line.6892"></a>
+<span class="sourceLineNo">6893</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set<a name="line.6893"></a>
+<span class="sourceLineNo">6894</span>     * the current color used by a Batch for tinting.<a name="line.6894"></a>
+<span class="sourceLineNo">6895</span>     * @param data a char array that must not be null and must have length of at least 8<a name="line.6895"></a>
+<span class="sourceLineNo">6896</span>     * @return a float in packed ABGR8888 format<a name="line.6896"></a>
+<span class="sourceLineNo">6897</span>     */<a name="line.6897"></a>
+<span class="sourceLineNo">6898</span><a name="line.6898"></a>
+<span class="sourceLineNo">6899</span>    public static float charsToFloat(final char[] data)<a name="line.6899"></a>
+<span class="sourceLineNo">6900</span>    {<a name="line.6900"></a>
+<span class="sourceLineNo">6901</span>        return NumberUtils.intToFloatColor(<a name="line.6901"></a>
+<span class="sourceLineNo">6902</span>                Integer.reverseBytes(StringKit.intFromHex(data, 0, 8)));<a name="line.6902"></a>
+<span class="sourceLineNo">6903</span>    }<a name="line.6903"></a>
+<span class="sourceLineNo">6904</span>    /**<a name="line.6904"></a>
+<span class="sourceLineNo">6905</span>     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} and use them<a name="line.6905"></a>
+<span class="sourceLineNo">6906</span>     * to construct a packed float in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most<a name="line.6906"></a>
+<span class="sourceLineNo">6907</span>     * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like<a name="line.6907"></a>
+<span class="sourceLineNo">6908</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set<a name="line.6908"></a>
+<span class="sourceLineNo">6909</span>     * the current color used by a Batch for tinting.<a name="line.6909"></a>
+<span class="sourceLineNo">6910</span>     * @param data a char array that must not be null and must have length of at least 8<a name="line.6910"></a>
+<span class="sourceLineNo">6911</span>     * @param offset where to start reading from in data; there must be at least 8 items between offset and data.length<a name="line.6911"></a>
+<span class="sourceLineNo">6912</span>     * @return a float in packed ABGR8888 format<a name="line.6912"></a>
+<span class="sourceLineNo">6913</span>     */<a name="line.6913"></a>
+<span class="sourceLineNo">6914</span><a name="line.6914"></a>
+<span class="sourceLineNo">6915</span>    public static float charsToFloat(final char[] data, final int offset)<a name="line.6915"></a>
+<span class="sourceLineNo">6916</span>    {<a name="line.6916"></a>
+<span class="sourceLineNo">6917</span>        return NumberUtils.intToFloatColor(<a name="line.6917"></a>
+<span class="sourceLineNo">6918</span>                Integer.reverseBytes(StringKit.intFromHex(data, offset, Math.min(data.length, offset+8))));<a name="line.6918"></a>
+<span class="sourceLineNo">6919</span>    }<a name="line.6919"></a>
+<span class="sourceLineNo">6920</span>    /**<a name="line.6920"></a>
+<span class="sourceLineNo">6921</span>     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} and use them<a name="line.6921"></a>
+<span class="sourceLineNo">6922</span>     * to construct a packed float in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most<a name="line.6922"></a>
+<span class="sourceLineNo">6923</span>     * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like<a name="line.6923"></a>
+<span class="sourceLineNo">6924</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set<a name="line.6924"></a>
+<span class="sourceLineNo">6925</span>     * the current color used by a Batch for tinting.<a name="line.6925"></a>
+<span class="sourceLineNo">6926</span>     * @param data a CharSequence that must not be null and must have length of at least 8<a name="line.6926"></a>
+<span class="sourceLineNo">6927</span>     * @param offset where to start reading from in data; there must be at least 8 items between offset and data.length()<a name="line.6927"></a>
+<span class="sourceLineNo">6928</span>     * @return a float in packed ABGR8888 format<a name="line.6928"></a>
+<span class="sourceLineNo">6929</span>     */<a name="line.6929"></a>
+<span class="sourceLineNo">6930</span><a name="line.6930"></a>
+<span class="sourceLineNo">6931</span>    public static float charsToFloat(final CharSequence data, final int offset)<a name="line.6931"></a>
 <span class="sourceLineNo">6932</span>    {<a name="line.6932"></a>
-<span class="sourceLineNo">6933</span>        return NumberUtils.intToFloatColor((c &gt;&gt;&gt; 24 &amp; 0xff) | (c &gt;&gt;&gt; 8 &amp; 0xff00) | (c &lt;&lt; 8 &amp; 0xff0000)<a name="line.6933"></a>
-<span class="sourceLineNo">6934</span>                | (c &lt;&lt; 24 &amp; 0xfe000000));<a name="line.6934"></a>
+<span class="sourceLineNo">6933</span>        return NumberUtils.intToFloatColor(<a name="line.6933"></a>
+<span class="sourceLineNo">6934</span>                Integer.reverseBytes(StringKit.intFromHex(data, offset, Math.min(data.length(), offset+8))));<a name="line.6934"></a>
 <span class="sourceLineNo">6935</span>    }<a name="line.6935"></a>
 <span class="sourceLineNo">6936</span><a name="line.6936"></a>
 <span class="sourceLineNo">6937</span>    /**<a name="line.6937"></a>
-<span class="sourceLineNo">6938</span>     * Gets a packed float representation of a color given as 3 RGB int components, setting alpha to opaque. LibGDX<a name="line.6938"></a>
-<span class="sourceLineNo">6939</span>     * expects ABGR format in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR,<a name="line.6939"></a>
-<span class="sourceLineNo">6940</span>     * or ARGB. Generally, packed floats like what this returns are ABGR format, the kind that can be passed<a name="line.6940"></a>
-<span class="sourceLineNo">6941</span>     * directly to {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)} without constructing intermediate<a name="line.6941"></a>
-<span class="sourceLineNo">6942</span>     * objects. SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that<a name="line.6942"></a>
+<span class="sourceLineNo">6938</span>     * Gets a packed float representation of a color given as 4 RGBA float components. LibGDX expects ABGR format<a name="line.6938"></a>
+<span class="sourceLineNo">6939</span>     * in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR, or ARGB. Generally,<a name="line.6939"></a>
+<span class="sourceLineNo">6940</span>     * packed floats like what this returns are ABGR format, the kind that can be passed directly to<a name="line.6940"></a>
+<span class="sourceLineNo">6941</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)} without constructing intermediate objects.<a name="line.6941"></a>
+<span class="sourceLineNo">6942</span>     * SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that<a name="line.6942"></a>
 <span class="sourceLineNo">6943</span>     * associates colors to cells; this has changed from earlier releases and should be much more efficient.<a name="line.6943"></a>
-<span class="sourceLineNo">6944</span>     * @param r an int from 0 to 255 (both inclusive) for red<a name="line.6944"></a>
-<span class="sourceLineNo">6945</span>     * @param g an int from 0 to 255 (both inclusive) for green<a name="line.6945"></a>
-<span class="sourceLineNo">6946</span>     * @param b an int from 0 to 255 (both inclusive) for blue<a name="line.6946"></a>
-<span class="sourceLineNo">6947</span>     * @return a packed float that can be given to the setColor method in LibGDX's Batch classes<a name="line.6947"></a>
-<span class="sourceLineNo">6948</span>     */<a name="line.6948"></a>
-<span class="sourceLineNo">6949</span>    public static float floatGetI(int r, int g, int b)<a name="line.6949"></a>
-<span class="sourceLineNo">6950</span>    {<a name="line.6950"></a>
-<span class="sourceLineNo">6951</span>        return NumberUtils.intToFloatColor((r &amp; 0xff) | (g &lt;&lt; 8 &amp; 0xff00) | (b &lt;&lt; 16 &amp; 0xff0000)<a name="line.6951"></a>
-<span class="sourceLineNo">6952</span>                | 0xfe000000);<a name="line.6952"></a>
-<span class="sourceLineNo">6953</span>    }<a name="line.6953"></a>
-<span class="sourceLineNo">6954</span><a name="line.6954"></a>
-<span class="sourceLineNo">6955</span>    @Override<a name="line.6955"></a>
-<span class="sourceLineNo">6956</span>    public String toString() {<a name="line.6956"></a>
-<span class="sourceLineNo">6957</span>        return name + " " + super.toString();<a name="line.6957"></a>
-<span class="sourceLineNo">6958</span>    }<a name="line.6958"></a>
-<span class="sourceLineNo">6959</span><a name="line.6959"></a>
-<span class="sourceLineNo">6960</span>    public String getName() {<a name="line.6960"></a>
-<span class="sourceLineNo">6961</span>        return name;<a name="line.6961"></a>
-<span class="sourceLineNo">6962</span>    }<a name="line.6962"></a>
-<span class="sourceLineNo">6963</span><a name="line.6963"></a>
-<span class="sourceLineNo">6964</span>    @Override<a name="line.6964"></a>
-<span class="sourceLineNo">6965</span>    public boolean equals(Object other) {<a name="line.6965"></a>
-<span class="sourceLineNo">6966</span>        return (other instanceof SColor || other instanceof Color) &amp;&amp; toIntBits() == ((Color) other).toIntBits();<a name="line.6966"></a>
-<span class="sourceLineNo">6967</span>    }<a name="line.6967"></a>
-<span class="sourceLineNo">6968</span><a name="line.6968"></a>
-<span class="sourceLineNo">6969</span>    @Override<a name="line.6969"></a>
-<span class="sourceLineNo">6970</span>    public int hashCode() {<a name="line.6970"></a>
-<span class="sourceLineNo">6971</span>        int hash = 5;<a name="line.6971"></a>
-<span class="sourceLineNo">6972</span>        hash = 31 * hash + CrossHash.Falcon.hash(name);<a name="line.6972"></a>
-<span class="sourceLineNo">6973</span>        hash += 31 * hash + toIntBits();<a name="line.6973"></a>
-<span class="sourceLineNo">6974</span>        return hash;<a name="line.6974"></a>
+<span class="sourceLineNo">6944</span>     * @param r a float from 0.0 to 1.0 for red<a name="line.6944"></a>
+<span class="sourceLineNo">6945</span>     * @param g a float from 0.0 to 1.0 for green<a name="line.6945"></a>
+<span class="sourceLineNo">6946</span>     * @param b a float from 0.0 to 1.0 for blue<a name="line.6946"></a>
+<span class="sourceLineNo">6947</span>     * @param a a float from 0.0 to 1.0 for alpha/opacity<a name="line.6947"></a>
+<span class="sourceLineNo">6948</span>     * @return a packed float that can be given to the setColor method in LibGDX's Batch classes<a name="line.6948"></a>
+<span class="sourceLineNo">6949</span>     */<a name="line.6949"></a>
+<span class="sourceLineNo">6950</span>    public static float floatGet(float r, float g, float b, float a)<a name="line.6950"></a>
+<span class="sourceLineNo">6951</span>    {<a name="line.6951"></a>
+<span class="sourceLineNo">6952</span>        return NumberUtils.intToFloatColor(((int)(a * 255) &lt;&lt; 24) | ((int)(b * 255) &lt;&lt; 16)<a name="line.6952"></a>
+<span class="sourceLineNo">6953</span>                | ((int)(g * 255) &lt;&lt; 8) | (int)(r * 255));<a name="line.6953"></a>
+<span class="sourceLineNo">6954</span>    }<a name="line.6954"></a>
+<span class="sourceLineNo">6955</span><a name="line.6955"></a>
+<span class="sourceLineNo">6956</span>    /**<a name="line.6956"></a>
+<span class="sourceLineNo">6957</span>     * Gets a packed float representation of a color given an RGBA8888-format long. LibGDX expects ABGR format<a name="line.6957"></a>
+<span class="sourceLineNo">6958</span>     * in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR, or ARGB. Generally,<a name="line.6958"></a>
+<span class="sourceLineNo">6959</span>     * packed floats like what this returns are ABGR format, the kind that can be passed directly to<a name="line.6959"></a>
+<span class="sourceLineNo">6960</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)} without constructing intermediate objects.<a name="line.6960"></a>
+<span class="sourceLineNo">6961</span>     * SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that<a name="line.6961"></a>
+<span class="sourceLineNo">6962</span>     * associates colors to cells; this has changed from earlier releases and should be much more efficient.<a name="line.6962"></a>
+<span class="sourceLineNo">6963</span>     * &lt;br&gt;<a name="line.6963"></a>
+<span class="sourceLineNo">6964</span>     * This method is probably not what you want unless you specifically have RGBA8888-format longs that you<a name="line.6964"></a>
+<span class="sourceLineNo">6965</span>     * want converted to packed floats. You probably should look at {@link #floatGet(float, float, float, float)} if<a name="line.6965"></a>
+<span class="sourceLineNo">6966</span>     * you have alpha and/or float components, or {@link #floatGetI(int, int, int)} for the common case of the 3 RGB<a name="line.6966"></a>
+<span class="sourceLineNo">6967</span>     * components as ints and alpha simply opaque.<a name="line.6967"></a>
+<span class="sourceLineNo">6968</span>     * @param c a long with format {@code 32 unused bits, 8 red bits, 8 green bits, 8 blue bits, 7 alpha bits, 1 unused bit}<a name="line.6968"></a>
+<span class="sourceLineNo">6969</span>     * @return a packed float that can be given to the setColor method in LibGDX's Batch classes<a name="line.6969"></a>
+<span class="sourceLineNo">6970</span>     */<a name="line.6970"></a>
+<span class="sourceLineNo">6971</span>    public static float floatGet(long c)<a name="line.6971"></a>
+<span class="sourceLineNo">6972</span>    {<a name="line.6972"></a>
+<span class="sourceLineNo">6973</span>        return NumberUtils.intToFloatColor((int)((c &gt;&gt;&gt; 24 &amp; 0xff) | (c &gt;&gt;&gt; 8 &amp; 0xff00) | (c &lt;&lt; 8 &amp; 0xff0000)<a name="line.6973"></a>
+<span class="sourceLineNo">6974</span>                | (c &lt;&lt; 24 &amp; 0xfe000000)));<a name="line.6974"></a>
 <span class="sourceLineNo">6975</span>    }<a name="line.6975"></a>
-<span class="sourceLineNo">6976</span>}<a name="line.6976"></a>
+<span class="sourceLineNo">6976</span><a name="line.6976"></a>
+<span class="sourceLineNo">6977</span>    /**<a name="line.6977"></a>
+<span class="sourceLineNo">6978</span>     * Gets a packed float representation of a color given an RGBA8888-format int. LibGDX expects ABGR format<a name="line.6978"></a>
+<span class="sourceLineNo">6979</span>     * in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR, or ARGB. Generally,<a name="line.6979"></a>
+<span class="sourceLineNo">6980</span>     * packed floats like what this returns are ABGR format, the kind that can be passed directly to<a name="line.6980"></a>
+<span class="sourceLineNo">6981</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)} without constructing intermediate objects.<a name="line.6981"></a>
+<span class="sourceLineNo">6982</span>     * SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that<a name="line.6982"></a>
+<span class="sourceLineNo">6983</span>     * associates colors to cells; this has changed from earlier releases and should be much more efficient.<a name="line.6983"></a>
+<span class="sourceLineNo">6984</span>     * &lt;br&gt;<a name="line.6984"></a>
+<span class="sourceLineNo">6985</span>     * This method is probably not what you want unless you specifically have RGBA8888-format ints that you<a name="line.6985"></a>
+<span class="sourceLineNo">6986</span>     * want converted to packed floats. You probably should look at {@link #floatGet(float, float, float, float)} if<a name="line.6986"></a>
+<span class="sourceLineNo">6987</span>     * you have alpha and/or float components, or {@link #floatGetI(int, int, int)} for the common case of the 3 RGB<a name="line.6987"></a>
+<span class="sourceLineNo">6988</span>     * components as ints and alpha simply opaque.<a name="line.6988"></a>
+<span class="sourceLineNo">6989</span>     * @param c an int with format {@code 8 red bits, 8 green bits, 8 blue bits, 7 alpha bits, 1 unused bit}<a name="line.6989"></a>
+<span class="sourceLineNo">6990</span>     * @return a packed float that can be given to the setColor method in LibGDX's Batch classes<a name="line.6990"></a>
+<span class="sourceLineNo">6991</span>     */<a name="line.6991"></a>
+<span class="sourceLineNo">6992</span>    public static float floatGet(int c)<a name="line.6992"></a>
+<span class="sourceLineNo">6993</span>    {<a name="line.6993"></a>
+<span class="sourceLineNo">6994</span>        return NumberUtils.intToFloatColor((c &gt;&gt;&gt; 24 &amp; 0xff) | (c &gt;&gt;&gt; 8 &amp; 0xff00) | (c &lt;&lt; 8 &amp; 0xff0000)<a name="line.6994"></a>
+<span class="sourceLineNo">6995</span>                | (c &lt;&lt; 24 &amp; 0xfe000000));<a name="line.6995"></a>
+<span class="sourceLineNo">6996</span>    }<a name="line.6996"></a>
+<span class="sourceLineNo">6997</span><a name="line.6997"></a>
+<span class="sourceLineNo">6998</span>    /**<a name="line.6998"></a>
+<span class="sourceLineNo">6999</span>     * Gets a packed float representation of a color given as 3 RGB int components, setting alpha to opaque. LibGDX<a name="line.6999"></a>
+<span class="sourceLineNo">7000</span>     * expects ABGR format in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR,<a name="line.7000"></a>
+<span class="sourceLineNo">7001</span>     * or ARGB. Generally, packed floats like what this returns are ABGR format, the kind that can be passed<a name="line.7001"></a>
+<span class="sourceLineNo">7002</span>     * directly to {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)} without constructing intermediate<a name="line.7002"></a>
+<span class="sourceLineNo">7003</span>     * objects. SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that<a name="line.7003"></a>
+<span class="sourceLineNo">7004</span>     * associates colors to cells; this has changed from earlier releases and should be much more efficient.<a name="line.7004"></a>
+<span class="sourceLineNo">7005</span>     * @param r an int from 0 to 255 (both inclusive) for red<a name="line.7005"></a>
+<span class="sourceLineNo">7006</span>     * @param g an int from 0 to 255 (both inclusive) for green<a name="line.7006"></a>
+<span class="sourceLineNo">7007</span>     * @param b an int from 0 to 255 (both inclusive) for blue<a name="line.7007"></a>
+<span class="sourceLineNo">7008</span>     * @return a packed float that can be given to the setColor method in LibGDX's Batch classes<a name="line.7008"></a>
+<span class="sourceLineNo">7009</span>     */<a name="line.7009"></a>
+<span class="sourceLineNo">7010</span>    public static float floatGetI(int r, int g, int b)<a name="line.7010"></a>
+<span class="sourceLineNo">7011</span>    {<a name="line.7011"></a>
+<span class="sourceLineNo">7012</span>        return /*NumberUtils.intToFloatColor((r &amp; 0xff) | (g &lt;&lt; 8 &amp; 0xff00) | (b &lt;&lt; 16 &amp; 0xff0000)<a name="line.7012"></a>
+<span class="sourceLineNo">7013</span>                | 0xfe000000);*/ rgbToFloatColor((b &amp; 0xff) | (g &lt;&lt; 8 &amp; 0xff00) | (r &lt;&lt; 16));<a name="line.7013"></a>
+<span class="sourceLineNo">7014</span>    }<a name="line.7014"></a>
+<span class="sourceLineNo">7015</span><a name="line.7015"></a>
+<span class="sourceLineNo">7016</span>    @Override<a name="line.7016"></a>
+<span class="sourceLineNo">7017</span>    public String toString() {<a name="line.7017"></a>
+<span class="sourceLineNo">7018</span>        return name + " " + super.toString();<a name="line.7018"></a>
+<span class="sourceLineNo">7019</span>    }<a name="line.7019"></a>
+<span class="sourceLineNo">7020</span><a name="line.7020"></a>
+<span class="sourceLineNo">7021</span>    public String getName() {<a name="line.7021"></a>
+<span class="sourceLineNo">7022</span>        return name;<a name="line.7022"></a>
+<span class="sourceLineNo">7023</span>    }<a name="line.7023"></a>
+<span class="sourceLineNo">7024</span><a name="line.7024"></a>
+<span class="sourceLineNo">7025</span>    @Override<a name="line.7025"></a>
+<span class="sourceLineNo">7026</span>    public boolean equals(Object other) {<a name="line.7026"></a>
+<span class="sourceLineNo">7027</span>        return (other instanceof SColor || other instanceof Color) &amp;&amp; toIntBits() == ((Color) other).toIntBits();<a name="line.7027"></a>
+<span class="sourceLineNo">7028</span>    }<a name="line.7028"></a>
+<span class="sourceLineNo">7029</span><a name="line.7029"></a>
+<span class="sourceLineNo">7030</span>    @Override<a name="line.7030"></a>
+<span class="sourceLineNo">7031</span>    public int hashCode() {<a name="line.7031"></a>
+<span class="sourceLineNo">7032</span>        int hash = 5;<a name="line.7032"></a>
+<span class="sourceLineNo">7033</span>        hash = 31 * hash + CrossHash.Wisp.hash(name);<a name="line.7033"></a>
+<span class="sourceLineNo">7034</span>        hash += 31 * hash + toIntBits();<a name="line.7034"></a>
+<span class="sourceLineNo">7035</span>        return hash;<a name="line.7035"></a>
+<span class="sourceLineNo">7036</span>    }<a name="line.7036"></a>
+<span class="sourceLineNo">7037</span>}<a name="line.7037"></a>
 
 
 

@@ -6737,23 +6737,61 @@ public class SColor extends Color {
         this.name = name;
     }
 
+    /**
+     * Get an index from the exponent part of the int {@code bits} representing a float with
+     * {@code ((bits >> 24 & 0x7e) | (bits >> 23 & 1))}
+     */
+    private static final float[] multipliers = {
+            0x0.8p-126f, 0x1.0p-126f, 0x1.0p-123f, 0x1.0p-122f, 0x1.0p-119f, 0x1.0p-118f, 0x1.0p-115f, 0x1.0p-114f,
+            0x1.0p-111f, 0x1.0p-110f, 0x1.0p-107f, 0x1.0p-106f, 0x1.0p-103f, 0x1.0p-102f, 0x1.0p-99f, 0x1.0p-98f,
+            0x1.0p-95f, 0x1.0p-94f, 0x1.0p-91f, 0x1.0p-90f, 0x1.0p-87f, 0x1.0p-86f, 0x1.0p-83f, 0x1.0p-82f,
+            0x1.0p-79f, 0x1.0p-78f, 0x1.0p-75f, 0x1.0p-74f, 0x1.0p-71f, 0x1.0p-70f, 0x1.0p-67f, 0x1.0p-66f,
+            0x1.0p-63f, 0x1.0p-62f, 0x1.0p-59f, 0x1.0p-58f, 0x1.0p-55f, 0x1.0p-54f, 0x1.0p-51f, 0x1.0p-50f,
+            0x1.0p-47f, 0x1.0p-46f, 0x1.0p-43f, 0x1.0p-42f, 0x1.0p-39f, 0x1.0p-38f, 0x1.0p-35f, 0x1.0p-34f,
+            0x1.0p-31f, 0x1.0p-30f, 0x1.0p-27f, 0x1.0p-26f, 0x1.0p-23f, 0x1.0p-22f, 0x1.0p-19f, 0x1.0p-18f,
+            0x1.0p-15f, 0x1.0p-14f, 0x1.0p-11f, 0x1.0p-10f, 0x1.0p-7f, 0x1.0p-6f, 0x1.0p-3f, 0x1.0p-2f,
+            0x1.0p1f, 0x1.0p2f, 0x1.0p5f, 0x1.0p6f, 0x1.0p9f, 0x1.0p10f, 0x1.0p13f, 0x1.0p14f,
+            0x1.0p17f, 0x1.0p18f, 0x1.0p21f, 0x1.0p22f, 0x1.0p25f, 0x1.0p26f, 0x1.0p29f, 0x1.0p30f,
+            0x1.0p33f, 0x1.0p34f, 0x1.0p37f, 0x1.0p38f, 0x1.0p41f, 0x1.0p42f, 0x1.0p45f, 0x1.0p46f,
+            0x1.0p49f, 0x1.0p50f, 0x1.0p53f, 0x1.0p54f, 0x1.0p57f, 0x1.0p58f, 0x1.0p61f, 0x1.0p62f,
+            0x1.0p65f, 0x1.0p66f, 0x1.0p69f, 0x1.0p70f, 0x1.0p73f, 0x1.0p74f, 0x1.0p77f, 0x1.0p78f,
+            0x1.0p81f, 0x1.0p82f, 0x1.0p85f, 0x1.0p86f, 0x1.0p89f, 0x1.0p90f, 0x1.0p93f, 0x1.0p94f,
+            0x1.0p97f, 0x1.0p98f, 0x1.0p101f, 0x1.0p102f, 0x1.0p105f, 0x1.0p106f, 0x1.0p109f, 0x1.0p110f,
+            0x1.0p113f, 0x1.0p114f, 0x1.0p117f, 0x1.0p118f, 0x1.0p121f, 0x1.0p122f, 0x1.0p125f, 0x1.0p126f};
 
     /**
-     * Possible replacement for {@link NumberUtils#intToFloatColor(int)} that is much less complex on GWT.
-     * For reference, see GWT's source for {@link Float#intBitsToFloat(int)},
-     * https://gwt.googlesource.com/gwt/+/2.8.0/user/super/com/google/gwt/emul/java/lang/Float.java#96 ,
-     * which involves multiple if statements, temporary variables, creates a long (slow on GWT), and finally passes off
-     * control to another method. There's also {@link #rgbToFloatColor(int)} if you don't need to worry about alpha.
+     * Use {@link #intToFloatColor(int)} instead, it's twice as fast on desktop, but still 3x slower than the JDK method
+     * {@link Float#intBitsToFloat(int)}. {@link com.badlogic.gdx.utils.NumberUtils#intToFloatColor(int)} is now
+     * super-sourced on GWT with a drastically simpler replacement than the original GWT code, and will use the JDK's
+     * implementation on desktop where it is much faster, so using NumberUtils should be the way to go.
      * @param bits the int to convert to float; only bits in the mask 0xfeffffff will be used
      * @return the float that can be used to represent the given bits
      */
-    public static float intToFloatColor(final int bits)
+    public static float intToFloatColorAlt(final int bits)
     {
         return (1f - (bits >>> 30 & 2)) * (0x1.0p0f + 0x0.000002p0f * (bits & 0x7fffff)) *
                 ((bits & 0x40000000) == 0
                         ? (((bits >> 29 & 1) == 1 ? 1 : 0x1.0p-64f) * ((bits >> 28 & 1) == 1 ? 1 : 0x1.0p-32f) * ((bits >> 27 & 1) == 1 ? 1 : 0x1.0p-16f) * ((bits >> 26 & 1) == 1 ? 1 : 0x1.0p-8f) * ((bits >> 25 & 1) == 1 ? 1 : 0x1.0p-4f) * 0x1.0p-2f * ((bits >> 23 & 1) == 1 ? 1 : 0x1.0p-1f))
                         : (((bits >> 29 & 1) == 1 ? 0x1.0p64f : 1) * ((bits >> 28 & 1) == 1 ? 0x1.0p32f : 1) * ((bits >> 27 & 1) == 1 ? 0x1.0p16f : 1) * ((bits >> 26 & 1) == 1 ? 0x1.0p8f : 1) * ((bits >> 25 & 1) == 1 ? 0x1.0p4f : 1) * 0x1.0p2f * ((bits >> 23 & 1) == 1 ? 1 : 0x1.0p-1f))
                 );
+    }
+    /**
+     * Possible replacement for {@link NumberUtils#intToFloatColor(int)} that is much less complex on GWT; shouldn't be
+     * called directly and you should default to {@link com.badlogic.gdx.utils.NumberUtils#intToFloatColor(int)}. That
+     * method is now super-sourced on GWT with a this method as a much simpler replacement for the original GWT code,
+     * but will not replace the JDK's implementation on desktop where it is much faster. Using NumberUtils should be the
+     * way to go. For reference, see GWT's source for {@link Float#intBitsToFloat(int)},
+     * https://gwt.googlesource.com/gwt/+/2.8.0/user/super/com/google/gwt/emul/java/lang/Float.java#96 ,
+     * which involves multiple if statements, temporary variables, creates a long (slow on GWT), and finally passes off
+     * control to another method. There's also {@link #rgbToFloatColor(int)} if you don't need to worry about alpha.
+     *
+     * @param bits the int to convert to float; only bits in the mask 0xfeffffff will be used
+     * @return the float that can be used to represent the given bits
+     */
+    public static float intToFloatColor(final int bits)
+    {
+        return (1 - (bits >>> 30 & 2)) * (1f + 0x0.000002p0f * (bits & 0x7fffff)) *
+                multipliers[(bits >> 24 & 0x7e) | (bits >> 23 & 1)];
     }
     public static float rgbToFloatColor(final int rgb)
     {
@@ -6860,7 +6898,7 @@ public class SColor extends Color {
 
     public static float charsToFloat(final char[] data)
     {
-        return /*NumberUtils.intToFloatColor*/intToFloatColor(
+        return NumberUtils.intToFloatColor(
                 Integer.reverseBytes(StringKit.intFromHex(data, 0, 8)));
     }
     /**
@@ -6876,7 +6914,7 @@ public class SColor extends Color {
 
     public static float charsToFloat(final char[] data, final int offset)
     {
-        return /*NumberUtils.intToFloatColor*/intToFloatColor(
+        return NumberUtils.intToFloatColor(
                 Integer.reverseBytes(StringKit.intFromHex(data, offset, Math.min(data.length, offset+8))));
     }
     /**
@@ -6892,7 +6930,7 @@ public class SColor extends Color {
 
     public static float charsToFloat(final CharSequence data, final int offset)
     {
-        return /*NumberUtils.intToFloatColor*/intToFloatColor(
+        return NumberUtils.intToFloatColor(
                 Integer.reverseBytes(StringKit.intFromHex(data, offset, Math.min(data.length(), offset+8))));
     }
 
@@ -6911,7 +6949,7 @@ public class SColor extends Color {
      */
     public static float floatGet(float r, float g, float b, float a)
     {
-        return /*NumberUtils.intToFloatColor*/intToFloatColor(((int)(a * 255) << 24) | ((int)(b * 255) << 16)
+        return NumberUtils.intToFloatColor(((int)(a * 255) << 24) | ((int)(b * 255) << 16)
                 | ((int)(g * 255) << 8) | (int)(r * 255));
     }
 
@@ -6932,7 +6970,7 @@ public class SColor extends Color {
      */
     public static float floatGet(long c)
     {
-        return /*NumberUtils.intToFloatColor*/intToFloatColor((int)((c >>> 24 & 0xff) | (c >>> 8 & 0xff00) | (c << 8 & 0xff0000)
+        return NumberUtils.intToFloatColor((int)((c >>> 24 & 0xff) | (c >>> 8 & 0xff00) | (c << 8 & 0xff0000)
                 | (c << 24 & 0xfe000000)));
     }
 
@@ -6953,7 +6991,7 @@ public class SColor extends Color {
      */
     public static float floatGet(int c)
     {
-        return /*NumberUtils.intToFloatColor*/intToFloatColor((c >>> 24 & 0xff) | (c >>> 8 & 0xff00) | (c << 8 & 0xff0000)
+        return NumberUtils.intToFloatColor((c >>> 24 & 0xff) | (c >>> 8 & 0xff00) | (c << 8 & 0xff0000)
                 | (c << 24 & 0xfe000000));
     }
 

@@ -18,8 +18,8 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
+var methods = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -76,13 +76,13 @@ var activeTableTab = "activeTableTab";
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
 <li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
@@ -107,10 +107,15 @@ var activeTableTab = "activeTableTab";
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interface in squidpony.squidmath">Noise.Noise2D</a>, <a href="../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>, <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>, <a href="../../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a></dd>
+</dl>
 <hr>
 <br>
 <pre>public class <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.60">SeededNoise</a>
-extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
+extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
+implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interface in squidpony.squidmath">Noise.Noise2D</a>, <a href="../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>, <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>, <a href="../../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a></pre>
 <div class="block">More advanced noise functions, in 2D, 3D, 4D, and 6D, including the ability to use the last two for seamless 2D and
  3D noise. All functions can take an int seed. The seamless functions, like <a href="../../squidpony/squidmath/SeededNoise.html#seamless2D-double:A:A-int-int-"><code>seamless2D(double[][], int, int)</code></a>,
  also take a number of octaves to generate, since operating on the 2D or 3D array to mix in another 2D or 3D array
@@ -206,20 +211,44 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#I_TWO_PI">I_TWO_PI</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../squidpony/squidmath/SeededNoise.html" title="class in squidpony.squidmath">SeededNoise</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#instance">instance</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#sideLength">sideLength</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected static int[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#SIMPLEX">SIMPLEX</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#TWO_PI">TWO_PI</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#valueScaler">valueScaler</a></span></code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor.summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#SeededNoise--">SeededNoise</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#SeededNoise-int-">SeededNoise</a></span>(int&nbsp;seed)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -231,7 +260,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
@@ -243,6 +272,64 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#getNoise-double-double-">getNoise</a></span>(double&nbsp;x,
+        double&nbsp;y)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#getNoise-double-double-double-">getNoise</a></span>(double&nbsp;x,
+        double&nbsp;y,
+        double&nbsp;z)</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#getNoise-double-double-double-double-">getNoise</a></span>(double&nbsp;x,
+        double&nbsp;y,
+        double&nbsp;z,
+        double&nbsp;w)</code>&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#getNoise-double-double-double-double-double-double-">getNoise</a></span>(double&nbsp;x,
+        double&nbsp;y,
+        double&nbsp;z,
+        double&nbsp;w,
+        double&nbsp;u,
+        double&nbsp;v)</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#getNoiseWithSeed-double-double-double-double-double-double-int-">getNoiseWithSeed</a></span>(double&nbsp;x,
+                double&nbsp;y,
+                double&nbsp;z,
+                double&nbsp;w,
+                double&nbsp;u,
+                double&nbsp;v,
+                int&nbsp;seed)</code>&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#getNoiseWithSeed-double-double-double-double-int-">getNoiseWithSeed</a></span>(double&nbsp;x,
+                double&nbsp;y,
+                double&nbsp;z,
+                double&nbsp;w,
+                int&nbsp;seed)</code>&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#getNoiseWithSeed-double-double-double-int-">getNoiseWithSeed</a></span>(double&nbsp;x,
+                double&nbsp;y,
+                double&nbsp;z,
+                int&nbsp;seed)</code>&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#getNoiseWithSeed-double-double-int-">getNoiseWithSeed</a></span>(double&nbsp;x,
+                double&nbsp;y,
+                int&nbsp;seed)</code>&nbsp;</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#hash-int-int-int-">hash</a></span>(int&nbsp;x,
     int&nbsp;y,
@@ -250,7 +337,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <div class="block">Possibly useful outside SeededNoise.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#hash-int-int-int-int-">hash</a></span>(int&nbsp;x,
     int&nbsp;y,
@@ -259,7 +346,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <div class="block">Possibly useful outside SeededNoise.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#hash-int-int-int-int-int-">hash</a></span>(int&nbsp;x,
     int&nbsp;y,
@@ -269,7 +356,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <div class="block">Possibly useful outside SeededNoise.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#hash-int-int-int-int-int-int-int-">hash</a></span>(int&nbsp;x,
     int&nbsp;y,
@@ -281,7 +368,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <div class="block">Possibly useful outside SeededNoise.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#noise-double-double-double-double-double-double-int-">noise</a></span>(double&nbsp;x,
      double&nbsp;y,
@@ -291,7 +378,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
      double&nbsp;v,
      int&nbsp;seed)</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#noise-double-double-double-double-int-">noise</a></span>(double&nbsp;x,
      double&nbsp;y,
@@ -299,20 +386,20 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
      double&nbsp;w,
      int&nbsp;seed)</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#noise-double-double-double-int-">noise</a></span>(double&nbsp;x,
      double&nbsp;y,
      double&nbsp;z,
      int&nbsp;seed)</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#noise-double-double-int-">noise</a></span>(double&nbsp;x,
      double&nbsp;y,
      int&nbsp;seed)</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>static double[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#seamless2D-double:A:A-int-int-">seamless2D</a></span>(double[][]&nbsp;fill,
           int&nbsp;seed,
@@ -321,7 +408,17 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  boundaries.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i18" class="altColor">
+<td class="colFirst"><code>static double[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#seamless2D-double:A:A-int-int-squidpony.squidmath.Noise.Noise4D-">seamless2D</a></span>(double[][]&nbsp;fill,
+          int&nbsp;seed,
+          int&nbsp;octaves,
+          <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;generator)</code>
+<div class="block">Fills the given 2D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
+ boundaries.</div>
+</td>
+</tr>
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>static double[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#seamless2D-int-int-int-int-">seamless2D</a></span>(int&nbsp;width,
           int&nbsp;height,
@@ -330,7 +427,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <div class="block">Produces a 2D array of noise with values from -1.0 to 1.0 that is seamless on all boundaries.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>static double[][][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#seamless3D-double:A:A:A-int-int-">seamless3D</a></span>(double[][][]&nbsp;fill,
           int&nbsp;seed,
@@ -339,7 +436,17 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  boundaries.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i21" class="rowColor">
+<td class="colFirst"><code>static double[][][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#seamless3D-double:A:A:A-int-int-squidpony.squidmath.Noise.Noise6D-">seamless3D</a></span>(double[][][]&nbsp;fill,
+          int&nbsp;seed,
+          int&nbsp;octaves,
+          <a href="../../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a>&nbsp;generator)</code>
+<div class="block">Fills the given 3D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
+ boundaries.</div>
+</td>
+</tr>
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>static double[][][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SeededNoise.html#seamless3D-int-int-int-int-int-">seamless3D</a></span>(int&nbsp;depth,
           int&nbsp;width,
@@ -371,13 +478,22 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Field Detail</h3>
+<a name="instance">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>instance</h4>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/SeededNoise.html" title="class in squidpony.squidmath">SeededNoise</a> <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.63">instance</a></pre>
+</li>
+</ul>
 <a name="gradient2DLUT">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>gradient2DLUT</h4>
-<pre>protected static final&nbsp;double[] <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.65">gradient2DLUT</a></pre>
+<pre>protected static final&nbsp;double[] <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.99">gradient2DLUT</a></pre>
 </li>
 </ul>
 <a name="gradient3DLUT">
@@ -386,7 +502,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>gradient3DLUT</h4>
-<pre>protected static final&nbsp;double[] <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.104">gradient3DLUT</a></pre>
+<pre>protected static final&nbsp;double[] <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.138">gradient3DLUT</a></pre>
 </li>
 </ul>
 <a name="gradient4DLUT">
@@ -395,7 +511,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>gradient4DLUT</h4>
-<pre>protected static final&nbsp;double[] <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.157">gradient4DLUT</a></pre>
+<pre>protected static final&nbsp;double[] <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.191">gradient4DLUT</a></pre>
 </li>
 </ul>
 <a name="gradient6DLUT">
@@ -404,7 +520,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>gradient6DLUT</h4>
-<pre>protected static final&nbsp;double[] <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.579">gradient6DLUT</a></pre>
+<pre>protected static final&nbsp;double[] <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.613">gradient6DLUT</a></pre>
 </li>
 </ul>
 <a name="SIMPLEX">
@@ -413,7 +529,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>SIMPLEX</h4>
-<pre>protected static final&nbsp;int[] <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1094">SIMPLEX</a></pre>
+<pre>protected static final&nbsp;int[] <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1128">SIMPLEX</a></pre>
 </li>
 </ul>
 <a name="F2">
@@ -422,7 +538,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>F2</h4>
-<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1200">F2</a></pre>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1234">F2</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.squidmath.SeededNoise.F2">Constant Field Values</a></dd>
@@ -435,7 +551,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>G2</h4>
-<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1201">G2</a></pre>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1235">G2</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.squidmath.SeededNoise.G2">Constant Field Values</a></dd>
@@ -448,7 +564,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>F3</h4>
-<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1202">F3</a></pre>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1236">F3</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.squidmath.SeededNoise.F3">Constant Field Values</a></dd>
@@ -461,7 +577,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>G3</h4>
-<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1203">G3</a></pre>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1237">G3</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.squidmath.SeededNoise.G3">Constant Field Values</a></dd>
@@ -474,7 +590,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>F4</h4>
-<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1204">F4</a></pre>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1238">F4</a></pre>
 </li>
 </ul>
 <a name="G4">
@@ -483,7 +599,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>G4</h4>
-<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1205">G4</a></pre>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1239">G4</a></pre>
 </li>
 </ul>
 <a name="F6">
@@ -492,7 +608,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>F6</h4>
-<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1206">F6</a></pre>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1240">F6</a></pre>
 </li>
 </ul>
 <a name="G6">
@@ -501,7 +617,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>G6</h4>
-<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1207">G6</a></pre>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1241">G6</a></pre>
 </li>
 </ul>
 <a name="sideLength">
@@ -510,7 +626,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>sideLength</h4>
-<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1208">sideLength</a></pre>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1242">sideLength</a></pre>
 </li>
 </ul>
 <a name="a6">
@@ -519,7 +635,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>a6</h4>
-<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1209">a6</a></pre>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1243">a6</a></pre>
 </li>
 </ul>
 <a name="cornerFace">
@@ -528,7 +644,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>cornerFace</h4>
-<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1211">cornerFace</a></pre>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1245">cornerFace</a></pre>
 </li>
 </ul>
 <a name="cornerFaceSq">
@@ -537,7 +653,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>cornerFaceSq</h4>
-<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1212">cornerFaceSq</a></pre>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1246">cornerFaceSq</a></pre>
 </li>
 </ul>
 <a name="valueScaler">
@@ -546,7 +662,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>valueScaler</h4>
-<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1213">valueScaler</a></pre>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1247">valueScaler</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.squidmath.SeededNoise.valueScaler">Constant Field Values</a></dd>
@@ -559,7 +675,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>I_PI</h4>
-<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1214">I_PI</a></pre>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1248">I_PI</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.squidmath.SeededNoise.I_PI">Constant Field Values</a></dd>
@@ -572,7 +688,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>TWO_PI</h4>
-<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1214">TWO_PI</a></pre>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1248">TWO_PI</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.squidmath.SeededNoise.TWO_PI">Constant Field Values</a></dd>
@@ -585,11 +701,37 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>I_TWO_PI</h4>
-<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1214">I_TWO_PI</a></pre>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1248">I_TWO_PI</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.squidmath.SeededNoise.I_TWO_PI">Constant Field Values</a></dd>
 </dl>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor.detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="SeededNoise--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>SeededNoise</h4>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.65">SeededNoise</a>()</pre>
+</li>
+</ul>
+<a name="SeededNoise-int-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>SeededNoise</h4>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.68">SeededNoise</a>(int&nbsp;seed)</pre>
 </li>
 </ul>
 </li>
@@ -600,13 +742,143 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="getNoise-double-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getNoise</h4>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.73">getNoise</a>(double&nbsp;x,
+                       double&nbsp;y)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../squidpony/squidmath/Noise.Noise2D.html#getNoise-double-double-">getNoise</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interface in squidpony.squidmath">Noise.Noise2D</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="getNoise-double-double-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getNoise</h4>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.76">getNoise</a>(double&nbsp;x,
+                       double&nbsp;y,
+                       double&nbsp;z)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../squidpony/squidmath/Noise.Noise3D.html#getNoise-double-double-double-">getNoise</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="getNoise-double-double-double-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getNoise</h4>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.79">getNoise</a>(double&nbsp;x,
+                       double&nbsp;y,
+                       double&nbsp;z,
+                       double&nbsp;w)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../squidpony/squidmath/Noise.Noise4D.html#getNoise-double-double-double-double-">getNoise</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="getNoise-double-double-double-double-double-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getNoise</h4>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.82">getNoise</a>(double&nbsp;x,
+                       double&nbsp;y,
+                       double&nbsp;z,
+                       double&nbsp;w,
+                       double&nbsp;u,
+                       double&nbsp;v)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../squidpony/squidmath/Noise.Noise6D.html#getNoise-double-double-double-double-double-double-">getNoise</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="getNoiseWithSeed-double-double-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getNoiseWithSeed</h4>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.86">getNoiseWithSeed</a>(double&nbsp;x,
+                               double&nbsp;y,
+                               int&nbsp;seed)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../squidpony/squidmath/Noise.Noise2D.html#getNoiseWithSeed-double-double-int-">getNoiseWithSeed</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interface in squidpony.squidmath">Noise.Noise2D</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="getNoiseWithSeed-double-double-double-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getNoiseWithSeed</h4>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.89">getNoiseWithSeed</a>(double&nbsp;x,
+                               double&nbsp;y,
+                               double&nbsp;z,
+                               int&nbsp;seed)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../squidpony/squidmath/Noise.Noise3D.html#getNoiseWithSeed-double-double-double-int-">getNoiseWithSeed</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="getNoiseWithSeed-double-double-double-double-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getNoiseWithSeed</h4>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.92">getNoiseWithSeed</a>(double&nbsp;x,
+                               double&nbsp;y,
+                               double&nbsp;z,
+                               double&nbsp;w,
+                               int&nbsp;seed)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../squidpony/squidmath/Noise.Noise4D.html#getNoiseWithSeed-double-double-double-double-int-">getNoiseWithSeed</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="getNoiseWithSeed-double-double-double-double-double-double-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getNoiseWithSeed</h4>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.95">getNoiseWithSeed</a>(double&nbsp;x,
+                               double&nbsp;y,
+                               double&nbsp;z,
+                               double&nbsp;w,
+                               double&nbsp;u,
+                               double&nbsp;v,
+                               int&nbsp;seed)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../squidpony/squidmath/Noise.Noise6D.html#getNoiseWithSeed-double-double-double-double-double-double-int-">getNoiseWithSeed</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a></code></dd>
+</dl>
+</li>
+</ul>
 <a name="hash-int-int-int-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1119">hash</a>(int&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1153">hash</a>(int&nbsp;x,
                        int&nbsp;y,
                        int&nbsp;seed)</pre>
 <div class="block">Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 8 bits.</div>
@@ -626,7 +898,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1134">hash</a>(int&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1168">hash</a>(int&nbsp;x,
                        int&nbsp;y,
                        int&nbsp;z,
                        int&nbsp;seed)</pre>
@@ -648,7 +920,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1151">hash</a>(int&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1185">hash</a>(int&nbsp;x,
                        int&nbsp;y,
                        int&nbsp;z,
                        int&nbsp;w,
@@ -672,7 +944,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1171">hash</a>(int&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1205">hash</a>(int&nbsp;x,
                        int&nbsp;y,
                        int&nbsp;z,
                        int&nbsp;w,
@@ -700,7 +972,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>fastFloor</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1196">fastFloor</a>(double&nbsp;t)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1230">fastFloor</a>(double&nbsp;t)</pre>
 <div class="block">Like <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Math.html?is-external=true#floor-double-" title="class or interface in java.lang"><code>Math.floor(double)</code></a>, but returns an int. Doesn't consider weird doubles like INFINITY and NaN.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -716,7 +988,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1221">noise</a>(double&nbsp;x,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1255">noise</a>(double&nbsp;x,
                            double&nbsp;y,
                            int&nbsp;seed)</pre>
 </li>
@@ -727,7 +999,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1271">noise</a>(double&nbsp;x,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1305">noise</a>(double&nbsp;x,
                            double&nbsp;y,
                            double&nbsp;z,
                            int&nbsp;seed)</pre>
@@ -739,7 +1011,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1384">noise</a>(double&nbsp;x,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1418">noise</a>(double&nbsp;x,
                            double&nbsp;y,
                            double&nbsp;z,
                            double&nbsp;w,
@@ -752,7 +1024,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1469">noise</a>(double&nbsp;x,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1503">noise</a>(double&nbsp;x,
                            double&nbsp;y,
                            double&nbsp;z,
                            double&nbsp;w,
@@ -767,7 +1039,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>seamless2D</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1602">seamless2D</a>(int&nbsp;width,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1636">seamless2D</a>(int&nbsp;width,
                                     int&nbsp;height,
                                     int&nbsp;seed,
                                     int&nbsp;octaves)</pre>
@@ -791,12 +1063,38 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>seamless2D</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1615">seamless2D</a>(double[][]&nbsp;fill,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1649">seamless2D</a>(double[][]&nbsp;fill,
                                     int&nbsp;seed,
                                     int&nbsp;octaves)</pre>
 <div class="block">Fills the given 2D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
  boundaries. This overload doesn't care what you use for x or y axes, it uses the exact size of fill fully.
  Allows a seed to change the generated noise.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fill</code> - a 2D array of double; must be rectangular, so it's a good idea to create with <code>new double[width][height]</code> or something similar</dd>
+<dd><code>seed</code> - an int seed that affects the noise produced, with different seeds producing very different noise</dd>
+<dd><code>octaves</code> - how many runs of differently sized and weighted noise generations to apply to the same area</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd><code>fill</code>, after assigning it with seamless-bounded noise</dd>
+</dl>
+</li>
+</ul>
+<a name="seamless2D-double:A:A-int-int-squidpony.squidmath.Noise.Noise4D-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>seamless2D</h4>
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1665">seamless2D</a>(double[][]&nbsp;fill,
+                                    int&nbsp;seed,
+                                    int&nbsp;octaves,
+                                    <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;generator)</pre>
+<div class="block">Fills the given 2D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
+ boundaries. This overload doesn't care what you use for x or y axes, it uses the exact size of fill fully.
+ Allows a seed to change the generated noise. DOES NOT clear the values in fill, so if it already has non-zero
+ elements, the result will be different than if it had been cleared beforehand. That does allow you to utilize
+ this method to add multiple seamless noise values on top of each other, though that allows values to go above or
+ below the normal minimum and maximum (-1.0 to 1.0).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>fill</code> - a 2D array of double; must be rectangular, so it's a good idea to create with <code>new double[width][height]</code> or something similar</dd>
@@ -813,7 +1111,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>seamless3D</h4>
-<pre>public static&nbsp;double[][][]&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1666">seamless3D</a>(int&nbsp;depth,
+<pre>public static&nbsp;double[][][]&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1716">seamless3D</a>(int&nbsp;depth,
                                       int&nbsp;width,
                                       int&nbsp;height,
                                       int&nbsp;seed,
@@ -839,12 +1137,35 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <a name="seamless3D-double:A:A:A-int-int-">
 <!--   -->
 </a>
+<ul class="blockList">
+<li class="blockList">
+<h4>seamless3D</h4>
+<pre>public static&nbsp;double[][][]&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1729">seamless3D</a>(double[][][]&nbsp;fill,
+                                      int&nbsp;seed,
+                                      int&nbsp;octaves)</pre>
+<div class="block">Fills the given 3D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
+ boundaries. This overload doesn't care what you use for x, y, or z axes, it uses the exact size of fill fully.
+ Allows a seed to change the generated noise.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fill</code> - a 3D array of double; must be rectangular, so it's a good idea to create with <code>new double[depth][width][height]</code> or something similar</dd>
+<dd><code>seed</code> - an int seed that affects the noise produced, with different seeds producing very different noise</dd>
+<dd><code>octaves</code> - how many runs of differently sized and weighted noise generations to apply to the same area</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd><code>fill</code>, after assigning it with seamless-bounded noise</dd>
+</dl>
+</li>
+</ul>
+<a name="seamless3D-double:A:A:A-int-int-squidpony.squidmath.Noise.Noise6D-">
+<!--   -->
+</a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>seamless3D</h4>
-<pre>public static&nbsp;double[][][]&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1679">seamless3D</a>(double[][][]&nbsp;fill,
+<pre>public static&nbsp;double[][][]&nbsp;<a href="../../src-html/squidpony/squidmath/SeededNoise.html#line.1742">seamless3D</a>(double[][][]&nbsp;fill,
                                       int&nbsp;seed,
-                                      int&nbsp;octaves)</pre>
+                                      int&nbsp;octaves,
+                                      <a href="../../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a>&nbsp;generator)</pre>
 <div class="block">Fills the given 3D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
  boundaries. This overload doesn't care what you use for x, y, or z axes, it uses the exact size of fill fully.
  Allows a seed to change the generated noise.</div>
@@ -913,13 +1234,13 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
 <li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
