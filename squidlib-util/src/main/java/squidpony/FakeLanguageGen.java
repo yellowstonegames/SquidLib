@@ -2815,7 +2815,7 @@ public class FakeLanguageGen implements Serializable {
         double myInfluence = 1.0 - otherInfluence;
 
         RNG rng = new RNG((hashCode() & 0xffffffffL) | ((other.hashCode() & 0xffffffffL) << 32)
-                ^ Double.doubleToLongBits(otherInfluence));
+                ^ NumberTools.doubleToLongBits(otherInfluence));
 
         String[] ov = merge1000(rng, openingVowels, other.openingVowels, otherInfluence),
                 mv = merge1000(rng, midVowels, other.midVowels, otherInfluence),
@@ -2971,7 +2971,7 @@ public class FakeLanguageGen implements Serializable {
         consonantInfluence = Math.max(0.0, Math.min(consonantInfluence, 1.0));
 
         RNG rng = new RNG((hashCode() & 0xffffffffL) ^
-                ((Double.doubleToLongBits(vowelInfluence) & 0xffffffffL) | (Double.doubleToLongBits(consonantInfluence) << 32)));
+                ((NumberTools.doubleToLongBits(vowelInfluence) & 0xffffffffL) | (NumberTools.doubleToLongBits(consonantInfluence) << 32)));
         String[] ov = accentVowels(rng, openingVowels, vowelInfluence),
                 mv = accentVowels(rng, midVowels, vowelInfluence),
                 oc = accentConsonants(rng, openingConsonants, consonantInfluence),
@@ -3120,15 +3120,15 @@ public class FakeLanguageGen implements Serializable {
         result = 31 * result + CrossHash.Lightning.hash(closingSyllables);
         result = 31 * result + (clean ? 1 : 0);
         result = 31 * result + syllableFrequencies.hashCode();
-        temp = Double.doubleToLongBits(totalSyllableFrequency);
+        temp = NumberTools.doubleToLongBits(totalSyllableFrequency);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(vowelStartFrequency);
+        temp = NumberTools.doubleToLongBits(vowelStartFrequency);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(vowelEndFrequency);
+        temp = NumberTools.doubleToLongBits(vowelEndFrequency);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(vowelSplitFrequency);
+        temp = NumberTools.doubleToLongBits(vowelSplitFrequency);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(syllableEndFrequency);
+        temp = NumberTools.doubleToLongBits(syllableEndFrequency);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (sanityChecks != null ? sanityChecks.length + 1 : 0);
         result = 31 * result + (modifiers != null ? modifiers.hashCode() : 0);
@@ -3495,7 +3495,7 @@ public class FakeLanguageGen implements Serializable {
             int result;
             long temp;
             result = replacer.hashCode();
-            temp = Double.doubleToLongBits(chance);
+            temp = NumberTools.doubleToLongBits(chance);
             result = 31 * result + (int) (temp ^ (temp >>> 32));
             return result;
         }

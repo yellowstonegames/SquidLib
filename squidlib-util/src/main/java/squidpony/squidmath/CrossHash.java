@@ -184,7 +184,7 @@ public class CrossHash {
             return 0;
         int h = -2128831035, len = data.length, t;
         for (int i = 0; i < len; i++) {
-            t = Float.floatToIntBits(data[i]);
+            t = NumberTools.floatToIntBits(data[i]);
             h ^= t & 0xff;
             h *= 16777619;
             h ^= (t >>> 8) & 0xff;
@@ -203,7 +203,7 @@ public class CrossHash {
         int h = -2128831035, len = data.length;
         long t;
         for (int i = 0; i < len; i++) {
-            t = Double.doubleToLongBits(data[i]);
+            t = NumberTools.doubleToLongBits(data[i]);
             h ^= (int) (t & 0xff);
             h *= 16777619;
             h ^= (int) ((t >>> 8) & 0xff);
@@ -415,7 +415,7 @@ public class CrossHash {
             return 0;
         long h = -3750763034362895579L, len = data.length, t;
         for (int i = 0; i < len; i++) {
-            t = Float.floatToIntBits(data[i]);
+            t = NumberTools.floatToIntBits(data[i]);
             h ^= t & 0xff;
             h *= 1099511628211L;
             h ^= (t >>> 8) & 0xff;
@@ -433,7 +433,7 @@ public class CrossHash {
             return 0;
         long h = -3750763034362895579L, len = data.length, t;
         for (int i = 0; i < len; i++) {
-            t = Double.doubleToLongBits(data[i]);
+            t = NumberTools.doubleToLongBits(data[i]);
             h ^= t & 0xff;
             h *= 1099511628211L;
             h ^= (t >>> 8) & 0xff;
@@ -1136,7 +1136,7 @@ public class CrossHash {
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += (Float.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (NumberTools.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
@@ -1146,7 +1146,7 @@ public class CrossHash {
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += (Double.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (NumberTools.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
@@ -1309,7 +1309,7 @@ public class CrossHash {
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += (Float.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (NumberTools.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
@@ -1319,7 +1319,7 @@ public class CrossHash {
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += (Double.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (NumberTools.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
@@ -1537,7 +1537,7 @@ public class CrossHash {
             final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L, len = data.length;
             long z = 0x632BE59BD9B4E019L + chips, result = 1L;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (Float.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
+                result ^= (z += (NumberTools.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
@@ -1548,7 +1548,7 @@ public class CrossHash {
             final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L, len = data.length;
             long z = 0x632BE59BD9B4E019L + chips, result = 1L;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (Double.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
+                result ^= (z += (NumberTools.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
@@ -1728,7 +1728,7 @@ public class CrossHash {
             final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L, len = data.length;
             long z = 0x632BE59BD9B4E019L + chips, result = 1L;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (Float.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
+                result ^= (z += (NumberTools.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
@@ -1739,7 +1739,7 @@ public class CrossHash {
             final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L, len = data.length;
             long z = 0x632BE59BD9B4E019L + chips, result = 1L;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (Double.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
+                result ^= (z += (NumberTools.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
@@ -1929,7 +1929,7 @@ public class CrossHash {
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
             for (int i = 0; i < data.length; i++) {
-                result += (z ^= Float.floatToIntBits(data[i]) * 0xD0E89D2D311E289FL) + 0x9E3779B97F4A7C15L;
+                result += (z ^= NumberTools.floatToIntBits(data[i]) * 0xD0E89D2D311E289FL) + 0x9E3779B97F4A7C15L;
             }
             return result ^ ((z ^ result) >>> 16) * 0x9E3779B97F4A7C15L;
         }
@@ -1939,7 +1939,7 @@ public class CrossHash {
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
             for (int i = 0; i < data.length; i++) {
-                result += (z ^= Double.doubleToLongBits(data[i]) * 0xD0E89D2D311E289FL) + 0x9E3779B97F4A7C15L;
+                result += (z ^= NumberTools.doubleToLongBits(data[i]) * 0xD0E89D2D311E289FL) + 0x9E3779B97F4A7C15L;
             }
             return result ^ ((z ^ result) >>> 16) * 0x9E3779B97F4A7C15L;
         }
@@ -2101,7 +2101,7 @@ public class CrossHash {
                 return 0;
             int z = 0x632BE5AB, result = 1;
             for (int i = 0; i < data.length; i++) {
-                result += (z ^= Float.floatToIntBits(data[i]) * 0x85157AF5) + 0x62E2AC0D;
+                result += (z ^= NumberTools.floatToIntBits(data[i]) * 0x85157AF5) + 0x62E2AC0D;
             }
             return result ^ ((z ^ result) >>> 8) * 0x9E3779B9;
         }
@@ -2121,7 +2121,7 @@ public class CrossHash {
                 return 0;
             int z = 0x632BE5AB, result = 1;
             for (int i = 0; i < data.length; i++) {
-                result += (z ^= Double.doubleToLongBits(data[i]) * 0x85157AF5) + 0x62E2AC0D;
+                result += (z ^= NumberTools.doubleToLongBits(data[i]) * 0x85157AF5) + 0x62E2AC0D;
             }
             return result ^ ((z ^ result) >>> 8) * 0x9E3779B9;
         }
@@ -2306,7 +2306,7 @@ public class CrossHash {
             long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
             final int len = data.length;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * Float.floatToIntBits(data[i]));
+                result += (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.floatToIntBits(data[i]));
             }
             return result * (a | 1L) ^ (result >>> 27 | result << 37);
         }
@@ -2337,7 +2337,7 @@ public class CrossHash {
             long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
             final int len = data.length;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * Double.doubleToLongBits(data[i]));
+                result += (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.doubleToLongBits(data[i]));
             }
             return result * (a | 1L) ^ (result >>> 27 | result << 37);
         }
@@ -2540,7 +2540,7 @@ public class CrossHash {
             int result = 0x9E3779B9, a = 0x632BE5AB;
             final int len = data.length;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x85157AF5 * Float.floatToIntBits(data[i]));
+                result += (a ^= 0x85157AF5 * NumberTools.floatToIntBits(data[i]));
             }
             return result * (a | 1) ^ (result >>> 11 | result << 21);
         }
@@ -2565,28 +2565,13 @@ public class CrossHash {
             return result * (a | 1) ^ (result >>> 11 | result << 21);
         }
 
-        public static int hash(final double[] data) {
-            if (data == null)
-                return 0;
-            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
-            final int len = data.length;
-            for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * Double.doubleToLongBits(data[i]));
-            }
-            return (int)((result = (result * (a | 1L) ^ (result >>> 27 | result << 37))) ^ (result >>> 32));
-        }
-
         /**
-         * The hashAlt and hash64Alt methods for floating-point number arrays have better visual hashing properties than
-         * hash and hash64, but are somewhat slower on desktop, though this hasn't been universally true and this method
-         * is sometimes a decent amount faster. Operations on double arrays, not float arrays, may be drastically faster
-         * than hash and hash64 on GWT, however, because they are super-sourced to avoid math with 64-bit longs. This
-         * means this method, though not {@link #hash(double[])}, will have different results for the same input on
-         * desktop/Android versus on GWT.
+         * The implementation of this method changed after 3.0.0-b8, so the numbers it produces will be different.
+         * It is faster and now lacks a visual-hashing artifact that could have been a symptom of a deeper problem.
          * @param data a double array to hash
          * @return a 32-bit hash code of data
          */
-        public static int hashAlt(final double[] data) {
+        public static int hash(final double[] data) {
             if (data == null)
                 return 0;
             long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
@@ -2596,6 +2581,17 @@ public class CrossHash {
                 result += (a ^= 0x8329C6EB9E6AD3E3L * ((long) (-0xD0E8.9D2D311E289Fp-25 * (t = data[i]) + t * -0x1.39b4dce80194cp9)));
             }
             return (int)((result = (result * (a | 1L) ^ (result >>> 27 | result << 37))) ^ (result >>> 32));
+        }
+
+        /**
+         * This method is identical to {@link Wisp#hash(double[])} on desktop, but is super-sourced on GWT, replacing
+         * the implementation only on that platform, to avoid math with 64-bit longs. This means this method, though not
+         * {@link Wisp#hash(double[])}, will have different results for the same input on desktop/Android versus on GWT.
+         * @param data a double array to hash
+         * @return a 32-bit hash code of data
+         */
+        public static int hashAlt(final double[] data) {
+            return NumberTools.hashWisp(data);
         }
 
         public static int hash(final CharSequence data) {
@@ -3003,7 +2999,7 @@ public class CrossHash {
                 expand(top << 1 < limit + 2 ? limit + 2 : top);
             long sum = $tore[0];
             for (int i = 0; i < limit; ) {
-                sum += (Float.floatToIntBits(data[i]) & 0xFFFFFFFFL) * ($tore[++i]);
+                sum += (NumberTools.floatToIntBits(data[i]) & 0xFFFFFFFFL) * ($tore[++i]);
             }
             if (limit > 0 && data[limit - 1] == 0)
                 sum += $tore[limit] ^ 0x632BE59BD9B4E019L;
@@ -3019,7 +3015,7 @@ public class CrossHash {
                 expand(top << 1 < (limit << 1) + 2 ? (limit << 1) + 2 : top);
             long sum = $tore[0], t = 0;
             for (int i = 0, ii = 1; i < limit; ii += 2) {
-                sum += ((t = Double.doubleToLongBits(data[i++])) & 0xFFFFFFFFL) * ($tore[ii]) + (t >>> 32) * ($tore[ii + 1]);
+                sum += ((t = NumberTools.doubleToLongBits(data[i++])) & 0xFFFFFFFFL) * ($tore[ii]) + (t >>> 32) * ($tore[ii + 1]);
             }
             if (limit > 0 && (t >>> 32) == 0)
                 sum += $tore[limit] ^ 0x632BE59BD9B4E019L;

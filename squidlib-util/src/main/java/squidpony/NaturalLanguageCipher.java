@@ -90,7 +90,7 @@ public class NaturalLanguageCipher implements Serializable{
 
         public double nextDouble()
         {
-            return Double.longBitsToDouble(0x3FFL << 52 | (state += 0x41041041041041L) >>> 12) - 1.0;
+            return NumberTools.longBitsToDouble(0x3FFL << 52 | (state += 0x41041041041041L) >>> 12) - 1.0;
         }
 
         /**

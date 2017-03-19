@@ -63,8 +63,8 @@ public class LongPeriodRNG implements RandomnessSource, Serializable {
 
     public void reseed() {
         LightRNG lr = new LightRNG(System.currentTimeMillis() ^
-                (Double.doubleToLongBits(Math.random()) << 32) |
-                (Double.doubleToLongBits(Math.random()) & 0xffffffffL));
+                (NumberTools.doubleToLongBits(Math.random()) << 32) |
+                (NumberTools.doubleToLongBits(Math.random()) & 0xffffffffL));
         long ts = lr.nextLong() ^ lr.nextLong() ^ lr.nextLong();
         if (ts == 0)
             ts++;
@@ -73,8 +73,8 @@ public class LongPeriodRNG implements RandomnessSource, Serializable {
         for (int i = 1; i < 16; i++) {
             //Chosen by trial and error to unevenly reseed 4 times, where i is 2, 5, 10, or 13
             if ((6 & (i * 1281783497376652987L)) == 6)
-                lr.state ^= (Double.doubleToLongBits(Math.random()) << 32) |
-                        (Double.doubleToLongBits(Math.random()) & 0xffffffffL);
+                lr.state ^= (NumberTools.doubleToLongBits(Math.random()) << 32) |
+                        (NumberTools.doubleToLongBits(Math.random()) & 0xffffffffL);
             state[i] = lr.nextLong() ^ lr.nextLong() ^ lr.nextLong();
             state[i - 1] ^= state[i];
             if (state[i - 1] == 0) state[i - 1]++;

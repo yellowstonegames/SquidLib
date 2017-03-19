@@ -41,6 +41,7 @@ import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.openjdk.jmh.runner.options.TimeValue;
 import squidpony.squidgrid.gui.gdx.SColor;
+import squidpony.squidmath.NumberTools;
 import squidpony.squidmath.PintRNG;
 
 import java.util.concurrent.TimeUnit;
@@ -56,7 +57,7 @@ public class ConvertBenchmark {
 
     public float doControl()
     {
-        final PintRNG rng = new PintRNG(Float.floatToIntBits(fseed));
+        final PintRNG rng = new PintRNG(NumberTools.floatToIntBits(fseed));
 
         for (int i = 0; i < 1000000; i++) {
             fseed += 0x20 | rng.next(3);
@@ -74,7 +75,7 @@ public class ConvertBenchmark {
 
     public float doJDK()
     {
-        final PintRNG rng = new PintRNG(Float.floatToIntBits(fseed));
+        final PintRNG rng = new PintRNG(NumberTools.floatToIntBits(fseed));
 
         for (int i = 0; i < 1000000; i++) {
             fseed += Float.intBitsToFloat(0x02000000 | rng.next(24));
@@ -92,7 +93,7 @@ public class ConvertBenchmark {
 
     public float doCustom()
     {
-        final PintRNG rng = new PintRNG(Float.floatToIntBits(fseed));
+        final PintRNG rng = new PintRNG(NumberTools.floatToIntBits(fseed));
 
         for (int i = 0; i < 1000000; i++) {
             fseed += SColor.intToFloatColor(0x02000000 | rng.next(24));
@@ -110,7 +111,7 @@ public class ConvertBenchmark {
 
     public float doCustomAlt()
     {
-        final PintRNG rng = new PintRNG(Float.floatToIntBits(fseed));
+        final PintRNG rng = new PintRNG(NumberTools.floatToIntBits(fseed));
 
         for (int i = 0; i < 1000000; i++) {
             fseed += SColor.intToFloatColorAlt(0x02000000 | rng.next(24));

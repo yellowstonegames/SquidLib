@@ -104,12 +104,12 @@ public class HashVisualizer extends ApplicationAdapter {
     private boolean keepGoing = true;
 
     public static double toDouble(long n) {
-        return Double.longBitsToDouble(0x3FF0000000000000L | n >>> 12) - 1.0;
+        return NumberTools.longBitsToDouble(0x3FF0000000000000L | n >>> 12) - 1.0;
         //return Double.longBitsToDouble(0x3FF0000000000000L | n >>> 12) - 1.0;
     }
 
     public static float toFloat(int n) {
-        return (Float.intBitsToFloat(0x3F800000 | n >>> 9) - 1.0f);
+        return (NumberTools.intBitsToFloat(0x3F800000 | n >>> 9) - 1.0f);
     }
 
     public static int mixHash(final int x, final int y)
