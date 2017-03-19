@@ -208,12 +208,15 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Wisp.html#hash-double:A-">hash</a></span>(double[]&nbsp;data)</code>
-<div class="block">The implementation of this method changed after 3.0.0-b8, so the numbers it produces will be different.</div>
+<div class="block">This method is identical to <a href="../../squidpony/squidmath/CrossHash.Wisp.html#hashAlt-double:A-"><code>hashAlt(double[])</code></a> on desktop, but is super-sourced on GWT, replacing
+ the implementation only on that platform, to avoid math with 64-bit longs.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Wisp.html#hash-float:A-">hash</a></span>(float[]&nbsp;data)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Wisp.html#hash-float:A-">hash</a></span>(float[]&nbsp;data)</code>
+<div class="block">This method is reasonable in quality and speed on desktop, though it has some visual hashing artifacts.</div>
+</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>static int</code></td>
@@ -338,15 +341,15 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <tr id="i38" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Wisp.html#hashAlt-double:A-">hashAlt</a></span>(double[]&nbsp;data)</code>
-<div class="block">This method is identical to <a href="../../squidpony/squidmath/CrossHash.Wisp.html#hash-double:A-"><code>hash(double[])</code></a> on desktop, but is super-sourced on GWT, replacing
- the implementation only on that platform, to avoid math with 64-bit longs.</div>
+<div class="block">This method is identical to <a href="../../squidpony/squidmath/CrossHash.Wisp.html#hash-double:A-"><code>hash(double[])</code></a> on desktop, but unlike that method, it will not be
+ super-sourced on GWT.</div>
 </td>
 </tr>
 <tr id="i39" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.Wisp.html#hashAlt-float:A-">hashAlt</a></span>(float[]&nbsp;data)</code>
-<div class="block">The hashAlt and hash64Alt methods for floating-point number arrays have better visual hashing properties than
- hash and hash64, but are somewhat slower on desktop.</div>
+<div class="block">This method is identical to <a href="../../squidpony/squidmath/CrossHash.Wisp.html#hash-float:A-"><code>hash(float[])</code></a> on desktop, but unlike that method, it will not be
+ super-sourced on GWT.</div>
 </td>
 </tr>
 </table>
@@ -650,7 +653,18 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2537">hash</a>(float[]&nbsp;data)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2545">hash</a>(float[]&nbsp;data)</pre>
+<div class="block">This method is reasonable in quality and speed on desktop, though it has some visual hashing artifacts.
+ The hashAlt method for float arrays has better visual hashing properties than this one, but it is somewhat
+ slower on desktop. Because hashAlt turns out to be faster on GWT, super-sourcing is used to replace calls to
+ <a href="../../squidpony/squidmath/CrossHash.Wisp.html#hash-float:A-"><code>hash(float[])</code></a> with calls to <a href="../../squidpony/squidmath/CrossHash.Wisp.html#hashAlt-float:A-"><code>hashAlt(float[])</code></a> on GWT only. This changes the results
+ between desktop/Android and GWT, but GWT was different anyway due to how it handles math being... "special."</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>data</code> - a float array to hash</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a 32-bit hash code of data</dd>
+</dl>
 </li>
 </ul>
 <a name="hashAlt-float:A-">
@@ -659,11 +673,11 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hashAlt</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2556">hashAlt</a>(float[]&nbsp;data)</pre>
-<div class="block">The hashAlt and hash64Alt methods for floating-point number arrays have better visual hashing properties than
- hash and hash64, but are somewhat slower on desktop. They may be drastically faster than hash and hash64 on
- GWT, however, because they don't use <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true#doubleToLongBits-double-" title="class or interface in java.lang"><code>Double.doubleToLongBits(double)</code></a> or its equivalent for Floats,
- and those methods have much more complex implementations on GWT than on desktop Java.</div>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2557">hashAlt</a>(float[]&nbsp;data)</pre>
+<div class="block">This method is identical to <a href="../../squidpony/squidmath/CrossHash.Wisp.html#hash-float:A-"><code>hash(float[])</code></a> on desktop, but unlike that method, it will not be
+ super-sourced on GWT. This makes it slower (sometimes significantly so) on GWT, but using this method on GWT
+ will behave closer to how it behaves on desktop than using <a href="../../squidpony/squidmath/CrossHash.Wisp.html#hash-float:A-"><code>hash(float[])</code></a> on GWT. GWT will
+ probably not produce the same numbers anyway, because its math is "special."</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>data</code> - a float array to hash</dd>
@@ -678,9 +692,11 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2574">hash</a>(double[]&nbsp;data)</pre>
-<div class="block">The implementation of this method changed after 3.0.0-b8, so the numbers it produces will be different.
- It is faster and now lacks a visual-hashing artifact that could have been a symptom of a deeper problem.</div>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2577">hash</a>(double[]&nbsp;data)</pre>
+<div class="block">This method is identical to <a href="../../squidpony/squidmath/CrossHash.Wisp.html#hashAlt-double:A-"><code>hashAlt(double[])</code></a> on desktop, but is super-sourced on GWT, replacing
+ the implementation only on that platform, to avoid math with 64-bit longs. This means this method, though not
+ <a href="../../squidpony/squidmath/CrossHash.Wisp.html#hashAlt-double:A-"><code>hashAlt(double[])</code></a>, will have different results for the same input on desktop/Android versus on
+ GWT. GWT was different anyway, though, due to how it handles math being generally "special."</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>data</code> - a double array to hash</dd>
@@ -695,10 +711,11 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hashAlt</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2593">hashAlt</a>(double[]&nbsp;data)</pre>
-<div class="block">This method is identical to <a href="../../squidpony/squidmath/CrossHash.Wisp.html#hash-double:A-"><code>hash(double[])</code></a> on desktop, but is super-sourced on GWT, replacing
- the implementation only on that platform, to avoid math with 64-bit longs. This means this method, though not
- <a href="../../squidpony/squidmath/CrossHash.Wisp.html#hash-double:A-"><code>hash(double[])</code></a>, will have different results for the same input on desktop/Android versus on GWT.</div>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2589">hashAlt</a>(double[]&nbsp;data)</pre>
+<div class="block">This method is identical to <a href="../../squidpony/squidmath/CrossHash.Wisp.html#hash-double:A-"><code>hash(double[])</code></a> on desktop, but unlike that method, it will not be
+ super-sourced on GWT. This makes it slower (sometimes significantly so) on GWT, but using this method on GWT
+ will behave closer to how it behaves on desktop than using <a href="../../squidpony/squidmath/CrossHash.Wisp.html#hash-double:A-"><code>hash(double[])</code></a> on GWT. GWT will
+ probably not produce the same numbers anyway, because its math is "special."</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>data</code> - a double array to hash</dd>
@@ -713,7 +730,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2597">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;data)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2601">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-char:A-int-int-">
@@ -722,7 +739,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2608">hash</a>(char[]&nbsp;data,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2612">hash</a>(char[]&nbsp;data,
                        int&nbsp;start,
                        int&nbsp;end)</pre>
 </li>
@@ -733,7 +750,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2619">hash</a>(char[][]&nbsp;data)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2623">hash</a>(char[][]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-long:A:A-">
@@ -742,7 +759,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2630">hash</a>(long[][]&nbsp;data)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2634">hash</a>(long[][]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-java.lang.CharSequence:A-">
@@ -751,7 +768,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2641">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>[]&nbsp;data)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2645">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-java.lang.CharSequence:A...-">
@@ -760,7 +777,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2652">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>[]...&nbsp;data)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2656">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>[]...&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-java.lang.Iterable-">
@@ -769,7 +786,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2663">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&gt;&nbsp;data)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2667">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&gt;&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-java.util.List-">
@@ -778,7 +795,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2673">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&gt;&nbsp;data)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2677">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&gt;&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-java.lang.Object:A-">
@@ -787,7 +804,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2684">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;data)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2688">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;data)</pre>
 </li>
 </ul>
 <a name="hash-java.lang.Object-">
@@ -796,7 +813,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2696">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;data)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.Wisp.html#line.2700">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;data)</pre>
 </li>
 </ul>
 </li>

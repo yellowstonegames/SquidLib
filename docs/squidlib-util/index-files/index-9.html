@@ -295,10 +295,13 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Wisp.html#hash-long:A-">hash(long[])</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Wisp.html" title="class in squidpony.squidmath">CrossHash.Wisp</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Wisp.html#hash-float:A-">hash(float[])</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Wisp.html" title="class in squidpony.squidmath">CrossHash.Wisp</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">This method is reasonable in quality and speed on desktop, though it has some visual hashing artifacts.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Wisp.html#hash-double:A-">hash(double[])</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Wisp.html" title="class in squidpony.squidmath">CrossHash.Wisp</a></dt>
 <dd>
-<div class="block">The implementation of this method changed after 3.0.0-b8, so the numbers it produces will be different.</div>
+<div class="block">This method is identical to <a href="../squidpony/squidmath/CrossHash.Wisp.html#hashAlt-double:A-"><code>CrossHash.Wisp.hashAlt(double[])</code></a> on desktop, but is super-sourced on GWT, replacing
+ the implementation only on that platform, to avoid math with 64-bit longs.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Wisp.html#hash-java.lang.CharSequence-">hash(CharSequence)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Wisp.html" title="class in squidpony.squidmath">CrossHash.Wisp</a></dt>
 <dd>&nbsp;</dd>
@@ -521,13 +524,13 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Wisp.html#hashAlt-float:A-">hashAlt(float[])</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Wisp.html" title="class in squidpony.squidmath">CrossHash.Wisp</a></dt>
 <dd>
-<div class="block">The hashAlt and hash64Alt methods for floating-point number arrays have better visual hashing properties than
- hash and hash64, but are somewhat slower on desktop.</div>
+<div class="block">This method is identical to <a href="../squidpony/squidmath/CrossHash.Wisp.html#hash-float:A-"><code>CrossHash.Wisp.hash(float[])</code></a> on desktop, but unlike that method, it will not be
+ super-sourced on GWT.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Wisp.html#hashAlt-double:A-">hashAlt(double[])</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Wisp.html" title="class in squidpony.squidmath">CrossHash.Wisp</a></dt>
 <dd>
-<div class="block">This method is identical to <a href="../squidpony/squidmath/CrossHash.Wisp.html#hash-double:A-"><code>CrossHash.Wisp.hash(double[])</code></a> on desktop, but is super-sourced on GWT, replacing
- the implementation only on that platform, to avoid math with 64-bit longs.</div>
+<div class="block">This method is identical to <a href="../squidpony/squidmath/CrossHash.Wisp.html#hash-double:A-"><code>CrossHash.Wisp.hash(double[])</code></a> on desktop, but unlike that method, it will not be
+ super-sourced on GWT.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Alteration.html#hashCode--">hashCode()</a></span> - Method in class squidpony.<a href="../squidpony/FakeLanguageGen.Alteration.html" title="class in squidpony">FakeLanguageGen.Alteration</a></dt>
 <dd>&nbsp;</dd>
