@@ -2578,9 +2578,11 @@ public class CrossHash {
 
         /**
          * The hashAlt and hash64Alt methods for floating-point number arrays have better visual hashing properties than
-         * hash and hash64, but are somewhat slower on desktop. They may be drastically faster than hash and hash64 on
-         * GWT, however, because they don't use {@link Double#doubleToLongBits(double)} or its equivalent for Floats,
-         * and those methods have much more complex implementations on GWT than on desktop Java.
+         * hash and hash64, but are somewhat slower on desktop, though this hasn't been universally true and this method
+         * is sometimes a decent amount faster. Operations on double arrays, not float arrays, may be drastically faster
+         * than hash and hash64 on GWT, however, because they are super-sourced to avoid math with 64-bit longs. This
+         * means this method, though not {@link #hash(double[])}, will have different results for the same input on
+         * desktop/Android versus on GWT.
          * @param data a double array to hash
          * @return a 32-bit hash code of data
          */

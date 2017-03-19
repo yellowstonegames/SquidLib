@@ -15,6 +15,13 @@
  */
 package java.lang;
 
+import com.google.gwt.typedarrays.client.Float32ArrayNative;
+import com.google.gwt.typedarrays.client.Int32ArrayNative;
+import com.google.gwt.typedarrays.client.Int8ArrayNative;
+import com.google.gwt.typedarrays.shared.Float32Array;
+import com.google.gwt.typedarrays.shared.Int32Array;
+import com.google.gwt.typedarrays.shared.Int8Array;
+
 public final class Double extends Number implements Comparable<Double> {
     private static final Int8Array wba = Int8ArrayNative.create(8);
     private static final Int32Array wia = Int32ArrayNative.create(wba.buffer(), 0, 2);

@@ -183,7 +183,7 @@ public class LFSR implements StatefulRandomness, Serializable {
      * @param state any long other than 0
      * @return the next long that an LFSR would produce with the given state
      */
-    public static long determine(long state)
+    public static long determine(final long state)
     {
         return state >>> 1 ^ (-(state & 1L) & 0xD800000000000000L);
     }
@@ -194,7 +194,7 @@ public class LFSR implements StatefulRandomness, Serializable {
      * @param state any byte other than 0
      * @return the next int between 1 and 255 that an LFSR would produce with the given state
      */
-    public static int determineByte(byte state)
+    public static int determineByte(final byte state)
     {
         return state >>> 1 ^ (-(state & 1) & 0xB8);
     }
@@ -206,7 +206,7 @@ public class LFSR implements StatefulRandomness, Serializable {
      * @param state any int other than 0
      * @return the next non-zero int that an LFSR would produce with the given state
      */
-    public static int determineInt(int state)
+    public static int determineInt(final int state)
     {
         return state >>> 1 ^ (-(state & 1) & 0xA3000000);
     }
@@ -223,7 +223,7 @@ public class LFSR implements StatefulRandomness, Serializable {
      * @param state any int other than -2147483648 (0x80000000), which is {@link Integer#MIN_VALUE}; can produce 0
      * @return the next int other than -2147483648 that an LFSR would produce with the given state
      */
-    public static int determineIntSymmetrical(int state)
+    public static int determineIntSymmetrical(final int state)
     {
         return ((state ^ 0x80000000) >>> 1 ^ (-(state & 1) & 0xA3000000));
     }
