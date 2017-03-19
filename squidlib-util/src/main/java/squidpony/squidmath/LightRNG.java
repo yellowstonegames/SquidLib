@@ -65,7 +65,7 @@ public class LightRNG implements RandomnessSource, StatefulRandomness, Serializa
     }
 
     @Override
-    public int next( int bits ) {
+    public final int next( int bits ) {
         return (int)( nextLong() & ( 1L << bits ) - 1 );
     }
 
@@ -74,7 +74,7 @@ public class LightRNG implements RandomnessSource, StatefulRandomness, Serializa
      * @return any long, all 64 bits are random
      */
     @Override
-    public long nextLong() {
+    public final long nextLong() {
         long z = state += 0x9E3779B97F4A7C15L;
         z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
         z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;

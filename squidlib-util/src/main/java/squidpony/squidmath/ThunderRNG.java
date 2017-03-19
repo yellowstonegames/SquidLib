@@ -98,7 +98,7 @@ public class ThunderRNG implements RandomnessSource, Serializable {
     }
 
     @Override
-    public int next( int bits ) {
+    public final int next( int bits ) {
         //return (int)( nextLong() & ( 1L << bits ) - 1 );
         return (int)( nextLong() >>> (64 - bits) );
     }
@@ -108,7 +108,7 @@ public class ThunderRNG implements RandomnessSource, Serializable {
      * @return any long, all 64 bits are random
      */
     @Override
-    public long nextLong() {
+    public final long nextLong() {
         //return ((state << 4L) + 0xC6BC279692B5CC83L) * ((state += 0x9E3779B97F4A7C15L) >>> 5) + 0x632BE59BD9B4E019L;
         //return 0xD0E89D2D311E289FL * ((state += 0x9E3779B97F4A7C15L) >> 18L); //very fast
         //return ((state *= 0x9E3779B97F4A7C15L) * (++state >>> 7));

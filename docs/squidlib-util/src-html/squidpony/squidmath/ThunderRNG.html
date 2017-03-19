@@ -106,7 +106,7 @@
 <span class="sourceLineNo">098</span>    }<a name="line.98"></a>
 <span class="sourceLineNo">099</span><a name="line.99"></a>
 <span class="sourceLineNo">100</span>    @Override<a name="line.100"></a>
-<span class="sourceLineNo">101</span>    public int next( int bits ) {<a name="line.101"></a>
+<span class="sourceLineNo">101</span>    public final int next( int bits ) {<a name="line.101"></a>
 <span class="sourceLineNo">102</span>        //return (int)( nextLong() &amp; ( 1L &lt;&lt; bits ) - 1 );<a name="line.102"></a>
 <span class="sourceLineNo">103</span>        return (int)( nextLong() &gt;&gt;&gt; (64 - bits) );<a name="line.103"></a>
 <span class="sourceLineNo">104</span>    }<a name="line.104"></a>
@@ -116,7 +116,7 @@
 <span class="sourceLineNo">108</span>     * @return any long, all 64 bits are random<a name="line.108"></a>
 <span class="sourceLineNo">109</span>     */<a name="line.109"></a>
 <span class="sourceLineNo">110</span>    @Override<a name="line.110"></a>
-<span class="sourceLineNo">111</span>    public long nextLong() {<a name="line.111"></a>
+<span class="sourceLineNo">111</span>    public final long nextLong() {<a name="line.111"></a>
 <span class="sourceLineNo">112</span>        //return ((state &lt;&lt; 4L) + 0xC6BC279692B5CC83L) * ((state += 0x9E3779B97F4A7C15L) &gt;&gt;&gt; 5) + 0x632BE59BD9B4E019L;<a name="line.112"></a>
 <span class="sourceLineNo">113</span>        //return 0xD0E89D2D311E289FL * ((state += 0x9E3779B97F4A7C15L) &gt;&gt; 18L); //very fast<a name="line.113"></a>
 <span class="sourceLineNo">114</span>        //return ((state *= 0x9E3779B97F4A7C15L) * (++state &gt;&gt;&gt; 7));<a name="line.114"></a>

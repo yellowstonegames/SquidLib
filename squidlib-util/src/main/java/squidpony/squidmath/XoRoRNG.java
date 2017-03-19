@@ -55,12 +55,12 @@ public class XoRoRNG implements RandomnessSource, Serializable {
     }
 
     @Override
-    public int next(int bits) {
+    public final int next(int bits) {
         return (int) (nextLong() & (1L << bits) - 1);
     }
 
     @Override
-    public long nextLong() {
+    public final long nextLong() {
         final long s0 = state0;
         long s1 = state1;
         final long result = s0 + s1;

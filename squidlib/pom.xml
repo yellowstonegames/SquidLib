@@ -29,7 +29,7 @@
                     <source>${jdk.version}</source>
                     <target>${jdk.version}</target>
                     <excludes>
-                        <exclude>**/super/**</exclude>
+                        <exclude>**/emu/**</exclude>
                     </excludes>
                 </configuration>
             </plugin>
