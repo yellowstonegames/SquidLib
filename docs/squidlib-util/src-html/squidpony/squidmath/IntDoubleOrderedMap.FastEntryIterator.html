@@ -2277,7 +2277,7 @@
 <span class="sourceLineNo">2269</span>         */<a name="line.2269"></a>
 <span class="sourceLineNo">2270</span><a name="line.2270"></a>
 <span class="sourceLineNo">2271</span>        static int float2int(final float f) {<a name="line.2271"></a>
-<span class="sourceLineNo">2272</span>            return Float.floatToIntBits(f);<a name="line.2272"></a>
+<span class="sourceLineNo">2272</span>            return NumberTools.floatToIntBits(f);<a name="line.2272"></a>
 <span class="sourceLineNo">2273</span>        }<a name="line.2273"></a>
 <span class="sourceLineNo">2274</span><a name="line.2274"></a>
 <span class="sourceLineNo">2275</span>        /**<a name="line.2275"></a>
@@ -2288,7 +2288,7 @@
 <span class="sourceLineNo">2280</span>         */<a name="line.2280"></a>
 <span class="sourceLineNo">2281</span><a name="line.2281"></a>
 <span class="sourceLineNo">2282</span>        static int double2int(final double d) {<a name="line.2282"></a>
-<span class="sourceLineNo">2283</span>            final long l = Double.doubleToLongBits(d);<a name="line.2283"></a>
+<span class="sourceLineNo">2283</span>            final long l = NumberTools.doubleToLongBits(d);<a name="line.2283"></a>
 <span class="sourceLineNo">2284</span>            return (int) (l ^ (l &gt;&gt;&gt; 32));<a name="line.2284"></a>
 <span class="sourceLineNo">2285</span>        }<a name="line.2285"></a>
 <span class="sourceLineNo">2286</span><a name="line.2286"></a>

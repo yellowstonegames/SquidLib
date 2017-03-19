@@ -191,7 +191,7 @@
 <span class="sourceLineNo">183</span>     * @param state any long other than 0<a name="line.183"></a>
 <span class="sourceLineNo">184</span>     * @return the next long that an LFSR would produce with the given state<a name="line.184"></a>
 <span class="sourceLineNo">185</span>     */<a name="line.185"></a>
-<span class="sourceLineNo">186</span>    public static long determine(long state)<a name="line.186"></a>
+<span class="sourceLineNo">186</span>    public static long determine(final long state)<a name="line.186"></a>
 <span class="sourceLineNo">187</span>    {<a name="line.187"></a>
 <span class="sourceLineNo">188</span>        return state &gt;&gt;&gt; 1 ^ (-(state &amp; 1L) &amp; 0xD800000000000000L);<a name="line.188"></a>
 <span class="sourceLineNo">189</span>    }<a name="line.189"></a>
@@ -202,7 +202,7 @@
 <span class="sourceLineNo">194</span>     * @param state any byte other than 0<a name="line.194"></a>
 <span class="sourceLineNo">195</span>     * @return the next int between 1 and 255 that an LFSR would produce with the given state<a name="line.195"></a>
 <span class="sourceLineNo">196</span>     */<a name="line.196"></a>
-<span class="sourceLineNo">197</span>    public static int determineByte(byte state)<a name="line.197"></a>
+<span class="sourceLineNo">197</span>    public static int determineByte(final byte state)<a name="line.197"></a>
 <span class="sourceLineNo">198</span>    {<a name="line.198"></a>
 <span class="sourceLineNo">199</span>        return state &gt;&gt;&gt; 1 ^ (-(state &amp; 1) &amp; 0xB8);<a name="line.199"></a>
 <span class="sourceLineNo">200</span>    }<a name="line.200"></a>
@@ -214,7 +214,7 @@
 <span class="sourceLineNo">206</span>     * @param state any int other than 0<a name="line.206"></a>
 <span class="sourceLineNo">207</span>     * @return the next non-zero int that an LFSR would produce with the given state<a name="line.207"></a>
 <span class="sourceLineNo">208</span>     */<a name="line.208"></a>
-<span class="sourceLineNo">209</span>    public static int determineInt(int state)<a name="line.209"></a>
+<span class="sourceLineNo">209</span>    public static int determineInt(final int state)<a name="line.209"></a>
 <span class="sourceLineNo">210</span>    {<a name="line.210"></a>
 <span class="sourceLineNo">211</span>        return state &gt;&gt;&gt; 1 ^ (-(state &amp; 1) &amp; 0xA3000000);<a name="line.211"></a>
 <span class="sourceLineNo">212</span>    }<a name="line.212"></a>
@@ -231,7 +231,7 @@
 <span class="sourceLineNo">223</span>     * @param state any int other than -2147483648 (0x80000000), which is {@link Integer#MIN_VALUE}; can produce 0<a name="line.223"></a>
 <span class="sourceLineNo">224</span>     * @return the next int other than -2147483648 that an LFSR would produce with the given state<a name="line.224"></a>
 <span class="sourceLineNo">225</span>     */<a name="line.225"></a>
-<span class="sourceLineNo">226</span>    public static int determineIntSymmetrical(int state)<a name="line.226"></a>
+<span class="sourceLineNo">226</span>    public static int determineIntSymmetrical(final int state)<a name="line.226"></a>
 <span class="sourceLineNo">227</span>    {<a name="line.227"></a>
 <span class="sourceLineNo">228</span>        return ((state ^ 0x80000000) &gt;&gt;&gt; 1 ^ (-(state &amp; 1) &amp; 0xA3000000));<a name="line.228"></a>
 <span class="sourceLineNo">229</span>    }<a name="line.229"></a>

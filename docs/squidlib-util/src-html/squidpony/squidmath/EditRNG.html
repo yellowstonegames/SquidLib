@@ -626,9 +626,9 @@
 <span class="sourceLineNo">618</span>    public int hashCode() {<a name="line.618"></a>
 <span class="sourceLineNo">619</span>        int result = super.hashCode() * 31;<a name="line.619"></a>
 <span class="sourceLineNo">620</span>        long temp;<a name="line.620"></a>
-<span class="sourceLineNo">621</span>        temp = Double.doubleToLongBits(expected);<a name="line.621"></a>
+<span class="sourceLineNo">621</span>        temp = NumberTools.doubleToLongBits(expected);<a name="line.621"></a>
 <span class="sourceLineNo">622</span>        result += (int) (temp ^ (temp &gt;&gt;&gt; 32));<a name="line.622"></a>
-<span class="sourceLineNo">623</span>        temp = Double.doubleToLongBits(centrality);<a name="line.623"></a>
+<span class="sourceLineNo">623</span>        temp = NumberTools.doubleToLongBits(centrality);<a name="line.623"></a>
 <span class="sourceLineNo">624</span>        result = 31 * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));<a name="line.624"></a>
 <span class="sourceLineNo">625</span>        return result;<a name="line.625"></a>
 <span class="sourceLineNo">626</span>    }<a name="line.626"></a>

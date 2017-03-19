@@ -6,6 +6,7 @@
      <inherits name='squidlib-util' />
   -->
 <module>
+    <inherits name="com.google.gwt.typedarrays.TypedArrays"/>
     <inherits name="regexodus"/>
     <super-source path="emu" />
     <source path="squidpony"/>

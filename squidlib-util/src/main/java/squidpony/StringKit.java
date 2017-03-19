@@ -1,6 +1,7 @@
 package squidpony;
 
 import squidpony.squidmath.CrossHash;
+import squidpony.squidmath.NumberTools;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -732,7 +733,7 @@ public class StringKit {
      * @return buf, after modifying it in-place
      */
     public static char[] b64Encode(double number, int offset, char[] buf) {
-        return b64Encode(Double.doubleToLongBits(number), offset, buf);
+        return b64Encode(NumberTools.doubleToLongBits(number), offset, buf);
     }
 
     /**
@@ -764,7 +765,7 @@ public class StringKit {
      * @return buf, after modifying it in-place
      */
     public static char[] b64Encode(float number, int offset, char[] buf) {
-        return b64Encode(Float.floatToIntBits(number), offset, buf);
+        return b64Encode(NumberTools.floatToIntBits(number), offset, buf);
     }
 
     /**
@@ -847,7 +848,7 @@ public class StringKit {
      */
     public static double b64DecodeDouble(char[] data, int offset) {
         return (data == null || data.length < 11 + offset) ? 0.0 :
-                Double.longBitsToDouble((((long) data[offset]) << 60)
+                NumberTools.longBitsToDouble((((long) data[offset]) << 60)
                         | ((0x3fL & data[offset + 1]) << 54)
                         | ((0x3fL & data[offset + 2]) << 48)
                         | ((0x3fL & data[offset + 3]) << 42)
@@ -884,7 +885,7 @@ public class StringKit {
      */
     public static float b64DecodeFloat(char[] data, int offset) {
         return (data == null || data.length < 6 + offset) ? 0f :
-                Float.intBitsToFloat(((data[offset]) << 30)
+                NumberTools.intBitsToFloat(((data[offset]) << 30)
                         | ((0x3f & data[offset + 1]) << 24)
                         | ((0x3f & data[offset + 2]) << 18)
                         | ((0x3f & data[offset + 3]) << 12)

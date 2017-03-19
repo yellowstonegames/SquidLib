@@ -2823,7 +2823,7 @@
 <span class="sourceLineNo">2815</span>        double myInfluence = 1.0 - otherInfluence;<a name="line.2815"></a>
 <span class="sourceLineNo">2816</span><a name="line.2816"></a>
 <span class="sourceLineNo">2817</span>        RNG rng = new RNG((hashCode() &amp; 0xffffffffL) | ((other.hashCode() &amp; 0xffffffffL) &lt;&lt; 32)<a name="line.2817"></a>
-<span class="sourceLineNo">2818</span>                ^ Double.doubleToLongBits(otherInfluence));<a name="line.2818"></a>
+<span class="sourceLineNo">2818</span>                ^ NumberTools.doubleToLongBits(otherInfluence));<a name="line.2818"></a>
 <span class="sourceLineNo">2819</span><a name="line.2819"></a>
 <span class="sourceLineNo">2820</span>        String[] ov = merge1000(rng, openingVowels, other.openingVowels, otherInfluence),<a name="line.2820"></a>
 <span class="sourceLineNo">2821</span>                mv = merge1000(rng, midVowels, other.midVowels, otherInfluence),<a name="line.2821"></a>
@@ -2979,7 +2979,7 @@
 <span class="sourceLineNo">2971</span>        consonantInfluence = Math.max(0.0, Math.min(consonantInfluence, 1.0));<a name="line.2971"></a>
 <span class="sourceLineNo">2972</span><a name="line.2972"></a>
 <span class="sourceLineNo">2973</span>        RNG rng = new RNG((hashCode() &amp; 0xffffffffL) ^<a name="line.2973"></a>
-<span class="sourceLineNo">2974</span>                ((Double.doubleToLongBits(vowelInfluence) &amp; 0xffffffffL) | (Double.doubleToLongBits(consonantInfluence) &lt;&lt; 32)));<a name="line.2974"></a>
+<span class="sourceLineNo">2974</span>                ((NumberTools.doubleToLongBits(vowelInfluence) &amp; 0xffffffffL) | (NumberTools.doubleToLongBits(consonantInfluence) &lt;&lt; 32)));<a name="line.2974"></a>
 <span class="sourceLineNo">2975</span>        String[] ov = accentVowels(rng, openingVowels, vowelInfluence),<a name="line.2975"></a>
 <span class="sourceLineNo">2976</span>                mv = accentVowels(rng, midVowels, vowelInfluence),<a name="line.2976"></a>
 <span class="sourceLineNo">2977</span>                oc = accentConsonants(rng, openingConsonants, consonantInfluence),<a name="line.2977"></a>
@@ -3128,15 +3128,15 @@
 <span class="sourceLineNo">3120</span>        result = 31 * result + CrossHash.Lightning.hash(closingSyllables);<a name="line.3120"></a>
 <span class="sourceLineNo">3121</span>        result = 31 * result + (clean ? 1 : 0);<a name="line.3121"></a>
 <span class="sourceLineNo">3122</span>        result = 31 * result + syllableFrequencies.hashCode();<a name="line.3122"></a>
-<span class="sourceLineNo">3123</span>        temp = Double.doubleToLongBits(totalSyllableFrequency);<a name="line.3123"></a>
+<span class="sourceLineNo">3123</span>        temp = NumberTools.doubleToLongBits(totalSyllableFrequency);<a name="line.3123"></a>
 <span class="sourceLineNo">3124</span>        result = 31 * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));<a name="line.3124"></a>
-<span class="sourceLineNo">3125</span>        temp = Double.doubleToLongBits(vowelStartFrequency);<a name="line.3125"></a>
+<span class="sourceLineNo">3125</span>        temp = NumberTools.doubleToLongBits(vowelStartFrequency);<a name="line.3125"></a>
 <span class="sourceLineNo">3126</span>        result = 31 * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));<a name="line.3126"></a>
-<span class="sourceLineNo">3127</span>        temp = Double.doubleToLongBits(vowelEndFrequency);<a name="line.3127"></a>
+<span class="sourceLineNo">3127</span>        temp = NumberTools.doubleToLongBits(vowelEndFrequency);<a name="line.3127"></a>
 <span class="sourceLineNo">3128</span>        result = 31 * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));<a name="line.3128"></a>
-<span class="sourceLineNo">3129</span>        temp = Double.doubleToLongBits(vowelSplitFrequency);<a name="line.3129"></a>
+<span class="sourceLineNo">3129</span>        temp = NumberTools.doubleToLongBits(vowelSplitFrequency);<a name="line.3129"></a>
 <span class="sourceLineNo">3130</span>        result = 31 * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));<a name="line.3130"></a>
-<span class="sourceLineNo">3131</span>        temp = Double.doubleToLongBits(syllableEndFrequency);<a name="line.3131"></a>
+<span class="sourceLineNo">3131</span>        temp = NumberTools.doubleToLongBits(syllableEndFrequency);<a name="line.3131"></a>
 <span class="sourceLineNo">3132</span>        result = 31 * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));<a name="line.3132"></a>
 <span class="sourceLineNo">3133</span>        result = 31 * result + (sanityChecks != null ? sanityChecks.length + 1 : 0);<a name="line.3133"></a>
 <span class="sourceLineNo">3134</span>        result = 31 * result + (modifiers != null ? modifiers.hashCode() : 0);<a name="line.3134"></a>
@@ -3503,7 +3503,7 @@
 <span class="sourceLineNo">3495</span>            int result;<a name="line.3495"></a>
 <span class="sourceLineNo">3496</span>            long temp;<a name="line.3496"></a>
 <span class="sourceLineNo">3497</span>            result = replacer.hashCode();<a name="line.3497"></a>
-<span class="sourceLineNo">3498</span>            temp = Double.doubleToLongBits(chance);<a name="line.3498"></a>
+<span class="sourceLineNo">3498</span>            temp = NumberTools.doubleToLongBits(chance);<a name="line.3498"></a>
 <span class="sourceLineNo">3499</span>            result = 31 * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));<a name="line.3499"></a>
 <span class="sourceLineNo">3500</span>            return result;<a name="line.3500"></a>
 <span class="sourceLineNo">3501</span>        }<a name="line.3501"></a>

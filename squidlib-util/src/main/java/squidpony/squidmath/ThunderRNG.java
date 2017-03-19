@@ -153,7 +153,7 @@ public class ThunderRNG implements RandomnessSource, Serializable {
      * @return a value between 0 (inclusive) and 0.9999999999999999 (inclusive)
      */
     public double nextDouble() {
-        return Double.longBitsToDouble(0x3FFL << 52 | nextLong() >>> 12) - 1.0;
+        return NumberTools.longBitsToDouble(0x3FFL << 52 | nextLong() >>> 12) - 1.0;
     }
 
     /**

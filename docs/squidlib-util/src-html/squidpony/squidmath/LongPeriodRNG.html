@@ -71,8 +71,8 @@
 <span class="sourceLineNo">063</span><a name="line.63"></a>
 <span class="sourceLineNo">064</span>    public void reseed() {<a name="line.64"></a>
 <span class="sourceLineNo">065</span>        LightRNG lr = new LightRNG(System.currentTimeMillis() ^<a name="line.65"></a>
-<span class="sourceLineNo">066</span>                (Double.doubleToLongBits(Math.random()) &lt;&lt; 32) |<a name="line.66"></a>
-<span class="sourceLineNo">067</span>                (Double.doubleToLongBits(Math.random()) &amp; 0xffffffffL));<a name="line.67"></a>
+<span class="sourceLineNo">066</span>                (NumberTools.doubleToLongBits(Math.random()) &lt;&lt; 32) |<a name="line.66"></a>
+<span class="sourceLineNo">067</span>                (NumberTools.doubleToLongBits(Math.random()) &amp; 0xffffffffL));<a name="line.67"></a>
 <span class="sourceLineNo">068</span>        long ts = lr.nextLong() ^ lr.nextLong() ^ lr.nextLong();<a name="line.68"></a>
 <span class="sourceLineNo">069</span>        if (ts == 0)<a name="line.69"></a>
 <span class="sourceLineNo">070</span>            ts++;<a name="line.70"></a>
@@ -81,8 +81,8 @@
 <span class="sourceLineNo">073</span>        for (int i = 1; i &lt; 16; i++) {<a name="line.73"></a>
 <span class="sourceLineNo">074</span>            //Chosen by trial and error to unevenly reseed 4 times, where i is 2, 5, 10, or 13<a name="line.74"></a>
 <span class="sourceLineNo">075</span>            if ((6 &amp; (i * 1281783497376652987L)) == 6)<a name="line.75"></a>
-<span class="sourceLineNo">076</span>                lr.state ^= (Double.doubleToLongBits(Math.random()) &lt;&lt; 32) |<a name="line.76"></a>
-<span class="sourceLineNo">077</span>                        (Double.doubleToLongBits(Math.random()) &amp; 0xffffffffL);<a name="line.77"></a>
+<span class="sourceLineNo">076</span>                lr.state ^= (NumberTools.doubleToLongBits(Math.random()) &lt;&lt; 32) |<a name="line.76"></a>
+<span class="sourceLineNo">077</span>                        (NumberTools.doubleToLongBits(Math.random()) &amp; 0xffffffffL);<a name="line.77"></a>
 <span class="sourceLineNo">078</span>            state[i] = lr.nextLong() ^ lr.nextLong() ^ lr.nextLong();<a name="line.78"></a>
 <span class="sourceLineNo">079</span>            state[i - 1] ^= state[i];<a name="line.79"></a>
 <span class="sourceLineNo">080</span>            if (state[i - 1] == 0) state[i - 1]++;<a name="line.80"></a>

@@ -98,7 +98,7 @@
 <span class="sourceLineNo">090</span><a name="line.90"></a>
 <span class="sourceLineNo">091</span>        public double nextDouble()<a name="line.91"></a>
 <span class="sourceLineNo">092</span>        {<a name="line.92"></a>
-<span class="sourceLineNo">093</span>            return Double.longBitsToDouble(0x3FFL &lt;&lt; 52 | (state += 0x41041041041041L) &gt;&gt;&gt; 12) - 1.0;<a name="line.93"></a>
+<span class="sourceLineNo">093</span>            return NumberTools.longBitsToDouble(0x3FFL &lt;&lt; 52 | (state += 0x41041041041041L) &gt;&gt;&gt; 12) - 1.0;<a name="line.93"></a>
 <span class="sourceLineNo">094</span>        }<a name="line.94"></a>
 <span class="sourceLineNo">095</span><a name="line.95"></a>
 <span class="sourceLineNo">096</span>        /**<a name="line.96"></a>

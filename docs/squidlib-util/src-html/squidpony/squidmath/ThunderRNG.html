@@ -161,7 +161,7 @@
 <span class="sourceLineNo">153</span>     * @return a value between 0 (inclusive) and 0.9999999999999999 (inclusive)<a name="line.153"></a>
 <span class="sourceLineNo">154</span>     */<a name="line.154"></a>
 <span class="sourceLineNo">155</span>    public double nextDouble() {<a name="line.155"></a>
-<span class="sourceLineNo">156</span>        return Double.longBitsToDouble(0x3FFL &lt;&lt; 52 | nextLong() &gt;&gt;&gt; 12) - 1.0;<a name="line.156"></a>
+<span class="sourceLineNo">156</span>        return NumberTools.longBitsToDouble(0x3FFL &lt;&lt; 52 | nextLong() &gt;&gt;&gt; 12) - 1.0;<a name="line.156"></a>
 <span class="sourceLineNo">157</span>    }<a name="line.157"></a>
 <span class="sourceLineNo">158</span><a name="line.158"></a>
 <span class="sourceLineNo">159</span>    /**<a name="line.159"></a>
