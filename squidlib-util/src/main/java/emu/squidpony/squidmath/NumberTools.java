@@ -71,6 +71,7 @@ public class NumberTools {
             result += (a ^= 0x85157AF5 * ((int) (-0xD0E8.9D2D311E289Fp-25f * (t = data[i]) + t * -0x1.39b4dce80194cp9f)));
         }
         return result * (a | 1) ^ (result >>> 11 | result << 21);
+    }
 
     static int hashWisp(final double[] data)
     {
