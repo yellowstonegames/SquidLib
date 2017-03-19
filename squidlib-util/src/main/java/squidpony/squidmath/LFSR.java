@@ -50,12 +50,12 @@ public class LFSR implements StatefulRandomness, Serializable {
 
 
     @Override
-    public int next(int bits) {
+    public final int next(int bits) {
         return (int) (nextLong() & (1L << bits) - 1);
     }
 
     @Override
-    public long nextLong() {
+    public final long nextLong() {
         return state = (state >>> 1 ^ (-(state & 1L) & 0xD800000000000000L));
     }
 
@@ -200,6 +200,35 @@ public class LFSR implements StatefulRandomness, Serializable {
     }
 
     /**
+     * Gets the next int that a different kind of LFSR would produce if its state was {@code state}.
+     * Does not allow state to be 0, nor will this produce a result of 0 (as long as 0 was not the input). If given all
+     * int values except 0 as arguments, will produce all non-zero ints.
+     * @param state any int other than 0
+     * @return the next non-zero int that an LFSR would produce with the given state
+     */
+    public static int determineInt(int state)
+    {
+        return state >>> 1 ^ (-(state & 1) & 0xA3000000);
+    }
+    /**
+     * Gets the next int that a different kind of LFSR would produce if its state was {@code state}.
+     * Does not allow state to be {@link Integer#MIN_VALUE}, nor will this produce a result of {@link Integer#MIN_VALUE}
+     * (as long as {@link Integer#MIN_VALUE} was not the input). If given all int values except
+     * {@link Integer#MIN_VALUE} as arguments, will produce all ints in the range {@code [-2147483647,2147483647]},
+     * including 0 but not -2147483648 (the minimum int).
+     *
+     * This is called Symmetrical because it produces the same amount of positive and negative numbers, instead of the
+     * normal generation of more negative ones (due to how ints are represented, the min value is always further from 0
+     * than the max value for any signed integer type).
+     * @param state any int other than -2147483648 (0x80000000), which is {@link Integer#MIN_VALUE}; can produce 0
+     * @return the next int other than -2147483648 that an LFSR would produce with the given state
+     */
+    public static int determineIntSymmetrical(int state)
+    {
+        return ((state ^ 0x80000000) >>> 1 ^ (-(state & 1) & 0xA3000000));
+    }
+
+    /**
      * Gets the next number that an LFSR would produce using {@link #nextInt(int)} if its state was {@code state} and
      * {@code bound} was passed to nextInt(). Does not allow state to be 0.
      * @param state any long other than 0
@@ -209,5 +238,15 @@ public class LFSR implements StatefulRandomness, Serializable {
     public static int determineBounded(final long state, final int bound)
     {
         return (int)((bound * ((state >>> 1) & 0x7FFFFFFFL)) >>> 31);
+    }
+    /**
+     * Gets the next int using {@link #determineInt(int)} and bounds it to fit betwee. Does not allow state to be 0.
+     * @param state any int other than 0
+     * @param bound the exclusive bound on the result as an int; does better if the bound is not too high (below 10000?)
+     * @return the next int that an LFSR would produce with the given state and bound; can return 0
+     */
+    public static int determineBounded(final int state, final int bound)
+    {
+        return (int)((bound * (~determineInt(state) & 0x7FFFFFFFL)) >>> 31);
     }
 }
