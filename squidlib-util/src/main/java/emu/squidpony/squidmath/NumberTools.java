@@ -20,43 +20,71 @@ public class NumberTools {
     private static final Float32Array wfa = Float32ArrayNative.create(wba.buffer(), 0, 2);
     private static final Float64Array wda = Float64ArrayNative.create(wba.buffer(), 0, 1);
 
-    public static long doubleToLongBits(double value) {
+    public static long doubleToLongBits(final double value) {
         wda.set(0, value);
         return ((long)wia.get(1) << 32) | (wia.get(0) & 0xffffffffL);
     }
 
-    public static long doubleToRawLongBits(double value) {
+    public static long doubleToRawLongBits(final double value) {
         wda.set(0, value);
         return ((long)wia.get(1) << 32) | (wia.get(0) & 0xffffffffL);
     }
 
-    public static double longBitsToDouble(long bits) {
+    public static double longBitsToDouble(final long bits) {
         wia.set(1, (int)(bits >>> 32));
-        wia.set(0, (int)(bits & 0xffffffffL));
+        wia.set(0, (int)bits);
         return wda.get(0);
     }
 
-    public static int doubleToLowIntBits(double value)
+    public static int doubleToLowIntBits(final double value)
     {
         wda.set(0, value);
         return wia.get(0);
     }
-    public static int doubleToHighIntBits(double value)
+    public static int doubleToHighIntBits(final double value)
     {
         wda.set(0, value);
         return wia.get(1);
     }
+    public static int doubleToMixedIntBits(final double value)
+    {
+        wda.set(0, value);
+        return wia.get(0) ^ wia.get(1);
+    }
 
-    public static int floatToIntBits(float value) {
+    public static double setExponent(final double value, final int exponentBits)
+    {
+        wda.set(0, value);
+        wia.set(1, (wia.get(1) & 0xfffff) | exponentBits << 20);
+        return wda.get(0);
+    }
+
+    public static double bounce(final double value)
+    {
+        wda.set(0, value);
+        int s = wia.get(1) & 0xfffff;
+        wia.set(1, ((s ^ -((s & 0x80000)>>19)) << 1) | 0x40100000);
+        return wda.get(0) - 5.0;
+    }
+
+    public static double bounce(final long value)
+    {
+        wia.set(0, (int)value);
+        int s = (int)(value>>>32&0xfffff);
+        wia.set(1, ((s ^ -((s & 0x80000)>>19)) << 1) | 0x40100000);
+        return wda.get(0) - 5.0;
+    }
+
+    public static int floatToIntBits(final float value) {
         wfa.set(0, value);
         return wia.get(0);
     }
-    public static int floatToRawIntBits(float value) {
+    public static int floatToRawIntBits(final float value) {
         wfa.set(0, value);
         return wia.get(0);
     }
 
-    public static float intBitsToFloat(int bits) {
+    public static float intBitsToFloat(final int bits) {
         wia.set(0, bits);
         return wfa.get(0);
     }

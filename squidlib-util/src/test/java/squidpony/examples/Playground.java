@@ -1,5 +1,8 @@
 package squidpony.examples;
 
+import squidpony.StringKit;
+import squidpony.squidmath.PintRNG;
+
 /**
  * This class is a scratchpad area to test things out.
  *
@@ -41,12 +44,22 @@ public class Playground {
             0x1.0p97f, 0x1.0p98f, 0x1.0p101f, 0x1.0p102f, 0x1.0p105f, 0x1.0p106f, 0x1.0p109f, 0x1.0p110f,
             0x1.0p113f, 0x1.0p114f, 0x1.0p117f, 0x1.0p118f, 0x1.0p121f, 0x1.0p122f, 0x1.0p125f, 0x1.0p126f};
     private void go() {
+
+        int seed2 = 0xBEEFDEED;
+        System.out.println("0x" + StringKit.hex(seed2));
+        System.out.println("0x" + StringKit.hex(seed2 = PintRNG.determine(seed2)));
+        System.out.println("0x" + StringKit.hex(seed2 = PintRNG.determine(seed2)));
+        System.out.println("0x" + StringKit.hex(seed2 = PintRNG.determine(seed2)));
+        System.out.println("0x" + StringKit.hex(seed2 = PintRNG.determine(seed2)));
+        System.out.println("0x" + StringKit.hex(seed2 = PintRNG.determine(seed2)));
+        /*
         for (int i = 0, n = 0; i <128; i++, n+=0x800000) {
             if((n & 0x1000000) != 0)
                 n += 0x1000000;
             if(floatPart(n) != multipliers[i])
                 System.out.println("!!! " + i + " !!!");
         }
+        */
     }
 
 }
