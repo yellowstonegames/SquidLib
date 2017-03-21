@@ -15,31 +15,30 @@
  ******************************************************************************/
 
 package com.badlogic.gdx.utils;
-import com.google.gwt.corp.compatibility.Numbers;
 import squidpony.squidmath.NumberTools;
 
 public final class NumberUtils {
 
     public static int floatToIntBits (float value) {
-        return Numbers.floatToIntBits(value);
+        return NumberTools.floatToIntBits(value);
     }
 
     public static int floatToRawIntBits (float value) {
-        return Numbers.floatToIntBits(value);
+        return NumberTools.floatToIntBits(value);
     }
 
     public static int floatToIntColor (float value) {
-        return Numbers.floatToIntBits(value);
+        return NumberTools.floatToIntBits(value);
     }
 
     public static float intToFloatColor (int value) {
         // This mask avoids using bits in the NaN range. See Float.intBitsToFloat javadocs.
         // This unfortunately means we don't get the full range of alpha.
-        return Numbers.intBitsToFloat(value & 0xfeffffff);
+        return NumberTools.intBitsToFloat(value & 0xfeffffff);
     }
 
     public static float intBitsToFloat (int value) {
-        return Numbers.intBitsToFloat(value);
+        return NumberTools.intBitsToFloat(value);
     }
 
     /**

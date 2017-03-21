@@ -74,7 +74,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 43, rngMode = 0, noiseMode = 31;
+    private int hashMode = 43, rngMode = 0, noiseMode = 47;
     private CrossHash.Storm storm, stormA, stormB, stormC;
     private CrossHash.Chariot chariot, chariotA, chariotB, chariotC;
     private final int[] coordinates = new int[2];
@@ -96,6 +96,8 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Noise6D scaled6D = new Noise.Scaled6D(seeded, 1.43, 1.43, 1.43, 1.43, 1.43, 1.43);
     private final Noise.Noise2D ridged2D = new Noise.Ridged2D(SeededNoise.instance, 2, 1.25);
     private final Noise.Noise3D ridged3D = new Noise.Ridged3D(SeededNoise.instance, 2, 1.25);
+    private final Noise.Noise4D ridged4D = new Noise.Ridged4D(SeededNoise.instance, 2, 1.25);
+    private final Noise.Noise6D ridged6D = new Noise.Ridged6D(SeededNoise.instance, 2, 1.25);
 
     private final Noise.Noise2D slick2D = new Noise.Slick2D(SeededNoise.instance, Noise.alternate, 1);
     private final Noise.Noise3D slick3D = new Noise.Slick3D(SeededNoise.instance, Noise.alternate, 1);
@@ -271,9 +273,9 @@ public class HashVisualizer extends ApplicationAdapter {
         SeededNoise.seamless3D(seamless[1], 123456, 3);
         SeededNoise.seamless3D(seamless[2], -9999, 3);
         */
-        SeededNoise.seamless3D(seamless[0], 1337, 1);
-        SeededNoise.seamless3D(seamless[1], 123456, 1);
-        SeededNoise.seamless3D(seamless[2], -9999, 1);
+        SeededNoise.seamless3D(seamless[0], 1337, 1, turb6D);
+        SeededNoise.seamless3D(seamless[1], 123456, 1, turb6D);
+        SeededNoise.seamless3D(seamless[2], -9999, 1, turb6D);
 
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
@@ -284,7 +286,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         {
                             case 4:
                                 noiseMode++;
-                                noiseMode %= 48;
+                                noiseMode %= 52;
                                 switch (noiseMode)
                                 {
                                     case 16:
@@ -359,6 +361,31 @@ public class HashVisualizer extends ApplicationAdapter {
                                         ArrayTools.fill(seamless[0], 0.0);
                                         SeededNoise.seamless2D(seamless[0][0], -31337, 1, slick4D);
                                         break;
+                                    case 48:
+                                        ArrayTools.fill(seamless[0], 0.0);
+                                        ArrayTools.fill(seamless[1], 0.0);
+                                        ArrayTools.fill(seamless[2], 0.0);
+                                        SeededNoise.seamless3D(seamless[0], 1337, 1, ridged6D);
+                                        SeededNoise.seamless3D(seamless[1], 123456, 1, ridged6D);
+                                        SeededNoise.seamless3D(seamless[2], -9999, 1, ridged6D);
+                                        break;
+                                    case 49:
+                                        ArrayTools.fill(seamless[0], 0.0);
+                                        SeededNoise.seamless3D(seamless[0], -31337, 1, ridged6D);
+                                        break;
+                                    case 50:
+                                        ArrayTools.fill(seamless[0], 0.0);
+                                        ArrayTools.fill(seamless[1], 0.0);
+                                        ArrayTools.fill(seamless[2], 0.0);
+                                        SeededNoise.seamless2D(seamless[0][0], 1337, 1, ridged4D);
+                                        SeededNoise.seamless2D(seamless[1][0], 123456, 1, ridged4D);
+                                        SeededNoise.seamless2D(seamless[2][0], -9999, 1, ridged4D);
+                                        break;
+                                    case 51:
+                                        ArrayTools.fill(seamless[0], 0.0);
+                                        SeededNoise.seamless2D(seamless[0][0], -31337, 1, ridged4D);
+                                        break;
+
                                 }
                                 break;
                             case 5:
@@ -2196,6 +2223,51 @@ public class HashVisualizer extends ApplicationAdapter {
                             }
                         }
                         break;
+                    case 48:
+                        Gdx.graphics.setTitle("Seeded Ridged Seamless 3D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y,
+                                        floatGet(
+                                                (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
+                                                (float) (seamless[1][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
+                                                (float) (seamless[2][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
+                                                1.0f));
+                            }
+                        }
+                        break;
+                    case 49:
+                        Gdx.graphics.setTitle("Seeded Ridged Seamless 3D Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5);
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 50:
+                        Gdx.graphics.setTitle("Seeded Ridged Seamless 2D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y,
+                                        floatGet(
+                                                (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
+                                                (float) (seamless[1][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
+                                                (float) (seamless[2][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
+                                                1.0f));
+                            }
+                        }
+                        break;
+                    case 51: {
+                        Gdx.graphics.setTitle("Seeded Ridged Seamless 2D Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5);
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                    }
+                    break;
 
                     /*
                                         case 2:
