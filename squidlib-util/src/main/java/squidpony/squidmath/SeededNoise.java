@@ -1152,9 +1152,9 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
      */
     public static int hash(final int x, final int y, final int seed) {
         int a = 0x632BE5AB,
-                result = 0x9E3779B9 + (a ^= 0x85157AF5 * x)
-                        + (a ^= 0x85157AF5 * y)
-                        + (a ^= 0x85157AF5 * seed);
+                result = 0x9E3779B9 + (a ^= 0x85157AF5 * (a+x^seed))
+                        + (a ^= 0x85157AF5 * (a+y^seed))
+                        + (a ^= 0x85157AF5 * (a+x+y^seed));
         return (result * a) >>> 24;
     }
     /**
@@ -1167,10 +1167,10 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
      */
     public static int hash(final int x, final int y, final int z, final int seed) {
         int a = 0x632BE5AB,
-                result = 0x9E3779B9 + (a ^= 0x85157AF5 * x)
-                        + (a ^= 0x85157AF5 * y)
-                        + (a ^= 0x85157AF5 * z)
-                        + (a ^= 0x85157AF5 * seed);
+                result = 0x9E3779B9 + (a ^= 0x85157AF5 * (a+x^seed))
+                        + (a ^= 0x85157AF5 * (a+y^seed))
+                        + (a ^= 0x85157AF5 * (a+z^seed))
+                        + (a ^= 0x85157AF5 * (a+x+y+z^seed));
         return (result * a) >>> 24;
     }
     /**
@@ -1184,11 +1184,11 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
      */
     public static int hash(final int x, final int y, final int z, final int w, final int seed) {
         int a = 0x632BE5AB,
-                result = 0x9E3779B9 + (a ^= 0x85157AF5 * x)
-                        + (a ^= 0x85157AF5 * y)
-                        + (a ^= 0x85157AF5 * z)
-                        + (a ^= 0x85157AF5 * w)
-                        + (a ^= 0x85157AF5 * seed);
+                result = 0x9E3779B9 + (a ^= 0x85157AF5 * (a+x^seed))
+                        + (a ^= 0x85157AF5 * (a+y^seed))
+                        + (a ^= 0x85157AF5 * (a+z^seed))
+                        + (a ^= 0x85157AF5 * (a+w^seed))
+                        + (a ^= 0x85157AF5 * (a+x+y+z+w^seed));
         return (result * a) >>> 24;
     }
     /**
@@ -1204,13 +1204,13 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
      */
     public static int hash(final int x, final int y, final int z, final int w, final int u, final int v, final int seed) {
         int a = 0x632BE5AB,
-                result = 0x9E3779B9 + (a ^= 0x85157AF5 * x)
-                        + (a ^= 0x85157AF5 * y)
-                        + (a ^= 0x85157AF5 * z)
-                        + (a ^= 0x85157AF5 * w)
-                        + (a ^= 0x85157AF5 * u)
-                        + (a ^= 0x85157AF5 * v)
-                        + (a ^= 0x85157AF5 * seed);
+                result = 0x9E3779B9 + (a ^= 0x85157AF5 * (a+x^seed))
+                        + (a ^= 0x85157AF5 * (a+y^seed))
+                        + (a ^= 0x85157AF5 * (a+z^seed))
+                        + (a ^= 0x85157AF5 * (a+w^seed))
+                        + (a ^= 0x85157AF5 * (a+u^seed))
+                        + (a ^= 0x85157AF5 * (a+v^seed))
+                        + (a ^= 0x85157AF5 * (a+x+y+z+w+u+v^seed));
         return (result * a) >>> 24;
         //return 0xFF & (result * (a | 1) ^ (result >>> 11));
     }
@@ -1668,14 +1668,14 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
                 || octaves <= 0 || octaves >= 63)
             return fill;
         final double i_w = 6.283185307179586 / width, i_h = 6.283185307179586 / height;
+        int s = 1<<(octaves-1), seed2 = seed;
         double p, q,
                 ps, pc,
                 qs, qc,
-                i_s = 1.0;
-        int s = 1<<(octaves-1), seed2 = seed;
+                i_s = 0.5 / s;
         for (int o = 0; o < octaves; o++, s>>=1) {
             seed2 = PintRNG.determine(seed2);
-            i_s *= 0.5;
+            i_s *= 2.0;
             for (int x = 0; x < width; x++) {
                 p = x * i_w;
                 ps = Math.sin(p) * i_s;
@@ -1745,14 +1745,14 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
                 || octaves <= 0 || octaves >= 63)
             return fill;
         final double i_w = 6.283185307179586 / width, i_h = 6.283185307179586 / height, i_d = 6.283185307179586 / depth;
+        int s = 1<<(octaves-1), seed2 = seed;
         double p, q, r,
                 ps, pc,
                 qs, qc,
-                rs, rc, i_s = 1.0;
-        int s = 1<<(octaves-1), seed2 = seed;
+                rs, rc, i_s = 0.5 / s;
         for (int o = 0; o < octaves; o++, s>>=1) {
             seed2 = PintRNG.determine(seed2);
-            i_s *= 0.5;
+            i_s *= 2.0;
             for (int x = 0; x < width; x++) {
                 p = x * i_w;
                 ps = Math.sin(p) * i_s;

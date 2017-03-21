@@ -36,7 +36,7 @@ public class Noise {
         protected Noise1D basis;
 
         public Layered1D() {
-            throw new UnsupportedOperationException("No known 1D noise implementation present in the library");
+            this(ValueNoise.instance);
         }
 
         public Layered1D(Noise1D basis) {
@@ -50,9 +50,8 @@ public class Noise {
 
         @Override
         public double getNoise(final double x) {
-            double n = 0.0, i_s = 1.0;
-
             int s = 1 << (octaves - 1);
+            double n = 0.0, i_s = 0.5 / s;
             for (int o = 0; o < octaves; o++, s >>= 1) {
                 n += basis.getNoise(x * (i_s *= 2.0) + o) * s;
             }
@@ -61,9 +60,8 @@ public class Noise {
 
         @Override
         public double getNoiseWithSeed(final double x, final int seed) {
-            double n = 0.0, i_s = 1.0;
-
             int s = 1 << (octaves - 1), seed2 = seed;
+            double n = 0.0, i_s = 0.5 / s;
             for (int o = 0; o < octaves; o++, s >>= 1) {
                 seed2 = PintRNG.determine(seed2);
                 n += basis.getNoiseWithSeed(x * (i_s *= 2.0) + (o << 6), seed2) * s;
@@ -91,9 +89,8 @@ public class Noise {
 
         @Override
         public double getNoise(final double x, final double y) {
-            double n = 0.0, i_s = 1.0;
-
             int s = 1 << (octaves - 1);
+            double n = 0.0, i_s = 0.5 / s;
             for (int o = 0; o < octaves; o++, s >>= 1) {
                 n += basis.getNoise(x * (i_s *= 2.0) + (o << 6), y * i_s + (o << 7)) * s;
             }
@@ -102,9 +99,8 @@ public class Noise {
 
         @Override
         public double getNoiseWithSeed(final double x, final double y, final int seed) {
-            double n = 0.0, i_s = 1.0;
-
             int s = 1 << (octaves - 1), seed2 = seed;
+            double n = 0.0, i_s = 0.5 / s;
             for (int o = 0; o < octaves; o++, s >>= 1) {
                 seed2 = PintRNG.determine(seed2);
                 n += basis.getNoiseWithSeed(x * (i_s *= 2.0) + (o << 6), y * i_s + (o << 7), seed2) * s;
@@ -131,9 +127,8 @@ public class Noise {
 
         @Override
         public double getNoise(final double x, final double y, final double z) {
-            double n = 0.0, i_s = 1.0;
-
             int s = 1 << (octaves - 1);
+            double n = 0.0, i_s = 0.5 / s;
             for (int o = 0; o < octaves; o++, s >>= 1) {
                 n += basis.getNoise(x * (i_s *= 2.0) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8)) * s;
             }
@@ -142,9 +137,8 @@ public class Noise {
 
         @Override
         public double getNoiseWithSeed(final double x, final double y, final double z, final int seed) {
-            double n = 0.0, i_s = 1.0;
-
             int s = 1 << (octaves - 1), seed2 = seed;
+            double n = 0.0, i_s = 0.5 / s;
             for (int o = 0; o < octaves; o++, s >>= 1) {
                 seed2 = PintRNG.determine(seed2);
                 n += basis.getNoiseWithSeed(x * (i_s *= 2.0) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8), seed2) * s;
@@ -171,9 +165,8 @@ public class Noise {
 
         @Override
         public double getNoise(final double x, final double y, final double z, final double w) {
-            double n = 0.0, i_s = 1.0;
-
             int s = 1 << (octaves - 1);
+            double n = 0.0, i_s = 0.5 / s;
             for (int o = 0; o < octaves; o++, s >>= 1) {
                 n += basis.getNoise(x * (i_s *= 2.0) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8), w * i_s + (o << 9)) * s;
             }
@@ -182,9 +175,8 @@ public class Noise {
 
         @Override
         public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final int seed) {
-            double n = 0.0, i_s = 1.0;
-
             int s = 1 << (octaves - 1), seed2 = seed;
+            double n = 0.0, i_s = 0.5 / s;
             for (int o = 0; o < octaves; o++, s >>= 1) {
                 seed2 = PintRNG.determine(seed2);
                 n += basis.getNoiseWithSeed(x * (i_s *= 2.0) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8), w * i_s + (o << 9), seed2) * s;
@@ -211,9 +203,8 @@ public class Noise {
 
         @Override
         public double getNoise(final double x, final double y, final double z, final double w, final double u, final double v) {
-            double n = 0.0, i_s = 1.0;
-
             int s = 1 << (octaves - 1);
+            double n = 0.0, i_s = 0.5 / s;
             for (int o = 0; o < octaves; o++, s >>= 1) {
                 n += basis.getNoise(x * (i_s *= 2.0) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8)
                         , w * i_s + (o << 9), u * i_s + (o << 10), v * i_s + (o << 11)) * s;
@@ -223,15 +214,166 @@ public class Noise {
 
         @Override
         public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, final int seed) {
-            double n = 0.0, i_s = 1.0;
-
             int s = 1 << (octaves - 1), seed2 = seed;
+            double n = 0.0, i_s = 0.5 / s;
             for (int o = 0; o < octaves; o++, s >>= 1) {
                 seed2 = PintRNG.determine(seed2);
                 n += basis.getNoiseWithSeed(x * (i_s *= 2.0) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8)
                         , w * i_s + (o << 9), u * i_s + (o << 10), v * i_s + (o << 11), seed2) * s;
             }
             return n / ((1 << octaves) - 1.0);
+        }
+    }
+
+    public static class Scaled1D implements Noise1D {
+        protected double scaleX;
+        protected Noise1D basis;
+
+        public Scaled1D() {
+            this(ValueNoise.instance);
+        }
+
+        public Scaled1D(Noise1D basis) {
+            this(basis, 2.0);
+        }
+
+        public Scaled1D(Noise1D basis, final double scaleX) {
+            this.basis = basis;
+            this.scaleX = scaleX;
+        }
+
+        @Override
+        public double getNoise(final double x) {
+            return basis.getNoise(x * scaleX);
+        }
+
+        @Override
+        public double getNoiseWithSeed(final double x, final int seed) {
+            return basis.getNoiseWithSeed(x * scaleX, seed);
+        }
+    }
+
+    public static class Scaled2D implements Noise2D {
+        protected double scaleX, scaleY;
+        protected Noise2D basis;
+
+        public Scaled2D() {
+            this(ValueNoise.instance);
+        }
+
+        public Scaled2D(Noise2D basis) {
+            this(basis, 2.0, 2.0);
+        }
+
+        public Scaled2D(Noise2D basis, final double scaleX, final double scaleY) {
+            this.basis = basis;
+            this.scaleX = scaleX;
+            this.scaleY = scaleY;
+        }
+
+        @Override
+        public double getNoise(final double x, final double y) {
+            return basis.getNoise(x * scaleX, y * scaleY);
+        }
+
+        @Override
+        public double getNoiseWithSeed(final double x, final double y, final int seed) {
+            return basis.getNoiseWithSeed(x * scaleX, y * scaleY, seed);
+        }
+    }
+    public static class Scaled3D implements Noise3D {
+        protected double scaleX, scaleY, scaleZ;
+        protected Noise3D basis;
+
+        public Scaled3D() {
+            this(ValueNoise.instance);
+        }
+
+        public Scaled3D(Noise3D basis) {
+            this(basis, 2.0, 2.0, 2.0);
+        }
+
+        public Scaled3D(Noise3D basis, final double scaleX, final double scaleY, final double scaleZ) {
+            this.basis = basis;
+            this.scaleX = scaleX;
+            this.scaleY = scaleY;
+            this.scaleZ = scaleZ;
+        }
+
+        @Override
+        public double getNoise(final double x, final double y, final double z) {
+            return basis.getNoise(x * scaleX, y * scaleY, z * scaleZ);
+        }
+
+        @Override
+        public double getNoiseWithSeed(final double x, final double y, final double z, final int seed) {
+            return basis.getNoiseWithSeed(x * scaleX, y * scaleY, z * scaleZ, seed);
+        }
+    }
+    public static class Scaled4D implements Noise4D {
+        protected double scaleX, scaleY, scaleZ, scaleW;
+        protected Noise4D basis;
+
+        public Scaled4D() {
+            this(ValueNoise.instance);
+        }
+
+        public Scaled4D(Noise4D basis) {
+            this(basis, 2.0, 2.0, 2.0, 2.0);
+        }
+
+        public Scaled4D(Noise4D basis, final double scaleX, final double scaleY, final double scaleZ, final double scaleW) {
+            this.basis = basis;
+            this.scaleX = scaleX;
+            this.scaleY = scaleY;
+            this.scaleZ = scaleZ;
+            this.scaleW = scaleW;
+        }
+
+        @Override
+        public double getNoise(final double x, final double y, final double z, final double w) {
+            return basis.getNoise(x * scaleX, y * scaleY, z * scaleZ, w * scaleW);
+        }
+
+        @Override
+        public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final int seed) {
+            return basis.getNoiseWithSeed(x * scaleX, y * scaleY, z * scaleZ, w * scaleW, seed);
+        }
+    }
+    public static class Scaled6D implements Noise6D {
+        protected double scaleX, scaleY, scaleZ, scaleW, scaleU, scaleV;
+        protected Noise6D basis;
+
+        public Scaled6D() {
+            this(ValueNoise.instance);
+        }
+
+        public Scaled6D(Noise6D basis) {
+            this(basis, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0);
+        }
+
+        public Scaled6D(Noise6D basis, final double scaleX, final double scaleY, final double scaleZ,
+                        final double scaleW, final double scaleU, final double scaleV) {
+            this.basis = basis;
+            this.scaleX = scaleX;
+            this.scaleY = scaleY;
+            this.scaleZ = scaleZ;
+            this.scaleW = scaleW;
+            this.scaleU = scaleU;
+            this.scaleV = scaleV;
+        }
+
+        @Override
+        public double getNoise(final double x, final double y, final double z, final double w,
+                               final double u, final double v) {
+            return basis.getNoise(x * scaleX, y * scaleY, z * scaleZ, w * scaleW, u * scaleU, v * scaleV);
+        }
+
+        @Override
+        public double getNoiseWithSeed(final double x, final double y, final double z, final double w,
+                                       final double u, final double v, final int seed) {
+            return basis.getNoiseWithSeed(x * scaleX, y * scaleY, z * scaleZ, w * scaleW, u * scaleU,
+                    v * scaleV, seed);
         }
     }
 
@@ -492,8 +634,8 @@ public class Noise {
             }
             return sum * correct[octaves - 1] - 1.0;
         }
-
     }
+    /*
     public static class Turbulent2D implements Noise2D {
         protected int octaves;
         protected Noise2D basis, disturbance;
@@ -582,6 +724,96 @@ public class Noise {
             return n / ((3 << octaves) - 3.0);
         }
     }
+    */
+    public static class Turbulent2D implements Noise2D {
+        protected int octaves;
+        protected Noise2D basis, disturbance;
+
+        public Turbulent2D() {
+            this(SeededNoise.instance, alternate, 1);
+        }
+
+        public Turbulent2D(Noise2D basis, Noise2D disturb) {
+            this(basis, disturb, 1);
+        }
+
+        public Turbulent2D(Noise2D basis, Noise2D disturb, final int octaves) {
+            this.basis = basis;
+            disturbance = disturb;
+            this.octaves = Math.max(1, Math.min(63, octaves));
+        }
+
+        @Override
+        public double getNoise(final double x, final double y) {
+            int s = 2 << (octaves - 1);
+            double n = 0.0, i_s = 1.0 / s, xx, yy;
+            for (int o = 0; o < octaves; o++) {
+                xx = x * (i_s *= 2.0) + (o << 6);
+                yy = y * i_s + (o << 7);
+                n += basis.getNoise(xx, yy) * s + disturbance.getNoise(xx, yy) * (s >>= 1);
+            }
+            return n / ((3 << octaves) - 3.0);
+        }
+
+        @Override
+        public double getNoiseWithSeed(final double x, final double y, final int seed) {
+            int s = 2 << (octaves - 1), seed2 = seed;
+            double n = 0.0, i_s = 1.0 / s, xx, yy;
+            for (int o = 0; o < octaves; o++) {
+                seed2 = PintRNG.determine(seed2);
+                xx = x * (i_s *= 2.0) + (o << 6);
+                yy = y * i_s + (o << 7);
+                n += basis.getNoiseWithSeed(xx, yy, seed2) * s + disturbance.getNoiseWithSeed(xx, yy, seed2) * (s >>= 1);
+            }
+            return n / ((3 << octaves) - 3.0);
+        }
+    }
+    public static class Turbulent3D implements Noise3D {
+        protected int octaves;
+        protected Noise3D basis, disturbance;
+
+        public Turbulent3D() {
+            this(SeededNoise.instance, alternate, 1);
+        }
+
+        public Turbulent3D(Noise3D basis, Noise3D disturb) {
+            this(basis, disturb, 1);
+        }
+
+        public Turbulent3D(Noise3D basis, Noise3D disturb, final int octaves) {
+            this.basis = basis;
+            disturbance = disturb;
+            this.octaves = Math.max(1, Math.min(63, octaves));
+        }
+
+        @Override
+        public double getNoise(final double x, final double y, final double z) {
+            int s = 2 << (octaves - 1);
+            double n = 0.0, i_s = 1.0 / s, xx, yy, zz;
+            for (int o = 0; o < octaves; o++) {
+                xx = x * (i_s *= 2.0) + (o << 6);
+                yy = y * i_s + (o << 7);
+                zz = z * i_s + (o << 8);
+                n += basis.getNoise(xx, yy, zz) * s + disturbance.getNoise(xx, yy, zz) * (s >>= 1);
+            }
+            return n / ((3 << octaves) - 3.0);
+        }
+
+        @Override
+        public double getNoiseWithSeed(final double x, final double y, final double z, final int seed) {
+            int s = 2 << (octaves - 1), seed2 = seed;
+            double n = 0.0, i_s = 1.0 / s, xx, yy, zz;
+            for (int o = 0; o < octaves; o++) {
+                seed2 = PintRNG.determine(seed2);
+                xx = x * (i_s *= 2.0) + (o << 6);
+                yy = y * i_s + (o << 7);
+                zz = z * i_s + (o << 8);
+                n += basis.getNoiseWithSeed(xx, yy, zz, seed2) * s + disturbance.getNoiseWithSeed(xx, yy, zz, seed2) * (s >>= 1);
+            }
+            return n / ((3 << octaves) - 3.0);
+        }
+    }
+
     public static class Turbulent4D implements Noise4D {
         protected int octaves;
         protected Noise4D basis, disturbance;
@@ -601,29 +833,29 @@ public class Noise {
         }
         @Override
         public double getNoise(final double x, final double y, final double z, final double w) {
-            double n = 0.0, i_s = 1.0, xx, yy, zz, ww;
             int s = 2 << (octaves - 1);
+            double n = 0.0, i_s = 1.0 / s, xx, yy, zz, ww;
             for (int o = 0; o < octaves; o++) {
                 xx = x * (i_s *= 2.0) + (o << 6);
                 yy = y * i_s + (o << 7);
                 zz = z * i_s + (o << 8);
                 ww = w * i_s + (o << 9);
-                n += basis.getNoise(xx, yy, zz, ww) * s + disturbance.getNoise(xx * s, yy * s, zz * s, ww * s) * (s >>= 1);
+                n += basis.getNoise(xx, yy, zz, ww) * s + disturbance.getNoise(xx, yy, zz, ww) * (s >>= 1);
             }
             return n / ((3 << octaves) - 3.0);
         }
 
         @Override
         public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final int seed) {
-            double n = 0.0, i_s = 1.0, xx, yy, zz, ww;
             int s = 2 << (octaves - 1), seed2 = seed;
+            double n = 0.0, i_s = 1.0 / s, xx, yy, zz, ww;
             for (int o = 0; o < octaves; o++) {
                 seed2 = PintRNG.determine(seed2);
                 xx = x * (i_s *= 2.0) + (o << 6);
                 yy = y * i_s + (o << 7);
                 zz = z * i_s + (o << 8);
                 ww = w * i_s + (o << 9);
-                n += basis.getNoiseWithSeed(xx, yy, zz, ww, seed2) * s + disturbance.getNoiseWithSeed(xx * s, yy * s, zz * s, ww * s, seed2) * (s >>= 1);
+                n += basis.getNoiseWithSeed(xx, yy, zz, ww, seed2) * s + disturbance.getNoiseWithSeed(xx, yy, zz, ww, seed2) * (s >>= 1);
             }
             return n / ((3 << octaves) - 3.0);
         }
@@ -647,8 +879,8 @@ public class Noise {
         }
         @Override
         public double getNoise(final double x, final double y, final double z, final double w, final double u, final double v) {
-            double n = 0.0, i_s = 1.0, xx, yy, zz, ww, uu, vv;
             int s = 2 << (octaves - 1);
+            double n = 0.0, i_s = 1.0 / s, xx, yy, zz, ww, uu, vv;
             for (int o = 0; o < octaves; o++) {
                 xx = x * (i_s *= 2.0) + (o << 6);
                 yy = y * i_s + (o << 7);
@@ -656,15 +888,15 @@ public class Noise {
                 ww = w * i_s + (o << 9);
                 uu = u * i_s + (o << 10);
                 vv = v * i_s + (o << 11);
-                n += basis.getNoise(xx, yy, zz, ww, uu, vv) * s + disturbance.getNoise(xx * s, yy * s, zz * s, ww * s, uu * s, vv * s) * (s >>= 1);
+                n += basis.getNoise(xx, yy, zz, ww, uu, vv) * s + disturbance.getNoise(xx, yy, zz, ww, uu, vv) * (s >>= 1);
             }
             return n / ((3 << octaves) - 3.0);
         }
 
         @Override
         public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, final int seed) {
-            double n = 0.0, i_s = 1.0, xx, yy, zz, ww, uu, vv;
             int s = 2 << (octaves - 1), seed2 = seed;
+            double n = 0.0, i_s = 1.0 / s, xx, yy, zz, ww, uu, vv;
             for (int o = 0; o < octaves; o++) {
                 seed2 = PintRNG.determine(seed2);
                 xx = x * (i_s *= 2.0) + (o << 6);
@@ -673,7 +905,7 @@ public class Noise {
                 ww = w * i_s + (o << 9);
                 uu = u * i_s + (o << 10);
                 vv = v * i_s + (o << 11);
-                n += basis.getNoiseWithSeed(xx, yy, zz, ww, uu, vv, seed2) * s + disturbance.getNoiseWithSeed(xx * s, yy * s, zz * s, ww * s, uu * s, vv * s, seed2) * (s >>= 1);
+                n += basis.getNoiseWithSeed(xx, yy, zz, ww, uu, vv, seed2) * s + disturbance.getNoiseWithSeed(xx, yy, zz, ww, uu, vv, seed2) * (s >>= 1);
             }
             return n / ((3 << octaves) - 3.0);
         }
