@@ -105,12 +105,23 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>static class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Layered3D.html" title="class in squidpony.squidmath">Noise.Layered3D</a></span></code>&nbsp;</td>
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GlitchNoise.html" title="class in squidpony.squidmath">GlitchNoise</a></span></code>
+<div class="block">A noise generator for 1D, 2D, 3D, 4D, or 6D noise that should look "glitchy", with waves of changing values moving
+ through triangular shapes.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Layered3D.html" title="class in squidpony.squidmath">Noise.Layered3D</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Ridged3D.html" title="class in squidpony.squidmath">Noise.Ridged3D</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Scaled3D.html" title="class in squidpony.squidmath">Noise.Scaled3D</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
@@ -154,21 +165,25 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></code></td>
-<td class="colLast"><span class="typeNameLabel">Noise.Ridged3D.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Ridged3D.html#basis">basis</a></span></code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">Noise.Scaled3D.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Scaled3D.html#basis">basis</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></code></td>
+<td class="colLast"><span class="typeNameLabel">Noise.Ridged3D.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Ridged3D.html#basis">basis</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Noise.Turbulent3D.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Turbulent3D.html#basis">basis</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Noise.Slick3D.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Slick3D.html#basis">basis</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Noise.Turbulent3D.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Turbulent3D.html#disturbance">disturbance</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Noise.Slick3D.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Slick3D.html#disturbance">disturbance</a></span></code>&nbsp;</td>
 </tr>
@@ -194,6 +209,15 @@
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Ridged3D.html#Ridged3D-squidpony.squidmath.Noise.Noise3D-int-double-">Ridged3D</a></span>(<a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>&nbsp;basis,
         int&nbsp;octaves,
         double&nbsp;frequency)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Scaled3D.html#Scaled3D-squidpony.squidmath.Noise.Noise3D-">Scaled3D</a></span>(<a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>&nbsp;basis)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Scaled3D.html#Scaled3D-squidpony.squidmath.Noise.Noise3D-double-double-double-">Scaled3D</a></span>(<a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>&nbsp;basis,
+        double&nbsp;scaleX,
+        double&nbsp;scaleY,
+        double&nbsp;scaleZ)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Slick3D.html#Slick3D-squidpony.squidmath.Noise.Noise3D-squidpony.squidmath.Noise.Noise3D-">Slick3D</a></span>(<a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>&nbsp;basis,

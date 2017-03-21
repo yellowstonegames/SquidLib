@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -149,36 +149,53 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>static int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#doubleToHighIntBits-double-">doubleToHighIntBits</a></span>(double&nbsp;value)</code>&nbsp;</td>
+<td class="colFirst"><code>static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#bounce-double-">bounce</a></span>(double&nbsp;value)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>static long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#doubleToLongBits-double-">doubleToLongBits</a></span>(double&nbsp;value)</code>&nbsp;</td>
+<td class="colFirst"><code>static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#bounce-long-">bounce</a></span>(long&nbsp;value)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>static int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#doubleToLowIntBits-double-">doubleToLowIntBits</a></span>(double&nbsp;value)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#doubleToHighIntBits-double-">doubleToHighIntBits</a></span>(double&nbsp;value)</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#doubleToRawLongBits-double-">doubleToRawLongBits</a></span>(double&nbsp;value)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#doubleToLongBits-double-">doubleToLongBits</a></span>(double&nbsp;value)</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#floatToIntBits-float-">floatToIntBits</a></span>(float&nbsp;value)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#doubleToLowIntBits-double-">doubleToLowIntBits</a></span>(double&nbsp;value)</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#floatToRawIntBits-float-">floatToRawIntBits</a></span>(float&nbsp;value)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#doubleToMixedIntBits-double-">doubleToMixedIntBits</a></span>(double&nbsp;value)</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
+<td class="colFirst"><code>static long</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#doubleToRawLongBits-double-">doubleToRawLongBits</a></span>(double&nbsp;value)</code>&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#floatToIntBits-float-">floatToIntBits</a></span>(float&nbsp;value)</code>&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#floatToRawIntBits-float-">floatToRawIntBits</a></span>(float&nbsp;value)</code>&nbsp;</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#intBitsToFloat-int-">intBitsToFloat</a></span>(int&nbsp;bits)</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#longBitsToDouble-long-">longBitsToDouble</a></span>(long&nbsp;bits)</code>&nbsp;</td>
+</tr>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code>static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#setExponent-double-int-">setExponent</a></span>(double&nbsp;value,
+           int&nbsp;exponentBits)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -264,13 +281,50 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.44">doubleToHighIntBits</a>(double&nbsp;value)</pre>
 </li>
 </ul>
+<a name="doubleToMixedIntBits-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>doubleToMixedIntBits</h4>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.49">doubleToMixedIntBits</a>(double&nbsp;value)</pre>
+</li>
+</ul>
+<a name="setExponent-double-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setExponent</h4>
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.55">setExponent</a>(double&nbsp;value,
+                                 int&nbsp;exponentBits)</pre>
+</li>
+</ul>
+<a name="bounce-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>bounce</h4>
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.62">bounce</a>(double&nbsp;value)</pre>
+</li>
+</ul>
+<a name="bounce-long-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>bounce</h4>
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.70">bounce</a>(long&nbsp;value)</pre>
+</li>
+</ul>
 <a name="floatToIntBits-float-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>floatToIntBits</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.50">floatToIntBits</a>(float&nbsp;value)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.78">floatToIntBits</a>(float&nbsp;value)</pre>
 </li>
 </ul>
 <a name="floatToRawIntBits-float-">
@@ -279,7 +333,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>floatToRawIntBits</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.54">floatToRawIntBits</a>(float&nbsp;value)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.82">floatToRawIntBits</a>(float&nbsp;value)</pre>
 </li>
 </ul>
 <a name="intBitsToFloat-int-">
@@ -288,7 +342,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>intBitsToFloat</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.59">intBitsToFloat</a>(int&nbsp;bits)</pre>
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.87">intBitsToFloat</a>(int&nbsp;bits)</pre>
 </li>
 </ul>
 </li>

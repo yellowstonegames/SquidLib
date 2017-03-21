@@ -74,7 +74,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 43, rngMode = 0, noiseMode = 32;
+    private int hashMode = 43, rngMode = 0, noiseMode = 31;
     private CrossHash.Storm storm, stormA, stormB, stormC;
     private CrossHash.Chariot chariot, chariotA, chariotB, chariotC;
     private final int[] coordinates = new int[2];
@@ -86,18 +86,26 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Noise3D layered3D = new Noise.Layered3D(SeededNoise.instance, 3);
     private final Noise.Noise4D layered4D = new Noise.Layered4D(SeededNoise.instance, 3);
     private final Noise.Noise6D layered6D = new Noise.Layered6D(SeededNoise.instance, 3);
+    private final Noise.Noise2D value2D = new Noise.Layered2D(ValueNoise.instance, 3);
+    private final Noise.Noise3D value3D = new Noise.Layered3D(ValueNoise.instance, 3);
+    private final Noise.Noise4D value4D = new Noise.Layered4D(ValueNoise.instance, 3);
+    private final Noise.Noise6D value6D = new Noise.Layered6D(ValueNoise.instance, 3);
+    private final Noise.Noise2D scaled2D = new Noise.Scaled2D(seeded, 1.43, 1.43);
+    private final Noise.Noise3D scaled3D = new Noise.Scaled3D(seeded, 1.43, 1.43, 1.43);
+    private final Noise.Noise4D scaled4D = new Noise.Scaled4D(seeded, 1.43, 1.43, 1.43, 1.43);
+    private final Noise.Noise6D scaled6D = new Noise.Scaled6D(seeded, 1.43, 1.43, 1.43, 1.43, 1.43, 1.43);
     private final Noise.Noise2D ridged2D = new Noise.Ridged2D(SeededNoise.instance, 2, 1.25);
     private final Noise.Noise3D ridged3D = new Noise.Ridged3D(SeededNoise.instance, 2, 1.25);
 
-    private final Noise.Noise2D turb2D = new Noise.Turbulent2D(layered2D, seeded, 1);
-    private final Noise.Noise3D turb3D = new Noise.Turbulent3D(layered3D, seeded, 1);
-    private final Noise.Noise4D turb4D = new Noise.Turbulent4D(layered4D, seeded, 1);
-    private final Noise.Noise6D turb6D = new Noise.Turbulent6D(layered6D, seeded, 1);
     private final Noise.Noise2D slick2D = new Noise.Slick2D(SeededNoise.instance, Noise.alternate, 1);
     private final Noise.Noise3D slick3D = new Noise.Slick3D(SeededNoise.instance, Noise.alternate, 1);
     private final Noise.Noise4D slick4D = new Noise.Slick4D(SeededNoise.instance, Noise.alternate, 1);
     private final Noise.Noise6D slick6D = new Noise.Slick6D(SeededNoise.instance, Noise.alternate, 1);
 
+    private final Noise.Noise2D turb2D = new Noise.Turbulent2D(layered2D, scaled2D, 1);
+    private final Noise.Noise3D turb3D = new Noise.Turbulent3D(layered3D, scaled3D, 1);
+    private final Noise.Noise4D turb4D = new Noise.Turbulent4D(layered4D, scaled4D, 1);
+    private final Noise.Noise6D turb6D = new Noise.Turbulent6D(layered6D, scaled6D, 1);
 
     // 0 commonly used hashes
     // 1 variants on Storm and other hashes
@@ -263,9 +271,9 @@ public class HashVisualizer extends ApplicationAdapter {
         SeededNoise.seamless3D(seamless[1], 123456, 3);
         SeededNoise.seamless3D(seamless[2], -9999, 3);
         */
-        SeededNoise.seamless3D(seamless[0], 1337, 1, turb6D);
-        SeededNoise.seamless3D(seamless[1], 123456, 1, turb6D);
-        SeededNoise.seamless3D(seamless[2], -9999, 1, turb6D);
+        SeededNoise.seamless3D(seamless[0], 1337, 1);
+        SeededNoise.seamless3D(seamless[1], 123456, 1);
+        SeededNoise.seamless3D(seamless[2], -9999, 1);
 
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
@@ -283,25 +291,25 @@ public class HashVisualizer extends ApplicationAdapter {
                                         ArrayTools.fill(seamless[0], 0.0);
                                         ArrayTools.fill(seamless[1], 0.0);
                                         ArrayTools.fill(seamless[2], 0.0);
-                                        SeededNoise.seamless3D(seamless[0], 1337, 3);
-                                        SeededNoise.seamless3D(seamless[1], 123456, 3);
-                                        SeededNoise.seamless3D(seamless[2], -9999, 3);
+                                        SeededNoise.seamless3D(seamless[0], 1337, 1);
+                                        SeededNoise.seamless3D(seamless[1], 123456, 1);
+                                        SeededNoise.seamless3D(seamless[2], -9999, 1);
                                         break;
                                     case 17:
                                         ArrayTools.fill(seamless[0], 0.0);
-                                        SeededNoise.seamless3D(seamless[0], -31337, 3);
+                                        SeededNoise.seamless3D(seamless[0], -31337, 1);
                                         break;
                                     case 20:
                                         ArrayTools.fill(seamless[0], 0.0);
                                         ArrayTools.fill(seamless[1], 0.0);
                                         ArrayTools.fill(seamless[2], 0.0);
-                                        SeededNoise.seamless2D(seamless[0][0], 1337, 3);
-                                        SeededNoise.seamless2D(seamless[1][0], 123456, 3);
-                                        SeededNoise.seamless2D(seamless[2][0], -9999, 3);
+                                        SeededNoise.seamless2D(seamless[0][0], 1337, 1);
+                                        SeededNoise.seamless2D(seamless[1][0], 123456, 1);
+                                        SeededNoise.seamless2D(seamless[2][0], -9999, 1);
                                         break;
                                     case 21:
                                         ArrayTools.fill(seamless[0], 0.0);
-                                        SeededNoise.seamless2D(seamless[0][0], -31337, 3);
+                                        SeededNoise.seamless2D(seamless[0][0], -31337, 1);
                                         break;
                                     case 32:
                                         ArrayTools.fill(seamless[0], 0.0);

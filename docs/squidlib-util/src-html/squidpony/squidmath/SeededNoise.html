@@ -1160,9 +1160,9 @@
 <span class="sourceLineNo">1152</span>     */<a name="line.1152"></a>
 <span class="sourceLineNo">1153</span>    public static int hash(final int x, final int y, final int seed) {<a name="line.1153"></a>
 <span class="sourceLineNo">1154</span>        int a = 0x632BE5AB,<a name="line.1154"></a>
-<span class="sourceLineNo">1155</span>                result = 0x9E3779B9 + (a ^= 0x85157AF5 * x)<a name="line.1155"></a>
-<span class="sourceLineNo">1156</span>                        + (a ^= 0x85157AF5 * y)<a name="line.1156"></a>
-<span class="sourceLineNo">1157</span>                        + (a ^= 0x85157AF5 * seed);<a name="line.1157"></a>
+<span class="sourceLineNo">1155</span>                result = 0x9E3779B9 + (a ^= 0x85157AF5 * (a+x^seed))<a name="line.1155"></a>
+<span class="sourceLineNo">1156</span>                        + (a ^= 0x85157AF5 * (a+y^seed))<a name="line.1156"></a>
+<span class="sourceLineNo">1157</span>                        + (a ^= 0x85157AF5 * (a+x+y^seed));<a name="line.1157"></a>
 <span class="sourceLineNo">1158</span>        return (result * a) &gt;&gt;&gt; 24;<a name="line.1158"></a>
 <span class="sourceLineNo">1159</span>    }<a name="line.1159"></a>
 <span class="sourceLineNo">1160</span>    /**<a name="line.1160"></a>
@@ -1175,10 +1175,10 @@
 <span class="sourceLineNo">1167</span>     */<a name="line.1167"></a>
 <span class="sourceLineNo">1168</span>    public static int hash(final int x, final int y, final int z, final int seed) {<a name="line.1168"></a>
 <span class="sourceLineNo">1169</span>        int a = 0x632BE5AB,<a name="line.1169"></a>
-<span class="sourceLineNo">1170</span>                result = 0x9E3779B9 + (a ^= 0x85157AF5 * x)<a name="line.1170"></a>
-<span class="sourceLineNo">1171</span>                        + (a ^= 0x85157AF5 * y)<a name="line.1171"></a>
-<span class="sourceLineNo">1172</span>                        + (a ^= 0x85157AF5 * z)<a name="line.1172"></a>
-<span class="sourceLineNo">1173</span>                        + (a ^= 0x85157AF5 * seed);<a name="line.1173"></a>
+<span class="sourceLineNo">1170</span>                result = 0x9E3779B9 + (a ^= 0x85157AF5 * (a+x^seed))<a name="line.1170"></a>
+<span class="sourceLineNo">1171</span>                        + (a ^= 0x85157AF5 * (a+y^seed))<a name="line.1171"></a>
+<span class="sourceLineNo">1172</span>                        + (a ^= 0x85157AF5 * (a+z^seed))<a name="line.1172"></a>
+<span class="sourceLineNo">1173</span>                        + (a ^= 0x85157AF5 * (a+x+y+z^seed));<a name="line.1173"></a>
 <span class="sourceLineNo">1174</span>        return (result * a) &gt;&gt;&gt; 24;<a name="line.1174"></a>
 <span class="sourceLineNo">1175</span>    }<a name="line.1175"></a>
 <span class="sourceLineNo">1176</span>    /**<a name="line.1176"></a>
@@ -1192,11 +1192,11 @@
 <span class="sourceLineNo">1184</span>     */<a name="line.1184"></a>
 <span class="sourceLineNo">1185</span>    public static int hash(final int x, final int y, final int z, final int w, final int seed) {<a name="line.1185"></a>
 <span class="sourceLineNo">1186</span>        int a = 0x632BE5AB,<a name="line.1186"></a>
-<span class="sourceLineNo">1187</span>                result = 0x9E3779B9 + (a ^= 0x85157AF5 * x)<a name="line.1187"></a>
-<span class="sourceLineNo">1188</span>                        + (a ^= 0x85157AF5 * y)<a name="line.1188"></a>
-<span class="sourceLineNo">1189</span>                        + (a ^= 0x85157AF5 * z)<a name="line.1189"></a>
-<span class="sourceLineNo">1190</span>                        + (a ^= 0x85157AF5 * w)<a name="line.1190"></a>
-<span class="sourceLineNo">1191</span>                        + (a ^= 0x85157AF5 * seed);<a name="line.1191"></a>
+<span class="sourceLineNo">1187</span>                result = 0x9E3779B9 + (a ^= 0x85157AF5 * (a+x^seed))<a name="line.1187"></a>
+<span class="sourceLineNo">1188</span>                        + (a ^= 0x85157AF5 * (a+y^seed))<a name="line.1188"></a>
+<span class="sourceLineNo">1189</span>                        + (a ^= 0x85157AF5 * (a+z^seed))<a name="line.1189"></a>
+<span class="sourceLineNo">1190</span>                        + (a ^= 0x85157AF5 * (a+w^seed))<a name="line.1190"></a>
+<span class="sourceLineNo">1191</span>                        + (a ^= 0x85157AF5 * (a+x+y+z+w^seed));<a name="line.1191"></a>
 <span class="sourceLineNo">1192</span>        return (result * a) &gt;&gt;&gt; 24;<a name="line.1192"></a>
 <span class="sourceLineNo">1193</span>    }<a name="line.1193"></a>
 <span class="sourceLineNo">1194</span>    /**<a name="line.1194"></a>
@@ -1212,13 +1212,13 @@
 <span class="sourceLineNo">1204</span>     */<a name="line.1204"></a>
 <span class="sourceLineNo">1205</span>    public static int hash(final int x, final int y, final int z, final int w, final int u, final int v, final int seed) {<a name="line.1205"></a>
 <span class="sourceLineNo">1206</span>        int a = 0x632BE5AB,<a name="line.1206"></a>
-<span class="sourceLineNo">1207</span>                result = 0x9E3779B9 + (a ^= 0x85157AF5 * x)<a name="line.1207"></a>
-<span class="sourceLineNo">1208</span>                        + (a ^= 0x85157AF5 * y)<a name="line.1208"></a>
-<span class="sourceLineNo">1209</span>                        + (a ^= 0x85157AF5 * z)<a name="line.1209"></a>
-<span class="sourceLineNo">1210</span>                        + (a ^= 0x85157AF5 * w)<a name="line.1210"></a>
-<span class="sourceLineNo">1211</span>                        + (a ^= 0x85157AF5 * u)<a name="line.1211"></a>
-<span class="sourceLineNo">1212</span>                        + (a ^= 0x85157AF5 * v)<a name="line.1212"></a>
-<span class="sourceLineNo">1213</span>                        + (a ^= 0x85157AF5 * seed);<a name="line.1213"></a>
+<span class="sourceLineNo">1207</span>                result = 0x9E3779B9 + (a ^= 0x85157AF5 * (a+x^seed))<a name="line.1207"></a>
+<span class="sourceLineNo">1208</span>                        + (a ^= 0x85157AF5 * (a+y^seed))<a name="line.1208"></a>
+<span class="sourceLineNo">1209</span>                        + (a ^= 0x85157AF5 * (a+z^seed))<a name="line.1209"></a>
+<span class="sourceLineNo">1210</span>                        + (a ^= 0x85157AF5 * (a+w^seed))<a name="line.1210"></a>
+<span class="sourceLineNo">1211</span>                        + (a ^= 0x85157AF5 * (a+u^seed))<a name="line.1211"></a>
+<span class="sourceLineNo">1212</span>                        + (a ^= 0x85157AF5 * (a+v^seed))<a name="line.1212"></a>
+<span class="sourceLineNo">1213</span>                        + (a ^= 0x85157AF5 * (a+x+y+z+w+u+v^seed));<a name="line.1213"></a>
 <span class="sourceLineNo">1214</span>        return (result * a) &gt;&gt;&gt; 24;<a name="line.1214"></a>
 <span class="sourceLineNo">1215</span>        //return 0xFF &amp; (result * (a | 1) ^ (result &gt;&gt;&gt; 11));<a name="line.1215"></a>
 <span class="sourceLineNo">1216</span>    }<a name="line.1216"></a>
@@ -1676,14 +1676,14 @@
 <span class="sourceLineNo">1668</span>                || octaves &lt;= 0 || octaves &gt;= 63)<a name="line.1668"></a>
 <span class="sourceLineNo">1669</span>            return fill;<a name="line.1669"></a>
 <span class="sourceLineNo">1670</span>        final double i_w = 6.283185307179586 / width, i_h = 6.283185307179586 / height;<a name="line.1670"></a>
-<span class="sourceLineNo">1671</span>        double p, q,<a name="line.1671"></a>
-<span class="sourceLineNo">1672</span>                ps, pc,<a name="line.1672"></a>
-<span class="sourceLineNo">1673</span>                qs, qc,<a name="line.1673"></a>
-<span class="sourceLineNo">1674</span>                i_s = 1.0;<a name="line.1674"></a>
-<span class="sourceLineNo">1675</span>        int s = 1&lt;&lt;(octaves-1), seed2 = seed;<a name="line.1675"></a>
+<span class="sourceLineNo">1671</span>        int s = 1&lt;&lt;(octaves-1), seed2 = seed;<a name="line.1671"></a>
+<span class="sourceLineNo">1672</span>        double p, q,<a name="line.1672"></a>
+<span class="sourceLineNo">1673</span>                ps, pc,<a name="line.1673"></a>
+<span class="sourceLineNo">1674</span>                qs, qc,<a name="line.1674"></a>
+<span class="sourceLineNo">1675</span>                i_s = 0.5 / s;<a name="line.1675"></a>
 <span class="sourceLineNo">1676</span>        for (int o = 0; o &lt; octaves; o++, s&gt;&gt;=1) {<a name="line.1676"></a>
 <span class="sourceLineNo">1677</span>            seed2 = PintRNG.determine(seed2);<a name="line.1677"></a>
-<span class="sourceLineNo">1678</span>            i_s *= 0.5;<a name="line.1678"></a>
+<span class="sourceLineNo">1678</span>            i_s *= 2.0;<a name="line.1678"></a>
 <span class="sourceLineNo">1679</span>            for (int x = 0; x &lt; width; x++) {<a name="line.1679"></a>
 <span class="sourceLineNo">1680</span>                p = x * i_w;<a name="line.1680"></a>
 <span class="sourceLineNo">1681</span>                ps = Math.sin(p) * i_s;<a name="line.1681"></a>
@@ -1753,14 +1753,14 @@
 <span class="sourceLineNo">1745</span>                || octaves &lt;= 0 || octaves &gt;= 63)<a name="line.1745"></a>
 <span class="sourceLineNo">1746</span>            return fill;<a name="line.1746"></a>
 <span class="sourceLineNo">1747</span>        final double i_w = 6.283185307179586 / width, i_h = 6.283185307179586 / height, i_d = 6.283185307179586 / depth;<a name="line.1747"></a>
-<span class="sourceLineNo">1748</span>        double p, q, r,<a name="line.1748"></a>
-<span class="sourceLineNo">1749</span>                ps, pc,<a name="line.1749"></a>
-<span class="sourceLineNo">1750</span>                qs, qc,<a name="line.1750"></a>
-<span class="sourceLineNo">1751</span>                rs, rc, i_s = 1.0;<a name="line.1751"></a>
-<span class="sourceLineNo">1752</span>        int s = 1&lt;&lt;(octaves-1), seed2 = seed;<a name="line.1752"></a>
+<span class="sourceLineNo">1748</span>        int s = 1&lt;&lt;(octaves-1), seed2 = seed;<a name="line.1748"></a>
+<span class="sourceLineNo">1749</span>        double p, q, r,<a name="line.1749"></a>
+<span class="sourceLineNo">1750</span>                ps, pc,<a name="line.1750"></a>
+<span class="sourceLineNo">1751</span>                qs, qc,<a name="line.1751"></a>
+<span class="sourceLineNo">1752</span>                rs, rc, i_s = 0.5 / s;<a name="line.1752"></a>
 <span class="sourceLineNo">1753</span>        for (int o = 0; o &lt; octaves; o++, s&gt;&gt;=1) {<a name="line.1753"></a>
 <span class="sourceLineNo">1754</span>            seed2 = PintRNG.determine(seed2);<a name="line.1754"></a>
-<span class="sourceLineNo">1755</span>            i_s *= 0.5;<a name="line.1755"></a>
+<span class="sourceLineNo">1755</span>            i_s *= 2.0;<a name="line.1755"></a>
 <span class="sourceLineNo">1756</span>            for (int x = 0; x &lt; width; x++) {<a name="line.1756"></a>
 <span class="sourceLineNo">1757</span>                p = x * i_w;<a name="line.1757"></a>
 <span class="sourceLineNo">1758</span>                ps = Math.sin(p) * i_s;<a name="line.1758"></a>
