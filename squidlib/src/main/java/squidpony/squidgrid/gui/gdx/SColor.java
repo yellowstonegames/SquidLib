@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.NumberUtils;
 import squidpony.StringKit;
 import squidpony.squidmath.CrossHash;
+import squidpony.squidmath.NumberTools;
 
 /**
  * Allows for the use of custom colors with custom names.
@@ -7011,6 +7012,18 @@ public class SColor extends Color {
     {
         return /*NumberUtils.intToFloatColor((r & 0xff) | (g << 8 & 0xff00) | (b << 16 & 0xff0000)
                 | 0xfe000000);*/ rgbToFloatColor((b & 0xff) | (g << 8 & 0xff00) | (r << 16));
+    }
+
+    @SuppressWarnings("NumericOverflow")
+    public static float lerpFloatColors(final float start, final float end, final float change)
+    {
+        final int s = NumberTools.floatToIntBits(start), e = NumberTools.floatToIntBits(end),
+                rs = (s & 255), gs = (s & 255 << 8) >>> 8, bs = (s & 255 << 16) >>> 16, as = (s & 254 << 24) >>> 24,
+                re = (e & 255), ge = (e & 255 << 8) >>> 8, be = (e & 255 << 16) >>> 16, ae = (e & 254 << 24) >>> 24;
+        return NumberUtils.intBitsToFloat(((int)(rs + change * (re - rs)) & 0xff)
+                | ((int)(gs + change * (ge - gs)) & 0xff) << 8
+                | (((int)(bs + change * (be - bs)) & 0xff) << 16)
+                | (((int)(as + change * (ae - as)) & 0xfe) << 24));
     }
 
     @Override

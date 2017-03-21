@@ -3828,16 +3828,14 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     /**
      * Randomly removes points from a GreasedRegion, with larger values for preservation keeping more of the existing
      * shape intact. If preservation is 1, roughly 1/2 of all points will be removed; if 2, roughly 1/4, if 3, roughly
-     * 1/8, and so on, so that preservation can be thought of as a negative exponent of 2. This allows both negative
-     * and positive values for preservation, and treats 2 and -2 the same for preservation.
+     * 1/8, and so on, so that preservation can be thought of as a negative exponent of 2.
      * @param rng used to determine random factors
-     * @param preservation roughly what degree of points to remove; removes about {@code 1/(2^preservation)} points (assuming positive)
+     * @param preservation roughly what degree of points to remove (higher keeps more); removes about {@code 1/(2^preservation)} points
      * @return a randomly modified change to this GreasedRegion
      */
     public GreasedRegion deteriorate(RNG rng, int preservation) {
-        if(rng == null || width <= 2 || ySections <= 0 || preservation == 0)
+        if(rng == null || width <= 2 || ySections <= 0 || preservation <= 0)
             return this;
-        preservation = Math.abs(preservation);
         long mash;
         for (int i = 0; i < width * ySections; i++) {
             mash = rng.nextLong();
@@ -3845,6 +3843,29 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 mash |= rng.nextLong();
             }
             data[i] &= mash;
+        }
+        return this;
+    }
+
+    /**
+     * Randomly removes points from a GreasedRegion, with preservation as a fraction between 1.0 (keep all) and 0.0
+     * (remove all). If preservation is 0.5, roughly 1/2 of all points will be removed; if 0.25, roughly 3/4 will be
+     * removed (roughly 0.25 will be _kept_), if 0.8, roughly 1/5 will be removed (and about 0.8 will be kept), and so
+     * on. Preservation must be between 0.0 and 1.0 for this to have the intended behavior; 1.0 or higher will keep all
+     * points without change (returning this GreasedRegion), while anything less than 0.015625 (1.0/64) will empty this
+     * GreasedRegion (using {@link #empty()}) and then return it.
+     * @param rng used to determine random factors
+     * @param preservation the rough fraction of points to keep, between 0.0 and 1.0
+     * @return a randomly modified change to this GreasedRegion
+     */
+    public GreasedRegion deteriorate(final RNG rng, final double preservation) {
+        if(rng == null || width <= 2 || ySections <= 0 || preservation >= 1)
+            return this;
+        if(preservation <= 0)
+            return empty();
+        int bitCount = (int) (preservation * 64);
+        for (int i = 0; i < width * ySections; i++) {
+            data[i] &= rng.approximateBits(bitCount);
         }
         return this;
     }

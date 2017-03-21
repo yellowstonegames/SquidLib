@@ -89,6 +89,20 @@ public class NumberTools {
         return wfa.get(0);
     }
 
+    public static byte getSelectedByte(final float value, final int whichByte)
+    {
+        wfa.set(0, value);
+        return wba.get(whichByte & 3);
+    }
+
+    public static float setSelectedByte(final float value, final int whichByte, final byte newValue)
+    {
+        wfa.set(0, value);
+        wba.set(whichByte & 3, newValue);
+        return wfa.get(0);
+    }
+
+
     static int hashWisp(final float[] data) {
         if (data == null)
             return 0;

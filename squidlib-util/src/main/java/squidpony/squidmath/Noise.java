@@ -34,7 +34,7 @@ public class Noise {
     public static class Layered1D implements Noise1D {
         protected int octaves;
         protected Noise1D basis;
-
+        public double frequency;
         public Layered1D() {
             this(ValueNoise.instance);
         }
@@ -44,12 +44,18 @@ public class Noise {
         }
 
         public Layered1D(Noise1D basis, final int octaves) {
+            this(basis, octaves, 1.0);
+        }
+        public Layered1D(Noise1D basis, final int octaves, double frequency) {
             this.basis = basis;
+            this.frequency = frequency;
             this.octaves = Math.max(1, Math.min(63, octaves));
         }
 
+
         @Override
-        public double getNoise(final double x) {
+        public double getNoise(double x) {
+            x *= frequency;
             int s = 1 << (octaves - 1);
             double n = 0.0, i_s = 0.5 / s;
             for (int o = 0; o < octaves; o++, s >>= 1) {
@@ -59,7 +65,8 @@ public class Noise {
         }
 
         @Override
-        public double getNoiseWithSeed(final double x, final int seed) {
+        public double getNoiseWithSeed(double x, final int seed) {
+            x *= frequency;
             int s = 1 << (octaves - 1), seed2 = seed;
             double n = 0.0, i_s = 0.5 / s;
             for (int o = 0; o < octaves; o++, s >>= 1) {
@@ -73,7 +80,7 @@ public class Noise {
     public static class Layered2D implements Noise2D {
         protected int octaves;
         protected Noise2D basis;
-
+        public double frequency;
         public Layered2D() {
             this(SeededNoise.instance, 2);
         }
@@ -83,12 +90,18 @@ public class Noise {
         }
 
         public Layered2D(Noise2D basis, final int octaves) {
+            this(basis, octaves, 1.0);
+        }
+        public Layered2D(Noise2D basis, final int octaves, double frequency) {
             this.basis = basis;
+            this.frequency = frequency;
             this.octaves = Math.max(1, Math.min(63, octaves));
         }
 
         @Override
-        public double getNoise(final double x, final double y) {
+        public double getNoise(double x, double y) {
+            x *= frequency;
+            y *= frequency;
             int s = 1 << (octaves - 1);
             double n = 0.0, i_s = 0.5 / s;
             for (int o = 0; o < octaves; o++, s >>= 1) {
@@ -98,7 +111,9 @@ public class Noise {
         }
 
         @Override
-        public double getNoiseWithSeed(final double x, final double y, final int seed) {
+        public double getNoiseWithSeed(double x, double y, final int seed) {
+            x *= frequency;
+            y *= frequency;
             int s = 1 << (octaves - 1), seed2 = seed;
             double n = 0.0, i_s = 0.5 / s;
             for (int o = 0; o < octaves; o++, s >>= 1) {
@@ -111,7 +126,7 @@ public class Noise {
     public static class Layered3D implements Noise3D {
         protected int octaves;
         protected Noise3D basis;
-
+        public double frequency;
         public Layered3D() {
             this(SeededNoise.instance, 2);
         }
@@ -121,12 +136,19 @@ public class Noise {
         }
 
         public Layered3D(Noise3D basis, final int octaves) {
+            this(basis, octaves, 1.0);
+        }
+        public Layered3D(Noise3D basis, final int octaves, double frequency) {
             this.basis = basis;
+            this.frequency = frequency;
             this.octaves = Math.max(1, Math.min(63, octaves));
         }
 
         @Override
-        public double getNoise(final double x, final double y, final double z) {
+        public double getNoise(double x, double y, double z) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
             int s = 1 << (octaves - 1);
             double n = 0.0, i_s = 0.5 / s;
             for (int o = 0; o < octaves; o++, s >>= 1) {
@@ -136,7 +158,10 @@ public class Noise {
         }
 
         @Override
-        public double getNoiseWithSeed(final double x, final double y, final double z, final int seed) {
+        public double getNoiseWithSeed(double x, double y, double z, final int seed) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
             int s = 1 << (octaves - 1), seed2 = seed;
             double n = 0.0, i_s = 0.5 / s;
             for (int o = 0; o < octaves; o++, s >>= 1) {
@@ -149,7 +174,7 @@ public class Noise {
     public static class Layered4D implements Noise4D {
         protected int octaves;
         protected Noise4D basis;
-
+        public double frequency;
         public Layered4D() {
             this(SeededNoise.instance, 2);
         }
@@ -159,12 +184,20 @@ public class Noise {
         }
 
         public Layered4D(Noise4D basis, final int octaves) {
+            this(basis, octaves, 1.0);
+        }
+        public Layered4D(Noise4D basis, final int octaves, double frequency) {
             this.basis = basis;
+            this.frequency = frequency;
             this.octaves = Math.max(1, Math.min(63, octaves));
         }
 
         @Override
-        public double getNoise(final double x, final double y, final double z, final double w) {
+        public double getNoise(double x, double y, double z, double w) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
+            w *= frequency;
             int s = 1 << (octaves - 1);
             double n = 0.0, i_s = 0.5 / s;
             for (int o = 0; o < octaves; o++, s >>= 1) {
@@ -174,7 +207,11 @@ public class Noise {
         }
 
         @Override
-        public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final int seed) {
+        public double getNoiseWithSeed(double x, double y, double z, double w, final int seed) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
+            w *= frequency;
             int s = 1 << (octaves - 1), seed2 = seed;
             double n = 0.0, i_s = 0.5 / s;
             for (int o = 0; o < octaves; o++, s >>= 1) {
@@ -187,7 +224,7 @@ public class Noise {
     public static class Layered6D implements Noise6D {
         protected int octaves;
         protected Noise6D basis;
-
+        public double frequency;
         public Layered6D() {
             this(SeededNoise.instance, 2);
         }
@@ -197,12 +234,22 @@ public class Noise {
         }
 
         public Layered6D(Noise6D basis, final int octaves) {
+            this(basis, octaves, 1.0);
+        }
+        public Layered6D(Noise6D basis, final int octaves, double frequency) {
             this.basis = basis;
+            this.frequency = frequency;
             this.octaves = Math.max(1, Math.min(63, octaves));
         }
 
         @Override
-        public double getNoise(final double x, final double y, final double z, final double w, final double u, final double v) {
+        public double getNoise(double x, double y, double z, double w, double u, double v) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
+            w *= frequency;
+            u *= frequency;
+            v *= frequency;
             int s = 1 << (octaves - 1);
             double n = 0.0, i_s = 0.5 / s;
             for (int o = 0; o < octaves; o++, s >>= 1) {
@@ -213,7 +260,13 @@ public class Noise {
         }
 
         @Override
-        public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, final int seed) {
+        public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, final int seed) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
+            w *= frequency;
+            u *= frequency;
+            v *= frequency;
             int s = 1 << (octaves - 1), seed2 = seed;
             double n = 0.0, i_s = 0.5 / s;
             for (int o = 0; o < octaves; o++, s >>= 1) {
@@ -379,7 +432,7 @@ public class Noise {
 
     public static class Ridged2D implements Noise2D {
         protected int octaves;
-        protected double frequency;
+        public double frequency;
         protected Noise2D basis;
 
         public Ridged2D() {
@@ -398,7 +451,7 @@ public class Noise {
 
         @Override
         public double getNoise(double x, double y) {
-            double sum = 0, amp = 1.0;
+            double sum = 0, amp = 0.5;
             x *= frequency;
             y *= frequency;
             for (int i = 0; i < octaves; ++i) {
@@ -414,7 +467,7 @@ public class Noise {
 
         @Override
         public double getNoiseWithSeed(double x, double y, int seed) {
-            double sum = 0, amp = 1.0;
+            double sum = 0, amp = 0.5;
             x *= frequency;
             y *= frequency;
             for (int i = 0; i < octaves; ++i) {
@@ -432,7 +485,7 @@ public class Noise {
 
     public static class Ridged3D implements Noise3D {
         protected int octaves;
-        protected double frequency;
+        public double frequency;
         protected Noise3D basis;
 
         public Ridged3D() {
@@ -451,7 +504,7 @@ public class Noise {
 
         @Override
         public double getNoise(double x, double y, double z) {
-            double sum = 0, amp = 1.0;
+            double sum = 0, amp = 0.5;
             x *= frequency;
             y *= frequency;
             z *= frequency;
@@ -469,7 +522,7 @@ public class Noise {
 
         @Override
         public double getNoiseWithSeed(double x, double y, double z, int seed) {
-            double sum = 0, amp = 1.0;
+            double sum = 0, amp = 0.5;
             x *= frequency;
             y *= frequency;
             z *= frequency;
@@ -491,7 +544,7 @@ public class Noise {
     public static class Ridged4D implements Noise4D {
         protected double[] exp, correct;
         protected int octaves;
-        protected double frequency;
+        public double frequency;
         public Noise4D basis;
 
         public Ridged4D() {
@@ -563,7 +616,7 @@ public class Noise {
     {
         protected double[] exp, correct;
         protected int octaves;
-        protected double frequency;
+        public double frequency;
         public Noise6D basis;
         public Ridged6D()
         {
@@ -728,6 +781,7 @@ public class Noise {
     public static class Turbulent2D implements Noise2D {
         protected int octaves;
         protected Noise2D basis, disturbance;
+        public double frequency = 1.0;
 
         public Turbulent2D() {
             this(SeededNoise.instance, alternate, 1);
@@ -738,13 +792,19 @@ public class Noise {
         }
 
         public Turbulent2D(Noise2D basis, Noise2D disturb, final int octaves) {
+            this(basis, disturb, octaves, 1.0);
+        }
+        public Turbulent2D(Noise2D basis, Noise2D disturb, final int octaves, final double frequency) {
             this.basis = basis;
+            this.frequency = frequency;
             disturbance = disturb;
             this.octaves = Math.max(1, Math.min(63, octaves));
         }
 
         @Override
-        public double getNoise(final double x, final double y) {
+        public double getNoise(double x, double y) {
+            x *= frequency;
+            y *= frequency;
             int s = 2 << (octaves - 1);
             double n = 0.0, i_s = 1.0 / s, xx, yy;
             for (int o = 0; o < octaves; o++) {
@@ -756,7 +816,9 @@ public class Noise {
         }
 
         @Override
-        public double getNoiseWithSeed(final double x, final double y, final int seed) {
+        public double getNoiseWithSeed(double x, double y, final int seed) {
+            x *= frequency;
+            y *= frequency;
             int s = 2 << (octaves - 1), seed2 = seed;
             double n = 0.0, i_s = 1.0 / s, xx, yy;
             for (int o = 0; o < octaves; o++) {
@@ -771,6 +833,7 @@ public class Noise {
     public static class Turbulent3D implements Noise3D {
         protected int octaves;
         protected Noise3D basis, disturbance;
+        public double frequency = 1.0;
 
         public Turbulent3D() {
             this(SeededNoise.instance, alternate, 1);
@@ -781,13 +844,20 @@ public class Noise {
         }
 
         public Turbulent3D(Noise3D basis, Noise3D disturb, final int octaves) {
+            this(basis, disturb, octaves, 1.0);
+        }
+        public Turbulent3D(Noise3D basis, Noise3D disturb, final int octaves, final double frequency) {
             this.basis = basis;
+            this.frequency = frequency;
             disturbance = disturb;
             this.octaves = Math.max(1, Math.min(63, octaves));
         }
 
         @Override
-        public double getNoise(final double x, final double y, final double z) {
+        public double getNoise(double x, double y, double z) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
             int s = 2 << (octaves - 1);
             double n = 0.0, i_s = 1.0 / s, xx, yy, zz;
             for (int o = 0; o < octaves; o++) {
@@ -800,7 +870,10 @@ public class Noise {
         }
 
         @Override
-        public double getNoiseWithSeed(final double x, final double y, final double z, final int seed) {
+        public double getNoiseWithSeed(double x, double y, double z, final int seed) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
             int s = 2 << (octaves - 1), seed2 = seed;
             double n = 0.0, i_s = 1.0 / s, xx, yy, zz;
             for (int o = 0; o < octaves; o++) {
@@ -817,6 +890,7 @@ public class Noise {
     public static class Turbulent4D implements Noise4D {
         protected int octaves;
         protected Noise4D basis, disturbance;
+        public double frequency = 1.0;
 
         public Turbulent4D() {
             this(SeededNoise.instance, alternate, 1);
@@ -826,13 +900,22 @@ public class Noise {
             this(basis, disturb, 1);
         }
 
+
         public Turbulent4D(Noise4D basis, Noise4D disturb, final int octaves) {
+            this(basis, disturb, octaves, 1.0);
+        }
+        public Turbulent4D(Noise4D basis, Noise4D disturb, final int octaves, final double frequency) {
             this.basis = basis;
+            this.frequency = frequency;
             disturbance = disturb;
             this.octaves = Math.max(1, Math.min(63, octaves));
         }
         @Override
-        public double getNoise(final double x, final double y, final double z, final double w) {
+        public double getNoise(double x, double y, double z, double w) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
+            w *= frequency;
             int s = 2 << (octaves - 1);
             double n = 0.0, i_s = 1.0 / s, xx, yy, zz, ww;
             for (int o = 0; o < octaves; o++) {
@@ -846,7 +929,11 @@ public class Noise {
         }
 
         @Override
-        public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final int seed) {
+        public double getNoiseWithSeed(double x, double y, double z, double w, final int seed) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
+            w *= frequency;
             int s = 2 << (octaves - 1), seed2 = seed;
             double n = 0.0, i_s = 1.0 / s, xx, yy, zz, ww;
             for (int o = 0; o < octaves; o++) {
@@ -863,7 +950,7 @@ public class Noise {
     public static class Turbulent6D implements Noise6D {
         protected int octaves;
         protected Noise6D basis, disturbance;
-
+        public double frequency = 1.0;
         public Turbulent6D() {
             this(SeededNoise.instance, alternate, 1);
         }
@@ -873,12 +960,22 @@ public class Noise {
         }
 
         public Turbulent6D(Noise6D basis, Noise6D disturb, final int octaves) {
+            this(basis, disturb, octaves, 1.0);
+        }
+        public Turbulent6D(Noise6D basis, Noise6D disturb, final int octaves, final double frequency) {
             this.basis = basis;
+            this.frequency = frequency;
             disturbance = disturb;
             this.octaves = Math.max(1, Math.min(63, octaves));
         }
         @Override
-        public double getNoise(final double x, final double y, final double z, final double w, final double u, final double v) {
+        public double getNoise(double x, double y, double z, double w, double u, double v) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
+            w *= frequency;
+            u *= frequency;
+            v *= frequency;
             int s = 2 << (octaves - 1);
             double n = 0.0, i_s = 1.0 / s, xx, yy, zz, ww, uu, vv;
             for (int o = 0; o < octaves; o++) {
@@ -894,7 +991,13 @@ public class Noise {
         }
 
         @Override
-        public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, final int seed) {
+        public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, final int seed) {
+            x *= frequency;
+            y *= frequency;
+            z *= frequency;
+            w *= frequency;
+            u *= frequency;
+            v *= frequency;
             int s = 2 << (octaves - 1), seed2 = seed;
             double n = 0.0, i_s = 1.0 / s, xx, yy, zz, ww, uu, vv;
             for (int o = 0; o < octaves; o++) {
@@ -1097,6 +1200,166 @@ public class Noise {
             }
             return n / ((1 << octaves) - 1.0);
         }
+    }
+
+    /**
+     * Produces a 2D array of noise with values from -1.0 to 1.0 that is seamless on all boundaries.
+     * Uses (x,y) order. Allows a seed to change the generated noise.
+     * If you need to call this very often, consider {@link #seamless2D(double[][], int, int)}, which re-uses the array.
+     * @param width the width of the array to produce (the length of the outer layer of arrays)
+     * @param height the height of the array to produce (the length of the inner arrays)
+     * @param seed an int seed that affects the noise produced, with different seeds producing very different noise
+     * @param octaves how many runs of differently sized and weighted noise generations to apply to the same area
+     * @return a freshly-allocated seamless-bounded array, a {@code double[width][height]}.
+     */
+    public static double[][] seamless2D(final int width, final int height, final int seed, final int octaves) {
+        return seamless2D(new double[width][height], seed, octaves);
+    }
+
+    /**
+     * Fills the given 2D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
+     * boundaries. This overload doesn't care what you use for x or y axes, it uses the exact size of fill fully.
+     * Allows a seed to change the generated noise.
+     * @param fill a 2D array of double; must be rectangular, so it's a good idea to create with {@code new double[width][height]} or something similar
+     * @param seed an int seed that affects the noise produced, with different seeds producing very different noise
+     * @param octaves how many runs of differently sized and weighted noise generations to apply to the same area
+     * @return {@code fill}, after assigning it with seamless-bounded noise
+     */
+    public static double[][] seamless2D(final double[][] fill, final int seed, final int octaves) {
+        return seamless2D(fill, seed, octaves, SeededNoise.instance);
+    }
+
+    /**
+     * Fills the given 2D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
+     * boundaries. This overload doesn't care what you use for x or y axes, it uses the exact size of fill fully.
+     * Allows a seed to change the generated noise. DOES NOT clear the values in fill, so if it already has non-zero
+     * elements, the result will be different than if it had been cleared beforehand. That does allow you to utilize
+     * this method to add multiple seamless noise values on top of each other, though that allows values to go above or
+     * below the normal minimum and maximum (-1.0 to 1.0).
+     * @param fill a 2D array of double; must be rectangular, so it's a good idea to create with {@code new double[width][height]} or something similar
+     * @param seed an int seed that affects the noise produced, with different seeds producing very different noise
+     * @param octaves how many runs of differently sized and weighted noise generations to apply to the same area
+     * @return {@code fill}, after assigning it with seamless-bounded noise
+     */
+    public static double[][] seamless2D(final double[][] fill, final int seed, final int octaves, final Noise.Noise4D generator) {
+        final int height, width;
+        if (fill == null || (width = fill.length) <= 0 || (height = fill[0].length) <= 0
+                || octaves <= 0 || octaves >= 63)
+            return fill;
+        final double i_w = 6.283185307179586 / width, i_h = 6.283185307179586 / height;
+        int s = 1<<(octaves-1), seed2 = seed;
+        double p, q,
+                ps, pc,
+                qs, qc,
+                i_s = 0.5 / s;
+        for (int o = 0; o < octaves; o++, s>>=1) {
+            seed2 = PintRNG.determine(seed2);
+            i_s *= 2.0;
+            for (int x = 0; x < width; x++) {
+                p = x * i_w;
+                ps = Math.sin(p) * i_s;
+                pc = Math.cos(p) * i_s;
+                for (int y = 0; y < height; y++) {
+                    q = y * i_h;
+                    qs = Math.sin(q) * i_s;
+                    qc = Math.cos(q) * i_s;
+                    fill[x][y] += generator.getNoiseWithSeed(pc, ps, qc, qs, seed2) * s;
+                }
+            }
+        }
+        if(octaves > 1) {
+            i_s = 1.0 / ((1<<octaves) - 1.0);
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    fill[x][y] *= i_s;
+                }
+            }
+        }
+        return fill;
+    }
+
+    /**
+     * Produces a 3D array of noise with values from -1.0 to 1.0 that is seamless on all boundaries.
+     * Allows a seed to change the generated noise.
+     * Because most games that would use this would use it for maps, and maps are often top-down, the returned 3D array
+     * uses the order (z,x,y), which allows a 2D slice of x and y to be taken as an element from the top-level array.
+     * If you need to call this very often, consider {@link #seamless3D(double[][][], int, int)}, which re-uses the
+     * array instead of re-generating it.
+     * @param width the width of the array to produce (the length of the middle layer of arrays)
+     * @param height the height of the array to produce (the length of the innermost arrays)
+     * @param depth the depth of the array to produce (the length of the outermost layer of arrays)
+     * @param seed an int seed that affects the noise produced, with different seeds producing very different noise
+     * @param octaves how many runs of differently sized and weighted noise generations to apply to the same area
+     * @return a freshly-allocated seamless-bounded array, a {@code double[depth][width][height]}.
+     */
+    public static double[][][] seamless3D(final int depth, final int width, final int height, final int seed, final int octaves) {
+        return seamless3D(new double[depth][width][height], seed, octaves);
+    }
+
+    /**
+     * Fills the given 3D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
+     * boundaries. This overload doesn't care what you use for x, y, or z axes, it uses the exact size of fill fully.
+     * Allows a seed to change the generated noise.
+     * @param fill a 3D array of double; must be rectangular, so it's a good idea to create with {@code new double[depth][width][height]} or something similar
+     * @param seed an int seed that affects the noise produced, with different seeds producing very different noise
+     * @param octaves how many runs of differently sized and weighted noise generations to apply to the same area
+     * @return {@code fill}, after assigning it with seamless-bounded noise
+     */
+    public static double[][][] seamless3D(final double[][][] fill, final int seed, final int octaves) {
+        return seamless3D(fill, seed, octaves, SeededNoise.instance);
+    }
+
+    /**
+     * Fills the given 3D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
+     * boundaries. This overload doesn't care what you use for x, y, or z axes, it uses the exact size of fill fully.
+     * Allows a seed to change the generated noise.
+     * @param fill a 3D array of double; must be rectangular, so it's a good idea to create with {@code new double[depth][width][height]} or something similar
+     * @param seed an int seed that affects the noise produced, with different seeds producing very different noise
+     * @param octaves how many runs of differently sized and weighted noise generations to apply to the same area
+     * @return {@code fill}, after assigning it with seamless-bounded noise
+     */
+    public static double[][][] seamless3D(final double[][][] fill, final int seed, final int octaves, final Noise.Noise6D generator) {
+        final int depth, height, width;
+        if(fill == null || (depth = fill.length) <= 0 || (width = fill[0].length) <= 0 || (height = fill[0][0].length) <= 0
+                || octaves <= 0 || octaves >= 63)
+            return fill;
+        final double i_w = 6.283185307179586 / width, i_h = 6.283185307179586 / height, i_d = 6.283185307179586 / depth;
+        int s = 1<<(octaves-1), seed2 = seed;
+        double p, q, r,
+                ps, pc,
+                qs, qc,
+                rs, rc, i_s = 0.5 / s;
+        for (int o = 0; o < octaves; o++, s>>=1) {
+            seed2 = PintRNG.determine(seed2);
+            i_s *= 2.0;
+            for (int x = 0; x < width; x++) {
+                p = x * i_w;
+                ps = Math.sin(p) * i_s;
+                pc = Math.cos(p) * i_s;
+                for (int y = 0; y < height; y++) {
+                    q = y * i_h;
+                    qs = Math.sin(q) * i_s;
+                    qc = Math.cos(q) * i_s;
+                    for (int z = 0; z < depth; z++) {
+                        r = z * i_d;
+                        rs = Math.sin(r) * i_s;
+                        rc = Math.cos(r) * i_s;
+                        fill[z][x][y] += generator.getNoiseWithSeed(pc, ps, qc, qs, rc, rs, seed2) * s;
+                    }
+                }
+            }
+        }
+        if(octaves > 1) {
+            i_s = 1.0 / ((1<<octaves) - 1.0);
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    for (int z = 0; z < depth; z++) {
+                        fill[z][x][y] *= i_s;
+                    }
+                }
+            }
+        }
+        return fill;
     }
 
 }

@@ -88,6 +88,33 @@ public class NumberTools {
         return Float.intBitsToFloat(bits);
     }
 
+    /**
+     * Gets an 8-bit section of the given float {@code value}, using {@code whichByte} to select whether this should
+     * return byte 0 (least significant), 1, 2, or 3 (most significant).
+     * @param value a float
+     * @param whichByte an int that will be used to select the byte to take from value (any int is allowed, only the bottom 2 bits are used to select)
+     * @return the selected byte from the given float
+     */
+    public static byte getSelectedByte(final float value, final int whichByte)
+    {
+        return (byte)(Float.floatToIntBits(value) >>> ((whichByte & 3) << 3));
+    }
+
+    /**
+     * Like {@link #getSelectedByte(float, int)}, this sets the byte at a selected position in the int representation of
+     * a float, then returns the float produced by the bit change. Uses {@code whichByte} to select whether this should
+     * set byte 0 (least significant), 1, 2, or 3 (most significant). {@code newValue} is a byte.
+     * @param value a float
+     * @param whichByte an int that will be used to select the byte to take from value (any int is allowed, only the bottom 2 bits are used to select)
+     * @param newValue a byte that will be placed into the returned float's bits at the selected position
+     * @return a float that results from changing the bits at the selected position to match newValue
+     */
+    public static float setSelectedByte(final float value, final int whichByte, final byte newValue)
+    {
+        return Float.intBitsToFloat((Float.floatToIntBits(value) & ~(255 << ((whichByte & 3) << 3)))
+                | ((newValue & 255) << ((whichByte & 3) << 3)));
+    }
+
     static int hashWisp(final float[] data)
     {
         if (data == null)
