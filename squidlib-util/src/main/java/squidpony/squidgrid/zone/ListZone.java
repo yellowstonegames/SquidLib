@@ -5,6 +5,7 @@ import squidpony.squidmath.Coord;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -20,6 +21,11 @@ public class ListZone extends Skeleton {
 
 	public ListZone(List<Coord> coords) {
 		this.coords = coords;
+	}
+
+	public ListZone(Coord[] coords) {
+		this.coords = new ArrayList<Coord>(coords.length);
+		Collections.addAll(this.coords, coords);
 	}
 
 	public ListZone(Collection<Coord> coordCollection)
