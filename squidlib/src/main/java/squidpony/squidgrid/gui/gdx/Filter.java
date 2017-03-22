@@ -12,5 +12,4 @@ import squidpony.IFilter;
 public abstract class Filter<T extends Color> implements IFilter<T> {
 
     public float[] state;
-
 }

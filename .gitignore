@@ -6,7 +6,9 @@ target/
 .idea/
 .settings/
 
-*.jar
+# Gradle temporary files
+.gradle/
+
 
 # jEdit garbage
 *~

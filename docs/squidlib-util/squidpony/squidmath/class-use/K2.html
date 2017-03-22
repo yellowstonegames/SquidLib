@@ -83,6 +83,18 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><a href="#squidpony">squidpony</a></td>
+<td class="colLast">
+<div class="block">Utilities that don't fit elsewhere in SquidLib, like text manipulation, some interfaces, and compatibility code.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#squidpony.squidgrid.mapping.locks">squidpony.squidgrid.mapping.locks</a></td>
+<td class="colLast">
+<div class="block">Lock-and-key puzzle generation from MetaZelda, https://github.com/tcoxon/metazelda (BSD-licensed).</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="#squidpony.squidmath">squidpony.squidmath</a></td>
 <td class="colLast">
 <div class="block">A very broad package containing random number generators, geometry tools, and some classes for combinatorics.</div>
@@ -93,6 +105,42 @@
 </li>
 <li class="blockList">
 <ul class="blockList">
+<li class="blockList"><a name="squidpony">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a> in <a href="../../../squidpony/package-summary.html">squidpony</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../squidpony/package-summary.html">squidpony</a> declared as <a href="../../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../../../squidpony/StringConvert.html" title="class in squidpony">StringConvert</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>[]&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">StringConvert.</span><code><span class="memberNameLink"><a href="../../../squidpony/StringConvert.html#registry">registry</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="squidpony.squidgrid.mapping.locks">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a> in <a href="../../../squidpony/squidgrid/mapping/locks/package-summary.html">squidpony.squidgrid.mapping.locks</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../squidpony/squidgrid/mapping/locks/package-summary.html">squidpony.squidgrid.mapping.locks</a> declared as <a href="../../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,<a href="../../../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">RoomLayout.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/locks/RoomLayout.html#rooms">rooms</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="squidpony.squidmath">
 <!--   -->
 </a>
@@ -160,7 +208,7 @@
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,<a href="../../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">K2.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/K2.html#reorder-int...-">reorder</a></span>(int...&nbsp;ordering)</code>
 <div class="block">Reorders this K2 using <code>ordering</code>, which have the same length as this K2's <a href="../../../squidpony/squidmath/K2.html#size--"><code>size()</code></a>
- and can be generated with <a href="../../../squidpony/GwtCompatibility.html#range-int-"><code>GwtCompatibility.range(int)</code></a> (which, if applied, would produce no
+ and can be generated with <a href="../../../squidpony/ArrayTools.html#range-int-"><code>ArrayTools.range(int)</code></a> (which, if applied, would produce no
  change to the current ordering), <a href="../../../squidpony/squidmath/RNG.html#randomOrdering-int-"><code>RNG.randomOrdering(int)</code></a> (which gives a random ordering, and if
  applied immediately would be the same as calling <a href="../../../squidpony/squidmath/K2.html#shuffle-squidpony.squidmath.RNG-"><code>shuffle(RNG)</code></a>), or made in some other way.</div>
 </td>
@@ -183,7 +231,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><span class="typeNameLabel">K2.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/K2.html#putAll-squidpony.squidmath.K2-">putAll</a></span>(<a href="../../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,<a href="../../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;other)</code>
+<td class="colLast"><span class="typeNameLabel">K2.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/K2.html#putAll-squidpony.squidmath.K2-">putAll</a></span>(<a href="../../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;? extends <a href="../../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,? extends <a href="../../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;other)</code>
 <div class="block">Puts all unique A and B keys in <code>other</code> into this K2, respecting other's ordering.</div>
 </td>
 </tr>
@@ -196,7 +244,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/K2.html#K2-squidpony.squidmath.K2-">K2</a></span>(<a href="../../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,<a href="../../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;other)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/K2.html#K2-squidpony.squidmath.K2-">K2</a></span>(<a href="../../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;? extends <a href="../../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,? extends <a href="../../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;other)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -252,6 +300,6 @@
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

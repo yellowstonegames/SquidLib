@@ -1,0 +1,449 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.squidmath;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import squidpony.ArrayTools;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import squidpony.annotation.Beta;<a name="line.4"></a>
+<span class="sourceLineNo">005</span>import squidpony.squidgrid.mapping.RoomFinder;<a name="line.5"></a>
+<span class="sourceLineNo">006</span>import squidpony.squidgrid.mapping.SectionDungeonGenerator;<a name="line.6"></a>
+<span class="sourceLineNo">007</span><a name="line.7"></a>
+<span class="sourceLineNo">008</span>import java.io.Serializable;<a name="line.8"></a>
+<span class="sourceLineNo">009</span>import java.util.ArrayList;<a name="line.9"></a>
+<span class="sourceLineNo">010</span>import java.util.List;<a name="line.10"></a>
+<span class="sourceLineNo">011</span><a name="line.11"></a>
+<span class="sourceLineNo">012</span>/**<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * A Map-like collection that allows storing subdivisions of a 2D array with names (always Strings) and<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * identifying numbers, then looking up {@link Coord}s to find the associated name and/or number, or or looking up<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * a subdivision with a name or number to get a {@link GreasedRegion} back.<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * Created by Tommy Ettinger on 11/28/2016.<a name="line.16"></a>
+<span class="sourceLineNo">017</span> */<a name="line.17"></a>
+<span class="sourceLineNo">018</span>@Beta<a name="line.18"></a>
+<span class="sourceLineNo">019</span>public class SectionMap implements Serializable {<a name="line.19"></a>
+<span class="sourceLineNo">020</span>    private static final long serialVersionUID = -2322572367863327331L;<a name="line.20"></a>
+<span class="sourceLineNo">021</span><a name="line.21"></a>
+<span class="sourceLineNo">022</span>    protected int[][] map;<a name="line.22"></a>
+<span class="sourceLineNo">023</span>    protected Arrangement&lt;String&gt; names;<a name="line.23"></a>
+<span class="sourceLineNo">024</span>    protected ArrayList&lt;GreasedRegion&gt; regions;<a name="line.24"></a>
+<span class="sourceLineNo">025</span>    protected ArrayList&lt;IntVLA&gt; connections;<a name="line.25"></a>
+<span class="sourceLineNo">026</span><a name="line.26"></a>
+<span class="sourceLineNo">027</span>    /**<a name="line.27"></a>
+<span class="sourceLineNo">028</span>     * This shouldn't usually be used unless you for some reason need to construct a SectionMap before you have access<a name="line.28"></a>
+<span class="sourceLineNo">029</span>     * to a dungeon for it to map. If you do need this, then you must call {@link #reinitialize(RoomFinder)} to get any<a name="line.29"></a>
+<span class="sourceLineNo">030</span>     * use out of this object.<a name="line.30"></a>
+<span class="sourceLineNo">031</span>     * @see #SectionMap(RoomFinder) The preferred constructor, which takes a RoomFinder.<a name="line.31"></a>
+<span class="sourceLineNo">032</span>     */<a name="line.32"></a>
+<span class="sourceLineNo">033</span>    public SectionMap()<a name="line.33"></a>
+<span class="sourceLineNo">034</span>    {<a name="line.34"></a>
+<span class="sourceLineNo">035</span>        map = new int[0][0];<a name="line.35"></a>
+<span class="sourceLineNo">036</span>        names = new Arrangement&lt;&gt;(0);<a name="line.36"></a>
+<span class="sourceLineNo">037</span>        regions = new ArrayList&lt;&gt;(0);<a name="line.37"></a>
+<span class="sourceLineNo">038</span>        connections = new ArrayList&lt;&gt;(0);<a name="line.38"></a>
+<span class="sourceLineNo">039</span>    }<a name="line.39"></a>
+<span class="sourceLineNo">040</span><a name="line.40"></a>
+<span class="sourceLineNo">041</span>    /**<a name="line.41"></a>
+<span class="sourceLineNo">042</span>     * The preferred constructor; takes a RoomFinder (often one already created in dungeon generation and available via<a name="line.42"></a>
+<span class="sourceLineNo">043</span>     * {@link SectionDungeonGenerator#finder}) and uses it to give unique String names and identifying numbers to each<a name="line.43"></a>
+<span class="sourceLineNo">044</span>     * room, corridor, and cave area that had been identified by that RoomFinder. In the rare but possible chance that<a name="line.44"></a>
+<span class="sourceLineNo">045</span>     * a room, corridor, or cave overlaps with another such area, the one given the highest identifying number takes<a name="line.45"></a>
+<span class="sourceLineNo">046</span>     * precedence, but this should probably only happen if RoomFinder was subclassed or its internal state was modified.<a name="line.46"></a>
+<span class="sourceLineNo">047</span>     * Any cells that aren't a room, corridor, or cave (usually this contains all walls) are given identifying number 0,<a name="line.47"></a>
+<span class="sourceLineNo">048</span>     * with the corresponding name "unused0." All other cells will then have positive, non-zero identifying numbers.<a name="line.48"></a>
+<span class="sourceLineNo">049</span>     * Rooms are named next, starting at "room1" and going up to "room2" and so on until all rooms are named; the 1 in<a name="line.49"></a>
+<span class="sourceLineNo">050</span>     * the name corresponds to the identifying number. After the last room has been found, e.g. "room5", then corridors<a name="line.50"></a>
+<span class="sourceLineNo">051</span>     * are named, starting after the last room's number, so in the example that would be "corridor6", followed by<a name="line.51"></a>
+<span class="sourceLineNo">052</span>     * "corridor7". The numbers in the names still correspond to identifying numbers. After corridors, caves follow the<a name="line.52"></a>
+<span class="sourceLineNo">053</span>     * same pattern; in this example "cave8" would be followed by "cave9".<a name="line.53"></a>
+<span class="sourceLineNo">054</span>     * @param rf a RoomFinder object; usually obtained via {@link SectionDungeonGenerator#finder}<a name="line.54"></a>
+<span class="sourceLineNo">055</span>     */<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    public SectionMap(RoomFinder rf)<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    {<a name="line.57"></a>
+<span class="sourceLineNo">058</span>        if(rf == null)<a name="line.58"></a>
+<span class="sourceLineNo">059</span>        {<a name="line.59"></a>
+<span class="sourceLineNo">060</span>            map = new int[0][0];<a name="line.60"></a>
+<span class="sourceLineNo">061</span>            names = new Arrangement&lt;&gt;(0);<a name="line.61"></a>
+<span class="sourceLineNo">062</span>            regions = new ArrayList&lt;&gt;(0);<a name="line.62"></a>
+<span class="sourceLineNo">063</span>            connections = new ArrayList&lt;&gt;(0);<a name="line.63"></a>
+<span class="sourceLineNo">064</span>            return;<a name="line.64"></a>
+<span class="sourceLineNo">065</span>        }<a name="line.65"></a>
+<span class="sourceLineNo">066</span>        regions = new ArrayList&lt;&gt;(rf.rooms.size + rf.caves.size + rf.corridors.size);<a name="line.66"></a>
+<span class="sourceLineNo">067</span>        names = new Arrangement&lt;&gt;(regions.size());<a name="line.67"></a>
+<span class="sourceLineNo">068</span>        connections = new ArrayList&lt;&gt;(regions.size());<a name="line.68"></a>
+<span class="sourceLineNo">069</span>        reinitialize(rf);<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    }<a name="line.70"></a>
+<span class="sourceLineNo">071</span><a name="line.71"></a>
+<span class="sourceLineNo">072</span>    /**<a name="line.72"></a>
+<span class="sourceLineNo">073</span>     * Copy constructor; takes an already-initialized SectionMap and deep-copies each element into this one. Allows null<a name="line.73"></a>
+<span class="sourceLineNo">074</span>     * for {@code other}, which will make an empty SectionMap. This shouldn't be needed very often because SectionMap<a name="line.74"></a>
+<span class="sourceLineNo">075</span>     * values are immutable, though their contents can in some cases be mutated independently, and this would allow one<a name="line.75"></a>
+<span class="sourceLineNo">076</span>     * SectionMap to be copied and then have its items changed without changing the original.<a name="line.76"></a>
+<span class="sourceLineNo">077</span>     * @param other a SectionMap to deep-copy into this one<a name="line.77"></a>
+<span class="sourceLineNo">078</span>     */<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    public SectionMap(SectionMap other)<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    {<a name="line.80"></a>
+<span class="sourceLineNo">081</span>        if(other == null) {<a name="line.81"></a>
+<span class="sourceLineNo">082</span>            map = new int[0][0];<a name="line.82"></a>
+<span class="sourceLineNo">083</span>            names = new Arrangement&lt;&gt;(0);<a name="line.83"></a>
+<span class="sourceLineNo">084</span>            regions = new ArrayList&lt;&gt;(0);<a name="line.84"></a>
+<span class="sourceLineNo">085</span>            connections = new ArrayList&lt;&gt;(0);<a name="line.85"></a>
+<span class="sourceLineNo">086</span>            return;<a name="line.86"></a>
+<span class="sourceLineNo">087</span>        }<a name="line.87"></a>
+<span class="sourceLineNo">088</span>        map = ArrayTools.copy(other.map);<a name="line.88"></a>
+<span class="sourceLineNo">089</span>        names = new Arrangement&lt;&gt;(other.names);<a name="line.89"></a>
+<span class="sourceLineNo">090</span>        regions = new ArrayList&lt;&gt;(other.regions.size());<a name="line.90"></a>
+<span class="sourceLineNo">091</span>        connections = new ArrayList&lt;&gt;(other.connections.size());<a name="line.91"></a>
+<span class="sourceLineNo">092</span>        for (int i = 0; i &lt; other.connections.size(); i++) {<a name="line.92"></a>
+<span class="sourceLineNo">093</span>            regions.add(new GreasedRegion(other.regions.get(i)));<a name="line.93"></a>
+<span class="sourceLineNo">094</span>            connections.add(new IntVLA(other.connections.get(i)));<a name="line.94"></a>
+<span class="sourceLineNo">095</span>        }<a name="line.95"></a>
+<span class="sourceLineNo">096</span>    }<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    /**<a name="line.97"></a>
+<span class="sourceLineNo">098</span>     * If this SectionMap hasn't been initialized or the map has completely changed (such as if the player went to a<a name="line.98"></a>
+<span class="sourceLineNo">099</span>     * different floor of a dungeon), then you can call this method to avoid discarding some of the state from an<a name="line.99"></a>
+<span class="sourceLineNo">100</span>     * earlier SectionMap. This does all the same steps {@link #SectionMap(RoomFinder)} does, so refer to that<a name="line.100"></a>
+<span class="sourceLineNo">101</span>     * constructor's documentation for the names and numbers this assigns.<a name="line.101"></a>
+<span class="sourceLineNo">102</span>     * @param rf a RoomFinder object; usually obtained via {@link SectionDungeonGenerator#finder}<a name="line.102"></a>
+<span class="sourceLineNo">103</span>     * @return this for chaining.<a name="line.103"></a>
+<span class="sourceLineNo">104</span>     */<a name="line.104"></a>
+<span class="sourceLineNo">105</span>    public SectionMap reinitialize(RoomFinder rf)<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    {<a name="line.106"></a>
+<span class="sourceLineNo">107</span>        if(rf == null)<a name="line.107"></a>
+<span class="sourceLineNo">108</span>        {<a name="line.108"></a>
+<span class="sourceLineNo">109</span>            map = new int[0][0];<a name="line.109"></a>
+<span class="sourceLineNo">110</span>            names = new Arrangement&lt;&gt;(0);<a name="line.110"></a>
+<span class="sourceLineNo">111</span>            regions = new ArrayList&lt;&gt;(0);<a name="line.111"></a>
+<span class="sourceLineNo">112</span>            connections = new ArrayList&lt;&gt;(0);<a name="line.112"></a>
+<span class="sourceLineNo">113</span>            return this;<a name="line.113"></a>
+<span class="sourceLineNo">114</span>        }<a name="line.114"></a>
+<span class="sourceLineNo">115</span>        map = new int[rf.width][rf.height];<a name="line.115"></a>
+<span class="sourceLineNo">116</span>        regions.clear();<a name="line.116"></a>
+<span class="sourceLineNo">117</span>        names.clear();<a name="line.117"></a>
+<span class="sourceLineNo">118</span>        connections.clear();<a name="line.118"></a>
+<span class="sourceLineNo">119</span>        GreasedRegion t, all = new GreasedRegion(map, 0);<a name="line.119"></a>
+<span class="sourceLineNo">120</span>        regions.add(all);<a name="line.120"></a>
+<span class="sourceLineNo">121</span>        names.add("unused0");<a name="line.121"></a>
+<span class="sourceLineNo">122</span>        connections.add(new IntVLA(0));<a name="line.122"></a>
+<span class="sourceLineNo">123</span>        for (int i = 0; i &lt; rf.rooms.size; i++) {<a name="line.123"></a>
+<span class="sourceLineNo">124</span>            t = rf.rooms.keyAt(i);<a name="line.124"></a>
+<span class="sourceLineNo">125</span>            regions.add(t);<a name="line.125"></a>
+<span class="sourceLineNo">126</span>            all.andNot(t);<a name="line.126"></a>
+<span class="sourceLineNo">127</span>            t.writeIntsInto(map, names.size);<a name="line.127"></a>
+<span class="sourceLineNo">128</span>            names.add("room"+names.size);<a name="line.128"></a>
+<span class="sourceLineNo">129</span>            connections.add(new IntVLA(rf.rooms.getAt(i).size()));<a name="line.129"></a>
+<span class="sourceLineNo">130</span>        }<a name="line.130"></a>
+<span class="sourceLineNo">131</span>        for (int i = 0; i &lt; rf.corridors.size; i++) {<a name="line.131"></a>
+<span class="sourceLineNo">132</span>            t = rf.corridors.keyAt(i);<a name="line.132"></a>
+<span class="sourceLineNo">133</span>            regions.add(t);<a name="line.133"></a>
+<span class="sourceLineNo">134</span>            all.andNot(t);<a name="line.134"></a>
+<span class="sourceLineNo">135</span>            t.writeIntsInto(map, names.size);<a name="line.135"></a>
+<span class="sourceLineNo">136</span>            names.add("corridor"+names.size);<a name="line.136"></a>
+<span class="sourceLineNo">137</span>            connections.add(new IntVLA(rf.corridors.getAt(i).size()));<a name="line.137"></a>
+<span class="sourceLineNo">138</span>        }<a name="line.138"></a>
+<span class="sourceLineNo">139</span>        for (int i = 0; i &lt; rf.caves.size; i++) {<a name="line.139"></a>
+<span class="sourceLineNo">140</span>            t = rf.caves.keyAt(i);<a name="line.140"></a>
+<span class="sourceLineNo">141</span>            regions.add(t);<a name="line.141"></a>
+<span class="sourceLineNo">142</span>            all.andNot(t);<a name="line.142"></a>
+<span class="sourceLineNo">143</span>            t.writeIntsInto(map, names.size);<a name="line.143"></a>
+<span class="sourceLineNo">144</span>            names.add("cave"+names.size);<a name="line.144"></a>
+<span class="sourceLineNo">145</span>            connections.add(new IntVLA(rf.caves.getAt(i).size()));<a name="line.145"></a>
+<span class="sourceLineNo">146</span>        }<a name="line.146"></a>
+<span class="sourceLineNo">147</span>        int ls = 1;<a name="line.147"></a>
+<span class="sourceLineNo">148</span>        List&lt;GreasedRegion&gt; connected;<a name="line.148"></a>
+<span class="sourceLineNo">149</span>        IntVLA iv;<a name="line.149"></a>
+<span class="sourceLineNo">150</span>        for (int i = 0; i &lt; rf.rooms.size; i++, ls++) {<a name="line.150"></a>
+<span class="sourceLineNo">151</span>            connected = rf.rooms.getAt(i);<a name="line.151"></a>
+<span class="sourceLineNo">152</span>            iv = connections.get(ls);<a name="line.152"></a>
+<span class="sourceLineNo">153</span>            for (int j = 0; j &lt; connected.size(); j++) {<a name="line.153"></a>
+<span class="sourceLineNo">154</span>                iv.add(positionToNumber(connected.get(j).first()));<a name="line.154"></a>
+<span class="sourceLineNo">155</span>            }<a name="line.155"></a>
+<span class="sourceLineNo">156</span>        }<a name="line.156"></a>
+<span class="sourceLineNo">157</span>        for (int i = 0; i &lt; rf.corridors.size; i++, ls++) {<a name="line.157"></a>
+<span class="sourceLineNo">158</span>            connected = rf.corridors.getAt(i);<a name="line.158"></a>
+<span class="sourceLineNo">159</span>            iv = connections.get(ls);<a name="line.159"></a>
+<span class="sourceLineNo">160</span>            for (int j = 0; j &lt; connected.size(); j++) {<a name="line.160"></a>
+<span class="sourceLineNo">161</span>                iv.add(positionToNumber(connected.get(j).first()));<a name="line.161"></a>
+<span class="sourceLineNo">162</span>            }<a name="line.162"></a>
+<span class="sourceLineNo">163</span>        }<a name="line.163"></a>
+<span class="sourceLineNo">164</span>        for (int i = 0; i &lt; rf.caves.size; i++, ls++) {<a name="line.164"></a>
+<span class="sourceLineNo">165</span>            connected = rf.caves.getAt(i);<a name="line.165"></a>
+<span class="sourceLineNo">166</span>            iv = connections.get(ls);<a name="line.166"></a>
+<span class="sourceLineNo">167</span>            for (int j = 0; j &lt; connected.size(); j++) {<a name="line.167"></a>
+<span class="sourceLineNo">168</span>                iv.add(positionToNumber(connected.get(j).first()));<a name="line.168"></a>
+<span class="sourceLineNo">169</span>            }<a name="line.169"></a>
+<span class="sourceLineNo">170</span>        }<a name="line.170"></a>
+<span class="sourceLineNo">171</span>        return this;<a name="line.171"></a>
+<span class="sourceLineNo">172</span>    }<a name="line.172"></a>
+<span class="sourceLineNo">173</span><a name="line.173"></a>
+<span class="sourceLineNo">174</span>    /**<a name="line.174"></a>
+<span class="sourceLineNo">175</span>     * Gets the identifying number of the area that contains the given x, y position.<a name="line.175"></a>
+<span class="sourceLineNo">176</span>     * @param x the x-coordinate to find the identifying number for; should be within bounds of the map<a name="line.176"></a>
+<span class="sourceLineNo">177</span>     * @param y the y-coordinate to find the identifying number for; should be within bounds of the map<a name="line.177"></a>
+<span class="sourceLineNo">178</span>     * @return the corresponding identifying number, or -1 if the parameters are invalid<a name="line.178"></a>
+<span class="sourceLineNo">179</span>     */<a name="line.179"></a>
+<span class="sourceLineNo">180</span>    public int positionToNumber(int x, int y)<a name="line.180"></a>
+<span class="sourceLineNo">181</span>    {<a name="line.181"></a>
+<span class="sourceLineNo">182</span>        if(x &lt; 0 || y &lt; 0 || x &gt;= map.length || y &gt;= map[x].length)<a name="line.182"></a>
+<span class="sourceLineNo">183</span>            return -1;<a name="line.183"></a>
+<span class="sourceLineNo">184</span>        return map[x][y];<a name="line.184"></a>
+<span class="sourceLineNo">185</span>    }<a name="line.185"></a>
+<span class="sourceLineNo">186</span><a name="line.186"></a>
+<span class="sourceLineNo">187</span>    /**<a name="line.187"></a>
+<span class="sourceLineNo">188</span>     * Gets the identifying number of the area that contains the given position.<a name="line.188"></a>
+<span class="sourceLineNo">189</span>     * @param position the Coord to find the identifying number for; should be within bounds of the map and non-null<a name="line.189"></a>
+<span class="sourceLineNo">190</span>     * @return the corresponding identifying number, or -1 if position is invalid or null<a name="line.190"></a>
+<span class="sourceLineNo">191</span>     */<a name="line.191"></a>
+<span class="sourceLineNo">192</span>    public int positionToNumber(Coord position)<a name="line.192"></a>
+<span class="sourceLineNo">193</span>    {<a name="line.193"></a>
+<span class="sourceLineNo">194</span>        if(position == null)<a name="line.194"></a>
+<span class="sourceLineNo">195</span>            return -1;<a name="line.195"></a>
+<span class="sourceLineNo">196</span>        return positionToNumber(position.x, position.y);<a name="line.196"></a>
+<span class="sourceLineNo">197</span>    }<a name="line.197"></a>
+<span class="sourceLineNo">198</span><a name="line.198"></a>
+<span class="sourceLineNo">199</span>    /**<a name="line.199"></a>
+<span class="sourceLineNo">200</span>     * Gets the name of the area that contains the given x, y position.<a name="line.200"></a>
+<span class="sourceLineNo">201</span>     * @param x the x-coordinate to find the name for; should be within bounds of the map<a name="line.201"></a>
+<span class="sourceLineNo">202</span>     * @param y the y-coordinate to find the name for; should be within bounds of the map<a name="line.202"></a>
+<span class="sourceLineNo">203</span>     * @return the corresponding name as a String, or null if the parameters are invalid<a name="line.203"></a>
+<span class="sourceLineNo">204</span>     */<a name="line.204"></a>
+<span class="sourceLineNo">205</span>    public String positionToName(int x, int y)<a name="line.205"></a>
+<span class="sourceLineNo">206</span>    {<a name="line.206"></a>
+<span class="sourceLineNo">207</span>        return numberToName(positionToNumber(x, y));<a name="line.207"></a>
+<span class="sourceLineNo">208</span>    }<a name="line.208"></a>
+<span class="sourceLineNo">209</span><a name="line.209"></a>
+<span class="sourceLineNo">210</span>    /**<a name="line.210"></a>
+<span class="sourceLineNo">211</span>     * Gets the name of the area that contains the given position.<a name="line.211"></a>
+<span class="sourceLineNo">212</span>     * @param position a Coord that should be within bounds of the map and non-null<a name="line.212"></a>
+<span class="sourceLineNo">213</span>     * @return the corresponding name as a String, or null if position is invalid or null<a name="line.213"></a>
+<span class="sourceLineNo">214</span>     */<a name="line.214"></a>
+<span class="sourceLineNo">215</span>    public String positionToName(Coord position)<a name="line.215"></a>
+<span class="sourceLineNo">216</span>    {<a name="line.216"></a>
+<span class="sourceLineNo">217</span>        if(position == null)<a name="line.217"></a>
+<span class="sourceLineNo">218</span>            return null;<a name="line.218"></a>
+<span class="sourceLineNo">219</span>        return numberToName(positionToNumber(position));<a name="line.219"></a>
+<span class="sourceLineNo">220</span>    }<a name="line.220"></a>
+<span class="sourceLineNo">221</span><a name="line.221"></a>
+<span class="sourceLineNo">222</span>    /**<a name="line.222"></a>
+<span class="sourceLineNo">223</span>     * Gets the identifying number corresponding to the given name.<a name="line.223"></a>
+<span class="sourceLineNo">224</span>     * @param name the name to look up, like "room1"<a name="line.224"></a>
+<span class="sourceLineNo">225</span>     * @return the corresponding identifying number, or -1 if no such name exists<a name="line.225"></a>
+<span class="sourceLineNo">226</span>     */<a name="line.226"></a>
+<span class="sourceLineNo">227</span>    public int nameToNumber(String name)<a name="line.227"></a>
+<span class="sourceLineNo">228</span>    {<a name="line.228"></a>
+<span class="sourceLineNo">229</span>        return names.getInt(name);<a name="line.229"></a>
+<span class="sourceLineNo">230</span>    }<a name="line.230"></a>
+<span class="sourceLineNo">231</span><a name="line.231"></a>
+<span class="sourceLineNo">232</span>    /**<a name="line.232"></a>
+<span class="sourceLineNo">233</span>     * Gets the name that corresponds to the given identifying number.<a name="line.233"></a>
+<span class="sourceLineNo">234</span>     * @param number the number to look up, like 1<a name="line.234"></a>
+<span class="sourceLineNo">235</span>     * @return the corresponding name as a String, or null if no such number is used<a name="line.235"></a>
+<span class="sourceLineNo">236</span>     */<a name="line.236"></a>
+<span class="sourceLineNo">237</span>    public String numberToName(int number)<a name="line.237"></a>
+<span class="sourceLineNo">238</span>    {<a name="line.238"></a>
+<span class="sourceLineNo">239</span>        return names.keyAt(number);<a name="line.239"></a>
+<span class="sourceLineNo">240</span>    }<a name="line.240"></a>
+<span class="sourceLineNo">241</span><a name="line.241"></a>
+<span class="sourceLineNo">242</span>    /**<a name="line.242"></a>
+<span class="sourceLineNo">243</span>     * Gets the GreasedRegion that has the given identifying number.<a name="line.243"></a>
+<span class="sourceLineNo">244</span>     * @param number the number to look up, like 1<a name="line.244"></a>
+<span class="sourceLineNo">245</span>     * @return the corresponding GreasedRegion, or null if no such number is used<a name="line.245"></a>
+<span class="sourceLineNo">246</span>     */<a name="line.246"></a>
+<span class="sourceLineNo">247</span>    public GreasedRegion numberToRegion(int number)<a name="line.247"></a>
+<span class="sourceLineNo">248</span>    {<a name="line.248"></a>
+<span class="sourceLineNo">249</span>        if(number &lt; 0 || number &gt;= regions.size())<a name="line.249"></a>
+<span class="sourceLineNo">250</span>            return null;<a name="line.250"></a>
+<span class="sourceLineNo">251</span>        return regions.get(number);<a name="line.251"></a>
+<span class="sourceLineNo">252</span>    }<a name="line.252"></a>
+<span class="sourceLineNo">253</span><a name="line.253"></a>
+<span class="sourceLineNo">254</span>    /**<a name="line.254"></a>
+<span class="sourceLineNo">255</span>     * Gets the GreasedRegion that has the given name.<a name="line.255"></a>
+<span class="sourceLineNo">256</span>     * @param name the name to look up, like "room1"<a name="line.256"></a>
+<span class="sourceLineNo">257</span>     * @return the corresponding GreasedRegion, or null if no such name exists<a name="line.257"></a>
+<span class="sourceLineNo">258</span>     */<a name="line.258"></a>
+<span class="sourceLineNo">259</span>    public GreasedRegion nameToRegion(String name)<a name="line.259"></a>
+<span class="sourceLineNo">260</span>    {<a name="line.260"></a>
+<span class="sourceLineNo">261</span>        return numberToRegion(nameToNumber(name));<a name="line.261"></a>
+<span class="sourceLineNo">262</span>    }<a name="line.262"></a>
+<span class="sourceLineNo">263</span><a name="line.263"></a>
+<span class="sourceLineNo">264</span>    /**<a name="line.264"></a>
+<span class="sourceLineNo">265</span>     * Gets the GreasedRegion (a group of points as made by the constructor) that contains the given x, y point.<a name="line.265"></a>
+<span class="sourceLineNo">266</span>     * @param x the x-coordinate to find the containing region for; should be within bounds of the map<a name="line.266"></a>
+<span class="sourceLineNo">267</span>     * @param y the y-coordinate to find the containing region for; should be within bounds of the map<a name="line.267"></a>
+<span class="sourceLineNo">268</span>     * @return the GreasedRegion containing the given point, or null if the parameters are invalid<a name="line.268"></a>
+<span class="sourceLineNo">269</span>     */<a name="line.269"></a>
+<span class="sourceLineNo">270</span>    public GreasedRegion positionToContaining(int x, int y)<a name="line.270"></a>
+<span class="sourceLineNo">271</span>    {<a name="line.271"></a>
+<span class="sourceLineNo">272</span>        return numberToRegion(positionToNumber(x, y));<a name="line.272"></a>
+<span class="sourceLineNo">273</span>    }<a name="line.273"></a>
+<span class="sourceLineNo">274</span>    /**<a name="line.274"></a>
+<span class="sourceLineNo">275</span>     * Gets the GreasedRegion (a group of points as made by the constructor) that contains the given x, y point.<a name="line.275"></a>
+<span class="sourceLineNo">276</span>     * @param position the Coord to find the containing region for; should be within bounds of the map and non-null<a name="line.276"></a>
+<span class="sourceLineNo">277</span>     * @return the GreasedRegion containing the given Coord, or null if position is invalid or null<a name="line.277"></a>
+<span class="sourceLineNo">278</span>     */<a name="line.278"></a>
+<span class="sourceLineNo">279</span>    public GreasedRegion positionToContaining(Coord position)<a name="line.279"></a>
+<span class="sourceLineNo">280</span>    {<a name="line.280"></a>
+<span class="sourceLineNo">281</span>        if(position == null)<a name="line.281"></a>
+<span class="sourceLineNo">282</span>            return null;<a name="line.282"></a>
+<span class="sourceLineNo">283</span>        return numberToRegion(positionToNumber(position));<a name="line.283"></a>
+<span class="sourceLineNo">284</span>    }<a name="line.284"></a>
+<span class="sourceLineNo">285</span><a name="line.285"></a>
+<span class="sourceLineNo">286</span>    /**<a name="line.286"></a>
+<span class="sourceLineNo">287</span>     * Gets the list of connected sections (by their identifying numbers) given an identifying number of a section.<a name="line.287"></a>
+<span class="sourceLineNo">288</span>     * @param number an identifying number; should be non-negative and less than {@link #size()}<a name="line.288"></a>
+<span class="sourceLineNo">289</span>     * @return an IntVLA storing the identifying numbers of connected sections, or null if given an invalid parameter<a name="line.289"></a>
+<span class="sourceLineNo">290</span>     */<a name="line.290"></a>
+<span class="sourceLineNo">291</span>    public IntVLA numberToConnections(int number)<a name="line.291"></a>
+<span class="sourceLineNo">292</span>    {<a name="line.292"></a>
+<span class="sourceLineNo">293</span>        if(number &lt; 0 || number &gt;= connections.size())<a name="line.293"></a>
+<span class="sourceLineNo">294</span>            return null;<a name="line.294"></a>
+<span class="sourceLineNo">295</span>        return connections.get(number);<a name="line.295"></a>
+<span class="sourceLineNo">296</span>    }<a name="line.296"></a>
+<span class="sourceLineNo">297</span>    /**<a name="line.297"></a>
+<span class="sourceLineNo">298</span>     * Gets the list of connected sections (by their identifying numbers) given a name of a section.<a name="line.298"></a>
+<span class="sourceLineNo">299</span>     * @param name a String name; should be present in this SectionMap or this will return null<a name="line.299"></a>
+<span class="sourceLineNo">300</span>     * @return an IntVLA storing the identifying numbers of connected sections, or null if given an invalid parameter<a name="line.300"></a>
+<span class="sourceLineNo">301</span>     */<a name="line.301"></a>
+<span class="sourceLineNo">302</span>    public IntVLA nameToConnections(String name)<a name="line.302"></a>
+<span class="sourceLineNo">303</span>    {<a name="line.303"></a>
+<span class="sourceLineNo">304</span>        return numberToConnections(nameToNumber(name));<a name="line.304"></a>
+<span class="sourceLineNo">305</span>    }<a name="line.305"></a>
+<span class="sourceLineNo">306</span><a name="line.306"></a>
+<span class="sourceLineNo">307</span>    /**<a name="line.307"></a>
+<span class="sourceLineNo">308</span>     * Gets the list of connected sections (by their identifying numbers) given a position inside that section.<a name="line.308"></a>
+<span class="sourceLineNo">309</span>     * @param x the x-coordinate of the position to look up; should be within bounds<a name="line.309"></a>
+<span class="sourceLineNo">310</span>     * @param y the y-coordinate of the position to look up; should be within bounds<a name="line.310"></a>
+<span class="sourceLineNo">311</span>     * @return an IntVLA storing the identifying numbers of connected sections, or null if given invalid parameters<a name="line.311"></a>
+<span class="sourceLineNo">312</span>     */<a name="line.312"></a>
+<span class="sourceLineNo">313</span>    public IntVLA positionToConnections(int x, int y)<a name="line.313"></a>
+<span class="sourceLineNo">314</span>    {<a name="line.314"></a>
+<span class="sourceLineNo">315</span>        return numberToConnections(positionToNumber(x, y));<a name="line.315"></a>
+<span class="sourceLineNo">316</span>    }<a name="line.316"></a>
+<span class="sourceLineNo">317</span><a name="line.317"></a>
+<span class="sourceLineNo">318</span>    /**<a name="line.318"></a>
+<span class="sourceLineNo">319</span>     * Gets the list of connected sections (by their identifying numbers) given a position inside that section.<a name="line.319"></a>
+<span class="sourceLineNo">320</span>     * @param position the Coord position to look up; should be within bounds and non-null<a name="line.320"></a>
+<span class="sourceLineNo">321</span>     * @return an IntVLA storing the identifying numbers of connected sections, or null if given an invalid parameter<a name="line.321"></a>
+<span class="sourceLineNo">322</span>     */<a name="line.322"></a>
+<span class="sourceLineNo">323</span>    public IntVLA positionToConnections(Coord position)<a name="line.323"></a>
+<span class="sourceLineNo">324</span>    {<a name="line.324"></a>
+<span class="sourceLineNo">325</span>        return numberToConnections(positionToNumber(position));<a name="line.325"></a>
+<span class="sourceLineNo">326</span>    }<a name="line.326"></a>
+<span class="sourceLineNo">327</span><a name="line.327"></a>
+<span class="sourceLineNo">328</span>    /**<a name="line.328"></a>
+<span class="sourceLineNo">329</span>     * The number of regions this knows about; includes an entry for "unused cells" so this may be one larger than the<a name="line.329"></a>
+<span class="sourceLineNo">330</span>     * amount of GreasedRegions present in a RoomFinder used to construct this.<a name="line.330"></a>
+<span class="sourceLineNo">331</span>     * @return the size of this SectionMap<a name="line.331"></a>
+<span class="sourceLineNo">332</span>     */<a name="line.332"></a>
+<span class="sourceLineNo">333</span>    public int size()<a name="line.333"></a>
+<span class="sourceLineNo">334</span>    {<a name="line.334"></a>
+<span class="sourceLineNo">335</span>        return names.size;<a name="line.335"></a>
+<span class="sourceLineNo">336</span>    }<a name="line.336"></a>
+<span class="sourceLineNo">337</span><a name="line.337"></a>
+<span class="sourceLineNo">338</span>    /**<a name="line.338"></a>
+<span class="sourceLineNo">339</span>     * Checks if this contains the given name.<a name="line.339"></a>
+<span class="sourceLineNo">340</span>     * @param name the name to check<a name="line.340"></a>
+<span class="sourceLineNo">341</span>     * @return true if this contains the name, false otherwise<a name="line.341"></a>
+<span class="sourceLineNo">342</span>     */<a name="line.342"></a>
+<span class="sourceLineNo">343</span>    public boolean contains(String name)<a name="line.343"></a>
+<span class="sourceLineNo">344</span>    {<a name="line.344"></a>
+<span class="sourceLineNo">345</span>        return names.containsKey(name);<a name="line.345"></a>
+<span class="sourceLineNo">346</span>    }<a name="line.346"></a>
+<span class="sourceLineNo">347</span><a name="line.347"></a>
+<span class="sourceLineNo">348</span>    /**<a name="line.348"></a>
+<span class="sourceLineNo">349</span>     * Checks if this contains the given identifying number.<a name="line.349"></a>
+<span class="sourceLineNo">350</span>     * @param number the number to check<a name="line.350"></a>
+<span class="sourceLineNo">351</span>     * @return true if this contains the identifying number, false otherwise<a name="line.351"></a>
+<span class="sourceLineNo">352</span>     */<a name="line.352"></a>
+<span class="sourceLineNo">353</span>    public boolean contains(int number)<a name="line.353"></a>
+<span class="sourceLineNo">354</span>    {<a name="line.354"></a>
+<span class="sourceLineNo">355</span>        return number &gt;= 0 &amp;&amp; number &lt; names.size;<a name="line.355"></a>
+<span class="sourceLineNo">356</span>    }<a name="line.356"></a>
+<span class="sourceLineNo">357</span><a name="line.357"></a>
+<span class="sourceLineNo">358</span>    /**<a name="line.358"></a>
+<span class="sourceLineNo">359</span>     * Checks if this contains the given position (that is, x and y are within map bounds).<a name="line.359"></a>
+<span class="sourceLineNo">360</span>     * @param x the x-coordinate of the position to check<a name="line.360"></a>
+<span class="sourceLineNo">361</span>     * @param y the y-coordinate of the position to check<a name="line.361"></a>
+<span class="sourceLineNo">362</span>     * @return true if the given position is in bounds, false otherwise<a name="line.362"></a>
+<span class="sourceLineNo">363</span>     */<a name="line.363"></a>
+<span class="sourceLineNo">364</span>    public boolean contains(int x, int y)<a name="line.364"></a>
+<span class="sourceLineNo">365</span>    {<a name="line.365"></a>
+<span class="sourceLineNo">366</span>        return x &gt;= 0 &amp;&amp; x &lt; map.length &amp;&amp; y &gt;= 0 &amp;&amp; y &lt; map[x].length;<a name="line.366"></a>
+<span class="sourceLineNo">367</span>    }<a name="line.367"></a>
+<span class="sourceLineNo">368</span>    /**<a name="line.368"></a>
+<span class="sourceLineNo">369</span>     * Checks if this contains the given position (that is, it is within map bounds).<a name="line.369"></a>
+<span class="sourceLineNo">370</span>     * @param position the position to check<a name="line.370"></a>
+<span class="sourceLineNo">371</span>     * @return true if position is non-null and is in bounds, false otherwise<a name="line.371"></a>
+<span class="sourceLineNo">372</span>     */<a name="line.372"></a>
+<span class="sourceLineNo">373</span>    public boolean contains(Coord position)<a name="line.373"></a>
+<span class="sourceLineNo">374</span>    {<a name="line.374"></a>
+<span class="sourceLineNo">375</span>        return position != null &amp;&amp; contains(position.x, position.y);<a name="line.375"></a>
+<span class="sourceLineNo">376</span>    }<a name="line.376"></a>
+<span class="sourceLineNo">377</span>}<a name="line.377"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

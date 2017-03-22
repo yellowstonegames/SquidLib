@@ -83,12 +83,6 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><a href="#squidpony.squidai">squidpony.squidai</a></td>
-<td class="colLast">
-<div class="block">Tools for finding paths, optimizing targets for area-of-effect (AOE) abilities, and evaluating influence on a grid.</div>
-</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><a href="#squidpony.squidgrid">squidpony.squidgrid</a></td>
 <td class="colLast">
 <div class="block">Tools for working with data on a grid, including LOS and FOV; overlaps with geometry code in squidpony.squidmath .</div>
@@ -99,59 +93,6 @@
 </li>
 <li class="blockList">
 <ul class="blockList">
-<li class="blockList"><a name="squidpony.squidai">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../squidpony/squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a> in <a href="../../../squidpony/squidai/package-summary.html">squidpony.squidai</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../squidpony/squidai/package-summary.html">squidpony.squidai</a> with parameters of type <a href="../../../squidpony/squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.html#findCoveredAttackPath-int-int-double-squidpony.squidgrid.FOV-boolean-java.util.Set-java.util.Set-java.util.List-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findCoveredAttackPath</a></span>(int&nbsp;moveLength,
-                     int&nbsp;preferredRange,
-                     double&nbsp;coverPreference,
-                     <a href="../../../squidpony/squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a>&nbsp;fov,
-                     boolean&nbsp;seekDistantGoals,
-                     <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable,
-                     <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;onlyPassable,
-                     <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidai/Threat.html" title="class in squidpony.squidai">Threat</a>&gt;&nbsp;threats,
-                     <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
-                     <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;targets)</code>
-<div class="block">Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list of Coord
- positions (using the current measurement) needed to get closer to a goal while staying in areas that none of the
- given threats are able to see (which should prevent them from attacking), until a cell is reached with
- a distance from a goal that is at equal to preferredRange,
- which may go further from a goal if the preferredRange has not been met at the current distance.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.html#findCoveredAttackPath-int-int-int-double-squidpony.squidgrid.FOV-boolean-java.util.Set-java.util.Set-java.lang.Iterable-squidpony.squidmath.Coord-squidpony.squidmath.Coord...-">findCoveredAttackPath</a></span>(int&nbsp;moveLength,
-                     int&nbsp;minPreferredRange,
-                     int&nbsp;maxPreferredRange,
-                     double&nbsp;coverPreference,
-                     <a href="../../../squidpony/squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a>&nbsp;fov,
-                     boolean&nbsp;seekDistantGoals,
-                     <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable,
-                     <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;onlyPassable,
-                     <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../../squidpony/squidai/Threat.html" title="class in squidpony.squidai">Threat</a>&gt;&nbsp;threats,
-                     <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
-                     <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;targets)</code>
-<div class="block">Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list of Coord
- positions (using the current measurement) needed to get closer to a goal while staying in areas that none of the
- given threats are able to see (which should prevent them from attacking), until a cell is reached with
- a distance from a goal that is at least equal to minPreferredRange and no more than maxPreferredRange,
- which may go further from a goal if the minPreferredRange has not been met at the current distance.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</li>
 <li class="blockList"><a name="squidpony.squidgrid">
 <!--   -->
 </a>
@@ -164,6 +105,12 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/BevelFOV.html" title="class in squidpony.squidgrid">BevelFOV</a></span></code>
+<div class="block">Use FOV instead, probably with type SHADOW; this has the same results as shadowcasting FOV but is slower, currently.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/FOVCache.html" title="class in squidpony.squidgrid">FOVCache</a></span></code>
 <div class="block">A combined FOV calculator, partial LOS calculator, FOV/LOS compressor, and tool to store/query/extract compressed
@@ -241,6 +188,6 @@
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

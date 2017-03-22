@@ -576,7 +576,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;squidpony.squidmath.<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></h3>
-<code><a href="../../squidpony/squidmath/RNG.html#nextCoord-int-int-">nextCoord</a>, <a href="../../squidpony/squidmath/RNG.html#randomOrdering-int-int:A-">randomOrdering</a>, <a href="../../squidpony/squidmath/RNG.html#shuffleInPlace-T:A-">shuffleInPlace</a></code></li>
+<code><a href="../../squidpony/squidmath/RNG.html#approximateBits-int-">approximateBits</a>, <a href="../../squidpony/squidmath/RNG.html#getRandomCellsIterable-int-int-int-">getRandomCellsIterable</a>, <a href="../../squidpony/squidmath/RNG.html#getRandomUniqueCells-int-int-int-int-">getRandomUniqueCells</a>, <a href="../../squidpony/squidmath/RNG.html#getRandomUniqueCells-int-int-int-int-squidpony.squidmath.Coord:A-">getRandomUniqueCells</a>, <a href="../../squidpony/squidmath/RNG.html#getRandomUniqueCells-int-int-int-int-int-">getRandomUniqueCells</a>, <a href="../../squidpony/squidmath/RNG.html#nextCoord-int-int-">nextCoord</a>, <a href="../../squidpony/squidmath/RNG.html#randomInterleave--">randomInterleave</a>, <a href="../../squidpony/squidmath/RNG.html#randomOrdering-int-int:A-">randomOrdering</a>, <a href="../../squidpony/squidmath/RNG.html#shuffle-java.util.Collection-java.util.ArrayList-">shuffle</a>, <a href="../../squidpony/squidmath/RNG.html#shuffleInPlace-T:A-">shuffleInPlace</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -874,7 +874,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
                     long&nbsp;max)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../squidpony/squidmath/RNG.html#between-long-long-">RNG</a></code></span></div>
 <div class="block">Returns a value between min (inclusive) and max (exclusive).
-
+ <p>
  The inclusive and exclusive behavior is to match the behavior of the
  similar method that deals with floating point values.</div>
 <dl>
@@ -1257,9 +1257,9 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <dd><code>list</code> - A list <b>with a constant-time <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true#get-int-" title="class or interface in java.util"><code>List.get(int)</code></a> method</b> (otherwise performance degrades).</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>An <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang"><code>Iterable</code></a> that iterates over <code>list</code> but start at
-         a random index. If the chosen index is <code>i</code>, the iterator
-         will return:
-         <code>list[i]; list[i+1]; ...; list[list.length() - 1]; list[0]; list[i-1]</code></dd>
+ a random index. If the chosen index is <code>i</code>, the iterator
+ will return:
+ <code>list[i]; list[i+1]; ...; list[list.length() - 1]; list[0]; list[i-1]</code></dd>
 </dl>
 </li>
 </ul>
@@ -1289,7 +1289,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>elements</code> - an array of T; will not be modified</dd>
 <dd><code>dest</code> - Where to put the shuffle. If it does not have the same length as <code>elements</code>, this will use the
-             randomPortion method of this class to fill the smaller dest. MUST NOT be the same array as elements!</dd>
+                 randomPortion method of this class to fill the smaller dest. MUST NOT be the same array as elements!</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>dest</code> after modifications</dd>
 </dl>
@@ -1541,7 +1541,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/EditRNG.html#line.606">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+<dd><code><a href="../../squidpony/squidmath/RNG.html#equals-java.lang.Object-">equals</a></code>&nbsp;in class&nbsp;<code><a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -1554,7 +1554,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/EditRNG.html#line.618">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+<dd><code><a href="../../squidpony/squidmath/RNG.html#hashCode--">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -1566,7 +1566,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>shuffle</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;T[]&nbsp;<a href="../../src-html/squidpony/squidmath/EditRNG.html#line.640">shuffle</a>(T[]&nbsp;elements)</pre>
+<pre>public&nbsp;&lt;T&gt;&nbsp;T[]&nbsp;<a href="../../src-html/squidpony/squidmath/EditRNG.html#line.638">shuffle</a>(T[]&nbsp;elements)</pre>
 <div class="block">Shuffle an array using the Fisher-Yates algorithm. Not GWT-compatible; use the overload that takes two arrays.
  <br>
  https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle</div>
@@ -1588,7 +1588,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>randomOrdering</h4>
-<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/EditRNG.html#line.652">randomOrdering</a>(int&nbsp;length)</pre>
+<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/EditRNG.html#line.650">randomOrdering</a>(int&nbsp;length)</pre>
 <div class="block">Generates a random permutation of the range from 0 (inclusive) to length (exclusive).
  Useful for passing to OrderedMap or OrderedSet's reorder() methods.</div>
 <dl>
@@ -1607,7 +1607,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>nextIntHasty</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/EditRNG.html#line.667">nextIntHasty</a>(int&nbsp;bound)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/EditRNG.html#line.665">nextIntHasty</a>(int&nbsp;bound)</pre>
 <div class="block">Returns a random non-negative integer below the given bound, or 0 if the bound is 0.
  Uses a slightly optimized technique. This method is considered "hasty" since
  it should be faster than nextInt() doesn't check for "less-valid" bounds values. It also
@@ -1692,6 +1692,6 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

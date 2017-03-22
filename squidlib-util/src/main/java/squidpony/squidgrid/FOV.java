@@ -1,7 +1,7 @@
 package squidpony.squidgrid;
 
+import squidpony.ArrayTools;
 import squidpony.GwtCompatibility;
-import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
 
 import java.io.Serializable;
@@ -83,21 +83,21 @@ public class FOV implements Serializable {
              * as fully transparent. Returns a percentage from 1.0 (center of
              * FOV) to 0.0 (outside of FOV).
              */
-    SHADOW = 5;
+            SHADOW = 5;
     private int type = SHADOW;
 
 	/**
 	 * Data allocated in the previous calls to the public API, if any. Used to
 	 * save allocations when multiple calls are done on the same instance.
 	 */
-    private double[][] light;
+    protected double[][] light;
 	/**
 	 * Data allocated in the previous calls to the public API, if any. Used to
 	 * save allocations when multiple calls are done on the same instance.
 	 */
-    private boolean[][] nearLight;
+    protected boolean[][] nearLight;
 
-    private static final Direction[] ccw = new Direction[]
+    protected static final Direction[] ccw = new Direction[]
             {Direction.UP_RIGHT, Direction.UP_LEFT, Direction.DOWN_LEFT, Direction.DOWN_RIGHT, Direction.UP_RIGHT},
             ccw_full = new Direction[]{Direction.RIGHT, Direction.UP_RIGHT, Direction.UP, Direction.UP_LEFT,
             Direction.LEFT, Direction.DOWN_LEFT, Direction.DOWN, Direction.DOWN_RIGHT};
@@ -172,7 +172,6 @@ public class FOV implements Serializable {
      * @return the computed light grid
      */
     public double[][] calculateFOV(double[][] resistanceMap, int startX, int startY, double radius, Radius radiusTechnique) {
-
         double rad = Math.max(1, radius);
         double decay = 1.0 / rad;
 
@@ -182,14 +181,12 @@ public class FOV implements Serializable {
         initializeLightMap(width, height);
         light[startX][startY] = 1;//make the starting space full power
 
-        initializeNearLight(width, height);
-
-        boolean[][] nearLight = new boolean[width][height];
         switch (type) {
             case RIPPLE:
             case RIPPLE_LOOSE:
             case RIPPLE_TIGHT:
             case RIPPLE_VERY_LOOSE:
+                initializeNearLight(width, height);
                 doRippleFOV(light, rippleValue(type), startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, radiusTechnique);
                 break;
             case SHADOW:
@@ -197,11 +194,8 @@ public class FOV implements Serializable {
                 // does not cause problems with brightness falloff because shadowcasting is on/off
 
                 // this should be fixed now, sorta. the distance is checked in the method this calls, so it doesn't ever
-                // run through more than 512 iterations of the radius-related loop (which seemed to be the only problem,
-                // running through billions of iterations when Integer/MAX_VALUE is given as a radius).
-                //if (rad > width + height){
-                //    rad = width + height;
-                //}
+                // run through more than (width + height) iterations of the radius-related loop (which seemed to be the
+                // only problem, running through billions of iterations when Integer/MAX_VALUE is given as a radius).
                 for (Direction d : Direction.DIAGONALS) {
                     shadowCast(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
                     shadowCast(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
@@ -247,25 +241,18 @@ public class FOV implements Serializable {
         initializeLightMap(width, height);
         light[startX][startY] = 1;//make the starting space full power
 
-        initializeNearLight(width, height);
-
         switch (type) {
             case RIPPLE:
             case RIPPLE_LOOSE:
             case RIPPLE_TIGHT:
             case RIPPLE_VERY_LOOSE:
+                initializeNearLight(width, height);
                 doRippleFOV(light, rippleValue(type), startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, radiusTechnique, angle2, span2);
                 break;
             case SHADOW:
-                // hotfix for too large radius -> set to longest possible straight-line Manhattan distance instead
-                // does not cause problems with brightness falloff because shadowcasting is on/off
-
                 // this should be fixed now, sorta. the distance is checked in the method this calls, so it doesn't ever
-                // run through more than 512 iterations of the radius-related loop (which seemed to be the only problem,
-                // running through billions of iterations when Integer/MAX_VALUE is given as a radius).
-                //if (rad > width + height){
-                //    rad = width + height;
-                //}
+                // run through more than (width + height) iterations of the radius-related loop (which seemed to be the
+                // only problem, running through billions of iterations when Integer/MAX_VALUE is given as a radius).
                 int ctr = 0;
                 boolean started = false;
                 for (Direction d : ccw) {
@@ -286,11 +273,99 @@ public class FOV implements Serializable {
         return light;
     }
 
-	/**
+
+    /**
+     * Calculates the Field Of View for the provided map from the given x, y
+     * coordinates. Assigns to, and returns, a light map where the values
+     * represent a percentage of fully lit. Always uses shadowcasting FOV,
+     * which allows this method to be static since it doesn't need to keep any
+     * state around, and can reuse the state the user gives it via the
+     * {@code light} parameter.
+     * <br>
+     * The starting point for the calculation is considered to be at the center
+     * of the origin cell. Radius determinations based on Euclidean
+     * calculations. The light will be treated as having infinite possible
+     * radius.
+     *
+     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
+     * @param startx the horizontal component of the starting location
+     * @param starty the vertical component of the starting location
+     * @return the computed light grid
+     */
+    public static double[][] calculateFOV(double[][] resistanceMap, double[][] light, int startx, int starty) {
+        return reuseFOV(resistanceMap, light, startx, starty, Integer.MAX_VALUE, Radius.CIRCLE);
+    }
+
+    /**
+     * Calculates the Field Of View for the provided map from the given x, y
+     * coordinates. Assigns to, and returns, a light map where the values
+     * represent a percentage of fully lit. Always uses shadowcasting FOV,
+     * which allows this method to be static since it doesn't need to keep any
+     * state around, and can reuse the state the user gives it via the
+     * {@code light} parameter.
+     * <br>
+     * The starting point for the calculation is considered to be at the center
+     * of the origin cell. Radius determinations based on Euclidean
+     * calculations.
+     *
+     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
+     * @param startx the horizontal component of the starting location
+     * @param starty the vertical component of the starting location
+     * @param radius the distance the light will extend to
+     * @return the computed light grid
+     */
+    public static double[][] reuseFOV(double[][] resistanceMap, double[][] light, int startx, int starty, double radius) {
+        return reuseFOV(resistanceMap, light, startx, starty, radius, Radius.CIRCLE);
+    }
+
+
+    /**
+     * Calculates the Field Of View for the provided map from the given x, y
+     * coordinates. Assigns to, and returns, a light map where the values
+     * represent a percentage of fully lit. Always uses shadowcasting FOV,
+     * which allows this method to be static since it doesn't need to keep any
+     * state around, and can reuse the state the user gives it via the
+     * {@code light} parameter.
+     * <br>
+     * The starting point for the calculation is considered to be at the center
+     * of the origin cell. Radius determinations are determined by the provided
+     * RadiusStrategy.
+     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
+     * @param light the grid of cells to assign to; may have existing values, and 0.0 is used to mean "unlit"
+     * @param startX the horizontal component of the starting location
+     * @param startY the vertical component of the starting location
+     * @param radius the distance the light will extend to
+     * @param radiusTechnique provides a means to calculate the radius as desired
+     * @return the computed light grid, which is the same 2D array as the value assigned to {@code light}
+     */
+    public static double[][] reuseFOV(double[][] resistanceMap, double[][] light, int startX, int startY, double radius, Radius radiusTechnique) {
+
+        double rad = Math.max(1, radius);
+        double decay = 1.0 / rad;
+
+        light[startX][startY] = 1;//make the starting space full power
+
+
+        shadowCast(1, 1.0, 0.0, 0, 1, 1, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        shadowCast(1, 1.0, 0.0, 1, 0, 0, 1, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
+
+        shadowCast(1, 1.0, 0.0, 0, 1, -1, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        shadowCast(1, 1.0, 0.0, 1, 0, 0, -1, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
+
+        shadowCast(1, 1.0, 0.0, 0, -1, -1, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        shadowCast(1, 1.0, 0.0, -1, 0, 0, -1, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
+
+        shadowCast(1, 1.0, 0.0, 0, -1, 1, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        shadowCast(1, 1.0, 0.0, -1, 0, 0, 1, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        return light;
+    }
+
+
+    /**
 	 * @param width
-	 *            The width that {@link #lightMap} should have.
+	 *            The width that {@link #light} should have.
 	 * @param height
-	 *            The height that {@link #lightMap} should have.
+	 *            The height that {@link #light} should have.
 	 */
 	private void initializeLightMap(int width, int height) {
 		if (light == null)
@@ -304,16 +379,16 @@ public class FOV implements Serializable {
 				 * Size did not change, we simply need to erase the previous
 				 * result
 				 */
-				DungeonUtility.fill(light, 0d);
+				ArrayTools.fill(light, 0.0);
 			}
 		}
 	}
 
 	/**
 	 * @param width
-	 *            The width that {@link #nearLightMap} should have.
+	 *            The width that {@link #nearLight} should have.
 	 * @param height
-	 *            The height that {@link #nearLightMap} should have.
+	 *            The height that {@link #nearLight} should have.
 	 */
 	private void initializeNearLight(int width, int height) {
 		if (nearLight == null)
@@ -327,7 +402,7 @@ public class FOV implements Serializable {
 				 * Size did not change, we simply need to erase the previous
 				 * result
 				 */
-				DungeonUtility.fill(nearLight, false);
+				ArrayTools.fill(nearLight, false);
 			}
 		}
 	}
@@ -592,7 +667,7 @@ public class FOV implements Serializable {
     {
         if(maps == null || maps.length == 0)
             return new double[0][0];
-        double[][] map = GwtCompatibility.copy2D(maps[0]);
+        double[][] map = ArrayTools.copy(maps[0]);
         for(int i = 1; i < maps.length; i++)
         {
             for (int x = 0; x < map.length && x < maps[i].length; x++) {
@@ -623,7 +698,7 @@ public class FOV implements Serializable {
         Iterator<double[][]> it = maps.iterator();
         if(!it.hasNext())
             return new double[0][0];
-        double[][] map = GwtCompatibility.copy2D(it.next()), t;
+        double[][] map = ArrayTools.copy(it.next()), t;
         while (it.hasNext())
         {
             t = it.next();

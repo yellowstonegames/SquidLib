@@ -3,6 +3,7 @@ package squidpony;
 import squidpony.panel.IColoredString;
 import squidpony.squidmath.RNG;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,22 +38,22 @@ import java.util.Map;
  */
 public interface IColorCenter<T> {
 
-	/**
-	 * @param red
-	 *            The red component. For screen colors, in-between 0 (inclusive)
+    /**
+     * @param red
+     *            The red component. For screen colors, in-between 0 (inclusive)
      *            and 256 (exclusive).
-	 * @param green
-	 *            The green component. For screen colors, in-between 0 (inclusive)
+     * @param green
+     *            The green component. For screen colors, in-between 0 (inclusive)
      *            and 256 (exclusive).
-	 * @param blue
-	 *            The blue component. For screen colors, in-between 0 (inclusive)
+     * @param blue
+     *            The blue component. For screen colors, in-between 0 (inclusive)
      *            and 256 (exclusive).
-	 * @param opacity
-	 *            The alpha component. In-between 0 (inclusive) and 256
-	 *            (exclusive). Larger values mean more opacity; 0 is clear.
-	 * @return A possibly transparent color.
-	 */
-	T get(int red, int green, int blue, int opacity);
+     * @param opacity
+     *            The alpha component. In-between 0 (inclusive) and 256
+     *            (exclusive). Larger values mean more opacity; 0 is clear.
+     * @return A possibly transparent color.
+     */
+    T get(int red, int green, int blue, int opacity);
 
 	/**
 	 * @param red
@@ -241,7 +242,26 @@ public interface IColorCenter<T> {
      */
     public T saturate(T color, float degree);
 
-    /**
+	/**
+	 * Finds a gradient with 16 steps going from fromColor to toColor,
+	 * both included in the gradient.
+	 * @param fromColor the color to start with, included in the gradient
+	 * @param toColor the color to end on, included in the gradient
+	 * @return an ArrayList composed of the blending steps from fromColor to toColor, with length equal to steps
+	 */
+	public ArrayList<T> gradient(T fromColor, T toColor);
+
+	/**
+	 * Finds a gradient with the specified number of steps going from fromColor to toColor,
+	 * both included in the gradient.
+	 * @param fromColor the color to start with, included in the gradient
+	 * @param toColor the color to end on, included in the gradient
+	 * @param steps the number of elements to use in the gradient
+	 * @return an ArrayList composed of the blending steps from fromColor to toColor, with length equal to steps
+	 */
+	public ArrayList<T> gradient(T fromColor, T toColor, int steps);
+
+	/**
 	 * A skeletal implementation of {@link IColorCenter}.
 	 * 
 	 * @author smelC
@@ -272,6 +292,18 @@ public interface IColorCenter<T> {
             cache.clear();
         }
 
+		/**
+		 * The actual cache is not public, but there are cases where you may want to know how many different colors are
+		 * actually used in a frame or a section of the game. If the cache was emptied (which might be from calling
+		 * {@link #clearCache()}), some colors were requested, then this is called, the returned int should be the
+		 * count of distinct colors this IColorCenter had created and cached; duplicates won't be counted twice.
+		 * @return
+		 */
+		public int cacheSize()
+		{
+			return cache.size();
+		}
+
         /**
          * You may want to copy colors between IColorCenter instances that have different create() methods -- and as
          * such, will have different values for the same keys in the cache. This allows you to copy the cache from other
@@ -300,18 +332,20 @@ public interface IColorCenter<T> {
 			return this;
 		}
 
-		@Override
-		public T get(int red, int green, int blue, int opacity) {
-			final Long value = getUniqueIdentifier((short)red, (short)green, (short)blue, (short)opacity);
-			T t = cache.get(value);
-			if (t == null) {
+		protected transient Long tempValue;
+
+        @Override
+        public T get(int red, int green, int blue, int opacity) {
+            tempValue = getUniqueIdentifier(red, green, blue, opacity);
+            T t = cache.get(tempValue);
+            if (t == null) {
 				/* Miss */
-				t = create(red, green, blue, opacity);
+                t = create(red, green, blue, opacity);
 				/* Put in cache */
-				cache.put(value, t);
-			}
-			return t;
-		}
+                cache.put(tempValue, t);
+            }
+            return t;
+        }
 
 		@Override
 		public T get(int red, int green, int blue) {
@@ -351,6 +385,7 @@ public interface IColorCenter<T> {
                 }
             }
         }
+
 
         @Override
         public T getHSV(float hue, float saturation, float value) {
@@ -481,10 +516,11 @@ public interface IColorCenter<T> {
         }
 
         @Override
-		public T filter(T c)
+        public T filter(T c)
         {
         	return c == null ? c : get(getRed(c), getGreen(c), getBlue(c), getAlpha(c));
         }
+
 
 		@Override
 		public IColoredString<T> filter(IColoredString<T> ics) {
@@ -623,20 +659,37 @@ public interface IColorCenter<T> {
 			return lerp(color, saturated(color), degree);
 		}
 
+		@Override
+		public ArrayList<T> gradient(T fromColor, T toColor) {
+			return gradient(fromColor, toColor, 16);
+		}
 
-		/**
-		 * Create a concrete instance of the color type given as a type parameter. That's the
-		 * place to use the {@link #filter}.
-		 * 
-		 * @param red the red component of the desired color
-		 * @param green the green component of the desired color
-		 * @param blue the blue component of the desired color
-		 * @param opacity the alpha component or opacity of the desired color
-		 * @return a fresh instance of the concrete color type
-		 */
-		protected abstract T create(int red, int green, int blue, int opacity);
+		@Override
+		public ArrayList<T> gradient(T fromColor, T toColor, int steps) {
+			ArrayList<T> colors = new ArrayList<>((steps > 1) ? steps : 1);
+			colors.add(filter(fromColor));
+			if(steps < 2)
+				return colors;
+			for (float i = 1; i < steps; i++) {
+				colors.add(lerp(fromColor, toColor, i / (steps - 1f)));
+			}
+			return colors;
 
-		private long getUniqueIdentifier(short r, short g, short b, short a) {
+		}
+
+        /**
+         * Create a concrete instance of the color type given as a type parameter. That's the
+         * place to use the {@link #filter}.
+         *
+         * @param red the red component of the desired color
+         * @param green the green component of the desired color
+         * @param blue the blue component of the desired color
+         * @param opacity the alpha component or opacity of the desired color
+         * @return a fresh instance of the concrete color type
+         */
+        protected abstract T create(int red, int green, int blue, int opacity);
+
+		private long getUniqueIdentifier(int r, int g, int b, int a) {
 			return ((a & 0xffL) << 48) | ((r & 0xffffL) << 32) | ((g & 0xffffL) << 16) | (b & 0xffffL);
 		}
 

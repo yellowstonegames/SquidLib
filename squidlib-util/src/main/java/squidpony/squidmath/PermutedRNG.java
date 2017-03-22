@@ -26,6 +26,8 @@ package squidpony.squidmath;
 
 import squidpony.StringKit;
 
+import java.io.Serializable;
+
 /**
  * This is a RandomnessSource in the PCG-Random family. It performs pseudo-
  * random modifications to the output based on the techniques from the
@@ -35,19 +37,16 @@ import squidpony.StringKit;
  *
  * The most statistically powerful generator, but all those steps
  * make it slower than some of the others.
- *
- * Because it's usually used in contexts where the state type and the
- * result type are the same, it is a permutation and is thus invert-able.
- * We thus provide a (protected) function to invert it.
  * <br>
  * Even though benchmarks on similar programs in C would lead you to
  * believe this should be somewhat faster than LightRNG, benchmarking
- * with JMH seems to show LightRNG being between 2 and 3 times faster
- * than PermutedRNG, and both drastically faster than java.util.Random .
+ * with JMH seems to show LightRNG being roughly 16% faster than
+ * PermutedRNG, and both drastically faster than java.util.Random .
  * @author Melissa E. O'Neill (Go HMC!)
  * @author Tommy Ettinger
+ * @see PintRNG PintRNG is similar to this algorithm but uses only 32-bit math, where possible; meant for GWT.
  */
-public class PermutedRNG implements RandomnessSource, StatefulRandomness
+public class PermutedRNG implements RandomnessSource, StatefulRandomness, Serializable
 {
 	/** 2 raised to the 53, - 1. */
     private static final long DOUBLE_MASK = ( 1L << 53 ) - 1;
@@ -74,37 +73,8 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
     }
 
     @Override
-    public int next( int bits ) {
+    public int next( final int bits ) {
         return (int)( nextLong() & ( 1L << bits ) - 1 );
-    }
-
-
-    /**
-     * From the PCG-Random source:
-     * XorShifts are invert-able, but they are something of a pain to invert.
-     * This function backs them out.
-     * @param n a XorShift-ed value
-     * @param bits the number of bits we still need to invert, not constant
-     * @param shift the crazy one; the wild-card; it's some weird value every time it's used
-     * @return a long that inverts the shift done to n
-     */
-    private static long unxorshift(long n, int bits, int shift)
-    {
-        if (2*shift >= bits) {
-            return n ^ (n >>> shift);
-        }
-        long lowmask1 = (1L << (bits - shift*2)) - 1;
-        long highmask1 = ~lowmask1;
-        long top1 = n;
-        long bottom1 = n & lowmask1;
-        top1 ^= top1 >>> shift;
-        top1 &= highmask1;
-        n = top1 | bottom1;
-        long lowmask2 = (1L << (bits - shift)) - 1;
-        long bottom2 = n & lowmask2;
-        bottom2 = unxorshift(bottom2, bits - shift, shift);
-        bottom2 &= lowmask1;
-        return top1 | bottom2;
     }
 
     /**
@@ -126,16 +96,15 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
         // increment  = 1442695040888963407L;
         // multiplier = 6364136223846793005L;
 
-        long p = state;
+        long p = (state += 0x9E3779B97F4A7C15L);
         p ^= p >>> (5 + (p >>> 59));
-        p *= -5840758589994634535L;
-        state = state * 6364136223846793005L + 1442695040888963407L;
-        return p ^ (p >>> 43);
+        //state = state * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL;
+        return ((p *= 0xAEF17502108EF2D9L) >>> 43) ^ p;
     }
 
     /**
      * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
-     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
+     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to
      * copy the state so it isn't shared, usually, and produce a new value with the same exact state.
      *
      * @return a copy of this RandomnessSource
@@ -147,35 +116,15 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
         return next;
     }
 
-    public static long permute(long p)
-    {
-        p ^= p >>> (5 + (p >>> 59));
-        p *= -5840758589994634535L;
-        return p ^ (p >>> 43);
-
-    }
-
-    protected static long invert(long internal)
-    {
-        internal = unxorshift(internal, 64, 43);
-        internal *= -3437190434928431767L;
-        return unxorshift(internal, 64, 5 + (int)(internal >>> 59));
-    }
-
     /**
      * Exclusive on the upper bound n.  The lower bound is 0.
      * Will call nextLong() with no arguments at least 1 time, possibly more.
-     * @param n the upper bound; should be positive
+     * @param bound the upper bound; should be positive
      * @return a random int less than n and at least equal to 0
      */
-    public int nextInt( final int n ) {
-        if ( n <= 0 ) return 0;
-        int threshold = (0x7fffffff - n + 1) % n;
-        for (;;) {
-            int bits = (int)(nextLong() & 0x7fffffff);
-            if (bits >= threshold)
-                return bits % n;
-        }
+    public int nextInt( final int bound ) {
+        if (bound <= 0) return 0;
+        return (int)((bound * (nextLong() & 0x7FFFFFFFL)) >> 31);
     }
 
     /**
@@ -261,7 +210,7 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
      * @return a random true or false value.
      */
     public boolean nextBoolean() {
-        return ( nextLong() & 1L ) != 0L;
+        return nextLong() < 0L;
     }
 
     /**
@@ -303,12 +252,13 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
     }
 
     /**
-     * Advances or rolls back the PermutedRNG's state without actually generating numbers. Skip forward
-     * or backward a number of steps specified by advance, where a step is equal to one call to nextLong().
+     * Advances or rolls back the PermutedRNG's state without actually generating each number. Skip forward
+     * or backward a number of steps specified by advance, where a step is equal to one call to nextLong(),
+     * and returns the random number produced at that step (you can get the state with {@link #getState()}).
      * @param advance Number of future generations to skip past. Can be negative to backtrack.
-     * @return the state after skipping.
+     * @return the number that would be generated after generating advance random numbers.
      */
-    public long skip(long advance)
+    public long skip(final long advance)
     {
         // The method used here is based on Brown, "Random Number Generation
         // with Arbitrary Stride,", Transactions of the American Nuclear
@@ -317,20 +267,24 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
         //
         // Even though advance is a signed long, it is treated as unsigned, effectively, for the purposes
         // of how many iterations it goes through (at most 63 for forwards, 64 for "backwards").
-        if(advance == 0)
-            return state;
-        long acc_mult = 1, acc_plus = 0, cur_mult = 6364136223846793005L, cur_plus = 1442695040888963407L;
-
-        do {
-            if ((advance & 1L) != 0L) {
-                acc_mult *= cur_mult;
-                acc_plus = acc_plus*cur_mult + cur_plus;
-            }
-            cur_plus = (cur_mult+1L)*cur_plus;
-            cur_mult *= cur_mult;
-            advance >>>= 1;
-        }while (advance > 0L);
-        return acc_mult * state + acc_plus;
+//        if(advance == 0)
+//            return state;
+//        long acc_mult = 1, acc_plus = 0, cur_mult = 6364136223846793005L, cur_plus = 1442695040888963407L;
+//
+//        do {
+//            if ((advance & 1L) != 0L) {
+//                acc_mult *= cur_mult;
+//                acc_plus = acc_plus*cur_mult + cur_plus;
+//            }
+//            cur_plus *= (cur_mult+1L);
+//            cur_mult *= cur_mult;
+//            advance >>>= 1;
+//        }while (advance > 0L);
+//        return acc_mult * state + acc_plus;
+        long p = (state += 0x9E3779B97F4A7C15L * advance);
+        p ^= p >>> (5 + (p >>> 59));
+        //state = state * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL;
+        return ((p *= 0xAEF17502108EF2D9L) >>> 43) ^ p;
     }
 
     @Override
@@ -338,4 +292,15 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
         return "PermutedRNG with state 0x" + StringKit.hex(state) + 'L';
     }
 
+    public static long determine(long state)
+    {
+        state ^= state >>> (5 + (state >>> 59));
+        return ((state *= 0xAEF17502108EF2D9L) >>> 43) ^ state;
+    }
+
+    public static int determineBounded(long state, final int bound)
+    {
+        state ^= state >>> (5 + (state >>> 59));
+        return (int)((bound * ((((state *= 0xAEF17502108EF2D9L) >>> 43) ^ state) & 0x7FFFFFFFL)) >>> 31);
+    }
 }

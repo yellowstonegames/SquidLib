@@ -101,7 +101,7 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/CustomDijkstraMap.html#DARK">DARK</a></span> - Static variable in class squidpony.squidai.<a href="../squidpony/squidai/CustomDijkstraMap.html" title="class in squidpony.squidai">CustomDijkstraMap</a></dt>
 <dd>
 <div class="block">This is used to mark cells that the scan couldn't reach, and these dark cells are marked with a high number
- equal to 999800.0 .</div>
+ equal to 999800 .</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#DARK">DARK</a></span> - Static variable in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
 <dd>
@@ -162,12 +162,20 @@
 <dd>
 <div class="block">Seeds this DeckRNG using the RandomnessSource it is given.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#decode-int-">decode(int)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
+<dd>
+<div class="block">If you for some reason have one of the internally-used ints produced by <a href="../squidpony/squidai/DijkstraMap.html#encode-squidpony.squidmath.Coord-"><code>DijkstraMap.encode(Coord)</code></a>, this will convert
+ it back to a Coord if you need it as such.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Coord.html#decode-int-">decode(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></dt>
 <dd>
 <div class="block">This can take an int produced by <code>someCoord.encode()</code> and get the original Coord back out of it.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#decode--">decode()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Returns this GreasedRegion's data as a 2D boolean array, [width][height] in size, with on treated as true and off
+ treated as false.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordPacker.html#decodeASCII-java.lang.String-">decodeASCII(String)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordPacker.html" title="class in squidpony.squidmath">CoordPacker</a></dt>
 <dd>
 <div class="block">Given a String specifically produced by CoordPacker.encodeASCII(), this will produce a packed data array.</div>
@@ -218,6 +226,16 @@
  access this) and an int count of how many indices to find a permutation of, returns an array with the permutation
  of the indices described by the long as a special (factoradic) index into the possible permutations.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#decodeX-int-">decodeX(int)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
+<dd>
+<div class="block">If you for some reason have one of the internally-used ints produced by <a href="../squidpony/squidai/DijkstraMap.html#encode-squidpony.squidmath.Coord-"><code>DijkstraMap.encode(Coord)</code></a>, this will decode
+ the x component of the point encoded in that int.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#decodeY-int-">decodeY(int)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
+<dd>
+<div class="block">If you for some reason have one of the internally-used ints produced by <a href="../squidpony/squidai/DijkstraMap.html#encode-squidpony.squidmath.Coord-"><code>DijkstraMap.encode(Coord)</code></a>, this will decode
+ the y component of the point encoded in that int.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/MetsaMapFactory.html#DEEP_SEA_LEVEL">DEEP_SEA_LEVEL</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/MetsaMapFactory.html" title="class in squidpony.squidgrid.mapping">MetsaMapFactory</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#deepLakeGlyph">deepLakeGlyph</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/SectionDungeonGenerator.html" title="class in squidpony.squidgrid.mapping">SectionDungeonGenerator</a></dt>
@@ -240,6 +258,10 @@
 <dd>
 <div class="block">The initial default size of a hash table.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#DEFAULT_INITIAL_SIZE">DEFAULT_INITIAL_SIZE</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
+<dd>
+<div class="block">The initial default size of a hash table.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#DEFAULT_LOAD_FACTOR">DEFAULT_LOAD_FACTOR</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
 <div class="block">The default load factor of a hash table.</div>
@@ -256,6 +278,16 @@
 <dd>
 <div class="block">The default load factor of a hash table.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TableSet.html#DEFAULT_LOAD_FACTOR">DEFAULT_LOAD_FACTOR</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a></dt>
+<dd>
+<div class="block">The default load factor of a hash table.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/constraints/FreeformConstraints.html#DEFAULT_MAX_KEYS">DEFAULT_MAX_KEYS</a></span> - Static variable in class squidpony.squidgrid.mapping.locks.constraints.<a href="../squidpony/squidgrid/mapping/locks/constraints/FreeformConstraints.html" title="class in squidpony.squidgrid.mapping.locks.constraints">FreeformConstraints</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/constraints/SpaceConstraints.html#DEFAULT_MAX_KEYS">DEFAULT_MAX_KEYS</a></span> - Static variable in class squidpony.squidgrid.mapping.locks.constraints.<a href="../squidpony/squidgrid/mapping/locks/constraints/SpaceConstraints.html" title="class in squidpony.squidgrid.mapping.locks.constraints">SpaceConstraints</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/constraints/SpaceConstraints.html#DEFAULT_MAX_SWITCHES">DEFAULT_MAX_SWITCHES</a></span> - Static variable in class squidpony.squidgrid.mapping.locks.constraints.<a href="../squidpony/squidgrid/mapping/locks/constraints/SpaceConstraints.html" title="class in squidpony.squidgrid.mapping.locks.constraints">SpaceConstraints</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/Technique.html#DEFAULT_POINT">DEFAULT_POINT</a></span> - Static variable in class squidpony.squidai.<a href="../squidpony/squidai/Technique.html" title="class in squidpony.squidai">Technique</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="../squidpony/tileset/DefaultDungeon.html" title="class in squidpony.tileset"><span class="typeNameLink">DefaultDungeon</span></a> - Class in <a href="../squidpony/tileset/package-summary.html">squidpony.tileset</a></dt>
@@ -263,8 +295,6 @@
 <dt><span class="memberNameLink"><a href="../squidpony/tileset/DefaultDungeon.html#DefaultDungeon--">DefaultDungeon()</a></span> - Constructor for class squidpony.tileset.<a href="../squidpony/tileset/DefaultDungeon.html" title="class in squidpony.tileset">DefaultDungeon</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.html#defaultHasher">defaultHasher</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.html" title="class in squidpony.squidmath">CrossHash</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.DefaultHasher.html#DefaultHasher--">DefaultHasher()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.DefaultHasher.html" title="class in squidpony.squidmath">CrossHash.DefaultHasher</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#defaultReturnValue-double-">defaultReturnValue(double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
 <dd>&nbsp;</dd>
@@ -290,6 +320,8 @@
 <dd>
 <div class="block">Gets the angle in degrees to go between two Coords; 0 is up.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Chariot.html#delta">delta</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Storm.html#delta">delta</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Direction.html#deltaX">deltaX</a></span> - Variable in enum squidpony.squidgrid.<a href="../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a></dt>
@@ -299,6 +331,11 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Direction.html#deltaY">deltaY</a></span> - Variable in enum squidpony.squidgrid.<a href="../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a></dt>
 <dd>
 <div class="block">The y coordinate difference for this direction.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.html#DEMONIC">DEMONIC</a></span> - Static variable in class squidpony.<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></dt>
+<dd>
+<div class="block">Fantasy language that might be suitable for a language spoken by demons, aggressive warriors, or people who seek
+ to emulate or worship similar groups.</div>
 </dd>
 <dt><a href="../squidpony/squidgrid/mapping/DenseRoomMapGenerator.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">DenseRoomMapGenerator</span></a> - Class in <a href="../squidpony/squidgrid/mapping/package-summary.html">squidpony.squidgrid.mapping</a></dt>
 <dd>
@@ -338,6 +375,16 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#deserializeFromString-java.lang.String-">deserializeFromString(String)</a></span> - Static method in class squidpony.<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/ObText.html#deserializeFromString-java.lang.String-">deserializeFromString(String)</a></span> - Static method in class squidpony.<a href="../squidpony/ObText.html" title="class in squidpony">ObText</a></dt>
+<dd>
+<div class="block">Deserializes an ObText that was serialized by <a href="../squidpony/ObText.html#serializeToString--"><code>ObText.serializeToString()</code></a> or <a href="../squidpony/ObText.html#toString--"><code>ObText.toString()</code></a>, and will
+ ignore the prefix and suffix that toString appends for readability (these are "ObText object: [[[[ " and " ]]]]",
+ for reference).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#deserializeFromString-java.lang.String-">deserializeFromString(String)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntVLA.html#deserializeFromString-java.lang.String-">deserializeFromString(String)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOVCache.html#destroy--">destroy()</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOVCache.html" title="class in squidpony.squidgrid">FOVCache</a></dt>
 <dd>
 <div class="block">Shuts down any threads that may prevent the game from closing properly.</div>
@@ -348,30 +395,102 @@
  more than just booleans; it can produce similar styles of texture (its original use in SynTex), of map, of item
  placement, and so on by specifying a different technique for differentiating two int values.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/DetailedMimic.html#DetailedMimic-squidpony.squidgrid.mapping.AestheticDifference-">DetailedMimic(AestheticDifference)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/DetailedMimic.html" title="class in squidpony.squidgrid">DetailedMimic</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/DetailedMimic.html#DetailedMimic-squidpony.squidgrid.mapping.AestheticDifference-squidpony.squidmath.RNG-">DetailedMimic(AestheticDifference, RNG)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/DetailedMimic.html" title="class in squidpony.squidgrid">DetailedMimic</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#deteriorate-java.util.List-">deteriorate(List&lt;Coord&gt;)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/DetailedMimic.html#DetailedMimic--">DetailedMimic()</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/DetailedMimic.html" title="class in squidpony.squidgrid">DetailedMimic</a></dt>
 <dd>
-<div class="block">Used in conjunction with methods that depend on finding cover, like findCoveredAttackPath(), this method causes
- specified risky points to be considered less safe, and will encourage a pathfinder to keep moving toward a goal
- instead of just staying in cover forever (or until an enemy moves around the cover and ambushes the pathfinder).</div>
+<div class="block">Constructor that uses an unseeded RNG and, without any instruction otherwise, assumes the ints this is asked to
+ compare are colors in RGBA8888 format.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#deteriorate-squidpony.squidmath.Coord...-">deteriorate(Coord...)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/DetailedMimic.html#DetailedMimic-squidpony.squidgrid.AestheticDifference-">DetailedMimic(AestheticDifference)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/DetailedMimic.html" title="class in squidpony.squidgrid">DetailedMimic</a></dt>
 <dd>
-<div class="block">Used in conjunction with methods that depend on finding cover, like findCoveredAttackPath(), this method causes
- specified risky points to be considered less safe, and will encourage a pathfinder to keep moving toward a goal
- instead of just staying in cover forever (or until an enemy moves around the cover and ambushes the pathfinder).</div>
+<div class="block">Constructor that uses an unseeded RNG (effectively a random seed) and the given AestheticDifference.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThunderRNG.html#determine-int-">determine(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThunderRNG.html" title="class in squidpony.squidmath">ThunderRNG</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/DetailedMimic.html#DetailedMimic-squidpony.squidgrid.AestheticDifference-squidpony.squidmath.RNG-">DetailedMimic(AestheticDifference, RNG)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/DetailedMimic.html" title="class in squidpony.squidgrid">DetailedMimic</a></dt>
+<dd>
+<div class="block">Constructor that uses the given RNG and the given AestheticDifference.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#deteriorate-squidpony.squidmath.RNG-int-">deteriorate(RNG, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
+<dd>
+<div class="block">Randomly removes points from a GreasedRegion, with larger values for preservation keeping more of the existing
+ shape intact.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#deteriorate-squidpony.squidmath.RNG-double-">deteriorate(RNG, double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
+<dd>
+<div class="block">Randomly removes points from a GreasedRegion, with preservation as a fraction between 1.0 (keep all) and 0.0
+ (remove all).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/LFSR.html#determine-long-">determine(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LFSR.html" title="class in squidpony.squidmath">LFSR</a></dt>
+<dd>
+<div class="block">Gets the next number that an LFSR would produce using <a href="../squidpony/squidmath/LFSR.html#nextLong--"><code>LFSR.nextLong()</code></a> if its state was <code>state</code>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/LightRNG.html#determine-long-">determine(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath">LightRNG</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThunderRNG.html#determine-int-int-">determine(int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThunderRNG.html" title="class in squidpony.squidmath">ThunderRNG</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/LightRNG.html#determine-int-int-">determine(int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath">LightRNG</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThunderRNG.html#determine-int-int-int-">determine(int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThunderRNG.html" title="class in squidpony.squidmath">ThunderRNG</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/PermutedRNG.html#determine-long-">determine(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/PermutedRNG.html" title="class in squidpony.squidmath">PermutedRNG</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThunderRNG.html#determine-int-int-int-int-">determine(int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThunderRNG.html" title="class in squidpony.squidmath">ThunderRNG</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/PintRNG.html#determine-int-">determine(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath">PintRNG</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/PintRNG.html#determine-int-int-">determine(int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath">PintRNG</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThunderRNG.html#determine-long-">determine(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThunderRNG.html" title="class in squidpony.squidmath">ThunderRNG</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThunderRNG.html#determine-long-long-">determine(long, long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThunderRNG.html" title="class in squidpony.squidmath">ThunderRNG</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThunderRNG.html#determine-long-long-long-">determine(long, long, long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThunderRNG.html" title="class in squidpony.squidmath">ThunderRNG</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThunderRNG.html#determine-long-long-long-long-">determine(long, long, long, long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThunderRNG.html" title="class in squidpony.squidmath">ThunderRNG</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/VanDerCorputQRNG.html#determine-int-int-">determine(int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/VanDerCorputQRNG.html" title="class in squidpony.squidmath">VanDerCorputQRNG</a></dt>
+<dd>
+<div class="block">Convenience method to get a double from the van der Corput sequence with the given <code>base</code> at the requested
+ <code>index</code> without needing to construct a VanDerCorputQRNG.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/VanDerCorputQRNG.html#determine2-int-">determine2(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/VanDerCorputQRNG.html" title="class in squidpony.squidmath">VanDerCorputQRNG</a></dt>
+<dd>
+<div class="block">Convenience method to get a double from the van der Corput sequence with the base 2 at the requested
+ <code>index</code> without needing to construct a VanDerCorputQRNG.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/LFSR.html#determineBounded-long-int-">determineBounded(long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LFSR.html" title="class in squidpony.squidmath">LFSR</a></dt>
+<dd>
+<div class="block">Gets the next number that an LFSR would produce using <a href="../squidpony/squidmath/LFSR.html#nextInt-int-"><code>LFSR.nextInt(int)</code></a> if its state was <code>state</code> and
+ <code>bound</code> was passed to nextInt().</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/LFSR.html#determineBounded-int-int-">determineBounded(int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LFSR.html" title="class in squidpony.squidmath">LFSR</a></dt>
+<dd>
+<div class="block">Gets the next int using <a href="../squidpony/squidmath/LFSR.html#determineInt-int-"><code>LFSR.determineInt(int)</code></a> and bounds it to fit betwee.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/LightRNG.html#determineBounded-long-int-">determineBounded(long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath">LightRNG</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/PermutedRNG.html#determineBounded-long-int-">determineBounded(long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/PermutedRNG.html" title="class in squidpony.squidmath">PermutedRNG</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/PintRNG.html#determineBounded-int-int-">determineBounded(int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath">PintRNG</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThunderRNG.html#determineBounded-long-int-">determineBounded(long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThunderRNG.html" title="class in squidpony.squidmath">ThunderRNG</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThunderRNG.html#determineBounded-long-long-int-">determineBounded(long, long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThunderRNG.html" title="class in squidpony.squidmath">ThunderRNG</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThunderRNG.html#determineBounded-long-long-long-int-">determineBounded(long, long, long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThunderRNG.html" title="class in squidpony.squidmath">ThunderRNG</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThunderRNG.html#determineBounded-long-long-long-long-int-">determineBounded(long, long, long, long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThunderRNG.html" title="class in squidpony.squidmath">ThunderRNG</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/LFSR.html#determineByte-byte-">determineByte(byte)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LFSR.html" title="class in squidpony.squidmath">LFSR</a></dt>
+<dd>
+<div class="block">Gets the next number from 1 to 255 that a different kind of LFSR would produce if its state was <code>state</code>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/LFSR.html#determineInt-int-">determineInt(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LFSR.html" title="class in squidpony.squidmath">LFSR</a></dt>
+<dd>
+<div class="block">Gets the next int that a different kind of LFSR would produce if its state was <code>state</code>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/LFSR.html#determineIntSymmetrical-int-">determineIntSymmetrical(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LFSR.html" title="class in squidpony.squidmath">LFSR</a></dt>
+<dd>
+<div class="block">Gets the next int that a different kind of LFSR would produce if its state was <code>state</code>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/VanDerCorputQRNG.html#determineMixed-int-">determineMixed(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/VanDerCorputQRNG.html" title="class in squidpony.squidmath">VanDerCorputQRNG</a></dt>
+<dd>
+<div class="block">Chooses one sequence from the van der Corput sequences with bases 2, 3, and 5, where 5 is used 1/8 of the time,
+ 3 is used 3/8 of the time, and 2 is used 1/2 of the time, and returns a double from the chosen sequence at the
+ specified <code>index</code>.</div>
+</dd>
 <dt><a href="../squidpony/squidmath/DharmaRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">DharmaRNG</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
 <dd>
 <div class="block">An alteration to a RandomnessSource that attempts to produce values that are perceived as fair to an imperfect user.</div>
@@ -432,13 +551,13 @@
 <dd>
 <div class="block">Creates a new dice roller that will use its own RNG, seeded with the given seed.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/DetailedMimic.html#difference">difference</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/DetailedMimic.html" title="class in squidpony.squidgrid">DetailedMimic</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/AestheticDifference.html#difference-int-int-">difference(int, int)</a></span> - Method in interface squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/AestheticDifference.html" title="interface in squidpony.squidgrid.mapping">AestheticDifference</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/AestheticDifference.html#difference-int-int-">difference(int, int)</a></span> - Method in interface squidpony.squidgrid.<a href="../squidpony/squidgrid/AestheticDifference.html" title="interface in squidpony.squidgrid">AestheticDifference</a></dt>
 <dd>
 <div class="block">Finds the difference between two int values, which implementations of this interface may treat as colors, as
  kinds of map feature, as item placement factors, or various other ways.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/DetailedMimic.html#difference">difference</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/DetailedMimic.html" title="class in squidpony.squidgrid">DetailedMimic</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordPacker.html#differencePacked-short:A-short:A-">differencePacked(short[], short[])</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordPacker.html" title="class in squidpony.squidmath">CoordPacker</a></dt>
 <dd>
 <div class="block">Given two packed short arrays, left and right, this produces a packed short array that encodes "on" for any cell
@@ -466,33 +585,37 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#DijkstraMap-char:A:A-">DijkstraMap(char[][])</a></span> - Constructor for class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
 <dd>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#DijkstraMap-char:A:A-squidpony.squidmath.RNG-">DijkstraMap(char[][], RNG)</a></span> - Constructor for class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
 <dd>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#DijkstraMap-char:A:A-char-">DijkstraMap(char[][], char)</a></span> - Constructor for class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
 <dd>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where one char means a wall and anything else is a walkable tile.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#DijkstraMap-char:A:A-squidpony.squidai.DijkstraMap.Measurement-">DijkstraMap(char[][], DijkstraMap.Measurement)</a></span> - Constructor for class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
 <dd>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#DijkstraMap-char:A:A-squidpony.squidai.DijkstraMap.Measurement-squidpony.squidmath.RNG-">DijkstraMap(char[][], DijkstraMap.Measurement, RNG)</a></span> - Constructor for class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
 <dd>
-<div class="block">Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </dd>
 <dt><a href="../squidpony/squidai/DijkstraMap.Measurement.html" title="enum in squidpony.squidai"><span class="typeNameLink">DijkstraMap.Measurement</span></a> - Enum in <a href="../squidpony/squidai/package-summary.html">squidpony.squidai</a></dt>
 <dd>
 <div class="block">The type of heuristic to use.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#dijkstraScan-char:A:A-squidpony.squidmath.Coord...-">dijkstraScan(char[][], Coord...)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#dijkstraScan8way-char:A:A-squidpony.squidmath.Coord...-">dijkstraScan8way(char[][], Coord...)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/AreaUtils.html#dijkstraToHashMap-double:A:A-">dijkstraToHashMap(double[][])</a></span> - Static method in class squidpony.squidai.<a href="../squidpony/squidai/AreaUtils.html" title="class in squidpony.squidai">AreaUtils</a></dt>
 <dd>
 <div class="block">This takes a DijkstraMap that has already completed a scan() and returns a HashMap of Coord keys to Double
@@ -512,6 +635,26 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Adjacency.html#directions">directions</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a></dt>
 <dd>
 <div class="block">The array of all possible directions this allows, regardless of cost.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/AStarSearch.html#dirs">dirs</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/AStarSearch.html" title="class in squidpony.squidmath">AStarSearch</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#disperse--">disperse()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
+<dd>
+<div class="block">Removes "on" cells that are orthogonally adjacent to other "on" cells, keeping at least one cell in a group "on."
+ Uses a "checkerboard" pattern to determine which cells to turn  off, with all cells that would be black on a
+ checkerboard turned off and all others kept as-is.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#disperse8way--">disperse8way()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
+<dd>
+<div class="block">Removes "on" cells that are 8-way adjacent to other "on" cells, keeping at least one cell in a group "on."
+ Uses a "grid-like" pattern to determine which cells to turn off, with all cells with even x and even y kept as-is
+ but all other cells (with either or both odd x or odd y) turned off.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#disperseRandom-squidpony.squidmath.RNG-">disperseRandom(RNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
+<dd>
+<div class="block">Removes "on" cells that are nearby other "on" cells, with a random factor to which bits are actually turned off
+ that still ensures exactly half of the bits are kept as-is (the one exception is when height is an odd number,
+ which makes the bottom row slightly random).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/ModularMapGenerator.html#displacement">displacement</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/ModularMapGenerator.html" title="class in squidpony.squidgrid.mapping">ModularMapGenerator</a></dt>
 <dd>&nbsp;</dd>
@@ -539,6 +682,22 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordDouble.html#distanceSq-squidpony.squidmath.CoordDouble-">distanceSq(CoordDouble)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/RandomBias.html#distribution">distribution</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/RandomBias.html" title="class in squidpony.squidmath">RandomBias</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.Slick2D.html#disturbance">disturbance</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.Slick2D.html" title="class in squidpony.squidmath">Noise.Slick2D</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.Slick3D.html#disturbance">disturbance</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.Slick3D.html" title="class in squidpony.squidmath">Noise.Slick3D</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.Slick4D.html#disturbance">disturbance</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.Slick4D.html" title="class in squidpony.squidmath">Noise.Slick4D</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.Slick6D.html#disturbance">disturbance</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.Slick6D.html" title="class in squidpony.squidmath">Noise.Slick6D</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.Turbulent2D.html#disturbance">disturbance</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.Turbulent2D.html" title="class in squidpony.squidmath">Noise.Turbulent2D</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.Turbulent3D.html#disturbance">disturbance</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.Turbulent3D.html" title="class in squidpony.squidmath">Noise.Turbulent3D</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.Turbulent4D.html#disturbance">disturbance</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.Turbulent4D.html" title="class in squidpony.squidmath">Noise.Turbulent4D</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.Turbulent6D.html#disturbance">disturbance</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.Turbulent6D.html" title="class in squidpony.squidmath">Noise.Turbulent6D</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Coord.html#divide-squidpony.squidmath.Coord-">divide(Coord)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></dt>
 <dd>
@@ -586,12 +745,25 @@
 <dd>
 <div class="block">When a RoomFinder is constructed, it stores all points of rooms that are adjacent to another region here.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/PerlinNoise.html#dot-double:A-double-double-">dot(double[], double, double)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/PerlinNoise.html" title="class in squidpony.squidmath">PerlinNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/PerlinNoise.html#dot-int:A-double-double-double-">dot(int[], double, double, double)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/PerlinNoise.html" title="class in squidpony.squidmath">PerlinNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/PerlinNoise.html#dot-int:A-double-double-double-double-">dot(int[], double, double, double, double)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/PerlinNoise.html" title="class in squidpony.squidmath">PerlinNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/WhirlingNoise.html#dotf-float:A-float-float-">dotf(float[], float, float)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/WhirlingNoise.html" title="class in squidpony.squidmath">WhirlingNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/WhirlingNoise.html#dotf-int:A-float-float-float-">dotf(int[], float, float, float)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/WhirlingNoise.html" title="class in squidpony.squidmath">WhirlingNoise</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#DOUBLE_CONSONANTS">DOUBLE_CONSONANTS</a></span> - Static variable in class squidpony.<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></dt>
 <dd>
 <div class="block">For a language that has a 50% chance to repeat a single consonant.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/RNG.html#DOUBLE_UNIT">DOUBLE_UNIT</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">A very small multiplier used to reduce random numbers to from the <code>[0.0,9007199254740991.0)</code> range to the
+ <code>[0.0,1.0)</code> range.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#DOUBLE_VOWELS">DOUBLE_VOWELS</a></span> - Static variable in class squidpony.<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></dt>
 <dd>
 <div class="block">For a language that has a 40% chance to repeat a single Latin vowel (a, e, o, or a variant on one of them
@@ -602,6 +774,18 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.html#doubleHasher">doubleHasher</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.html" title="class in squidpony.squidmath">CrossHash</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleIterator.html#DoubleIterator--">DoubleIterator()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleIterator.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.DoubleIterator</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/GridData.html#doubleMaps">doubleMaps</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/GridData.html" title="class in squidpony.squidgrid">GridData</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#doubleToHighIntBits-double-">doubleToHighIntBits(double)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#doubleToLongBits-double-">doubleToLongBits(double)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#doubleToLowIntBits-double-">doubleToLowIntBits(double)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#doubleToMixedIntBits-double-">doubleToMixedIntBits(double)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#doubleToRawLongBits-double-">doubleToRawLongBits(double)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/DungeonUtility.html#doubleWidth-char:A:A-">doubleWidth(char[][])</a></span> - Static method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/DungeonUtility.html" title="class in squidpony.squidgrid.mapping">DungeonUtility</a></dt>
 <dd>
@@ -618,6 +802,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/DungeonGenerator.html#dungeon">dungeon</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#dungeon">dungeon</a></span> - Variable in class squidpony.squidgrid.mapping.locks.generators.<a href="../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html" title="class in squidpony.squidgrid.mapping.locks.generators">LayoutGenerator</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/MixedGenerator.html#dungeon">dungeon</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/MixedGenerator.html" title="class in squidpony.squidgrid.mapping">MixedGenerator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/RectangleRoomFinder.html#dungeon">dungeon</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/RectangleRoomFinder.html" title="class in squidpony.squidgrid.mapping">RectangleRoomFinder</a></dt>
@@ -630,15 +816,15 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#DungeonBoneGen-java.util.Random-">DungeonBoneGen(Random)</a></span> - Constructor for class squidpony.squidgrid.mapping.styled.<a href="../squidpony/squidgrid/mapping/styled/DungeonBoneGen.html" title="class in squidpony.squidgrid.mapping.styled">DungeonBoneGen</a></dt>
 <dd>
-<div class="block">Constructs a DungeonGen that uses the given java.util.Random .</div>
+<div class="block">Constructs a DungeonBoneGen that uses the given java.util.Random .</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#DungeonBoneGen-squidpony.squidmath.RNG-">DungeonBoneGen(RNG)</a></span> - Constructor for class squidpony.squidgrid.mapping.styled.<a href="../squidpony/squidgrid/mapping/styled/DungeonBoneGen.html" title="class in squidpony.squidgrid.mapping.styled">DungeonBoneGen</a></dt>
 <dd>
-<div class="block">Constructs a DungeonGen that uses the given squidpony.squidmath.RNG.</div>
+<div class="block">Constructs a DungeonBoneGen that uses the given squidpony.squidmath.RNG.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#DungeonBoneGen--">DungeonBoneGen()</a></span> - Constructor for class squidpony.squidgrid.mapping.styled.<a href="../squidpony/squidgrid/mapping/styled/DungeonBoneGen.html" title="class in squidpony.squidgrid.mapping.styled">DungeonBoneGen</a></dt>
 <dd>
-<div class="block">Constructs a DungeonGen that uses the default RNG.</div>
+<div class="block">Constructs a DungeonBoneGen that uses the default RNG.</div>
 </dd>
 <dt><a href="../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">DungeonGenerator</span></a> - Class in <a href="../squidpony/squidgrid/mapping/package-summary.html">squidpony.squidgrid.mapping</a></dt>
 <dd>
@@ -729,6 +915,6 @@
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>
