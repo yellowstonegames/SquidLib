@@ -117,7 +117,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public static class <a href="../../src-html/squidpony/squidmath/Noise.html#line.111">Noise.Layered3D</a>
+<pre>public static class <a href="../../src-html/squidpony/squidmath/Noise.html#line.126">Noise.Layered3D</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></pre>
 </li>
@@ -143,6 +143,10 @@ implements <a href="../../squidpony/squidmath/Noise.Noise3D.html" title="interfa
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.Layered3D.html#basis">basis</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.Layered3D.html#frequency">frequency</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.Layered3D.html#octaves">octaves</a></span></code>&nbsp;</td>
 </tr>
@@ -169,6 +173,11 @@ implements <a href="../../squidpony/squidmath/Noise.Noise3D.html" title="interfa
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.Layered3D.html#Layered3D-squidpony.squidmath.Noise.Noise3D-int-">Layered3D</a></span>(<a href="../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>&nbsp;basis,
          int&nbsp;octaves)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.Layered3D.html#Layered3D-squidpony.squidmath.Noise.Noise3D-int-double-">Layered3D</a></span>(<a href="../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>&nbsp;basis,
+         int&nbsp;octaves,
+         double&nbsp;frequency)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -226,16 +235,25 @@ implements <a href="../../squidpony/squidmath/Noise.Noise3D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>octaves</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/Noise.Layered3D.html#line.112">octaves</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/Noise.Layered3D.html#line.127">octaves</a></pre>
 </li>
 </ul>
 <a name="basis">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>basis</h4>
-<pre>protected&nbsp;<a href="../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a> <a href="../../src-html/squidpony/squidmath/Noise.Layered3D.html#line.113">basis</a></pre>
+<pre>protected&nbsp;<a href="../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a> <a href="../../src-html/squidpony/squidmath/Noise.Layered3D.html#line.128">basis</a></pre>
+</li>
+</ul>
+<a name="frequency">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>frequency</h4>
+<pre>public&nbsp;double <a href="../../src-html/squidpony/squidmath/Noise.Layered3D.html#line.129">frequency</a></pre>
 </li>
 </ul>
 </li>
@@ -252,7 +270,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise3D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>Layered3D</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Layered3D.html#line.115">Layered3D</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Layered3D.html#line.130">Layered3D</a>()</pre>
 </li>
 </ul>
 <a name="Layered3D-squidpony.squidmath.Noise.Noise3D-">
@@ -261,17 +279,28 @@ implements <a href="../../squidpony/squidmath/Noise.Noise3D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>Layered3D</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Layered3D.html#line.119">Layered3D</a>(<a href="../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>&nbsp;basis)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Layered3D.html#line.134">Layered3D</a>(<a href="../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>&nbsp;basis)</pre>
 </li>
 </ul>
 <a name="Layered3D-squidpony.squidmath.Noise.Noise3D-int-">
 <!--   -->
 </a>
+<ul class="blockList">
+<li class="blockList">
+<h4>Layered3D</h4>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Layered3D.html#line.138">Layered3D</a>(<a href="../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>&nbsp;basis,
+                 int&nbsp;octaves)</pre>
+</li>
+</ul>
+<a name="Layered3D-squidpony.squidmath.Noise.Noise3D-int-double-">
+<!--   -->
+</a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Layered3D</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Layered3D.html#line.123">Layered3D</a>(<a href="../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>&nbsp;basis,
-                 int&nbsp;octaves)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Layered3D.html#line.141">Layered3D</a>(<a href="../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>&nbsp;basis,
+                 int&nbsp;octaves,
+                 double&nbsp;frequency)</pre>
 </li>
 </ul>
 </li>
@@ -288,7 +317,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise3D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoise</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Layered3D.html#line.129">getNoise</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Layered3D.html#line.148">getNoise</a>(double&nbsp;x,
                        double&nbsp;y,
                        double&nbsp;z)</pre>
 <dl>
@@ -303,7 +332,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise3D.html" title="interfa
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getNoiseWithSeed</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Layered3D.html#line.139">getNoiseWithSeed</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Layered3D.html#line.161">getNoiseWithSeed</a>(double&nbsp;x,
                                double&nbsp;y,
                                double&nbsp;z,
                                int&nbsp;seed)</pre>

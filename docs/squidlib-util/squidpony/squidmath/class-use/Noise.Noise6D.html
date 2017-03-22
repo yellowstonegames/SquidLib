@@ -200,6 +200,16 @@
  boundaries.</div>
 </td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static double[][][]</code></td>
+<td class="colLast"><span class="typeNameLabel">Noise.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.html#seamless3D-double:A:A:A-int-int-squidpony.squidmath.Noise.Noise6D-">seamless3D</a></span>(double[][][]&nbsp;fill,
+          int&nbsp;seed,
+          int&nbsp;octaves,
+          <a href="../../../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a>&nbsp;generator)</code>
+<div class="block">Fills the given 3D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
+ boundaries.</div>
+</td>
+</tr>
 </tbody>
 </table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
@@ -216,17 +226,22 @@
          int&nbsp;octaves)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Ridged6D.html#Ridged6D-squidpony.squidmath.Noise.Noise6D-">Ridged6D</a></span>(<a href="../../../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a>&nbsp;basis)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Layered6D.html#Layered6D-squidpony.squidmath.Noise.Noise6D-int-double-">Layered6D</a></span>(<a href="../../../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a>&nbsp;basis,
+         int&nbsp;octaves,
+         double&nbsp;frequency)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Ridged6D.html#Ridged6D-squidpony.squidmath.Noise.Noise6D-">Ridged6D</a></span>(<a href="../../../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a>&nbsp;basis)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Ridged6D.html#Ridged6D-squidpony.squidmath.Noise.Noise6D-int-double-">Ridged6D</a></span>(<a href="../../../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a>&nbsp;basis,
         int&nbsp;octaves,
         double&nbsp;frequency)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Scaled6D.html#Scaled6D-squidpony.squidmath.Noise.Noise6D-">Scaled6D</a></span>(<a href="../../../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a>&nbsp;basis)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Scaled6D.html#Scaled6D-squidpony.squidmath.Noise.Noise6D-double-double-double-double-double-double-">Scaled6D</a></span>(<a href="../../../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a>&nbsp;basis,
         double&nbsp;scaleX,
         double&nbsp;scaleY,
@@ -235,23 +250,29 @@
         double&nbsp;scaleU,
         double&nbsp;scaleV)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Slick6D.html#Slick6D-squidpony.squidmath.Noise.Noise6D-squidpony.squidmath.Noise.Noise6D-">Slick6D</a></span>(<a href="../../../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a>&nbsp;basis,
        <a href="../../../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a>&nbsp;disturb)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Slick6D.html#Slick6D-squidpony.squidmath.Noise.Noise6D-squidpony.squidmath.Noise.Noise6D-int-">Slick6D</a></span>(<a href="../../../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a>&nbsp;basis,
        <a href="../../../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a>&nbsp;disturb,
        int&nbsp;octaves)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Turbulent6D.html#Turbulent6D-squidpony.squidmath.Noise.Noise6D-squidpony.squidmath.Noise.Noise6D-">Turbulent6D</a></span>(<a href="../../../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a>&nbsp;basis,
            <a href="../../../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a>&nbsp;disturb)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Turbulent6D.html#Turbulent6D-squidpony.squidmath.Noise.Noise6D-squidpony.squidmath.Noise.Noise6D-int-">Turbulent6D</a></span>(<a href="../../../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a>&nbsp;basis,
            <a href="../../../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a>&nbsp;disturb,
            int&nbsp;octaves)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Turbulent6D.html#Turbulent6D-squidpony.squidmath.Noise.Noise6D-squidpony.squidmath.Noise.Noise6D-int-double-">Turbulent6D</a></span>(<a href="../../../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a>&nbsp;basis,
+           <a href="../../../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a>&nbsp;disturb,
+           int&nbsp;octaves,
+           double&nbsp;frequency)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

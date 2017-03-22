@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -185,17 +185,28 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#floatToRawIntBits-float-">floatToRawIntBits</a></span>(float&nbsp;value)</code>&nbsp;</td>
 </tr>
 <tr id="i9" class="rowColor">
+<td class="colFirst"><code>static byte</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#getSelectedByte-float-int-">getSelectedByte</a></span>(float&nbsp;value,
+               int&nbsp;whichByte)</code>&nbsp;</td>
+</tr>
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#intBitsToFloat-int-">intBitsToFloat</a></span>(int&nbsp;bits)</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#longBitsToDouble-long-">longBitsToDouble</a></span>(long&nbsp;bits)</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#setExponent-double-int-">setExponent</a></span>(double&nbsp;value,
            int&nbsp;exponentBits)</code>&nbsp;</td>
+</tr>
+<tr id="i13" class="rowColor">
+<td class="colFirst"><code>static float</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#setSelectedByte-float-int-byte-">setSelectedByte</a></span>(float&nbsp;value,
+               int&nbsp;whichByte,
+               byte&nbsp;newValue)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -339,10 +350,31 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <a name="intBitsToFloat-int-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>intBitsToFloat</h4>
 <pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.87">intBitsToFloat</a>(int&nbsp;bits)</pre>
+</li>
+</ul>
+<a name="getSelectedByte-float-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSelectedByte</h4>
+<pre>public static&nbsp;byte&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.92">getSelectedByte</a>(float&nbsp;value,
+                                   int&nbsp;whichByte)</pre>
+</li>
+</ul>
+<a name="setSelectedByte-float-int-byte-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setSelectedByte</h4>
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.98">setSelectedByte</a>(float&nbsp;value,
+                                    int&nbsp;whichByte,
+                                    byte&nbsp;newValue)</pre>
 </li>
 </ul>
 </li>

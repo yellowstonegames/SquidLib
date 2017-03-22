@@ -206,6 +206,16 @@
  boundaries.</div>
 </td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static double[][]</code></td>
+<td class="colLast"><span class="typeNameLabel">Noise.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.html#seamless2D-double:A:A-int-int-squidpony.squidmath.Noise.Noise4D-">seamless2D</a></span>(double[][]&nbsp;fill,
+          int&nbsp;seed,
+          int&nbsp;octaves,
+          <a href="../../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;generator)</code>
+<div class="block">Fills the given 2D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
+ boundaries.</div>
+</td>
+</tr>
 </tbody>
 </table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
@@ -222,40 +232,51 @@
          int&nbsp;octaves)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Ridged4D.html#Ridged4D-squidpony.squidmath.Noise.Noise4D-">Ridged4D</a></span>(<a href="../../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;basis)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Layered4D.html#Layered4D-squidpony.squidmath.Noise.Noise4D-int-double-">Layered4D</a></span>(<a href="../../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;basis,
+         int&nbsp;octaves,
+         double&nbsp;frequency)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Ridged4D.html#Ridged4D-squidpony.squidmath.Noise.Noise4D-">Ridged4D</a></span>(<a href="../../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;basis)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Ridged4D.html#Ridged4D-squidpony.squidmath.Noise.Noise4D-int-double-">Ridged4D</a></span>(<a href="../../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;basis,
         int&nbsp;octaves,
         double&nbsp;frequency)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Scaled4D.html#Scaled4D-squidpony.squidmath.Noise.Noise4D-">Scaled4D</a></span>(<a href="../../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;basis)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Scaled4D.html#Scaled4D-squidpony.squidmath.Noise.Noise4D-double-double-double-double-">Scaled4D</a></span>(<a href="../../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;basis,
         double&nbsp;scaleX,
         double&nbsp;scaleY,
         double&nbsp;scaleZ,
         double&nbsp;scaleW)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Slick4D.html#Slick4D-squidpony.squidmath.Noise.Noise4D-squidpony.squidmath.Noise.Noise4D-">Slick4D</a></span>(<a href="../../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;basis,
        <a href="../../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;disturb)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Slick4D.html#Slick4D-squidpony.squidmath.Noise.Noise4D-squidpony.squidmath.Noise.Noise4D-int-">Slick4D</a></span>(<a href="../../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;basis,
        <a href="../../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;disturb,
        int&nbsp;octaves)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Turbulent4D.html#Turbulent4D-squidpony.squidmath.Noise.Noise4D-squidpony.squidmath.Noise.Noise4D-">Turbulent4D</a></span>(<a href="../../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;basis,
            <a href="../../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;disturb)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Turbulent4D.html#Turbulent4D-squidpony.squidmath.Noise.Noise4D-squidpony.squidmath.Noise.Noise4D-int-">Turbulent4D</a></span>(<a href="../../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;basis,
            <a href="../../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;disturb,
            int&nbsp;octaves)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Noise.Turbulent4D.html#Turbulent4D-squidpony.squidmath.Noise.Noise4D-squidpony.squidmath.Noise.Noise4D-int-double-">Turbulent4D</a></span>(<a href="../../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;basis,
+           <a href="../../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;disturb,
+           int&nbsp;octaves,
+           double&nbsp;frequency)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

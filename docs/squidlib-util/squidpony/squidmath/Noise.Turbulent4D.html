@@ -117,7 +117,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public static class <a href="../../src-html/squidpony/squidmath/Noise.html#line.817">Noise.Turbulent4D</a>
+<pre>public static class <a href="../../src-html/squidpony/squidmath/Noise.html#line.902">Noise.Turbulent4D</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a></pre>
 </li>
@@ -147,6 +147,10 @@ implements <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interfa
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.Turbulent4D.html#disturbance">disturbance</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.Turbulent4D.html#frequency">frequency</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.Turbulent4D.html#octaves">octaves</a></span></code>&nbsp;</td>
 </tr>
@@ -175,6 +179,12 @@ implements <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interfa
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.Turbulent4D.html#Turbulent4D-squidpony.squidmath.Noise.Noise4D-squidpony.squidmath.Noise.Noise4D-int-">Turbulent4D</a></span>(<a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;basis,
            <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;disturb,
            int&nbsp;octaves)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.Turbulent4D.html#Turbulent4D-squidpony.squidmath.Noise.Noise4D-squidpony.squidmath.Noise.Noise4D-int-double-">Turbulent4D</a></span>(<a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;basis,
+           <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;disturb,
+           int&nbsp;octaves,
+           double&nbsp;frequency)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -234,7 +244,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>octaves</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/Noise.Turbulent4D.html#line.818">octaves</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/Noise.Turbulent4D.html#line.903">octaves</a></pre>
 </li>
 </ul>
 <a name="basis">
@@ -243,16 +253,25 @@ implements <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>basis</h4>
-<pre>protected&nbsp;<a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a> <a href="../../src-html/squidpony/squidmath/Noise.Turbulent4D.html#line.819">basis</a></pre>
+<pre>protected&nbsp;<a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a> <a href="../../src-html/squidpony/squidmath/Noise.Turbulent4D.html#line.904">basis</a></pre>
 </li>
 </ul>
 <a name="disturbance">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>disturbance</h4>
-<pre>protected&nbsp;<a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a> <a href="../../src-html/squidpony/squidmath/Noise.Turbulent4D.html#line.819">disturbance</a></pre>
+<pre>protected&nbsp;<a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a> <a href="../../src-html/squidpony/squidmath/Noise.Turbulent4D.html#line.904">disturbance</a></pre>
+</li>
+</ul>
+<a name="frequency">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>frequency</h4>
+<pre>public&nbsp;double <a href="../../src-html/squidpony/squidmath/Noise.Turbulent4D.html#line.905">frequency</a></pre>
 </li>
 </ul>
 </li>
@@ -269,7 +288,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>Turbulent4D</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Turbulent4D.html#line.821">Turbulent4D</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Turbulent4D.html#line.907">Turbulent4D</a>()</pre>
 </li>
 </ul>
 <a name="Turbulent4D-squidpony.squidmath.Noise.Noise4D-squidpony.squidmath.Noise.Noise4D-">
@@ -278,19 +297,31 @@ implements <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>Turbulent4D</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Turbulent4D.html#line.825">Turbulent4D</a>(<a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;basis,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Turbulent4D.html#line.911">Turbulent4D</a>(<a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;basis,
                    <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;disturb)</pre>
 </li>
 </ul>
 <a name="Turbulent4D-squidpony.squidmath.Noise.Noise4D-squidpony.squidmath.Noise.Noise4D-int-">
 <!--   -->
 </a>
+<ul class="blockList">
+<li class="blockList">
+<h4>Turbulent4D</h4>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Turbulent4D.html#line.916">Turbulent4D</a>(<a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;basis,
+                   <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;disturb,
+                   int&nbsp;octaves)</pre>
+</li>
+</ul>
+<a name="Turbulent4D-squidpony.squidmath.Noise.Noise4D-squidpony.squidmath.Noise.Noise4D-int-double-">
+<!--   -->
+</a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Turbulent4D</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Turbulent4D.html#line.829">Turbulent4D</a>(<a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;basis,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Turbulent4D.html#line.919">Turbulent4D</a>(<a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;basis,
                    <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;disturb,
-                   int&nbsp;octaves)</pre>
+                   int&nbsp;octaves,
+                   double&nbsp;frequency)</pre>
 </li>
 </ul>
 </li>
@@ -307,7 +338,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoise</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Turbulent4D.html#line.835">getNoise</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Turbulent4D.html#line.926">getNoise</a>(double&nbsp;x,
                        double&nbsp;y,
                        double&nbsp;z,
                        double&nbsp;w)</pre>
@@ -323,7 +354,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interfa
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getNoiseWithSeed</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Turbulent4D.html#line.849">getNoiseWithSeed</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Turbulent4D.html#line.944">getNoiseWithSeed</a>(double&nbsp;x,
                                double&nbsp;y,
                                double&nbsp;z,
                                double&nbsp;w,
