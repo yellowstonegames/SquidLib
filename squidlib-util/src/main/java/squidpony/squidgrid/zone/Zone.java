@@ -3,6 +3,7 @@ package squidpony.squidgrid.zone;
 import squidpony.squidmath.Coord;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -36,7 +37,7 @@ import java.util.List;
  * @see squidpony.squidmath.CoordPacker
  * @see squidpony.squidmath.GreasedRegion
  */
-public interface Zone extends Serializable {
+public interface Zone extends Serializable, Iterable<Coord> {
 
     /**
      * @return Whether this zone is empty.
@@ -83,6 +84,15 @@ public interface Zone extends Serializable {
         public boolean contains(Coord c) {
             return contains(c.x, c.y);
         }
+
+		@Override
+		/*
+		 * Convenience implementation, feel free to override, in particular if
+		 * you can avoid allocating the list usually allocated by getAll().
+		 */
+		public Iterator<Coord> iterator() {
+			return getAll().iterator();
+		}
 
     }
 }
