@@ -7010,8 +7010,8 @@ public class SColor extends Color {
      */
     public static float floatGetI(int r, int g, int b)
     {
-        return /*NumberUtils.intToFloatColor((r & 0xff) | (g << 8 & 0xff00) | (b << 16 & 0xff0000)
-                | 0xfe000000);*/ rgbToFloatColor((b & 0xff) | (g << 8 & 0xff00) | (r << 16));
+        return NumberUtils.intToFloatColor((r & 0xff) | (g << 8 & 0xff00) | (b << 16 & 0xff0000)
+                | 0xfe000000); //rgbToFloatColor((b & 0xff) | (g << 8 & 0xff00) | (r << 16));
     }
 
     @SuppressWarnings("NumericOverflow")
@@ -7042,9 +7042,6 @@ public class SColor extends Color {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 31 * hash + CrossHash.Wisp.hash(name);
-        hash += 31 * hash + toIntBits();
-        return hash;
+        return  (155 + CrossHash.Wisp.hash(name)) * 31 + toIntBits();
     }
 }

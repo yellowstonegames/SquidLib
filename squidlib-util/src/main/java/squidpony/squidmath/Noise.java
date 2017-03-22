@@ -433,6 +433,7 @@ public class Noise {
     public static class Ridged2D implements Noise2D {
         protected int octaves;
         public double frequency;
+        protected double correct;
         protected Noise2D basis;
 
         public Ridged2D() {
@@ -447,11 +448,16 @@ public class Noise {
             this.basis = basis;
             this.octaves = (octaves = Math.max(1, Math.min(63, octaves)));
             this.frequency = frequency;
+            for (int o = 0; o < octaves; o++) {
+                correct += Math.pow(2.0, -o);
+            }
+            correct = 1.9 / correct;
+
         }
 
         @Override
         public double getNoise(double x, double y) {
-            double sum = 0, amp = 0.5;
+            double sum = 0, amp = 1.0;
             x *= frequency;
             y *= frequency;
             for (int i = 0; i < octaves; ++i) {
@@ -462,12 +468,12 @@ public class Noise {
                 x *= 2.0;
                 y *= 2.0;
             }
-            return sum;
+            return sum * correct - 1.0;
         }
 
         @Override
         public double getNoiseWithSeed(double x, double y, int seed) {
-            double sum = 0, amp = 0.5;
+            double sum = 0, amp = 1.0;
             x *= frequency;
             y *= frequency;
             for (int i = 0; i < octaves; ++i) {
@@ -479,13 +485,14 @@ public class Noise {
                 x *= 2.0;
                 y *= 2.0;
             }
-            return sum;
+            return sum * correct - 1.0;
         }
     }
 
     public static class Ridged3D implements Noise3D {
         protected int octaves;
         public double frequency;
+        protected double correct;
         protected Noise3D basis;
 
         public Ridged3D() {
@@ -500,11 +507,15 @@ public class Noise {
             this.basis = basis;
             this.octaves = (octaves = Math.max(1, Math.min(63, octaves)));
             this.frequency = frequency;
+            for (int o = 0; o < octaves; o++) {
+                correct += Math.pow(2.0, -o);
+            }
+            correct = 1.45 / correct;
         }
 
         @Override
         public double getNoise(double x, double y, double z) {
-            double sum = 0, amp = 0.5;
+            double sum = 0, amp = 1.0;
             x *= frequency;
             y *= frequency;
             z *= frequency;
@@ -517,12 +528,12 @@ public class Noise {
                 y *= 2.0;
                 z *= 2.0;
             }
-            return sum;
+            return sum * correct - 1.0;
         }
 
         @Override
         public double getNoiseWithSeed(double x, double y, double z, int seed) {
-            double sum = 0, amp = 0.5;
+            double sum = 0, amp = 1.0;
             x *= frequency;
             y *= frequency;
             z *= frequency;
@@ -536,7 +547,7 @@ public class Noise {
                 y *= 2.0;
                 z *= 2.0;
             }
-            return sum;
+            return sum * correct - 1.0;
         }
     }
 
@@ -564,7 +575,7 @@ public class Noise {
             double maxvalue = 0.0;
             for (int i = 0; i < octaves; ++i) {
                 maxvalue += (exp[i] = Math.pow(2.0, -0.9 * i));
-                correct[i] = 2.0 / maxvalue;
+                correct[i] = 1.41 / maxvalue;
             }
         }
 
@@ -607,7 +618,8 @@ public class Noise {
                 z *= 2.0;
                 w *= 2.0;
             }
-            return sum * correct[octaves - 1] - 1.0;
+            sum = sum * correct[octaves - 1] - 1.0;
+            return sum;
         }
     }
 
@@ -636,7 +648,7 @@ public class Noise {
             double maxvalue = 0.0;
             for (int i = 0; i < octaves; ++i) {
                 maxvalue += (exp[i] = Math.pow(2.0, -0.9 * i));
-                correct[i] = 2.0 / maxvalue;
+                correct[i] = 1.28 / maxvalue;
             }
         }
         @Override
@@ -1229,6 +1241,7 @@ public class Noise {
         return seamless2D(fill, seed, octaves, SeededNoise.instance);
     }
 
+    public static double total = 0.0;
     /**
      * Fills the given 2D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
      * boundaries. This overload doesn't care what you use for x or y axes, it uses the exact size of fill fully.
@@ -1248,6 +1261,7 @@ public class Noise {
             return fill;
         final double i_w = 6.283185307179586 / width, i_h = 6.283185307179586 / height;
         int s = 1<<(octaves-1), seed2 = seed;
+        total= 0.0;
         double p, q,
                 ps, pc,
                 qs, qc,
@@ -1267,14 +1281,14 @@ public class Noise {
                 }
             }
         }
-        if(octaves > 1) {
+        //if(octaves > 1) {
             i_s = 1.0 / ((1<<octaves) - 1.0);
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
-                    fill[x][y] *= i_s;
+                    total += (fill[x][y] *= i_s);
                 }
             }
-        }
+        //}
         return fill;
     }
 
@@ -1325,6 +1339,7 @@ public class Noise {
             return fill;
         final double i_w = 6.283185307179586 / width, i_h = 6.283185307179586 / height, i_d = 6.283185307179586 / depth;
         int s = 1<<(octaves-1), seed2 = seed;
+        total = 0.0;
         double p, q, r,
                 ps, pc,
                 qs, qc,
@@ -1349,16 +1364,16 @@ public class Noise {
                 }
             }
         }
-        if(octaves > 1) {
+        //if(octaves > 1) {
             i_s = 1.0 / ((1<<octaves) - 1.0);
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     for (int z = 0; z < depth; z++) {
-                        fill[z][x][y] *= i_s;
+                        total += (fill[z][x][y] *= i_s);
                     }
                 }
             }
-        }
+        //}
         return fill;
     }
 
