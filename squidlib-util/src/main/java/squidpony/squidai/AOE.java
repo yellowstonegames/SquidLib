@@ -7,7 +7,7 @@ import squidpony.squidmath.Coord;
 import squidpony.squidmath.OrderedMap;
 
 import java.util.ArrayList;
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * Area of Effect interface meant to be implemented by various specific burst, line, flowing, and user-made AOE types.
@@ -31,10 +31,10 @@ public interface AOE {
      * that the Set of Points consist only of enemies that are within FOV, which cuts down a lot on the amount of checks
      * this needs to make; if the game doesn't restrict the player's FOV, this is still recommended (just with a larger
      * FOV radius) because it prevents checking enemies on the other side of the map and through multiple walls.
-     * @param targets a Set of Points that are desirable targets to include in this AOE
+     * @param targets a Collection (usually a Set) of Points that are desirable targets to include in this AOE
      * @return true if there could be at least one target within the AOE, false otherwise. Very approximate.
      */
-    boolean mayContainTarget(Set<Coord> targets);
+    boolean mayContainTarget(Collection<Coord> targets);
 
     /**
      * Returns a OrderedMap of Coord keys and ArrayList of Coord values, where each Coord key is an ideal location to
@@ -56,7 +56,7 @@ public interface AOE {
      * @param requiredExclusions a Set of Points that this tries strongly to avoid including in this AOE
      * @return a OrderedMap of Coord keys and ArrayList of Coord values where keys are ideal locations and values are the target points that will be hit when that key is used.
      */
-    OrderedMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> targets, Set<Coord> requiredExclusions);
+    OrderedMap<Coord, ArrayList<Coord>> idealLocations(Collection<Coord> targets, Collection<Coord> requiredExclusions);
 
     /**
      * A variant of idealLocations that takes two groups of desirable targets, and will rate locations by how many
@@ -71,7 +71,7 @@ public interface AOE {
      * @param requiredExclusions a Set of Points that this tries strongly to avoid including in this AOE
      * @return a OrderedMap of Coord keys and ArrayList of Coord values where keys are ideal locations and values are the target points that will be hit when that key is used.
      */
-    OrderedMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> priorityTargets, Set<Coord> lesserTargets, Set<Coord> requiredExclusions);
+    OrderedMap<Coord, ArrayList<Coord>> idealLocations(Collection<Coord> priorityTargets, Collection<Coord> lesserTargets, Collection<Coord> requiredExclusions);
 
     /**
      * This must be called before any other methods, and takes a char[][] with '#' for walls, anything else for floors.

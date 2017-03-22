@@ -84,7 +84,7 @@ public class BlastAOE implements AOE {
     }
 
     @Override
-    public boolean mayContainTarget(Set<Coord> targets) {
+    public boolean mayContainTarget(Collection<Coord> targets) {
         for (Coord p : targets)
         {
             if(radiusType.radius(center.x, center.y, p.x, p.y) <= radius)
@@ -94,7 +94,7 @@ public class BlastAOE implements AOE {
     }
 
     @Override
-    public OrderedMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> targets, Set<Coord> requiredExclusions) {
+    public OrderedMap<Coord, ArrayList<Coord>> idealLocations(Collection<Coord> targets, Collection<Coord> requiredExclusions) {
         if(targets == null)
             return new OrderedMap<>();
         if(requiredExclusions == null) requiredExclusions = new OrderedSet<>();
@@ -236,7 +236,7 @@ public class BlastAOE implements AOE {
     }
 
     @Override
-    public OrderedMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> priorityTargets, Set<Coord> lesserTargets, Set<Coord> requiredExclusions) {
+    public OrderedMap<Coord, ArrayList<Coord>> idealLocations(Collection<Coord> priorityTargets, Collection<Coord> lesserTargets, Collection<Coord> requiredExclusions) {
         if(priorityTargets == null)
             return idealLocations(lesserTargets, requiredExclusions);
         if(requiredExclusions == null) requiredExclusions = new OrderedSet<>();

@@ -1,6 +1,6 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.GwtCompatibility;
+import squidpony.ArrayTools;
 import squidpony.squidmath.*;
 
 import java.util.ArrayList;
@@ -65,7 +65,7 @@ public class RoomFinder {
     /**
      * Constructs a RoomFinder given a dungeon map, and finds rooms, corridors, and their connections on the map. Does
      * not find caves; if a collection of caves is requested from this, it will be non-null but empty.
-     * @param dungeon a 2D char array that uses '#' for walls.
+     * @param dungeon a 2D char array that uses '#', box drawing characters, or ' ' for walls.
      */
     public RoomFinder(char[][] dungeon)
     {
@@ -117,6 +117,13 @@ public class RoomFinder {
         }
     }
 
+    /**
+     * Constructs a RoomFinder given a dungeon map and a general kind of environment for the whole map, then finds
+     * rooms, corridors, and their connections on the map. Defaults to treating all areas as cave unless
+     * {@code environmentKind} is {@code MixedGenerator.ROOM_FLOOR} (or its equivalent, 1).
+     * @param dungeon a 2D char array that uses '#', box drawing characters, or ' ' for walls.
+     * @param environmentKind if 1 ({@code MixedGenerator.ROOM_FLOOR}), this will find rooms and corridors, else caves
+     */
     public RoomFinder(char[][] dungeon, int environmentKind)
     {
         if(dungeon.length <= 0)
@@ -201,7 +208,7 @@ public class RoomFinder {
         width = dungeon.length;
         height = dungeon[0].length;
         map = new char[width][height];
-        this.environment = GwtCompatibility.copy2D(environment);
+        this.environment = ArrayTools.copy(environment);
         for (int i = 0; i < width; i++) {
             System.arraycopy(dungeon[i], 0, map[i], 0, height);
         }
@@ -214,9 +221,8 @@ public class RoomFinder {
         allRooms = new GreasedRegion(environment, MixedGenerator.ROOM_FLOOR);
         allCorridors = new GreasedRegion(environment, MixedGenerator.CORRIDOR_FLOOR);
         allCaves = new GreasedRegion(environment, MixedGenerator.CAVE_FLOOR);
-        GreasedRegion rc = allRooms.copy().or(allCorridors),
-                d = allCorridors.copy().fringe().and(allRooms),
-                m = allCaves.copy().fringe().and(rc);
+        GreasedRegion d = allCorridors.copy().fringe().and(allRooms),
+                m = allCaves.copy().fringe().and(allRooms.copy().or(allCorridors));
         doorways = d.asCoords();
         mouths = m.asCoords();
         connections = new Coord[doorways.length + mouths.length];

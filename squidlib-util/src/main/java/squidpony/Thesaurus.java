@@ -232,10 +232,16 @@ public class Thesaurus implements Serializable{
      */
     public Thesaurus addFakeWords()
     {
-        for(Map.Entry<String, ArrayList<String>> kv : languages.entrySet())
+        long state = rng.getState();
+        for(Map.Entry<String, FakeLanguageGen> kv : languages.entrySet())
         {
-            addCategory(kv.getKey(), kv.getValue());
+            ArrayList<String> words = new ArrayList<>(16);
+            for (int i = 0; i < 16; i++) {
+                words.add(kv.getValue().word(rng, false, rng.between(2, 4)));
+            }
+            addCategory(kv.getKey().replace("gen", "pre"), words);
         }
+        rng.setState(state);
         return this;
     }
 
@@ -272,6 +278,17 @@ public class Thesaurus implements Serializable{
                 return Character.toUpperCase(nx.charAt(0)) + nx.substring(1, nx.length());
             }
             return nx;
+        }
+        else if(languages.containsKey(word2))
+        {
+            if(word.length() > 1 && Category.Lu.contains(word.charAt(1)))
+                return languages.get(word2).word(rng, false, rng.between(2, 4)).toUpperCase();
+            if(Category.Lu.contains(word.charAt(0)))
+            {
+                return languages.get(word2).word(rng, true, rng.between(2, 4));
+            }
+            return languages.get(word2).word(rng, false, rng.between(2, 4));
+
         }
         return word;
     }
@@ -438,60 +455,115 @@ public class Thesaurus implements Serializable{
             makeList("protectors", "guardians", "wardens", "defenders", "guards", "shields", "sentinels", "watchmen", "knights"),
             "rage`noun`",
             makeList("rage", "fury", "anger", "wrath", "frenzy", "vengeance")
-            ),
-            languages = makeOM(
+            );
+
+    public static final OrderedMap<String, FakeLanguageGen> languages = makeOM(
             "lc`gen`",
-            makeList("lahatos", "iatsiltak", "hmimrekaarl", "yixaltaishk", "cthupaxa", "zvroggamraa", "ixaakran"),
+            FakeLanguageGen.LOVECRAFT,
             "jp`gen`",
-            makeList("naimoken", "kishigu", "houdaibo", "souchaya", "aijake", "hyazuran", "pajokke", "sokkimou"),
+            FakeLanguageGen.JAPANESE_ROMANIZED,
             "fr`gen`",
-            makeList("devive", "esiggoi", "afaddouille", "roiquide", "obaploui", "baîmefi", "vêggrôste", "blaçeglè", "bamissecois"),
+            FakeLanguageGen.FRENCH,
             "gr`gen`",
-            makeList("lemabus", "ithonxeum", "etoneoch", "eirkuirstes", "taunonkos", "krailozes", "amarstei", "psorsteomium"),
+            FakeLanguageGen.GREEK_ROMANIZED,
             "ru`gen`",
-            makeList("belyvia", "tiuzhiskit", "dazyved", "dabrisazetsky", "shaskianyr", "goskabad", "deblieskib", "neskagre"),
+            FakeLanguageGen.RUSSIAN_ROMANIZED,
             "sw`gen`",
-            makeList("mzabandu", "nzaloi", "tamzamda", "anzibo", "jamsala", "latazi", "faazaza", "uzoge", "mbomuta", "nbasonga"),
+            FakeLanguageGen.SWAHILI,
             "so`gen`",
-            makeList("daggidda", "xabuumaq", "naadhana", "goquusad", "baxiltuu", "qooddaddut", "mosumyuuc", "uggular", "jaabacyut"),
+            FakeLanguageGen.SOMALI,
             "en`gen`",
-            makeList("thabbackion", "joongipper", "urbigsus", "otsaffet", "pittesely", "ramesist", "elgimmac", "genosont", "bessented"),
+            FakeLanguageGen.ENGLISH,
             "fn`gen`",
-            makeList("kemosso", "venzendo", "tybangue", "evendi", "ringamye", "drayusta", "acleutos", "nenizo", "ifelle", "rytoudo"),
+            FakeLanguageGen.FANTASY_NAME,
             "fn`acc`gen`",
-            makeList("tánzeku", "nìāfőshi", "ñoffêfès", "áfŏmu", "drĕstishű", "pyeryĕquı", "bėdĕbǽ", "nęìjônne", "mainűthî"),
+            FakeLanguageGen.FANCY_FANTASY_NAME,
             "ar`acc`gen`",
-            makeList("azawiq", "al-ahaluq", "isabzīz", "zūrżuhikari", "īrālať", "ījīqab", "qizifih", "ibn-āħūkū", "šulilfas"),
+            FakeLanguageGen.ARABIC_ROMANIZED.addAccents(0.15, 0.0),
             "ar`gen`",
-            makeList("iibaatuu", "wiilnalza", "ulanzha", "jaliifa", "iqaddiz", "waatufaa", "lizhuqa", "qinzaamju", "zuzuri"),
+            FakeLanguageGen.ARABIC_ROMANIZED,
             "hi`gen`",
-            makeList("maghubadhit", "bhunasu", "ipruja", "dhuevasam", "nubudho", "ghasaibi", "virjorghu", "khlindairai", "irsinam"),
+            FakeLanguageGen.HINDI_ROMANIZED,
+            "in`gen`",
+            FakeLanguageGen.INUKTITUT,
+            "nr`gen`acc`",
+            FakeLanguageGen.NORSE,
+            "nr`gen`",
+            FakeLanguageGen.NORSE.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_NORSE),
+            "na`gen`",
+            FakeLanguageGen.NAHUATL,
             "ru`so`gen`",
-            makeList("tserokyb", "zhieziufoj", "bisaskug", "nuriesyv", "gybared", "bableqa", "pybadis", "wiuskoglif", "zakalieb"),
+            FakeLanguageGen.mixAll(FakeLanguageGen.RUSSIAN_ROMANIZED, 3, FakeLanguageGen.SOMALI, 2),
             "gr`hi`gen`",
-            makeList("takhada", "bepsegos", "ovukhrim", "sinupiam", "nabogon", "umianum", "dhainukotron", "muisaithi", "aerpraidha"),
+            FakeLanguageGen.mixAll(FakeLanguageGen.GREEK_ROMANIZED, 3, FakeLanguageGen.HINDI_ROMANIZED, 2),
             "sw`fr`gen`",
-            makeList("nchaleûja", "soëhusi", "nsavarço", "fambofai", "namyàmse", "mfonsapa", "zalasha", "hiplaîpu", "hœumyemza"),
+            FakeLanguageGen.mixAll(FakeLanguageGen.SWAHILI, 3, FakeLanguageGen.FRENCH, 2),
             "ar`jp`gen`",
-            makeList("jukkaizhi", "hibiikkiiz", "shomela", "qhabohuz", "isiikya", "akkirzuh", "jalukhmih", "uujajon", "ryaataibna"),
+            FakeLanguageGen.mixAll(FakeLanguageGen.ARABIC_ROMANIZED, 3, FakeLanguageGen.JAPANESE_ROMANIZED, 2),
             "sw`gr`gen`",
-            makeList("ozuxii", "muguino", "nauteicha", "mjixazi", "yataya", "pomboirki", "achuiga", "maleibe", "psizeso", "njameichim"),
+            FakeLanguageGen.mixAll(FakeLanguageGen.SWAHILI, 3, FakeLanguageGen.GREEK_ROMANIZED, 2),
             "gr`so`gen`",
-            makeList("xaaxoteum", "basaalii", "azaibe", "oupeddom", "pseiqigioh", "garkame", "uddoulis", "jobegos", "eqisol"),
+            FakeLanguageGen.mixAll(FakeLanguageGen.GREEK_ROMANIZED, 3, FakeLanguageGen.SOMALI, 2),
             "en`hi`gen`",
-            makeList("promolchi", "dhontriso", "gobhamblom", "hombangot", "sutsidalm", "dhindhinaur", "megsesa", "skaghinma", "thacebha"),
+            FakeLanguageGen.mixAll(FakeLanguageGen.ENGLISH, 3, FakeLanguageGen.HINDI_ROMANIZED, 2),
             "en`jp`gen`",
-            makeList("nyintazu", "haxinsen", "kedezorp", "angapec", "donesalk", "ranepurgy", "laldimyi", "ipprijain", "bizinni"),
+            FakeLanguageGen.mixAll(FakeLanguageGen.ENGLISH, 3, FakeLanguageGen.JAPANESE_ROMANIZED, 2),
             "so`hi`gen`",
-            makeList("yiteevadh", "omithid", "qugadhit", "nujagi", "nidogish", "danurbha", "sarojik", "cigafo", "tavodduu", "huqoyint"),
+            FakeLanguageGen.mixAll(FakeLanguageGen.SOMALI, 3, FakeLanguageGen.HINDI_ROMANIZED, 2),
             "fr`mod`gen`",
-            makeList("egleidô", "glaiemegchragne", "veçebun", "aubudaî", "peirquembrut", "eglecque", "marçoimeaux", "jêmbrégshre"),
+            FakeLanguageGen.FRENCH.addModifiers(FakeLanguageGen.modifier("([^aeiou])\\1", "$1ph", 0.3),
+                    FakeLanguageGen.modifier("([^aeiou])\\1", "$1ch", 0.4),
+                    FakeLanguageGen.modifier("([^aeiou])\\1", "$1sh", 0.5),
+                    FakeLanguageGen.modifier("([^aeiou])\\1", "$1", 0.9)),
             "jp`mod`gen`",
-            makeList("dotobyu", "nikinaan", "gimoummee", "aanzaro", "ryasheeso", "aizaizo", "nyaikkashaa", "kitaani", "maabyopai"),
+            FakeLanguageGen.JAPANESE_ROMANIZED.addModifiers(FakeLanguageGen.Modifier.DOUBLE_VOWELS),
             "so`mod`gen`",
-            makeList("sanata", "ájisha", "soreeggár", "quágeleu", "abaxé", "tedora", "bloxajac", "tiblarxo", "oodagí", "jélebi"),
+            FakeLanguageGen.SOMALI.addModifiers(FakeLanguageGen.modifier("([kd])h", "$1"),
+                    FakeLanguageGen.modifier("([pfsgkcb])([aeiouy])", "$1l$2", 0.35),
+                    FakeLanguageGen.modifier("ii", "ai"),
+                    FakeLanguageGen.modifier("uu", "ia"),
+                    FakeLanguageGen.modifier("([aeo])\\1", "$1"),
+                    FakeLanguageGen.modifier("^x", "v"),
+                    FakeLanguageGen.modifier("([^aeiou]|^)u([^aeiou]|$)", "$1a$2", 0.6),
+                    FakeLanguageGen.modifier("([aeiou])[^aeiou]([aeiou])", "$1v$2", 0.06),
+                    FakeLanguageGen.modifier("([aeiou])[^aeiou]([aeiou])", "$1l$2", 0.07),
+                    FakeLanguageGen.modifier("([aeiou])[^aeiou]([aeiou])", "$1n$2", 0.07),
+                    FakeLanguageGen.modifier("([aeiou])[^aeiou]([aeiou])", "$1z$2", 0.08),
+                    FakeLanguageGen.modifier("([^aeiou])[aeiou]+$", "$1ia", 0.35),
+                    FakeLanguageGen.modifier("([^aeiou])[bpdtkgj]", "$1"),
+                    FakeLanguageGen.modifier("[jg]$", "th"),
+                    FakeLanguageGen.modifier("g", "c", 0.92),
+                    FakeLanguageGen.modifier("([aeiou])[wy]$", "$1l", 0.6),
+                    FakeLanguageGen.modifier("([aeiou])[wy]$", "$1n"),
+                    FakeLanguageGen.modifier("[qf]$", "l", 0.4),
+                    FakeLanguageGen.modifier("[qf]$", "n", 0.65),
+                    FakeLanguageGen.modifier("[qf]$", "s"),
+                    FakeLanguageGen.modifier("cy", "sp"),
+                    FakeLanguageGen.modifier("kl", "sk"),
+                    FakeLanguageGen.modifier("qu+", "qui"),
+                    FakeLanguageGen.modifier("q([^u])", "qu$1"),
+                    FakeLanguageGen.modifier("cc", "ch"),
+                    FakeLanguageGen.modifier("[^aeiou]([^aeiou][^aeiou])", "$1"),
+                    FakeLanguageGen.Modifier.NO_DOUBLES),
             "ru`gr`gen`",
-            makeList("zydievov", "pyplerta", "gaupythian", "kaustybre", "larkygagda", "metuskiev", "vuvidzhian", "ykadzhodna", "paziutso"),
+            FakeLanguageGen.mixAll(FakeLanguageGen.RUSSIAN_ROMANIZED, 3, FakeLanguageGen.GREEK_ROMANIZED, 2),
             "lc`gr`gen`",
-            makeList("fesiagroigor", "gledzhiggiakh", "saghiathask", "sheglerliv", "hmepobor", "riagarosk", "kramrufot", "glonuskiub"));
+            FakeLanguageGen.mixAll(FakeLanguageGen.LOVECRAFT, 3, FakeLanguageGen.GREEK_ROMANIZED, 2),
+            "in`so`gen`",
+            FakeLanguageGen.mixAll(FakeLanguageGen.INUKTITUT, 3, FakeLanguageGen.SOMALI, 2),
+            "ar`in`gen`",
+            FakeLanguageGen.mixAll(FakeLanguageGen.ARABIC_ROMANIZED, 3, FakeLanguageGen.INUKTITUT, 2),
+            "na`lc`gen`",
+            FakeLanguageGen.mixAll(FakeLanguageGen.NAHUATL, 3, FakeLanguageGen.LOVECRAFT, 2),
+            "na`sw`gen`",
+            FakeLanguageGen.mixAll(FakeLanguageGen.NAHUATL, 3, FakeLanguageGen.SWAHILI, 2),
+            "nr`ru`gen`",
+            FakeLanguageGen.mixAll(
+                    FakeLanguageGen.NORSE.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_NORSE), 3,
+                    FakeLanguageGen.RUSSIAN_ROMANIZED, 2),
+            "nr`in`gen`",
+            FakeLanguageGen.mixAll(
+                    FakeLanguageGen.NORSE.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_NORSE), 3,
+                    FakeLanguageGen.INUKTITUT, 2)
+    );
 }

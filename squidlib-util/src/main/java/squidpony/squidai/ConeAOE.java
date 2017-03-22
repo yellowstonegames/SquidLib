@@ -186,7 +186,7 @@ public class ConeAOE implements AOE {
     }
 
     @Override
-    public boolean mayContainTarget(Set<Coord> targets) {
+    public boolean mayContainTarget(Collection<Coord> targets) {
         for (Coord p : targets) {
             if (radiusType.radius(origin.x, origin.y, p.x, p.y) <= radius) {
                 double d = (angle - Math.toDegrees(Math.atan2(p.y - origin.y, p.x - origin.x)) % 360.0 + 360.0) % 360.0;
@@ -200,7 +200,7 @@ public class ConeAOE implements AOE {
     }
 
     @Override
-    public OrderedMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> targets, Set<Coord> requiredExclusions) {
+    public OrderedMap<Coord, ArrayList<Coord>> idealLocations(Collection<Coord> targets, Collection<Coord> requiredExclusions) {
         if(targets == null)
             return new OrderedMap<>();
         if(requiredExclusions == null) requiredExclusions = new OrderedSet<>();
@@ -330,7 +330,7 @@ public class ConeAOE implements AOE {
     }
 
     @Override
-    public OrderedMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> priorityTargets, Set<Coord> lesserTargets, Set<Coord> requiredExclusions) {
+    public OrderedMap<Coord, ArrayList<Coord>> idealLocations(Collection<Coord> priorityTargets, Collection<Coord> lesserTargets, Collection<Coord> requiredExclusions) {
         if(priorityTargets == null)
             return idealLocations(lesserTargets, requiredExclusions);
         if(requiredExclusions == null) requiredExclusions = new OrderedSet<>();

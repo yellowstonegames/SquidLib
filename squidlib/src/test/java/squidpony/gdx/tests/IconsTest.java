@@ -13,13 +13,14 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.squidgrid.Direction;
-import squidpony.squidgrid.SpatialMap;
-import squidpony.squidgrid.gui.gdx.*;
+import squidpony.squidgrid.gui.gdx.AnimatedEntity;
+import squidpony.squidgrid.gui.gdx.DefaultResources;
+import squidpony.squidgrid.gui.gdx.SquidLayers;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.CoordPacker;
-import squidpony.squidmath.SquidID;
+import squidpony.squidmath.OrderedMap;
 import squidpony.squidmath.StatefulRNG;
 
 import java.util.ArrayList;
@@ -36,11 +37,10 @@ public class IconsTest extends ApplicationAdapter{
     Stage stage;
     SpriteBatch batch;
     ArrayList<Color> colors;
-    Coord[] points;
     double[][] resMap;
     float ctr = 0;
     TextureAtlas atlas;
-    SpatialMap<SquidID, AnimatedEntity> things;
+    OrderedMap<Coord, AnimatedEntity> things;
     Array<TextureAtlas.AtlasRegion> regions;
     int totalRegions;
     long seed;
@@ -58,6 +58,7 @@ public class IconsTest extends ApplicationAdapter{
         layers = new SquidLayers(gridWidth, gridHeight, cellWidth, cellHeight,
                 DefaultResources.getStretchableSquareFont());
         layers.setTextSize(cellWidth, cellHeight+1);
+        layers.setAnimationDuration(0.35f);
         //colors = DefaultResources.getSCC().rainbow(0.2f, 1.0f, 144);
         /*
         colors = DefaultResources.getSCC().zigzagGradient(Color.DARK_GRAY, Color.LIGHT_GRAY, 200);
@@ -74,18 +75,17 @@ public class IconsTest extends ApplicationAdapter{
         indicesFG = DungeonUtility.generatePaletteIndices(map);
         resMap = DungeonUtility.generateResistances(map);
         short[] packed = CoordPacker.pack(gen.getBareDungeon(), '.');
-        points = CoordPacker.fractionPacked(packed, 7);
+        Coord[] points = CoordPacker.fractionPacked(packed, 7);
 
         seed = rng.getState();
-        things = new SpatialMap<SquidID, AnimatedEntity>(points.length);
+        things = new OrderedMap<>(points.length);
         AnimatedEntity ent;
         for (int i = 0; i < points.length; i++) {
             ent = layers.animateActor(points[i].x, points[i].y, regions.get(rng.nextInt(totalRegions)),
                     i, colors);
-            things.add(points[i], new SquidID(), ent);
+            things.put(points[i], ent);
             ent.actor.setUserObject(i);
         }
-
         batch = new SpriteBatch();
         stage = new Stage(new StretchViewport(gridWidth * cellWidth, gridHeight * cellHeight), batch);
         stage.addActor(layers);
@@ -103,12 +103,13 @@ public class IconsTest extends ApplicationAdapter{
         regions = atlas.getRegions();
         totalRegions = regions.size;
         rng.setState(seed);
-        things = new SpatialMap<SquidID, AnimatedEntity>(points.length);
         AnimatedEntity ent;
-        for (int i = 0; i < points.length; i++) {
-            ent = layers.animateActor(points[i].x, points[i].y, regions.get(rng.nextInt(totalRegions)),
+        Coord pt;
+        for (int i = 0; i < things.size(); i++) {
+            pt = things.keyAt(i);
+            ent = layers.animateActor(pt.x, pt.y, regions.get(rng.nextInt(totalRegions)),
                     i, colors);
-            things.add(points[i], new SquidID(), ent);
+            things.put(pt, ent);
             ent.actor.setUserObject(i);
         }
     }
@@ -128,9 +129,8 @@ public class IconsTest extends ApplicationAdapter{
             Coord pt;
             AnimatedEntity ent;
             Integer uo;
-            for (int i = 0; i < points.length; i++) {
-                pt = points[i];
-                ent = things.get(pt);
+            for (int i = 0; i < things.size(); i++) {
+                ent = things.getAt(i);
                 if(ent == null || ent.actor == null)
                     continue;
                 uo =  ((Integer) (ent.actor.getUserObject()) + 1) % colors.size();
@@ -138,25 +138,21 @@ public class IconsTest extends ApplicationAdapter{
                 ent.actor.setColor(colors.get(uo));
             }
         }
-        SquidPanel panel = layers.getForegroundLayer();
-        if(ctr > 0.4) {
+
+        if(!layers.hasActiveAnimations() && ctr > 0.4) {
             ctr -= 0.4;
             Direction[] dirs = new Direction[4];
             Coord alter, pt;
             AnimatedEntity ent;
-            for (int i = 0; i < points.length; i++) {
-                pt = points[i];
+            for (int i = 0; i < things.size(); i++) {
+                pt = things.keyAt(i);
                 rng.shuffle(Direction.CARDINALS, dirs);
-                for (Direction d : dirs) {
-                    alter = pt.translate(d);
-                    if (map[alter.x][alter.y] == '.' && !things.containsPosition(alter)) {
-                        points[i] = alter;
-                        ent = things.get(pt);
-                        ent.gridX = alter.x;
-                        ent.gridY = alter.y;
-                        ent.actor.setPosition(panel.adjustX(ent.gridX, false), panel.adjustY(ent.gridY));
-                        things.positionalModify(pt, ent);
-                        things.move(pt, alter);
+                for (int di = 0; di < 4; di++) {
+                    alter = pt.translate(dirs[di]);
+                    if (map[alter.x][alter.y] == '.' && !things.containsKey(alter)) {
+                        ent = things.getAt(i);
+                        layers.slide(ent, alter.x, alter.y);
+                        things.alter(pt, alter);
                         break;
                     }
                 }
@@ -167,9 +163,10 @@ public class IconsTest extends ApplicationAdapter{
         layers.put(0, 0, displayedMap, indicesFG, indicesBG);
         stage.draw();
         batch.begin();
-        for(AnimatedEntity ae : things)
+        int sz = things.size();
+        for (int i = 0; i < sz; i++)
         {
-            layers.drawActor(batch, 1f, ae);
+            layers.drawActor(batch, 1f, things.getAt(i));
         }
         batch.end();
 
