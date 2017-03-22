@@ -394,6 +394,12 @@ public interface Rectangle extends Zone {
 		public List<Coord> getAll() {
             return Utils.cellsList(this);
 		}
+
+		@Override
+		public Iterator<Coord> iterator() {
+			/* Do not rely on getAll(), to avoid allocating the list */
+			return Rectangle.Utils.cells(this);
+		}
 	}
 
 }
