@@ -57,9 +57,9 @@ public class Noise {
         public double getNoise(double x) {
             x *= frequency;
             int s = 1 << (octaves - 1);
-            double n = 0.0, i_s = 0.5 / s;
+            double n = 0.0, i_s = 1.0;
             for (int o = 0; o < octaves; o++, s >>= 1) {
-                n += basis.getNoise(x * (i_s *= 2.0) + o) * s;
+                n += basis.getNoise(x * (i_s *= 0.5) + o) * s;
             }
             return n / ((1 << octaves) - 1.0);
         }
@@ -68,10 +68,10 @@ public class Noise {
         public double getNoiseWithSeed(double x, final int seed) {
             x *= frequency;
             int s = 1 << (octaves - 1), seed2 = seed;
-            double n = 0.0, i_s = 0.5 / s;
+            double n = 0.0, i_s = 1.0;
             for (int o = 0; o < octaves; o++, s >>= 1) {
                 seed2 = PintRNG.determine(seed2);
-                n += basis.getNoiseWithSeed(x * (i_s *= 2.0) + (o << 6), seed2) * s;
+                n += basis.getNoiseWithSeed(x * (i_s *= 0.5) + (o << 6), seed2) * s;
             }
             return n / ((1 << octaves) - 1.0);
         }
@@ -103,9 +103,9 @@ public class Noise {
             x *= frequency;
             y *= frequency;
             int s = 1 << (octaves - 1);
-            double n = 0.0, i_s = 0.5 / s;
+            double n = 0.0, i_s = 1.0;
             for (int o = 0; o < octaves; o++, s >>= 1) {
-                n += basis.getNoise(x * (i_s *= 2.0) + (o << 6), y * i_s + (o << 7)) * s;
+                n += basis.getNoise(x * (i_s *= 0.5) + (o << 6), y * i_s + (o << 7)) * s;
             }
             return n / ((1 << octaves) - 1.0);
         }
@@ -115,10 +115,10 @@ public class Noise {
             x *= frequency;
             y *= frequency;
             int s = 1 << (octaves - 1), seed2 = seed;
-            double n = 0.0, i_s = 0.5 / s;
+            double n = 0.0, i_s = 1.0;
             for (int o = 0; o < octaves; o++, s >>= 1) {
                 seed2 = PintRNG.determine(seed2);
-                n += basis.getNoiseWithSeed(x * (i_s *= 2.0) + (o << 6), y * i_s + (o << 7), seed2) * s;
+                n += basis.getNoiseWithSeed(x * (i_s *= 0.5) + (o << 6), y * i_s + (o << 7), seed2) * s;
             }
             return n / ((1 << octaves) - 1.0);
         }
@@ -150,9 +150,9 @@ public class Noise {
             y *= frequency;
             z *= frequency;
             int s = 1 << (octaves - 1);
-            double n = 0.0, i_s = 0.5 / s;
+            double n = 0.0, i_s = 1.0;
             for (int o = 0; o < octaves; o++, s >>= 1) {
-                n += basis.getNoise(x * (i_s *= 2.0) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8)) * s;
+                n += basis.getNoise(x * (i_s *= 0.5) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8)) * s;
             }
             return n / ((1 << octaves) - 1.0);
         }
@@ -163,10 +163,10 @@ public class Noise {
             y *= frequency;
             z *= frequency;
             int s = 1 << (octaves - 1), seed2 = seed;
-            double n = 0.0, i_s = 0.5 / s;
+            double n = 0.0, i_s = 1.0;
             for (int o = 0; o < octaves; o++, s >>= 1) {
                 seed2 = PintRNG.determine(seed2);
-                n += basis.getNoiseWithSeed(x * (i_s *= 2.0) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8), seed2) * s;
+                n += basis.getNoiseWithSeed(x * (i_s *= 0.5) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8), seed2) * s;
             }
             return n / ((1 << octaves) - 1.0);
         }
@@ -199,9 +199,9 @@ public class Noise {
             z *= frequency;
             w *= frequency;
             int s = 1 << (octaves - 1);
-            double n = 0.0, i_s = 0.5 / s;
+            double n = 0.0, i_s = 1.0;
             for (int o = 0; o < octaves; o++, s >>= 1) {
-                n += basis.getNoise(x * (i_s *= 2.0) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8), w * i_s + (o << 9)) * s;
+                n += basis.getNoise(x * (i_s *= 0.5) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8), w * i_s + (o << 9)) * s;
             }
             return n / ((1 << octaves) - 1.0);
         }
@@ -213,10 +213,10 @@ public class Noise {
             z *= frequency;
             w *= frequency;
             int s = 1 << (octaves - 1), seed2 = seed;
-            double n = 0.0, i_s = 0.5 / s;
+            double n = 0.0, i_s = 1.0;
             for (int o = 0; o < octaves; o++, s >>= 1) {
                 seed2 = PintRNG.determine(seed2);
-                n += basis.getNoiseWithSeed(x * (i_s *= 2.0) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8), w * i_s + (o << 9), seed2) * s;
+                n += basis.getNoiseWithSeed(x * (i_s *= 0.5) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8), w * i_s + (o << 9), seed2) * s;
             }
             return n / ((1 << octaves) - 1.0);
         }
@@ -251,9 +251,9 @@ public class Noise {
             u *= frequency;
             v *= frequency;
             int s = 1 << (octaves - 1);
-            double n = 0.0, i_s = 0.5 / s;
+            double n = 0.0, i_s = 1.0;
             for (int o = 0; o < octaves; o++, s >>= 1) {
-                n += basis.getNoise(x * (i_s *= 2.0) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8)
+                n += basis.getNoise(x * (i_s *= 0.5) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8)
                         , w * i_s + (o << 9), u * i_s + (o << 10), v * i_s + (o << 11)) * s;
             }
             return n / ((1 << octaves) - 1.0);
@@ -268,10 +268,10 @@ public class Noise {
             u *= frequency;
             v *= frequency;
             int s = 1 << (octaves - 1), seed2 = seed;
-            double n = 0.0, i_s = 0.5 / s;
+            double n = 0.0, i_s = 1.0;
             for (int o = 0; o < octaves; o++, s >>= 1) {
                 seed2 = PintRNG.determine(seed2);
-                n += basis.getNoiseWithSeed(x * (i_s *= 2.0) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8)
+                n += basis.getNoiseWithSeed(x * (i_s *= 0.5) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8)
                         , w * i_s + (o << 9), u * i_s + (o << 10), v * i_s + (o << 11), seed2) * s;
             }
             return n / ((1 << octaves) - 1.0);

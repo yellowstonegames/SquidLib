@@ -21,7 +21,8 @@ import squidpony.squidmath.StatefulRNG;
 
 /**
  * Port of Zachary Carter's world generation technique, https://github.com/zacharycarter/mapgen
- * Not currently working in full.
+ * It seems to mostly work now, though it only generates one view of the map that it renders (but biome, moisture, heat,
+ * and height maps can all be requested from it).
  */
 public class DetailedWorldMapDemo extends ApplicationAdapter {
     public enum  BiomeType {
@@ -44,7 +45,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private Noise.Noise4D terrain, terrainRidged, disturbed, heat, moisture;
+    private Noise.Noise4D terrain, terrainRidged, heat, moisture;
     private long seed;
     private int iseed;
     private StatefulRNG rng;
@@ -56,14 +57,15 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             heatCodeData = new int[width][height],
             moistureCodeData = new int[width][height],
             biomeCodeData = new int[width][height];
+    public double waterModifier = 0.0;
 
     public static final double
-            deepWaterLower = -1.0, deepWaterUpper = -0.6,        // -4
-            mediumWaterLower = -0.6, mediumWaterUpper = -0.4,    // -3
-            shallowWaterLower = -0.4, shallowWaterUpper = -0.2,  // -2
-            coastalWaterLower = -0.2, coastalWaterUpper = 0.1, // -1
-            sandLower = 0.1, sandUpper = 0.2,                 // 0
-            grassLower = 0.2, grassUpper = 0.35,                // 1
+            deepWaterLower = -1.0, deepWaterUpper = -0.7,        // -4
+            mediumWaterLower = -0.7, mediumWaterUpper = -0.3,    // -3
+            shallowWaterLower = -0.3, shallowWaterUpper = -0.1,  // -2
+            coastalWaterLower = -0.1, coastalWaterUpper = 0.1,   // -1
+            sandLower = 0.1, sandUpper = 0.22,                   // 0
+            grassLower = 0.22, grassUpper = 0.35,                // 1
             forestLower = 0.35, forestUpper = 0.6,               // 2
             rockLower = 0.6, rockUpper = 0.8,                    // 3
             snowLower = 0.8, snowUpper = 1.0;                    // 4
@@ -77,12 +79,12 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
 
 
     public static final double
-            coldestValueLower = 0.0,   coldestValueUpper = 0.05, // 0
-            colderValueLower = 0.05,   colderValueUpper = 0.18,  // 1
-            coldValueLower = 0.18,     coldValueUpper = 0.4,     // 2
-            warmValueLower = 0.4,      warmValueUpper = 0.6,     // 3
-            warmerValueLower = 0.6,    warmerValueUpper = 0.8,   // 4
-            warmestValueLower = 0.8,   warmestValueUpper = 1.0,  // 5
+            coldestValueLower = 0.0,   coldestValueUpper = 0.15, // 0
+            colderValueLower = 0.15,   colderValueUpper = 0.31,  // 1
+            coldValueLower = 0.31,     coldValueUpper = 0.5,     // 2
+            warmValueLower = 0.5,      warmValueUpper = 0.69,     // 3
+            warmerValueLower = 0.69,    warmerValueUpper = 0.85,   // 4
+            warmestValueLower = 0.85,   warmestValueUpper = 1.0,  // 5
 
             driestValuelower = 0.0,    driestValueUpper  = 0.27, // 0
             drierValueLower = 0.27,    drierValueUpper   = 0.4,  // 1
@@ -151,6 +153,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private static float grassColor = SColor.floatGetI(50, 220, 20);
     private static float forestColor = SColor.floatGetI(16, 160, 0);
     private static float rockColor = SColor.floatGetI(127, 127, 127);
+    private static float darkRockColor = SColor.lerpFloatColors(rockColor, black, 0.1f);
     private static float snowColor = SColor.floatGetI(255, 255, 255);
 
     // Heat map colors
@@ -238,12 +241,17 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         view = new StretchViewport(width, height);
         stage = new Stage(view, batch);
         seed = 0xBEEFF00DCAFECABAL;
-        rng = new StatefulRNG(seed);
-        double minHeight = Double.POSITIVE_INFINITY, maxHeight = Double.NEGATIVE_INFINITY;
-        terrain = new Noise.Layered4D(new SeededNoise(iseed = rng.nextInt()), 5, 1.55);
-        terrainRidged = new Noise.Ridged4D(new SeededNoise(iseed = rng.nextInt()), 3, 1.1);
-        disturbed = new Noise.Turbulent4D(terrain, terrainRidged, 1, 0.75);
-        heat = new Noise.Layered4D(new SeededNoise(iseed = rng.nextInt()), 4, 4.5);
+        rng = new StatefulRNG(); //seed
+        double minHeight = Double.POSITIVE_INFINITY, maxHeight = Double.NEGATIVE_INFINITY,
+                minHeat = Double.POSITIVE_INFINITY, maxHeat = Double.NEGATIVE_INFINITY,
+                minHeat2 = Double.POSITIVE_INFINITY, maxHeat2 = Double.NEGATIVE_INFINITY,
+                minWet = Double.POSITIVE_INFINITY, maxWet = Double.NEGATIVE_INFINITY;
+        waterModifier = rng.nextDouble(0.15)-0.06;
+        terrain = new Noise.Layered4D(new SeededNoise(iseed = rng.nextInt()), 6, 1.9);
+        terrainRidged = new Noise.Ridged4D(new SeededNoise(iseed = rng.nextInt()), 4, 2.0);
+        heat = new Noise.Layered4D(new SeededNoise(rng.nextInt()), 4, 2.0);
+        //heat = new Noise.Turbulent4D(new Noise.Layered4D(new SeededNoise(iseed = rng.nextInt()), 3, 1.05),
+        //        new SeededNoise(iseed = rng.nextInt()), 1, 1.5);
         /*
         new Noise.Noise4D() {
             private final double inv_height = 24.0/(height);
@@ -270,45 +278,71 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                 h, temp;
         for (int y = 0; y < height; y++) {
             q = y * i_h;
-            qs = Math.sin(q) * 4.0;
-            qc = Math.cos(q) * 4.0;
+            qs = Math.sin(q);
+            qc = Math.cos(q);
             for (int x = 0; x < width; x++) {
                 p = x * i_w;
-                ps = Math.sin(p) * 4.0;
-                pc = Math.cos(p) * 4.0;
-                heightData[x][y] = (h = terrain.getNoiseWithSeed(pc +
+                ps = Math.sin(p);
+                pc = Math.cos(p);
+                h = terrain.getNoiseWithSeed(pc +
                                 terrainRidged.getNoiseWithSeed(pc, ps, qc, qs, seedC),
-                        ps, qc, qs, seedA));
+                        ps, qc, qs, seedA);
+                p = Math.signum(h) + waterModifier;
+                h *= p * p;
+                heightData[x][y] = h;
                 minHeight = Math.min(minHeight, h);
                 maxHeight = Math.max(maxHeight, h);
-                heatData[x][y] = heat.getNoiseWithSeed(pc, ps, qc, qs, seedB);
-                moistureData[x][y] = moisture.getNoiseWithSeed(pc, ps, qc, qs, seedC);
+                heatData[x][y] = (h = heat.getNoiseWithSeed(pc, ps, qc, qs, seedB));
+                minHeat = Math.min(minHeat, h);
+                maxHeat = Math.max(maxHeat, h);
+                moistureData[x][y] = (h = moisture.getNoiseWithSeed(pc, ps, qc, qs, seedC));
+                minWet = Math.min(minWet, h);
+                maxWet = Math.max(maxWet, h);
             }
         }
-        double heightDiff = 2.0 / (maxHeight - minHeight);
+        double heightDiff = 2.0 / (maxHeight - minHeight),
+                heatDiff = 0.8 / (maxHeat - minHeat),
+                wetDiff = 1.0 / (maxWet - minWet),
+                hMod;
         for (int y = 0; y < height; y++) {
-            temp = (y - 255.5) * 0.003913894324853229;
-            temp *= temp * 0.5;
+            temp = Math.abs(y - 255.5) * 0.003913894324853229 * 0.6;
             for (int x = 0; x < width; x++) {
                 heightData[x][y] = (h = (heightData[x][y] - minHeight) * heightDiff - 1.0);
                 heightCodeData[x][y] = (t = codeHeight(h));
+                hMod = 1.0;
                 switch (t){
-                    case 2: h = -0.1 * (h- forestLower - 0.08);
+                    case -1:
+                    case -2:
+                    case -3:
+                    case -4:
+                        h = 0.5;
+                        hMod = 0.2;
+                        break;
+                    case 2: h = -0.1 * (h - forestLower - 0.08);
                         break;
                     case 3: h *= -0.25;
                         break;
                     case 4: h *= -0.4;
                         break;
-                    default: h *= 0.1;
+                    default: h *= 0.05;
                 }
-                heatData[x][y] = (h = ((heatData[x][y] * 0.5) + 1.4 + h - temp) * 0.5);
+                heatData[x][y] = (h = (((heatData[x][y] - minHeat) * heatDiff * hMod) + h + 0.8) * (0.7 - temp));
+                minHeat2 = Math.min(minHeat2, h);
+                maxHeat2 = Math.max(maxHeat2, h);
+            }
+        }
+        heatDiff = 1.0 / (maxHeat2 - minHeat2);
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                h = ((heatData[x][y] - minHeat2) * heatDiff);
+                heatData[x][y] = (h = Math.pow(h, 2.0 - h * 2.0));
                 heatCodeData[x][y] = (s = codeHeat(h));
-                moistureData[x][y] = (q = moistureData[x][y] * 0.5 + 0.5);
+                moistureData[x][y] = (q = (moistureData[x][y] - minWet) * wetDiff);
                 moistureCodeData[x][y] = (t = codeMoisture(q));
                 biomeCodeData[x][y] = BIOME_TABLE[s + t * 6].ordinal();
             }
         }
-        heightIndex = data.putDoubles("height", heightData);
+            heightIndex = data.putDoubles("height", heightData);
         heatIndex = data.putDoubles("heat", heatData);
         moistureIndex = data.putDoubles("moisture", moistureData);
 
@@ -340,75 +374,117 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
 
     public void putMap() {
         display.erase();
-        int hc, bc;
+        int hc, bc, tc;
         double h;
-        float c;
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
+        for (int y = 0; y < height; y++) {
+            PER_CELL:
+            for (int x = 0; x < width; x++) {
                 h = heightData[x][y];
                 hc = heightCodeData[x][y] + 4;
                 bc = biomeCodeData[x][y];
+                tc = heatCodeData[x][y];
+                if(tc == 0)
+                {
+                    switch (hc)
+                    {
+/*
+                        case 0:
+                            display.put(x, y, SColor.lerpFloatColors(shallowColor, darkShallowColor,
+                                    (float) ((h - lowers[hc]) / (differences[hc] * 1.6))));
+                            continue PER_CELL;
+                        case 1:
+                            display.put(x, y, SColor.lerpFloatColors(coastalColor, darkCoastalColor,
+                                    (float) ((h - lowers[hc]) / (differences[hc] * 1.4))));
+                            continue PER_CELL;
+                        case 2:
+                            display.put(x, y, SColor.lerpFloatColors(ice, coastalColor,
+                                    (float) ((h - lowers[hc]) / (differences[hc] * 1.2))));
+                            continue PER_CELL;
+                        case 3:
+                            display.put(x, y, SColor.lerpFloatColors(ice, coastalColor,
+                                    (float) ((h - lowers[hc]) / (differences[hc]))));
+                            continue PER_CELL;
+                        case 4:
+                        */
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                            display.put(x, y, SColor.lerpFloatColors(shallowColor, ice,
+                                    (float) ((h - deepWaterLower) / (coastalWaterUpper - deepWaterLower))));
+                            continue PER_CELL;
+                        case 4:
+                            display.put(x, y, SColor.lerpFloatColors(darkIce, ice,
+                                    (float) ((h - lowers[hc]) / (differences[hc]))));
+                            continue PER_CELL;
+
+                    }
+                }
                 switch (hc) {
                     case 0:
-                        display.put(x, y, SColor.lerpFloatColors(deepColor, darkDeepColor,
+                        display.put(x, y, SColor.lerpFloatColors(darkDeepColor, deepColor,
                                 (float) ((h - lowers[hc]) / (differences[hc]))));
                         break;
                     case 1:
-                        display.put(x, y, SColor.lerpFloatColors(mediumColor, darkMediumColor,
+                        display.put(x, y, SColor.lerpFloatColors(darkMediumColor, mediumColor,
                                 (float) ((h - lowers[hc]) / (differences[hc]))));
                         break;
                     case 2:
-                        display.put(x, y, SColor.lerpFloatColors(shallowColor, darkShallowColor,
+                        display.put(x, y, SColor.lerpFloatColors(darkShallowColor, shallowColor,
                                 (float) ((h - lowers[hc]) / (differences[hc]))));
                         break;
                     case 3:
-                        display.put(x, y, SColor.lerpFloatColors(coastalColor, darkCoastalColor,
+                        display.put(x, y, SColor.lerpFloatColors(darkCoastalColor, coastalColor,
                                 (float) ((h - lowers[hc]) / (differences[hc]))));
                         break;
                     case 4:
-                        display.put(x, y, SColor.lerpFloatColors(beachColor, darkBeachColor,
+                        if(tc == 1)
+                            display.put(x, y, SColor.lerpFloatColors(darkRockColor, rockColor,
+                                    (float) ((h - lowers[hc]) / (differences[hc]))));
+                        else
+                            display.put(x, y, SColor.lerpFloatColors(darkBeachColor, beachColor,
                                 (float) ((h - lowers[hc]) / (differences[hc]))));
                         break;
                     default: {
                         switch (bc) {
                             case 0: //Desert
-                                display.put(x, y, SColor.lerpFloatColors(desert, darkDesert,
+                                display.put(x, y, SColor.lerpFloatColors(darkDesert, desert,
                                         (float) ((h - lowers[hc]) / (differences[hc]))));
                                 break;
                             case 1: //Savanna
-                                display.put(x, y, SColor.lerpFloatColors(savanna, darkSavanna,
+                                display.put(x, y, SColor.lerpFloatColors(darkSavanna, savanna,
                                         (float) ((h - lowers[hc]) / (differences[hc]))));
                                 break;
                             case 2: //TropicalRainforest
-                                display.put(x, y, SColor.lerpFloatColors(tropicalRainforest, darkTropicalRainforest,
+                                display.put(x, y, SColor.lerpFloatColors(darkTropicalRainforest, tropicalRainforest,
                                         (float) ((h - lowers[hc]) / (differences[hc]))));
                                 break;
                             case 3: //Grassland
-                                display.put(x, y, SColor.lerpFloatColors(grassland, darkGrassland,
+                                display.put(x, y, SColor.lerpFloatColors(darkGrassland, grassland,
                                         (float) ((h - lowers[hc]) / (differences[hc]))));
                                 break;
                             case 4: //Woodland
-                                display.put(x, y, SColor.lerpFloatColors(woodland, darkWoodland,
+                                display.put(x, y, SColor.lerpFloatColors(darkWoodland, woodland,
                                         (float) ((h - lowers[hc]) / (differences[hc]))));
                                 break;
                             case 5: //SeasonalForest
-                                display.put(x, y, SColor.lerpFloatColors(seasonalForest, darkSeasonalForest,
+                                display.put(x, y, SColor.lerpFloatColors(darkSeasonalForest, seasonalForest,
                                         (float) ((h - lowers[hc]) / (differences[hc]))));
                                 break;
                             case 6: //TemperateRainforest
-                                display.put(x, y, SColor.lerpFloatColors(temperateRainforest, darkTemperateRainforest,
+                                display.put(x, y, SColor.lerpFloatColors(darkTemperateRainforest, temperateRainforest,
                                         (float) ((h - lowers[hc]) / (differences[hc]))));
                                 break;
                             case 7: //BorealForest
-                                display.put(x, y, SColor.lerpFloatColors(borealForest, darkBorealForest,
+                                display.put(x, y, SColor.lerpFloatColors(darkBorealForest, borealForest,
                                         (float) ((h - lowers[hc]) / (differences[hc]))));
                                 break;
                             case 8: //Tundra
-                                display.put(x, y, SColor.lerpFloatColors(tundra, darkTundra,
+                                display.put(x, y, SColor.lerpFloatColors(darkTundra, tundra,
                                         (float) ((h - lowers[hc]) / (differences[hc]))));
                                 break;
                             case 9: //Ice
-                                display.put(x, y, SColor.lerpFloatColors(ice, darkIce,
+                                display.put(x, y, SColor.lerpFloatColors(darkIce, ice,
                                         (float) ((h - lowers[hc]) / (differences[hc]))));
                                 break;
                         }

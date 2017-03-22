@@ -86,10 +86,10 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Noise3D layered3D = new Noise.Layered3D(SeededNoise.instance, 2, 1.25);
     private final Noise.Noise4D layered4D = new Noise.Layered4D(SeededNoise.instance, 2, 1.25);
     private final Noise.Noise6D layered6D = new Noise.Layered6D(SeededNoise.instance, 2, 1.25);
-    private final Noise.Noise2D value2D = new Noise.Layered2D(ValueNoise.instance, 1);
-    private final Noise.Noise3D value3D = new Noise.Layered3D(ValueNoise.instance, 1);
-    private final Noise.Noise4D value4D = new Noise.Layered4D(ValueNoise.instance, 1);
-    private final Noise.Noise6D value6D = new Noise.Layered6D(ValueNoise.instance, 1);
+    private final Noise.Noise2D value2D = new Noise.Layered2D(ValueNoise.instance, 2);
+    private final Noise.Noise3D value3D = new Noise.Layered3D(ValueNoise.instance, 2);
+    private final Noise.Noise4D value4D = new Noise.Layered4D(ValueNoise.instance, 2);
+    private final Noise.Noise6D value6D = new Noise.Layered6D(ValueNoise.instance, 2);
     private final Noise.Noise2D scaled2D = new Noise.Scaled2D(seeded, 1.43, 1.43);
     private final Noise.Noise3D scaled3D = new Noise.Scaled3D(seeded, 1.43, 1.43, 1.43);
     private final Noise.Noise4D scaled4D = new Noise.Scaled4D(seeded, 1.43, 1.43, 1.43, 1.43);
