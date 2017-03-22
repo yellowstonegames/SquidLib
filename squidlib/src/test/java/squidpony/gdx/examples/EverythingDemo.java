@@ -110,8 +110,8 @@ public class EverythingDemo extends ApplicationAdapter {
     private Stage stage;
     private int framesWithoutAnimation = 0;
     private Coord cursor;
-    private ArrayList<Coord> toCursor;
-    private ArrayList<Coord> awaitedMoves;
+    private List<Coord> toCursor;
+    private List<Coord> awaitedMoves;
     private String lang;
     private SquidColorCenter[] colorCenters;
     private int currentCenter;
@@ -289,7 +289,16 @@ public class EverythingDemo extends ApplicationAdapter {
         cursor = Coord.get(-1, -1);
         toCursor = new ArrayList<>(10);
         awaitedMoves = new ArrayList<>(10);
+        //DijkstraMap is the pathfinding swiss-army knife we use here to find a path to the latest cursor position.
+        //DijkstraMap.Measurement is an enum that determines the possibility or preference to enter diagonals. Here, the
+        //EUCLIDEAN value is used, which allows 8 directions of movement but prefers orthogonal moves, unless a
+        //diagonal move is clearly closer "as the crow flies." Alternatives are CHEBYSHEV,  which allows 8 directions of
+        //movement at the same cost for all directions, and MANHATTAN, which means 4-way movement only, no diagonals.
         playerToCursor = new DijkstraMap(decoDungeon, DijkstraMap.Measurement.EUCLIDEAN);
+        //These next two lines mark the player as something we want paths to go to or from, and get the distances to the
+        // player from all walkable cells in the dungeon.
+        playerToCursor.setGoal(pl);
+        playerToCursor.scan(null);
         final int[][] initialColors = DungeonUtility.generatePaletteIndices(decoDungeon),
                 initialBGColors = DungeonUtility.generateBGPaletteIndices(decoDungeon);
         colors = new Color[width][height];
@@ -413,10 +422,21 @@ public class EverythingDemo extends ApplicationAdapter {
                 if (fovmap[screenX][screenY] > 0.0 && awaitedMoves.isEmpty()) {
                     if (toCursor.isEmpty()) {
                         cursor = Coord.get(screenX, screenY);
-                        //Uses DijkstraMap to get a path. from the player's position to the cursor
-                        toCursor = playerToCursor.findPath(30, null, null, Coord.get(player.gridX, player.gridY), cursor);
+                        //This uses DijkstraMap.findPathPreScannned() to get a path as a List of Coord from the current
+                        // player position to the position the user clicked on. The "PreScanned" part is an optimization
+                        // that's special to DijkstraMap; because the whole map has already been fully analyzed by the
+                        // DijkstraMap.scan() method at the start of the program, and re-calculated whenever the player
+                        // moves, we only need to do a fraction of the work to find the best path with that info.
+                        toCursor = playerToCursor.findPathPreScanned(cursor);
+                        //findPathPreScanned includes the current cell (goal) by default, which is helpful when
+                        // you're finding a path to a monster or loot, and want to bump into it, but here can be
+                        // confusing because you would "move into yourself" as your first move without this.
+                        // Getting a sublist avoids potential performance issues with removing from the start of an
+                        // ArrayList, since it keeps the original list around and only gets a "view" of it.
+                        if(!toCursor.isEmpty())
+                            toCursor = toCursor.subList(1, toCursor.size());
+
                     }
-                    awaitedMoves.clear();
                     awaitedMoves.addAll(toCursor);
                 }
                 return false;
@@ -431,15 +451,29 @@ public class EverythingDemo extends ApplicationAdapter {
             // receive highlighting). Uses DijkstraMap.findPath() to find the path, which is surprisingly fast.
             @Override
             public boolean mouseMoved(int screenX, int screenY) {
-                if (!awaitedMoves.isEmpty())
+                if(!awaitedMoves.isEmpty())
                     return false;
-                if (cursor.x == screenX && cursor.y == screenY) {
+                if((screenX < 0 || screenX >= width || screenY < 0 || screenY >= height)
+                        || (cursor.x == screenX && cursor.y == screenY))
+                {
                     return false;
                 }
                 if (fovmap[screenX][screenY] > 0.0) {
                     cursor = Coord.get(screenX, screenY);
-                    //Uses DijkstraMap to get a path. from the player's position to the cursor
-                    toCursor = playerToCursor.findPath(30, null, null, Coord.get(player.gridX, player.gridY), cursor);
+                    //This uses DijkstraMap.findPathPreScannned() to get a path as a List of Coord from the current
+                    // player position to the position the user clicked on. The "PreScanned" part is an optimization
+                    // that's special to DijkstraMap; because the whole map has already been fully analyzed by the
+                    // DijkstraMap.scan() method at the start of the program, and re-calculated whenever the player
+                    // moves, we only need to do a fraction of the work to find the best path with that info.
+                    toCursor = playerToCursor.findPathPreScanned(cursor);
+                    //findPathPreScanned includes the current cell (goal) by default, which is helpful when
+                    // you're finding a path to a monster or loot, and want to bump into it, but here can be
+                    // confusing because you would "move into yourself" as your first move without this.
+                    // Getting a sublist avoids potential performance issues with removing from the start of an
+                    // ArrayList, since it keeps the original list around and only gets a "view" of it.
+                    if(!toCursor.isEmpty())
+                        toCursor = toCursor.subList(1, toCursor.size());
+
                 }
                 return false;
             }
@@ -692,7 +726,7 @@ public class EverythingDemo extends ApplicationAdapter {
                 }
             }
         }
-        Coord pt = null;
+        Coord pt;
         for (int i = 0; i < toCursor.size(); i++) {
             pt = toCursor.get(i);
             // use a brighter light to trace the path to the cursor, from 170 max lightness to 0 min.
@@ -749,6 +783,24 @@ public class EverythingDemo extends ApplicationAdapter {
                             Coord m = awaitedMoves.remove(0);
                             toCursor.remove(0);
                             move(m.x - player.gridX, m.y - player.gridY);
+                            // this only happens if we just removed the last Coord from awaitedMoves, and it's only then that we need to
+                            // re-calculate the distances from all cells to the player. We don't need to calculate this information on
+                            // each part of a many-cell move (just the end), nor do we need to calculate it whenever the mouse moves.
+                            if(awaitedMoves.isEmpty())
+                            {
+                                // the next two lines remove any lingering data needed for earlier paths
+                                playerToCursor.clearGoals();
+                                playerToCursor.resetMap();
+                                // the next line marks the player as a "goal" cell, which seems counter-intuitive, but it works because all
+                                // cells will try to find the distance between themselves and the nearest goal, and once this is found, the
+                                // distances don't change as long as the goals don't change. Since the mouse will move and new paths will be
+                                // found, but the player doesn't move until a cell is clicked, the "goal" is the non-changing cell, so the
+                                // player's position, and the "target" of a pathfinding method like DijkstraMap.findPathPreScanned() is the
+                                // currently-moused-over cell, which we only need to set where the mouse is being handled.
+                                playerToCursor.setGoal(m);
+                                playerToCursor.scan(null);
+                            }
+
                             break;
                         case PLAYER_ANIM:
                             postMove();

@@ -20,6 +20,7 @@ import squidpony.squidmath.RNG;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class BasicDemo extends ApplicationAdapter {
     SpriteBatch batch;
@@ -42,8 +43,8 @@ public class BasicDemo extends ApplicationAdapter {
     private Stage stage;
     private DijkstraMap playerToCursor;
     private Coord cursor, player;
-    private ArrayList<Coord> toCursor;
-    private ArrayList<Coord> awaitedMoves;
+    private List<Coord> toCursor;
+    private List<Coord> awaitedMoves;
     private float secondsWithoutMoves;
     private String[] lang;
     private int langIndex = 0;
@@ -294,6 +295,13 @@ public class BasicDemo extends ApplicationAdapter {
                         // DijkstraMap.scan() method at the start of the program, and re-calculated whenever the player
                         // moves, we only need to do a fraction of the work to find the best path with that info.
                         toCursor = playerToCursor.findPathPreScanned(cursor);
+                        //findPathPreScanned includes the current cell (goal) by default, which is helpful when
+                        // you're finding a path to a monster or loot, and want to bump into it, but here can be
+                        // confusing because you would "move into yourself" as your first move without this.
+                        // Getting a sublist avoids potential performance issues with removing from the start of an
+                        // ArrayList, since it keeps the original list around and only gets a "view" of it.
+                        if(!toCursor.isEmpty())
+                            toCursor = toCursor.subList(1, toCursor.size());
                     }
                     awaitedMoves.addAll(toCursor);
                 }
@@ -323,6 +331,13 @@ public class BasicDemo extends ApplicationAdapter {
                 // moves, we only need to do a fraction of the work to find the best path with that info.
 
                 toCursor = playerToCursor.findPathPreScanned(cursor);
+                //findPathPreScanned includes the current cell (goal) by default, which is helpful when
+                // you're finding a path to a monster or loot, and want to bump into it, but here can be
+                // confusing because you would "move into yourself" as your first move without this.
+                // Getting a sublist avoids potential performance issues with removing from the start of an
+                // ArrayList, since it keeps the original list around and only gets a "view" of it.
+                if(!toCursor.isEmpty())
+                    toCursor = toCursor.subList(1, toCursor.size());
                 return false;
             }
         }));

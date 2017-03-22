@@ -789,7 +789,8 @@ public class DijkstraMap implements Serializable {
         if (!initialized) return;
         if (impassable != null && !impassable.isEmpty()) {
             for (Coord pt : impassable) {
-                gradientMap[pt.x][pt.y] = WALL;
+                if(pt != null && pt.isWithin(width, height))
+                    gradientMap[pt.x][pt.y] = WALL;
             }
         }
         int dec, adjX, adjY, cen, cenX, cenY;
@@ -851,7 +852,8 @@ public class DijkstraMap implements Serializable {
                         {
                             if (impassable != null && !impassable.isEmpty()) {
                                 for (Coord pt : impassable) {
-                                    gradientMap[pt.x][pt.y] = physicalMap[pt.x][pt.y];
+                                    if(pt != null && pt.isWithin(width, height))
+                                        gradientMap[pt.x][pt.y] = physicalMap[pt.x][pt.y];
                                 }
                             }
                             return;
@@ -862,7 +864,8 @@ public class DijkstraMap implements Serializable {
         }
         if (impassable != null && !impassable.isEmpty()) {
             for (Coord pt : impassable) {
-                gradientMap[pt.x][pt.y] = physicalMap[pt.x][pt.y];
+                if(pt != null && pt.isWithin(width, height))
+                    gradientMap[pt.x][pt.y] = physicalMap[pt.x][pt.y];
             }
         }
     }
@@ -916,7 +919,8 @@ public class DijkstraMap implements Serializable {
         if (!initialized || limit <= 0) return;
         if (impassable != null && !impassable.isEmpty()) {
             for (Coord pt : impassable) {
-                gradientMap[pt.x][pt.y] = WALL;
+                if(pt != null && pt.isWithin(width, height))
+                    gradientMap[pt.x][pt.y] = WALL;
             }
         }
         int dec, adjX, adjY, cen, cenX, cenY;
@@ -982,7 +986,8 @@ public class DijkstraMap implements Serializable {
                         {
                             if (impassable != null && !impassable.isEmpty()) {
                                 for (Coord pt : impassable) {
-                                    gradientMap[pt.x][pt.y] = physicalMap[pt.x][pt.y];
+                                    if(pt != null && pt.isWithin(width, height))
+                                        gradientMap[pt.x][pt.y] = physicalMap[pt.x][pt.y];
                                 }
                             }
                             return;
@@ -993,7 +998,8 @@ public class DijkstraMap implements Serializable {
         }
         if (impassable != null && !impassable.isEmpty()) {
             for (Coord pt : impassable) {
-                gradientMap[pt.x][pt.y] = physicalMap[pt.x][pt.y];
+                if(pt != null && pt.isWithin(width, height))
+                    gradientMap[pt.x][pt.y] = physicalMap[pt.x][pt.y];
             }
         }
     }
@@ -1277,7 +1283,8 @@ public class DijkstraMap implements Serializable {
         double[][] gradientClone = ArrayTools.copy(gradientMap);
         if (impassable != null && !impassable.isEmpty()) {
             for (Coord pt : impassable) {
-                gradientMap[pt.x][pt.y] = WALL;
+                if(pt != null && pt.isWithin(width, height))
+                    gradientMap[pt.x][pt.y] = WALL;
             }
         }
         for (int xx = size; xx < width; xx++) {
@@ -1357,20 +1364,34 @@ public class DijkstraMap implements Serializable {
                         {
                             if (impassable != null && !impassable.isEmpty()) {
                                 for (Coord pt : impassable) {
-                                    for (int xs = pt.x, xi = 0; xi < size && xs >= 0; xs--, xi++) {
-                                        for (int ys = pt.y, yi = 0; yi < size && ys >= 0; ys--, yi++) {
-                                            gradientClone[xs][ys] = physicalMap[xs][ys];
+                                    if(pt != null && pt.isWithin(width, height)) {
+                                        for (int xs = pt.x, xi = 0; xi < size && xs >= 0; xs--, xi++) {
+                                            for (int ys = pt.y, yi = 0; yi < size && ys >= 0; ys--, yi++) {
+                                                gradientClone[xs][ys] = physicalMap[xs][ys];
+                                            }
                                         }
                                     }
                                 }
                             }
+                            gradientMap = gradientClone;
                             return;
                         }
                     }
                 }
             }
         }
-        // return;
+        if (impassable != null && !impassable.isEmpty()) {
+            for (Coord pt : impassable) {
+                if(pt != null && pt.isWithin(width, height)) {
+                    for (int xs = pt.x, xi = 0; xi < size && xs >= 0; xs--, xi++) {
+                        for (int ys = pt.y, yi = 0; yi < size && ys >= 0; ys--, yi++) {
+                            gradientClone[xs][ys] = physicalMap[xs][ys];
+                        }
+                    }
+                }
+            }
+        }
+        gradientMap = gradientClone;
     }
 
 
@@ -1435,7 +1456,8 @@ public class DijkstraMap implements Serializable {
         double[][] gradientClone = ArrayTools.copy(gradientMap);
         if (impassable != null && !impassable.isEmpty()) {
             for (Coord pt : impassable) {
-                gradientMap[pt.x][pt.y] = WALL;
+                if(pt != null && pt.isWithin(width, height))
+                    gradientMap[pt.x][pt.y] = WALL;
             }
         }
         for (int xx = size; xx < width; xx++) {
@@ -1516,20 +1538,34 @@ public class DijkstraMap implements Serializable {
                         {
                             if (impassable != null && !impassable.isEmpty()) {
                                 for (Coord pt : impassable) {
-                                    for (int xs = pt.x, xi = 0; xi < size && xs >= 0; xs--, xi++) {
-                                        for (int ys = pt.y, yi = 0; yi < size && ys >= 0; ys--, yi++) {
-                                            gradientClone[xs][ys] = physicalMap[xs][ys];
+                                    if(pt != null && pt.isWithin(width, height)) {
+                                        for (int xs = pt.x, xi = 0; xi < size && xs >= 0; xs--, xi++) {
+                                            for (int ys = pt.y, yi = 0; yi < size && ys >= 0; ys--, yi++) {
+                                                gradientClone[xs][ys] = physicalMap[xs][ys];
+                                            }
                                         }
                                     }
                                 }
                             }
+                            gradientMap = gradientClone;
                             return;
                         }
                     }
                 }
             }
         }
-        // return;
+        if (impassable != null && !impassable.isEmpty()) {
+            for (Coord pt : impassable) {
+                if(pt != null && pt.isWithin(width, height)) {
+                    for (int xs = pt.x, xi = 0; xi < size && xs >= 0; xs--, xi++) {
+                        for (int ys = pt.y, yi = 0; yi < size && ys >= 0; ys--, yi++) {
+                            gradientClone[xs][ys] = physicalMap[xs][ys];
+                        }
+                    }
+                }
+            }
+        }
+        gradientMap = gradientClone;
     }
 
     /**
