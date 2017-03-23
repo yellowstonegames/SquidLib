@@ -52,7 +52,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private int iseed;
     private StatefulRNG rng;
     private GridData data;
-    private static final int width = 700, height = 700;
+    private static final int width = 512, height = 512;
     private double[][] heightData = new double[width][height],
             heatData = new double[width][height],
             moistureData = new double[width][height],
@@ -62,7 +62,12 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             moistureCodeData = new int[width][height],
             biomeUpperCodeData = new int[width][height],
             biomeLowerCodeData = new int[width][height];
-    public double waterModifier = 0.0, coolingModifier = 1.0;
+    public double waterModifier = 0.0, coolingModifier = 1.0,
+            minHeight = Double.POSITIVE_INFINITY, maxHeight = Double.NEGATIVE_INFINITY,
+            minHeat = Double.POSITIVE_INFINITY, maxHeat = Double.NEGATIVE_INFINITY,
+            minHeat2 = Double.POSITIVE_INFINITY, maxHeat2 = Double.NEGATIVE_INFINITY,
+            minWet = Double.POSITIVE_INFINITY, maxWet = Double.NEGATIVE_INFINITY;
+    ;
 
     public static final double
             deepWaterLower = -1.0, deepWaterUpper = -0.7,        // -4
@@ -395,21 +400,39 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         stage = new Stage(view, batch);
         seed = 0xBEEFF00DCAFECABAL;
         rng = new StatefulRNG(seed); //seed
-        terrain = new Noise.Layered4D(new SeededNoise(iseed = rng.nextInt()), 6, 1.9);
-        terrainRidged = new Noise.Ridged4D(new SeededNoise(iseed = rng.nextInt()), 4, 2.0);
-        heat = new Noise.Layered4D(new SeededNoise(rng.nextInt()), 5, 4.5);
-        moisture = new Noise.Layered4D(new SeededNoise(rng.nextInt()), 4, 3.5);
-        otherRidged = new Noise.Ridged4D(new SeededNoise(iseed = rng.nextInt()), 4, 1.5);
+        terrain = new Noise.Layered4D(new SeededNoise(), 6, 1.9);
+        terrainRidged = new Noise.Ridged4D(new SeededNoise(), 4, 2.0);
+        heat = new Noise.Layered4D(new SeededNoise(), 5, 4.5);
+        moisture = new Noise.Layered4D(new SeededNoise(), 4, 3.5);
+        otherRidged = new Noise.Ridged4D(new SeededNoise(), 4, 1.5);
         data = new GridData(16);
-        regenerate();
+        regenerate(0, 0, width, height, seed);
         input = new SquidInput(new SquidInput.KeyHandler() {
+            int zoom = 0;
+            final long currentSeed = seed;
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
                 switch (key) {
                     case SquidInput.ENTER:
                         regenerate();
                         //putMap();
-                        Gdx.graphics.requestRendering();
+                        //Gdx.graphics.requestRendering();
+                        break;
+                    case '=':
+                    case '+':
+                        if(zoom < 7)
+                        {
+                            zoom++;
+                            regenerate(256 - (256 >> zoom), 256 - (256 >> zoom), (512 >> zoom), (512 >> zoom), currentSeed);
+                        }
+                        break;
+                    case '-':
+                    case '_':
+                        if(zoom > 0)
+                        {
+                            zoom--;
+                            regenerate(256 - (256 >> zoom), 256 - (256 >> zoom), (512 >> zoom), (512 >> zoom), currentSeed);
+                        }
                         break;
                     case 'Q':
                     case 'q':
@@ -423,15 +446,15 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         display.setPosition(0, 0);
         stage.addActor(display);
         //putMap();
-        Gdx.graphics.setContinuousRendering(false);
-        Gdx.graphics.requestRendering();
+        //Gdx.graphics.setContinuousRendering(false);
+        //Gdx.graphics.requestRendering();
     }
-    public void regenerate()
+    public void regenerate() {
+        regenerate(0, 0, width, height, rng.getState());
+    }
+    public void regenerate(int startX, int startY, int usedWidth, int usedHeight, long state)
     {
-        double minHeight = Double.POSITIVE_INFINITY, maxHeight = Double.NEGATIVE_INFINITY,
-                minHeat = Double.POSITIVE_INFINITY, maxHeat = Double.NEGATIVE_INFINITY,
-                minHeat2 = Double.POSITIVE_INFINITY, maxHeat2 = Double.NEGATIVE_INFINITY,
-                minWet = Double.POSITIVE_INFINITY, maxWet = Double.NEGATIVE_INFINITY;
+        rng.setState(state);
         int seedA = rng.nextInt(), seedB = rng.nextInt(), seedC = rng.nextInt(), seedD = rng.nextInt(), t;
         waterModifier = rng.nextDouble(0.15)-0.06;
         coolingModifier = (rng.nextDouble(0.75) - rng.nextDouble(0.75) + 1.0);
@@ -440,13 +463,15 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                 ps, pc,
                 qs, qc,
                 h, temp,
-                i_w = 6.283185307179586 / width, i_h = 6.283185307179586 / height;;
-        for (int y = 0; y < height; y++) {
-            q = y * i_h;
+                i_w = 6.283185307179586 / width, i_h = 6.283185307179586 / height,
+                xPos, yPos = startY, i_uw = usedWidth / (double)width, i_uh = usedHeight / (double)height;
+        for (int y = 0; y < height; y++, yPos += i_uh) {
+            q = yPos * i_h;
             qs = Math.sin(q);
             qc = Math.cos(q);
-            for (int x = 0; x < width; x++) {
-                p = x * i_w;
+            xPos = startX;
+            for (int x = 0; x < width; x++, xPos += i_uw) {
+                p = xPos * i_w;
                 ps = Math.sin(p);
                 pc = Math.cos(p);
                 h = terrain.getNoiseWithSeed(pc +
@@ -472,8 +497,9 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                 wetDiff = 1.0 / (maxWet - minWet),
                 hMod,
                 halfHeight = (height - 1) * 0.5, i_half = 1.0 / halfHeight;
-        for (int y = 0; y < height; y++) {
-            temp = Math.abs(y - halfHeight) * i_half;
+        yPos = startY;
+        for (int y = 0; y < height; y++, yPos += i_uh) {
+            temp = Math.abs(yPos - halfHeight) * i_half;
             temp *= (2.4 - temp);
             for (int x = 0; x < width; x++) {
                 heightData[x][y] = (h = (heightData[x][y] - minHeight) * heightDiff - 1.0);
@@ -511,13 +537,15 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             }
            
         }
+        /*
         data.putDoubles("height", heightData);
         data.putDoubles("heat", heatData);
         data.putDoubles("moisture", moistureData);
-
+        */
     }
 
     public void putMap() {
+        //regenerate();
         display.erase();
         int hc, tc;
         for (int y = 0; y < height; y++) {
@@ -537,7 +565,6 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                                     (float) ((heightData[x][y] - deepWaterLower) / (coastalWaterUpper - deepWaterLower))));
                             continue PER_CELL;
                         case 4:
-                            hc = heightCodeData[x][y];
                             display.put(x, y, SColor.lerpFloatColors(lightIce, ice,
                                     (float) ((heightData[x][y] - lowers[hc]) / (differences[hc]))));
                             continue PER_CELL;
@@ -611,6 +638,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         // not sure if this is always needed...
         Gdx.gl.glDisable(GL20.GL_BLEND);
+        Gdx.graphics.setTitle("SquidLib Demo: Detailed World Map, at " + Gdx.graphics.getFramesPerSecond() + " FPS");
         // need to display the map every frame, since we clear the screen to avoid artifacts.
         putMap();
         // if the user clicked, we have a list of moves to perform.
@@ -632,7 +660,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
 
     public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "SquidLib Test: Detailed World Map";
+        config.title = "SquidLib Demo: Detailed World Map";
         config.width = width;
         config.height = height;
         config.foregroundFPS = 0;
