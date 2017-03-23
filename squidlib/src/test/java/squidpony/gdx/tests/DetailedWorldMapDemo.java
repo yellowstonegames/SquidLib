@@ -52,7 +52,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private int iseed;
     private StatefulRNG rng;
     private GridData data;
-    private final int width = 512, height = 512;
+    private static final int width = 800, height = 800;
     private double[][] heightData = new double[width][height],
             heatData = new double[width][height],
             moistureData = new double[width][height],
@@ -141,9 +141,9 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private static float darkBeach = SColor.lerpFloatColors(beach, black, 0.15f);
 
     // water colors
-    private static float deepColor = SColor.floatGetI(0, 42, 92);
+    private static float deepColor = SColor.floatGetI(0, 68, 128);
     private static float darkDeepColor = SColor.lerpFloatColors(deepColor, black, 0.15f);
-    private static float mediumColor = SColor.floatGetI(0, 75, 139);
+    private static float mediumColor = SColor.floatGetI(0, 89, 159);
     private static float darkMediumColor = SColor.lerpFloatColors(mediumColor, black, 0.15f);
     private static float shallowColor = SColor.CERULEAN.toFloatBits();
     private static float darkShallowColor = SColor.lerpFloatColors(shallowColor, black, 0.15f);
@@ -507,7 +507,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                 minWet = Double.POSITIVE_INFINITY, maxWet = Double.NEGATIVE_INFINITY;
         int seedA = rng.nextInt(), seedB = rng.nextInt(), seedC = rng.nextInt(), seedD = rng.nextInt(), t;
         waterModifier = rng.nextDouble(0.15)-0.06;
-        coolingModifier = (rng.nextDouble(1.5) + 0.25);
+        coolingModifier = (rng.nextDouble(0.75) - rng.nextDouble(0.75) + 1.0);
 
         double p, q,
                 ps, pc,
@@ -543,9 +543,10 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         double heightDiff = 2.0 / (maxHeight - minHeight),
                 heatDiff = 0.8 / (maxHeat - minHeat),
                 wetDiff = 1.0 / (maxWet - minWet),
-                hMod;
+                hMod,
+                halfHeight = (height - 1) * 0.5, i_half = 1.0 / halfHeight;
         for (int y = 0; y < height; y++) {
-            temp = Math.abs(y - 255.5) * 0.003913894324853229;
+            temp = Math.abs(y - halfHeight) * i_half;
             temp *= (2.4 - temp);
             for (int x = 0; x < width; x++) {
                 heightData[x][y] = (h = (heightData[x][y] - minHeight) * heightDiff - 1.0);
@@ -650,7 +651,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                     case 1:
                     case 2:
                     case 3:
-                        display.put(x, y, SColor.lerpFloatColors(darkDeepColor, coastalColor,
+                        display.put(x, y, SColor.lerpFloatColors(deepColor, coastalColor,
                                 (float) ((h - deepWaterLower) / (coastalWaterUpper - deepWaterLower))));
                         break;
                     /*
@@ -763,8 +764,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "SquidLib Test: Detailed World Map";
-        config.width = 512;
-        config.height = 512;
+        config.width = width;
+        config.height = height;
         config.foregroundFPS = 0;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);

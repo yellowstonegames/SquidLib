@@ -8,13 +8,14 @@ import java.util.List;
 /**
  * Created by Tommy Ettinger on 1/4/2017.
  */
-public class Rect2I implements Rectangle {
+public class Rect2I extends Rectangle.Impl {
     public Coord topLeft;
     public int width;
     public int height;
 
     public Rect2I(Coord min, int w, int h)
     {
+        super(min, w, h);
         topLeft = min;
         width = w;
         height = h;
@@ -25,17 +26,14 @@ public class Rect2I implements Rectangle {
         return new Rect2I(Coord.get(minX, minY), maxX - minX, maxY - minY);
     }
 
-    @Override
     public Coord getBottomLeft() {
         return topLeft;
     }
 
-    @Override
     public int getWidth() {
         return width;
     }
 
-    @Override
     public int getHeight() {
         return height;
     }
