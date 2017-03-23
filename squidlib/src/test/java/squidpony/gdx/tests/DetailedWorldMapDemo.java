@@ -74,14 +74,16 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             mediumWaterLower = -0.7, mediumWaterUpper = -0.3,    // -3
             shallowWaterLower = -0.3, shallowWaterUpper = -0.1,  // -2
             coastalWaterLower = -0.1, coastalWaterUpper = 0.1,   // -1
-            sandLower = 0.1, sandUpper = 0.22,                   // 0
-            grassLower = 0.22, grassUpper = 0.35,                // 1
+            sandLower = 0.1, sandUpper = 0.18,                   // 0
+            grassLower = 0.18, grassUpper = 0.35,                // 1
             forestLower = 0.35, forestUpper = 0.6,               // 2
             rockLower = 0.6, rockUpper = 0.8,                    // 3
             snowLower = 0.8, snowUpper = 1.0;                    // 4
 
     public static final double[] lowers = {deepWaterLower, mediumWaterLower, shallowWaterLower, coastalWaterLower,
             sandLower, grassLower, forestLower, rockLower, snowLower},
+            uppers = {deepWaterUpper, mediumWaterUpper, shallowWaterUpper, coastalWaterUpper,
+                    sandUpper, grassUpper, forestUpper, rockUpper, snowUpper},
             differences = {deepWaterUpper - deepWaterLower, mediumWaterUpper - mediumWaterLower,
             shallowWaterUpper - shallowWaterLower, coastalWaterUpper - coastalWaterLower, sandUpper - sandLower,
                     grassUpper - grassLower, forestUpper - forestLower, rockUpper - rockLower, snowUpper - snowLower};
@@ -128,7 +130,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private static float temperateRainforest = SColor.floatGetI(29, 73, 40);
     private static float darkTemperateRainforest = SColor.lerpFloatColors(temperateRainforest, black, 0.15f);
 
-    private static float grassland = SColor.floatGetI(164, 225, 99);
+    private static float grassland = SColor.floatGetI(170, 195, 119);
     private static float darkGrassland = SColor.lerpFloatColors(grassland, black, 0.15f);
 
     private static float seasonalForest = SColor.floatGetI(100, 158, 75);
@@ -243,16 +245,17 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         Ice+0.2f,   Tundra+0.3f,  BorealForest+0.2f,   TemperateRainforest+0.4f, TropicalRainforest+0.3f, Savanna+0.1f,       //WETTER
         Ice+0.0f,   BorealForest, BorealForest+0.0f,   TemperateRainforest+0.2f, TropicalRainforest+0.1f, TropicalRainforest, //WETTEST
         Rocky+0.9f, Rocky+0.6f,   Beach+0.4f,          Beach+0.55f,              Beach+0.75f,             Beach+0.9f          //COASTS
-    }, BIOME_COLOR_TABLE = new float[42];
+    }, BIOME_COLOR_TABLE = new float[42], BIOME_DARK_COLOR_TABLE = new float[42];
 
     static {
         float b, diff;
         for (int i = 0; i < 42; i++) {
             b = BIOME_TABLE[i];
             diff = ((b % 1.0f) - 0.5f) * 0.35f;
-            BIOME_COLOR_TABLE[i] = (diff >= 0)
+            BIOME_COLOR_TABLE[i] = (b = (diff >= 0)
                     ? SColor.lerpFloatColors(biomeColors[(int)b], white, diff)
-                    : SColor.lerpFloatColors(biomeColors[(int)b], black, -diff);
+                    : SColor.lerpFloatColors(biomeColors[(int)b], black, -diff));
+            BIOME_DARK_COLOR_TABLE[i] = SColor.lerpFloatColors(b, black, 0.1f);
         }
     }
     private void codeBiome(int x, int y, double hot, double moist, int heightCode) {
@@ -387,6 +390,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         }
 
         biomeLowerCodeData[x][y] = (hc + mc * 6);
+        //biomeDifferenceData[x][y] = (Math.max(upperProximityH, upperProximityM) + Math.max(lowerProximityH, lowerProximityM)) * 0.5;
         biomeDifferenceData[x][y] = (upperProximityH + upperProximityM + lowerProximityH + lowerProximityM) * 0.25;
     }
 
@@ -400,21 +404,21 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         stage = new Stage(view, batch);
         seed = 0xBEEFF00DCAFECABAL;
         rng = new StatefulRNG(seed); //seed
-        terrain = new Noise.Layered4D(new SeededNoise(), 6, 1.9);
-        terrainRidged = new Noise.Ridged4D(new SeededNoise(), 4, 2.0);
-        heat = new Noise.Layered4D(new SeededNoise(), 5, 4.5);
-        moisture = new Noise.Layered4D(new SeededNoise(), 4, 3.5);
-        otherRidged = new Noise.Ridged4D(new SeededNoise(), 4, 1.5);
+        terrain = new Noise.Layered4D(SeededNoise.instance, 5, 2.0);
+        terrainRidged = new Noise.Ridged4D(SeededNoise.instance, 9, 2.4);
+        heat = new Noise.Layered4D(SeededNoise.instance, 5, 3.5);
+        moisture = new Noise.Layered4D(SeededNoise.instance, 6, 4.5);
+        otherRidged = new Noise.Ridged4D(SeededNoise.instance, 8, 3.5);
         data = new GridData(16);
-        regenerate(0, 0, width, height, seed);
         input = new SquidInput(new SquidInput.KeyHandler() {
             int zoom = 0;
-            final long currentSeed = seed;
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
                 switch (key) {
                     case SquidInput.ENTER:
-                        regenerate();
+                        rng.nextLong();
+                        regenerate(256 - (256 >> zoom), 256 - (256 >> zoom), (512 >> zoom), (512 >> zoom), seed = rng.getState());
+                        rng.setState(seed);
                         //putMap();
                         //Gdx.graphics.requestRendering();
                         break;
@@ -423,7 +427,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                         if(zoom < 7)
                         {
                             zoom++;
-                            regenerate(256 - (256 >> zoom), 256 - (256 >> zoom), (512 >> zoom), (512 >> zoom), currentSeed);
+                            regenerate(256 - (256 >> zoom), 256 - (256 >> zoom), (512 >> zoom), (512 >> zoom), seed = rng.getState());
+                            rng.setState(seed);
                         }
                         break;
                     case '-':
@@ -431,7 +436,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                         if(zoom > 0)
                         {
                             zoom--;
-                            regenerate(256 - (256 >> zoom), 256 - (256 >> zoom), (512 >> zoom), (512 >> zoom), currentSeed);
+                            regenerate(256 - (256 >> zoom), 256 - (256 >> zoom), (512 >> zoom), (512 >> zoom), seed = rng.getState());
+                            rng.setState(seed);
                         }
                         break;
                     case 'Q':
@@ -442,6 +448,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                 }
             }
         });
+        regenerate(0, 0, width, height, seed);
+        rng.setState(seed);
         Gdx.input.setInputProcessor(input);
         display.setPosition(0, 0);
         stage.addActor(display);
@@ -548,6 +556,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         //regenerate();
         display.erase();
         int hc, tc;
+        double tmp;
         for (int y = 0; y < height; y++) {
             PER_CELL:
             for (int x = 0; x < width; x++) {
@@ -580,8 +589,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                         break;
                     default:
                         display.put(x, y, SColor.lerpFloatColors(BIOME_COLOR_TABLE[biomeUpperCodeData[x][y]],
-                                BIOME_COLOR_TABLE[biomeLowerCodeData[x][y]],
-                                (float) biomeDifferenceData[x][y]));
+                                BIOME_DARK_COLOR_TABLE[biomeLowerCodeData[x][y]],
+                                (float) (((heightData[x][y] - lowers[hc]) / (differences[hc])) + biomeDifferenceData[x][y]) * 0.5f));
                         /*
                         switch (bc) {
                             case 0: //Desert
