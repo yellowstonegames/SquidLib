@@ -113,13 +113,23 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.14">ValueNoise</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.24">ValueNoise</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../squidpony/squidmath/Noise.Noise1D.html" title="interface in squidpony.squidmath">Noise.Noise1D</a>, <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interface in squidpony.squidmath">Noise.Noise2D</a>, <a href="../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>, <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>, <a href="../../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a></pre>
 <div class="block">Performance-oriented "white noise" generator for 1D, 2D, 3D, 4D, and 6D. Produces noise values from -1.0 inclusive
- to 1.0 exclusive. Implementation is based on <a href="../../squidpony/squidmath/CrossHash.Wisp.html#hash64Alt-double:A-"><code>CrossHash.Wisp.hash64Alt(double[])</code></a>, multiplying the doubles
- given as input by medium-sized doubles (between 100 and 200, with a large section after the decimal point), then
- flooring them and doing the rest of the math with longs. Finishes by passing the top 52 bits as a significand to
+ to 1.0 exclusive. Should produce a completely different double even for extremely-nearby points, so this is not a
+ kind of continuous noise like <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>. It is not actually random, and the value is always determined by
+ the exact double positions (and possibly an int seed) given to it. Even a slight change should drastically alter the
+ returned value, though below some very small epsilon the results might not be different between two very close points
+ in space.
+ <br>
+ Meant for cases where you want to use a different number for every pixel, tile, or other unit of noise generated,
+ often coupled with another kind of noise but with the result of the ValueNoise made less significant to add a "fuzzy"
+ effect to the appearance.
+ <br>
+ Implementation is based on <a href="../../squidpony/squidmath/CrossHash.Wisp.html#hash64-int:A-"><code>CrossHash.Wisp.hash64(int[])</code></a>, treating doubles as ints
+ by using <a href="../../squidpony/squidmath/NumberTools.html#doubleToMixedIntBits-double-"><code>NumberTools.doubleToMixedIntBits(double)</code></a>, which XORs the bottom and top halves of the long bits of
+ each double, and does it efficiently enough on GWT. Finishes by passing the top 52 bits as a significand to
  <a href="../../squidpony/squidmath/NumberTools.html#longBitsToDouble-long-"><code>NumberTools.longBitsToDouble(long)</code></a>, using an exponent that allows this to produce numbers between -1.0 and
  1.0. Has special treatment for the seed when present (since it is an int).
  <br>
@@ -281,7 +291,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise1D.html" title="interfa
 <ul class="blockListLast">
 <li class="blockList">
 <h4>instance</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/ValueNoise.html" title="class in squidpony.squidmath">ValueNoise</a> <a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.15">instance</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/ValueNoise.html" title="class in squidpony.squidmath">ValueNoise</a> <a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.25">instance</a></pre>
 </li>
 </ul>
 </li>
@@ -298,7 +308,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise1D.html" title="interfa
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ValueNoise</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.17">ValueNoise</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.27">ValueNoise</a>()</pre>
 </li>
 </ul>
 </li>
@@ -315,7 +325,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise1D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoise</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.21">getNoise</a>(double&nbsp;x)</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.31">getNoise</a>(double&nbsp;x)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/squidmath/Noise.Noise1D.html#getNoise-double-">getNoise</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidmath/Noise.Noise1D.html" title="interface in squidpony.squidmath">Noise.Noise1D</a></code></dd>
@@ -328,7 +338,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise1D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoiseWithSeed</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.29">getNoiseWithSeed</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.39">getNoiseWithSeed</a>(double&nbsp;x,
                                int&nbsp;seed)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -342,7 +352,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise1D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoise</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.38">getNoise</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.48">getNoise</a>(double&nbsp;x,
                        double&nbsp;y)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -356,7 +366,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise1D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoiseWithSeed</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.47">getNoiseWithSeed</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.57">getNoiseWithSeed</a>(double&nbsp;x,
                                double&nbsp;y,
                                int&nbsp;seed)</pre>
 <dl>
@@ -371,7 +381,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise1D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoise</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.57">getNoise</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.67">getNoise</a>(double&nbsp;x,
                        double&nbsp;y,
                        double&nbsp;z)</pre>
 <dl>
@@ -386,7 +396,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise1D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoiseWithSeed</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.67">getNoiseWithSeed</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.77">getNoiseWithSeed</a>(double&nbsp;x,
                                double&nbsp;y,
                                double&nbsp;z,
                                int&nbsp;seed)</pre>
@@ -402,7 +412,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise1D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoise</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.77">getNoise</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.87">getNoise</a>(double&nbsp;x,
                        double&nbsp;y,
                        double&nbsp;z,
                        double&nbsp;w)</pre>
@@ -418,7 +428,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise1D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoiseWithSeed</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.88">getNoiseWithSeed</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.98">getNoiseWithSeed</a>(double&nbsp;x,
                                double&nbsp;y,
                                double&nbsp;z,
                                double&nbsp;w,
@@ -435,7 +445,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise1D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoise</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.100">getNoise</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.110">getNoise</a>(double&nbsp;x,
                        double&nbsp;y,
                        double&nbsp;z,
                        double&nbsp;w,
@@ -453,7 +463,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise1D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoiseWithSeed</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.113">getNoiseWithSeed</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.123">getNoiseWithSeed</a>(double&nbsp;x,
                                double&nbsp;y,
                                double&nbsp;z,
                                double&nbsp;w,
@@ -472,7 +482,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise1D.html" title="interfa
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hash</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.131">hash</a>(double...&nbsp;data)</pre>
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/ValueNoise.html#line.142">hash</a>(double...&nbsp;data)</pre>
 <div class="block">Hashes the input double array or vararg and produces a double with unpredictable value, between -1.0 inclusive
  and 1.0 exclusive.</div>
 <dl>
