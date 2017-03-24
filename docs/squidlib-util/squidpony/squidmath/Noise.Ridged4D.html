@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10};
+var methods = {"i0":10,"i1":10,"i2":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -117,7 +117,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public static class <a href="../../src-html/squidpony/squidmath/Noise.html#line.555">Noise.Ridged4D</a>
+<pre>public static class <a href="../../src-html/squidpony/squidmath/Noise.html#line.564">Noise.Ridged4D</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a></pre>
 </li>
@@ -143,7 +143,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interfa
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.Ridged4D.html#basis">basis</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected double[]</code></td>
+<td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.Ridged4D.html#correct">correct</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -213,6 +213,10 @@ implements <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interfa
                 double&nbsp;w,
                 int&nbsp;seed)</code>&nbsp;</td>
 </tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.Ridged4D.html#setOctaves-int-">setOctaves</a></span>(int&nbsp;octaves)</code>&nbsp;</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -241,16 +245,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>exp</h4>
-<pre>protected&nbsp;double[] <a href="../../src-html/squidpony/squidmath/Noise.Ridged4D.html#line.556">exp</a></pre>
-</li>
-</ul>
-<a name="correct">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>correct</h4>
-<pre>protected&nbsp;double[] <a href="../../src-html/squidpony/squidmath/Noise.Ridged4D.html#line.556">correct</a></pre>
+<pre>protected&nbsp;double[] <a href="../../src-html/squidpony/squidmath/Noise.Ridged4D.html#line.565">exp</a></pre>
 </li>
 </ul>
 <a name="octaves">
@@ -259,7 +254,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>octaves</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/Noise.Ridged4D.html#line.557">octaves</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/Noise.Ridged4D.html#line.566">octaves</a></pre>
 </li>
 </ul>
 <a name="frequency">
@@ -268,7 +263,16 @@ implements <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>frequency</h4>
-<pre>public&nbsp;double <a href="../../src-html/squidpony/squidmath/Noise.Ridged4D.html#line.558">frequency</a></pre>
+<pre>public&nbsp;double <a href="../../src-html/squidpony/squidmath/Noise.Ridged4D.html#line.567">frequency</a></pre>
+</li>
+</ul>
+<a name="correct">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>correct</h4>
+<pre>public&nbsp;double <a href="../../src-html/squidpony/squidmath/Noise.Ridged4D.html#line.567">correct</a></pre>
 </li>
 </ul>
 <a name="basis">
@@ -277,7 +281,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interfa
 <ul class="blockListLast">
 <li class="blockList">
 <h4>basis</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a> <a href="../../src-html/squidpony/squidmath/Noise.Ridged4D.html#line.559">basis</a></pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a> <a href="../../src-html/squidpony/squidmath/Noise.Ridged4D.html#line.568">basis</a></pre>
 </li>
 </ul>
 </li>
@@ -294,7 +298,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>Ridged4D</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Ridged4D.html#line.561">Ridged4D</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Ridged4D.html#line.570">Ridged4D</a>()</pre>
 </li>
 </ul>
 <a name="Ridged4D-squidpony.squidmath.Noise.Noise4D-">
@@ -303,7 +307,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>Ridged4D</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Ridged4D.html#line.565">Ridged4D</a>(<a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;basis)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Ridged4D.html#line.574">Ridged4D</a>(<a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;basis)</pre>
 </li>
 </ul>
 <a name="Ridged4D-squidpony.squidmath.Noise.Noise4D-int-double-">
@@ -312,7 +316,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interfa
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Ridged4D</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Ridged4D.html#line.569">Ridged4D</a>(<a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;basis,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Ridged4D.html#line.578">Ridged4D</a>(<a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;basis,
                 int&nbsp;octaves,
                 double&nbsp;frequency)</pre>
 </li>
@@ -325,13 +329,22 @@ implements <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interfa
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="setOctaves-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setOctaves</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Ridged4D.html#line.583">setOctaves</a>(int&nbsp;octaves)</pre>
+</li>
+</ul>
 <a name="getNoise-double-double-double-double-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoise</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Ridged4D.html#line.583">getNoise</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Ridged4D.html#line.595">getNoise</a>(double&nbsp;x,
                        double&nbsp;y,
                        double&nbsp;z,
                        double&nbsp;w)</pre>
@@ -347,7 +360,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interfa
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getNoiseWithSeed</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Ridged4D.html#line.604">getNoiseWithSeed</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.Ridged4D.html#line.616">getNoiseWithSeed</a>(double&nbsp;x,
                                double&nbsp;y,
                                double&nbsp;z,
                                double&nbsp;w,

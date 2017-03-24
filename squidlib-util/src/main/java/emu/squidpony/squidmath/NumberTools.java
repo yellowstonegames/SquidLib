@@ -62,16 +62,25 @@ public class NumberTools {
     public static double bounce(final double value)
     {
         wda.set(0, value);
-        int s = wia.get(1) & 0xfffff;
-        wia.set(1, ((s ^ -((s & 0x80000)>>19)) << 1) | 0x40100000);
+        int s = wia.get(1) & 0xfffff, flip = -((s & 0x80000)>>19);
+        wia.set(1, ((s ^ flip) & 0xfffff) | 0x40100000);
+        wia.set(0, wia.get(0) ^ flip);
         return wda.get(0) - 5.0;
     }
 
     public static double bounce(final long value)
     {
-        wia.set(0, (int)value);
-        int s = (int)(value>>>32&0xfffff);
-        wia.set(1, ((s ^ -((s & 0x80000)>>19)) << 1) | 0x40100000);
+        int s = (int)(value>>>32&0xfffff), flip = -((s & 0x80000)>>19);
+        wia.set(1, ((s ^ flip) & 0xfffff) | 0x40100000);
+        wia.set(0, ((int)value) ^ flip);
+        return wda.get(0) - 5.0;
+    }
+
+    public static double bounce(final int valueLow, final int valueHigh)
+    {
+        int s = valueHigh & 0xfffff, flip = -((s & 0x80000)>>19);
+        wia.set(1, ((s ^ flip) & 0xfffff) | 0x40100000);
+        wia.set(0, valueLow ^ flip);
         return wda.get(0) - 5.0;
     }
 
@@ -102,6 +111,46 @@ public class NumberTools {
         return wfa.get(0);
     }
 
+    public static double randomDouble(int seed)
+    {
+        seed ^= seed >>> (4 + (seed >>> 28));
+        wia.set(0, ((seed *= 277803737) >>> 22) ^ seed);
+        seed += 0x9E3779B9;
+        seed ^= seed >>> (4 + (seed >>> 28));
+        wia.set(1, ((((seed *= 277803737) >>> 22) ^ seed) & 0xfffff) | 0x3ff00000);
+        return wda.get(0) - 1.0;
+    }
+    /**
+     * Generates a pseudo-random float between -1.0f (exclusive) and 1.0f (exclusive) using the given int seed, passing
+     * it once through the (very high-quality and rather fast) {@link PintRNG} algorithm, derived from PCG-Random. This
+     * produces a random int, which this produces a float from using {@link #intBitsToFloat(int)} (long)} or something
+     * functionally equivalent on GWT. The sign bit of the result is determined by data that is not used by the float
+     * otherwise, and keeps the results almost linear in distribution between -1.0 and 1.0, exclusive for both (0 shows
+     * up twice as often as any single other result, but this shouldn't affect the odds very strongly; it's about a 1 in
+     * 8 million chance of exactly 0 occurring vs. a 1 in 16 million of any other specific float this can produce).
+     * <br>
+     * Consider calling this with {@code NumberTools.randomSignedFloat(seed += 0x9E3779B9)} for an optimal period of 2
+     * to the 32 when repeatedly called, but {@code NumberTools.randomSignedFloat(++seed)} will also work just fine.
+     * @param seed any int to be used as a seed
+     * @return a pseudo-random float from -1.0f (exclusive) to 1.0f (exclusive)
+     */
+    public static float randomSignedFloat(int seed)
+    {
+        seed ^= seed >>> (4 + (seed >>> 28));
+        wia.set(0, (((seed *= 0x108EF2D9) >>> 22 ^ seed) & 0x7fffff) | 0x3f800000);
+        return (wfa.get(0) - 1f) * (seed >> 31 | 1);
+    }
+
+
+    public static double randomDoubleCurved(int seed)
+    {
+        seed ^= seed >>> (4 + (seed >>> 28));
+        wia.set(0, ((((seed *= 277803737) >>> 22) ^ seed) & 0x7fffff) | 0x3f800000);
+        seed += 0x9E3779B9;
+        seed ^= seed >>> (4 + (seed >>> 28));
+        wia.set(1, ((((seed *= 277803737) >>> 22) ^ seed) & 0x7fffff) | 0x3f800000);
+        return (wfa.get(0) - 1.0) * (wfa.get(1) - 1.0) * (seed >> 31 | 1);
+    }
 
     static int hashWisp(final float[] data) {
         if (data == null)
