@@ -10,13 +10,16 @@ Documentation:
 Jars of javadocs are distributed with each release via Maven Central, and with the current latest via JitPack. You can
 get the docs and source of the latest version, 3.0.0-b8, in two parts for each; squidlib-util (the core of the library,
 and also the largest part) has its
+[library jar here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-util/3.0.0-b8/squidlib-util-3.0.0-b8.jar),
 [docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-util/3.0.0-b8/squidlib-util-3.0.0-b8-javadoc.jar),
 and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-util/3.0.0-b8/squidlib-util-3.0.0-b8-sources.jar),
 while squidlib (the display part of the library, named the way it is because depending on squidlib should also pull in
 squidlib-util to make it a "one-stop shop" dependency) has its
+[library jar here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib/3.0.0-b8/squidlib-3.0.0-b8.jar),
 [docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib/3.0.0-b8/squidlib-3.0.0-b8-javadoc.jar),
 and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib/3.0.0-b8/squidlib-3.0.0-b8-sources.jar).
 The completely-optional squidlib-extra module (primarily used for serialization; relies on libGDX but doesn't use it for display) has its
+[library jar here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.0-b8/squidlib-extra-3.0.0-b8.jar),
 [docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.0-b8/squidlib-extra-3.0.0-b8-javadoc.jar),
 and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.0-b8/squidlib-extra-3.0.0-b8-sources.jar).
 
@@ -237,16 +240,14 @@ Current Features:
   - 3.0.0-b1 is the last release to contain Swing. If you're porting code that used an earlier version of SquidLib and need Swing for some reason, you may want to stay with the largely-compatible 2.9.1 instead of the very-different 3.0.0-b1.
     - This should also enable SquidLib to be used for rendering on Android/iOS and not only the desktop platforms Swing is limited to
   - There is now a tool that sets up a project for people who want an easy way to handle the dependencies of SquidLib and/or libGDX
-    - We now have SquidSetup to automatically handle the setup of a new project that uses SquidLib 3.0.0-b6, including fetching
-    dependencies automatically and setting up a project that potentially targets both desktop and Android, potentially
-    HTML, and ~~possibly iOS as well~~ (iOS is currently in a bit of a chaotic state with RoboVM's changes, and isn't
-    recommended yet; you can use [mobidevelop's RoboVM fork](https://github.com/MobiDevelop/robovm) if you're feeling adventurous).
-    - If you already use Maven, Gradle, SBT, Leiningen, or some other dependency manager, upgrading should be easier to the 3.0.0 series
-    - If you don't, you should since it can really ease updating, and SquidSetup should handle the hard parts for you.
-  - If you use SquidLib's latest version as of April 12, the assets have been moved out of the `squidlib` jar, making the download size smaller, but a freshly-updated SquidSetup has all the latest assets
-    and will put them in the correct assets folder (as before) without duplicating them. You can delete any assets you don't use, or move them out of the distributed part of your code.
-    - If you don't use SquidSetup, you can download any assets you need from the assets/ folder of this GitHub repo, or
-      get all the assets in a .zip file from SquidLib's main folder, [assets.zip](https://github.com/SquidPony/SquidLib/raw/master/assets.zip).
+    - You should use [czyzby's gdx-setup application](https://github.com/czyzby/gdx-setup) if you want to use the latest stable SquidLib, since
+      it has squidlib 3.0.0-b8 (as well as squidlib-util and regexodus) as third-party extensions. There's a SquidLib demo as a third-party example
+      that can be selected. You should probably select libGDX version 1.9.3 if you use the stable version, currently.
+    - That application does not include more than a few assets, so if you use the DefaultResources class in the display
+      module (recommended for several things, like distance field fonts), you need to get the assets you want separately.
+      They're in the assets/ folder of this GitHub repo, or you can get all the assets in a .zip file from SquidLib's
+      main folder, [assets.zip](https://github.com/SquidPony/SquidLib/raw/master/assets.zip). If you get the .zip, then
+      after extracting the files you can delete any assets you don't use, or move them out of the distributed part of your code.
   - [This commit on June 19, 2016](https://github.com/SquidPony/SquidLib/commit/22c770b37b3635c6beacadda6ef71e07c9a55a8e)
     changed usages of LinkedHashMap and LinkedHashSet to OrderedMap and OrderedSet in the squidpony.squidmath package.
     If you use SquidLib versions before that commit (such as beta 6), then update to after that commit (which was some
@@ -259,24 +260,128 @@ Download
 --
 
 Download JARs for older versions from the Releases tab, use Maven Central to download the latest version with your
-choice of features (display or none, with or without squidlib-extra), or simply use SquidSetup to make a new project
-configured the way libGDX prefers to work, and copy in any code you might already have.
+choice of features (display or none, with or without squidlib-extra), or simply use
+[czyzby's gdx-setup tool](https://github.com/czyzby/gdx-setup) to make a new project configured the way libGDX prefers
+to work, and copy in any code you might already have.
 
-Ideally, if you're just starting out you should use SquidSetup. Beta 6 has been added to SquidSetup.
-This is [the most recent, beta 6, release of the setup tool](https://github.com/SquidPony/SquidLib/releases/tag/v3.0.0-b6);
-beta 8 support is being added to the next build.
-This is [the new snapshot setup tool](https://github.com/tommyettinger/SquidSetup/releases/tag/v3.0.0-LATEST), which is
-good if you already understand Gradle, but especially if you want to test new features/fixes as they come in. It
-currently isn't named in the most accurate way; it actually downloads a fixed version from JitPack.io, but you can
-change that version to the latest commit if you want to use more recent code between releases.
+Ideally, if you're starting out you should use [gdx-setup](https://github.com/czyzby/gdx-setup). SquidLib is supported
+as a third-party extension for gdx-setup, an alternative to the current official libGDX setup that aims to have more
+features and update more readily. This replaces the older SquidSetup for stable releases, and it is possible that
+SquidSetup will become a fork of gdx-setup that includes assets and gets the most recent version from JitPack if
+possible. The gdx-setup project also allows demo code to be more easily supplied, and a demo is present for SquidLib,
+updated for 3.0.0-b8 and the various improvements made possible in this release.
 
-SquidLib is supported as a third-party extension for [gdx-setup by czyzby](https://github.com/czyzby/gdx-setup),
-an alternative to the current official libGDX setup that aims to have more features and update more readily. This will
-replace the current SquidSetup for stable releases, and it is likely that the next significant change to SquidSetup will
-be to make it a simple fork of czyzby's setup tool that includes the assets and also gets the most recent version from
-JitPack if possible. The gdx-setup project also allows demo code to be more easily supplied, and some demos are in
-progress for SquidLib (one is already present in gdx-setup, but it is made for an earlier version of SquidLib; this is
-being remedied and gdx-setup should be ready to use beta 8 very soon).
+If you use a dependency manager already and don't need a new project, you can use these dependencies for Maven projects:
+
+Core of SquidLib:
+```
+<dependency>
+    <groupId>com.squidpony</groupId>
+    <artifactId>squidlib-util</artifactId>
+    <version>3.0.0-b8</version>
+</dependency>
+```
+
+Optional Text-Based Display
+```
+<dependency>
+    <groupId>com.squidpony</groupId>
+    <artifactId>squidlib</artifactId>
+    <version>3.0.0-b8</version>
+</dependency>
+```
+
+Optional Serialization Support
+```
+<dependency>
+    <groupId>com.squidpony</groupId>
+    <artifactId>squidlib-extra</artifactId>
+    <version>3.0.0-b8</version>
+</dependency>
+```
+
+Or these dependencies for Gradle:
+
+Core of SquidLib:
+```
+compile 'com.squidpony:squidlib-util:3.0.0-b8'
+```
+
+Optional Text-Based Display
+```
+compile 'com.squidpony:squidlib:3.0.0-b8'
+```
+
+Optional Serialization Support
+```
+compile 'com.squidpony:squidlib-extra:3.0.0-b8'
+```
+
+If you want the latest version of SquidLib, which uses libGDX 1.9.6 and GWT 2.8.0 (if you use GWT), you can use JitPack
+to build the latest commit on-demand. It needs an additional repository, which is this for Maven:
+
+```
+	<repositories>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+```
+
+Or this for Gradle, which if you used gdx-setup, would be in the repositories block inside subprojects:
+```
+maven { url "https://jitpack.io" }
+```
+
+Then the dependencies would be this for Maven (the first is needed, the others are optional); replace `ecff5cd03e`
+with any short commit from GitHub:
+
+```
+	<dependency>
+	    <groupId>com.github.SquidPony.SquidLib</groupId>
+	    <artifactId>squidlib-util</artifactId>
+	    <version>ecff5cd03e</version>
+	</dependency>
+	<dependency>
+	    <groupId>com.github.SquidPony.SquidLib</groupId>
+	    <artifactId>squidlib</artifactId>
+	    <version>ecff5cd03e</version>
+	</dependency>
+	<dependency>
+	    <groupId>com.github.SquidPony.SquidLib</groupId>
+	    <artifactId>squidlib-extra</artifactId>
+	    <version>ecff5cd03e</version>
+	</dependency>
+```
+
+Or this for Gradle (the first two are needed, the others are optional); replace `ecff5cd03e` with any short commit from GitHub:
+```
+    compile("com.github.SquidPony.SquidLib:squidlib-util:ecff5cd03e")
+    compile("com.github.SquidPony.SquidLib:squidlib:ecff5cd03e")
+    compile("com.github.SquidPony.SquidLib:squidlib-extra:ecff5cd03e")
+```
+
+If you use GWT, you should probably use gdx-setup to configure the project, though it might need some changes to
+GWT "inherits" configuration for your application. These should be present once in GdxDefinition.gwt.xml if you use GWT:
+
+```
+    <inherits name="regexodus" />
+    <inherits name="squidlib-util" />
+```
+
+If you use the display module, you also need
+
+```
+    <inherits name="squidlib" />
+```
+
+And if you use squidlib-extra, you also need
+
+```
+    <inherits name="blazing.chain"/>
+    <inherits name="squidlib-extra" />
+```
 
 More information is available on the wiki here on Github, at the page on [Project Setup](https://github.com/SquidPony/SquidLib/wiki/Project-Setup).
 It may be somewhat out of date for now.

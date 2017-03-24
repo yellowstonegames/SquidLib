@@ -39,6 +39,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         Beach                  = 10,
         Rocky                  = 11;
 
+    private static final int width = 800, height = 800;
+
     private SpriteBatch batch;
     private SquidColorCenter colorFactory;
     private SquidPanel display;//, overlay;
@@ -52,7 +54,6 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private int iseed;
     private StatefulRNG rng;
     private GridData data;
-    private static final int width = 512, height = 512;
     private double[][] heightData = new double[width][height],
             heatData = new double[width][height],
             moistureData = new double[width][height],
@@ -115,7 +116,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private static float darkIce = SColor.lerpFloatColors(ice, black, 0.15f);
     private static float lightIce = white;
 
-    private static float desert = SColor.floatGetI(238, 218, 130);
+    private static float desert = SColor.floatGetI(248, 229, 180);
     private static float darkDesert = SColor.lerpFloatColors(desert, black, 0.15f);
 
     private static float savanna = SColor.floatGetI(177, 209, 110);
@@ -238,9 +239,9 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
 
     protected final static float[] BIOME_TABLE = {
         //COLDEST   //COLDER      //COLD               //HOT                     //HOTTER                 //HOTTEST
-        Ice+0.7f,   Ice+0.65f,    Grassland+0.8f,      Desert+0.8f,              Desert+0.7f,             Desert+0.6f,        //DRYEST
-        Ice+0.6f,   Tundra+0.9f,  Grassland+0.6f,      Grassland+0.4f,           Desert+0.55f,            Desert+0.45f,       //DRYER
-        Ice+0.5f,   Tundra+0.7f,  Woodland+0.5f,       Woodland+0.6f,            Savanna+0.6f,            Desert+0.3f,        //DRY
+        Ice+0.7f,   Ice+0.65f,    Grassland+0.8f,      Desert+0.65f,             Desert+0.75f,            Desert+0.8f,        //DRYEST
+        Ice+0.6f,   Tundra+0.9f,  Grassland+0.6f,      Grassland+0.4f,           Desert+0.6f,             Desert+0.65f,       //DRYER
+        Ice+0.5f,   Tundra+0.7f,  Woodland+0.5f,       Woodland+0.6f,            Savanna+0.6f,            Desert+0.5f,        //DRY
         Ice+0.4f,   Tundra+0.5f,  SeasonalForest+0.3f, SeasonalForest+0.5f,      Savanna+0.4f,            Savanna+0.3f,       //WET
         Ice+0.2f,   Tundra+0.3f,  BorealForest+0.2f,   TemperateRainforest+0.4f, TropicalRainforest+0.3f, Savanna+0.1f,       //WETTER
         Ice+0.0f,   BorealForest, BorealForest+0.0f,   TemperateRainforest+0.2f, TropicalRainforest+0.1f, TropicalRainforest, //WETTEST
@@ -251,7 +252,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         float b, diff;
         for (int i = 0; i < 42; i++) {
             b = BIOME_TABLE[i];
-            diff = ((b % 1.0f) - 0.5f) * 0.35f;
+            diff = ((b % 1.0f) - 0.45f) * 0.3f;
             BIOME_COLOR_TABLE[i] = (b = (diff >= 0)
                     ? SColor.lerpFloatColors(biomeColors[(int)b], white, diff)
                     : SColor.lerpFloatColors(biomeColors[(int)b], black, -diff));
@@ -261,6 +262,69 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private void codeBiome(int x, int y, double hot, double moist, int heightCode) {
         int hc, mc;
         double upperProximityH, upperProximityM, lowerProximityH, lowerProximityM, bound, prevBound;
+        if(moist >= (bound = wettestValueUpper - (wetterValueUpper - wetterValueLower) * 0.2))
+        {
+            mc = 5;
+            upperProximityM = (moist - bound) / (1.0 - bound);
+        }
+        else if((prevBound = bound) == -1 || moist >= (bound = wetterValueUpper - (wetValueUpper - wetValueLower) * 0.2))
+        {
+            mc = 4;
+            upperProximityM = (moist - bound) / (prevBound - bound);
+        }
+        else if((prevBound = bound) == -1 || moist >= (bound = wetValueUpper - (dryValueUpper - dryValueLower) * 0.2))
+        {
+            mc = 3;
+            upperProximityM = (moist - bound) / (prevBound - bound);
+        }
+        else if((prevBound = bound) == -1 || moist >= (bound = dryValueUpper - (drierValueUpper - drierValueLower) * 0.2))
+        {
+            mc = 2;
+            upperProximityM = (moist - bound) / (prevBound - bound);
+        }
+        else if((prevBound = bound) == -1 || moist >= (bound = drierValueUpper - (driestValueUpper) * 0.2))
+        {
+            mc = 1;
+            upperProximityM = (moist - bound) / (prevBound - bound);
+        }
+        else
+        {
+            mc = 0;
+            upperProximityM = (moist) / (bound);
+        }
+
+        if(hot >= (bound = warmestValueUpper - (warmerValueUpper - warmerValueLower) * 0.2))
+        {
+            hc = 5;
+            upperProximityH = (hot - bound) / (1.0 - bound);
+        }
+        else if((prevBound = bound) == -1 || hot >= (bound = warmerValueUpper - (warmValueUpper - warmValueLower) * 0.2))
+        {
+            hc = 4;
+            upperProximityH = (hot - bound) / (prevBound - bound);
+        }
+        else if((prevBound = bound) == -1 || hot >= (bound = warmValueUpper - (coldValueUpper - coldValueLower) * 0.2))
+        {
+            hc = 3;
+            upperProximityH = (hot - bound) / (prevBound - bound);
+        }
+        else if((prevBound = bound) == -1 || hot >= (bound = coldValueUpper - (colderValueUpper - colderValueLower) * 0.2))
+        {
+            hc = 2;
+            upperProximityH = (hot - bound) / (prevBound - bound);
+        }
+        else if((prevBound = bound) == -1 || hot >= (bound = colderValueUpper - (coldestValueUpper) * 0.2))
+        {
+            hc = 1;
+            upperProximityH = (hot - bound) / (prevBound - bound);
+        }
+        else
+        {
+            hc = 0;
+            upperProximityH = (hot) / (bound);
+        }
+
+        /*
         if(hot < coldestValueUpper)
         {
             hc = 0;
@@ -322,12 +386,13 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             mc = 5;
             upperProximityM = (moist - wettestValueLower) / (wettestValueUpper - wettestValueLower);
         }
+        */
 
         heatCodeData[x][y] = hc;
         moistureCodeData[x][y] = mc;
         biomeUpperCodeData[x][y] = (heightCode == 4) ? hc + 36 : hc + mc * 6;
 
-        if(moist >= (bound = wetterValueUpper + (wettestValueUpper - wettestValueLower) * 0.5))
+        if(moist >= (bound = wetterValueUpper + (wettestValueUpper - wettestValueLower) * 0.2))
         {
             mc = 5;
             lowerProximityM = (moist - bound) / (1.0 - bound);
@@ -337,17 +402,17 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             mc = 4;
             lowerProximityM = (moist - bound) / (prevBound - bound);
         }
-        else if((prevBound = bound) == -1 || moist >= (bound = dryValueUpper + (wetValueUpper - wetValueLower) * 0.5))
+        else if((prevBound = bound) == -1 || moist >= (bound = dryValueUpper + (wetValueUpper - wetValueLower) * 0.2))
         {
             mc = 3;
             lowerProximityM = (moist - bound) / (prevBound - bound);
         }
-        else if((prevBound = bound) == -1 || moist >= (bound = drierValueUpper + (dryValueUpper - dryValueLower) * 0.5))
+        else if((prevBound = bound) == -1 || moist >= (bound = drierValueUpper + (dryValueUpper - dryValueLower) * 0.2))
         {
             mc = 2;
             lowerProximityM = (moist - bound) / (prevBound - bound);
         }
-        else if((prevBound = bound) == -1 || moist >= (bound = driestValueUpper + (drierValueUpper - drierValueLower) * 0.5))
+        else if((prevBound = bound) == -1 || moist >= (bound = driestValueUpper + (drierValueUpper - drierValueLower) * 0.2))
         {
             mc = 1;
             lowerProximityM = (moist - bound) / (prevBound - bound);
@@ -358,27 +423,27 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             lowerProximityM = (moist) / (bound);
         }
 
-        if(hot >= (bound = warmerValueUpper + (warmestValueUpper - warmestValueLower) * 0.5))
+        if(hot >= (bound = warmerValueUpper + (warmestValueUpper - warmestValueLower) * 0.2))
         {
             hc = 5;
             lowerProximityH = (hot - bound) / (1.0 - bound);
         }
-        else if((prevBound = bound) == -1 || hot >= (bound = warmValueUpper + (warmerValueUpper - warmerValueLower) * 0.5))
+        else if((prevBound = bound) == -1 || hot >= (bound = warmValueUpper + (warmerValueUpper - warmerValueLower) * 0.2))
         {
             hc = 4;
             lowerProximityH = (hot - bound) / (prevBound - bound);
         }
-        else if((prevBound = bound) == -1 || hot >= (bound = coldValueUpper + (warmValueUpper - warmValueLower) * 0.5))
+        else if((prevBound = bound) == -1 || hot >= (bound = coldValueUpper + (warmValueUpper - warmValueLower) * 0.2))
         {
             hc = 3;
             lowerProximityH = (hot - bound) / (prevBound - bound);
         }
-        else if((prevBound = bound) == -1 || hot >= (bound = colderValueUpper + (coldValueUpper - coldValueLower) * 0.5))
+        else if((prevBound = bound) == -1 || hot >= (bound = colderValueUpper + (coldValueUpper - coldValueLower) * 0.2))
         {
             hc = 2;
             lowerProximityH = (hot - bound) / (prevBound - bound);
         }
-        else if((prevBound = bound) == -1 || hot >= (bound = coldestValueUpper + (colderValueUpper - colderValueLower) * 0.5))
+        else if((prevBound = bound) == -1 || hot >= (bound = coldestValueUpper + (colderValueUpper - colderValueLower) * 0.2))
         {
             hc = 1;
             lowerProximityH = (hot - bound) / (prevBound - bound);
@@ -390,8 +455,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         }
 
         biomeLowerCodeData[x][y] = (hc + mc * 6);
-        //biomeDifferenceData[x][y] = (Math.max(upperProximityH, upperProximityM) + Math.max(lowerProximityH, lowerProximityM)) * 0.5;
-        biomeDifferenceData[x][y] = (upperProximityH + upperProximityM + lowerProximityH + lowerProximityM) * 0.25;
+        biomeDifferenceData[x][y] = (Math.max(upperProximityH, upperProximityM) + Math.max(lowerProximityH, lowerProximityM)) * 0.5;
+        //biomeDifferenceData[x][y] = (upperProximityH + upperProximityM + lowerProximityH + lowerProximityM) * 0.25;
     }
 
     @Override
@@ -404,20 +469,21 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         stage = new Stage(view, batch);
         seed = 0xBEEFF00DCAFECABAL;
         rng = new StatefulRNG(seed); //seed
-        terrain = new Noise.Layered4D(SeededNoise.instance, 5, 2.0);
-        terrainRidged = new Noise.Ridged4D(SeededNoise.instance, 9, 2.4);
-        heat = new Noise.Layered4D(SeededNoise.instance, 5, 3.5);
-        moisture = new Noise.Layered4D(SeededNoise.instance, 6, 4.5);
-        otherRidged = new Noise.Ridged4D(SeededNoise.instance, 8, 3.5);
+        terrain = new Noise.Layered4D(SeededNoise.instance, 7, 2.0);
+        terrainRidged = new Noise.Ridged4D(SeededNoise.instance, 8, 2.3);
+        heat = new Noise.Layered4D(SeededNoise.instance, 4, 5.5);
+        moisture = new Noise.Layered4D(SeededNoise.instance, 4, 4.5);
+        otherRidged = new Noise.Ridged4D(SeededNoise.instance, 5, 3.7);
         data = new GridData(16);
         input = new SquidInput(new SquidInput.KeyHandler() {
             int zoom = 0;
+            int half_w = width >> 1, half_h = height >> 1;
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
                 switch (key) {
                     case SquidInput.ENTER:
                         rng.nextLong();
-                        regenerate(256 - (256 >> zoom), 256 - (256 >> zoom), (512 >> zoom), (512 >> zoom), seed = rng.getState());
+                        regenerate(half_w - (half_w >> zoom), half_h - (half_h >> zoom), (width >> zoom), (height >> zoom), seed = rng.getState());
                         rng.setState(seed);
                         //putMap();
                         //Gdx.graphics.requestRendering();
@@ -427,7 +493,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                         if(zoom < 7)
                         {
                             zoom++;
-                            regenerate(256 - (256 >> zoom), 256 - (256 >> zoom), (512 >> zoom), (512 >> zoom), seed = rng.getState());
+                            regenerate(half_w - (half_w >> zoom), half_h - (half_h >> zoom), (width >> zoom), (height >> zoom), seed = rng.getState());
                             rng.setState(seed);
                         }
                         break;
@@ -436,7 +502,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                         if(zoom > 0)
                         {
                             zoom--;
-                            regenerate(256 - (256 >> zoom), 256 - (256 >> zoom), (512 >> zoom), (512 >> zoom), seed = rng.getState());
+                            regenerate(half_w - (half_w >> zoom), half_h - (half_h >> zoom), (width >> zoom), (height >> zoom), seed = rng.getState());
                             rng.setState(seed);
                         }
                         break;
@@ -539,7 +605,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             for (int x = 0; x < width; x++) {
                 t = heightCodeData[x][y];
                 h = ((heatData[x][y] - minHeat2) * heatDiff);
-                heatData[x][y] = (h = Math.pow(h, 2.0 - h * 2.0));
+                heatData[x][y] = h;//(h = Math.pow(h, 2.0 - h * 2.0));
                 moistureData[x][y] = (q = (moistureData[x][y] - minWet) * wetDiff);
                 codeBiome(x, y, h, q, t);
             }
@@ -590,7 +656,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                     default:
                         display.put(x, y, SColor.lerpFloatColors(BIOME_COLOR_TABLE[biomeUpperCodeData[x][y]],
                                 BIOME_DARK_COLOR_TABLE[biomeLowerCodeData[x][y]],
-                                (float) (((heightData[x][y] - lowers[hc]) / (differences[hc])) + biomeDifferenceData[x][y]) * 0.5f));
+                                (float) (((heightData[x][y] - lowers[hc]) / (differences[hc])) * 21 + biomeDifferenceData[x][y] * 11) * 0.03125f));
                         /*
                         switch (bc) {
                             case 0: //Desert

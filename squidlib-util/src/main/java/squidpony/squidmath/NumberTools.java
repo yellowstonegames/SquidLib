@@ -75,6 +75,24 @@ public class NumberTools {
         return Double.longBitsToDouble(((s ^ -((s & 0x8000000000000L)>>51)) & 0xfffffffffffffL)
                 | 0x4010000000000000L) - 5.0;
     }
+    /**
+     * Very limited-use. Takes the significand bits of a double, represented as a pair of ints {@code valueLow} and
+     * {@code valueHigh}, using all bits in valueLow and the least-significant 20 bits of valueHigh, and
+     * produces a double in the -1.0 to 1.0 range, with similar inputs producing close to a consistent rate of up and
+     * down through the range. This is meant for noise, where it may be useful to limit the amount of change between
+     * nearby points' noise values and prevent sudden "jumps" in noise value.
+     * @param valueLow any int; all bits will be used as the less-significant bits of the significand
+     * @param valueHigh any int; only the bottom 20 bits will be used as the more-significant bits of the significand
+     * @return a double from -1.0 (inclusive) to 1.0 (exclusive)
+     */
+
+    public static double bounce(final int valueLow, final int valueHigh)
+    {
+        long s = (((long) valueHigh) << 32 | valueLow) & 0xfffffffffffffL;
+        return Double.longBitsToDouble(((s ^ -((s & 0x8000000000000L)>>51)) & 0xfffffffffffffL)
+                | 0x4010000000000000L) - 5.0;
+
+    }
     public static int floatToIntBits(final float value)
     {
         return Float.floatToIntBits(value);
@@ -113,6 +131,69 @@ public class NumberTools {
     {
         return Float.intBitsToFloat((Float.floatToIntBits(value) & ~(255 << ((whichByte & 3) << 3)))
                 | ((newValue & 255) << ((whichByte & 3) << 3)));
+    }
+
+    /**
+     * Generates a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive) using the given int seed, passing it
+     * twice through the (very high-quality and rather fast) {@link PintRNG} algorithm, derived from PCG-Random. This
+     * produces a pair of random ints, which this produces a double from using the equivalent of
+     * {@link #longBitsToDouble(long)} or something functionally equivalent on GWT.
+     * <br>
+     * Consider calling this with {@code NumberTools.randomDouble(seed += 0x3C6EF372)} for an optimal period of 2 to the
+     * 31 when repeatedly called, but {@code NumberTools.randomDouble(++seed)} will also work just fine.
+     * @param seed any int to be used as a seed
+     * @return a pseudo-random double from 0.0 (inclusive) to 1.0 (exclusive)
+     */
+    public static double randomDouble(int seed)
+    {
+        seed ^= seed >>> (4 + (seed >>> 28));
+        long bits = ((seed *= 0x108EF2D9) >>> 22 ^ seed);
+        seed += 0x9E3779B9;
+        seed ^= seed >>> (4 + (seed >>> 28));
+        bits |= ((((seed *= 0x108EF2D9) >>> 22 ^ seed) & 0xfffffL) << 32 | 0x3ff0000000000000L);
+        return Double.longBitsToDouble(bits) - 1.0;
+    }
+    /**
+     * Generates a pseudo-random float between -1.0f (exclusive) and 1.0f (exclusive) using the given int seed, passing
+     * it once through the (very high-quality and rather fast) {@link PintRNG} algorithm, derived from PCG-Random. This
+     * produces a random int, which this produces a float from using {@link #intBitsToFloat(int)} (long)} or something
+     * functionally equivalent on GWT. The sign bit of the result is determined by data that is not used by the float
+     * otherwise, and keeps the results almost linear in distribution between -1.0 and 1.0, exclusive for both (0 shows
+     * up twice as often as any single other result, but this shouldn't affect the odds very strongly; it's about a 1 in
+     * 8 million chance of exactly 0 occurring vs. a 1 in 16 million of any other specific float this can produce).
+     * <br>
+     * Consider calling this with {@code NumberTools.randomSignedFloat(seed += 0x9E3779B9)} for an optimal period of 2
+     * to the 32 when repeatedly called, but {@code NumberTools.randomSignedFloat(++seed)} will also work just fine.
+     * @param seed any int to be used as a seed
+     * @return a pseudo-random float from -1.0f (exclusive) to 1.0f (exclusive)
+     */
+    public static float randomSignedFloat(int seed)
+    {
+        seed ^= seed >>> (4 + (seed >>> 28));
+        return (Float.intBitsToFloat((((seed *= 0x108EF2D9) >>> 22 ^ seed) & 0x7fffff) | 0x3f800000) - 1f) * (seed >> 31 | 1);
+    }
+
+    /**
+     * Generates a pseudo-random double between -1.0 (exclusive) and 1.0 (exclusive) with a distribution that has a
+     * strong central bias (around 0.0). Uses the given int seed, passing it twice through the (very high-quality and
+     * rather fast) {@link PintRNG} algorithm, derived from PCG-Random. This produces a pair of random ints, which this
+     * uses to generate a pair of floats between 0.0 (inclusive)and 1.0 (exclusive) using the equivalent of
+     * {@link #intBitsToFloat(int)} or something functionally equivalent on GWT, multiplies the floats, and sets the
+     * sign pseudo-randomly based on an unused bit from earlier.
+     * <br>
+     * Consider calling this with {@code NumberTools.randomDoubleCurved(seed += 0x3C6EF372)} for an optimal period of 2
+     * to the 31 when repeatedly called, but {@code NumberTools.randomDoubleCurved(++seed)} will also work just fine.
+     * @param seed any int to be used as a seed
+     * @return a pseudo-random double from -1.0 (exclusive) to 1.0 (exclusive), distributed on a curve centered on 0.0
+     */
+    public static double randomDoubleCurved(int seed)
+    {
+        seed ^= seed >>> (4 + (seed >>> 28));
+        float a = Float.intBitsToFloat((((seed *= 0x108EF2D9) >>> 22 ^ seed) & 0x7fffff) | 0x3f800000);
+        seed += 0x9E3779B9;
+        seed ^= seed >>> (4 + (seed >>> 28));
+        double t = (a - 1.0) * (Float.intBitsToFloat((((seed *= 0x108EF2D9) >>> 22 ^ seed) & 0x7fffff) | 0x3f800000) - 1.0) * (seed >> 31 | 1);
+        return t;
     }
 
     static int hashWisp(final float[] data)
