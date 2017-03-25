@@ -997,11 +997,11 @@
 <span class="sourceLineNo">989</span>     * @return a pseudo-random-like int between 0 and 255, inclusive on both<a name="line.989"></a>
 <span class="sourceLineNo">990</span>     */<a name="line.990"></a>
 <span class="sourceLineNo">991</span>    public static int hash(final int x, final int y, final int seed) {<a name="line.991"></a>
-<span class="sourceLineNo">992</span>        int a = 0x632BE5AB,<a name="line.992"></a>
-<span class="sourceLineNo">993</span>                result = 0x9E3779B9 + (a ^= 0x85157AF5 * seed + x)<a name="line.993"></a>
-<span class="sourceLineNo">994</span>                        + (a ^= 0x85157AF5 * x + y)<a name="line.994"></a>
-<span class="sourceLineNo">995</span>                        + (a ^= 0x85157AF5 * y + seed);<a name="line.995"></a>
-<span class="sourceLineNo">996</span>        return (result * a) &gt;&gt;&gt; 24;<a name="line.996"></a>
+<span class="sourceLineNo">992</span>        int a = 0x632BE5AB;<a name="line.992"></a>
+<span class="sourceLineNo">993</span>        return  (0x9E3779B9<a name="line.993"></a>
+<span class="sourceLineNo">994</span>                + (a ^= 0x85157AF5 * seed + x)<a name="line.994"></a>
+<span class="sourceLineNo">995</span>                + (a ^= 0x85157AF5 * x + y)<a name="line.995"></a>
+<span class="sourceLineNo">996</span>                + (a ^= 0x85157AF5 * y + seed)) * a &gt;&gt;&gt; 24;<a name="line.996"></a>
 <span class="sourceLineNo">997</span>    }<a name="line.997"></a>
 <span class="sourceLineNo">998</span>    /**<a name="line.998"></a>
 <span class="sourceLineNo">999</span>     * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 8 bits.<a name="line.999"></a>
@@ -1012,12 +1012,12 @@
 <span class="sourceLineNo">1004</span>     * @return a pseudo-random-like int between 0 and 255, inclusive on both<a name="line.1004"></a>
 <span class="sourceLineNo">1005</span>     */<a name="line.1005"></a>
 <span class="sourceLineNo">1006</span>    public static int hash(final int x, final int y, final int z, final int seed) {<a name="line.1006"></a>
-<span class="sourceLineNo">1007</span>        int a = 0x632BE5AB,<a name="line.1007"></a>
-<span class="sourceLineNo">1008</span>                result = 0x9E3779B9 + (a ^= 0x85157AF5 * seed + x)<a name="line.1008"></a>
-<span class="sourceLineNo">1009</span>                        + (a ^= 0x85157AF5 * x + y)<a name="line.1009"></a>
-<span class="sourceLineNo">1010</span>                        + (a ^= 0x85157AF5 * y + z)<a name="line.1010"></a>
-<span class="sourceLineNo">1011</span>                        + (a ^= 0x85157AF5 * z + seed);<a name="line.1011"></a>
-<span class="sourceLineNo">1012</span>        return (result * a) &gt;&gt;&gt; 24;<a name="line.1012"></a>
+<span class="sourceLineNo">1007</span>        int a = 0x632BE5AB;<a name="line.1007"></a>
+<span class="sourceLineNo">1008</span>        return  (0x9E3779B9<a name="line.1008"></a>
+<span class="sourceLineNo">1009</span>                + (a ^= 0x85157AF5 * seed + x)<a name="line.1009"></a>
+<span class="sourceLineNo">1010</span>                + (a ^= 0x85157AF5 * x + y)<a name="line.1010"></a>
+<span class="sourceLineNo">1011</span>                + (a ^= 0x85157AF5 * y + z)<a name="line.1011"></a>
+<span class="sourceLineNo">1012</span>                + (a ^= 0x85157AF5 * z + seed)) * a &gt;&gt;&gt; 24;<a name="line.1012"></a>
 <span class="sourceLineNo">1013</span>    }<a name="line.1013"></a>
 <span class="sourceLineNo">1014</span>    /**<a name="line.1014"></a>
 <span class="sourceLineNo">1015</span>     * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 8 bits.<a name="line.1015"></a>
@@ -1029,13 +1029,13 @@
 <span class="sourceLineNo">1021</span>     * @return a pseudo-random-like int between 0 and 255, inclusive on both<a name="line.1021"></a>
 <span class="sourceLineNo">1022</span>     */<a name="line.1022"></a>
 <span class="sourceLineNo">1023</span>    public static int hash(final int x, final int y, final int z, final int w, final int seed) {<a name="line.1023"></a>
-<span class="sourceLineNo">1024</span>        int a = 0x632BE5AB,<a name="line.1024"></a>
-<span class="sourceLineNo">1025</span>                result = 0x9E3779B9 + (a ^= 0x85157AF5 * seed + x)<a name="line.1025"></a>
-<span class="sourceLineNo">1026</span>                        + (a ^= 0x85157AF5 * x + y)<a name="line.1026"></a>
-<span class="sourceLineNo">1027</span>                        + (a ^= 0x85157AF5 * y + z)<a name="line.1027"></a>
-<span class="sourceLineNo">1028</span>                        + (a ^= 0x85157AF5 * z + w)<a name="line.1028"></a>
-<span class="sourceLineNo">1029</span>                        + (a ^= 0x85157AF5 * w + seed);<a name="line.1029"></a>
-<span class="sourceLineNo">1030</span>        return (result * a) &gt;&gt;&gt; 24;<a name="line.1030"></a>
+<span class="sourceLineNo">1024</span>        int a = 0x632BE5AB;<a name="line.1024"></a>
+<span class="sourceLineNo">1025</span>        return (0x9E3779B9<a name="line.1025"></a>
+<span class="sourceLineNo">1026</span>                + (a ^= 0x85157AF5 * seed + x)<a name="line.1026"></a>
+<span class="sourceLineNo">1027</span>                + (a ^= 0x85157AF5 * x + y)<a name="line.1027"></a>
+<span class="sourceLineNo">1028</span>                + (a ^= 0x85157AF5 * y + z)<a name="line.1028"></a>
+<span class="sourceLineNo">1029</span>                + (a ^= 0x85157AF5 * z + w)<a name="line.1029"></a>
+<span class="sourceLineNo">1030</span>                + (a ^= 0x85157AF5 * w + seed)) * a &gt;&gt;&gt; 24;<a name="line.1030"></a>
 <span class="sourceLineNo">1031</span>    }<a name="line.1031"></a>
 <span class="sourceLineNo">1032</span>    /**<a name="line.1032"></a>
 <span class="sourceLineNo">1033</span>     * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 8 bits.<a name="line.1033"></a>
@@ -1049,15 +1049,15 @@
 <span class="sourceLineNo">1041</span>     * @return a pseudo-random-like int between 0 and 255, inclusive on both<a name="line.1041"></a>
 <span class="sourceLineNo">1042</span>     */<a name="line.1042"></a>
 <span class="sourceLineNo">1043</span>    public static int hash(final int x, final int y, final int z, final int w, final int u, final int v, final int seed) {<a name="line.1043"></a>
-<span class="sourceLineNo">1044</span>        int a = 0x632BE5AB,<a name="line.1044"></a>
-<span class="sourceLineNo">1045</span>                result = 0x9E3779B9 + (a ^= 0x85157AF5 * seed + x)<a name="line.1045"></a>
-<span class="sourceLineNo">1046</span>                        + (a ^= 0x85157AF5 * x + y)<a name="line.1046"></a>
-<span class="sourceLineNo">1047</span>                        + (a ^= 0x85157AF5 * y + z)<a name="line.1047"></a>
-<span class="sourceLineNo">1048</span>                        + (a ^= 0x85157AF5 * z + w)<a name="line.1048"></a>
-<span class="sourceLineNo">1049</span>                        + (a ^= 0x85157AF5 * w + u)<a name="line.1049"></a>
-<span class="sourceLineNo">1050</span>                        + (a ^= 0x85157AF5 * u + v)<a name="line.1050"></a>
-<span class="sourceLineNo">1051</span>                        + (a ^= 0x85157AF5 * v + seed);<a name="line.1051"></a>
-<span class="sourceLineNo">1052</span>        return (result * a) &gt;&gt;&gt; 24;<a name="line.1052"></a>
+<span class="sourceLineNo">1044</span>        int a = 0x632BE5AB;<a name="line.1044"></a>
+<span class="sourceLineNo">1045</span>        return (0x9E3779B9<a name="line.1045"></a>
+<span class="sourceLineNo">1046</span>                + (a ^= 0x85157AF5 * seed + x)<a name="line.1046"></a>
+<span class="sourceLineNo">1047</span>                + (a ^= 0x85157AF5 * x + y)<a name="line.1047"></a>
+<span class="sourceLineNo">1048</span>                + (a ^= 0x85157AF5 * y + z)<a name="line.1048"></a>
+<span class="sourceLineNo">1049</span>                + (a ^= 0x85157AF5 * z + w)<a name="line.1049"></a>
+<span class="sourceLineNo">1050</span>                + (a ^= 0x85157AF5 * w + u)<a name="line.1050"></a>
+<span class="sourceLineNo">1051</span>                + (a ^= 0x85157AF5 * u + v)<a name="line.1051"></a>
+<span class="sourceLineNo">1052</span>                + (a ^= 0x85157AF5 * v + seed)) * a &gt;&gt;&gt; 24;<a name="line.1052"></a>
 <span class="sourceLineNo">1053</span>    }<a name="line.1053"></a>
 <span class="sourceLineNo">1054</span><a name="line.1054"></a>
 <span class="sourceLineNo">1055</span>    /*<a name="line.1055"></a>
@@ -1073,8 +1073,8 @@
 <span class="sourceLineNo">1065</span>//     * @param seed an int to incorporate into the hash<a name="line.1065"></a>
 <span class="sourceLineNo">1066</span>//     * @return a pseudo-random-like int between 0 and 255, inclusive on both<a name="line.1066"></a>
 <span class="sourceLineNo">1067</span>//     */<a name="line.1067"></a>
-<span class="sourceLineNo">1068</span>//    public static int hash(int x, int y, int seed) {<a name="line.1068"></a>
-<span class="sourceLineNo">1069</span>//        return ((seed = x * 0x5a34f ^ y * 0xc29cb ^ seed * 0x63413) ^ ((seed &gt;&gt;&gt; 31 - (x = seed &amp; 30)) | seed &lt;&lt; 1 + x)) &amp; 255;<a name="line.1069"></a>
+<span class="sourceLineNo">1068</span>//    public static int hash(final int x, final int y, int seed) {<a name="line.1068"></a>
+<span class="sourceLineNo">1069</span>//        return ((seed = x * 0x5a34f ^ y * 0xc29cb ^ seed * 0x63413) ^ ((seed &gt;&gt;&gt; 31 - (seed &amp; 30)) | seed &lt;&lt; 1 + (seed &amp; 30))) &amp; 255;<a name="line.1069"></a>
 <span class="sourceLineNo">1070</span>//    }<a name="line.1070"></a>
 <span class="sourceLineNo">1071</span>//<a name="line.1071"></a>
 <span class="sourceLineNo">1072</span>//    /**<a name="line.1072"></a>
@@ -1085,9 +1085,9 @@
 <span class="sourceLineNo">1077</span>//     * @param seed an int to incorporate into the hash<a name="line.1077"></a>
 <span class="sourceLineNo">1078</span>//     * @return a pseudo-random-like int between 0 and 255, inclusive on both<a name="line.1078"></a>
 <span class="sourceLineNo">1079</span>//     */<a name="line.1079"></a>
-<span class="sourceLineNo">1080</span>//    public static int hash(int x, int y, int z, int seed) {<a name="line.1080"></a>
+<span class="sourceLineNo">1080</span>//    public static int hash(final int x, final int y, final int z, int seed) {<a name="line.1080"></a>
 <span class="sourceLineNo">1081</span>//        return ((seed = x * 0x5a34f ^ y * 0xc29cb ^ z ^ 0x13333 ^ seed * 0x63413)<a name="line.1081"></a>
-<span class="sourceLineNo">1082</span>//                ^ ((seed &gt;&gt;&gt; 31 - (x = seed &amp; 30)) | seed &lt;&lt; 1 + x)) &amp; 255;<a name="line.1082"></a>
+<span class="sourceLineNo">1082</span>//                ^ ((seed &gt;&gt;&gt; 31 - (seed &amp; 30)) | seed &lt;&lt; 1 + (seed &amp; 30))) &amp; 255;<a name="line.1082"></a>
 <span class="sourceLineNo">1083</span>//    }<a name="line.1083"></a>
 <span class="sourceLineNo">1084</span>//    /**<a name="line.1084"></a>
 <span class="sourceLineNo">1085</span>//     * Possibly useful outside SeededNoise. A fast, low-to-mid-quality hash that generates 8 bits.<a name="line.1085"></a>
@@ -1098,9 +1098,9 @@
 <span class="sourceLineNo">1090</span>//     * @param seed an int to incorporate into the hash<a name="line.1090"></a>
 <span class="sourceLineNo">1091</span>//     * @return a pseudo-random-like int between 0 and 255, inclusive on both<a name="line.1091"></a>
 <span class="sourceLineNo">1092</span>//     */<a name="line.1092"></a>
-<span class="sourceLineNo">1093</span>//    public static int hash(int x, int y, int z, int w, int seed) {<a name="line.1093"></a>
+<span class="sourceLineNo">1093</span>//    public static int hash(final int x, final int y, final int z, final int w, int seed) {<a name="line.1093"></a>
 <span class="sourceLineNo">1094</span>//        return ((seed = x * 0x5a34f ^ y * 0xc29cb ^ z ^ 0x13333 ^ w * 0x42023 ^ seed * 0x63413)<a name="line.1094"></a>
-<span class="sourceLineNo">1095</span>//                ^ ((seed &gt;&gt;&gt; 31 - (x = seed &amp; 30)) | seed &lt;&lt; 1 + x)) &amp; 255;<a name="line.1095"></a>
+<span class="sourceLineNo">1095</span>//                ^ ((seed &gt;&gt;&gt; 31 - (seed &amp; 30)) | seed &lt;&lt; 1 + (seed &amp; 30))) &amp; 255;<a name="line.1095"></a>
 <span class="sourceLineNo">1096</span>//    }<a name="line.1096"></a>
 <span class="sourceLineNo">1097</span>//    /**<a name="line.1097"></a>
 <span class="sourceLineNo">1098</span>//     * Possibly useful outside SeededNoise. A fast, low-to-mid-quality hash that generates 8 bits.<a name="line.1098"></a>
@@ -1113,9 +1113,9 @@
 <span class="sourceLineNo">1105</span>//     * @param seed an int to incorporate into the hash<a name="line.1105"></a>
 <span class="sourceLineNo">1106</span>//     * @return a pseudo-random-like int between 0 and 255, inclusive on both<a name="line.1106"></a>
 <span class="sourceLineNo">1107</span>//     */<a name="line.1107"></a>
-<span class="sourceLineNo">1108</span>//    public static int hash(int x, int y, int z, int w, int u, int v, int seed) {<a name="line.1108"></a>
+<span class="sourceLineNo">1108</span>//    public static int hash(final int x, final int y, final int z, final int w, final int u, final int v, int seed) {<a name="line.1108"></a>
 <span class="sourceLineNo">1109</span>//        return ((seed = x * 0x5a34f ^ y * 0xc29cb ^ z ^ 0x13333 ^ w * 0x42023 ^ u * 0xb34eb ^ v * 0x2feb7 ^ seed * 0x63413)<a name="line.1109"></a>
-<span class="sourceLineNo">1110</span>//                ^ ((seed &gt;&gt;&gt; 31 - (x = seed &amp; 30)) | seed &lt;&lt; 1 + x)) &amp; 255;<a name="line.1110"></a>
+<span class="sourceLineNo">1110</span>//                ^ ((seed &gt;&gt;&gt; 31 - (seed &amp; 30)) | seed &lt;&lt; 1 + (seed &amp; 30))) &amp; 255;<a name="line.1110"></a>
 <span class="sourceLineNo">1111</span>//    }<a name="line.1111"></a>
 <span class="sourceLineNo">1112</span><a name="line.1112"></a>
 <span class="sourceLineNo">1113</span><a name="line.1113"></a>

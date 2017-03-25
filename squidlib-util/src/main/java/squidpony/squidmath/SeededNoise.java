@@ -989,11 +989,11 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
      * @return a pseudo-random-like int between 0 and 255, inclusive on both
      */
     public static int hash(final int x, final int y, final int seed) {
-        int a = 0x632BE5AB,
-                result = 0x9E3779B9 + (a ^= 0x85157AF5 * seed + x)
-                        + (a ^= 0x85157AF5 * x + y)
-                        + (a ^= 0x85157AF5 * y + seed);
-        return (result * a) >>> 24;
+        int a = 0x632BE5AB;
+        return  (0x9E3779B9
+                + (a ^= 0x85157AF5 * seed + x)
+                + (a ^= 0x85157AF5 * x + y)
+                + (a ^= 0x85157AF5 * y + seed)) * a >>> 24;
     }
     /**
      * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 8 bits.
@@ -1004,12 +1004,12 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
      * @return a pseudo-random-like int between 0 and 255, inclusive on both
      */
     public static int hash(final int x, final int y, final int z, final int seed) {
-        int a = 0x632BE5AB,
-                result = 0x9E3779B9 + (a ^= 0x85157AF5 * seed + x)
-                        + (a ^= 0x85157AF5 * x + y)
-                        + (a ^= 0x85157AF5 * y + z)
-                        + (a ^= 0x85157AF5 * z + seed);
-        return (result * a) >>> 24;
+        int a = 0x632BE5AB;
+        return  (0x9E3779B9
+                + (a ^= 0x85157AF5 * seed + x)
+                + (a ^= 0x85157AF5 * x + y)
+                + (a ^= 0x85157AF5 * y + z)
+                + (a ^= 0x85157AF5 * z + seed)) * a >>> 24;
     }
     /**
      * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 8 bits.
@@ -1021,13 +1021,13 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
      * @return a pseudo-random-like int between 0 and 255, inclusive on both
      */
     public static int hash(final int x, final int y, final int z, final int w, final int seed) {
-        int a = 0x632BE5AB,
-                result = 0x9E3779B9 + (a ^= 0x85157AF5 * seed + x)
-                        + (a ^= 0x85157AF5 * x + y)
-                        + (a ^= 0x85157AF5 * y + z)
-                        + (a ^= 0x85157AF5 * z + w)
-                        + (a ^= 0x85157AF5 * w + seed);
-        return (result * a) >>> 24;
+        int a = 0x632BE5AB;
+        return (0x9E3779B9
+                + (a ^= 0x85157AF5 * seed + x)
+                + (a ^= 0x85157AF5 * x + y)
+                + (a ^= 0x85157AF5 * y + z)
+                + (a ^= 0x85157AF5 * z + w)
+                + (a ^= 0x85157AF5 * w + seed)) * a >>> 24;
     }
     /**
      * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 8 bits.
@@ -1041,15 +1041,15 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
      * @return a pseudo-random-like int between 0 and 255, inclusive on both
      */
     public static int hash(final int x, final int y, final int z, final int w, final int u, final int v, final int seed) {
-        int a = 0x632BE5AB,
-                result = 0x9E3779B9 + (a ^= 0x85157AF5 * seed + x)
-                        + (a ^= 0x85157AF5 * x + y)
-                        + (a ^= 0x85157AF5 * y + z)
-                        + (a ^= 0x85157AF5 * z + w)
-                        + (a ^= 0x85157AF5 * w + u)
-                        + (a ^= 0x85157AF5 * u + v)
-                        + (a ^= 0x85157AF5 * v + seed);
-        return (result * a) >>> 24;
+        int a = 0x632BE5AB;
+        return (0x9E3779B9
+                + (a ^= 0x85157AF5 * seed + x)
+                + (a ^= 0x85157AF5 * x + y)
+                + (a ^= 0x85157AF5 * y + z)
+                + (a ^= 0x85157AF5 * z + w)
+                + (a ^= 0x85157AF5 * w + u)
+                + (a ^= 0x85157AF5 * u + v)
+                + (a ^= 0x85157AF5 * v + seed)) * a >>> 24;
     }
 
     /*
@@ -1065,8 +1065,8 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
 //     * @param seed an int to incorporate into the hash
 //     * @return a pseudo-random-like int between 0 and 255, inclusive on both
 //     */
-//    public static int hash(int x, int y, int seed) {
-//        return ((seed = x * 0x5a34f ^ y * 0xc29cb ^ seed * 0x63413) ^ ((seed >>> 31 - (x = seed & 30)) | seed << 1 + x)) & 255;
+//    public static int hash(final int x, final int y, int seed) {
+//        return ((seed = x * 0x5a34f ^ y * 0xc29cb ^ seed * 0x63413) ^ ((seed >>> 31 - (seed & 30)) | seed << 1 + (seed & 30))) & 255;
 //    }
 //
 //    /**
@@ -1077,9 +1077,9 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
 //     * @param seed an int to incorporate into the hash
 //     * @return a pseudo-random-like int between 0 and 255, inclusive on both
 //     */
-//    public static int hash(int x, int y, int z, int seed) {
+//    public static int hash(final int x, final int y, final int z, int seed) {
 //        return ((seed = x * 0x5a34f ^ y * 0xc29cb ^ z ^ 0x13333 ^ seed * 0x63413)
-//                ^ ((seed >>> 31 - (x = seed & 30)) | seed << 1 + x)) & 255;
+//                ^ ((seed >>> 31 - (seed & 30)) | seed << 1 + (seed & 30))) & 255;
 //    }
 //    /**
 //     * Possibly useful outside SeededNoise. A fast, low-to-mid-quality hash that generates 8 bits.
@@ -1090,9 +1090,9 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
 //     * @param seed an int to incorporate into the hash
 //     * @return a pseudo-random-like int between 0 and 255, inclusive on both
 //     */
-//    public static int hash(int x, int y, int z, int w, int seed) {
+//    public static int hash(final int x, final int y, final int z, final int w, int seed) {
 //        return ((seed = x * 0x5a34f ^ y * 0xc29cb ^ z ^ 0x13333 ^ w * 0x42023 ^ seed * 0x63413)
-//                ^ ((seed >>> 31 - (x = seed & 30)) | seed << 1 + x)) & 255;
+//                ^ ((seed >>> 31 - (seed & 30)) | seed << 1 + (seed & 30))) & 255;
 //    }
 //    /**
 //     * Possibly useful outside SeededNoise. A fast, low-to-mid-quality hash that generates 8 bits.
@@ -1105,9 +1105,9 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
 //     * @param seed an int to incorporate into the hash
 //     * @return a pseudo-random-like int between 0 and 255, inclusive on both
 //     */
-//    public static int hash(int x, int y, int z, int w, int u, int v, int seed) {
+//    public static int hash(final int x, final int y, final int z, final int w, final int u, final int v, int seed) {
 //        return ((seed = x * 0x5a34f ^ y * 0xc29cb ^ z ^ 0x13333 ^ w * 0x42023 ^ u * 0xb34eb ^ v * 0x2feb7 ^ seed * 0x63413)
-//                ^ ((seed >>> 31 - (x = seed & 30)) | seed << 1 + x)) & 255;
+//                ^ ((seed >>> 31 - (seed & 30)) | seed << 1 + (seed & 30))) & 255;
 //    }
 
 
