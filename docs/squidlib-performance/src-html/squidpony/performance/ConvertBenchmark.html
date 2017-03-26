@@ -49,41 +49,41 @@
 <span class="sourceLineNo">041</span>import org.openjdk.jmh.runner.options.OptionsBuilder;<a name="line.41"></a>
 <span class="sourceLineNo">042</span>import org.openjdk.jmh.runner.options.TimeValue;<a name="line.42"></a>
 <span class="sourceLineNo">043</span>import squidpony.squidgrid.gui.gdx.SColor;<a name="line.43"></a>
-<span class="sourceLineNo">044</span>import squidpony.squidmath.PintRNG;<a name="line.44"></a>
-<span class="sourceLineNo">045</span><a name="line.45"></a>
-<span class="sourceLineNo">046</span>import java.util.concurrent.TimeUnit;<a name="line.46"></a>
-<span class="sourceLineNo">047</span><a name="line.47"></a>
-<span class="sourceLineNo">048</span>/**<a name="line.48"></a>
-<span class="sourceLineNo">049</span> *<a name="line.49"></a>
-<span class="sourceLineNo">050</span> */<a name="line.50"></a>
-<span class="sourceLineNo">051</span>public class ConvertBenchmark {<a name="line.51"></a>
-<span class="sourceLineNo">052</span><a name="line.52"></a>
-<span class="sourceLineNo">053</span>    private static long seed = 9000;<a name="line.53"></a>
-<span class="sourceLineNo">054</span>    private static int iseed = 9000;<a name="line.54"></a>
-<span class="sourceLineNo">055</span>    private static float fseed = 9000f;<a name="line.55"></a>
-<span class="sourceLineNo">056</span><a name="line.56"></a>
-<span class="sourceLineNo">057</span>    public float doControl()<a name="line.57"></a>
-<span class="sourceLineNo">058</span>    {<a name="line.58"></a>
-<span class="sourceLineNo">059</span>        final PintRNG rng = new PintRNG(Float.floatToIntBits(fseed));<a name="line.59"></a>
-<span class="sourceLineNo">060</span><a name="line.60"></a>
-<span class="sourceLineNo">061</span>        for (int i = 0; i &lt; 1000000; i++) {<a name="line.61"></a>
-<span class="sourceLineNo">062</span>            fseed += 0x20 | rng.next(3);<a name="line.62"></a>
-<span class="sourceLineNo">063</span>        }<a name="line.63"></a>
-<span class="sourceLineNo">064</span>        return fseed;<a name="line.64"></a>
-<span class="sourceLineNo">065</span>    }<a name="line.65"></a>
-<span class="sourceLineNo">066</span><a name="line.66"></a>
-<span class="sourceLineNo">067</span>    @Benchmark<a name="line.67"></a>
-<span class="sourceLineNo">068</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.68"></a>
-<span class="sourceLineNo">069</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.69"></a>
-<span class="sourceLineNo">070</span>    public void measureControl() throws InterruptedException {<a name="line.70"></a>
-<span class="sourceLineNo">071</span>        fseed = 9000f;<a name="line.71"></a>
-<span class="sourceLineNo">072</span>        doControl();<a name="line.72"></a>
-<span class="sourceLineNo">073</span>    }<a name="line.73"></a>
-<span class="sourceLineNo">074</span><a name="line.74"></a>
+<span class="sourceLineNo">044</span>import squidpony.squidmath.NumberTools;<a name="line.44"></a>
+<span class="sourceLineNo">045</span>import squidpony.squidmath.PintRNG;<a name="line.45"></a>
+<span class="sourceLineNo">046</span><a name="line.46"></a>
+<span class="sourceLineNo">047</span>import java.util.concurrent.TimeUnit;<a name="line.47"></a>
+<span class="sourceLineNo">048</span><a name="line.48"></a>
+<span class="sourceLineNo">049</span>/**<a name="line.49"></a>
+<span class="sourceLineNo">050</span> *<a name="line.50"></a>
+<span class="sourceLineNo">051</span> */<a name="line.51"></a>
+<span class="sourceLineNo">052</span>public class ConvertBenchmark {<a name="line.52"></a>
+<span class="sourceLineNo">053</span><a name="line.53"></a>
+<span class="sourceLineNo">054</span>    private static long seed = 9000;<a name="line.54"></a>
+<span class="sourceLineNo">055</span>    private static int iseed = 9000;<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    private static float fseed = 9000f;<a name="line.56"></a>
+<span class="sourceLineNo">057</span><a name="line.57"></a>
+<span class="sourceLineNo">058</span>    public float doControl()<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    {<a name="line.59"></a>
+<span class="sourceLineNo">060</span>        final PintRNG rng = new PintRNG(NumberTools.floatToIntBits(fseed));<a name="line.60"></a>
+<span class="sourceLineNo">061</span><a name="line.61"></a>
+<span class="sourceLineNo">062</span>        for (int i = 0; i &lt; 1000000; i++) {<a name="line.62"></a>
+<span class="sourceLineNo">063</span>            fseed += 0x20 | rng.next(3);<a name="line.63"></a>
+<span class="sourceLineNo">064</span>        }<a name="line.64"></a>
+<span class="sourceLineNo">065</span>        return fseed;<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    }<a name="line.66"></a>
+<span class="sourceLineNo">067</span><a name="line.67"></a>
+<span class="sourceLineNo">068</span>    @Benchmark<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    public void measureControl() throws InterruptedException {<a name="line.71"></a>
+<span class="sourceLineNo">072</span>        fseed = 9000f;<a name="line.72"></a>
+<span class="sourceLineNo">073</span>        doControl();<a name="line.73"></a>
+<span class="sourceLineNo">074</span>    }<a name="line.74"></a>
 <span class="sourceLineNo">075</span><a name="line.75"></a>
 <span class="sourceLineNo">076</span>    public float doJDK()<a name="line.76"></a>
 <span class="sourceLineNo">077</span>    {<a name="line.77"></a>
-<span class="sourceLineNo">078</span>        final PintRNG rng = new PintRNG(Float.floatToIntBits(fseed));<a name="line.78"></a>
+<span class="sourceLineNo">078</span>        final PintRNG rng = new PintRNG(NumberTools.floatToIntBits(fseed));<a name="line.78"></a>
 <span class="sourceLineNo">079</span><a name="line.79"></a>
 <span class="sourceLineNo">080</span>        for (int i = 0; i &lt; 1000000; i++) {<a name="line.80"></a>
 <span class="sourceLineNo">081</span>            fseed += Float.intBitsToFloat(0x02000000 | rng.next(24));<a name="line.81"></a>
@@ -101,7 +101,7 @@
 <span class="sourceLineNo">093</span><a name="line.93"></a>
 <span class="sourceLineNo">094</span>    public float doCustom()<a name="line.94"></a>
 <span class="sourceLineNo">095</span>    {<a name="line.95"></a>
-<span class="sourceLineNo">096</span>        final PintRNG rng = new PintRNG(Float.floatToIntBits(fseed));<a name="line.96"></a>
+<span class="sourceLineNo">096</span>        final PintRNG rng = new PintRNG(NumberTools.floatToIntBits(fseed));<a name="line.96"></a>
 <span class="sourceLineNo">097</span><a name="line.97"></a>
 <span class="sourceLineNo">098</span>        for (int i = 0; i &lt; 1000000; i++) {<a name="line.98"></a>
 <span class="sourceLineNo">099</span>            fseed += SColor.intToFloatColor(0x02000000 | rng.next(24));<a name="line.99"></a>
@@ -119,7 +119,7 @@
 <span class="sourceLineNo">111</span><a name="line.111"></a>
 <span class="sourceLineNo">112</span>    public float doCustomAlt()<a name="line.112"></a>
 <span class="sourceLineNo">113</span>    {<a name="line.113"></a>
-<span class="sourceLineNo">114</span>        final PintRNG rng = new PintRNG(Float.floatToIntBits(fseed));<a name="line.114"></a>
+<span class="sourceLineNo">114</span>        final PintRNG rng = new PintRNG(NumberTools.floatToIntBits(fseed));<a name="line.114"></a>
 <span class="sourceLineNo">115</span><a name="line.115"></a>
 <span class="sourceLineNo">116</span>        for (int i = 0; i &lt; 1000000; i++) {<a name="line.116"></a>
 <span class="sourceLineNo">117</span>            fseed += SColor.intToFloatColorAlt(0x02000000 | rng.next(24));<a name="line.117"></a>

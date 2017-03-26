@@ -39,12 +39,13 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         Beach                  = 10,
         Rocky                  = 11;
 
-    private static final int width = 256, height = 256;
+    private static final int width = 512, height = 512;
+    private final double terrainFreq = 1.9, terrainRidgedFreq = 2.5, heatFreq = 5.5, moistureFreq = 5.0, otherFreq = 4.1;
 
     private SpriteBatch batch;
     private SquidColorCenter colorFactory;
     private SquidPanel display;//, overlay;
-    private int cellWidth = 1, cellHeight = 1;
+    private static final int cellWidth = 1, cellHeight = 1;
     private SquidInput input;
     private Stage stage;
     private Viewport view;
@@ -69,6 +70,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
             minHeat = Double.POSITIVE_INFINITY, maxHeat = Double.NEGATIVE_INFINITY,
             minWet = Double.POSITIVE_INFINITY, maxWet = Double.NEGATIVE_INFINITY;
+    private double i_hot = 1.0;
     private long ttg = 0; // time to generate
 
     public static final double
@@ -262,29 +264,28 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     }
     private void codeBiome(int x, int y, double hot, double moist, int heightCode) {
         int hc, mc;
-        double upperProximityH, upperProximityM, lowerProximityH, lowerProximityM, bound, prevBound,
-                i_hot = 1.0 / maxHeat, i_wet = 1.0;
-        if(moist >= (bound = (wettestValueUpper - (wetterValueUpper - wetterValueLower) * 0.2) * i_wet))
+        double upperProximityH, upperProximityM, lowerProximityH, lowerProximityM, bound, prevBound;
+        if(moist >= (bound = (wettestValueUpper - (wetterValueUpper - wetterValueLower) * 0.2)))
         {
             mc = 5;
             upperProximityM = (moist - bound) / (maxWet - bound);
         }
-        else if((prevBound = bound) == -1 || moist >= (bound = (wetterValueUpper - (wetValueUpper - wetValueLower) * 0.2) * i_wet))
+        else if((prevBound = bound) == -1 || moist >= (bound = (wetterValueUpper - (wetValueUpper - wetValueLower) * 0.2)))
         {
             mc = 4;
             upperProximityM = (moist - bound) / (prevBound - bound);
         }
-        else if((prevBound = bound) == -1 || moist >= (bound = (wetValueUpper - (dryValueUpper - dryValueLower) * 0.2) * i_wet))
+        else if((prevBound = bound) == -1 || moist >= (bound = (wetValueUpper - (dryValueUpper - dryValueLower) * 0.2)))
         {
             mc = 3;
             upperProximityM = (moist - bound) / (prevBound - bound);
         }
-        else if((prevBound = bound) == -1 || moist >= (bound = (dryValueUpper - (drierValueUpper - drierValueLower) * 0.2) * i_wet))
+        else if((prevBound = bound) == -1 || moist >= (bound = (dryValueUpper - (drierValueUpper - drierValueLower) * 0.2)))
         {
             mc = 2;
             upperProximityM = (moist - bound) / (prevBound - bound);
         }
-        else if((prevBound = bound) == -1 || moist >= (bound = (drierValueUpper - (driestValueUpper) * 0.2) * i_wet))
+        else if((prevBound = bound) == -1 || moist >= (bound = (drierValueUpper - (driestValueUpper) * 0.2)))
         {
             mc = 1;
             upperProximityM = (moist - bound) / (prevBound - bound);
@@ -330,27 +331,27 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         moistureCodeData[x][y] = mc;
         biomeUpperCodeData[x][y] = (heightCode == 4) ? hc + 36 : hc + mc * 6;
 
-        if(moist >= (bound = (wetterValueUpper + (wettestValueUpper - wettestValueLower) * 0.2) * i_wet))
+        if(moist >= (bound = (wetterValueUpper + (wettestValueUpper - wettestValueLower) * 0.2)))
         {
             mc = 5;
             lowerProximityM = (moist - bound) / (maxWet - bound);
         }
-        else if((prevBound = bound) == -1 || moist >= (bound = (wetValueUpper + (wetterValueUpper - wetterValueLower) * 0.55) * i_wet))
+        else if((prevBound = bound) == -1 || moist >= (bound = (wetValueUpper + (wetterValueUpper - wetterValueLower) * 0.55)))
         {
             mc = 4;
             lowerProximityM = (moist - bound) / (prevBound - bound);
         }
-        else if((prevBound = bound) == -1 || moist >= (bound = (dryValueUpper + (wetValueUpper - wetValueLower) * 0.2) * i_wet))
+        else if((prevBound = bound) == -1 || moist >= (bound = (dryValueUpper + (wetValueUpper - wetValueLower) * 0.2)))
         {
             mc = 3;
             lowerProximityM = (moist - bound) / (prevBound - bound);
         }
-        else if((prevBound = bound) == -1 || moist >= (bound = (drierValueUpper + (dryValueUpper - dryValueLower) * 0.2) * i_wet))
+        else if((prevBound = bound) == -1 || moist >= (bound = (drierValueUpper + (dryValueUpper - dryValueLower) * 0.2)))
         {
             mc = 2;
             lowerProximityM = (moist - bound) / (prevBound - bound);
         }
-        else if((prevBound = bound) == -1 || moist >= (bound = (driestValueUpper + (drierValueUpper - drierValueLower) * 0.2) * i_wet))
+        else if((prevBound = bound) == -1 || moist >= (bound = (driestValueUpper + (drierValueUpper - drierValueLower) * 0.2)))
         {
             mc = 1;
             lowerProximityM = (moist - bound) / (prevBound - bound);
@@ -394,8 +395,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
 
         biomeLowerCodeData[x][y] = (hc + mc * 6);
         biomeDifferenceData[x][y] =
-                (Math.max(upperProximityH, upperProximityM) + Math.max(lowerProximityH, lowerProximityM)) * 0.5;
-        //biomeDifferenceData[x][y] = (upperProximityH + upperProximityM + lowerProximityH + lowerProximityM) * 0.25;
+        //        (Math.max(upperProximityH, upperProximityM) + Math.max(lowerProximityH, lowerProximityM)) * 0.5;
+        biomeDifferenceData[x][y] = (upperProximityH + upperProximityM + lowerProximityH + lowerProximityM) * 0.25;
     }
 
     @Override
@@ -404,15 +405,16 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         display = new SquidPanel(width, height, cellWidth, cellHeight);
         //overlay = new SquidPanel(16, 8, DefaultResources.getStretchableFont().width(32).height(64).initBySize());
         colorFactory = new SquidColorCenter();
-        view = new StretchViewport(width, height);
+        view = new StretchViewport(width*cellWidth, height*cellHeight);
         stage = new Stage(view, batch);
-        seed = 0xBEEFF00DCAFECABAL;
-        rng = new StatefulRNG(seed); //seed
-        terrain = new Noise.Layered4D(SeededNoise.instance, 7, 2.0);
-        terrainRidged = new Noise.Ridged4D(SeededNoise.instance, 8, 2.3);
-        heat = new Noise.Layered4D(SeededNoise.instance, 4, 5.5);
-        moisture = new Noise.Layered4D(SeededNoise.instance, 5, 5.0);
-        otherRidged = new Noise.Ridged4D(SeededNoise.instance, 6, 4.1);
+        seed = 0xDEBACL;
+        rng = new StatefulRNG(seed);
+        // 1.9, 2.3, 5.5, 5.0, 4.1
+        terrain = new Noise.Layered4D(SeededNoise.instance, 7, terrainFreq);
+        terrainRidged = new Noise.Ridged4D(SeededNoise.instance, 8, terrainRidgedFreq);
+        heat = new Noise.Layered4D(SeededNoise.instance, 4, heatFreq);
+        moisture = new Noise.Layered4D(SeededNoise.instance, 5, moistureFreq);
+        otherRidged = new Noise.Ridged4D(SeededNoise.instance, 6, otherFreq);
         //data = new GridData(16);
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
@@ -484,7 +486,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             fresh = true;
         }
         rng.setState(state);
-        int seedA = rng.nextInt(), seedB = rng.nextInt(), seedC = rng.nextInt(), seedD = rng.nextInt(), t;
+        int seedA = rng.nextInt(), seedB = rng.nextInt(), seedC = rng.nextInt(), t;
         waterModifier = rng.nextDouble(0.15)-0.06;
         coolingModifier = NumberTools.randomDoubleCurved(rng.nextInt()) * 0.5 + 1.0;
 
@@ -493,26 +495,32 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                 qs, qc,
                 h, temp,
                 i_w = 6.283185307179586 / width, i_h = 6.283185307179586 / height,
-                xPos, yPos = startY, i_uw = usedWidth / (double)width, i_uh = usedHeight / (double)height;
+                xPos = startX, yPos = startY, i_uw = usedWidth / (double)width, i_uh = usedHeight / (double)height;
+        double[] trigTable = new double[width << 1];
+        for (int x = 0; x < width; x++, xPos += i_uw) {
+            p = xPos * i_w;
+            trigTable[x<<1]   = Math.sin(p);
+            trigTable[x<<1|1] = Math.cos(p);
+        }
         for (int y = 0; y < height; y++, yPos += i_uh) {
             q = yPos * i_h;
             qs = Math.sin(q);
             qc = Math.cos(q);
-            xPos = startX;
-            for (int x = 0; x < width; x++, xPos += i_uw) {
-                p = xPos * i_w;
-                ps = Math.sin(p);
-                pc = Math.cos(p);
+            for (int x = 0, xt = 0; x < width; x++) {
+                ps = trigTable[xt++];//Math.sin(p);
+                pc = trigTable[xt++];//Math.cos(p);
                 h = terrain.getNoiseWithSeed(pc +
-                                terrainRidged.getNoiseWithSeed(pc, ps, qc, qs, seedC),
+                                terrainRidged.getNoiseWithSeed(pc, ps, qc, qs, seedA + seedB),
                         ps, qc, qs, seedA);
                 p = Math.signum(h) + waterModifier;
                 h *= p * p;
                 heightData[x][y] = h;
                 heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps, qc
-                        + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedD + seedC), qs, seedB));
+                        + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedB + seedC)//, seedD + seedC)
+                        , qs, seedB));
                 moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qc, qs
-                        + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedD + seedB), seedC));
+                        + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedC + seedA)//seedD + seedB)
+                        , seedC));
                 if(fresh) {
                     minHeight = Math.min(minHeight, h);
                     maxHeight = Math.max(maxHeight, h);
@@ -538,6 +546,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         for (int y = 0; y < height; y++, yPos += i_uh) {
             temp = Math.abs(yPos - halfHeight) * i_half;
             temp *= (2.4 - temp);
+            temp = 2.2 - temp;
             for (int x = 0; x < width; x++) {
                 heightData[x][y] = (h = (heightData[x][y] - minHeight) * heightDiff - 1.0);
                 heightCodeData[x][y] = (t = codeHeight(h));
@@ -562,7 +571,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                     default:
                         h *= 0.05;
                 }
-                heatData[x][y] = (h = (((heatData[x][y] - minHeat0) * heatDiff * hMod) + h + 0.6) * (2.2 - temp));
+                heatData[x][y] = (h = (((heatData[x][y] - minHeat0) * heatDiff * hMod) + h + 0.6) * temp);
                 if (fresh) {
                     ps = Math.min(ps, h); //minHeat0
                     pc = Math.max(pc, h); //maxHeat0
@@ -598,6 +607,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         {
             minHeat = qs;
             maxHeat = qc;
+            i_hot =  1.0 / qc;
         }
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -613,7 +623,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     }
 
     public void putMap() {
-        regenerate(0, 0, width, height, rng.getState());
+        //regenerate(0, 0, width, height, rng.getState());
         display.erase();
         int hc, tc;
         for (int y = 0; y < height; y++) {
@@ -666,7 +676,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         Gdx.gl.glDisable(GL20.GL_BLEND);
         // need to display the map every frame, since we clear the screen to avoid artifacts.
         putMap();
-        Gdx.graphics.setTitle("SquidLib Demo: Detailed World Map, took " + ttg + " ms to generate");
+        Gdx.graphics.setTitle("Map! Took " + ttg + " ms to generate");
 
         // if we are waiting for the player's input and get input, process it.
         if (input.hasNext()) {
@@ -686,9 +696,9 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "SquidLib Demo: Detailed World Map";
-        config.width = width * 2;
-        config.height = height * 2;
-        config.foregroundFPS = 10;
+        config.width = width * cellWidth;
+        config.height = height * cellHeight;
+        config.foregroundFPS = 60;
         config.backgroundFPS = -1;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);

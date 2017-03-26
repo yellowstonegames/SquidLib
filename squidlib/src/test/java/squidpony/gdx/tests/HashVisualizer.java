@@ -74,7 +74,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 43, rngMode = 0, noiseMode = 28;
+    private int hashMode = 43, rngMode = 0, noiseMode = 37;
     private CrossHash.Storm storm, stormA, stormB, stormC;
     private CrossHash.Chariot chariot, chariotA, chariotB, chariotC;
     private final int[] coordinates = new int[2];
@@ -82,10 +82,10 @@ public class HashVisualizer extends ApplicationAdapter {
     private final double[] doubleCoordinates = new double[2], doubleCoordinate = new double[1];
     private final double[][][][] seamless = new double[3][64][64][64];
     private final SeededNoise seeded = new SeededNoise(0xDEADD00D);
-    private final Noise.Noise2D layered2D = new Noise.Layered2D(SeededNoise.instance, 2, 1.25);
-    private final Noise.Noise3D layered3D = new Noise.Layered3D(SeededNoise.instance, 2, 1.25);
-    private final Noise.Noise4D layered4D = new Noise.Layered4D(SeededNoise.instance, 2, 1.25);
-    private final Noise.Noise6D layered6D = new Noise.Layered6D(SeededNoise.instance, 2, 1.25);
+    private final Noise.Noise2D layered2D = new Noise.Layered2D(SeededNoise.instance, 2, 1.75);
+    private final Noise.Noise3D layered3D = new Noise.Layered3D(SeededNoise.instance, 2, 1.75);
+    private final Noise.Noise4D layered4D = new Noise.Layered4D(SeededNoise.instance, 2, 1.75);
+    private final Noise.Noise6D layered6D = new Noise.Layered6D(SeededNoise.instance, 2, 1.75);
     private final Noise.Noise2D value2D = new Noise.Layered2D(ValueNoise.instance, 2);
     private final Noise.Noise3D value3D = new Noise.Layered3D(ValueNoise.instance, 2);
     private final Noise.Noise4D value4D = new Noise.Layered4D(ValueNoise.instance, 2);
@@ -94,20 +94,20 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Noise3D scaled3D = new Noise.Scaled3D(seeded, 1.43, 1.43, 1.43);
     private final Noise.Noise4D scaled4D = new Noise.Scaled4D(seeded, 1.43, 1.43, 1.43, 1.43);
     private final Noise.Noise6D scaled6D = new Noise.Scaled6D(seeded, 1.43, 1.43, 1.43, 1.43, 1.43, 1.43);
-    private final Noise.Noise2D ridged2D = new Noise.Ridged2D(SeededNoise.instance, 2, 1.45);
-    private final Noise.Noise3D ridged3D = new Noise.Ridged3D(SeededNoise.instance, 2, 1.45);
-    private final Noise.Noise4D ridged4D = new Noise.Ridged4D(SeededNoise.instance, 2, 1.45);
-    private final Noise.Noise6D ridged6D = new Noise.Ridged6D(SeededNoise.instance, 2, 1.45);
+    private final Noise.Noise2D ridged2D = new Noise.Ridged2D(SeededNoise.instance, 2, 1.45); // 1.45
+    private final Noise.Noise3D ridged3D = new Noise.Ridged3D(SeededNoise.instance, 2, 1.45); // 1.45
+    private final Noise.Noise4D ridged4D = new Noise.Ridged4D(SeededNoise.instance, 2, 1.45); // 1.45
+    private final Noise.Noise6D ridged6D = new Noise.Ridged6D(SeededNoise.instance, 2, 1.45); // 1.45
                                                                                    
     private final Noise.Noise2D slick2D = new Noise.Slick2D(SeededNoise.instance, Noise.alternate, 1);
     private final Noise.Noise3D slick3D = new Noise.Slick3D(SeededNoise.instance, Noise.alternate, 1);
     private final Noise.Noise4D slick4D = new Noise.Slick4D(SeededNoise.instance, Noise.alternate, 1);
     private final Noise.Noise6D slick6D = new Noise.Slick6D(SeededNoise.instance, Noise.alternate, 1);
 
-    private final Noise.Noise2D turb2D = new Noise.Turbulent2D(layered2D, ridged2D, 1, 0.75);
-    private final Noise.Noise3D turb3D = new Noise.Turbulent3D(layered3D, ridged3D, 1, 0.75);
-    private final Noise.Noise4D turb4D = new Noise.Turbulent4D(layered4D, ridged4D, 1, 0.75);
-    private final Noise.Noise6D turb6D = new Noise.Turbulent6D(layered6D, ridged6D, 1, 0.75);
+    private final Noise.Noise2D turb2D = new Noise.Turbulent2D(layered2D, ridged2D, 1, 1);
+    private final Noise.Noise3D turb3D = new Noise.Turbulent3D(layered3D, ridged3D, 1, 1);
+    private final Noise.Noise4D turb4D = new Noise.Turbulent4D(layered4D, ridged4D, 1, 1);
+    private final Noise.Noise6D turb6D = new Noise.Turbulent6D(layered6D, ridged6D, 1, 1);
 
     // 0 commonly used hashes
     // 1 variants on Storm and other hashes
