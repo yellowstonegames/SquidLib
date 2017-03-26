@@ -120,6 +120,13 @@ public class NumberTools {
         wia.set(1, ((((seed *= 277803737) >>> 22) ^ seed) & 0xfffff) | 0x3ff00000);
         return wda.get(0) - 1.0;
     }
+    public static float randomFloat(int seed)
+    {
+        seed ^= seed >>> (4 + (seed >>> 28));
+        wia.set(0, (((seed *= 0x108EF2D9) >>> 22 ^ seed) & 0x7fffff) | 0x3f800000);
+        return (wfa.get(0) - 1f);
+    }
+
     /**
      * Generates a pseudo-random float between -1.0f (exclusive) and 1.0f (exclusive) using the given int seed, passing
      * it once through the (very high-quality and rather fast) {@link PintRNG} algorithm, derived from PCG-Random. This

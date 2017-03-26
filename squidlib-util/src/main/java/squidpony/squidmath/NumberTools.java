@@ -154,6 +154,22 @@ public class NumberTools {
         return Double.longBitsToDouble(bits) - 1.0;
     }
     /**
+     * Generates a pseudo-random float between 0.0f (inclusive) and 1.0f (exclusive) using the given int seed, passing
+     * it once through the (very high-quality and rather fast) {@link PintRNG} algorithm, derived from PCG-Random. This
+     * produces a random int, which this produces a float from using {@link #intBitsToFloat(int)} (long)} or something
+     * functionally equivalent on GWT.
+     * <br>
+     * Consider calling this with {@code NumberTools.randomSignedFloat(seed += 0x9E3779B9)} for an optimal period of 2
+     * to the 32 when repeatedly called, but {@code NumberTools.randomSignedFloat(++seed)} will also work just fine.
+     * @param seed any int to be used as a seed
+     * @return a pseudo-random float from -1.0f (exclusive) to 1.0f (exclusive)
+     */
+    public static float randomFloat(int seed)
+    {
+        seed ^= seed >>> (4 + (seed >>> 28));
+        return (Float.intBitsToFloat((((seed *= 0x108EF2D9) >>> 22 ^ seed) & 0x7fffff) | 0x3f800000) - 1f);
+    }
+    /**
      * Generates a pseudo-random float between -1.0f (exclusive) and 1.0f (exclusive) using the given int seed, passing
      * it once through the (very high-quality and rather fast) {@link PintRNG} algorithm, derived from PCG-Random. This
      * produces a random int, which this produces a float from using {@link #intBitsToFloat(int)} (long)} or something

@@ -151,7 +151,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class DijkstraBenchmark {
 
-    public static final int DIMENSION = 100, PATH_LENGTH = (DIMENSION - 2) * (DIMENSION - 2);
+    public static final int DIMENSION = 128, PATH_LENGTH = (DIMENSION - 2) * (DIMENSION - 2);
     public static DungeonGenerator dungeonGen =
             new DungeonGenerator(DIMENSION, DIMENSION, new StatefulRNG(0x1337BEEFDEAL));
     public static SerpentMapGenerator serpent = new SerpentMapGenerator(DIMENSION, DIMENSION,
