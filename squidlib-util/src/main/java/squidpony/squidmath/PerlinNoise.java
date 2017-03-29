@@ -421,13 +421,13 @@ public class PerlinNoise {
         // of the four coordinates, and the results are used to add up binary
         // bits
         // for an integer index.
-        int c1 = (x0 > y0) ? 32 : 0;
-        int c2 = (x0 > z0) ? 16 : 0;
-        int c3 = (y0 > z0) ? 8 : 0;
-        int c4 = (x0 > w0) ? 4 : 0;
-        int c5 = (y0 > w0) ? 2 : 0;
-        int c6 = (z0 > w0) ? 1 : 0;
-        int c = c1 + c2 + c3 + c4 + c5 + c6;
+        int c =
+                (x0 > y0 ? 32 : 0)
+              + (x0 > z0 ? 16 : 0)
+              + (y0 > z0 ? 8 : 0 )
+              + (x0 > w0 ? 4 : 0 )
+              + (y0 > w0 ? 2 : 0 )
+              + (z0 > w0 ? 1 : 0 );
         int i1, j1, k1, l1; // The integer offsets for the second simplex
         // corner
         int i2, j2, k2, l2; // The integer offsets for the third simplex

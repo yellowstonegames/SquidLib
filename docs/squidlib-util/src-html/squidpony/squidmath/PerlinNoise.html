@@ -429,13 +429,13 @@
 <span class="sourceLineNo">421</span>        // of the four coordinates, and the results are used to add up binary<a name="line.421"></a>
 <span class="sourceLineNo">422</span>        // bits<a name="line.422"></a>
 <span class="sourceLineNo">423</span>        // for an integer index.<a name="line.423"></a>
-<span class="sourceLineNo">424</span>        int c1 = (x0 &gt; y0) ? 32 : 0;<a name="line.424"></a>
-<span class="sourceLineNo">425</span>        int c2 = (x0 &gt; z0) ? 16 : 0;<a name="line.425"></a>
-<span class="sourceLineNo">426</span>        int c3 = (y0 &gt; z0) ? 8 : 0;<a name="line.426"></a>
-<span class="sourceLineNo">427</span>        int c4 = (x0 &gt; w0) ? 4 : 0;<a name="line.427"></a>
-<span class="sourceLineNo">428</span>        int c5 = (y0 &gt; w0) ? 2 : 0;<a name="line.428"></a>
-<span class="sourceLineNo">429</span>        int c6 = (z0 &gt; w0) ? 1 : 0;<a name="line.429"></a>
-<span class="sourceLineNo">430</span>        int c = c1 + c2 + c3 + c4 + c5 + c6;<a name="line.430"></a>
+<span class="sourceLineNo">424</span>        int c =<a name="line.424"></a>
+<span class="sourceLineNo">425</span>                (x0 &gt; y0 ? 32 : 0)<a name="line.425"></a>
+<span class="sourceLineNo">426</span>              + (x0 &gt; z0 ? 16 : 0)<a name="line.426"></a>
+<span class="sourceLineNo">427</span>              + (y0 &gt; z0 ? 8 : 0 )<a name="line.427"></a>
+<span class="sourceLineNo">428</span>              + (x0 &gt; w0 ? 4 : 0 )<a name="line.428"></a>
+<span class="sourceLineNo">429</span>              + (y0 &gt; w0 ? 2 : 0 )<a name="line.429"></a>
+<span class="sourceLineNo">430</span>              + (z0 &gt; w0 ? 1 : 0 );<a name="line.430"></a>
 <span class="sourceLineNo">431</span>        int i1, j1, k1, l1; // The integer offsets for the second simplex<a name="line.431"></a>
 <span class="sourceLineNo">432</span>        // corner<a name="line.432"></a>
 <span class="sourceLineNo">433</span>        int i2, j2, k2, l2; // The integer offsets for the third simplex<a name="line.433"></a>
