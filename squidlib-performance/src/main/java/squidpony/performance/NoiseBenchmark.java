@@ -54,17 +54,33 @@ import java.util.concurrent.TimeUnit;
  * NoiseBenchmark.measureWhirling3D     avgt    4  2808.307 ± 121.119  ms/op // best smooth 3D
  * NoiseBenchmark.measureWhirlingAlt2D  avgt    4  1758.283 ± 117.308  ms/op
  * NoiseBenchmark.measureWhirlingAlt3D  avgt    4  2895.686 ±  98.599  ms/op
+ *
+ * Newer (March 29, 2017)
+ * Benchmark                            Mode  Cnt     Score     Error  Units
+ * NoiseBenchmark.measureMerlin2D       avgt    4  1044.135 ±  82.200  ms/op
+ * NoiseBenchmark.measureMerlin3D       avgt    4  1057.640 ± 200.091  ms/op
+ * NoiseBenchmark.measurePerlin2D       avgt    4  1986.690 ± 529.819  ms/op
+ * NoiseBenchmark.measurePerlin3D       avgt    4  3023.699 ±  63.116  ms/op
+ * NoiseBenchmark.measurePerlin4D       avgt    4  3949.164 ± 599.040  ms/op
+ * NoiseBenchmark.measureSeeded2D       avgt    4  1610.013 ± 148.908  ms/op
+ * NoiseBenchmark.measureSeeded3D       avgt    4  2122.671 ± 314.632  ms/op
+ * NoiseBenchmark.measureSeeded4D       avgt    4  3817.848 ± 444.091  ms/op
+ * NoiseBenchmark.measureSeeded6D       avgt    4  8295.256 ± 886.270  ms/op
+ * NoiseBenchmark.measureWhirling2D     avgt    4  1778.534 ± 153.531  ms/op
+ * NoiseBenchmark.measureWhirling3D     avgt    4  2675.181 ± 116.986  ms/op
+ * NoiseBenchmark.measureWhirling4D     avgt    4  3988.344 ± 110.043  ms/op
+ * NoiseBenchmark.measureWhirlingAlt2D  avgt    4  1874.060 ±  83.351  ms/op
+ * NoiseBenchmark.measureWhirlingAlt3D  avgt    4  2842.153 ± 110.335  ms/op
  */
 public class NoiseBenchmark {
 
     private static double seed = 9000;
+    private static int state = 9999;
 
     public double doPerlin2D()
     {
-        for (double x = 0.0; x < 8000.0; x++) {
-            for (double y = 0.0; y < 8000.0; y++) {
-                seed += PerlinNoise.noise(x, y);
-            }
+        for (double x = 0.0, a = 0.0; x < 64000000.0; x++) {
+            seed += PerlinNoise.noise(a += 0.0625, a);
         }
         return seed;
     }
@@ -79,12 +95,9 @@ public class NoiseBenchmark {
 
     public double doPerlin3D()
     {
-        for (double x = 0.0; x < 400.0; x++) {
-            for (double y = 0.0; y < 400.0; y++) {
-                for (double z = 0.0; z < 400.0; z++) {
-                    seed += PerlinNoise.noise(x, y, z);
-                }
-            }
+
+        for (double x = 0.0, a = 0.0; x < 64000000.0; x++) {
+            seed += PerlinNoise.noise(a += 0.0625, a, a);
         }
         return seed;
     }
@@ -97,12 +110,29 @@ public class NoiseBenchmark {
         System.out.println(doPerlin3D());
     }
 
+
+    public double doPerlin4D()
+    {
+
+        for (double x = 0.0, a = 0.0; x < 64000000.0; x++) {
+            seed += PerlinNoise.noise(a += 0.0625, a, a, a);
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measurePerlin4D() throws InterruptedException {
+        seed = 9000;
+        System.out.println(doPerlin4D());
+    }
+
     public double doMerlin2D()
     {
-        for (int x = 0; x < 8000; x++) {
-            for (int y = 0; y < 8000; y++) {
-                seed += MerlinNoise.noise2D(x, y);
-            }
+        int a = 0;
+        for (double x = 0.0; x < 64000000.0; x++) {
+            seed += MerlinNoise.noise2D(++a, a);
         }
         return seed;
     }
@@ -117,12 +147,9 @@ public class NoiseBenchmark {
 
     public double doMerlin3D()
     {
-        for (int x = 0; x < 400; x++) {
-            for (int y = 0; y < 400; y++) {
-                for (int z = 0; z < 400; z++) {
-                    seed += MerlinNoise.noise3D(x, y, z);
-                }
-            }
+        int a = 0;
+        for (double x = 0.0; x < 64000000.0; x++) {
+            seed += MerlinNoise.noise3D(++a, a, a);
         }
         return seed;
     }
@@ -137,10 +164,8 @@ public class NoiseBenchmark {
 
     public double doWhirling2D()
     {
-        for (double x = 0.0; x < 8000.0; x++) {
-            for (double y = 0.0; y < 8000.0; y++) {
-                seed += WhirlingNoise.noise(x, y);
-            }
+        for (double x = 0.0, a = 0.0; x < 64000000.0; x++) {
+            seed += WhirlingNoise.noise(a += 0.0625, a);
         }
         return seed;
     }
@@ -155,12 +180,8 @@ public class NoiseBenchmark {
 
     public double doWhirling3D()
     {
-        for (double x = 0.0; x < 400.0; x++) {
-            for (double y = 0.0; y < 400.0; y++) {
-                for (double z = 0.0; z < 400.0; z++) {
-                    seed += WhirlingNoise.noise(x, y, z);
-                }
-            }
+        for (double x = 0.0, a = 0.0; x < 64000000.0; x++) {
+            seed += WhirlingNoise.noise(a += 0.0625, a, a);
         }
         return seed;
     }
@@ -173,13 +194,27 @@ public class NoiseBenchmark {
         System.out.println(doWhirling3D());
     }
 
+    public double doWhirling4D()
+    {
+        for (double x = 0.0, a = 0.0; x < 64000000.0; x++) {
+            seed += WhirlingNoise.noise(a += 0.0625, a, a, a);
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureWhirling4D() throws InterruptedException {
+        seed = 9000;
+        System.out.println(doWhirling4D());
+    }
+
 
     public double doWhirlingAlt2D()
     {
-        for (double x = 0.0; x < 8000.0; x++) {
-            for (double y = 0.0; y < 8000.0; y++) {
-                seed += WhirlingNoise.noiseAlt(x, y);
-            }
+        for (double x = 0.0, a = 0.0; x < 64000000.0; x++) {
+            seed += WhirlingNoise.noiseAlt(a += 0.0625, a);
         }
         return seed;
     }
@@ -194,13 +229,10 @@ public class NoiseBenchmark {
 
     public double doWhirlingAlt3D()
     {
-        for (double x = 0.0; x < 400.0; x++) {
-            for (double y = 0.0; y < 400.0; y++) {
-                for (double z = 0.0; z < 400.0; z++) {
-                    seed += WhirlingNoise.noiseAlt(x, y, z);
-                }
-            }
+        for (double x = 0.0, a = 0.0; x < 64000000.0; x++) {
+            seed += WhirlingNoise.noiseAlt(a += 0.0625, a, a);
         }
+
         return seed;
     }
 
@@ -212,6 +244,74 @@ public class NoiseBenchmark {
         System.out.println(doWhirlingAlt3D());
     }
 
+    public double doSeeded2D()
+    {
+
+        state = 9999;
+        for (double x = 0.0, a = 0.0; x < 64000000.0; x++) {
+            seed += SeededNoise.noise(a += 0.0625, a, ++state);
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureSeeded2D() throws InterruptedException {
+        seed = 9000;
+        System.out.println(doSeeded2D());
+    }
+
+    public double doSeeded3D()
+    {
+        state = 9999;
+        for (double x = 0.0, a = 0.0; x < 64000000.0; x++) {
+            seed += SeededNoise.noise(a += 0.0625, a, a, ++state);
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureSeeded3D() throws InterruptedException {
+        seed = 9000;
+        System.out.println(doSeeded3D());
+    }
+
+    public double doSeeded4D()
+    {
+        state = 9999;
+        for (double x = 0.0, a = 0.0; x < 64000000.0; x++) {
+            seed += SeededNoise.noise(a += 0.0625, a, a, a, ++state);
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureSeeded4D() throws InterruptedException {
+        seed = 9000;
+        System.out.println(doSeeded4D());
+    }
+
+    public double doSeeded6D()
+    {
+        state = 9999;
+        for (double x = 0.0, a = 0.0; x < 64000000.0; x++) {
+            seed += SeededNoise.noise(a += 0.0625, a, a, a, a, a, ++state);
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureSeeded6D() throws InterruptedException {
+        seed = 9000;
+        System.out.println(doSeeded6D());
+    }
 
     /*
      * ============================== HOW TO RUN THIS TEST: ====================================
@@ -223,7 +323,7 @@ public class NoiseBenchmark {
      *
      * a) Via the command line from the squidlib-performance module's root folder:
      *    $ mvn clean install
-     *    $ java -jar target/benchmarks.jar NoiseBenchmark -wi 3 -i 3 -f 1
+     *    $ java -jar target/benchmarks.jar NoiseBenchmark -wi 4 -i 4 -f 1
      *
      *    (we requested 5 warmup/measurement iterations, single fork)
      *
