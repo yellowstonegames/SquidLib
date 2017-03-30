@@ -1,5 +1,6 @@
 package squidpony.squidgrid.mapping;
 
+import squidpony.ArrayTools;
 import squidpony.squidmath.PerlinNoise;
 import squidpony.squidmath.RNG;
 
@@ -108,6 +109,25 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
         wallShapes = copying.wallShapes;
     }
 
+    /**
+     * Doors are not supported by this class. There's a lot of confusing and ambiguous situations that can easily
+     * result from trying to automatically place doors when any given map could need doors on walkable cells, prefer
+     * doors between walkable cells aligned to walls, have mixes of "expanded", "retracted", and "normal" wall change
+     * modes, or any number of other issues. There are also some very confusing cases where automatically-placed doors,
+     * if this class tries to reposition them in retracted-wall mode (or in any case where rooms and corridors don't
+     * have the same change mode), wind up hanging in the middle of a room or with partial connecting walls but not any
+     * sensible layout. If you want doors here, you should assign them yourself how you see fit.
+     * @param percentage ignored.
+     * @param doubleDoors ignored.
+     * @return this for chaining.
+     */
+    @Override
+    public SectionDungeonGenerator addDoors(int percentage, boolean doubleDoors)
+    {
+        doorFX = 0;
+        return this;
+    }
+
     public char[][] makeThin() {
         int nw = (width << 1) - 1, nh = (height << 1) - 1;
         char[][] d2 = new char[nw][nh];
@@ -124,7 +144,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
         int tempShapes;
         for (int y = 0; y < nh; y += 2) {
             CELL_WISE:
-            for (int x = 1; x < nw-1; x += 2) {
+            for (int x = 1; x < nw - 1; x += 2) {
                 eLow = e2[x - 1][y];
                 eHigh = e2[x + 1][y];
                 dLow = d2[x - 1][y];
@@ -145,18 +165,18 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                         }
                 }
                 switch (tempShapes & 0xf) {
+//                    case ROOM_WALL_RETRACT:
                     case ROOM_WALL_NORMAL:
-                    case ROOM_WALL_RETRACT:
-                        if (y > 0 && y < nh - 1) {
-                            if ((dLow == '+') && (e2[x-1][y + 2] & 1) + (e2[x-1][y + 2] & 1) == 0) {
+                        if (y > 1 && y < nh - 2) {
+                            if ((dLow == '+') && (e2[x - 1][y - 2] & 1) + (e2[x - 1][y + 2] & 1) == 0) {
                                 d2[x][y] = dHigh;
                                 e2[x][y] = eHigh;
-                                d2[x-1][y-1] = '#';
-                                d2[x-1][y+1] = '#';
-                                e2[x-1][y-1] = 777;
-                                e2[x-1][y+1] = 777;
+                                d2[x - 1][y - 1] = '#';
+                                d2[x - 1][y + 1] = '#';
+                                e2[x - 1][y - 1] = 777;
+                                e2[x - 1][y + 1] = 777;
                                 if (e2[x][y] != MixedGenerator.UNTOUCHED || d2[x][y] == 0)
-                                    d2[x][y] = '\u0006';
+                                    d2[x][y] = 6;
                                 continue CELL_WISE;
                             } /*else if ((dHigh == '+') && (e2[x+1][y - 2] & 1) + (e2[x+1][y - 2] & 1) == 0) {
                                 d2[x][y] = dLow;
@@ -171,8 +191,28 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                             }*/
                         }
                         break;
+//                    case ROOM_WALL_RETRACT:
+//                        if (x > 2 && y > 1 && y < nh - 2) {
+//                            if ((dLow == '+') && (e2[x-1][y + 2] & 1) + (e2[x-1][y - 2] & 1) == 0) {
+//                                d2[x][y] = dLow;
+//                                e2[x][y] = eLow;
+//                                d2[x][y-1] = d2[x-1][y - 2];
+//                                e2[x][y-1] = e2[x-1][y - 2];
+//                                d2[x][y+1] = d2[x-1][y + 2];
+//                                e2[x][y+1] = e2[x-1][y + 2];
+//                                d2[x-1][y] = d2[x-3][y];
+//                                e2[x-1][y] = e2[x-3][y];
+//                                d2[x-1][y-1] = d2[x-3][y-1];
+//                                d2[x-1][y+1] = d2[x-3][y+1];
+//                                e2[x-1][y-1] = e2[x-3][y-1];
+//                                e2[x-1][y+1] = e2[x-3][y+1];
+//                                continue CELL_WISE;
+//                            }
+//                        }
+//                        break;
+                    case ROOM_WALL_RETRACT:
                     case ROOM_WALL_EXPAND:
-                        if (y > 0 && y < nh - 1) {
+                        if (y > 1 && y < nh - 2) {
                             if ((dLow == '+') && ((e2[x - 1][y - 2] & 1) + (e2[x + 1][y - 2] & 1) != 0 || (e2[x - 1][y + 2] & 1) + (e2[x + 1][y + 2] & 1) != 0)) {
                                 d2[x][y] = dLow;
                                 e2[x][y] = eLow;
@@ -189,20 +229,17 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                         }
                         break;
                     case ROOM_WALL_CHAOTIC:
-                        if(dLow == '+')
-                        {
+                        if (dLow == '+') {
                             d2[x - 1][y] = dHigh;
                             e2[x - 1][y] = eHigh;
                             if (e2[x][y] != MixedGenerator.UNTOUCHED || d2[x][y] == 0)
-                                d2[x][y] = '\u0006';
+                                d2[x][y] = 6;
                             continue CELL_WISE;
-                        }
-                        else if(dHigh == '+')
-                        {
+                        } else if (dHigh == '+') {
                             d2[x + 1][y] = dLow;
                             e2[x + 1][y] = eLow;
                             if (e2[x][y] != MixedGenerator.UNTOUCHED || d2[x][y] == 0)
-                                d2[x][y] = '\u0006';
+                                d2[x][y] = 6;
                             continue CELL_WISE;
                         }
                         break;
@@ -232,7 +269,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                             default:
                                 switch (tempShapes & 0xF) {
                                     case ROOM_WALL_CHAOTIC:
-                                        if (PerlinNoise.noise(x * 0.8, y * 0.8) > -0.2) {
+                                        if (PerlinNoise.noise(x * 6, y * 6) > -0.2) {
                                             e2[x][y] = eHigh;
                                             d2[x][y] = dHigh;
                                         } else {
@@ -240,19 +277,20 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                                             d2[x][y] = dLow;
                                         }
                                         break;
+                                    case ROOM_WALL_RETRACT:
                                     case ROOM_WALL_EXPAND:
                                         e2[x][y] = MixedGenerator.UNTOUCHED;
                                         d2[x][y] = dLow;
                                         break;
-                                    /*
-                                    case ROOM_WALL_RETRACT:
-                                        e2[x][y] = eHigh;
-                                        d2[x][y] = dHigh;
-                                        if(y > 1 && y < nh - 1 && (finder.environment[(x>>1)+1][y>>1] & 1) == 1) { // opposite cell is walkable, originally
-                                            e2[x - 1][y] = eHigh;
-                                            d2[x - 1][y] = dHigh;
-                                        }
-                                        break;*/
+
+//                                    case ROOM_WALL_RETRACT:
+//                                        e2[x][y] = eHigh;
+//                                        d2[x][y] = dHigh;
+//                                        if(x > 2 && (e2[x-3][y] & 1) != 0) { // wall is thin enough
+//                                            e2[x - 1][y] = eHigh;
+//                                            d2[x - 1][y] = dHigh;
+//                                        }
+//                                        break;
                                     default:
                                         e2[x][y] = eHigh;
                                         d2[x][y] = dHigh;
@@ -273,7 +311,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                             case MixedGenerator.UNTOUCHED:
                                 switch (tempShapes & 0xF) {
                                     case ROOM_WALL_CHAOTIC:
-                                        if (PerlinNoise.noise(x * 0.8, y * 0.8) > -0.2) {
+                                        if (PerlinNoise.noise(x * 6, y * 6) > -0.2) {
                                             e2[x][y] = eLow;
                                             d2[x][y] = dLow;
                                         } else {
@@ -281,19 +319,21 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                                             d2[x][y] = dHigh;
                                         }
                                         break;
+                                    case ROOM_WALL_RETRACT:
                                     case ROOM_WALL_EXPAND:
                                         e2[x][y] = MixedGenerator.UNTOUCHED;
                                         d2[x][y] = dHigh;
                                         break;
-                                    /*
-                                    case ROOM_WALL_RETRACT:
-                                        e2[x][y] = eLow;
-                                        d2[x][y] = dLow;
-                                        if(y > 1 && y < nh - 1 && (finder.environment[(x>>1)-1][y>>1] & 1) == 1) { // opposite cell is walkable, originally
-                                            e2[x + 1][y] = eLow;
-                                            d2[x + 1][y] = dLow;
-                                        }
-                                        break;*/
+
+//                                    case ROOM_WALL_RETRACT:
+//                                        e2[x][y] = eLow;
+//                                        d2[x][y] = dLow;
+//                                        /*if(x < nh - 3 && (e2[x+3][y] & 1) != 0) { // wall is thin enough
+//                                            e2[x + 1][y] = eLow;
+//                                            d2[x + 1][y] = dLow;
+//                                        }
+//                                        */
+//                                        break;
                                     default:
                                         e2[x][y] = eLow;
                                         d2[x][y] = dLow;
@@ -312,13 +352,13 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                         break;
                 }
                 if (e2[x][y] != MixedGenerator.UNTOUCHED || d2[x][y] == 0) {
-                    d2[x][y] = '\u0006';
+                    d2[x][y] = 6;
                 }
             }
         }
         for (int x = 0; x < nw; x++) {
             CELL_WISE:
-            for (int y = 1; y < nh-1; y += 2) {
+            for (int y = 1; y < nh - 1; y += 2) {
                 eLow = e2[x][y - 1];
                 eHigh = e2[x][y + 1];
                 dLow = d2[x][y - 1];
@@ -340,36 +380,55 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                 }
                 switch (tempShapes & 0xf) {
                     case ROOM_WALL_NORMAL:
-                    case ROOM_WALL_RETRACT:
                         if (x > 0 && x < nw - 1) {
-                            if(d2[x-1][y-1] == '+' || d2[x-1][y+1] == '+' ||d2[x+1][y-1] == '+' || d2[x+1][y+1] == '+') {
+                            if (d2[x - 1][y - 1] == '+' || d2[x - 1][y + 1] == '+' || d2[x + 1][y - 1] == '+' || d2[x + 1][y + 1] == '+') {
                                 if (e2[x][y] != MixedGenerator.UNTOUCHED || d2[x][y] == 0)
-                                    d2[x][y] = '\u0006';
+                                    d2[x][y] = 6;
                                 continue CELL_WISE;
-                            }
-                            else if ((dLow == '/') && (e2[x - 2][y - 1] & 1) + (e2[x - 2][y + 1] & 1) == 0) {
+                            } else if ((dLow == '/') && (e2[x - 2][y - 1] & 1) + (e2[x - 2][y + 1] & 1) == 0) {
                                 d2[x][y] = dHigh;
                                 e2[x][y] = eHigh;
-                                d2[x-1][y-1] = '#';
-                                d2[x+1][y-1] = '#';
-                                e2[x-1][y-1] = MixedGenerator.UNTOUCHED;
-                                e2[x+1][y-1] = MixedGenerator.UNTOUCHED;
+                                d2[x - 1][y - 1] = '#';
+                                d2[x + 1][y - 1] = '#';
+                                e2[x - 1][y - 1] = MixedGenerator.UNTOUCHED;
+                                e2[x + 1][y - 1] = MixedGenerator.UNTOUCHED;
                                 if (e2[x][y] != MixedGenerator.UNTOUCHED || d2[x][y] == 0)
-                                    d2[x][y] = '\u0006';
+                                    d2[x][y] = 6;
                                 continue CELL_WISE;
                             } else if ((dHigh == '/') && (e2[x - 2][y + 1] & 1) + (e2[x + 2][y + 1] & 1) == 0) {
                                 d2[x][y] = dLow;
                                 e2[x][y] = eLow;
-                                d2[x-1][y+1] = '#';
-                                d2[x+1][y+1] = '#';
-                                e2[x-1][y+1] = MixedGenerator.UNTOUCHED;
-                                e2[x+1][y+1] = MixedGenerator.UNTOUCHED;
+                                d2[x - 1][y + 1] = '#';
+                                d2[x + 1][y + 1] = '#';
+                                e2[x - 1][y + 1] = MixedGenerator.UNTOUCHED;
+                                e2[x + 1][y + 1] = MixedGenerator.UNTOUCHED;
                                 if (e2[x][y] != MixedGenerator.UNTOUCHED || d2[x][y] == 0)
-                                    d2[x][y] = '\u0006';
+                                    d2[x][y] = 6;
                                 continue CELL_WISE;
                             }
                         }
                         break;
+//                    case ROOM_WALL_RETRACT:
+//                        if (y > 2 && x > 1 && x < nw - 2) {
+//                            if ((dLow == '/') && (e2[x-2][y-1] & 1) + (e2[x+2][y-1] & 1) == 0) {
+//                                d2[x][y] = dLow;
+//                                e2[x][y] = eLow;
+//                                d2[x-1][y] = d2[x-2][y-1];
+//                                e2[x-1][y] = e2[x-2][y-1];
+//                                d2[x+1][y] = d2[x+2][y-1];
+//                                e2[x+1][y] = e2[x+2][y-1];
+//                                d2[x][y-1] = d2[x][y-3];
+//                                e2[x][y-1] = e2[x][y-3];
+//                                d2[x-1][y-1] = d2[x-1][y-3];
+//                                d2[x+1][y-1] = d2[x+1][y-3];
+//                                e2[x-1][y-1] = e2[x-1][y-3];
+//                                e2[x+1][y-1] = e2[x+1][y-3];
+//                                continue CELL_WISE;
+//                            }
+//                        }
+//
+//                        break;
+                    case ROOM_WALL_RETRACT:
                     case ROOM_WALL_EXPAND:
                         if (x > 0 && x < nw - 1) {
                             if ((dLow == '/') && ((e2[x - 1][y - 1] & 1) + (e2[x - 1][y + 1] & 1) != 0 || (e2[x + 1][y - 1] & 1) + (e2[x + 1][y + 1] & 1) != 0)) {
@@ -388,20 +447,17 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                         }
                         break;
                     case ROOM_WALL_CHAOTIC:
-                        if(dLow == '/')
-                        {
-                            d2[x][y-1] = dHigh;
-                            e2[x][y-1] = eHigh;
+                        if (dLow == '/') {
+                            d2[x][y - 1] = dHigh;
+                            e2[x][y - 1] = eHigh;
                             if (e2[x][y] != MixedGenerator.UNTOUCHED || d2[x][y] == 0)
-                                d2[x][y] = '\u0006';
+                                d2[x][y] = 6;
                             continue CELL_WISE;
-                        }
-                        else if(dHigh == '/')
-                        {
-                            d2[x][y+1] = dLow;
-                            e2[x][y+1] = eLow;
+                        } else if (dHigh == '/') {
+                            d2[x][y + 1] = dLow;
+                            e2[x][y + 1] = eLow;
                             if (e2[x][y] != MixedGenerator.UNTOUCHED || d2[x][y] == 0)
-                                d2[x][y] = '\u0006';
+                                d2[x][y] = 6;
                             continue CELL_WISE;
                         }
                         break;
@@ -432,7 +488,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                             default:
                                 switch (tempShapes & 0xF) {
                                     case ROOM_WALL_CHAOTIC:
-                                        if (PerlinNoise.noise(x * 0.8, y * 0.8) > -0.2) {
+                                        if (PerlinNoise.noise(x * 6, y * 6) > -0.2) {
                                             e2[x][y] = eHigh;
                                             d2[x][y] = dHigh;
                                         } else {
@@ -440,22 +496,23 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                                             d2[x][y] = dLow;
                                         }
                                         break;
+                                    case ROOM_WALL_RETRACT:
                                     case ROOM_WALL_EXPAND:
                                         e2[x][y] = MixedGenerator.UNTOUCHED;
                                         d2[x][y] = dLow;
                                         break;
-                                    /*
-                                    case ROOM_WALL_RETRACT:
-                                        e2[x][y] = eHigh;
-                                        d2[x][y] = dHigh;
-                                        if(x > 1 && x < nw - 1 && (finder.environment[x>>1][(y>>1)+1] & 1) == 1) { // opposite cell is walkable, originally
-                                            e2[x][y-1] = eHigh;
-                                            d2[x][y-1] = dHigh;
-                                        }
-                                        break;*/
+
+//                                    case ROOM_WALL_RETRACT:
+//                                        e2[x][y] = eHigh;
+//                                        d2[x][y] = dHigh;
+//                                        if(y > 2 && (e2[x][y-3] & 1) != 0) { // wall is thin enough
+//                                            e2[x][y - 1] = eHigh;
+//                                            d2[x][y - 1] = dHigh;
+//                                        }
+//                                        break;
                                     default:
-                                        e2[x][y] = eHigh;
-                                        d2[x][y] = dHigh;
+                                        e2[x][y] = eLow;
+                                        d2[x][y] = dLow;
                                         break;
                                 }
                                 break;
@@ -473,7 +530,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                             case MixedGenerator.UNTOUCHED:
                                 switch (tempShapes & 0xF) {
                                     case ROOM_WALL_CHAOTIC:
-                                        if (PerlinNoise.noise(x * 0.8, y * 0.8) > -0.2) {
+                                        if (PerlinNoise.noise(x * 6, y * 6) > -0.2) {
                                             e2[x][y] = eLow;
                                             d2[x][y] = dLow;
                                         } else {
@@ -481,19 +538,20 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                                             d2[x][y] = dHigh;
                                         }
                                         break;
+                                    case ROOM_WALL_RETRACT:
                                     case ROOM_WALL_EXPAND:
                                         e2[x][y] = MixedGenerator.UNTOUCHED;
                                         d2[x][y] = dHigh;
                                         break;
-                                    /*
-                                    case ROOM_WALL_RETRACT:
-                                        e2[x][y] = eLow;
-                                        d2[x][y] = dLow;
-                                        if(x > 1 && x < nw - 1 && (finder.environment[x>>1][(y>>1)-1] & 1) == 1) { // opposite cell is walkable, originally
-                                            e2[x][y+1] = eLow;
-                                            d2[x][y+1] = dLow;
-                                        }
-                                        break;*/
+
+//                                    case ROOM_WALL_RETRACT:
+//                                        e2[x][y] = eLow;
+//                                        d2[x][y] = dLow;
+//                                         /*if(y > 2 && (e2[x][y-3] & 1) != 0) { // wall is thin enough
+//                                            e2[x][y + 1] = eLow;
+//                                            d2[x][y + 1] = dLow;
+//                                        } */
+//                                        break;
                                     default:
                                         e2[x][y] = eLow;
                                         d2[x][y] = dLow;
@@ -505,15 +563,243 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                                 d2[x][y] = dHigh;
                                 break;
                             default:
-                                e2[x][y] = eLow;
-                                d2[x][y] = dLow;
+                                e2[x][y] = eHigh;
+                                d2[x][y] = dHigh;
                                 break;
                         }
                         break;
                 }
 
                 if (e2[x][y] != MixedGenerator.UNTOUCHED || d2[x][y] == 0) {
-                    d2[x][y] = '\u0006';
+                    d2[x][y] = 6;
+                }
+            }
+        }
+        int currentEnv, env2, offset;
+        char currentDun;
+        int[][] eArchive = ArrayTools.copy(e2);
+        if ((wallShapes & 0x111) != 0) // any environments are retracting
+        {
+            for (int x = 2; x < nw - 2; x += 2) {
+                for (int y = 0; y < nh - 2; y++) {
+                    offset = (d2[x - 1][y] == '+') ? 1 : 2;
+                    if ((eArchive[x][y] & 1) == 0 && ((currentEnv = eArchive[x - offset][y]) & 1) != 0) {
+                        currentDun = d2[x - offset][y];
+                        if (currentDun == '+' || currentDun == '/') {
+                            switch (currentEnv) {
+                                case MixedGenerator.ROOM_FLOOR:
+                                    if ((wallShapes & ROOM_WALL_RETRACT) != 0) {
+                                        e2[x + 2 - offset][y] = currentEnv;
+                                        d2[x + 2 - offset][y] = currentDun;
+                                        e2[x + 1 - offset][y] = eArchive[x - 1 - offset][y];
+                                        d2[x + 1 - offset][y] = d2[x - 1 - offset][y];
+                                        e2[x - offset][y] = eArchive[x - 1 - offset][y];
+                                        d2[x - offset][y] = d2[x - 1 - offset][y];
+                                    }
+                                    break;
+                                case MixedGenerator.CAVE_FLOOR:
+                                    if ((wallShapes & CAVE_WALL_RETRACT) != 0) {
+
+//                                    e2[x][y] = (currentDun == '+' || currentDun == '/') ? MixedGenerator.UNTOUCHED : currentEnv;
+//                                    d2[x][y] = (currentDun == '+' || currentDun == '/') ? '\u0005' : currentDun;
+//                                    e2[x-1][y] = (currentDun == '+' || currentDun == '/') ? MixedGenerator.UNTOUCHED : currentEnv;
+//                                    d2[x-1][y] = (currentDun == '+' || currentDun == '/') ? '\u0005' : 6;
+                                        e2[x + 2 - offset][y] = currentEnv;
+                                        d2[x + 2 - offset][y] = currentDun;
+                                        e2[x + 1 - offset][y] = eArchive[x - 1 - offset][y];
+                                        d2[x + 1 - offset][y] = d2[x - 1 - offset][y];
+                                        e2[x - offset][y] = eArchive[x - 1 - offset][y];
+                                        d2[x - offset][y] = d2[x - 1 - offset][y];
+                                    }
+                                    break;
+                                case MixedGenerator.CORRIDOR_FLOOR:
+                                    if ((wallShapes & CORRIDOR_WALL_RETRACT) != 0) {
+                                        e2[x + 2 - offset][y] = currentEnv;
+                                        d2[x + 2 - offset][y] = currentDun;
+                                        e2[x + 1 - offset][y] = eArchive[x - 1 - offset][y];
+                                        d2[x + 1 - offset][y] = d2[x - 1 - offset][y];
+                                        e2[x - offset][y] = eArchive[x - 1 - offset][y];
+                                        d2[x - offset][y] = d2[x - 1 - offset][y];
+
+                                    }
+                                    break;
+                            }
+                        } else {
+                            switch (currentEnv) {
+                                case MixedGenerator.ROOM_FLOOR:
+                                    if ((wallShapes & ROOM_WALL_RETRACT) != 0) {
+                                        e2[x][y] = currentEnv;
+                                        d2[x][y] = currentDun;
+                                        e2[x - 1][y] = currentEnv;
+                                        d2[x - 1][y] = 6;
+
+                                    }
+                                    break;
+                                case MixedGenerator.CAVE_FLOOR:
+                                    if ((wallShapes & CAVE_WALL_RETRACT) != 0) {
+
+//                                    e2[x][y] = (currentDun == '+' || currentDun == '/') ? MixedGenerator.UNTOUCHED : currentEnv;
+//                                    d2[x][y] = (currentDun == '+' || currentDun == '/') ? '\u0005' : currentDun;
+//                                    e2[x-1][y] = (currentDun == '+' || currentDun == '/') ? MixedGenerator.UNTOUCHED : currentEnv;
+//                                    d2[x-1][y] = (currentDun == '+' || currentDun == '/') ? '\u0005' : 6;
+                                        e2[x][y] = currentEnv;
+                                        d2[x][y] = currentDun;
+                                        e2[x - 1][y] = currentEnv;
+                                        d2[x - 1][y] = 6;
+
+
+                                    }
+                                    break;
+                                case MixedGenerator.CORRIDOR_FLOOR:
+                                    if ((wallShapes & CORRIDOR_WALL_RETRACT) != 0) {
+                                        e2[x][y] = currentEnv;
+                                        d2[x][y] = currentDun;
+                                        e2[x - 1][y] = currentEnv;
+                                        d2[x - 1][y] = 6;
+
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+
+//            for (int x = nw - 2; x > 1; x -= 2) {
+//                for (int y = 0; y < nh; y++) {
+//                    if(((env2 = e2[x - 1][y]) & 1) == 0 && ((currentEnv = e2[x + 1][y]) & 1) != 0) {
+//                        currentDun = d2[x - 1][y];
+//                        switch (currentEnv) {
+//                            case MixedGenerator.ROOM_FLOOR:
+//                                if ((wallShapes & ROOM_WALL_RETRACT) != 0) {
+//                                    e2[x][y] = env2;
+//                                    d2[x][y] = currentDun;
+//                                }
+//                                break;
+//                            case MixedGenerator.CAVE_FLOOR:
+//                                if ((wallShapes & CAVE_WALL_RETRACT) != 0) {
+//                                    e2[x][y] = env2;
+//                                    d2[x][y] = currentDun;
+//                                }
+//                                break;
+//                            case MixedGenerator.CORRIDOR_FLOOR:
+//                                if ((wallShapes & CORRIDOR_WALL_RETRACT) != 0) {
+//                                    e2[x][y] = env2;
+//                                    d2[x][y] = currentDun;
+//                                }
+//                                break;
+//                        }
+//                    }
+//                }
+//            }
+
+            eArchive = ArrayTools.copy(e2);
+            for (int x = 0; x < nw - 2; x++) {
+                for (int y = 2; y < nh - 2; y += 2) {
+                    offset = (d2[x][y-1] == '+') ? 1 : 2;
+                    if ((eArchive[x][y] & 1) == 0 && ((currentEnv = eArchive[x][y - offset]) & 1) != 0) {
+                        currentDun = d2[x][y - offset];
+                        if (currentDun == '+' || currentDun == '/') {
+                            switch (currentEnv) {
+                                case MixedGenerator.ROOM_FLOOR:
+                                    if ((wallShapes & ROOM_WALL_RETRACT) != 0) {
+                                        e2[x][y + 2 - offset] = currentEnv;
+                                        d2[x][y + 2 - offset] = currentDun;
+                                        e2[x][y + 1 - offset] = eArchive[x][y - 1 - offset];
+                                        d2[x][y + 1 - offset] = d2[x][y - 1 - offset];
+                                        e2[x][y - offset] = eArchive[x][y - 1 - offset];
+                                        d2[x][y - offset] = d2[x][y - 1 - offset];
+                                    }
+                                    break;
+                                case MixedGenerator.CAVE_FLOOR:
+                                    if ((wallShapes & CAVE_WALL_RETRACT) != 0) {
+                                        e2[x][y + 2 - offset] = currentEnv;
+                                        d2[x][y + 2 - offset] = currentDun;
+                                        e2[x][y + 1 - offset] = eArchive[x][y - 1 - offset];
+                                        d2[x][y + 1 - offset] = d2[x][y - 1 - offset];
+                                        e2[x][y - offset] = eArchive[x][y - 1 - offset];
+                                        d2[x][y - offset] = d2[x][y - 1 - offset];
+                                    }
+                                    break;
+                                case MixedGenerator.CORRIDOR_FLOOR:
+                                    if ((wallShapes & CORRIDOR_WALL_RETRACT) != 0) {
+                                        e2[x][y + 2 - offset] = currentEnv;
+                                        d2[x][y + 2 - offset] = currentDun;
+                                        e2[x][y + 1 - offset] = eArchive[x][y - 1 - offset];
+                                        d2[x][y + 1 - offset] = d2[x][y - 1 - offset];
+                                        e2[x][y - offset] = eArchive[x][y - 1 - offset];
+                                        d2[x][y - offset] = d2[x][y - 1 - offset];
+                                    }
+                                    break;
+                            }
+
+                        } else {
+                            switch (currentEnv) {
+                                case MixedGenerator.ROOM_FLOOR:
+                                    if ((wallShapes & ROOM_WALL_RETRACT) != 0) {
+                                        e2[x][y] = currentEnv;
+                                        d2[x][y] = currentDun;
+                                        e2[x][y - 1] = currentEnv;
+                                        d2[x][y - 1] = 6;
+                                    }
+                                    break;
+                                case MixedGenerator.CAVE_FLOOR:
+                                    if ((wallShapes & CAVE_WALL_RETRACT) != 0) {
+                                        e2[x][y] = currentEnv;
+                                        d2[x][y] = currentDun;
+                                        e2[x][y - 1] = currentEnv;
+                                        d2[x][y - 1] = 6;
+                                    }
+                                    break;
+                                case MixedGenerator.CORRIDOR_FLOOR:
+                                    if ((wallShapes & CORRIDOR_WALL_RETRACT) != 0) {
+                                        e2[x][y] = currentEnv;
+                                        d2[x][y] = currentDun;
+                                        e2[x][y - 1] = currentEnv;
+                                        d2[x][y - 1] = 6;
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+
+//            for (int x = 0; x < nw; x++) {
+//                for (int y = nh - 2; y > 1; y -= 2) {
+//                    if(((env2 = e2[x][y - 1]) & 1) == 0 && ((currentEnv = e2[x][y + 1]) & 1) != 0) {
+//                        currentDun = d2[x][y + 1];
+//                        switch (currentEnv) {
+//                            case MixedGenerator.ROOM_FLOOR:
+//                                if ((wallShapes & ROOM_WALL_RETRACT) != 0) {
+//                                    e2[x][y] = env2;
+//                                    d2[x][y] = currentDun;
+//                                }
+//                                break;
+//                            case MixedGenerator.CAVE_FLOOR:
+//                                if ((wallShapes & CAVE_WALL_RETRACT) != 0) {
+//                                    e2[x][y] = env2;
+//                                    d2[x][y] = currentDun;
+//                                }
+//                                break;
+//                            case MixedGenerator.CORRIDOR_FLOOR:
+//                                if ((wallShapes & CORRIDOR_WALL_RETRACT) != 0) {
+//                                    e2[x][y] = env2;
+//                                    d2[x][y] = currentDun;
+//                                }
+//                                break;
+//                        }
+//                    }
+//                }
+//            }
+        }
+
+
+        for (int x = 0; x < nw; x++) {
+            for (int y = 0; y < nh; y++) {
+                if (d2[x][y] == '\u0005') {
+                    e2[x][y] = MixedGenerator.UNTOUCHED;
+                    d2[x][y] = '#';
                 }
             }
         }

@@ -15,6 +15,8 @@
  ******************************************************************************/
 package squidpony.squidmath;
 
+import squidpony.StringConvert;
+import squidpony.StringKit;
 import squidpony.annotation.GwtIncompatible;
 
 import java.io.Serializable;
@@ -214,15 +216,20 @@ public class IntVLA implements Serializable, Cloneable {
         return -1;
     }
 
-    public boolean removeValue (int value) {
+    /**
+     * Removes the first occurrence of the requested value, and returns the index it was removed at (-1 if not found)
+     * @param value a value in this IntVLA to remove
+     * @return the index the value was found and removed at, or -1 if it was not present
+     */
+    public int removeValue (int value) {
         int[] items = this.items;
         for (int i = 0, n = size; i < n; i++) {
             if (items[i] == value) {
                 removeIndex(i);
-                return true;
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 
     /** Removes and returns the item at the specified index. */
@@ -324,20 +331,19 @@ public class IntVLA implements Serializable, Cloneable {
         return items;
     }
 
+    /** Sets the array size, leaving any values beyond the current size undefined.
+     * @return {@link #items} */
+    public int[] setSize (int newSize) {
+        if (newSize > items.length) resize(Math.max(8, newSize));
+        size = newSize;
+        return items;
+    }
+
     protected int[] resize (int newSize) {
         int[] newItems = new int[newSize];
         int[] items = this.items;
         System.arraycopy(items, 0, newItems, 0, Math.min(size, newItems.length));
         this.items = newItems;
-        return newItems;
-    }
-
-    public int[] asInts () {
-        int[] newItems = new int[size];
-        int[] items = this.items;
-        for (int i = 0; i < size; i++) {
-            newItems[i] = items[i] & 0xffff;
-        }
         return newItems;
     }
 
@@ -414,6 +420,16 @@ public class IntVLA implements Serializable, Cloneable {
             h = h * 31 + items[i];
         return h;
     }
+    public int hashWisp () {
+        int[] data = this.items;
+        int result = 0x9E3779B9, a = 0x632BE5AB;
+        final int len = size;
+        for (int i = 0; i < len; i++) {
+            result += (a ^= 0x85157AF5 * data[i]);
+        }
+        return result * (a | 1) ^ (result >>> 11 | result << 21);
+    }
+
     public long hash64 () {
         return CrossHash.Lightning.hash64(items);
     }
@@ -457,8 +473,33 @@ public class IntVLA implements Serializable, Cloneable {
         return buffer.toString();
     }
 
+    public static IntVLA deserializeFromString(String data)
+    {
+        int amount = StringKit.count(data, ",");
+        if (amount <= 0) return new IntVLA();
+        IntVLA iv = new IntVLA(amount+1);
+        int dl = 1, idx = -dl, idx2;
+        for (int i = 0; i < amount; i++) {
+            iv.add(StringKit.intFromDec(data, idx+dl, idx = data.indexOf(",", idx+dl)));
+        }
+        if((idx2 = data.indexOf(",", idx+dl)) < 0)
+        {
+            iv.add(StringKit.intFromDec(data, idx+dl, data.length()));
+        }
+        else
+        {
+            iv.add(StringKit.intFromDec(data, idx+dl, idx2));
+        }
+        return iv;
+    }
+
     /** @see #IntVLA(int[]) */
     public static IntVLA with (int... array) {
         return new IntVLA(array);
     }
+
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
 }

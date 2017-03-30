@@ -19,7 +19,11 @@ import com.badlogic.gdx.utils.Disposable;
 import squidpony.IColorCenter;
 import squidpony.squidmath.OrderedMap;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+
+import static squidpony.squidgrid.gui.gdx.SColor.colorFromFloat;
 
 /**
  * Class for creating text blocks.
@@ -47,7 +51,15 @@ public class TextCellFactory implements Disposable {
      * The commonly used symbols in roguelike games.
      */
     public static final String DEFAULT_FITTING = "@!#$%^&*()_+1234567890-=~ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz;:,'\"{}?/\\ ",
-    LINE_FITTING = "┼├┤┴┬┌┐└┘│─", SQUID_FITTING = DEFAULT_FITTING + LINE_FITTING;
+    LINE_FITTING = "┼├┤┴┬┌┐└┘│─",
+            SQUID_FITTING = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmno"+
+                    "pqrstuvwxyz{|}~¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàá"+
+                    "âãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿĀāĂăĄąĆćĈĉĊċČčĎďĐđĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħĨĩĪīĬĭĮįİı"+
+                    "ĲĳĴĵĶķĹĺĻļĽľĿŀŁłŃńŅņŇňŊŋŌōŎŏŐőŒœŔŕŖŗŘřŚśŜŝŞşŠšŢţŤťŨũŪūŬŭŮůŰűŲųŴŵŶŷŸŹźŻżŽžſƒǺǻǼǽǾ"+
+                    "ǿȘșȚțȷˆˇˉˋ˘˙˚˛˜˝;΄΅Ά·ΈΉΊΌΎΏΐΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩΪΫάέήίΰαβγδεζηθικλμνξοπρςστυ"+
+                    "φχψωϊϋόύώЀЁЂЃЄЅІЇЈЉЊЋЌЍЎЏАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхц"+
+                    "чшщъыьэюяѐёђѓєѕіїјљњћќѝўџѢѣѲѳѴѵҐґẀẁẂẃẄẅỲỳ–—‘’‚‛“”„†‡•…‰‹›ⁿ₤€№™Ω℮←↑→↓∆−√≈─│┌┐└┘├┤"+
+                    "┬┴┼═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫■□▪▫▲▼◊○●◦♀♂♠♣♥♦♪";
 
 	/**
 	 * The {@link AssetManager} from where to load the font. Use it to share
@@ -69,9 +81,11 @@ public class TextCellFactory implements Disposable {
     protected float smoothingMultiplier = 1f;
     protected float descent, lineHeight;
     private Label.LabelStyle style;
-    protected OrderedMap<String, String> swap = new OrderedMap<>(32);
+    protected OrderedMap<Character, Character> swap = new OrderedMap<>(32);
     protected char directionGlyph = '^';
+    protected OrderedMap<Character, TextureRegion> glyphTextures = new OrderedMap<>(16);
 
+    private StringBuilder mut = new StringBuilder(1).append('\0');
 
     /**
      * Creates a default valued factory. One of the initialization methods must
@@ -95,7 +109,7 @@ public class TextCellFactory implements Disposable {
     public TextCellFactory(/* Nullable */ AssetManager assetManager) {
     	this.assetManager = assetManager;
         scc = DefaultResources.getSCC();
-        swap.put("\u0006", " ");
+        swap.put('\u0006', ' ');
     }
 
     public TextCellFactory copy()
@@ -122,6 +136,7 @@ public class TextCellFactory implements Disposable {
         //next.modifiedHeight = modifiedHeight;
         next.smoothingMultiplier = smoothingMultiplier;
         next.scc = scc;
+        next.directionGlyph = directionGlyph;
         if(initializedBySize)
             next.initBySize();
         else if(initializedByFont)
@@ -769,18 +784,42 @@ public class TextCellFactory implements Disposable {
         // - distanceFieldScaleY / 12f
 
         //height - lineTweak * 2f
-        if (s == null) {
+        if (s == null || s.isEmpty() || s.charAt(0) == 0) {
             batch.setColor(1f,1f,1f,1f);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // + descent * 1 / 3f
-        } else if(s.length() > 0 && s.charAt(0) == '\0') {
-            batch.setColor(1f,1f,1f,1f);
-            batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight); // descent * 1 / 3f
         } else {
             bmpFont.setColor(1f,1f,1f,1f);
-            if(swap.containsKey(s))
-                bmpFont.draw(batch, swap.get(s), x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width * s.length(), Align.center, false);
-            else
-                bmpFont.draw(batch, s, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width * s.length(), Align.center, false);
+            mut.setCharAt(0, swap.getOrDefault(s.charAt(0), s.charAt(0)));
+            bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
+        }
+    }
+
+
+    /**
+     * Use the specified Batch to draw a char with the default color (white), with x and y
+     * determining the world-space coordinates for the upper-left corner.
+     *
+     * @param batch the LibGDX Batch to do the drawing
+     * @param c the char to draw, often but not necessarily one char. Can be null to draw a solid block instead.
+     * @param x x of the upper-left corner of the region of text in world coordinates.
+     * @param y y of the upper-left corner of the region of text in world coordinates.
+     */
+    public void draw(Batch batch, char c, float x, float y) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+
+        // + descent * 3 / 2f
+        // - distanceFieldScaleY / 12f
+
+        //height - lineTweak * 2f
+        if (c == 0) {
+            batch.setColor(1f,1f,1f,1f);
+            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // + descent * 1 / 3f
+        } else {
+            bmpFont.setColor(1f,1f,1f,1f);
+            mut.setCharAt(0, swap.getOrDefault(c, c));
+            bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
     }
     /**
@@ -813,10 +852,8 @@ public class TextCellFactory implements Disposable {
             batch.setColor(orig);
         } else {
             bmpFont.setColor(r, g, b, a);
-            if(swap.containsKey(s))
-                bmpFont.draw(batch, swap.get(s), x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width * s.length(), Align.center, false);
-            else
-                bmpFont.draw(batch, s, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width * s.length(), Align.center, false);
+            mut.setCharAt(0, swap.getOrDefault(s.charAt(0), s.charAt(0)));
+            bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
     }
 
@@ -847,10 +884,68 @@ public class TextCellFactory implements Disposable {
             batch.setColor(orig);
         } else {
             bmpFont.setColor(scc.filter(color));
-            if(swap.containsKey(s))
-                bmpFont.draw(batch, swap.get(s), x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width * s.length(), Align.center, false);
-            else
-                bmpFont.draw(batch, s, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width * s.length(), Align.center, false);
+            mut.setCharAt(0, swap.getOrDefault(s.charAt(0), s.charAt(0)));
+            bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
+        }
+    }
+    /**
+     * Use the specified Batch to draw a String (often just one char long) in the specified LibGDX Color, with x and y
+     * determining the world-space coordinates for the upper-left corner.
+     *
+     * @param batch the LibGDX Batch to do the drawing
+     * @param s the string to draw, often but not necessarily one char. Can be null to draw a solid block instead.
+     * @param encodedColor the LibGDX Color to use, converted to float as by {@link Color#toFloatBits()}
+     * @param x x of the upper-left corner of the region of text in world coordinates.
+     * @param y y of the upper-left corner of the region of text in world coordinates.
+     */
+    public void draw(Batch batch, String s, float encodedColor, float x, float y) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+
+        if (s == null) {
+            float orig = batch.getPackedColor();
+            batch.setColor(encodedColor);
+            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // descent * 1 / 3f
+            batch.setColor(orig);
+        } else if(s.length() > 0 && s.charAt(0) == '\0') {
+            float orig = batch.getPackedColor();
+            batch.setColor(encodedColor);
+            batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight); // descent * 1 / 3f
+            batch.setColor(orig);
+        } else
+        {
+            colorFromFloat(bmpFont.getColor(), encodedColor);
+            mut.setCharAt(0, swap.getOrDefault(s.charAt(0), s.charAt(0)));
+            bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
+        }
+    }
+
+    /**
+     * Use the specified Batch to draw a String (often just one char long) in the specified LibGDX Color, with x and y
+     * determining the world-space coordinates for the upper-left corner.
+     *
+     * @param batch the LibGDX Batch to do the drawing
+     * @param c the char to draw, often but not necessarily one char. Can be null to draw a solid block instead.
+     * @param encodedColor the LibGDX Color to use, converted to float as by {@link Color#toFloatBits()}
+     * @param x x of the upper-left corner of the region of text in world coordinates.
+     * @param y y of the upper-left corner of the region of text in world coordinates.
+     */
+    public void draw(Batch batch, char c, float encodedColor, float x, float y) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+
+        if (c == 0) {
+            float orig = batch.getPackedColor();
+            batch.setColor(encodedColor);
+            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // descent * 1 / 3f
+            batch.setColor(orig);
+        } else
+        {
+            colorFromFloat(bmpFont.getColor(), encodedColor);
+            mut.setCharAt(0, swap.getOrDefault(c, c));
+            bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
     }
 
@@ -1070,11 +1165,8 @@ public class TextCellFactory implements Disposable {
             // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
         } else {
-            Label lb;
-            if(swap.containsKey(s))
-                lb = new Label(swap.get(s), style);
-            else
-                lb = new Label(s, style);
+            mut.setCharAt(0, swap.getOrDefault(s.charAt(0), s.charAt(0)));
+            Label lb = new Label(mut, style);
             //lb.setFontScale(bmpFont.getData().scaleX, bmpFont.getData().scaleY);
             lb.setSize(width * s.length(), height - descent); //+ lineTweak * 1f
             lb.setColor(scc.filter(color));
@@ -1147,12 +1239,111 @@ public class TextCellFactory implements Disposable {
             // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
         } else {
-            ColorChangeLabel lb;
-            if(swap.containsKey(s))
-                lb = new ColorChangeLabel(swap.get(s), style, loopTime, doubleWidth, colors2);
-            else
-                lb = new ColorChangeLabel(s, style, loopTime, doubleWidth, colors2);
+            mut.setCharAt(0, swap.getOrDefault(s.charAt(0), s.charAt(0)));
+            ColorChangeLabel lb = new ColorChangeLabel(mut, style, loopTime, doubleWidth, colors2);
             lb.setSize(width * s.length(), height - descent); //+ lineTweak * 1f
+            // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
+            return lb;
+        }
+    }
+
+
+
+
+
+
+
+
+    /**
+     * Converts a char into a Label, or if the argument c is '\0', creates an Image of a solid block. Can be used
+     * for preparing glyphs for animation effects, and is used internally for this purpose.
+     * @param c a char to make into an Actor, which can be the character with Unicode value 0 for a solid block.
+     * @param color a Color to tint c with.
+     * @return the Actor, with no position set.
+     */
+    public Actor makeActor(char c, Color color) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        if (c == 0) {
+            Image im = new Image(block);
+            im.setColor(scc.filter(color));
+            //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));
+            im.setSize(actualCellWidth, actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
+            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
+            return im;
+        } else {
+            mut.setCharAt(0, swap.getOrDefault(c, c));
+            Label lb = new Label(mut, style);
+            //lb.setFontScale(bmpFont.getData().scaleX, bmpFont.getData().scaleY);
+            lb.setSize(width, height - descent); //+ lineTweak * 1f
+            lb.setColor(scc.filter(color));
+            // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
+            return lb;
+        }
+    }
+
+    /**
+     * Converts a char into a ColorChangeLabel, or if the argument c is '\0', creates a ColorChangeImage of a solid
+     * block. Can be used for preparing glyphs for animation effects, and is used internally for this purpose. The
+     * ColorChange classes will rotate between all colors given in the List each second, and are not affected by setColor,
+     * though they are affected by their setColors methods. Their color change is not considered an animation for the
+     * purposes of things like SquidPanel.hasActiveAnimations() .
+     * @param c a char to make into an Actor, which can be the character with Unicode value 0 for a solid block.
+     * @param colors a List of Color to tint c with, looping through all elements in the list each second
+     * @return the Actor, with no position set.
+     */
+    public Actor makeActor(char c, Collection<Color> colors) {
+        return makeActor(c, colors, 2f, false);
+    }
+    /**
+     * Converts a char into a ColorChangeLabel, or if the argument c is '\0', creates a ColorChangeImage of a solid
+     * block. Can be used for preparing glyphs for animation effects, and is used internally for this purpose. The
+     * ColorChange classes will rotate between all colors given in the List each second, and are not affected by setColor,
+     * though they are affected by their setColors methods. Their color change is not considered an animation for the
+     * purposes of things like SquidPanel.hasActiveAnimations() .
+     * @param c a char to make into an Actor, which can be the character with Unicode value 0 for a solid block.
+     * @param colors a List of Color to tint c with, looping through all elements in the list each second
+     * @param loopTime the amount of time, in seconds, to spend looping through all colors in the list
+     * @return the Actor, with no position set.
+     */
+    public Actor makeActor(char c, Collection<Color> colors, float loopTime)
+    {
+        return makeActor(c, colors, loopTime, false);
+    }
+    /**
+     * Converts a char into a ColorChangeLabel, or if the argument c is '\0', creates a ColorChangeImage of a solid
+     * block. Can be used for preparing glyphs for animation effects, and is used internally for this purpose. The
+     * ColorChange classes will rotate between all colors given in the List each second, and are not affected by setColor,
+     * though they are affected by their setColors methods. Their color change is not considered an animation for the
+     * purposes of things like SquidPanel.hasActiveAnimations() .
+     * @param c a char to make into an Actor, which can be the character with Unicode value 0 for a solid block.
+     * @param colors a List of Color to tint c with, looping through all elements in the list each second
+     * @param loopTime the amount of time, in seconds, to spend looping through all colors in the list
+     * @return the Actor, with no position set.
+     */
+    public Actor makeActor(char c, Collection<Color> colors, float loopTime, boolean doubleWidth) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        ArrayList<Color> colors2 = null;
+        if(colors != null && !colors.isEmpty())
+        {
+            colors2 = new ArrayList<>(colors.size());
+            for (Color color : colors) {
+                colors2.add(scc.filter(color));
+            }
+        }
+        if (c == 0) {
+            ColorChangeImage im = new ColorChangeImage(block, loopTime, doubleWidth, colors2);
+            //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));
+            im.setSize(actualCellWidth * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
+            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
+            return im;
+        } else {
+            mut.setCharAt(0, swap.getOrDefault(c, c));
+            ColorChangeLabel lb = new ColorChangeLabel(mut, style, loopTime, doubleWidth, colors2);
+            lb.setSize(width, height - descent); //+ lineTweak * 1f
             // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return lb;
         }
@@ -1167,7 +1358,7 @@ public class TextCellFactory implements Disposable {
      * @param loopTime the amount of time, in seconds, to spend looping through all colors in the list
      * @return the Actor, with no position set.
      */
-    public Actor makeDirectionMarker(Collection<Color> colors, float loopTime, boolean doubleWidth) {
+    public Image makeDirectionMarker(Collection<Color> colors, float loopTime, boolean doubleWidth) {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
@@ -1181,9 +1372,7 @@ public class TextCellFactory implements Disposable {
         ColorChangeImage im = new ColorChangeImage(dirMarker, loopTime, doubleWidth,
                 actualCellWidth, actualCellHeight + (distanceField ? 1 : 0), colors2);
         im.setAlign(2);
-        //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));
         im.setSize(actualCellWidth * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
-        // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
         return im;
     }
     /**
@@ -1191,16 +1380,70 @@ public class TextCellFactory implements Disposable {
      * @param color a Color to tint the '^' with
      * @return the Actor, with no position set.
      */
-    public Actor makeDirectionMarker(Color color) {
+    public Image makeDirectionMarker(Color color) {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
         Image im = new Image(dirMarker);
         im.setColor(scc.filter(color));
-        //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));
         im.setSize(actualCellWidth, actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
         im.setOrigin(1); //center
-        // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
+        return im;
+    }
+
+    public ColorChangeImage makeGlyphImage(char glyph, Color color)
+    {
+        return makeGlyphImage(glyph, color, false);
+    }
+    public ColorChangeImage makeGlyphImage(char glyph, Color color, boolean doubleWidth)
+    {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        TextureRegion tr;
+        if (glyphTextures.containsKey(glyph))
+        {
+            tr = glyphTextures.get(glyph);
+        }
+        else
+        {
+            BitmapFont.Glyph g = bmpFont.getData().getGlyph(glyph);
+            tr = new TextureRegion(bmpFont.getRegion(g.page), g.srcX, g.srcY, g.width, g.height);
+            glyphTextures.put(glyph, tr);
+        }
+
+        ColorChangeImage im = new ColorChangeImage(tr, 1, doubleWidth,
+                actualCellWidth, actualCellHeight + (distanceField ? 1 : 0), Collections.singletonList(scc.filter(color)));
+        im.setAlign(2);
+        im.setSize(actualCellWidth * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
+        return im;
+    }
+    public ColorChangeImage makeGlyphImage(char glyph, Collection<Color> colors, float loopTime, boolean doubleWidth) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        TextureRegion tr;
+        if (glyphTextures.containsKey(glyph))
+        {
+            tr = glyphTextures.get(glyph);
+        }
+        else
+        {
+            BitmapFont.Glyph g = bmpFont.getData().getGlyph(glyph);
+            tr = new TextureRegion(bmpFont.getRegion(g.page), g.srcX, g.srcY, g.width, g.height);
+            glyphTextures.put(glyph, tr);
+        }
+        ArrayList<Color> colors2 = null;
+        if (colors != null && !colors.isEmpty()) {
+            colors2 = new ArrayList<>(colors.size());
+            for (Color c : colors) {
+                colors2.add(scc.filter(c));
+            }
+        }
+        ColorChangeImage im = new ColorChangeImage(tr, loopTime, doubleWidth,
+                actualCellWidth, actualCellHeight + (distanceField ? 1 : 0), colors2);
+        im.setAlign(2);
+        im.setSize(actualCellWidth * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
         return im;
     }
 
@@ -1317,8 +1560,7 @@ public class TextCellFactory implements Disposable {
     public void configureShader(Batch batch) {
         if (initialized && distanceField) {
             batch.setShader(shader);
-            shader.setUniformf("u_smoothing", 3.5f * smoothingMultiplier * bmpFont.getData().scaleX);
-
+            shader.setUniformf("u_smoothing", 0.2f / (3.5f * smoothingMultiplier * bmpFont.getData().scaleX));
         }
     }
     /**
@@ -1349,8 +1591,8 @@ public class TextCellFactory implements Disposable {
 
     /**
      * Adds a pair of Strings (typically both with length 1) as a replacement pair, so when the find String is requested
-     * to be drawn, the replace String is used instead. These are used when drawing text in each cell in SquidPanel and
-     * related classes, so Strings longer than 1 char are rare, if they occur at all.
+     * to be drawn, the replace String is used instead. Swaps are used when drawing text in each cell in SquidPanel and
+     * related classes, so Strings longer than 1 char are effectively disregarded beyond the first char.
      * <br>
      * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep
      * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something
@@ -1364,9 +1606,9 @@ public class TextCellFactory implements Disposable {
      */
     public TextCellFactory addSwap(String find, String replace)
     {
-        if(find.startsWith("\0"))
+        if(find == null || replace == null || find.isEmpty()  || replace.isEmpty() || find.charAt(0) == 0)
             return this;
-        swap.put(find, replace);
+        swap.put(find.charAt(0), replace.charAt(0));
         return this;
     }
 
@@ -1386,19 +1628,21 @@ public class TextCellFactory implements Disposable {
      */
     public TextCellFactory addSwap(char find, char replace)
     {
-        if(find == '\0')
+        if(find == 0)
             return this;
-        swap.put(String.valueOf(find), String.valueOf(replace));
+        swap.put(find, replace);
         return this;
     }
 
     /**
-     * Removes the replacement pair, if present, that searches for the given key, find.
+     * Removes the replacement pair, if present, that searches for the given key, find. Swaps are used when drawing text
+     * in each cell in SquidPanel and related classes, so Strings longer than 1 char are effectively disregarded beyond
+     * the first char.
      * <br>
      * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep
      * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something
-     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap("^", ",")} and also
-     * {@code addSwap(",", ":")}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn
+     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also
+     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn
      * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use
      * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.
      * @param find the String that would be changed in the replacement pair
@@ -1406,7 +1650,9 @@ public class TextCellFactory implements Disposable {
      */
     public TextCellFactory removeSwap(String find)
     {
-        swap.remove(find);
+
+        if(find != null && !find.isEmpty() && find.charAt(0) != 0)
+            swap.remove(find.charAt(0));
         return this;
     }
 
@@ -1423,7 +1669,7 @@ public class TextCellFactory implements Disposable {
      */
     public TextCellFactory removeSwap(char find)
     {
-        swap.remove(String.valueOf(find));
+        swap.remove(find);
         return this;
     }
 
@@ -1433,57 +1679,54 @@ public class TextCellFactory implements Disposable {
      * <br>
      * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep
      * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something
-     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap("^", ",")} and also
-     * {@code addSwap(",", ":")}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn
+     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also
+     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn
      * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use
      * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.
      * @return the mapping of replacement pairs
      */
-    public OrderedMap<String, String> getAllSwaps() {
+    public OrderedMap<Character, Character> getAllSwaps() {
         return swap;
     }
 
     /**
-     * Sets the mapping of replacement pairs to a different one as a Map of String keys to String values.
+     * Sets the mapping of replacement pairs to a different one as a Map of Character keys to String values.
      * <br>
      * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep
      * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something
-     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap("^", ",")} and also
-     * {@code addSwap(",", ":")}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn
+     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also
+     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn
      * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use
      * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.
      * @param swaps the Map of replacement pairs; keys requested for drawing will be replaced with their values
      * @return this for chaining
      */
-    public TextCellFactory setAllSwaps(Map<String, String> swaps) {
-        this.swap = new OrderedMap<>(swaps.size());
-        for(Map.Entry<String, String> kv : swaps.entrySet())
-        {
-            if(!kv.getKey().startsWith("\0"))
-                this.swap.put(kv.getKey(), kv.getValue());
+    public TextCellFactory setAllSwaps(OrderedMap<Character, Character> swaps) {
+        swap.clear();
+        for (int i = 0; i < swaps.size(); i++) {
+            if(!swaps.keyAt(i).equals('\0'))
+                swap.put(swaps.keyAt(i), swaps.getAt(i));
         }
         return this;
     }
 
     /**
      * Appends to the mapping of replacement pairs, adding or replacing any entries in the current mapping with the
-     * entries in a Map of String keys to String values.
+     * entries in a Map of Character keys to String values.
      * <br>
      * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep
      * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something
-     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap("^", ",")} and also
-     * {@code addSwap(",", ":")}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn
+     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also
+     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn
      * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use
      * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.
      * @param swaps the Map of replacement pairs to add; keys requested for drawing will be replaced with their values
      * @return this for chaining
      */
-    public TextCellFactory addSwaps(Map<String, String> swaps) {
-
-        for(Map.Entry<String, String> kv : swaps.entrySet())
-        {
-            if(!kv.getKey().startsWith("\0"))
-                swap.put(kv.getKey(), kv.getValue());
+    public TextCellFactory addSwaps(OrderedMap<Character, Character> swaps) {
+        for (int i = 0; i < swaps.size(); i++) {
+            if(!swaps.keyAt(i).equals('\0'))
+                swap.put(swaps.keyAt(i), swaps.getAt(i));
         }
         return this;
     }
@@ -1493,8 +1736,8 @@ public class TextCellFactory implements Disposable {
      * <br>
      * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep
      * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something
-     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap("^", ",")} and also
-     * {@code addSwap(",", ":")}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn
+     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also
+     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn
      * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use
      * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.
      * @return this for chaining

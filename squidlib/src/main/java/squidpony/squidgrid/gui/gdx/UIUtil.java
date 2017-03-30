@@ -2,9 +2,13 @@ package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Pools;
 
 /**
  * @author smelC
@@ -12,12 +16,42 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public class UIUtil {
 
 	/**
+	 * Writes {@code text} at {@code (x, y)} by cutting off using "…" if it gets
+	 * wider than {@code width}.
+	 * 
+	 * @param batch
+	 * @param font
+	 *            The font to use
+	 * @param text
+	 *            The text to draw
+	 * @param color
+	 *            The text's color
+	 * @param align
+	 *            The alignment (see {@link com.badlogic.gdx.utils.Align}).
+	 * @param width
+	 *            The desired width of the text
+	 * @param x
+	 *            Where to draw
+	 * @param y
+	 *            Where to draw
+	 */
+	public static void drawLimitedWidthText(Batch batch, BitmapFont font, String text, Color color,
+											int align, float width, float x, float y) {
+		final GlyphLayout glyph = Pools.obtain(GlyphLayout.class);
+		glyph.setText(font, text, 0, text.length(), color, width, align,
+				/* do not wrap */ false, /* the ellipsis */ "…");
+		font.draw(batch, glyph, x, y);
+		Pools.free(glyph);
+	}
+
+	/**
 	 * Draws margins around an actor.
 	 * 
 	 * @param renderer_
 	 *            The renderer to use. If {@code null} a new one will be
 	 *            allocated.
-	 * @param a the actor to draw around
+	 * @param a
+	 *            the actor to draw around
 	 * @param margin
 	 *            The size of the margin to draw.
 	 * @param color
@@ -182,8 +216,9 @@ public class UIUtil {
 	/**
 	 * Draws a rectangle using a {@link ShapeRenderer}.
 	 * 
-	 * @param sRender_ The renderer to use. If {@code null} a new one will be
-	 *        allocated.
+	 * @param sRender_
+	 *            The renderer to use. If {@code null} a new one will be
+	 *            allocated.
 	 * @param botLeftX
 	 *            The bottom left x of the rectangle.
 	 * @param botLeftY

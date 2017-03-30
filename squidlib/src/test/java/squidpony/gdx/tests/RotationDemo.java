@@ -87,15 +87,15 @@ public class RotationDemo extends ApplicationAdapter {
     /**
      * In number of cells
      */
-    private static final int height = 30;
+    private static final int height = 25;
     /**
      * The pixel width of a cell
      */
-    private static final int cellWidth = 15 * INTERNAL_ZOOM;
+    private static final int cellWidth = 18 * INTERNAL_ZOOM;
     /**
      * The pixel height of a cell
      */
-    private static final int cellHeight = 27 * INTERNAL_ZOOM;
+    private static final int cellHeight = 28 * INTERNAL_ZOOM;
     private VisualInput input;
     private double counter;
     private boolean[][] seen;
@@ -113,7 +113,7 @@ public class RotationDemo extends ApplicationAdapter {
     private Viewport viewport;
     private float currentZoomX = INTERNAL_ZOOM, currentZoomY = INTERNAL_ZOOM;
 
-    public static final Adjacency adjacency = new Adjacency.RotationAdjacency(width, height, DijkstraMap.Measurement.MANHATTAN);
+    public static final Adjacency adjacency = new Adjacency.RotationAdjacency(width, height, DijkstraMap.Measurement.EUCLIDEAN);
     @Override
     public void create() {
         // gotta have a random number generator. We seed a LightRNG with any long we want, then pass that to an RNG.
@@ -133,8 +133,13 @@ public class RotationDemo extends ApplicationAdapter {
         // manually if you use a constant internal zoom; here we use 1f for internal zoom 1, about 2/3f for zoom 2, and
         // about 1/2f for zoom 3. If you have more zooms as options for some reason, this formula should hold for many
         // cases but probably not all.
+        //textFactory = DefaultResources.getStretchableDejaVuFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
+        //        .width(cellWidth).height(cellHeight).initBySize();
         textFactory = DefaultResources.getStretchableCodeFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
                 .width(cellWidth).height(cellHeight).initBySize(); //.setDirectionGlyph('ˆ')
+        //textFactory = DefaultResources.getStretchableSciFiFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
+        //        .width(cellWidth).height(cellHeight).initBySize();
+
         // Creates a layered series of text grids in a SquidLayers object, using the previously set-up textFactory and
         // SquidColorCenters.
         display = new SquidLayers(width, height, cellWidth, cellHeight,
@@ -147,8 +152,8 @@ public class RotationDemo extends ApplicationAdapter {
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        messages.setTextSize(cellWidth, cellHeight + INTERNAL_ZOOM);
-        display.setTextSize(cellWidth, cellHeight + INTERNAL_ZOOM);
+        messages.setTextSize(cellWidth + INTERNAL_ZOOM * 3, cellHeight + INTERNAL_ZOOM * 4);
+        display.setTextSize(cellWidth + INTERNAL_ZOOM * 3, cellHeight + INTERNAL_ZOOM * 4);
         //The subCell SquidPanel uses a smaller size here; the numbers 8 and 16 should change if cellWidth or cellHeight
         //change, and the INTERNAL_ZOOM multiplier keeps things sharp, the same as it does all over here.
         viewport = new StretchViewport(width * cellWidth, (height + 4) * cellHeight);
@@ -173,6 +178,7 @@ public class RotationDemo extends ApplicationAdapter {
         serpent.putWalledRoundRoomCarvers(2);
         char[][] mg = serpent.generate();
         decoDungeon = dungeonGen.generate(mg, serpent.getEnvironment());
+        //decoDungeon = dungeonGen.generate();
         bareDungeon = dungeonGen.getBareDungeon();
         lineDungeon = DungeonUtility.hashesToLines(dungeonGen.getDungeon(), true);
         /*
@@ -219,7 +225,7 @@ public class RotationDemo extends ApplicationAdapter {
             Coord monPos = placement.singleRandom(rng);
             placement.remove(monPos);
             p = adjacency.composite(monPos.x, monPos.y, rng.nextIntHasty(4), 0);
-            monsters.put(p >> 3, new Creature(display.animateActor(monPos.x, monPos.y, 'Я',
+            monsters.put(p >> 3, new Creature(display.animateActor(monPos.x, monPos.y, ((i & 1) == 0) ? 'g' : 'K', //'Я',
                     SColor.SCARLET),
                     display.directionMarker(monPos.x, monPos.y, monsterMarkColors, 1.5f, 3, false),
                     p,
@@ -259,7 +265,11 @@ public class RotationDemo extends ApplicationAdapter {
         }
         lights = DungeonUtility.generateLightnessModifiers(decoDungeon, counter);
         seen = new boolean[width][height];
+        /*
         lang = FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 4, 6, new String[]{",", ",", ",", " -"},
+                new String[]{"..."}, 0.25);
+        */
+        lang = FakeLanguageGen.RUSSIAN_ROMANIZED.sentence(rng, 4, 6, new String[]{",", ",", ",", " -"},
                 new String[]{"..."}, 0.25);
         // this is a big one.
         // SquidInput can be constructed with a KeyHandler (which just processes specific keypresses), a SquidMouse
@@ -466,22 +476,27 @@ public class RotationDemo extends ApplicationAdapter {
         // recalculate FOV, store it in fovmap for the render to use.
         fovmap = fov.calculateFOV(res, player.entity.gridX, player.entity.gridY, 8, Radius.SQUARE);
         // handle monster turns
-        Creature mon;
         int ms = monsters.size(), tmp;
         IntVLA impassable = new IntVLA(ms), path;
         for (int i = 0; i < ms; i++) {
             impassable.add(monsters.getAt(i).pos);
         }
         int[] playerGoal = new int[]{player.pos};
-        for (Integer pos : monsters.keySet()) {
-            mon = monsters.get(pos);
-            if(mon == null)
+        for (int i = 0; i < ms; i++) {
+            Integer pos = monsters.keyAt(i);
+            if(pos == null)
                 continue;
+            Creature mon = monsters.getAt(i);
             // monster values are used to store their aggression, 1 for actively stalking the player, 0 for not.
             if (mon.state > 0 || fovmap[adjacency.extractX(pos << 3)][adjacency.extractY(pos << 3)] > 0.1) {
                 if (mon.state == 0) {
+                    /*
                     messages.appendMessage("The AЯMED GUAЯD shouts at you, \"" +
                             FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 1, 3,
+                                    new String[]{",", ",", ",", " -"}, new String[]{"!"}, 0.25) + "\"");
+                    */
+                    messages.appendMessage("The ARMED GUARD shouts at you, \"" +
+                            FakeLanguageGen.RUSSIAN_ROMANIZED.sentence(rng, 1, 3,
                                     new String[]{",", ",", ",", " -"}, new String[]{"!"}, 0.25) + "\"");
                 }
 

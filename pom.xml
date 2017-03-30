@@ -64,9 +64,10 @@
         <findbugs.version>3.0.2</findbugs.version>
         <cobertura.version>2.7</cobertura.version>
         <jdk.version>1.7</jdk.version>
-        <gdx.version>1.9.3</gdx.version>
+        <!-- As in build.gradle-->
+        <gdx.version>1.9.6</gdx.version>
         <junit.version>4.11</junit.version>
-        <regexodus.version>0.1.7</regexodus.version>
+        <regexodus.version>0.1.9</regexodus.version>
         <blazingchain.version>1.4.4.1</blazingchain.version>
     </properties>
 
@@ -115,6 +116,39 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <!--
+            To sign (only needed for Maven Central), add this argument to the mvn command line, just after mvn...
+            -DperformRelease=true
+            ...
+            This only really matters for tommyettinger since he's in charge of releases there.
+            -->
+            <id>release-sign-artifacts</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>${maven.gpg.version}</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
     <build>
         <plugins>
@@ -126,20 +160,6 @@
                     <source>${jdk.version}</source>
                     <target>${jdk.version}</target>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>${maven.gpg.version}</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <artifactId>maven-source-plugin</artifactId>

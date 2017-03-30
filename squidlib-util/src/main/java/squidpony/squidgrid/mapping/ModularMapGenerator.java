@@ -198,7 +198,7 @@ public class ModularMapGenerator {
                     }
                 }
             }
-            if (layout.size > 0)
+            if (!layout.isEmpty())
                 break;
         }
         Coord a, b;

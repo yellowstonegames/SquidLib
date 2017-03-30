@@ -17,6 +17,13 @@ import java.util.*;
 public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 
 	/**
+	 * A convenience alias for {@code append(c, null)}.
+	 * 
+	 * @param text
+	 */
+	void append(/* @Nullable */ char c);
+
+	/**
 	 * Mutates {@code this} by appending {@code c} to it.
 	 * 
 	 * @param c
@@ -25,6 +32,13 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 	 *            {@code text}'s color. Or {@code null} to let the panel decide.
 	 */
 	void append(char c, /* @Nullable */T color);
+
+	/**
+	 * A convenience alias for {@code append(text, null)}.
+	 * 
+	 * @param text
+	 */
+	void append(/* @Nullable */ String text);
 
 	/**
 	 * Mutates {@code this} by appending {@code text} to it. Does nothing if
@@ -259,8 +273,18 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 		}
 
 		@Override
+		public void append(char c) {
+			append(c, null);
+		}
+
+		@Override
 		public void append(char c, T color) {
 			append(String.valueOf(c), color);
+		}
+
+		@Override
+		public void append(String text) {
+			append(text, null);
 		}
 
 		@Override

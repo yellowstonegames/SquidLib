@@ -13,7 +13,7 @@ import java.util.Arrays;
  */
 public class ArrayTools {
 
-    private static final char[] letters = {
+    static final char[] letters = {
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a',
             'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'À', 'Á',
             'Â', 'Ã', 'Ä', 'Å', 'Æ', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ð', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ø', 'Ù', 'Ú', 'Û', 'Ü', 'Ý',
@@ -24,7 +24,7 @@ public class ArrayTools {
             'ŏ', 'Ő', 'ő', 'Œ', 'œ', 'Ŕ', 'ŕ', 'Ŗ', 'ŗ', 'Ř', 'ř', 'Ś', 'ś', 'Ŝ', 'ŝ', 'Ş', 'ş', 'Š', 'š', 'Ţ', 'ţ', 'Ť', 'ť', 'Ŧ', 'ŧ', 'Ũ', 'ũ',
             'Ū', 'ū', 'Ŭ', 'ŭ', 'Ů', 'ů', 'Ű', 'ű', 'Ų', 'ų', 'Ŵ', 'ŵ', 'Ŷ', 'ŷ', 'Ÿ', 'Ź', 'ź', 'Ż', 'ż', 'Ž', 'ž', 'Ǿ', 'ǿ', 'Ș', 'ș', 'Ț', 'ț',
             'Γ', 'Δ', 'Θ', 'Λ', 'Ξ', 'Π', 'Σ', 'Φ', 'Ψ', 'Ω', 'α', 'β', 'γ'};
-    private static final char[] empty = new char[0];
+    static final char[] empty = new char[0];
 
     /**
      * Stupidly simple convenience method that produces a range from 0 to end, not including end, as an int array.
@@ -89,7 +89,9 @@ public class ArrayTools {
      * Stupidly simple convenience method that produces a char array containing only letters that can be reasonably
      * displayed (with SquidLib's default text display assets, at least). The letters are copied from a single source
      * of 256 chars; if you need more chars or you don't need pure letters, you can use {@link #charSpan(char, char)}.
-     *
+     * This set does not contain "visual duplicate" letters, such as Latin alphabet capital letter 'A' and Greek
+     * alphabet capital letter alpha, 'Α'; it does contain many accented Latin letters and the visually-distinct Greek
+     * letters, up to a point.
      * @param charCount the number of letters to return in an array; the maximum this will produce is 256
      * @return the range of letters as a char array
      */
@@ -99,6 +101,20 @@ public class ArrayTools {
         char[] r = new char[Math.min(charCount, 256)];
         System.arraycopy(letters, 0, r, 0, r.length);
         return r;
+    }
+
+    /**
+     * Gets the nth letter from the set that SquidLib is likely to support; from index 0 (returning 'A') to 255
+     * (returning the Greek lower-case letter gamma, 'γ') and wrapping around if given negative numbers or numbers
+     * larger than 255. This set does not contain "visual duplicate" letters, such as Latin alphabet capital letter 'A'
+     * and Greek alphabet capital letter alpha, 'Α'; it does contain many accented Latin letters and the
+     * visually-distinct Greek letters, up to a point.
+     * @param index typically from 0 to 255, but all ints are allowed and will produce letters
+     * @return the letter at the given index in a 256-element portion of the letters SquidLib usually supports
+     */
+    public static char letterAt(int index)
+    {
+        return letters[index & 255];
     }
 
     /**
@@ -279,6 +295,22 @@ public class ArrayTools {
 
     /**
      * Creates a 2D array of the given width and height, filled with entirely with the value contents.
+     * You may want to use {@link #fill(float[][], float)} to modify an existing 2D array instead.
+     * @param contents the value to fill the array with
+     * @param width    the desired width
+     * @param height   the desired height
+     * @return a freshly allocated 2D array of the requested dimensions, filled entirely with contents
+     */
+    public static float[][] fill(float contents, int width, int height) {
+        float[][] next = new float[width][height];
+        for (int x = 0; x < width; x++) {
+            Arrays.fill(next[x], contents);
+        }
+        return next;
+    }
+
+    /**
+     * Creates a 2D array of the given width and height, filled with entirely with the value contents.
      * You may want to use {@link #fill(double[][], double)} to modify an existing 2D array instead.
      * @param contents the value to fill the array with
      * @param width    the desired width
@@ -303,6 +335,22 @@ public class ArrayTools {
      */
     public static int[][] fill(int contents, int width, int height) {
         int[][] next = new int[width][height];
+        for (int x = 0; x < width; x++) {
+            Arrays.fill(next[x], contents);
+        }
+        return next;
+    }
+
+    /**
+     * Creates a 2D array of the given width and height, filled with entirely with the value contents.
+     * You may want to use {@link #fill(byte[][], byte)} to modify an existing 2D array instead.
+     * @param contents the value to fill the array with
+     * @param width    the desired width
+     * @param height   the desired height
+     * @return a freshly allocated 2D array of the requested dimensions, filled entirely with contents
+     */
+    public static byte[][] fill(byte contents, int width, int height) {
+        byte[][] next = new byte[width][height];
         for (int x = 0; x < width; x++) {
             Arrays.fill(next[x], contents);
         }
@@ -366,6 +414,26 @@ public class ArrayTools {
 
     /**
      * Fills {@code array2d} with {@code value}.
+     * Not to be confused with {@link #fill(float, int, int)}, which makes a new 2D array.
+     * @param array2d a 2D array that will be modified in-place
+     * @param value the value to fill all of array2D with
+     */
+    public static void fill(float[][] array2d, float value) {
+        final int width = array2d.length;
+        final int height = width == 0 ? 0 : array2d[0].length;
+        if(width > 0) {
+            for (int i = 0; i < height; i++) {
+                array2d[0][i] = value;
+            }
+        }
+        for (int x = 1; x < width; x++) {
+            System.arraycopy(array2d[0], 0, array2d[x], 0, height);
+        }
+    }
+
+
+    /**
+     * Fills {@code array2d} with {@code value}.
      * Not to be confused with {@link #fill(double, int, int)}, which makes a new 2D array.
      * @param array2d a 2D array that will be modified in-place
      * @param value the value to fill all of array2D with
@@ -384,12 +452,57 @@ public class ArrayTools {
     }
 
     /**
+     * Fills {@code array3d} with {@code value}.
+     * Not to be confused with {@link #fill(double[][], double)}, which fills a 2D array instead of a 3D one, or with
+     * {@link #fill(double, int, int)}, which makes a new 2D array.
+     * @param array3d a 3D array that will be modified in-place
+     * @param value the value to fill all of array3d with
+     */
+    public static void fill(double[][][] array3d, double value) {
+        final int depth = array3d.length;
+        final int width = depth == 0 ? 0 : array3d[0].length;
+        final int height = width == 0 ? 0 : array3d[0][0].length;
+        if(depth > 0 && width > 0) {
+            for (int i = 0; i < height; i++) {
+                array3d[0][0][i] = value;
+            }
+        }
+        for (int x = 1; x < width; x++) {
+            System.arraycopy(array3d[0][0], 0, array3d[0][x], 0, height);
+        }
+        for (int z = 1; z < depth; z++) {
+            for (int x = 0; x < width; x++) {
+                System.arraycopy(array3d[0][0], 0, array3d[z][x], 0, height);
+            }
+        }
+    }
+
+    /**
      * Fills {@code array2d} with {@code value}.
      * Not to be confused with {@link #fill(int, int, int)}, which makes a new 2D array.
      * @param array2d a 2D array that will be modified in-place
      * @param value the value to fill all of array2D with
      */
     public static void fill(int[][] array2d, int value) {
+        final int width = array2d.length;
+        final int height = width == 0 ? 0 : array2d[0].length;
+        if(width > 0) {
+            for (int i = 0; i < height; i++) {
+                array2d[0][i] = value;
+            }
+        }
+        for (int x = 1; x < width; x++) {
+            System.arraycopy(array2d[0], 0, array2d[x], 0, height);
+        }
+    }
+
+    /**
+     * Fills {@code array2d} with {@code value}.
+     * Not to be confused with {@link #fill(byte, int, int)}, which makes a new 2D array.
+     * @param array2d a 2D array that will be modified in-place
+     * @param value the value to fill all of array2D with
+     */
+    public static void fill(byte[][] array2d, byte value) {
         final int width = array2d.length;
         final int height = width == 0 ? 0 : array2d[0].length;
         if(width > 0) {
@@ -464,5 +577,130 @@ public class ArrayTools {
             dest[ordering[i]] = i;
         }
         return dest;
+    }
+
+    /**
+     * Reverses the array given as a parameter, in-place, and returns the modified original.
+     * @param data an array that will be reversed in-place
+     * @return the array passed in, after reversal
+     */
+    public static boolean[] reverse(boolean[] data)
+    {
+        int sz;
+        if(data == null || (sz = data.length) <= 0) return data;
+        boolean t;
+        for (int i = 0, j = sz - 1; i < j; i++, j--) {
+            t = data[j];
+            data[j] = data[i];
+            data[i] = t;
+        }
+        return data;
+    }
+
+    /**
+     * Reverses the array given as a parameter, in-place, and returns the modified original.
+     * @param data an array that will be reversed in-place
+     * @return the array passed in, after reversal
+     */
+    public static char[] reverse(char[] data)
+    {
+        int sz;
+        if(data == null || (sz = data.length) <= 0) return data;
+        char t;
+        for (int i = 0, j = sz - 1; i < j; i++, j--) {
+            t = data[j];
+            data[j] = data[i];
+            data[i] = t;
+        }
+        return data;
+    }
+
+    /**
+     * Reverses the array given as a parameter, in-place, and returns the modified original.
+     * @param data an array that will be reversed in-place
+     * @return the array passed in, after reversal
+     */
+    public static float[] reverse(float[] data)
+    {
+        int sz;
+        if(data == null || (sz = data.length) <= 0) return data;
+        float t;
+        for (int i = 0, j = sz - 1; i < j; i++, j--) {
+            t = data[j];
+            data[j] = data[i];
+            data[i] = t;
+        }
+        return data;
+    }
+
+    /**
+     * Reverses the array given as a parameter, in-place, and returns the modified original.
+     * @param data an array that will be reversed in-place
+     * @return the array passed in, after reversal
+     */
+    public static double[] reverse(double[] data)
+    {
+        int sz;
+        if(data == null || (sz = data.length) <= 0) return data;
+        double t;
+        for (int i = 0, j = sz - 1; i < j; i++, j--) {
+            t = data[j];
+            data[j] = data[i];
+            data[i] = t;
+        }
+        return data;
+    }
+
+    /**
+     * Reverses the array given as a parameter, in-place, and returns the modified original.
+     * @param data an array that will be reversed in-place
+     * @return the array passed in, after reversal
+     */
+    public static int[] reverse(int[] data)
+    {
+        int sz;
+        if(data == null || (sz = data.length) <= 0) return data;
+        int t;
+        for (int i = 0, j = sz - 1; i < j; i++, j--) {
+            t = data[j];
+            data[j] = data[i];
+            data[i] = t;
+        }
+        return data;
+    }
+
+    /**
+     * Reverses the array given as a parameter, in-place, and returns the modified original.
+     * @param data an array that will be reversed in-place
+     * @return the array passed in, after reversal
+     */
+    public static byte[] reverse(byte[] data)
+    {
+        int sz;
+        if(data == null || (sz = data.length) <= 0) return data;
+        byte t;
+        for (int i = 0, j = sz - 1; i < j; i++, j--) {
+            t = data[j];
+            data[j] = data[i];
+            data[i] = t;
+        }
+        return data;
+    }
+    /**
+     * Reverses the array given as a parameter, in-place, and returns the modified original.
+     * @param data an array that will be reversed in-place
+     * @return the array passed in, after reversal
+     */
+    public static<T> T[] reverse(T[] data)
+    {
+        int sz;
+        if(data == null || (sz = data.length) <= 0) return data;
+        T t;
+        for (int i = 0, j = sz - 1; i < j; i++, j--) {
+            t = data[j];
+            data[j] = data[i];
+            data[i] = t;
+        }
+        return data;
     }
 }

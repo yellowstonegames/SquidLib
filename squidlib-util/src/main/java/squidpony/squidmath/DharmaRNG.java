@@ -575,11 +575,11 @@ public class DharmaRNG extends RNG implements Serializable{
     public int hashCode() {
         int result;
         long temp;
-        temp = Double.doubleToLongBits(fairness);
+        temp = NumberTools.doubleToLongBits(fairness);
         result = (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(produced);
+        temp = NumberTools.doubleToLongBits(produced);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(baseline);
+        temp = NumberTools.doubleToLongBits(baseline);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }

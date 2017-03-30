@@ -1,5 +1,7 @@
 package squidpony.examples;
 
+import squidpony.ArrayTools;
+import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.SobolQRNG;
 import squidpony.squidmath.VanDerCorputQRNG;
 
@@ -41,7 +43,7 @@ public class SobolTest {
         System.out.println("\nVDC:");
         for(int d : new int[]{2, 3, 5, 7, 11, 13, 17, 19})
         {
-            VanDerCorputQRNG vdc = new VanDerCorputQRNG(d, 0L);
+            VanDerCorputQRNG vdc = new VanDerCorputQRNG(d, 0L, false);
             System.out.println("Base " + d);
             System.out.print(vdc.nextDouble());
             for (int i = 0; i < 32; i++) {
@@ -79,8 +81,31 @@ public class SobolTest {
                 System.out.print(", " + (vdc.nextLong() ^ (vdc.nextLong() >>> vdc.next(3) + 2)));
             }
             System.out.println();
-
-
         }
+        System.out.println("HALTON:");
+        char[][] map = ArrayTools.fill(' ', 80, 40);
+        char[] letters = ArrayTools.letterSpan(128);
+        int x, y;
+        int[] primes = {2, 3, 5, 7, 11};
+        for (int a = 0; a < primes.length; a++) {
+            for (int b = a+1; b < primes.length; b++) {
+                VanDerCorputQRNG xAxis = new VanDerCorputQRNG(primes[a], 19, true),
+                        yAxis = new VanDerCorputQRNG(primes[b], 19, true);
+                ArrayTools.fill(map, ' ');
+                System.out.println("Prime for x axis: " + primes[a] + ", for y axis: " + primes[b]);
+                for (int i = 0; i < 64; i++) {
+                    x = (int)(80*xAxis.nextDouble());
+                    y = (int)(40*yAxis.nextDouble());
+                    if(map[x][y] == ' ')
+                        map[x][y] = letters[i];
+                    else
+                        System.out.println("Oh no, overlap! primes are " + primes[a] + ", " + primes[b] + ", i is " + i +
+                                ", x is " + x + ", y is " + y);
+                }
+                DungeonUtility.debugPrint(map);
+                System.out.println();
+            }
+        }
+
     }
 }
