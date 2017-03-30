@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":9,"i5":10,"i6":10};
+var methods = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":9,"i5":9,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -117,7 +117,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public static class <a href="../src-html/squidpony/FakeLanguageGen.html#line.2972">FakeLanguageGen.Modifier</a>
+<pre>public static class <a href="../src-html/squidpony/FakeLanguageGen.html#line.3216">FakeLanguageGen.Modifier</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <dl>
@@ -161,25 +161,38 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#GENERAL_CLEANUP">GENERAL_CLEANUP</a></span></code>
+<div class="block">Some changes that can be applied when sanity checks (which force re-generating a new word) aren't appropriate
+ for fixing a word that isn't pronounceable.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#HISS">HISS</a></span></code>
 <div class="block">For a character who always lengthens 's' and 'z' sounds not starting a word.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#LISP">LISP</a></span></code>
 <div class="block">For a character who always pronounces 's', 'ss', and 'sh' as 'th'.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#NO_DOUBLES">NO_DOUBLES</a></span></code>
 <div class="block">For a language that never repeats the same letter twice in a row.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#SIMPLIFY_ARABIC">SIMPLIFY_ARABIC</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#SIMPLIFY_NORSE">SIMPLIFY_NORSE</a></span></code>
+<div class="block">Removes accented letters and the two non-English consonants from text generated with <a href="../squidpony/FakeLanguageGen.html#NORSE"><code>FakeLanguageGen.NORSE</code></a>.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
@@ -250,16 +263,22 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#replacementTable-squidpony.squidmath.OrderedMap-">replacementTable</a></span>(<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;map)</code>
+<div class="block">Creates a Modifier that will replace the nth String key in map with the nth value.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#replacementTable-java.lang.String-java.lang.String-">replacementTable</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;initial,
                 <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;change)</code>
 <div class="block">Creates a Modifier that will replace the nth char in initial with the nth char in change.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#serializeToString--">serializeToString</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
@@ -291,7 +310,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>alterations</h4>
-<pre>public final&nbsp;<a href="../squidpony/FakeLanguageGen.Alteration.html" title="class in squidpony">FakeLanguageGen.Alteration</a>[] <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.2974">alterations</a></pre>
+<pre>public final&nbsp;<a href="../squidpony/FakeLanguageGen.Alteration.html" title="class in squidpony">FakeLanguageGen.Alteration</a>[] <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3218">alterations</a></pre>
 </li>
 </ul>
 <a name="LISP">
@@ -300,7 +319,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>LISP</h4>
-<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3030">LISP</a></pre>
+<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3274">LISP</a></pre>
 <div class="block">For a character who always pronounces 's', 'ss', and 'sh' as 'th'.</div>
 </li>
 </ul>
@@ -310,7 +329,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>HISS</h4>
-<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3035">HISS</a></pre>
+<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3279">HISS</a></pre>
 <div class="block">For a character who always lengthens 's' and 'z' sounds not starting a word.</div>
 </li>
 </ul>
@@ -320,7 +339,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>STUTTER</h4>
-<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3040">STUTTER</a></pre>
+<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3284">STUTTER</a></pre>
 <div class="block">For a character who has a 20% chance to repeat a starting consonant or vowel.</div>
 </li>
 </ul>
@@ -330,7 +349,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>DOUBLE_VOWELS</h4>
-<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3048">DOUBLE_VOWELS</a></pre>
+<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3292">DOUBLE_VOWELS</a></pre>
 <div class="block">For a language that has a 40% chance to repeat a single Latin vowel (a, e, o, or a variant on one of them
  like å or ö, but not merged letters like æ and œ).</div>
 </li>
@@ -341,7 +360,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>DOUBLE_CONSONANTS</h4>
-<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3057">DOUBLE_CONSONANTS</a></pre>
+<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3301">DOUBLE_CONSONANTS</a></pre>
 <div class="block">For a language that has a 50% chance to repeat a single consonant.</div>
 </li>
 </ul>
@@ -351,8 +370,32 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>NO_DOUBLES</h4>
-<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3064">NO_DOUBLES</a></pre>
+<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3308">NO_DOUBLES</a></pre>
 <div class="block">For a language that never repeats the same letter twice in a row.</div>
+</li>
+</ul>
+<a name="SIMPLIFY_NORSE">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>SIMPLIFY_NORSE</h4>
+<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3316">SIMPLIFY_NORSE</a></pre>
+<div class="block">Removes accented letters and the two non-English consonants from text generated with <a href="../squidpony/FakeLanguageGen.html#NORSE"><code>FakeLanguageGen.NORSE</code></a>.
+ Replaces á, é, í, ý, ó, æ, ú, and ö with a, e, i, y, o, ae, and ou. In some instances, replaces j
+ with y. Replaces ð and þ with th and th, except for when preceded by s (then it replaces sð or sþ
+ with st or st) or when the start of a word is fð or fþ, where it replaces with fr or fr.</div>
+</li>
+</ul>
+<a name="GENERAL_CLEANUP">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>GENERAL_CLEANUP</h4>
+<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3336">GENERAL_CLEANUP</a></pre>
+<div class="block">Some changes that can be applied when sanity checks (which force re-generating a new word) aren't appropriate
+ for fixing a word that isn't pronounceable.</div>
 </li>
 </ul>
 <a name="SIMPLIFY_ARABIC">
@@ -361,7 +404,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>SIMPLIFY_ARABIC</h4>
-<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3085">SIMPLIFY_ARABIC</a></pre>
+<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3390">SIMPLIFY_ARABIC</a></pre>
 </li>
 </ul>
 </li>
@@ -378,7 +421,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>Modifier</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.2976">Modifier</a>()</pre>
+<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3220">Modifier</a>()</pre>
 </li>
 </ul>
 <a name="Modifier-java.lang.String-java.lang.String-">
@@ -387,7 +430,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>Modifier</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.2980">Modifier</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pattern,
+<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3224">Modifier</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pattern,
                 <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;replacement)</pre>
 </li>
 </ul>
@@ -397,7 +440,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>Modifier</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.2984">Modifier</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pattern,
+<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3228">Modifier</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pattern,
                 <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;replacement,
                 double&nbsp;chance)</pre>
 </li>
@@ -408,7 +451,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Modifier</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.2988">Modifier</a>(<a href="../squidpony/FakeLanguageGen.Alteration.html" title="class in squidpony">FakeLanguageGen.Alteration</a>...&nbsp;alts)</pre>
+<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3232">Modifier</a>(<a href="../squidpony/FakeLanguageGen.Alteration.html" title="class in squidpony">FakeLanguageGen.Alteration</a>...&nbsp;alts)</pre>
 </li>
 </ul>
 </li>
@@ -425,7 +468,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>modify</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.2992">modify</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3236">modify</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
                             <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;sb)</pre>
 </li>
 </ul>
@@ -435,7 +478,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>replacementTable</h4>
-<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3075">replacementTable</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;initial,
+<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3357">replacementTable</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;initial,
                                                         <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;change)</pre>
 <div class="block">Creates a Modifier that will replace the nth char in initial with the nth char in change. Expects initial and
  change to be the same length, but will use the lesser length if they are not equal-length. Because of the
@@ -449,13 +492,36 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 </dl>
 </li>
 </ul>
+<a name="replacementTable-squidpony.squidmath.OrderedMap-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>replacementTable</h4>
+<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3380">replacementTable</a>(<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;map)</pre>
+<div class="block">Creates a Modifier that will replace the nth String key in map with the nth value. Because of the
+ state of the text at the time modifiers are run, only lower-case letters need to be searched for.
+ This overload of replacementTable allows full regex pattern strings as keys and replacement syntax,
+ such as searching for "([aeiou])\\1+" to find repeated occurrences of the same vowel, and "$1" in
+ this example to replace the repeated section with only the first vowel.
+ The ordering of map matters if a later key contains an earlier key (the earlier one will be replaced
+ first, possibly making the later key not match), or if an earlier replacement causes a later one to
+ become valid.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>map</code> - containing String keys to replace and String values to use instead; replacements happen in order</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a Modifier that can be added to a FakeLanguageGen with its addModifiers() method</dd>
+</dl>
+</li>
+</ul>
 <a name="equals-java.lang.Object-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3103">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3408">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -468,7 +534,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3114">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3419">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -481,7 +547,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3119">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3424">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -494,7 +560,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>serializeToString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3124">serializeToString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3430">serializeToString</a>()</pre>
 </li>
 </ul>
 <a name="deserializeFromString-java.lang.String-">
@@ -503,7 +569,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>deserializeFromString</h4>
-<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3132">deserializeFromString</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;data)</pre>
+<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3438">deserializeFromString</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;data)</pre>
 </li>
 </ul>
 </li>
@@ -575,6 +641,6 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

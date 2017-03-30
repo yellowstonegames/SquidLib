@@ -495,7 +495,7 @@ public class CoordPackerBenchmark {
         long l = 0;
         GreasedRegion tmp = new GreasedRegion(floorsG[0]);
         for (int i = 0; i < 0x1000; i++) {
-            l += tmp.clear().insert(floorsG[i].singleRandom(srng)).flood8way(floorsG[i], count).hashCode();
+            l += tmp.empty().insert(floorsG[i].singleRandom(srng)).flood8way(floorsG[i], count).hashCode();
         }
         return l;
     }

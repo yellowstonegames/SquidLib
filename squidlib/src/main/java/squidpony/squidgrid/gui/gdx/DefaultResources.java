@@ -58,20 +58,23 @@ public class DefaultResources implements LifecycleListener {
     private BitmapFont narrow1 = null, narrow2 = null, narrow3 = null,
             smooth1 = null, smooth2 = null, smoothSquare = null, smoothSquareOld = null,
             square1 = null, square2 = null,
-            unicode1 = null, unicode2 = null, arial15 = null;
+            unicode1 = null, unicode2 = null,
+            arial15 = null;
 
     private TextCellFactory distanceNarrow = null, distanceSquare = null, typewriterDistanceNarrow = null,
-            distancePrint = null, distanceClean = null, distanceCode = null;
+            distancePrint = null, distanceClean = null, distanceCode = null, distanceDejaVu = null,
+            distanceSciFi = null, distanceOrbit = null, distanceLean = null, distanceSlab = null;
     private TextureAtlas iconAtlas = null;
-    public static final String squareName = "Zodiac-Square-12x12.fnt",
-            narrowName = "Rogue-Zodiac-6x12.fnt",
-            unicodeName = "Mandrill-6x16.fnt",
-            squareNameLarge = "Zodiac-Square-24x24.fnt",
-            narrowNameLarge = "Rogue-Zodiac-12x24.fnt",
-            unicodeNameLarge = "Mandrill-12x32.fnt",
-            narrowNameExtraLarge = "Rogue-Zodiac-18x36.fnt",
-            smoothName = "Inconsolata-LGC-8x18.fnt",
-            smoothNameLarge = "Inconsolata-LGC-12x24.fnt",
+    public static final String squareName = "Zodiac-Square-12x12.fnt", squareTexture = "Zodiac-Square-12x12.png",
+            narrowName = "Rogue-Zodiac-6x12.fnt", narrowTexture = "Rogue-Zodiac-6x12_0.png",
+            unicodeName = "Mandrill-6x16.fnt", unicodeTexture = "Mandrill-6x16.png",
+            squareNameLarge = "Zodiac-Square-24x24.fnt", squareTextureLarge = "Zodiac-Square-24x24.png",
+            narrowNameLarge = "Rogue-Zodiac-12x24.fnt", narrowTextureLarge = "Rogue-Zodiac-12x24_0.png",
+            unicodeNameLarge = "Mandrill-12x32.fnt", unicodeTextureLarge = "Mandrill-12x32.png",
+            narrowNameExtraLarge = "Rogue-Zodiac-18x36.fnt", narrowTextureExtraLarge = "Rogue-Zodiac-18x36_0.png",
+            smoothName = "Inconsolata-LGC-8x18.fnt", smoothTexture = "Inconsolata-LGC-8x18.png",
+            smoothNameLarge = "Inconsolata-LGC-12x24.fnt", smoothTextureLarge = "Inconsolata-LGC-12x24.png",
+            smoothSquareName = "Inconsolata-LGC-Square-25x25.fnt", smoothSquareTexture = "Inconsolata-LGC-Square-25x25.png",
             distanceFieldSquare = "Inconsolata-LGC-Square-distance.fnt",
             distanceFieldSquareTexture = "Inconsolata-LGC-Square-distance.png",
             distanceFieldNarrow = "Inconsolata-LGC-Custom-distance.fnt",
@@ -83,7 +86,17 @@ public class DefaultResources implements LifecycleListener {
             distanceFieldTypewriterNarrow = "CM-Custom-distance.fnt",
             distanceFieldTypewriterNarrowTexture = "CM-Custom-distance.png",
             distanceFieldCode = "SourceCodePro-Medium-distance.fnt",
-            distanceFieldCodeTexture = "SourceCodePro-Medium-distance.png";
+            distanceFieldCodeTexture = "SourceCodePro-Medium-distance.png",
+            distanceFieldDejaVu = "DejaVuSansMono-distance.fnt",
+            distanceFieldDejaVuTexture = "DejaVuSansMono-distance.png",
+            distanceFieldSciFi = "Galaxsea-Starlight-Mono-v3_1-distance.fnt",
+            distanceFieldSciFiTexture = "Galaxsea-Starlight-Mono-v3_1-distance.png",
+            distanceFieldOrbit = "Orbitron-distance.fnt",
+            distanceFieldOrbitTexture = "Orbitron-distance.png",
+            distanceFieldLean = "Iosevka-distance.fnt",
+            distanceFieldLeanTexture = "Iosevka-distance.png",
+            distanceFieldSlab = "Iosevka-Slab-distance.fnt",
+            distanceFieldSlabTexture = "Iosevka-Slab-distance.png";
     public static String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n"
             + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n"
             + "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n"
@@ -110,9 +123,8 @@ public class DefaultResources implements LifecycleListener {
             + "\n"
             + "void main() {\n"
             + "	if (u_smoothing > 0.0) {\n"
-            + "		float smoothing = 0.25 / u_smoothing;\n"
             + "		float distance = texture2D(u_texture, v_texCoords).a;\n"
-            + "		float alpha = smoothstep(0.5 - smoothing, 0.5 + smoothing, distance);\n"
+            + "		float alpha = smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, distance);\n"
             + "		gl_FragColor = vec4(v_color.rgb, alpha * v_color.a);\n"
             + "	} else {\n"
             + "		gl_FragColor = v_color * texture2D(u_texture, v_texCoords);\n"
@@ -171,7 +183,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.square1 == null)
         {
             try {
-                instance.square1 = new BitmapFont(Gdx.files.internal("Zodiac-Square-12x12.fnt"), Gdx.files.internal("Zodiac-Square-12x12.png"), false);
+                instance.square1 = new BitmapFont(Gdx.files.internal(squareName), Gdx.files.internal(squareTexture), false);
                 //instance.square1.getData().padBottom = instance.square1.getDescent();
             } catch (Exception e) {
             }
@@ -194,7 +206,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.square2 == null)
         {
             try {
-                instance.square2 = new BitmapFont(Gdx.files.internal("Zodiac-Square-24x24.fnt"), Gdx.files.internal("Zodiac-Square-24x24.png"), false);
+                instance.square2 = new BitmapFont(Gdx.files.internal(squareNameLarge), Gdx.files.internal(squareTextureLarge), false);
                 //instance.square2.getData().padBottom = instance.square2.getDescent();
             } catch (Exception e) {
             }
@@ -217,7 +229,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.narrow1 == null)
         {
             try {
-                instance.narrow1 = new BitmapFont(Gdx.files.internal("Rogue-Zodiac-6x12.fnt"), Gdx.files.internal("Rogue-Zodiac-6x12_0.png"), false);
+                instance.narrow1 = new BitmapFont(Gdx.files.internal(narrowName), Gdx.files.internal(narrowTexture), false);
                 //instance.narrow1.getData().padBottom = instance.narrow1.getDescent();
             } catch (Exception e) {
             }
@@ -241,7 +253,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.narrow2 == null)
         {
             try {
-                instance.narrow2 = new BitmapFont(Gdx.files.internal("Rogue-Zodiac-12x24.fnt"), Gdx.files.internal("Rogue-Zodiac-12x24_0.png"), false);
+                instance.narrow2 = new BitmapFont(Gdx.files.internal(narrowNameLarge), Gdx.files.internal(narrowTextureLarge), false);
                 //instance.narrow2.getData().padBottom = instance.narrow2.getDescent();
             } catch (Exception e) {
             }
@@ -264,7 +276,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.narrow3 == null)
         {
             try {
-                instance.narrow3 = new BitmapFont(Gdx.files.internal("Rogue-Zodiac-18x36.fnt"), Gdx.files.internal("Rogue-Zodiac-18x36_0.png"), false);
+                instance.narrow3 = new BitmapFont(Gdx.files.internal(narrowNameExtraLarge), Gdx.files.internal(narrowTextureExtraLarge), false);
                 //instance.narrow3.getData().padBottom = instance.narrow3.getDescent();
             } catch (Exception e) {
             }
@@ -290,7 +302,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.smooth1 == null)
         {
             try {
-                instance.smooth1 = new BitmapFont(Gdx.files.internal("Inconsolata-LGC-8x18.fnt"), Gdx.files.internal("Inconsolata-LGC-8x18.png"), false);
+                instance.smooth1 = new BitmapFont(Gdx.files.internal(smoothName), Gdx.files.internal(smoothTexture), false);
                 //instance.smooth1.getData().padBottom = instance.smooth1.getDescent();
             } catch (Exception e) {
             }
@@ -315,7 +327,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.smooth2 == null)
         {
             try {
-                instance.smooth2 = new BitmapFont(Gdx.files.internal("Inconsolata-LGC-12x24.fnt"), Gdx.files.internal("Inconsolata-LGC-12x24.png"), false);
+                instance.smooth2 = new BitmapFont(Gdx.files.internal(smoothNameLarge), Gdx.files.internal(smoothTextureLarge), false);
                 //instance.smooth2.getData().padBottom = instance.smooth2.getDescent();
             } catch (Exception e) {
             }
@@ -338,7 +350,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.unicode1 == null)
         {
             try {
-                instance.unicode1 = new BitmapFont(Gdx.files.internal("Mandrill-6x16.fnt"), Gdx.files.internal("Mandrill-6x16.png"), false);
+                instance.unicode1 = new BitmapFont(Gdx.files.internal(unicodeName), Gdx.files.internal(unicodeTexture), false);
                 //instance.unicode1.getData().padBottom = instance.unicode1.getDescent();
             } catch (Exception e) {
             }
@@ -362,7 +374,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.unicode2 == null)
         {
             try {
-                instance.unicode2 = new BitmapFont(Gdx.files.internal("Mandrill-12x32.fnt"), Gdx.files.internal("Mandrill-12x32.png"), false);
+                instance.unicode2 = new BitmapFont(Gdx.files.internal(unicodeNameLarge), Gdx.files.internal(unicodeTextureLarge), false);
                 //instance.unicode2.getData().padBottom = instance.unicode2.getDescent();
             } catch (Exception e) {
             }
@@ -373,7 +385,8 @@ public class DefaultResources implements LifecycleListener {
      * Returns a 25x25px, very smooth and generally good-looking font (based on Inconsolata) as an embedded resource.
      * This font fully supports Latin, Greek, Cyrillic, and of particular interest to SquidLib, Box Drawing characters.
      * This variant is (almost) perfectly square, and box drawing characters should line up at size 25x25 px, but other
-     * glyphs will have much more horizontal spacing than in other fonts. Caches the font for later calls.
+     * glyphs will have much more horizontal spacing than in other fonts. Caches the font for later calls. You may want
+     * {@link #getStretchableSquareFont()} instead, which is the same font but can stretch smoothly to most sizes.
      * <br>
      * Needs files:
      * <ul>
@@ -388,7 +401,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.smoothSquare == null)
         {
             try {
-                instance.smoothSquare = new BitmapFont(Gdx.files.internal("Inconsolata-LGC-Square-25x25.fnt"), Gdx.files.internal("Inconsolata-LGC-Square-25x25.png"), false);
+                instance.smoothSquare = new BitmapFont(Gdx.files.internal(smoothSquareName), Gdx.files.internal(smoothSquareTexture), false);
                 //instance.smoothSquare.getData().padBottom = instance.smoothSquare.getDescent();
             } catch (Exception e) {
             }
@@ -397,37 +410,10 @@ public class DefaultResources implements LifecycleListener {
     }
 
     /**
-     * NOTE: May have issues with transparency. Prefer using distance field fonts with getStretchableSquareFont() if
-     * possible, or getSquareSmoothFont() for a larger square BitmapFont. Returns a 20x20px, very smooth and generally
-     * good-looking font (based on Inconsolata) as an embedded resource. This font fully supports Latin, Greek,
-     * Cyrillic, and of particular interest to SquidLib, Box Drawing characters. This variant is (almost) perfectly
-     * square, and box drawing characters should line up at size 20x20 px, but other glyphs will have much more
-     * horizontal spacing than in other fonts. Caches the font for later calls.
-     * <br>
-     * Needs files:
-     * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Square.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Square.png</li>
-     * </ul>
-     * @return the BitmapFont object representing Inconsolata-LGC-Square at size 20x20 pixels
-     */
-    public static BitmapFont getSquareSmoothMediumFont()
-    {
-        initialize();
-        if(instance.smoothSquareOld == null)
-        {
-            try {
-                instance.smoothSquareOld = new BitmapFont(Gdx.files.internal("Inconsolata-LGC-Square.fnt"), Gdx.files.internal("Inconsolata-LGC-Square.png"), false);
-                //instance.smoothSquareOld.getData().padBottom = instance.smoothSquareOld.getDescent();
-            } catch (Exception e) {
-            }
-        }
-        return instance.smoothSquareOld;
-    }
-
-    /**
      * Returns a TextCellFactory already configured to use a square font that should scale cleanly to many sizes. Caches
      * the result for later calls.
+     * <br>
+     * Preview: http://i.imgur.com/DD1RkPa.png
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * distance field font technique this uses can work.
@@ -456,6 +442,8 @@ public class DefaultResources implements LifecycleListener {
     /**
      * Returns a TextCellFactory already configured to use a narrow font (twice as tall as it is wide) that should scale
      * cleanly to many sizes. Caches the result for later calls.
+     * <br>
+     * Preview: http://i.imgur.com/dvEEMqo.png
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * distance field font technique this uses can work.
@@ -488,6 +476,8 @@ public class DefaultResources implements LifecycleListener {
      * Returns a TextCellFactory already configured to use a narrow typewriter-style serif font that should scale
      * cleanly to many sizes. Caches the result for later calls.
      * <br>
+     * Preview: http://i.imgur.com/oN2gRci.png
+     * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * distance field font technique this uses can work.
      * <br>
@@ -517,12 +507,14 @@ public class DefaultResources implements LifecycleListener {
     /**
      * Returns a TextCellFactory already configured to use a highly-legible fixed-width font with broad Unicode support
      * that should scale cleanly to many sizes. Caches the result for later calls. The font used is Source Code Pro, an
-     * open-source (SIL Open Font License) typeface by Adobe, and it has the best Unicode support of any fixed-width
-     * font used by SquidLib. It may be a good choice for science-fiction games because of its modern feel, but the
+     * open-source (SIL Open Font License) typeface by Adobe, and it has good Unicode support among the fixed-width
+     * fonts used by SquidLib. It may be a good choice for science-fiction games because of its modern feel, but the
      * legibility enhancements made so the font could be usable in text editors also are nice for all text-based games.
      * The high glyph count means the part of the image for each glyph is smaller, though, so this may look slightly
      * pixelated if it starts small and is resized to much larger. A cell width of 15 and cell height of 27 is ideal;
      * this allows the font to resize fairly well to larger sizes using Viewports.
+     * <br>
+     * Preview: http://i.imgur.com/VC0xn2r.png
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * distance field font technique this uses can work.
@@ -550,11 +542,178 @@ public class DefaultResources implements LifecycleListener {
             return instance.distanceCode.copy();
         return null;
     }
+    /**
+     * Returns a TextCellFactory already configured to use a highly-legible fixed-width font with good Unicode support
+     * and a thin, geometric style, that should scale cleanly to many sizes. Caches the result for later calls. The font
+     * used is Iosevka, an open-source (SIL Open Font License) typeface by Belleve Invis (see
+     * https://be5invis.github.io/Iosevka/ ), and it uses several customizations thanks to Iosevka's special build
+     * process. It supports a lot of glyphs, including quite a bit of extended Latin, Greek, and Cyrillic, but also
+     * circled letters and digits and the necessary box drawing characters. The high glyph count means the part of the
+     * image for each glyph is smaller, though, so this may look slightly pixelated if it starts small and is resized to
+     * much larger. A cell width of 11 and cell height of 20 is ideal (or some approximate multiple of that aspect
+     * ratio); this allows the font to resize fairly well to larger sizes using Viewports.
+     * <br>
+     * Preview: http://i.imgur.com/sm0ULbU.png
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-distance.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-distance.png</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font Iosevka.ttf
+     */
+    public static TextCellFactory getStretchableLeanFont()
+    {
+        initialize();
+        if(instance.distanceLean == null)
+        {
+            try {
+                instance.distanceLean = new TextCellFactory()
+                        .fontDistanceField(distanceFieldLean, distanceFieldLeanTexture);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.distanceLean != null)
+            return instance.distanceLean.copy();
+        return null;
+    }
 
+    /**
+     * Returns a TextCellFactory already configured to use a highly-legible fixed-width font with good Unicode support
+     * and a slab-serif geometric style, that should scale cleanly to many sizes. Caches the result for later calls. The
+     * font used is Iosevka with Slab style, an open-source (SIL Open Font License) typeface by Belleve Invis (see
+     * https://be5invis.github.io/Iosevka/ ), and it uses several customizations thanks to Iosevka's special build
+     * process. It supports a lot of glyphs, including quite a bit of extended Latin, Greek, and Cyrillic, but also
+     * circled letters and digits and the necessary box drawing characters. The high glyph count means the part of the
+     * image for each glyph is smaller, though, so this may look slightly pixelated if it starts small and is resized to
+     * much larger. A cell width of 11 and cell height of 20 is ideal (or some approximate multiple of that aspect
+     * ratio); this allows the font to resize fairly well to larger sizes using Viewports.
+     * <br>
+     * Preview: http://i.imgur.com/5kb697p.png
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-distance.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-distance.png</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font Iosevka.ttf
+     */
+    public static TextCellFactory getStretchableSlabFont()
+    {
+        initialize();
+        if(instance.distanceSlab == null)
+        {
+            try {
+                instance.distanceSlab = new TextCellFactory()
+                        .fontDistanceField(distanceFieldSlab, distanceFieldSlabTexture);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.distanceSlab != null)
+            return instance.distanceSlab.copy();
+        return null;
+    }
+
+    /**
+     * Returns a TextCellFactory already configured to use a font with extremely wide Unicode support that should scale
+     * cleanly to many sizes. Caches the result for later calls. The font is DejaVu Sans Mono, a common font on Linux
+     * operating systems and a clean-looking, legible font, though it has some visual quirks like a "tail" on lower-case
+     * 'l', that take some getting used to. A possible requirement for this font is that the size of the text in a
+     * SquidPanel or SquidLayers may need to be increased 1-5 pixels past what the cell width and height are; this can
+     * be done with {@link SquidPanel#setTextSize(int, int)} or {@link SquidLayers#setTextSize(int, int)}, giving 1-2
+     * more than the cell width for x and 3-5 more than the cell height for y.
+     * <br>
+     * Preview: http://i.imgur.com/1haETOe.png
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/DejaVuSansMono-distance.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/DejaVuSansMono-distance.png</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font DejaVuSansMono.ttf
+     */
+    public static TextCellFactory getStretchableDejaVuFont()
+    {
+        initialize();
+        if(instance.distanceDejaVu == null)
+        {
+            try {
+                instance.distanceDejaVu = new TextCellFactory().fontDistanceField(distanceFieldDejaVu, distanceFieldDejaVuTexture);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.distanceDejaVu != null)
+            return instance.distanceDejaVu.copy();
+        return null;
+
+    }
+    /**
+     * Returns a TextCellFactory already configured to use a highly-decorative "alien-like" font that should scale
+     * cleanly to many sizes, and is a good fit for text used in science-fiction settings. Has excellent Latin script
+     * support, including enough to handle the rare characters used by Vietnamese, but does not support Cyrillic and has
+     * only very limited Greek support (e.g. no alpha or beta). This font looks better at larger sizes, and many small
+     * glyphs, including '^' and '`' will only be recognizable at a height of at least 24 and a width of at least 11 (in
+     * pixels). It may be ideal to use a larger size and scale this down, with a height of 64 and a width of about 28
+     * working well. A lot of glyphs may be somewhat hard to read at first. Caches the result for later calls.
+     * <br>
+     * This font has additional an license requirement, attribution to the original author of the font (using the
+     * nickname dialNforNinja); you should also attribute Elementalist, which is me (Tommy Ettinger), to note that not
+     * all of the changes in the font (which people may or may not prefer, but were done for better compatibility with
+     * SquidLib) were by the original author. The license file that the font was generated with is provided in the
+     * SquidLib assets, and you should include some form of attribution to dialNforNinja in your distribution and/or
+     * credits if you incorporate this font; the license file should be suitable in an open-source game. There are no
+     * other restrictions on the usage of this font (it can be used commercially, can be modified, etc.).
+     * <br>
+     * The font can be previewed here, http://fontstruct.com/fontstructions/show/1353674/galaxsea-starlight-mono-v3 ,
+     * with links to the font it was based on (v3 by dialNforNinja instead of v3.1 by Elementalist/Tommy Ettinger).
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work. This sets the smoothing multiplier to 1.2f by default, so
+     * <b>if you set the smoothing multiplier yourself, you should probably increase the amount by 20%</b> relative to
+     * other fonts' multipliers.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Galaxsea-Starlight-Mono-v3_1-distance.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Galaxsea-Starlight-Mono-v3_1-distance.png</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Galaxsea-Starlight-Mono-v3_1-license.txt</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font Galaxsea-Starlight-Mono-v3_1.ttf
+     */
+    public static TextCellFactory getStretchableSciFiFont()
+    {
+        initialize();
+        if(instance.distanceSciFi == null)
+        {
+            try {
+                instance.distanceSciFi = new TextCellFactory()
+                        .fontDistanceField(distanceFieldSciFi, distanceFieldSciFiTexture).setSmoothingMultiplier(1.2f);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.distanceSciFi != null)
+            return instance.distanceSciFi.copy();
+        return null;
+    }
     /**
      * Returns a TextCellFactory already configured to use a variable-width serif font that should look like the serif
      * fonts used in many novels' main texts, and that should scale cleanly to many sizes. Meant to be used in variable-
      * width displays like TextPanel. Caches the result for later calls.
+     * <br>
+     * Preview: http://i.imgur.com/eIYYt8C.png
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * distance field font technique this uses can work.
@@ -571,7 +730,7 @@ public class DefaultResources implements LifecycleListener {
         if (instance.distancePrint == null) {
             try {
                 instance.distancePrint = new TextCellFactory().fontDistanceField(distanceFieldPrint, distanceFieldPrintTexture)
-                        /* .setSmoothingMultiplier(0.4f) */.height(30).width(7);
+                        /* .setSmoothingMultiplier(0.4f) */.height(30).width(8);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -582,12 +741,49 @@ public class DefaultResources implements LifecycleListener {
     }
 
     /**
+     * Returns a TextCellFactory already configured to use a variable-width sans-serif font that should have a blocky,
+     * futuristic look (based on the font Orbitron), and that should scale cleanly to many sizes. Meant to be used in
+     * variable-width displays like TextPanel. Caches the result for later calls.
+     * <br>
+     * Preview: http://i.imgur.com/grJhoMs.png
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Orbitron-distance.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Orbitron-distance.png</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font Orbitron, by The League of Movable Type
+     */
+    public static TextCellFactory getStretchableOrbitFont() {
+        initialize();
+        if (instance.distanceOrbit == null) {
+            try {
+                instance.distanceOrbit = new TextCellFactory().setDirectionGlyph('ˆ')
+                        .fontDistanceField(distanceFieldOrbit, distanceFieldOrbitTexture)
+                        .setSmoothingMultiplier(1.3f).height(30).width(11);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.distanceOrbit != null)
+            return instance.distanceOrbit.copy();
+        return null;
+    }
+
+    /**
      * Returns a TextCellFactory already configured to use a variable-width sans-serif font that currently looks
      * slightly jumbled without certain layout features. Meant to be used in variable-width displays like TextPanel, but
      * currently you should prefer getStretchablePrintFont() for legibility. Caches the result for later calls.
      * <br>
+     * Preview: http://i.imgur.com/GF5qQxn.png
+     * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
-     * distance field font technique this uses can work.
+     * distance field font technique this uses can work. Sets the smoothing multiplier to 0.8f; if you set the smoothing
+     * multiplier yourself, it should be similarly smaller than what other fonts use (most fonts are 1.0, so multiplying
+     * whatever you would normally set the smoothing multiplier to by 0.8f should work).
      * <br>
      * Needs files:
      * <ul>
@@ -601,7 +797,7 @@ public class DefaultResources implements LifecycleListener {
         if (instance.distanceClean == null) {
             try {
                 instance.distanceClean = new TextCellFactory().fontDistanceField(distanceFieldClean, distanceFieldCleanTexture)
-                        .setSmoothingMultiplier(0.4f).height(30).width(7);
+                        .setSmoothingMultiplier(0.8f).height(30).width(5);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -760,7 +956,7 @@ public class DefaultResources implements LifecycleListener {
         }
         if(square2 != null) {
             square2.dispose();
-            square1 = null;
+            square2 = null;
         }
         if(smoothSquare != null) {
             smoothSquare.dispose();
@@ -782,6 +978,18 @@ public class DefaultResources implements LifecycleListener {
             typewriterDistanceNarrow.dispose();
             typewriterDistanceNarrow = null;
         }
+        if(distanceCode != null) {
+            distanceCode.dispose();
+            distanceCode = null;
+        }
+        if(distanceDejaVu != null) {
+            distanceDejaVu.dispose();
+            distanceDejaVu = null;
+        }
+        if(distanceSciFi != null) {
+            distanceSciFi.dispose();
+            distanceSciFi = null;
+        }
         if(distanceClean != null) {
             distanceClean.dispose();
             distanceClean = null;
@@ -789,6 +997,10 @@ public class DefaultResources implements LifecycleListener {
         if(distancePrint != null) {
             distancePrint.dispose();
             distancePrint = null;
+        }
+        if(distanceOrbit != null) {
+            distanceOrbit.dispose();
+            distanceOrbit = null;
         }
         if (unicode1 != null) {
             unicode1.dispose();

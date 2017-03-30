@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -206,6 +206,17 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>static &lt;K,V&gt;&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Maker.html#makeOM-float-K-V-java.lang.Object...-">makeOM</a></span>(float&nbsp;factor,
+      K&nbsp;k0,
+      V&nbsp;v0,
+      <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>...&nbsp;rest)</code>
+<div class="block">Makes an OrderedMap (OM) with the given load factor (which should be between 0.1 and 0.9), key and value types
+ inferred from the types of k0 and v0, and considers all remaining parameters key-value pairs, casting the Objects
+ at positions 0, 2, 4...</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>static &lt;K,V&gt;&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Maker.html#makeOM-K-V-java.lang.Object...-">makeOM</a></span>(K&nbsp;k0,
       V&nbsp;v0,
       <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>...&nbsp;rest)</code>
@@ -213,7 +224,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  parameters key-value pairs, casting the Objects at positions 0, 2, 4...</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static &lt;T&gt;&nbsp;<a href="../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;T&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Maker.html#makeOS-T...-">makeOS</a></span>(T...&nbsp;elements)</code>
 <div class="block">Makes a OrderedSet (OS) of T given an array or vararg of T elements.</div>
@@ -335,7 +346,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>makeList</h4>
-<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.90">makeList</a>(T...&nbsp;elements)</pre>
+<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.91">makeList</a>(T...&nbsp;elements)</pre>
 <div class="block">Makes an ArrayList of T given an array or vararg of T elements.</div>
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
@@ -355,7 +366,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>makeLHS</h4>
-<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/LinkedHashSet.html?is-external=true" title="class or interface in java.util">LinkedHashSet</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.104">makeLHS</a>(T...&nbsp;elements)</pre>
+<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/LinkedHashSet.html?is-external=true" title="class or interface in java.util">LinkedHashSet</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.106">makeLHS</a>(T...&nbsp;elements)</pre>
 <div class="block">Makes a LinkedHashSet (LHS) of T given an array or vararg of T elements. Duplicate items in elements will have
  all but one item discarded, using the later item in elements.</div>
 <dl>
@@ -376,7 +387,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>makeOM</h4>
-<pre>public static&nbsp;&lt;K,V&gt;&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.125">makeOM</a>(K&nbsp;k0,
+<pre>public static&nbsp;&lt;K,V&gt;&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.127">makeOM</a>(K&nbsp;k0,
                                            V&nbsp;v0,
                                            <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>...&nbsp;rest)</pre>
 <div class="block">Makes an OrderedMap (OM) with key and value types inferred from the types of k0 and v0, and considers all
@@ -386,9 +397,41 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  on the problematic pair to the static Maker.issueLog field.</div>
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
-<dd><code>K</code> - the type of keys in the returned LinkedHashMap; if not specified, will be inferred from k0</dd>
-<dd><code>V</code> - the type of values in the returned LinkedHashMap; if not specified, will be inferred from v0</dd>
+<dd><code>K</code> - the type of keys in the returned OrderedMap; if not specified, will be inferred from k0</dd>
+<dd><code>V</code> - the type of values in the returned OrderedMap; if not specified, will be inferred from v0</dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>k0</code> - the first key; used to infer the types of other keys if generic parameters aren't specified.</dd>
+<dd><code>v0</code> - the first value; used to infer the types of other values if generic parameters aren't specified.</dd>
+<dd><code>rest</code> - an array or vararg of keys and values in pairs; should contain alternating K, V, K, V... elements</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a freshly-made OrderedMap with K keys and V values, using k0, v0, and the contents of rest to fill it</dd>
+</dl>
+</li>
+</ul>
+<a name="makeOM-float-java.lang.Object-java.lang.Object-java.lang.Object:A-">
+<!--   -->
+</a><a name="makeOM-float-K-V-java.lang.Object...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>makeOM</h4>
+<pre>public static&nbsp;&lt;K,V&gt;&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.147">makeOM</a>(float&nbsp;factor,
+                                           K&nbsp;k0,
+                                           V&nbsp;v0,
+                                           <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>...&nbsp;rest)</pre>
+<div class="block">Makes an OrderedMap (OM) with the given load factor (which should be between 0.1 and 0.9), key and value types
+ inferred from the types of k0 and v0, and considers all remaining parameters key-value pairs, casting the Objects
+ at positions 0, 2, 4... etc. to K and the objects at positions 1, 3, 5... etc. to V. If rest has an odd-number
+ length, then it discards the last item. If any pair of items in rest cannot be cast to the correct type of K or
+ V, then this inserts nothing for that pair and logs information on the problematic pair to the static
+ Maker.issueLog field.</div>
+<dl>
+<dt><span class="paramLabel">Type Parameters:</span></dt>
+<dd><code>K</code> - the type of keys in the returned OrderedMap; if not specified, will be inferred from k0</dd>
+<dd><code>V</code> - the type of values in the returned OrderedMap; if not specified, will be inferred from v0</dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>factor</code> - the load factor; should be between 0.1 and 0.9, and 0.75f is a safe choice</dd>
 <dd><code>k0</code> - the first key; used to infer the types of other keys if generic parameters aren't specified.</dd>
 <dd><code>v0</code> - the first value; used to infer the types of other values if generic parameters aren't specified.</dd>
 <dd><code>rest</code> - an array or vararg of keys and values in pairs; should contain alternating K, V, K, V... elements</dd>
@@ -403,7 +446,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>makeOM</h4>
-<pre>public static&nbsp;&lt;K,V&gt;&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.166">makeOM</a>()</pre>
+<pre>public static&nbsp;&lt;K,V&gt;&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.188">makeOM</a>()</pre>
 <div class="block">Makes an empty OrderedMap (OM); needs key and value types to be specified in order to work. For an empty
  OrderedMap with String keys and Coord values, you could use <code>Maker.&lt;String, Coord&gt;makeOM();</code>. Using
  the new keyword is probably just as easy in this case; this method is provided for completeness relative to
@@ -425,7 +468,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>makeOS</h4>
-<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.178">makeOS</a>(T...&nbsp;elements)</pre>
+<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.201">makeOS</a>(T...&nbsp;elements)</pre>
 <div class="block">Makes a OrderedSet (OS) of T given an array or vararg of T elements. Duplicate items in elements will have
  all but one item discarded, using the later item in elements.</div>
 <dl>
@@ -507,6 +550,6 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

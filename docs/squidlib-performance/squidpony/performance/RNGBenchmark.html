@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":9,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":9,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../squidpony/performance/LOSBenchmark.html" title="class in squidpony.performance"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../squidpony/performance/NoiseBenchmark.html" title="class in squidpony.performance"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../squidpony/performance/WaypointBenchmark.html" title="class in squidpony.performance"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -109,7 +109,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.227">RNGBenchmark</a>
+<pre>public class <a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.246">RNGBenchmark</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">Benchmark                         Mode  Cnt            Score            Error  Units
  RNGBenchmark.measureLight         avgt    3   1275059037.000 ±   61737532.875  ns/op
@@ -285,7 +285,29 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  RNGBenchmark.measureXoRo         avgt    3  1182.115 ± 146.899  ms/op
  RNGBenchmark.measureXoRoInt      avgt    3  1382.232 ±  68.132  ms/op
  RNGBenchmark.measureXoRoIntR     avgt    3  1458.964 ±  10.307  ms/op
- RNGBenchmark.measureXoRoR        avgt    3  1249.812 ± 450.441  ms/op</div>
+ RNGBenchmark.measureXoRoR        avgt    3  1249.812 ± 450.441  ms/op
+
+ Benchmark                        Mode  Cnt     Score     Error  Units
+ RNGBenchmark.measureGDX          avgt    5  1443.180 ±  21.341  ms/op
+ RNGBenchmark.measureGDXInt       avgt    5  1389.316 ±  28.694  ms/op
+ RNGBenchmark.measureLight        avgt    5  1322.170 ±  17.512  ms/op
+ RNGBenchmark.measureLightInt     avgt    5  1321.347 ±   8.074  ms/op
+ RNGBenchmark.measureLightIntR    avgt    5  1497.184 ±  63.809  ms/op
+ RNGBenchmark.measureLightR       avgt    5  1319.403 ±  16.077  ms/op
+ RNGBenchmark.measurePermuted     avgt    5  1678.603 ±  19.053  ms/op
+ RNGBenchmark.measurePermutedInt  avgt    5  1759.054 ± 253.032  ms/op
+ RNGBenchmark.measurePint         avgt    5  4433.747 ±  12.294  ms/op
+ RNGBenchmark.measurePintInt      avgt    5  1788.244 ±  14.589  ms/op
+ RNGBenchmark.measurePintIntR     avgt    5  1791.904 ±  36.237  ms/op
+ RNGBenchmark.measurePintR        avgt    5  4581.224 ±  77.325  ms/op
+ RNGBenchmark.measureThunder      avgt    5   914.464 ±   6.066  ms/op
+ RNGBenchmark.measureThunderInt   avgt    5  1075.635 ±  19.411  ms/op
+ RNGBenchmark.measureThunderIntR  avgt    5  1156.366 ±  10.684  ms/op
+ RNGBenchmark.measureThunderR     avgt    5   992.199 ±   5.749  ms/op
+ RNGBenchmark.measureXoRo         avgt    5  1353.115 ±  14.770  ms/op
+ RNGBenchmark.measureXoRoInt      avgt    5  1440.937 ±  26.151  ms/op
+ RNGBenchmark.measureXoRoIntR     avgt    5  1551.285 ±  45.324  ms/op
+ RNGBenchmark.measureXoRoR        avgt    5  1415.288 ±  28.783  ms/op</div>
 </li>
 </ul>
 </div>
@@ -322,52 +344,52 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#a_measurePint--">a_measurePint</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doLFSR--">doLFSR</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#a_measurePintInt--">a_measurePintInt</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doLFSRInt--">doLFSRInt</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#a_measurePintIntR--">a_measurePintIntR</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doLFSRIntR--">doLFSRIntR</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#a_measurePintR--">a_measurePintR</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doLFSRR--">doLFSRR</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doChaosR--">doChaosR</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doLight--">doLight</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doChaosRInt--">doChaosRInt</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doLightInt--">doLightInt</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doGDX--">doGDX</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doLightIntR--">doLightIntR</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doGDXInt--">doGDXInt</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doLightR--">doLightR</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doLight--">doLight</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doPermuted--">doPermuted</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doLightInt--">doLightInt</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doPermutedInt--">doPermutedInt</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doLightIntR--">doLightIntR</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doPermutedIntR--">doPermutedIntR</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doLightR--">doLightR</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doPermutedR--">doPermutedR</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>long</code></td>
@@ -386,136 +408,72 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doPintR--">doPintR</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i16" class="altColor">
-<td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doRandom--">doRandom</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i17" class="rowColor">
-<td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doRandomInt--">doRandomInt</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i18" class="altColor">
-<td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doThreadLocalRandom--">doThreadLocalRandom</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i19" class="rowColor">
-<td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doThreadLocalRandomInt--">doThreadLocalRandomInt</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i20" class="altColor">
-<td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doThunder--">doThunder</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i21" class="rowColor">
-<td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doThunderInt--">doThunderInt</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i22" class="altColor">
-<td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doThunderIntR--">doThunderIntR</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i23" class="rowColor">
-<td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doThunderR--">doThunderR</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i24" class="altColor">
-<td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doXoRo--">doXoRo</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i25" class="rowColor">
-<td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doXoRoInt--">doXoRoInt</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i26" class="altColor">
-<td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doXoRoIntR--">doXoRoIntR</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i27" class="rowColor">
-<td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#doXoRoR--">doXoRoR</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i28" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#main-java.lang.String:A-">main</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)</code>&nbsp;</td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measureChaosR--">measureChaosR</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measureLFSR--">measureLFSR</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measureChaosRInt--">measureChaosRInt</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measureLFSRInt--">measureLFSRInt</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measureGDX--">measureGDX</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measureLFSRIntR--">measureLFSRIntR</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measureGDXInt--">measureGDXInt</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measureLFSRR--">measureLFSRR</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i33" class="rowColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measureLight--">measureLight</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i34" class="altColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measureLightInt--">measureLightInt</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i35" class="rowColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measureLightIntR--">measureLightIntR</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i36" class="altColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measureLightR--">measureLightR</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i37" class="rowColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measureRandom--">measureRandom</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measurePermuted--">measurePermuted</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i38" class="altColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measureRandomInt--">measureRandomInt</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measurePermutedInt--">measurePermutedInt</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i39" class="rowColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measureThreadLocalRandom--">measureThreadLocalRandom</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measurePermutedIntR--">measurePermutedIntR</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i40" class="altColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measureThreadLocalRandomInt--">measureThreadLocalRandomInt</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measurePermutedR--">measurePermutedR</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i41" class="rowColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measureThunder--">measureThunder</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measurePint--">measurePint</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i42" class="altColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measureThunderInt--">measureThunderInt</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measurePintInt--">measurePintInt</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i43" class="rowColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measureThunderIntR--">measureThunderIntR</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measurePintIntR--">measurePintIntR</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i44" class="altColor">
+<tr id="i32" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measureThunderR--">measureThunderR</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i45" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measureXoRo--">measureXoRo</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i46" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measureXoRoInt--">measureXoRoInt</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i47" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measureXoRoIntR--">measureXoRoIntR</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i48" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measureXoRoR--">measureXoRoR</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/performance/RNGBenchmark.html#measurePintR--">measurePintR</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -545,7 +503,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>RNGBenchmark</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.227">RNGBenchmark</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.246">RNGBenchmark</a>()</pre>
 </li>
 </ul>
 </li>
@@ -562,17 +520,17 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doPint</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.232">doPint</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.251">doPint</a>()</pre>
 </li>
 </ul>
-<a name="a_measurePint--">
+<a name="measurePint--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>a_measurePint</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.245">a_measurePint</a>()
-                   throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
+<h4>measurePint</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.264">measurePint</a>()
+                 throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>
@@ -585,17 +543,17 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doPintInt</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.250">doPintInt</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.269">doPintInt</a>()</pre>
 </li>
 </ul>
-<a name="a_measurePintInt--">
+<a name="measurePintInt--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>a_measurePintInt</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.263">a_measurePintInt</a>()
-                      throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
+<h4>measurePintInt</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.282">measurePintInt</a>()
+                    throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>
@@ -608,17 +566,17 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doPintR</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.267">doPintR</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.286">doPintR</a>()</pre>
 </li>
 </ul>
-<a name="a_measurePintR--">
+<a name="measurePintR--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>a_measurePintR</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.280">a_measurePintR</a>()
-                    throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
+<h4>measurePintR</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.299">measurePintR</a>()
+                  throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>
@@ -631,200 +589,16 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doPintIntR</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.285">doPintIntR</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.304">doPintIntR</a>()</pre>
 </li>
 </ul>
-<a name="a_measurePintIntR--">
+<a name="measurePintIntR--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>a_measurePintIntR</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.298">a_measurePintIntR</a>()
-                       throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="doThunder--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>doThunder</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.303">doThunder</a>()</pre>
-</li>
-</ul>
-<a name="measureThunder--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>measureThunder</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.316">measureThunder</a>()
-                    throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="doThunderInt--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>doThunderInt</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.321">doThunderInt</a>()</pre>
-</li>
-</ul>
-<a name="measureThunderInt--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>measureThunderInt</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.334">measureThunderInt</a>()
-                       throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="doThunderR--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>doThunderR</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.338">doThunderR</a>()</pre>
-</li>
-</ul>
-<a name="measureThunderR--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>measureThunderR</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.351">measureThunderR</a>()
-                     throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="doThunderIntR--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>doThunderIntR</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.356">doThunderIntR</a>()</pre>
-</li>
-</ul>
-<a name="measureThunderIntR--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>measureThunderIntR</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.369">measureThunderIntR</a>()
-                        throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="doXoRo--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>doXoRo</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.374">doXoRo</a>()</pre>
-</li>
-</ul>
-<a name="measureXoRo--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>measureXoRo</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.386">measureXoRo</a>()
-                 throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="doXoRoInt--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>doXoRoInt</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.391">doXoRoInt</a>()</pre>
-</li>
-</ul>
-<a name="measureXoRoInt--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>measureXoRoInt</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.402">measureXoRoInt</a>()
-                    throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="doXoRoR--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>doXoRoR</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.407">doXoRoR</a>()</pre>
-</li>
-</ul>
-<a name="measureXoRoR--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>measureXoRoR</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.419">measureXoRoR</a>()
-                  throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="doXoRoIntR--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>doXoRoIntR</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.424">doXoRoIntR</a>()</pre>
-</li>
-</ul>
-<a name="measureXoRoIntR--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>measureXoRoIntR</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.435">measureXoRoIntR</a>()
+<h4>measurePintIntR</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.317">measurePintIntR</a>()
                      throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -838,7 +612,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doLight</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.440">doLight</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.459">doLight</a>()</pre>
 </li>
 </ul>
 <a name="measureLight--">
@@ -847,7 +621,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureLight</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.453">measureLight</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.472">measureLight</a>()
                   throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -861,7 +635,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doLightInt</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.458">doLightInt</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.477">doLightInt</a>()</pre>
 </li>
 </ul>
 <a name="measureLightInt--">
@@ -870,7 +644,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureLightInt</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.471">measureLightInt</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.490">measureLightInt</a>()
                      throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -884,7 +658,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doLightR</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.475">doLightR</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.494">doLightR</a>()</pre>
 </li>
 </ul>
 <a name="measureLightR--">
@@ -893,7 +667,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureLightR</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.488">measureLightR</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.507">measureLightR</a>()
                    throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -907,7 +681,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doLightIntR</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.493">doLightIntR</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.512">doLightIntR</a>()</pre>
 </li>
 </ul>
 <a name="measureLightIntR--">
@@ -916,7 +690,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>measureLightIntR</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.506">measureLightIntR</a>()
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.525">measureLightIntR</a>()
                       throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -924,45 +698,68 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="doChaosR--">
+<a name="doPermuted--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>doChaosR</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.682">doChaosR</a>()</pre>
+<h4>doPermuted</h4>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.568">doPermuted</a>()</pre>
 </li>
 </ul>
-<a name="measureChaosR--">
+<a name="measurePermuted--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>measureChaosR</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.696">measureChaosR</a>()
-                   throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
+<h4>measurePermuted</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.580">measurePermuted</a>()
+                     throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>
 </dl>
 </li>
 </ul>
-<a name="doChaosRInt--">
+<a name="doPermutedInt--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>doChaosRInt</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.701">doChaosRInt</a>()</pre>
+<h4>doPermutedInt</h4>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.585">doPermutedInt</a>()</pre>
 </li>
 </ul>
-<a name="measureChaosRInt--">
+<a name="measurePermutedInt--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>measureChaosRInt</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.715">measureChaosRInt</a>()
+<h4>measurePermutedInt</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.596">measurePermutedInt</a>()
+                        throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="doPermutedR--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>doPermutedR</h4>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.601">doPermutedR</a>()</pre>
+</li>
+</ul>
+<a name="measurePermutedR--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>measurePermutedR</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.613">measurePermutedR</a>()
                       throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -970,138 +767,115 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="doThreadLocalRandom--">
+<a name="doPermutedIntR--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>doThreadLocalRandom</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.719">doThreadLocalRandom</a>()</pre>
+<h4>doPermutedIntR</h4>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.618">doPermutedIntR</a>()</pre>
 </li>
 </ul>
-<a name="measureThreadLocalRandom--">
+<a name="measurePermutedIntR--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>measureThreadLocalRandom</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.733">measureThreadLocalRandom</a>()
-                              throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
+<h4>measurePermutedIntR</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.629">measurePermutedIntR</a>()
+                         throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>
 </dl>
 </li>
 </ul>
-<a name="doThreadLocalRandomInt--">
+<a name="doLFSR--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>doThreadLocalRandomInt</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.738">doThreadLocalRandomInt</a>()</pre>
+<h4>doLFSR</h4>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.635">doLFSR</a>()</pre>
 </li>
 </ul>
-<a name="measureThreadLocalRandomInt--">
+<a name="measureLFSR--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>measureThreadLocalRandomInt</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.752">measureThreadLocalRandomInt</a>()
-                                 throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
+<h4>measureLFSR</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.648">measureLFSR</a>()
+                 throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>
 </dl>
 </li>
 </ul>
-<a name="doRandom--">
+<a name="doLFSRInt--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>doRandom</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.756">doRandom</a>()</pre>
+<h4>doLFSRInt</h4>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.653">doLFSRInt</a>()</pre>
 </li>
 </ul>
-<a name="measureRandom--">
+<a name="measureLFSRInt--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>measureRandom</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.769">measureRandom</a>()
-                   throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
+<h4>measureLFSRInt</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.666">measureLFSRInt</a>()
+                    throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>
 </dl>
 </li>
 </ul>
-<a name="doRandomInt--">
+<a name="doLFSRR--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>doRandomInt</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.774">doRandomInt</a>()</pre>
+<h4>doLFSRR</h4>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.670">doLFSRR</a>()</pre>
 </li>
 </ul>
-<a name="measureRandomInt--">
+<a name="measureLFSRR--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>measureRandomInt</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.787">measureRandomInt</a>()
-                      throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
+<h4>measureLFSRR</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.683">measureLFSRR</a>()
+                  throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>
 </dl>
 </li>
 </ul>
-<a name="doGDX--">
+<a name="doLFSRIntR--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>doGDX</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.794">doGDX</a>()</pre>
+<h4>doLFSRIntR</h4>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.688">doLFSRIntR</a>()</pre>
 </li>
 </ul>
-<a name="measureGDX--">
+<a name="measureLFSRIntR--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>measureGDX</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.807">measureGDX</a>()
-                throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="doGDXInt--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>doGDXInt</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.812">doGDXInt</a>()</pre>
-</li>
-</ul>
-<a name="measureGDXInt--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>measureGDXInt</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.825">measureGDXInt</a>()
-                   throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
+<h4>measureLFSRIntR</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.701">measureLFSRIntR</a>()
+                     throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>
@@ -1114,7 +888,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>main</h4>
-<pre>public static&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.1030">main</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)
+<pre>public static&nbsp;void&nbsp;<a href="../../src-html/squidpony/performance/RNGBenchmark.html#line.1120">main</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)
                  throws org.openjdk.jmh.runner.RunnerException</pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -1150,7 +924,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../squidpony/performance/LOSBenchmark.html" title="class in squidpony.performance"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../squidpony/performance/NoiseBenchmark.html" title="class in squidpony.performance"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../squidpony/performance/WaypointBenchmark.html" title="class in squidpony.performance"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -1191,6 +965,6 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

@@ -83,24 +83,30 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><a href="#squidpony.squidai">squidpony.squidai</a></td>
+<td class="colLast">
+<div class="block">Tools for finding paths, optimizing targets for area-of-effect (AOE) abilities, and evaluating influence on a grid.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#squidpony.squidgrid">squidpony.squidgrid</a></td>
 <td class="colLast">
 <div class="block">Tools for working with data on a grid, including LOS and FOV; overlaps with geometry code in squidpony.squidmath .</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#squidpony.squidgrid.iterator">squidpony.squidgrid.iterator</a></td>
 <td class="colLast">
 <div class="block">Iterators that allow traversal of squidpony.squidmath.Coord points on a map's grid.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#squidpony.squidgrid.mapping">squidpony.squidgrid.mapping</a></td>
 <td class="colLast">
 <div class="block">Tools specifically for generating maps and placing content in them, usually working with 2D char arrays.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#squidpony.squidmath">squidpony.squidmath</a></td>
 <td class="colLast">
 <div class="block">A very broad package containing random number generators, geometry tools, and some classes for combinatorics.</div>
@@ -111,6 +117,24 @@
 </li>
 <li class="blockList">
 <ul class="blockList">
+<li class="blockList"><a name="squidpony.squidai">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a> in <a href="../../../squidpony/squidai/package-summary.html">squidpony.squidai</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../squidpony/squidai/package-summary.html">squidpony.squidai</a> with parameters of type <a href="../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><span class="typeNameLabel">DijkstraMap.Measurement.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.Measurement.html#heuristic-squidpony.squidgrid.Direction-">heuristic</a></span>(<a href="../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>&nbsp;target)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="squidpony.squidgrid">
 <!--   -->
 </a>
@@ -139,6 +163,14 @@
 <td class="colLast"><span class="typeNameLabel">Direction.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/Direction.html#CARDINALS_COUNTERCLOCKWISE">CARDINALS_COUNTERCLOCKWISE</a></span></code>
 <div class="block">An array which holds only the four cardinal directions in counter-clockwise order.</div>
 </td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected static <a href="../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>[]</code></td>
+<td class="colLast"><span class="typeNameLabel">FOV.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/FOV.html#ccw">ccw</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected static <a href="../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>[]</code></td>
+<td class="colLast"><span class="typeNameLabel">FOV.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/FOV.html#ccw_full">ccw_full</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>[]</code></td>
@@ -315,6 +347,19 @@ the order they are declared.</div>
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a> in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> declared as <a href="../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>[]</code></td>
+<td class="colLast"><span class="typeNameLabel">AStarSearch.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/AStarSearch.html#dirs">dirs</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
 <caption><span>Methods in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> that return <a href="../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -396,6 +441,6 @@ the order they are declared.</div>
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

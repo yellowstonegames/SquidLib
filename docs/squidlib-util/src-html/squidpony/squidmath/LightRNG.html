@@ -73,7 +73,7 @@
 <span class="sourceLineNo">065</span>    }<a name="line.65"></a>
 <span class="sourceLineNo">066</span><a name="line.66"></a>
 <span class="sourceLineNo">067</span>    @Override<a name="line.67"></a>
-<span class="sourceLineNo">068</span>    public int next( int bits ) {<a name="line.68"></a>
+<span class="sourceLineNo">068</span>    public final int next( int bits ) {<a name="line.68"></a>
 <span class="sourceLineNo">069</span>        return (int)( nextLong() &amp; ( 1L &lt;&lt; bits ) - 1 );<a name="line.69"></a>
 <span class="sourceLineNo">070</span>    }<a name="line.70"></a>
 <span class="sourceLineNo">071</span><a name="line.71"></a>
@@ -82,7 +82,7 @@
 <span class="sourceLineNo">074</span>     * @return any long, all 64 bits are random<a name="line.74"></a>
 <span class="sourceLineNo">075</span>     */<a name="line.75"></a>
 <span class="sourceLineNo">076</span>    @Override<a name="line.76"></a>
-<span class="sourceLineNo">077</span>    public long nextLong() {<a name="line.77"></a>
+<span class="sourceLineNo">077</span>    public final long nextLong() {<a name="line.77"></a>
 <span class="sourceLineNo">078</span>        long z = state += 0x9E3779B97F4A7C15L;<a name="line.78"></a>
 <span class="sourceLineNo">079</span>        z = (z ^ (z &gt;&gt;&gt; 30)) * 0xBF58476D1CE4E5B9L;<a name="line.79"></a>
 <span class="sourceLineNo">080</span>        z = (z ^ (z &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.80"></a>
@@ -191,7 +191,7 @@
 <span class="sourceLineNo">183</span>     * @return a random true or false value.<a name="line.183"></a>
 <span class="sourceLineNo">184</span>     */<a name="line.184"></a>
 <span class="sourceLineNo">185</span>    public boolean nextBoolean() {<a name="line.185"></a>
-<span class="sourceLineNo">186</span>        return ( nextLong() &amp; 1 ) != 0L;<a name="line.186"></a>
+<span class="sourceLineNo">186</span>        return nextLong() &lt; 0L;<a name="line.186"></a>
 <span class="sourceLineNo">187</span>    }<a name="line.187"></a>
 <span class="sourceLineNo">188</span><a name="line.188"></a>
 <span class="sourceLineNo">189</span>    /**<a name="line.189"></a>
@@ -234,38 +234,64 @@
 <span class="sourceLineNo">226</span>    }<a name="line.226"></a>
 <span class="sourceLineNo">227</span><a name="line.227"></a>
 <span class="sourceLineNo">228</span>    /**<a name="line.228"></a>
-<span class="sourceLineNo">229</span>     * Advances or rolls back the LightRNG's state without actually generating numbers. Skip forward<a name="line.229"></a>
-<span class="sourceLineNo">230</span>     * or backward a number of steps specified by advance, where a step is equal to one call to nextInt().<a name="line.230"></a>
-<span class="sourceLineNo">231</span>     * @param advance Number of future generations to skip past. Can be negative to backtrack.<a name="line.231"></a>
-<span class="sourceLineNo">232</span>     * @return the state after skipping.<a name="line.232"></a>
-<span class="sourceLineNo">233</span>     */<a name="line.233"></a>
-<span class="sourceLineNo">234</span>    public long skip(long advance)<a name="line.234"></a>
-<span class="sourceLineNo">235</span>    {<a name="line.235"></a>
-<span class="sourceLineNo">236</span>        return state += 0x9E3779B97F4A7C15L * advance;<a name="line.236"></a>
-<span class="sourceLineNo">237</span>    }<a name="line.237"></a>
-<span class="sourceLineNo">238</span><a name="line.238"></a>
-<span class="sourceLineNo">239</span><a name="line.239"></a>
-<span class="sourceLineNo">240</span>    @Override<a name="line.240"></a>
-<span class="sourceLineNo">241</span>    public String toString() {<a name="line.241"></a>
-<span class="sourceLineNo">242</span>        return "LightRNG with state 0x" + StringKit.hex(state) + 'L';<a name="line.242"></a>
-<span class="sourceLineNo">243</span>    }<a name="line.243"></a>
-<span class="sourceLineNo">244</span><a name="line.244"></a>
-<span class="sourceLineNo">245</span>    @Override<a name="line.245"></a>
-<span class="sourceLineNo">246</span>    public boolean equals(Object o) {<a name="line.246"></a>
-<span class="sourceLineNo">247</span>        if (this == o) return true;<a name="line.247"></a>
-<span class="sourceLineNo">248</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.248"></a>
-<span class="sourceLineNo">249</span><a name="line.249"></a>
-<span class="sourceLineNo">250</span>        LightRNG lightRNG = (LightRNG) o;<a name="line.250"></a>
-<span class="sourceLineNo">251</span><a name="line.251"></a>
-<span class="sourceLineNo">252</span>        return state == lightRNG.state;<a name="line.252"></a>
+<span class="sourceLineNo">229</span>     * Advances or rolls back the LightRNG's state without actually generating each number. Skip forward<a name="line.229"></a>
+<span class="sourceLineNo">230</span>     * or backward a number of steps specified by advance, where a step is equal to one call to nextLong(),<a name="line.230"></a>
+<span class="sourceLineNo">231</span>     * and returns the random number produced at that step (you can get the state with {@link #getState()}).<a name="line.231"></a>
+<span class="sourceLineNo">232</span>     *<a name="line.232"></a>
+<span class="sourceLineNo">233</span>     * @param advance Number of future generations to skip over; can be negative to backtrack, 0 gets the most recent generated number<a name="line.233"></a>
+<span class="sourceLineNo">234</span>     * @return the random long generated after skipping advance numbers<a name="line.234"></a>
+<span class="sourceLineNo">235</span>     */<a name="line.235"></a>
+<span class="sourceLineNo">236</span>    public long skip(long advance) {<a name="line.236"></a>
+<span class="sourceLineNo">237</span>        long z = (state += 0x9E3779B97F4A7C15L * advance);<a name="line.237"></a>
+<span class="sourceLineNo">238</span>        z = (z ^ (z &gt;&gt;&gt; 30)) * 0xBF58476D1CE4E5B9L;<a name="line.238"></a>
+<span class="sourceLineNo">239</span>        z = (z ^ (z &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.239"></a>
+<span class="sourceLineNo">240</span>        return z ^ (z &gt;&gt;&gt; 31);<a name="line.240"></a>
+<span class="sourceLineNo">241</span>    }<a name="line.241"></a>
+<span class="sourceLineNo">242</span><a name="line.242"></a>
+<span class="sourceLineNo">243</span><a name="line.243"></a>
+<span class="sourceLineNo">244</span>    @Override<a name="line.244"></a>
+<span class="sourceLineNo">245</span>    public String toString() {<a name="line.245"></a>
+<span class="sourceLineNo">246</span>        return "LightRNG with state 0x" + StringKit.hex(state) + 'L';<a name="line.246"></a>
+<span class="sourceLineNo">247</span>    }<a name="line.247"></a>
+<span class="sourceLineNo">248</span><a name="line.248"></a>
+<span class="sourceLineNo">249</span>    @Override<a name="line.249"></a>
+<span class="sourceLineNo">250</span>    public boolean equals(Object o) {<a name="line.250"></a>
+<span class="sourceLineNo">251</span>        if (this == o) return true;<a name="line.251"></a>
+<span class="sourceLineNo">252</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.252"></a>
 <span class="sourceLineNo">253</span><a name="line.253"></a>
-<span class="sourceLineNo">254</span>    }<a name="line.254"></a>
+<span class="sourceLineNo">254</span>        LightRNG lightRNG = (LightRNG) o;<a name="line.254"></a>
 <span class="sourceLineNo">255</span><a name="line.255"></a>
-<span class="sourceLineNo">256</span>    @Override<a name="line.256"></a>
-<span class="sourceLineNo">257</span>    public int hashCode() {<a name="line.257"></a>
-<span class="sourceLineNo">258</span>        return (int) (state ^ (state &gt;&gt;&gt; 32));<a name="line.258"></a>
-<span class="sourceLineNo">259</span>    }<a name="line.259"></a>
-<span class="sourceLineNo">260</span>}<a name="line.260"></a>
+<span class="sourceLineNo">256</span>        return state == lightRNG.state;<a name="line.256"></a>
+<span class="sourceLineNo">257</span>    }<a name="line.257"></a>
+<span class="sourceLineNo">258</span><a name="line.258"></a>
+<span class="sourceLineNo">259</span>    @Override<a name="line.259"></a>
+<span class="sourceLineNo">260</span>    public int hashCode() {<a name="line.260"></a>
+<span class="sourceLineNo">261</span>        return (int) (state ^ (state &gt;&gt;&gt; 32));<a name="line.261"></a>
+<span class="sourceLineNo">262</span>    }<a name="line.262"></a>
+<span class="sourceLineNo">263</span><a name="line.263"></a>
+<span class="sourceLineNo">264</span>    public static long determine(long state)<a name="line.264"></a>
+<span class="sourceLineNo">265</span>    {<a name="line.265"></a>
+<span class="sourceLineNo">266</span>        state = (((state += 0x9E3779B97F4A7C15L) &gt;&gt;&gt; 30) ^ state) * 0xBF58476D1CE4E5B9L;<a name="line.266"></a>
+<span class="sourceLineNo">267</span>        state = (state ^ (state &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.267"></a>
+<span class="sourceLineNo">268</span>        return state ^ (state &gt;&gt;&gt; 31);<a name="line.268"></a>
+<span class="sourceLineNo">269</span>    }<a name="line.269"></a>
+<span class="sourceLineNo">270</span><a name="line.270"></a>
+<span class="sourceLineNo">271</span>    public static long determine(final int a, final int b)<a name="line.271"></a>
+<span class="sourceLineNo">272</span>    {<a name="line.272"></a>
+<span class="sourceLineNo">273</span>        long state = 0x9E3779B97F4A7C15L + (a &amp; 0xFFFFFFFFL) + ((long)b &lt;&lt; 32);<a name="line.273"></a>
+<span class="sourceLineNo">274</span>        state = ((state &gt;&gt;&gt; 30) ^ state) * 0xBF58476D1CE4E5B9L;<a name="line.274"></a>
+<span class="sourceLineNo">275</span>        state = (state ^ (state &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.275"></a>
+<span class="sourceLineNo">276</span>        return state ^ (state &gt;&gt;&gt; 31);<a name="line.276"></a>
+<span class="sourceLineNo">277</span>    }<a name="line.277"></a>
+<span class="sourceLineNo">278</span><a name="line.278"></a>
+<span class="sourceLineNo">279</span>    public static int determineBounded(long state, final int bound)<a name="line.279"></a>
+<span class="sourceLineNo">280</span>    {<a name="line.280"></a>
+<span class="sourceLineNo">281</span>        state = (((state += 0x9E3779B97F4A7C15L) &gt;&gt;&gt; 30) ^ state) * 0xBF58476D1CE4E5B9L;<a name="line.281"></a>
+<span class="sourceLineNo">282</span>        state = (state ^ (state &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.282"></a>
+<span class="sourceLineNo">283</span>        return (int)((bound * ((state ^ (state &gt;&gt;&gt; 31)) &amp; 0x7FFFFFFFL)) &gt;&gt;&gt; 31);<a name="line.283"></a>
+<span class="sourceLineNo">284</span>    }<a name="line.284"></a>
+<span class="sourceLineNo">285</span><a name="line.285"></a>
+<span class="sourceLineNo">286</span>}<a name="line.286"></a>
 
 
 

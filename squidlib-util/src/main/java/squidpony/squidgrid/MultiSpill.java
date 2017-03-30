@@ -3,9 +3,7 @@ package squidpony.squidgrid;
 import squidpony.squidgrid.Spill.Measurement;
 import squidpony.squidmath.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A randomized flood-fill implementation that can be used for level generation (e.g. filling ponds and lakes), for
@@ -136,7 +134,7 @@ public class MultiSpill {
     }
 
     /**
-     * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
      * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here.
@@ -149,7 +147,7 @@ public class MultiSpill {
         initialize(level);
     }
     /**
-     * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
      * char[][] where one char means a wall and anything else is a walkable tile. If you only have
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here. You can specify the character used for walls.
@@ -164,7 +162,7 @@ public class MultiSpill {
     }
 
     /**
-     * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
      * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here. This constructor specifies a distance measurement.
@@ -179,7 +177,7 @@ public class MultiSpill {
         initialize(level);
     }
     /**
-     * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
      * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here. This constructor specifies a distance measurement.
@@ -345,15 +343,15 @@ public class MultiSpill {
      *
      * @param entries the first cell for each spiller to spread from, which should really be passable.
      * @param volume the total number of cells to attempt to fill; if negative will fill the whole map.
-     * @param impassable a Set of Position keys representing the locations of moving obstacles to a
-     *                   fill that cannot be moved through; this can be null if there are no such obstacles.
+     * @param impassable a Collection, ideally a Set or GreasedRegion, holding Coord items representing the locations of
+     *                   moving obstacles to a fill that cannot be moved through; null means no obstacles exist.
      * @return an ArrayList of Points that this will enter, in order starting with entry at index 0, until it
      * reaches its volume or fills its boundaries completely.
      */
-    public ArrayList<ArrayList<Coord>> start(List<Coord> entries, int volume, Set<Coord> impassable) {
+    public ArrayList<ArrayList<Coord>> start(List<Coord> entries, int volume, Collection<Coord> impassable) {
         if(!initialized) return null;
         if(impassable == null)
-            impassable = new OrderedSet<>();
+            impassable = Collections.emptySet();
         if(volume < 0)
             volume = Integer.MAX_VALUE;
         ArrayList<Coord> spillers = new ArrayList<>(entries);
@@ -363,7 +361,7 @@ public class MultiSpill {
         boolean hasFresh = false;
         for (short i = 0; i < spillers.size(); i++) {
             spreadPattern.add(new ArrayList<Coord>(128));
-            OrderedSet<Coord> os = new OrderedSet<Coord>(128);
+            OrderedSet<Coord> os = new OrderedSet<>(128);
             fresh.add(os);
             Coord c = spillers.get(i);
             spillMap[c.x][c.y] = i;
@@ -425,15 +423,15 @@ public class MultiSpill {
      * @param entries key: the first cell for each spiller to spread from. value: the bias toward advancing this key;
      *                1.0 will always advance, 0.0 will never advance beyond the key, in between will randomly choose
      * @param volume the total number of cells to attempt to fill; if negative will fill the whole map.
-     * @param impassable a Set of Position keys representing the locations of moving obstacles to a
-     *                   fill that cannot be moved through; this can be null if there are no such obstacles.
+     * @param impassable a Collection, ideally a Set or GreasedRegion, holding Coord items representing the locations of
+     *                   moving obstacles to a fill that cannot be moved through; null means no obstacles exist.
      * @return an ArrayList of Points that this will enter, in order starting with entry at index 0, until it
      * reaches its volume or fills its boundaries completely.
      */
-    public ArrayList<ArrayList<Coord>> start(OrderedMap<Coord, Double> entries, int volume, Set<Coord> impassable) {
+    public ArrayList<ArrayList<Coord>> start(OrderedMap<Coord, Double> entries, int volume, Collection<Coord> impassable) {
         if(!initialized || entries == null) return null;
         if(impassable == null)
-            impassable = new OrderedSet<>();
+            impassable = Collections.emptySet();
         if(volume < 0)
             volume = Integer.MAX_VALUE;
         int sz = entries.size();

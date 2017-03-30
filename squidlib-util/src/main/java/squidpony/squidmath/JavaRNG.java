@@ -4,10 +4,14 @@ import java.io.Serializable;
 import java.util.Random;
 
 /**
- * This makes java.util.Random available in SquidLib.
- * It is relevant mainly as example code
- * or if you want to compare what your results would have been
- * without using a better RNG.
+ * This makes java.util.Random available for testing purposes.
+ * It is relevant mainly as example code, or if you want to
+ * compare what your results would have been without using a
+ * better RNG. Results might not be apparent in some cases,
+ * although the terrible performance of java.util.Random is
+ * likely to be the first thing a user notices if this is
+ * used heavily (i.e. to generate white noise with one call
+ * to {@link #nextDouble()} per cell).
  * @author Ben McLean
  */
 public class JavaRNG implements RandomnessSource, Serializable
@@ -71,12 +75,21 @@ public class JavaRNG implements RandomnessSource, Serializable
 
     @Override
     public String toString() {
-        return "Java.util.Random in JavaRNG";
+        return "JavaRNG wrapping java.util.Random with id " + System.identityHashCode(random);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        return false;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        JavaRNG javaRNG = (JavaRNG) o;
+
+        return random.equals(javaRNG.random);
+    }
+
+    @Override
+    public int hashCode() {
+        return random.hashCode() * 31;
     }
 }

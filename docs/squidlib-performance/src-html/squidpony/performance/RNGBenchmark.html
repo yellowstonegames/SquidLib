@@ -39,490 +39,490 @@
 <span class="sourceLineNo">031</span><a name="line.31"></a>
 <span class="sourceLineNo">032</span>package squidpony.performance;<a name="line.32"></a>
 <span class="sourceLineNo">033</span><a name="line.33"></a>
-<span class="sourceLineNo">034</span>import com.badlogic.gdx.math.RandomXS128;<a name="line.34"></a>
-<span class="sourceLineNo">035</span>import org.openjdk.jmh.annotations.Benchmark;<a name="line.35"></a>
-<span class="sourceLineNo">036</span>import org.openjdk.jmh.annotations.BenchmarkMode;<a name="line.36"></a>
-<span class="sourceLineNo">037</span>import org.openjdk.jmh.annotations.Mode;<a name="line.37"></a>
-<span class="sourceLineNo">038</span>import org.openjdk.jmh.annotations.OutputTimeUnit;<a name="line.38"></a>
-<span class="sourceLineNo">039</span>import org.openjdk.jmh.runner.Runner;<a name="line.39"></a>
-<span class="sourceLineNo">040</span>import org.openjdk.jmh.runner.RunnerException;<a name="line.40"></a>
-<span class="sourceLineNo">041</span>import org.openjdk.jmh.runner.options.Options;<a name="line.41"></a>
-<span class="sourceLineNo">042</span>import org.openjdk.jmh.runner.options.OptionsBuilder;<a name="line.42"></a>
-<span class="sourceLineNo">043</span>import org.openjdk.jmh.runner.options.TimeValue;<a name="line.43"></a>
-<span class="sourceLineNo">044</span>import squidpony.squidmath.*;<a name="line.44"></a>
-<span class="sourceLineNo">045</span><a name="line.45"></a>
-<span class="sourceLineNo">046</span>import java.util.Random;<a name="line.46"></a>
-<span class="sourceLineNo">047</span>import java.util.concurrent.ThreadLocalRandom;<a name="line.47"></a>
-<span class="sourceLineNo">048</span>import java.util.concurrent.TimeUnit;<a name="line.48"></a>
-<span class="sourceLineNo">049</span><a name="line.49"></a>
-<span class="sourceLineNo">050</span>/**<a name="line.50"></a>
-<span class="sourceLineNo">051</span> * Benchmark                         Mode  Cnt            Score            Error  Units<a name="line.51"></a>
-<span class="sourceLineNo">052</span> * RNGBenchmark.measureLight         avgt    3   1275059037.000 ±   61737532.875  ns/op<a name="line.52"></a>
-<span class="sourceLineNo">053</span> * RNGBenchmark.measureLightInt      avgt    3   1278703443.000 ±   66201423.790  ns/op<a name="line.53"></a>
-<span class="sourceLineNo">054</span> * RNGBenchmark.measureLightIntR     avgt    3   1427303028.000 ±  200958011.322  ns/op<a name="line.54"></a>
-<span class="sourceLineNo">055</span> * RNGBenchmark.measureLightR        avgt    3   1269081959.667 ±   86190018.925  ns/op<a name="line.55"></a>
-<span class="sourceLineNo">056</span> * RNGBenchmark.measureMT            avgt    3  43085766002.333 ± 2268888793.171  ns/op<a name="line.56"></a>
-<span class="sourceLineNo">057</span> * RNGBenchmark.measureMTInt         avgt    3  22167143778.000 ±  828756142.658  ns/op<a name="line.57"></a>
-<span class="sourceLineNo">058</span> * RNGBenchmark.measureMTIntR        avgt    3  22132403458.000 ±  383655518.387  ns/op<a name="line.58"></a>
-<span class="sourceLineNo">059</span> * RNGBenchmark.measureMTR           avgt    3  43006069307.000 ± 2473850311.634  ns/op<a name="line.59"></a>
-<span class="sourceLineNo">060</span> * RNGBenchmark.measurePermuted      avgt    3   1637032592.333 ±   59199840.006  ns/op<a name="line.60"></a>
-<span class="sourceLineNo">061</span> * RNGBenchmark.measurePermutedInt   avgt    3   1734496732.000 ±   93718940.208  ns/op<a name="line.61"></a>
-<span class="sourceLineNo">062</span> * RNGBenchmark.measurePermutedIntR  avgt    3   1737075300.667 ±  241897619.330  ns/op<a name="line.62"></a>
-<span class="sourceLineNo">063</span> * RNGBenchmark.measurePermutedR     avgt    3   1668389798.667 ±  378429094.045  ns/op<a name="line.63"></a>
-<span class="sourceLineNo">064</span> * RNGBenchmark.measureRandom        avgt    3  22703702167.000 ±  392502237.818  ns/op<a name="line.64"></a>
-<span class="sourceLineNo">065</span> * RNGBenchmark.measureRandomInt     avgt    3  12593739050.667 ±  197683615.906  ns/op<a name="line.65"></a>
-<span class="sourceLineNo">066</span> * RNGBenchmark.measureXor           avgt    3   1384086605.000 ±  174305317.575  ns/op<a name="line.66"></a>
-<span class="sourceLineNo">067</span> * RNGBenchmark.measureXorInt        avgt    3   1276688870.167 ±  133364204.061  ns/op<a name="line.67"></a>
-<span class="sourceLineNo">068</span> * RNGBenchmark.measureXorIntR       avgt    3   1214642941.833 ±   51259344.714  ns/op<a name="line.68"></a>
-<span class="sourceLineNo">069</span> * RNGBenchmark.measureXorR          avgt    3   1346017624.333 ±  151221919.876  ns/op<a name="line.69"></a>
-<span class="sourceLineNo">070</span> *<a name="line.70"></a>
-<span class="sourceLineNo">071</span> * RNGBenchmark.measureLight                 avgt    3   1271.746 ±  155.345  ms/op<a name="line.71"></a>
-<span class="sourceLineNo">072</span> * RNGBenchmark.measureLightInt              avgt    3   1271.499 ±   64.098  ms/op<a name="line.72"></a>
-<span class="sourceLineNo">073</span> * RNGBenchmark.measureLightIntR             avgt    3   1426.202 ±  132.951  ms/op<a name="line.73"></a>
-<span class="sourceLineNo">074</span> * RNGBenchmark.measureLightR                avgt    3   1271.037 ±   69.143  ms/op<a name="line.74"></a>
-<span class="sourceLineNo">075</span> * RNGBenchmark.measureMT                    avgt    3  42625.239 ±  969.951  ms/op<a name="line.75"></a>
-<span class="sourceLineNo">076</span> * RNGBenchmark.measureMTInt                 avgt    3  22143.479 ± 2771.177  ms/op<a name="line.76"></a>
-<span class="sourceLineNo">077</span> * RNGBenchmark.measureMTIntR                avgt    3  22322.939 ± 1853.463  ms/op<a name="line.77"></a>
-<span class="sourceLineNo">078</span> * RNGBenchmark.measureMTR                   avgt    3  43003.067 ± 8246.183  ms/op<a name="line.78"></a>
-<span class="sourceLineNo">079</span> * RNGBenchmark.measurePermuted              avgt    3   1650.486 ±   24.306  ms/op<a name="line.79"></a>
-<span class="sourceLineNo">080</span> * RNGBenchmark.measurePermutedInt           avgt    3   1746.945 ±  102.116  ms/op<a name="line.80"></a>
-<span class="sourceLineNo">081</span> * RNGBenchmark.measurePermutedIntR          avgt    3   1746.471 ±  133.611  ms/op<a name="line.81"></a>
-<span class="sourceLineNo">082</span> * RNGBenchmark.measurePermutedR             avgt    3   1662.623 ±  154.331  ms/op<a name="line.82"></a>
-<span class="sourceLineNo">083</span> * RNGBenchmark.measureRandom                avgt    3  22601.739 ±  277.755  ms/op<a name="line.83"></a>
-<span class="sourceLineNo">084</span> * RNGBenchmark.measureRandomInt             avgt    3  12685.072 ±   75.535  ms/op<a name="line.84"></a>
-<span class="sourceLineNo">085</span> * RNGBenchmark.measureXor                   avgt    3   1382.533 ±   50.650  ms/op<a name="line.85"></a>
-<span class="sourceLineNo">086</span> * RNGBenchmark.measureXorInt                avgt    3   1288.620 ±   74.813  ms/op<a name="line.86"></a>
-<span class="sourceLineNo">087</span> * RNGBenchmark.measureXorIntR               avgt    3   1229.695 ±   85.585  ms/op<a name="line.87"></a>
-<span class="sourceLineNo">088</span> * RNGBenchmark.measureXorR                  avgt    3   1358.552 ±   78.095  ms/op<a name="line.88"></a>
-<span class="sourceLineNo">089</span> * RNGBenchmark.measureThreadLocalRandom     avgt    3   1518.164 ±   63.002  ms/op<a name="line.89"></a>
-<span class="sourceLineNo">090</span> * RNGBenchmark.measureThreadLocalRandomInt  avgt    3   1387.081 ±   26.544  ms/op<a name="line.90"></a>
-<span class="sourceLineNo">091</span> *<a name="line.91"></a>
-<span class="sourceLineNo">092</span> * Benchmark                                 Mode  Cnt       Score      Error  Units<a name="line.92"></a>
-<span class="sourceLineNo">093</span> * RNGBenchmark.measureChaosR                avgt    3    1991.710 ±   25.528  ms/op<a name="line.93"></a>
-<span class="sourceLineNo">094</span> * RNGBenchmark.measureChaosRInt             avgt    3    2013.044 ±   45.370  ms/op<a name="line.94"></a>
-<span class="sourceLineNo">095</span> * RNGBenchmark.measureLight                 avgt    3    1270.195 ±   25.362  ms/op<a name="line.95"></a>
-<span class="sourceLineNo">096</span> * RNGBenchmark.measureLightInt              avgt    3    1268.299 ±   51.405  ms/op<a name="line.96"></a>
-<span class="sourceLineNo">097</span> * RNGBenchmark.measureLightIntR             avgt    3    1430.807 ±   33.260  ms/op<a name="line.97"></a>
-<span class="sourceLineNo">098</span> * RNGBenchmark.measureLightR                avgt    3    1275.100 ±  108.047  ms/op<a name="line.98"></a>
-<span class="sourceLineNo">099</span> * RNGBenchmark.measurePermuted              avgt    3    1646.291 ±   15.124  ms/op<a name="line.99"></a>
-<span class="sourceLineNo">100</span> * RNGBenchmark.measurePermutedInt           avgt    3    1747.967 ±   75.774  ms/op<a name="line.100"></a>
-<span class="sourceLineNo">101</span> * RNGBenchmark.measurePermutedIntR          avgt    3    1749.495 ±   61.203  ms/op<a name="line.101"></a>
-<span class="sourceLineNo">102</span> * RNGBenchmark.measurePermutedR             avgt    3    1662.216 ±   30.412  ms/op<a name="line.102"></a>
-<span class="sourceLineNo">103</span> * RNGBenchmark.measureSecureRandom          avgt    3  162726.751 ± 8173.061  ms/op<a name="line.103"></a>
-<span class="sourceLineNo">104</span> * RNGBenchmark.measureSecureRandomInt       avgt    3   81390.982 ±  471.706  ms/op<a name="line.104"></a>
-<span class="sourceLineNo">105</span> * RNGBenchmark.measureThreadLocalRandom     avgt    3    1463.199 ±  164.716  ms/op<a name="line.105"></a>
-<span class="sourceLineNo">106</span> * RNGBenchmark.measureThreadLocalRandomInt  avgt    3    1395.997 ±  186.706  ms/op<a name="line.106"></a>
-<span class="sourceLineNo">107</span> * RNGBenchmark.measureXor                   avgt    3    1389.147 ±  128.362  ms/op<a name="line.107"></a>
-<span class="sourceLineNo">108</span> * RNGBenchmark.measureXorInt                avgt    3    1286.873 ±  152.577  ms/op<a name="line.108"></a>
-<span class="sourceLineNo">109</span> * RNGBenchmark.measureXorIntR               avgt    3    1228.443 ±  280.454  ms/op<a name="line.109"></a>
-<span class="sourceLineNo">110</span> * RNGBenchmark.measureXorR                  avgt    3    1355.535 ±   74.150  ms/op<a name="line.110"></a>
-<span class="sourceLineNo">111</span> *<a name="line.111"></a>
-<span class="sourceLineNo">112</span> * Benchmark                         Mode  Cnt     Score     Error  Units<a name="line.112"></a>
-<span class="sourceLineNo">113</span> * RNGBenchmark.measureLight         avgt    3  1251.677 ± 138.161  ms/op<a name="line.113"></a>
-<span class="sourceLineNo">114</span> * RNGBenchmark.measureLightInt      avgt    3  1245.465 ±  30.920  ms/op<a name="line.114"></a>
-<span class="sourceLineNo">115</span> * RNGBenchmark.measureLightIntR     avgt    3  1405.867 ±  71.977  ms/op<a name="line.115"></a>
-<span class="sourceLineNo">116</span> * RNGBenchmark.measureLightR        avgt    3  1249.536 ±  17.589  ms/op<a name="line.116"></a>
-<span class="sourceLineNo">117</span> * RNGBenchmark.measurePermuted      avgt    3  1618.965 ± 191.034  ms/op<a name="line.117"></a>
-<span class="sourceLineNo">118</span> * RNGBenchmark.measurePermutedInt   avgt    3  1719.651 ±  81.618  ms/op<a name="line.118"></a>
-<span class="sourceLineNo">119</span> * RNGBenchmark.measurePermutedIntR  avgt    3  1724.723 ± 361.353  ms/op<a name="line.119"></a>
-<span class="sourceLineNo">120</span> * RNGBenchmark.measurePermutedR     avgt    3  1631.643 ± 224.490  ms/op<a name="line.120"></a>
-<span class="sourceLineNo">121</span> * RNGBenchmark.measureXoRo          avgt    3  1215.819 ± 123.754  ms/op<a name="line.121"></a>
-<span class="sourceLineNo">122</span> * RNGBenchmark.measureXoRoInt       avgt    3  1377.244 ±  82.096  ms/op<a name="line.122"></a>
-<span class="sourceLineNo">123</span> * RNGBenchmark.measureXoRoIntR      avgt    3  1446.973 ±  61.399  ms/op<a name="line.123"></a>
-<span class="sourceLineNo">124</span> * RNGBenchmark.measureXoRoR         avgt    3  1274.790 ± 114.618  ms/op<a name="line.124"></a>
-<span class="sourceLineNo">125</span> * RNGBenchmark.measureXor           avgt    3  1362.249 ±  24.538  ms/op<a name="line.125"></a>
-<span class="sourceLineNo">126</span> * RNGBenchmark.measureXorInt        avgt    3  1263.790 ±  41.724  ms/op<a name="line.126"></a>
-<span class="sourceLineNo">127</span> * RNGBenchmark.measureXorIntR       avgt    3  1210.991 ± 105.103  ms/op<a name="line.127"></a>
-<span class="sourceLineNo">128</span> * RNGBenchmark.measureXorR          avgt    3  1331.630 ±  77.693  ms/op<a name="line.128"></a>
-<span class="sourceLineNo">129</span> *<a name="line.129"></a>
-<span class="sourceLineNo">130</span> * Benchmark                               Mode  Cnt     Score     Error  Units<a name="line.130"></a>
-<span class="sourceLineNo">131</span> * RNGBenchmark.measureLight               avgt    3  1269.143 ±  85.918  ms/op<a name="line.131"></a>
-<span class="sourceLineNo">132</span> * RNGBenchmark.measureLightBetweenHastyR  avgt    3  1617.676 ± 316.244  ms/op<a name="line.132"></a>
-<span class="sourceLineNo">133</span> * RNGBenchmark.measureLightBetweenR       avgt    3  2920.878 ± 169.583  ms/op<a name="line.133"></a>
-<span class="sourceLineNo">134</span> * RNGBenchmark.measureLightInt            avgt    3  1267.969 ±  47.884  ms/op<a name="line.134"></a>
-<span class="sourceLineNo">135</span> * RNGBenchmark.measureLightIntR           avgt    3  1425.842 ±  89.710  ms/op<a name="line.135"></a>
-<span class="sourceLineNo">136</span> * RNGBenchmark.measureLightR              avgt    3  1270.877 ±  62.054  ms/op<a name="line.136"></a>
-<span class="sourceLineNo">137</span> * RNGBenchmark.measurePermuted            avgt    3  1647.609 ±  22.511  ms/op<a name="line.137"></a>
-<span class="sourceLineNo">138</span> * RNGBenchmark.measurePermutedInt         avgt    3  1749.033 ± 147.920  ms/op<a name="line.138"></a>
-<span class="sourceLineNo">139</span> * RNGBenchmark.measurePermutedIntR        avgt    3  1744.506 ±  77.704  ms/op<a name="line.139"></a>
-<span class="sourceLineNo">140</span> * RNGBenchmark.measurePermutedR           avgt    3  1679.043 ± 733.835  ms/op<a name="line.140"></a>
-<span class="sourceLineNo">141</span> * RNGBenchmark.measureXoRo                avgt    3  1234.455 ± 112.165  ms/op<a name="line.141"></a>
-<span class="sourceLineNo">142</span> * RNGBenchmark.measureXoRoInt             avgt    3  1400.915 ±  12.242  ms/op<a name="line.142"></a>
-<span class="sourceLineNo">143</span> * RNGBenchmark.measureXoRoIntR            avgt    3  1471.615 ±  12.909  ms/op<a name="line.143"></a>
-<span class="sourceLineNo">144</span> * RNGBenchmark.measureXoRoR               avgt    3  1298.212 ±  13.077  ms/op<a name="line.144"></a>
-<span class="sourceLineNo">145</span> * RNGBenchmark.measureXor                 avgt    3  1392.523 ±  74.491  ms/op<a name="line.145"></a>
-<span class="sourceLineNo">146</span> * RNGBenchmark.measureXorInt              avgt    3  1286.622 ±  17.861  ms/op<a name="line.146"></a>
-<span class="sourceLineNo">147</span> * RNGBenchmark.measureXorIntR             avgt    3  1229.620 ±  50.388  ms/op<a name="line.147"></a>
-<span class="sourceLineNo">148</span> * RNGBenchmark.measureXorR                avgt    3  1356.388 ±  61.536  ms/op<a name="line.148"></a>
-<span class="sourceLineNo">149</span> *<a name="line.149"></a>
-<span class="sourceLineNo">150</span> * Benchmark                               Mode  Cnt     Score     Error  Units<a name="line.150"></a>
-<span class="sourceLineNo">151</span> * RNGBenchmark.measureGDX                 avgt    3  1387.068 ±  39.887  ms/op<a name="line.151"></a>
-<span class="sourceLineNo">152</span> * RNGBenchmark.measureGDXInt              avgt    3  1340.047 ±  12.284  ms/op<a name="line.152"></a>
-<span class="sourceLineNo">153</span> * RNGBenchmark.measureIsaac               avgt    3  5895.743 ± 673.415  ms/op<a name="line.153"></a>
-<span class="sourceLineNo">154</span> * RNGBenchmark.measureIsaacInt            avgt    3  5910.345 ± 372.230  ms/op<a name="line.154"></a>
-<span class="sourceLineNo">155</span> * RNGBenchmark.measureIsaacR              avgt    3  6063.574 ± 276.814  ms/op<a name="line.155"></a>
-<span class="sourceLineNo">156</span> * RNGBenchmark.measureLight               avgt    3  1265.901 ± 145.178  ms/op<a name="line.156"></a>
-<span class="sourceLineNo">157</span> * RNGBenchmark.measureLightBetweenHastyR  avgt    3  1605.859 ±  36.246  ms/op<a name="line.157"></a>
-<span class="sourceLineNo">158</span> * RNGBenchmark.measureLightBetweenR       avgt    3  2986.241 ± 140.256  ms/op<a name="line.158"></a>
-<span class="sourceLineNo">159</span> * RNGBenchmark.measureLightInt            avgt    3  1277.823 ± 199.616  ms/op<a name="line.159"></a>
-<span class="sourceLineNo">160</span> * RNGBenchmark.measureLightIntR           avgt    3  1424.500 ±  31.110  ms/op<a name="line.160"></a>
-<span class="sourceLineNo">161</span> * RNGBenchmark.measureLightR              avgt    3  1271.564 ±  73.357  ms/op\<a name="line.161"></a>
-<span class="sourceLineNo">162</span> * RNGBenchmark.measurePermuted            avgt    3  1647.924 ±  52.709  ms/op<a name="line.162"></a>
-<span class="sourceLineNo">163</span> * RNGBenchmark.measurePermutedInt         avgt    3  1747.788 ±  47.732  ms/op<a name="line.163"></a>
-<span class="sourceLineNo">164</span> * RNGBenchmark.measurePermutedIntR        avgt    3  1749.924 ±  85.835  ms/op<a name="line.164"></a>
-<span class="sourceLineNo">165</span> * RNGBenchmark.measurePermutedR           avgt    3  1649.223 ±  28.546  ms/op<a name="line.165"></a>
-<span class="sourceLineNo">166</span> * RNGBenchmark.measureXoRo                avgt    3  1228.254 ±  16.915  ms/op<a name="line.166"></a>
-<span class="sourceLineNo">167</span> * RNGBenchmark.measureXoRoInt             avgt    3  1395.978 ±  80.767  ms/op<a name="line.167"></a>
-<span class="sourceLineNo">168</span> * RNGBenchmark.measureXoRoIntR            avgt    3  1475.439 ±  30.060  ms/op<a name="line.168"></a>
-<span class="sourceLineNo">169</span> * RNGBenchmark.measureXoRoR               avgt    3  1297.531 ±  32.635  ms/op<a name="line.169"></a>
-<span class="sourceLineNo">170</span> * RNGBenchmark.measureXor                 avgt    3  1386.555 ±  41.859  ms/op<a name="line.170"></a>
-<span class="sourceLineNo">171</span> * RNGBenchmark.measureXorInt              avgt    3  1286.369 ±  45.825  ms/op<a name="line.171"></a>
-<span class="sourceLineNo">172</span> * RNGBenchmark.measureXorIntR             avgt    3  1227.971 ±  23.930  ms/op<a name="line.172"></a>
-<span class="sourceLineNo">173</span> * RNGBenchmark.measureXorR                avgt    3  1354.662 ±  83.443  ms/op<a name="line.173"></a>
-<span class="sourceLineNo">174</span> *<a name="line.174"></a>
-<span class="sourceLineNo">175</span> * Benchmark                        Mode  Cnt     Score     Error  Units<a name="line.175"></a>
-<span class="sourceLineNo">176</span> * RNGBenchmark.measureGDX          avgt    3  1335.200 ±  55.131  ms/op<a name="line.176"></a>
-<span class="sourceLineNo">177</span> * RNGBenchmark.measureGDXInt       avgt    3  1284.587 ± 115.753  ms/op<a name="line.177"></a>
-<span class="sourceLineNo">178</span> * RNGBenchmark.measureLight        avgt    3  1220.308 ± 152.938  ms/op<a name="line.178"></a>
-<span class="sourceLineNo">179</span> * RNGBenchmark.measureLightInt     avgt    3  1215.762 ±  88.660  ms/op<a name="line.179"></a>
-<span class="sourceLineNo">180</span> * RNGBenchmark.measureLightIntR    avgt    3  1365.114 ±  99.494  ms/op<a name="line.180"></a>
-<span class="sourceLineNo">181</span> * RNGBenchmark.measureLightR       avgt    3  1221.436 ±  69.999  ms/op<a name="line.181"></a>
-<span class="sourceLineNo">182</span> * RNGBenchmark.measurePermuted     avgt    3  1599.886 ± 628.296  ms/op<a name="line.182"></a>
-<span class="sourceLineNo">183</span> * RNGBenchmark.measurePermutedInt  avgt    3  1672.186 ± 110.668  ms/op<a name="line.183"></a>
-<span class="sourceLineNo">184</span> * RNGBenchmark.measureThunder      avgt    3   761.156 ±  26.884  ms/op<a name="line.184"></a>
-<span class="sourceLineNo">185</span> * RNGBenchmark.measureThunderInt   avgt    3   846.351 ± 315.138  ms/op<a name="line.185"></a>
-<span class="sourceLineNo">186</span> * RNGBenchmark.measureThunderIntR  avgt    3   918.034 ± 223.494  ms/op<a name="line.186"></a>
-<span class="sourceLineNo">187</span> * RNGBenchmark.measureThunderR     avgt    3   838.914 ±  62.472  ms/op<a name="line.187"></a>
-<span class="sourceLineNo">188</span> * RNGBenchmark.measureXoRo         avgt    3  1179.352 ±  44.233  ms/op<a name="line.188"></a>
-<span class="sourceLineNo">189</span> * RNGBenchmark.measureXoRoInt      avgt    3  1342.901 ±  21.042  ms/op<a name="line.189"></a>
-<span class="sourceLineNo">190</span> * RNGBenchmark.measureXoRoIntR     avgt    3  1415.585 ±  71.514  ms/op<a name="line.190"></a>
-<span class="sourceLineNo">191</span> * RNGBenchmark.measureXoRoR        avgt    3  1245.577 ±  39.306  ms/op<a name="line.191"></a>
-<span class="sourceLineNo">192</span> *<a name="line.192"></a>
-<span class="sourceLineNo">193</span> * Benchmark                        Mode  Cnt     Score     Error  Units<a name="line.193"></a>
-<span class="sourceLineNo">194</span> * RNGBenchmark.measureGDX          avgt    3  1349.265 ±  58.767  ms/op<a name="line.194"></a>
-<span class="sourceLineNo">195</span> * RNGBenchmark.measureGDXInt       avgt    3  1313.436 ± 275.429  ms/op<a name="line.195"></a>
-<span class="sourceLineNo">196</span> * RNGBenchmark.measureLight        avgt    3  1268.311 ±  54.113  ms/op<a name="line.196"></a>
-<span class="sourceLineNo">197</span> * RNGBenchmark.measureLightInt     avgt    3  1268.068 ±  67.096  ms/op<a name="line.197"></a>
-<span class="sourceLineNo">198</span> * RNGBenchmark.measureLightIntR    avgt    3  1430.136 ±  64.875  ms/op<a name="line.198"></a>
-<span class="sourceLineNo">199</span> * RNGBenchmark.measureLightR       avgt    3  1272.734 ±  79.132  ms/op<a name="line.199"></a>
-<span class="sourceLineNo">200</span> * RNGBenchmark.measurePermuted     avgt    3  1649.275 ±  55.005  ms/op<a name="line.200"></a>
-<span class="sourceLineNo">201</span> * RNGBenchmark.measurePermutedInt  avgt    3  1773.061 ± 973.661  ms/op<a name="line.201"></a>
-<span class="sourceLineNo">202</span> * RNGBenchmark.measureThunder      avgt    3   714.949 ±  41.154  ms/op<a name="line.202"></a>
-<span class="sourceLineNo">203</span> * RNGBenchmark.measureThunderInt   avgt    3   793.242 ±  12.410  ms/op<a name="line.203"></a>
-<span class="sourceLineNo">204</span> * RNGBenchmark.measureThunderIntR  avgt    3   793.398 ±  41.674  ms/op<a name="line.204"></a>
-<span class="sourceLineNo">205</span> * RNGBenchmark.measureThunderR     avgt    3   715.476 ±  84.131  ms/op<a name="line.205"></a>
-<span class="sourceLineNo">206</span> * RNGBenchmark.measureXoRo         avgt    3  1233.067 ±  17.727  ms/op<a name="line.206"></a>
-<span class="sourceLineNo">207</span> * RNGBenchmark.measureXoRoInt      avgt    3  1407.854 ± 111.257  ms/op<a name="line.207"></a>
-<span class="sourceLineNo">208</span> * RNGBenchmark.measureXoRoIntR     avgt    3  1470.919 ±  57.782  ms/op<a name="line.208"></a>
-<span class="sourceLineNo">209</span> * RNGBenchmark.measureXoRoR        avgt    3  1303.842 ± 116.414  ms/op<a name="line.209"></a>
-<span class="sourceLineNo">210</span> *<a name="line.210"></a>
-<span class="sourceLineNo">211</span> * Benchmark                        Mode  Cnt     Score     Error  Units<a name="line.211"></a>
-<span class="sourceLineNo">212</span> * RNGBenchmark.measureGDX          avgt    3  1330.069 ±  82.401  ms/op<a name="line.212"></a>
-<span class="sourceLineNo">213</span> * RNGBenchmark.measureGDXInt       avgt    3  1272.507 ± 103.801  ms/op<a name="line.213"></a>
-<span class="sourceLineNo">214</span> * RNGBenchmark.measureLight        avgt    3  1233.945 ± 653.550  ms/op<a name="line.214"></a>
-<span class="sourceLineNo">215</span> * RNGBenchmark.measureLightInt     avgt    3  1211.301 ±  79.526  ms/op<a name="line.215"></a>
-<span class="sourceLineNo">216</span> * RNGBenchmark.measureLightIntR    avgt    3  1392.179 ± 552.502  ms/op<a name="line.216"></a>
-<span class="sourceLineNo">217</span> * RNGBenchmark.measureLightR       avgt    3  1207.975 ± 107.328  ms/op<a name="line.217"></a>
-<span class="sourceLineNo">218</span> * RNGBenchmark.measureThunder      avgt    3   848.403 ±  55.360  ms/op<a name="line.218"></a>
-<span class="sourceLineNo">219</span> * RNGBenchmark.measureThunderInt   avgt    3   920.933 ±  55.772  ms/op<a name="line.219"></a>
-<span class="sourceLineNo">220</span> * RNGBenchmark.measureThunderIntR  avgt    3  1074.927 ± 119.307  ms/op<a name="line.220"></a>
-<span class="sourceLineNo">221</span> * RNGBenchmark.measureThunderR     avgt    3   916.797 ±  58.557  ms/op<a name="line.221"></a>
-<span class="sourceLineNo">222</span> * RNGBenchmark.measureXoRo         avgt    3  1182.115 ± 146.899  ms/op<a name="line.222"></a>
-<span class="sourceLineNo">223</span> * RNGBenchmark.measureXoRoInt      avgt    3  1382.232 ±  68.132  ms/op<a name="line.223"></a>
-<span class="sourceLineNo">224</span> * RNGBenchmark.measureXoRoIntR     avgt    3  1458.964 ±  10.307  ms/op<a name="line.224"></a>
-<span class="sourceLineNo">225</span> * RNGBenchmark.measureXoRoR        avgt    3  1249.812 ± 450.441  ms/op<a name="line.225"></a>
-<span class="sourceLineNo">226</span> */<a name="line.226"></a>
-<span class="sourceLineNo">227</span>public class RNGBenchmark {<a name="line.227"></a>
-<span class="sourceLineNo">228</span><a name="line.228"></a>
-<span class="sourceLineNo">229</span>    private static long seed = 9000;<a name="line.229"></a>
-<span class="sourceLineNo">230</span>    private static int iseed = 9000;<a name="line.230"></a>
-<span class="sourceLineNo">231</span><a name="line.231"></a>
-<span class="sourceLineNo">232</span>    public long doPint()<a name="line.232"></a>
-<span class="sourceLineNo">233</span>    {<a name="line.233"></a>
-<span class="sourceLineNo">234</span>        PintRNG rng = new PintRNG(seed);<a name="line.234"></a>
-<span class="sourceLineNo">235</span><a name="line.235"></a>
-<span class="sourceLineNo">236</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.236"></a>
-<span class="sourceLineNo">237</span>            seed += rng.nextLong();<a name="line.237"></a>
-<span class="sourceLineNo">238</span>        }<a name="line.238"></a>
-<span class="sourceLineNo">239</span>        return seed;<a name="line.239"></a>
-<span class="sourceLineNo">240</span>    }<a name="line.240"></a>
-<span class="sourceLineNo">241</span><a name="line.241"></a>
-<span class="sourceLineNo">242</span>    @Benchmark<a name="line.242"></a>
-<span class="sourceLineNo">243</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.243"></a>
-<span class="sourceLineNo">244</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.244"></a>
-<span class="sourceLineNo">245</span>    public void a_measurePint() throws InterruptedException {<a name="line.245"></a>
-<span class="sourceLineNo">246</span>        seed = 9000;<a name="line.246"></a>
-<span class="sourceLineNo">247</span>        doPint();<a name="line.247"></a>
-<span class="sourceLineNo">248</span>    }<a name="line.248"></a>
-<span class="sourceLineNo">249</span><a name="line.249"></a>
-<span class="sourceLineNo">250</span>    public long doPintInt()<a name="line.250"></a>
-<span class="sourceLineNo">251</span>    {<a name="line.251"></a>
-<span class="sourceLineNo">252</span>        PintRNG rng = new PintRNG(iseed);<a name="line.252"></a>
-<span class="sourceLineNo">253</span><a name="line.253"></a>
-<span class="sourceLineNo">254</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.254"></a>
-<span class="sourceLineNo">255</span>            iseed += rng.nextInt();<a name="line.255"></a>
-<span class="sourceLineNo">256</span>        }<a name="line.256"></a>
-<span class="sourceLineNo">257</span>        return iseed;<a name="line.257"></a>
-<span class="sourceLineNo">258</span>    }<a name="line.258"></a>
-<span class="sourceLineNo">259</span><a name="line.259"></a>
-<span class="sourceLineNo">260</span>    @Benchmark<a name="line.260"></a>
-<span class="sourceLineNo">261</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.261"></a>
-<span class="sourceLineNo">262</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.262"></a>
-<span class="sourceLineNo">263</span>    public void a_measurePintInt() throws InterruptedException {<a name="line.263"></a>
-<span class="sourceLineNo">264</span>        iseed = 9000;<a name="line.264"></a>
-<span class="sourceLineNo">265</span>        doPintInt();<a name="line.265"></a>
-<span class="sourceLineNo">266</span>    }<a name="line.266"></a>
-<span class="sourceLineNo">267</span>    public long doPintR()<a name="line.267"></a>
-<span class="sourceLineNo">268</span>    {<a name="line.268"></a>
-<span class="sourceLineNo">269</span>        RNG rng = new RNG(new PintRNG(seed));<a name="line.269"></a>
-<span class="sourceLineNo">270</span><a name="line.270"></a>
-<span class="sourceLineNo">271</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.271"></a>
-<span class="sourceLineNo">272</span>            seed += rng.nextLong();<a name="line.272"></a>
-<span class="sourceLineNo">273</span>        }<a name="line.273"></a>
-<span class="sourceLineNo">274</span>        return seed;<a name="line.274"></a>
-<span class="sourceLineNo">275</span>    }<a name="line.275"></a>
-<span class="sourceLineNo">276</span><a name="line.276"></a>
-<span class="sourceLineNo">277</span>    @Benchmark<a name="line.277"></a>
-<span class="sourceLineNo">278</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.278"></a>
-<span class="sourceLineNo">279</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.279"></a>
-<span class="sourceLineNo">280</span>    public void a_measurePintR() throws InterruptedException {<a name="line.280"></a>
-<span class="sourceLineNo">281</span>        seed = 9000;<a name="line.281"></a>
-<span class="sourceLineNo">282</span>        doPintR();<a name="line.282"></a>
-<span class="sourceLineNo">283</span>    }<a name="line.283"></a>
-<span class="sourceLineNo">284</span><a name="line.284"></a>
-<span class="sourceLineNo">285</span>    public long doPintIntR()<a name="line.285"></a>
-<span class="sourceLineNo">286</span>    {<a name="line.286"></a>
-<span class="sourceLineNo">287</span>        RNG rng = new RNG(new PintRNG(iseed));<a name="line.287"></a>
-<span class="sourceLineNo">288</span><a name="line.288"></a>
-<span class="sourceLineNo">289</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.289"></a>
-<span class="sourceLineNo">290</span>            iseed += rng.nextInt();<a name="line.290"></a>
-<span class="sourceLineNo">291</span>        }<a name="line.291"></a>
-<span class="sourceLineNo">292</span>        return iseed;<a name="line.292"></a>
-<span class="sourceLineNo">293</span>    }<a name="line.293"></a>
-<span class="sourceLineNo">294</span><a name="line.294"></a>
-<span class="sourceLineNo">295</span>    @Benchmark<a name="line.295"></a>
-<span class="sourceLineNo">296</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.296"></a>
-<span class="sourceLineNo">297</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.297"></a>
-<span class="sourceLineNo">298</span>    public void a_measurePintIntR() throws InterruptedException {<a name="line.298"></a>
-<span class="sourceLineNo">299</span>        iseed = 9000;<a name="line.299"></a>
-<span class="sourceLineNo">300</span>        doPintIntR();<a name="line.300"></a>
-<span class="sourceLineNo">301</span>    }<a name="line.301"></a>
-<span class="sourceLineNo">302</span><a name="line.302"></a>
-<span class="sourceLineNo">303</span>    public long doThunder()<a name="line.303"></a>
-<span class="sourceLineNo">304</span>    {<a name="line.304"></a>
-<span class="sourceLineNo">305</span>        ThunderRNG rng = new ThunderRNG(seed);<a name="line.305"></a>
-<span class="sourceLineNo">306</span><a name="line.306"></a>
-<span class="sourceLineNo">307</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.307"></a>
-<span class="sourceLineNo">308</span>            seed += rng.nextLong();<a name="line.308"></a>
-<span class="sourceLineNo">309</span>        }<a name="line.309"></a>
-<span class="sourceLineNo">310</span>        return seed;<a name="line.310"></a>
-<span class="sourceLineNo">311</span>    }<a name="line.311"></a>
-<span class="sourceLineNo">312</span><a name="line.312"></a>
-<span class="sourceLineNo">313</span>    @Benchmark<a name="line.313"></a>
-<span class="sourceLineNo">314</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.314"></a>
-<span class="sourceLineNo">315</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.315"></a>
-<span class="sourceLineNo">316</span>    public void measureThunder() throws InterruptedException {<a name="line.316"></a>
-<span class="sourceLineNo">317</span>        seed = 9000;<a name="line.317"></a>
-<span class="sourceLineNo">318</span>        doThunder();<a name="line.318"></a>
-<span class="sourceLineNo">319</span>    }<a name="line.319"></a>
-<span class="sourceLineNo">320</span><a name="line.320"></a>
-<span class="sourceLineNo">321</span>    public long doThunderInt()<a name="line.321"></a>
-<span class="sourceLineNo">322</span>    {<a name="line.322"></a>
-<span class="sourceLineNo">323</span>        ThunderRNG rng = new ThunderRNG(iseed);<a name="line.323"></a>
-<span class="sourceLineNo">324</span><a name="line.324"></a>
-<span class="sourceLineNo">325</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.325"></a>
-<span class="sourceLineNo">326</span>            iseed += rng.nextInt();<a name="line.326"></a>
-<span class="sourceLineNo">327</span>        }<a name="line.327"></a>
-<span class="sourceLineNo">328</span>        return iseed;<a name="line.328"></a>
-<span class="sourceLineNo">329</span>    }<a name="line.329"></a>
-<span class="sourceLineNo">330</span><a name="line.330"></a>
-<span class="sourceLineNo">331</span>    @Benchmark<a name="line.331"></a>
-<span class="sourceLineNo">332</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.332"></a>
-<span class="sourceLineNo">333</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.333"></a>
-<span class="sourceLineNo">334</span>    public void measureThunderInt() throws InterruptedException {<a name="line.334"></a>
-<span class="sourceLineNo">335</span>        iseed = 9000;<a name="line.335"></a>
-<span class="sourceLineNo">336</span>        doThunderInt();<a name="line.336"></a>
-<span class="sourceLineNo">337</span>    }<a name="line.337"></a>
-<span class="sourceLineNo">338</span>    public long doThunderR()<a name="line.338"></a>
-<span class="sourceLineNo">339</span>    {<a name="line.339"></a>
-<span class="sourceLineNo">340</span>        RNG rng = new RNG(new ThunderRNG(seed));<a name="line.340"></a>
-<span class="sourceLineNo">341</span><a name="line.341"></a>
-<span class="sourceLineNo">342</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.342"></a>
-<span class="sourceLineNo">343</span>            seed += rng.nextLong();<a name="line.343"></a>
-<span class="sourceLineNo">344</span>        }<a name="line.344"></a>
-<span class="sourceLineNo">345</span>        return seed;<a name="line.345"></a>
-<span class="sourceLineNo">346</span>    }<a name="line.346"></a>
-<span class="sourceLineNo">347</span><a name="line.347"></a>
-<span class="sourceLineNo">348</span>    @Benchmark<a name="line.348"></a>
-<span class="sourceLineNo">349</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.349"></a>
-<span class="sourceLineNo">350</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.350"></a>
-<span class="sourceLineNo">351</span>    public void measureThunderR() throws InterruptedException {<a name="line.351"></a>
-<span class="sourceLineNo">352</span>        seed = 9000;<a name="line.352"></a>
-<span class="sourceLineNo">353</span>        doThunderR();<a name="line.353"></a>
-<span class="sourceLineNo">354</span>    }<a name="line.354"></a>
-<span class="sourceLineNo">355</span><a name="line.355"></a>
-<span class="sourceLineNo">356</span>    public long doThunderIntR()<a name="line.356"></a>
-<span class="sourceLineNo">357</span>    {<a name="line.357"></a>
-<span class="sourceLineNo">358</span>        RNG rng = new RNG(new ThunderRNG(iseed));<a name="line.358"></a>
-<span class="sourceLineNo">359</span><a name="line.359"></a>
-<span class="sourceLineNo">360</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.360"></a>
-<span class="sourceLineNo">361</span>            iseed += rng.nextInt();<a name="line.361"></a>
-<span class="sourceLineNo">362</span>        }<a name="line.362"></a>
-<span class="sourceLineNo">363</span>        return iseed;<a name="line.363"></a>
-<span class="sourceLineNo">364</span>    }<a name="line.364"></a>
-<span class="sourceLineNo">365</span><a name="line.365"></a>
-<span class="sourceLineNo">366</span>    @Benchmark<a name="line.366"></a>
-<span class="sourceLineNo">367</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.367"></a>
-<span class="sourceLineNo">368</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.368"></a>
-<span class="sourceLineNo">369</span>    public void measureThunderIntR() throws InterruptedException {<a name="line.369"></a>
-<span class="sourceLineNo">370</span>        iseed = 9000;<a name="line.370"></a>
-<span class="sourceLineNo">371</span>        doThunderIntR();<a name="line.371"></a>
-<span class="sourceLineNo">372</span>    }<a name="line.372"></a>
-<span class="sourceLineNo">373</span><a name="line.373"></a>
-<span class="sourceLineNo">374</span>    public long doXoRo()<a name="line.374"></a>
-<span class="sourceLineNo">375</span>    {<a name="line.375"></a>
-<span class="sourceLineNo">376</span>        XoRoRNG rng = new XoRoRNG(seed);<a name="line.376"></a>
-<span class="sourceLineNo">377</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.377"></a>
-<span class="sourceLineNo">378</span>            seed += rng.nextLong();<a name="line.378"></a>
-<span class="sourceLineNo">379</span>        }<a name="line.379"></a>
-<span class="sourceLineNo">380</span>        return seed;<a name="line.380"></a>
-<span class="sourceLineNo">381</span>    }<a name="line.381"></a>
-<span class="sourceLineNo">382</span><a name="line.382"></a>
-<span class="sourceLineNo">383</span>    @Benchmark<a name="line.383"></a>
-<span class="sourceLineNo">384</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.384"></a>
-<span class="sourceLineNo">385</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.385"></a>
-<span class="sourceLineNo">386</span>    public void measureXoRo() throws InterruptedException {<a name="line.386"></a>
-<span class="sourceLineNo">387</span>        seed = 9000;<a name="line.387"></a>
-<span class="sourceLineNo">388</span>        doXoRo();<a name="line.388"></a>
-<span class="sourceLineNo">389</span>    }<a name="line.389"></a>
-<span class="sourceLineNo">390</span><a name="line.390"></a>
-<span class="sourceLineNo">391</span>    public long doXoRoInt()<a name="line.391"></a>
-<span class="sourceLineNo">392</span>    {<a name="line.392"></a>
-<span class="sourceLineNo">393</span>        XoRoRNG rng = new XoRoRNG(iseed);<a name="line.393"></a>
-<span class="sourceLineNo">394</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.394"></a>
-<span class="sourceLineNo">395</span>            iseed += rng.nextInt();<a name="line.395"></a>
-<span class="sourceLineNo">396</span>        }<a name="line.396"></a>
-<span class="sourceLineNo">397</span>        return iseed;<a name="line.397"></a>
-<span class="sourceLineNo">398</span>    }<a name="line.398"></a>
-<span class="sourceLineNo">399</span>    @Benchmark<a name="line.399"></a>
-<span class="sourceLineNo">400</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.400"></a>
-<span class="sourceLineNo">401</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.401"></a>
-<span class="sourceLineNo">402</span>    public void measureXoRoInt() throws InterruptedException {<a name="line.402"></a>
-<span class="sourceLineNo">403</span>        iseed = 9000;<a name="line.403"></a>
-<span class="sourceLineNo">404</span>        doXoRoInt();<a name="line.404"></a>
-<span class="sourceLineNo">405</span>    }<a name="line.405"></a>
-<span class="sourceLineNo">406</span><a name="line.406"></a>
-<span class="sourceLineNo">407</span>    public long doXoRoR()<a name="line.407"></a>
-<span class="sourceLineNo">408</span>    {<a name="line.408"></a>
-<span class="sourceLineNo">409</span>        RNG rng = new RNG(new XoRoRNG(seed));<a name="line.409"></a>
-<span class="sourceLineNo">410</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.410"></a>
-<span class="sourceLineNo">411</span>            seed += rng.nextLong();<a name="line.411"></a>
-<span class="sourceLineNo">412</span>        }<a name="line.412"></a>
-<span class="sourceLineNo">413</span>        return seed;<a name="line.413"></a>
-<span class="sourceLineNo">414</span>    }<a name="line.414"></a>
-<span class="sourceLineNo">415</span><a name="line.415"></a>
-<span class="sourceLineNo">416</span>    @Benchmark<a name="line.416"></a>
-<span class="sourceLineNo">417</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.417"></a>
-<span class="sourceLineNo">418</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.418"></a>
-<span class="sourceLineNo">419</span>    public void measureXoRoR() throws InterruptedException {<a name="line.419"></a>
-<span class="sourceLineNo">420</span>        seed = 9000;<a name="line.420"></a>
-<span class="sourceLineNo">421</span>        doXoRoR();<a name="line.421"></a>
-<span class="sourceLineNo">422</span>    }<a name="line.422"></a>
-<span class="sourceLineNo">423</span><a name="line.423"></a>
-<span class="sourceLineNo">424</span>    public long doXoRoIntR()<a name="line.424"></a>
-<span class="sourceLineNo">425</span>    {<a name="line.425"></a>
-<span class="sourceLineNo">426</span>        RNG rng = new RNG(new XoRoRNG(iseed));<a name="line.426"></a>
-<span class="sourceLineNo">427</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.427"></a>
-<span class="sourceLineNo">428</span>            iseed += rng.nextInt();<a name="line.428"></a>
-<span class="sourceLineNo">429</span>        }<a name="line.429"></a>
-<span class="sourceLineNo">430</span>        return iseed;<a name="line.430"></a>
-<span class="sourceLineNo">431</span>    }<a name="line.431"></a>
-<span class="sourceLineNo">432</span>    @Benchmark<a name="line.432"></a>
-<span class="sourceLineNo">433</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.433"></a>
-<span class="sourceLineNo">434</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.434"></a>
-<span class="sourceLineNo">435</span>    public void measureXoRoIntR() throws InterruptedException {<a name="line.435"></a>
-<span class="sourceLineNo">436</span>        iseed = 9000;<a name="line.436"></a>
-<span class="sourceLineNo">437</span>        doXoRoIntR();<a name="line.437"></a>
-<span class="sourceLineNo">438</span>    }<a name="line.438"></a>
-<span class="sourceLineNo">439</span><a name="line.439"></a>
-<span class="sourceLineNo">440</span>    public long doLight()<a name="line.440"></a>
-<span class="sourceLineNo">441</span>    {<a name="line.441"></a>
-<span class="sourceLineNo">442</span>        LightRNG rng = new LightRNG(seed);<a name="line.442"></a>
-<span class="sourceLineNo">443</span><a name="line.443"></a>
-<span class="sourceLineNo">444</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.444"></a>
-<span class="sourceLineNo">445</span>            seed += rng.nextLong();<a name="line.445"></a>
-<span class="sourceLineNo">446</span>        }<a name="line.446"></a>
-<span class="sourceLineNo">447</span>        return seed;<a name="line.447"></a>
-<span class="sourceLineNo">448</span>    }<a name="line.448"></a>
-<span class="sourceLineNo">449</span><a name="line.449"></a>
-<span class="sourceLineNo">450</span>    @Benchmark<a name="line.450"></a>
-<span class="sourceLineNo">451</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.451"></a>
-<span class="sourceLineNo">452</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.452"></a>
-<span class="sourceLineNo">453</span>    public void measureLight() throws InterruptedException {<a name="line.453"></a>
-<span class="sourceLineNo">454</span>        seed = 9000;<a name="line.454"></a>
-<span class="sourceLineNo">455</span>        doLight();<a name="line.455"></a>
-<span class="sourceLineNo">456</span>    }<a name="line.456"></a>
-<span class="sourceLineNo">457</span><a name="line.457"></a>
-<span class="sourceLineNo">458</span>    public long doLightInt()<a name="line.458"></a>
-<span class="sourceLineNo">459</span>    {<a name="line.459"></a>
-<span class="sourceLineNo">460</span>        LightRNG rng = new LightRNG(iseed);<a name="line.460"></a>
-<span class="sourceLineNo">461</span><a name="line.461"></a>
-<span class="sourceLineNo">462</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.462"></a>
-<span class="sourceLineNo">463</span>            iseed += rng.nextInt();<a name="line.463"></a>
-<span class="sourceLineNo">464</span>        }<a name="line.464"></a>
-<span class="sourceLineNo">465</span>        return iseed;<a name="line.465"></a>
-<span class="sourceLineNo">466</span>    }<a name="line.466"></a>
-<span class="sourceLineNo">467</span><a name="line.467"></a>
-<span class="sourceLineNo">468</span>    @Benchmark<a name="line.468"></a>
-<span class="sourceLineNo">469</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.469"></a>
-<span class="sourceLineNo">470</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.470"></a>
-<span class="sourceLineNo">471</span>    public void measureLightInt() throws InterruptedException {<a name="line.471"></a>
-<span class="sourceLineNo">472</span>        iseed = 9000;<a name="line.472"></a>
-<span class="sourceLineNo">473</span>        doLightInt();<a name="line.473"></a>
-<span class="sourceLineNo">474</span>    }<a name="line.474"></a>
-<span class="sourceLineNo">475</span>    public long doLightR()<a name="line.475"></a>
-<span class="sourceLineNo">476</span>    {<a name="line.476"></a>
-<span class="sourceLineNo">477</span>        RNG rng = new RNG(new LightRNG(seed));<a name="line.477"></a>
-<span class="sourceLineNo">478</span><a name="line.478"></a>
-<span class="sourceLineNo">479</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.479"></a>
-<span class="sourceLineNo">480</span>            seed += rng.nextLong();<a name="line.480"></a>
-<span class="sourceLineNo">481</span>        }<a name="line.481"></a>
-<span class="sourceLineNo">482</span>        return seed;<a name="line.482"></a>
-<span class="sourceLineNo">483</span>    }<a name="line.483"></a>
-<span class="sourceLineNo">484</span><a name="line.484"></a>
-<span class="sourceLineNo">485</span>    @Benchmark<a name="line.485"></a>
-<span class="sourceLineNo">486</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.486"></a>
-<span class="sourceLineNo">487</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.487"></a>
-<span class="sourceLineNo">488</span>    public void measureLightR() throws InterruptedException {<a name="line.488"></a>
-<span class="sourceLineNo">489</span>        seed = 9000;<a name="line.489"></a>
-<span class="sourceLineNo">490</span>        doLightR();<a name="line.490"></a>
-<span class="sourceLineNo">491</span>    }<a name="line.491"></a>
-<span class="sourceLineNo">492</span><a name="line.492"></a>
-<span class="sourceLineNo">493</span>    public long doLightIntR()<a name="line.493"></a>
-<span class="sourceLineNo">494</span>    {<a name="line.494"></a>
-<span class="sourceLineNo">495</span>        RNG rng = new RNG(new LightRNG(iseed));<a name="line.495"></a>
-<span class="sourceLineNo">496</span><a name="line.496"></a>
-<span class="sourceLineNo">497</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.497"></a>
-<span class="sourceLineNo">498</span>            iseed += rng.nextInt();<a name="line.498"></a>
-<span class="sourceLineNo">499</span>        }<a name="line.499"></a>
-<span class="sourceLineNo">500</span>        return iseed;<a name="line.500"></a>
-<span class="sourceLineNo">501</span>    }<a name="line.501"></a>
-<span class="sourceLineNo">502</span><a name="line.502"></a>
-<span class="sourceLineNo">503</span>    @Benchmark<a name="line.503"></a>
-<span class="sourceLineNo">504</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.504"></a>
-<span class="sourceLineNo">505</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.505"></a>
-<span class="sourceLineNo">506</span>    public void measureLightIntR() throws InterruptedException {<a name="line.506"></a>
-<span class="sourceLineNo">507</span>        iseed = 9000;<a name="line.507"></a>
-<span class="sourceLineNo">508</span>        doLightIntR();<a name="line.508"></a>
-<span class="sourceLineNo">509</span>    }<a name="line.509"></a>
-<span class="sourceLineNo">510</span><a name="line.510"></a>
-<span class="sourceLineNo">511</span>    /*<a name="line.511"></a>
-<span class="sourceLineNo">512</span>    public long doLightBetweenR()<a name="line.512"></a>
+<span class="sourceLineNo">034</span>import org.openjdk.jmh.annotations.Benchmark;<a name="line.34"></a>
+<span class="sourceLineNo">035</span>import org.openjdk.jmh.annotations.BenchmarkMode;<a name="line.35"></a>
+<span class="sourceLineNo">036</span>import org.openjdk.jmh.annotations.Mode;<a name="line.36"></a>
+<span class="sourceLineNo">037</span>import org.openjdk.jmh.annotations.OutputTimeUnit;<a name="line.37"></a>
+<span class="sourceLineNo">038</span>import org.openjdk.jmh.runner.Runner;<a name="line.38"></a>
+<span class="sourceLineNo">039</span>import org.openjdk.jmh.runner.RunnerException;<a name="line.39"></a>
+<span class="sourceLineNo">040</span>import org.openjdk.jmh.runner.options.Options;<a name="line.40"></a>
+<span class="sourceLineNo">041</span>import org.openjdk.jmh.runner.options.OptionsBuilder;<a name="line.41"></a>
+<span class="sourceLineNo">042</span>import org.openjdk.jmh.runner.options.TimeValue;<a name="line.42"></a>
+<span class="sourceLineNo">043</span>import squidpony.squidmath.*;<a name="line.43"></a>
+<span class="sourceLineNo">044</span><a name="line.44"></a>
+<span class="sourceLineNo">045</span>import java.util.concurrent.TimeUnit;<a name="line.45"></a>
+<span class="sourceLineNo">046</span><a name="line.46"></a>
+<span class="sourceLineNo">047</span>/**<a name="line.47"></a>
+<span class="sourceLineNo">048</span> * Benchmark                         Mode  Cnt            Score            Error  Units<a name="line.48"></a>
+<span class="sourceLineNo">049</span> * RNGBenchmark.measureLight         avgt    3   1275059037.000 ±   61737532.875  ns/op<a name="line.49"></a>
+<span class="sourceLineNo">050</span> * RNGBenchmark.measureLightInt      avgt    3   1278703443.000 ±   66201423.790  ns/op<a name="line.50"></a>
+<span class="sourceLineNo">051</span> * RNGBenchmark.measureLightIntR     avgt    3   1427303028.000 ±  200958011.322  ns/op<a name="line.51"></a>
+<span class="sourceLineNo">052</span> * RNGBenchmark.measureLightR        avgt    3   1269081959.667 ±   86190018.925  ns/op<a name="line.52"></a>
+<span class="sourceLineNo">053</span> * RNGBenchmark.measureMT            avgt    3  43085766002.333 ± 2268888793.171  ns/op<a name="line.53"></a>
+<span class="sourceLineNo">054</span> * RNGBenchmark.measureMTInt         avgt    3  22167143778.000 ±  828756142.658  ns/op<a name="line.54"></a>
+<span class="sourceLineNo">055</span> * RNGBenchmark.measureMTIntR        avgt    3  22132403458.000 ±  383655518.387  ns/op<a name="line.55"></a>
+<span class="sourceLineNo">056</span> * RNGBenchmark.measureMTR           avgt    3  43006069307.000 ± 2473850311.634  ns/op<a name="line.56"></a>
+<span class="sourceLineNo">057</span> * RNGBenchmark.measurePermuted      avgt    3   1637032592.333 ±   59199840.006  ns/op<a name="line.57"></a>
+<span class="sourceLineNo">058</span> * RNGBenchmark.measurePermutedInt   avgt    3   1734496732.000 ±   93718940.208  ns/op<a name="line.58"></a>
+<span class="sourceLineNo">059</span> * RNGBenchmark.measurePermutedIntR  avgt    3   1737075300.667 ±  241897619.330  ns/op<a name="line.59"></a>
+<span class="sourceLineNo">060</span> * RNGBenchmark.measurePermutedR     avgt    3   1668389798.667 ±  378429094.045  ns/op<a name="line.60"></a>
+<span class="sourceLineNo">061</span> * RNGBenchmark.measureRandom        avgt    3  22703702167.000 ±  392502237.818  ns/op<a name="line.61"></a>
+<span class="sourceLineNo">062</span> * RNGBenchmark.measureRandomInt     avgt    3  12593739050.667 ±  197683615.906  ns/op<a name="line.62"></a>
+<span class="sourceLineNo">063</span> * RNGBenchmark.measureXor           avgt    3   1384086605.000 ±  174305317.575  ns/op<a name="line.63"></a>
+<span class="sourceLineNo">064</span> * RNGBenchmark.measureXorInt        avgt    3   1276688870.167 ±  133364204.061  ns/op<a name="line.64"></a>
+<span class="sourceLineNo">065</span> * RNGBenchmark.measureXorIntR       avgt    3   1214642941.833 ±   51259344.714  ns/op<a name="line.65"></a>
+<span class="sourceLineNo">066</span> * RNGBenchmark.measureXorR          avgt    3   1346017624.333 ±  151221919.876  ns/op<a name="line.66"></a>
+<span class="sourceLineNo">067</span> *<a name="line.67"></a>
+<span class="sourceLineNo">068</span> * RNGBenchmark.measureLight                 avgt    3   1271.746 ±  155.345  ms/op<a name="line.68"></a>
+<span class="sourceLineNo">069</span> * RNGBenchmark.measureLightInt              avgt    3   1271.499 ±   64.098  ms/op<a name="line.69"></a>
+<span class="sourceLineNo">070</span> * RNGBenchmark.measureLightIntR             avgt    3   1426.202 ±  132.951  ms/op<a name="line.70"></a>
+<span class="sourceLineNo">071</span> * RNGBenchmark.measureLightR                avgt    3   1271.037 ±   69.143  ms/op<a name="line.71"></a>
+<span class="sourceLineNo">072</span> * RNGBenchmark.measureMT                    avgt    3  42625.239 ±  969.951  ms/op<a name="line.72"></a>
+<span class="sourceLineNo">073</span> * RNGBenchmark.measureMTInt                 avgt    3  22143.479 ± 2771.177  ms/op<a name="line.73"></a>
+<span class="sourceLineNo">074</span> * RNGBenchmark.measureMTIntR                avgt    3  22322.939 ± 1853.463  ms/op<a name="line.74"></a>
+<span class="sourceLineNo">075</span> * RNGBenchmark.measureMTR                   avgt    3  43003.067 ± 8246.183  ms/op<a name="line.75"></a>
+<span class="sourceLineNo">076</span> * RNGBenchmark.measurePermuted              avgt    3   1650.486 ±   24.306  ms/op<a name="line.76"></a>
+<span class="sourceLineNo">077</span> * RNGBenchmark.measurePermutedInt           avgt    3   1746.945 ±  102.116  ms/op<a name="line.77"></a>
+<span class="sourceLineNo">078</span> * RNGBenchmark.measurePermutedIntR          avgt    3   1746.471 ±  133.611  ms/op<a name="line.78"></a>
+<span class="sourceLineNo">079</span> * RNGBenchmark.measurePermutedR             avgt    3   1662.623 ±  154.331  ms/op<a name="line.79"></a>
+<span class="sourceLineNo">080</span> * RNGBenchmark.measureRandom                avgt    3  22601.739 ±  277.755  ms/op<a name="line.80"></a>
+<span class="sourceLineNo">081</span> * RNGBenchmark.measureRandomInt             avgt    3  12685.072 ±   75.535  ms/op<a name="line.81"></a>
+<span class="sourceLineNo">082</span> * RNGBenchmark.measureXor                   avgt    3   1382.533 ±   50.650  ms/op<a name="line.82"></a>
+<span class="sourceLineNo">083</span> * RNGBenchmark.measureXorInt                avgt    3   1288.620 ±   74.813  ms/op<a name="line.83"></a>
+<span class="sourceLineNo">084</span> * RNGBenchmark.measureXorIntR               avgt    3   1229.695 ±   85.585  ms/op<a name="line.84"></a>
+<span class="sourceLineNo">085</span> * RNGBenchmark.measureXorR                  avgt    3   1358.552 ±   78.095  ms/op<a name="line.85"></a>
+<span class="sourceLineNo">086</span> * RNGBenchmark.measureThreadLocalRandom     avgt    3   1518.164 ±   63.002  ms/op<a name="line.86"></a>
+<span class="sourceLineNo">087</span> * RNGBenchmark.measureThreadLocalRandomInt  avgt    3   1387.081 ±   26.544  ms/op<a name="line.87"></a>
+<span class="sourceLineNo">088</span> *<a name="line.88"></a>
+<span class="sourceLineNo">089</span> * Benchmark                                 Mode  Cnt       Score      Error  Units<a name="line.89"></a>
+<span class="sourceLineNo">090</span> * RNGBenchmark.measureChaosR                avgt    3    1991.710 ±   25.528  ms/op<a name="line.90"></a>
+<span class="sourceLineNo">091</span> * RNGBenchmark.measureChaosRInt             avgt    3    2013.044 ±   45.370  ms/op<a name="line.91"></a>
+<span class="sourceLineNo">092</span> * RNGBenchmark.measureLight                 avgt    3    1270.195 ±   25.362  ms/op<a name="line.92"></a>
+<span class="sourceLineNo">093</span> * RNGBenchmark.measureLightInt              avgt    3    1268.299 ±   51.405  ms/op<a name="line.93"></a>
+<span class="sourceLineNo">094</span> * RNGBenchmark.measureLightIntR             avgt    3    1430.807 ±   33.260  ms/op<a name="line.94"></a>
+<span class="sourceLineNo">095</span> * RNGBenchmark.measureLightR                avgt    3    1275.100 ±  108.047  ms/op<a name="line.95"></a>
+<span class="sourceLineNo">096</span> * RNGBenchmark.measurePermuted              avgt    3    1646.291 ±   15.124  ms/op<a name="line.96"></a>
+<span class="sourceLineNo">097</span> * RNGBenchmark.measurePermutedInt           avgt    3    1747.967 ±   75.774  ms/op<a name="line.97"></a>
+<span class="sourceLineNo">098</span> * RNGBenchmark.measurePermutedIntR          avgt    3    1749.495 ±   61.203  ms/op<a name="line.98"></a>
+<span class="sourceLineNo">099</span> * RNGBenchmark.measurePermutedR             avgt    3    1662.216 ±   30.412  ms/op<a name="line.99"></a>
+<span class="sourceLineNo">100</span> * RNGBenchmark.measureSecureRandom          avgt    3  162726.751 ± 8173.061  ms/op<a name="line.100"></a>
+<span class="sourceLineNo">101</span> * RNGBenchmark.measureSecureRandomInt       avgt    3   81390.982 ±  471.706  ms/op<a name="line.101"></a>
+<span class="sourceLineNo">102</span> * RNGBenchmark.measureThreadLocalRandom     avgt    3    1463.199 ±  164.716  ms/op<a name="line.102"></a>
+<span class="sourceLineNo">103</span> * RNGBenchmark.measureThreadLocalRandomInt  avgt    3    1395.997 ±  186.706  ms/op<a name="line.103"></a>
+<span class="sourceLineNo">104</span> * RNGBenchmark.measureXor                   avgt    3    1389.147 ±  128.362  ms/op<a name="line.104"></a>
+<span class="sourceLineNo">105</span> * RNGBenchmark.measureXorInt                avgt    3    1286.873 ±  152.577  ms/op<a name="line.105"></a>
+<span class="sourceLineNo">106</span> * RNGBenchmark.measureXorIntR               avgt    3    1228.443 ±  280.454  ms/op<a name="line.106"></a>
+<span class="sourceLineNo">107</span> * RNGBenchmark.measureXorR                  avgt    3    1355.535 ±   74.150  ms/op<a name="line.107"></a>
+<span class="sourceLineNo">108</span> *<a name="line.108"></a>
+<span class="sourceLineNo">109</span> * Benchmark                         Mode  Cnt     Score     Error  Units<a name="line.109"></a>
+<span class="sourceLineNo">110</span> * RNGBenchmark.measureLight         avgt    3  1251.677 ± 138.161  ms/op<a name="line.110"></a>
+<span class="sourceLineNo">111</span> * RNGBenchmark.measureLightInt      avgt    3  1245.465 ±  30.920  ms/op<a name="line.111"></a>
+<span class="sourceLineNo">112</span> * RNGBenchmark.measureLightIntR     avgt    3  1405.867 ±  71.977  ms/op<a name="line.112"></a>
+<span class="sourceLineNo">113</span> * RNGBenchmark.measureLightR        avgt    3  1249.536 ±  17.589  ms/op<a name="line.113"></a>
+<span class="sourceLineNo">114</span> * RNGBenchmark.measurePermuted      avgt    3  1618.965 ± 191.034  ms/op<a name="line.114"></a>
+<span class="sourceLineNo">115</span> * RNGBenchmark.measurePermutedInt   avgt    3  1719.651 ±  81.618  ms/op<a name="line.115"></a>
+<span class="sourceLineNo">116</span> * RNGBenchmark.measurePermutedIntR  avgt    3  1724.723 ± 361.353  ms/op<a name="line.116"></a>
+<span class="sourceLineNo">117</span> * RNGBenchmark.measurePermutedR     avgt    3  1631.643 ± 224.490  ms/op<a name="line.117"></a>
+<span class="sourceLineNo">118</span> * RNGBenchmark.measureXoRo          avgt    3  1215.819 ± 123.754  ms/op<a name="line.118"></a>
+<span class="sourceLineNo">119</span> * RNGBenchmark.measureXoRoInt       avgt    3  1377.244 ±  82.096  ms/op<a name="line.119"></a>
+<span class="sourceLineNo">120</span> * RNGBenchmark.measureXoRoIntR      avgt    3  1446.973 ±  61.399  ms/op<a name="line.120"></a>
+<span class="sourceLineNo">121</span> * RNGBenchmark.measureXoRoR         avgt    3  1274.790 ± 114.618  ms/op<a name="line.121"></a>
+<span class="sourceLineNo">122</span> * RNGBenchmark.measureXor           avgt    3  1362.249 ±  24.538  ms/op<a name="line.122"></a>
+<span class="sourceLineNo">123</span> * RNGBenchmark.measureXorInt        avgt    3  1263.790 ±  41.724  ms/op<a name="line.123"></a>
+<span class="sourceLineNo">124</span> * RNGBenchmark.measureXorIntR       avgt    3  1210.991 ± 105.103  ms/op<a name="line.124"></a>
+<span class="sourceLineNo">125</span> * RNGBenchmark.measureXorR          avgt    3  1331.630 ±  77.693  ms/op<a name="line.125"></a>
+<span class="sourceLineNo">126</span> *<a name="line.126"></a>
+<span class="sourceLineNo">127</span> * Benchmark                               Mode  Cnt     Score     Error  Units<a name="line.127"></a>
+<span class="sourceLineNo">128</span> * RNGBenchmark.measureLight               avgt    3  1269.143 ±  85.918  ms/op<a name="line.128"></a>
+<span class="sourceLineNo">129</span> * RNGBenchmark.measureLightBetweenHastyR  avgt    3  1617.676 ± 316.244  ms/op<a name="line.129"></a>
+<span class="sourceLineNo">130</span> * RNGBenchmark.measureLightBetweenR       avgt    3  2920.878 ± 169.583  ms/op<a name="line.130"></a>
+<span class="sourceLineNo">131</span> * RNGBenchmark.measureLightInt            avgt    3  1267.969 ±  47.884  ms/op<a name="line.131"></a>
+<span class="sourceLineNo">132</span> * RNGBenchmark.measureLightIntR           avgt    3  1425.842 ±  89.710  ms/op<a name="line.132"></a>
+<span class="sourceLineNo">133</span> * RNGBenchmark.measureLightR              avgt    3  1270.877 ±  62.054  ms/op<a name="line.133"></a>
+<span class="sourceLineNo">134</span> * RNGBenchmark.measurePermuted            avgt    3  1647.609 ±  22.511  ms/op<a name="line.134"></a>
+<span class="sourceLineNo">135</span> * RNGBenchmark.measurePermutedInt         avgt    3  1749.033 ± 147.920  ms/op<a name="line.135"></a>
+<span class="sourceLineNo">136</span> * RNGBenchmark.measurePermutedIntR        avgt    3  1744.506 ±  77.704  ms/op<a name="line.136"></a>
+<span class="sourceLineNo">137</span> * RNGBenchmark.measurePermutedR           avgt    3  1679.043 ± 733.835  ms/op<a name="line.137"></a>
+<span class="sourceLineNo">138</span> * RNGBenchmark.measureXoRo                avgt    3  1234.455 ± 112.165  ms/op<a name="line.138"></a>
+<span class="sourceLineNo">139</span> * RNGBenchmark.measureXoRoInt             avgt    3  1400.915 ±  12.242  ms/op<a name="line.139"></a>
+<span class="sourceLineNo">140</span> * RNGBenchmark.measureXoRoIntR            avgt    3  1471.615 ±  12.909  ms/op<a name="line.140"></a>
+<span class="sourceLineNo">141</span> * RNGBenchmark.measureXoRoR               avgt    3  1298.212 ±  13.077  ms/op<a name="line.141"></a>
+<span class="sourceLineNo">142</span> * RNGBenchmark.measureXor                 avgt    3  1392.523 ±  74.491  ms/op<a name="line.142"></a>
+<span class="sourceLineNo">143</span> * RNGBenchmark.measureXorInt              avgt    3  1286.622 ±  17.861  ms/op<a name="line.143"></a>
+<span class="sourceLineNo">144</span> * RNGBenchmark.measureXorIntR             avgt    3  1229.620 ±  50.388  ms/op<a name="line.144"></a>
+<span class="sourceLineNo">145</span> * RNGBenchmark.measureXorR                avgt    3  1356.388 ±  61.536  ms/op<a name="line.145"></a>
+<span class="sourceLineNo">146</span> *<a name="line.146"></a>
+<span class="sourceLineNo">147</span> * Benchmark                               Mode  Cnt     Score     Error  Units<a name="line.147"></a>
+<span class="sourceLineNo">148</span> * RNGBenchmark.measureGDX                 avgt    3  1387.068 ±  39.887  ms/op<a name="line.148"></a>
+<span class="sourceLineNo">149</span> * RNGBenchmark.measureGDXInt              avgt    3  1340.047 ±  12.284  ms/op<a name="line.149"></a>
+<span class="sourceLineNo">150</span> * RNGBenchmark.measureIsaac               avgt    3  5895.743 ± 673.415  ms/op<a name="line.150"></a>
+<span class="sourceLineNo">151</span> * RNGBenchmark.measureIsaacInt            avgt    3  5910.345 ± 372.230  ms/op<a name="line.151"></a>
+<span class="sourceLineNo">152</span> * RNGBenchmark.measureIsaacR              avgt    3  6063.574 ± 276.814  ms/op<a name="line.152"></a>
+<span class="sourceLineNo">153</span> * RNGBenchmark.measureLight               avgt    3  1265.901 ± 145.178  ms/op<a name="line.153"></a>
+<span class="sourceLineNo">154</span> * RNGBenchmark.measureLightBetweenHastyR  avgt    3  1605.859 ±  36.246  ms/op<a name="line.154"></a>
+<span class="sourceLineNo">155</span> * RNGBenchmark.measureLightBetweenR       avgt    3  2986.241 ± 140.256  ms/op<a name="line.155"></a>
+<span class="sourceLineNo">156</span> * RNGBenchmark.measureLightInt            avgt    3  1277.823 ± 199.616  ms/op<a name="line.156"></a>
+<span class="sourceLineNo">157</span> * RNGBenchmark.measureLightIntR           avgt    3  1424.500 ±  31.110  ms/op<a name="line.157"></a>
+<span class="sourceLineNo">158</span> * RNGBenchmark.measureLightR              avgt    3  1271.564 ±  73.357  ms/op\<a name="line.158"></a>
+<span class="sourceLineNo">159</span> * RNGBenchmark.measurePermuted            avgt    3  1647.924 ±  52.709  ms/op<a name="line.159"></a>
+<span class="sourceLineNo">160</span> * RNGBenchmark.measurePermutedInt         avgt    3  1747.788 ±  47.732  ms/op<a name="line.160"></a>
+<span class="sourceLineNo">161</span> * RNGBenchmark.measurePermutedIntR        avgt    3  1749.924 ±  85.835  ms/op<a name="line.161"></a>
+<span class="sourceLineNo">162</span> * RNGBenchmark.measurePermutedR           avgt    3  1649.223 ±  28.546  ms/op<a name="line.162"></a>
+<span class="sourceLineNo">163</span> * RNGBenchmark.measureXoRo                avgt    3  1228.254 ±  16.915  ms/op<a name="line.163"></a>
+<span class="sourceLineNo">164</span> * RNGBenchmark.measureXoRoInt             avgt    3  1395.978 ±  80.767  ms/op<a name="line.164"></a>
+<span class="sourceLineNo">165</span> * RNGBenchmark.measureXoRoIntR            avgt    3  1475.439 ±  30.060  ms/op<a name="line.165"></a>
+<span class="sourceLineNo">166</span> * RNGBenchmark.measureXoRoR               avgt    3  1297.531 ±  32.635  ms/op<a name="line.166"></a>
+<span class="sourceLineNo">167</span> * RNGBenchmark.measureXor                 avgt    3  1386.555 ±  41.859  ms/op<a name="line.167"></a>
+<span class="sourceLineNo">168</span> * RNGBenchmark.measureXorInt              avgt    3  1286.369 ±  45.825  ms/op<a name="line.168"></a>
+<span class="sourceLineNo">169</span> * RNGBenchmark.measureXorIntR             avgt    3  1227.971 ±  23.930  ms/op<a name="line.169"></a>
+<span class="sourceLineNo">170</span> * RNGBenchmark.measureXorR                avgt    3  1354.662 ±  83.443  ms/op<a name="line.170"></a>
+<span class="sourceLineNo">171</span> *<a name="line.171"></a>
+<span class="sourceLineNo">172</span> * Benchmark                        Mode  Cnt     Score     Error  Units<a name="line.172"></a>
+<span class="sourceLineNo">173</span> * RNGBenchmark.measureGDX          avgt    3  1335.200 ±  55.131  ms/op<a name="line.173"></a>
+<span class="sourceLineNo">174</span> * RNGBenchmark.measureGDXInt       avgt    3  1284.587 ± 115.753  ms/op<a name="line.174"></a>
+<span class="sourceLineNo">175</span> * RNGBenchmark.measureLight        avgt    3  1220.308 ± 152.938  ms/op<a name="line.175"></a>
+<span class="sourceLineNo">176</span> * RNGBenchmark.measureLightInt     avgt    3  1215.762 ±  88.660  ms/op<a name="line.176"></a>
+<span class="sourceLineNo">177</span> * RNGBenchmark.measureLightIntR    avgt    3  1365.114 ±  99.494  ms/op<a name="line.177"></a>
+<span class="sourceLineNo">178</span> * RNGBenchmark.measureLightR       avgt    3  1221.436 ±  69.999  ms/op<a name="line.178"></a>
+<span class="sourceLineNo">179</span> * RNGBenchmark.measurePermuted     avgt    3  1599.886 ± 628.296  ms/op<a name="line.179"></a>
+<span class="sourceLineNo">180</span> * RNGBenchmark.measurePermutedInt  avgt    3  1672.186 ± 110.668  ms/op<a name="line.180"></a>
+<span class="sourceLineNo">181</span> * RNGBenchmark.measureThunder      avgt    3   761.156 ±  26.884  ms/op<a name="line.181"></a>
+<span class="sourceLineNo">182</span> * RNGBenchmark.measureThunderInt   avgt    3   846.351 ± 315.138  ms/op<a name="line.182"></a>
+<span class="sourceLineNo">183</span> * RNGBenchmark.measureThunderIntR  avgt    3   918.034 ± 223.494  ms/op<a name="line.183"></a>
+<span class="sourceLineNo">184</span> * RNGBenchmark.measureThunderR     avgt    3   838.914 ±  62.472  ms/op<a name="line.184"></a>
+<span class="sourceLineNo">185</span> * RNGBenchmark.measureXoRo         avgt    3  1179.352 ±  44.233  ms/op<a name="line.185"></a>
+<span class="sourceLineNo">186</span> * RNGBenchmark.measureXoRoInt      avgt    3  1342.901 ±  21.042  ms/op<a name="line.186"></a>
+<span class="sourceLineNo">187</span> * RNGBenchmark.measureXoRoIntR     avgt    3  1415.585 ±  71.514  ms/op<a name="line.187"></a>
+<span class="sourceLineNo">188</span> * RNGBenchmark.measureXoRoR        avgt    3  1245.577 ±  39.306  ms/op<a name="line.188"></a>
+<span class="sourceLineNo">189</span> *<a name="line.189"></a>
+<span class="sourceLineNo">190</span> * Benchmark                        Mode  Cnt     Score     Error  Units<a name="line.190"></a>
+<span class="sourceLineNo">191</span> * RNGBenchmark.measureGDX          avgt    3  1349.265 ±  58.767  ms/op<a name="line.191"></a>
+<span class="sourceLineNo">192</span> * RNGBenchmark.measureGDXInt       avgt    3  1313.436 ± 275.429  ms/op<a name="line.192"></a>
+<span class="sourceLineNo">193</span> * RNGBenchmark.measureLight        avgt    3  1268.311 ±  54.113  ms/op<a name="line.193"></a>
+<span class="sourceLineNo">194</span> * RNGBenchmark.measureLightInt     avgt    3  1268.068 ±  67.096  ms/op<a name="line.194"></a>
+<span class="sourceLineNo">195</span> * RNGBenchmark.measureLightIntR    avgt    3  1430.136 ±  64.875  ms/op<a name="line.195"></a>
+<span class="sourceLineNo">196</span> * RNGBenchmark.measureLightR       avgt    3  1272.734 ±  79.132  ms/op<a name="line.196"></a>
+<span class="sourceLineNo">197</span> * RNGBenchmark.measurePermuted     avgt    3  1649.275 ±  55.005  ms/op<a name="line.197"></a>
+<span class="sourceLineNo">198</span> * RNGBenchmark.measurePermutedInt  avgt    3  1773.061 ± 973.661  ms/op<a name="line.198"></a>
+<span class="sourceLineNo">199</span> * RNGBenchmark.measureThunder      avgt    3   714.949 ±  41.154  ms/op<a name="line.199"></a>
+<span class="sourceLineNo">200</span> * RNGBenchmark.measureThunderInt   avgt    3   793.242 ±  12.410  ms/op<a name="line.200"></a>
+<span class="sourceLineNo">201</span> * RNGBenchmark.measureThunderIntR  avgt    3   793.398 ±  41.674  ms/op<a name="line.201"></a>
+<span class="sourceLineNo">202</span> * RNGBenchmark.measureThunderR     avgt    3   715.476 ±  84.131  ms/op<a name="line.202"></a>
+<span class="sourceLineNo">203</span> * RNGBenchmark.measureXoRo         avgt    3  1233.067 ±  17.727  ms/op<a name="line.203"></a>
+<span class="sourceLineNo">204</span> * RNGBenchmark.measureXoRoInt      avgt    3  1407.854 ± 111.257  ms/op<a name="line.204"></a>
+<span class="sourceLineNo">205</span> * RNGBenchmark.measureXoRoIntR     avgt    3  1470.919 ±  57.782  ms/op<a name="line.205"></a>
+<span class="sourceLineNo">206</span> * RNGBenchmark.measureXoRoR        avgt    3  1303.842 ± 116.414  ms/op<a name="line.206"></a>
+<span class="sourceLineNo">207</span> *<a name="line.207"></a>
+<span class="sourceLineNo">208</span> * Benchmark                        Mode  Cnt     Score     Error  Units<a name="line.208"></a>
+<span class="sourceLineNo">209</span> * RNGBenchmark.measureGDX          avgt    3  1330.069 ±  82.401  ms/op<a name="line.209"></a>
+<span class="sourceLineNo">210</span> * RNGBenchmark.measureGDXInt       avgt    3  1272.507 ± 103.801  ms/op<a name="line.210"></a>
+<span class="sourceLineNo">211</span> * RNGBenchmark.measureLight        avgt    3  1233.945 ± 653.550  ms/op<a name="line.211"></a>
+<span class="sourceLineNo">212</span> * RNGBenchmark.measureLightInt     avgt    3  1211.301 ±  79.526  ms/op<a name="line.212"></a>
+<span class="sourceLineNo">213</span> * RNGBenchmark.measureLightIntR    avgt    3  1392.179 ± 552.502  ms/op<a name="line.213"></a>
+<span class="sourceLineNo">214</span> * RNGBenchmark.measureLightR       avgt    3  1207.975 ± 107.328  ms/op<a name="line.214"></a>
+<span class="sourceLineNo">215</span> * RNGBenchmark.measureThunder      avgt    3   848.403 ±  55.360  ms/op<a name="line.215"></a>
+<span class="sourceLineNo">216</span> * RNGBenchmark.measureThunderInt   avgt    3   920.933 ±  55.772  ms/op<a name="line.216"></a>
+<span class="sourceLineNo">217</span> * RNGBenchmark.measureThunderIntR  avgt    3  1074.927 ± 119.307  ms/op<a name="line.217"></a>
+<span class="sourceLineNo">218</span> * RNGBenchmark.measureThunderR     avgt    3   916.797 ±  58.557  ms/op<a name="line.218"></a>
+<span class="sourceLineNo">219</span> * RNGBenchmark.measureXoRo         avgt    3  1182.115 ± 146.899  ms/op<a name="line.219"></a>
+<span class="sourceLineNo">220</span> * RNGBenchmark.measureXoRoInt      avgt    3  1382.232 ±  68.132  ms/op<a name="line.220"></a>
+<span class="sourceLineNo">221</span> * RNGBenchmark.measureXoRoIntR     avgt    3  1458.964 ±  10.307  ms/op<a name="line.221"></a>
+<span class="sourceLineNo">222</span> * RNGBenchmark.measureXoRoR        avgt    3  1249.812 ± 450.441  ms/op<a name="line.222"></a>
+<span class="sourceLineNo">223</span> *<a name="line.223"></a>
+<span class="sourceLineNo">224</span> * Benchmark                        Mode  Cnt     Score     Error  Units<a name="line.224"></a>
+<span class="sourceLineNo">225</span> * RNGBenchmark.measureGDX          avgt    5  1443.180 ±  21.341  ms/op<a name="line.225"></a>
+<span class="sourceLineNo">226</span> * RNGBenchmark.measureGDXInt       avgt    5  1389.316 ±  28.694  ms/op<a name="line.226"></a>
+<span class="sourceLineNo">227</span> * RNGBenchmark.measureLight        avgt    5  1322.170 ±  17.512  ms/op<a name="line.227"></a>
+<span class="sourceLineNo">228</span> * RNGBenchmark.measureLightInt     avgt    5  1321.347 ±   8.074  ms/op<a name="line.228"></a>
+<span class="sourceLineNo">229</span> * RNGBenchmark.measureLightIntR    avgt    5  1497.184 ±  63.809  ms/op<a name="line.229"></a>
+<span class="sourceLineNo">230</span> * RNGBenchmark.measureLightR       avgt    5  1319.403 ±  16.077  ms/op<a name="line.230"></a>
+<span class="sourceLineNo">231</span> * RNGBenchmark.measurePermuted     avgt    5  1678.603 ±  19.053  ms/op<a name="line.231"></a>
+<span class="sourceLineNo">232</span> * RNGBenchmark.measurePermutedInt  avgt    5  1759.054 ± 253.032  ms/op<a name="line.232"></a>
+<span class="sourceLineNo">233</span> * RNGBenchmark.measurePint         avgt    5  4433.747 ±  12.294  ms/op<a name="line.233"></a>
+<span class="sourceLineNo">234</span> * RNGBenchmark.measurePintInt      avgt    5  1788.244 ±  14.589  ms/op<a name="line.234"></a>
+<span class="sourceLineNo">235</span> * RNGBenchmark.measurePintIntR     avgt    5  1791.904 ±  36.237  ms/op<a name="line.235"></a>
+<span class="sourceLineNo">236</span> * RNGBenchmark.measurePintR        avgt    5  4581.224 ±  77.325  ms/op<a name="line.236"></a>
+<span class="sourceLineNo">237</span> * RNGBenchmark.measureThunder      avgt    5   914.464 ±   6.066  ms/op<a name="line.237"></a>
+<span class="sourceLineNo">238</span> * RNGBenchmark.measureThunderInt   avgt    5  1075.635 ±  19.411  ms/op<a name="line.238"></a>
+<span class="sourceLineNo">239</span> * RNGBenchmark.measureThunderIntR  avgt    5  1156.366 ±  10.684  ms/op<a name="line.239"></a>
+<span class="sourceLineNo">240</span> * RNGBenchmark.measureThunderR     avgt    5   992.199 ±   5.749  ms/op<a name="line.240"></a>
+<span class="sourceLineNo">241</span> * RNGBenchmark.measureXoRo         avgt    5  1353.115 ±  14.770  ms/op<a name="line.241"></a>
+<span class="sourceLineNo">242</span> * RNGBenchmark.measureXoRoInt      avgt    5  1440.937 ±  26.151  ms/op<a name="line.242"></a>
+<span class="sourceLineNo">243</span> * RNGBenchmark.measureXoRoIntR     avgt    5  1551.285 ±  45.324  ms/op<a name="line.243"></a>
+<span class="sourceLineNo">244</span> * RNGBenchmark.measureXoRoR        avgt    5  1415.288 ±  28.783  ms/op<a name="line.244"></a>
+<span class="sourceLineNo">245</span> */<a name="line.245"></a>
+<span class="sourceLineNo">246</span>public class RNGBenchmark {<a name="line.246"></a>
+<span class="sourceLineNo">247</span><a name="line.247"></a>
+<span class="sourceLineNo">248</span>    private static long seed = 9000;<a name="line.248"></a>
+<span class="sourceLineNo">249</span>    private static int iseed = 9000;<a name="line.249"></a>
+<span class="sourceLineNo">250</span><a name="line.250"></a>
+<span class="sourceLineNo">251</span>    public long doPint()<a name="line.251"></a>
+<span class="sourceLineNo">252</span>    {<a name="line.252"></a>
+<span class="sourceLineNo">253</span>        PintRNG rng = new PintRNG(seed);<a name="line.253"></a>
+<span class="sourceLineNo">254</span><a name="line.254"></a>
+<span class="sourceLineNo">255</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.255"></a>
+<span class="sourceLineNo">256</span>            seed += rng.nextLong();<a name="line.256"></a>
+<span class="sourceLineNo">257</span>        }<a name="line.257"></a>
+<span class="sourceLineNo">258</span>        return seed;<a name="line.258"></a>
+<span class="sourceLineNo">259</span>    }<a name="line.259"></a>
+<span class="sourceLineNo">260</span><a name="line.260"></a>
+<span class="sourceLineNo">261</span>    @Benchmark<a name="line.261"></a>
+<span class="sourceLineNo">262</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.262"></a>
+<span class="sourceLineNo">263</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.263"></a>
+<span class="sourceLineNo">264</span>    public void measurePint() throws InterruptedException {<a name="line.264"></a>
+<span class="sourceLineNo">265</span>        seed = 9000;<a name="line.265"></a>
+<span class="sourceLineNo">266</span>        doPint();<a name="line.266"></a>
+<span class="sourceLineNo">267</span>    }<a name="line.267"></a>
+<span class="sourceLineNo">268</span><a name="line.268"></a>
+<span class="sourceLineNo">269</span>    public long doPintInt()<a name="line.269"></a>
+<span class="sourceLineNo">270</span>    {<a name="line.270"></a>
+<span class="sourceLineNo">271</span>        PintRNG rng = new PintRNG(iseed);<a name="line.271"></a>
+<span class="sourceLineNo">272</span><a name="line.272"></a>
+<span class="sourceLineNo">273</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.273"></a>
+<span class="sourceLineNo">274</span>            iseed += rng.nextInt();<a name="line.274"></a>
+<span class="sourceLineNo">275</span>        }<a name="line.275"></a>
+<span class="sourceLineNo">276</span>        return iseed;<a name="line.276"></a>
+<span class="sourceLineNo">277</span>    }<a name="line.277"></a>
+<span class="sourceLineNo">278</span><a name="line.278"></a>
+<span class="sourceLineNo">279</span>    @Benchmark<a name="line.279"></a>
+<span class="sourceLineNo">280</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.280"></a>
+<span class="sourceLineNo">281</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.281"></a>
+<span class="sourceLineNo">282</span>    public void measurePintInt() throws InterruptedException {<a name="line.282"></a>
+<span class="sourceLineNo">283</span>        iseed = 9000;<a name="line.283"></a>
+<span class="sourceLineNo">284</span>        doPintInt();<a name="line.284"></a>
+<span class="sourceLineNo">285</span>    }<a name="line.285"></a>
+<span class="sourceLineNo">286</span>    public long doPintR()<a name="line.286"></a>
+<span class="sourceLineNo">287</span>    {<a name="line.287"></a>
+<span class="sourceLineNo">288</span>        RNG rng = new RNG(new PintRNG(seed));<a name="line.288"></a>
+<span class="sourceLineNo">289</span><a name="line.289"></a>
+<span class="sourceLineNo">290</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.290"></a>
+<span class="sourceLineNo">291</span>            seed += rng.nextLong();<a name="line.291"></a>
+<span class="sourceLineNo">292</span>        }<a name="line.292"></a>
+<span class="sourceLineNo">293</span>        return seed;<a name="line.293"></a>
+<span class="sourceLineNo">294</span>    }<a name="line.294"></a>
+<span class="sourceLineNo">295</span><a name="line.295"></a>
+<span class="sourceLineNo">296</span>    @Benchmark<a name="line.296"></a>
+<span class="sourceLineNo">297</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.297"></a>
+<span class="sourceLineNo">298</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.298"></a>
+<span class="sourceLineNo">299</span>    public void measurePintR() throws InterruptedException {<a name="line.299"></a>
+<span class="sourceLineNo">300</span>        seed = 9000;<a name="line.300"></a>
+<span class="sourceLineNo">301</span>        doPintR();<a name="line.301"></a>
+<span class="sourceLineNo">302</span>    }<a name="line.302"></a>
+<span class="sourceLineNo">303</span><a name="line.303"></a>
+<span class="sourceLineNo">304</span>    public long doPintIntR()<a name="line.304"></a>
+<span class="sourceLineNo">305</span>    {<a name="line.305"></a>
+<span class="sourceLineNo">306</span>        RNG rng = new RNG(new PintRNG(iseed));<a name="line.306"></a>
+<span class="sourceLineNo">307</span><a name="line.307"></a>
+<span class="sourceLineNo">308</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.308"></a>
+<span class="sourceLineNo">309</span>            iseed += rng.nextInt();<a name="line.309"></a>
+<span class="sourceLineNo">310</span>        }<a name="line.310"></a>
+<span class="sourceLineNo">311</span>        return iseed;<a name="line.311"></a>
+<span class="sourceLineNo">312</span>    }<a name="line.312"></a>
+<span class="sourceLineNo">313</span><a name="line.313"></a>
+<span class="sourceLineNo">314</span>    @Benchmark<a name="line.314"></a>
+<span class="sourceLineNo">315</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.315"></a>
+<span class="sourceLineNo">316</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.316"></a>
+<span class="sourceLineNo">317</span>    public void measurePintIntR() throws InterruptedException {<a name="line.317"></a>
+<span class="sourceLineNo">318</span>        iseed = 9000;<a name="line.318"></a>
+<span class="sourceLineNo">319</span>        doPintIntR();<a name="line.319"></a>
+<span class="sourceLineNo">320</span>    }<a name="line.320"></a>
+<span class="sourceLineNo">321</span>/*<a name="line.321"></a>
+<span class="sourceLineNo">322</span>    public long doThunder()<a name="line.322"></a>
+<span class="sourceLineNo">323</span>    {<a name="line.323"></a>
+<span class="sourceLineNo">324</span>        ThunderRNG rng = new ThunderRNG(seed);<a name="line.324"></a>
+<span class="sourceLineNo">325</span><a name="line.325"></a>
+<span class="sourceLineNo">326</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.326"></a>
+<span class="sourceLineNo">327</span>            seed += rng.nextLong();<a name="line.327"></a>
+<span class="sourceLineNo">328</span>        }<a name="line.328"></a>
+<span class="sourceLineNo">329</span>        return seed;<a name="line.329"></a>
+<span class="sourceLineNo">330</span>    }<a name="line.330"></a>
+<span class="sourceLineNo">331</span><a name="line.331"></a>
+<span class="sourceLineNo">332</span>    @Benchmark<a name="line.332"></a>
+<span class="sourceLineNo">333</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.333"></a>
+<span class="sourceLineNo">334</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.334"></a>
+<span class="sourceLineNo">335</span>    public void measureThunder() throws InterruptedException {<a name="line.335"></a>
+<span class="sourceLineNo">336</span>        seed = 9000;<a name="line.336"></a>
+<span class="sourceLineNo">337</span>        doThunder();<a name="line.337"></a>
+<span class="sourceLineNo">338</span>    }<a name="line.338"></a>
+<span class="sourceLineNo">339</span><a name="line.339"></a>
+<span class="sourceLineNo">340</span>    public long doThunderInt()<a name="line.340"></a>
+<span class="sourceLineNo">341</span>    {<a name="line.341"></a>
+<span class="sourceLineNo">342</span>        ThunderRNG rng = new ThunderRNG(iseed);<a name="line.342"></a>
+<span class="sourceLineNo">343</span><a name="line.343"></a>
+<span class="sourceLineNo">344</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.344"></a>
+<span class="sourceLineNo">345</span>            iseed += rng.nextInt();<a name="line.345"></a>
+<span class="sourceLineNo">346</span>        }<a name="line.346"></a>
+<span class="sourceLineNo">347</span>        return iseed;<a name="line.347"></a>
+<span class="sourceLineNo">348</span>    }<a name="line.348"></a>
+<span class="sourceLineNo">349</span><a name="line.349"></a>
+<span class="sourceLineNo">350</span>    @Benchmark<a name="line.350"></a>
+<span class="sourceLineNo">351</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.351"></a>
+<span class="sourceLineNo">352</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.352"></a>
+<span class="sourceLineNo">353</span>    public void measureThunderInt() throws InterruptedException {<a name="line.353"></a>
+<span class="sourceLineNo">354</span>        iseed = 9000;<a name="line.354"></a>
+<span class="sourceLineNo">355</span>        doThunderInt();<a name="line.355"></a>
+<span class="sourceLineNo">356</span>    }<a name="line.356"></a>
+<span class="sourceLineNo">357</span>    public long doThunderR()<a name="line.357"></a>
+<span class="sourceLineNo">358</span>    {<a name="line.358"></a>
+<span class="sourceLineNo">359</span>        RNG rng = new RNG(new ThunderRNG(seed));<a name="line.359"></a>
+<span class="sourceLineNo">360</span><a name="line.360"></a>
+<span class="sourceLineNo">361</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.361"></a>
+<span class="sourceLineNo">362</span>            seed += rng.nextLong();<a name="line.362"></a>
+<span class="sourceLineNo">363</span>        }<a name="line.363"></a>
+<span class="sourceLineNo">364</span>        return seed;<a name="line.364"></a>
+<span class="sourceLineNo">365</span>    }<a name="line.365"></a>
+<span class="sourceLineNo">366</span><a name="line.366"></a>
+<span class="sourceLineNo">367</span>    @Benchmark<a name="line.367"></a>
+<span class="sourceLineNo">368</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.368"></a>
+<span class="sourceLineNo">369</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.369"></a>
+<span class="sourceLineNo">370</span>    public void measureThunderR() throws InterruptedException {<a name="line.370"></a>
+<span class="sourceLineNo">371</span>        seed = 9000;<a name="line.371"></a>
+<span class="sourceLineNo">372</span>        doThunderR();<a name="line.372"></a>
+<span class="sourceLineNo">373</span>    }<a name="line.373"></a>
+<span class="sourceLineNo">374</span><a name="line.374"></a>
+<span class="sourceLineNo">375</span>    public long doThunderIntR()<a name="line.375"></a>
+<span class="sourceLineNo">376</span>    {<a name="line.376"></a>
+<span class="sourceLineNo">377</span>        RNG rng = new RNG(new ThunderRNG(iseed));<a name="line.377"></a>
+<span class="sourceLineNo">378</span><a name="line.378"></a>
+<span class="sourceLineNo">379</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.379"></a>
+<span class="sourceLineNo">380</span>            iseed += rng.nextInt();<a name="line.380"></a>
+<span class="sourceLineNo">381</span>        }<a name="line.381"></a>
+<span class="sourceLineNo">382</span>        return iseed;<a name="line.382"></a>
+<span class="sourceLineNo">383</span>    }<a name="line.383"></a>
+<span class="sourceLineNo">384</span><a name="line.384"></a>
+<span class="sourceLineNo">385</span>    @Benchmark<a name="line.385"></a>
+<span class="sourceLineNo">386</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.386"></a>
+<span class="sourceLineNo">387</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.387"></a>
+<span class="sourceLineNo">388</span>    public void measureThunderIntR() throws InterruptedException {<a name="line.388"></a>
+<span class="sourceLineNo">389</span>        iseed = 9000;<a name="line.389"></a>
+<span class="sourceLineNo">390</span>        doThunderIntR();<a name="line.390"></a>
+<span class="sourceLineNo">391</span>    }<a name="line.391"></a>
+<span class="sourceLineNo">392</span><a name="line.392"></a>
+<span class="sourceLineNo">393</span>    public long doXoRo()<a name="line.393"></a>
+<span class="sourceLineNo">394</span>    {<a name="line.394"></a>
+<span class="sourceLineNo">395</span>        XoRoRNG rng = new XoRoRNG(seed);<a name="line.395"></a>
+<span class="sourceLineNo">396</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.396"></a>
+<span class="sourceLineNo">397</span>            seed += rng.nextLong();<a name="line.397"></a>
+<span class="sourceLineNo">398</span>        }<a name="line.398"></a>
+<span class="sourceLineNo">399</span>        return seed;<a name="line.399"></a>
+<span class="sourceLineNo">400</span>    }<a name="line.400"></a>
+<span class="sourceLineNo">401</span><a name="line.401"></a>
+<span class="sourceLineNo">402</span>    @Benchmark<a name="line.402"></a>
+<span class="sourceLineNo">403</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.403"></a>
+<span class="sourceLineNo">404</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.404"></a>
+<span class="sourceLineNo">405</span>    public void measureXoRo() throws InterruptedException {<a name="line.405"></a>
+<span class="sourceLineNo">406</span>        seed = 9000;<a name="line.406"></a>
+<span class="sourceLineNo">407</span>        doXoRo();<a name="line.407"></a>
+<span class="sourceLineNo">408</span>    }<a name="line.408"></a>
+<span class="sourceLineNo">409</span><a name="line.409"></a>
+<span class="sourceLineNo">410</span>    public long doXoRoInt()<a name="line.410"></a>
+<span class="sourceLineNo">411</span>    {<a name="line.411"></a>
+<span class="sourceLineNo">412</span>        XoRoRNG rng = new XoRoRNG(iseed);<a name="line.412"></a>
+<span class="sourceLineNo">413</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.413"></a>
+<span class="sourceLineNo">414</span>            iseed += rng.nextInt();<a name="line.414"></a>
+<span class="sourceLineNo">415</span>        }<a name="line.415"></a>
+<span class="sourceLineNo">416</span>        return iseed;<a name="line.416"></a>
+<span class="sourceLineNo">417</span>    }<a name="line.417"></a>
+<span class="sourceLineNo">418</span>    @Benchmark<a name="line.418"></a>
+<span class="sourceLineNo">419</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.419"></a>
+<span class="sourceLineNo">420</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.420"></a>
+<span class="sourceLineNo">421</span>    public void measureXoRoInt() throws InterruptedException {<a name="line.421"></a>
+<span class="sourceLineNo">422</span>        iseed = 9000;<a name="line.422"></a>
+<span class="sourceLineNo">423</span>        doXoRoInt();<a name="line.423"></a>
+<span class="sourceLineNo">424</span>    }<a name="line.424"></a>
+<span class="sourceLineNo">425</span><a name="line.425"></a>
+<span class="sourceLineNo">426</span>    public long doXoRoR()<a name="line.426"></a>
+<span class="sourceLineNo">427</span>    {<a name="line.427"></a>
+<span class="sourceLineNo">428</span>        RNG rng = new RNG(new XoRoRNG(seed));<a name="line.428"></a>
+<span class="sourceLineNo">429</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.429"></a>
+<span class="sourceLineNo">430</span>            seed += rng.nextLong();<a name="line.430"></a>
+<span class="sourceLineNo">431</span>        }<a name="line.431"></a>
+<span class="sourceLineNo">432</span>        return seed;<a name="line.432"></a>
+<span class="sourceLineNo">433</span>    }<a name="line.433"></a>
+<span class="sourceLineNo">434</span><a name="line.434"></a>
+<span class="sourceLineNo">435</span>    @Benchmark<a name="line.435"></a>
+<span class="sourceLineNo">436</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.436"></a>
+<span class="sourceLineNo">437</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.437"></a>
+<span class="sourceLineNo">438</span>    public void measureXoRoR() throws InterruptedException {<a name="line.438"></a>
+<span class="sourceLineNo">439</span>        seed = 9000;<a name="line.439"></a>
+<span class="sourceLineNo">440</span>        doXoRoR();<a name="line.440"></a>
+<span class="sourceLineNo">441</span>    }<a name="line.441"></a>
+<span class="sourceLineNo">442</span><a name="line.442"></a>
+<span class="sourceLineNo">443</span>    public long doXoRoIntR()<a name="line.443"></a>
+<span class="sourceLineNo">444</span>    {<a name="line.444"></a>
+<span class="sourceLineNo">445</span>        RNG rng = new RNG(new XoRoRNG(iseed));<a name="line.445"></a>
+<span class="sourceLineNo">446</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.446"></a>
+<span class="sourceLineNo">447</span>            iseed += rng.nextInt();<a name="line.447"></a>
+<span class="sourceLineNo">448</span>        }<a name="line.448"></a>
+<span class="sourceLineNo">449</span>        return iseed;<a name="line.449"></a>
+<span class="sourceLineNo">450</span>    }<a name="line.450"></a>
+<span class="sourceLineNo">451</span>    @Benchmark<a name="line.451"></a>
+<span class="sourceLineNo">452</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.452"></a>
+<span class="sourceLineNo">453</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.453"></a>
+<span class="sourceLineNo">454</span>    public void measureXoRoIntR() throws InterruptedException {<a name="line.454"></a>
+<span class="sourceLineNo">455</span>        iseed = 9000;<a name="line.455"></a>
+<span class="sourceLineNo">456</span>        doXoRoIntR();<a name="line.456"></a>
+<span class="sourceLineNo">457</span>    }<a name="line.457"></a>
+<span class="sourceLineNo">458</span>*/<a name="line.458"></a>
+<span class="sourceLineNo">459</span>    public long doLight()<a name="line.459"></a>
+<span class="sourceLineNo">460</span>    {<a name="line.460"></a>
+<span class="sourceLineNo">461</span>        LightRNG rng = new LightRNG(seed);<a name="line.461"></a>
+<span class="sourceLineNo">462</span><a name="line.462"></a>
+<span class="sourceLineNo">463</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.463"></a>
+<span class="sourceLineNo">464</span>            seed += rng.nextLong();<a name="line.464"></a>
+<span class="sourceLineNo">465</span>        }<a name="line.465"></a>
+<span class="sourceLineNo">466</span>        return seed;<a name="line.466"></a>
+<span class="sourceLineNo">467</span>    }<a name="line.467"></a>
+<span class="sourceLineNo">468</span><a name="line.468"></a>
+<span class="sourceLineNo">469</span>    @Benchmark<a name="line.469"></a>
+<span class="sourceLineNo">470</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.470"></a>
+<span class="sourceLineNo">471</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.471"></a>
+<span class="sourceLineNo">472</span>    public void measureLight() throws InterruptedException {<a name="line.472"></a>
+<span class="sourceLineNo">473</span>        seed = 9000;<a name="line.473"></a>
+<span class="sourceLineNo">474</span>        doLight();<a name="line.474"></a>
+<span class="sourceLineNo">475</span>    }<a name="line.475"></a>
+<span class="sourceLineNo">476</span><a name="line.476"></a>
+<span class="sourceLineNo">477</span>    public long doLightInt()<a name="line.477"></a>
+<span class="sourceLineNo">478</span>    {<a name="line.478"></a>
+<span class="sourceLineNo">479</span>        LightRNG rng = new LightRNG(iseed);<a name="line.479"></a>
+<span class="sourceLineNo">480</span><a name="line.480"></a>
+<span class="sourceLineNo">481</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.481"></a>
+<span class="sourceLineNo">482</span>            iseed += rng.nextInt();<a name="line.482"></a>
+<span class="sourceLineNo">483</span>        }<a name="line.483"></a>
+<span class="sourceLineNo">484</span>        return iseed;<a name="line.484"></a>
+<span class="sourceLineNo">485</span>    }<a name="line.485"></a>
+<span class="sourceLineNo">486</span><a name="line.486"></a>
+<span class="sourceLineNo">487</span>    @Benchmark<a name="line.487"></a>
+<span class="sourceLineNo">488</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.488"></a>
+<span class="sourceLineNo">489</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.489"></a>
+<span class="sourceLineNo">490</span>    public void measureLightInt() throws InterruptedException {<a name="line.490"></a>
+<span class="sourceLineNo">491</span>        iseed = 9000;<a name="line.491"></a>
+<span class="sourceLineNo">492</span>        doLightInt();<a name="line.492"></a>
+<span class="sourceLineNo">493</span>    }<a name="line.493"></a>
+<span class="sourceLineNo">494</span>    public long doLightR()<a name="line.494"></a>
+<span class="sourceLineNo">495</span>    {<a name="line.495"></a>
+<span class="sourceLineNo">496</span>        RNG rng = new RNG(new LightRNG(seed));<a name="line.496"></a>
+<span class="sourceLineNo">497</span><a name="line.497"></a>
+<span class="sourceLineNo">498</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.498"></a>
+<span class="sourceLineNo">499</span>            seed += rng.nextLong();<a name="line.499"></a>
+<span class="sourceLineNo">500</span>        }<a name="line.500"></a>
+<span class="sourceLineNo">501</span>        return seed;<a name="line.501"></a>
+<span class="sourceLineNo">502</span>    }<a name="line.502"></a>
+<span class="sourceLineNo">503</span><a name="line.503"></a>
+<span class="sourceLineNo">504</span>    @Benchmark<a name="line.504"></a>
+<span class="sourceLineNo">505</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.505"></a>
+<span class="sourceLineNo">506</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.506"></a>
+<span class="sourceLineNo">507</span>    public void measureLightR() throws InterruptedException {<a name="line.507"></a>
+<span class="sourceLineNo">508</span>        seed = 9000;<a name="line.508"></a>
+<span class="sourceLineNo">509</span>        doLightR();<a name="line.509"></a>
+<span class="sourceLineNo">510</span>    }<a name="line.510"></a>
+<span class="sourceLineNo">511</span><a name="line.511"></a>
+<span class="sourceLineNo">512</span>    public long doLightIntR()<a name="line.512"></a>
 <span class="sourceLineNo">513</span>    {<a name="line.513"></a>
 <span class="sourceLineNo">514</span>        RNG rng = new RNG(new LightRNG(iseed));<a name="line.514"></a>
 <span class="sourceLineNo">515</span><a name="line.515"></a>
 <span class="sourceLineNo">516</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.516"></a>
-<span class="sourceLineNo">517</span>            iseed += rng.nextInt(1000);<a name="line.517"></a>
+<span class="sourceLineNo">517</span>            iseed += rng.nextInt();<a name="line.517"></a>
 <span class="sourceLineNo">518</span>        }<a name="line.518"></a>
 <span class="sourceLineNo">519</span>        return iseed;<a name="line.519"></a>
 <span class="sourceLineNo">520</span>    }<a name="line.520"></a>
@@ -530,525 +530,615 @@
 <span class="sourceLineNo">522</span>    @Benchmark<a name="line.522"></a>
 <span class="sourceLineNo">523</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.523"></a>
 <span class="sourceLineNo">524</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.524"></a>
-<span class="sourceLineNo">525</span>    public void measureLightBetweenR() throws InterruptedException {<a name="line.525"></a>
+<span class="sourceLineNo">525</span>    public void measureLightIntR() throws InterruptedException {<a name="line.525"></a>
 <span class="sourceLineNo">526</span>        iseed = 9000;<a name="line.526"></a>
-<span class="sourceLineNo">527</span>        System.out.println(doLightBetweenR());<a name="line.527"></a>
+<span class="sourceLineNo">527</span>        doLightIntR();<a name="line.527"></a>
 <span class="sourceLineNo">528</span>    }<a name="line.528"></a>
-<span class="sourceLineNo">529</span>    public long doLightBetweenHastyR()<a name="line.529"></a>
-<span class="sourceLineNo">530</span>    {<a name="line.530"></a>
-<span class="sourceLineNo">531</span>        RNG rng = new RNG(new LightRNG(iseed));<a name="line.531"></a>
-<span class="sourceLineNo">532</span><a name="line.532"></a>
-<span class="sourceLineNo">533</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.533"></a>
-<span class="sourceLineNo">534</span>            iseed += rng.nextIntHasty(1000);<a name="line.534"></a>
-<span class="sourceLineNo">535</span>        }<a name="line.535"></a>
-<span class="sourceLineNo">536</span>        return iseed;<a name="line.536"></a>
-<span class="sourceLineNo">537</span>    }<a name="line.537"></a>
-<span class="sourceLineNo">538</span><a name="line.538"></a>
-<span class="sourceLineNo">539</span>    @Benchmark<a name="line.539"></a>
-<span class="sourceLineNo">540</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.540"></a>
-<span class="sourceLineNo">541</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.541"></a>
-<span class="sourceLineNo">542</span>    public void measureLightBetweenHastyR() throws InterruptedException {<a name="line.542"></a>
-<span class="sourceLineNo">543</span>        iseed = 9000;<a name="line.543"></a>
-<span class="sourceLineNo">544</span>        System.out.println(doLightBetweenHastyR());<a name="line.544"></a>
-<span class="sourceLineNo">545</span>    }<a name="line.545"></a>
-<span class="sourceLineNo">546</span>    */<a name="line.546"></a>
-<span class="sourceLineNo">547</span><a name="line.547"></a>
-<span class="sourceLineNo">548</span>    /*<a name="line.548"></a>
-<span class="sourceLineNo">549</span>    public long doPermuted()<a name="line.549"></a>
-<span class="sourceLineNo">550</span>    {<a name="line.550"></a>
-<span class="sourceLineNo">551</span>        PermutedRNG rng = new PermutedRNG(seed);<a name="line.551"></a>
+<span class="sourceLineNo">529</span><a name="line.529"></a>
+<span class="sourceLineNo">530</span>    /*<a name="line.530"></a>
+<span class="sourceLineNo">531</span>    public long doLightBetweenR()<a name="line.531"></a>
+<span class="sourceLineNo">532</span>    {<a name="line.532"></a>
+<span class="sourceLineNo">533</span>        RNG rng = new RNG(new LightRNG(iseed));<a name="line.533"></a>
+<span class="sourceLineNo">534</span><a name="line.534"></a>
+<span class="sourceLineNo">535</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.535"></a>
+<span class="sourceLineNo">536</span>            iseed += rng.nextInt(1000);<a name="line.536"></a>
+<span class="sourceLineNo">537</span>        }<a name="line.537"></a>
+<span class="sourceLineNo">538</span>        return iseed;<a name="line.538"></a>
+<span class="sourceLineNo">539</span>    }<a name="line.539"></a>
+<span class="sourceLineNo">540</span><a name="line.540"></a>
+<span class="sourceLineNo">541</span>    @Benchmark<a name="line.541"></a>
+<span class="sourceLineNo">542</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.542"></a>
+<span class="sourceLineNo">543</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.543"></a>
+<span class="sourceLineNo">544</span>    public void measureLightBetweenR() throws InterruptedException {<a name="line.544"></a>
+<span class="sourceLineNo">545</span>        iseed = 9000;<a name="line.545"></a>
+<span class="sourceLineNo">546</span>        System.out.println(doLightBetweenR());<a name="line.546"></a>
+<span class="sourceLineNo">547</span>    }<a name="line.547"></a>
+<span class="sourceLineNo">548</span>    public long doLightBetweenHastyR()<a name="line.548"></a>
+<span class="sourceLineNo">549</span>    {<a name="line.549"></a>
+<span class="sourceLineNo">550</span>        RNG rng = new RNG(new LightRNG(iseed));<a name="line.550"></a>
+<span class="sourceLineNo">551</span><a name="line.551"></a>
 <span class="sourceLineNo">552</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.552"></a>
-<span class="sourceLineNo">553</span>            seed += rng.nextLong();<a name="line.553"></a>
+<span class="sourceLineNo">553</span>            iseed += rng.nextIntHasty(1000);<a name="line.553"></a>
 <span class="sourceLineNo">554</span>        }<a name="line.554"></a>
-<span class="sourceLineNo">555</span>        return seed;<a name="line.555"></a>
+<span class="sourceLineNo">555</span>        return iseed;<a name="line.555"></a>
 <span class="sourceLineNo">556</span>    }<a name="line.556"></a>
 <span class="sourceLineNo">557</span><a name="line.557"></a>
 <span class="sourceLineNo">558</span>    @Benchmark<a name="line.558"></a>
 <span class="sourceLineNo">559</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.559"></a>
 <span class="sourceLineNo">560</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.560"></a>
-<span class="sourceLineNo">561</span>    public void measurePermuted() throws InterruptedException {<a name="line.561"></a>
-<span class="sourceLineNo">562</span>        seed = 9000;<a name="line.562"></a>
-<span class="sourceLineNo">563</span>        doPermuted();<a name="line.563"></a>
+<span class="sourceLineNo">561</span>    public void measureLightBetweenHastyR() throws InterruptedException {<a name="line.561"></a>
+<span class="sourceLineNo">562</span>        iseed = 9000;<a name="line.562"></a>
+<span class="sourceLineNo">563</span>        System.out.println(doLightBetweenHastyR());<a name="line.563"></a>
 <span class="sourceLineNo">564</span>    }<a name="line.564"></a>
-<span class="sourceLineNo">565</span><a name="line.565"></a>
-<span class="sourceLineNo">566</span>    public long doPermutedInt()<a name="line.566"></a>
-<span class="sourceLineNo">567</span>    {<a name="line.567"></a>
-<span class="sourceLineNo">568</span>        PermutedRNG rng = new PermutedRNG(iseed);<a name="line.568"></a>
-<span class="sourceLineNo">569</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.569"></a>
-<span class="sourceLineNo">570</span>            iseed += rng.nextInt();<a name="line.570"></a>
-<span class="sourceLineNo">571</span>        }<a name="line.571"></a>
-<span class="sourceLineNo">572</span>        return iseed;<a name="line.572"></a>
-<span class="sourceLineNo">573</span>    }<a name="line.573"></a>
-<span class="sourceLineNo">574</span>    @Benchmark<a name="line.574"></a>
-<span class="sourceLineNo">575</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.575"></a>
-<span class="sourceLineNo">576</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.576"></a>
-<span class="sourceLineNo">577</span>    public void measurePermutedInt() throws InterruptedException {<a name="line.577"></a>
-<span class="sourceLineNo">578</span>        iseed = 9000;<a name="line.578"></a>
-<span class="sourceLineNo">579</span>        doPermutedInt();<a name="line.579"></a>
-<span class="sourceLineNo">580</span>    }<a name="line.580"></a>
-<span class="sourceLineNo">581</span>    /*<a name="line.581"></a>
-<span class="sourceLineNo">582</span>    public long doPermutedR()<a name="line.582"></a>
-<span class="sourceLineNo">583</span>    {<a name="line.583"></a>
-<span class="sourceLineNo">584</span>        RNG rng = new RNG(new PermutedRNG(seed));<a name="line.584"></a>
-<span class="sourceLineNo">585</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.585"></a>
-<span class="sourceLineNo">586</span>            seed += rng.nextLong();<a name="line.586"></a>
-<span class="sourceLineNo">587</span>        }<a name="line.587"></a>
-<span class="sourceLineNo">588</span>        return seed;<a name="line.588"></a>
-<span class="sourceLineNo">589</span>    }<a name="line.589"></a>
-<span class="sourceLineNo">590</span><a name="line.590"></a>
-<span class="sourceLineNo">591</span>    @Benchmark<a name="line.591"></a>
-<span class="sourceLineNo">592</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.592"></a>
-<span class="sourceLineNo">593</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.593"></a>
-<span class="sourceLineNo">594</span>    public void measurePermutedR() throws InterruptedException {<a name="line.594"></a>
-<span class="sourceLineNo">595</span>        seed = 9000;<a name="line.595"></a>
-<span class="sourceLineNo">596</span>        doPermutedR();<a name="line.596"></a>
-<span class="sourceLineNo">597</span>    }<a name="line.597"></a>
-<span class="sourceLineNo">598</span><a name="line.598"></a>
-<span class="sourceLineNo">599</span>    public long doPermutedIntR()<a name="line.599"></a>
-<span class="sourceLineNo">600</span>    {<a name="line.600"></a>
-<span class="sourceLineNo">601</span>        RNG rng = new RNG(new PermutedRNG(iseed));<a name="line.601"></a>
-<span class="sourceLineNo">602</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.602"></a>
-<span class="sourceLineNo">603</span>            iseed += rng.nextInt();<a name="line.603"></a>
-<span class="sourceLineNo">604</span>        }<a name="line.604"></a>
-<span class="sourceLineNo">605</span>        return iseed;<a name="line.605"></a>
-<span class="sourceLineNo">606</span>    }<a name="line.606"></a>
-<span class="sourceLineNo">607</span>    @Benchmark<a name="line.607"></a>
-<span class="sourceLineNo">608</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.608"></a>
-<span class="sourceLineNo">609</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.609"></a>
-<span class="sourceLineNo">610</span>    public void measurePermutedIntR() throws InterruptedException {<a name="line.610"></a>
-<span class="sourceLineNo">611</span>        iseed = 9000;<a name="line.611"></a>
-<span class="sourceLineNo">612</span>        doPermutedIntR();<a name="line.612"></a>
-<span class="sourceLineNo">613</span>    }<a name="line.613"></a>
-<span class="sourceLineNo">614</span><a name="line.614"></a>
-<span class="sourceLineNo">615</span><a name="line.615"></a>
-<span class="sourceLineNo">616</span>    public long doXor()<a name="line.616"></a>
-<span class="sourceLineNo">617</span>    {<a name="line.617"></a>
-<span class="sourceLineNo">618</span>        XorRNG rng = new XorRNG(seed);<a name="line.618"></a>
-<span class="sourceLineNo">619</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.619"></a>
-<span class="sourceLineNo">620</span>            seed += rng.nextLong();<a name="line.620"></a>
-<span class="sourceLineNo">621</span>        }<a name="line.621"></a>
-<span class="sourceLineNo">622</span>        return seed;<a name="line.622"></a>
-<span class="sourceLineNo">623</span>    }<a name="line.623"></a>
-<span class="sourceLineNo">624</span><a name="line.624"></a>
-<span class="sourceLineNo">625</span>    @Benchmark<a name="line.625"></a>
-<span class="sourceLineNo">626</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.626"></a>
-<span class="sourceLineNo">627</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.627"></a>
-<span class="sourceLineNo">628</span>    public void measureXor() throws InterruptedException {<a name="line.628"></a>
-<span class="sourceLineNo">629</span>        seed = 9000;<a name="line.629"></a>
-<span class="sourceLineNo">630</span>        doXor();<a name="line.630"></a>
-<span class="sourceLineNo">631</span>    }<a name="line.631"></a>
-<span class="sourceLineNo">632</span><a name="line.632"></a>
-<span class="sourceLineNo">633</span>    public long doXorInt()<a name="line.633"></a>
-<span class="sourceLineNo">634</span>    {<a name="line.634"></a>
-<span class="sourceLineNo">635</span>        XorRNG rng = new XorRNG(iseed);<a name="line.635"></a>
-<span class="sourceLineNo">636</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.636"></a>
-<span class="sourceLineNo">637</span>            iseed += rng.nextInt();<a name="line.637"></a>
-<span class="sourceLineNo">638</span>        }<a name="line.638"></a>
-<span class="sourceLineNo">639</span>        return iseed;<a name="line.639"></a>
-<span class="sourceLineNo">640</span>    }<a name="line.640"></a>
-<span class="sourceLineNo">641</span>    @Benchmark<a name="line.641"></a>
-<span class="sourceLineNo">642</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.642"></a>
-<span class="sourceLineNo">643</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.643"></a>
-<span class="sourceLineNo">644</span>    public void measureXorInt() throws InterruptedException {<a name="line.644"></a>
-<span class="sourceLineNo">645</span>        iseed = 9000;<a name="line.645"></a>
-<span class="sourceLineNo">646</span>        doXorInt();<a name="line.646"></a>
-<span class="sourceLineNo">647</span>    }<a name="line.647"></a>
-<span class="sourceLineNo">648</span><a name="line.648"></a>
-<span class="sourceLineNo">649</span>    public long doXorR()<a name="line.649"></a>
-<span class="sourceLineNo">650</span>    {<a name="line.650"></a>
-<span class="sourceLineNo">651</span>        RNG rng = new RNG(new XorRNG(seed));<a name="line.651"></a>
-<span class="sourceLineNo">652</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.652"></a>
-<span class="sourceLineNo">653</span>            seed += rng.nextLong();<a name="line.653"></a>
-<span class="sourceLineNo">654</span>        }<a name="line.654"></a>
-<span class="sourceLineNo">655</span>        return seed;<a name="line.655"></a>
-<span class="sourceLineNo">656</span>    }<a name="line.656"></a>
-<span class="sourceLineNo">657</span><a name="line.657"></a>
-<span class="sourceLineNo">658</span>    @Benchmark<a name="line.658"></a>
-<span class="sourceLineNo">659</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.659"></a>
-<span class="sourceLineNo">660</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.660"></a>
-<span class="sourceLineNo">661</span>    public void measureXorR() throws InterruptedException {<a name="line.661"></a>
-<span class="sourceLineNo">662</span>        seed = 9000;<a name="line.662"></a>
-<span class="sourceLineNo">663</span>        doXorR();<a name="line.663"></a>
-<span class="sourceLineNo">664</span>    }<a name="line.664"></a>
-<span class="sourceLineNo">665</span><a name="line.665"></a>
-<span class="sourceLineNo">666</span>    public long doXorIntR()<a name="line.666"></a>
-<span class="sourceLineNo">667</span>    {<a name="line.667"></a>
-<span class="sourceLineNo">668</span>        RNG rng = new RNG(new XorRNG(iseed));<a name="line.668"></a>
-<span class="sourceLineNo">669</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.669"></a>
-<span class="sourceLineNo">670</span>            iseed += rng.nextInt();<a name="line.670"></a>
-<span class="sourceLineNo">671</span>        }<a name="line.671"></a>
-<span class="sourceLineNo">672</span>        return iseed;<a name="line.672"></a>
-<span class="sourceLineNo">673</span>    }<a name="line.673"></a>
-<span class="sourceLineNo">674</span>    @Benchmark<a name="line.674"></a>
-<span class="sourceLineNo">675</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.675"></a>
-<span class="sourceLineNo">676</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.676"></a>
-<span class="sourceLineNo">677</span>    public void measureXorIntR() throws InterruptedException {<a name="line.677"></a>
-<span class="sourceLineNo">678</span>        iseed = 9000;<a name="line.678"></a>
-<span class="sourceLineNo">679</span>        doXorIntR();<a name="line.679"></a>
-<span class="sourceLineNo">680</span>    }<a name="line.680"></a>
-<span class="sourceLineNo">681</span>    */<a name="line.681"></a>
-<span class="sourceLineNo">682</span>    public long doChaosR()<a name="line.682"></a>
-<span class="sourceLineNo">683</span>    {<a name="line.683"></a>
-<span class="sourceLineNo">684</span>        RNG rng = new RNG(new ChaosRNG());<a name="line.684"></a>
-<span class="sourceLineNo">685</span>        //rng.setSeed(seed);<a name="line.685"></a>
-<span class="sourceLineNo">686</span><a name="line.686"></a>
-<span class="sourceLineNo">687</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.687"></a>
-<span class="sourceLineNo">688</span>            seed += rng.nextLong();<a name="line.688"></a>
-<span class="sourceLineNo">689</span>        }<a name="line.689"></a>
-<span class="sourceLineNo">690</span>        return seed;<a name="line.690"></a>
-<span class="sourceLineNo">691</span>    }<a name="line.691"></a>
-<span class="sourceLineNo">692</span><a name="line.692"></a>
-<span class="sourceLineNo">693</span>    //@Benchmark<a name="line.693"></a>
-<span class="sourceLineNo">694</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.694"></a>
-<span class="sourceLineNo">695</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.695"></a>
-<span class="sourceLineNo">696</span>    public void measureChaosR() throws InterruptedException {<a name="line.696"></a>
-<span class="sourceLineNo">697</span>        seed = 9000;<a name="line.697"></a>
-<span class="sourceLineNo">698</span>        doChaosR();<a name="line.698"></a>
-<span class="sourceLineNo">699</span>    }<a name="line.699"></a>
-<span class="sourceLineNo">700</span><a name="line.700"></a>
-<span class="sourceLineNo">701</span>    public long doChaosRInt()<a name="line.701"></a>
-<span class="sourceLineNo">702</span>    {<a name="line.702"></a>
-<span class="sourceLineNo">703</span>        RNG rng = new RNG(new ChaosRNG());<a name="line.703"></a>
-<span class="sourceLineNo">704</span>        //rng.setSeed(iseed);<a name="line.704"></a>
+<span class="sourceLineNo">565</span>    */<a name="line.565"></a>
+<span class="sourceLineNo">566</span><a name="line.566"></a>
+<span class="sourceLineNo">567</span><a name="line.567"></a>
+<span class="sourceLineNo">568</span>    public long doPermuted()<a name="line.568"></a>
+<span class="sourceLineNo">569</span>    {<a name="line.569"></a>
+<span class="sourceLineNo">570</span>        PermutedRNG rng = new PermutedRNG(seed);<a name="line.570"></a>
+<span class="sourceLineNo">571</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.571"></a>
+<span class="sourceLineNo">572</span>            seed += rng.nextLong();<a name="line.572"></a>
+<span class="sourceLineNo">573</span>        }<a name="line.573"></a>
+<span class="sourceLineNo">574</span>        return seed;<a name="line.574"></a>
+<span class="sourceLineNo">575</span>    }<a name="line.575"></a>
+<span class="sourceLineNo">576</span><a name="line.576"></a>
+<span class="sourceLineNo">577</span>    @Benchmark<a name="line.577"></a>
+<span class="sourceLineNo">578</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.578"></a>
+<span class="sourceLineNo">579</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.579"></a>
+<span class="sourceLineNo">580</span>    public void measurePermuted() throws InterruptedException {<a name="line.580"></a>
+<span class="sourceLineNo">581</span>        seed = 9000;<a name="line.581"></a>
+<span class="sourceLineNo">582</span>        doPermuted();<a name="line.582"></a>
+<span class="sourceLineNo">583</span>    }<a name="line.583"></a>
+<span class="sourceLineNo">584</span><a name="line.584"></a>
+<span class="sourceLineNo">585</span>    public long doPermutedInt()<a name="line.585"></a>
+<span class="sourceLineNo">586</span>    {<a name="line.586"></a>
+<span class="sourceLineNo">587</span>        PermutedRNG rng = new PermutedRNG(iseed);<a name="line.587"></a>
+<span class="sourceLineNo">588</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.588"></a>
+<span class="sourceLineNo">589</span>            iseed += rng.nextInt();<a name="line.589"></a>
+<span class="sourceLineNo">590</span>        }<a name="line.590"></a>
+<span class="sourceLineNo">591</span>        return iseed;<a name="line.591"></a>
+<span class="sourceLineNo">592</span>    }<a name="line.592"></a>
+<span class="sourceLineNo">593</span>    @Benchmark<a name="line.593"></a>
+<span class="sourceLineNo">594</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.594"></a>
+<span class="sourceLineNo">595</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.595"></a>
+<span class="sourceLineNo">596</span>    public void measurePermutedInt() throws InterruptedException {<a name="line.596"></a>
+<span class="sourceLineNo">597</span>        iseed = 9000;<a name="line.597"></a>
+<span class="sourceLineNo">598</span>        doPermutedInt();<a name="line.598"></a>
+<span class="sourceLineNo">599</span>    }<a name="line.599"></a>
+<span class="sourceLineNo">600</span><a name="line.600"></a>
+<span class="sourceLineNo">601</span>    public long doPermutedR()<a name="line.601"></a>
+<span class="sourceLineNo">602</span>    {<a name="line.602"></a>
+<span class="sourceLineNo">603</span>        RNG rng = new RNG(new PermutedRNG(seed));<a name="line.603"></a>
+<span class="sourceLineNo">604</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.604"></a>
+<span class="sourceLineNo">605</span>            seed += rng.nextLong();<a name="line.605"></a>
+<span class="sourceLineNo">606</span>        }<a name="line.606"></a>
+<span class="sourceLineNo">607</span>        return seed;<a name="line.607"></a>
+<span class="sourceLineNo">608</span>    }<a name="line.608"></a>
+<span class="sourceLineNo">609</span><a name="line.609"></a>
+<span class="sourceLineNo">610</span>    @Benchmark<a name="line.610"></a>
+<span class="sourceLineNo">611</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.611"></a>
+<span class="sourceLineNo">612</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.612"></a>
+<span class="sourceLineNo">613</span>    public void measurePermutedR() throws InterruptedException {<a name="line.613"></a>
+<span class="sourceLineNo">614</span>        seed = 9000;<a name="line.614"></a>
+<span class="sourceLineNo">615</span>        doPermutedR();<a name="line.615"></a>
+<span class="sourceLineNo">616</span>    }<a name="line.616"></a>
+<span class="sourceLineNo">617</span><a name="line.617"></a>
+<span class="sourceLineNo">618</span>    public long doPermutedIntR()<a name="line.618"></a>
+<span class="sourceLineNo">619</span>    {<a name="line.619"></a>
+<span class="sourceLineNo">620</span>        RNG rng = new RNG(new PermutedRNG(iseed));<a name="line.620"></a>
+<span class="sourceLineNo">621</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.621"></a>
+<span class="sourceLineNo">622</span>            iseed += rng.nextInt();<a name="line.622"></a>
+<span class="sourceLineNo">623</span>        }<a name="line.623"></a>
+<span class="sourceLineNo">624</span>        return iseed;<a name="line.624"></a>
+<span class="sourceLineNo">625</span>    }<a name="line.625"></a>
+<span class="sourceLineNo">626</span>    @Benchmark<a name="line.626"></a>
+<span class="sourceLineNo">627</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.627"></a>
+<span class="sourceLineNo">628</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.628"></a>
+<span class="sourceLineNo">629</span>    public void measurePermutedIntR() throws InterruptedException {<a name="line.629"></a>
+<span class="sourceLineNo">630</span>        iseed = 9000;<a name="line.630"></a>
+<span class="sourceLineNo">631</span>        doPermutedIntR();<a name="line.631"></a>
+<span class="sourceLineNo">632</span>    }<a name="line.632"></a>
+<span class="sourceLineNo">633</span><a name="line.633"></a>
+<span class="sourceLineNo">634</span><a name="line.634"></a>
+<span class="sourceLineNo">635</span>    public long doLFSR()<a name="line.635"></a>
+<span class="sourceLineNo">636</span>    {<a name="line.636"></a>
+<span class="sourceLineNo">637</span>        LFSR rng = new LFSR(seed);<a name="line.637"></a>
+<span class="sourceLineNo">638</span><a name="line.638"></a>
+<span class="sourceLineNo">639</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.639"></a>
+<span class="sourceLineNo">640</span>            seed += rng.nextLong();<a name="line.640"></a>
+<span class="sourceLineNo">641</span>        }<a name="line.641"></a>
+<span class="sourceLineNo">642</span>        return seed;<a name="line.642"></a>
+<span class="sourceLineNo">643</span>    }<a name="line.643"></a>
+<span class="sourceLineNo">644</span><a name="line.644"></a>
+<span class="sourceLineNo">645</span>    @Benchmark<a name="line.645"></a>
+<span class="sourceLineNo">646</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.646"></a>
+<span class="sourceLineNo">647</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.647"></a>
+<span class="sourceLineNo">648</span>    public void measureLFSR() throws InterruptedException {<a name="line.648"></a>
+<span class="sourceLineNo">649</span>        seed = 9000;<a name="line.649"></a>
+<span class="sourceLineNo">650</span>        doLFSR();<a name="line.650"></a>
+<span class="sourceLineNo">651</span>    }<a name="line.651"></a>
+<span class="sourceLineNo">652</span><a name="line.652"></a>
+<span class="sourceLineNo">653</span>    public long doLFSRInt()<a name="line.653"></a>
+<span class="sourceLineNo">654</span>    {<a name="line.654"></a>
+<span class="sourceLineNo">655</span>        LFSR rng = new LFSR(iseed);<a name="line.655"></a>
+<span class="sourceLineNo">656</span><a name="line.656"></a>
+<span class="sourceLineNo">657</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.657"></a>
+<span class="sourceLineNo">658</span>            iseed += rng.nextInt();<a name="line.658"></a>
+<span class="sourceLineNo">659</span>        }<a name="line.659"></a>
+<span class="sourceLineNo">660</span>        return iseed;<a name="line.660"></a>
+<span class="sourceLineNo">661</span>    }<a name="line.661"></a>
+<span class="sourceLineNo">662</span><a name="line.662"></a>
+<span class="sourceLineNo">663</span>    @Benchmark<a name="line.663"></a>
+<span class="sourceLineNo">664</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.664"></a>
+<span class="sourceLineNo">665</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.665"></a>
+<span class="sourceLineNo">666</span>    public void measureLFSRInt() throws InterruptedException {<a name="line.666"></a>
+<span class="sourceLineNo">667</span>        iseed = 9000;<a name="line.667"></a>
+<span class="sourceLineNo">668</span>        doLFSRInt();<a name="line.668"></a>
+<span class="sourceLineNo">669</span>    }<a name="line.669"></a>
+<span class="sourceLineNo">670</span>    public long doLFSRR()<a name="line.670"></a>
+<span class="sourceLineNo">671</span>    {<a name="line.671"></a>
+<span class="sourceLineNo">672</span>        RNG rng = new RNG(new LFSR(seed));<a name="line.672"></a>
+<span class="sourceLineNo">673</span><a name="line.673"></a>
+<span class="sourceLineNo">674</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.674"></a>
+<span class="sourceLineNo">675</span>            seed += rng.nextLong();<a name="line.675"></a>
+<span class="sourceLineNo">676</span>        }<a name="line.676"></a>
+<span class="sourceLineNo">677</span>        return seed;<a name="line.677"></a>
+<span class="sourceLineNo">678</span>    }<a name="line.678"></a>
+<span class="sourceLineNo">679</span><a name="line.679"></a>
+<span class="sourceLineNo">680</span>    @Benchmark<a name="line.680"></a>
+<span class="sourceLineNo">681</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.681"></a>
+<span class="sourceLineNo">682</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.682"></a>
+<span class="sourceLineNo">683</span>    public void measureLFSRR() throws InterruptedException {<a name="line.683"></a>
+<span class="sourceLineNo">684</span>        seed = 9000;<a name="line.684"></a>
+<span class="sourceLineNo">685</span>        doLFSRR();<a name="line.685"></a>
+<span class="sourceLineNo">686</span>    }<a name="line.686"></a>
+<span class="sourceLineNo">687</span><a name="line.687"></a>
+<span class="sourceLineNo">688</span>    public long doLFSRIntR()<a name="line.688"></a>
+<span class="sourceLineNo">689</span>    {<a name="line.689"></a>
+<span class="sourceLineNo">690</span>        RNG rng = new RNG(new LFSR(iseed));<a name="line.690"></a>
+<span class="sourceLineNo">691</span><a name="line.691"></a>
+<span class="sourceLineNo">692</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.692"></a>
+<span class="sourceLineNo">693</span>            iseed += rng.nextInt();<a name="line.693"></a>
+<span class="sourceLineNo">694</span>        }<a name="line.694"></a>
+<span class="sourceLineNo">695</span>        return iseed;<a name="line.695"></a>
+<span class="sourceLineNo">696</span>    }<a name="line.696"></a>
+<span class="sourceLineNo">697</span><a name="line.697"></a>
+<span class="sourceLineNo">698</span>    @Benchmark<a name="line.698"></a>
+<span class="sourceLineNo">699</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.699"></a>
+<span class="sourceLineNo">700</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.700"></a>
+<span class="sourceLineNo">701</span>    public void measureLFSRIntR() throws InterruptedException {<a name="line.701"></a>
+<span class="sourceLineNo">702</span>        iseed = 9000;<a name="line.702"></a>
+<span class="sourceLineNo">703</span>        doLFSRIntR();<a name="line.703"></a>
+<span class="sourceLineNo">704</span>    }<a name="line.704"></a>
 <span class="sourceLineNo">705</span><a name="line.705"></a>
-<span class="sourceLineNo">706</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.706"></a>
-<span class="sourceLineNo">707</span>            iseed += rng.nextInt();<a name="line.707"></a>
-<span class="sourceLineNo">708</span>        }<a name="line.708"></a>
-<span class="sourceLineNo">709</span>        return iseed;<a name="line.709"></a>
-<span class="sourceLineNo">710</span>    }<a name="line.710"></a>
-<span class="sourceLineNo">711</span><a name="line.711"></a>
-<span class="sourceLineNo">712</span>    //@Benchmark<a name="line.712"></a>
-<span class="sourceLineNo">713</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.713"></a>
-<span class="sourceLineNo">714</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.714"></a>
-<span class="sourceLineNo">715</span>    public void measureChaosRInt() throws InterruptedException {<a name="line.715"></a>
-<span class="sourceLineNo">716</span>        iseed = 9000;<a name="line.716"></a>
-<span class="sourceLineNo">717</span>        doChaosRInt();<a name="line.717"></a>
-<span class="sourceLineNo">718</span>    }<a name="line.718"></a>
-<span class="sourceLineNo">719</span>    public long doThreadLocalRandom()<a name="line.719"></a>
-<span class="sourceLineNo">720</span>    {<a name="line.720"></a>
-<span class="sourceLineNo">721</span>        ThreadLocalRandom rng = ThreadLocalRandom.current();<a name="line.721"></a>
-<span class="sourceLineNo">722</span>        //rng.setSeed(seed);<a name="line.722"></a>
+<span class="sourceLineNo">706</span>    /*<a name="line.706"></a>
+<span class="sourceLineNo">707</span>    public long doXor()<a name="line.707"></a>
+<span class="sourceLineNo">708</span>    {<a name="line.708"></a>
+<span class="sourceLineNo">709</span>        XorRNG rng = new XorRNG(seed);<a name="line.709"></a>
+<span class="sourceLineNo">710</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.710"></a>
+<span class="sourceLineNo">711</span>            seed += rng.nextLong();<a name="line.711"></a>
+<span class="sourceLineNo">712</span>        }<a name="line.712"></a>
+<span class="sourceLineNo">713</span>        return seed;<a name="line.713"></a>
+<span class="sourceLineNo">714</span>    }<a name="line.714"></a>
+<span class="sourceLineNo">715</span><a name="line.715"></a>
+<span class="sourceLineNo">716</span>    @Benchmark<a name="line.716"></a>
+<span class="sourceLineNo">717</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.717"></a>
+<span class="sourceLineNo">718</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.718"></a>
+<span class="sourceLineNo">719</span>    public void measureXor() throws InterruptedException {<a name="line.719"></a>
+<span class="sourceLineNo">720</span>        seed = 9000;<a name="line.720"></a>
+<span class="sourceLineNo">721</span>        doXor();<a name="line.721"></a>
+<span class="sourceLineNo">722</span>    }<a name="line.722"></a>
 <span class="sourceLineNo">723</span><a name="line.723"></a>
-<span class="sourceLineNo">724</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.724"></a>
-<span class="sourceLineNo">725</span>            seed += rng.nextLong();<a name="line.725"></a>
-<span class="sourceLineNo">726</span>        }<a name="line.726"></a>
-<span class="sourceLineNo">727</span>        return seed;<a name="line.727"></a>
-<span class="sourceLineNo">728</span>    }<a name="line.728"></a>
-<span class="sourceLineNo">729</span><a name="line.729"></a>
-<span class="sourceLineNo">730</span>    //@Benchmark<a name="line.730"></a>
-<span class="sourceLineNo">731</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.731"></a>
-<span class="sourceLineNo">732</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.732"></a>
-<span class="sourceLineNo">733</span>    public void measureThreadLocalRandom() throws InterruptedException {<a name="line.733"></a>
-<span class="sourceLineNo">734</span>        seed = 9000;<a name="line.734"></a>
-<span class="sourceLineNo">735</span>        doThreadLocalRandom();<a name="line.735"></a>
-<span class="sourceLineNo">736</span>    }<a name="line.736"></a>
-<span class="sourceLineNo">737</span><a name="line.737"></a>
-<span class="sourceLineNo">738</span>    public long doThreadLocalRandomInt()<a name="line.738"></a>
-<span class="sourceLineNo">739</span>    {<a name="line.739"></a>
-<span class="sourceLineNo">740</span>        ThreadLocalRandom rng = ThreadLocalRandom.current();<a name="line.740"></a>
-<span class="sourceLineNo">741</span>        //rng.setSeed(iseed);<a name="line.741"></a>
-<span class="sourceLineNo">742</span><a name="line.742"></a>
+<span class="sourceLineNo">724</span>    public long doXorInt()<a name="line.724"></a>
+<span class="sourceLineNo">725</span>    {<a name="line.725"></a>
+<span class="sourceLineNo">726</span>        XorRNG rng = new XorRNG(iseed);<a name="line.726"></a>
+<span class="sourceLineNo">727</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.727"></a>
+<span class="sourceLineNo">728</span>            iseed += rng.nextInt();<a name="line.728"></a>
+<span class="sourceLineNo">729</span>        }<a name="line.729"></a>
+<span class="sourceLineNo">730</span>        return iseed;<a name="line.730"></a>
+<span class="sourceLineNo">731</span>    }<a name="line.731"></a>
+<span class="sourceLineNo">732</span>    @Benchmark<a name="line.732"></a>
+<span class="sourceLineNo">733</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.733"></a>
+<span class="sourceLineNo">734</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.734"></a>
+<span class="sourceLineNo">735</span>    public void measureXorInt() throws InterruptedException {<a name="line.735"></a>
+<span class="sourceLineNo">736</span>        iseed = 9000;<a name="line.736"></a>
+<span class="sourceLineNo">737</span>        doXorInt();<a name="line.737"></a>
+<span class="sourceLineNo">738</span>    }<a name="line.738"></a>
+<span class="sourceLineNo">739</span><a name="line.739"></a>
+<span class="sourceLineNo">740</span>    public long doXorR()<a name="line.740"></a>
+<span class="sourceLineNo">741</span>    {<a name="line.741"></a>
+<span class="sourceLineNo">742</span>        RNG rng = new RNG(new XorRNG(seed));<a name="line.742"></a>
 <span class="sourceLineNo">743</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.743"></a>
-<span class="sourceLineNo">744</span>            iseed += rng.nextInt();<a name="line.744"></a>
+<span class="sourceLineNo">744</span>            seed += rng.nextLong();<a name="line.744"></a>
 <span class="sourceLineNo">745</span>        }<a name="line.745"></a>
-<span class="sourceLineNo">746</span>        return iseed;<a name="line.746"></a>
+<span class="sourceLineNo">746</span>        return seed;<a name="line.746"></a>
 <span class="sourceLineNo">747</span>    }<a name="line.747"></a>
 <span class="sourceLineNo">748</span><a name="line.748"></a>
-<span class="sourceLineNo">749</span>    //@Benchmark<a name="line.749"></a>
+<span class="sourceLineNo">749</span>    @Benchmark<a name="line.749"></a>
 <span class="sourceLineNo">750</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.750"></a>
 <span class="sourceLineNo">751</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.751"></a>
-<span class="sourceLineNo">752</span>    public void measureThreadLocalRandomInt() throws InterruptedException {<a name="line.752"></a>
-<span class="sourceLineNo">753</span>        iseed = 9000;<a name="line.753"></a>
-<span class="sourceLineNo">754</span>        doThreadLocalRandomInt();<a name="line.754"></a>
+<span class="sourceLineNo">752</span>    public void measureXorR() throws InterruptedException {<a name="line.752"></a>
+<span class="sourceLineNo">753</span>        seed = 9000;<a name="line.753"></a>
+<span class="sourceLineNo">754</span>        doXorR();<a name="line.754"></a>
 <span class="sourceLineNo">755</span>    }<a name="line.755"></a>
-<span class="sourceLineNo">756</span>    public long doRandom()<a name="line.756"></a>
-<span class="sourceLineNo">757</span>    {<a name="line.757"></a>
-<span class="sourceLineNo">758</span>        Random rng = new Random(seed);<a name="line.758"></a>
-<span class="sourceLineNo">759</span><a name="line.759"></a>
+<span class="sourceLineNo">756</span><a name="line.756"></a>
+<span class="sourceLineNo">757</span>    public long doXorIntR()<a name="line.757"></a>
+<span class="sourceLineNo">758</span>    {<a name="line.758"></a>
+<span class="sourceLineNo">759</span>        RNG rng = new RNG(new XorRNG(iseed));<a name="line.759"></a>
 <span class="sourceLineNo">760</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.760"></a>
-<span class="sourceLineNo">761</span>            seed += rng.nextLong();<a name="line.761"></a>
+<span class="sourceLineNo">761</span>            iseed += rng.nextInt();<a name="line.761"></a>
 <span class="sourceLineNo">762</span>        }<a name="line.762"></a>
-<span class="sourceLineNo">763</span>        return seed;<a name="line.763"></a>
+<span class="sourceLineNo">763</span>        return iseed;<a name="line.763"></a>
 <span class="sourceLineNo">764</span>    }<a name="line.764"></a>
-<span class="sourceLineNo">765</span><a name="line.765"></a>
-<span class="sourceLineNo">766</span>    //@Benchmark<a name="line.766"></a>
-<span class="sourceLineNo">767</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.767"></a>
-<span class="sourceLineNo">768</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.768"></a>
-<span class="sourceLineNo">769</span>    public void measureRandom() throws InterruptedException {<a name="line.769"></a>
-<span class="sourceLineNo">770</span>        seed = 9000;<a name="line.770"></a>
-<span class="sourceLineNo">771</span>        doRandom();<a name="line.771"></a>
-<span class="sourceLineNo">772</span>    }<a name="line.772"></a>
-<span class="sourceLineNo">773</span><a name="line.773"></a>
-<span class="sourceLineNo">774</span>    public long doRandomInt()<a name="line.774"></a>
-<span class="sourceLineNo">775</span>    {<a name="line.775"></a>
-<span class="sourceLineNo">776</span>        Random rng = new Random(iseed);<a name="line.776"></a>
+<span class="sourceLineNo">765</span>    @Benchmark<a name="line.765"></a>
+<span class="sourceLineNo">766</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.766"></a>
+<span class="sourceLineNo">767</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.767"></a>
+<span class="sourceLineNo">768</span>    public void measureXorIntR() throws InterruptedException {<a name="line.768"></a>
+<span class="sourceLineNo">769</span>        iseed = 9000;<a name="line.769"></a>
+<span class="sourceLineNo">770</span>        doXorIntR();<a name="line.770"></a>
+<span class="sourceLineNo">771</span>    }<a name="line.771"></a>
+<span class="sourceLineNo">772</span><a name="line.772"></a>
+<span class="sourceLineNo">773</span>    public long doChaosR()<a name="line.773"></a>
+<span class="sourceLineNo">774</span>    {<a name="line.774"></a>
+<span class="sourceLineNo">775</span>        RNG rng = new RNG(new ChaosRNG());<a name="line.775"></a>
+<span class="sourceLineNo">776</span>        //rng.setSeed(seed);<a name="line.776"></a>
 <span class="sourceLineNo">777</span><a name="line.777"></a>
 <span class="sourceLineNo">778</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.778"></a>
-<span class="sourceLineNo">779</span>            iseed += rng.nextInt();<a name="line.779"></a>
+<span class="sourceLineNo">779</span>            seed += rng.nextLong();<a name="line.779"></a>
 <span class="sourceLineNo">780</span>        }<a name="line.780"></a>
-<span class="sourceLineNo">781</span>        return iseed;<a name="line.781"></a>
+<span class="sourceLineNo">781</span>        return seed;<a name="line.781"></a>
 <span class="sourceLineNo">782</span>    }<a name="line.782"></a>
 <span class="sourceLineNo">783</span><a name="line.783"></a>
 <span class="sourceLineNo">784</span>    //@Benchmark<a name="line.784"></a>
 <span class="sourceLineNo">785</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.785"></a>
 <span class="sourceLineNo">786</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.786"></a>
-<span class="sourceLineNo">787</span>    public void measureRandomInt() throws InterruptedException {<a name="line.787"></a>
-<span class="sourceLineNo">788</span>        iseed = 9000;<a name="line.788"></a>
-<span class="sourceLineNo">789</span>        doRandomInt();<a name="line.789"></a>
+<span class="sourceLineNo">787</span>    public void measureChaosR() throws InterruptedException {<a name="line.787"></a>
+<span class="sourceLineNo">788</span>        seed = 9000;<a name="line.788"></a>
+<span class="sourceLineNo">789</span>        doChaosR();<a name="line.789"></a>
 <span class="sourceLineNo">790</span>    }<a name="line.790"></a>
 <span class="sourceLineNo">791</span><a name="line.791"></a>
-<span class="sourceLineNo">792</span><a name="line.792"></a>
-<span class="sourceLineNo">793</span><a name="line.793"></a>
-<span class="sourceLineNo">794</span>    public long doGDX()<a name="line.794"></a>
-<span class="sourceLineNo">795</span>    {<a name="line.795"></a>
-<span class="sourceLineNo">796</span>        RandomXS128 rng = new RandomXS128(seed);<a name="line.796"></a>
-<span class="sourceLineNo">797</span><a name="line.797"></a>
-<span class="sourceLineNo">798</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.798"></a>
-<span class="sourceLineNo">799</span>            seed += rng.nextLong();<a name="line.799"></a>
-<span class="sourceLineNo">800</span>        }<a name="line.800"></a>
-<span class="sourceLineNo">801</span>        return seed;<a name="line.801"></a>
-<span class="sourceLineNo">802</span>    }<a name="line.802"></a>
-<span class="sourceLineNo">803</span><a name="line.803"></a>
-<span class="sourceLineNo">804</span>    //@Benchmark<a name="line.804"></a>
-<span class="sourceLineNo">805</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.805"></a>
-<span class="sourceLineNo">806</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.806"></a>
-<span class="sourceLineNo">807</span>    public void measureGDX() throws InterruptedException {<a name="line.807"></a>
-<span class="sourceLineNo">808</span>        seed = 9000;<a name="line.808"></a>
-<span class="sourceLineNo">809</span>        doGDX();<a name="line.809"></a>
-<span class="sourceLineNo">810</span>    }<a name="line.810"></a>
-<span class="sourceLineNo">811</span><a name="line.811"></a>
-<span class="sourceLineNo">812</span>    public long doGDXInt()<a name="line.812"></a>
-<span class="sourceLineNo">813</span>    {<a name="line.813"></a>
-<span class="sourceLineNo">814</span>        RandomXS128 rng = new RandomXS128(iseed);<a name="line.814"></a>
-<span class="sourceLineNo">815</span><a name="line.815"></a>
-<span class="sourceLineNo">816</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.816"></a>
-<span class="sourceLineNo">817</span>            iseed += rng.nextInt();<a name="line.817"></a>
-<span class="sourceLineNo">818</span>        }<a name="line.818"></a>
-<span class="sourceLineNo">819</span>        return iseed;<a name="line.819"></a>
-<span class="sourceLineNo">820</span>    }<a name="line.820"></a>
-<span class="sourceLineNo">821</span><a name="line.821"></a>
-<span class="sourceLineNo">822</span>    //@Benchmark<a name="line.822"></a>
-<span class="sourceLineNo">823</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.823"></a>
-<span class="sourceLineNo">824</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.824"></a>
-<span class="sourceLineNo">825</span>    public void measureGDXInt() throws InterruptedException {<a name="line.825"></a>
-<span class="sourceLineNo">826</span>        iseed = 9000;<a name="line.826"></a>
-<span class="sourceLineNo">827</span>        doGDXInt();<a name="line.827"></a>
-<span class="sourceLineNo">828</span>    }<a name="line.828"></a>
-<span class="sourceLineNo">829</span>    /*<a name="line.829"></a>
-<span class="sourceLineNo">830</span>    public long doIsaac()<a name="line.830"></a>
-<span class="sourceLineNo">831</span>    {<a name="line.831"></a>
-<span class="sourceLineNo">832</span>        IsaacRNG rng = new IsaacRNG(seed);<a name="line.832"></a>
+<span class="sourceLineNo">792</span>    public long doChaosRInt()<a name="line.792"></a>
+<span class="sourceLineNo">793</span>    {<a name="line.793"></a>
+<span class="sourceLineNo">794</span>        RNG rng = new RNG(new ChaosRNG());<a name="line.794"></a>
+<span class="sourceLineNo">795</span>        //rng.setSeed(iseed);<a name="line.795"></a>
+<span class="sourceLineNo">796</span><a name="line.796"></a>
+<span class="sourceLineNo">797</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.797"></a>
+<span class="sourceLineNo">798</span>            iseed += rng.nextInt();<a name="line.798"></a>
+<span class="sourceLineNo">799</span>        }<a name="line.799"></a>
+<span class="sourceLineNo">800</span>        return iseed;<a name="line.800"></a>
+<span class="sourceLineNo">801</span>    }<a name="line.801"></a>
+<span class="sourceLineNo">802</span><a name="line.802"></a>
+<span class="sourceLineNo">803</span>    //@Benchmark<a name="line.803"></a>
+<span class="sourceLineNo">804</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.804"></a>
+<span class="sourceLineNo">805</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.805"></a>
+<span class="sourceLineNo">806</span>    public void measureChaosRInt() throws InterruptedException {<a name="line.806"></a>
+<span class="sourceLineNo">807</span>        iseed = 9000;<a name="line.807"></a>
+<span class="sourceLineNo">808</span>        doChaosRInt();<a name="line.808"></a>
+<span class="sourceLineNo">809</span>    }<a name="line.809"></a>
+<span class="sourceLineNo">810</span>    public long doThreadLocalRandom()<a name="line.810"></a>
+<span class="sourceLineNo">811</span>    {<a name="line.811"></a>
+<span class="sourceLineNo">812</span>        ThreadLocalRandom rng = ThreadLocalRandom.current();<a name="line.812"></a>
+<span class="sourceLineNo">813</span>        //rng.setSeed(seed);<a name="line.813"></a>
+<span class="sourceLineNo">814</span><a name="line.814"></a>
+<span class="sourceLineNo">815</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.815"></a>
+<span class="sourceLineNo">816</span>            seed += rng.nextLong();<a name="line.816"></a>
+<span class="sourceLineNo">817</span>        }<a name="line.817"></a>
+<span class="sourceLineNo">818</span>        return seed;<a name="line.818"></a>
+<span class="sourceLineNo">819</span>    }<a name="line.819"></a>
+<span class="sourceLineNo">820</span><a name="line.820"></a>
+<span class="sourceLineNo">821</span>    //@Benchmark<a name="line.821"></a>
+<span class="sourceLineNo">822</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.822"></a>
+<span class="sourceLineNo">823</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.823"></a>
+<span class="sourceLineNo">824</span>    public void measureThreadLocalRandom() throws InterruptedException {<a name="line.824"></a>
+<span class="sourceLineNo">825</span>        seed = 9000;<a name="line.825"></a>
+<span class="sourceLineNo">826</span>        doThreadLocalRandom();<a name="line.826"></a>
+<span class="sourceLineNo">827</span>    }<a name="line.827"></a>
+<span class="sourceLineNo">828</span><a name="line.828"></a>
+<span class="sourceLineNo">829</span>    public long doThreadLocalRandomInt()<a name="line.829"></a>
+<span class="sourceLineNo">830</span>    {<a name="line.830"></a>
+<span class="sourceLineNo">831</span>        ThreadLocalRandom rng = ThreadLocalRandom.current();<a name="line.831"></a>
+<span class="sourceLineNo">832</span>        //rng.setSeed(iseed);<a name="line.832"></a>
 <span class="sourceLineNo">833</span><a name="line.833"></a>
 <span class="sourceLineNo">834</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.834"></a>
-<span class="sourceLineNo">835</span>            seed += rng.nextLong();<a name="line.835"></a>
+<span class="sourceLineNo">835</span>            iseed += rng.nextInt();<a name="line.835"></a>
 <span class="sourceLineNo">836</span>        }<a name="line.836"></a>
-<span class="sourceLineNo">837</span>        return seed;<a name="line.837"></a>
+<span class="sourceLineNo">837</span>        return iseed;<a name="line.837"></a>
 <span class="sourceLineNo">838</span>    }<a name="line.838"></a>
 <span class="sourceLineNo">839</span><a name="line.839"></a>
-<span class="sourceLineNo">840</span>    @Benchmark<a name="line.840"></a>
+<span class="sourceLineNo">840</span>    //@Benchmark<a name="line.840"></a>
 <span class="sourceLineNo">841</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.841"></a>
 <span class="sourceLineNo">842</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.842"></a>
-<span class="sourceLineNo">843</span>    public void measureIsaac() throws InterruptedException {<a name="line.843"></a>
-<span class="sourceLineNo">844</span>        seed = 9000;<a name="line.844"></a>
-<span class="sourceLineNo">845</span>        doIsaac();<a name="line.845"></a>
+<span class="sourceLineNo">843</span>    public void measureThreadLocalRandomInt() throws InterruptedException {<a name="line.843"></a>
+<span class="sourceLineNo">844</span>        iseed = 9000;<a name="line.844"></a>
+<span class="sourceLineNo">845</span>        doThreadLocalRandomInt();<a name="line.845"></a>
 <span class="sourceLineNo">846</span>    }<a name="line.846"></a>
-<span class="sourceLineNo">847</span><a name="line.847"></a>
-<span class="sourceLineNo">848</span>    public long doIsaacInt()<a name="line.848"></a>
-<span class="sourceLineNo">849</span>    {<a name="line.849"></a>
-<span class="sourceLineNo">850</span>        IsaacRNG rng = new IsaacRNG(iseed);<a name="line.850"></a>
-<span class="sourceLineNo">851</span><a name="line.851"></a>
-<span class="sourceLineNo">852</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.852"></a>
-<span class="sourceLineNo">853</span>            iseed += rng.next(32);<a name="line.853"></a>
-<span class="sourceLineNo">854</span>        }<a name="line.854"></a>
-<span class="sourceLineNo">855</span>        return iseed;<a name="line.855"></a>
-<span class="sourceLineNo">856</span>    }<a name="line.856"></a>
-<span class="sourceLineNo">857</span><a name="line.857"></a>
-<span class="sourceLineNo">858</span>    @Benchmark<a name="line.858"></a>
-<span class="sourceLineNo">859</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.859"></a>
-<span class="sourceLineNo">860</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.860"></a>
-<span class="sourceLineNo">861</span>    public void measureIsaacInt() throws InterruptedException {<a name="line.861"></a>
-<span class="sourceLineNo">862</span>        iseed = 9000;<a name="line.862"></a>
-<span class="sourceLineNo">863</span>        doIsaacInt();<a name="line.863"></a>
-<span class="sourceLineNo">864</span>    }<a name="line.864"></a>
-<span class="sourceLineNo">865</span>    public long doIsaacR()<a name="line.865"></a>
+<span class="sourceLineNo">847</span>    public long doRandom()<a name="line.847"></a>
+<span class="sourceLineNo">848</span>    {<a name="line.848"></a>
+<span class="sourceLineNo">849</span>        Random rng = new Random(seed);<a name="line.849"></a>
+<span class="sourceLineNo">850</span><a name="line.850"></a>
+<span class="sourceLineNo">851</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.851"></a>
+<span class="sourceLineNo">852</span>            seed += rng.nextLong();<a name="line.852"></a>
+<span class="sourceLineNo">853</span>        }<a name="line.853"></a>
+<span class="sourceLineNo">854</span>        return seed;<a name="line.854"></a>
+<span class="sourceLineNo">855</span>    }<a name="line.855"></a>
+<span class="sourceLineNo">856</span><a name="line.856"></a>
+<span class="sourceLineNo">857</span>    //@Benchmark<a name="line.857"></a>
+<span class="sourceLineNo">858</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.858"></a>
+<span class="sourceLineNo">859</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.859"></a>
+<span class="sourceLineNo">860</span>    public void measureRandom() throws InterruptedException {<a name="line.860"></a>
+<span class="sourceLineNo">861</span>        seed = 9000;<a name="line.861"></a>
+<span class="sourceLineNo">862</span>        doRandom();<a name="line.862"></a>
+<span class="sourceLineNo">863</span>    }<a name="line.863"></a>
+<span class="sourceLineNo">864</span><a name="line.864"></a>
+<span class="sourceLineNo">865</span>    public long doRandomInt()<a name="line.865"></a>
 <span class="sourceLineNo">866</span>    {<a name="line.866"></a>
-<span class="sourceLineNo">867</span>        RNG rng = new RNG(new IsaacRNG(seed));<a name="line.867"></a>
+<span class="sourceLineNo">867</span>        Random rng = new Random(iseed);<a name="line.867"></a>
 <span class="sourceLineNo">868</span><a name="line.868"></a>
 <span class="sourceLineNo">869</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.869"></a>
-<span class="sourceLineNo">870</span>            seed += rng.nextLong();<a name="line.870"></a>
+<span class="sourceLineNo">870</span>            iseed += rng.nextInt();<a name="line.870"></a>
 <span class="sourceLineNo">871</span>        }<a name="line.871"></a>
-<span class="sourceLineNo">872</span>        return seed;<a name="line.872"></a>
+<span class="sourceLineNo">872</span>        return iseed;<a name="line.872"></a>
 <span class="sourceLineNo">873</span>    }<a name="line.873"></a>
 <span class="sourceLineNo">874</span><a name="line.874"></a>
-<span class="sourceLineNo">875</span>    @Benchmark<a name="line.875"></a>
+<span class="sourceLineNo">875</span>    //@Benchmark<a name="line.875"></a>
 <span class="sourceLineNo">876</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.876"></a>
 <span class="sourceLineNo">877</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.877"></a>
-<span class="sourceLineNo">878</span>    public void measureIsaacR() throws InterruptedException {<a name="line.878"></a>
-<span class="sourceLineNo">879</span>        seed = 9000;<a name="line.879"></a>
-<span class="sourceLineNo">880</span>        doIsaacR();<a name="line.880"></a>
+<span class="sourceLineNo">878</span>    public void measureRandomInt() throws InterruptedException {<a name="line.878"></a>
+<span class="sourceLineNo">879</span>        iseed = 9000;<a name="line.879"></a>
+<span class="sourceLineNo">880</span>        doRandomInt();<a name="line.880"></a>
 <span class="sourceLineNo">881</span>    }<a name="line.881"></a>
 <span class="sourceLineNo">882</span><a name="line.882"></a>
-<span class="sourceLineNo">883</span>    public long doIsaacIntR()<a name="line.883"></a>
-<span class="sourceLineNo">884</span>    {<a name="line.884"></a>
-<span class="sourceLineNo">885</span>        RNG rng = new RNG(new IsaacRNG(iseed));<a name="line.885"></a>
-<span class="sourceLineNo">886</span><a name="line.886"></a>
-<span class="sourceLineNo">887</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.887"></a>
-<span class="sourceLineNo">888</span>            iseed += rng.nextInt();<a name="line.888"></a>
-<span class="sourceLineNo">889</span>        }<a name="line.889"></a>
-<span class="sourceLineNo">890</span>        return iseed;<a name="line.890"></a>
-<span class="sourceLineNo">891</span>    }<a name="line.891"></a>
-<span class="sourceLineNo">892</span>    */<a name="line.892"></a>
+<span class="sourceLineNo">883</span><a name="line.883"></a>
+<span class="sourceLineNo">884</span>    public long doGDX()<a name="line.884"></a>
+<span class="sourceLineNo">885</span>    {<a name="line.885"></a>
+<span class="sourceLineNo">886</span>        RandomXS128 rng = new RandomXS128(seed);<a name="line.886"></a>
+<span class="sourceLineNo">887</span><a name="line.887"></a>
+<span class="sourceLineNo">888</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.888"></a>
+<span class="sourceLineNo">889</span>            seed += rng.nextLong();<a name="line.889"></a>
+<span class="sourceLineNo">890</span>        }<a name="line.890"></a>
+<span class="sourceLineNo">891</span>        return seed;<a name="line.891"></a>
+<span class="sourceLineNo">892</span>    }<a name="line.892"></a>
 <span class="sourceLineNo">893</span><a name="line.893"></a>
-<span class="sourceLineNo">894</span>/*<a name="line.894"></a>
-<span class="sourceLineNo">895</span>    public long doSecureRandom()<a name="line.895"></a>
-<span class="sourceLineNo">896</span>    {<a name="line.896"></a>
-<span class="sourceLineNo">897</span>        SecureRandom rng = new SecureRandom();<a name="line.897"></a>
-<span class="sourceLineNo">898</span>        //rng.setSeed(seed);<a name="line.898"></a>
-<span class="sourceLineNo">899</span><a name="line.899"></a>
-<span class="sourceLineNo">900</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.900"></a>
-<span class="sourceLineNo">901</span>            seed += rng.nextLong();<a name="line.901"></a>
-<span class="sourceLineNo">902</span>        }<a name="line.902"></a>
-<span class="sourceLineNo">903</span>        return seed;<a name="line.903"></a>
-<span class="sourceLineNo">904</span>    }<a name="line.904"></a>
+<span class="sourceLineNo">894</span>    @Benchmark<a name="line.894"></a>
+<span class="sourceLineNo">895</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.895"></a>
+<span class="sourceLineNo">896</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.896"></a>
+<span class="sourceLineNo">897</span>    public void measureGDX() throws InterruptedException {<a name="line.897"></a>
+<span class="sourceLineNo">898</span>        seed = 9000;<a name="line.898"></a>
+<span class="sourceLineNo">899</span>        doGDX();<a name="line.899"></a>
+<span class="sourceLineNo">900</span>    }<a name="line.900"></a>
+<span class="sourceLineNo">901</span><a name="line.901"></a>
+<span class="sourceLineNo">902</span>    public long doGDXInt()<a name="line.902"></a>
+<span class="sourceLineNo">903</span>    {<a name="line.903"></a>
+<span class="sourceLineNo">904</span>        RandomXS128 rng = new RandomXS128(iseed);<a name="line.904"></a>
 <span class="sourceLineNo">905</span><a name="line.905"></a>
-<span class="sourceLineNo">906</span>    @Benchmark<a name="line.906"></a>
-<span class="sourceLineNo">907</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.907"></a>
-<span class="sourceLineNo">908</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.908"></a>
-<span class="sourceLineNo">909</span>    public void measureSecureRandom() throws InterruptedException {<a name="line.909"></a>
-<span class="sourceLineNo">910</span>        seed = 9000;<a name="line.910"></a>
-<span class="sourceLineNo">911</span>        doSecureRandom();<a name="line.911"></a>
-<span class="sourceLineNo">912</span>    }<a name="line.912"></a>
-<span class="sourceLineNo">913</span><a name="line.913"></a>
-<span class="sourceLineNo">914</span>    public long doSecureRandomInt()<a name="line.914"></a>
-<span class="sourceLineNo">915</span>    {<a name="line.915"></a>
-<span class="sourceLineNo">916</span>        SecureRandom rng = new SecureRandom();<a name="line.916"></a>
-<span class="sourceLineNo">917</span>        //rng.setSeed(iseed);<a name="line.917"></a>
-<span class="sourceLineNo">918</span><a name="line.918"></a>
-<span class="sourceLineNo">919</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.919"></a>
-<span class="sourceLineNo">920</span>            iseed += rng.nextInt();<a name="line.920"></a>
-<span class="sourceLineNo">921</span>        }<a name="line.921"></a>
-<span class="sourceLineNo">922</span>        return iseed;<a name="line.922"></a>
-<span class="sourceLineNo">923</span>    }<a name="line.923"></a>
-<span class="sourceLineNo">924</span><a name="line.924"></a>
-<span class="sourceLineNo">925</span>    @Benchmark<a name="line.925"></a>
-<span class="sourceLineNo">926</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.926"></a>
-<span class="sourceLineNo">927</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.927"></a>
-<span class="sourceLineNo">928</span>    public void measureSecureRandomInt() throws InterruptedException {<a name="line.928"></a>
-<span class="sourceLineNo">929</span>        iseed = 9000;<a name="line.929"></a>
-<span class="sourceLineNo">930</span>        doSecureRandomInt();<a name="line.930"></a>
-<span class="sourceLineNo">931</span>    }<a name="line.931"></a>
-<span class="sourceLineNo">932</span>*/<a name="line.932"></a>
-<span class="sourceLineNo">933</span><a name="line.933"></a>
-<span class="sourceLineNo">934</span><a name="line.934"></a>
-<span class="sourceLineNo">935</span>    /*<a name="line.935"></a>
-<span class="sourceLineNo">936</span>    public long doMT()<a name="line.936"></a>
-<span class="sourceLineNo">937</span>    {<a name="line.937"></a>
-<span class="sourceLineNo">938</span>        byte[] bseed = new byte[16];<a name="line.938"></a>
-<span class="sourceLineNo">939</span>        Arrays.fill(bseed, (byte)seed);<a name="line.939"></a>
-<span class="sourceLineNo">940</span>        MersenneTwister rng = new MersenneTwister(bseed);<a name="line.940"></a>
-<span class="sourceLineNo">941</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.941"></a>
-<span class="sourceLineNo">942</span>            seed += rng.nextLong();<a name="line.942"></a>
-<span class="sourceLineNo">943</span>        }<a name="line.943"></a>
-<span class="sourceLineNo">944</span>        return seed;<a name="line.944"></a>
-<span class="sourceLineNo">945</span>    }<a name="line.945"></a>
-<span class="sourceLineNo">946</span><a name="line.946"></a>
-<span class="sourceLineNo">947</span>    //@Benchmark<a name="line.947"></a>
-<span class="sourceLineNo">948</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.948"></a>
-<span class="sourceLineNo">949</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.949"></a>
-<span class="sourceLineNo">950</span>    public void measureMT() throws InterruptedException {<a name="line.950"></a>
-<span class="sourceLineNo">951</span>        seed = 9000;<a name="line.951"></a>
-<span class="sourceLineNo">952</span>        doMT();<a name="line.952"></a>
-<span class="sourceLineNo">953</span>    }<a name="line.953"></a>
-<span class="sourceLineNo">954</span><a name="line.954"></a>
-<span class="sourceLineNo">955</span>    public long doMTInt()<a name="line.955"></a>
+<span class="sourceLineNo">906</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.906"></a>
+<span class="sourceLineNo">907</span>            iseed += rng.nextInt();<a name="line.907"></a>
+<span class="sourceLineNo">908</span>        }<a name="line.908"></a>
+<span class="sourceLineNo">909</span>        return iseed;<a name="line.909"></a>
+<span class="sourceLineNo">910</span>    }<a name="line.910"></a>
+<span class="sourceLineNo">911</span><a name="line.911"></a>
+<span class="sourceLineNo">912</span>    @Benchmark<a name="line.912"></a>
+<span class="sourceLineNo">913</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.913"></a>
+<span class="sourceLineNo">914</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.914"></a>
+<span class="sourceLineNo">915</span>    public void measureGDXInt() throws InterruptedException {<a name="line.915"></a>
+<span class="sourceLineNo">916</span>        iseed = 9000;<a name="line.916"></a>
+<span class="sourceLineNo">917</span>        doGDXInt();<a name="line.917"></a>
+<span class="sourceLineNo">918</span>    }<a name="line.918"></a>
+<span class="sourceLineNo">919</span>    /*<a name="line.919"></a>
+<span class="sourceLineNo">920</span>    public long doIsaac()<a name="line.920"></a>
+<span class="sourceLineNo">921</span>    {<a name="line.921"></a>
+<span class="sourceLineNo">922</span>        IsaacRNG rng = new IsaacRNG(seed);<a name="line.922"></a>
+<span class="sourceLineNo">923</span><a name="line.923"></a>
+<span class="sourceLineNo">924</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.924"></a>
+<span class="sourceLineNo">925</span>            seed += rng.nextLong();<a name="line.925"></a>
+<span class="sourceLineNo">926</span>        }<a name="line.926"></a>
+<span class="sourceLineNo">927</span>        return seed;<a name="line.927"></a>
+<span class="sourceLineNo">928</span>    }<a name="line.928"></a>
+<span class="sourceLineNo">929</span><a name="line.929"></a>
+<span class="sourceLineNo">930</span>    @Benchmark<a name="line.930"></a>
+<span class="sourceLineNo">931</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.931"></a>
+<span class="sourceLineNo">932</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.932"></a>
+<span class="sourceLineNo">933</span>    public void measureIsaac() throws InterruptedException {<a name="line.933"></a>
+<span class="sourceLineNo">934</span>        seed = 9000;<a name="line.934"></a>
+<span class="sourceLineNo">935</span>        doIsaac();<a name="line.935"></a>
+<span class="sourceLineNo">936</span>    }<a name="line.936"></a>
+<span class="sourceLineNo">937</span><a name="line.937"></a>
+<span class="sourceLineNo">938</span>    public long doIsaacInt()<a name="line.938"></a>
+<span class="sourceLineNo">939</span>    {<a name="line.939"></a>
+<span class="sourceLineNo">940</span>        IsaacRNG rng = new IsaacRNG(iseed);<a name="line.940"></a>
+<span class="sourceLineNo">941</span><a name="line.941"></a>
+<span class="sourceLineNo">942</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.942"></a>
+<span class="sourceLineNo">943</span>            iseed += rng.next(32);<a name="line.943"></a>
+<span class="sourceLineNo">944</span>        }<a name="line.944"></a>
+<span class="sourceLineNo">945</span>        return iseed;<a name="line.945"></a>
+<span class="sourceLineNo">946</span>    }<a name="line.946"></a>
+<span class="sourceLineNo">947</span><a name="line.947"></a>
+<span class="sourceLineNo">948</span>    @Benchmark<a name="line.948"></a>
+<span class="sourceLineNo">949</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.949"></a>
+<span class="sourceLineNo">950</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.950"></a>
+<span class="sourceLineNo">951</span>    public void measureIsaacInt() throws InterruptedException {<a name="line.951"></a>
+<span class="sourceLineNo">952</span>        iseed = 9000;<a name="line.952"></a>
+<span class="sourceLineNo">953</span>        doIsaacInt();<a name="line.953"></a>
+<span class="sourceLineNo">954</span>    }<a name="line.954"></a>
+<span class="sourceLineNo">955</span>    public long doIsaacR()<a name="line.955"></a>
 <span class="sourceLineNo">956</span>    {<a name="line.956"></a>
-<span class="sourceLineNo">957</span>        byte[] bseed = new byte[16];<a name="line.957"></a>
-<span class="sourceLineNo">958</span>        Arrays.fill(bseed, (byte)iseed);<a name="line.958"></a>
-<span class="sourceLineNo">959</span>        MersenneTwister rng = new MersenneTwister(bseed);<a name="line.959"></a>
-<span class="sourceLineNo">960</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.960"></a>
-<span class="sourceLineNo">961</span>            iseed += rng.next(32);<a name="line.961"></a>
-<span class="sourceLineNo">962</span>        }<a name="line.962"></a>
-<span class="sourceLineNo">963</span>        return iseed;<a name="line.963"></a>
-<span class="sourceLineNo">964</span>    }<a name="line.964"></a>
-<span class="sourceLineNo">965</span>    //@Benchmark<a name="line.965"></a>
+<span class="sourceLineNo">957</span>        RNG rng = new RNG(new IsaacRNG(seed));<a name="line.957"></a>
+<span class="sourceLineNo">958</span><a name="line.958"></a>
+<span class="sourceLineNo">959</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.959"></a>
+<span class="sourceLineNo">960</span>            seed += rng.nextLong();<a name="line.960"></a>
+<span class="sourceLineNo">961</span>        }<a name="line.961"></a>
+<span class="sourceLineNo">962</span>        return seed;<a name="line.962"></a>
+<span class="sourceLineNo">963</span>    }<a name="line.963"></a>
+<span class="sourceLineNo">964</span><a name="line.964"></a>
+<span class="sourceLineNo">965</span>    @Benchmark<a name="line.965"></a>
 <span class="sourceLineNo">966</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.966"></a>
 <span class="sourceLineNo">967</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.967"></a>
-<span class="sourceLineNo">968</span>    public void measureMTInt() throws InterruptedException {<a name="line.968"></a>
-<span class="sourceLineNo">969</span>        iseed = 9000;<a name="line.969"></a>
-<span class="sourceLineNo">970</span>        doMTInt();<a name="line.970"></a>
+<span class="sourceLineNo">968</span>    public void measureIsaacR() throws InterruptedException {<a name="line.968"></a>
+<span class="sourceLineNo">969</span>        seed = 9000;<a name="line.969"></a>
+<span class="sourceLineNo">970</span>        doIsaacR();<a name="line.970"></a>
 <span class="sourceLineNo">971</span>    }<a name="line.971"></a>
 <span class="sourceLineNo">972</span><a name="line.972"></a>
-<span class="sourceLineNo">973</span>    public long doMTR()<a name="line.973"></a>
+<span class="sourceLineNo">973</span>    public long doIsaacIntR()<a name="line.973"></a>
 <span class="sourceLineNo">974</span>    {<a name="line.974"></a>
-<span class="sourceLineNo">975</span>        byte[] bseed = new byte[16];<a name="line.975"></a>
-<span class="sourceLineNo">976</span>        Arrays.fill(bseed, (byte)seed);<a name="line.976"></a>
-<span class="sourceLineNo">977</span>        RNG rng = new RNG(new MersenneTwister(bseed));<a name="line.977"></a>
-<span class="sourceLineNo">978</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.978"></a>
-<span class="sourceLineNo">979</span>            seed += rng.nextLong();<a name="line.979"></a>
-<span class="sourceLineNo">980</span>        }<a name="line.980"></a>
-<span class="sourceLineNo">981</span>        return seed;<a name="line.981"></a>
-<span class="sourceLineNo">982</span>    }<a name="line.982"></a>
+<span class="sourceLineNo">975</span>        RNG rng = new RNG(new IsaacRNG(iseed));<a name="line.975"></a>
+<span class="sourceLineNo">976</span><a name="line.976"></a>
+<span class="sourceLineNo">977</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.977"></a>
+<span class="sourceLineNo">978</span>            iseed += rng.nextInt();<a name="line.978"></a>
+<span class="sourceLineNo">979</span>        }<a name="line.979"></a>
+<span class="sourceLineNo">980</span>        return iseed;<a name="line.980"></a>
+<span class="sourceLineNo">981</span>    }<a name="line.981"></a>
+<span class="sourceLineNo">982</span>    */<a name="line.982"></a>
 <span class="sourceLineNo">983</span><a name="line.983"></a>
-<span class="sourceLineNo">984</span>    //@Benchmark<a name="line.984"></a>
-<span class="sourceLineNo">985</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.985"></a>
-<span class="sourceLineNo">986</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.986"></a>
-<span class="sourceLineNo">987</span>    public void measureMTR() throws InterruptedException {<a name="line.987"></a>
-<span class="sourceLineNo">988</span>        seed = 9000;<a name="line.988"></a>
-<span class="sourceLineNo">989</span>        doMTR();<a name="line.989"></a>
-<span class="sourceLineNo">990</span>    }<a name="line.990"></a>
-<span class="sourceLineNo">991</span><a name="line.991"></a>
-<span class="sourceLineNo">992</span>    public long doMTIntR()<a name="line.992"></a>
-<span class="sourceLineNo">993</span>    {<a name="line.993"></a>
-<span class="sourceLineNo">994</span>        byte[] bseed = new byte[16];<a name="line.994"></a>
-<span class="sourceLineNo">995</span>        Arrays.fill(bseed, (byte)iseed);<a name="line.995"></a>
-<span class="sourceLineNo">996</span>        RNG rng = new RNG(new MersenneTwister(bseed));<a name="line.996"></a>
-<span class="sourceLineNo">997</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.997"></a>
-<span class="sourceLineNo">998</span>            iseed += rng.nextInt();<a name="line.998"></a>
-<span class="sourceLineNo">999</span>        }<a name="line.999"></a>
-<span class="sourceLineNo">1000</span>        return iseed;<a name="line.1000"></a>
-<span class="sourceLineNo">1001</span>    }<a name="line.1001"></a>
-<span class="sourceLineNo">1002</span>    //@Benchmark<a name="line.1002"></a>
-<span class="sourceLineNo">1003</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.1003"></a>
-<span class="sourceLineNo">1004</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.1004"></a>
-<span class="sourceLineNo">1005</span>    public void measureMTIntR() throws InterruptedException {<a name="line.1005"></a>
-<span class="sourceLineNo">1006</span>        iseed = 9000;<a name="line.1006"></a>
-<span class="sourceLineNo">1007</span>        doMTIntR();<a name="line.1007"></a>
-<span class="sourceLineNo">1008</span>    }<a name="line.1008"></a>
-<span class="sourceLineNo">1009</span>*/<a name="line.1009"></a>
-<span class="sourceLineNo">1010</span><a name="line.1010"></a>
-<span class="sourceLineNo">1011</span>    /*<a name="line.1011"></a>
-<span class="sourceLineNo">1012</span>     * ============================== HOW TO RUN THIS TEST: ====================================<a name="line.1012"></a>
-<span class="sourceLineNo">1013</span>     *<a name="line.1013"></a>
-<span class="sourceLineNo">1014</span>     * You are expected to see the different run modes for the same benchmark.<a name="line.1014"></a>
-<span class="sourceLineNo">1015</span>     * Note the units are different, scores are consistent with each other.<a name="line.1015"></a>
-<span class="sourceLineNo">1016</span>     *<a name="line.1016"></a>
-<span class="sourceLineNo">1017</span>     * You can run this test:<a name="line.1017"></a>
-<span class="sourceLineNo">1018</span>     *<a name="line.1018"></a>
-<span class="sourceLineNo">1019</span>     * a) Via the command line from the squidlib-performance module's root folder:<a name="line.1019"></a>
-<span class="sourceLineNo">1020</span>     *    $ mvn clean install<a name="line.1020"></a>
-<span class="sourceLineNo">1021</span>     *    $ java -jar target/benchmarks.jar RNGBenchmark -wi 3 -i 3 -f 1<a name="line.1021"></a>
-<span class="sourceLineNo">1022</span>     *<a name="line.1022"></a>
-<span class="sourceLineNo">1023</span>     *    (we requested 5 warmup/measurement iterations, single fork)<a name="line.1023"></a>
-<span class="sourceLineNo">1024</span>     *<a name="line.1024"></a>
-<span class="sourceLineNo">1025</span>     * b) Via the Java API:<a name="line.1025"></a>
-<span class="sourceLineNo">1026</span>     *    (see the JMH homepage for possible caveats when running from IDE:<a name="line.1026"></a>
-<span class="sourceLineNo">1027</span>     *      http://openjdk.java.net/projects/code-tools/jmh/)<a name="line.1027"></a>
-<span class="sourceLineNo">1028</span>     */<a name="line.1028"></a>
-<span class="sourceLineNo">1029</span><a name="line.1029"></a>
-<span class="sourceLineNo">1030</span>    public static void main(String[] args) throws RunnerException {<a name="line.1030"></a>
-<span class="sourceLineNo">1031</span>        Options opt = new OptionsBuilder()<a name="line.1031"></a>
-<span class="sourceLineNo">1032</span>                .include(RNGBenchmark.class.getSimpleName())<a name="line.1032"></a>
-<span class="sourceLineNo">1033</span>                .timeout(TimeValue.seconds(30))<a name="line.1033"></a>
-<span class="sourceLineNo">1034</span>                .warmupIterations(5)<a name="line.1034"></a>
-<span class="sourceLineNo">1035</span>                .measurementIterations(5)<a name="line.1035"></a>
-<span class="sourceLineNo">1036</span>                .forks(1)<a name="line.1036"></a>
-<span class="sourceLineNo">1037</span>                .build();<a name="line.1037"></a>
-<span class="sourceLineNo">1038</span><a name="line.1038"></a>
-<span class="sourceLineNo">1039</span>        new Runner(opt).run();<a name="line.1039"></a>
-<span class="sourceLineNo">1040</span>    }<a name="line.1040"></a>
-<span class="sourceLineNo">1041</span><a name="line.1041"></a>
-<span class="sourceLineNo">1042</span><a name="line.1042"></a>
-<span class="sourceLineNo">1043</span>}<a name="line.1043"></a>
+<span class="sourceLineNo">984</span>/*<a name="line.984"></a>
+<span class="sourceLineNo">985</span>    public long doSecureRandom()<a name="line.985"></a>
+<span class="sourceLineNo">986</span>    {<a name="line.986"></a>
+<span class="sourceLineNo">987</span>        SecureRandom rng = new SecureRandom();<a name="line.987"></a>
+<span class="sourceLineNo">988</span>        //rng.setSeed(seed);<a name="line.988"></a>
+<span class="sourceLineNo">989</span><a name="line.989"></a>
+<span class="sourceLineNo">990</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.990"></a>
+<span class="sourceLineNo">991</span>            seed += rng.nextLong();<a name="line.991"></a>
+<span class="sourceLineNo">992</span>        }<a name="line.992"></a>
+<span class="sourceLineNo">993</span>        return seed;<a name="line.993"></a>
+<span class="sourceLineNo">994</span>    }<a name="line.994"></a>
+<span class="sourceLineNo">995</span><a name="line.995"></a>
+<span class="sourceLineNo">996</span>    @Benchmark<a name="line.996"></a>
+<span class="sourceLineNo">997</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.997"></a>
+<span class="sourceLineNo">998</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.998"></a>
+<span class="sourceLineNo">999</span>    public void measureSecureRandom() throws InterruptedException {<a name="line.999"></a>
+<span class="sourceLineNo">1000</span>        seed = 9000;<a name="line.1000"></a>
+<span class="sourceLineNo">1001</span>        doSecureRandom();<a name="line.1001"></a>
+<span class="sourceLineNo">1002</span>    }<a name="line.1002"></a>
+<span class="sourceLineNo">1003</span><a name="line.1003"></a>
+<span class="sourceLineNo">1004</span>    public long doSecureRandomInt()<a name="line.1004"></a>
+<span class="sourceLineNo">1005</span>    {<a name="line.1005"></a>
+<span class="sourceLineNo">1006</span>        SecureRandom rng = new SecureRandom();<a name="line.1006"></a>
+<span class="sourceLineNo">1007</span>        //rng.setSeed(iseed);<a name="line.1007"></a>
+<span class="sourceLineNo">1008</span><a name="line.1008"></a>
+<span class="sourceLineNo">1009</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.1009"></a>
+<span class="sourceLineNo">1010</span>            iseed += rng.nextInt();<a name="line.1010"></a>
+<span class="sourceLineNo">1011</span>        }<a name="line.1011"></a>
+<span class="sourceLineNo">1012</span>        return iseed;<a name="line.1012"></a>
+<span class="sourceLineNo">1013</span>    }<a name="line.1013"></a>
+<span class="sourceLineNo">1014</span><a name="line.1014"></a>
+<span class="sourceLineNo">1015</span>    @Benchmark<a name="line.1015"></a>
+<span class="sourceLineNo">1016</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.1016"></a>
+<span class="sourceLineNo">1017</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.1017"></a>
+<span class="sourceLineNo">1018</span>    public void measureSecureRandomInt() throws InterruptedException {<a name="line.1018"></a>
+<span class="sourceLineNo">1019</span>        iseed = 9000;<a name="line.1019"></a>
+<span class="sourceLineNo">1020</span>        doSecureRandomInt();<a name="line.1020"></a>
+<span class="sourceLineNo">1021</span>    }<a name="line.1021"></a>
+<span class="sourceLineNo">1022</span>*/<a name="line.1022"></a>
+<span class="sourceLineNo">1023</span><a name="line.1023"></a>
+<span class="sourceLineNo">1024</span><a name="line.1024"></a>
+<span class="sourceLineNo">1025</span>    /*<a name="line.1025"></a>
+<span class="sourceLineNo">1026</span>    public long doMT()<a name="line.1026"></a>
+<span class="sourceLineNo">1027</span>    {<a name="line.1027"></a>
+<span class="sourceLineNo">1028</span>        byte[] bseed = new byte[16];<a name="line.1028"></a>
+<span class="sourceLineNo">1029</span>        Arrays.fill(bseed, (byte)seed);<a name="line.1029"></a>
+<span class="sourceLineNo">1030</span>        MersenneTwister rng = new MersenneTwister(bseed);<a name="line.1030"></a>
+<span class="sourceLineNo">1031</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.1031"></a>
+<span class="sourceLineNo">1032</span>            seed += rng.nextLong();<a name="line.1032"></a>
+<span class="sourceLineNo">1033</span>        }<a name="line.1033"></a>
+<span class="sourceLineNo">1034</span>        return seed;<a name="line.1034"></a>
+<span class="sourceLineNo">1035</span>    }<a name="line.1035"></a>
+<span class="sourceLineNo">1036</span><a name="line.1036"></a>
+<span class="sourceLineNo">1037</span>    //@Benchmark<a name="line.1037"></a>
+<span class="sourceLineNo">1038</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.1038"></a>
+<span class="sourceLineNo">1039</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.1039"></a>
+<span class="sourceLineNo">1040</span>    public void measureMT() throws InterruptedException {<a name="line.1040"></a>
+<span class="sourceLineNo">1041</span>        seed = 9000;<a name="line.1041"></a>
+<span class="sourceLineNo">1042</span>        doMT();<a name="line.1042"></a>
+<span class="sourceLineNo">1043</span>    }<a name="line.1043"></a>
+<span class="sourceLineNo">1044</span><a name="line.1044"></a>
+<span class="sourceLineNo">1045</span>    public long doMTInt()<a name="line.1045"></a>
+<span class="sourceLineNo">1046</span>    {<a name="line.1046"></a>
+<span class="sourceLineNo">1047</span>        byte[] bseed = new byte[16];<a name="line.1047"></a>
+<span class="sourceLineNo">1048</span>        Arrays.fill(bseed, (byte)iseed);<a name="line.1048"></a>
+<span class="sourceLineNo">1049</span>        MersenneTwister rng = new MersenneTwister(bseed);<a name="line.1049"></a>
+<span class="sourceLineNo">1050</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.1050"></a>
+<span class="sourceLineNo">1051</span>            iseed += rng.next(32);<a name="line.1051"></a>
+<span class="sourceLineNo">1052</span>        }<a name="line.1052"></a>
+<span class="sourceLineNo">1053</span>        return iseed;<a name="line.1053"></a>
+<span class="sourceLineNo">1054</span>    }<a name="line.1054"></a>
+<span class="sourceLineNo">1055</span>    //@Benchmark<a name="line.1055"></a>
+<span class="sourceLineNo">1056</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.1056"></a>
+<span class="sourceLineNo">1057</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.1057"></a>
+<span class="sourceLineNo">1058</span>    public void measureMTInt() throws InterruptedException {<a name="line.1058"></a>
+<span class="sourceLineNo">1059</span>        iseed = 9000;<a name="line.1059"></a>
+<span class="sourceLineNo">1060</span>        doMTInt();<a name="line.1060"></a>
+<span class="sourceLineNo">1061</span>    }<a name="line.1061"></a>
+<span class="sourceLineNo">1062</span><a name="line.1062"></a>
+<span class="sourceLineNo">1063</span>    public long doMTR()<a name="line.1063"></a>
+<span class="sourceLineNo">1064</span>    {<a name="line.1064"></a>
+<span class="sourceLineNo">1065</span>        byte[] bseed = new byte[16];<a name="line.1065"></a>
+<span class="sourceLineNo">1066</span>        Arrays.fill(bseed, (byte)seed);<a name="line.1066"></a>
+<span class="sourceLineNo">1067</span>        RNG rng = new RNG(new MersenneTwister(bseed));<a name="line.1067"></a>
+<span class="sourceLineNo">1068</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.1068"></a>
+<span class="sourceLineNo">1069</span>            seed += rng.nextLong();<a name="line.1069"></a>
+<span class="sourceLineNo">1070</span>        }<a name="line.1070"></a>
+<span class="sourceLineNo">1071</span>        return seed;<a name="line.1071"></a>
+<span class="sourceLineNo">1072</span>    }<a name="line.1072"></a>
+<span class="sourceLineNo">1073</span><a name="line.1073"></a>
+<span class="sourceLineNo">1074</span>    //@Benchmark<a name="line.1074"></a>
+<span class="sourceLineNo">1075</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.1075"></a>
+<span class="sourceLineNo">1076</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.1076"></a>
+<span class="sourceLineNo">1077</span>    public void measureMTR() throws InterruptedException {<a name="line.1077"></a>
+<span class="sourceLineNo">1078</span>        seed = 9000;<a name="line.1078"></a>
+<span class="sourceLineNo">1079</span>        doMTR();<a name="line.1079"></a>
+<span class="sourceLineNo">1080</span>    }<a name="line.1080"></a>
+<span class="sourceLineNo">1081</span><a name="line.1081"></a>
+<span class="sourceLineNo">1082</span>    public long doMTIntR()<a name="line.1082"></a>
+<span class="sourceLineNo">1083</span>    {<a name="line.1083"></a>
+<span class="sourceLineNo">1084</span>        byte[] bseed = new byte[16];<a name="line.1084"></a>
+<span class="sourceLineNo">1085</span>        Arrays.fill(bseed, (byte)iseed);<a name="line.1085"></a>
+<span class="sourceLineNo">1086</span>        RNG rng = new RNG(new MersenneTwister(bseed));<a name="line.1086"></a>
+<span class="sourceLineNo">1087</span>        for (int i = 0; i &lt; 1000000000; i++) {<a name="line.1087"></a>
+<span class="sourceLineNo">1088</span>            iseed += rng.nextInt();<a name="line.1088"></a>
+<span class="sourceLineNo">1089</span>        }<a name="line.1089"></a>
+<span class="sourceLineNo">1090</span>        return iseed;<a name="line.1090"></a>
+<span class="sourceLineNo">1091</span>    }<a name="line.1091"></a>
+<span class="sourceLineNo">1092</span>    //@Benchmark<a name="line.1092"></a>
+<span class="sourceLineNo">1093</span>    @BenchmarkMode(Mode.AverageTime)<a name="line.1093"></a>
+<span class="sourceLineNo">1094</span>    @OutputTimeUnit(TimeUnit.MILLISECONDS)<a name="line.1094"></a>
+<span class="sourceLineNo">1095</span>    public void measureMTIntR() throws InterruptedException {<a name="line.1095"></a>
+<span class="sourceLineNo">1096</span>        iseed = 9000;<a name="line.1096"></a>
+<span class="sourceLineNo">1097</span>        doMTIntR();<a name="line.1097"></a>
+<span class="sourceLineNo">1098</span>    }<a name="line.1098"></a>
+<span class="sourceLineNo">1099</span>*/<a name="line.1099"></a>
+<span class="sourceLineNo">1100</span><a name="line.1100"></a>
+<span class="sourceLineNo">1101</span>    /*<a name="line.1101"></a>
+<span class="sourceLineNo">1102</span>     * ============================== HOW TO RUN THIS TEST: ====================================<a name="line.1102"></a>
+<span class="sourceLineNo">1103</span>     *<a name="line.1103"></a>
+<span class="sourceLineNo">1104</span>     * You are expected to see the different run modes for the same benchmark.<a name="line.1104"></a>
+<span class="sourceLineNo">1105</span>     * Note the units are different, scores are consistent with each other.<a name="line.1105"></a>
+<span class="sourceLineNo">1106</span>     *<a name="line.1106"></a>
+<span class="sourceLineNo">1107</span>     * You can run this test:<a name="line.1107"></a>
+<span class="sourceLineNo">1108</span>     *<a name="line.1108"></a>
+<span class="sourceLineNo">1109</span>     * a) Via the command line from the squidlib-performance module's root folder:<a name="line.1109"></a>
+<span class="sourceLineNo">1110</span>     *    $ mvn clean install<a name="line.1110"></a>
+<span class="sourceLineNo">1111</span>     *    $ java -jar target/benchmarks.jar RNGBenchmark -wi 3 -i 3 -f 1<a name="line.1111"></a>
+<span class="sourceLineNo">1112</span>     *<a name="line.1112"></a>
+<span class="sourceLineNo">1113</span>     *    (we requested 5 warmup/measurement iterations, single fork)<a name="line.1113"></a>
+<span class="sourceLineNo">1114</span>     *<a name="line.1114"></a>
+<span class="sourceLineNo">1115</span>     * b) Via the Java API:<a name="line.1115"></a>
+<span class="sourceLineNo">1116</span>     *    (see the JMH homepage for possible caveats when running from IDE:<a name="line.1116"></a>
+<span class="sourceLineNo">1117</span>     *      http://openjdk.java.net/projects/code-tools/jmh/)<a name="line.1117"></a>
+<span class="sourceLineNo">1118</span>     */<a name="line.1118"></a>
+<span class="sourceLineNo">1119</span><a name="line.1119"></a>
+<span class="sourceLineNo">1120</span>    public static void main(String[] args) throws RunnerException {<a name="line.1120"></a>
+<span class="sourceLineNo">1121</span>        Options opt = new OptionsBuilder()<a name="line.1121"></a>
+<span class="sourceLineNo">1122</span>                .include(RNGBenchmark.class.getSimpleName())<a name="line.1122"></a>
+<span class="sourceLineNo">1123</span>                .timeout(TimeValue.seconds(30))<a name="line.1123"></a>
+<span class="sourceLineNo">1124</span>                .warmupIterations(5)<a name="line.1124"></a>
+<span class="sourceLineNo">1125</span>                .measurementIterations(5)<a name="line.1125"></a>
+<span class="sourceLineNo">1126</span>                .forks(1)<a name="line.1126"></a>
+<span class="sourceLineNo">1127</span>                .build();<a name="line.1127"></a>
+<span class="sourceLineNo">1128</span><a name="line.1128"></a>
+<span class="sourceLineNo">1129</span>        new Runner(opt).run();<a name="line.1129"></a>
+<span class="sourceLineNo">1130</span>    }<a name="line.1130"></a>
+<span class="sourceLineNo">1131</span><a name="line.1131"></a>
+<span class="sourceLineNo">1132</span><a name="line.1132"></a>
+<span class="sourceLineNo">1133</span>}<a name="line.1133"></a>
 
 
 

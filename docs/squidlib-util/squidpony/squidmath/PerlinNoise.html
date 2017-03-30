@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -75,14 +75,14 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
@@ -107,9 +107,13 @@ var activeTableTab = "activeTableTab";
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>Direct Known Subclasses:</dt>
+<dd><a href="../../squidpony/squidmath/WhirlingNoise.html" title="class in squidpony.squidmath">WhirlingNoise</a></dd>
+</dl>
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.17">PerlinNoise</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.33">PerlinNoise</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">This is Ken Perlin's third revision of his noise function. It is sometimes
  referred to as "Simplex Noise". Results are bound by (-1, 1) inclusive.
@@ -121,13 +125,135 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  <ul>
  <li>http://www.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf</li>
  <li>http://webstaff.itn.liu.se/~stegu/TNM022-2005/perlinnoiselinks/ch02.pdf</li>
- </ul></div>
+ </ul>
+ But, Gustavson's paper is not without its own issues, particularly for 2D noise.
+ More detail is noted here,
+ http://stackoverflow.com/questions/18885440/why-does-simplex-noise-seem-to-have-more-artifacts-than-classic-perlin-noise#21568753
+ and some changes have been made to 2D noise generation to reduce angular artifacts.
+ Specifically for the 2D gradient table, code based on Gustavson's paper used 12
+ points, with some duplicates, and not all on the unit circle. In this version,
+ points are used on the unit circle starting at (1,0) and moving along the circle
+ in increments of 1.61803398875 radians, that is, the golden ratio phi, getting the
+ sin and cosine of 15 points after the starting point and storing them as constants.
+ This definitely doesn't have a noticeable 45 degree angle artifact, though it does
+ have, to a lesser extent, some other minor artifacts.
+ <br>
+ You can also consider <a href="../../squidpony/squidmath/WhirlingNoise.html" title="class in squidpony.squidmath"><code>WhirlingNoise</code></a> as an alternative, which can be faster
+ and also reduces the likelihood of angular artifacts. WhirlingNoise does not scale its
+ input (it doesn't need to), so it won't produce the same results as PerlinNoise for the
+ same inputs, but it will produce similar shape, density, and aesthetic quality of noise.</div>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../squidpony/squidmath/WhirlingNoise.html" title="class in squidpony.squidmath"><code>A subclass that has a faster implementation and some different qualities.</code></a></dd>
+</dl>
 </li>
 </ul>
 </div>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#epi">epi</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#F2">F2</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#F3">F3</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#F4">F4</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#G2">G2</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#G3">G3</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#G4">G4</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected static double[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#grad2">grad2</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected static int[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#grad3">grad3</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected static int[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#grad4">grad4</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected static int[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#perm">perm</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#phi">phi</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected static double[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#phiGrad2">phiGrad2</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected static int[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#simplex">simplex</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#unit1_4">unit1_4</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#unit1_8">unit1_8</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#unit3_8">unit3_8</a></span></code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor.summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier</th>
+<th class="colLast" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected </code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#PerlinNoise--">PerlinNoise</a></span>()</code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
 <!-- ========== METHOD SUMMARY =========== -->
 <ul class="blockList">
 <li class="blockList"><a name="method.summary">
@@ -141,13 +267,34 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>protected static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#dot-double:A-double-double-">dot</a></span>(double[]&nbsp;g,
+   double&nbsp;x,
+   double&nbsp;y)</code>&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>protected static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#dot-int:A-double-double-double-">dot</a></span>(int[]&nbsp;g,
+   double&nbsp;x,
+   double&nbsp;y,
+   double&nbsp;z)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>protected static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#dot-int:A-double-double-double-double-">dot</a></span>(int[]&nbsp;g,
+   double&nbsp;x,
+   double&nbsp;y,
+   double&nbsp;z,
+   double&nbsp;w)</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#noise-double-double-">noise</a></span>(double&nbsp;xin,
      double&nbsp;yin)</code>
 <div class="block">2D simplex noise.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#noise-double-double-double-">noise</a></span>(double&nbsp;xin,
      double&nbsp;yin,
@@ -155,7 +302,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <div class="block">3D simplex noise.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#noise-double-double-double-double-">noise</a></span>(double&nbsp;x,
      double&nbsp;y,
@@ -180,25 +327,271 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="phi">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>phi</h4>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.35">phi</a></pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../constant-values.html#squidpony.squidmath.PerlinNoise.phi">Constant Field Values</a></dd>
+</dl>
+</li>
+</ul>
+<a name="epi">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>epi</h4>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.36">epi</a></pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../constant-values.html#squidpony.squidmath.PerlinNoise.epi">Constant Field Values</a></dd>
+</dl>
+</li>
+</ul>
+<a name="unit1_4">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>unit1_4</h4>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.36">unit1_4</a></pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../constant-values.html#squidpony.squidmath.PerlinNoise.unit1_4">Constant Field Values</a></dd>
+</dl>
+</li>
+</ul>
+<a name="unit1_8">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>unit1_8</h4>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.36">unit1_8</a></pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../constant-values.html#squidpony.squidmath.PerlinNoise.unit1_8">Constant Field Values</a></dd>
+</dl>
+</li>
+</ul>
+<a name="unit3_8">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>unit3_8</h4>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.36">unit3_8</a></pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../constant-values.html#squidpony.squidmath.PerlinNoise.unit3_8">Constant Field Values</a></dd>
+</dl>
+</li>
+</ul>
+<a name="grad2">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>grad2</h4>
+<pre>protected static final&nbsp;double[][] <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.38">grad2</a></pre>
+</li>
+</ul>
+<a name="phiGrad2">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>phiGrad2</h4>
+<pre>protected static final&nbsp;double[][] <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.47">phiGrad2</a></pre>
+</li>
+</ul>
+<a name="grad3">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>grad3</h4>
+<pre>protected static final&nbsp;int[][] <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.57">grad3</a></pre>
+</li>
+</ul>
+<a name="grad4">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>grad4</h4>
+<pre>protected static final&nbsp;int[][] <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.61">grad4</a></pre>
+</li>
+</ul>
+<a name="F2">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>F2</h4>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.102">F2</a></pre>
+</li>
+</ul>
+<a name="G2">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>G2</h4>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.103">G2</a></pre>
+</li>
+</ul>
+<a name="F3">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>F3</h4>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.104">F3</a></pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../constant-values.html#squidpony.squidmath.PerlinNoise.F3">Constant Field Values</a></dd>
+</dl>
+</li>
+</ul>
+<a name="G3">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>G3</h4>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.105">G3</a></pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../constant-values.html#squidpony.squidmath.PerlinNoise.G3">Constant Field Values</a></dd>
+</dl>
+</li>
+</ul>
+<a name="F4">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>F4</h4>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.106">F4</a></pre>
+</li>
+</ul>
+<a name="G4">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>G4</h4>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.107">G4</a></pre>
+</li>
+</ul>
+<a name="perm">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>perm</h4>
+<pre>protected static final&nbsp;int[] <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.110">perm</a></pre>
+</li>
+</ul>
+<a name="simplex">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>simplex</h4>
+<pre>protected static final&nbsp;int[][] <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.123">simplex</a></pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor.detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="PerlinNoise--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>PerlinNoise</h4>
+<pre>protected&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.117">PerlinNoise</a>()</pre>
+</li>
+</ul>
+</li>
+</ul>
 <!-- ============ METHOD DETAIL ========== -->
 <ul class="blockList">
 <li class="blockList"><a name="method.detail">
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="dot-double:A-double-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>dot</h4>
+<pre>protected static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.141">dot</a>(double[]&nbsp;g,
+                            double&nbsp;x,
+                            double&nbsp;y)</pre>
+</li>
+</ul>
+<a name="dot-int:A-double-double-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>dot</h4>
+<pre>protected static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.145">dot</a>(int[]&nbsp;g,
+                            double&nbsp;x,
+                            double&nbsp;y,
+                            double&nbsp;z)</pre>
+</li>
+</ul>
+<a name="dot-int:A-double-double-double-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>dot</h4>
+<pre>protected static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.149">dot</a>(int[]&nbsp;g,
+                            double&nbsp;x,
+                            double&nbsp;y,
+                            double&nbsp;z,
+                            double&nbsp;w)</pre>
+</li>
+</ul>
 <a name="noise-double-double-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.122">noise</a>(double&nbsp;xin,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.164">noise</a>(double&nbsp;xin,
                            double&nbsp;yin)</pre>
-<div class="block">2D simplex noise.</div>
+<div class="block">2D simplex noise.
+ This doesn't use its parameters verbatim; xin and yin are both effectively divided by
+ (<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Math.html?is-external=true#E" title="class or interface in java.lang"><code>Math.E</code></a> * <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Math.html?is-external=true#PI" title="class or interface in java.lang"><code>Math.PI</code></a>), because without a step like that, any integer parameters would return 0 and
+ only doubles with a decimal component would produce actual noise. This step allows integers to be passed in a
+ arguments, and changes the cycle at which 0 is repeated to multiples of (E*PI).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>xin</code> - x input</dd>
-<dd><code>yin</code> - y input</dd>
+<dd><code>xin</code> - x input; works well if between 0.0 and 1.0, but anything is accepted</dd>
+<dd><code>yin</code> - y input; works well if between 0.0 and 1.0, but anything is accepted</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>noise from -1.0 to 1.0, inclusive</dd>
 </dl>
@@ -210,7 +603,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.197">noise</a>(double&nbsp;xin,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.241">noise</a>(double&nbsp;xin,
                            double&nbsp;yin,
                            double&nbsp;zin)</pre>
 <div class="block">3D simplex noise.</div>
@@ -230,7 +623,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.340">noise</a>(double&nbsp;x,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.387">noise</a>(double&nbsp;x,
                            double&nbsp;y,
                            double&nbsp;z,
                            double&nbsp;w)</pre>
@@ -300,14 +693,14 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
@@ -315,6 +708,6 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

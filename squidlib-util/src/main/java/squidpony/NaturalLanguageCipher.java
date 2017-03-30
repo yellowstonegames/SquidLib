@@ -90,7 +90,7 @@ public class NaturalLanguageCipher implements Serializable{
 
         public double nextDouble()
         {
-            return Double.longBitsToDouble(0x3FFL << 52 | (state += 0x41041041041041L) >>> 12) - 1.0;
+            return NumberTools.longBitsToDouble(0x3FFL << 52 | (state += 0x41041041041041L) >>> 12) - 1.0;
         }
 
         /**
@@ -192,17 +192,26 @@ se$->z
             new Replacer(Pattern.compile("e$"), "", false),
             new Replacer(Pattern.compile("^[pc]([nts])"), "$1"),
             new Replacer(Pattern.compile("^fth"), "t", false),
-    }, conjugationProc = {
+    }, conjugationProc = { // 17 is REFlags.UNICODE | REFlags.IGNORE_CASE
             new Replacer(Pattern.compile("([^àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]+)" +
                     "([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])\\2" +
-                    "([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])", REFlags.UNICODE | REFlags.IGNORE_CASE), "$1$2$1$2$3"),
+                    "([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])", 17), "$1$2$1$2$3"),
             new Replacer(Pattern.compile("([^àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]+)" +
                     "([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])" +
-                    "([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])\\3", REFlags.UNICODE | REFlags.IGNORE_CASE), "$1$2$3$1$3"),
+                    "([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])\\3", 17), "$1$2$3$1$3"),
             new Replacer(Pattern.compile("([^àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]{3})" +
-                    "(?:[^àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]+)", REFlags.UNICODE | REFlags.IGNORE_CASE), "$1"),
+                    "(?:[^àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]+)", 17), "$1"),
             new Replacer(Pattern.compile("([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])" +
-                    "([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])(?:\\1\\2)+", REFlags.UNICODE | REFlags.IGNORE_CASE), "$1$2"),
+                    "([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])(?:\\1\\2)+", 17), "$1$2"),
+            new Replacer(Pattern.compile("[æǽœìíîïĩīĭįıiùúûüũūŭůűųuýÿŷỳy]([æǽœýÿŷỳy])", 17), "$1"),
+            new Replacer(Pattern.compile("q([ùúûüũūŭůűųu])$", 17), "q$1e"),
+            new Replacer(Pattern.compile("([ìíîïĩīĭįıi])[ìíîïĩīĭįıi]", 17), "$1"),
+            new Replacer(Pattern.compile("([æǽœìíîïĩīĭįıiùúûüũūŭůűųuýÿŷỳy])[wŵẁẃẅ]$", 17), "$1"),
+            new Replacer(Pattern.compile("([ùúûüũūŭůűųu])([òóôõöøōŏőǿo])", 17), "$2$1"),
+            new Replacer(Pattern.compile("[àáâãäåāăąǻaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőǿoùúûüũūŭůűųuýÿŷỳy]([æǽœ])", 17), "$1"),
+            new Replacer(Pattern.compile("([æǽœ])[àáâãäåāăąǻaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőǿoùúûüũūŭůűųuýÿŷỳy]", 17), "$1"),
+            new Replacer(Pattern.compile("([wŵẁẃẅ])[wŵẁẃẅ]", 17), "$1"),
+            new Replacer(Pattern.compile("q{2,}", 17), "q")
     };
 
     static final long[] bigrams = {
@@ -319,8 +328,9 @@ se$->z
             Pattern.compile("[g][hн]?[aаαΛeезξεЗΣyуλγУ]+$", 17),
             Pattern.compile("[wψшщuμυνv](?:[hн]?)[aаαΛeезξεЗΣoоюσοuμυνv]+$", 17),
     }, additionalSuffixChecks = {
-            Pattern.compile("^[aаαeезξεЗΣoоюσοuμυ]*[nи]*[tтτΓгdgkкκcсςq]", 17),
-            Pattern.compile("^[iτιyуλγУaаαΛ]*[gj]", 17),
+            Pattern.compile("^(?:[aаαeезξεЗΣoоюσοuμυ]*)(?:[nи]+)[tтτΓгdgkкκcсςq]", 17),
+            Pattern.compile("^(?:[aаαeезξεЗΣoоюσοuμυ]+)(?:[nи]*)[tтτΓгdgkкκcсςq]", 17),
+            Pattern.compile("^(?:[iτιyуλγУaаαΛ]*)[gj]", 17),
             Pattern.compile("^[nи]..?[Ssξlιζz]", 17),
             Pattern.compile("^[iτιyуλγУaаαΛ][dtтτΓг]", 17),
             Pattern.compile("^[iτιyуλγУaаαΛ][kкκcсςq][kкκcсςq]", 17),

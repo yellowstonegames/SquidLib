@@ -583,11 +583,11 @@
 <span class="sourceLineNo">575</span>    public int hashCode() {<a name="line.575"></a>
 <span class="sourceLineNo">576</span>        int result;<a name="line.576"></a>
 <span class="sourceLineNo">577</span>        long temp;<a name="line.577"></a>
-<span class="sourceLineNo">578</span>        temp = Double.doubleToLongBits(fairness);<a name="line.578"></a>
+<span class="sourceLineNo">578</span>        temp = NumberTools.doubleToLongBits(fairness);<a name="line.578"></a>
 <span class="sourceLineNo">579</span>        result = (int) (temp ^ (temp &gt;&gt;&gt; 32));<a name="line.579"></a>
-<span class="sourceLineNo">580</span>        temp = Double.doubleToLongBits(produced);<a name="line.580"></a>
+<span class="sourceLineNo">580</span>        temp = NumberTools.doubleToLongBits(produced);<a name="line.580"></a>
 <span class="sourceLineNo">581</span>        result = 31 * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));<a name="line.581"></a>
-<span class="sourceLineNo">582</span>        temp = Double.doubleToLongBits(baseline);<a name="line.582"></a>
+<span class="sourceLineNo">582</span>        temp = NumberTools.doubleToLongBits(baseline);<a name="line.582"></a>
 <span class="sourceLineNo">583</span>        result = 31 * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));<a name="line.583"></a>
 <span class="sourceLineNo">584</span>        return result;<a name="line.584"></a>
 <span class="sourceLineNo">585</span>    }<a name="line.585"></a>

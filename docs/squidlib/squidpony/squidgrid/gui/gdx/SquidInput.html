@@ -439,44 +439,40 @@ extends com.badlogic.gdx.InputAdapter</pre>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected com.badlogic.gdx.utils.CharArray</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html#processingQueue">processingQueue</a></span></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected com.badlogic.gdx.utils.CharArray</code></td>
+<td class="colFirst"><code>protected squidpony.squidmath.IntVLA</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html#queue">queue</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static char</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html#RIGHT_ARROW">RIGHT_ARROW</a></span></code>
 <div class="block">Down arrow key.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static char</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html#TAB">TAB</a></span></code>
 <div class="block">Tab key.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static char</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html#UP_ARROW">UP_ARROW</a></span></code>
 <div class="block">Up arrow key.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static char</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html#UP_LEFT_ARROW">UP_LEFT_ARROW</a></span></code>
 <div class="block">Not typically a dedicated key, but if numpadDirections is enabled, this will be sent by Numpad 7.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static char</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html#UP_RIGHT_ARROW">UP_RIGHT_ARROW</a></span></code>
 <div class="block">Not typically a dedicated key, but if numpadDirections is enabled, this will be sent by Numpad 9.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static char</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html#VERTICAL_ARROW">VERTICAL_ARROW</a></span></code>
 <div class="block">Not typically a dedicated key, but if numpadDirections is enabled, this will be sent by Numpad 0.</div>
@@ -723,16 +719,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>queue</h4>
-<pre>protected final&nbsp;com.badlogic.gdx.utils.CharArray <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.58">queue</a></pre>
-</li>
-</ul>
-<a name="processingQueue">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>processingQueue</h4>
-<pre>protected final&nbsp;com.badlogic.gdx.utils.CharArray <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.59">processingQueue</a></pre>
+<pre>protected final&nbsp;squidpony.squidmath.IntVLA <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.58">queue</a></pre>
 </li>
 </ul>
 <a name="LEFT_ARROW">
@@ -741,7 +728,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>LEFT_ARROW</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.582">LEFT_ARROW</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.568">LEFT_ARROW</a></pre>
 <div class="block">Left arrow key. If numpadDirections is enabled, this will also be sent by Numpad 4.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -755,7 +742,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>UP_ARROW</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.586">UP_ARROW</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.572">UP_ARROW</a></pre>
 <div class="block">Up arrow key. If numpadDirections is enabled, this will also be sent by Numpad 8.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -769,7 +756,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>RIGHT_ARROW</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.590">RIGHT_ARROW</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.576">RIGHT_ARROW</a></pre>
 <div class="block">Down arrow key. If numpadDirections is enabled, this will also be sent by Numpad 6.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -783,7 +770,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>DOWN_ARROW</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.594">DOWN_ARROW</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.580">DOWN_ARROW</a></pre>
 <div class="block">Down arrow key. If numpadDirections is enabled, this will also be sent by Numpad 2.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -797,7 +784,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>DOWN_LEFT_ARROW</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.598">DOWN_LEFT_ARROW</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.584">DOWN_LEFT_ARROW</a></pre>
 <div class="block">Not typically a dedicated key, but if numpadDirections is enabled, this will be sent by Numpad 1.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -811,7 +798,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>DOWN_RIGHT_ARROW</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.602">DOWN_RIGHT_ARROW</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.588">DOWN_RIGHT_ARROW</a></pre>
 <div class="block">Not typically a dedicated key, but if numpadDirections is enabled, this will be sent by Numpad 3.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -825,7 +812,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>UP_RIGHT_ARROW</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.606">UP_RIGHT_ARROW</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.592">UP_RIGHT_ARROW</a></pre>
 <div class="block">Not typically a dedicated key, but if numpadDirections is enabled, this will be sent by Numpad 9.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -839,7 +826,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>UP_LEFT_ARROW</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.610">UP_LEFT_ARROW</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.596">UP_LEFT_ARROW</a></pre>
 <div class="block">Not typically a dedicated key, but if numpadDirections is enabled, this will be sent by Numpad 7.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -853,7 +840,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>CENTER_ARROW</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.614">CENTER_ARROW</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.600">CENTER_ARROW</a></pre>
 <div class="block">Not typically a dedicated key, but if numpadDirections is enabled, this will be sent by Numpad 5.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -867,7 +854,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>VERTICAL_ARROW</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.620">VERTICAL_ARROW</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.606">VERTICAL_ARROW</a></pre>
 <div class="block">Not typically a dedicated key, but if numpadDirections is enabled, this will be sent by Numpad 0.
 
  Intended for games that might need up a jump or crouch button on the numpad that supplants movement.</div>
@@ -883,7 +870,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>ENTER</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.624">ENTER</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.610">ENTER</a></pre>
 <div class="block">Enter key, also called Return key. Used to start a new line of text or confirm entries in forms.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -897,7 +884,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>TAB</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.628">TAB</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.614">TAB</a></pre>
 <div class="block">Tab key. Used for entering horizontal spacing, such as indentation, but also often to cycle between menu items.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -911,7 +898,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>BACKSPACE</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.632">BACKSPACE</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.618">BACKSPACE</a></pre>
 <div class="block">Backspace key on most PC keyboards; Delete key on Mac keyboards. Used to delete the previous character.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -925,7 +912,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>FORWARD_DELETE</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.638">FORWARD_DELETE</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.624">FORWARD_DELETE</a></pre>
 <div class="block">Delete key on most PC keyboards; no equivalent on some (all?) Mac keyboards. Used to delete the next character.
 
  Not present on some laptop keyboards and some (all?) Mac keyboards.</div>
@@ -941,7 +928,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>INSERT</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.644">INSERT</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.630">INSERT</a></pre>
 <div class="block">Insert key. Not recommended for common use because it could affect other application behavior.
 
  Not present on some laptop keyboards.</div>
@@ -957,7 +944,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>PAGE_DOWN</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.650">PAGE_DOWN</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.636">PAGE_DOWN</a></pre>
 <div class="block">Page Down key.
 
  Not present on some laptop keyboards.</div>
@@ -973,7 +960,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>PAGE_UP</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.656">PAGE_UP</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.642">PAGE_UP</a></pre>
 <div class="block">Page Up key.
 
  Not present on some laptop keyboards.</div>
@@ -989,7 +976,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>HOME</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.662">HOME</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.648">HOME</a></pre>
 <div class="block">Home key (commonly used for moving a cursor to start of line).
 
  Not present on some laptop keyboards.</div>
@@ -1005,7 +992,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>END</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.668">END</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.654">END</a></pre>
 <div class="block">End key (commonly used for moving a cursor to end of line).
 
  Not present on some laptop keyboards.</div>
@@ -1021,7 +1008,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>ESCAPE</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.672">ESCAPE</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.658">ESCAPE</a></pre>
 <div class="block">Esc or Escape key</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1035,7 +1022,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>F1</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.677">F1</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.663">F1</a></pre>
 <div class="block">Function key F1</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1049,7 +1036,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>F2</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.681">F2</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.667">F2</a></pre>
 <div class="block">Function key F2</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1063,7 +1050,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>F3</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.685">F3</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.671">F3</a></pre>
 <div class="block">Function key F3</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1077,7 +1064,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>F4</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.689">F4</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.675">F4</a></pre>
 <div class="block">Function key F4</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1091,7 +1078,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>F5</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.693">F5</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.679">F5</a></pre>
 <div class="block">Function key F5</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1105,7 +1092,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>F6</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.697">F6</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.683">F6</a></pre>
 <div class="block">Function key F6</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1119,7 +1106,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>F7</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.701">F7</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.687">F7</a></pre>
 <div class="block">Function key F7</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1133,7 +1120,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>F8</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.705">F8</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.691">F8</a></pre>
 <div class="block">Function key F8</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1147,7 +1134,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>F9</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.709">F9</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.695">F9</a></pre>
 <div class="block">Function key F9</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1161,7 +1148,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>F10</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.713">F10</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.699">F10</a></pre>
 <div class="block">Function key F10</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1175,7 +1162,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>F11</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.717">F11</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.703">F11</a></pre>
 <div class="block">Function key F11</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1189,7 +1176,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>F12</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.721">F12</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.707">F12</a></pre>
 <div class="block">Function key F12</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1203,7 +1190,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>GAMEPAD_A</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.726">GAMEPAD_A</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.712">GAMEPAD_A</a></pre>
 <div class="block">Gamepad A button.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1217,7 +1204,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>GAMEPAD_B</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.730">GAMEPAD_B</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.716">GAMEPAD_B</a></pre>
 <div class="block">Gamepad B button.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1231,7 +1218,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>GAMEPAD_C</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.734">GAMEPAD_C</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.720">GAMEPAD_C</a></pre>
 <div class="block">Gamepad C button.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1245,7 +1232,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>GAMEPAD_X</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.738">GAMEPAD_X</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.724">GAMEPAD_X</a></pre>
 <div class="block">Gamepad X button.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1259,7 +1246,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>GAMEPAD_Y</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.742">GAMEPAD_Y</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.728">GAMEPAD_Y</a></pre>
 <div class="block">Gamepad Y button.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1273,7 +1260,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>GAMEPAD_Z</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.746">GAMEPAD_Z</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.732">GAMEPAD_Z</a></pre>
 <div class="block">Gamepad Z button.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1287,7 +1274,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>GAMEPAD_L1</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.751">GAMEPAD_L1</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.737">GAMEPAD_L1</a></pre>
 <div class="block">Gamepad L1 button.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1301,7 +1288,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>GAMEPAD_L2</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.755">GAMEPAD_L2</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.741">GAMEPAD_L2</a></pre>
 <div class="block">Gamepad L2 button.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1315,7 +1302,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>GAMEPAD_R1</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.759">GAMEPAD_R1</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.745">GAMEPAD_R1</a></pre>
 <div class="block">Gamepad R1 button.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1329,7 +1316,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>GAMEPAD_R2</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.763">GAMEPAD_R2</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.749">GAMEPAD_R2</a></pre>
 <div class="block">Gamepad R2 button.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1343,7 +1330,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>GAMEPAD_LEFT_THUMB</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.767">GAMEPAD_LEFT_THUMB</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.753">GAMEPAD_LEFT_THUMB</a></pre>
 <div class="block">Gamepad Left Thumb button.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1357,7 +1344,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>GAMEPAD_RIGHT_THUMB</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.771">GAMEPAD_RIGHT_THUMB</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.757">GAMEPAD_RIGHT_THUMB</a></pre>
 <div class="block">Gamepad Right Thumb button.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1371,7 +1358,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>GAMEPAD_START</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.775">GAMEPAD_START</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.761">GAMEPAD_START</a></pre>
 <div class="block">Gamepad Start button.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1385,7 +1372,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>GAMEPAD_SELECT</h4>
-<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.779">GAMEPAD_SELECT</a></pre>
+<pre>public static final&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.765">GAMEPAD_SELECT</a></pre>
 <div class="block">Gamepad Select button.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1407,7 +1394,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>SquidInput</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.65">SquidInput</a>()</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.64">SquidInput</a>()</pre>
 <div class="block">Constructs a new SquidInput that does not respond to keyboard or mouse input. These can be set later by calling
  setKeyHandler() to allow keyboard handling or setMouse() to allow mouse handling on a grid.</div>
 </li>
@@ -1418,7 +1405,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>SquidInput</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.78">SquidInput</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidMouse.html" title="class in squidpony.squidgrid.gui.gdx">SquidMouse</a>&nbsp;mouse)</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.77">SquidInput</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidMouse.html" title="class in squidpony.squidgrid.gui.gdx">SquidMouse</a>&nbsp;mouse)</pre>
 <div class="block">Constructs a new SquidInput that does not respond to keyboard input, but does take mouse input and passes mouse
  events along to the given SquidMouse. The SquidMouse, even though it is an InputProcessor on its own, should not
  be registered by calling Input.setInputProcessor(SquidMouse), and instead this object should be registered by
@@ -1436,7 +1423,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>SquidInput</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.92">SquidInput</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.KeyHandler.html" title="interface in squidpony.squidgrid.gui.gdx">SquidInput.KeyHandler</a>&nbsp;keyHandler)</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.91">SquidInput</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.KeyHandler.html" title="interface in squidpony.squidgrid.gui.gdx">SquidInput.KeyHandler</a>&nbsp;keyHandler)</pre>
 <div class="block">Constructs a new SquidInput that does not respond to mouse input, but does take keyboard input and sends keyboard
  events through some processing before calling keyHandler.handle() on keypresses that can sensibly be processed.
  Modifier keys do not go through the same processing but are checked for their current state when the key is
@@ -1454,7 +1441,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>SquidInput</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.105">SquidInput</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.KeyHandler.html" title="interface in squidpony.squidgrid.gui.gdx">SquidInput.KeyHandler</a>&nbsp;keyHandler,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.104">SquidInput</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.KeyHandler.html" title="interface in squidpony.squidgrid.gui.gdx">SquidInput.KeyHandler</a>&nbsp;keyHandler,
                   boolean&nbsp;ignoreInput)</pre>
 <div class="block">Constructs a new SquidInput that does not respond to mouse input, but does take keyboard input and sends keyboard
  events through some processing before calling keyHandler.handle() on keypresses that can sensibly be processed.
@@ -1474,7 +1461,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>SquidInput</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.122">SquidInput</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.KeyHandler.html" title="interface in squidpony.squidgrid.gui.gdx">SquidInput.KeyHandler</a>&nbsp;keyHandler,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.121">SquidInput</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.KeyHandler.html" title="interface in squidpony.squidgrid.gui.gdx">SquidInput.KeyHandler</a>&nbsp;keyHandler,
                   <a href="../../../../squidpony/squidgrid/gui/gdx/SquidMouse.html" title="class in squidpony.squidgrid.gui.gdx">SquidMouse</a>&nbsp;mouse)</pre>
 <div class="block">Constructs a new SquidInput that responds to mouse and keyboard input when given a SquidMouse and a
  SquidInput.KeyHandler implementation. It sends keyboard events through some processing before calling
@@ -1497,7 +1484,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>SquidInput</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.141">SquidInput</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.KeyHandler.html" title="interface in squidpony.squidgrid.gui.gdx">SquidInput.KeyHandler</a>&nbsp;keyHandler,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.140">SquidInput</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.KeyHandler.html" title="interface in squidpony.squidgrid.gui.gdx">SquidInput.KeyHandler</a>&nbsp;keyHandler,
                   <a href="../../../../squidpony/squidgrid/gui/gdx/SquidMouse.html" title="class in squidpony.squidgrid.gui.gdx">SquidMouse</a>&nbsp;mouse,
                   boolean&nbsp;ignoreInput)</pre>
 <div class="block">Constructs a new SquidInput that responds to mouse and keyboard input when given a SquidMouse and a
@@ -1531,7 +1518,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setKeyHandler</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.147">setKeyHandler</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.KeyHandler.html" title="interface in squidpony.squidgrid.gui.gdx">SquidInput.KeyHandler</a>&nbsp;keyHandler)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.146">setKeyHandler</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.KeyHandler.html" title="interface in squidpony.squidgrid.gui.gdx">SquidInput.KeyHandler</a>&nbsp;keyHandler)</pre>
 </li>
 </ul>
 <a name="setMouse-squidpony.squidgrid.gui.gdx.SquidMouse-">
@@ -1540,7 +1527,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setMouse</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.151">setMouse</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidMouse.html" title="class in squidpony.squidgrid.gui.gdx">SquidMouse</a>&nbsp;mouse)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.150">setMouse</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidMouse.html" title="class in squidpony.squidgrid.gui.gdx">SquidMouse</a>&nbsp;mouse)</pre>
 </li>
 </ul>
 <a name="isUsingNumpadDirections--">
@@ -1549,7 +1536,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>isUsingNumpadDirections</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.156">isUsingNumpadDirections</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.155">isUsingNumpadDirections</a>()</pre>
 </li>
 </ul>
 <a name="setUsingNumpadDirections-boolean-">
@@ -1558,7 +1545,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setUsingNumpadDirections</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.160">setUsingNumpadDirections</a>(boolean&nbsp;using)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.159">setUsingNumpadDirections</a>(boolean&nbsp;using)</pre>
 </li>
 </ul>
 <a name="getKeyHandler--">
@@ -1567,7 +1554,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getKeyHandler</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.KeyHandler.html" title="interface in squidpony.squidgrid.gui.gdx">SquidInput.KeyHandler</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.164">getKeyHandler</a>()</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.KeyHandler.html" title="interface in squidpony.squidgrid.gui.gdx">SquidInput.KeyHandler</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.163">getKeyHandler</a>()</pre>
 </li>
 </ul>
 <a name="getMouse--">
@@ -1576,7 +1563,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getMouse</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidMouse.html" title="class in squidpony.squidgrid.gui.gdx">SquidMouse</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.168">getMouse</a>()</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidMouse.html" title="class in squidpony.squidgrid.gui.gdx">SquidMouse</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.167">getMouse</a>()</pre>
 </li>
 </ul>
 <a name="getIgnoreInput--">
@@ -1585,7 +1572,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getIgnoreInput</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.178">getIgnoreInput</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.177">getIgnoreInput</a>()</pre>
 <div class="block">Get the status for whether this should ignore input right now or not. True means this object will ignore and not
  queue input, false means it should process them normally. Useful to pause processing or delegate it to
  another object temporarily.</div>
@@ -1601,7 +1588,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setIgnoreInput</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.188">setIgnoreInput</a>(boolean&nbsp;ignoreInput)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.187">setIgnoreInput</a>(boolean&nbsp;ignoreInput)</pre>
 <div class="block">Set the status for whether this should ignore input right now or not. True means this object will ignore and not
  queue input, false means it should process them normally. Useful to pause processing or delegate it to
  another object temporarily.</div>
@@ -1617,7 +1604,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>drain</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.196">drain</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.195">drain</a>()</pre>
 <div class="block">Processes all events queued up, passing them through this object's key processing and then to keyHandler. Mouse
  events are not queued and are processed when they come in.</div>
 </li>
@@ -1628,7 +1615,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>hasNext</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.223">hasNext</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.215">hasNext</a>()</pre>
 <div class="block">Returns true if at least one event is queued.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1642,7 +1629,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.232">next</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.224">next</a>()</pre>
 <div class="block">Processes the first key event queued up, passing it to this object's InputProcessor. Mouse events are not
  queued and are processed when they come in.</div>
 </li>
@@ -1653,7 +1640,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>flush</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.251">flush</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.239">flush</a>()</pre>
 <div class="block">Empties the backing queue of data.</div>
 </li>
 </ul>
@@ -1663,7 +1650,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>keyDown</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.257">keyDown</a>(int&nbsp;keycode)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.245">keyDown</a>(int&nbsp;keycode)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>keyDown</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.InputProcessor</code></dd>
@@ -1678,7 +1665,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>keyUp</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.275">keyUp</a>(int&nbsp;keycode)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.261">keyUp</a>(int&nbsp;keycode)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>keyUp</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.InputProcessor</code></dd>
@@ -1693,7 +1680,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>keyTyped</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.282">keyTyped</a>(char&nbsp;character)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.268">keyTyped</a>(char&nbsp;character)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>keyTyped</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.InputProcessor</code></dd>
@@ -1708,7 +1695,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>touchDown</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.287">touchDown</a>(int&nbsp;screenX,
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.273">touchDown</a>(int&nbsp;screenX,
                          int&nbsp;screenY,
                          int&nbsp;pointer,
                          int&nbsp;button)</pre>
@@ -1726,7 +1713,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>touchUp</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.293">touchUp</a>(int&nbsp;screenX,
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.279">touchUp</a>(int&nbsp;screenX,
                        int&nbsp;screenY,
                        int&nbsp;pointer,
                        int&nbsp;button)</pre>
@@ -1744,7 +1731,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>touchDragged</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.299">touchDragged</a>(int&nbsp;screenX,
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.285">touchDragged</a>(int&nbsp;screenX,
                             int&nbsp;screenY,
                             int&nbsp;pointer)</pre>
 <dl>
@@ -1761,7 +1748,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>mouseMoved</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.305">mouseMoved</a>(int&nbsp;screenX,
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.291">mouseMoved</a>(int&nbsp;screenX,
                           int&nbsp;screenY)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -1777,7 +1764,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>scrolled</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.311">scrolled</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.297">scrolled</a>(int&nbsp;amount)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>scrolled</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.InputProcessor</code></dd>
@@ -1792,7 +1779,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>fromCode</h4>
-<pre>public&nbsp;char&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.361">fromCode</a>(int&nbsp;keycode,
+<pre>public&nbsp;char&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidInput.html#line.347">fromCode</a>(int&nbsp;keycode,
                      boolean&nbsp;shift)</pre>
 <div class="block">Maps keycodes to unicode chars, sometimes depending on whether the Shift key is held.
 
@@ -1832,7 +1819,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
  <li><code>'|'</code> to <code>'\\'</code></li>
  <li><code>'-'</code> to <code>'_'</code></li>
  <li><code>'+'</code> to <code>'='</code></li>
- <li><code>'`'</code> to <code>'~'</code></li>
+ <li><code>'`'</code> to <code>'~'</code> (note, this key produces no event on the GWT backend)</li>
  </ul></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1911,6 +1898,6 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

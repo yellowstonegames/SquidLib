@@ -25,7 +25,8 @@ import java.util.ArrayList;
  * Created by Tommy Ettinger on 4/6/2016.
  */
 public class SquidLayersTest extends ApplicationAdapter{
-    int gridWidth, gridHeight, cellWidth, cellHeight;
+    public static final int gridWidth = 80, gridHeight = 30, cellWidth = 20, cellHeight = 20;
+
     SquidLayers layers;
     char[][] map, displayedMap;
     int[][] indicesFG, indicesBG, lightness;
@@ -44,18 +45,16 @@ public class SquidLayersTest extends ApplicationAdapter{
     public void create() {
         super.create();
         rng = new StatefulRNG(0x9876543210L);
-        gridWidth = 80;
-        gridHeight = 30;
-        cellWidth = 15;
-        cellHeight = 27;
 
         layers = new SquidLayers(gridWidth, gridHeight, cellWidth, cellHeight,
-                DefaultResources.getStretchableCodeFont());
-                //new TextCellFactory().fontDistanceField("SourceCodePro-Medium-distance.fnt", "SourceCodePro-Medium-distance.png"));
+                //DefaultResources.getStretchableCodeFont());
+                DefaultResources.getStretchableDejaVuFont());
+        //new TextCellFactory().fontDistanceField("SourceCodePro-Medium-distance.fnt", "SourceCodePro-Medium-distance.png"));
                 //DefaultResources.getStretchableFont());
+        layers.setTextSize(cellWidth + 2, cellHeight + 4);
         //colors = DefaultResources.getSCC().rainbow(0.2f, 1.0f, 144);
-        colors = DefaultResources.getSCC().loopingGradient(SColor.ATOMIC_TANGERINE, SColor.CRIMSON, 100);
-        mColors = DefaultResources.getSCC().loopingGradient(SColor.ALICE_BLUE, SColor.MAGIC_MINT, 123);
+        colors = DefaultResources.getSCC().loopingGradient(SColor.ATOMIC_TANGERINE, SColor.CRIMSON, 500);
+        mColors = DefaultResources.getSCC().loopingGradient(SColor.SKY_BLUE, SColor.MAGIC_MINT, 523);
         //colors.addAll(DefaultResources.getSCC().zigzagGradient(Color.MAGENTA, Color.RED, 200));
         layers.setLightingColor(colors.get(colorIndex));
         fov = new FOV(FOV.SHADOW);
@@ -111,6 +110,7 @@ public class SquidLayersTest extends ApplicationAdapter{
     @Override
     public void render() {
         super.render();
+        Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() + " FPS");
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         ctr += Gdx.graphics.getDeltaTime();
@@ -165,8 +165,9 @@ public class SquidLayersTest extends ApplicationAdapter{
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "SquidLib Test: SquidLayers";
-        config.width = 80 * 15;
-        config.height = 30 * 27;
+        config.width = gridWidth * cellWidth;
+        config.height = gridHeight * cellHeight;
+        config.foregroundFPS = 0;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);
         config.addIcon("Tentacle-128.png", Files.FileType.Internal);

@@ -337,6 +337,12 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             put(e.getIntKey(), e.getDoubleValue());
         }
     }
+    public void putAll(int[] k, double[] v)
+    {
+        for (int i = 0, length = Math.min(k.length, v.length); i < length; i++)
+            this.put(k[i], v[i]);
+
+    }
 
     private int insert(final int k, final double v) {
         int pos;
@@ -2263,7 +2269,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
          */
 
         static int float2int(final float f) {
-            return Float.floatToIntBits(f);
+            return NumberTools.floatToIntBits(f);
         }
 
         /**
@@ -2274,7 +2280,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
          */
 
         static int double2int(final double d) {
-            final long l = Double.doubleToLongBits(d);
+            final long l = NumberTools.doubleToLongBits(d);
             return (int) (l ^ (l >>> 32));
         }
 

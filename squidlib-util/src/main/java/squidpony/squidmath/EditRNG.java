@@ -606,23 +606,21 @@ public class EditRNG extends StatefulRNG implements Serializable{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
 
         EditRNG editRNG = (EditRNG) o;
 
         if (Double.compare(editRNG.expected, expected) != 0) return false;
-        return Double.compare(editRNG.centrality, centrality) == 0 && Double.compare(editRNG.rawLatest, rawLatest) == 0;
-
+        return Double.compare(editRNG.centrality, centrality) == 0;
     }
 
     @Override
     public int hashCode() {
-        int result;
+        int result = super.hashCode() * 31;
         long temp;
-        temp = Double.doubleToLongBits(expected);
-        result = (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(centrality);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(rawLatest);
+        temp = NumberTools.doubleToLongBits(expected);
+        result += (int) (temp ^ (temp >>> 32));
+        temp = NumberTools.doubleToLongBits(centrality);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
@@ -667,4 +665,6 @@ public class EditRNG extends StatefulRNG implements Serializable{
     public int nextIntHasty(int bound) {
         return (int)(nextDouble() * bound);
     }
+
+
 }

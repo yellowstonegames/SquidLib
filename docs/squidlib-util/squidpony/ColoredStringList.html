@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":9,"i10":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":9,"i10":9,"i11":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../squidpony/ArrayTools.html" title="class in squidpony"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../squidpony/DamerauLevenshteinAlgorithm.html" title="class in squidpony"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../squidpony/Converters.html" title="class in squidpony"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../index.html?squidpony/ColoredStringList.html" target="_top">Frames</a></li>
@@ -175,6 +175,9 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.ht
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../squidpony/ColoredStringList.html#ColoredStringList--">ColoredStringList</a></span>()</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../squidpony/ColoredStringList.html#ColoredStringList-int-">ColoredStringList</a></span>(int&nbsp;expectedSize)</code>&nbsp;</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -252,6 +255,10 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.ht
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ColoredStringList.html#create--">create</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i10" class="altColor">
+<td class="colFirst"><code>static &lt;T&gt;&nbsp;<a href="../squidpony/ColoredStringList.html" title="class in squidpony">ColoredStringList</a>&lt;T&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ColoredStringList.html#create-int-">create</a></span>(int&nbsp;expectedSize)</code>&nbsp;</td>
+</tr>
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ColoredStringList.html#replaceColor-T-T-">replaceColor</a></span>(<a href="../squidpony/ColoredStringList.html" title="type parameter in ColoredStringList">T</a>&nbsp;old,
             <a href="../squidpony/ColoredStringList.html" title="type parameter in ColoredStringList">T</a>&nbsp;new_)</code>
@@ -318,10 +325,19 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.ht
 <a name="ColoredStringList--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>ColoredStringList</h4>
 <pre>public&nbsp;<a href="../src-html/squidpony/ColoredStringList.html#line.21">ColoredStringList</a>()</pre>
+</li>
+</ul>
+<a name="ColoredStringList-int-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>ColoredStringList</h4>
+<pre>public&nbsp;<a href="../src-html/squidpony/ColoredStringList.html#line.25">ColoredStringList</a>(int&nbsp;expectedSize)</pre>
 </li>
 </ul>
 </li>
@@ -338,8 +354,23 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>create</h4>
-<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../squidpony/ColoredStringList.html" title="class in squidpony">ColoredStringList</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/ColoredStringList.html#line.28">create</a>()</pre>
+<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../squidpony/ColoredStringList.html" title="class in squidpony">ColoredStringList</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/ColoredStringList.html#line.32">create</a>()</pre>
 <dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A fresh empty instance.</dd>
+</dl>
+</li>
+</ul>
+<a name="create-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>create</h4>
+<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../squidpony/ColoredStringList.html" title="class in squidpony">ColoredStringList</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/ColoredStringList.html#line.40">create</a>(int&nbsp;expectedSize)</pre>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>expectedSize</code> - </dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>A fresh empty instance.</dd>
 </dl>
@@ -351,7 +382,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>addText</h4>
-<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ColoredStringList.html#line.36">addText</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ColoredStringList.html#line.49">addText</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</pre>
 <div class="block">Appends <code>text</code> to <code>this</code>, without specifying its color.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -365,7 +396,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>addText</h4>
-<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ColoredStringList.html#line.45">addText</a>(<a href="../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../squidpony/ColoredStringList.html" title="type parameter in ColoredStringList">T</a>&gt;&nbsp;text)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ColoredStringList.html#line.58">addText</a>(<a href="../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../squidpony/ColoredStringList.html" title="type parameter in ColoredStringList">T</a>&gt;&nbsp;text)</pre>
 <div class="block">Appends <code>text</code> to <code>this</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -381,7 +412,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>addColoredText</h4>
-<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ColoredStringList.html#line.59">addColoredText</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
+<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ColoredStringList.html#line.72">addColoredText</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
                            <a href="../squidpony/ColoredStringList.html" title="type parameter in ColoredStringList">T</a>&nbsp;c)</pre>
 <div class="block">Appends colored text to <code>this</code>.</div>
 <dl>
@@ -396,7 +427,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>addTextOnNewLine</h4>
-<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ColoredStringList.html#line.74">addTextOnNewLine</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ColoredStringList.html#line.87">addTextOnNewLine</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</pre>
 <div class="block">Appends text to <code>this</code>, on a new line; without specifying its
  color.</div>
 <dl>
@@ -411,7 +442,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>addTextOnNewLine</h4>
-<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ColoredStringList.html#line.78">addTextOnNewLine</a>(<a href="../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../squidpony/ColoredStringList.html" title="type parameter in ColoredStringList">T</a>&gt;&nbsp;text)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ColoredStringList.html#line.91">addTextOnNewLine</a>(<a href="../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../squidpony/ColoredStringList.html" title="type parameter in ColoredStringList">T</a>&gt;&nbsp;text)</pre>
 </li>
 </ul>
 <a name="addColoredTextOnNewLine-java.lang.String-java.lang.Object-">
@@ -422,7 +453,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>addColoredTextOnNewLine</h4>
-<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ColoredStringList.html#line.87">addColoredTextOnNewLine</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
+<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ColoredStringList.html#line.100">addColoredTextOnNewLine</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
                                     <a href="../squidpony/ColoredStringList.html" title="type parameter in ColoredStringList">T</a>&nbsp;color)</pre>
 <div class="block">Appends colored text to <code>this</code>.</div>
 <dl>
@@ -437,7 +468,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>addOnNewLine</h4>
-<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ColoredStringList.html#line.97">addOnNewLine</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;? extends <a href="../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../squidpony/ColoredStringList.html" title="type parameter in ColoredStringList">T</a>&gt;&gt;&nbsp;texts)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ColoredStringList.html#line.110">addOnNewLine</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;? extends <a href="../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../squidpony/ColoredStringList.html" title="type parameter in ColoredStringList">T</a>&gt;&gt;&nbsp;texts)</pre>
 <div class="block">Adds <code>texts</code> to <code>this</code>, starting a new line for the first
  one.</div>
 <dl>
@@ -452,7 +483,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>addAllText</h4>
-<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ColoredStringList.html#line.115">addAllText</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;? extends <a href="../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../squidpony/ColoredStringList.html" title="type parameter in ColoredStringList">T</a>&gt;&gt;&nbsp;texts)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ColoredStringList.html#line.128">addAllText</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;? extends <a href="../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../squidpony/ColoredStringList.html" title="type parameter in ColoredStringList">T</a>&gt;&gt;&nbsp;texts)</pre>
 <div class="block">Contrary to <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true#addAll-java.util.Collection-" title="class or interface in java.util"><code>Collection.addAll(Collection)</code></a>, this method appends
  text to the current text, without inserting new lines.</div>
 <dl>
@@ -467,7 +498,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>addEmptyLine</h4>
-<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ColoredStringList.html#line.123">addEmptyLine</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ColoredStringList.html#line.136">addEmptyLine</a>()</pre>
 <div class="block">Jumps a line.</div>
 </li>
 </ul>
@@ -479,7 +510,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.ht
 <ul class="blockListLast">
 <li class="blockList">
 <h4>replaceColor</h4>
-<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ColoredStringList.html#line.133">replaceColor</a>(<a href="../squidpony/ColoredStringList.html" title="type parameter in ColoredStringList">T</a>&nbsp;old,
+<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ColoredStringList.html#line.146">replaceColor</a>(<a href="../squidpony/ColoredStringList.html" title="type parameter in ColoredStringList">T</a>&nbsp;old,
                          <a href="../squidpony/ColoredStringList.html" title="type parameter in ColoredStringList">T</a>&nbsp;new_)</pre>
 <div class="block">Changes a color in members of <code>this</code>.</div>
 <dl>
@@ -517,7 +548,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.ht
 <div class="subNav">
 <ul class="navList">
 <li><a href="../squidpony/ArrayTools.html" title="class in squidpony"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../squidpony/DamerauLevenshteinAlgorithm.html" title="class in squidpony"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../squidpony/Converters.html" title="class in squidpony"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../index.html?squidpony/ColoredStringList.html" target="_top">Frames</a></li>
@@ -557,6 +588,6 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.ht
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>
