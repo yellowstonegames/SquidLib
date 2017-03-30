@@ -1640,7 +1640,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * the parameter off for "off" cells, separated by newlines, with no trailing newline at the end.
      * @param on the char to use for "on" cells
      * @param off the char to use for "off" cells
-     * @return a StringBuilder that stores each row of this GreasedRegion as chars separated by newlines.
+     * @return a StringBuilder that stores each row of this GreasedRegion as chars, with rows separated by newlines.
      */
     public StringBuilder show(char on, char off)
     {
@@ -1938,6 +1938,133 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return this;
     }
 
+    /**
+     * Effectively doubles the x and y values of each cell this contains (not scaling each cell to be larger, so each
+     * "on" cell will be surrounded by "off" cells), and re-maps the positions so the given x and y in the doubled space
+     * become 0,0 in the resulting GreasedRegion (which is this, assigning to itself).
+     * @param x in the doubled coordinate space, the x position that should become 0 x in the result; can be negative
+     * @param y in the doubled coordinate space, the y position that should become 0 y in the result; can be negative
+     * @return this for chaining
+     */
+    public GreasedRegion zoom(int x, int y)
+    {
+        if(width < 1 || ySections <= 0)
+            return this;
+        x = -x;
+        y = -y;
+        int
+                width2 = width + 1 >>> 1, ySections2 = ySections + 1 >>> 1,
+                start = Math.max(0, x), len = Math.min(width, width + x) - start,
+                jump = (y == 0) ? 0 : (y < 0) ? -(1-y >>> 6) : (y-1 >>> 6), lily = (y < 0) ? -(-y & 63) : (y & 63),
+                originalJump = Math.max(0, -jump), alterJump = Math.max(0, jump),
+                oddX = (x & 1), oddY = (y & 1);
+        long[] data2 = new long[width * ySections];
+
+        long prev, tmp, yEndMask2 = -1L >>> (64 - ((height + 1 >>> 1) & 63));
+        if (x < 0) {
+            for (int i = alterJump, oi = originalJump; i < ySections2 && oi < ySections2; i++, oi++) {
+                for (int j = Math.max(0, -x), jj = 0; jj < len; j++, jj++) {
+                    data2[jj * ySections + i] = data[j * ySections + oi];
+                }
+            }
+        } else if (x > 0) {
+            for (int i = alterJump, oi = originalJump; i < ySections2 && oi < ySections2; i++, oi++) {
+                for (int j = 0, jj = start; j < len; j++, jj++) {
+                    data2[jj * ySections + i] = data[j * ySections + oi];
+                }
+            }
+        } else {
+            for (int i = alterJump, oi = originalJump; i < ySections2 && oi < ySections2; i++, oi++) {
+                for (int j = 0; j < len; j++) {
+                    data2[j * ySections + i] = data[j * ySections + oi];
+                }
+            }
+        }
+
+        if(lily < 0) {
+            for (int i = start; i < len; i++) {
+                prev = 0L;
+                for (int j = 0; j < ySections2; j++) {
+                    tmp = prev;
+                    prev = (data2[i * ySections + j] & ~(-1L << -lily)) << (64 + lily);
+                    data2[i * ySections + j] >>>= -lily;
+                    data2[i * ySections + j] |= tmp;
+                }
+            }
+        }
+        else if(lily > 0) {
+            for (int i = start; i < start + len; i++) {
+                prev = 0L;
+                for (int j = 0; j < ySections2; j++) {
+                    tmp = prev;
+                    prev = (data2[i * ySections + j] & ~(-1L >>> lily)) >>> (64 - lily);
+                    data2[i * ySections + j] <<= lily;
+                    data2[i * ySections + j] |= tmp;
+                }
+            }
+        }
+        if(ySections2 > 0 && yEndMask2 != -1) {
+            for (int a = ySections - 1; a < data2.length; a += ySections) {
+                data2[a] &= yEndMask2;
+            }
+        }
+
+        for (int i = 0; i < width2; i++) {
+            for (int j = 0; j < ySections2; j++) {
+                prev = data2[i * ySections + j];
+                tmp = prev >>> 32;
+                prev = (prev | (prev << 16)) & 0x0000FFFF0000FFFFL;
+                prev = (prev | (prev << 8)) & 0x00FF00FF00FF00FFL;
+                prev = (prev | (prev << 4)) & 0x0F0F0F0F0F0F0F0FL;
+                prev = (prev | (prev << 2)) & 0x3333333333333333L;
+                prev = (prev | (prev << 1)) & 0x5555555555555555L;
+                prev <<= oddY;
+                if(oddX == 1) {
+                    if (i * 2 + 1 < width)
+                        data[(i * ySections + j) * 2 + ySections] = prev;
+                    if (i * 2 < width)
+                        data[(i * ySections + j) * 2] = 0L;
+                }
+                else
+                {
+                    if (i * 2 < width)
+                        data[(i * ySections + j) * 2] = prev;
+                    if (i * 2 + 1 < width)
+                        data[(i * ySections + j) * 2 + ySections] = 0L;
+                }
+                if(j * 2 + 1 < ySections) {
+                    tmp = (tmp | (tmp << 16)) & 0x0000FFFF0000FFFFL;
+                    tmp = (tmp | (tmp << 8)) & 0x00FF00FF00FF00FFL;
+                    tmp = (tmp | (tmp << 4)) & 0x0F0F0F0F0F0F0F0FL;
+                    tmp = (tmp | (tmp << 2)) & 0x3333333333333333L;
+                    tmp = (tmp | (tmp << 1)) & 0x5555555555555555L;
+                    tmp <<= oddY;
+                    if(oddX == 1) {
+                        if (i * 2 + 1 < width)
+                            data[(i * ySections + j) * 2 + ySections + 1] = tmp;
+                        if (i * 2 < width)
+                            data[(i * ySections + j) * 2 + 1] = 0L;
+                    }
+                    else
+                    {
+                        if (i * 2 < width)
+                            data[(i * ySections + j) * 2 + 1] = tmp;
+                        if (i * 2 + 1 < width)
+                            data[(i * ySections + j) * 2 + ySections + 1] = 0L;
+                    }
+                }
+            }
+        }
+
+        if(ySections > 0 && yEndMask != -1) {
+            for (int a = ySections - 1; a < data.length; a += ySections) {
+                data[a] &= yEndMask;
+            }
+        }
+
+        return this;
+    }
+
 
     /**
      * Removes "on" cells that are orthogonally adjacent to other "on" cells, keeping at least one cell in a group "on."
@@ -2097,7 +2224,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * <br>
      * This method is very efficient due to how the class is implemented, and the various spatial increase/decrease
      * methods (including {@link #expand()}, {@link #retract()}, {@link #fringe()}, and {@link #surface()}) all perform
-     * very well by operating in bulk on up to 64 cells at a time. The surface and retract methods do allocate one
+     * very well by operating in bulk on up to 64 cells at a time. The surface and fringe methods do allocate one
      * temporary GreasedRegion to store the original before modification, but the others generally don't.
      * @return this for chaining
      */
@@ -2116,7 +2243,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * <br>
      * This method is very efficient due to how the class is implemented, and the various spatial increase/decrease
      * methods (including {@link #expand()}, {@link #retract()}, {@link #fringe()}, and {@link #surface()}) all perform
-     * very well by operating in bulk on up to 64 cells at a time. The surface and retract methods do allocate one
+     * very well by operating in bulk on up to 64 cells at a time. The surface and fringe methods do allocate one
      * temporary GreasedRegion to store the original before modification, but the others generally don't.
      * @return this for chaining
      */

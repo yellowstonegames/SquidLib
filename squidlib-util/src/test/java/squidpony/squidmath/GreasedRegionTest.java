@@ -9,7 +9,6 @@ import squidpony.squidgrid.mapping.DungeonUtility;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertTrue;
-import static squidpony.squidmath.CoordPacker.*;
 
 
 /**
@@ -17,11 +16,11 @@ import static squidpony.squidmath.CoordPacker.*;
  */
 public class GreasedRegionTest {
 
-    public static GreasedRegion dataCross = new GreasedRegion(unpack(unionPacked(rectangle(25, 2, 14, 60), rectangle(2, 25, 60, 14)), 64, 64));
-    public static GreasedRegion dataCross2 = new GreasedRegion(unpack(unionPacked(rectangle(24 + 32, 2 + 32, 16, 60), rectangle(2 + 32, 24 + 32, 60, 16)), 128, 128));
-    public static GreasedRegion box = new GreasedRegion(unpack(intersectPacked(rectangle(24, 2, 16, 60), rectangle(2, 24, 60, 16)), 64, 64));
-    public static GreasedRegion box2 = new GreasedRegion(unpack(intersectPacked(rectangle(24 + 32, 2 + 32, 16, 60), rectangle(2 + 32, 24 + 32, 60, 16)), 120, 120));
-    public static GreasedRegion box3 = new GreasedRegion(unpack(rectangle(30, 30, 180, 180), 240, 240));
+    public static GreasedRegion dataCross = new GreasedRegion(64, 64).insertRectangle(25, 2, 14, 60).insertRectangle(2, 25, 60, 14);
+    public static GreasedRegion dataCross2 = new GreasedRegion(128, 128).insertRectangle(24+32, 2 + 32, 16, 60).insertRectangle(2 + 32, 24 + 32, 60, 16);
+    public static GreasedRegion box = new GreasedRegion(64, 64).insertRectangle(24, 24, 16, 16);
+    public static GreasedRegion box2 = new GreasedRegion(120, 120).insertRectangle(24+32, 24+32, 16, 16);
+    public static GreasedRegion box3 = new GreasedRegion(240, 240).insertRectangle(30, 30, 180, 180);
     public static StatefulRNG srng = new StatefulRNG(0x1337BEEF);
     public static DungeonGenerator dungeonGen = new DungeonGenerator(64, 64, srng);
     public static char[][] dungeon = dungeonGen.generate();
@@ -63,7 +62,7 @@ public class GreasedRegionTest {
         assertTrue(gr.equals(gr2));
         if(false) {
             srng.setState(0x123456789ABCDEFL);
-            DungeonUtility.debugPrint(CoordPacker.unpackChar(CoordPacker.packSeveral(gr.singleRandom(srng),
+            printRegion(new GreasedRegion(120, 120).insertSeveral(gr.singleRandom(srng),
                     gr.singleRandom(srng), gr.singleRandom(srng),
                     gr.singleRandom(srng), gr.singleRandom(srng),
                     gr.singleRandom(srng), gr.singleRandom(srng),
@@ -73,8 +72,7 @@ public class GreasedRegionTest {
                     gr.singleRandom(srng), gr.singleRandom(srng),
                     gr.singleRandom(srng), gr.singleRandom(srng),
                     gr.singleRandom(srng), gr.singleRandom(srng),
-                    gr.singleRandom(srng), gr.singleRandom(srng)),
-                    120, 120, '@', '.'));
+                    gr.singleRandom(srng), gr.singleRandom(srng)));
             System.out.println("\nSOBOL:");
             int dcs = dataCross.copy().not().size() + dataCross.size() / 20;
             printRegion(gr = dataCross.copy().not().insertSeveral(dataCross.separatedPortion(0.05)));
@@ -165,7 +163,7 @@ public class GreasedRegionTest {
         printRegion(dataCross);
         GreasedRegion crossBox = new GreasedRegion(dataCross).translate(25, 25).translate(-50, -50);
         printRegion(crossBox);
-        assertTrue(crossBox.equals(new GreasedRegion(unpack(rectangle(14, 14), 64, 64))));
+        assertTrue(crossBox.equals(new GreasedRegion(CoordPacker.unpack(CoordPacker.rectangle(14, 14), 64, 64))));
 
         GreasedRegion big = new GreasedRegion(150, 150).not().translate(100, 100);
         GreasedRegion big2 = new GreasedRegion(150, 150).insertRectangle(100, 100, 50, 50);
@@ -183,14 +181,14 @@ public class GreasedRegionTest {
         box.translate(-50, -50);
         //printRegion(box);
         box.translate(25, 25);
-        GreasedRegion alter = new GreasedRegion(unpack(rectangle(25, 2, 14, 60), 64, 64))
-                .and(new GreasedRegion(unpack(rectangle(2, 25, 60, 14), 64, 64)));
+        GreasedRegion alter = new GreasedRegion(CoordPacker.unpack(CoordPacker.rectangle(25, 2, 14, 60), 64, 64))
+                .and(new GreasedRegion(CoordPacker.unpack(CoordPacker.rectangle(2, 25, 60, 14), 64, 64)));
         //printRegion(box);
         //printRegion(alter);
         assertTrue(box.equals(alter));
         GreasedRegion minus = new GreasedRegion(dataCross).andNot(box);
-        GreasedRegion xr = new GreasedRegion(unpack(rectangle(25, 2, 14, 60), 64, 64))
-                .xor(new GreasedRegion(unpack(rectangle(2, 25, 60, 14), 64, 64)));
+        GreasedRegion xr = new GreasedRegion(CoordPacker.unpack(CoordPacker.rectangle(25, 2, 14, 60), 64, 64))
+                .xor(new GreasedRegion(CoordPacker.unpack(CoordPacker.rectangle(2, 25, 60, 14), 64, 64)));
         printRegion(minus);
         printRegion(xr);
         assertTrue(minus.equals(xr));
@@ -275,4 +273,17 @@ public class GreasedRegionTest {
         beveled.fill(true).removeCorners();
         printRegion(beveled);
     }
+
+    @Test
+    public void testZoom() {
+        GreasedRegion crossCopy = new GreasedRegion(dataCross);
+        printRegion(crossCopy);
+        crossCopy.zoom(13, 13);
+        printRegion(crossCopy);
+        GreasedRegion midCross = new GreasedRegion(71, 71).insertRectangle(27, 2, 17, 60).insertRectangle(2, 27, 60, 17);
+        printRegion(midCross);
+        midCross.zoom(30, 33);
+        printRegion(midCross);
+    }
 }
+
