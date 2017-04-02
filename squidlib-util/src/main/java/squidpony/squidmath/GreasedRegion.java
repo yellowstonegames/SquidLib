@@ -1955,6 +1955,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         int
                 width2 = width + 1 >>> 1, ySections2 = ySections + 1 >>> 1,
                 start = Math.max(0, x), len = Math.min(width, width + x) - start,
+                //tall = (Math.min(height, height + y) - Math.max(0, y)) + 63 >> 6,
                 jump = (y == 0) ? 0 : (y < 0) ? -(1-y >>> 6) : (y-1 >>> 6), lily = (y < 0) ? -(-y & 63) : (y & 63),
                 originalJump = Math.max(0, -jump), alterJump = Math.max(0, jump),
                 oddX = (x & 1), oddY = (y & 1);
@@ -1962,19 +1963,19 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
 
         long prev, tmp, yEndMask2 = -1L >>> (64 - ((height + 1 >>> 1) & 63));
         if (x < 0) {
-            for (int i = alterJump, oi = originalJump; i < ySections2 && oi < ySections2; i++, oi++) {
+            for (int i = alterJump, oi = originalJump; i <= ySections2 && oi < ySections; i++, oi++) {
                 for (int j = Math.max(0, -x), jj = 0; jj < len; j++, jj++) {
                     data2[jj * ySections + i] = data[j * ySections + oi];
                 }
             }
         } else if (x > 0) {
-            for (int i = alterJump, oi = originalJump; i < ySections2 && oi < ySections2; i++, oi++) {
+            for (int i = alterJump, oi = originalJump; i <= ySections2 && oi < ySections; i++, oi++) {
                 for (int j = 0, jj = start; j < len; j++, jj++) {
                     data2[jj * ySections + i] = data[j * ySections + oi];
                 }
             }
         } else {
-            for (int i = alterJump, oi = originalJump; i < ySections2 && oi < ySections2; i++, oi++) {
+            for (int i = alterJump, oi = originalJump; i <= ySections2 && oi < ySections; i++, oi++) {
                 for (int j = 0; j < len; j++) {
                     data2[j * ySections + i] = data[j * ySections + oi];
                 }
@@ -1984,7 +1985,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         if(lily < 0) {
             for (int i = start; i < len; i++) {
                 prev = 0L;
-                for (int j = 0; j < ySections2; j++) {
+                for (int j = ySections2; j >= 0; j--) {
                     tmp = prev;
                     prev = (data2[i * ySections + j] & ~(-1L << -lily)) << (64 + lily);
                     data2[i * ySections + j] >>>= -lily;
@@ -2003,16 +2004,19 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 }
             }
         }
+
+
         if(ySections2 > 0 && yEndMask2 != -1) {
-            for (int a = ySections - 1; a < data2.length; a += ySections) {
+            for (int a = ySections2 - 1; a < data2.length; a += ySections) {
                 data2[a] &= yEndMask2;
+                data2[a+1] = 0L;
             }
         }
-
         for (int i = 0; i < width2; i++) {
             for (int j = 0; j < ySections2; j++) {
                 prev = data2[i * ySections + j];
                 tmp = prev >>> 32;
+                prev &= 0xFFFFFFFFL;
                 prev = (prev | (prev << 16)) & 0x0000FFFF0000FFFFL;
                 prev = (prev | (prev << 8)) & 0x00FF00FF00FF00FFL;
                 prev = (prev | (prev << 4)) & 0x0F0F0F0F0F0F0F0FL;
@@ -2062,6 +2066,132 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
 
+        return this;
+    }
+
+    /**
+     * Takes the pairs of "on" cells in this GreasedRegion that are separated by exactly one cell in an orthogonal line,
+     * and changes the gap cells to "on" as well.
+     * <br>
+     * This method is very efficient due to how the class is implemented, and the various spatial increase/decrease
+     * methods (including {@link #expand()}, {@link #retract()}, {@link #fringe()}, and {@link #surface()}) all perform
+     * very well by operating in bulk on up to 64 cells at a time.
+     * @return this for chaining
+     */
+    public GreasedRegion connect()
+    {
+        if(width < 2 || ySections == 0)
+            return this;
+
+        final long[] next = new long[width * ySections];
+        System.arraycopy(data, 0, next, 0, width * ySections);
+        for (int a = 0; a < ySections; a++) {
+            next[a] |= ((data[a] << 1) & (data[a] >>> 1)) | data[a+ySections];
+            next[(width-1)*ySections+a] |= ((data[(width-1)*ySections+a] << 1) & (data[(width-1)*ySections+a] >>> 1)) | data[(width-2) *ySections+a];
+
+            for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
+                next[i] |= ((data[i] << 1) & (data[i] >>> 1)) | (data[i - ySections] & data[i + ySections]);
+            }
+
+            if(a > 0) {
+                for (int i = ySections+a; i < (width-1) * ySections; i+= ySections) {
+                    next[i] |= (data[i - 1] & 0x8000000000000000L) >>> 63 & (data[i] >>> 1);
+                }
+            }
+            else
+            {
+                for (int i = ySections; i < (width-1) * ySections; i+= ySections) {
+                    next[i] |= (data[i] >>> 1 & 1L);
+                }
+            }
+
+            if(a < ySections - 1) {
+                for (int i = ySections+a; i < (width-1) * ySections; i+= ySections) {
+                    next[i] |= (data[i + 1] & 1L) << 63 & (data[i] << 1);
+                }
+            }
+            else
+            {
+                for (int i = ySections+a; i < (width-1) * ySections; i+= ySections) {
+                    next[i] |= (data[i] << 1 & 0x8000000000000000L);
+                }
+
+            }
+        }
+
+        if(ySections > 0 && yEndMask != -1) {
+            for (int a = ySections - 1; a < next.length; a += ySections) {
+                next[a] &= yEndMask;
+            }
+        }
+        data = next;
+        return this;
+    }
+
+    /**
+     * Takes the pairs of "on" cells in this GreasedRegion that are separated by exactly one cell in an orthogonal or
+     * diagonal line, and changes the gap cells to "on" as well.
+     * <br>
+     * This method is very efficient due to how the class is implemented, and the various spatial increase/decrease
+     * methods (including {@link #expand()}, {@link #retract()}, {@link #fringe()}, and {@link #surface()}) all perform
+     * very well by operating in bulk on up to 64 cells at a time.
+     * @return this for chaining
+     */
+    public GreasedRegion connect8way()
+    {
+        if(width < 2 || ySections == 0)
+            return this;
+
+        final long[] next = new long[width * ySections];
+        System.arraycopy(data, 0, next, 0, width * ySections);
+        for (int a = 0; a < ySections; a++) {
+            next[a] |= ((data[a] << 1) & (data[a] >>> 1)) | data[a+ySections] | (data[a+ySections] << 1) | (data[a+ySections] >>> 1);
+            next[(width-1)*ySections+a] |= ((data[(width-1)*ySections+a] << 1) & (data[(width-1)*ySections+a] >>> 1))
+                    | data[(width-2) *ySections+a] | (data[(width-2)*ySections+a] << 1) | (data[(width-2)*ySections+a] >>> 1);
+
+            for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
+                next[i] |= ((data[i] << 1) & (data[i] >>> 1)) | (data[i - ySections] & data[i + ySections])
+                        | ((data[i - ySections] << 1) & (data[i + ySections] >>> 1))
+                        | ((data[i + ySections] << 1) & (data[i - ySections] >>> 1));
+            }
+
+            if(a > 0) {
+                for (int i = ySections+a; i < (width-1) * ySections; i+= ySections) {
+                    next[i] |= ((data[i - 1] & 0x8000000000000000L) >>> 63 & (data[i] >>> 1)) |
+                            ((data[i - ySections - 1] & 0x8000000000000000L) >>> 63 & (data[i + ySections] >>> 1)) |
+                            ((data[i + ySections - 1] & 0x8000000000000000L) >>> 63 & (data[i - ySections] >>> 1));
+                }
+            }
+            else
+            {
+                for (int i = ySections; i < (width-1) * ySections; i+= ySections) {
+                    next[i] |= (data[i] >>> 1 & 1L) | (data[i - ySections] >>> 1 & 1L) | (data[i + ySections] >>> 1 & 1L);
+                }
+            }
+
+            if(a < ySections - 1) {
+                for (int i = ySections+a; i < (width-1) * ySections; i+= ySections) {
+                    next[i] |= ((data[i + 1] & 1L) << 63 & (data[i] << 1)) |
+                            ((data[i - ySections + 1] & 1L) << 63 & (data[i + ySections] << 1)) |
+                            ((data[i + ySections + 1] & 1L) << 63 & (data[i - ySections] << 1)) ;
+                }
+            }
+            else
+            {
+                for (int i = ySections+a; i < (width-1) * ySections; i+= ySections) {
+                    next[i] |= (data[i] << 1 & 0x8000000000000000L)
+                            | (data[i - ySections] << 1 & 0x8000000000000000L) | (data[i + ySections] << 1 & 0x8000000000000000L);
+                }
+
+            }
+        }
+
+        if(ySections > 0 && yEndMask != -1) {
+            for (int a = ySections - 1; a < next.length; a += ySections) {
+                next[a] &= yEndMask;
+            }
+        }
+        data = next;
         return this;
     }
 
@@ -2136,7 +2266,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         if(width < 2 || ySections == 0)
             return this;
 
-        long[] next = new long[width * ySections];
+        final long[] next = new long[width * ySections];
         System.arraycopy(data, 0, next, 0, width * ySections);
         for (int a = 0; a < ySections; a++) {
             next[a] |= (data[a] << 1) | (data[a] >>> 1) | data[a+ySections];
@@ -2307,7 +2437,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         if(width <= 2 || ySections <= 0)
             return this;
 
-        long[] next = new long[width * ySections];
+        final long[] next = new long[width * ySections];
         System.arraycopy(data, ySections, next, ySections, (width - 2) * ySections);
         for (int a = 0; a < ySections; a++) {
             if(a > 0 && a < ySections - 1) {
@@ -2433,7 +2563,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         if(width < 2 || ySections <= 0)
             return this;
 
-        long[] next = new long[width * ySections];
+        final long[] next = new long[width * ySections];
         System.arraycopy(data, 0, next, 0, width * ySections);
         for (int a = 0; a < ySections; a++) {
             next[a] |= (data[a] << 1) | (data[a] >>> 1)
@@ -2545,7 +2675,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         if(width <= 2 || ySections <= 0)
             return this;
 
-        long[] next = new long[width * ySections];
+        final long[] next = new long[width * ySections];
         System.arraycopy(data, ySections, next, ySections, (width - 2) * ySections);
         for (int a = 0; a < ySections; a++) {
             if(a > 0 && a < ySections - 1) {
@@ -2680,7 +2810,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         if(width < 2 || ySections <= 0 || bounds == null || bounds.width < 2 || bounds.ySections <= 0)
             return this;
 
-        long[] next = new long[width * ySections];
+        final long[] next = new long[width * ySections];
         for (int a = 0; a < ySections && a < bounds.ySections; a++) {
             next[a] |= (data[a] |(data[a] << 1) | (data[a] >>> 1) | data[a+ySections]) & bounds.data[a];
             next[(width-1)*ySections+a] |= (data[(width-1)*ySections+a] | (data[(width-1)*ySections+a] << 1)
@@ -2786,7 +2916,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         if(width < 2 || ySections <= 0 || bounds == null || bounds.width < 2 || bounds.ySections <= 0)
             return this;
 
-        long[] next = new long[width * ySections];
+        final long[] next = new long[width * ySections];
         for (int a = 0; a < ySections && a < bounds.ySections; a++) {
             next[a] |= (data[a] | (data[a] << 1) | (data[a] >>> 1)
                     | data[a+ySections] | (data[a+ySections] << 1) | (data[a+ySections] >>> 1)) & bounds.data[a];
@@ -2913,7 +3043,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         if(width <= 2 || ySections <= 0)
             return this;
 
-        long[] next = new long[width * ySections];
+        final long[] next = new long[width * ySections];
         System.arraycopy(data, 0, next, 0, width * ySections);
         for (int a = 0; a < ySections; a++) {
             if(a > 0 && a < ySections - 1) {
