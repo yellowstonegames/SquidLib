@@ -3325,10 +3325,31 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
 
     }
 
+    /**
+     * Gets a Coord array from the "on" contents of this GreasedRegion, using a quasi-random scattering of chosen cells
+     * with a count that matches the given {@code fraction} of the total amount of "on" cells in this. This is quasi-
+     * random instead of pseudo-random because it is somewhat less likely to produce nearby cells in the result. If you
+     * request too many cells (too high of a value for fraction), it will start to overlap, however.
+     * Does not restrict the size of the returned array other than only using up to {@code fraction * size()} cells.
+     * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
+     * @return a freshly-allocated Coord array containing the quasi-random cells
+     */
     public Coord[] quasiRandomSeparated(double fraction)
     {
         return quasiRandomSeparated(fraction, -1);
     }
+
+    /**
+     * Gets a Coord array from the "on" contents of this GreasedRegion, using a quasi-random scattering of chosen cells
+     * with a count that matches the given {@code fraction} of the total amount of "on" cells in this. This is quasi-
+     * random instead of pseudo-random because it is somewhat less likely to produce nearby cells in the result. If you
+     * request too many cells (too high of a value for fraction), it will start to overlap, however.
+     * Restricts the total size of the returned array to a maximum of {@code limit} (minimum is 0 if no cells are "on").
+     * If limit is negative, this will not restrict the size.
+     * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
+     * @param limit the maximum size of the array to return
+     * @return a freshly-allocated Coord array containing the quasi-random cells
+     */
     public Coord[] quasiRandomSeparated(double fraction, int limit)
     {
         if(fraction < 0)
@@ -3369,7 +3390,85 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
         return vl;
+    }
 
+
+
+    /**
+     * Modifies this GreasedRegion so it contains a quasi-random subset of its previous contents, choosing cells so that
+     * the {@link #size()} matches the given {@code fraction} of the total amount of "on" cells in this. This is quasi-
+     * random instead of pseudo-random because it is somewhat less likely to produce nearby cells in the result. If you
+     * request too many cells (too high of a value for fraction), it will start to overlap, however.
+     * Does not restrict the count of "on" cells after this returns other than by only using up to
+     * {@code fraction * size()} cells.
+     * <br>
+     * Uses a different algorithm than {@link #quasiRandomSeparated(double)}, hoping that it will be faster.
+     * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
+     * @return this for chaining
+     */
+    public GreasedRegion quasiRandomRegion(double fraction) {
+        return quasiRandomRegion(fraction, -1);
+    }
+    /**
+     * Modifies this GreasedRegion so it contains a quasi-random subset of its previous contents, choosing cells so that
+     * the {@link #size()} matches the given {@code fraction} of the total amount of "on" cells in this. This is quasi-
+     * random instead of pseudo-random because it is somewhat less likely to produce nearby cells in the result. If you
+     * request too many cells (too high of a value for fraction), it will start to overlap, however.
+     * Restricts the total count of "on" cells after this returns to a maximum of {@code limit} (minimum is 0 if no
+     * cells are "on"). If limit is negative, this will not restrict the count.
+     * <br>
+     * Uses a different algorithm than {@link #quasiRandomSeparated(double)}, hoping that it will be faster.
+     * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
+     * @param limit the maximum count of "on" cells to keep
+     * @return this for chaining
+     */
+    public GreasedRegion quasiRandomRegion(double fraction, int limit) {
+        int ct = 0, idx = 0, run = 0;
+        for (int i = 0; i < width * ySections; i++) {
+            ct += Long.bitCount(data[i]);
+        }
+        if (ct <= limit)
+            return this;
+        if (ct <= 0)
+            return empty();
+        if (limit < 0)
+            limit = (int) (fraction * ct);
+        int[] order = new int[limit];
+        for (int i = 0, m = 0; i < limit; i++, m++) {
+            idx = (int) (VanDerCorputQRNG.weakDetermine(m) * ct);
+            BIG:
+            while (true) {
+                for (int j = 0; j < i; j++) {
+                    if (order[j] == idx) {
+                        idx = (int) (VanDerCorputQRNG.weakDetermine(++m) * ct);
+                        continue BIG;
+                    }
+                }
+                break;
+            }
+            order[i] = idx;
+        }
+        idx = 0;
+        Arrays.sort(order);
+        long t, w;
+        ALL:
+        for (int s = 0; s < ySections; s++) {
+            for (int x = 0; x < width; x++) {
+                if ((t = data[x * ySections + s]) != 0) {
+                    w = Long.lowestOneBit(t);
+                    while (w != 0) {
+                        if (run++ == order[idx]) {
+                            if (++idx >= limit) break ALL;
+                        } else {
+                            data[x * ySections + s] ^= w;
+                        }
+                        t ^= w;
+                        w = Long.lowestOneBit(t);
+                    }
+                }
+            }
+        }
+        return this;
     }
 
     public double rateDensity()
@@ -3569,6 +3668,35 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return Coord.get(-1, -1);
     }
 
+    public int atFractionTight(final double fraction)
+    {
+        int ct = 0, tmp;
+        int[] counts = new int[width * ySections];
+        for (int i = 0; i < width * ySections; i++) {
+            tmp = Long.bitCount(data[i]);
+            counts[i] = tmp == 0 ? -1 : (ct += tmp);
+        }
+        if(ct <= 0) return -1;
+        tmp = Math.abs((int)(fraction * ct) % ct);
+        long t, w;
+
+        for (int x = 0; x < width; x++) {
+            for (int s = 0; s < ySections; s++) {
+                if ((ct = counts[x * ySections + s]) > tmp) {
+                    t = data[x * ySections + s];
+                    w = Long.lowestOneBit(t);
+                    for (--ct; w != 0; ct--) {
+                        if (ct == tmp)
+                            return ((s << 6) | Long.numberOfTrailingZeros(w)) * width + x;
+                        t ^= w;
+                        w = Long.lowestOneBit(t);
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+
     public Coord singleRandom(RNG rng)
     {
         int ct = 0, tmp;
@@ -3595,6 +3723,34 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         }
 
         return Coord.get(-1, -1);
+    }
+
+    public int singleRandomTight(RNG rng)
+    {
+        int ct = 0, tmp;
+        int[] counts = new int[width * ySections];
+        for (int i = 0; i < width * ySections; i++) {
+            tmp = Long.bitCount(data[i]);
+            counts[i] = tmp == 0 ? -1 : (ct += tmp);
+        }
+        tmp = rng.nextInt(ct);
+        long t, w;
+        for (int s = 0; s < ySections; s++) {
+            for (int x = 0; x < width; x++) {
+                if ((ct = counts[x * ySections + s]) > tmp) {
+                    t = data[x * ySections + s];
+                    w = Long.lowestOneBit(t);
+                    for (--ct; w != 0; ct--) {
+                        if (ct == tmp)
+                            return ((s << 6) | Long.numberOfTrailingZeros(w)) * width + x;
+                        t ^= w;
+                        w = Long.lowestOneBit(t);
+                    }
+                }
+            }
+        }
+
+        return -1;
     }
 
 
@@ -3630,6 +3786,42 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
         return points;
+    }
+
+    public GreasedRegion randomRegion(RNG rng, int size)
+    {
+        int ct = 0, idx = 0, run = 0;
+        for (int i = 0; i < width * ySections; i++) {
+            ct += Long.bitCount(data[i]);
+        }
+        if(ct <= 0 || size <= 0)
+            return empty();
+        if(ct <= size)
+            return this;
+        int[] order = rng.randomOrdering(ct);
+        Arrays.sort(order, 0, size);
+        long t, w;
+        ALL:
+        for (int s = 0; s < ySections; s++) {
+            for (int x = 0; x < width; x++) {
+                if((t = data[x * ySections + s]) != 0)
+                {
+                    w = Long.lowestOneBit(t);
+                    while (w != 0) {
+                        if (run++ == order[idx]) {
+                            if(++idx >= size) break ALL;
+                        }
+                        else
+                        {
+                            data[x * ySections + s] &= ~(1L << Long.numberOfTrailingZeros(w));
+                        }
+                        t ^= w;
+                        w = Long.lowestOneBit(t);
+                    }
+                }
+            }
+        }
+        return this;
     }
 
     @Override

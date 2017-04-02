@@ -329,4 +329,17 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
     {
         return determine(lowPrimes[index & 7], index);
     }
+
+    /**
+     * Experimental, use with caution! Given any non-negative int (0 is allowed), this gets a somewhat-sub-random
+     * double from 0.0 (inclusive) to 1.0 (exclusive) using a brief series of relatively-fast operations.
+     * @param index any non-negative int
+     * @return a double from 0.0 (inclusive) to 1.0 (exclusive) that should not be closely correlated to index
+     */
+    public static double weakDetermine(int index)
+    {
+        return NumberTools.setExponent(
+                (NumberTools.setExponent((index<<1|1) * 0.618033988749895, 0x3ff))
+                        * (0x232BE5 * (~index)), 0x3ff) - 1.0;
+    }
 }
