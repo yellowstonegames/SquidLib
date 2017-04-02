@@ -38,7 +38,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         Rocky                  = 11,
         River                  = 12;
 
-    private static final int width = 800, height = 800;
+    private static final int width = 512, height = 512;
     private final double terrainFreq = 1.9, terrainRidgedFreq = 2.5, heatFreq = 5.5, moistureFreq = 5.0, otherFreq = 4.1;
 
     private SpriteBatch batch;
@@ -48,7 +48,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private SquidInput input;
     private Stage stage;
     private Viewport view;
-    int zoom = 0;
+    private int zoom = 0;
     private Noise.Noise4D terrain, terrainRidged, heat, moisture, otherRidged;
     private long seed, cachedState;
     private int iseed;
@@ -58,8 +58,10 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             heatData = new double[width][height],
             moistureData = new double[width][height],
             biomeDifferenceData = new double[width][height];
-    private double[] workingData = new double[width*height];
-    private GreasedRegion riverData = new GreasedRegion(width, height), lakeData = new GreasedRegion(width, height);
+    private GreasedRegion riverData = new GreasedRegion(width, height), lakeData = new GreasedRegion(width, height),
+            partialRiverData = new GreasedRegion(width, height), partialLakeData = new GreasedRegion(width, height),
+            workingData = new GreasedRegion(width, height);
+
     private int[][] heightCodeData = new int[width][height],
             heatCodeData = new int[width][height],
             moistureCodeData = new int[width][height],
@@ -270,7 +272,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private void codeBiome(int x, int y, double hot, double moist, int heightCode) {
         int hc, mc;
         double upperProximityH, upperProximityM, lowerProximityH, lowerProximityM, bound, prevBound;
-        boolean isLake = lakeData.contains(x, y), isRiver = riverData.contains(x, y);
+        boolean isLake = partialLakeData.contains(x, y), isRiver = partialRiverData.contains(x, y);
         if(moist >= (bound = (wettestValueUpper - (wetterValueUpper - wetterValueLower) * 0.2)))
         {
             mc = 5;
@@ -617,7 +619,33 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             maxHeat = qc;
             i_hot =  1.0 / qc;
         }
-        addRivers();
+        if(fresh)
+        {
+            addRivers();
+            partialRiverData.remake(riverData);
+            partialLakeData.remake(lakeData);
+        }
+        else {
+            partialRiverData.remake(riverData);
+            partialLakeData.remake(lakeData);
+            for (int i = 1; i <= zoom; i++) {
+                if ((i & 1) == 0) {
+
+                    partialRiverData.zoom((width >> 2), (height >> 2)).connect8way();
+                    partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.4)).connect8way();
+                    partialLakeData.zoom((width >> 2), (height >> 2)).connect8way();
+                    partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.45)).connect8way();
+
+                }
+                else
+                {
+                    partialRiverData.zoom((width >> 2), (height >> 2)).connect8way();
+                    partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.17)).connect8way();
+                    partialLakeData.zoom((width >> 2), (height >> 2)).connect8way();
+                    partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.2)).connect8way();
+                }
+            }
+        }
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 codeBiome(x, y, heatData[x][y], moistureData[x][y], heightCodeData[x][y]);
@@ -675,7 +703,6 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             }
         }
     }
-    private final IntVLA fresh = new IntVLA(256);
     private static int encode(final int x, final int y)
     {
         return width * y + x;
@@ -688,74 +715,11 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     {
         return coded / width;
     }
-    private void setFresh(final int coded, final double counter)
-    {
-        if(workingData[coded] < counter) return;
-        workingData[coded] = counter;
-        fresh.add(coded);
-
-    }
-    private void sortaDijkstra()
-    {
-        int current = 0;
-        double working, min = 99999;
-        for (int y = 0; y < height; y++) {
-            current = width * y;
-            for (int x = 0; x < width; x++, current++) {
-                working = (workingData[current] = ((working = heightData[x][y]) < 0.05) ? (working >= 0.0 ? 0.0 : 10011.0) : working * -347.87);
-                min = Math.min(min, working);
-            }
-        }
-        int adj, adjX, adjY, cen, cenX, cenY, dx, dy;
-
-        double cs, dist;
-        fresh.clear();
-        for (int y = 0; y < height; y++) {
-            current = width * y;
-            for (int x = 0; x < width; x++, current++) {
-                if ((working = workingData[current]) == 0.0) {
-                    setFresh(current, min - 415);
-                }
-                else if(working == 10011.0)
-                    workingData[current] = -10011.0;
-            }
-        }
-        int fsz, numAssigned = fresh.size;
-        Direction[] dirs = Direction.OUTWARDS;
-        GreasedRegion blocks = new GreasedRegion(rng, 0.16, width, height);
-        while (numAssigned > 0) {
-            numAssigned = 0;
-            fsz = fresh.size;
-            for (int ci = fsz-1; ci >= 0; ci--) {
-                cen = fresh.removeIndex(ci);
-                cenX = decodeX(cen);
-                cenY = decodeY(cen);
-                dist = workingData[cen];
-
-                for (int d = 0; d < 8; d++) {
-                    adjX = (cenX + (dx = dirs[d].deltaX));
-                    if(adjX < 0 || adjX >= width)
-                        continue;
-                    adjY = (cenY + (dy = dirs[d].deltaY));
-                    if(adjY < 0 || adjY >= height)
-                        continue;
-                    if(blocks.contains(adjX, adjY))
-                        continue;
-                    adj = encode(adjX, adjY);
-                    cs = dist + ((dx * dy == 0) ? 0.1 : 0.141);
-                    if (cs < workingData[adj]) {
-                        setFresh(adj, cs);
-                        ++numAssigned;
-                    }
-                }
-            }
-        }
-    }
     private static final Direction[] reuse = new Direction[9];
     private void appendDirToShuffle(RNG rng) {
         rng.randomPortion(Direction.CARDINALS, reuse);
         int diags = rng.next(2);
-        reuse[3] = Direction.DIAGONALS[diags];
+        reuse[rng.next(2)] = Direction.DIAGONALS[diags];
         /*
         int diags = rng.nextIntHasty(12);
         reuse[3] = Direction.DIAGONALS[diags & 3];
@@ -774,18 +738,17 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
 
             }
         }*/
-        riverData.refill(heightCodeData, 6, 100);
+        workingData.empty().insertRectangle(8, 8, width - 16, height - 16);
+        riverData.empty().refill(heightCodeData, 6, 100);
         //System.out.println(riverData.show('.', '#'));
         //System.out.println('\n');
-        riverData.quasiRandomRegion(0.002);
+        riverData.quasiRandomRegion(0.002).and(workingData);
         //System.out.println(riverData.show('.', '#'));
         //System.out.println('\n');
         int[] starts = riverData.asTightEncoded();
         int len = starts.length, currentPos, adj, adjX, adjY, currX, currY, tcx, tcy, stx, sty, sbx, sby;
         riverData.clear();
         lakeData.clear();
-        GreasedRegion workingData = new GreasedRegion(width, height);
-
         PER_RIVER:
         for (int i = 0; i < len; i++) {
             workingData.clear();
@@ -800,10 +763,18 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                 for (int d = 0; d < 4; d++) {
                     adjX = (currX + reuse[d].deltaX);
                     if (adjX < 0 || adjX >= width)
-                        continue;
+                    {
+                        if(rng.next(4) == 0)
+                            riverData.or(workingData);
+                        continue PER_RIVER;
+                    }
                     adjY = (currY + reuse[d].deltaY);
                     if (adjY < 0 || adjY >= height)
-                        continue;
+                    {
+                        if(rng.next(4) == 0)
+                            riverData.or(workingData);
+                        continue PER_RIVER;
+                    }
                     if (heightData[adjX][adjY] < best && !workingData.contains(adjX, adjY)) {
                         best = heightData[adjX][adjY];
                         tcx = adjX;
@@ -823,7 +794,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                     lakeData.insert(currX, currY - 1);
                     if (!(adjY < 0 || adjY >= height || adjX < 0 || adjX >= width))
                     {
-                        if(heightCodeData[adjX][adjY] < 2) {
+                        if(heightCodeData[adjX][adjY] <= 3) {
                             riverData.or(workingData);
                             continue PER_RIVER;
                         }
@@ -845,7 +816,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                     adjY = currY + (tcx & 2) - 1;
                     if (!(adjY < 0 || adjY >= height || adjX < 0 || adjX >= width))
                     {
-                        if(heightCodeData[adjX][adjY] < 2) {
+                        if(heightCodeData[adjX][adjY] <= 3) {
                             riverData.or(workingData);
                             continue PER_RIVER;
                         }
@@ -909,7 +880,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                     }
                     currX = sbx;
                     currY = sby;
-                    if (best <= heightData[stx][sty] || heightData[currX][currY] > rng.nextDouble(140.0)) {
+                    if (best <= heightData[stx][sty] || heightData[currX][currY] > rng.nextDouble(160.0)) {
                         riverData.or(workingData);
                         continue RIVER;
                     }if (heightCodeData[currX][currY] >= 4)
