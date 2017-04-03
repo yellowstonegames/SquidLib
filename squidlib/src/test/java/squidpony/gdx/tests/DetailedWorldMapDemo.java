@@ -40,6 +40,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
 
     private static final int width = 512, height = 512;
     private final double terrainFreq = 1.9, terrainRidgedFreq = 2.5, heatFreq = 5.5, moistureFreq = 5.0, otherFreq = 4.1;
+    //riverSize = (0.5 - 10.0 / height) * (0.5 - 10.0 / width), lakeSize = riverSize * 1.1;
 
     private SpriteBatch batch;
     private SquidColorCenter colorFactory;
@@ -69,6 +70,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             biomeLowerCodeData = new int[width][height];
     public double waterModifier = 0.0, coolingModifier = 1.0,
             minHeight = Double.POSITIVE_INFINITY, maxHeight = Double.NEGATIVE_INFINITY,
+            minHeightActual = Double.POSITIVE_INFINITY, maxHeightActual = Double.NEGATIVE_INFINITY,
             minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
             minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
             minHeat = Double.POSITIVE_INFINITY, maxHeat = Double.NEGATIVE_INFINITY,
@@ -272,7 +274,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private void codeBiome(int x, int y, double hot, double moist, int heightCode) {
         int hc, mc;
         double upperProximityH, upperProximityM, lowerProximityH, lowerProximityM, bound, prevBound;
-        boolean isLake = partialLakeData.contains(x, y), isRiver = partialRiverData.contains(x, y);
+        boolean isLake = partialLakeData.contains(x, y) && heightCodeData[x][y] >= 4,
+                isRiver = partialRiverData.contains(x, y) && heightCodeData[x][y] >= 4;
         if(moist >= (bound = (wettestValueUpper - (wetterValueUpper - wetterValueLower) * 0.2)))
         {
             mc = 5;
@@ -531,6 +534,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                 moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qc, qs
                         + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedC + seedA)//seedD + seedB)
                         , seedC));
+                minHeightActual = Math.min(minHeightActual, h);
+                maxHeightActual = Math.max(maxHeightActual, h);
                 if(fresh) {
                     minHeight = Math.min(minHeight, h);
                     maxHeight = Math.max(maxHeight, h);
@@ -543,8 +548,11 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
 
                 }
             }
+            minHeightActual = Math.min(minHeightActual, minHeight);
+            maxHeightActual = Math.max(maxHeightActual, maxHeight);
+
         }
-        double heightDiff = 2.0 / (maxHeight - minHeight),
+        double heightDiff = 2.0 / (maxHeightActual - minHeightActual),
                 heatDiff = 0.8 / (maxHeat0 - minHeat0),
                 wetDiff = 1.0 / (maxWet - minWet),
                 hMod,
@@ -558,7 +566,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             temp *= (2.4 - temp);
             temp = 2.2 - temp;
             for (int x = 0; x < width; x++) {
-                heightData[x][y] = (h = (heightData[x][y] - minHeight) * heightDiff - 1.0);
+                heightData[x][y] = (h = (heightData[x][y] - minHeightActual) * heightDiff - 1.0);
                 heightCodeData[x][y] = (t = codeHeight(h));
                 hMod = 1.0;
                 switch (t) {
@@ -622,29 +630,30 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         if(fresh)
         {
             addRivers();
+            riverData.connect8way().thin().thin();
             partialRiverData.remake(riverData);
-            partialLakeData.remake(lakeData);
+            //partialLakeData.remake(lakeData.thinFully());
         }
         else {
             partialRiverData.remake(riverData);
-            partialLakeData.remake(lakeData);
+            //partialLakeData.remake(lakeData);
             for (int i = 1; i <= zoom; i++) {
-                if ((i & 1) == 0) {
-
-                    partialRiverData.zoom((width >> 2), (height >> 2)).connect8way();
-                    partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.4)).connect8way();
-                    partialLakeData.zoom((width >> 2), (height >> 2)).connect8way();
-                    partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.45)).connect8way();
-
+                if ((i & 3) == 3) {
+                    partialRiverData.zoom((width >> 2), (height >> 2)).expand8way().disperseRandom(rng).connect8way().thin();//.connect8way();//.connect();
+                    partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.3));
+                    //partialLakeData.zoom((width >> 2), (height >> 2)).connect8way();//.connect8way();//.connect();
+                    //partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.35)).connect8way();
                 }
                 else
                 {
-                    partialRiverData.zoom((width >> 2), (height >> 2)).connect8way();
-                    partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.17)).connect8way();
-                    partialLakeData.zoom((width >> 2), (height >> 2)).connect8way();
-                    partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.2)).connect8way();
+                    partialRiverData.zoom((width >> 2), (height >> 2)).connect8way().thin();//.connect8way();//.connect();
+                    partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.4));
+                    //partialLakeData.zoom((width >> 2), (height >> 2)).connect8way();//.connect8way();//.connect();
+                    //partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.25)).connect8way();
                 }
             }
+
+            //partialRiverData.thinFully();
         }
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -718,11 +727,12 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private static final Direction[] reuse = new Direction[9];
     private void appendDirToShuffle(RNG rng) {
         rng.randomPortion(Direction.CARDINALS, reuse);
-        int diags = rng.next(2);
-        reuse[rng.next(2)] = Direction.DIAGONALS[diags];
+        reuse[rng.next(2)] = Direction.DIAGONALS[rng.next(2)];
+        reuse[4] = Direction.DIAGONALS[rng.next(2)];
+        //int diags = rng.next(2);
         /*
         int diags = rng.nextIntHasty(12);
-        reuse[3] = Direction.DIAGONALS[diags & 3];
+        reuse[rng.next(2)] = Direction.DIAGONALS[diags & 3];
         reuse[4] = Direction.DIAGONALS[(diags & 3) + 1 + (diags >> 2) & 3];
         */
         //reuse[4] = Direction.NONE;
@@ -742,11 +752,11 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         riverData.empty().refill(heightCodeData, 6, 100);
         //System.out.println(riverData.show('.', '#'));
         //System.out.println('\n');
-        riverData.quasiRandomRegion(0.002).and(workingData);
+        riverData.quasiRandomRegion(0.000003 * Math.max(width, height)).and(workingData);
         //System.out.println(riverData.show('.', '#'));
         //System.out.println('\n');
         int[] starts = riverData.asTightEncoded();
-        int len = starts.length, currentPos, adj, adjX, adjY, currX, currY, tcx, tcy, stx, sty, sbx, sby;
+        int len = starts.length, currentPos, choice, adjX, adjY, currX, currY, tcx, tcy, stx, sty, sbx, sby;
         riverData.clear();
         lakeData.clear();
         PER_RIVER:
@@ -758,9 +768,10 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             while (true) {
 
                 double best = 999999;
+                choice = -1;
                 appendDirToShuffle(rng);
 
-                for (int d = 0; d < 4; d++) {
+                for (int d = 0; d < 5; d++) {
                     adjX = (currX + reuse[d].deltaX);
                     if (adjX < 0 || adjX >= width)
                     {
@@ -777,6 +788,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                     }
                     if (heightData[adjX][adjY] < best && !workingData.contains(adjX, adjY)) {
                         best = heightData[adjX][adjY];
+                        choice = d;
                         tcx = adjX;
                         tcy = adjY;
                     }
@@ -787,11 +799,11 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                     tcx = rng.next(2);
                     adjX = currX + ((tcx & 1) << 1) - 1;
                     adjY = currY + (tcx & 2) - 1;
-                    lakeData.insert(currX, currY);
+                    /*lakeData.insert(currX, currY);
                     lakeData.insert(currX + 1, currY);
                     lakeData.insert(currX - 1, currY);
                     lakeData.insert(currX, currY + 1);
-                    lakeData.insert(currX, currY - 1);
+                    lakeData.insert(currX, currY - 1);*/
                     if (!(adjY < 0 || adjY >= height || adjX < 0 || adjX >= width))
                     {
                         if(heightCodeData[adjX][adjY] <= 3) {
@@ -834,6 +846,40 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                         continue PER_RIVER;
                     }
 
+                }
+                if(choice != -1 && reuse[choice].isDiagonal())
+                {
+                    tcx = currX - reuse[choice].deltaX;
+                    tcy = currY - reuse[choice].deltaY;
+                    if(heightData[tcx][currY] <= heightData[currX][tcy] && !workingData.contains(tcx, currY))
+                    {
+                        if(riverData.contains(tcx, currY))
+                        {
+                            riverData.or(workingData);
+                            continue PER_RIVER;
+                        }
+                        workingData.insert(tcx, currY);
+                        if (heightData[tcx][currY] <= 0.075)
+                        {
+                            riverData.or(workingData);
+                            continue PER_RIVER;
+                        }
+                    }
+                    else if(!workingData.contains(currX, tcy))
+                    {
+                        if(riverData.contains(currX, tcy))
+                        {
+                            riverData.or(workingData);
+                            continue PER_RIVER;
+                        }
+                        workingData.insert(currX, tcy);
+                        if (heightData[currX][tcy] <= 0.075)
+                        {
+                            riverData.or(workingData);
+                            continue PER_RIVER;
+                        }
+
+                    }
                 }
                 if(riverData.contains(currX, currY))
                 {
@@ -848,157 +894,97 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                 }
             }
         }
-        int riverCount = riverData.size() >> 4, currentMax = riverCount >> 2, idx = 0;
+
+        GreasedRegion tempData = new GreasedRegion(width, height);
+        int riverCount = riverData.size() >> 5, currentMax = riverCount >> 2, idx = 0, prevChoice;
         for (int h = 5; h < 9; h++) { //, currentMax += riverCount / 18
             workingData.empty().refill(heightCodeData, h).and(riverData);
             //System.out.println(workingData.show('.', '#'));
             RIVER:
             for (int j = 0; j < currentMax && idx < riverCount; j++) {
-                double vdc = VanDerCorputQRNG.weakDetermine(idx++);
+                double vdc = VanDerCorputQRNG.weakDetermine(idx++), best = -999999;
                 currentPos = workingData.atFractionTight(vdc);
-                if(currentPos < 0) break;
+                if(currentPos < 0)
+                    break;
                 stx = sbx = tcx = currX = decodeX(currentPos);
                 sty = sby = tcy = currY = decodeY(currentPos);
-                while (true) {
-                    double best = -999999;
-                    appendDirToShuffle(rng);
+                appendDirToShuffle(rng);
+                choice = -1;
+                prevChoice = -1;
+                for (int d = 0; d < 5; d++) {
+                    adjX = (currX + reuse[d].deltaX);
+                    if (adjX < 0 || adjX >= width)
+                        continue;
+                    adjY = (currY + reuse[d].deltaY);
+                    if (adjY < 0 || adjY >= height)
+                        continue;
+                    if (heightData[adjX][adjY] > best) {
+                        best = heightData[adjX][adjY];
+                        prevChoice = choice;
+                        choice = d;
+                        sbx = tcx;
+                        sby = tcy;
+                        tcx = adjX;
+                        tcy = adjY;
+                    }
+                }
+                currX = sbx;
+                currY = sby;
+                if (prevChoice != -1 && heightCodeData[currX][currY] >= 4) {
+                    if (reuse[prevChoice].isDiagonal()) {
+                        tcx = currX - reuse[prevChoice].deltaX;
+                        tcy = currY - reuse[prevChoice].deltaY;
+                        if (heightData[tcx][currY] <= heightData[currX][tcy])
+                            tempData.insert(tcx, currY);
+                        else
+                            tempData.insert(currX, tcy);
+                    }
+                    tempData.insert(currX, currY);
+                }
 
-                    for (int d = 0; d < 4; d++) {
+                while (true) {
+                    best = -999999;
+                    appendDirToShuffle(rng);
+                    choice = -1;
+                    for (int d = 0; d < 5; d++) {
                         adjX = (currX + reuse[d].deltaX);
                         if (adjX < 0 || adjX >= width)
                             continue;
                         adjY = (currY + reuse[d].deltaY);
                         if (adjY < 0 || adjY >= height)
                             continue;
-                        if (heightData[adjX][adjY] > best && !riverData.contains(adjX, adjY)) {
+                        if (heightData[adjX][adjY] > best) {
                             best = heightData[adjX][adjY];
-                            sbx = tcx;
-                            sby = tcy;
-                            tcx = adjX;
-                            tcy = adjY;
+                            choice = d;
+                            sbx = adjX;
+                            sby = adjY;
                         }
                     }
                     currX = sbx;
                     currY = sby;
-                    if (best <= heightData[stx][sty] || heightData[currX][currY] > rng.nextDouble(160.0)) {
-                        riverData.or(workingData);
+                    if (best <= heightData[stx][sty] || heightData[currX][currY] > rng.nextDouble(160.0)
+                            //|| riverData.contains(currX, currY)
+                            ) {
+                        riverData.or(tempData);
+                        tempData.clear();
                         continue RIVER;
-                    }if (heightCodeData[currX][currY] >= 4)
-                        workingData.insert(currX, currY);
+                    }
+                    if (choice != -1 && heightCodeData[currX][currY] >= 4) {
+                        if (reuse[choice].isDiagonal()) {
+                            tcx = currX - reuse[choice].deltaX;
+                            tcy = currY - reuse[choice].deltaY;
+                            if (heightData[tcx][currY] <= heightData[currX][tcy])
+                                tempData.insert(tcx, currY);
+                            else
+                                tempData.insert(currX, tcy);
+                        }
+                        tempData.insert(currX, currY);
+                    }
                 }
             }
 
         }
 
-        /*
-        riverData.refill(heightData, 0.05, 0.1);
-        riverData.deteriorate(rng, 0.015625).deteriorate(rng, 0.03125);
-        IntVLA starts = new IntVLA(riverData.asTightEncoded());
-        int[] xOffsets = {0, 1, 0, -1}, yOffsets = {1, 0, -1, 0};
-        int len = starts.size * 20, currentPos, adjX, adjY, currX, currY, tcx, tcy, stx, sty;
-        riverData.clear();
-        lakeData.clear();
-        PER_RIVER:
-        for (int i = 0; i < starts.size && i < len; i++) {
-            currentPos = starts.get(i);
-            stx = tcx = currX = decodeX(currentPos);
-            sty = tcy = currY = decodeY(currentPos);
-            while(true) {
-                double best = -999999;
-                appendDirToShuffle(rng);
-
-                for (int d = 0; d < 4; d++) {
-                    adjX = (currX + reuse[d].deltaX);
-                    if(adjX < 0 || adjX >= width)
-                        continue;
-                    adjY = (currY + reuse[d].deltaY);
-                    if(adjY < 0 || adjY >= height)
-                        continue;
-                    if (heightData[adjX][adjY] > best && !riverData.contains(adjX, adjY)) {
-                        best = heightData[adjX][adjY];
-                        tcx = adjX;
-                        tcy = adjY;
-                    }
-                }
-                currX = tcx;
-                currY = tcy;
-                if (best <= heightData[stx][sty]
-                        || rng.next(8) == 0) // 1 in 256 chance
-                {
-                    if(heightCodeData[currX][currY] < 4)
-                        continue PER_RIVER;
-                    tcx = rng.nextIntHasty(12);
-                    tcy = tcx & 3;
-                    tcx = ((tcx >>> 2) + 1 + tcy) & 3;
-                    adjX = currX+xOffsets[tcy];
-                    adjY = currY+yOffsets[tcy];
-                    if(adjY >= 0 && adjY < height && adjX >= 0 && adjX < width && heightCodeData[adjX][adjY] >= 4)
-                        riverData.insert(adjX, adjY);
-                    adjX += xOffsets[tcy];
-                    adjY += yOffsets[tcy];
-                    if(adjY >= 0 && adjY < height && adjX >= 0 && adjX < width && heightCodeData[adjX][adjY] >= 4)
-                        riverData.insert(adjX, adjY);
-                    tcy = tcy+(rng.next(2)|1) & 3; // add either 1 or 3; ensures a 90 degree turn
-                    adjX += xOffsets[tcy];
-                    adjY += yOffsets[tcy];
-                    if(adjY >= 0 && adjY < height && adjX >= 0 && adjX < width)
-                        starts.add(encode(adjX, adjY));
-                    adjX = currX+xOffsets[tcx];
-                    adjY = currY+yOffsets[tcx];
-                    if(adjY >= 0 && adjY < height && adjX >= 0 && adjX < width && heightCodeData[adjX][adjY] >= 4)
-                        riverData.insert(adjX, adjY);
-                    adjX += xOffsets[tcx];
-                    adjY += yOffsets[tcx];
-                    if(adjY >= 0 && adjY < height && adjX >= 0 && adjX < width && heightCodeData[adjX][adjY] >= 4)
-                        riverData.insert(adjX, adjY);
-                    tcx = tcx+(rng.next(2)|1) & 3; // add either 1 or 3; ensures a 90 degree turn
-                    adjX += xOffsets[tcx];
-                    adjY += yOffsets[tcx];
-                    if(adjY >= 0 && adjY < height && adjX >= 0 && adjX < width)
-                        starts.add(encode(adjX, adjY));
-
-                    riverData.insert(currX, currY);
-
-                    //if((heightData[adjX][adjY] += 0.001) > uppers[heightCodeData[adjX][adjY]])
-                    //    continue PER_RIVER;
-                    continue PER_RIVER;
-                }
-                if(heightCodeData[currX][currY] >= 4)
-                    riverData.insert(currX, currY);
-                if(heightData[currX][currY] > rng.nextDouble(150.0))
-                    continue PER_RIVER;
-            }
-        }
-        */
-                /*
-                double best = workingData[encode(currX, currY)];
-                final Direction[] dirs = appendDirToShuffle(rng);
-                for (int d = 0; d < 4; d++) {
-                    adjX = (currX + dirs[d].deltaX);
-                    if(adjX < 0 || adjX >= width)
-                        continue;
-                    adjY = (currY + dirs[d].deltaY);
-                    if(adjY < 0 || adjY >= height)
-                        continue;
-                    adj = encode(adjX, adjY);
-                    if (workingData[adj] < best) {
-                        best = workingData[adj];
-                        tcx = adjX;
-                        tcy = adjY;
-                    }
-                }
-                currX = tcx;
-                currY = tcy;
-                if (best >= workingData[starts[i]] || riverData.contains(currX, currY)) {
-                    continue PER_RIVER;
-                }
-                */
-        /*
-        GreasedRegion heightZone = new GreasedRegion(width, height);
-        for (int i = 4; i < 9; i++) {
-            heightZone.empty().refill(heightCodeData, i);
-            riverData.or(heightZone.and(riverData).fringe8way().deteriorate(rng, 1.35 - 0.1 * i));
-        }*/
         rng.setState(rebuildState);
     }
 
