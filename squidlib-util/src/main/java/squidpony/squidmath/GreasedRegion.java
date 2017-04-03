@@ -2009,7 +2009,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         if(ySections2 > 0 && yEndMask2 != -1) {
             for (int a = ySections2 - 1; a < data2.length; a += ySections) {
                 data2[a] &= yEndMask2;
-                data2[a+1] = 0L;
+                if(ySections2 < ySections)
+                    data2[a+1] = 0L;
             }
         }
         for (int i = 0; i < width2; i++) {
@@ -2194,6 +2195,112 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         data = next;
         return this;
     }
+    /**
+     * Takes the pairs of "on" cells in this GreasedRegion that are separated by exactly one cell in an orthogonal or
+     * diagonal line, and changes the gap cells to "on" as well. As a special case, this requires diagonals to either
+     * have no "on" cells adjacent along the perpendicular diagonal, or both cells on that perpendicular diagonal need
+     * to be "on." This is useful to counteract some less-desirable behavior of {@link #connect8way()}, where a right
+     * angle would always get the inner corners filled because it was considered a diagonal.
+     * <br>
+     * This method is very efficient due to how the class is implemented, and the various spatial increase/decrease
+     * methods (including {@link #expand()}, {@link #retract()}, {@link #fringe()}, and {@link #surface()}) all perform
+     * very well by operating in bulk on up to 64 cells at a time.
+     * @return this for chaining
+     */
+    public GreasedRegion connectLines()
+    {
+        if(width < 2 || ySections == 0)
+            return this;
+
+        final long[] next = new long[width * ySections];
+        System.arraycopy(data, 0, next, 0, width * ySections);
+        for (int a = 0; a < ySections; a++) {
+            next[a] |= ((data[a] << 1) & (data[a] >>> 1)) | data[a+ySections] | (data[a+ySections] << 1) | (data[a+ySections] >>> 1);
+            next[(width-1)*ySections+a] |= ((data[(width-1)*ySections+a] << 1) & (data[(width-1)*ySections+a] >>> 1))
+                    | data[(width-2) *ySections+a] | (data[(width-2)*ySections+a] << 1) | (data[(width-2)*ySections+a] >>> 1);
+
+            for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
+                next[i] |= ((data[i] << 1) & (data[i] >>> 1)) | (data[i - ySections] & data[i + ySections])
+                        | (((data[i - ySections] << 1) & (data[i + ySections] >>> 1))
+                           ^ ((data[i + ySections] << 1) & (data[i - ySections] >>> 1)));
+            }
+
+            if(a > 0) {
+                for (int i = ySections+a; i < (width-1) * ySections; i+= ySections) {
+                    next[i] |= ((data[i - 1] & 0x8000000000000000L) >>> 63 & (data[i] >>> 1))
+                            | (((data[i - ySections - 1] & 0x8000000000000000L) >>> 63 & (data[i + ySections] >>> 1))
+                               ^ ((data[i + ySections - 1] & 0x8000000000000000L) >>> 63 & (data[i - ySections] >>> 1)));
+                }
+            }
+            else
+            {
+                for (int i = ySections; i < (width-1) * ySections; i+= ySections) {
+                    next[i] |= (data[i] >>> 1 & 1L) | (data[i - ySections] >>> 1 & 1L) | (data[i + ySections] >>> 1 & 1L);
+                }
+            }
+
+            if(a < ySections - 1) {
+                for (int i = ySections+a; i < (width-1) * ySections; i+= ySections) {
+                    next[i] |= ((data[i + 1] & 1L) << 63 & (data[i] << 1))
+                            | (((data[i - ySections + 1] & 1L) << 63 & (data[i + ySections] << 1))
+                               ^ ((data[i + ySections + 1] & 1L) << 63 & (data[i - ySections] << 1)));
+                }
+            }
+            else
+            {
+                for (int i = ySections+a; i < (width-1) * ySections; i+= ySections) {
+                    next[i] |= (data[i] << 1 & 0x8000000000000000L)
+                            | (data[i - ySections] << 1 & 0x8000000000000000L) | (data[i + ySections] << 1 & 0x8000000000000000L);
+                }
+
+            }
+        }
+
+        if(ySections > 0 && yEndMask != -1) {
+            for (int a = ySections - 1; a < next.length; a += ySections) {
+                next[a] &= yEndMask;
+            }
+        }
+        data = next;
+        return this;
+    }
+
+    /**
+     * Like {@link #retract()}, this reduces the width of thick areas of this GreasedRegion, but thin() will not remove
+     * areas that would be identical in a subsequent call to retract(), such as if the area would be eliminated. This
+     * is useful primarily for adjusting areas so they do not exceed a width of 2 cells, though their length (the longer
+     * of the two dimensions) will be unaffected by this. Especially wide, irregularly-shaped areas may have unintended
+     * appearances if you call this repeatedly or use {@link #thinFully()}; consider using this sparingly, or primarily
+     * when an area has just gotten thicker than desired.
+     * @return this for chaining
+     */
+    public GreasedRegion thin()
+    {
+        if(width <= 2 || ySections <= 0)
+            return this;
+        GreasedRegion c1 = new GreasedRegion(this).retract8way(),
+                c2 = new GreasedRegion(c1).expand8way().xor(this).expand8way().and(this);
+        remake(c1).or(c2);
+        /*
+        System.out.println("\n\nc1:\n" + c1.toString() + "\n");
+        System.out.println("\n\nc2:\n" + c2.toString() + "\n");
+        System.out.println("\n\nthis:\n" + toString() + "\n");
+        */
+        return this;
+    }
+
+    /**
+     * Calls {@link #thin()} repeatedly, until the result is unchanged from the last call. Consider using the idiom
+     * {@code expand8way().retract().thinFully()} to help change a possibly-strange appearance when the GreasedRegion
+     * this is called on touches the edges of the grid. In general, this method is likely to go too far when it tries to
+     * thin a round or irregular area, and this often results in many diagonal lines spanning the formerly-thick area.
+     * @return this for chaining
+     */
+    public GreasedRegion thinFully()
+    {
+        while (size() != thin().size());
+        return this;
+    }
 
 
     /**
@@ -2206,12 +2313,12 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     {
         if(width < 1 || ySections <= 0)
             return this;
-        int len = data.length;
         long mask = 0x5555555555555555L;
-        for (int j = 0; j < len;) {
-            data[j] &= mask;
-            mask >>>= (j & 1);
-            mask <<= (++j & 1);
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < ySections; j++) {
+                data[j] &= mask;
+            }
+            mask = ~mask;
         }
         return this;
     }
@@ -3563,6 +3670,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             return empty();
         if (limit < 0)
             limit = (int) (fraction * ct);
+        if(limit <= 0)
+            return empty();
         int[] order = new int[limit];
         for (int i = 0, m = 0; i < limit; i++, m++) {
             idx = (int) (VanDerCorputQRNG.weakDetermine(m) * ct);

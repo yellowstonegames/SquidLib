@@ -337,7 +337,20 @@
 <span class="sourceLineNo">329</span>    {<a name="line.329"></a>
 <span class="sourceLineNo">330</span>        return determine(lowPrimes[index &amp; 7], index);<a name="line.330"></a>
 <span class="sourceLineNo">331</span>    }<a name="line.331"></a>
-<span class="sourceLineNo">332</span>}<a name="line.332"></a>
+<span class="sourceLineNo">332</span><a name="line.332"></a>
+<span class="sourceLineNo">333</span>    /**<a name="line.333"></a>
+<span class="sourceLineNo">334</span>     * Experimental, use with caution! Given any non-negative int (0 is allowed), this gets a somewhat-sub-random<a name="line.334"></a>
+<span class="sourceLineNo">335</span>     * double from 0.0 (inclusive) to 1.0 (exclusive) using a brief series of relatively-fast operations.<a name="line.335"></a>
+<span class="sourceLineNo">336</span>     * @param index any non-negative int<a name="line.336"></a>
+<span class="sourceLineNo">337</span>     * @return a double from 0.0 (inclusive) to 1.0 (exclusive) that should not be closely correlated to index<a name="line.337"></a>
+<span class="sourceLineNo">338</span>     */<a name="line.338"></a>
+<span class="sourceLineNo">339</span>    public static double weakDetermine(int index)<a name="line.339"></a>
+<span class="sourceLineNo">340</span>    {<a name="line.340"></a>
+<span class="sourceLineNo">341</span>        return NumberTools.setExponent(<a name="line.341"></a>
+<span class="sourceLineNo">342</span>                (NumberTools.setExponent((index&lt;&lt;1|1) * 0.618033988749895, 0x3ff))<a name="line.342"></a>
+<span class="sourceLineNo">343</span>                        * (0x232BE5 * (~index)), 0x3ff) - 1.0;<a name="line.343"></a>
+<span class="sourceLineNo">344</span>    }<a name="line.344"></a>
+<span class="sourceLineNo">345</span>}<a name="line.345"></a>
 
 
 
