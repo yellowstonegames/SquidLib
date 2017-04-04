@@ -268,12 +268,13 @@ public class Converters {
     public static final StringConvert<Boolean> convertBoolean = new StringConvert<Boolean>("Boolean") {
         @Override
         public String stringify(Boolean item) {
-            return item.toString();
+            return item == null ? "n" : item ? "1" : "0";
         }
 
         @Override
         public Boolean restore(String text) {
-            return "true".equals(text);
+            char c;
+            return (text == null || text.isEmpty() || (c = text.charAt(0)) == 'n') ? null : c == '1';
         }
     };
 
@@ -364,22 +365,16 @@ public class Converters {
     public static final StringConvert<boolean[]> convertArrayBoolean = new StringConvert<boolean[]>("boolean[]") {
         @Override
         public String stringify(boolean[] item) {
-            return StringKit.join(",", item);
+            return StringKit.joinAlt(item);
         }
 
         @Override
         public boolean[] restore(String text) {
-            int amount = StringKit.count(text, ",");
-            if (amount <= 0) return new boolean[]{"true".equals(text)};
-            boolean[] splat = new boolean[amount + 1];
-            int dl = 1, idx = -dl, idx2;
+            int amount = text.length();
+            if (amount <= 0) return new boolean[0];
+            boolean[] splat = new boolean[amount];
             for (int i = 0; i < amount; i++) {
-                splat[i] = "true".equals(StringKit.safeSubstring(text, idx + dl, idx = text.indexOf(',', idx + dl)));
-            }
-            if ((idx2 = text.indexOf(',', idx + dl)) < 0) {
-                splat[amount] = "true".equals(StringKit.safeSubstring(text, idx + dl, text.length()));
-            } else {
-                splat[amount] = "true".equals(StringKit.safeSubstring(text, idx + dl, idx2));
+                splat[amount] = text.charAt(i) == '1';
             }
             return splat;
         }
@@ -543,6 +538,416 @@ public class Converters {
             return text.toCharArray();
         }
     };
+
+    public static final StringConvert<boolean[][]> convertArrayBoolean2D = new StringConvert<boolean[][]>() {
+        @Override
+        public String stringify(boolean[][] item) {
+            if(item == null)
+                return "N";
+            int len;
+            if((len = item.length) <= 0)
+                return "";
+            StringBuilder sb = new StringBuilder(len * 128);
+            if(item[0] == null)
+                sb.append('n');
+            else
+                sb.append(StringKit.joinAlt(item[0]));
+            for (int i = 1; i < len; i++) {
+                if(item[i] == null)
+                    sb.append(";n");
+                else
+                    sb.append(';').append(StringKit.joinAlt(item[i]));
+            }
+            return sb.toString();
+        }
+
+        @Override
+        public boolean[][] restore(String text) {
+            if(text == null) return null;
+            int len;
+            if((len = text.length()) <= 0) return new boolean[0][0];
+            if(text.charAt(0) == 'N') return null;
+            int width = StringKit.count(text, ';')+1;
+            boolean[][] val = new boolean[width][];
+            int start = 0, end = text.indexOf(';');
+            for (int i = 0; i < width; i++) {
+                if(start == end || start >= len) val[i] = new boolean[0];
+                else if(text.charAt(start) == 'n') val[i] = null;
+                else {
+                    int amount = end - start;
+                    val[i] = new boolean[amount];
+                    for (int j = 0; j < amount; j++) {
+                        val[i][j] = text.charAt(start + j) == '1';
+                    }
+                }
+                start = end+1;
+                end = text.indexOf(';', start);
+            }
+            return val;
+        }
+    };
+
+    public static final StringConvert<byte[][]> convertArrayByte2D = new StringConvert<byte[][]>() {
+        @Override
+        public String stringify(byte[][] item) {
+            if(item == null)
+                return "N";
+            int len;
+            if((len = item.length) <= 0)
+                return "";
+            StringBuilder sb = new StringBuilder(len * 128);
+            if(item[0] == null)
+                sb.append('n');
+            else
+                sb.append(StringKit.join(",", item[0]));
+            for (int i = 1; i < len; i++) {
+                if(item[i] == null)
+                    sb.append(";n");
+                else
+                    sb.append(';').append(StringKit.join(",", item[i]));
+            }
+            return sb.toString();
+        }
+
+        @Override
+        public byte[][] restore(String text) {
+            if(text == null) return null;
+            int len;
+            if((len = text.length()) <= 0) return new byte[0][0];
+            if(text.charAt(0) == 'N') return null;
+            int width = StringKit.count(text, ';')+1;
+            byte[][] val = new byte[width][];
+            int start = 0, end = text.indexOf(';');
+            for (int i = 0; i < width; i++) {
+                if(start == end || start >= len) val[i] = new byte[0];
+                else if(text.charAt(start) == 'n') val[i] = null;
+                else {
+                    int amount = StringKit.count(text, ",", start, end);
+                    if (amount <= 0){
+                        val[i] = new byte[]{Byte.decode(text)};
+                        continue;
+                    }
+                    val[i] = new byte[amount + 1];
+                    int dl = 1, idx = -dl, idx2;
+                    for (int j = 0; j < amount; j++) {
+                        val[i][j] = Byte.decode(StringKit.safeSubstring(text, idx + dl, idx = text.indexOf(',', idx + dl)));
+                    }
+                    if ((idx2 = text.indexOf(',', idx + dl)) < 0) {
+                        val[i][amount] = Byte.decode(StringKit.safeSubstring(text, idx + dl, text.length()));
+                    } else if(idx2 < end){
+                        val[i][amount] = Byte.decode(StringKit.safeSubstring(text, idx + dl, idx2));
+                    } else {
+                        val[i][amount] = Byte.decode(StringKit.safeSubstring(text, idx + dl, end));
+                    }
+                }
+                start = end+1;
+                end = text.indexOf(';', start);
+            }
+            return val;
+        }
+    };
+
+
+    public static final StringConvert<short[][]> convertArrayShort2D = new StringConvert<short[][]>() {
+        @Override
+        public String stringify(short[][] item) {
+            if(item == null)
+                return "N";
+            int len;
+            if((len = item.length) <= 0)
+                return "";
+            StringBuilder sb = new StringBuilder(len * 128);
+            if(item[0] == null)
+                sb.append('n');
+            else
+                sb.append(StringKit.join(",", item[0]));
+            for (int i = 1; i < len; i++) {
+                if(item[i] == null)
+                    sb.append(";n");
+                else
+                    sb.append(';').append(StringKit.join(",", item[i]));
+            }
+            return sb.toString();
+        }
+
+        @Override
+        public short[][] restore(String text) {
+            if(text == null) return null;
+            int len;
+            if((len = text.length()) <= 0) return new short[0][0];
+            if(text.charAt(0) == 'N') return null;
+            int width = StringKit.count(text, ';')+1;
+            short[][] val = new short[width][];
+            int start = 0, end = text.indexOf(';');
+            for (int i = 0; i < width; i++) {
+                if(start == end || start >= len) val[i] = new short[0];
+                else if(text.charAt(start) == 'n') val[i] = null;
+                else {
+                    int amount = StringKit.count(text, ",", start, end);
+                    if (amount <= 0){
+                        val[i] = new short[]{Short.decode(text)};
+                        continue;
+                    }
+                    val[i] = new short[amount + 1];
+                    int dl = 1, idx = -dl, idx2;
+                    for (int j = 0; j < amount; j++) {
+                        val[i][j] = Short.decode(StringKit.safeSubstring(text, idx + dl, idx = text.indexOf(',', idx + dl)));
+                    }
+                    if ((idx2 = text.indexOf(',', idx + dl)) < 0) {
+                        val[i][amount] = Short.decode(StringKit.safeSubstring(text, idx + dl, text.length()));
+                    } else if(idx2 < end){
+                        val[i][amount] = Short.decode(StringKit.safeSubstring(text, idx + dl, idx2));
+                    } else {
+                        val[i][amount] = Short.decode(StringKit.safeSubstring(text, idx + dl, end));
+                    }
+                }
+                start = end+1;
+                end = text.indexOf(';', start);
+            }
+            return val;
+        }
+    };
+
+    public static final StringConvert<int[][]> convertArrayInt2D = new StringConvert<int[][]>() {
+        @Override
+        public String stringify(int[][] item) {
+            if(item == null)
+                return "N";
+            int len;
+            if((len = item.length) <= 0)
+                return "";
+            StringBuilder sb = new StringBuilder(len * 128);
+            if(item[0] == null)
+                sb.append('n');
+            else
+                sb.append(StringKit.join(",", item[0]));
+            for (int i = 1; i < len; i++) {
+                if(item[i] == null)
+                    sb.append(";n");
+                else
+                    sb.append(';').append(StringKit.join(",", item[i]));
+            }
+            return sb.toString();
+        }
+
+        @Override
+        public int[][] restore(String text) {
+            if(text == null) return null;
+            int len;
+            if((len = text.length()) <= 0) return new int[0][0];
+            if(text.charAt(0) == 'N') return null;
+            int width = StringKit.count(text, ';')+1;
+            int[][] val = new int[width][];
+            int start = 0, end = text.indexOf(';');
+            for (int i = 0; i < width; i++) {
+                if(start == end || start >= len) val[i] = new int[0];
+                else if(text.charAt(start) == 'n') val[i] = null;
+                else {
+                    int amount = StringKit.count(text, ",", start, end);
+                    if (amount <= 0){
+                        val[i] = new int[]{Integer.decode(text)};
+                        continue;
+                    }
+                    val[i] = new int[amount + 1];
+                    int dl = 1, idx = -dl, idx2;
+                    for (int j = 0; j < amount; j++) {
+                        val[i][j] = Integer.decode(StringKit.safeSubstring(text, idx + dl, idx = text.indexOf(',', idx + dl)));
+                    }
+                    if ((idx2 = text.indexOf(',', idx + dl)) < 0) {
+                        val[i][amount] = Integer.decode(StringKit.safeSubstring(text, idx + dl, text.length()));
+                    } else if(idx2 < end){
+                        val[i][amount] = Integer.decode(StringKit.safeSubstring(text, idx + dl, idx2));
+                    } else {
+                        val[i][amount] = Integer.decode(StringKit.safeSubstring(text, idx + dl, end));
+                    }
+                }
+                start = end+1;
+                end = text.indexOf(';', start);
+            }
+            return val;
+        }
+    };
+
+    public static final StringConvert<long[][]> convertArrayLong2D = new StringConvert<long[][]>() {
+        @Override
+        public String stringify(long[][] item) {
+            if(item == null)
+                return "N";
+            int len;
+            if((len = item.length) <= 0)
+                return "";
+            StringBuilder sb = new StringBuilder(len * 128);
+            if(item[0] == null)
+                sb.append('n');
+            else
+                sb.append(StringKit.join(",", item[0]));
+            for (int i = 1; i < len; i++) {
+                if(item[i] == null)
+                    sb.append(";n");
+                else
+                    sb.append(';').append(StringKit.join(",", item[i]));
+            }
+            return sb.toString();
+        }
+
+        @Override
+        public long[][] restore(String text) {
+            if(text == null) return null;
+            int len;
+            if((len = text.length()) <= 0) return new long[0][0];
+            if(text.charAt(0) == 'N') return null;
+            int width = StringKit.count(text, ';')+1;
+            long[][] val = new long[width][];
+            int start = 0, end = text.indexOf(';');
+            for (int i = 0; i < width; i++) {
+                if(start == end || start >= len) val[i] = new long[0];
+                else if(text.charAt(start) == 'n') val[i] = null;
+                else {
+                    int amount = StringKit.count(text, ",", start, end);
+                    if (amount <= 0){
+                        val[i] = new long[]{Long.decode(text)};
+                        continue;
+                    }
+                    val[i] = new long[amount + 1];
+                    int dl = 1, idx = -dl, idx2;
+                    for (int j = 0; j < amount; j++) {
+                        val[i][j] = Long.decode(StringKit.safeSubstring(text, idx + dl, idx = text.indexOf(',', idx + dl)));
+                    }
+                    if ((idx2 = text.indexOf(',', idx + dl)) < 0) {
+                        val[i][amount] = Long.decode(StringKit.safeSubstring(text, idx + dl, text.length()));
+                    } else if(idx2 < end){
+                        val[i][amount] = Long.decode(StringKit.safeSubstring(text, idx + dl, idx2));
+                    } else {
+                        val[i][amount] = Long.decode(StringKit.safeSubstring(text, idx + dl, end));
+                    }
+                }
+                start = end+1;
+                end = text.indexOf(';', start);
+            }
+            return val;
+        }
+    };
+
+    public static final StringConvert<float[][]> convertArrayFloat2D = new StringConvert<float[][]>() {
+        @Override
+        public String stringify(float[][] item) {
+            if(item == null)
+                return "N";
+            int len;
+            if((len = item.length) <= 0)
+                return "";
+            StringBuilder sb = new StringBuilder(len * 128);
+            if(item[0] == null)
+                sb.append('n');
+            else
+                sb.append(StringKit.join(",", item[0]));
+            for (int i = 1; i < len; i++) {
+                if(item[i] == null)
+                    sb.append(";n");
+                else
+                    sb.append(';').append(StringKit.join(",", item[i]));
+            }
+            return sb.toString();
+        }
+
+        @Override
+        public float[][] restore(String text) {
+            if(text == null) return null;
+            int len;
+            if((len = text.length()) <= 0) return new float[0][0];
+            if(text.charAt(0) == 'N') return null;
+            int width = StringKit.count(text, ';')+1;
+            float[][] val = new float[width][];
+            int start = 0, end = text.indexOf(';');
+            for (int i = 0; i < width; i++) {
+                if(start == end || start >= len) val[i] = new float[0];
+                else if(text.charAt(start) == 'n') val[i] = null;
+                else {
+                    int amount = StringKit.count(text, ",", start, end);
+                    if (amount <= 0){
+                        val[i] = new float[]{Float.parseFloat(text)};
+                        continue;
+                    }
+                    val[i] = new float[amount + 1];
+                    int dl = 1, idx = -dl, idx2;
+                    for (int j = 0; j < amount; j++) {
+                        val[i][j] = Float.parseFloat(StringKit.safeSubstring(text, idx + dl, idx = text.indexOf(',', idx + dl)));
+                    }
+                    if ((idx2 = text.indexOf(',', idx + dl)) < 0) {
+                        val[i][amount] = Float.parseFloat(StringKit.safeSubstring(text, idx + dl, text.length()));
+                    } else if(idx2 < end){
+                        val[i][amount] = Float.parseFloat(StringKit.safeSubstring(text, idx + dl, idx2));
+                    } else {
+                        val[i][amount] = Float.parseFloat(StringKit.safeSubstring(text, idx + dl, end));
+                    }
+                }
+                start = end+1;
+                end = text.indexOf(';', start);
+            }
+            return val;
+        }
+    };
+
+    public static final StringConvert<double[][]> convertArrayDouble2D = new StringConvert<double[][]>() {
+        @Override
+        public String stringify(double[][] item) {
+            if(item == null)
+                return "N";
+            int len;
+            if((len = item.length) <= 0)
+                return "";
+            StringBuilder sb = new StringBuilder(len * 128);
+            if(item[0] == null)
+                sb.append('n');
+            else
+                sb.append(StringKit.join(",", item[0]));
+            for (int i = 1; i < len; i++) {
+                if(item[i] == null)
+                    sb.append(";n");
+                else
+                    sb.append(';').append(StringKit.join(",", item[i]));
+            }
+            return sb.toString();
+        }
+
+        @Override
+        public double[][] restore(String text) {
+            if(text == null) return null;
+            int len;
+            if((len = text.length()) <= 0) return new double[0][0];
+            if(text.charAt(0) == 'N') return null;
+            int width = StringKit.count(text, ';')+1;
+            double[][] val = new double[width][];
+            int start = 0, end = text.indexOf(';');
+            for (int i = 0; i < width; i++) {
+                if(start == end || start >= len) val[i] = new double[0];
+                else if(text.charAt(start) == 'n') val[i] = null;
+                else {
+                    int amount = StringKit.count(text, ",", start, end);
+                    if (amount <= 0){
+                        val[i] = new double[]{Double.parseDouble(text)};
+                        continue;
+                    }
+                    val[i] = new double[amount + 1];
+                    int dl = 1, idx = -dl, idx2;
+                    for (int j = 0; j < amount; j++) {
+                        val[i][j] = Double.parseDouble(StringKit.safeSubstring(text, idx + dl, idx = text.indexOf(',', idx + dl)));
+                    }
+                    if ((idx2 = text.indexOf(',', idx + dl)) < 0) {
+                        val[i][amount] = Double.parseDouble(StringKit.safeSubstring(text, idx + dl, text.length()));
+                    } else if(idx2 < end){
+                        val[i][amount] = Double.parseDouble(StringKit.safeSubstring(text, idx + dl, idx2));
+                    } else {
+                        val[i][amount] = Double.parseDouble(StringKit.safeSubstring(text, idx + dl, end));
+                    }
+                }
+                start = end+1;
+                end = text.indexOf(';', start);
+            }
+            return val;
+        }
+    };
+
 
     public static final StringConvert<char[][]> convertArrayChar2D = new StringConvert<char[][]>("char[][]") {
         @Override
