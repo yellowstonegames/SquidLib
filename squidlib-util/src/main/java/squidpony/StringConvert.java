@@ -107,13 +107,13 @@ public abstract class StringConvert<T> {
                 return 0;
             final CharSequence s;
             if(data instanceof StringConvert) s = ((StringConvert) data).getName();
-            else if(data instanceof String) s = (CharSequence) data;
-            else return data.hashCode();
+            else s = (CharSequence) data;
             int result = 0x9E3779B9, a = 0x632BE5AB;
             final int len = s.length();
+            char c;
             for (int i = 0; i < len; i++) {
-                if(s.charAt(i) != ' ')
-                    result += (a ^= 0x85157AF5 * s.charAt(i));
+                if((c = s.charAt(i)) != ' ')
+                    result += (a ^= 0x85157AF5 * c);
             }
             return result * (a | 1) ^ (result >>> 11 | result << 21);
         }

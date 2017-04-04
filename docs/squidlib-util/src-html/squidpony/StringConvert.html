@@ -115,13 +115,13 @@
 <span class="sourceLineNo">107</span>                return 0;<a name="line.107"></a>
 <span class="sourceLineNo">108</span>            final CharSequence s;<a name="line.108"></a>
 <span class="sourceLineNo">109</span>            if(data instanceof StringConvert) s = ((StringConvert) data).getName();<a name="line.109"></a>
-<span class="sourceLineNo">110</span>            else if(data instanceof String) s = (CharSequence) data;<a name="line.110"></a>
-<span class="sourceLineNo">111</span>            else return data.hashCode();<a name="line.111"></a>
-<span class="sourceLineNo">112</span>            int result = 0x9E3779B9, a = 0x632BE5AB;<a name="line.112"></a>
-<span class="sourceLineNo">113</span>            final int len = s.length();<a name="line.113"></a>
+<span class="sourceLineNo">110</span>            else s = (CharSequence) data;<a name="line.110"></a>
+<span class="sourceLineNo">111</span>            int result = 0x9E3779B9, a = 0x632BE5AB;<a name="line.111"></a>
+<span class="sourceLineNo">112</span>            final int len = s.length();<a name="line.112"></a>
+<span class="sourceLineNo">113</span>            char c;<a name="line.113"></a>
 <span class="sourceLineNo">114</span>            for (int i = 0; i &lt; len; i++) {<a name="line.114"></a>
-<span class="sourceLineNo">115</span>                if(s.charAt(i) != ' ')<a name="line.115"></a>
-<span class="sourceLineNo">116</span>                    result += (a ^= 0x85157AF5 * s.charAt(i));<a name="line.116"></a>
+<span class="sourceLineNo">115</span>                if((c = s.charAt(i)) != ' ')<a name="line.115"></a>
+<span class="sourceLineNo">116</span>                    result += (a ^= 0x85157AF5 * c);<a name="line.116"></a>
 <span class="sourceLineNo">117</span>            }<a name="line.117"></a>
 <span class="sourceLineNo">118</span>            return result * (a | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.118"></a>
 <span class="sourceLineNo">119</span>        }<a name="line.119"></a>

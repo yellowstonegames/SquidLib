@@ -3519,18 +3519,4 @@ public class FakeLanguageGen implements Serializable {
                     Double.parseDouble(data.substring(split4 + 1)));
         }
     }
-
-    public static final StringConvert<FakeLanguageGen> convert = new StringConvert<FakeLanguageGen>("FakeLanguageGen")
-    {
-        @Override
-        public String stringify(FakeLanguageGen item) {
-        return item.summary;
-    }
-
-        @Override
-        public FakeLanguageGen restore(String text) {
-        return FakeLanguageGen.deserializeFromString(text);
-    }
-    };
-
 }
