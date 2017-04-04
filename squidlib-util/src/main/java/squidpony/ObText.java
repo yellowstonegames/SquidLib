@@ -79,23 +79,36 @@ import static squidpony.ArrayTools.letters;
 public class ObText extends AbstractCollection<String>{
     public static final Pattern pattern = Pattern.compile(
             "(?>'''(?:[\n\u000C\f\r\u0085\u2028\u2029]|\r\n)?({=s}.*?)(?:[\n\u000C\f\r\u0085\u2028\u2029]|\r\n)?''')" +
-            "|(?>\\[\\[({=q}[^\\[\\]]*)\\[(?:[\n\u000C\f\r\u0085\u2028\u2029]|\r\n)?({=s}.*?)(?:[\n\u000C\f\r\u0085\u2028\u2029]|\r\n)?\\]{\\q}\\]\\])" +
-            "|(?>({=q}[\"'])({=s}.*?)(?<!\\\\){\\q})" +
-            "|(?>(?>//|#)(?>\\V*))" +
-            "|(?>/\\*(?:.*?)\\*/)" +
-            "|(?>/\\[({=q}\\S*)/(?:.*?)/{\\q}\\]/)" +
-            "|({=s}[^\\s\\[\\]\"'#\\\\]+)" +
-            "|({=o}\\[)" +
-            "|({=c}\\])", REFlags.DOTALL | REFlags.UNICODE
-    );
+                    "|(?>\\[\\[({=q}[^\\[\\]]*)\\[(?:[\n\u000C\f\r\u0085\u2028\u2029]|\r\n)?({=s}.*?)(?:[\n\u000C\f\r\u0085\u2028\u2029]|\r\n)?\\]{\\q}\\]\\])" +
+                    "|(?>({=q}[\"'])({=s}.*?)(?<!\\\\){\\q})" +
+                    "|(?>(?>//|#)(?>\\V*))" +
+                    "|(?>/\\*(?:.*?)\\*/)" +
+                    "|(?>/\\[({=q}\\S*)/(?:.*?)/{\\q}\\]/)" +
+                    "|({=s}[^\\s\\[\\]\"'#\\\\]+)" +
+                    "|({=o}\\[)" +
+                    "|({=c}\\])", REFlags.DOTALL | REFlags.UNICODE
+    ),
+            patternRelaxed = Pattern.compile(
+                    "(?>'''(?:[\n\u000C\f\r\u0085\u2028\u2029]|\r\n)?({=s}.*?)(?:[\n\u000C\f\r\u0085\u2028\u2029]|\r\n)?''')" +
+                            "|(?>\\[\\[({=q}[^\\[\\]]*)\\[(?:[\n\u000C\f\r\u0085\u2028\u2029]|\r\n)?({=s}.*?)(?:[\n\u000C\f\r\u0085\u2028\u2029]|\r\n)?\\]{\\q}\\]\\])" +
+                            "|(?>({=q}[\"'])({=s}.*?)(?<!\\\\){\\q})" +
+                            //"|(?>(?>//|#)(?>\\V*))" +
+                            //"|(?>/\\*(?:.*?)\\*/)" +
+                            //"|(?>/\\[({=q}\\S*)/(?:.*?)/{\\q}\\]/)" +
+                            "|({=s}[^\\s\\[\\]\"'\\\\]+)"
+                    , REFlags.DOTALL | REFlags.UNICODE
+            );
+
 
     public static final int stringId = pattern.groupId("s"),
             openId = pattern.groupId("o"), closeId = pattern.groupId("c");
 
     protected static final Pattern illegalBareWord = Pattern.compile("[\\s\\[\\]\"'#\\\\]|(?:/[/\\*])"),
+            reallyIllegalBareWord = Pattern.compile("[\\s\\[\\]\"'\\\\]"),
             needsRaw = Pattern.compile("(?<!\\\\)[\\[\\]]|\\\\$");
     protected static final Matcher m = pattern.matcher();
-    protected static final Matcher bare = illegalBareWord.matcher(), raw = needsRaw.matcher();
+    protected static final Matcher bare = illegalBareWord.matcher(), raw = needsRaw.matcher(),
+            reallyBare = reallyIllegalBareWord.matcher();
 
     protected final ArrayList<String> strings = new ArrayList<String>(64);
     protected final IntVLA neighbors = new IntVLA(64);
@@ -271,12 +284,21 @@ public class ObText extends AbstractCollection<String>{
 
     public static void appendQuoted(StringBuilder sb, String text)
     {
+        appendQuoted(sb, text, reallyBare);
+    }
+
+    public static void appendQuotedObText(StringBuilder sb, String text)
+    {
+        appendQuoted(sb, text, bare);
+    }
+    protected static void appendQuoted(StringBuilder sb, String text, Matcher bareFinder)
+    {
         if(text == null || text.isEmpty()) {
             sb.append("''");
             return;
         }
-        bare.setTarget(text);
-        if(!bare.find())
+        bareFinder.setTarget(text);
+        if(!bareFinder.find())
             sb.append(text);
         else
         {
@@ -378,7 +400,7 @@ public class ObText extends AbstractCollection<String>{
     private static void iterate(StringBuilder sb, ObText.ItemIterator it)
     {
         while (it.hasNext()) {
-            appendQuoted(sb, it.next());
+            appendQuotedObText(sb, it.next());
             sb.append('\n');
             if (it.hasChild()) {
                 sb.append("[\n");
@@ -387,19 +409,6 @@ public class ObText extends AbstractCollection<String>{
             }
         }
     }
-
-    public static final StringConvert<ObText> convert = new StringConvert<ObText>("ObText") {
-        @Override
-        public String stringify(ObText item) {
-            return item.serializeToString();
-        }
-
-        @Override
-        public ObText restore(String text) {
-            return ObText.deserializeFromString(text);
-        }
-
-    };
 
     /**
      * Can be used to help reading sequences of Strings with ObText-style quotation marking their boundaries.
@@ -435,6 +444,23 @@ public class ObText extends AbstractCollection<String>{
         return new ContentMatcher(text);
     }
 
+    /**
+     * Can be used to help reading sequences of Strings with ObText-style quotation marking their boundaries, but no
+     * comments (which allows some additional characters to be used in bare words, like '#').
+     * This returns a {@link ContentMatcher} object that is already configured to read from {@code text}.
+     * The {@code text} should contain Strings that may be surrounded by quotes, heredoc-style quotes, or just bare
+     * words. Calling {@link ContentMatcher#find()} will try to find the next String, returning false if there's nothing
+     * left or returning true and advancing the search if a String was found. Unlike the ContentMatcher produced by
+     * {@link #makeMatcher(CharSequence)}, you can call {@link ContentMatcher#getMatch()} after any successful call to
+     * {@link ContentMatcher#find()}, which will get the un-quoted contents of the next String in the target.
+     * @param text the target String that should probably have at least one sub-string that might be quoted
+     * @return a {@link ContentMatcher} that can be used immediately by calling {@link ContentMatcher#find()}
+     */
+    public static ContentMatcher makeMatcherNoComments(CharSequence text)
+    {
+        return new ContentMatcher(text, patternRelaxed);
+    }
+
     public static class ContentMatcher extends Matcher {
 
         /**
@@ -455,6 +481,14 @@ public class ObText extends AbstractCollection<String>{
         {
             super(pattern, text);
         }
+        /**
+         * Constructs a ContentMatcher that already has its target set to {@code text} and uses an alternate Pattern.
+         */
+        ContentMatcher(CharSequence text, Pattern altPattern)
+        {
+            super(altPattern, text);
+        }
+
 
         /**
          * Supplies a text to search in/match with.

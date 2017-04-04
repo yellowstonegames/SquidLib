@@ -13,6 +13,16 @@ import java.util.ArrayList;
  */
 @SuppressWarnings("unchecked")
 public class Converters {
+
+    public static void appendQuoted(StringBuilder sb, String text)
+    {
+        ObText.appendQuoted(sb, text);
+    }
+
+    public static ObText.ContentMatcher makeMatcher(CharSequence text)
+    {
+        return ObText.makeMatcherNoComments(text);
+    }
     public static <K> StringConvert<OrderedSet<K>> convertOrderedSet(final StringConvert<K> convert) {
         CharSequence[] types = StringConvert.asArray("OrderedSet", convert.name);
         StringConvert found = StringConvert.lookup(types);
@@ -37,7 +47,7 @@ public class Converters {
 
             @Override
             public OrderedSet<K> restore(String text) {
-                ObText.ContentMatcher m = ObText.makeMatcher(text);
+                ObText.ContentMatcher m = makeMatcher(text);
                 OrderedSet<K> d = new OrderedSet<>();
                 while (m.find()) {
                     if (m.hasMatch()) {
@@ -73,12 +83,12 @@ public class Converters {
                     k = item.keyAt(i);
                     if (k == item)
                         return "";
-                    ObText.appendQuoted(sb, convertK.stringify(k));
+                    appendQuoted(sb, convertK.stringify(k));
                     sb.append(' ');
                     v = item.getAt(i);
                     if (v == item)
                         return "";
-                    ObText.appendQuoted(sb, convertV.stringify(v));
+                    appendQuoted(sb, convertV.stringify(v));
                     if (++i < item.size())
                         sb.append('\n');
                 }
@@ -87,7 +97,7 @@ public class Converters {
 
             @Override
             public OrderedMap<K, V> restore(String text) {
-                ObText.ContentMatcher m = ObText.makeMatcher(text);
+                ObText.ContentMatcher m = makeMatcher(text);
                 OrderedMap<K, V> d = new OrderedMap<>();
                 String t;
                 while (m.find()) {
@@ -126,7 +136,7 @@ public class Converters {
                     k = item.get(i);
                     if (item == k)
                         return "";
-                    ObText.appendQuoted(sb, convert.stringify(k));
+                    appendQuoted(sb, convert.stringify(k));
                     if (++i < item.size())
                         sb.append(' ');
                 }
@@ -135,7 +145,7 @@ public class Converters {
 
             @Override
             public ArrayList<K> restore(String text) {
-                ObText.ContentMatcher m = ObText.makeMatcher(text);
+                ObText.ContentMatcher m = makeMatcher(text);
                 ArrayList<K> d = new ArrayList<>();
                 while (m.find()) {
                     if (m.hasMatch()) {
@@ -213,6 +223,30 @@ public class Converters {
         @Override
         public IntVLA restore(String text) {
             return IntVLA.deserializeFromString(text);
+        }
+    };
+
+    public static final StringConvert<FakeLanguageGen> convertFakeLanguageGen = new StringConvert<FakeLanguageGen>("FakeLanguageGen")
+    {
+        @Override
+        public String stringify(FakeLanguageGen item) {
+            return item.serializeToString();
+        }
+
+        @Override
+        public FakeLanguageGen restore(String text) {
+            return FakeLanguageGen.deserializeFromString(text);
+        }
+    };
+    public static final StringConvert<ObText> convertObText = new StringConvert<ObText>("ObText") {
+        @Override
+        public String stringify(ObText item) {
+            return item.serializeToString();
+        }
+
+        @Override
+        public ObText restore(String text) {
+            return ObText.deserializeFromString(text);
         }
     };
 
@@ -507,6 +541,88 @@ public class Converters {
         @Override
         public char[] restore(String text) {
             return text.toCharArray();
+        }
+    };
+
+    public static final StringConvert<char[][]> convertArrayChar2D = new StringConvert<char[][]>("char[][]") {
+        @Override
+        public String stringify(char[][] item) {
+            int len, l2, sum;
+            if (item == null) return "N"; // N for null
+            if((len = item.length) <= 0) return "R0|0|";
+            sum = l2 = item[0].length;
+            char regular = 'R'; // R for rectangular
+            for (int i = 1; i < len; i++) {
+                if(item[i] == null)
+                {
+                    regular = 'J'; // J for jagged
+                }
+                else if(l2 != (l2 = item[i].length))
+                {
+                    regular = 'J';  // J for jagged
+                    sum += l2;
+                }
+            }
+            StringBuilder sb;
+            if(regular == 'R')
+            {
+                sb = new StringBuilder(len * l2 + 15);
+                sb.append('R').append(len).append('|').append(l2).append('|');
+                for (int i = 0; i < len; i++) {
+                    sb.append(item[i]);
+                }
+            }
+            else
+            {
+                sb = new StringBuilder(len * 7 + sum + 8);
+                sb.append('J').append(len).append('|');
+                for (int i = 0; i < len; i++) {
+                    if(item[i] == null)
+                        sb.append("-|");
+                    else
+                        sb.append(item[i].length).append('|').append(item[i]);
+                }
+            }
+            return sb.toString();
+        }
+
+        @Override
+        public char[][] restore(String text) {
+            if(text == null || text.length() <= 1) return null;
+            if(text.charAt(0) == 'R')
+            {
+                int width, height, start = 1, end = text.indexOf('|');
+                width = StringKit.intFromDec(text, start, end);
+                start = end+1;
+                end = text.indexOf('|', start);
+                height = StringKit.intFromDec(text, start, end);
+                start = end+1;
+                char[][] val = new char[width][height];
+                for (int i = 0; i < width; i++) {
+                    text.getChars(start, start += height, val[i], 0);
+                }
+                return val;
+            }
+            else
+            {
+                int width, current, start = 1, end = text.indexOf('|');
+                width = StringKit.intFromDec(text, start, end);
+                start = end + 1;
+                char[][] val = new char[width][];
+                for (int i = 0; i < width; i++) {
+                    end = text.indexOf('|', start);
+                    if (text.charAt(start) == '-') {
+                        val[i] = null;
+                        start = end + 1;
+                    } else {
+                        current = StringKit.intFromDec(text, start, end);
+                        start = end + 1;
+                        val[i] = new char[current];
+                        text.getChars(start, start += current, val[i], 0);
+                    }
+                }
+                return val;
+            }
         }
     };
 
