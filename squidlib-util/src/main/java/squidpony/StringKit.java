@@ -174,6 +174,20 @@ public class StringKit {
     }
 
     /**
+     * Joins the boolean array {@code elements} without delimiters into a String, using "1" for true and "0" for false.
+     * @param elements
+     * @return
+     */
+    public static String joinAlt(boolean... elements) {
+        if (elements == null || elements.length == 0) return "";
+        StringBuilder sb = new StringBuilder(64);
+        for (int i = 0; i < elements.length; i++) {
+            sb.append(elements[i] ? '1' : '0');
+        }
+        return sb.toString();
+    }
+
+    /**
      * Scans repeatedly in {@code source} for the String {@code search}, not scanning the same char twice except as part
      * of a larger String, and returns the number of instances of search that were found, or 0 if source is null or if
      * search is null or empty.
@@ -181,7 +195,7 @@ public class StringKit {
      * @param search a String to look for
      * @return the number of times search was found in source
      */
-    public static int count(String source, String search)
+    public static int count(final String source, final String search)
     {
         if(source == null || search == null || source.isEmpty() || search.isEmpty())
             return 0;
@@ -199,12 +213,56 @@ public class StringKit {
      * @param search a codepoint or char to look for
      * @return the number of times search was found in source
      */
-    public static int count(String source, int search)
+    public static int count(final String source, final int search)
     {
         if(source == null || source.isEmpty())
             return 0;
         int amount = 0, idx = -1;
         while ((idx = source.indexOf(search, idx+1)) >= 0)
+            ++amount;
+        return amount;
+    }
+    /**
+     * Scans repeatedly in {@code source} (only using the area from startIndex, inclusive, to endIndex, exclusive) for
+     * the String {@code search}, not scanning the same char twice except as part of a larger String, and returns the
+     * number of instances of search that were found, or 0 if source or search is null or if the searched area is empty.
+     * If endIndex is negative, this will search from startIndex until the end of the source.
+     * @param source a String to look through
+     * @param search a String to look for
+     * @param startIndex the first index to search through, inclusive
+     * @param endIndex the last index to search through, exclusive; if negative this will search the rest of source
+     * @return the number of times search was found in source
+     */
+    public static int count(final String source, final String search, final int startIndex, int endIndex)
+    {
+        if(endIndex < 0) endIndex = 0x7fffffff;
+        if(source == null || search == null || source.isEmpty() || search.isEmpty()
+                || startIndex < 0 || startIndex >= endIndex)
+            return 0;
+        int amount = 0, idx = startIndex-1;
+        while ((idx = source.indexOf(search, idx+1)) >= 0 && idx < endIndex)
+            ++amount;
+        return amount;
+    }
+
+    /**
+     * Scans repeatedly in {@code source} (only using the area from startIndex, inclusive, to endIndex, exclusive) for
+     * the codepoint {@code search} (which is usually a char literal), not scanning the same section twice, and returns
+     * the number of instances of search that were found, or 0 if source is null or if the searched area is empty.
+     * If endIndex is negative, this will search from startIndex until the end of the source.
+     * @param source a String to look through
+     * @param search a codepoint or char to look for
+     * @param startIndex the first index to search through, inclusive
+     * @param endIndex the last index to search through, exclusive; if negative this will search the rest of source
+     * @return the number of times search was found in source
+     */
+    public static int count(final String source, final int search, final int startIndex, int endIndex)
+    {
+        if(endIndex < 0) endIndex = 0x7fffffff;
+        if(source == null || source.isEmpty() || startIndex < 0 || startIndex >= endIndex)
+            return 0;
+        int amount = 0, idx = startIndex-1;
+        while ((idx = source.indexOf(search, idx+1)) >= 0 && idx < endIndex)
             ++amount;
         return amount;
     }

@@ -996,7 +996,11 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/Converters.html#convertArrayBoolean">convertArrayBoolean</a></span> - Static variable in class squidpony.<a href="../squidpony/Converters.html" title="class in squidpony">Converters</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/Converters.html#convertArrayBoolean2D">convertArrayBoolean2D</a></span> - Static variable in class squidpony.<a href="../squidpony/Converters.html" title="class in squidpony">Converters</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/Converters.html#convertArrayByte">convertArrayByte</a></span> - Static variable in class squidpony.<a href="../squidpony/Converters.html" title="class in squidpony">Converters</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/Converters.html#convertArrayByte2D">convertArrayByte2D</a></span> - Static variable in class squidpony.<a href="../squidpony/Converters.html" title="class in squidpony">Converters</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/Converters.html#convertArrayChar">convertArrayChar</a></span> - Static variable in class squidpony.<a href="../squidpony/Converters.html" title="class in squidpony">Converters</a></dt>
 <dd>&nbsp;</dd>
@@ -1006,9 +1010,15 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/Converters.html#convertArrayDouble">convertArrayDouble</a></span> - Static variable in class squidpony.<a href="../squidpony/Converters.html" title="class in squidpony">Converters</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/Converters.html#convertArrayDouble2D">convertArrayDouble2D</a></span> - Static variable in class squidpony.<a href="../squidpony/Converters.html" title="class in squidpony">Converters</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/Converters.html#convertArrayFloat">convertArrayFloat</a></span> - Static variable in class squidpony.<a href="../squidpony/Converters.html" title="class in squidpony">Converters</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/Converters.html#convertArrayFloat2D">convertArrayFloat2D</a></span> - Static variable in class squidpony.<a href="../squidpony/Converters.html" title="class in squidpony">Converters</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/Converters.html#convertArrayInt">convertArrayInt</a></span> - Static variable in class squidpony.<a href="../squidpony/Converters.html" title="class in squidpony">Converters</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/Converters.html#convertArrayInt2D">convertArrayInt2D</a></span> - Static variable in class squidpony.<a href="../squidpony/Converters.html" title="class in squidpony">Converters</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/Converters.html#convertArrayList-squidpony.StringConvert-">convertArrayList(StringConvert&lt;K&gt;)</a></span> - Static method in class squidpony.<a href="../squidpony/Converters.html" title="class in squidpony">Converters</a></dt>
 <dd>&nbsp;</dd>
@@ -1018,7 +1028,11 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/Converters.html#convertArrayLong">convertArrayLong</a></span> - Static variable in class squidpony.<a href="../squidpony/Converters.html" title="class in squidpony">Converters</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/Converters.html#convertArrayLong2D">convertArrayLong2D</a></span> - Static variable in class squidpony.<a href="../squidpony/Converters.html" title="class in squidpony">Converters</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/Converters.html#convertArrayShort">convertArrayShort</a></span> - Static variable in class squidpony.<a href="../squidpony/Converters.html" title="class in squidpony">Converters</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/Converters.html#convertArrayShort2D">convertArrayShort2D</a></span> - Static variable in class squidpony.<a href="../squidpony/Converters.html" title="class in squidpony">Converters</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/Converters.html#convertBoolean">convertBoolean</a></span> - Static variable in class squidpony.<a href="../squidpony/Converters.html" title="class in squidpony">Converters</a></dt>
 <dd>&nbsp;</dd>
@@ -1393,6 +1407,18 @@
 <div class="block">Scans repeatedly in <code>source</code> for the codepoint <code>search</code> (which is usually a char literal), not
  scanning the same section twice, and returns the number of instances of search that were found, or 0 if source is
  null.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/StringKit.html#count-java.lang.String-java.lang.String-int-int-">count(String, String, int, int)</a></span> - Static method in class squidpony.<a href="../squidpony/StringKit.html" title="class in squidpony">StringKit</a></dt>
+<dd>
+<div class="block">Scans repeatedly in <code>source</code> (only using the area from startIndex, inclusive, to endIndex, exclusive) for
+ the String <code>search</code>, not scanning the same char twice except as part of a larger String, and returns the
+ number of instances of search that were found, or 0 if source or search is null or if the searched area is empty.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/StringKit.html#count-java.lang.String-int-int-int-">count(String, int, int, int)</a></span> - Static method in class squidpony.<a href="../squidpony/StringKit.html" title="class in squidpony">StringKit</a></dt>
+<dd>
+<div class="block">Scans repeatedly in <code>source</code> (only using the area from startIndex, inclusive, to endIndex, exclusive) for
+ the codepoint <code>search</code> (which is usually a char literal), not scanning the same section twice, and returns
+ the number of instances of search that were found, or 0 if source is null or if the searched area is empty.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/DungeonUtility.html#countCells-char:A:A-char-">countCells(char[][], char)</a></span> - Static method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/DungeonUtility.html" title="class in squidpony.squidgrid.mapping">DungeonUtility</a></dt>
 <dd>

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9,"i28":9,"i29":9,"i30":9,"i31":9,"i32":9,"i33":9,"i34":9,"i35":9,"i36":9,"i37":9,"i38":9,"i39":9,"i40":9,"i41":9,"i42":9,"i43":9,"i44":9,"i45":9,"i46":9,"i47":9,"i48":9,"i49":9,"i50":9,"i51":9,"i52":9,"i53":9,"i54":9,"i55":9,"i56":9,"i57":9,"i58":9,"i59":9,"i60":9,"i61":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9,"i28":9,"i29":9,"i30":9,"i31":9,"i32":9,"i33":9,"i34":9,"i35":9,"i36":9,"i37":9,"i38":9,"i39":9,"i40":9,"i41":9,"i42":9,"i43":9,"i44":9,"i45":9,"i46":9,"i47":9,"i48":9,"i49":9,"i50":9,"i51":9,"i52":9,"i53":9,"i54":9,"i55":9,"i56":9,"i57":9,"i58":9,"i59":9,"i60":9,"i61":9,"i62":9,"i63":9,"i64":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -334,6 +334,17 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i23" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#count-java.lang.String-int-int-int-">count</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;source,
+     int&nbsp;search,
+     int&nbsp;startIndex,
+     int&nbsp;endIndex)</code>
+<div class="block">Scans repeatedly in <code>source</code> (only using the area from startIndex, inclusive, to endIndex, exclusive) for
+ the codepoint <code>search</code> (which is usually a char literal), not scanning the same section twice, and returns
+ the number of instances of search that were found, or 0 if source is null or if the searched area is empty.</div>
+</td>
+</tr>
+<tr id="i24" class="altColor">
+<td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#count-java.lang.String-java.lang.String-">count</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;source,
      <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;search)</code>
 <div class="block">Scans repeatedly in <code>source</code> for the String <code>search</code>, not scanning the same char twice except as part
@@ -341,71 +352,82 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  search is null or empty.</div>
 </td>
 </tr>
-<tr id="i24" class="altColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hex-byte-">hex</a></span>(byte&nbsp;number)</code>&nbsp;</td>
-</tr>
 <tr id="i25" class="rowColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hex-byte:A-">hex</a></span>(byte[]&nbsp;numbers)</code>&nbsp;</td>
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#count-java.lang.String-java.lang.String-int-int-">count</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;source,
+     <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;search,
+     int&nbsp;startIndex,
+     int&nbsp;endIndex)</code>
+<div class="block">Scans repeatedly in <code>source</code> (only using the area from startIndex, inclusive, to endIndex, exclusive) for
+ the String <code>search</code>, not scanning the same char twice except as part of a larger String, and returns the
+ number of instances of search that were found, or 0 if source or search is null or if the searched area is empty.</div>
+</td>
 </tr>
 <tr id="i26" class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hex-char-">hex</a></span>(char&nbsp;number)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hex-byte-">hex</a></span>(byte&nbsp;number)</code>&nbsp;</td>
 </tr>
 <tr id="i27" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hex-char:A-">hex</a></span>(char[]&nbsp;numbers)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hex-byte:A-">hex</a></span>(byte[]&nbsp;numbers)</code>&nbsp;</td>
 </tr>
 <tr id="i28" class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hex-int-">hex</a></span>(int&nbsp;number)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hex-char-">hex</a></span>(char&nbsp;number)</code>&nbsp;</td>
 </tr>
 <tr id="i29" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hex-int:A-">hex</a></span>(int[]&nbsp;numbers)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hex-char:A-">hex</a></span>(char[]&nbsp;numbers)</code>&nbsp;</td>
 </tr>
 <tr id="i30" class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hex-long-">hex</a></span>(long&nbsp;number)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hex-int-">hex</a></span>(int&nbsp;number)</code>&nbsp;</td>
 </tr>
 <tr id="i31" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hex-long:A-">hex</a></span>(long[]&nbsp;numbers)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hex-int:A-">hex</a></span>(int[]&nbsp;numbers)</code>&nbsp;</td>
 </tr>
 <tr id="i32" class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hex-short-">hex</a></span>(short&nbsp;number)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hex-long-">hex</a></span>(long&nbsp;number)</code>&nbsp;</td>
 </tr>
 <tr id="i33" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hex-short:A-">hex</a></span>(short[]&nbsp;numbers)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hex-long:A-">hex</a></span>(long[]&nbsp;numbers)</code>&nbsp;</td>
 </tr>
 <tr id="i34" class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hexHash-boolean...-">hexHash</a></span>(boolean...&nbsp;array)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hex-short-">hex</a></span>(short&nbsp;number)</code>&nbsp;</td>
 </tr>
 <tr id="i35" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hexHash-byte...-">hexHash</a></span>(byte...&nbsp;array)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hex-short:A-">hex</a></span>(short[]&nbsp;numbers)</code>&nbsp;</td>
 </tr>
 <tr id="i36" class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hexHash-char...-">hexHash</a></span>(char...&nbsp;array)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hexHash-boolean...-">hexHash</a></span>(boolean...&nbsp;array)</code>&nbsp;</td>
 </tr>
 <tr id="i37" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hexHash-int...-">hexHash</a></span>(int...&nbsp;array)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hexHash-byte...-">hexHash</a></span>(byte...&nbsp;array)</code>&nbsp;</td>
 </tr>
 <tr id="i38" class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hexHash-long...-">hexHash</a></span>(long...&nbsp;array)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hexHash-char...-">hexHash</a></span>(char...&nbsp;array)</code>&nbsp;</td>
 </tr>
 <tr id="i39" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hexHash-short...-">hexHash</a></span>(short...&nbsp;array)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hexHash-int...-">hexHash</a></span>(int...&nbsp;array)</code>&nbsp;</td>
 </tr>
 <tr id="i40" class="altColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hexHash-long...-">hexHash</a></span>(long...&nbsp;array)</code>&nbsp;</td>
+</tr>
+<tr id="i41" class="rowColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#hexHash-short...-">hexHash</a></span>(short...&nbsp;array)</code>&nbsp;</td>
+</tr>
+<tr id="i42" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#intFromDec-java.lang.CharSequence-">intFromDec</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;cs)</code>
 <div class="block">Reads in a CharSequence containing only decimal digits (0-9) with an optional sign at the start and returns the
@@ -413,7 +435,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  if nothing could be read.</div>
 </td>
 </tr>
-<tr id="i41" class="rowColor">
+<tr id="i43" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#intFromDec-java.lang.CharSequence-int-int-">intFromDec</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;cs,
           int&nbsp;start,
@@ -423,7 +445,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  if nothing could be read.</div>
 </td>
 </tr>
-<tr id="i42" class="altColor">
+<tr id="i44" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#intFromHex-char:A-int-int-">intFromHex</a></span>(char[]&nbsp;cs,
           int&nbsp;start,
@@ -433,7 +455,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  if valid, or 0 if nothing could be read.</div>
 </td>
 </tr>
-<tr id="i43" class="rowColor">
+<tr id="i45" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#intFromHex-java.lang.CharSequence-">intFromHex</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;cs)</code>
 <div class="block">Reads in a CharSequence containing only hex digits (only 0-9, a-f, and A-F) with an optional sign at the start
@@ -441,7 +463,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  if valid, or 0 if nothing could be read.</div>
 </td>
 </tr>
-<tr id="i44" class="altColor">
+<tr id="i46" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#intFromHex-java.lang.CharSequence-int-int-">intFromHex</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;cs,
           int&nbsp;start,
@@ -451,69 +473,75 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  if valid, or 0 if nothing could be read.</div>
 </td>
 </tr>
-<tr id="i45" class="rowColor">
+<tr id="i47" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#join-java.lang.CharSequence-boolean...-">join</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;delimiter,
     boolean...&nbsp;elements)</code>&nbsp;</td>
 </tr>
-<tr id="i46" class="altColor">
+<tr id="i48" class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#join-java.lang.CharSequence-byte...-">join</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;delimiter,
     byte...&nbsp;elements)</code>&nbsp;</td>
 </tr>
-<tr id="i47" class="rowColor">
+<tr id="i49" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#join-java.lang.CharSequence-char...-">join</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;delimiter,
     char...&nbsp;elements)</code>&nbsp;</td>
 </tr>
-<tr id="i48" class="altColor">
+<tr id="i50" class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#join-java.lang.CharSequence-java.lang.CharSequence...-">join</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;delimiter,
     <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>...&nbsp;elements)</code>&nbsp;</td>
 </tr>
-<tr id="i49" class="rowColor">
+<tr id="i51" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#join-java.lang.CharSequence-java.util.Collection-">join</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;delimiter,
     <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&gt;&nbsp;elements)</code>&nbsp;</td>
 </tr>
-<tr id="i50" class="altColor">
+<tr id="i52" class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#join-java.lang.CharSequence-double...-">join</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;delimiter,
     double...&nbsp;elements)</code>&nbsp;</td>
 </tr>
-<tr id="i51" class="rowColor">
+<tr id="i53" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#join-java.lang.CharSequence-float...-">join</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;delimiter,
     float...&nbsp;elements)</code>&nbsp;</td>
 </tr>
-<tr id="i52" class="altColor">
+<tr id="i54" class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#join-java.lang.CharSequence-int...-">join</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;delimiter,
     int...&nbsp;elements)</code>&nbsp;</td>
 </tr>
-<tr id="i53" class="rowColor">
+<tr id="i55" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#join-java.lang.CharSequence-long...-">join</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;delimiter,
     long...&nbsp;elements)</code>&nbsp;</td>
 </tr>
-<tr id="i54" class="altColor">
+<tr id="i56" class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#join-java.lang.CharSequence-short...-">join</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;delimiter,
     short...&nbsp;elements)</code>&nbsp;</td>
 </tr>
-<tr id="i55" class="rowColor">
+<tr id="i57" class="rowColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#joinAlt-boolean...-">joinAlt</a></span>(boolean...&nbsp;elements)</code>
+<div class="block">Joins the boolean array <code>elements</code> without delimiters into a String, using "1" for true and "0" for false.</div>
+</td>
+</tr>
+<tr id="i58" class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#joinArrays-java.lang.CharSequence-char:A...-">joinArrays</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;delimiter,
           char[]...&nbsp;elements)</code>&nbsp;</td>
 </tr>
-<tr id="i56" class="altColor">
+<tr id="i59" class="rowColor">
 <td class="colFirst"><code>static long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#longFromBin-java.lang.CharSequence-">longFromBin</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;cs)</code>
 <div class="block">Reads in a CharSequence containing only binary digits (only 0 and 1) and returns the long they represent,
  reading at most 64 characters and returning the result if valid or 0 otherwise.</div>
 </td>
 </tr>
-<tr id="i57" class="rowColor">
+<tr id="i60" class="altColor">
 <td class="colFirst"><code>static long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#longFromBin-java.lang.CharSequence-int-int-">longFromBin</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;cs,
            int&nbsp;start,
@@ -522,7 +550,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  reading at most 64 characters and returning the result if valid or 0 otherwise.</div>
 </td>
 </tr>
-<tr id="i58" class="altColor">
+<tr id="i61" class="rowColor">
 <td class="colFirst"><code>static long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#longFromHex-java.lang.CharSequence-">longFromHex</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;cs)</code>
 <div class="block">Reads in a CharSequence containing only hex digits (only 0-9, a-f, and A-F) with an optional sign at the start
@@ -530,7 +558,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  result if valid, or 0 if nothing could be read.</div>
 </td>
 </tr>
-<tr id="i59" class="rowColor">
+<tr id="i62" class="altColor">
 <td class="colFirst"><code>static long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#longFromHex-java.lang.CharSequence-int-int-">longFromHex</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;cs,
            int&nbsp;start,
@@ -540,7 +568,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  result if valid, or 0 if nothing could be read.</div>
 </td>
 </tr>
-<tr id="i60" class="altColor">
+<tr id="i63" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#safeSubstring-java.lang.String-int-int-">safeSubstring</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;source,
              int&nbsp;beginIndex,
@@ -548,7 +576,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <div class="block">Like <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true#substring-int-int-" title="class or interface in java.lang"><code>String.substring(int, int)</code></a> but returns "" instead of throwing any sort of Exception.</div>
 </td>
 </tr>
-<tr id="i61" class="rowColor">
+<tr id="i64" class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringKit.html#split-java.lang.String-java.lang.String-">split</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;source,
      <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;delimiter)</code>
@@ -583,7 +611,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>mask64</h4>
-<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> <a href="../src-html/squidpony/StringKit.html#line.253">mask64</a></pre>
+<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> <a href="../src-html/squidpony/StringKit.html#line.311">mask64</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../constant-values.html#squidpony.StringKit.mask64">Constant Field Values</a></dd>
@@ -596,7 +624,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>mask32</h4>
-<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> <a href="../src-html/squidpony/StringKit.html#line.254">mask32</a></pre>
+<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> <a href="../src-html/squidpony/StringKit.html#line.312">mask32</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../constant-values.html#squidpony.StringKit.mask32">Constant Field Values</a></dd>
@@ -609,7 +637,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>mask16</h4>
-<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> <a href="../src-html/squidpony/StringKit.html#line.255">mask16</a></pre>
+<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> <a href="../src-html/squidpony/StringKit.html#line.313">mask16</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../constant-values.html#squidpony.StringKit.mask16">Constant Field Values</a></dd>
@@ -622,7 +650,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>mask8</h4>
-<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> <a href="../src-html/squidpony/StringKit.html#line.256">mask8</a></pre>
+<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> <a href="../src-html/squidpony/StringKit.html#line.314">mask8</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../constant-values.html#squidpony.StringKit.mask8">Constant Field Values</a></dd>
@@ -804,13 +832,28 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
                           boolean...&nbsp;elements)</pre>
 </li>
 </ul>
+<a name="joinAlt-boolean...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>joinAlt</h4>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.181">joinAlt</a>(boolean...&nbsp;elements)</pre>
+<div class="block">Joins the boolean array <code>elements</code> without delimiters into a String, using "1" for true and "0" for false.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>elements</code> - </dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+</dl>
+</li>
+</ul>
 <a name="count-java.lang.String-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>count</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../src-html/squidpony/StringKit.html#line.184">count</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;source,
+<pre>public static&nbsp;int&nbsp;<a href="../src-html/squidpony/StringKit.html#line.198">count</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;source,
                         <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;search)</pre>
 <div class="block">Scans repeatedly in <code>source</code> for the String <code>search</code>, not scanning the same char twice except as part
  of a larger String, and returns the number of instances of search that were found, or 0 if source is null or if
@@ -830,7 +873,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>count</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../src-html/squidpony/StringKit.html#line.202">count</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;source,
+<pre>public static&nbsp;int&nbsp;<a href="../src-html/squidpony/StringKit.html#line.216">count</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;source,
                         int&nbsp;search)</pre>
 <div class="block">Scans repeatedly in <code>source</code> for the codepoint <code>search</code> (which is usually a char literal), not
  scanning the same section twice, and returns the number of instances of search that were found, or 0 if source is
@@ -844,13 +887,63 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
+<a name="count-java.lang.String-java.lang.String-int-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>count</h4>
+<pre>public static&nbsp;int&nbsp;<a href="../src-html/squidpony/StringKit.html#line.236">count</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;source,
+                        <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;search,
+                        int&nbsp;startIndex,
+                        int&nbsp;endIndex)</pre>
+<div class="block">Scans repeatedly in <code>source</code> (only using the area from startIndex, inclusive, to endIndex, exclusive) for
+ the String <code>search</code>, not scanning the same char twice except as part of a larger String, and returns the
+ number of instances of search that were found, or 0 if source or search is null or if the searched area is empty.
+ If endIndex is negative, this will search from startIndex until the end of the source.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>source</code> - a String to look through</dd>
+<dd><code>search</code> - a String to look for</dd>
+<dd><code>startIndex</code> - the first index to search through, inclusive</dd>
+<dd><code>endIndex</code> - the last index to search through, exclusive; if negative this will search the rest of source</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the number of times search was found in source</dd>
+</dl>
+</li>
+</ul>
+<a name="count-java.lang.String-int-int-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>count</h4>
+<pre>public static&nbsp;int&nbsp;<a href="../src-html/squidpony/StringKit.html#line.259">count</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;source,
+                        int&nbsp;search,
+                        int&nbsp;startIndex,
+                        int&nbsp;endIndex)</pre>
+<div class="block">Scans repeatedly in <code>source</code> (only using the area from startIndex, inclusive, to endIndex, exclusive) for
+ the codepoint <code>search</code> (which is usually a char literal), not scanning the same section twice, and returns
+ the number of instances of search that were found, or 0 if source is null or if the searched area is empty.
+ If endIndex is negative, this will search from startIndex until the end of the source.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>source</code> - a String to look through</dd>
+<dd><code>search</code> - a codepoint or char to look for</dd>
+<dd><code>startIndex</code> - the first index to search through, inclusive</dd>
+<dd><code>endIndex</code> - the last index to search through, exclusive; if negative this will search the rest of source</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the number of times search was found in source</dd>
+</dl>
+</li>
+</ul>
 <a name="safeSubstring-java.lang.String-int-int-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>safeSubstring</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.219">safeSubstring</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;source,
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.277">safeSubstring</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;source,
                                    int&nbsp;beginIndex,
                                    int&nbsp;endIndex)</pre>
 <div class="block">Like <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true#substring-int-int-" title="class or interface in java.lang"><code>String.substring(int, int)</code></a> but returns "" instead of throwing any sort of Exception.</div>
@@ -870,7 +963,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>split</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;<a href="../src-html/squidpony/StringKit.html#line.234">split</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;source,
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;<a href="../src-html/squidpony/StringKit.html#line.292">split</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;source,
                              <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;delimiter)</pre>
 <div class="block">Like <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true#split-java.lang.String-" title="class or interface in java.lang"><code>String.split(String)</code></a> but doesn't use any regex for splitting (delimiter is a literal String).</div>
 <dl>
@@ -888,7 +981,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hex</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.263">hex</a>(long&nbsp;number)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.321">hex</a>(long&nbsp;number)</pre>
 </li>
 </ul>
 <a name="hex-int-">
@@ -897,7 +990,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hex</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.268">hex</a>(int&nbsp;number)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.326">hex</a>(int&nbsp;number)</pre>
 </li>
 </ul>
 <a name="hex-short-">
@@ -906,7 +999,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hex</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.273">hex</a>(short&nbsp;number)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.331">hex</a>(short&nbsp;number)</pre>
 </li>
 </ul>
 <a name="hex-char-">
@@ -915,7 +1008,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hex</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.278">hex</a>(char&nbsp;number)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.336">hex</a>(char&nbsp;number)</pre>
 </li>
 </ul>
 <a name="hex-byte-">
@@ -924,7 +1017,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hex</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.283">hex</a>(byte&nbsp;number)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.341">hex</a>(byte&nbsp;number)</pre>
 </li>
 </ul>
 <a name="hex-long:A-">
@@ -933,7 +1026,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hex</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.288">hex</a>(long[]&nbsp;numbers)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.346">hex</a>(long[]&nbsp;numbers)</pre>
 </li>
 </ul>
 <a name="hex-int:A-">
@@ -942,7 +1035,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hex</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.298">hex</a>(int[]&nbsp;numbers)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.356">hex</a>(int[]&nbsp;numbers)</pre>
 </li>
 </ul>
 <a name="hex-short:A-">
@@ -951,7 +1044,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hex</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.308">hex</a>(short[]&nbsp;numbers)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.366">hex</a>(short[]&nbsp;numbers)</pre>
 </li>
 </ul>
 <a name="hex-char:A-">
@@ -960,7 +1053,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hex</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.318">hex</a>(char[]&nbsp;numbers)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.376">hex</a>(char[]&nbsp;numbers)</pre>
 </li>
 </ul>
 <a name="hex-byte:A-">
@@ -969,7 +1062,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hex</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.328">hex</a>(byte[]&nbsp;numbers)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.386">hex</a>(byte[]&nbsp;numbers)</pre>
 </li>
 </ul>
 <a name="bin-long-">
@@ -978,7 +1071,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>bin</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.338">bin</a>(long&nbsp;number)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.396">bin</a>(long&nbsp;number)</pre>
 </li>
 </ul>
 <a name="bin-int-">
@@ -987,7 +1080,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>bin</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.343">bin</a>(int&nbsp;number)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.401">bin</a>(int&nbsp;number)</pre>
 </li>
 </ul>
 <a name="bin-short-">
@@ -996,7 +1089,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>bin</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.348">bin</a>(short&nbsp;number)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.406">bin</a>(short&nbsp;number)</pre>
 </li>
 </ul>
 <a name="bin-char-">
@@ -1005,7 +1098,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>bin</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.353">bin</a>(char&nbsp;number)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.411">bin</a>(char&nbsp;number)</pre>
 </li>
 </ul>
 <a name="bin-byte-">
@@ -1014,7 +1107,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>bin</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.358">bin</a>(byte&nbsp;number)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.416">bin</a>(byte&nbsp;number)</pre>
 </li>
 </ul>
 <a name="longFromHex-java.lang.CharSequence-">
@@ -1023,7 +1116,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>longFromHex</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../src-html/squidpony/StringKit.html#line.389">longFromHex</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;cs)</pre>
+<pre>public static&nbsp;long&nbsp;<a href="../src-html/squidpony/StringKit.html#line.447">longFromHex</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;cs)</pre>
 <div class="block">Reads in a CharSequence containing only hex digits (only 0-9, a-f, and A-F) with an optional sign at the start
  and returns the long they represent, reading at most 16 characters (17 if there is a sign) and returning the
  result if valid, or 0 if nothing could be read. The leading sign can be '+' or '-' if present. This can also
@@ -1052,7 +1145,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>longFromHex</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../src-html/squidpony/StringKit.html#line.413">longFromHex</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;cs,
+<pre>public static&nbsp;long&nbsp;<a href="../src-html/squidpony/StringKit.html#line.471">longFromHex</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;cs,
                                int&nbsp;start,
                                int&nbsp;end)</pre>
 <div class="block">Reads in a CharSequence containing only hex digits (only 0-9, a-f, and A-F) with an optional sign at the start
@@ -1086,7 +1179,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>intFromHex</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../src-html/squidpony/StringKit.html#line.464">intFromHex</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;cs)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../src-html/squidpony/StringKit.html#line.522">intFromHex</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;cs)</pre>
 <div class="block">Reads in a CharSequence containing only hex digits (only 0-9, a-f, and A-F) with an optional sign at the start
  and returns the int they represent, reading at most 8 characters (9 if there is a sign) and returning the result
  if valid, or 0 if nothing could be read. The leading sign can be '+' or '-' if present. This can also represent
@@ -1117,7 +1210,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>intFromHex</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../src-html/squidpony/StringKit.html#line.488">intFromHex</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;cs,
+<pre>public static&nbsp;int&nbsp;<a href="../src-html/squidpony/StringKit.html#line.546">intFromHex</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;cs,
                              int&nbsp;start,
                              int&nbsp;end)</pre>
 <div class="block">Reads in a CharSequence containing only hex digits (only 0-9, a-f, and A-F) with an optional sign at the start
@@ -1151,7 +1244,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>intFromHex</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../src-html/squidpony/StringKit.html#line.545">intFromHex</a>(char[]&nbsp;cs,
+<pre>public static&nbsp;int&nbsp;<a href="../src-html/squidpony/StringKit.html#line.603">intFromHex</a>(char[]&nbsp;cs,
                              int&nbsp;start,
                              int&nbsp;end)</pre>
 <div class="block">Reads in a char[] containing only hex digits (only 0-9, a-f, and A-F) with an optional sign at the start
@@ -1185,7 +1278,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>intFromDec</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../src-html/squidpony/StringKit.html#line.598">intFromDec</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;cs)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../src-html/squidpony/StringKit.html#line.656">intFromDec</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;cs)</pre>
 <div class="block">Reads in a CharSequence containing only decimal digits (0-9) with an optional sign at the start and returns the
  int they represent, reading at most 10 characters (11 if there is a sign) and returning the result if valid, or 0
  if nothing could be read. The leading sign can be '+' or '-' if present. This can technically be used to handle
@@ -1213,7 +1306,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>intFromDec</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../src-html/squidpony/StringKit.html#line.620">intFromDec</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;cs,
+<pre>public static&nbsp;int&nbsp;<a href="../src-html/squidpony/StringKit.html#line.678">intFromDec</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;cs,
                              int&nbsp;start,
                              int&nbsp;end)</pre>
 <div class="block">Reads in a CharSequence containing only decimal digits (0-9) with an optional sign at the start and returns the
@@ -1245,7 +1338,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>longFromBin</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../src-html/squidpony/StringKit.html#line.665">longFromBin</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;cs)</pre>
+<pre>public static&nbsp;long&nbsp;<a href="../src-html/squidpony/StringKit.html#line.723">longFromBin</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;cs)</pre>
 <div class="block">Reads in a CharSequence containing only binary digits (only 0 and 1) and returns the long they represent,
  reading at most 64 characters and returning the result if valid or 0 otherwise. The first digit is considered
  the sign bit iff cs is 64 chars long.
@@ -1266,7 +1359,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>longFromBin</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../src-html/squidpony/StringKit.html#line.682">longFromBin</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;cs,
+<pre>public static&nbsp;long&nbsp;<a href="../src-html/squidpony/StringKit.html#line.740">longFromBin</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;cs,
                                int&nbsp;start,
                                int&nbsp;end)</pre>
 <div class="block">Reads in a CharSequence containing only binary digits (only 0 and 1) and returns the long they represent,
@@ -1291,7 +1384,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>b64Encode</h4>
-<pre>public static&nbsp;char[]&nbsp;<a href="../src-html/squidpony/StringKit.html#line.709">b64Encode</a>(long&nbsp;number,
+<pre>public static&nbsp;char[]&nbsp;<a href="../src-html/squidpony/StringKit.html#line.767">b64Encode</a>(long&nbsp;number,
                                int&nbsp;offset,
                                char[]&nbsp;buf)</pre>
 <div class="block">Base-64 encodes number and stores that string representation in buf starting at offset; uses 11 chars.</div>
@@ -1311,7 +1404,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>b64Encode</h4>
-<pre>public static&nbsp;char[]&nbsp;<a href="../src-html/squidpony/StringKit.html#line.735">b64Encode</a>(double&nbsp;number,
+<pre>public static&nbsp;char[]&nbsp;<a href="../src-html/squidpony/StringKit.html#line.793">b64Encode</a>(double&nbsp;number,
                                int&nbsp;offset,
                                char[]&nbsp;buf)</pre>
 <div class="block">Base-64 encodes number and stores that string representation in buf starting at offset; uses 11 chars.</div>
@@ -1331,7 +1424,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>b64Encode</h4>
-<pre>public static&nbsp;char[]&nbsp;<a href="../src-html/squidpony/StringKit.html#line.747">b64Encode</a>(int&nbsp;number,
+<pre>public static&nbsp;char[]&nbsp;<a href="../src-html/squidpony/StringKit.html#line.805">b64Encode</a>(int&nbsp;number,
                                int&nbsp;offset,
                                char[]&nbsp;buf)</pre>
 <div class="block">Base-64 encodes number and stores that string representation in buf starting at offset; uses 6 chars.</div>
@@ -1351,7 +1444,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>b64Encode</h4>
-<pre>public static&nbsp;char[]&nbsp;<a href="../src-html/squidpony/StringKit.html#line.767">b64Encode</a>(float&nbsp;number,
+<pre>public static&nbsp;char[]&nbsp;<a href="../src-html/squidpony/StringKit.html#line.825">b64Encode</a>(float&nbsp;number,
                                int&nbsp;offset,
                                char[]&nbsp;buf)</pre>
 <div class="block">Base-64 encodes number and stores that string representation in buf starting at offset; uses 6 chars.</div>
@@ -1371,7 +1464,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>b64Encode</h4>
-<pre>public static&nbsp;char[]&nbsp;<a href="../src-html/squidpony/StringKit.html#line.779">b64Encode</a>(short&nbsp;number,
+<pre>public static&nbsp;char[]&nbsp;<a href="../src-html/squidpony/StringKit.html#line.837">b64Encode</a>(short&nbsp;number,
                                int&nbsp;offset,
                                char[]&nbsp;buf)</pre>
 <div class="block">Base-64 encodes number and stores that string representation in buf starting at offset; uses 3 chars.</div>
@@ -1391,7 +1484,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>b64Encode</h4>
-<pre>public static&nbsp;char[]&nbsp;<a href="../src-html/squidpony/StringKit.html#line.796">b64Encode</a>(char&nbsp;glyph,
+<pre>public static&nbsp;char[]&nbsp;<a href="../src-html/squidpony/StringKit.html#line.854">b64Encode</a>(char&nbsp;glyph,
                                int&nbsp;offset,
                                char[]&nbsp;buf)</pre>
 <div class="block">Base-64 encodes glyph and stores that string representation in buf starting at offset; uses 3 chars.</div>
@@ -1411,7 +1504,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>b64Encode</h4>
-<pre>public static&nbsp;char[]&nbsp;<a href="../src-html/squidpony/StringKit.html#line.813">b64Encode</a>(byte&nbsp;number,
+<pre>public static&nbsp;char[]&nbsp;<a href="../src-html/squidpony/StringKit.html#line.871">b64Encode</a>(byte&nbsp;number,
                                int&nbsp;offset,
                                char[]&nbsp;buf)</pre>
 <div class="block">Base-64 encodes number and stores that string representation in buf starting at offset; uses 2 chars.</div>
@@ -1431,7 +1524,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>b64DecodeLong</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../src-html/squidpony/StringKit.html#line.828">b64DecodeLong</a>(char[]&nbsp;data,
+<pre>public static&nbsp;long&nbsp;<a href="../src-html/squidpony/StringKit.html#line.886">b64DecodeLong</a>(char[]&nbsp;data,
                                  int&nbsp;offset)</pre>
 <div class="block">Decodes 11 characters from data starting from offset to get a long encoded as base-64.</div>
 <dl>
@@ -1449,7 +1542,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>b64DecodeDouble</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../src-html/squidpony/StringKit.html#line.849">b64DecodeDouble</a>(char[]&nbsp;data,
+<pre>public static&nbsp;double&nbsp;<a href="../src-html/squidpony/StringKit.html#line.907">b64DecodeDouble</a>(char[]&nbsp;data,
                                      int&nbsp;offset)</pre>
 <div class="block">Decodes 11 characters from data starting from offset to get a double encoded as base-64.</div>
 <dl>
@@ -1467,7 +1560,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>b64DecodeInt</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../src-html/squidpony/StringKit.html#line.870">b64DecodeInt</a>(char[]&nbsp;data,
+<pre>public static&nbsp;int&nbsp;<a href="../src-html/squidpony/StringKit.html#line.928">b64DecodeInt</a>(char[]&nbsp;data,
                                int&nbsp;offset)</pre>
 <div class="block">Decodes 6 characters from data starting from offset to get an int encoded as base-64.</div>
 <dl>
@@ -1485,7 +1578,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>b64DecodeFloat</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../src-html/squidpony/StringKit.html#line.886">b64DecodeFloat</a>(char[]&nbsp;data,
+<pre>public static&nbsp;float&nbsp;<a href="../src-html/squidpony/StringKit.html#line.944">b64DecodeFloat</a>(char[]&nbsp;data,
                                    int&nbsp;offset)</pre>
 <div class="block">Decodes 6 characters from data starting from offset to get a float encoded as base-64.</div>
 <dl>
@@ -1503,7 +1596,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>b64DecodeShort</h4>
-<pre>public static&nbsp;short&nbsp;<a href="../src-html/squidpony/StringKit.html#line.902">b64DecodeShort</a>(char[]&nbsp;data,
+<pre>public static&nbsp;short&nbsp;<a href="../src-html/squidpony/StringKit.html#line.960">b64DecodeShort</a>(char[]&nbsp;data,
                                    int&nbsp;offset)</pre>
 <div class="block">Decodes 3 characters from data starting from offset to get a short encoded as base-64.</div>
 <dl>
@@ -1521,7 +1614,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>b64DecodeChar</h4>
-<pre>public static&nbsp;char&nbsp;<a href="../src-html/squidpony/StringKit.html#line.914">b64DecodeChar</a>(char[]&nbsp;data,
+<pre>public static&nbsp;char&nbsp;<a href="../src-html/squidpony/StringKit.html#line.972">b64DecodeChar</a>(char[]&nbsp;data,
                                  int&nbsp;offset)</pre>
 <div class="block">Decodes 3 characters from data starting from offset to get a char encoded as base-64.</div>
 <dl>
@@ -1539,7 +1632,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>b64DecodeByte</h4>
-<pre>public static&nbsp;byte&nbsp;<a href="../src-html/squidpony/StringKit.html#line.927">b64DecodeByte</a>(char[]&nbsp;data,
+<pre>public static&nbsp;byte&nbsp;<a href="../src-html/squidpony/StringKit.html#line.985">b64DecodeByte</a>(char[]&nbsp;data,
                                  int&nbsp;offset)</pre>
 <div class="block">Decodes 2 characters from data starting from offset to get a byte encoded as base-64.</div>
 <dl>
@@ -1557,7 +1650,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hexHash</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.933">hexHash</a>(boolean...&nbsp;array)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.991">hexHash</a>(boolean...&nbsp;array)</pre>
 </li>
 </ul>
 <a name="hexHash-byte...-">
@@ -1566,7 +1659,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hexHash</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.937">hexHash</a>(byte...&nbsp;array)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.995">hexHash</a>(byte...&nbsp;array)</pre>
 </li>
 </ul>
 <a name="hexHash-short...-">
@@ -1575,7 +1668,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hexHash</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.941">hexHash</a>(short...&nbsp;array)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.999">hexHash</a>(short...&nbsp;array)</pre>
 </li>
 </ul>
 <a name="hexHash-char...-">
@@ -1584,7 +1677,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hexHash</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.945">hexHash</a>(char...&nbsp;array)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.1003">hexHash</a>(char...&nbsp;array)</pre>
 </li>
 </ul>
 <a name="hexHash-int...-">
@@ -1593,7 +1686,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hexHash</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.949">hexHash</a>(int...&nbsp;array)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.1007">hexHash</a>(int...&nbsp;array)</pre>
 </li>
 </ul>
 <a name="hexHash-long...-">
@@ -1602,7 +1695,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hexHash</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.953">hexHash</a>(long...&nbsp;array)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/StringKit.html#line.1011">hexHash</a>(long...&nbsp;array)</pre>
 </li>
 </ul>
 </li>
