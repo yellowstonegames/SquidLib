@@ -1711,6 +1711,27 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
 
     /**
+     * Returns a copy of map where if a cell is "off" in this GreasedRegion, this keeps the value in map intact,
+     * and where a cell is "on", it instead writes the char toWrite.
+     * @param map a 2D char array that will not be modified
+     * @param toWrite the char to use where this GreasedRegion stores an "on" cell
+     * @return a masked copy of map
+     */
+    public char[][] inverseMask(char[][] map, char toWrite)
+    {
+        if(map == null || map.length == 0)
+            return new char[0][0];
+        int width2 = Math.min(width, map.length), height2 = Math.min(height, map[0].length);
+        char[][] chars = new char[width2][height2];
+        for (int x = 0; x < width2; x++) {
+            for (int y = 0; y < height2; y++) {
+                chars[x][y] = (data[x * ySections + (y >> 6)] & (1L << (y & 63))) != 0 ? toWrite : map[x][y];
+            }
+        }
+        return chars;
+    }
+
+    /**
      * "Inverse mask for ints;" returns a copy of map where if a cell is "off" in this GreasedRegion, this keeps
      * the value in map intact, and where a cell is "on", it instead writes the int toWrite.
      * @param map a 2D int array that will not be modified

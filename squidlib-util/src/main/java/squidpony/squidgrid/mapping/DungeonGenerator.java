@@ -3,13 +3,16 @@ package squidpony.squidgrid.mapping;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
-import squidpony.squidmath.*;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.OrderedSet;
+import squidpony.squidmath.PoissonDisk;
+import squidpony.squidmath.RNG;
+import squidpony.squidmath.StatefulRNG;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.EnumMap;
-
-import static squidpony.squidmath.CoordPacker.*;
 
 /**
  * The primary way to create a more-complete dungeon, layering different effects and modifications on top of
@@ -685,8 +688,8 @@ public class DungeonGenerator {
                 }
             }
         }
-        short[] floors = pack(map, '.'), working;
-        floorCount = count(floors);
+        GreasedRegion floors = new GreasedRegion(map, '.'), working = new GreasedRegion(width, height);
+        floorCount = floors.size();
         float waterRate = waterFill / 100.0f, grassRate = grassFill / 100.0f;
         if(waterRate + grassRate > 1.0f)
         {
@@ -701,20 +704,19 @@ public class DungeonGenerator {
         Coord[] scatter;
         int remainingWater = targetWater, remainingGrass = targetGrass;
         if(targetWater > 0) {
-            scatter = fractionPacked(floors, 7);
-            scatter = rng.shuffle(scatter, new Coord[scatter.length]);
-            ArrayList<Coord> allWater = new ArrayList<>(targetWater);
+            scatter = floors.quasiRandomSeparated(1.0 / 7.0);
+            rng.shuffleInPlace(scatter);
+            GreasedRegion allWater = new GreasedRegion(width, height);
             for (int i = 0; i < scatter.length; i++) {
                 if (remainingWater > 5) //remainingWater >= targetWater * 0.02 &&
                 {
-                    if(!queryPacked(floors, scatter[i].x, scatter[i].y))
+                    if(!floors.contains(scatter[i]))
                         continue;
-                    working = spill(floors, packOne(scatter[i]), rng.between(4, Math.min(remainingWater, sizeWaterPools)), rng);
+                    working.empty().insert(scatter[i]).spill(floors, rng.between(4, Math.min(remainingWater, sizeWaterPools)), rng);
 
-                    floors = differencePacked(floors, working);
-                    Coord[] pts = allPacked(working);
-                    remainingWater -= pts.length;
-                    Collections.addAll(allWater, pts);
+                    floors.andNot(working);
+                    remainingWater -= working.size();
+                    allWater.addAll(working);
                 } else
                     break;
             }
@@ -733,22 +735,17 @@ public class DungeonGenerator {
             }
         }
         if(targetGrass > 0) {
-            scatter = fractionPacked(floors, 7);
-            scatter = rng.shuffle(scatter, new Coord[scatter.length]);
-            Coord p;
+            scatter = floors.quasiRandomSeparated(1.0/7.0);
+            rng.shuffleInPlace(scatter);
             for (int i = 0; i < scatter.length; i++) {
                 if (remainingGrass > 5) //remainingGrass >= targetGrass * 0.02 &&
                 {
-                    working = spill(floors, packOne(scatter[i]), rng.between(4, Math.min(remainingGrass, sizeGrassPools)), rng);
-                    if (working.length == 0)
+                    working.empty().insert(scatter[i]).spill(floors, rng.between(4, Math.min(remainingGrass, sizeGrassPools)), rng);
+                    if (working.isEmpty())
                         continue;
-                    floors = differencePacked(floors, working);
-                    Coord[] pts = allPacked(working);
-                    remainingGrass -= pts.length;
-                    for (int c = 0; c < pts.length; c++) {
-                        p = pts[c];
-                        map[p.x][p.y] = '"';
-                    }
+                    floors.andNot(working);
+                    remainingGrass -= working.size();
+                    working.inverseMask(map, '"');
                 } else
                     break;
             }

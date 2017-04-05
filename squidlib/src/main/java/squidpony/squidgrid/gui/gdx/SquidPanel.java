@@ -23,6 +23,8 @@ import squidpony.squidmath.StatefulRNG;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static com.badlogic.gdx.math.MathUtils.clamp;
+
 /**
  * Displays text and images in a grid pattern. Supports basic animations.
  * 
@@ -131,6 +133,24 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     public SquidPanel(int gridWidth, int gridHeight, TextCellFactory factory, IColorCenter<Color> center,
                       float xOffset, float yOffset) {
+        this(gridWidth, gridHeight, factory, center, xOffset, yOffset, null);
+    }
+    /**
+     * Builds a panel with the given grid size and all other parameters determined by the factory. Even if sprite images
+     * are being used, a TextCellFactory is still needed to perform sizing and other utility functions.
+     *
+     * If the TextCellFactory has not yet been initialized, then it will be sized at 12x12 px per cell. If it is null
+     * then a default one will be created and initialized.
+     *
+     * @param gridWidth the number of cells horizontally
+     * @param gridHeight the number of cells vertically
+     * @param factory the factory to use for cell rendering
+     * @param center
+     * 			The color center to use. Can be {@code null}, but then must be set later on with
+     *          {@link #setColorCenter(IColorCenter)}.
+     */
+    public SquidPanel(int gridWidth, int gridHeight, TextCellFactory factory, IColorCenter<Color> center,
+                      float xOffset, float yOffset, char[][] actualMap) {
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
         if(center == null)
@@ -150,8 +170,11 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         cellWidth = MathUtils.round(textFactory.actualCellWidth);
         cellHeight = MathUtils.round(textFactory.actualCellHeight);
 
-        contents = ArrayTools.fill(' ', gridWidth, gridHeight);
-        colors = ArrayTools.fill(scc.filter(Color.CLEAR).toFloatBits(), gridWidth, gridHeight);
+        if(actualMap == null || actualMap.length <= 0)
+            contents = ArrayTools.fill(' ', gridWidth, gridHeight);
+        else
+            contents = actualMap;
+        colors = ArrayTools.fill(scc.filter(Color.CLEAR).toFloatBits(), contents.length, contents[0].length);
 
         int w = gridWidth * cellWidth;
         int h = gridHeight * cellHeight;
@@ -472,7 +495,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     @Override
     public void put(int x, int y, char c, Color color) {
-        if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) {
+        if (x < 0 || x >= contents.length || y < 0 || y >= contents[0].length) {
             return;//skip if out of bounds
         }
         contents[x][y] = c;
@@ -487,7 +510,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param encodedColor
      */
     public void put(int x, int y, char c, float encodedColor) {
-        if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) {
+        if (x < 0 || x >= contents.length || y < 0 || y >= contents[0].length) {
             return;//skip if out of bounds
         }
         contents[x][y] = c;
@@ -501,7 +524,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * produce some tint to color, and probably cache the produced color in the IColorCenter this uses).
 	 */
 	public void put(int x, int y, char c, Color color, float colorMultiplier) {
-        if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) {
+        if (x < 0 || x >= contents.length || y < 0 || y >= contents[0].length) {
             return;//skip if out of bounds
         }
         contents[x][y] = c;
@@ -552,13 +575,16 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     @Override
     public void draw (Batch batch, float parentAlpha) {
         textFactory.configureShader(batch);
-        int inc = onlyRenderEven ? 2 : 1;
-        for (int x = gridOffsetX; x < gridWidth; x += inc) {
-            for (int y = gridOffsetY; y < gridHeight; y += inc) {
+        int inc = onlyRenderEven ? 2 : 1, widthInc = inc * cellWidth, heightInc = inc * cellHeight;
+        float screenX = xOffset, screenY_base = 1f + yOffset + gridHeight * cellHeight, screenY;
+        for (int x = gridOffsetX, xx = 0; xx < gridWidth && x < contents.length; x += inc, xx += inc, screenX += widthInc) {
+            screenY = screenY_base;
+            for (int y = gridOffsetY, yy = 0; yy < gridHeight && y < contents[x].length; y += inc, yy += inc, screenY -= heightInc) {
                 textFactory.draw(batch, contents[x][y],
                         colors[x][y],
-                        xOffset + /*- getX() + 1f * */ x * cellWidth,
-                        yOffset + /*- getY() + 1f * */ (gridHeight - y) * cellHeight + 1f);
+                        screenX,// xOffset + /*- getX() + 1f * */ x * cellWidth,
+                        screenY // yOffset + /*- getY() + 1f * */ (gridHeight - y) * cellHeight + 1f
+                );
             }
         }
         super.draw(batch, parentAlpha);
@@ -1014,14 +1040,14 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     public float adjustX(float x, boolean doubleWidth)
     {
         if(doubleWidth)
-            return x * 2 * cellWidth + getX();
+            return (x - gridOffsetX) * 2 * cellWidth + getX();
         else
-            return x * cellWidth + getX();
+            return (x - gridOffsetX) * cellWidth + getX();
     }
 
     public float adjustY(float y)
     {
-        return (gridHeight - y - 1) * cellHeight + getY() + 1 + cellHeight - textFactory.actualCellHeight; // - textFactory.lineHeight //textFactory.lineTweak * 3f
+        return (gridHeight - y - 1 + gridOffsetY) * cellHeight + getY() + 1 + cellHeight - textFactory.actualCellHeight; // - textFactory.lineHeight //textFactory.lineTweak * 3f
         //return (gridHeight - y - 1) * cellHeight + textFactory.getDescent() * 3 / 2f + getY();
     }
 
@@ -1040,8 +1066,8 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     public void recallActor(Actor a, boolean restoreSym)
     {
         animationCount--;
-        int x = Math.round((a.getX() - getX()) / cellWidth),
-                y = gridHeight - (int)(a.getY() / cellHeight) - 1;
+        int x = Math.round((a.getX() - getX()) / cellWidth) + gridOffsetX,
+                y = gridHeight - (int)(a.getY() / cellHeight) - 1 + gridOffsetY;
         if(onlyRenderEven)
         {
             // this just sets the least significant bit to 0, making any odd numbers even (decrementing)
@@ -1058,10 +1084,10 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     public void recallActor(AnimatedEntity ae)
     {
         if(ae.doubleWidth)
-            ae.gridX = Math.round((ae.actor.getX() - getX()) / (2 * cellWidth));
+            ae.gridX = Math.round((ae.actor.getX() - getX()) / (2 * cellWidth)) + gridOffsetX;
         else
-            ae.gridX = Math.round((ae.actor.getX() - getX()) / cellWidth);
-        ae.gridY = gridHeight - (int)((ae.actor.getY() - getY()) / cellHeight) - 1;
+            ae.gridX = Math.round((ae.actor.getX() - getX()) / cellWidth) + gridOffsetY;
+        ae.gridY = gridHeight - (int)((ae.actor.getY() - getY()) / cellHeight) - 1 + gridOffsetY;
         if(onlyRenderEven)
         {
             // this just sets the least significant bit to 0, making any odd numbers even (decrementing)
@@ -1961,7 +1987,9 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     }
 
     /**
-     * The X offset that the whole panel's internals will be rendered at.
+     * The X offset that the whole panel's internals will be rendered at. If the {@code gridWidth} of this SquidPanel is
+     * less than the actual size of the char[][] it renders, then you can use gridOffsetX to start rendering at a
+     * different position
      * @return the current offset in cells along the x axis
      */
     public int getGridOffsetX() {
@@ -1973,8 +2001,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param gridOffsetX the requested offset in cells; should be less than gridWidth
      */
     public void setGridOffsetX(int gridOffsetX) {
-        if(gridOffsetX < gridWidth)
-            this.gridOffsetX = gridOffsetX;
+        this.gridOffsetX = clamp(gridOffsetX,0,  contents.length - gridWidth);
     }
 
     /**
@@ -1990,9 +2017,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param gridOffsetY the requested offset in cells; should be less than gridHeight
      */
     public void setGridOffsetY(int gridOffsetY) {
-        if(gridOffsetY < gridHeight)
-            this.gridOffsetY = gridOffsetY;
-
+        this.gridOffsetY = clamp(gridOffsetY,0,  contents[0].length - gridHeight);
     }
 
     /**
@@ -2025,6 +2050,29 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     public void setGridHeight(int gridHeight) {
         this.gridHeight = gridHeight;
+    }
+
+    /**
+     * Gets the total number of cells along the x-axis that this stores; this is usually equivalent to
+     * {@link #getGridWidth()}, but not if the constructor
+     * {@link #SquidPanel(int, int, TextCellFactory, IColorCenter, float, float, char[][])} was used to set a
+     * larger-than-normal map.
+     * @return the width of the internal array this can render, which may be larger than the visible width
+     */
+    public int getTotalWidth()
+    {
+        return contents.length;
+    }
+    /**
+     * Gets the total number of cells along the y-axis that this stores; this is usually equivalent to
+     * {@link #getGridHeight()}, but not if the constructor
+     * {@link #SquidPanel(int, int, TextCellFactory, IColorCenter, float, float, char[][])} was used to set a
+     * larger-than-normal map.
+     * @return the height of the internal array this can render, which may be larger than the visible height
+     */
+    public int getTotalHeight()
+    {
+        return contents[0].length;
     }
 
     /**

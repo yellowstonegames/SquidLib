@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import squidpony.ArrayTools;
 import squidpony.FakeLanguageGen;
 import squidpony.panel.IColoredString;
 import squidpony.squidai.DijkstraMap;
@@ -22,10 +21,7 @@ import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.MixedGenerator;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.CoordPacker;
-import squidpony.squidmath.OrderedSet;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +65,10 @@ public class EverythingDemo extends ApplicationAdapter {
     private Phase phase = Phase.WAIT;
     private StatefulRNG rng;
     private SquidLayers display;
-    private SquidPanel subCell;
+    //private SquidPanel subCell;
+
+    // for more convenient access to some methods
+    private SquidPanel fg;
     private SquidMessageBox messages;
     /**
      * Non-{@code null} iff '?' was pressed before
@@ -80,7 +79,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private double[][] res;
     private int[][] lights;
     private Color[][] colors, bgColors;
-    private double[][] fovmap, pathMap, monPathMap;
+    private double[][] fovmap, pathMap;
     private AnimatedEntity player;
     private FOV fov;
     /**
@@ -91,6 +90,14 @@ public class EverythingDemo extends ApplicationAdapter {
      * In number of cells
      */
     private int height;
+    /**
+     * In number of cells
+     */
+    private int totalWidth;
+    /**
+     * In number of cells
+     */
+    private int totalHeight;
     /**
      * The pixel width of a cell
      */
@@ -186,33 +193,54 @@ public class EverythingDemo extends ApplicationAdapter {
 
         batch = new SpriteBatch();
         width = 90;
-        height = 30;
+        height = 25;
+        totalWidth = width * 3;
+        totalHeight = height * 3;
+        dungeonGen = new DungeonGenerator(totalWidth, totalHeight, rng);
+        dungeonGen.addWater(30, 6);
+        dungeonGen.addGrass(5);
+        dungeonGen.addBoulders(10);
+        dungeonGen.addDoors(18, false);
+        MixedGenerator mix = new MixedGenerator(totalWidth, totalHeight, rng);
+        mix.putCaveCarvers(1);
+        mix.putBoxRoomCarvers(1);
+        mix.putRoundRoomCarvers(2);
+        char[][] mg = mix.generate();
+        decoDungeon = dungeonGen.generate(mg);
+
+        // change the TilesetType to lots of different choices to see what dungeon works best.
+        //bareDungeon = dungeonGen.generate(TilesetType.DEFAULT_DUNGEON);
+        bareDungeon = dungeonGen.getBareDungeon();
+        lineDungeon = DungeonUtility.hashesToLines(dungeonGen.getDungeon(), true);
+
+
         //NOTE: cellWidth and cellHeight are assigned values that are significantly larger than the corresponding sizes
         //in the EverythingDemoLauncher's main method. Because they are scaled up by an integer here, they can be scaled
         //down when rendered, allowing certain small details to appear sharper. This _only_ works with distance field,
         //a.k.a. stretchable, fonts! INTERNAL_ZOOM is a tradeoff between rendering more pixels to increase quality (when
         // values are high) or rendering fewer pixels for speed (when values are low). Using 2 seems to work well.
-        cellWidth = 13 * INTERNAL_ZOOM;
-        cellHeight = 26 * INTERNAL_ZOOM;
+        cellWidth = 11 * INTERNAL_ZOOM;
+        cellHeight = 24 * INTERNAL_ZOOM;
         // getStretchableFont loads an embedded font, Inconsolata-LGC-Custom, that is a distance field font as mentioned
         // earlier. We set the smoothing multiplier on it only because we are using internal zoom to increase sharpness
         // on small details, but if the smoothing is incorrect some sizes look blurry or over-sharpened. This can be set
         // manually if you use a constant internal zoom; here we use 1f for internal zoom 1, about 2/3f for zoom 2, and
         // about 1/2f for zoom 3. If you have more zooms as options for some reason, this formula should hold for many
         // cases but probably not all.
-        textFactory = DefaultResources.getStretchableFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
+        textFactory = DefaultResources.getStretchableSlabFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
                 .width(cellWidth).height(cellHeight).initBySize();
         // Creates a layered series of text grids in a SquidLayers object, using the previously set-up textFactory and
         // SquidColorCenters.
         display = new SquidLayers(width, height, cellWidth, cellHeight,
-                textFactory.copy(), bgCenter, fgCenter);
+                textFactory.copy(), bgCenter, fgCenter, decoDungeon);
+        //NOT USED CURRENTLY
         //subCell is a SquidPanel, the same class that SquidLayers has for each of its layers, but we want to render
         //certain effects on top of all other panels, which can't be done in the all-in-one-pass rendering of the grids
         //in SquidLayers, though it could be done with a slight hassle if the effects are made into AnimatedEntity
         //objects or Actors, then rendered separately like the monsters are (see render() below). It is called subCell
         //because its text will be made smaller than a full cell, and appears in the upper left corner for things like
         //the current health of the player and an '!' for alerted monsters.
-        subCell = new SquidPanel(width, height, textFactory.copy(), fgCenter);
+        //subCell = new SquidPanel(width, height, textFactory.copy(), fgCenter);
 
         display.setAnimationDuration(0.1f);
         messages = new SquidMessageBox(width, 4,
@@ -220,18 +248,18 @@ public class EverythingDemo extends ApplicationAdapter {
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        messages.setTextSize(cellWidth, cellHeight + INTERNAL_ZOOM * 2);
-        display.setTextSize(cellWidth, cellHeight + INTERNAL_ZOOM * 2);
+        messages.setTextSize(cellWidth + INTERNAL_ZOOM * 2, cellHeight + INTERNAL_ZOOM * 2);
+        display.setTextSize(cellWidth + INTERNAL_ZOOM * 2, cellHeight + INTERNAL_ZOOM * 2);
         //The subCell SquidPanel uses a smaller size here; the numbers 8 and 16 should change if cellWidth or cellHeight
         //change, and the INTERNAL_ZOOM multiplier keeps things sharp, the same as it does all over here.
-        subCell.setTextSize(8 * INTERNAL_ZOOM, 16 * INTERNAL_ZOOM);
+        //subCell.setTextSize(8 * INTERNAL_ZOOM, 16 * INTERNAL_ZOOM);
         viewport = new StretchViewport(width * cellWidth, (height + 4) * cellHeight);
         stage = new Stage(viewport, batch);
 
         //These need to have their positions set before adding any entities if there is an offset involved.
         messages.setBounds(0, 0, cellWidth * width, cellHeight * 4);
         display.setPosition(0, messages.getHeight());
-        subCell.setPosition(0, messages.getHeight());
+        //subCell.setPosition(0, messages.getHeight());
         messages.appendWrappingMessage("Use numpad or vi-keys (hjklyubn) to move. Use ? for help, f to change colors, q to quit." +
                 " Click the top or bottom border of this box to scroll.");
         counter = 0;
@@ -245,31 +273,19 @@ public class EverythingDemo extends ApplicationAdapter {
         display.setFGColorCenter(fgCenter);
         display.setBGColorCenter(bgCenter);
 
-        dungeonGen = new DungeonGenerator(width, height, rng);
-        dungeonGen.addWater(30, 6);
-        dungeonGen.addGrass(5);
-        dungeonGen.addBoulders(10);
-        dungeonGen.addDoors(18, false);
-        MixedGenerator mix = new MixedGenerator(width, height, rng);
-        mix.putCaveCarvers(1);
-        mix.putBoxRoomCarvers(1);
-        mix.putRoundRoomCarvers(2);
-        char[][] mg = mix.generate();
-        decoDungeon = dungeonGen.generate(mg);
+        // it's more efficient to get random floors from a set containing only tightly-stored floor positions.
+        GreasedRegion placement = new GreasedRegion(bareDungeon, '.');
+        Coord pl = placement.singleRandom(rng);
+        display.setGridOffsetX(pl.x - (width >> 1));
+        display.setGridOffsetY(pl.y - (height >> 1));
 
-        // change the TilesetType to lots of different choices to see what dungeon works best.
-        //bareDungeon = dungeonGen.generate(TilesetType.DEFAULT_DUNGEON);
-        bareDungeon = dungeonGen.getBareDungeon();
-        lineDungeon = DungeonUtility.hashesToLines(dungeonGen.getDungeon(), true);
-        // it's more efficient to get random floors from a packed set containing only (compressed) floor positions.
-        short[] placement = CoordPacker.pack(bareDungeon, '.');
-        Coord pl = dungeonGen.utility.randomCell(placement);
-        placement = CoordPacker.removePacked(placement, pl.x, pl.y);
-        int numMonsters = 25;
+        fg = display.getForegroundLayer();
+        placement.remove(pl);
+        int numMonsters = 80;
         monsters = new SpatialMap<>(numMonsters);
         for (int i = 0; i < numMonsters; i++) {
-            Coord monPos = dungeonGen.utility.randomCell(placement);
-            placement = CoordPacker.removePacked(placement, monPos.x, monPos.y);
+            Coord monPos = placement.singleRandom(rng);
+            placement = placement.remove(monPos);
             monsters.put(monPos, i, new Monster(display.animateActor(monPos.x, monPos.y, 'Я',
                     fgCenter.filter(display.getPalette().get(11))), 0));
         }
@@ -281,7 +297,6 @@ public class EverythingDemo extends ApplicationAdapter {
         getToPlayer.rng = rng;
         getToPlayer.setGoal(pl);
         pathMap = getToPlayer.scan(null);
-        monPathMap = ArrayTools.copy(pathMap);
 
         player = display.animateActor(pl.x, pl.y, '@',
                 fgCenter.loopingGradient(SColor.CAPE_JASMINE, SColor.HAN_PURPLE, 45), 1.5f, false);
@@ -301,18 +316,18 @@ public class EverythingDemo extends ApplicationAdapter {
         playerToCursor.scan(null);
         final int[][] initialColors = DungeonUtility.generatePaletteIndices(decoDungeon),
                 initialBGColors = DungeonUtility.generateBGPaletteIndices(decoDungeon);
-        colors = new Color[width][height];
-        bgColors = new Color[width][height];
+        colors = new Color[totalWidth][totalHeight];
+        bgColors = new Color[totalWidth][totalHeight];
         ArrayList<Color> palette = display.getPalette();
         bgColor = SColor.DARK_SLATE_GRAY;
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
+        for (int i = 0; i < totalWidth; i++) {
+            for (int j = 0; j < totalHeight; j++) {
                 colors[i][j] = palette.get(initialColors[i][j]);
                 bgColors[i][j] = palette.get(initialBGColors[i][j]);
             }
         }
         lights = DungeonUtility.generateLightnessModifiers(decoDungeon, counter);
-        seen = new boolean[width][height];
+        seen = new boolean[decoDungeon.length][decoDungeon[0].length];
         lang = FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 4, 6, new String[]{",", ",", ",", " -"},
                 new String[]{"..."}, 0.25);
         // this is a big one.
@@ -419,9 +434,10 @@ public class EverythingDemo extends ApplicationAdapter {
             // hasn't been generated already by mouseMoved, then copy it over to awaitedMoves.
             @Override
             public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-                if (fovmap[screenX][screenY] > 0.0 && awaitedMoves.isEmpty()) {
+                int sx = screenX + display.getGridOffsetX(), sy = screenY + display.getGridOffsetY();
+                if (fovmap[sx][sy] > 0.0 && awaitedMoves.isEmpty()) {
                     if (toCursor.isEmpty()) {
-                        cursor = Coord.get(screenX, screenY);
+                        cursor = Coord.get(sx, sy);
                         //This uses DijkstraMap.findPathPreScannned() to get a path as a List of Coord from the current
                         // player position to the position the user clicked on. The "PreScanned" part is an optimization
                         // that's special to DijkstraMap; because the whole map has already been fully analyzed by the
@@ -453,13 +469,14 @@ public class EverythingDemo extends ApplicationAdapter {
             public boolean mouseMoved(int screenX, int screenY) {
                 if(!awaitedMoves.isEmpty())
                     return false;
-                if((screenX < 0 || screenX >= width || screenY < 0 || screenY >= height)
-                        || (cursor.x == screenX && cursor.y == screenY))
+                int sx = screenX + display.getGridOffsetX(), sy = screenY + display.getGridOffsetY();
+                if((sx < 0 || sx >= totalWidth || sy < 0 || sy >= totalHeight)
+                        || (cursor.x == sx && cursor.y == sy))
                 {
                     return false;
                 }
-                if (fovmap[screenX][screenY] > 0.0) {
-                    cursor = Coord.get(screenX, screenY);
+                if (fovmap[sx][sy] > 0.0) {
+                    cursor = Coord.get(sx, sy);
                     //This uses DijkstraMap.findPathPreScannned() to get a path as a List of Coord from the current
                     // player position to the position the user clicked on. The "PreScanned" part is an optimization
                     // that's special to DijkstraMap; because the whole map has already been fully analyzed by the
@@ -484,7 +501,7 @@ public class EverythingDemo extends ApplicationAdapter {
         input.init("filter", "??? help?", "quit");
         // ABSOLUTELY NEEDED TO HANDLE INPUT
         Gdx.input.setInputProcessor(new InputMultiplexer(stage, input));
-        subCell.setOffsetY(messages.getGridHeight() * cellHeight);
+        //subCell.setOffsetY(messages.getGridHeight() * cellHeight);
         // and then add display and messages, our two visual components, to the list of things that act in Stage.
         stage.addActor(display);
         // stage.addActor(subCell); // this is not added since it is manually drawn after other steps
@@ -505,7 +522,7 @@ public class EverythingDemo extends ApplicationAdapter {
 
         if (health <= 0) return;
         int newX = player.gridX + xmod, newY = player.gridY + ymod;
-        if (newX >= 0 && newY >= 0 && newX < width && newY < height
+        if (newX >= 0 && newY >= 0 && newX < totalWidth && newY < totalHeight
                 && bareDungeon[newX][newY] != '#') {
             // '+' is a door.
             if (lineDungeon[newX][newY] == '+') {
@@ -519,8 +536,14 @@ public class EverythingDemo extends ApplicationAdapter {
             } else {
                 // recalculate FOV, store it in fovmap for the render to use.
                 fovmap = fov.calculateFOV(res, newX, newY, 8, Radius.SQUARE);
-                display.slide(player, newX, newY);
+                //display.slide(player, newX, newY);
+                player.gridX = newX;
+                player.gridY = newY;
                 monsters.remove(Coord.get(newX, newY));
+                display.setGridOffsetX(newX - (width >> 1));
+                display.setGridOffsetY(newY - (height >> 1));
+                player.actor.setPosition(fg.adjustX(newX, false), fg.adjustY(newY));
+
             }
             phase = Phase.PLAYER_ANIM;
         }
@@ -571,6 +594,8 @@ public class EverythingDemo extends ApplicationAdapter {
                         //player.setText("" + health);
                         monsters.positionalModify(pos, mon.change(1));
                         monplaces.add(pos);
+                        mon.entity.actor.setPosition(fg.adjustX(pos.x, false), fg.adjustY(pos.y));
+
                     }
                     // otherwise store the new position in newMons.
                     else {
@@ -579,7 +604,10 @@ public class EverythingDemo extends ApplicationAdapter {
                         }*/
                         monsters.positionalModify(pos, mon.change(1));
                         monsters.move(pos, tmp);
-                        display.slide(mon.entity, tmp.x, tmp.y);
+                        //display.slide(mon.entity, tmp.x, tmp.y);
+                        mon.entity.gridX = tmp.x;
+                        mon.entity.gridY = tmp.y;
+                        mon.entity.actor.setPosition(fg.adjustX(tmp.x, false), fg.adjustY(tmp.y));
                         monplaces.add(tmp);
                     }
                 } else {
@@ -711,18 +739,19 @@ public class EverythingDemo extends ApplicationAdapter {
 
     public void putMap() {
         boolean overlapping;
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                overlapping = monsters.containsPosition(Coord.get(i, j)) || (player.gridX == i && player.gridY == j);
+        int offsetX = display.getGridOffsetX(), offsetY = display.getGridOffsetY();
+        for (int i = 0, ci = offsetX; i < width; i++, ci++) {
+            for (int j = 0, cj = offsetY; j < height; j++, cj++) {
+                overlapping = monsters.containsPosition(Coord.get(ci, cj)) || (player.gridX == ci && player.gridY == cj);
                 // if we see it now, we remember the cell and show a lit cell based on the fovmap value (between 0.0
                 // and 1.0), with 1.0 being brighter at +75 lightness and 0.0 being rather dark at -105.
-                if (fovmap[i][j] > 0.0) {
-                    seen[i][j] = true;
-                    display.put(i, j, (overlapping) ? ' ' : lineDungeon[i][j], fgCenter.filter(colors[i][j]), bgCenter.filter(bgColors[i][j]),
-                            lights[i][j] + (int) (-105 + 180 * fovmap[i][j]));
+                if (fovmap[ci][cj] > 0.0) {
+                    seen[ci][cj] = true;
+                    display.put(ci, cj, (overlapping) ? ' ' : lineDungeon[ci][cj], fgCenter.filter(colors[ci][cj]), bgCenter.filter(bgColors[ci][cj]),
+                            lights[ci][cj] + (int) (-105 + 180 * fovmap[ci][cj]));
                     // if we don't see it now, but did earlier, use a very dark background, but lighter than black.
                 } else {// if (seen[i][j]) {
-                    display.put(i, j, lineDungeon[i][j], fgCenter.filter(colors[i][j]), bgCenter.filter(bgColors[i][j]), -140);
+                    display.put(ci, cj, lineDungeon[ci][cj], fgCenter.filter(colors[ci][cj]), bgCenter.filter(bgColors[ci][cj]), -140);
                 }
             }
         }
@@ -754,10 +783,10 @@ public class EverythingDemo extends ApplicationAdapter {
         if (health <= 0) {
             // still need to display the map, then write over it with a message.
             putMap();
-            display.putBoxedString(width / 2 - 18, height / 2 - 10, "   THE TSAR WILL HAVE YOUR HEAD!    ");
-            display.putBoxedString(width / 2 - 18, height / 2 - 5, "      AS THE OLD SAYING GOES,       ");
-            display.putBoxedString(width / 2 - lang.length() / 2, height / 2, lang);
-            display.putBoxedString(width / 2 - 18, height / 2 + 5, "             q to quit.             ");
+            display.putBoxedString(width / 2 - 18 + fg.getGridOffsetX(), height / 2 - 10 + fg.getGridOffsetY(), "   THE TSAR WILL HAVE YOUR HEAD!    ");
+            display.putBoxedString(width / 2 - 18 + fg.getGridOffsetX(), height / 2 - 5 + fg.getGridOffsetY(), "      AS THE OLD SAYING GOES,       ");
+            display.putBoxedString(width / 2 - lang.length() / 2 + fg.getGridOffsetX(), height / 2 + fg.getGridOffsetY(), lang);
+            display.putBoxedString(width / 2 - 18 + fg.getGridOffsetX(), height / 2 + 5 + fg.getGridOffsetY(), "             q to quit.             ");
 
             // because we return early, we still need to draw.
             stage.draw();
@@ -844,23 +873,23 @@ public class EverythingDemo extends ApplicationAdapter {
         stage.draw();
         stage.act();
 
-        subCell.erase();
+        //subCell.erase();
         if (help == null) {
             // display does not draw all AnimatedEntities by default, since FOV often changes how they need to be drawn.
             batch.begin();
             // the player needs to get drawn every frame, of course.
             display.drawActor(batch, 1.0f, player);
-            subCell.put(player.gridX, player.gridY, Character.forDigit(health, 10), SColor.DARK_PINK);
+            //subCell.put(player.gridX, player.gridY, Character.forDigit(health, 10), SColor.DARK_PINK);
 
             for (Monster mon : monsters) {
                 // monsters are only drawn if within FOV.
                 if (fovmap[mon.entity.gridX][mon.entity.gridY] > 0.0) {
                     display.drawActor(batch, 1.0f, mon.entity);
-                    if (mon.state > 0)
-                        subCell.put(mon.entity.gridX, mon.entity.gridY, '!', SColor.DARK_RED);
+                    //if (mon.state > 0)
+                    //    subCell.put(mon.entity.gridX, mon.entity.gridY, '!', SColor.DARK_RED);
                 }
             }
-            subCell.draw(batch, 1.0F);
+            //subCell.draw(batch, 1.0F);
             // batch must end if it began.
             batch.end();
         }
