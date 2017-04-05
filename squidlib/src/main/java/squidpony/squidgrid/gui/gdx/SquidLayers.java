@@ -504,7 +504,7 @@ public class SquidLayers extends Group {
      * @param high the height of a glyph in pixels
      * @return this for chaining
      */
-    public SquidLayers setTextSize(int layer, int wide, int high)
+    public SquidLayers setTextSize(int layer, float wide, float high)
     {
         SquidPanel p = backgroundPanel;
         switch (layer) {
@@ -529,7 +529,7 @@ public class SquidLayers extends Group {
      * @param high the height of a glyph in pixels
      * @return this for chaining
      */
-    public SquidLayers setTextSize(int wide, int high)
+    public SquidLayers setTextSize(float wide, float high)
     {
         textFactory.tweakHeight(high).tweakWidth(wide).initBySize();
         setTextSize(0, wide, high);

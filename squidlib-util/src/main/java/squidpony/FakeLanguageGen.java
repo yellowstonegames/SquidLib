@@ -2555,6 +2555,8 @@ public class FakeLanguageGen implements Serializable {
      */
     public String sentence(RNG rng, int minWords, int maxWords, String[] midPunctuation, String[] endPunctuation,
                            double midPunctuationFrequency, int maxChars) {
+        if(maxChars < 0)
+            return sentence(rng, minWords, maxWords, midPunctuation, endPunctuation, midPunctuationFrequency);
         if (minWords < 1)
             minWords = 1;
         if (minWords > maxWords)
@@ -3517,6 +3519,66 @@ public class FakeLanguageGen implements Serializable {
             return new Alteration(Pattern.deserializeFromString(data.substring(0, split2)),
                     data.substring(split2 + 1, split4),
                     Double.parseDouble(data.substring(split4 + 1)));
+        }
+    }
+
+    /**
+     * A simple way to bundle a FakeLanguageGen with the arguments that would be passed to it when calling
+     * {@link FakeLanguageGen#sentence(RNG, int, int, String[], String[], double, int)} or one of its overloads.
+     * You can call {@link #sentence()} on this to produce another String sentence with the parameters it was given
+     * at construction. The parameters to
+     * {@link #SentenceForm(FakeLanguageGen, RNG, int, int, String[], String[], double, int)} are stored in fields of
+     * the same name, and all fields in this class are public and modifiable.
+     */
+    public static class SentenceForm implements Serializable
+    {
+        private static final long serialVersionUID = 1246527948419533147L;
+        public RNG rng;
+        public int minWords, maxWords, maxChars;
+        public String[] midPunctuation, endPunctuation;
+        public double midPunctuationFrequency;
+        public FakeLanguageGen language;
+        public SentenceForm()
+        {
+            this(FakeLanguageGen.FANTASY_NAME, FakeLanguageGen.srng, 1, 9,
+                    new String[]{",", ",", ",", ";", ";"},
+                    new String[]{".", ".", ".", "!", "?", "..."}, 0.18, -1);
+        }
+        public SentenceForm(FakeLanguageGen language, int minWords, int maxWords)
+        {
+            this(language, FakeLanguageGen.srng, minWords, maxWords, new String[]{",", ",", ",", ";", ";"},
+                    new String[]{".", ".", ".", "!", "?", "..."}, 0.18, -1);
+        }
+        public SentenceForm(FakeLanguageGen language, int minWords, int maxWords, String[] midPunctuation,
+                            String[] endPunctuation, double midPunctuationFrequency)
+        {
+            this(language, FakeLanguageGen.srng, minWords, maxWords, midPunctuation, endPunctuation,
+                    midPunctuationFrequency, -1);
+        }
+        public SentenceForm(FakeLanguageGen language, int minWords, int maxWords, String[] midPunctuation,
+                            String[] endPunctuation, double midPunctuationFrequency, int maxChars)
+        {
+            this(language, FakeLanguageGen.srng, minWords, maxWords, midPunctuation, endPunctuation,
+                    midPunctuationFrequency, maxChars);
+        }
+
+        public SentenceForm(FakeLanguageGen language, RNG rng, int minWords, int maxWords,
+                            String[] midPunctuation, String[] endPunctuation,
+                            double midPunctuationFrequency, int maxChars)
+        {
+            this.language = language;
+            this.rng = rng;
+            this.minWords = minWords;
+            this.maxWords = maxWords;
+            this.midPunctuation = midPunctuation;
+            this.endPunctuation = endPunctuation;
+            this.midPunctuationFrequency = midPunctuationFrequency;
+            this.maxChars = maxChars;
+        }
+        public String sentence()
+        {
+            return language.sentence(rng, minWords, maxWords, midPunctuation, endPunctuation,
+                    midPunctuationFrequency, maxChars);
         }
     }
 }

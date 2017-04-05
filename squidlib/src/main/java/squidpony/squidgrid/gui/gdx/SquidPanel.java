@@ -57,7 +57,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * thin-wall maps should have this false, since ThinDungeonGenerator (in conjunction with DungeonUtility's
      * hashesToLines method) makes thin lines for walls that should be displayed as between the boundaries of
      * other cells. The overlap behavior needed for some "thin enough" cells to be displayed between the cells
-     * can be accomplished by using {@link #setTextSize(int, int)} to double the previously-given cell width
+     * can be accomplished by using {@link #setTextSize(float, float)} to double the previously-given cell width
      * and height.
      */
     public boolean onlyRenderEven = false;
@@ -565,7 +565,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param high the height of a glyph in pixels
      * @return this for chaining
      */
-    public SquidPanel setTextSize(int wide, int high)
+    public SquidPanel setTextSize(float wide, float high)
     {
         textFactory.tweakHeight(high).tweakWidth(wide).initBySize();
         //textFactory.setSmoothingMultiplier((3f + Math.max(cellWidth * 1f / wide, cellHeight * 1f / high)) / 4f);
@@ -2118,7 +2118,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * foregrounds of thin-wall maps should have this false, since ThinDungeonGenerator (in conjunction with
      * DungeonUtility's hashesToLines() method) makes thin lines for walls that should be displayed as between
      * the boundaries of other cells. The overlap behavior needed for some "thin enough" cells to be displayed
-     * between the cells can be accomplished by using {@link #setTextSize(int, int)} to double the
+     * between the cells can be accomplished by using {@link #setTextSize(float, float)} to double the
      * previously-given cell width and height.
      *
      * @return the current status of the onlyRenderEven flag, which defaults to false
@@ -2137,7 +2137,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * foregrounds of thin-wall maps should have this false, since ThinDungeonGenerator (in conjunction with
      * DungeonUtility's hashesToLines() method) makes thin lines for walls that should be displayed as between
      * the boundaries of other cells. The overlap behavior needed for some "thin enough" cells to be displayed
-     * between the cells can be accomplished by using {@link #setTextSize(int, int)} to double the
+     * between the cells can be accomplished by using {@link #setTextSize(float, float)} to double the
      * previously-given cell width and height.
      *
      * @param onlyRenderEven generally, should only be true if this SquidPanel is a background of a thin map

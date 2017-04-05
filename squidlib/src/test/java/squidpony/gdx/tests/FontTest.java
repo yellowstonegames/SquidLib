@@ -36,11 +36,11 @@ public class FontTest extends ApplicationAdapter {
     /**
      * The pixel width of a cell
      */
-    private static int cellWidth = 13;
+    private static float cellWidth = 13;
     /**
      * The pixel height of a cell
      */
-    private static int cellHeight = 30;
+    private static float cellHeight = 30;
 
     private static int totalWidth = 1346, totalHeight = 700;
 

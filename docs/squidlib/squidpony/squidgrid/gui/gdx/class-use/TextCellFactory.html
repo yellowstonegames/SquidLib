@@ -320,7 +320,7 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></td>
-<td class="colLast"><span class="typeNameLabel">TextCellFactory.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#height-int-">height</a></span>(int&nbsp;height)</code>
+<td class="colLast"><span class="typeNameLabel">TextCellFactory.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#height-float-">height</a></span>(float&nbsp;height)</code>
 <div class="block">Sets the factory's cell height to the provided value.</div>
 </td>
 </tr>
@@ -407,19 +407,19 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></td>
-<td class="colLast"><span class="typeNameLabel">TextCellFactory.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#tweakHeight-int-">tweakHeight</a></span>(int&nbsp;height)</code>
+<td class="colLast"><span class="typeNameLabel">TextCellFactory.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#tweakHeight-float-">tweakHeight</a></span>(float&nbsp;height)</code>
 <div class="block">Sets the factory's height used for text to the provided value, but does not change the size of a cell.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></td>
-<td class="colLast"><span class="typeNameLabel">TextCellFactory.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#tweakWidth-int-">tweakWidth</a></span>(int&nbsp;width)</code>
+<td class="colLast"><span class="typeNameLabel">TextCellFactory.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#tweakWidth-float-">tweakWidth</a></span>(float&nbsp;width)</code>
 <div class="block">Sets the factory's height used for text to the provided value, but does not change the size of a cell.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></td>
-<td class="colLast"><span class="typeNameLabel">TextCellFactory.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#width-int-">width</a></span>(int&nbsp;width)</code>
+<td class="colLast"><span class="typeNameLabel">TextCellFactory.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#width-float-">width</a></span>(float&nbsp;width)</code>
 <div class="block">Sets the factory's cell width to the provided value.</div>
 </td>
 </tr>
@@ -499,13 +499,27 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#SquidLayers-int-int-int-int-squidpony.squidgrid.gui.gdx.TextCellFactory-squidpony.squidgrid.gui.gdx.SquidColorCenter-squidpony.squidgrid.gui.gdx.SquidColorCenter-char:A:A-">SquidLayers</a></span>(int&nbsp;gridWidth,
+           int&nbsp;gridHeight,
+           int&nbsp;cellWidth,
+           int&nbsp;cellHeight,
+           <a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;tcf,
+           <a href="../../../../../squidpony/squidgrid/gui/gdx/SquidColorCenter.html" title="class in squidpony.squidgrid.gui.gdx">SquidColorCenter</a>&nbsp;bgColorCenter,
+           <a href="../../../../../squidpony/squidgrid/gui/gdx/SquidColorCenter.html" title="class in squidpony.squidgrid.gui.gdx">SquidColorCenter</a>&nbsp;fgColorCenter,
+           char[][]&nbsp;actualMap)</code>
+<div class="block">Create a new SquidLayers widget with the given TextCellFactory, the given number of cells for gridWidth
+ and gridHeight, the size in pixels for each cell given by cellWidth and cellHeight, and the given
+ SquidColorCenters for background and foreground.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidMessageBox.html#SquidMessageBox-int-int-squidpony.squidgrid.gui.gdx.TextCellFactory-">SquidMessageBox</a></span>(int&nbsp;gridWidth,
                int&nbsp;gridHeight,
                <a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;factory)</code>
 <div class="block">Builds a panel with the given grid size and all other parameters determined by the factory.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidMessageBox.html#SquidMessageBox-int-int-squidpony.squidgrid.gui.gdx.TextCellFactory-squidpony.IColorCenter-">SquidMessageBox</a></span>(int&nbsp;gridWidth,
                int&nbsp;gridHeight,
                <a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;factory,
@@ -513,14 +527,14 @@
 <div class="block">Builds a panel with the given grid size and all other parameters determined by the factory.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#SquidPanel-int-int-squidpony.squidgrid.gui.gdx.TextCellFactory-">SquidPanel</a></span>(int&nbsp;gridWidth,
           int&nbsp;gridHeight,
           <a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;factory)</code>
 <div class="block">Builds a panel with the given grid size and all other parameters determined by the factory.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#SquidPanel-int-int-squidpony.squidgrid.gui.gdx.TextCellFactory-squidpony.IColorCenter-">SquidPanel</a></span>(int&nbsp;gridWidth,
           int&nbsp;gridHeight,
           <a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;factory,
@@ -528,13 +542,24 @@
 <div class="block">Builds a panel with the given grid size and all other parameters determined by the factory.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#SquidPanel-int-int-squidpony.squidgrid.gui.gdx.TextCellFactory-squidpony.IColorCenter-float-float-">SquidPanel</a></span>(int&nbsp;gridWidth,
           int&nbsp;gridHeight,
           <a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;factory,
           squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center,
           float&nbsp;xOffset,
           float&nbsp;yOffset)</code>
+<div class="block">Builds a panel with the given grid size and all other parameters determined by the factory.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#SquidPanel-int-int-squidpony.squidgrid.gui.gdx.TextCellFactory-squidpony.IColorCenter-float-float-char:A:A-">SquidPanel</a></span>(int&nbsp;gridWidth,
+          int&nbsp;gridHeight,
+          <a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;factory,
+          squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center,
+          float&nbsp;xOffset,
+          float&nbsp;yOffset,
+          char[][]&nbsp;actualMap)</code>
 <div class="block">Builds a panel with the given grid size and all other parameters determined by the factory.</div>
 </td>
 </tr>

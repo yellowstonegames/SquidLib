@@ -196,6 +196,8 @@ public class EverythingDemo extends ApplicationAdapter {
         height = 25;
         totalWidth = width * 3;
         totalHeight = height * 3;
+        //Only needed if totalWidth and/or totalHeight is 257 or larger
+        Coord.expandPoolTo(totalWidth, totalHeight);
         dungeonGen = new DungeonGenerator(totalWidth, totalHeight, rng);
         dungeonGen.addWater(30, 6);
         dungeonGen.addGrass(5);
@@ -219,8 +221,8 @@ public class EverythingDemo extends ApplicationAdapter {
         //down when rendered, allowing certain small details to appear sharper. This _only_ works with distance field,
         //a.k.a. stretchable, fonts! INTERNAL_ZOOM is a tradeoff between rendering more pixels to increase quality (when
         // values are high) or rendering fewer pixels for speed (when values are low). Using 2 seems to work well.
-        cellWidth = 11 * INTERNAL_ZOOM;
-        cellHeight = 24 * INTERNAL_ZOOM;
+        cellWidth = 10 * INTERNAL_ZOOM;
+        cellHeight = 22 * INTERNAL_ZOOM;
         // getStretchableFont loads an embedded font, Inconsolata-LGC-Custom, that is a distance field font as mentioned
         // earlier. We set the smoothing multiplier on it only because we are using internal zoom to increase sharpness
         // on small details, but if the smoothing is incorrect some sizes look blurry or over-sharpened. This can be set
@@ -243,13 +245,19 @@ public class EverythingDemo extends ApplicationAdapter {
         //subCell = new SquidPanel(width, height, textFactory.copy(), fgCenter);
 
         display.setAnimationDuration(0.1f);
+        // we use a "torchlight" effect where the field of view wavers slightly, so a slightly-yellow color like
+        // SColor.COSMIC_LATTE works well for the color of lighting. This tints everything very slightly yellow, but
+        // this is mostly unnoticeable for things like deep water that already have a vivid color here.
+        // if you check the JavaDocs on SColor.COSMIC_LATTE, you will (depending on IDE) probably see a nice preview
+        // of the actual color, which should be practically white but just a little closer to yellow.
+        display.setLightingColor(SColor.COSMIC_LATTE);
         messages = new SquidMessageBox(width, 4,
                 textFactory.copy());
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        messages.setTextSize(cellWidth + INTERNAL_ZOOM * 2, cellHeight + INTERNAL_ZOOM * 2);
-        display.setTextSize(cellWidth + INTERNAL_ZOOM * 2, cellHeight + INTERNAL_ZOOM * 2);
+        messages.setTextSize(cellWidth * 1.15f, cellHeight * 1.1f);
+        display.setTextSize(cellWidth * 1.15f, cellHeight  * 1.1f);
         //The subCell SquidPanel uses a smaller size here; the numbers 8 and 16 should change if cellWidth or cellHeight
         //change, and the INTERNAL_ZOOM multiplier keeps things sharp, the same as it does all over here.
         //subCell.setTextSize(8 * INTERNAL_ZOOM, 16 * INTERNAL_ZOOM);
@@ -575,6 +583,7 @@ public class EverythingDemo extends ApplicationAdapter {
         {
             Coord pos = monplaces.removeFirst();
             Monster mon = monsters.get(pos);
+            mon.entity.actor.setPosition(fg.adjustX(pos.x, false), fg.adjustY(pos.y));
             // monster values are used to store their aggression, 1 for actively stalking the player, 0 for not.
             if (mon.state > 0 || fovmap[pos.x][pos.y] > 0.1) {
                 if (mon.state == 0) {
@@ -594,7 +603,6 @@ public class EverythingDemo extends ApplicationAdapter {
                         //player.setText("" + health);
                         monsters.positionalModify(pos, mon.change(1));
                         monplaces.add(pos);
-                        mon.entity.actor.setPosition(fg.adjustX(pos.x, false), fg.adjustY(pos.y));
 
                     }
                     // otherwise store the new position in newMons.
@@ -740,6 +748,12 @@ public class EverythingDemo extends ApplicationAdapter {
     public void putMap() {
         boolean overlapping;
         int offsetX = display.getGridOffsetX(), offsetY = display.getGridOffsetY();
+
+        // this will very occasionally go from very high to very low, but if a very large long for time is multiplied
+        // by a float, then you generally will get Float.POSITIVE_INFINITY, and similarly for some doubles. Infinite
+        // results are not good for the smooth noise we use the current time for! We want the time to go up slowly and
+        // steadily, so the animation of the "torchlight" effect looks right.
+        long tm = System.currentTimeMillis() & 0xfffffff;
         for (int i = 0, ci = offsetX; i < width; i++, ci++) {
             for (int j = 0, cj = offsetY; j < height; j++, cj++) {
                 overlapping = monsters.containsPosition(Coord.get(ci, cj)) || (player.gridX == ci && player.gridY == cj);
@@ -748,7 +762,8 @@ public class EverythingDemo extends ApplicationAdapter {
                 if (fovmap[ci][cj] > 0.0) {
                     seen[ci][cj] = true;
                     display.put(ci, cj, (overlapping) ? ' ' : lineDungeon[ci][cj], fgCenter.filter(colors[ci][cj]), bgCenter.filter(bgColors[ci][cj]),
-                            lights[ci][cj] + (int) (-105 + 180 * fovmap[ci][cj]));
+                            lights[ci][cj] + (int) (-105 +
+                                    180 * (fovmap[ci][cj] * (1.0 + 0.2 * SeededNoise.noise(ci * 0.2, cj * 0.2, tm * 0.001, 10000)))));
                     // if we don't see it now, but did earlier, use a very dark background, but lighter than black.
                 } else {// if (seen[i][j]) {
                     display.put(ci, cj, lineDungeon[ci][cj], fgCenter.filter(colors[ci][cj]), bgCenter.filter(bgColors[ci][cj]), -140);
@@ -761,6 +776,7 @@ public class EverythingDemo extends ApplicationAdapter {
             // use a brighter light to trace the path to the cursor, from 170 max lightness to 0 min.
             display.highlight(pt.x, pt.y, lights[pt.x][pt.y] + (int) (170 * fovmap[pt.x][pt.y]));
         }
+        messages.put(width - 10 >> 1, 0, "Health: " + health, SColor.RED_PIGMENT);
         //if(pt != null)
         //    display.putString(0, 0, String.valueOf(monPathMap[pt.x][pt.y]));
     }

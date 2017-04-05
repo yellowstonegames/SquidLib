@@ -80,7 +80,7 @@
 <span class="sourceLineNo">072</span>    protected String fitting = SQUID_FITTING;<a name="line.72"></a>
 <span class="sourceLineNo">073</span>    protected IColorCenter&lt;Color&gt; scc;<a name="line.73"></a>
 <span class="sourceLineNo">074</span>    protected int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;<a name="line.74"></a>
-<span class="sourceLineNo">075</span>    protected int width = 1, height = 1;<a name="line.75"></a>
+<span class="sourceLineNo">075</span>    protected float width = 1, height = 1;<a name="line.75"></a>
 <span class="sourceLineNo">076</span>    protected float actualCellWidth = 1, actualCellHeight = 1;<a name="line.76"></a>
 <span class="sourceLineNo">077</span>    protected float distanceFieldScaleX = 36f, distanceFieldScaleY = 36f;<a name="line.77"></a>
 <span class="sourceLineNo">078</span>    private boolean initialized = false, initializedByFont = false, initializedBySize = false;<a name="line.78"></a>
@@ -165,9 +165,9 @@
 <span class="sourceLineNo">157</span>        if(bmpFont == null)<a name="line.157"></a>
 <span class="sourceLineNo">158</span>            bmpFont = DefaultResources.getIncludedFont();<a name="line.158"></a>
 <span class="sourceLineNo">159</span>        bmpFont.setFixedWidthGlyphs(fitting);<a name="line.159"></a>
-<span class="sourceLineNo">160</span>        width = (int)bmpFont.getSpaceWidth();<a name="line.160"></a>
+<span class="sourceLineNo">160</span>        width = bmpFont.getSpaceWidth();<a name="line.160"></a>
 <span class="sourceLineNo">161</span>        lineHeight = bmpFont.getLineHeight();<a name="line.161"></a>
-<span class="sourceLineNo">162</span>        height = (int)(lineHeight);<a name="line.162"></a>
+<span class="sourceLineNo">162</span>        height = (lineHeight);<a name="line.162"></a>
 <span class="sourceLineNo">163</span>        descent = bmpFont.getDescent();<a name="line.163"></a>
 <span class="sourceLineNo">164</span><a name="line.164"></a>
 <span class="sourceLineNo">165</span>        actualCellWidth = width;<a name="line.165"></a>
@@ -505,7 +505,7 @@
 <span class="sourceLineNo">497</span>     *<a name="line.497"></a>
 <span class="sourceLineNo">498</span>     * @return the width<a name="line.498"></a>
 <span class="sourceLineNo">499</span>     */<a name="line.499"></a>
-<span class="sourceLineNo">500</span>    public int width() {<a name="line.500"></a>
+<span class="sourceLineNo">500</span>    public float width() {<a name="line.500"></a>
 <span class="sourceLineNo">501</span>        return width;<a name="line.501"></a>
 <span class="sourceLineNo">502</span>    }<a name="line.502"></a>
 <span class="sourceLineNo">503</span><a name="line.503"></a>
@@ -516,7 +516,7 @@
 <span class="sourceLineNo">508</span>     * @param width the desired width<a name="line.508"></a>
 <span class="sourceLineNo">509</span>     * @return this factory for method chaining<a name="line.509"></a>
 <span class="sourceLineNo">510</span>     */<a name="line.510"></a>
-<span class="sourceLineNo">511</span>    public TextCellFactory width(int width) {<a name="line.511"></a>
+<span class="sourceLineNo">511</span>    public TextCellFactory width(float width) {<a name="line.511"></a>
 <span class="sourceLineNo">512</span>        this.width = Math.max(1, width);<a name="line.512"></a>
 <span class="sourceLineNo">513</span>        actualCellWidth = this.width;<a name="line.513"></a>
 <span class="sourceLineNo">514</span>        return this;<a name="line.514"></a>
@@ -527,7 +527,7 @@
 <span class="sourceLineNo">519</span>     *<a name="line.519"></a>
 <span class="sourceLineNo">520</span>     * @return the height of a single cell<a name="line.520"></a>
 <span class="sourceLineNo">521</span>     */<a name="line.521"></a>
-<span class="sourceLineNo">522</span>    public int height() {<a name="line.522"></a>
+<span class="sourceLineNo">522</span>    public float height() {<a name="line.522"></a>
 <span class="sourceLineNo">523</span>        return height;<a name="line.523"></a>
 <span class="sourceLineNo">524</span>    }<a name="line.524"></a>
 <span class="sourceLineNo">525</span><a name="line.525"></a>
@@ -538,7 +538,7 @@
 <span class="sourceLineNo">530</span>     * @param height the desired width<a name="line.530"></a>
 <span class="sourceLineNo">531</span>     * @return this factory for method chaining<a name="line.531"></a>
 <span class="sourceLineNo">532</span>     */<a name="line.532"></a>
-<span class="sourceLineNo">533</span>    public TextCellFactory height(int height) {<a name="line.533"></a>
+<span class="sourceLineNo">533</span>    public TextCellFactory height(float height) {<a name="line.533"></a>
 <span class="sourceLineNo">534</span>        this.height = Math.max(1, height);<a name="line.534"></a>
 <span class="sourceLineNo">535</span>        //modifiedHeight = this.height;<a name="line.535"></a>
 <span class="sourceLineNo">536</span>        actualCellHeight = this.height;<a name="line.536"></a>
@@ -551,7 +551,7 @@
 <span class="sourceLineNo">543</span>     * @param width the desired width<a name="line.543"></a>
 <span class="sourceLineNo">544</span>     * @return this factory for method chaining<a name="line.544"></a>
 <span class="sourceLineNo">545</span>     */<a name="line.545"></a>
-<span class="sourceLineNo">546</span>    public TextCellFactory tweakWidth(int width) {<a name="line.546"></a>
+<span class="sourceLineNo">546</span>    public TextCellFactory tweakWidth(float width) {<a name="line.546"></a>
 <span class="sourceLineNo">547</span>        this.width = Math.max(1, width);<a name="line.547"></a>
 <span class="sourceLineNo">548</span>        return this;<a name="line.548"></a>
 <span class="sourceLineNo">549</span>    }<a name="line.549"></a>
@@ -563,7 +563,7 @@
 <span class="sourceLineNo">555</span>     * @param height the desired height<a name="line.555"></a>
 <span class="sourceLineNo">556</span>     * @return this factory for method chaining<a name="line.556"></a>
 <span class="sourceLineNo">557</span>     */<a name="line.557"></a>
-<span class="sourceLineNo">558</span>    public TextCellFactory tweakHeight(int height) {<a name="line.558"></a>
+<span class="sourceLineNo">558</span>    public TextCellFactory tweakHeight(float height) {<a name="line.558"></a>
 <span class="sourceLineNo">559</span>        this.height = Math.max(1, height);<a name="line.559"></a>
 <span class="sourceLineNo">560</span>        //modifiedHeight = this.height;<a name="line.560"></a>
 <span class="sourceLineNo">561</span>        return this;<a name="line.561"></a>
@@ -592,7 +592,7 @@
 <span class="sourceLineNo">584</span>    public TextCellFactory fit(String fit) {<a name="line.584"></a>
 <span class="sourceLineNo">585</span>        fitting = fit;<a name="line.585"></a>
 <span class="sourceLineNo">586</span>        bmpFont.setFixedWidthGlyphs(fitting);<a name="line.586"></a>
-<span class="sourceLineNo">587</span>        width = (int)bmpFont.getSpaceWidth();<a name="line.587"></a>
+<span class="sourceLineNo">587</span>        width = bmpFont.getSpaceWidth();<a name="line.587"></a>
 <span class="sourceLineNo">588</span>        return this;<a name="line.588"></a>
 <span class="sourceLineNo">589</span>    }<a name="line.589"></a>
 <span class="sourceLineNo">590</span><a name="line.590"></a>
@@ -606,7 +606,7 @@
 <span class="sourceLineNo">598</span>    public TextCellFactory addFit(String fit) {<a name="line.598"></a>
 <span class="sourceLineNo">599</span>        fitting += fit;<a name="line.599"></a>
 <span class="sourceLineNo">600</span>        bmpFont.setFixedWidthGlyphs(fitting);<a name="line.600"></a>
-<span class="sourceLineNo">601</span>        width = (int)bmpFont.getSpaceWidth();<a name="line.601"></a>
+<span class="sourceLineNo">601</span>        width = bmpFont.getSpaceWidth();<a name="line.601"></a>
 <span class="sourceLineNo">602</span>        return this;<a name="line.602"></a>
 <span class="sourceLineNo">603</span>    }<a name="line.603"></a>
 <span class="sourceLineNo">604</span><a name="line.604"></a>
