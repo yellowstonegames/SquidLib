@@ -47,6 +47,7 @@ public class BasicDemo extends ApplicationAdapter {
     private List<Coord> awaitedMoves;
     private float secondsWithoutMoves;
     private String[] lang;
+    private FakeLanguageGen.SentenceForm[] forms;
     private int langIndex = 0;
     @Override
     public void create () {
@@ -54,23 +55,23 @@ public class BasicDemo extends ApplicationAdapter {
         //pixels, must match the size you specified in the launcher for input to behave.
         //This is one of the more common places a mistake can happen.
         //In our desktop launcher, we gave these arguments to the configuration:
-        //	config.width = 80 * 8;
-        //  config.height = 40 * 18;
+        //	config.width = 80 * 10;
+        //  config.height = 32 * 22;
         //Here, config.height refers to the total number of rows to be displayed on the screen.
-        //We're displaying 32 rows of dungeon, then 8 more rows of text generation to show some tricks with language.
-        //gridHeight is 32 because that variable will be used for generating the dungeon and handling movement within
-        //the upper 32 rows. Anything that refers to the full height, which happens rarely and usually for things like
+        //We're displaying 24 rows of dungeon, then 8 more rows of text generation to show some tricks with language.
+        //gridHeight is 24 because that variable will be used for generating the dungeon and handling movement within
+        //the upper 24 rows. Anything that refers to the full height, which happens rarely and usually for things like
         //screen resizes, just uses gridHeight + 8. Next to it is gridWidth, which is 80 because we want 80 grid spaces
-        //across the whole screen. cellWidth and cellHeight are 8 and 18, and match the multipliers for config.width and
-        //config.height, but in this case don't strictly need to because we soon use a "Stretchable" font. While
+        //across the whole screen. cellWidth and cellHeight are 10 and 22, and match the multipliers for config.width
+        //and config.height, but in this case don't strictly need to because we soon use a "Stretchable" font. While
         //gridWidth and gridHeight are measured in spaces on the grid, cellWidth and cellHeight are the pixel dimensions
         //of an individual cell. The font will look more crisp if the cell dimensions match the config multipliers
         //exactly, and the stretchable fonts (technically, distance field fonts) can resize to non-square sizes and
         //still retain most of that crispness.
         gridWidth = 80;
         gridHeight = 24;
-        cellWidth = 14;
-        cellHeight = 21;
+        cellWidth = 10;
+        cellHeight = 22;
         // gotta have a random number generator. We can seed an RNG with any long we want, or even a String.
         rng = new RNG("SquidLib!");
 
@@ -81,11 +82,11 @@ public class BasicDemo extends ApplicationAdapter {
         // the font will try to load CM-Custom as an embedded bitmap font with a distance field effect.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
         display = new SquidLayers(gridWidth, gridHeight + 8, cellWidth, cellHeight,
-                DefaultResources.getStretchableTypewriterFont());
+                DefaultResources.getStretchableSlabFont());
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        display.setTextSize(cellWidth, cellHeight + 1);
+        display.setTextSize(cellWidth * 1.15f, cellHeight * 1.1f);
 
         // this makes animations very fast, which is good for multi-cell movement but bad for attack animations.
         display.setAnimationDuration(0.03f);
@@ -160,57 +161,73 @@ public class BasicDemo extends ApplicationAdapter {
         bgColor = SColor.DARK_SLATE_GRAY;
         colorIndices = DungeonUtility.generatePaletteIndices(decoDungeon);
         bgColorIndices = DungeonUtility.generateBGPaletteIndices(decoDungeon);
-        // this creates an array of sentences, where each imitates a different sort of language or mix of languages.
+        // this creates an array of sentence builders, where each imitates one or more languages or linguistic styles.
         // this serves to demonstrate the large amount of glyphs SquidLib supports.
         // there's no need to put much effort into understanding this section yet, and many games won't use the language
-        // generation code at all. If you want to know what this does, the parameters are:
+        // generation code at all. If you want to know what this does, the parameters are: the language to use,
         // minimum words in a sentence, maximum words in a sentence, "mid" punctuation that can be after a word (like a
         // comma), "end" punctuation that can be at the end of a sentence, frequency of "mid" punctuation (the chance in
         // 1.0 that a word will have something like a comma appended after it), and the limit on how many chars to use.
-        lang = new String[]
+        forms = new FakeLanguageGen.SentenceForm[]
                 {
-                        FakeLanguageGen.ENGLISH.sentence(5, 10, new String[]{",", ",", ",", ";"},
+                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.ENGLISH, 5, 10, new String[]{",", ",", ",", ";"},
                                 new String[]{".", ".", ".", "!", "?", "..."}, 0.17, gridWidth - 4),
-                        FakeLanguageGen.GREEK_AUTHENTIC.sentence(5, 11, new String[]{",", ",", ";"},
+                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.GREEK_AUTHENTIC, 5, 11, new String[]{",", ",", ";"},
                                 new String[]{".", ".", ".", "!", "?", "..."}, 0.2, gridWidth - 4),
-                        FakeLanguageGen.GREEK_ROMANIZED.sentence(5, 11, new String[]{",", ",", ";"},
+                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.GREEK_ROMANIZED, 5, 11, new String[]{",", ",", ";"},
                                 new String[]{".", ".", ".", "!", "?", "..."}, 0.2, gridWidth - 4),
-                        FakeLanguageGen.LOVECRAFT.sentence(3, 9, new String[]{",", ",", ";"},
+                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.LOVECRAFT, 3, 9, new String[]{",", ",", ";"},
                                 new String[]{".", ".", "!", "!", "?", "...", "..."}, 0.15, gridWidth - 4),
-                        FakeLanguageGen.FRENCH.sentence(4, 12, new String[]{",", ",", ",", ";", ";"},
+                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.FRENCH, 4, 12, new String[]{",", ",", ",", ";", ";"},
                                 new String[]{".", ".", ".", "!", "?", "..."}, 0.17, gridWidth - 4),
-                        FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(6, 13, new String[]{",", ",", ",", ",", ";", " -"},
+                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.RUSSIAN_AUTHENTIC, 6, 13, new String[]{",", ",", ",", ",", ";", " -"},
                                 new String[]{".", ".", ".", "!", "?", "..."}, 0.25, gridWidth - 4),
-                        FakeLanguageGen.RUSSIAN_ROMANIZED.sentence(6, 13, new String[]{",", ",", ",", ",", ";", " -"},
+                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.RUSSIAN_ROMANIZED, 6, 13, new String[]{",", ",", ",", ",", ";", " -"},
                                 new String[]{".", ".", ".", "!", "?", "..."}, 0.25, gridWidth - 4),
-                        FakeLanguageGen.JAPANESE_ROMANIZED.sentence(5, 13, new String[]{",", ",", ",", ",", ";"},
+                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.JAPANESE_ROMANIZED, 5, 13, new String[]{",", ",", ",", ",", ";"},
                                 new String[]{".", ".", ".", "!", "?", "...", "..."}, 0.12, gridWidth - 4),
-                        FakeLanguageGen.SWAHILI.sentence(4, 9, new String[]{",", ",", ",", ";", ";"},
+                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.SWAHILI, 4, 9, new String[]{",", ",", ",", ";", ";"},
                                 new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
-                        FakeLanguageGen.SOMALI.sentence(4, 9, new String[]{",", ",", ",", ";", ";"},
+                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.SOMALI, 4, 9, new String[]{",", ",", ",", ";", ";"},
                                 new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
-                        FakeLanguageGen.HINDI_ROMANIZED.sentence(4, 9, new String[]{",", ",", ",", ";", ";"},
+                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.HINDI_ROMANIZED, 4, 9, new String[]{",", ",", ",", ";", ";"},
                                 new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
-                        FakeLanguageGen.NORSE.sentence(4, 9, new String[]{",", ",", ",", ";", ";"},
+                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.NORSE, 4, 9, new String[]{",", ",", ",", ";", ";"},
                                 new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
-                        FakeLanguageGen.INUKTITUT.sentence(4, 9, new String[]{",", ",", ",", ";", ";"},
+                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.INUKTITUT, 4, 9, new String[]{",", ",", ",", ";", ";"},
                                 new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
-                        FakeLanguageGen.NAHUATL.sentence(4, 9, new String[]{",", ",", ",", ";", ";"},
+                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.NAHUATL, 4, 9, new String[]{",", ",", ",", ";", ";"},
                                 new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
-                        FakeLanguageGen.FANTASY_NAME.sentence(4, 8, new String[]{",", ",", ",", ";", ";"},
+                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.FANTASY_NAME, 4, 8, new String[]{",", ",", ",", ";", ";"},
                                 new String[]{".", ".", ".", "!", "?", "..."}, 0.22, gridWidth - 4),
-                        FakeLanguageGen.FANCY_FANTASY_NAME.sentence(4, 8, new String[]{",", ",", ",", ";", ";"},
+                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.FANCY_FANTASY_NAME, 4, 8, new String[]{",", ",", ",", ";", ";"},
                                 new String[]{".", ".", ".", "!", "?", "..."}, 0.22, gridWidth - 4),
-                        FakeLanguageGen.FRENCH.mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.65).sentence(5, 9, new String[]{",", ",", ",", ";"},
+                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.ELF, 5, 10, new String[]{",", ",", ",", ";", ";", " -"},
+                                new String[]{".", ".", ".", "...", "?"}, 0.22, gridWidth - 4),
+                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.GOBLIN, 4, 9, new String[]{",", ",", ",", ";", ";"},
+                                new String[]{".", ".", ".", "...", "?"}, 0.1, gridWidth - 4),
+                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.DEMONIC, 4, 8, new String[]{",", ",", ",", ";", ";"},
+                                new String[]{".", ".", "!", "!", "!", "?!"}, 0.07, gridWidth - 4),
+                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.INFERNAL, 6, 13, new String[]{",", ",", ",", ";", ";", " -", "*", " ©"},
+                                new String[]{".", ".", ".", "...", "?", "...", "?"}, 0.25, gridWidth - 4),
+                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.FRENCH.mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.65), 5, 9, new String[]{",", ",", ",", ";"},
                                 new String[]{".", ".", ".", "!", "?", "?", "..."}, 0.14, gridWidth - 4),
-                        FakeLanguageGen.ENGLISH.addAccents(0.5, 0.15).sentence(5, 10, new String[]{",", ",", ",", ";"},
+                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.ENGLISH.addAccents(0.5, 0.15), 5, 10, new String[]{",", ",", ",", ";"},
                                 new String[]{".", ".", ".", "!", "?", "..."}, 0.17, gridWidth - 4),
-                        FakeLanguageGen.SWAHILI.mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.5).mix(FakeLanguageGen.FRENCH, 0.35)
+                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.SWAHILI.mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.5).mix(FakeLanguageGen.FRENCH, 0.35)
                                 .mix(FakeLanguageGen.RUSSIAN_ROMANIZED, 0.25).mix(FakeLanguageGen.GREEK_ROMANIZED, 0.2).mix(FakeLanguageGen.ENGLISH, 0.15)
                                 .mix(FakeLanguageGen.FANCY_FANTASY_NAME, 0.12).mix(FakeLanguageGen.LOVECRAFT, 0.1)
-                                .sentence(5, 10, new String[]{",", ",", ",", ";"},
+                                , 5, 10, new String[]{",", ",", ",", ";"},
                                 new String[]{".", ".", ".", "!", "?", "..."}, 0.2, gridWidth - 4),
                 };
+        /*
+         * Now we generate the initial sentences for each of those many languages. We cycle through the shown sentences
+         * by changing langIndex, and change the contents of each sentence once it is cycled out of being visible.
+         */
+        lang = new String[forms.length];
+        for (int i = 0; i < forms.length; i++) {
+            lang[i] = forms[i].sentence();
+        }
 
         // this is a big one.
         // SquidInput can be constructed with a KeyHandler (which just processes specific keypresses), a SquidMouse
@@ -364,7 +381,9 @@ public class BasicDemo extends ApplicationAdapter {
             // from all other cells only when we need to, that is, when the movement is finished (see render() ).
             player = player.translate(xmod, ymod);
         }
-        // loops through the text snippets displayed whenever the player moves
+        // changes the top displayed sentence to a new one with the same language. the top will be cycled off next.
+        lang[langIndex] = forms[langIndex].sentence();
+        // cycles through the text snippets displayed whenever the player moves
         langIndex = (langIndex + 1) % lang.length;
     }
 

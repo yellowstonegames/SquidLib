@@ -72,7 +72,7 @@ public class TextCellFactory implements Disposable {
     protected String fitting = SQUID_FITTING;
     protected IColorCenter<Color> scc;
     protected int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;
-    protected int width = 1, height = 1;
+    protected float width = 1, height = 1;
     protected float actualCellWidth = 1, actualCellHeight = 1;
     protected float distanceFieldScaleX = 36f, distanceFieldScaleY = 36f;
     private boolean initialized = false, initializedByFont = false, initializedBySize = false;
@@ -157,9 +157,9 @@ public class TextCellFactory implements Disposable {
         if(bmpFont == null)
             bmpFont = DefaultResources.getIncludedFont();
         bmpFont.setFixedWidthGlyphs(fitting);
-        width = (int)bmpFont.getSpaceWidth();
+        width = bmpFont.getSpaceWidth();
         lineHeight = bmpFont.getLineHeight();
-        height = (int)(lineHeight);
+        height = (lineHeight);
         descent = bmpFont.getDescent();
 
         actualCellWidth = width;
@@ -497,7 +497,7 @@ public class TextCellFactory implements Disposable {
      *
      * @return the width
      */
-    public int width() {
+    public float width() {
         return width;
     }
 
@@ -508,7 +508,7 @@ public class TextCellFactory implements Disposable {
      * @param width the desired width
      * @return this factory for method chaining
      */
-    public TextCellFactory width(int width) {
+    public TextCellFactory width(float width) {
         this.width = Math.max(1, width);
         actualCellWidth = this.width;
         return this;
@@ -519,7 +519,7 @@ public class TextCellFactory implements Disposable {
      *
      * @return the height of a single cell
      */
-    public int height() {
+    public float height() {
         return height;
     }
 
@@ -530,7 +530,7 @@ public class TextCellFactory implements Disposable {
      * @param height the desired width
      * @return this factory for method chaining
      */
-    public TextCellFactory height(int height) {
+    public TextCellFactory height(float height) {
         this.height = Math.max(1, height);
         //modifiedHeight = this.height;
         actualCellHeight = this.height;
@@ -543,7 +543,7 @@ public class TextCellFactory implements Disposable {
      * @param width the desired width
      * @return this factory for method chaining
      */
-    public TextCellFactory tweakWidth(int width) {
+    public TextCellFactory tweakWidth(float width) {
         this.width = Math.max(1, width);
         return this;
     }
@@ -555,7 +555,7 @@ public class TextCellFactory implements Disposable {
      * @param height the desired height
      * @return this factory for method chaining
      */
-    public TextCellFactory tweakHeight(int height) {
+    public TextCellFactory tweakHeight(float height) {
         this.height = Math.max(1, height);
         //modifiedHeight = this.height;
         return this;
@@ -584,7 +584,7 @@ public class TextCellFactory implements Disposable {
     public TextCellFactory fit(String fit) {
         fitting = fit;
         bmpFont.setFixedWidthGlyphs(fitting);
-        width = (int)bmpFont.getSpaceWidth();
+        width = bmpFont.getSpaceWidth();
         return this;
     }
 
@@ -598,7 +598,7 @@ public class TextCellFactory implements Disposable {
     public TextCellFactory addFit(String fit) {
         fitting += fit;
         bmpFont.setFixedWidthGlyphs(fitting);
-        width = (int)bmpFont.getSpaceWidth();
+        width = bmpFont.getSpaceWidth();
         return this;
     }
 
