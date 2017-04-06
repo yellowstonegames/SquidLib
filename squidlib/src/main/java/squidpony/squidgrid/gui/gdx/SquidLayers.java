@@ -1156,7 +1156,6 @@ public class SquidLayers extends Group {
     public SquidLayers slide(AnimatedEntity ae, int endX, int endY) {
         return slide(ae, endX, endY, 2, -1);
     }
-
     public SquidLayers wiggle(int x, int y, int layer, float duration) {
         if (duration < 0)
             duration = animationDuration;

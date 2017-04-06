@@ -4,11 +4,14 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.FakeLanguageGen;
@@ -114,7 +117,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private Color bgColor;
     private SpatialMap<Integer, Monster> monsters;
     private DijkstraMap getToPlayer, playerToCursor;
-    private Stage stage;
+    private Stage stage, messageStage;
     private int framesWithoutAnimation = 0;
     private Coord cursor;
     private List<Coord> toCursor;
@@ -125,7 +128,8 @@ public class EverythingDemo extends ApplicationAdapter {
     private boolean changingColors = false;
     private TextCellFactory textFactory;
     public static final int INTERNAL_ZOOM = 1;
-    private Viewport viewport;
+    private Viewport viewport, messageViewport;
+    private Camera camera;
     private float currentZoomX = INTERNAL_ZOOM, currentZoomY = INTERNAL_ZOOM;
 
     @Override
@@ -244,7 +248,7 @@ public class EverythingDemo extends ApplicationAdapter {
         //the current health of the player and an '!' for alerted monsters.
         //subCell = new SquidPanel(width, height, textFactory.copy(), fgCenter);
 
-        display.setAnimationDuration(0.1f);
+        display.setAnimationDuration(0.15f);
         // we use a "torchlight" effect where the field of view wavers slightly, so a slightly-yellow color like
         // SColor.COSMIC_LATTE works well for the color of lighting. This tints everything very slightly yellow, but
         // this is mostly unnoticeable for things like deep water that already have a vivid color here.
@@ -261,12 +265,15 @@ public class EverythingDemo extends ApplicationAdapter {
         //The subCell SquidPanel uses a smaller size here; the numbers 8 and 16 should change if cellWidth or cellHeight
         //change, and the INTERNAL_ZOOM multiplier keeps things sharp, the same as it does all over here.
         //subCell.setTextSize(8 * INTERNAL_ZOOM, 16 * INTERNAL_ZOOM);
-        viewport = new StretchViewport(width * cellWidth, (height + 4) * cellHeight);
+        viewport = new StretchViewport(width * cellWidth, (height) * cellHeight);
+        messageViewport = new StretchViewport(width * cellWidth, (4) * cellHeight);
+        camera = viewport.getCamera();
         stage = new Stage(viewport, batch);
-
+        messageStage = new Stage(messageViewport, batch);
         //These need to have their positions set before adding any entities if there is an offset involved.
         messages.setBounds(0, 0, cellWidth * width, cellHeight * 4);
-        display.setPosition(0, messages.getHeight());
+        display.setPosition(0, 0);
+        viewport.setScreenY((int)messages.getHeight());
         //subCell.setPosition(0, messages.getHeight());
         messages.appendWrappingMessage("Use numpad or vi-keys (hjklyubn) to move. Use ? for help, f to change colors, q to quit." +
                 " Click the top or bottom border of this box to scroll.");
@@ -508,13 +515,13 @@ public class EverythingDemo extends ApplicationAdapter {
         //actions to give names to in the visual input menu
         input.init("filter", "??? help?", "quit");
         // ABSOLUTELY NEEDED TO HANDLE INPUT
-        Gdx.input.setInputProcessor(new InputMultiplexer(stage, input));
+        Gdx.input.setInputProcessor(new InputMultiplexer(stage, messageStage, input));
         //subCell.setOffsetY(messages.getGridHeight() * cellHeight);
         // and then add display and messages, our two visual components, to the list of things that act in Stage.
         stage.addActor(display);
         // stage.addActor(subCell); // this is not added since it is manually drawn after other steps
-        stage.addActor(messages);
-        viewport = input.resizeInnerStage(stage);
+        messageStage.addActor(messages);
+        //viewport = input.resizeInnerStage(stage);
     }
 
     /**
@@ -544,13 +551,36 @@ public class EverythingDemo extends ApplicationAdapter {
             } else {
                 // recalculate FOV, store it in fovmap for the render to use.
                 fovmap = fov.calculateFOV(res, newX, newY, 8, Radius.SQUARE);
-                //display.slide(player, newX, newY);
-                player.gridX = newX;
-                player.gridY = newY;
+                //player.gridX = newX;
+                //player.gridY = newY;
                 monsters.remove(Coord.get(newX, newY));
-                display.setGridOffsetX(newX - (width >> 1));
-                display.setGridOffsetY(newY - (height >> 1));
-                player.actor.setPosition(fg.adjustX(newX, false), fg.adjustY(newY));
+                //display.setGridOffsetX(newX - (width >> 1));
+                //display.setGridOffsetY(newY - (height >> 1));
+                //display.slideWorld(xmod, ymod, -1);
+                final Vector3 pos = camera.position.cpy(), original = camera.position.cpy(),
+                        nextPos = camera.position.cpy().add(xmod * cellWidth, -ymod * cellHeight, 0);
+                display.slide(player, newX, newY);
+                display.addAction(
+                        new TemporalAction(display.getAnimationDuration()+0.02f) {
+                            @Override
+                            protected void update(float percent) {
+                                pos.lerp(nextPos, percent);
+                                camera.position.set(pos);
+                                pos.set(original);
+                                camera.update();
+                            }
+                            @Override
+                            protected void end() {
+                                super.end();
+                                display.setGridOffsetX(player.gridX - (width >> 1));
+                                display.setGridOffsetY(player.gridY - (height >> 1));
+                                display.getForegroundLayer().fixPositions();
+                                camera.position.set(original);
+                                camera.update();
+
+                            }
+                        });
+                //player.actor.setPosition(fg.adjustX(newX, false), fg.adjustY(newY));
 
             }
             phase = Phase.PLAYER_ANIM;
@@ -583,7 +613,7 @@ public class EverythingDemo extends ApplicationAdapter {
         {
             Coord pos = monplaces.removeFirst();
             Monster mon = monsters.get(pos);
-            mon.entity.actor.setPosition(fg.adjustX(pos.x, false), fg.adjustY(pos.y));
+            //mon.entity.actor.setPosition(fg.adjustX(pos.x, false), fg.adjustY(pos.y));
             // monster values are used to store their aggression, 1 for actively stalking the player, 0 for not.
             if (mon.state > 0 || fovmap[pos.x][pos.y] > 0.1) {
                 if (mon.state == 0) {
@@ -612,10 +642,10 @@ public class EverythingDemo extends ApplicationAdapter {
                         }*/
                         monsters.positionalModify(pos, mon.change(1));
                         monsters.move(pos, tmp);
-                        //display.slide(mon.entity, tmp.x, tmp.y);
-                        mon.entity.gridX = tmp.x;
-                        mon.entity.gridY = tmp.y;
-                        mon.entity.actor.setPosition(fg.adjustX(tmp.x, false), fg.adjustY(tmp.y));
+                        display.slide(mon.entity, tmp.x, tmp.y);
+                        //mon.entity.gridX = tmp.x;
+                        //mon.entity.gridY = tmp.y;
+                        //mon.entity.actor.setPosition(fg.adjustX(tmp.x, false), fg.adjustY(tmp.y));
                         monplaces.add(tmp);
                     }
                 } else {
@@ -754,8 +784,8 @@ public class EverythingDemo extends ApplicationAdapter {
         // results are not good for the smooth noise we use the current time for! We want the time to go up slowly and
         // steadily, so the animation of the "torchlight" effect looks right.
         long tm = System.currentTimeMillis() & 0xfffffff;
-        for (int i = 0, ci = offsetX; i < width; i++, ci++) {
-            for (int j = 0, cj = offsetY; j < height; j++, cj++) {
+        for (int i = -1, ci = Math.max(0, offsetX-1); i <= width && ci < totalWidth; i++, ci++) {
+            for (int j = -1, cj = Math.max(0, offsetY-1); j <= height && cj < totalHeight; j++, cj++) {
                 overlapping = monsters.containsPosition(Coord.get(ci, cj)) || (player.gridX == ci && player.gridY == cj);
                 // if we see it now, we remember the cell and show a lit cell based on the fovmap value (between 0.0
                 // and 1.0), with 1.0 being brighter at +75 lightness and 0.0 being rather dark at -105.
@@ -813,6 +843,11 @@ public class EverythingDemo extends ApplicationAdapter {
         }
         // need to display the map every frame, since we clear the screen to avoid artifacts.
         putMap();
+        /*if(!display.hasActiveAnimations())
+        {
+            display.setGridOffsetX(player.gridX - (width >> 1));
+            display.setGridOffsetY(player.gridY - (height >> 1));
+        }*/
         // if the user clicked, we have a list of moves to perform.
         if (!awaitedMoves.isEmpty()) {
 
@@ -884,11 +919,13 @@ public class EverythingDemo extends ApplicationAdapter {
         }
 
         input.show();
+        messageViewport.apply(false);
+        messageStage.act();
+        messageStage.draw();
         // stage has its own batch and must be explicitly told to draw(). this also causes it to act().
-        stage.getViewport().apply(true);
-        stage.draw();
         stage.act();
-
+        viewport.apply(false);
+        stage.draw();
         //subCell.erase();
         if (help == null) {
             // display does not draw all AnimatedEntities by default, since FOV often changes how they need to be drawn.
@@ -930,7 +967,10 @@ public class EverythingDemo extends ApplicationAdapter {
         input.reinitialize(currentZoomX, currentZoomY, this.width, this.height, 0, 0, width, height);
         currentZoomX = cellWidth / currentZoomX;
         currentZoomY = cellHeight / currentZoomY;
-        input.update(width, height, true);
-        stage.getViewport().update(width, height, true);
+        input.update(width, height, false);
+        messageViewport.update(width, height, false);
+        messageViewport.setScreenBounds(0, 0, width, (int)messages.getHeight());
+        viewport.update(width, height, false);
+        viewport.setScreenBounds(0, (int)messages.getHeight(), width, height - (int)messages.getHeight());
     }
 }
