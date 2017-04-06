@@ -576,10 +576,11 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     public void draw (Batch batch, float parentAlpha) {
         textFactory.configureShader(batch);
         int inc = onlyRenderEven ? 2 : 1, widthInc = inc * cellWidth, heightInc = inc * cellHeight;
-        float screenX = xOffset, screenY_base = 1f + yOffset + gridHeight * cellHeight, screenY;
-        for (int x = gridOffsetX, xx = 0; xx < gridWidth && x < contents.length; x += inc, xx += inc, screenX += widthInc) {
+        float screenX = xOffset - (gridOffsetX <= 0 ? 0 : cellWidth)/* - getX()*/,
+                screenY_base = 1f + yOffset + (gridOffsetY <= 0 ? 0 : cellHeight) + gridHeight * cellHeight, screenY;
+        for (int x = Math.max(0, gridOffsetX-1), xx = (gridOffsetX <= 0) ? 0 : -1; xx <= gridWidth && x < contents.length; x += inc, xx += inc, screenX += widthInc) {
             screenY = screenY_base;
-            for (int y = gridOffsetY, yy = 0; yy < gridHeight && y < contents[x].length; y += inc, yy += inc, screenY -= heightInc) {
+            for (int y = Math.max(0, gridOffsetY-1), yy = (gridOffsetY <= 0) ? 0 : -1; yy <= gridHeight && y < contents[x].length; y += inc, yy += inc, screenY -= heightInc) {
                 textFactory.draw(batch, contents[x][y],
                         colors[x][y],
                         screenX,// xOffset + /*- getX() + 1f * */ x * cellWidth,
@@ -1078,9 +1079,27 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
             return;
         String n;
         if (restoreSym && (n = a.getName()) != null && !n.isEmpty())
-        	contents[x][y] = a.getName().charAt(0);
+            contents[x][y] = a.getName().charAt(0);
         removeActor(a);
     }
+
+    public void recallActor(Actor a, boolean restoreSym, int nextX, int nextY)
+    {
+        animationCount--;
+        if(onlyRenderEven)
+        {
+            // this just sets the least significant bit to 0, making any odd numbers even (decrementing)
+            nextX &= -2;
+            nextY &= -2;
+        }
+        if(nextX < 0 || nextY < 0 || nextX >= contents.length || nextY >= contents[nextX].length)
+            return;
+        String n;
+        if (restoreSym && (n = a.getName()) != null && !n.isEmpty())
+            contents[nextX][nextY] = a.getName().charAt(0);
+        removeActor(a);
+    }
+
     public void recallActor(AnimatedEntity ae)
     {
         if(ae.doubleWidth)
@@ -1096,6 +1115,31 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         }
         ae.animating = false;
         animationCount--;
+    }
+    public void recallActor(AnimatedEntity ae, int nextX, int nextY)
+    {
+        ae.gridX = nextX;
+        ae.gridY = nextY;
+        if(onlyRenderEven)
+        {
+            // this just sets the least significant bit to 0, making any odd numbers even (decrementing)
+            ae.gridX &= -2;
+            ae.gridY &= -2;
+        }
+        ae.animating = false;
+        animationCount--;
+    }
+
+    public void fixPosition(AnimatedEntity ae)
+    {
+        ae.actor.setPosition(adjustX(ae.gridX, ae.doubleWidth), adjustY(ae.gridY));
+    }
+    public void fixPositions()
+    {
+        for (int i = 0; i < animatedEntities.size(); i++) {
+            AnimatedEntity ae = animatedEntities.getAt(i);
+            ae.actor.setPosition(adjustX(ae.gridX, ae.doubleWidth), adjustY(ae.gridY));
+        }
     }
 
     /**
@@ -1120,7 +1164,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
                 Actions.delay(duration, Actions.run(new Runnable() {
                     @Override
                     public void run() {
-                        recallActor(ae);
+                        recallActor(ae, ae.gridX, ae.gridY);
                     }
                 }))));
 
@@ -1132,7 +1176,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param direction
      * @param duration a float, measured in seconds, for how long the animation should last; commonly 0.12f
      */
-    public void bump(int x, int y, Direction direction, float duration)
+    public void bump(final int x, final int y, Direction direction, float duration)
     {
         final Actor a = cellToActor(x, y);
         if(a == null) return;
@@ -1154,7 +1198,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
                 Actions.delay(duration, Actions.run(new Runnable() {
                     @Override
                     public void run() {
-                        recallActor(a, true);
+                        recallActor(a, true, x, y);
                     }
                 }))));
 
@@ -1187,7 +1231,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param newY
      * @param duration
      */
-    public void slide(final AnimatedEntity ae, int newX, int newY, float duration)
+    public void slide(final AnimatedEntity ae, final int newX, final int newY, float duration)
     {
         final Actor a = ae.actor;
         final float nextX = adjustX(newX, ae.doubleWidth), nextY = adjustY(newY);
@@ -1195,12 +1239,14 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         duration = clampDuration(duration);
         animationCount++;
         ae.animating = true;
+        ae.gridX = newX;
+        ae.gridY = newY;
         a.addAction(Actions.sequence(
                 Actions.moveToAligned(nextX, nextY, Align.bottomLeft, duration),
                 Actions.delay(duration, Actions.run(new Runnable() {
                     @Override
                     public void run() {
-                        recallActor(ae);
+                        recallActor(ae, newX, newY);
                     }
                 }))));
     }
@@ -1214,7 +1260,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param newY
      * @param duration
      */
-    public void slide(int x, int y, int newX, int newY, float duration)
+    public void slide(int x, int y, final int newX, final int newY, float duration)
     {
         final Actor a = cellToActor(x, y);
         if(a == null) return;
@@ -1235,7 +1281,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
                 Actions.delay(duration, Actions.run(new Runnable() {
                     @Override
                     public void run() {
-                        recallActor(a, true);
+                        recallActor(a, true, newX, newY);
                     }
                 }))));
     }
@@ -1293,8 +1339,8 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      *            The animation's duration.
      * @param postRunnable a Runnable to execute after the slide completes; may be null to do nothing.
      */
-    public void slide(int x, int y, final /* @Nullable */ String name, /* @Nullable */ Color color, int newX,
-                      int newY, float duration, /* @Nullable */ Runnable postRunnable) {
+    public void slide(int x, int y, final /* @Nullable */ String name, /* @Nullable */ Color color, final int newX,
+                      final int newY, float duration, /* @Nullable */ Runnable postRunnable) {
         if(name != null && name.isEmpty())
             return;
         final Actor a = createActor(x, y, name == null ? contents[x][y] : name.charAt(0),
@@ -1320,7 +1366,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         sequence[index] = Actions.delay(duration, Actions.run(new Runnable() {
             @Override
             public void run() {
-                recallActor(a, name == null);
+                recallActor(a, name == null, newX, newY);
             }
         }));
 
@@ -1395,7 +1441,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
                 Actions.delay(duration, Actions.run(new Runnable() {
                     @Override
                     public void run() {
-                        recallActor(ae);
+                        recallActor(ae, ae.gridX, ae.gridY);
                     }
                 }))));
     }
@@ -1406,7 +1452,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param y
      * @param duration
      */
-    public void wiggle(int x, int y, float duration) {
+    public void wiggle(final int x, final int y, float duration) {
         final Actor a = cellToActor(x, y);
         if(a == null) return;
         duration = clampDuration(duration);
@@ -1438,7 +1484,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
                 Actions.delay(duration, Actions.run(new Runnable() {
                     @Override
                     public void run() {
-                        recallActor(a, true);
+                        recallActor(a, true, x, y);
                     }
                 }))));
     }
@@ -1464,7 +1510,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
                 Actions.delay(duration, Actions.run(new Runnable() {
                     @Override
                     public void run() {
-                        recallActor(ae);
+                        recallActor(ae, ae.gridX, ae.gridY);
                     }
                 }))));
     }
@@ -1494,7 +1540,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param postRunnable a Runnable to execute after the tint completes; may be null to do nothing.
      */
 
-    public void tint(float delay, int x, int y, Color color, float duration, Runnable postRunnable) {
+    public void tint(float delay, final int x, final int y, Color color, float duration, Runnable postRunnable) {
         final Actor a = cellToActor(x, y);
         if(a == null)
             return;
@@ -1518,7 +1564,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         sequence[index] = Actions.run(new Runnable() {
             @Override
             public void run() {
-                recallActor(a, true);
+                recallActor(a, true, x, y);
             }
         });
 
@@ -1550,7 +1596,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 	 * @param duration
 	 *            The fadeout's duration.
 	 */
-	public void fade(int x, int y, Color color, float duration) {
+	public void fade(final int x, final int y, Color color, float duration) {
 		final Actor a = cellToActor(x, y);
 		if (a == null)
 			return;
@@ -1560,7 +1606,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 		a.addAction(Actions.sequence(Actions.color(c, duration), Actions.run(new Runnable() {
 			@Override
 			public void run() {
-				recallActor(a, true);
+				recallActor(a, true, x, y);
 			}
 		})));
 	}
