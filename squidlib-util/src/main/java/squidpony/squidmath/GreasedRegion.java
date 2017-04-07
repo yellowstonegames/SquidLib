@@ -3629,7 +3629,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         EACH_QUASI:
         for (int i = 0; i < ct; i++)
         {
-            tmp = (int)(VanDerCorputQRNG.determineMixed(i) * total);
+            tmp = (int)(VanDerCorputQRNG.weakDetermine(i) * total);
             for (int s = 0; s < ySections; s++) {
                 for (int x = 0; x < width; x++) {
                     if ((ic = counts[x * ySections + s]) > tmp) {
@@ -3675,13 +3675,14 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * Restricts the total count of "on" cells after this returns to a maximum of {@code limit} (minimum is 0 if no
      * cells are "on"). If limit is negative, this will not restrict the count.
      * <br>
-     * Uses a different algorithm than {@link #quasiRandomSeparated(double)}, hoping that it will be faster.
+     * Used a different algorithm than {@link #quasiRandomSeparated(double)}, but now that method changed to match the
+     * algorithm this uses ({@link VanDerCorputQRNG#weakDetermine(int)}).
      * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
      * @param limit the maximum count of "on" cells to keep
      * @return this for chaining
      */
     public GreasedRegion quasiRandomRegion(double fraction, int limit) {
-        int ct = 0, idx = 0, run = 0;
+        int ct = 0, idx, run = 0;
         for (int i = 0; i < width * ySections; i++) {
             ct += Long.bitCount(data[i]);
         }

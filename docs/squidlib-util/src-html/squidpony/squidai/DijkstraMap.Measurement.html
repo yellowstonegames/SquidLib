@@ -852,7 +852,7 @@
 <span class="sourceLineNo">844</span>                    }<a name="line.844"></a>
 <span class="sourceLineNo">845</span>                    double h = measurement.heuristic(dirs[d]);<a name="line.845"></a>
 <span class="sourceLineNo">846</span>                    cs = dist + h * costMap[adjX][adjY];<a name="line.846"></a>
-<span class="sourceLineNo">847</span>                    if (physicalMap[adjX][adjY] &lt;= FLOOR &amp;&amp; cs &lt; gradientMap[adjX][adjY]) {<a name="line.847"></a>
+<span class="sourceLineNo">847</span>                    if (gradientMap[adjX][adjY] &lt;= FLOOR &amp;&amp; cs &lt; gradientMap[adjX][adjY]) {<a name="line.847"></a>
 <span class="sourceLineNo">848</span>                        setFresh(adjX, adjY, cs);<a name="line.848"></a>
 <span class="sourceLineNo">849</span>                        ++numAssigned;<a name="line.849"></a>
 <span class="sourceLineNo">850</span>                        ++mappedCount;<a name="line.850"></a>
@@ -986,7 +986,7 @@
 <span class="sourceLineNo">978</span>                    }<a name="line.978"></a>
 <span class="sourceLineNo">979</span>                    double h = measurement.heuristic(dirs[d]);<a name="line.979"></a>
 <span class="sourceLineNo">980</span>                    cs = dist + h * costMap[adjX][adjY];<a name="line.980"></a>
-<span class="sourceLineNo">981</span>                    if (physicalMap[adjX][adjY] &lt;= FLOOR &amp;&amp; cs &lt; gradientMap[adjX][adjY]) {<a name="line.981"></a>
+<span class="sourceLineNo">981</span>                    if (gradientMap[adjX][adjY] &lt;= FLOOR &amp;&amp; cs &lt; gradientMap[adjX][adjY]) {<a name="line.981"></a>
 <span class="sourceLineNo">982</span>                        setFresh(adjX, adjY, cs);<a name="line.982"></a>
 <span class="sourceLineNo">983</span>                        ++numAssigned;<a name="line.983"></a>
 <span class="sourceLineNo">984</span>                        ++mappedCount;<a name="line.984"></a>
@@ -1069,7 +1069,7 @@
 <span class="sourceLineNo">1061</span>                    }<a name="line.1061"></a>
 <span class="sourceLineNo">1062</span>                    double h = measurement.heuristic(dirs[d]);<a name="line.1062"></a>
 <span class="sourceLineNo">1063</span>                    cs = dist + h * costMap[adjX][adjY];<a name="line.1063"></a>
-<span class="sourceLineNo">1064</span>                    if (physicalMap[adjX][adjY] &lt;= FLOOR &amp;&amp; cs &lt; gradientMap[adjX][adjY]) {<a name="line.1064"></a>
+<span class="sourceLineNo">1064</span>                    if (gradientMap[adjX][adjY] &lt;= FLOOR &amp;&amp; cs &lt; gradientMap[adjX][adjY]) {<a name="line.1064"></a>
 <span class="sourceLineNo">1065</span>                        ++mappedCount;<a name="line.1065"></a>
 <span class="sourceLineNo">1066</span>                        if (targets.contains(adj = Coord.get(adjX, adjY))) {<a name="line.1066"></a>
 <span class="sourceLineNo">1067</span>                            fresh.clear();<a name="line.1067"></a>
@@ -1212,7 +1212,7 @@
 <span class="sourceLineNo">1204</span>                    }<a name="line.1204"></a>
 <span class="sourceLineNo">1205</span>                    double h = measurement.heuristic(dirs[d]);<a name="line.1205"></a>
 <span class="sourceLineNo">1206</span>                    cs = dist + h * costMap[adjX][adjY];<a name="line.1206"></a>
-<span class="sourceLineNo">1207</span>                    if (physicalMap[adjX][adjY] &lt;= FLOOR &amp;&amp; cs &lt; gradientMap[adjX][adjY]) {<a name="line.1207"></a>
+<span class="sourceLineNo">1207</span>                    if (gradientMap[adjX][adjY] &lt;= FLOOR &amp;&amp; cs &lt; gradientMap[adjX][adjY]) {<a name="line.1207"></a>
 <span class="sourceLineNo">1208</span>                        ++mappedCount;<a name="line.1208"></a>
 <span class="sourceLineNo">1209</span>                        if (targets.contains(adj = Coord.get(adjX, adjY))) {<a name="line.1209"></a>
 <span class="sourceLineNo">1210</span>                            found.add(adj);<a name="line.1210"></a>
@@ -1364,7 +1364,7 @@
 <span class="sourceLineNo">1356</span>                    }<a name="line.1356"></a>
 <span class="sourceLineNo">1357</span>                    double h = measurement.heuristic(dirs[d]);<a name="line.1357"></a>
 <span class="sourceLineNo">1358</span>                    cs = dist + h * costMap[adjX][adjY];<a name="line.1358"></a>
-<span class="sourceLineNo">1359</span>                    if (physicalMap[adjX][adjY] &lt;= FLOOR &amp;&amp; cs &lt; gradientClone[adjX][adjY]) {<a name="line.1359"></a>
+<span class="sourceLineNo">1359</span>                    if (gradientClone[adjX][adjY] &lt;= FLOOR &amp;&amp; cs &lt; gradientClone[adjX][adjY]) {<a name="line.1359"></a>
 <span class="sourceLineNo">1360</span>                        setFresh(adjX, adjY, cs);<a name="line.1360"></a>
 <span class="sourceLineNo">1361</span>                        ++numAssigned;<a name="line.1361"></a>
 <span class="sourceLineNo">1362</span>                        ++mappedCount;<a name="line.1362"></a>
@@ -1538,7 +1538,7 @@
 <span class="sourceLineNo">1530</span>                    }<a name="line.1530"></a>
 <span class="sourceLineNo">1531</span>                    double h = measurement.heuristic(dirs[d]);<a name="line.1531"></a>
 <span class="sourceLineNo">1532</span>                    cs = dist + h * costMap[adjX][adjY];<a name="line.1532"></a>
-<span class="sourceLineNo">1533</span>                    if (physicalMap[adjX][adjY] &lt;= FLOOR &amp;&amp; cs &lt; gradientClone[adjX][adjY]) {<a name="line.1533"></a>
+<span class="sourceLineNo">1533</span>                    if (gradientClone[adjX][adjY] &lt;= FLOOR &amp;&amp; cs &lt; gradientClone[adjX][adjY]) {<a name="line.1533"></a>
 <span class="sourceLineNo">1534</span>                        setFresh(adjX, adjY, cs);<a name="line.1534"></a>
 <span class="sourceLineNo">1535</span>                        ++numAssigned;<a name="line.1535"></a>
 <span class="sourceLineNo">1536</span>                        ++mappedCount;<a name="line.1536"></a>

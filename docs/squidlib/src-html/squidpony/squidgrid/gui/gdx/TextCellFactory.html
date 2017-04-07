@@ -1292,470 +1292,502 @@
 <span class="sourceLineNo">1284</span>    }<a name="line.1284"></a>
 <span class="sourceLineNo">1285</span><a name="line.1285"></a>
 <span class="sourceLineNo">1286</span>    /**<a name="line.1286"></a>
-<span class="sourceLineNo">1287</span>     * Converts a char into a ColorChangeLabel, or if the argument c is '\0', creates a ColorChangeImage of a solid<a name="line.1287"></a>
-<span class="sourceLineNo">1288</span>     * block. Can be used for preparing glyphs for animation effects, and is used internally for this purpose. The<a name="line.1288"></a>
-<span class="sourceLineNo">1289</span>     * ColorChange classes will rotate between all colors given in the List each second, and are not affected by setColor,<a name="line.1289"></a>
-<span class="sourceLineNo">1290</span>     * though they are affected by their setColors methods. Their color change is not considered an animation for the<a name="line.1290"></a>
-<span class="sourceLineNo">1291</span>     * purposes of things like SquidPanel.hasActiveAnimations() .<a name="line.1291"></a>
+<span class="sourceLineNo">1287</span>     * Converts a char into a Label, or if the argument c is '\0', creates an Image of a solid block. Can be used<a name="line.1287"></a>
+<span class="sourceLineNo">1288</span>     * for preparing glyphs for animation effects, and is used internally for this purpose. Instead of a libGDX Color<a name="line.1288"></a>
+<span class="sourceLineNo">1289</span>     * object, this takes an encoded float that represents a color as libGDX often does internally, ABGR-packed format.<a name="line.1289"></a>
+<span class="sourceLineNo">1290</span>     * You can use various methods in SColor to produce these, like {@link SColor#floatGet(float, float, float, float)}<a name="line.1290"></a>
+<span class="sourceLineNo">1291</span>     * or {@link Color#toFloatBits()}.<a name="line.1291"></a>
 <span class="sourceLineNo">1292</span>     * @param c a char to make into an Actor, which can be the character with Unicode value 0 for a solid block.<a name="line.1292"></a>
-<span class="sourceLineNo">1293</span>     * @param colors a List of Color to tint c with, looping through all elements in the list each second<a name="line.1293"></a>
+<span class="sourceLineNo">1293</span>     * @param encodedColor an ABGR packed float (as produced by {@link SColor#floatGet(float, float, float, float)}) to use as c's color<a name="line.1293"></a>
 <span class="sourceLineNo">1294</span>     * @return the Actor, with no position set.<a name="line.1294"></a>
 <span class="sourceLineNo">1295</span>     */<a name="line.1295"></a>
-<span class="sourceLineNo">1296</span>    public Actor makeActor(char c, Collection&lt;Color&gt; colors) {<a name="line.1296"></a>
-<span class="sourceLineNo">1297</span>        return makeActor(c, colors, 2f, false);<a name="line.1297"></a>
-<span class="sourceLineNo">1298</span>    }<a name="line.1298"></a>
-<span class="sourceLineNo">1299</span>    /**<a name="line.1299"></a>
-<span class="sourceLineNo">1300</span>     * Converts a char into a ColorChangeLabel, or if the argument c is '\0', creates a ColorChangeImage of a solid<a name="line.1300"></a>
-<span class="sourceLineNo">1301</span>     * block. Can be used for preparing glyphs for animation effects, and is used internally for this purpose. The<a name="line.1301"></a>
-<span class="sourceLineNo">1302</span>     * ColorChange classes will rotate between all colors given in the List each second, and are not affected by setColor,<a name="line.1302"></a>
-<span class="sourceLineNo">1303</span>     * though they are affected by their setColors methods. Their color change is not considered an animation for the<a name="line.1303"></a>
-<span class="sourceLineNo">1304</span>     * purposes of things like SquidPanel.hasActiveAnimations() .<a name="line.1304"></a>
-<span class="sourceLineNo">1305</span>     * @param c a char to make into an Actor, which can be the character with Unicode value 0 for a solid block.<a name="line.1305"></a>
-<span class="sourceLineNo">1306</span>     * @param colors a List of Color to tint c with, looping through all elements in the list each second<a name="line.1306"></a>
-<span class="sourceLineNo">1307</span>     * @param loopTime the amount of time, in seconds, to spend looping through all colors in the list<a name="line.1307"></a>
-<span class="sourceLineNo">1308</span>     * @return the Actor, with no position set.<a name="line.1308"></a>
-<span class="sourceLineNo">1309</span>     */<a name="line.1309"></a>
-<span class="sourceLineNo">1310</span>    public Actor makeActor(char c, Collection&lt;Color&gt; colors, float loopTime)<a name="line.1310"></a>
-<span class="sourceLineNo">1311</span>    {<a name="line.1311"></a>
-<span class="sourceLineNo">1312</span>        return makeActor(c, colors, loopTime, false);<a name="line.1312"></a>
-<span class="sourceLineNo">1313</span>    }<a name="line.1313"></a>
-<span class="sourceLineNo">1314</span>    /**<a name="line.1314"></a>
-<span class="sourceLineNo">1315</span>     * Converts a char into a ColorChangeLabel, or if the argument c is '\0', creates a ColorChangeImage of a solid<a name="line.1315"></a>
-<span class="sourceLineNo">1316</span>     * block. Can be used for preparing glyphs for animation effects, and is used internally for this purpose. The<a name="line.1316"></a>
-<span class="sourceLineNo">1317</span>     * ColorChange classes will rotate between all colors given in the List each second, and are not affected by setColor,<a name="line.1317"></a>
-<span class="sourceLineNo">1318</span>     * though they are affected by their setColors methods. Their color change is not considered an animation for the<a name="line.1318"></a>
-<span class="sourceLineNo">1319</span>     * purposes of things like SquidPanel.hasActiveAnimations() .<a name="line.1319"></a>
-<span class="sourceLineNo">1320</span>     * @param c a char to make into an Actor, which can be the character with Unicode value 0 for a solid block.<a name="line.1320"></a>
-<span class="sourceLineNo">1321</span>     * @param colors a List of Color to tint c with, looping through all elements in the list each second<a name="line.1321"></a>
-<span class="sourceLineNo">1322</span>     * @param loopTime the amount of time, in seconds, to spend looping through all colors in the list<a name="line.1322"></a>
-<span class="sourceLineNo">1323</span>     * @return the Actor, with no position set.<a name="line.1323"></a>
-<span class="sourceLineNo">1324</span>     */<a name="line.1324"></a>
-<span class="sourceLineNo">1325</span>    public Actor makeActor(char c, Collection&lt;Color&gt; colors, float loopTime, boolean doubleWidth) {<a name="line.1325"></a>
-<span class="sourceLineNo">1326</span>        if (!initialized) {<a name="line.1326"></a>
-<span class="sourceLineNo">1327</span>            throw new IllegalStateException("This factory has not yet been initialized!");<a name="line.1327"></a>
-<span class="sourceLineNo">1328</span>        }<a name="line.1328"></a>
-<span class="sourceLineNo">1329</span>        ArrayList&lt;Color&gt; colors2 = null;<a name="line.1329"></a>
-<span class="sourceLineNo">1330</span>        if(colors != null &amp;&amp; !colors.isEmpty())<a name="line.1330"></a>
-<span class="sourceLineNo">1331</span>        {<a name="line.1331"></a>
-<span class="sourceLineNo">1332</span>            colors2 = new ArrayList&lt;&gt;(colors.size());<a name="line.1332"></a>
-<span class="sourceLineNo">1333</span>            for (Color color : colors) {<a name="line.1333"></a>
-<span class="sourceLineNo">1334</span>                colors2.add(scc.filter(color));<a name="line.1334"></a>
-<span class="sourceLineNo">1335</span>            }<a name="line.1335"></a>
-<span class="sourceLineNo">1336</span>        }<a name="line.1336"></a>
-<span class="sourceLineNo">1337</span>        if (c == 0) {<a name="line.1337"></a>
-<span class="sourceLineNo">1338</span>            ColorChangeImage im = new ColorChangeImage(block, loopTime, doubleWidth, colors2);<a name="line.1338"></a>
-<span class="sourceLineNo">1339</span>            //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));<a name="line.1339"></a>
-<span class="sourceLineNo">1340</span>            im.setSize(actualCellWidth * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f<a name="line.1340"></a>
-<span class="sourceLineNo">1341</span>            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);<a name="line.1341"></a>
-<span class="sourceLineNo">1342</span>            return im;<a name="line.1342"></a>
-<span class="sourceLineNo">1343</span>        } else {<a name="line.1343"></a>
-<span class="sourceLineNo">1344</span>            mut.setCharAt(0, swap.getOrDefault(c, c));<a name="line.1344"></a>
-<span class="sourceLineNo">1345</span>            ColorChangeLabel lb = new ColorChangeLabel(mut, style, loopTime, doubleWidth, colors2);<a name="line.1345"></a>
-<span class="sourceLineNo">1346</span>            lb.setSize(width, height - descent); //+ lineTweak * 1f<a name="line.1346"></a>
-<span class="sourceLineNo">1347</span>            // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);<a name="line.1347"></a>
-<span class="sourceLineNo">1348</span>            return lb;<a name="line.1348"></a>
-<span class="sourceLineNo">1349</span>        }<a name="line.1349"></a>
-<span class="sourceLineNo">1350</span>    }<a name="line.1350"></a>
-<span class="sourceLineNo">1351</span><a name="line.1351"></a>
-<span class="sourceLineNo">1352</span>    /**<a name="line.1352"></a>
-<span class="sourceLineNo">1353</span>     * Creates a ColorChangeImage Actor that should look like the glyph '^' in this font, but will be rotate-able. The<a name="line.1353"></a>
-<span class="sourceLineNo">1354</span>     * ColorChange classes will rotate between all colors given in the List in the given amount of loopTime, and are not<a name="line.1354"></a>
-<span class="sourceLineNo">1355</span>     * affected by setColor, though they are affected by their setColors methods. Their color change is not considered<a name="line.1355"></a>
-<span class="sourceLineNo">1356</span>     * an animation for the purposes of things like SquidPanel.hasActiveAnimations() .<a name="line.1356"></a>
-<span class="sourceLineNo">1357</span>     * @param colors a List of Color to tint s with, looping through all elements in the list each second<a name="line.1357"></a>
-<span class="sourceLineNo">1358</span>     * @param loopTime the amount of time, in seconds, to spend looping through all colors in the list<a name="line.1358"></a>
-<span class="sourceLineNo">1359</span>     * @return the Actor, with no position set.<a name="line.1359"></a>
-<span class="sourceLineNo">1360</span>     */<a name="line.1360"></a>
-<span class="sourceLineNo">1361</span>    public Image makeDirectionMarker(Collection&lt;Color&gt; colors, float loopTime, boolean doubleWidth) {<a name="line.1361"></a>
-<span class="sourceLineNo">1362</span>        if (!initialized) {<a name="line.1362"></a>
-<span class="sourceLineNo">1363</span>            throw new IllegalStateException("This factory has not yet been initialized!");<a name="line.1363"></a>
-<span class="sourceLineNo">1364</span>        }<a name="line.1364"></a>
-<span class="sourceLineNo">1365</span>        ArrayList&lt;Color&gt; colors2 = null;<a name="line.1365"></a>
-<span class="sourceLineNo">1366</span>        if (colors != null &amp;&amp; !colors.isEmpty()) {<a name="line.1366"></a>
-<span class="sourceLineNo">1367</span>            colors2 = new ArrayList&lt;&gt;(colors.size());<a name="line.1367"></a>
-<span class="sourceLineNo">1368</span>            for (Color c : colors) {<a name="line.1368"></a>
-<span class="sourceLineNo">1369</span>                colors2.add(scc.filter(c));<a name="line.1369"></a>
-<span class="sourceLineNo">1370</span>            }<a name="line.1370"></a>
-<span class="sourceLineNo">1371</span>        }<a name="line.1371"></a>
-<span class="sourceLineNo">1372</span>        ColorChangeImage im = new ColorChangeImage(dirMarker, loopTime, doubleWidth,<a name="line.1372"></a>
-<span class="sourceLineNo">1373</span>                actualCellWidth, actualCellHeight + (distanceField ? 1 : 0), colors2);<a name="line.1373"></a>
-<span class="sourceLineNo">1374</span>        im.setAlign(2);<a name="line.1374"></a>
-<span class="sourceLineNo">1375</span>        im.setSize(actualCellWidth * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f<a name="line.1375"></a>
-<span class="sourceLineNo">1376</span>        return im;<a name="line.1376"></a>
-<span class="sourceLineNo">1377</span>    }<a name="line.1377"></a>
-<span class="sourceLineNo">1378</span>    /**<a name="line.1378"></a>
-<span class="sourceLineNo">1379</span>     * Creates a Image Actor that should look like the glyph '^' in this font, but will be rotate-able.<a name="line.1379"></a>
-<span class="sourceLineNo">1380</span>     * @param color a Color to tint the '^' with<a name="line.1380"></a>
-<span class="sourceLineNo">1381</span>     * @return the Actor, with no position set.<a name="line.1381"></a>
-<span class="sourceLineNo">1382</span>     */<a name="line.1382"></a>
-<span class="sourceLineNo">1383</span>    public Image makeDirectionMarker(Color color) {<a name="line.1383"></a>
-<span class="sourceLineNo">1384</span>        if (!initialized) {<a name="line.1384"></a>
-<span class="sourceLineNo">1385</span>            throw new IllegalStateException("This factory has not yet been initialized!");<a name="line.1385"></a>
-<span class="sourceLineNo">1386</span>        }<a name="line.1386"></a>
-<span class="sourceLineNo">1387</span>        Image im = new Image(dirMarker);<a name="line.1387"></a>
-<span class="sourceLineNo">1388</span>        im.setColor(scc.filter(color));<a name="line.1388"></a>
-<span class="sourceLineNo">1389</span>        im.setSize(actualCellWidth, actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f<a name="line.1389"></a>
-<span class="sourceLineNo">1390</span>        im.setOrigin(1); //center<a name="line.1390"></a>
-<span class="sourceLineNo">1391</span>        return im;<a name="line.1391"></a>
-<span class="sourceLineNo">1392</span>    }<a name="line.1392"></a>
-<span class="sourceLineNo">1393</span><a name="line.1393"></a>
-<span class="sourceLineNo">1394</span>    public ColorChangeImage makeGlyphImage(char glyph, Color color)<a name="line.1394"></a>
-<span class="sourceLineNo">1395</span>    {<a name="line.1395"></a>
-<span class="sourceLineNo">1396</span>        return makeGlyphImage(glyph, color, false);<a name="line.1396"></a>
-<span class="sourceLineNo">1397</span>    }<a name="line.1397"></a>
-<span class="sourceLineNo">1398</span>    public ColorChangeImage makeGlyphImage(char glyph, Color color, boolean doubleWidth)<a name="line.1398"></a>
-<span class="sourceLineNo">1399</span>    {<a name="line.1399"></a>
-<span class="sourceLineNo">1400</span>        if (!initialized) {<a name="line.1400"></a>
-<span class="sourceLineNo">1401</span>            throw new IllegalStateException("This factory has not yet been initialized!");<a name="line.1401"></a>
-<span class="sourceLineNo">1402</span>        }<a name="line.1402"></a>
-<span class="sourceLineNo">1403</span>        TextureRegion tr;<a name="line.1403"></a>
-<span class="sourceLineNo">1404</span>        if (glyphTextures.containsKey(glyph))<a name="line.1404"></a>
-<span class="sourceLineNo">1405</span>        {<a name="line.1405"></a>
-<span class="sourceLineNo">1406</span>            tr = glyphTextures.get(glyph);<a name="line.1406"></a>
-<span class="sourceLineNo">1407</span>        }<a name="line.1407"></a>
-<span class="sourceLineNo">1408</span>        else<a name="line.1408"></a>
-<span class="sourceLineNo">1409</span>        {<a name="line.1409"></a>
-<span class="sourceLineNo">1410</span>            BitmapFont.Glyph g = bmpFont.getData().getGlyph(glyph);<a name="line.1410"></a>
-<span class="sourceLineNo">1411</span>            tr = new TextureRegion(bmpFont.getRegion(g.page), g.srcX, g.srcY, g.width, g.height);<a name="line.1411"></a>
-<span class="sourceLineNo">1412</span>            glyphTextures.put(glyph, tr);<a name="line.1412"></a>
-<span class="sourceLineNo">1413</span>        }<a name="line.1413"></a>
-<span class="sourceLineNo">1414</span><a name="line.1414"></a>
-<span class="sourceLineNo">1415</span>        ColorChangeImage im = new ColorChangeImage(tr, 1, doubleWidth,<a name="line.1415"></a>
-<span class="sourceLineNo">1416</span>                actualCellWidth, actualCellHeight + (distanceField ? 1 : 0), Collections.singletonList(scc.filter(color)));<a name="line.1416"></a>
-<span class="sourceLineNo">1417</span>        im.setAlign(2);<a name="line.1417"></a>
-<span class="sourceLineNo">1418</span>        im.setSize(actualCellWidth * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f<a name="line.1418"></a>
-<span class="sourceLineNo">1419</span>        return im;<a name="line.1419"></a>
-<span class="sourceLineNo">1420</span>    }<a name="line.1420"></a>
-<span class="sourceLineNo">1421</span>    public ColorChangeImage makeGlyphImage(char glyph, Collection&lt;Color&gt; colors, float loopTime, boolean doubleWidth) {<a name="line.1421"></a>
-<span class="sourceLineNo">1422</span>        if (!initialized) {<a name="line.1422"></a>
-<span class="sourceLineNo">1423</span>            throw new IllegalStateException("This factory has not yet been initialized!");<a name="line.1423"></a>
-<span class="sourceLineNo">1424</span>        }<a name="line.1424"></a>
-<span class="sourceLineNo">1425</span>        TextureRegion tr;<a name="line.1425"></a>
-<span class="sourceLineNo">1426</span>        if (glyphTextures.containsKey(glyph))<a name="line.1426"></a>
-<span class="sourceLineNo">1427</span>        {<a name="line.1427"></a>
-<span class="sourceLineNo">1428</span>            tr = glyphTextures.get(glyph);<a name="line.1428"></a>
-<span class="sourceLineNo">1429</span>        }<a name="line.1429"></a>
-<span class="sourceLineNo">1430</span>        else<a name="line.1430"></a>
-<span class="sourceLineNo">1431</span>        {<a name="line.1431"></a>
-<span class="sourceLineNo">1432</span>            BitmapFont.Glyph g = bmpFont.getData().getGlyph(glyph);<a name="line.1432"></a>
-<span class="sourceLineNo">1433</span>            tr = new TextureRegion(bmpFont.getRegion(g.page), g.srcX, g.srcY, g.width, g.height);<a name="line.1433"></a>
-<span class="sourceLineNo">1434</span>            glyphTextures.put(glyph, tr);<a name="line.1434"></a>
-<span class="sourceLineNo">1435</span>        }<a name="line.1435"></a>
-<span class="sourceLineNo">1436</span>        ArrayList&lt;Color&gt; colors2 = null;<a name="line.1436"></a>
-<span class="sourceLineNo">1437</span>        if (colors != null &amp;&amp; !colors.isEmpty()) {<a name="line.1437"></a>
-<span class="sourceLineNo">1438</span>            colors2 = new ArrayList&lt;&gt;(colors.size());<a name="line.1438"></a>
-<span class="sourceLineNo">1439</span>            for (Color c : colors) {<a name="line.1439"></a>
-<span class="sourceLineNo">1440</span>                colors2.add(scc.filter(c));<a name="line.1440"></a>
-<span class="sourceLineNo">1441</span>            }<a name="line.1441"></a>
-<span class="sourceLineNo">1442</span>        }<a name="line.1442"></a>
-<span class="sourceLineNo">1443</span>        ColorChangeImage im = new ColorChangeImage(tr, loopTime, doubleWidth,<a name="line.1443"></a>
-<span class="sourceLineNo">1444</span>                actualCellWidth, actualCellHeight + (distanceField ? 1 : 0), colors2);<a name="line.1444"></a>
-<span class="sourceLineNo">1445</span>        im.setAlign(2);<a name="line.1445"></a>
-<span class="sourceLineNo">1446</span>        im.setSize(actualCellWidth * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f<a name="line.1446"></a>
-<span class="sourceLineNo">1447</span>        return im;<a name="line.1447"></a>
-<span class="sourceLineNo">1448</span>    }<a name="line.1448"></a>
-<span class="sourceLineNo">1449</span><a name="line.1449"></a>
-<span class="sourceLineNo">1450</span>    /**<a name="line.1450"></a>
-<span class="sourceLineNo">1451</span>     * Converts a TextureRegion into an Image, or if the argument s is null, creates an Image of a solid block. Can be<a name="line.1451"></a>
-<span class="sourceLineNo">1452</span>     * used for preparing images for animation effects. Stretches the TextureRegion to match a single cell's dimensions.<a name="line.1452"></a>
-<span class="sourceLineNo">1453</span>     * @param tr a TextureRegion to make into an Actor, which can be null for a solid block.<a name="line.1453"></a>
-<span class="sourceLineNo">1454</span>     * @param color a Color to tint tr with.<a name="line.1454"></a>
-<span class="sourceLineNo">1455</span>     * @return the Actor, with no position set.<a name="line.1455"></a>
-<span class="sourceLineNo">1456</span>     */<a name="line.1456"></a>
-<span class="sourceLineNo">1457</span>    public Actor makeActor(TextureRegion tr, Color color) {<a name="line.1457"></a>
-<span class="sourceLineNo">1458</span>        if (!initialized) {<a name="line.1458"></a>
-<span class="sourceLineNo">1459</span>            throw new IllegalStateException("This factory has not yet been initialized!");<a name="line.1459"></a>
-<span class="sourceLineNo">1460</span>        }<a name="line.1460"></a>
-<span class="sourceLineNo">1461</span>        if (tr == null) {<a name="line.1461"></a>
-<span class="sourceLineNo">1462</span>            Image im = new Image(block);<a name="line.1462"></a>
-<span class="sourceLineNo">1463</span>            im.setColor(scc.filter(color));<a name="line.1463"></a>
-<span class="sourceLineNo">1464</span>            im.setSize(width, height);<a name="line.1464"></a>
-<span class="sourceLineNo">1465</span>            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);<a name="line.1465"></a>
-<span class="sourceLineNo">1466</span>            return im;<a name="line.1466"></a>
-<span class="sourceLineNo">1467</span>        } else {<a name="line.1467"></a>
-<span class="sourceLineNo">1468</span>            Image im = new Image(tr);<a name="line.1468"></a>
-<span class="sourceLineNo">1469</span>            im.setColor(scc.filter(color));<a name="line.1469"></a>
-<span class="sourceLineNo">1470</span>            im.setSize(width, height);<a name="line.1470"></a>
-<span class="sourceLineNo">1471</span>            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);<a name="line.1471"></a>
-<span class="sourceLineNo">1472</span>            return im;<a name="line.1472"></a>
-<span class="sourceLineNo">1473</span>        }<a name="line.1473"></a>
-<span class="sourceLineNo">1474</span>    }<a name="line.1474"></a>
-<span class="sourceLineNo">1475</span><a name="line.1475"></a>
-<span class="sourceLineNo">1476</span>    /**<a name="line.1476"></a>
-<span class="sourceLineNo">1477</span>     * Converts a TextureRegion into an Image, or if the argument s is null, creates an Image of a solid block. Can be<a name="line.1477"></a>
-<span class="sourceLineNo">1478</span>     * used for preparing images for animation effects. Ensures the returned Image has the given width and height.<a name="line.1478"></a>
-<span class="sourceLineNo">1479</span>     * @param tr a TextureRegion to make into an Actor, which can be null for a solid block.<a name="line.1479"></a>
-<span class="sourceLineNo">1480</span>     * @param color a Color to tint tr with.<a name="line.1480"></a>
-<span class="sourceLineNo">1481</span>     * @return the Actor, with no position set.<a name="line.1481"></a>
-<span class="sourceLineNo">1482</span>     */<a name="line.1482"></a>
-<span class="sourceLineNo">1483</span>    public Actor makeActor(TextureRegion tr, Color color, float width, float height) {<a name="line.1483"></a>
-<span class="sourceLineNo">1484</span>        if (!initialized) {<a name="line.1484"></a>
-<span class="sourceLineNo">1485</span>            throw new IllegalStateException("This factory has not yet been initialized!");<a name="line.1485"></a>
-<span class="sourceLineNo">1486</span>        }<a name="line.1486"></a>
-<span class="sourceLineNo">1487</span>        if (tr == null) {<a name="line.1487"></a>
-<span class="sourceLineNo">1488</span>            Image im = new Image(block);<a name="line.1488"></a>
-<span class="sourceLineNo">1489</span>            im.setColor(scc.filter(color));<a name="line.1489"></a>
-<span class="sourceLineNo">1490</span>            im.setSize(width, height);<a name="line.1490"></a>
-<span class="sourceLineNo">1491</span>            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);<a name="line.1491"></a>
-<span class="sourceLineNo">1492</span>            return im;<a name="line.1492"></a>
-<span class="sourceLineNo">1493</span>        } else {<a name="line.1493"></a>
-<span class="sourceLineNo">1494</span>            Image im = new Image(tr);<a name="line.1494"></a>
+<span class="sourceLineNo">1296</span>    public Actor makeActor(char c, float encodedColor) {<a name="line.1296"></a>
+<span class="sourceLineNo">1297</span>        if (!initialized) {<a name="line.1297"></a>
+<span class="sourceLineNo">1298</span>            throw new IllegalStateException("This factory has not yet been initialized!");<a name="line.1298"></a>
+<span class="sourceLineNo">1299</span>        }<a name="line.1299"></a>
+<span class="sourceLineNo">1300</span>        if (c == 0) {<a name="line.1300"></a>
+<span class="sourceLineNo">1301</span>            Image im = new Image(block);<a name="line.1301"></a>
+<span class="sourceLineNo">1302</span>            Color.abgr8888ToColor(im.getColor(), encodedColor);<a name="line.1302"></a>
+<span class="sourceLineNo">1303</span>            //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));<a name="line.1303"></a>
+<span class="sourceLineNo">1304</span>            im.setSize(actualCellWidth, actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f<a name="line.1304"></a>
+<span class="sourceLineNo">1305</span>            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);<a name="line.1305"></a>
+<span class="sourceLineNo">1306</span>            return im;<a name="line.1306"></a>
+<span class="sourceLineNo">1307</span>        } else {<a name="line.1307"></a>
+<span class="sourceLineNo">1308</span>            mut.setCharAt(0, swap.getOrDefault(c, c));<a name="line.1308"></a>
+<span class="sourceLineNo">1309</span>            Label lb = new Label(mut, style);<a name="line.1309"></a>
+<span class="sourceLineNo">1310</span>            //lb.setFontScale(bmpFont.getData().scaleX, bmpFont.getData().scaleY);<a name="line.1310"></a>
+<span class="sourceLineNo">1311</span>            lb.setSize(width, height - descent); //+ lineTweak * 1f<a name="line.1311"></a>
+<span class="sourceLineNo">1312</span>            Color.abgr8888ToColor(lb.getColor(), encodedColor);<a name="line.1312"></a>
+<span class="sourceLineNo">1313</span>            // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);<a name="line.1313"></a>
+<span class="sourceLineNo">1314</span>            return lb;<a name="line.1314"></a>
+<span class="sourceLineNo">1315</span>        }<a name="line.1315"></a>
+<span class="sourceLineNo">1316</span>    }<a name="line.1316"></a>
+<span class="sourceLineNo">1317</span><a name="line.1317"></a>
+<span class="sourceLineNo">1318</span>    /**<a name="line.1318"></a>
+<span class="sourceLineNo">1319</span>     * Converts a char into a ColorChangeLabel, or if the argument c is '\0', creates a ColorChangeImage of a solid<a name="line.1319"></a>
+<span class="sourceLineNo">1320</span>     * block. Can be used for preparing glyphs for animation effects, and is used internally for this purpose. The<a name="line.1320"></a>
+<span class="sourceLineNo">1321</span>     * ColorChange classes will rotate between all colors given in the List each second, and are not affected by setColor,<a name="line.1321"></a>
+<span class="sourceLineNo">1322</span>     * though they are affected by their setColors methods. Their color change is not considered an animation for the<a name="line.1322"></a>
+<span class="sourceLineNo">1323</span>     * purposes of things like SquidPanel.hasActiveAnimations() .<a name="line.1323"></a>
+<span class="sourceLineNo">1324</span>     * @param c a char to make into an Actor, which can be the character with Unicode value 0 for a solid block.<a name="line.1324"></a>
+<span class="sourceLineNo">1325</span>     * @param colors a List of Color to tint c with, looping through all elements in the list each second<a name="line.1325"></a>
+<span class="sourceLineNo">1326</span>     * @return the Actor, with no position set.<a name="line.1326"></a>
+<span class="sourceLineNo">1327</span>     */<a name="line.1327"></a>
+<span class="sourceLineNo">1328</span>    public Actor makeActor(char c, Collection&lt;Color&gt; colors) {<a name="line.1328"></a>
+<span class="sourceLineNo">1329</span>        return makeActor(c, colors, 2f, false);<a name="line.1329"></a>
+<span class="sourceLineNo">1330</span>    }<a name="line.1330"></a>
+<span class="sourceLineNo">1331</span>    /**<a name="line.1331"></a>
+<span class="sourceLineNo">1332</span>     * Converts a char into a ColorChangeLabel, or if the argument c is '\0', creates a ColorChangeImage of a solid<a name="line.1332"></a>
+<span class="sourceLineNo">1333</span>     * block. Can be used for preparing glyphs for animation effects, and is used internally for this purpose. The<a name="line.1333"></a>
+<span class="sourceLineNo">1334</span>     * ColorChange classes will rotate between all colors given in the List each second, and are not affected by setColor,<a name="line.1334"></a>
+<span class="sourceLineNo">1335</span>     * though they are affected by their setColors methods. Their color change is not considered an animation for the<a name="line.1335"></a>
+<span class="sourceLineNo">1336</span>     * purposes of things like SquidPanel.hasActiveAnimations() .<a name="line.1336"></a>
+<span class="sourceLineNo">1337</span>     * @param c a char to make into an Actor, which can be the character with Unicode value 0 for a solid block.<a name="line.1337"></a>
+<span class="sourceLineNo">1338</span>     * @param colors a List of Color to tint c with, looping through all elements in the list each second<a name="line.1338"></a>
+<span class="sourceLineNo">1339</span>     * @param loopTime the amount of time, in seconds, to spend looping through all colors in the list<a name="line.1339"></a>
+<span class="sourceLineNo">1340</span>     * @return the Actor, with no position set.<a name="line.1340"></a>
+<span class="sourceLineNo">1341</span>     */<a name="line.1341"></a>
+<span class="sourceLineNo">1342</span>    public Actor makeActor(char c, Collection&lt;Color&gt; colors, float loopTime)<a name="line.1342"></a>
+<span class="sourceLineNo">1343</span>    {<a name="line.1343"></a>
+<span class="sourceLineNo">1344</span>        return makeActor(c, colors, loopTime, false);<a name="line.1344"></a>
+<span class="sourceLineNo">1345</span>    }<a name="line.1345"></a>
+<span class="sourceLineNo">1346</span>    /**<a name="line.1346"></a>
+<span class="sourceLineNo">1347</span>     * Converts a char into a ColorChangeLabel, or if the argument c is '\0', creates a ColorChangeImage of a solid<a name="line.1347"></a>
+<span class="sourceLineNo">1348</span>     * block. Can be used for preparing glyphs for animation effects, and is used internally for this purpose. The<a name="line.1348"></a>
+<span class="sourceLineNo">1349</span>     * ColorChange classes will rotate between all colors given in the List each second, and are not affected by setColor,<a name="line.1349"></a>
+<span class="sourceLineNo">1350</span>     * though they are affected by their setColors methods. Their color change is not considered an animation for the<a name="line.1350"></a>
+<span class="sourceLineNo">1351</span>     * purposes of things like SquidPanel.hasActiveAnimations() .<a name="line.1351"></a>
+<span class="sourceLineNo">1352</span>     * @param c a char to make into an Actor, which can be the character with Unicode value 0 for a solid block.<a name="line.1352"></a>
+<span class="sourceLineNo">1353</span>     * @param colors a List of Color to tint c with, looping through all elements in the list each second<a name="line.1353"></a>
+<span class="sourceLineNo">1354</span>     * @param loopTime the amount of time, in seconds, to spend looping through all colors in the list<a name="line.1354"></a>
+<span class="sourceLineNo">1355</span>     * @return the Actor, with no position set.<a name="line.1355"></a>
+<span class="sourceLineNo">1356</span>     */<a name="line.1356"></a>
+<span class="sourceLineNo">1357</span>    public Actor makeActor(char c, Collection&lt;Color&gt; colors, float loopTime, boolean doubleWidth) {<a name="line.1357"></a>
+<span class="sourceLineNo">1358</span>        if (!initialized) {<a name="line.1358"></a>
+<span class="sourceLineNo">1359</span>            throw new IllegalStateException("This factory has not yet been initialized!");<a name="line.1359"></a>
+<span class="sourceLineNo">1360</span>        }<a name="line.1360"></a>
+<span class="sourceLineNo">1361</span>        ArrayList&lt;Color&gt; colors2 = null;<a name="line.1361"></a>
+<span class="sourceLineNo">1362</span>        if(colors != null &amp;&amp; !colors.isEmpty())<a name="line.1362"></a>
+<span class="sourceLineNo">1363</span>        {<a name="line.1363"></a>
+<span class="sourceLineNo">1364</span>            colors2 = new ArrayList&lt;&gt;(colors.size());<a name="line.1364"></a>
+<span class="sourceLineNo">1365</span>            for (Color color : colors) {<a name="line.1365"></a>
+<span class="sourceLineNo">1366</span>                colors2.add(scc.filter(color));<a name="line.1366"></a>
+<span class="sourceLineNo">1367</span>            }<a name="line.1367"></a>
+<span class="sourceLineNo">1368</span>        }<a name="line.1368"></a>
+<span class="sourceLineNo">1369</span>        if (c == 0) {<a name="line.1369"></a>
+<span class="sourceLineNo">1370</span>            ColorChangeImage im = new ColorChangeImage(block, loopTime, doubleWidth, colors2);<a name="line.1370"></a>
+<span class="sourceLineNo">1371</span>            //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));<a name="line.1371"></a>
+<span class="sourceLineNo">1372</span>            im.setSize(actualCellWidth * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f<a name="line.1372"></a>
+<span class="sourceLineNo">1373</span>            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);<a name="line.1373"></a>
+<span class="sourceLineNo">1374</span>            return im;<a name="line.1374"></a>
+<span class="sourceLineNo">1375</span>        } else {<a name="line.1375"></a>
+<span class="sourceLineNo">1376</span>            mut.setCharAt(0, swap.getOrDefault(c, c));<a name="line.1376"></a>
+<span class="sourceLineNo">1377</span>            ColorChangeLabel lb = new ColorChangeLabel(mut, style, loopTime, doubleWidth, colors2);<a name="line.1377"></a>
+<span class="sourceLineNo">1378</span>            lb.setSize(width, height - descent); //+ lineTweak * 1f<a name="line.1378"></a>
+<span class="sourceLineNo">1379</span>            // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);<a name="line.1379"></a>
+<span class="sourceLineNo">1380</span>            return lb;<a name="line.1380"></a>
+<span class="sourceLineNo">1381</span>        }<a name="line.1381"></a>
+<span class="sourceLineNo">1382</span>    }<a name="line.1382"></a>
+<span class="sourceLineNo">1383</span><a name="line.1383"></a>
+<span class="sourceLineNo">1384</span>    /**<a name="line.1384"></a>
+<span class="sourceLineNo">1385</span>     * Creates a ColorChangeImage Actor that should look like the glyph '^' in this font, but will be rotate-able. The<a name="line.1385"></a>
+<span class="sourceLineNo">1386</span>     * ColorChange classes will rotate between all colors given in the List in the given amount of loopTime, and are not<a name="line.1386"></a>
+<span class="sourceLineNo">1387</span>     * affected by setColor, though they are affected by their setColors methods. Their color change is not considered<a name="line.1387"></a>
+<span class="sourceLineNo">1388</span>     * an animation for the purposes of things like SquidPanel.hasActiveAnimations() .<a name="line.1388"></a>
+<span class="sourceLineNo">1389</span>     * @param colors a List of Color to tint s with, looping through all elements in the list each second<a name="line.1389"></a>
+<span class="sourceLineNo">1390</span>     * @param loopTime the amount of time, in seconds, to spend looping through all colors in the list<a name="line.1390"></a>
+<span class="sourceLineNo">1391</span>     * @return the Actor, with no position set.<a name="line.1391"></a>
+<span class="sourceLineNo">1392</span>     */<a name="line.1392"></a>
+<span class="sourceLineNo">1393</span>    public Image makeDirectionMarker(Collection&lt;Color&gt; colors, float loopTime, boolean doubleWidth) {<a name="line.1393"></a>
+<span class="sourceLineNo">1394</span>        if (!initialized) {<a name="line.1394"></a>
+<span class="sourceLineNo">1395</span>            throw new IllegalStateException("This factory has not yet been initialized!");<a name="line.1395"></a>
+<span class="sourceLineNo">1396</span>        }<a name="line.1396"></a>
+<span class="sourceLineNo">1397</span>        ArrayList&lt;Color&gt; colors2 = null;<a name="line.1397"></a>
+<span class="sourceLineNo">1398</span>        if (colors != null &amp;&amp; !colors.isEmpty()) {<a name="line.1398"></a>
+<span class="sourceLineNo">1399</span>            colors2 = new ArrayList&lt;&gt;(colors.size());<a name="line.1399"></a>
+<span class="sourceLineNo">1400</span>            for (Color c : colors) {<a name="line.1400"></a>
+<span class="sourceLineNo">1401</span>                colors2.add(scc.filter(c));<a name="line.1401"></a>
+<span class="sourceLineNo">1402</span>            }<a name="line.1402"></a>
+<span class="sourceLineNo">1403</span>        }<a name="line.1403"></a>
+<span class="sourceLineNo">1404</span>        ColorChangeImage im = new ColorChangeImage(dirMarker, loopTime, doubleWidth,<a name="line.1404"></a>
+<span class="sourceLineNo">1405</span>                actualCellWidth, actualCellHeight + (distanceField ? 1 : 0), colors2);<a name="line.1405"></a>
+<span class="sourceLineNo">1406</span>        im.setAlign(2);<a name="line.1406"></a>
+<span class="sourceLineNo">1407</span>        im.setSize(actualCellWidth * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f<a name="line.1407"></a>
+<span class="sourceLineNo">1408</span>        return im;<a name="line.1408"></a>
+<span class="sourceLineNo">1409</span>    }<a name="line.1409"></a>
+<span class="sourceLineNo">1410</span>    /**<a name="line.1410"></a>
+<span class="sourceLineNo">1411</span>     * Creates a Image Actor that should look like the glyph '^' in this font, but will be rotate-able.<a name="line.1411"></a>
+<span class="sourceLineNo">1412</span>     * @param color a Color to tint the '^' with<a name="line.1412"></a>
+<span class="sourceLineNo">1413</span>     * @return the Actor, with no position set.<a name="line.1413"></a>
+<span class="sourceLineNo">1414</span>     */<a name="line.1414"></a>
+<span class="sourceLineNo">1415</span>    public Image makeDirectionMarker(Color color) {<a name="line.1415"></a>
+<span class="sourceLineNo">1416</span>        if (!initialized) {<a name="line.1416"></a>
+<span class="sourceLineNo">1417</span>            throw new IllegalStateException("This factory has not yet been initialized!");<a name="line.1417"></a>
+<span class="sourceLineNo">1418</span>        }<a name="line.1418"></a>
+<span class="sourceLineNo">1419</span>        Image im = new Image(dirMarker);<a name="line.1419"></a>
+<span class="sourceLineNo">1420</span>        im.setColor(scc.filter(color));<a name="line.1420"></a>
+<span class="sourceLineNo">1421</span>        im.setSize(actualCellWidth, actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f<a name="line.1421"></a>
+<span class="sourceLineNo">1422</span>        im.setOrigin(1); //center<a name="line.1422"></a>
+<span class="sourceLineNo">1423</span>        return im;<a name="line.1423"></a>
+<span class="sourceLineNo">1424</span>    }<a name="line.1424"></a>
+<span class="sourceLineNo">1425</span><a name="line.1425"></a>
+<span class="sourceLineNo">1426</span>    public ColorChangeImage makeGlyphImage(char glyph, Color color)<a name="line.1426"></a>
+<span class="sourceLineNo">1427</span>    {<a name="line.1427"></a>
+<span class="sourceLineNo">1428</span>        return makeGlyphImage(glyph, color, false);<a name="line.1428"></a>
+<span class="sourceLineNo">1429</span>    }<a name="line.1429"></a>
+<span class="sourceLineNo">1430</span>    public ColorChangeImage makeGlyphImage(char glyph, Color color, boolean doubleWidth)<a name="line.1430"></a>
+<span class="sourceLineNo">1431</span>    {<a name="line.1431"></a>
+<span class="sourceLineNo">1432</span>        if (!initialized) {<a name="line.1432"></a>
+<span class="sourceLineNo">1433</span>            throw new IllegalStateException("This factory has not yet been initialized!");<a name="line.1433"></a>
+<span class="sourceLineNo">1434</span>        }<a name="line.1434"></a>
+<span class="sourceLineNo">1435</span>        TextureRegion tr;<a name="line.1435"></a>
+<span class="sourceLineNo">1436</span>        if (glyphTextures.containsKey(glyph))<a name="line.1436"></a>
+<span class="sourceLineNo">1437</span>        {<a name="line.1437"></a>
+<span class="sourceLineNo">1438</span>            tr = glyphTextures.get(glyph);<a name="line.1438"></a>
+<span class="sourceLineNo">1439</span>        }<a name="line.1439"></a>
+<span class="sourceLineNo">1440</span>        else<a name="line.1440"></a>
+<span class="sourceLineNo">1441</span>        {<a name="line.1441"></a>
+<span class="sourceLineNo">1442</span>            BitmapFont.Glyph g = bmpFont.getData().getGlyph(glyph);<a name="line.1442"></a>
+<span class="sourceLineNo">1443</span>            tr = new TextureRegion(bmpFont.getRegion(g.page), g.srcX, g.srcY, g.width, g.height);<a name="line.1443"></a>
+<span class="sourceLineNo">1444</span>            glyphTextures.put(glyph, tr);<a name="line.1444"></a>
+<span class="sourceLineNo">1445</span>        }<a name="line.1445"></a>
+<span class="sourceLineNo">1446</span><a name="line.1446"></a>
+<span class="sourceLineNo">1447</span>        ColorChangeImage im = new ColorChangeImage(tr, 1, doubleWidth,<a name="line.1447"></a>
+<span class="sourceLineNo">1448</span>                actualCellWidth, actualCellHeight + (distanceField ? 1 : 0), Collections.singletonList(scc.filter(color)));<a name="line.1448"></a>
+<span class="sourceLineNo">1449</span>        im.setAlign(2);<a name="line.1449"></a>
+<span class="sourceLineNo">1450</span>        im.setSize(actualCellWidth * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f<a name="line.1450"></a>
+<span class="sourceLineNo">1451</span>        return im;<a name="line.1451"></a>
+<span class="sourceLineNo">1452</span>    }<a name="line.1452"></a>
+<span class="sourceLineNo">1453</span>    public ColorChangeImage makeGlyphImage(char glyph, Collection&lt;Color&gt; colors, float loopTime, boolean doubleWidth) {<a name="line.1453"></a>
+<span class="sourceLineNo">1454</span>        if (!initialized) {<a name="line.1454"></a>
+<span class="sourceLineNo">1455</span>            throw new IllegalStateException("This factory has not yet been initialized!");<a name="line.1455"></a>
+<span class="sourceLineNo">1456</span>        }<a name="line.1456"></a>
+<span class="sourceLineNo">1457</span>        TextureRegion tr;<a name="line.1457"></a>
+<span class="sourceLineNo">1458</span>        if (glyphTextures.containsKey(glyph))<a name="line.1458"></a>
+<span class="sourceLineNo">1459</span>        {<a name="line.1459"></a>
+<span class="sourceLineNo">1460</span>            tr = glyphTextures.get(glyph);<a name="line.1460"></a>
+<span class="sourceLineNo">1461</span>        }<a name="line.1461"></a>
+<span class="sourceLineNo">1462</span>        else<a name="line.1462"></a>
+<span class="sourceLineNo">1463</span>        {<a name="line.1463"></a>
+<span class="sourceLineNo">1464</span>            BitmapFont.Glyph g = bmpFont.getData().getGlyph(glyph);<a name="line.1464"></a>
+<span class="sourceLineNo">1465</span>            tr = new TextureRegion(bmpFont.getRegion(g.page), g.srcX, g.srcY, g.width, g.height);<a name="line.1465"></a>
+<span class="sourceLineNo">1466</span>            glyphTextures.put(glyph, tr);<a name="line.1466"></a>
+<span class="sourceLineNo">1467</span>        }<a name="line.1467"></a>
+<span class="sourceLineNo">1468</span>        ArrayList&lt;Color&gt; colors2 = null;<a name="line.1468"></a>
+<span class="sourceLineNo">1469</span>        if (colors != null &amp;&amp; !colors.isEmpty()) {<a name="line.1469"></a>
+<span class="sourceLineNo">1470</span>            colors2 = new ArrayList&lt;&gt;(colors.size());<a name="line.1470"></a>
+<span class="sourceLineNo">1471</span>            for (Color c : colors) {<a name="line.1471"></a>
+<span class="sourceLineNo">1472</span>                colors2.add(scc.filter(c));<a name="line.1472"></a>
+<span class="sourceLineNo">1473</span>            }<a name="line.1473"></a>
+<span class="sourceLineNo">1474</span>        }<a name="line.1474"></a>
+<span class="sourceLineNo">1475</span>        ColorChangeImage im = new ColorChangeImage(tr, loopTime, doubleWidth,<a name="line.1475"></a>
+<span class="sourceLineNo">1476</span>                actualCellWidth, actualCellHeight + (distanceField ? 1 : 0), colors2);<a name="line.1476"></a>
+<span class="sourceLineNo">1477</span>        im.setAlign(2);<a name="line.1477"></a>
+<span class="sourceLineNo">1478</span>        im.setSize(actualCellWidth * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f<a name="line.1478"></a>
+<span class="sourceLineNo">1479</span>        return im;<a name="line.1479"></a>
+<span class="sourceLineNo">1480</span>    }<a name="line.1480"></a>
+<span class="sourceLineNo">1481</span><a name="line.1481"></a>
+<span class="sourceLineNo">1482</span>    /**<a name="line.1482"></a>
+<span class="sourceLineNo">1483</span>     * Converts a TextureRegion into an Image, or if the argument s is null, creates an Image of a solid block. Can be<a name="line.1483"></a>
+<span class="sourceLineNo">1484</span>     * used for preparing images for animation effects. Stretches the TextureRegion to match a single cell's dimensions.<a name="line.1484"></a>
+<span class="sourceLineNo">1485</span>     * @param tr a TextureRegion to make into an Actor, which can be null for a solid block.<a name="line.1485"></a>
+<span class="sourceLineNo">1486</span>     * @param color a Color to tint tr with.<a name="line.1486"></a>
+<span class="sourceLineNo">1487</span>     * @return the Actor, with no position set.<a name="line.1487"></a>
+<span class="sourceLineNo">1488</span>     */<a name="line.1488"></a>
+<span class="sourceLineNo">1489</span>    public Actor makeActor(TextureRegion tr, Color color) {<a name="line.1489"></a>
+<span class="sourceLineNo">1490</span>        if (!initialized) {<a name="line.1490"></a>
+<span class="sourceLineNo">1491</span>            throw new IllegalStateException("This factory has not yet been initialized!");<a name="line.1491"></a>
+<span class="sourceLineNo">1492</span>        }<a name="line.1492"></a>
+<span class="sourceLineNo">1493</span>        if (tr == null) {<a name="line.1493"></a>
+<span class="sourceLineNo">1494</span>            Image im = new Image(block);<a name="line.1494"></a>
 <span class="sourceLineNo">1495</span>            im.setColor(scc.filter(color));<a name="line.1495"></a>
 <span class="sourceLineNo">1496</span>            im.setSize(width, height);<a name="line.1496"></a>
 <span class="sourceLineNo">1497</span>            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);<a name="line.1497"></a>
 <span class="sourceLineNo">1498</span>            return im;<a name="line.1498"></a>
-<span class="sourceLineNo">1499</span>        }<a name="line.1499"></a>
-<span class="sourceLineNo">1500</span>    }<a name="line.1500"></a>
-<span class="sourceLineNo">1501</span><a name="line.1501"></a>
-<span class="sourceLineNo">1502</span>    /**<a name="line.1502"></a>
-<span class="sourceLineNo">1503</span>     * Returns a solid block of white, 1x1 pixel in size; can be drawn at other sizes by Batch.<a name="line.1503"></a>
-<span class="sourceLineNo">1504</span>     *<a name="line.1504"></a>
-<span class="sourceLineNo">1505</span>     * @return a white 1x1 pixel Texture.<a name="line.1505"></a>
-<span class="sourceLineNo">1506</span>     */<a name="line.1506"></a>
-<span class="sourceLineNo">1507</span>    public Texture getSolid() {<a name="line.1507"></a>
-<span class="sourceLineNo">1508</span>        if (!initialized) {<a name="line.1508"></a>
-<span class="sourceLineNo">1509</span>            throw new IllegalStateException("This factory has not yet been initialized!");<a name="line.1509"></a>
-<span class="sourceLineNo">1510</span>        }<a name="line.1510"></a>
-<span class="sourceLineNo">1511</span>        return block;<a name="line.1511"></a>
-<span class="sourceLineNo">1512</span>    }<a name="line.1512"></a>
-<span class="sourceLineNo">1513</span><a name="line.1513"></a>
-<span class="sourceLineNo">1514</span>    public boolean isDistanceField() {<a name="line.1514"></a>
-<span class="sourceLineNo">1515</span>        return distanceField;<a name="line.1515"></a>
-<span class="sourceLineNo">1516</span>    }<a name="line.1516"></a>
-<span class="sourceLineNo">1517</span><a name="line.1517"></a>
-<span class="sourceLineNo">1518</span>    public float getDistanceFieldScaleX() {<a name="line.1518"></a>
-<span class="sourceLineNo">1519</span>        return distanceFieldScaleX;<a name="line.1519"></a>
-<span class="sourceLineNo">1520</span>    }<a name="line.1520"></a>
-<span class="sourceLineNo">1521</span>    public float getDistanceFieldScaleY() {<a name="line.1521"></a>
-<span class="sourceLineNo">1522</span>        return distanceFieldScaleY;<a name="line.1522"></a>
-<span class="sourceLineNo">1523</span>    }<a name="line.1523"></a>
-<span class="sourceLineNo">1524</span><a name="line.1524"></a>
-<span class="sourceLineNo">1525</span>    /**<a name="line.1525"></a>
-<span class="sourceLineNo">1526</span>     * If this uses a distance field font, the smoothing multiplier affects how crisp or blurry lines are, with higher<a name="line.1526"></a>
-<span class="sourceLineNo">1527</span>     * numbers generally resulting in more crisp fonts, but numbers that are too high cause jagged aliasing.<a name="line.1527"></a>
-<span class="sourceLineNo">1528</span>     * @return the current smoothing multiplier as a float, which starts at 1f.<a name="line.1528"></a>
-<span class="sourceLineNo">1529</span>     */<a name="line.1529"></a>
-<span class="sourceLineNo">1530</span>    public float getSmoothingMultiplier() {<a name="line.1530"></a>
-<span class="sourceLineNo">1531</span>        return smoothingMultiplier;<a name="line.1531"></a>
+<span class="sourceLineNo">1499</span>        } else {<a name="line.1499"></a>
+<span class="sourceLineNo">1500</span>            Image im = new Image(tr);<a name="line.1500"></a>
+<span class="sourceLineNo">1501</span>            im.setColor(scc.filter(color));<a name="line.1501"></a>
+<span class="sourceLineNo">1502</span>            im.setSize(width, height);<a name="line.1502"></a>
+<span class="sourceLineNo">1503</span>            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);<a name="line.1503"></a>
+<span class="sourceLineNo">1504</span>            return im;<a name="line.1504"></a>
+<span class="sourceLineNo">1505</span>        }<a name="line.1505"></a>
+<span class="sourceLineNo">1506</span>    }<a name="line.1506"></a>
+<span class="sourceLineNo">1507</span><a name="line.1507"></a>
+<span class="sourceLineNo">1508</span>    /**<a name="line.1508"></a>
+<span class="sourceLineNo">1509</span>     * Converts a TextureRegion into an Image, or if the argument s is null, creates an Image of a solid block. Can be<a name="line.1509"></a>
+<span class="sourceLineNo">1510</span>     * used for preparing images for animation effects. Ensures the returned Image has the given width and height.<a name="line.1510"></a>
+<span class="sourceLineNo">1511</span>     * @param tr a TextureRegion to make into an Actor, which can be null for a solid block.<a name="line.1511"></a>
+<span class="sourceLineNo">1512</span>     * @param color a Color to tint tr with.<a name="line.1512"></a>
+<span class="sourceLineNo">1513</span>     * @return the Actor, with no position set.<a name="line.1513"></a>
+<span class="sourceLineNo">1514</span>     */<a name="line.1514"></a>
+<span class="sourceLineNo">1515</span>    public Actor makeActor(TextureRegion tr, Color color, float width, float height) {<a name="line.1515"></a>
+<span class="sourceLineNo">1516</span>        if (!initialized) {<a name="line.1516"></a>
+<span class="sourceLineNo">1517</span>            throw new IllegalStateException("This factory has not yet been initialized!");<a name="line.1517"></a>
+<span class="sourceLineNo">1518</span>        }<a name="line.1518"></a>
+<span class="sourceLineNo">1519</span>        if (tr == null) {<a name="line.1519"></a>
+<span class="sourceLineNo">1520</span>            Image im = new Image(block);<a name="line.1520"></a>
+<span class="sourceLineNo">1521</span>            im.setColor(scc.filter(color));<a name="line.1521"></a>
+<span class="sourceLineNo">1522</span>            im.setSize(width, height);<a name="line.1522"></a>
+<span class="sourceLineNo">1523</span>            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);<a name="line.1523"></a>
+<span class="sourceLineNo">1524</span>            return im;<a name="line.1524"></a>
+<span class="sourceLineNo">1525</span>        } else {<a name="line.1525"></a>
+<span class="sourceLineNo">1526</span>            Image im = new Image(tr);<a name="line.1526"></a>
+<span class="sourceLineNo">1527</span>            im.setColor(scc.filter(color));<a name="line.1527"></a>
+<span class="sourceLineNo">1528</span>            im.setSize(width, height);<a name="line.1528"></a>
+<span class="sourceLineNo">1529</span>            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);<a name="line.1529"></a>
+<span class="sourceLineNo">1530</span>            return im;<a name="line.1530"></a>
+<span class="sourceLineNo">1531</span>        }<a name="line.1531"></a>
 <span class="sourceLineNo">1532</span>    }<a name="line.1532"></a>
 <span class="sourceLineNo">1533</span><a name="line.1533"></a>
 <span class="sourceLineNo">1534</span>    /**<a name="line.1534"></a>
-<span class="sourceLineNo">1535</span>     * If this uses a distance field font, the smoothing multiplier affects how crisp or blurry lines are, with higher<a name="line.1535"></a>
-<span class="sourceLineNo">1536</span>     * numbers generally resulting in more crisp fonts, but numbers that are too high cause jagged aliasing.<a name="line.1536"></a>
-<span class="sourceLineNo">1537</span>     * @param smoothingMultiplier the new value for the smoothing multiplier as a float; should be fairly close to 1f.<a name="line.1537"></a>
-<span class="sourceLineNo">1538</span>     * @return this for chaining<a name="line.1538"></a>
-<span class="sourceLineNo">1539</span>     */<a name="line.1539"></a>
-<span class="sourceLineNo">1540</span>    public TextCellFactory setSmoothingMultiplier(float smoothingMultiplier) {<a name="line.1540"></a>
-<span class="sourceLineNo">1541</span>        this.smoothingMultiplier = smoothingMultiplier;<a name="line.1541"></a>
-<span class="sourceLineNo">1542</span>        return this;<a name="line.1542"></a>
-<span class="sourceLineNo">1543</span>    }<a name="line.1543"></a>
-<span class="sourceLineNo">1544</span><a name="line.1544"></a>
-<span class="sourceLineNo">1545</span>    /**<a name="line.1545"></a>
-<span class="sourceLineNo">1546</span>     * If using a distance field font, you MUST call this at some point while the batch has begun, or use code that<a name="line.1546"></a>
-<span class="sourceLineNo">1547</span>     * calls it for you (which is now much of SquidLib). A typical point to call it is in the<a name="line.1547"></a>
-<span class="sourceLineNo">1548</span>     * "void draw(Batch batch, float parentAlpha)" method or an overriding method for a Scene2D class. You should call<a name="line.1548"></a>
-<span class="sourceLineNo">1549</span>     * configureShader rarely, typically only a few times per frame if there are no images to render, and this means the<a name="line.1549"></a>
-<span class="sourceLineNo">1550</span>     * logical place to call it is in the outermost Group that contains any SquidPanel objects or other widgets. If you<a name="line.1550"></a>
-<span class="sourceLineNo">1551</span>     * have multipleTextCellFactory objects, each one needs to have configureShader called before it is used to draw.<a name="line.1551"></a>
-<span class="sourceLineNo">1552</span>     * &lt;br&gt;<a name="line.1552"></a>
-<span class="sourceLineNo">1553</span>     * SquidLayers and SquidPanel already call this method in their draw overrides, so you don't need to call this<a name="line.1553"></a>
-<span class="sourceLineNo">1554</span>     * manually if you use SquidLayers or SquidPanel.<a name="line.1554"></a>
-<span class="sourceLineNo">1555</span>     * &lt;br&gt;<a name="line.1555"></a>
-<span class="sourceLineNo">1556</span>     * If you don't use a distance field font, you don't need to call this, but calling it won't cause problems.<a name="line.1556"></a>
-<span class="sourceLineNo">1557</span>     *<a name="line.1557"></a>
-<span class="sourceLineNo">1558</span>     * @param batch the Batch, such as a SpriteBatch, to configure to render distance field fonts if necessary.<a name="line.1558"></a>
-<span class="sourceLineNo">1559</span>     */<a name="line.1559"></a>
-<span class="sourceLineNo">1560</span>    public void configureShader(Batch batch) {<a name="line.1560"></a>
-<span class="sourceLineNo">1561</span>        if (initialized &amp;&amp; distanceField) {<a name="line.1561"></a>
-<span class="sourceLineNo">1562</span>            batch.setShader(shader);<a name="line.1562"></a>
-<span class="sourceLineNo">1563</span>            shader.setUniformf("u_smoothing", 0.2f / (3.5f * smoothingMultiplier * bmpFont.getData().scaleX));<a name="line.1563"></a>
-<span class="sourceLineNo">1564</span>        }<a name="line.1564"></a>
-<span class="sourceLineNo">1565</span>    }<a name="line.1565"></a>
+<span class="sourceLineNo">1535</span>     * Returns a solid block of white, 1x1 pixel in size; can be drawn at other sizes by Batch.<a name="line.1535"></a>
+<span class="sourceLineNo">1536</span>     *<a name="line.1536"></a>
+<span class="sourceLineNo">1537</span>     * @return a white 1x1 pixel Texture.<a name="line.1537"></a>
+<span class="sourceLineNo">1538</span>     */<a name="line.1538"></a>
+<span class="sourceLineNo">1539</span>    public Texture getSolid() {<a name="line.1539"></a>
+<span class="sourceLineNo">1540</span>        if (!initialized) {<a name="line.1540"></a>
+<span class="sourceLineNo">1541</span>            throw new IllegalStateException("This factory has not yet been initialized!");<a name="line.1541"></a>
+<span class="sourceLineNo">1542</span>        }<a name="line.1542"></a>
+<span class="sourceLineNo">1543</span>        return block;<a name="line.1543"></a>
+<span class="sourceLineNo">1544</span>    }<a name="line.1544"></a>
+<span class="sourceLineNo">1545</span><a name="line.1545"></a>
+<span class="sourceLineNo">1546</span>    public boolean isDistanceField() {<a name="line.1546"></a>
+<span class="sourceLineNo">1547</span>        return distanceField;<a name="line.1547"></a>
+<span class="sourceLineNo">1548</span>    }<a name="line.1548"></a>
+<span class="sourceLineNo">1549</span><a name="line.1549"></a>
+<span class="sourceLineNo">1550</span>    public float getDistanceFieldScaleX() {<a name="line.1550"></a>
+<span class="sourceLineNo">1551</span>        return distanceFieldScaleX;<a name="line.1551"></a>
+<span class="sourceLineNo">1552</span>    }<a name="line.1552"></a>
+<span class="sourceLineNo">1553</span>    public float getDistanceFieldScaleY() {<a name="line.1553"></a>
+<span class="sourceLineNo">1554</span>        return distanceFieldScaleY;<a name="line.1554"></a>
+<span class="sourceLineNo">1555</span>    }<a name="line.1555"></a>
+<span class="sourceLineNo">1556</span><a name="line.1556"></a>
+<span class="sourceLineNo">1557</span>    /**<a name="line.1557"></a>
+<span class="sourceLineNo">1558</span>     * If this uses a distance field font, the smoothing multiplier affects how crisp or blurry lines are, with higher<a name="line.1558"></a>
+<span class="sourceLineNo">1559</span>     * numbers generally resulting in more crisp fonts, but numbers that are too high cause jagged aliasing.<a name="line.1559"></a>
+<span class="sourceLineNo">1560</span>     * @return the current smoothing multiplier as a float, which starts at 1f.<a name="line.1560"></a>
+<span class="sourceLineNo">1561</span>     */<a name="line.1561"></a>
+<span class="sourceLineNo">1562</span>    public float getSmoothingMultiplier() {<a name="line.1562"></a>
+<span class="sourceLineNo">1563</span>        return smoothingMultiplier;<a name="line.1563"></a>
+<span class="sourceLineNo">1564</span>    }<a name="line.1564"></a>
+<span class="sourceLineNo">1565</span><a name="line.1565"></a>
 <span class="sourceLineNo">1566</span>    /**<a name="line.1566"></a>
-<span class="sourceLineNo">1567</span>     * Releases all resources of this object.<a name="line.1567"></a>
-<span class="sourceLineNo">1568</span>     */<a name="line.1568"></a>
-<span class="sourceLineNo">1569</span>    @Override<a name="line.1569"></a>
-<span class="sourceLineNo">1570</span>    public void dispose() {<a name="line.1570"></a>
-<span class="sourceLineNo">1571</span>        if(bmpFont != null) bmpFont.dispose();<a name="line.1571"></a>
-<span class="sourceLineNo">1572</span>        if(block != null) block.dispose();<a name="line.1572"></a>
-<span class="sourceLineNo">1573</span>    }<a name="line.1573"></a>
-<span class="sourceLineNo">1574</span><a name="line.1574"></a>
-<span class="sourceLineNo">1575</span>    /**<a name="line.1575"></a>
-<span class="sourceLineNo">1576</span>     * Gets the descent of this TextCellFactory's BitmapFont, which may be useful for layout outside this class.<a name="line.1576"></a>
-<span class="sourceLineNo">1577</span>     * @return the descent of the BitmapFont this object uses<a name="line.1577"></a>
-<span class="sourceLineNo">1578</span>     */<a name="line.1578"></a>
-<span class="sourceLineNo">1579</span>    public float getDescent() {<a name="line.1579"></a>
-<span class="sourceLineNo">1580</span>        return descent;<a name="line.1580"></a>
-<span class="sourceLineNo">1581</span>    }<a name="line.1581"></a>
-<span class="sourceLineNo">1582</span><a name="line.1582"></a>
-<span class="sourceLineNo">1583</span>    public char getDirectionGlyph() {<a name="line.1583"></a>
-<span class="sourceLineNo">1584</span>        return directionGlyph;<a name="line.1584"></a>
-<span class="sourceLineNo">1585</span>    }<a name="line.1585"></a>
-<span class="sourceLineNo">1586</span><a name="line.1586"></a>
-<span class="sourceLineNo">1587</span>    public TextCellFactory setDirectionGlyph(char directionGlyph) {<a name="line.1587"></a>
-<span class="sourceLineNo">1588</span>        this.directionGlyph = directionGlyph;<a name="line.1588"></a>
-<span class="sourceLineNo">1589</span>        return this;<a name="line.1589"></a>
-<span class="sourceLineNo">1590</span>    }<a name="line.1590"></a>
-<span class="sourceLineNo">1591</span><a name="line.1591"></a>
-<span class="sourceLineNo">1592</span>    /**<a name="line.1592"></a>
-<span class="sourceLineNo">1593</span>     * Adds a pair of Strings (typically both with length 1) as a replacement pair, so when the find String is requested<a name="line.1593"></a>
-<span class="sourceLineNo">1594</span>     * to be drawn, the replace String is used instead. Swaps are used when drawing text in each cell in SquidPanel and<a name="line.1594"></a>
-<span class="sourceLineNo">1595</span>     * related classes, so Strings longer than 1 char are effectively disregarded beyond the first char.<a name="line.1595"></a>
-<span class="sourceLineNo">1596</span>     * &lt;br&gt;<a name="line.1596"></a>
-<span class="sourceLineNo">1597</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1597"></a>
-<span class="sourceLineNo">1598</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1598"></a>
-<span class="sourceLineNo">1599</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap("^", ",")} and also<a name="line.1599"></a>
-<span class="sourceLineNo">1600</span>     * {@code addSwap(",", ":")}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1600"></a>
-<span class="sourceLineNo">1601</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1601"></a>
-<span class="sourceLineNo">1602</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1602"></a>
-<span class="sourceLineNo">1603</span>     * @param find the requested String that will be changed<a name="line.1603"></a>
-<span class="sourceLineNo">1604</span>     * @param replace the replacement String that will be used in place of find<a name="line.1604"></a>
-<span class="sourceLineNo">1605</span>     * @return this for chaining<a name="line.1605"></a>
-<span class="sourceLineNo">1606</span>     */<a name="line.1606"></a>
-<span class="sourceLineNo">1607</span>    public TextCellFactory addSwap(String find, String replace)<a name="line.1607"></a>
-<span class="sourceLineNo">1608</span>    {<a name="line.1608"></a>
-<span class="sourceLineNo">1609</span>        if(find == null || replace == null || find.isEmpty()  || replace.isEmpty() || find.charAt(0) == 0)<a name="line.1609"></a>
-<span class="sourceLineNo">1610</span>            return this;<a name="line.1610"></a>
-<span class="sourceLineNo">1611</span>        swap.put(find.charAt(0), replace.charAt(0));<a name="line.1611"></a>
-<span class="sourceLineNo">1612</span>        return this;<a name="line.1612"></a>
+<span class="sourceLineNo">1567</span>     * If this uses a distance field font, the smoothing multiplier affects how crisp or blurry lines are, with higher<a name="line.1567"></a>
+<span class="sourceLineNo">1568</span>     * numbers generally resulting in more crisp fonts, but numbers that are too high cause jagged aliasing.<a name="line.1568"></a>
+<span class="sourceLineNo">1569</span>     * @param smoothingMultiplier the new value for the smoothing multiplier as a float; should be fairly close to 1f.<a name="line.1569"></a>
+<span class="sourceLineNo">1570</span>     * @return this for chaining<a name="line.1570"></a>
+<span class="sourceLineNo">1571</span>     */<a name="line.1571"></a>
+<span class="sourceLineNo">1572</span>    public TextCellFactory setSmoothingMultiplier(float smoothingMultiplier) {<a name="line.1572"></a>
+<span class="sourceLineNo">1573</span>        this.smoothingMultiplier = smoothingMultiplier;<a name="line.1573"></a>
+<span class="sourceLineNo">1574</span>        return this;<a name="line.1574"></a>
+<span class="sourceLineNo">1575</span>    }<a name="line.1575"></a>
+<span class="sourceLineNo">1576</span><a name="line.1576"></a>
+<span class="sourceLineNo">1577</span>    /**<a name="line.1577"></a>
+<span class="sourceLineNo">1578</span>     * If using a distance field font, you MUST call this at some point while the batch has begun, or use code that<a name="line.1578"></a>
+<span class="sourceLineNo">1579</span>     * calls it for you (which is now much of SquidLib). A typical point to call it is in the<a name="line.1579"></a>
+<span class="sourceLineNo">1580</span>     * "void draw(Batch batch, float parentAlpha)" method or an overriding method for a Scene2D class. You should call<a name="line.1580"></a>
+<span class="sourceLineNo">1581</span>     * configureShader rarely, typically only a few times per frame if there are no images to render, and this means the<a name="line.1581"></a>
+<span class="sourceLineNo">1582</span>     * logical place to call it is in the outermost Group that contains any SquidPanel objects or other widgets. If you<a name="line.1582"></a>
+<span class="sourceLineNo">1583</span>     * have multipleTextCellFactory objects, each one needs to have configureShader called before it is used to draw.<a name="line.1583"></a>
+<span class="sourceLineNo">1584</span>     * &lt;br&gt;<a name="line.1584"></a>
+<span class="sourceLineNo">1585</span>     * SquidLayers and SquidPanel already call this method in their draw overrides, so you don't need to call this<a name="line.1585"></a>
+<span class="sourceLineNo">1586</span>     * manually if you use SquidLayers or SquidPanel.<a name="line.1586"></a>
+<span class="sourceLineNo">1587</span>     * &lt;br&gt;<a name="line.1587"></a>
+<span class="sourceLineNo">1588</span>     * If you don't use a distance field font, you don't need to call this, but calling it won't cause problems.<a name="line.1588"></a>
+<span class="sourceLineNo">1589</span>     *<a name="line.1589"></a>
+<span class="sourceLineNo">1590</span>     * @param batch the Batch, such as a SpriteBatch, to configure to render distance field fonts if necessary.<a name="line.1590"></a>
+<span class="sourceLineNo">1591</span>     */<a name="line.1591"></a>
+<span class="sourceLineNo">1592</span>    public void configureShader(Batch batch) {<a name="line.1592"></a>
+<span class="sourceLineNo">1593</span>        if (initialized &amp;&amp; distanceField) {<a name="line.1593"></a>
+<span class="sourceLineNo">1594</span>            batch.setShader(shader);<a name="line.1594"></a>
+<span class="sourceLineNo">1595</span>            shader.setUniformf("u_smoothing", 0.2f / (3.5f * smoothingMultiplier * bmpFont.getData().scaleX));<a name="line.1595"></a>
+<span class="sourceLineNo">1596</span>        }<a name="line.1596"></a>
+<span class="sourceLineNo">1597</span>    }<a name="line.1597"></a>
+<span class="sourceLineNo">1598</span>    /**<a name="line.1598"></a>
+<span class="sourceLineNo">1599</span>     * Releases all resources of this object.<a name="line.1599"></a>
+<span class="sourceLineNo">1600</span>     */<a name="line.1600"></a>
+<span class="sourceLineNo">1601</span>    @Override<a name="line.1601"></a>
+<span class="sourceLineNo">1602</span>    public void dispose() {<a name="line.1602"></a>
+<span class="sourceLineNo">1603</span>        if(bmpFont != null) bmpFont.dispose();<a name="line.1603"></a>
+<span class="sourceLineNo">1604</span>        if(block != null) block.dispose();<a name="line.1604"></a>
+<span class="sourceLineNo">1605</span>    }<a name="line.1605"></a>
+<span class="sourceLineNo">1606</span><a name="line.1606"></a>
+<span class="sourceLineNo">1607</span>    /**<a name="line.1607"></a>
+<span class="sourceLineNo">1608</span>     * Gets the descent of this TextCellFactory's BitmapFont, which may be useful for layout outside this class.<a name="line.1608"></a>
+<span class="sourceLineNo">1609</span>     * @return the descent of the BitmapFont this object uses<a name="line.1609"></a>
+<span class="sourceLineNo">1610</span>     */<a name="line.1610"></a>
+<span class="sourceLineNo">1611</span>    public float getDescent() {<a name="line.1611"></a>
+<span class="sourceLineNo">1612</span>        return descent;<a name="line.1612"></a>
 <span class="sourceLineNo">1613</span>    }<a name="line.1613"></a>
 <span class="sourceLineNo">1614</span><a name="line.1614"></a>
-<span class="sourceLineNo">1615</span>    /**<a name="line.1615"></a>
-<span class="sourceLineNo">1616</span>     * Adds a pair of chars as a replacement pair, so when the find char is requested to be drawn, the replace char is<a name="line.1616"></a>
-<span class="sourceLineNo">1617</span>     * used instead.<a name="line.1617"></a>
-<span class="sourceLineNo">1618</span>     * &lt;br&gt;<a name="line.1618"></a>
-<span class="sourceLineNo">1619</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1619"></a>
-<span class="sourceLineNo">1620</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1620"></a>
-<span class="sourceLineNo">1621</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1621"></a>
-<span class="sourceLineNo">1622</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1622"></a>
-<span class="sourceLineNo">1623</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1623"></a>
-<span class="sourceLineNo">1624</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1624"></a>
-<span class="sourceLineNo">1625</span>     * @param find the requested char that will be changed (converted to a length-1 String)<a name="line.1625"></a>
-<span class="sourceLineNo">1626</span>     * @param replace the replacement char that will be used in place of find (converted to a length-1 String)<a name="line.1626"></a>
-<span class="sourceLineNo">1627</span>     * @return this for chaining<a name="line.1627"></a>
-<span class="sourceLineNo">1628</span>     */<a name="line.1628"></a>
-<span class="sourceLineNo">1629</span>    public TextCellFactory addSwap(char find, char replace)<a name="line.1629"></a>
-<span class="sourceLineNo">1630</span>    {<a name="line.1630"></a>
-<span class="sourceLineNo">1631</span>        if(find == 0)<a name="line.1631"></a>
-<span class="sourceLineNo">1632</span>            return this;<a name="line.1632"></a>
-<span class="sourceLineNo">1633</span>        swap.put(find, replace);<a name="line.1633"></a>
-<span class="sourceLineNo">1634</span>        return this;<a name="line.1634"></a>
-<span class="sourceLineNo">1635</span>    }<a name="line.1635"></a>
-<span class="sourceLineNo">1636</span><a name="line.1636"></a>
-<span class="sourceLineNo">1637</span>    /**<a name="line.1637"></a>
-<span class="sourceLineNo">1638</span>     * Removes the replacement pair, if present, that searches for the given key, find. Swaps are used when drawing text<a name="line.1638"></a>
-<span class="sourceLineNo">1639</span>     * in each cell in SquidPanel and related classes, so Strings longer than 1 char are effectively disregarded beyond<a name="line.1639"></a>
-<span class="sourceLineNo">1640</span>     * the first char.<a name="line.1640"></a>
-<span class="sourceLineNo">1641</span>     * &lt;br&gt;<a name="line.1641"></a>
-<span class="sourceLineNo">1642</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1642"></a>
-<span class="sourceLineNo">1643</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1643"></a>
-<span class="sourceLineNo">1644</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1644"></a>
-<span class="sourceLineNo">1645</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1645"></a>
-<span class="sourceLineNo">1646</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1646"></a>
-<span class="sourceLineNo">1647</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1647"></a>
-<span class="sourceLineNo">1648</span>     * @param find the String that would be changed in the replacement pair<a name="line.1648"></a>
-<span class="sourceLineNo">1649</span>     * @return this for chaining<a name="line.1649"></a>
-<span class="sourceLineNo">1650</span>     */<a name="line.1650"></a>
-<span class="sourceLineNo">1651</span>    public TextCellFactory removeSwap(String find)<a name="line.1651"></a>
-<span class="sourceLineNo">1652</span>    {<a name="line.1652"></a>
-<span class="sourceLineNo">1653</span><a name="line.1653"></a>
-<span class="sourceLineNo">1654</span>        if(find != null &amp;&amp; !find.isEmpty() &amp;&amp; find.charAt(0) != 0)<a name="line.1654"></a>
-<span class="sourceLineNo">1655</span>            swap.remove(find.charAt(0));<a name="line.1655"></a>
-<span class="sourceLineNo">1656</span>        return this;<a name="line.1656"></a>
-<span class="sourceLineNo">1657</span>    }<a name="line.1657"></a>
-<span class="sourceLineNo">1658</span><a name="line.1658"></a>
-<span class="sourceLineNo">1659</span>    /**<a name="line.1659"></a>
-<span class="sourceLineNo">1660</span>     * Removes the replacement pair, if present, that searches for the given key, find.<a name="line.1660"></a>
-<span class="sourceLineNo">1661</span>     * &lt;br&gt;<a name="line.1661"></a>
-<span class="sourceLineNo">1662</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1662"></a>
-<span class="sourceLineNo">1663</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1663"></a>
-<span class="sourceLineNo">1664</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1664"></a>
-<span class="sourceLineNo">1665</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1665"></a>
-<span class="sourceLineNo">1666</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1666"></a>
-<span class="sourceLineNo">1667</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1667"></a>
-<span class="sourceLineNo">1668</span>     * @return this for chaining<a name="line.1668"></a>
-<span class="sourceLineNo">1669</span>     */<a name="line.1669"></a>
-<span class="sourceLineNo">1670</span>    public TextCellFactory removeSwap(char find)<a name="line.1670"></a>
-<span class="sourceLineNo">1671</span>    {<a name="line.1671"></a>
-<span class="sourceLineNo">1672</span>        swap.remove(find);<a name="line.1672"></a>
-<span class="sourceLineNo">1673</span>        return this;<a name="line.1673"></a>
-<span class="sourceLineNo">1674</span>    }<a name="line.1674"></a>
-<span class="sourceLineNo">1675</span><a name="line.1675"></a>
-<span class="sourceLineNo">1676</span>    /**<a name="line.1676"></a>
-<span class="sourceLineNo">1677</span>     * Gets the current mapping of "swaps", or replacement pairs, to replace keys requested for drawing with their<a name="line.1677"></a>
-<span class="sourceLineNo">1678</span>     * values in the OrderedMap.<a name="line.1678"></a>
-<span class="sourceLineNo">1679</span>     * &lt;br&gt;<a name="line.1679"></a>
-<span class="sourceLineNo">1680</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1680"></a>
-<span class="sourceLineNo">1681</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1681"></a>
-<span class="sourceLineNo">1682</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1682"></a>
-<span class="sourceLineNo">1683</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1683"></a>
-<span class="sourceLineNo">1684</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1684"></a>
-<span class="sourceLineNo">1685</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1685"></a>
-<span class="sourceLineNo">1686</span>     * @return the mapping of replacement pairs<a name="line.1686"></a>
-<span class="sourceLineNo">1687</span>     */<a name="line.1687"></a>
-<span class="sourceLineNo">1688</span>    public OrderedMap&lt;Character, Character&gt; getAllSwaps() {<a name="line.1688"></a>
-<span class="sourceLineNo">1689</span>        return swap;<a name="line.1689"></a>
-<span class="sourceLineNo">1690</span>    }<a name="line.1690"></a>
-<span class="sourceLineNo">1691</span><a name="line.1691"></a>
-<span class="sourceLineNo">1692</span>    /**<a name="line.1692"></a>
-<span class="sourceLineNo">1693</span>     * Sets the mapping of replacement pairs to a different one as a Map of Character keys to String values.<a name="line.1693"></a>
-<span class="sourceLineNo">1694</span>     * &lt;br&gt;<a name="line.1694"></a>
-<span class="sourceLineNo">1695</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1695"></a>
-<span class="sourceLineNo">1696</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1696"></a>
-<span class="sourceLineNo">1697</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1697"></a>
-<span class="sourceLineNo">1698</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1698"></a>
-<span class="sourceLineNo">1699</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1699"></a>
-<span class="sourceLineNo">1700</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1700"></a>
-<span class="sourceLineNo">1701</span>     * @param swaps the Map of replacement pairs; keys requested for drawing will be replaced with their values<a name="line.1701"></a>
-<span class="sourceLineNo">1702</span>     * @return this for chaining<a name="line.1702"></a>
-<span class="sourceLineNo">1703</span>     */<a name="line.1703"></a>
-<span class="sourceLineNo">1704</span>    public TextCellFactory setAllSwaps(OrderedMap&lt;Character, Character&gt; swaps) {<a name="line.1704"></a>
-<span class="sourceLineNo">1705</span>        swap.clear();<a name="line.1705"></a>
-<span class="sourceLineNo">1706</span>        for (int i = 0; i &lt; swaps.size(); i++) {<a name="line.1706"></a>
-<span class="sourceLineNo">1707</span>            if(!swaps.keyAt(i).equals('\0'))<a name="line.1707"></a>
-<span class="sourceLineNo">1708</span>                swap.put(swaps.keyAt(i), swaps.getAt(i));<a name="line.1708"></a>
-<span class="sourceLineNo">1709</span>        }<a name="line.1709"></a>
-<span class="sourceLineNo">1710</span>        return this;<a name="line.1710"></a>
-<span class="sourceLineNo">1711</span>    }<a name="line.1711"></a>
-<span class="sourceLineNo">1712</span><a name="line.1712"></a>
-<span class="sourceLineNo">1713</span>    /**<a name="line.1713"></a>
-<span class="sourceLineNo">1714</span>     * Appends to the mapping of replacement pairs, adding or replacing any entries in the current mapping with the<a name="line.1714"></a>
-<span class="sourceLineNo">1715</span>     * entries in a Map of Character keys to String values.<a name="line.1715"></a>
-<span class="sourceLineNo">1716</span>     * &lt;br&gt;<a name="line.1716"></a>
-<span class="sourceLineNo">1717</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1717"></a>
-<span class="sourceLineNo">1718</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1718"></a>
-<span class="sourceLineNo">1719</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1719"></a>
-<span class="sourceLineNo">1720</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1720"></a>
-<span class="sourceLineNo">1721</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1721"></a>
-<span class="sourceLineNo">1722</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1722"></a>
-<span class="sourceLineNo">1723</span>     * @param swaps the Map of replacement pairs to add; keys requested for drawing will be replaced with their values<a name="line.1723"></a>
-<span class="sourceLineNo">1724</span>     * @return this for chaining<a name="line.1724"></a>
-<span class="sourceLineNo">1725</span>     */<a name="line.1725"></a>
-<span class="sourceLineNo">1726</span>    public TextCellFactory addSwaps(OrderedMap&lt;Character, Character&gt; swaps) {<a name="line.1726"></a>
-<span class="sourceLineNo">1727</span>        for (int i = 0; i &lt; swaps.size(); i++) {<a name="line.1727"></a>
-<span class="sourceLineNo">1728</span>            if(!swaps.keyAt(i).equals('\0'))<a name="line.1728"></a>
-<span class="sourceLineNo">1729</span>                swap.put(swaps.keyAt(i), swaps.getAt(i));<a name="line.1729"></a>
-<span class="sourceLineNo">1730</span>        }<a name="line.1730"></a>
-<span class="sourceLineNo">1731</span>        return this;<a name="line.1731"></a>
-<span class="sourceLineNo">1732</span>    }<a name="line.1732"></a>
-<span class="sourceLineNo">1733</span><a name="line.1733"></a>
-<span class="sourceLineNo">1734</span>    /**<a name="line.1734"></a>
-<span class="sourceLineNo">1735</span>     * Clears all replacement pairs this has been told to swap.<a name="line.1735"></a>
-<span class="sourceLineNo">1736</span>     * &lt;br&gt;<a name="line.1736"></a>
-<span class="sourceLineNo">1737</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1737"></a>
-<span class="sourceLineNo">1738</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1738"></a>
-<span class="sourceLineNo">1739</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1739"></a>
-<span class="sourceLineNo">1740</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1740"></a>
-<span class="sourceLineNo">1741</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1741"></a>
-<span class="sourceLineNo">1742</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1742"></a>
-<span class="sourceLineNo">1743</span>     * @return this for chaining<a name="line.1743"></a>
-<span class="sourceLineNo">1744</span>     */<a name="line.1744"></a>
-<span class="sourceLineNo">1745</span>    public TextCellFactory clearSwaps()<a name="line.1745"></a>
-<span class="sourceLineNo">1746</span>    {<a name="line.1746"></a>
-<span class="sourceLineNo">1747</span>        swap.clear();<a name="line.1747"></a>
-<span class="sourceLineNo">1748</span>        return this;<a name="line.1748"></a>
-<span class="sourceLineNo">1749</span>    }<a name="line.1749"></a>
-<span class="sourceLineNo">1750</span>}<a name="line.1750"></a>
+<span class="sourceLineNo">1615</span>    public char getDirectionGlyph() {<a name="line.1615"></a>
+<span class="sourceLineNo">1616</span>        return directionGlyph;<a name="line.1616"></a>
+<span class="sourceLineNo">1617</span>    }<a name="line.1617"></a>
+<span class="sourceLineNo">1618</span><a name="line.1618"></a>
+<span class="sourceLineNo">1619</span>    public TextCellFactory setDirectionGlyph(char directionGlyph) {<a name="line.1619"></a>
+<span class="sourceLineNo">1620</span>        this.directionGlyph = directionGlyph;<a name="line.1620"></a>
+<span class="sourceLineNo">1621</span>        return this;<a name="line.1621"></a>
+<span class="sourceLineNo">1622</span>    }<a name="line.1622"></a>
+<span class="sourceLineNo">1623</span><a name="line.1623"></a>
+<span class="sourceLineNo">1624</span>    /**<a name="line.1624"></a>
+<span class="sourceLineNo">1625</span>     * Adds a pair of Strings (typically both with length 1) as a replacement pair, so when the find String is requested<a name="line.1625"></a>
+<span class="sourceLineNo">1626</span>     * to be drawn, the replace String is used instead. Swaps are used when drawing text in each cell in SquidPanel and<a name="line.1626"></a>
+<span class="sourceLineNo">1627</span>     * related classes, so Strings longer than 1 char are effectively disregarded beyond the first char.<a name="line.1627"></a>
+<span class="sourceLineNo">1628</span>     * &lt;br&gt;<a name="line.1628"></a>
+<span class="sourceLineNo">1629</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1629"></a>
+<span class="sourceLineNo">1630</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1630"></a>
+<span class="sourceLineNo">1631</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap("^", ",")} and also<a name="line.1631"></a>
+<span class="sourceLineNo">1632</span>     * {@code addSwap(",", ":")}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1632"></a>
+<span class="sourceLineNo">1633</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1633"></a>
+<span class="sourceLineNo">1634</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1634"></a>
+<span class="sourceLineNo">1635</span>     * @param find the requested String that will be changed<a name="line.1635"></a>
+<span class="sourceLineNo">1636</span>     * @param replace the replacement String that will be used in place of find<a name="line.1636"></a>
+<span class="sourceLineNo">1637</span>     * @return this for chaining<a name="line.1637"></a>
+<span class="sourceLineNo">1638</span>     */<a name="line.1638"></a>
+<span class="sourceLineNo">1639</span>    public TextCellFactory addSwap(String find, String replace)<a name="line.1639"></a>
+<span class="sourceLineNo">1640</span>    {<a name="line.1640"></a>
+<span class="sourceLineNo">1641</span>        if(find == null || replace == null || find.isEmpty()  || replace.isEmpty() || find.charAt(0) == 0)<a name="line.1641"></a>
+<span class="sourceLineNo">1642</span>            return this;<a name="line.1642"></a>
+<span class="sourceLineNo">1643</span>        swap.put(find.charAt(0), replace.charAt(0));<a name="line.1643"></a>
+<span class="sourceLineNo">1644</span>        return this;<a name="line.1644"></a>
+<span class="sourceLineNo">1645</span>    }<a name="line.1645"></a>
+<span class="sourceLineNo">1646</span><a name="line.1646"></a>
+<span class="sourceLineNo">1647</span>    /**<a name="line.1647"></a>
+<span class="sourceLineNo">1648</span>     * Adds a pair of chars as a replacement pair, so when the find char is requested to be drawn, the replace char is<a name="line.1648"></a>
+<span class="sourceLineNo">1649</span>     * used instead.<a name="line.1649"></a>
+<span class="sourceLineNo">1650</span>     * &lt;br&gt;<a name="line.1650"></a>
+<span class="sourceLineNo">1651</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1651"></a>
+<span class="sourceLineNo">1652</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1652"></a>
+<span class="sourceLineNo">1653</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1653"></a>
+<span class="sourceLineNo">1654</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1654"></a>
+<span class="sourceLineNo">1655</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1655"></a>
+<span class="sourceLineNo">1656</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1656"></a>
+<span class="sourceLineNo">1657</span>     * @param find the requested char that will be changed (converted to a length-1 String)<a name="line.1657"></a>
+<span class="sourceLineNo">1658</span>     * @param replace the replacement char that will be used in place of find (converted to a length-1 String)<a name="line.1658"></a>
+<span class="sourceLineNo">1659</span>     * @return this for chaining<a name="line.1659"></a>
+<span class="sourceLineNo">1660</span>     */<a name="line.1660"></a>
+<span class="sourceLineNo">1661</span>    public TextCellFactory addSwap(char find, char replace)<a name="line.1661"></a>
+<span class="sourceLineNo">1662</span>    {<a name="line.1662"></a>
+<span class="sourceLineNo">1663</span>        if(find == 0)<a name="line.1663"></a>
+<span class="sourceLineNo">1664</span>            return this;<a name="line.1664"></a>
+<span class="sourceLineNo">1665</span>        swap.put(find, replace);<a name="line.1665"></a>
+<span class="sourceLineNo">1666</span>        return this;<a name="line.1666"></a>
+<span class="sourceLineNo">1667</span>    }<a name="line.1667"></a>
+<span class="sourceLineNo">1668</span><a name="line.1668"></a>
+<span class="sourceLineNo">1669</span>    /**<a name="line.1669"></a>
+<span class="sourceLineNo">1670</span>     * Removes the replacement pair, if present, that searches for the given key, find. Swaps are used when drawing text<a name="line.1670"></a>
+<span class="sourceLineNo">1671</span>     * in each cell in SquidPanel and related classes, so Strings longer than 1 char are effectively disregarded beyond<a name="line.1671"></a>
+<span class="sourceLineNo">1672</span>     * the first char.<a name="line.1672"></a>
+<span class="sourceLineNo">1673</span>     * &lt;br&gt;<a name="line.1673"></a>
+<span class="sourceLineNo">1674</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1674"></a>
+<span class="sourceLineNo">1675</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1675"></a>
+<span class="sourceLineNo">1676</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1676"></a>
+<span class="sourceLineNo">1677</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1677"></a>
+<span class="sourceLineNo">1678</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1678"></a>
+<span class="sourceLineNo">1679</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1679"></a>
+<span class="sourceLineNo">1680</span>     * @param find the String that would be changed in the replacement pair<a name="line.1680"></a>
+<span class="sourceLineNo">1681</span>     * @return this for chaining<a name="line.1681"></a>
+<span class="sourceLineNo">1682</span>     */<a name="line.1682"></a>
+<span class="sourceLineNo">1683</span>    public TextCellFactory removeSwap(String find)<a name="line.1683"></a>
+<span class="sourceLineNo">1684</span>    {<a name="line.1684"></a>
+<span class="sourceLineNo">1685</span><a name="line.1685"></a>
+<span class="sourceLineNo">1686</span>        if(find != null &amp;&amp; !find.isEmpty() &amp;&amp; find.charAt(0) != 0)<a name="line.1686"></a>
+<span class="sourceLineNo">1687</span>            swap.remove(find.charAt(0));<a name="line.1687"></a>
+<span class="sourceLineNo">1688</span>        return this;<a name="line.1688"></a>
+<span class="sourceLineNo">1689</span>    }<a name="line.1689"></a>
+<span class="sourceLineNo">1690</span><a name="line.1690"></a>
+<span class="sourceLineNo">1691</span>    /**<a name="line.1691"></a>
+<span class="sourceLineNo">1692</span>     * Removes the replacement pair, if present, that searches for the given key, find.<a name="line.1692"></a>
+<span class="sourceLineNo">1693</span>     * &lt;br&gt;<a name="line.1693"></a>
+<span class="sourceLineNo">1694</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1694"></a>
+<span class="sourceLineNo">1695</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1695"></a>
+<span class="sourceLineNo">1696</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1696"></a>
+<span class="sourceLineNo">1697</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1697"></a>
+<span class="sourceLineNo">1698</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1698"></a>
+<span class="sourceLineNo">1699</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1699"></a>
+<span class="sourceLineNo">1700</span>     * @return this for chaining<a name="line.1700"></a>
+<span class="sourceLineNo">1701</span>     */<a name="line.1701"></a>
+<span class="sourceLineNo">1702</span>    public TextCellFactory removeSwap(char find)<a name="line.1702"></a>
+<span class="sourceLineNo">1703</span>    {<a name="line.1703"></a>
+<span class="sourceLineNo">1704</span>        swap.remove(find);<a name="line.1704"></a>
+<span class="sourceLineNo">1705</span>        return this;<a name="line.1705"></a>
+<span class="sourceLineNo">1706</span>    }<a name="line.1706"></a>
+<span class="sourceLineNo">1707</span><a name="line.1707"></a>
+<span class="sourceLineNo">1708</span>    /**<a name="line.1708"></a>
+<span class="sourceLineNo">1709</span>     * Gets the current mapping of "swaps", or replacement pairs, to replace keys requested for drawing with their<a name="line.1709"></a>
+<span class="sourceLineNo">1710</span>     * values in the OrderedMap.<a name="line.1710"></a>
+<span class="sourceLineNo">1711</span>     * &lt;br&gt;<a name="line.1711"></a>
+<span class="sourceLineNo">1712</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1712"></a>
+<span class="sourceLineNo">1713</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1713"></a>
+<span class="sourceLineNo">1714</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1714"></a>
+<span class="sourceLineNo">1715</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1715"></a>
+<span class="sourceLineNo">1716</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1716"></a>
+<span class="sourceLineNo">1717</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1717"></a>
+<span class="sourceLineNo">1718</span>     * @return the mapping of replacement pairs<a name="line.1718"></a>
+<span class="sourceLineNo">1719</span>     */<a name="line.1719"></a>
+<span class="sourceLineNo">1720</span>    public OrderedMap&lt;Character, Character&gt; getAllSwaps() {<a name="line.1720"></a>
+<span class="sourceLineNo">1721</span>        return swap;<a name="line.1721"></a>
+<span class="sourceLineNo">1722</span>    }<a name="line.1722"></a>
+<span class="sourceLineNo">1723</span><a name="line.1723"></a>
+<span class="sourceLineNo">1724</span>    /**<a name="line.1724"></a>
+<span class="sourceLineNo">1725</span>     * Sets the mapping of replacement pairs to a different one as a Map of Character keys to String values.<a name="line.1725"></a>
+<span class="sourceLineNo">1726</span>     * &lt;br&gt;<a name="line.1726"></a>
+<span class="sourceLineNo">1727</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1727"></a>
+<span class="sourceLineNo">1728</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1728"></a>
+<span class="sourceLineNo">1729</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1729"></a>
+<span class="sourceLineNo">1730</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1730"></a>
+<span class="sourceLineNo">1731</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1731"></a>
+<span class="sourceLineNo">1732</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1732"></a>
+<span class="sourceLineNo">1733</span>     * @param swaps the Map of replacement pairs; keys requested for drawing will be replaced with their values<a name="line.1733"></a>
+<span class="sourceLineNo">1734</span>     * @return this for chaining<a name="line.1734"></a>
+<span class="sourceLineNo">1735</span>     */<a name="line.1735"></a>
+<span class="sourceLineNo">1736</span>    public TextCellFactory setAllSwaps(OrderedMap&lt;Character, Character&gt; swaps) {<a name="line.1736"></a>
+<span class="sourceLineNo">1737</span>        swap.clear();<a name="line.1737"></a>
+<span class="sourceLineNo">1738</span>        for (int i = 0; i &lt; swaps.size(); i++) {<a name="line.1738"></a>
+<span class="sourceLineNo">1739</span>            if(!swaps.keyAt(i).equals('\0'))<a name="line.1739"></a>
+<span class="sourceLineNo">1740</span>                swap.put(swaps.keyAt(i), swaps.getAt(i));<a name="line.1740"></a>
+<span class="sourceLineNo">1741</span>        }<a name="line.1741"></a>
+<span class="sourceLineNo">1742</span>        return this;<a name="line.1742"></a>
+<span class="sourceLineNo">1743</span>    }<a name="line.1743"></a>
+<span class="sourceLineNo">1744</span><a name="line.1744"></a>
+<span class="sourceLineNo">1745</span>    /**<a name="line.1745"></a>
+<span class="sourceLineNo">1746</span>     * Appends to the mapping of replacement pairs, adding or replacing any entries in the current mapping with the<a name="line.1746"></a>
+<span class="sourceLineNo">1747</span>     * entries in a Map of Character keys to String values.<a name="line.1747"></a>
+<span class="sourceLineNo">1748</span>     * &lt;br&gt;<a name="line.1748"></a>
+<span class="sourceLineNo">1749</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1749"></a>
+<span class="sourceLineNo">1750</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1750"></a>
+<span class="sourceLineNo">1751</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1751"></a>
+<span class="sourceLineNo">1752</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1752"></a>
+<span class="sourceLineNo">1753</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1753"></a>
+<span class="sourceLineNo">1754</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1754"></a>
+<span class="sourceLineNo">1755</span>     * @param swaps the Map of replacement pairs to add; keys requested for drawing will be replaced with their values<a name="line.1755"></a>
+<span class="sourceLineNo">1756</span>     * @return this for chaining<a name="line.1756"></a>
+<span class="sourceLineNo">1757</span>     */<a name="line.1757"></a>
+<span class="sourceLineNo">1758</span>    public TextCellFactory addSwaps(OrderedMap&lt;Character, Character&gt; swaps) {<a name="line.1758"></a>
+<span class="sourceLineNo">1759</span>        for (int i = 0; i &lt; swaps.size(); i++) {<a name="line.1759"></a>
+<span class="sourceLineNo">1760</span>            if(!swaps.keyAt(i).equals('\0'))<a name="line.1760"></a>
+<span class="sourceLineNo">1761</span>                swap.put(swaps.keyAt(i), swaps.getAt(i));<a name="line.1761"></a>
+<span class="sourceLineNo">1762</span>        }<a name="line.1762"></a>
+<span class="sourceLineNo">1763</span>        return this;<a name="line.1763"></a>
+<span class="sourceLineNo">1764</span>    }<a name="line.1764"></a>
+<span class="sourceLineNo">1765</span><a name="line.1765"></a>
+<span class="sourceLineNo">1766</span>    /**<a name="line.1766"></a>
+<span class="sourceLineNo">1767</span>     * Clears all replacement pairs this has been told to swap.<a name="line.1767"></a>
+<span class="sourceLineNo">1768</span>     * &lt;br&gt;<a name="line.1768"></a>
+<span class="sourceLineNo">1769</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1769"></a>
+<span class="sourceLineNo">1770</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1770"></a>
+<span class="sourceLineNo">1771</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1771"></a>
+<span class="sourceLineNo">1772</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1772"></a>
+<span class="sourceLineNo">1773</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1773"></a>
+<span class="sourceLineNo">1774</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1774"></a>
+<span class="sourceLineNo">1775</span>     * @return this for chaining<a name="line.1775"></a>
+<span class="sourceLineNo">1776</span>     */<a name="line.1776"></a>
+<span class="sourceLineNo">1777</span>    public TextCellFactory clearSwaps()<a name="line.1777"></a>
+<span class="sourceLineNo">1778</span>    {<a name="line.1778"></a>
+<span class="sourceLineNo">1779</span>        swap.clear();<a name="line.1779"></a>
+<span class="sourceLineNo">1780</span>        return this;<a name="line.1780"></a>
+<span class="sourceLineNo">1781</span>    }<a name="line.1781"></a>
+<span class="sourceLineNo">1782</span>}<a name="line.1782"></a>
 
 
 

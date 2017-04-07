@@ -1284,6 +1284,38 @@ public class TextCellFactory implements Disposable {
     }
 
     /**
+     * Converts a char into a Label, or if the argument c is '\0', creates an Image of a solid block. Can be used
+     * for preparing glyphs for animation effects, and is used internally for this purpose. Instead of a libGDX Color
+     * object, this takes an encoded float that represents a color as libGDX often does internally, ABGR-packed format.
+     * You can use various methods in SColor to produce these, like {@link SColor#floatGet(float, float, float, float)}
+     * or {@link Color#toFloatBits()}.
+     * @param c a char to make into an Actor, which can be the character with Unicode value 0 for a solid block.
+     * @param encodedColor an ABGR packed float (as produced by {@link SColor#floatGet(float, float, float, float)}) to use as c's color
+     * @return the Actor, with no position set.
+     */
+    public Actor makeActor(char c, float encodedColor) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        if (c == 0) {
+            Image im = new Image(block);
+            Color.abgr8888ToColor(im.getColor(), encodedColor);
+            //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));
+            im.setSize(actualCellWidth, actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
+            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
+            return im;
+        } else {
+            mut.setCharAt(0, swap.getOrDefault(c, c));
+            Label lb = new Label(mut, style);
+            //lb.setFontScale(bmpFont.getData().scaleX, bmpFont.getData().scaleY);
+            lb.setSize(width, height - descent); //+ lineTweak * 1f
+            Color.abgr8888ToColor(lb.getColor(), encodedColor);
+            // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
+            return lb;
+        }
+    }
+
+    /**
      * Converts a char into a ColorChangeLabel, or if the argument c is '\0', creates a ColorChangeImage of a solid
      * block. Can be used for preparing glyphs for animation effects, and is used internally for this purpose. The
      * ColorChange classes will rotate between all colors given in the List each second, and are not affected by setColor,

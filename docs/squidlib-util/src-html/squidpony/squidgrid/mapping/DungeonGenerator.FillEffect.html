@@ -743,7 +743,7 @@
 <span class="sourceLineNo">735</span>            }<a name="line.735"></a>
 <span class="sourceLineNo">736</span>        }<a name="line.736"></a>
 <span class="sourceLineNo">737</span>        if(targetGrass &gt; 0) {<a name="line.737"></a>
-<span class="sourceLineNo">738</span>            scatter = floors.quasiRandomSeparated(1.0/7.0);<a name="line.738"></a>
+<span class="sourceLineNo">738</span>            scatter = floors.quasiRandomSeparated(1.03/6.7);<a name="line.738"></a>
 <span class="sourceLineNo">739</span>            rng.shuffleInPlace(scatter);<a name="line.739"></a>
 <span class="sourceLineNo">740</span>            for (int i = 0; i &lt; scatter.length; i++) {<a name="line.740"></a>
 <span class="sourceLineNo">741</span>                if (remainingGrass &gt; 5) //remainingGrass &gt;= targetGrass * 0.02 &amp;&amp;<a name="line.741"></a>
@@ -753,7 +753,7 @@
 <span class="sourceLineNo">745</span>                        continue;<a name="line.745"></a>
 <span class="sourceLineNo">746</span>                    floors.andNot(working);<a name="line.746"></a>
 <span class="sourceLineNo">747</span>                    remainingGrass -= working.size();<a name="line.747"></a>
-<span class="sourceLineNo">748</span>                    working.inverseMask(map, '"');<a name="line.748"></a>
+<span class="sourceLineNo">748</span>                    map = working.inverseMask(map, '"');<a name="line.748"></a>
 <span class="sourceLineNo">749</span>                } else<a name="line.749"></a>
 <span class="sourceLineNo">750</span>                    break;<a name="line.750"></a>
 <span class="sourceLineNo">751</span>            }<a name="line.751"></a>

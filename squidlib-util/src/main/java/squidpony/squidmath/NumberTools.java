@@ -147,7 +147,7 @@ public class NumberTools {
     public static double randomDouble(int seed)
     {
         seed ^= seed >>> (4 + (seed >>> 28));
-        long bits = ((seed *= 0x108EF2D9) >>> 22 ^ seed);
+        long bits = ((seed *= 0x108EF2D9) >>> 22 ^ seed) & 0xffffffffL;
         seed += 0x9E3779B9;
         seed ^= seed >>> (4 + (seed >>> 28));
         bits |= ((((seed *= 0x108EF2D9) >>> 22 ^ seed) & 0xfffffL) << 32 | 0x3ff0000000000000L);
@@ -167,7 +167,7 @@ public class NumberTools {
     public static float randomFloat(int seed)
     {
         seed ^= seed >>> (4 + (seed >>> 28));
-        return (Float.intBitsToFloat((((seed *= 0x108EF2D9) >>> 22 ^ seed) & 0x7fffff) | 0x3f800000) - 1f);
+        return (Float.intBitsToFloat((((seed *= 0x108EF2D9) >>> 22 ^ seed) >>> 9) | 0x3f800000) - 1f);
     }
     /**
      * Generates a pseudo-random float between -1.0f (exclusive) and 1.0f (exclusive) using the given int seed, passing
@@ -186,7 +186,7 @@ public class NumberTools {
     public static float randomSignedFloat(int seed)
     {
         seed ^= seed >>> (4 + (seed >>> 28));
-        return (Float.intBitsToFloat((((seed *= 0x108EF2D9) >>> 22 ^ seed) & 0x7fffff) | 0x3f800000) - 1f) * (seed >> 31 | 1);
+        return (Float.intBitsToFloat((((seed *= 0x108EF2D9) >>> 22 ^ seed) >>> 9) | 0x3f800000) - 1f) * (seed >> 31 | 1);
     }
 
     /**
@@ -205,11 +205,10 @@ public class NumberTools {
     public static double randomDoubleCurved(int seed)
     {
         seed ^= seed >>> (4 + (seed >>> 28));
-        float a = Float.intBitsToFloat((((seed *= 0x108EF2D9) >>> 22 ^ seed) & 0x7fffff) | 0x3f800000);
+        float a = Float.intBitsToFloat((((seed *= 0x108EF2D9) >>> 22 ^ seed) >>> 9) | 0x3f800000);
         seed += 0x9E3779B9;
         seed ^= seed >>> (4 + (seed >>> 28));
-        double t = (a - 1.0) * (Float.intBitsToFloat((((seed *= 0x108EF2D9) >>> 22 ^ seed) & 0x7fffff) | 0x3f800000) - 1.0) * (seed >> 31 | 1);
-        return t;
+        return  (a - 1.0) * (Float.intBitsToFloat((((seed *= 0x108EF2D9) >>> 22 ^ seed) >>> 9) | 0x3f800000) - 1.0) * (seed >> 31 | 1);
     }
 
     static int hashWisp(final float[] data)

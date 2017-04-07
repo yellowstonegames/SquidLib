@@ -50,6 +50,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     protected final TextCellFactory textFactory;
     protected float xOffset, yOffset;
     public final OrderedSet<AnimatedEntity> animatedEntities;
+    public final OrderedSet<Actor> autoActors;
     /**
      * For thin-wall maps, where only cells where x and y are both even numbers have backgrounds displayed.
      * Should be false when using this SquidPanel for anything that isn't specifically a background of a map
@@ -182,6 +183,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         this.yOffset = yOffset;
         setSize(w, h);
         animatedEntities = new OrderedSet<>();
+        autoActors = new OrderedSet<>();
     }
 
     /**
@@ -589,9 +591,18 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
             }
         }
         super.draw(batch, parentAlpha);
-        for(AnimatedEntity ae : animatedEntities)
-        {
-            ae.actor.act(Gdx.graphics.getDeltaTime());
+        int len = animatedEntities.size();
+        for (int i = 0; i < len; i++) {
+
+            animatedEntities.getAt(i).actor.act(Gdx.graphics.getDeltaTime());
+        }
+        len = autoActors.size();
+        Actor a;
+        for (int i = 0; i < len; i++) {
+            a = autoActors.getAt(i);
+            if(a == null) continue;
+            drawActor(batch, parentAlpha, a);
+            a.act(Gdx.graphics.getDeltaTime());
         }
     }
 
@@ -603,7 +614,27 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     public void drawActor(Batch batch, float parentAlpha, AnimatedEntity ae)
     {
-            ae.actor.draw(batch, parentAlpha);
+        drawActor(batch, parentAlpha, ae.actor);
+        /*
+        float prevX = ae.actor.getX(), prevY = ae.actor.getY();
+        ae.actor.setPosition(prevX - gridOffsetX * cellWidth, prevY + gridOffsetY * cellHeight);
+        ae.actor.draw(batch, parentAlpha);
+        ae.actor.setPosition(prevX, prevY);
+        */
+    }
+
+    /**
+     * Draws one AnimatedEntity, specifically the Actor it contains. Batch must be between start() and end()
+     * @param batch Must have start() called already but not stop() yet during this frame.
+     * @param parentAlpha This can be assumed to be 1.0f if you don't know it
+     * @param ac The Actor to draw; the position to draw ac is modified and reset based on some fields of this object
+     */
+    public void drawActor(Batch batch, float parentAlpha, Actor ac)
+    {
+        float prevX = ac.getX(), prevY = ac.getY();
+        ac.setPosition(prevX - gridOffsetX * cellWidth, prevY + gridOffsetY * cellHeight);
+        ac.draw(batch, parentAlpha);
+        ac.setPosition(prevX, prevY);
     }
 
     @Override
@@ -1016,8 +1047,8 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         else {
             final Actor a = textFactory.makeActor(name, scc.filter(color));
             a.setName(name);
-            a.setPosition(adjustX(x, doubleWidth) - getX() * 2, adjustY(y) - getY() * 2);
-            addActor(a);
+            a.setPosition(adjustX(x, doubleWidth) - getX(), adjustY(y) - getY());
+            autoActors.add(a);
             return a;
         }
     }
@@ -1025,16 +1056,20 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     protected /* @Nullable */ Actor createActor(int x, int y, char name, Color color, boolean doubleWidth) {
         final Actor a = textFactory.makeActor(name, scc.filter(color));
         a.setName(String.valueOf(name));
-        a.setPosition(adjustX(x, doubleWidth) - getX() * 2, adjustY(y) - getY() * 2);
-        addActor(a);
+        a.setPosition(adjustX(x, doubleWidth) - getX(), adjustY(y) - getY());
+        autoActors.add(a);
+        return a;
+    }
+
+    protected /* @Nullable */ Actor createActor(int x, int y, char name, float encodedColor, boolean doubleWidth) {
+        final Actor a = textFactory.makeActor(name, encodedColor);
+        a.setName(String.valueOf(name));
+        a.setPosition(adjustX(x, doubleWidth) - getX(), adjustY(y) - getY());
+        autoActors.add(a);
         return a;
     }
 
     protected /* @Nullable */ Actor createActor(int x, int y, String name, float encodedColor, boolean doubleWidth) {
-        return createActor(x, y, name, SColor.colorFromFloat(tmpColor, encodedColor), doubleWidth);
-    }
-
-    protected /* @Nullable */ Actor createActor(int x, int y, char name, float encodedColor, boolean doubleWidth) {
         return createActor(x, y, name, SColor.colorFromFloat(tmpColor, encodedColor), doubleWidth);
     }
 
@@ -1043,12 +1078,12 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         if(doubleWidth)
             return (x - gridOffsetX) * 2 * cellWidth + getX();
         else
-            return (x - gridOffsetX) * cellWidth + getX();
+            return (x) * cellWidth + getX();
     }
 
     public float adjustY(float y)
     {
-        return (gridHeight - y - 1 + gridOffsetY) * cellHeight + getY() + 1 + cellHeight - textFactory.actualCellHeight; // - textFactory.lineHeight //textFactory.lineTweak * 3f
+        return (gridHeight - y - 1) * cellHeight + getY() + 1 + cellHeight - textFactory.actualCellHeight; // - textFactory.lineHeight //textFactory.lineTweak * 3f
         //return (gridHeight - y - 1) * cellHeight + textFactory.getDescent() * 3 / 2f + getY();
     }
 
@@ -1081,6 +1116,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         if (restoreSym && (n = a.getName()) != null && !n.isEmpty())
             contents[x][y] = a.getName().charAt(0);
         removeActor(a);
+        autoActors.remove(a);
     }
 
     public void recallActor(Actor a, boolean restoreSym, int nextX, int nextY)
@@ -1098,6 +1134,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         if (restoreSym && (n = a.getName()) != null && !n.isEmpty())
             contents[nextX][nextY] = a.getName().charAt(0);
         removeActor(a);
+        autoActors.remove(a);
     }
 
     public void recallActor(AnimatedEntity ae)
@@ -1126,6 +1163,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
             ae.gridX &= -2;
             ae.gridY &= -2;
         }
+        //fixPosition(ae);
         ae.animating = false;
         animationCount--;
     }
@@ -1736,16 +1774,16 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         animationCount++;
         final ColorChangeImage
                 gi = textFactory.makeGlyphImage(glyph, scc.gradient(startColor, endColor, (int) (duration * 40)), duration * 1.1f, doubleWidth);
-        gi.setPosition(adjustX(startX, doubleWidth) - getX() * 2, adjustY(startY) - getY() * 2);
+        gi.setPosition(adjustX(startX, doubleWidth) - getX(), adjustY(startY) - getY());
         gi.setRotation(startRotation);
-        addActor(gi);
+        autoActors.add(gi);
         final int nbActions = 2 + (0 < delay ? 1 : 0);
         final Action[] sequence = new Action[nbActions];
         int index = 0;
         if (0 < delay)
             sequence[index++] = Actions.delay(delay);
         sequence[index++] = Actions.parallel(
-                Actions.moveTo(adjustX(endX, doubleWidth) - getX() * 2, adjustY(endY) - getY() * 2, duration),
+                Actions.moveTo(adjustX(endX, doubleWidth) - getX(), adjustY(endY) - getY(), duration),
                 Actions.rotateTo(endRotation, duration));
         sequence[index] = Actions.run(new Runnable() {
             @Override
@@ -2044,7 +2082,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
     /**
      * Sets the X offset that the whole panel's internals will be rendered at.
-     * @param gridOffsetX the requested offset in cells; should be less than gridWidth
+     * @param gridOffsetX the requested offset in cells
      */
     public void setGridOffsetX(int gridOffsetX) {
         this.gridOffsetX = clamp(gridOffsetX,0,  contents.length - gridWidth);
@@ -2060,7 +2098,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
     /**
      * Sets the Y offset that the whole panel's internals will be rendered at.
-     * @param gridOffsetY the requested offset in cells; should be less than gridHeight
+     * @param gridOffsetY the requested offset in cells
      */
     public void setGridOffsetY(int gridOffsetY) {
         this.gridOffsetY = clamp(gridOffsetY,0,  contents[0].length - gridHeight);

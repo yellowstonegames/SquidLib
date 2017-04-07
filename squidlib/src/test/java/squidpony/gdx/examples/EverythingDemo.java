@@ -23,7 +23,7 @@ import squidpony.squidgrid.SpatialMap;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidgrid.mapping.MixedGenerator;
+import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.*;
 
 import java.util.ArrayList;
@@ -203,16 +203,16 @@ public class EverythingDemo extends ApplicationAdapter {
         //Only needed if totalWidth and/or totalHeight is 257 or larger
         Coord.expandPoolTo(totalWidth, totalHeight);
         dungeonGen = new DungeonGenerator(totalWidth, totalHeight, rng);
-        dungeonGen.addWater(30, 6);
-        dungeonGen.addGrass(5);
-        dungeonGen.addBoulders(10);
-        dungeonGen.addDoors(18, false);
-        MixedGenerator mix = new MixedGenerator(totalWidth, totalHeight, rng);
-        mix.putCaveCarvers(1);
-        mix.putBoxRoomCarvers(1);
-        mix.putRoundRoomCarvers(2);
-        char[][] mg = mix.generate();
-        decoDungeon = dungeonGen.generate(mg);
+        dungeonGen.addWater(16, 6);
+        dungeonGen.addGrass(8);
+        dungeonGen.addBoulders(5);
+        dungeonGen.addDoors(12, true);
+        //SerpentMapGenerator mix = new SerpentMapGenerator(totalWidth, totalHeight, rng, 0.35);
+        //mix.putCaveCarvers(2);
+        //mix.putWalledBoxRoomCarvers(3);
+        //mix.putWalledRoundRoomCarvers(2);
+        //char[][] mg = mix.generate();
+        decoDungeon = dungeonGen.generate(TilesetType.DEFAULT_DUNGEON);
 
         // change the TilesetType to lots of different choices to see what dungeon works best.
         //bareDungeon = dungeonGen.generate(TilesetType.DEFAULT_DUNGEON);
@@ -248,7 +248,7 @@ public class EverythingDemo extends ApplicationAdapter {
         //the current health of the player and an '!' for alerted monsters.
         //subCell = new SquidPanel(width, height, textFactory.copy(), fgCenter);
 
-        display.setAnimationDuration(0.15f);
+        display.setAnimationDuration(0.11f);
         // we use a "torchlight" effect where the field of view wavers slightly, so a slightly-yellow color like
         // SColor.COSMIC_LATTE works well for the color of lighting. This tints everything very slightly yellow, but
         // this is mostly unnoticeable for things like deep water that already have a vivid color here.
@@ -296,7 +296,7 @@ public class EverythingDemo extends ApplicationAdapter {
 
         fg = display.getForegroundLayer();
         placement.remove(pl);
-        int numMonsters = 80;
+        int numMonsters = 50;
         monsters = new SpatialMap<>(numMonsters);
         for (int i = 0; i < numMonsters; i++) {
             Coord monPos = placement.singleRandom(rng);
@@ -537,6 +537,7 @@ public class EverythingDemo extends ApplicationAdapter {
 
         if (health <= 0) return;
         int newX = player.gridX + xmod, newY = player.gridY + ymod;
+        float midX = player.gridX + xmod * 0.5f, midY = player.gridY + ymod * 0.5f;
         if (newX >= 0 && newY >= 0 && newX < totalWidth && newY < totalHeight
                 && bareDungeon[newX][newY] != '#') {
             // '+' is a door.
@@ -558,13 +559,18 @@ public class EverythingDemo extends ApplicationAdapter {
                 //display.setGridOffsetY(newY - (height >> 1));
                 //display.slideWorld(xmod, ymod, -1);
                 final Vector3 pos = camera.position.cpy(), original = camera.position.cpy(),
-                        nextPos = camera.position.cpy().add(xmod * cellWidth, -ymod * cellHeight, 0);
+                        nextPos = camera.position.cpy().add(
+                                midX > totalWidth - (width + 1) * 0.5f || midX < (width + 1) * 0.5f ? 0 : (xmod * cellWidth),
+                                midY > totalHeight - (height + 1) * 0.5f || midY < (height - 1) * 0.5f ? 0 : (-ymod * cellHeight),
+                                0);
                 display.slide(player, newX, newY);
+                //movingCamera = true;
                 display.addAction(
-                        new TemporalAction(display.getAnimationDuration()+0.02f) {
+                        new TemporalAction(display.getAnimationDuration()) {
                             @Override
                             protected void update(float percent) {
                                 pos.lerp(nextPos, percent);
+                                //System.out.println(pos.toString());
                                 camera.position.set(pos);
                                 pos.set(original);
                                 camera.update();
@@ -574,7 +580,7 @@ public class EverythingDemo extends ApplicationAdapter {
                                 super.end();
                                 display.setGridOffsetX(player.gridX - (width >> 1));
                                 display.setGridOffsetY(player.gridY - (height >> 1));
-                                display.getForegroundLayer().fixPositions();
+                                //display.getForegroundLayer().fixPositions();
                                 camera.position.set(original);
                                 camera.update();
 
@@ -835,6 +841,9 @@ public class EverythingDemo extends ApplicationAdapter {
             display.putBoxedString(width / 2 - 18 + fg.getGridOffsetX(), height / 2 + 5 + fg.getGridOffsetY(), "             q to quit.             ");
 
             // because we return early, we still need to draw.
+            messageViewport.apply(false);
+            messageStage.draw();
+            viewport.apply(false);
             stage.draw();
             // q still needs to quit.
             if (input.hasNext())
@@ -843,11 +852,6 @@ public class EverythingDemo extends ApplicationAdapter {
         }
         // need to display the map every frame, since we clear the screen to avoid artifacts.
         putMap();
-        /*if(!display.hasActiveAnimations())
-        {
-            display.setGridOffsetX(player.gridX - (width >> 1));
-            display.setGridOffsetY(player.gridY - (height >> 1));
-        }*/
         // if the user clicked, we have a list of moves to perform.
         if (!awaitedMoves.isEmpty()) {
 
