@@ -331,15 +331,27 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
     }
 
     /**
-     * Experimental, use with caution! Given any non-negative int (0 is allowed), this gets a somewhat-sub-random
-     * double from 0.0 (inclusive) to 1.0 (exclusive) using a brief series of relatively-fast operations.
-     * @param index any non-negative int
+     * Given any int (0 is allowed), this gets a somewhat-sub-random double from 0.0 (inclusive) to 1.0 (exclusive)
+     * using the same implementation as {@link NumberTools#randomFloat(int)} but converted to double. Only "weak"
+     * because it lacks the stronger certainty of subsequent numbers being separated that the Van der Corput sequence
+     * has. Not actually sub-random, but manages to be distributed remarkably evenly, likely due to the statistical
+     * strength of the algorithm it uses (the same as {@link PintRNG}, derived from PCG-Random). Because PintRNG is
+     * pseudo-random and uses very different starting states on subsequent calls to its {@link PintRNG#next(int)}
+     * method, this method needs to perform some manipulation of index to keep a call that passes 2 for index different
+     * enough from a call that passes 3 (this should result in 0.4257662296295166 and 0.7359509468078613). Not all int
+     * values for index will produce unique results, since this uses a float internally and there are less distinct
+     * floats between 0.0 and 1.0 than there are all ints (1/512 as many floats in that range as ints, specifically).
+     * It should take a while calling this method before you hit an actual collision.
+     * @param index any int
      * @return a double from 0.0 (inclusive) to 1.0 (exclusive) that should not be closely correlated to index
      */
     public static double weakDetermine(int index)
     {
-        return NumberTools.setExponent(
-                (NumberTools.setExponent((index<<1|1) * 0.618033988749895, 0x3ff))
-                        * (0x232BE5 * (~index)), 0x3ff) - 1.0;
+        return NumberTools.randomFloat((index ^= 0xD0E89D2D) >>> 19 | index << 13);
+        //return NumberTools.longBitsToDouble(0x3ff0000000000000L | ((index<<1|1) * 0x9E3779B97F4A7C15L * ~index
+        //        - ((index ^ ~(index * 11L)) * 0x632BE59BD9B4E019L)) >>> 12) - 1.0;
+        //return NumberTools.setExponent(
+        //        (NumberTools.setExponent((index<<1|1) * 0.618033988749895, 0x3ff))
+        //                * (0x232BE5 * (~index)), 0x3ff) - 1.0;
     }
 }

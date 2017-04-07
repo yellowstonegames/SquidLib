@@ -735,7 +735,7 @@ public class DungeonGenerator {
             }
         }
         if(targetGrass > 0) {
-            scatter = floors.quasiRandomSeparated(1.0/7.0);
+            scatter = floors.quasiRandomSeparated(1.03/6.7);
             rng.shuffleInPlace(scatter);
             for (int i = 0; i < scatter.length; i++) {
                 if (remainingGrass > 5) //remainingGrass >= targetGrass * 0.02 &&
@@ -745,7 +745,7 @@ public class DungeonGenerator {
                         continue;
                     floors.andNot(working);
                     remainingGrass -= working.size();
-                    working.inverseMask(map, '"');
+                    map = working.inverseMask(map, '"');
                 } else
                     break;
             }

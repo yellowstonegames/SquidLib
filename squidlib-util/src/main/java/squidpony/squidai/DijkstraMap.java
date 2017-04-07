@@ -844,7 +844,7 @@ public class DijkstraMap implements Serializable {
                     }
                     double h = measurement.heuristic(dirs[d]);
                     cs = dist + h * costMap[adjX][adjY];
-                    if (physicalMap[adjX][adjY] <= FLOOR && cs < gradientMap[adjX][adjY]) {
+                    if (gradientMap[adjX][adjY] <= FLOOR && cs < gradientMap[adjX][adjY]) {
                         setFresh(adjX, adjY, cs);
                         ++numAssigned;
                         ++mappedCount;
@@ -978,7 +978,7 @@ public class DijkstraMap implements Serializable {
                     }
                     double h = measurement.heuristic(dirs[d]);
                     cs = dist + h * costMap[adjX][adjY];
-                    if (physicalMap[adjX][adjY] <= FLOOR && cs < gradientMap[adjX][adjY]) {
+                    if (gradientMap[adjX][adjY] <= FLOOR && cs < gradientMap[adjX][adjY]) {
                         setFresh(adjX, adjY, cs);
                         ++numAssigned;
                         ++mappedCount;
@@ -1061,7 +1061,7 @@ public class DijkstraMap implements Serializable {
                     }
                     double h = measurement.heuristic(dirs[d]);
                     cs = dist + h * costMap[adjX][adjY];
-                    if (physicalMap[adjX][adjY] <= FLOOR && cs < gradientMap[adjX][adjY]) {
+                    if (gradientMap[adjX][adjY] <= FLOOR && cs < gradientMap[adjX][adjY]) {
                         ++mappedCount;
                         if (targets.contains(adj = Coord.get(adjX, adjY))) {
                             fresh.clear();
@@ -1204,7 +1204,7 @@ public class DijkstraMap implements Serializable {
                     }
                     double h = measurement.heuristic(dirs[d]);
                     cs = dist + h * costMap[adjX][adjY];
-                    if (physicalMap[adjX][adjY] <= FLOOR && cs < gradientMap[adjX][adjY]) {
+                    if (gradientMap[adjX][adjY] <= FLOOR && cs < gradientMap[adjX][adjY]) {
                         ++mappedCount;
                         if (targets.contains(adj = Coord.get(adjX, adjY))) {
                             found.add(adj);
@@ -1356,7 +1356,7 @@ public class DijkstraMap implements Serializable {
                     }
                     double h = measurement.heuristic(dirs[d]);
                     cs = dist + h * costMap[adjX][adjY];
-                    if (physicalMap[adjX][adjY] <= FLOOR && cs < gradientClone[adjX][adjY]) {
+                    if (gradientClone[adjX][adjY] <= FLOOR && cs < gradientClone[adjX][adjY]) {
                         setFresh(adjX, adjY, cs);
                         ++numAssigned;
                         ++mappedCount;
@@ -1530,7 +1530,7 @@ public class DijkstraMap implements Serializable {
                     }
                     double h = measurement.heuristic(dirs[d]);
                     cs = dist + h * costMap[adjX][adjY];
-                    if (physicalMap[adjX][adjY] <= FLOOR && cs < gradientClone[adjX][adjY]) {
+                    if (gradientClone[adjX][adjY] <= FLOOR && cs < gradientClone[adjX][adjY]) {
                         setFresh(adjX, adjY, cs);
                         ++numAssigned;
                         ++mappedCount;
