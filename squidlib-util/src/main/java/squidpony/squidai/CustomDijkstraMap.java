@@ -32,6 +32,11 @@ import java.io.Serializable;
 public class CustomDijkstraMap implements Serializable {
     private static final long serialVersionUID = -2456306898212944440L;
 
+    /**
+     * The main factor in determining the "Custom" behavior of CustomDijkstraMap; using an Adjacency implementation like
+     * {@link Adjacency.BasicAdjacency} should cause this class to mimic {@link DijkstraMap}, but using
+     * {@link Adjacency.RotationAdjacency} will be very different.
+     */
     public Adjacency adjacency;
 
     /**
@@ -48,12 +53,11 @@ public class CustomDijkstraMap implements Serializable {
      */
     public double[] gradientMap;
     /**
-     * This stores the entry cost multipliers for each cell; that is, a value of 1.0 is a normal, unmodified cell, but
-     * a value of 0.5 can be entered easily (two cells of its cost can be entered for the cost of one 1.0 cell), and a
-     * value of 2.0 can only be entered with difficulty (one cell of its cost can be entered for the cost of two 1.0
-     * cells). Unlike the measurement field, this does affect the length of paths, as well as the numbers assigned
-     * to gradientMap during a scan. The values for walls are identical to the value used by gradientMap, that is, this
-     * class' WALL static final field. Floors, however, are never given FLOOR as a value, and default to 1.0 .
+     * This stores the type of each cell for the purposes of determining its cost to enter; in most cases this type is
+     * the char used to represent the cell, but any int can be used if you need more information. An int from costMap
+     * is looked up in {@link Adjacency#costRules} to get the actual cost as a double; this collection should almost
+     * always start with a reasonable default value for when the int key is not present. It's common to simply assign
+     * a char like '#' or '.' to an element in costMap.
      */
     public int[] costMap = null;
 
