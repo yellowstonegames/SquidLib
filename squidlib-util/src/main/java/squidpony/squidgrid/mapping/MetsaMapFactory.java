@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * A map generation factory using perlin noise to make island chain style maps.
+ * A map generation factory using Perlin noise to make island chain style maps.
  *
  * Based largely on work done by Metsa from #rgrd
  *

@@ -1,20 +1,16 @@
 package squidpony.gdx.tests;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Files;
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.squidgrid.Direction;
-import squidpony.squidgrid.gui.gdx.SColor;
-import squidpony.squidgrid.gui.gdx.SquidColorCenter;
-import squidpony.squidgrid.gui.gdx.SquidInput;
-import squidpony.squidgrid.gui.gdx.SquidPanel;
+import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidmath.*;
 
 /**
@@ -38,7 +34,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         Rocky                  = 11,
         River                  = 12;
 
-    private static final int width = 800, height = 800;
+    private static final int width = 512, height = 512;
     private final double terrainFreq = 1.9, terrainRidgedFreq = 2.5, heatFreq = 5.5, moistureFreq = 5.0, otherFreq = 4.1;
     //riverSize = (0.5 - 10.0 / height) * (0.5 - 10.0 / width), lakeSize = riverSize * 1.1;
 
@@ -53,6 +49,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private Noise.Noise4D terrain, terrainRidged, heat, moisture, otherRidged;
     private long seed, cachedState;
     private StatefulRNG rng;
+    private IntVLA startCacheX = new IntVLA(8), startCacheY = new IntVLA(8);
     //private GridData data;
     private double[][] heightData = new double[width][height],
             heatData = new double[width][height],
@@ -153,7 +150,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private static float woodland = SColor.floatGetI(139, 175, 90);
     private static float darkWoodland = SColor.lerpFloatColors(woodland, black, 0.15f);
 
-    private static float rocky = SColor.floatGetI(177, 167, 157);
+    private static float rocky = SColor.floatGetI(171, 175, 145);
     private static float darkRocky = SColor.lerpFloatColors(rocky, black, 0.15f);
 
     private static float beach = SColor.floatGetI(255, 235, 180);
@@ -273,137 +270,113 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             BIOME_DARK_COLOR_TABLE[i] = SColor.lerpFloatColors(b, black, 0.07f);
         }
     }
+
     protected void codeBiome(int x, int y, double hot, double moist, int heightCode) {
         int hc, mc;
-        double upperProximityH, upperProximityM, lowerProximityH, lowerProximityM, bound, prevBound;
         boolean isLake = partialLakeData.contains(x, y) && heightCode >= 4,
                 isRiver = partialRiverData.contains(x, y) && heightCode >= 4;
-        if(moist >= (bound = (wettestValueUpper - (wetterValueUpper - wetterValueLower) * 0.2)))
+        if(moist >= (wettestValueUpper - (wetterValueUpper - wetterValueLower) * 0.2))
         {
             mc = 5;
-            upperProximityM = (moist - bound) / (maxWet - bound);
         }
-        else if((prevBound = bound) == -1 || moist >= (bound = (wetterValueUpper - (wetValueUpper - wetValueLower) * 0.2)))
+        else if(moist >= (wetterValueUpper - (wetValueUpper - wetValueLower) * 0.2))
         {
             mc = 4;
-            upperProximityM = (moist - bound) / (prevBound - bound);
         }
-        else if((prevBound = bound) == -1 || moist >= (bound = (wetValueUpper - (dryValueUpper - dryValueLower) * 0.2)))
+        else if(moist >= (wetValueUpper - (dryValueUpper - dryValueLower) * 0.2))
         {
             mc = 3;
-            upperProximityM = (moist - bound) / (prevBound - bound);
         }
-        else if((prevBound = bound) == -1 || moist >= (bound = (dryValueUpper - (drierValueUpper - drierValueLower) * 0.2)))
+        else if(moist >= (dryValueUpper - (drierValueUpper - drierValueLower) * 0.2))
         {
             mc = 2;
-            upperProximityM = (moist - bound) / (prevBound - bound);
         }
-        else if((prevBound = bound) == -1 || moist >= (bound = (drierValueUpper - (driestValueUpper) * 0.2)))
+        else if(moist >= (drierValueUpper - (driestValueUpper) * 0.2))
         {
             mc = 1;
-            upperProximityM = (moist - bound) / (prevBound - bound);
         }
         else
         {
             mc = 0;
-            upperProximityM = (moist) / (bound);
         }
 
-        if(hot >= (bound = (warmestValueUpper - (warmerValueUpper - warmerValueLower) * 0.2) * i_hot))
+        if(hot >= (warmestValueUpper - (warmerValueUpper - warmerValueLower) * 0.2) * i_hot)
         {
             hc = 5;
-            upperProximityH = (hot - bound) / (maxHeat - bound);
         }
-        else if((prevBound = bound) == -1 || hot >= (bound = (warmerValueUpper - (warmValueUpper - warmValueLower) * 0.2) * i_hot))
+        else if(hot >= (warmerValueUpper - (warmValueUpper - warmValueLower) * 0.2) * i_hot)
         {
             hc = 4;
-            upperProximityH = (hot - bound) / (prevBound - bound);
         }
-        else if((prevBound = bound) == -1 || hot >= (bound = (warmValueUpper - (coldValueUpper - coldValueLower) * 0.2) * i_hot))
+        else if(hot >= (warmValueUpper - (coldValueUpper - coldValueLower) * 0.2) * i_hot)
         {
             hc = 3;
-            upperProximityH = (hot - bound) / (prevBound - bound);
         }
-        else if((prevBound = bound) == -1 || hot >= (bound = (coldValueUpper - (colderValueUpper - colderValueLower) * 0.2) * i_hot))
+        else if(hot >= (coldValueUpper - (colderValueUpper - colderValueLower) * 0.2) * i_hot)
         {
             hc = 2;
-            upperProximityH = (hot - bound) / (prevBound - bound);
         }
-        else if((prevBound = bound) == -1 || hot >= (bound = (colderValueUpper - (coldestValueUpper) * 0.2) * i_hot))
+        else if(hot >= (colderValueUpper - (coldestValueUpper) * 0.2) * i_hot)
         {
             hc = 1;
-            upperProximityH = (hot - bound) / (prevBound - bound);
         }
         else
         {
             hc = 0;
-            upperProximityH = (hot) / (bound);
         }
 
         heatCodeData[x][y] = hc;
         moistureCodeData[x][y] = mc;
         biomeUpperCodeData[x][y] = isLake? hc + 48 : (isRiver ? hc + 42 : ((heightCode == 4) ? hc + 36 : hc + mc * 6));
 
-        if(moist >= (bound = (wetterValueUpper + (wettestValueUpper - wettestValueLower) * 0.2)))
+        if(moist >= (wetterValueUpper + (wettestValueUpper - wettestValueLower) * 0.2))
         {
             mc = 5;
-            lowerProximityM = (moist - bound) / (maxWet - bound);
         }
-        else if((prevBound = bound) == -1 || moist >= (bound = (wetValueUpper + (wetterValueUpper - wetterValueLower) * 0.2)))
+        else if(moist >= (wetValueUpper + (wetterValueUpper - wetterValueLower) * 0.2))
         {
             mc = 4;
-            lowerProximityM = (moist - bound) / (prevBound - bound);
         }
-        else if((prevBound = bound) == -1 || moist >= (bound = (dryValueUpper + (wetValueUpper - wetValueLower) * 0.2)))
+        else if(moist >= (dryValueUpper + (wetValueUpper - wetValueLower) * 0.2))
         {
             mc = 3;
-            lowerProximityM = (moist - bound) / (prevBound - bound);
         }
-        else if((prevBound = bound) == -1 || moist >= (bound = (drierValueUpper + (dryValueUpper - dryValueLower) * 0.2)))
+        else if(moist >= (drierValueUpper + (dryValueUpper - dryValueLower) * 0.2))
         {
             mc = 2;
-            lowerProximityM = (moist - bound) / (prevBound - bound);
         }
-        else if((prevBound = bound) == -1 || moist >= (bound = (driestValueUpper + (drierValueUpper - drierValueLower) * 0.2)))
+        else if(moist >= (driestValueUpper + (drierValueUpper - drierValueLower) * 0.2))
         {
             mc = 1;
-            lowerProximityM = (moist - bound) / (prevBound - bound);
         }
         else
         {
             mc = 0;
-            lowerProximityM = (moist) / (bound);
         }
 
-        if(hot >= (bound = (warmerValueUpper + (warmestValueUpper - warmestValueLower) * 0.2) * i_hot))
+        if(hot >= (warmerValueUpper + (warmestValueUpper - warmestValueLower) * 0.2) * i_hot)
         {
             hc = 5;
-            lowerProximityH = (hot - bound) / (maxHeat - bound);
         }
-        else if((prevBound = bound) == -1 || hot >= (bound = (warmValueUpper + (warmerValueUpper - warmerValueLower) * 0.2) * i_hot))
+        else if(hot >= (warmValueUpper + (warmerValueUpper - warmerValueLower) * 0.2) * i_hot)
         {
             hc = 4;
-            lowerProximityH = (hot - bound) / (prevBound - bound);
         }
-        else if((prevBound = bound) == -1 || hot >= (bound = (coldValueUpper + (warmValueUpper - warmValueLower) * 0.2) * i_hot))
+        else if(hot >= (coldValueUpper + (warmValueUpper - warmValueLower) * 0.2) * i_hot)
         {
             hc = 3;
-            lowerProximityH = (hot - bound) / (prevBound - bound);
         }
-        else if((prevBound = bound) == -1 || hot >= (bound = (colderValueUpper + (coldValueUpper - coldValueLower) * 0.2) * i_hot))
+        else if(hot >= (colderValueUpper + (coldValueUpper - coldValueLower) * 0.2) * i_hot)
         {
             hc = 2;
-            lowerProximityH = (hot - bound) / (prevBound - bound);
         }
-        else if((prevBound = bound) == -1 || hot >= (bound = (coldestValueUpper + (colderValueUpper - colderValueLower) * 0.2) * i_hot))
+        else if(hot >= (coldestValueUpper + (colderValueUpper - colderValueLower) * 0.2) * i_hot)
         {
             hc = 1;
-            lowerProximityH = (hot - bound) / (prevBound - bound);
         }
         else
         {
             hc = 0;
-            lowerProximityH = (hot) / (bound);
         }
 
         biomeLowerCodeData[x][y] = hc + mc * 6;
@@ -415,6 +388,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             shadingData[x][y] = //(upperProximityH + upperProximityM - lowerProximityH - lowerProximityM) * 0.1 + 0.2
                     + NumberTools.bounce(heightData[x][y] * (71 + moist * 11 - hot * 5)) * 0.5 + 0.5;
     }
+
 
     @Override
     public void create() {
@@ -438,6 +412,10 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                 switch (key) {
                     case SquidInput.ENTER:
                         seed = rng.nextLong();
+                        startCacheX.clear();
+                        startCacheY.clear();
+                        startCacheX.add((width >> 1) - (width >> zoom+1));
+                        startCacheY.add((height >> 1) - (height >> zoom+1));
                         regenerate(seed);
                         rng.setState(seed);
                         break;
@@ -447,17 +425,46 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                         {
                             zoom++;
                             cachedState = rng.getState();
+
+                            if(startCacheX.isEmpty())
+                            {
+                                startCacheX.add(0);
+                                startCacheY.add(0);
+                            }
+                            else {
+                                startCacheX.add(MathUtils.clamp(startCacheX.peek() + (width >> zoom) - (width >> zoom + 1),
+                                        0, width - (width >> zoom)));
+                                startCacheY.add(MathUtils.clamp(startCacheY.peek() + (height >> zoom) - (height >> zoom + 1),
+                                        0, height - (height >> zoom)));
+                            }
+                            regenerate(startCacheX.peek(), startCacheY.peek(),width >> zoom, height >> zoom, cachedState);
+                            /*
+                            startCacheX.add((width >> 1) - (width >> zoom+1));
+                            startCacheY.add((height >> 1) - (height >> zoom+1));
                             regenerate(cachedState);
+                            */
                             rng.setState(cachedState);
                         }
                         break;
                     case '-':
                     case '_':
-                        if(zoom > 0)
+                        if(zoom > 0) {
                             zoom--;
-                        cachedState = rng.getState();
-                        regenerate(cachedState);
-                        rng.setState(cachedState);
+                            cachedState = rng.getState();
+                            startCacheX.pop();
+                            startCacheY.pop();
+                            startCacheX.add(MathUtils.clamp(startCacheX.pop() + (width >> zoom + 1) - (width >> zoom + 1),
+                                    0, width - (width >> zoom)));
+                            startCacheY.add(MathUtils.clamp(startCacheY.pop() + (height >> zoom + 1) - (height >> zoom + 1),
+                                    0, height - (height >> zoom)));
+                            regenerate(startCacheX.peek(), startCacheY.peek(),width >> zoom, height >> zoom, cachedState);
+                            /*
+                            startCacheX.pop();
+                            startCacheY.pop();
+                            regenerate(cachedState);
+                            */
+                            rng.setState(cachedState);
+                        }
                         break;
                     case 'Q':
                     case 'q':
@@ -467,20 +474,67 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                 }
                 Gdx.graphics.requestRendering();
             }
-        });
+        }, new SquidMouse(1, 1, width, height, 0, 0, new InputAdapter()
+        {
+            @Override
+            public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+                if(button == Input.Buttons.RIGHT)
+                {
+                    if(zoom > 0)
+                    {
+                        zoom--;
+                        cachedState = rng.getState();
+
+                        startCacheX.pop();
+                        startCacheY.pop();
+                        startCacheX.add(MathUtils.clamp(startCacheX.pop() + (screenX >> zoom + 1) - (width >> zoom + 2),
+                                0, width - (width >> zoom)));
+                        startCacheY.add(MathUtils.clamp(startCacheY.pop() + (screenY >> zoom + 1) - (height >> zoom + 2),
+                                0, height - (height >> zoom)));
+                        regenerate(startCacheX.peek(), startCacheY.peek(),width >> zoom, height >> zoom, cachedState);
+                        rng.setState(cachedState);
+
+                    }
+                }
+                else
+                {
+                    if(zoom < 7)
+                    {
+                        zoom++;
+                        cachedState = rng.getState();
+                        if(startCacheX.isEmpty())
+                        {
+                            startCacheX.add(0);
+                            startCacheY.add(0);
+                        }
+                        else {
+                            startCacheX.add(MathUtils.clamp(startCacheX.peek() + (screenX >> zoom - 1) - (width >> zoom + 1),
+                                    0, width - (width >> zoom)));
+                            startCacheY.add(MathUtils.clamp(startCacheY.peek() + (screenY >> zoom - 1) - (height >> zoom + 1),
+                                    0, height - (height >> zoom)));
+                        }
+                        regenerate(startCacheX.peek(), startCacheY.peek(),width >> zoom, height >> zoom, cachedState);
+                        rng.setState(cachedState);
+                    }
+                }
+                return true;
+            }
+        }));
         cachedState = ~seed;
+        startCacheX.add(0);
+        startCacheY.add(0);
         regenerate(seed);
         rng.setState(seed);
         Gdx.input.setInputProcessor(input);
         display.setPosition(0, 0);
         stage.addActor(display);
-        Gdx.graphics.setContinuousRendering(false);
-        Gdx.graphics.requestRendering();
+        //Gdx.graphics.setContinuousRendering(false);
+        //Gdx.graphics.requestRendering();
     }
     public void regenerate(final long state) {
         if(zoom != 0 && cachedState != state)
             zoom = 0;
-        regenerate((width >> 1) - (width >> zoom+1), (height >> 1) - (height >> zoom+1),
+        regenerate(startCacheX.peek(), startCacheY.peek(),
                 (width >> zoom), (height >> zoom), state);
     }
     public void regenerate(int startX, int startY, int usedWidth, int usedHeight, long state)
@@ -506,8 +560,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         }
         rng.setState(state);
         int seedA = rng.nextInt(), seedB = rng.nextInt(), seedC = rng.nextInt(), t;
-        waterModifier = rng.nextDouble(0.15)-0.06;
-        coolingModifier = NumberTools.randomDoubleCurved(rng.nextInt()) * 0.5 + 1.0;
+        waterModifier = rng.nextDouble(0.13)-0.06;
+        coolingModifier = rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1;
 
         double p, q,
                 ps, pc,
@@ -650,17 +704,19 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             partialRiverData.remake(riverData);
             partialLakeData.remake(lakeData);
             for (int i = 1; i <= zoom; i++) {
+                int stx = (startCacheX.get(i) - startCacheX.get(i-1)) << (i - 1),
+                        sty = (startCacheY.get(i) - startCacheY.get(i-1)) << (i - 1);
                 if ((i & 3) == 3) {
-                    partialRiverData.zoom((width >> 2), (height >> 2)).connect8way();//.connect8way();//.connect();
+                    partialRiverData.zoom(stx, sty).connect8way();//.connect8way();//.connect();
                     partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.4));
-                    partialLakeData.zoom((width >> 2), (height >> 2)).connect8way();//.connect8way();//.connect();
+                    partialLakeData.zoom(stx, sty).connect8way();//.connect8way();//.connect();
                     partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.55));
                 }
                 else
                 {
-                    partialRiverData.zoom((width >> 2), (height >> 2)).connect8way().thin();//.connect8way();//.connect();
+                    partialRiverData.zoom(stx, sty).connect8way().thin();//.connect8way();//.connect();
                     partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.5));
-                    partialLakeData.zoom((width >> 2), (height >> 2)).connect8way().thin();//.connect8way();//.connect();
+                    partialLakeData.zoom(stx, sty).connect8way().thin();//.connect8way();//.connect();
                     partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.7));
                 }
             }
