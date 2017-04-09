@@ -23,7 +23,7 @@
 <span class="sourceLineNo">015</span>import java.util.Arrays;<a name="line.15"></a>
 <span class="sourceLineNo">016</span><a name="line.16"></a>
 <span class="sourceLineNo">017</span>/**<a name="line.17"></a>
-<span class="sourceLineNo">018</span> * This is a port of the public domain Isaac64 (cryptographic) random number generator to Java.<a name="line.18"></a>
+<span class="sourceLineNo">018</span> * This is a port of the public domain Isaac64 (cryptographic) random number generator to Java, by Bob Jenkins.<a name="line.18"></a>
 <span class="sourceLineNo">019</span> * It is a RandomnessSource here, so it should generally be used to make an RNG, which has more features.<a name="line.19"></a>
 <span class="sourceLineNo">020</span> * IsaacRNG is slower than the non-cryptographic RNGs in SquidLib, but much faster than cryptographic RNGs<a name="line.20"></a>
 <span class="sourceLineNo">021</span> * that need SecureRandom, and it's compatible with GWT and Android to boot!<a name="line.21"></a>
@@ -61,7 +61,7 @@
 <span class="sourceLineNo">053</span>     * Arrays larger than 256 items will only have the first 256 used.<a name="line.53"></a>
 <span class="sourceLineNo">054</span>     * @param seed an array of longs to use as a seed; ideally it should be 256 individual longs<a name="line.54"></a>
 <span class="sourceLineNo">055</span>     */<a name="line.55"></a>
-<span class="sourceLineNo">056</span>    public IsaacRNG(long seed[]) {<a name="line.56"></a>
+<span class="sourceLineNo">056</span>    public IsaacRNG(final long seed[]) {<a name="line.56"></a>
 <span class="sourceLineNo">057</span>        mem = new long[SIZE];<a name="line.57"></a>
 <span class="sourceLineNo">058</span>        results = new long[SIZE];<a name="line.58"></a>
 <span class="sourceLineNo">059</span>        if(seed == null)<a name="line.59"></a>
@@ -258,67 +258,83 @@
 <span class="sourceLineNo">250</span>    }<a name="line.250"></a>
 <span class="sourceLineNo">251</span><a name="line.251"></a>
 <span class="sourceLineNo">252</span>    /**<a name="line.252"></a>
-<span class="sourceLineNo">253</span>     * Generates and returns a block of 255 pseudo-random long values.<a name="line.253"></a>
-<span class="sourceLineNo">254</span>     * @return an array of 255 pseudo-random longs, with all bits possible<a name="line.254"></a>
+<span class="sourceLineNo">253</span>     * Generates and returns a block of 256 pseudo-random long values.<a name="line.253"></a>
+<span class="sourceLineNo">254</span>     * @return a freshly-allocated array of 256 pseudo-random longs, with all bits possible<a name="line.254"></a>
 <span class="sourceLineNo">255</span>     */<a name="line.255"></a>
 <span class="sourceLineNo">256</span>    public final long[] nextBlock()<a name="line.256"></a>
 <span class="sourceLineNo">257</span>    {<a name="line.257"></a>
 <span class="sourceLineNo">258</span>        regen();<a name="line.258"></a>
-<span class="sourceLineNo">259</span>        final long[] block = new long[SIZE-1];<a name="line.259"></a>
-<span class="sourceLineNo">260</span>        System.arraycopy(results, 1, block, 0, SIZE-1);<a name="line.260"></a>
+<span class="sourceLineNo">259</span>        final long[] block = new long[SIZE];<a name="line.259"></a>
+<span class="sourceLineNo">260</span>        System.arraycopy(results, 0, block, 0, SIZE);<a name="line.260"></a>
 <span class="sourceLineNo">261</span>        count = 0;<a name="line.261"></a>
 <span class="sourceLineNo">262</span>        return block;<a name="line.262"></a>
 <span class="sourceLineNo">263</span>    }<a name="line.263"></a>
 <span class="sourceLineNo">264</span><a name="line.264"></a>
-<span class="sourceLineNo">265</span>    @Override<a name="line.265"></a>
-<span class="sourceLineNo">266</span>    public final int next( int bits ) {<a name="line.266"></a>
-<span class="sourceLineNo">267</span>        //return (int)( nextLong() &gt;&gt;&gt; (64 - bits) );<a name="line.267"></a>
-<span class="sourceLineNo">268</span>        return (int)( nextLong() &amp; ( 1L &lt;&lt; bits ) - 1 );<a name="line.268"></a>
-<span class="sourceLineNo">269</span>    }<a name="line.269"></a>
-<span class="sourceLineNo">270</span><a name="line.270"></a>
-<span class="sourceLineNo">271</span>    /**<a name="line.271"></a>
-<span class="sourceLineNo">272</span>     * Produces another RandomnessSource, but the new one will not produce the same data as this one.<a name="line.272"></a>
-<span class="sourceLineNo">273</span>     * This is meant to be a "more-secure" generator, so this helps reduce the ability to guess future<a name="line.273"></a>
-<span class="sourceLineNo">274</span>     * results from a given sequence of output.<a name="line.274"></a>
-<span class="sourceLineNo">275</span>     * @return another RandomnessSource with the same implementation but no guarantees as to generation<a name="line.275"></a>
-<span class="sourceLineNo">276</span>     */<a name="line.276"></a>
-<span class="sourceLineNo">277</span>    @Override<a name="line.277"></a>
-<span class="sourceLineNo">278</span>    public RandomnessSource copy() {<a name="line.278"></a>
-<span class="sourceLineNo">279</span>        return new IsaacRNG(results);<a name="line.279"></a>
-<span class="sourceLineNo">280</span>    }<a name="line.280"></a>
-<span class="sourceLineNo">281</span><a name="line.281"></a>
-<span class="sourceLineNo">282</span>    @Override<a name="line.282"></a>
-<span class="sourceLineNo">283</span>    public boolean equals(Object o) {<a name="line.283"></a>
-<span class="sourceLineNo">284</span>        if (this == o) return true;<a name="line.284"></a>
-<span class="sourceLineNo">285</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.285"></a>
+<span class="sourceLineNo">265</span>    /**<a name="line.265"></a>
+<span class="sourceLineNo">266</span>     * Generates enough pseudo-random long values to fill {@code data} and assigns them to it.<a name="line.266"></a>
+<span class="sourceLineNo">267</span>     */<a name="line.267"></a>
+<span class="sourceLineNo">268</span>    public final void setBlock(final long[] data)<a name="line.268"></a>
+<span class="sourceLineNo">269</span>    {<a name="line.269"></a>
+<span class="sourceLineNo">270</span>        int len, i;<a name="line.270"></a>
+<span class="sourceLineNo">271</span>        if(data == null || (len = data.length) == 0) return;<a name="line.271"></a>
+<span class="sourceLineNo">272</span>        for (i = 0; len &gt; 256; i += 256, len -= 256) {<a name="line.272"></a>
+<span class="sourceLineNo">273</span>            regen();<a name="line.273"></a>
+<span class="sourceLineNo">274</span>            System.arraycopy(results, 0, data, i, 256);<a name="line.274"></a>
+<span class="sourceLineNo">275</span>        }<a name="line.275"></a>
+<span class="sourceLineNo">276</span>        regen();<a name="line.276"></a>
+<span class="sourceLineNo">277</span>        System.arraycopy(results, 0, data, i, len);<a name="line.277"></a>
+<span class="sourceLineNo">278</span>        count = len &amp; 255;<a name="line.278"></a>
+<span class="sourceLineNo">279</span>    }<a name="line.279"></a>
+<span class="sourceLineNo">280</span><a name="line.280"></a>
+<span class="sourceLineNo">281</span>    @Override<a name="line.281"></a>
+<span class="sourceLineNo">282</span>    public final int next( int bits ) {<a name="line.282"></a>
+<span class="sourceLineNo">283</span>        //return (int)( nextLong() &gt;&gt;&gt; (64 - bits) );<a name="line.283"></a>
+<span class="sourceLineNo">284</span>        return (int)( nextLong() &amp; ( 1L &lt;&lt; bits ) - 1 );<a name="line.284"></a>
+<span class="sourceLineNo">285</span>    }<a name="line.285"></a>
 <span class="sourceLineNo">286</span><a name="line.286"></a>
-<span class="sourceLineNo">287</span>        IsaacRNG isaacRNG = (IsaacRNG) o;<a name="line.287"></a>
-<span class="sourceLineNo">288</span><a name="line.288"></a>
-<span class="sourceLineNo">289</span>        if (count != isaacRNG.count) return false;<a name="line.289"></a>
-<span class="sourceLineNo">290</span>        if (a != isaacRNG.a) return false;<a name="line.290"></a>
-<span class="sourceLineNo">291</span>        if (b != isaacRNG.b) return false;<a name="line.291"></a>
-<span class="sourceLineNo">292</span>        if (c != isaacRNG.c) return false;<a name="line.292"></a>
-<span class="sourceLineNo">293</span>        if (!Arrays.equals(results, isaacRNG.results)) return false;<a name="line.293"></a>
-<span class="sourceLineNo">294</span>        return Arrays.equals(mem, isaacRNG.mem);<a name="line.294"></a>
-<span class="sourceLineNo">295</span>    }<a name="line.295"></a>
-<span class="sourceLineNo">296</span><a name="line.296"></a>
-<span class="sourceLineNo">297</span>    @Override<a name="line.297"></a>
-<span class="sourceLineNo">298</span>    public int hashCode() {<a name="line.298"></a>
-<span class="sourceLineNo">299</span>        int result = count;<a name="line.299"></a>
-<span class="sourceLineNo">300</span>        result = 31 * result + CrossHash.Lightning.hash(results);<a name="line.300"></a>
-<span class="sourceLineNo">301</span>        result = 31 * result + CrossHash.Lightning.hash(mem);<a name="line.301"></a>
-<span class="sourceLineNo">302</span>        result = 31 * result + (int) (a ^ (a &gt;&gt;&gt; 32));<a name="line.302"></a>
-<span class="sourceLineNo">303</span>        result = 31 * result + (int) (b ^ (b &gt;&gt;&gt; 32));<a name="line.303"></a>
-<span class="sourceLineNo">304</span>        result = 31 * result + (int) (c ^ (c &gt;&gt;&gt; 32));<a name="line.304"></a>
-<span class="sourceLineNo">305</span>        return result;<a name="line.305"></a>
-<span class="sourceLineNo">306</span>    }<a name="line.306"></a>
-<span class="sourceLineNo">307</span><a name="line.307"></a>
-<span class="sourceLineNo">308</span>    @Override<a name="line.308"></a>
-<span class="sourceLineNo">309</span>    public String toString()<a name="line.309"></a>
-<span class="sourceLineNo">310</span>    {<a name="line.310"></a>
-<span class="sourceLineNo">311</span>        return "IsaacRNG with a hidden state (id is " + System.identityHashCode(this) + ')';<a name="line.311"></a>
-<span class="sourceLineNo">312</span>    }<a name="line.312"></a>
-<span class="sourceLineNo">313</span>}<a name="line.313"></a>
+<span class="sourceLineNo">287</span>    /**<a name="line.287"></a>
+<span class="sourceLineNo">288</span>     * Produces another RandomnessSource, but the new one will not produce the same data as this one.<a name="line.288"></a>
+<span class="sourceLineNo">289</span>     * This is meant to be a "more-secure" generator, so this helps reduce the ability to guess future<a name="line.289"></a>
+<span class="sourceLineNo">290</span>     * results from a given sequence of output.<a name="line.290"></a>
+<span class="sourceLineNo">291</span>     * @return another RandomnessSource with the same implementation but no guarantees as to generation<a name="line.291"></a>
+<span class="sourceLineNo">292</span>     */<a name="line.292"></a>
+<span class="sourceLineNo">293</span>    @Override<a name="line.293"></a>
+<span class="sourceLineNo">294</span>    public RandomnessSource copy() {<a name="line.294"></a>
+<span class="sourceLineNo">295</span>        return new IsaacRNG(results);<a name="line.295"></a>
+<span class="sourceLineNo">296</span>    }<a name="line.296"></a>
+<span class="sourceLineNo">297</span><a name="line.297"></a>
+<span class="sourceLineNo">298</span>    @Override<a name="line.298"></a>
+<span class="sourceLineNo">299</span>    public boolean equals(Object o) {<a name="line.299"></a>
+<span class="sourceLineNo">300</span>        if (this == o) return true;<a name="line.300"></a>
+<span class="sourceLineNo">301</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.301"></a>
+<span class="sourceLineNo">302</span><a name="line.302"></a>
+<span class="sourceLineNo">303</span>        IsaacRNG isaacRNG = (IsaacRNG) o;<a name="line.303"></a>
+<span class="sourceLineNo">304</span><a name="line.304"></a>
+<span class="sourceLineNo">305</span>        if (count != isaacRNG.count) return false;<a name="line.305"></a>
+<span class="sourceLineNo">306</span>        if (a != isaacRNG.a) return false;<a name="line.306"></a>
+<span class="sourceLineNo">307</span>        if (b != isaacRNG.b) return false;<a name="line.307"></a>
+<span class="sourceLineNo">308</span>        if (c != isaacRNG.c) return false;<a name="line.308"></a>
+<span class="sourceLineNo">309</span>        if (!Arrays.equals(results, isaacRNG.results)) return false;<a name="line.309"></a>
+<span class="sourceLineNo">310</span>        return Arrays.equals(mem, isaacRNG.mem);<a name="line.310"></a>
+<span class="sourceLineNo">311</span>    }<a name="line.311"></a>
+<span class="sourceLineNo">312</span><a name="line.312"></a>
+<span class="sourceLineNo">313</span>    @Override<a name="line.313"></a>
+<span class="sourceLineNo">314</span>    public int hashCode() {<a name="line.314"></a>
+<span class="sourceLineNo">315</span>        int result = count;<a name="line.315"></a>
+<span class="sourceLineNo">316</span>        result = 31 * result + CrossHash.Wisp.hash(results);<a name="line.316"></a>
+<span class="sourceLineNo">317</span>        result = 31 * result + CrossHash.Wisp.hash(mem);<a name="line.317"></a>
+<span class="sourceLineNo">318</span>        result = 31 * result + (int) (a ^ (a &gt;&gt;&gt; 32));<a name="line.318"></a>
+<span class="sourceLineNo">319</span>        result = 31 * result + (int) (b ^ (b &gt;&gt;&gt; 32));<a name="line.319"></a>
+<span class="sourceLineNo">320</span>        result = 31 * result + (int) (c ^ (c &gt;&gt;&gt; 32));<a name="line.320"></a>
+<span class="sourceLineNo">321</span>        return result;<a name="line.321"></a>
+<span class="sourceLineNo">322</span>    }<a name="line.322"></a>
+<span class="sourceLineNo">323</span><a name="line.323"></a>
+<span class="sourceLineNo">324</span>    @Override<a name="line.324"></a>
+<span class="sourceLineNo">325</span>    public String toString()<a name="line.325"></a>
+<span class="sourceLineNo">326</span>    {<a name="line.326"></a>
+<span class="sourceLineNo">327</span>        return "IsaacRNG with a hidden state (id is " + System.identityHashCode(this) + ')';<a name="line.327"></a>
+<span class="sourceLineNo">328</span>    }<a name="line.328"></a>
+<span class="sourceLineNo">329</span>}<a name="line.329"></a>
 
 
 

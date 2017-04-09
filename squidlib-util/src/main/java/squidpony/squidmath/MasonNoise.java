@@ -47,6 +47,8 @@
  */
 package squidpony.squidmath;
 
+import squidpony.annotation.Beta;
+
 import static squidpony.squidmath.NumberTools.*;
 
 /**
@@ -63,17 +65,17 @@ import static squidpony.squidmath.NumberTools.*;
  * sounds a lot like MerlinNoise, which sounds a lot like PerlinNoise and WhirlingNoise. This class is very close in
  * implementation to WhirlingNoise.
  */
-public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise6D {
+@Beta
+public class MasonNoise extends SeededNoise {
 
-    private final int defaultSeed;
     public static final MasonNoise instance = new MasonNoise();
 
     public MasonNoise() {
-        defaultSeed = 0x1337BEEF;
+        this(0x1337BEEF);
     }
 
     public MasonNoise(int seed) {
-        defaultSeed = seed;
+        super(seed);
     }
 
     public double getNoise(final double x, final double y) {
@@ -137,14 +139,14 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
      * @param x    an int to incorporate into the hash
      * @param y    an int to incorporate into the hash
      * @param seed an int to incorporate into the hash
-     * @return a pseudo-random-like int between 0 and 3, inclusive on both
+     * @return a pseudo-random-like int in the full range an int can hold
      */
     public static int hash(final int x, final int y, final int seed) {
         int a = 0x632BE5AB,
                 result = 0x9E3779B9 + (a ^= 0x85157AF5 * x)
                         + (a ^= 0x85157AF5 * y)
                         + (a ^= 0x85157AF5 * seed);
-        return (result * a) >>> 30;
+        return (result * (a | 1) ^ (result >>> 11 | result << 21));
     }
 
     /**
@@ -168,7 +170,7 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
      * @param y    an int to incorporate into the hash
      * @param z    an int to incorporate into the hash
      * @param seed an int to incorporate into the hash
-     * @return a pseudo-random-like int between 0 and 11, inclusive on both
+     * @return a pseudo-random-like int in the full range an int can hold
      */
     public static int hash(final int x, final int y, final int z, final int seed) {
         int a = 0x632BE5AB,
@@ -176,7 +178,7 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
                         + (a ^= 0x85157AF5 * y)
                         + (a ^= 0x85157AF5 * z)
                         + (a ^= 0x85157AF5 * seed);
-        return (((result * a) >>> 8) * 12) >>> 24;
+        return (result * (a | 1) ^ (result >>> 11 | result << 21));
     }
 
     /**
@@ -230,7 +232,7 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     }
 
     /**
-     * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 24 bits.
+     * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that generates all 32 bits.
      *
      * @param x    an int to incorporate into the hash
      * @param y    an int to incorporate into the hash
@@ -239,7 +241,30 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
      * @param u    an int to incorporate into the hash
      * @param v    an int to incorporate into the hash
      * @param seed an int to incorporate into the hash
-     * @return a pseudo-random-like int between 0 and 255, inclusive on both
+     * @return a pseudo-random-like int in the full range an int can hold
+     */
+    public static int hash(final int x, final int y, final int z, final int w, final int u, final int seed) {
+        int a = 0x632BE5AB,
+                result = 0x9E3779B9 + (a ^= 0x85157AF5 * seed + x)
+                        + (a ^= 0x85157AF5 * x + y)
+                        + (a ^= 0x85157AF5 * y + z)
+                        + (a ^= 0x85157AF5 * z + w)
+                        + (a ^= 0x85157AF5 * w + u)
+                        + (a ^= 0x85157AF5 * u + seed);
+        return (result * a ^ (result >>> 11 | result << 21));
+    }
+
+    /**
+     * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that generates all 32 bits.
+     *
+     * @param x    an int to incorporate into the hash
+     * @param y    an int to incorporate into the hash
+     * @param z    an int to incorporate into the hash
+     * @param w    an int to incorporate into the hash
+     * @param u    an int to incorporate into the hash
+     * @param v    an int to incorporate into the hash
+     * @param seed an int to incorporate into the hash
+     * @return a pseudo-random-like int in the full range an int can hold
      */
     public static int hash(final int x, final int y, final int z, final int w, final int u, final int v, final int seed) {
         int a = 0x632BE5AB,
@@ -250,8 +275,35 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
                         + (a ^= 0x85157AF5 * w + u)
                         + (a ^= 0x85157AF5 * u + v)
                         + (a ^= 0x85157AF5 * v + seed);
-        return (result * a ^ (result >>> 11 | result << 21)) >>> 8;
+        return (result * a ^ (result >>> 11 | result << 21));
     }
+
+    /**
+     * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that generates all 32 bits.
+     *
+     * @param x    an int to incorporate into the hash
+     * @param y    an int to incorporate into the hash
+     * @param z    an int to incorporate into the hash
+     * @param w    an int to incorporate into the hash
+     * @param u    an int to incorporate into the hash
+     * @param v    an int to incorporate into the hash
+     * @param $    an int to incorporate into the hash (ran out of letters)
+     * @param seed an int to incorporate into the hash
+     * @return a pseudo-random-like int in the full range an int can hold
+     */
+    public static int hash(final int x, final int y, final int z, final int w, final int u, final int v, final int $, final int seed) {
+        int a = 0x632BE5AB,
+                result = 0x9E3779B9 + (a ^= 0x85157AF5 * seed + x)
+                        + (a ^= 0x85157AF5 * x + y)
+                        + (a ^= 0x85157AF5 * y + z)
+                        + (a ^= 0x85157AF5 * z + w)
+                        + (a ^= 0x85157AF5 * w + u)
+                        + (a ^= 0x85157AF5 * u + v)
+                        + (a ^= 0x85157AF5 * v + $)
+                        + (a ^= 0x85157AF5 * $ + seed);
+        return (result * a ^ (result >>> 11 | result << 21));
+    }
+
     /**
      * Meant to generate a somewhat-random (at least, unpredictable) int from multiple inputs. The int should probably
      * be fed as a seed into a better RNG function.

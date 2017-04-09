@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":9,"i2":9,"i3":9,"i4":10,"i5":10,"i6":9,"i7":9,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":9};
+var methods = {"i0":10,"i1":9,"i2":9,"i3":9,"i4":10,"i5":10,"i6":9,"i7":9,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":9,"i15":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -366,10 +366,16 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/VanDerCorputQRNG.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i14" class="altColor">
-<td class="colFirst"><code>static double</code></td>
+<td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/VanDerCorputQRNG.html#weakDetermine-int-">weakDetermine</a></span>(int&nbsp;index)</code>
-<div class="block">Given any int (0 is allowed), this gets a somewhat-sub-random double from 0.0 (inclusive) to 1.0 (exclusive)
- using the same implementation as <a href="../../squidpony/squidmath/NumberTools.html#randomFloat-int-"><code>NumberTools.randomFloat(int)</code></a> but converted to double.</div>
+<div class="block">Given any int (0 is allowed), this gets a somewhat-sub-random float from 0.0 (inclusive) to 1.0 (exclusive)
+ using the same implementation as <a href="../../squidpony/squidmath/NumberTools.html#randomFloat-int-"><code>NumberTools.randomFloat(int)</code></a> but with index alterations.</div>
+</td>
+</tr>
+<tr id="i15" class="rowColor">
+<td class="colFirst"><code>static float</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/VanDerCorputQRNG.html#weakSignedDetermine-int-">weakSignedDetermine</a></span>(int&nbsp;index)</code>
+<div class="block">Like <a href="../../squidpony/squidmath/VanDerCorputQRNG.html#weakDetermine-int-"><code>weakDetermine(int)</code></a>, but returns a float between -1.0f and 1.0f, exclusive on both.</div>
 </td>
 </tr>
 </table>
@@ -760,26 +766,43 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <a name="weakDetermine-int-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>weakDetermine</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.348">weakDetermine</a>(int&nbsp;index)</pre>
-<div class="block">Given any int (0 is allowed), this gets a somewhat-sub-random double from 0.0 (inclusive) to 1.0 (exclusive)
- using the same implementation as <a href="../../squidpony/squidmath/NumberTools.html#randomFloat-int-"><code>NumberTools.randomFloat(int)</code></a> but converted to double. Only "weak"
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.348">weakDetermine</a>(int&nbsp;index)</pre>
+<div class="block">Given any int (0 is allowed), this gets a somewhat-sub-random float from 0.0 (inclusive) to 1.0 (exclusive)
+ using the same implementation as <a href="../../squidpony/squidmath/NumberTools.html#randomFloat-int-"><code>NumberTools.randomFloat(int)</code></a> but with index alterations. Only "weak"
  because it lacks the stronger certainty of subsequent numbers being separated that the Van der Corput sequence
  has. Not actually sub-random, but manages to be distributed remarkably evenly, likely due to the statistical
  strength of the algorithm it uses (the same as <a href="../../squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath"><code>PintRNG</code></a>, derived from PCG-Random). Because PintRNG is
  pseudo-random and uses very different starting states on subsequent calls to its <a href="../../squidpony/squidmath/PintRNG.html#next-int-"><code>PintRNG.next(int)</code></a>
  method, this method needs to perform some manipulation of index to keep a call that passes 2 for index different
  enough from a call that passes 3 (this should result in 0.4257662296295166 and 0.7359509468078613). Not all int
- values for index will produce unique results, since this uses a float internally and there are less distinct
- floats between 0.0 and 1.0 than there are all ints (1/512 as many floats in that range as ints, specifically).
+ values for index will produce unique results, since this produces a float and there are less distinct floats
+ between 0.0 and 1.0 than there are all ints (1/512 as many floats in that range as ints, specifically).
  It should take a while calling this method before you hit an actual collision.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>index</code> - any int</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a double from 0.0 (inclusive) to 1.0 (exclusive) that should not be closely correlated to index</dd>
+<dd>a float from 0.0 (inclusive) to 1.0 (exclusive) that should not be closely correlated to index</dd>
+</dl>
+</li>
+</ul>
+<a name="weakSignedDetermine-int-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>weakSignedDetermine</h4>
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.365">weakSignedDetermine</a>(int&nbsp;index)</pre>
+<div class="block">Like <a href="../../squidpony/squidmath/VanDerCorputQRNG.html#weakDetermine-int-"><code>weakDetermine(int)</code></a>, but returns a float between -1.0f and 1.0f, exclusive on both. Uses
+ <a href="../../squidpony/squidmath/NumberTools.html#randomSignedFloat-int-"><code>NumberTools.randomSignedFloat(int)</code></a> internally but alters the index parameter so calls with nearby values
+ for index are less likely to have nearby results.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>index</code> - </dd>
+<dt><span class="returnLabel">Returns:</span></dt>
 </dl>
 </li>
 </ul>
