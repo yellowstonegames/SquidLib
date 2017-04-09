@@ -59,7 +59,7 @@ package squidpony.squidmath;
  */
 public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise6D {
 
-    private final int defaultSeed;
+    protected final int defaultSeed;
     public static final SeededNoise instance = new SeededNoise();
 
     public SeededNoise() {
@@ -1180,7 +1180,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
      * @return the floor of t, as an int
      */
     public static int fastFloor(float t) {
-        return t > 0 ? (int) t : (int) t - 1;
+        return t >= 0 ? (int) t : (int) t - 1;
     }
 
 
