@@ -60,7 +60,7 @@ import static squidpony.squidmath.NumberTools.*;
  * incorporated, but now that SquidLib has seamless noise, that's a nice feature that would have needed Joise before.
  * <br>
  * The name comes from the Freemasons, who as a secret society, are very good at concealing things. MasonNoise also
- * sounds a lot like MerlinNoise, which sounds a lot like PerlinNoise an WhirlingNoise. This class is very close in
+ * sounds a lot like MerlinNoise, which sounds a lot like PerlinNoise and WhirlingNoise. This class is very close in
  * implementation to WhirlingNoise.
  */
 public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise6D {
@@ -137,7 +137,7 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
      * @param x    an int to incorporate into the hash
      * @param y    an int to incorporate into the hash
      * @param seed an int to incorporate into the hash
-     * @return a pseudo-random-like int between 0 and 255, inclusive on both
+     * @return a pseudo-random-like int between 0 and 3, inclusive on both
      */
     public static int hash(final int x, final int y, final int seed) {
         int a = 0x632BE5AB,
@@ -168,7 +168,7 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
      * @param y    an int to incorporate into the hash
      * @param z    an int to incorporate into the hash
      * @param seed an int to incorporate into the hash
-     * @return a pseudo-random-like int between 0 and 255, inclusive on both
+     * @return a pseudo-random-like int between 0 and 11, inclusive on both
      */
     public static int hash(final int x, final int y, final int z, final int seed) {
         int a = 0x632BE5AB,
@@ -202,7 +202,7 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
      * @param z    an int to incorporate into the hash
      * @param w    an int to incorporate into the hash
      * @param seed an int to incorporate into the hash
-     * @return a pseudo-random-like int between 0 and 255, inclusive on both
+     * @return a pseudo-random-like int in the full range an int can hold
      */
     public static int hash(final int x, final int y, final int z, final int w, final int seed) {
         int a = 0x632BE5AB,
