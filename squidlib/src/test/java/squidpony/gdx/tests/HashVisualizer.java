@@ -270,15 +270,14 @@ public class HashVisualizer extends ApplicationAdapter {
         stage = new Stage(view, batch);
         seed = 0xBEEFF00DCAFECABAL;
 
-        /*
         Noise.seamless3D(seamless[0], 1337, 3);
         Noise.seamless3D(seamless[1], 123456, 3);
         Noise.seamless3D(seamless[2], -9999, 3);
-        */
+        /*
         Noise.seamless2D(seamless[0][0], 1337, 1, mead);
         Noise.seamless2D(seamless[1][0], 123456, 1, mead);
         Noise.seamless2D(seamless[2][0], -9999, 1, mead);
-
+        */
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
@@ -292,24 +291,26 @@ public class HashVisualizer extends ApplicationAdapter {
                                 switch (noiseMode)
                                 {
                                     case 16:
+
                                         ArrayTools.fill(seamless[0], 0.0);
                                         ArrayTools.fill(seamless[1], 0.0);
                                         ArrayTools.fill(seamless[2], 0.0);
-                                        /*
+
                                         Noise.seamless3D(seamless[0], 1337, 1);
                                         Noise.seamless3D(seamless[1], 123456, 1);
                                         Noise.seamless3D(seamless[2], -9999, 1);
-                                        */
+                                        /*
                                         Noise.seamless2D(seamless[0][0], 1337, 1, mead);
                                         Noise.seamless2D(seamless[1][0], 123456, 1, mead);
                                         Noise.seamless2D(seamless[2][0], -9999, 1, mead);
+                                        */
                                         break;
                                     case 17:
                                         ArrayTools.fill(seamless[0], 0.0);
-                                        /*
+
                                         Noise.seamless3D(seamless[0], -31337, 1);
-                                        */
-                                        Noise.seamless2D(seamless[0][0], -31337, 1, mead);
+
+                                        //Noise.seamless2D(seamless[0][0], -31337, 1, mead);
                                         break;
                                     case 20:
                                         ArrayTools.fill(seamless[0], 0.0);
@@ -1829,37 +1830,40 @@ public class HashVisualizer extends ApplicationAdapter {
 
 
                     case 16:
-                        Gdx.graphics.setTitle("Mead Seamless 2D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
-                        //Gdx.graphics.setTitle("Seeded Seamless 3D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        //Gdx.graphics.setTitle("Mead Seamless 2D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Seamless 3D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
+                                /*
                                 display.put(x, y,
                                         floatGet(
                                                 (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
                                                 (float) (seamless[1][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
                                                 (float) (seamless[2][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
                                                 1.0f));
-                                /*
+                                */
                                 display.put(x, y,
                                         floatGet(
                                                 (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
                                                 (float) (seamless[1][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
                                                 (float) (seamless[2][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
                                                 1.0f));
-                                                */
+
                             }
                         }
                         break;
                     case 17:
-                        Gdx.graphics.setTitle("Mead Seamless 2D Noise, three octaves at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        //Gdx.graphics.setTitle("Mead Seamless 2D Noise, three octaves at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Seamless 3D Noise, three octaves at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
+                                /*
                                 bright = (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5);
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
-                                /*
+                                */
                                 bright = (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5);
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
-                                */
+
                             }
                         }
                         break;

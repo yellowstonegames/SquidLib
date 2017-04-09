@@ -15,7 +15,7 @@ package squidpony.squidmath;
 import java.util.Arrays;
 
 /**
- * This is a port of the public domain Isaac64 (cryptographic) random number generator to Java.
+ * This is a port of the public domain Isaac64 (cryptographic) random number generator to Java, by Bob Jenkins.
  * It is a RandomnessSource here, so it should generally be used to make an RNG, which has more features.
  * IsaacRNG is slower than the non-cryptographic RNGs in SquidLib, but much faster than cryptographic RNGs
  * that need SecureRandom, and it's compatible with GWT and Android to boot!
@@ -53,7 +53,7 @@ public class IsaacRNG implements RandomnessSource {
      * Arrays larger than 256 items will only have the first 256 used.
      * @param seed an array of longs to use as a seed; ideally it should be 256 individual longs
      */
-    public IsaacRNG(long seed[]) {
+    public IsaacRNG(final long seed[]) {
         mem = new long[SIZE];
         results = new long[SIZE];
         if(seed == null)
@@ -250,16 +250,32 @@ public class IsaacRNG implements RandomnessSource {
     }
 
     /**
-     * Generates and returns a block of 255 pseudo-random long values.
-     * @return an array of 255 pseudo-random longs, with all bits possible
+     * Generates and returns a block of 256 pseudo-random long values.
+     * @return a freshly-allocated array of 256 pseudo-random longs, with all bits possible
      */
     public final long[] nextBlock()
     {
         regen();
-        final long[] block = new long[SIZE-1];
-        System.arraycopy(results, 1, block, 0, SIZE-1);
+        final long[] block = new long[SIZE];
+        System.arraycopy(results, 0, block, 0, SIZE);
         count = 0;
         return block;
+    }
+
+    /**
+     * Generates enough pseudo-random long values to fill {@code data} and assigns them to it.
+     */
+    public final void setBlock(final long[] data)
+    {
+        int len, i;
+        if(data == null || (len = data.length) == 0) return;
+        for (i = 0; len > 256; i += 256, len -= 256) {
+            regen();
+            System.arraycopy(results, 0, data, i, 256);
+        }
+        regen();
+        System.arraycopy(results, 0, data, i, len);
+        count = len & 255;
     }
 
     @Override
@@ -297,8 +313,8 @@ public class IsaacRNG implements RandomnessSource {
     @Override
     public int hashCode() {
         int result = count;
-        result = 31 * result + CrossHash.Lightning.hash(results);
-        result = 31 * result + CrossHash.Lightning.hash(mem);
+        result = 31 * result + CrossHash.Wisp.hash(results);
+        result = 31 * result + CrossHash.Wisp.hash(mem);
         result = 31 * result + (int) (a ^ (a >>> 32));
         result = 31 * result + (int) (b ^ (b >>> 32));
         result = 31 * result + (int) (c ^ (c >>> 32));
