@@ -35,7 +35,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         River                  = 12;
 
     private static final int width = 512, height = 512;
-    private final double terrainFreq = 1.9, terrainRidgedFreq = 2.5, heatFreq = 5.5, moistureFreq = 5.0, otherFreq = 4.1;
+    private final double terrainFreq = 1.75, terrainRidgedFreq = 1.1, heatFreq = 4.5, moistureFreq = 4.0, otherFreq = 3.1;
     //riverSize = (0.5 - 10.0 / height) * (0.5 - 10.0 / width), lakeSize = riverSize * 1.1;
 
     private SpriteBatch batch;
@@ -401,11 +401,11 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         seed = 0xDEBACL;
         rng = new StatefulRNG(seed);
         // 1.9, 2.5, 5.5, 5.0, 4.1
-        terrain = new Noise.Layered4D(SeededNoise.instance, 7, terrainFreq);
-        terrainRidged = new Noise.Ridged4D(SeededNoise.instance, 8, terrainRidgedFreq);
+        terrain = new Noise.Layered4D(SeededNoise.instance, 10, terrainFreq);
+        terrainRidged = new Noise.Ridged4D(SeededNoise.instance, 9, terrainRidgedFreq);
         heat = new Noise.Layered4D(SeededNoise.instance, 4, heatFreq);
         moisture = new Noise.Layered4D(SeededNoise.instance, 5, moistureFreq);
-        otherRidged = new Noise.Ridged4D(SeededNoise.instance, 6, otherFreq);
+        otherRidged = new Noise.Ridged4D(SeededNoise.instance, 4, otherFreq);
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
@@ -532,8 +532,15 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         //Gdx.graphics.requestRendering();
     }
     public void regenerate(final long state) {
-        if(zoom != 0 && cachedState != state)
+        if(cachedState != state)
+        {
             zoom = 0;
+            startCacheX.clear();
+            startCacheY.clear();
+            startCacheX.add(0);
+            startCacheY.add(0);
+
+        }
         regenerate(startCacheX.peek(), startCacheY.peek(),
                 (width >> zoom), (height >> zoom), state);
     }

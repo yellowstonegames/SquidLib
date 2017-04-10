@@ -91,8 +91,8 @@ public class NumberTools {
         long s = (((long) valueHigh) << 32 | valueLow) & 0xfffffffffffffL;
         return Double.longBitsToDouble(((s ^ -((s & 0x8000000000000L)>>51)) & 0xfffffffffffffL)
                 | 0x4010000000000000L) - 5.0;
-
     }
+
     public static int floatToIntBits(final float value)
     {
         return Float.floatToIntBits(value);
