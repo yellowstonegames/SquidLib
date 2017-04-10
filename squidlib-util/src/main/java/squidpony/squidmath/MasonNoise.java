@@ -49,8 +49,6 @@ package squidpony.squidmath;
 
 import squidpony.annotation.Beta;
 
-import static squidpony.squidmath.NumberTools.*;
-
 /**
  * Noise functions that try to conceal undesirable patterns, in 2D, 3D, 4D, and 6D, with the last two as options for
  * generating seamlessly-tiling noise using {@link Noise#seamless2D(double[][], int, int, Noise.Noise4D)} and/or
@@ -67,7 +65,6 @@ import static squidpony.squidmath.NumberTools.*;
  */
 @Beta
 public class MasonNoise extends SeededNoise {
-
     public static final MasonNoise instance = new MasonNoise();
 
     public MasonNoise() {
@@ -76,6 +73,7 @@ public class MasonNoise extends SeededNoise {
 
     public MasonNoise(int seed) {
         super(seed);
+
     }
 
     public double getNoise(final double x, final double y) {
@@ -146,7 +144,7 @@ public class MasonNoise extends SeededNoise {
                 result = 0x9E3779B9 + (a ^= 0x85157AF5 * x)
                         + (a ^= 0x85157AF5 * y)
                         + (a ^= 0x85157AF5 * seed);
-        return (result * (a | 1) ^ (result >>> 11 | result << 21));
+        return (result * (a | 1) ^ (result >>> 11 | result << 21)) >>> 24;
     }
 
     /**
@@ -178,7 +176,7 @@ public class MasonNoise extends SeededNoise {
                         + (a ^= 0x85157AF5 * y)
                         + (a ^= 0x85157AF5 * z)
                         + (a ^= 0x85157AF5 * seed);
-        return (result * (a | 1) ^ (result >>> 11 | result << 21));
+        return (result * (a | 1) ^ (result >>> 11 | result << 21)) >>> 24;
     }
 
     /**
@@ -213,7 +211,7 @@ public class MasonNoise extends SeededNoise {
                         + (a ^= 0x85157AF5 * z)
                         + (a ^= 0x85157AF5 * w)
                         + (a ^= 0x85157AF5 * seed);
-        return (result * (a | 1) ^ (result >>> 11 | result << 21));
+        return (result * (a | 1) ^ (result >>> 11 | result << 21)) >>> 24;
     }
     /**
      * Meant to generate a somewhat-random (at least, unpredictable) int from multiple inputs. The int should probably
@@ -239,7 +237,6 @@ public class MasonNoise extends SeededNoise {
      * @param z    an int to incorporate into the hash
      * @param w    an int to incorporate into the hash
      * @param u    an int to incorporate into the hash
-     * @param v    an int to incorporate into the hash
      * @param seed an int to incorporate into the hash
      * @return a pseudo-random-like int in the full range an int can hold
      */
@@ -251,7 +248,7 @@ public class MasonNoise extends SeededNoise {
                         + (a ^= 0x85157AF5 * z + w)
                         + (a ^= 0x85157AF5 * w + u)
                         + (a ^= 0x85157AF5 * u + seed);
-        return (result * a ^ (result >>> 11 | result << 21));
+        return (result * a ^ (result >>> 11 | result << 21)) >>> 24;
     }
 
     /**
@@ -268,14 +265,15 @@ public class MasonNoise extends SeededNoise {
      */
     public static int hash(final int x, final int y, final int z, final int w, final int u, final int v, final int seed) {
         int a = 0x632BE5AB,
-                result = 0x9E3779B9 + (a ^= 0x85157AF5 * seed + x)
-                        + (a ^= 0x85157AF5 * x + y)
-                        + (a ^= 0x85157AF5 * y + z)
-                        + (a ^= 0x85157AF5 * z + w)
-                        + (a ^= 0x85157AF5 * w + u)
-                        + (a ^= 0x85157AF5 * u + v)
-                        + (a ^= 0x85157AF5 * v + seed);
-        return (result * a ^ (result >>> 11 | result << 21));
+                result = 0x9E3779B9
+                        + (a ^= 0x85157AF5 * (seed + z))
+                        + (a ^= 0x85157AF5 * (x + w))
+                        + (a ^= 0x85157AF5 * (y + u))
+                        + (a ^= 0x85157AF5 * (z + v))
+                        + (a ^= 0x85157AF5 * (w + seed))
+                        + (a ^= 0x85157AF5 * (u + x))
+                        + (a ^= 0x85157AF5 * (v + y));
+        return (result * a ^ (result >>> 11 | result << 21)) >>> 24;
     }
 
     /**
@@ -326,207 +324,21 @@ public class MasonNoise extends SeededNoise {
     }
     */
 
-    /**
-     * Like {@link Math#floor}, but returns an int. Doesn't consider weird doubles like INFINITY and NaN.
-     *
-     * @param t the double to find the floor for
-     * @return the floor of t, as an int
-     */
-    public static int fastFloor(float t) {
-        return t > 0 ? (int) t : (int) t - 1;
-    }
-
-    protected static final float F2 = 0.36602540378443864676372317075294f,
-            G2 = 0.21132486540518711774542560974902f,
-            F3 = 1f / 3f,
-            G3 = 1f / 6f,
-            F4 = (float) (Math.sqrt(5.0) - 1.0) / 4f,
-            G4 = (float)(5.0 - Math.sqrt(5.0)) / 20f,
-            F6 = (float)(Math.sqrt(7.0) - 1.0) / 6f,
-            G6 = F6 / (float)(1.0 + 6.0 * F6),
-            sideLength = (float)Math.sqrt(6.0) / (6f * F6 + 1f),
-            a6 = (float)(Math.sqrt((sideLength * sideLength)
-                    - ((sideLength * 0.5) * (sideLength * 0.5f)))),
-            cornerFace = (float)Math.sqrt(a6 * a6 + (a6 * 0.5) * (a6 * 0.5)),
-            cornerFaceSq = cornerFace * cornerFace,
-            valueScaler = 7.5f;
-            //Math.pow(5.0, -0.5) * (Math.pow(5.0, -3.5) * 100 + 13),
-
+    protected static final float
+            LIMIT4 = 0.62f,
+            LIMIT6 = 0.777f;
     private static final float[] m = {0, 0, 0, 0, 0, 0}, cellDist = {0, 0, 0, 0, 0, 0};
     private static final int[] distOrder = {0, 0, 0, 0, 0, 0},
             newDistOrder = new int[]{-1, 0, 0, 0, 0, 0, 0},
             intLoc = {0, 0, 0, 0, 0, 0};
-
-    public static double noise(final double xPos, final double yPos, int seed) {
-        final float x = (float)xPos, y = (float)yPos;
-        final float s = (x + y) * F2;
-        final int i = fastFloor(x + s),
-                j = fastFloor(y + s);
-        final float t = (i + j) * G2,
-                X0 = i - t,
-                Y0 = j - t,
-                x0 = x - X0,
-                y0 = y - Y0;
-        int i1, j1;
-        if (x0 > y0) {
-            i1 = 1;
-            j1 = 0;
-        } else {
-            i1 = 0;
-            j1 = 1;
-        }
-        final float
-                x1 = x0 - i1 + G2,
-                y1 = y0 - j1 + G2,
-                x2 = x0 - 1f + 2f * G2,
-                y2 = y0 - 1f + 2f * G2;
-        final int h0 = mix(i, j, seed),
-                h1 = mix(i + i1, j + j1, seed),
-                h2 = mix(i + 1, j + 1, seed);
-        float n0, n1, n2;
-        float t0 = 0.5f - x0 * x0 - y0 * y0;
-        if (t0 < 0)
-            n0 = 0;
-        else {
-            t0 *= t0;
-            n0 = t0 * t0 * ((x0 * randomSignedFloat(h0)) + (y0 * randomSignedFloat(h0 + 0x9E3779B9)));
-        }
-        float t1 = 0.5f - x1 * x1 - y1 * y1;
-        if (t1 < 0)
-            n1 = 0;
-        else {
-            t1 *= t1;
-            n1 = t1 * t1 * (x1 * randomSignedFloat(h1) + y1 * randomSignedFloat(h1 + 0x9E3779B9));
-        }
-        float t2 = 0.5f - x2 * x2 - y2 * y2;
-        if (t2 < 0)
-            n2 = 0;
-        else {
-            t2 *= t2;
-            n2 = t2 * t2 * (x2 * randomSignedFloat(h2) + y2 * randomSignedFloat(h2 + 0x9E3779B9));
-        }
-        return (50f * (n0 + n1 + n2)) * 1.42188695 + 0.001054489;
+    public static double noise(final double x, final double y, final double z, final double w, final int seed) {
+        return noise((float)x, (float)y, (float)z, (float)w, seed);
     }
-
-    public static double noise(final double xPos, final double yPos, final double zPos, final int seed) {
-        final float x = (float)xPos, y = (float)yPos, z = (float)zPos;
-        double n0, n1, n2, n3;
-
-        final float s = (x + y + z) * F3;
-        final int i = fastFloor(x + s),
-                j = fastFloor(y + s),
-                k = fastFloor(z + s);
-
-        final float t = (i + j + k) * G3;
-        final float X0 = i - t, Y0 = j - t, Z0 = k - t,
-                x0 = x - X0, y0 = y - Y0, z0 = z - Z0;
-
-        int i1, j1, k1;
-        int i2, j2, k2;
-
-        if (x0 >= y0) {
-            if (y0 >= z0) {
-                i1 = 1;
-                j1 = 0;
-                k1 = 0;
-                i2 = 1;
-                j2 = 1;
-                k2 = 0;
-            } else if (x0 >= z0) {
-                i1 = 1;
-                j1 = 0;
-                k1 = 0;
-                i2 = 1;
-                j2 = 0;
-                k2 = 1;
-            } else {
-                i1 = 0;
-                j1 = 0;
-                k1 = 1;
-                i2 = 1;
-                j2 = 0;
-                k2 = 1;
-            }
-        } else {
-            if (y0 < z0) {
-                i1 = 0;
-                j1 = 0;
-                k1 = 1;
-                i2 = 0;
-                j2 = 1;
-                k2 = 1;
-            } else if (x0 < z0) {
-                i1 = 0;
-                j1 = 1;
-                k1 = 0;
-                i2 = 0;
-                j2 = 1;
-                k2 = 1;
-            } else {
-                i1 = 0;
-                j1 = 1;
-                k1 = 0;
-                i2 = 1;
-                j2 = 1;
-                k2 = 0;
-            }
-        }
-
-        float x1 = x0 - i1 + G3,
-              y1 = y0 - j1 + G3,
-              z1 = z0 - k1 + G3,
-              x2 = x0 - i2 + 2f * G3,
-              y2 = y0 - j2 + 2f * G3,
-              z2 = z0 - k2 + 2f * G3,
-              x3 = x0 - 1f + 3f * G3,
-              y3 = y0 - 1f + 3f * G3,
-              z3 = z0 - 1f + 3f * G3;
-
-        final int h0 = mix(i, j, k, seed),
-                h1 = mix(i + i1, j + j1, k + k1, seed),
-                h2 = mix(i + i2, j + j2, k + k2, seed),
-                h3 = mix(i + 1, j + 1, k + 1, seed);
-
-        float t0 = 0.6f - x0 * x0 - y0 * y0 - z0 * z0;
-        if (t0 < 0f)
-            n0 = 0f;
-        else {
-            t0 *= t0;
-            n0 = t0 * t0 * (x0 * randomSignedFloat(h0) + y0 * randomSignedFloat(h0 + 0x9E3779B9) + z0 * randomSignedFloat(h0 + 0x3C6EF372));
-        }
-
-        float t1 = 0.6f - x1 * x1 - y1 * y1 - z1 * z1;
-        if (t1 < 0f)
-            n1 = 0f;
-        else {
-            t1 *= t1;
-            n1 = t1 * t1 * (x1 * randomSignedFloat(h1) + y1 * randomSignedFloat(h1 + 0x9E3779B9) + z1 * randomSignedFloat(h1 + 0x3C6EF372));
-        }
-
-        float t2 = 0.6f - x2 * x2 - y2 * y2 - z2 * z2;
-        if (t2 < 0)
-            n2 = 0f;
-        else {
-            t2 *= t2;
-            n2 = t2 * t2 * (x2 * randomSignedFloat(h2) + y2 * randomSignedFloat(h2 + 0x9E3779B9) + z2 * randomSignedFloat(h2 + 0x3C6EF372));
-        }
-
-        float t3 = 0.6f - x3 * x3 - y3 * y3 - z3 * z3;
-        if (t3 < 0)
-            n3 = 0f;
-        else {
-            t3 *= t3;
-            n3 = t3 * t3 * (x3 * randomSignedFloat(h3) + y3 * randomSignedFloat(h3 + 0x9E3779B9) + z3 * randomSignedFloat(h3 + 0x3C6EF372));
-        }
-
-        return (27f * (n0 + n1 + n2 + n3))/* * 1.25086885*/ + 0.0003194984;
-    }
-
-    public static double noise(final double xPos, final double yPos, final double zPos, final double wPos, final int seed) {
-        final float x = (float)xPos, y = (float)yPos, z = (float)zPos, w = (float)wPos;
+    public static double noise(final float x, final float y, final float z, final float w, final int seed) {
         double n0, n1, n2, n3, n4;
         final float s = (x + y + z + w) * F4;
         final int i = fastFloor(x + s), j = fastFloor(y + s), k = fastFloor(z + s), l = fastFloor(w + s);
+        final float[] gradient4DLUT = SeededNoise.gradient4DLUT;
         final float t = (i + j + k + l) * G4,
                 X0 = i - t,
                 Y0 = j - t,
@@ -565,56 +377,72 @@ public class MasonNoise extends SeededNoise {
                 y4 = y0 - 1f + 4f * G4,
                 z4 = z0 - 1f + 4f * G4,
                 w4 = w0 - 1f + 4f * G4;
-        final int h0 = mix(i, j, k, l, seed),
-                h1 = mix(i + i1, j + j1, k + k1, l + l1, seed),
-                h2 = mix(i + i2, j + j2, k + k2, l + l2, seed),
-                h3 = mix(i + i3, j + j3, k + k3, l + l3, seed),
-                h4 = mix(i + 1, j + 1, k + 1, l + 1, seed);
-        float t0 = 0.6f - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
+        final int h0 = hash(i, j, k, l, seed) << 2,
+                h1 = hash(i + i1, j + j1, k + k1, l + l1, seed) << 2,
+                h2 = hash(i + i2, j + j2, k + k2, l + l2, seed) << 2,
+                h3 = hash(i + i3, j + j3, k + k3, l + l3, seed) << 2,
+                h4 = hash(i + 1, j + 1, k + 1, l + 1, seed) << 2;
+        float t0 = LIMIT4 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
         if (t0 < 0)
-            n0 = 0f;
+            n0 = 0.0;
         else {
             t0 *= t0;
-            n0 = t0 * t0 * (x0 * randomSignedFloat(h0) + y0 * randomSignedFloat(h0 + 0xDAA66D2B) + z0 * randomSignedFloat(h0 + 0x9E3779B9) + w0 * randomSignedFloat(h0 + 0x3C6EF372));
+            n0 = t0 * t0 * (x0 * gradient4DLUT[h0] + y0 * gradient4DLUT[h0 | 1] + z0 * gradient4DLUT[h0 | 2] + w0 * gradient4DLUT[h0 | 3]);
         }
-        float t1 = 0.6f - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1;
+        float t1 = LIMIT4 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1;
         if (t1 < 0)
-            n1 = 0f;
+            n1 = 0.0;
         else {
             t1 *= t1;
-            n1 = t1 * t1 * (x1 * randomSignedFloat(h1) + y1 * randomSignedFloat(h1 + 0xDAA66D2B) + z1 * randomSignedFloat(h1 + 0x9E3779B9) + w1 * randomSignedFloat(h1 + 0x3C6EF372));
+            n1 = t1 * t1 * (x1 * gradient4DLUT[h1] + y1 * gradient4DLUT[h1 | 1] + z1 * gradient4DLUT[h1 | 2] + w1 * gradient4DLUT[h1 | 3]);
         }
-        float t2 = 0.6f - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2;
+        float t2 = LIMIT4 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2;
         if (t2 < 0)
-            n2 = 0f;
+            n2 = 0.0;
         else {
             t2 *= t2;
-            n2 = t2 * t2 * (x2 * randomSignedFloat(h2) + y2 * randomSignedFloat(h2 + 0xDAA66D2B) + z2 * randomSignedFloat(h2 + 0x9E3779B9) + w2 * randomSignedFloat(h2 + 0x3C6EF372));
+            n2 = t2 * t2 * (x2 * gradient4DLUT[h2] + y2 * gradient4DLUT[h2 | 1] + z2 * gradient4DLUT[h2 | 2] + w2 * gradient4DLUT[h2 | 3]);
         }
-        float t3 = 0.6f - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3;
+        float t3 = LIMIT4 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3;
         if (t3 < 0)
-            n3 = 0f;
+            n3 = 0.0;
         else {
             t3 *= t3;
-            n3 = t3 * t3 * (x3 * randomSignedFloat(h3) + y3 * randomSignedFloat(h3 + 0xDAA66D2B) + z3 * randomSignedFloat(h3 + 0x9E3779B9) + w3 * randomSignedFloat(h3 + 0x3C6EF372));
+            n3 = t3 * t3 * (x3 * gradient4DLUT[h3] + y3 * gradient4DLUT[h3 | 1] + z3 * gradient4DLUT[h3 | 2] + w3 * gradient4DLUT[h3 | 3]);
         }
-        float t4 = 0.6f - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4;
+        float t4 = LIMIT4 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4;
         if (t4 < 0)
-            n4 = 0f;
+            n4 = 0.0;
         else {
             t4 *= t4;
-            n4 = t4 * t4 * (x4 * randomSignedFloat(h4) + y4 * randomSignedFloat(h4 + 0xDAA66D2B) + z4 * randomSignedFloat(h4 + 0x9E3779B9) + w4 * randomSignedFloat(h4 + 0x3C6EF372));
+            n4 = t4 * t4 * (x4 * gradient4DLUT[h4] + y4 * gradient4DLUT[h4 | 1] + z4 * gradient4DLUT[h4 | 2] + w4 * gradient4DLUT[h4 | 3]);
         }
-        return 18f * (n0 + n1 + n2 + n3 + n4);
+        return NumberTools.bounce(5 + 41 * (n0 + n1 + n2 + n3 + n4));
     }
 
-    public static double noise(double xPos, double yPos, double zPos, double wPos, double uPos, double vPos, int seed) {
-        final float x = (float)xPos, y = (float)yPos, z = (float)zPos, w = (float)wPos, u = (float)uPos, v = (float)vPos;
+    public static double noise(final double x, final double y, final double z,
+                               final double w, final double u, final double v, final int seed) {
+        return noise((float)x,(float)y,(float)z,(float)w,(float)u,(float)v,seed);
+/*
+        return noise(
+                (float)(x * 1.41 + u - 0.597 * z),
+                (float)(y * 1.41 + v - 0.597 * w),
+                (float)(z * 1.41 + x - 0.597 * u),
+                (float)(w * 1.41 + y - 0.597 * v),
+                (float)(u * 1.41 + z - 0.597 * x),
+                (float)(v * 1.41 + w - 0.597 * y),
+                seed);
+
+ */
+    }
+
+    public static double noise(final float x, final float y, final float z, final float w, final float u, final float v, final int seed) {
 
         final float s = (x + y + z + w + u + v) * F6;
 
         final int skewX = fastFloor(x + s), skewY = fastFloor(y + s), skewZ = fastFloor(z + s),
                 skewW = fastFloor(w + s), skewU = fastFloor(u + s), skewV = fastFloor(v + s);
+        final int[] intLoc = MasonNoise.intLoc, distOrder = MasonNoise.distOrder;
         intLoc[0] = skewX;
         intLoc[1] = skewY;
         intLoc[2] = skewZ;
@@ -623,7 +451,7 @@ public class MasonNoise extends SeededNoise {
         intLoc[5] = skewV;
 
         final float unskew = (skewX + skewY + skewZ + skewW + skewU + skewV) * G6;
-
+        final float[] cellDist = MasonNoise.cellDist, gradient6DLUT = SeededNoise.gradient6DLUT;
         cellDist[0] = x - skewX + unskew;
         cellDist[1] = y - skewY + unskew;
         cellDist[2] = z - skewZ + unskew;
@@ -631,79 +459,25 @@ public class MasonNoise extends SeededNoise {
         cellDist[4] = u - skewU + unskew;
         cellDist[5] = v - skewV + unskew;
 
-        distOrder[0] = 0;
-        distOrder[1] = 1;
-        distOrder[2] = 2;
-        distOrder[3] = 3;
-        distOrder[4] = 4;
-        distOrder[5] = 5;
-        int t;
-        if (cellDist[1] < cellDist[2]) {
-            distOrder[1] = 2;
-            distOrder[2] = 1;
-        }
-        if (cellDist[distOrder[4]] < cellDist[distOrder[5]]) {
-            t = distOrder[4];
-            distOrder[4] = distOrder[5];
-            distOrder[5] = t;
-        }
-        if (cellDist[distOrder[0]] < cellDist[distOrder[2]]) {
-            t = distOrder[0];
-            distOrder[0] = distOrder[2];
-            distOrder[2] = t;
-        }
-        if (cellDist[distOrder[3]] < cellDist[distOrder[5]]) {
-            t = distOrder[3];
-            distOrder[3] = distOrder[5];
-            distOrder[5] = t;
-        }
-        if (cellDist[distOrder[0]] < cellDist[distOrder[1]]) {
-            t = distOrder[0];
-            distOrder[0] = distOrder[1];
-            distOrder[1] = t;
-        }
-        if (cellDist[distOrder[3]] < cellDist[distOrder[4]]) {
-            t = distOrder[3];
-            distOrder[3] = distOrder[4];
-            distOrder[4] = t;
-        }
-        if (cellDist[distOrder[1]] < cellDist[distOrder[4]]) {
-            t = distOrder[1];
-            distOrder[1] = distOrder[4];
-            distOrder[4] = t;
-        }
-        if (cellDist[distOrder[0]] < cellDist[distOrder[3]]) {
-            t = distOrder[0];
-            distOrder[0] = distOrder[3];
-            distOrder[3] = t;
-        }
-        if (cellDist[distOrder[2]] < cellDist[distOrder[5]]) {
-            t = distOrder[2];
-            distOrder[2] = distOrder[5];
-            distOrder[5] = t;
-        }
-        if (cellDist[distOrder[1]] < cellDist[distOrder[3]]) {
-            t = distOrder[1];
-            distOrder[1] = distOrder[3];
-            distOrder[3] = t;
-        }
-        if (cellDist[distOrder[2]] < cellDist[distOrder[4]]) {
-            t = distOrder[2];
-            distOrder[2] = distOrder[4];
-            distOrder[4] = t;
-        }
-        if (cellDist[distOrder[2]] < cellDist[distOrder[3]]) {
-            t = distOrder[2];
-            distOrder[2] = distOrder[3];
-            distOrder[3] = t;
-        }
-        System.arraycopy(distOrder, 0, newDistOrder, 1, 6);
+        int o0 = (cellDist[0]<cellDist[1]?1:0)+(cellDist[0]<cellDist[2]?1:0)+(cellDist[0]<cellDist[3]?1:0)+(cellDist[0]<cellDist[4]?1:0)+(cellDist[0]<cellDist[5]?1:0);
+        int o1 = (cellDist[1]<=cellDist[0]?1:0)+(cellDist[1]<cellDist[2]?1:0)+(cellDist[1]<cellDist[3]?1:0)+(cellDist[1]<cellDist[4]?1:0)+(cellDist[1]<cellDist[5]?1:0);
+        int o2 = (cellDist[2]<=cellDist[0]?1:0)+(cellDist[2]<=cellDist[1]?1:0)+(cellDist[2]<cellDist[3]?1:0)+(cellDist[2]<cellDist[4]?1:0)+(cellDist[2]<cellDist[5]?1:0);
+        int o3 = (cellDist[3]<=cellDist[0]?1:0)+(cellDist[3]<=cellDist[1]?1:0)+(cellDist[3]<=cellDist[2]?1:0)+(cellDist[3]<cellDist[4]?1:0)+(cellDist[3]<cellDist[5]?1:0);
+        int o4 = (cellDist[4]<=cellDist[0]?1:0)+(cellDist[4]<=cellDist[1]?1:0)+(cellDist[4]<=cellDist[2]?1:0)+(cellDist[4]<=cellDist[3]?1:0)+(cellDist[4]<cellDist[5]?1:0);
+        int o5 = 15-(o0+o1+o2+o3+o4);
+
+        distOrder[o0]=0;
+        distOrder[o1]=1;
+        distOrder[o2]=2;
+        distOrder[o3]=3;
+        distOrder[o4]=4;
+        distOrder[o5]=5;
 
         float n = 0f;
         float skewOffset = 0f;
 
-        for (int c = 0; c < 7; ++c) {
-            if (c != 0) intLoc[newDistOrder[c]]++;
+        for (int c = -1; c < 6; c++) {
+            if (c != -1) intLoc[distOrder[c]]++;
 
             m[0] = cellDist[0] - (intLoc[0] - skewX) + skewOffset;
             m[1] = cellDist[1] - (intLoc[1] - skewY) + skewOffset;
@@ -712,24 +486,25 @@ public class MasonNoise extends SeededNoise {
             m[4] = cellDist[4] - (intLoc[4] - skewU) + skewOffset;
             m[5] = cellDist[5] - (intLoc[5] - skewV) + skewOffset;
 
-            float tc = cornerFaceSq;
+            float tc = LIMIT6;
 
-            for (int d = 0; d < 6; ++d) {
+            for (int d = 0; d < 6; d++) {
                 tc -= m[d] * m[d];
             }
 
             if (tc > 0f) {
-                final int h = mix(intLoc[0], intLoc[1], intLoc[2], intLoc[3],
+                final int h = hash(intLoc[0], intLoc[1], intLoc[2], intLoc[3],
                         intLoc[4], intLoc[5], seed);
                 float gr = 0f;
-                for (int d = 0, a = 0; d < 6; ++d, a += 0x9E3779B9) {
-                    gr += randomSignedFloat(h + a) * m[d];
+                for (int d = 0; d < 6; d++) {
+                    gr += gradient6DLUT[h * 6 + d] * m[d];
                 }
 
                 n += gr * tc * tc * tc * tc;
             }
             skewOffset += G6;
         }
-        return n * valueScaler;
+        return NumberTools.bounce(5 + 13.5 * n);
+        //return n * valueScaler;
     }
 }
