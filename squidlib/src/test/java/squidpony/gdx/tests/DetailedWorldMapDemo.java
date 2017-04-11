@@ -39,7 +39,6 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     //riverSize = (0.5 - 10.0 / height) * (0.5 - 10.0 / width), lakeSize = riverSize * 1.1;
 
     private SpriteBatch batch;
-    private SquidColorCenter colorFactory;
     private SquidPanel display;//, overlay;
     private static final int cellWidth = 1, cellHeight = 1;
     private SquidInput input;
@@ -50,16 +49,15 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private long seed, cachedState;
     private StatefulRNG rng;
     private IntVLA startCacheX = new IntVLA(8), startCacheY = new IntVLA(8);
-    //private GridData data;
-    private double[][] heightData = new double[width][height],
+    private final double[][] heightData = new double[width][height],
             heatData = new double[width][height],
             moistureData = new double[width][height],
             shadingData = new double[width][height];
-    private GreasedRegion riverData = new GreasedRegion(width, height), lakeData = new GreasedRegion(width, height),
+    private final GreasedRegion riverData = new GreasedRegion(width, height), lakeData = new GreasedRegion(width, height),
             partialRiverData = new GreasedRegion(width, height), partialLakeData = new GreasedRegion(width, height),
             workingData = new GreasedRegion(width, height);
 
-    private int[][] heightCodeData = new int[width][height],
+    private final int[][] heightCodeData = new int[width][height],
             heatCodeData = new int[width][height],
             moistureCodeData = new int[width][height],
             biomeUpperCodeData = new int[width][height],
@@ -69,11 +67,13 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             minHeightActual = Double.POSITIVE_INFINITY, maxHeightActual = Double.NEGATIVE_INFINITY,
             minHeat = Double.POSITIVE_INFINITY, maxHeat = Double.NEGATIVE_INFINITY,
             minWet = Double.POSITIVE_INFINITY, maxWet = Double.NEGATIVE_INFINITY;
-    private double i_hot = 1.0,
-            minHeightActual0 = Double.POSITIVE_INFINITY, maxHeightActual0 = Double.NEGATIVE_INFINITY,
-            minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
-            minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
-            minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
+    private double i_hot = 1.0;
+    private double minHeat0 = Double.POSITIVE_INFINITY;
+    private double maxHeat0 = Double.NEGATIVE_INFINITY;
+    private double minHeat1 = Double.POSITIVE_INFINITY;
+    private double maxHeat1 = Double.NEGATIVE_INFINITY;
+    private double minWet0 = Double.POSITIVE_INFINITY;
+    private double maxWet0 = Double.NEGATIVE_INFINITY;
 
     private long ttg = 0; // time to generate
 
@@ -112,8 +112,6 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             wetValueLower = 0.6,       wetValueUpper     = 0.8,  // 3
             wetterValueLower = 0.8,    wetterValueUpper  = 0.9,  // 4
             wettestValueLower = 0.9,   wettestValueUpper = 1.0;  // 5
-
-    private static SquidColorCenter squidColorCenter = new SquidColorCenter();
 
     private static float black = SColor.floatGetI(0, 0, 0),
             white = SColor.floatGet(0xffffffff);
@@ -383,7 +381,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
 
         if(isRiver || isLake)
             shadingData[x][y] = //((moist - minWet) / (maxWet - minWet)) * 0.45 + 0.15 - 0.14 * ((hot - minHeat) / (maxHeat - minHeat))
-                    (NumberTools.bounce(high * (30 + moist * 16 - hot * 4)) * 0.3 + 0.6);
+                    (moist * 0.35 + 0.6);
         else
             shadingData[x][y] = //(upperProximityH + upperProximityM - lowerProximityH - lowerProximityM) * 0.1 + 0.2
                     (heightCode == 4) ? (0.18 - high) / (0.08):
@@ -396,7 +394,6 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         batch = new SpriteBatch();
         display = new SquidPanel(width, height, cellWidth, cellHeight);
         //overlay = new SquidPanel(16, 8, DefaultResources.getStretchableFont().width(32).height(64).initBySize());
-        colorFactory = new SquidColorCenter();
         view = new StretchViewport(width*cellWidth, height*cellHeight);
         stage = new Stage(view, batch);
         seed = 0xDEBACL;
@@ -494,7 +491,6 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                                 0, height - (height >> zoom)));
                         regenerate(startCacheX.peek(), startCacheY.peek(),width >> zoom, height >> zoom, cachedState);
                         rng.setState(cachedState);
-
                     }
                 }
                 else
@@ -568,7 +564,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         }
         rng.setState(state);
         int seedA = rng.nextInt(), seedB = rng.nextInt(), seedC = rng.nextInt(), t;
-        waterModifier = rng.nextDouble(0.13)-0.06;
+        waterModifier = rng.nextDouble(0.25) + 0.89;
         coolingModifier = rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1;
 
         double p, q,
@@ -593,8 +589,9 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                 h = terrain.getNoiseWithSeed(pc +
                                 terrainRidged.getNoiseWithSeed(pc, ps, qc, qs, seedA + seedB),
                         ps, qc, qs, seedA);
-                p = Math.signum(h) + waterModifier;
-                h *= p * p;
+                //p = Math.signum(h) + waterModifier;
+                //h *= p * p;
+                h *= waterModifier;
                 heightData[x][y] = h;
                 heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps, qc
                         + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedB + seedC)//, seedD + seedC)
@@ -625,8 +622,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                 wetDiff = 1.0 / (maxWet0 - minWet0),
                 hMod,
                 halfHeight = (height - 1) * 0.5, i_half = 1.0 / halfHeight;
-        minHeightActual0 = minHeightActual;
-        maxHeightActual0 = maxHeightActual;
+        double minHeightActual0 = minHeightActual;
+        double maxHeightActual0 = maxHeightActual;
         yPos = startY;
         ps = Double.POSITIVE_INFINITY;
         pc = Double.NEGATIVE_INFINITY;
@@ -764,7 +761,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                             continue PER_CELL;
                         case 4:
                             display.put(x, y, SColor.lerpFloatColors(lightIce, ice,
-                                    (float) ((heightData[x][y] - lowers[hc]) / (differences[hc]))));
+                                    (float) ((heightData[x][y] - sandLower) / (sandUpper - sandLower))));
                             continue PER_CELL;
                     }
                 }
@@ -815,32 +812,15 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         rng.randomPortion(Direction.CARDINALS, reuse);
         reuse[rng.next(2)] = Direction.DIAGONALS[rng.next(2)];
         reuse[4] = Direction.DIAGONALS[rng.next(2)];
-        //int diags = rng.next(2);
-        /*
-        int diags = rng.nextIntHasty(12);
-        reuse[rng.next(2)] = Direction.DIAGONALS[diags & 3];
-        reuse[4] = Direction.DIAGONALS[(diags & 3) + 1 + (diags >> 2) & 3];
-        */
-        //reuse[4] = Direction.NONE;
+        reuse[5] = Direction.OUTWARDS[rng.next(3)];
     }
 
     private void addRivers()
     {
         long rebuildState = rng.nextLong();
-        //sortaDijkstra();
-        /*int current = 0;
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-
-            }
-        }*/
         workingData.empty().insertRectangle(8, 8, width - 16, height - 16);
         riverData.empty().refill(heightCodeData, 6, 100);
-        //System.out.println(riverData.show('.', '#'));
-        //System.out.println('\n');
         riverData.quasiRandomRegion(0.000003 * Math.max(width, height)).and(workingData);
-        //System.out.println(riverData.show('.', '#'));
-        //System.out.println('\n');
         int[] starts = riverData.asTightEncoded();
         int len = starts.length, currentPos, choice, adjX, adjY, currX, currY, tcx, tcy, stx, sty, sbx, sby;
         riverData.clear();
@@ -982,10 +962,9 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         }
 
         GreasedRegion tempData = new GreasedRegion(width, height);
-        int riverCount = riverData.size() >> 5, currentMax = riverCount >> 2, idx = 0, prevChoice;
+        int riverCount = riverData.size() >> 3, currentMax = riverCount >> 2, idx = 0, prevChoice;
         for (int h = 5; h < 9; h++) { //, currentMax += riverCount / 18
             workingData.empty().refill(heightCodeData, h).and(riverData);
-            //System.out.println(workingData.show('.', '#'));
             RIVER:
             for (int j = 0; j < currentMax && idx < riverCount; j++) {
                 double vdc = VanDerCorputQRNG.weakDetermine(idx++), best = -999999;
@@ -1032,14 +1011,14 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                     best = -999999;
                     appendDirToShuffle(rng);
                     choice = -1;
-                    for (int d = 0; d < 5; d++) {
+                    for (int d = 0; d < 6; d++) {
                         adjX = (currX + reuse[d].deltaX);
                         if (adjX < 0 || adjX >= width)
                             continue;
                         adjY = (currY + reuse[d].deltaY);
                         if (adjY < 0 || adjY >= height)
                             continue;
-                        if (heightData[adjX][adjY] > best) {
+                        if (heightData[adjX][adjY] > best && !riverData.contains(adjX, adjY)) {
                             best = heightData[adjX][adjY];
                             choice = d;
                             sbx = adjX;
@@ -1048,21 +1027,6 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                     }
                     currX = sbx;
                     currY = sby;
-                    if (best <= heightData[stx][sty] || heightData[currX][currY] > rng.nextDouble(160.0)
-                            //|| riverData.contains(currX, currY)
-                            ) {
-                        riverData.or(tempData);
-
-                        lakeData.insert(currX, currY);
-                        lakeData.insert(currX + 1, currY);
-                        lakeData.insert(currX - 1, currY);
-                        lakeData.insert(currX, currY + 1);
-                        lakeData.insert(currX, currY - 1);
-                        sbx = rng.next(2);
-                        lakeData.insert(currX+(~(sbx&1)|1), currY+((sbx&2)-1)); // random diagonal
-                        tempData.clear();
-                        continue RIVER;
-                    }
                     if (choice != -1 && heightCodeData[currX][currY] >= 4) {
                         if (reuse[choice].isDiagonal()) {
                             tcx = currX - reuse[choice].deltaX;
@@ -1073,6 +1037,28 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                                 tempData.insert(currX, tcy);
                         }
                         tempData.insert(currX, currY);
+                    }
+                    if (best <= heightData[stx][sty] || heightData[currX][currY] > rng.nextDouble(280.0)) {
+                        riverData.or(tempData);
+                        tempData.clear();
+
+                        lakeData.insert(currX, currY);
+                        sbx = rng.next(8);
+                        sbx &= sbx >>> 4;
+                        if ((sbx & 1) == 0)
+                            lakeData.insert(currX + 1, currY);
+                        if ((sbx & 2) == 0)
+                            lakeData.insert(currX - 1, currY);
+                        if ((sbx & 4) == 0)
+                            lakeData.insert(currX, currY + 1);
+                        if ((sbx & 8) == 0)
+                            lakeData.insert(currX, currY - 1);
+                        sbx = rng.next(2);
+                        lakeData.insert(currX + (-(sbx & 1) | 1), currY + ((sbx & 2) - 1)); // random diagonal
+                        lakeData.insert(currX, currY + ((sbx & 2) - 1)); // ortho next to random diagonal
+                        lakeData.insert(currX + (-(sbx & 1) | 1), currY); // ortho next to random diagonal
+
+                        continue RIVER;
                     }
                 }
             }
