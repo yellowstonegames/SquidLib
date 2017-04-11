@@ -35,7 +35,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         River                  = 12;
 
     private static final int width = 512, height = 512;
-    private final double terrainFreq = 1.75, terrainRidgedFreq = 1.1, heatFreq = 4.5, moistureFreq = 4.0, otherFreq = 3.1;
+    private final double terrainFreq = 1.75, terrainRidgedFreq = 1.1, heatFreq = 5.05, moistureFreq = 5.2, otherFreq = 5.5;
     //riverSize = (0.5 - 10.0 / height) * (0.5 - 10.0 / width), lakeSize = riverSize * 1.1;
 
     private SpriteBatch batch;
@@ -126,7 +126,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private static float desert = SColor.floatGetI(248, 229, 180);
     private static float darkDesert = SColor.lerpFloatColors(desert, black, 0.15f);
 
-    private static float savanna = SColor.floatGetI(177, 209, 110);
+    private static float savanna = SColor.floatGetI(181, 200, 100);
     private static float darkSavanna = SColor.lerpFloatColors(savanna, black, 0.15f);
 
     private static float tropicalRainforest = SColor.floatGetI(66, 123, 25);
@@ -135,19 +135,19 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private static float tundra = SColor.floatGetI(151, 175, 159);
     private static float darkTundra = SColor.lerpFloatColors(tundra, black, 0.15f);
 
-    private static float temperateRainforest = SColor.floatGetI(29, 73, 40);
+    private static float temperateRainforest = SColor.floatGetI(54, 113, 60);
     private static float darkTemperateRainforest = SColor.lerpFloatColors(temperateRainforest, black, 0.15f);
 
-    private static float grassland = SColor.floatGetI(170, 195, 119);
+    private static float grassland = SColor.floatGetI(169, 185, 105);
     private static float darkGrassland = SColor.lerpFloatColors(grassland, black, 0.15f);
 
     private static float seasonalForest = SColor.floatGetI(100, 158, 75);
     private static float darkSeasonalForest = SColor.lerpFloatColors(seasonalForest, black, 0.15f);
 
-    private static float borealForest = SColor.floatGetI(95, 115, 62);
+    private static float borealForest = SColor.floatGetI(75, 105, 45);
     private static float darkBorealForest = SColor.lerpFloatColors(borealForest, black, 0.15f);
 
-    private static float woodland = SColor.floatGetI(139, 175, 90);
+    private static float woodland = SColor.floatGetI(122, 170, 90);
     private static float darkWoodland = SColor.lerpFloatColors(woodland, black, 0.15f);
 
     private static float rocky = SColor.floatGetI(171, 175, 145);
@@ -248,12 +248,12 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
 
     protected final static float[] BIOME_TABLE = {
         //COLDEST   //COLDER      //COLD               //HOT                     //HOTTER                 //HOTTEST
-        Ice+0.7f,   Ice+0.65f,    Grassland+0.8f,      Desert+0.75f,             Desert+0.8f,             Desert+0.85f,            //DRYEST
-        Ice+0.6f,   Tundra+0.9f,  Grassland+0.6f,      Grassland+0.4f,           Desert+0.65f,            Desert+0.7f,             //DRYER
-        Ice+0.5f,   Tundra+0.7f,  Woodland+0.5f,       Woodland+0.6f,            Savanna+0.65f,           Desert+0.6f,             //DRY
-        Ice+0.4f,   Tundra+0.5f,  SeasonalForest+0.3f, SeasonalForest+0.5f,      Savanna+0.4f,            Savanna+0.55f,           //WET
-        Ice+0.2f,   Tundra+0.3f,  BorealForest+0.35f,  TemperateRainforest+0.4f, TropicalRainforest+0.5f, Savanna+0.3f,            //WETTER
-        Ice+0.0f,   BorealForest, BorealForest+0.15f,  TemperateRainforest+0.2f, TropicalRainforest+0.3f, TropicalRainforest+0.1f, //WETTEST
+        Ice+0.7f,   Ice+0.65f,    Grassland+0.9f,      Desert+0.75f,             Desert+0.8f,             Desert+0.85f,            //DRYEST
+        Ice+0.6f,   Tundra+0.9f,  Grassland+0.6f,      Grassland+0.3f,           Desert+0.65f,            Desert+0.7f,             //DRYER
+        Ice+0.5f,   Tundra+0.7f,  Woodland+0.4f,       Woodland+0.6f,            Savanna+0.8f,           Desert+0.6f,              //DRY
+        Ice+0.4f,   Tundra+0.5f,  SeasonalForest+0.3f, SeasonalForest+0.5f,      Savanna+0.6f,            Savanna+0.4f,            //WET
+        Ice+0.2f,   Tundra+0.3f,  BorealForest+0.35f,  TemperateRainforest+0.4f, TropicalRainforest+0.6f, Savanna+0.2f,            //WETTER
+        Ice+0.0f,   BorealForest, BorealForest+0.15f,  TemperateRainforest+0.2f, TropicalRainforest+0.4f, TropicalRainforest+0.2f, //WETTEST
         Rocky+0.9f, Rocky+0.6f,   Beach+0.4f,          Beach+0.55f,              Beach+0.75f,             Beach+0.9f,              //COASTS
         Ice+0.3f,   River+0.8f,   River+0.7f,          River+0.6f,               River+0.5f,              River+0.4f,              //RIVERS
         Ice+0.2f,   River+0.7f,   River+0.6f,          River+0.5f,               River+0.4f,              River+0.3f,              //LAKES
@@ -263,15 +263,15 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         float b, diff;
         for (int i = 0; i < 54; i++) {
             b = BIOME_TABLE[i];
-            diff = ((b % 1.0f) - 0.48f) * 0.23f;
+            diff = ((b % 1.0f) - 0.48f) * 0.27f;
             BIOME_COLOR_TABLE[i] = (b = (diff >= 0)
                     ? SColor.lerpFloatColors(biomeColors[(int)b], white, diff)
                     : SColor.lerpFloatColors(biomeColors[(int)b], black, -diff));
-            BIOME_DARK_COLOR_TABLE[i] = SColor.lerpFloatColors(b, black, 0.07f);
+            BIOME_DARK_COLOR_TABLE[i] = SColor.lerpFloatColors(b, black, 0.08f);
         }
     }
 
-    protected void codeBiome(int x, int y, double hot, double moist, int heightCode) {
+    protected void codeBiome(final int x, final int y, final double hot, final double moist, final double high, final int heightCode) {
         int hc, mc;
         boolean isLake = partialLakeData.contains(x, y) && heightCode >= 4,
                 isRiver = partialRiverData.contains(x, y) && heightCode >= 4;
@@ -383,10 +383,11 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
 
         if(isRiver || isLake)
             shadingData[x][y] = //((moist - minWet) / (maxWet - minWet)) * 0.45 + 0.15 - 0.14 * ((hot - minHeat) / (maxHeat - minHeat))
-                    + (NumberTools.bounce(heightData[x][y] * (32 + moist * 16 - hot * 4)) * 0.3 + 0.6);
+                    (NumberTools.bounce(high * (30 + moist * 16 - hot * 4)) * 0.3 + 0.6);
         else
             shadingData[x][y] = //(upperProximityH + upperProximityM - lowerProximityH - lowerProximityM) * 0.1 + 0.2
-                    + NumberTools.bounce(heightData[x][y] * (71 + moist * 11 - hot * 5)) * 0.5 + 0.5;
+                    (heightCode == 4) ? (0.18 - high) / (0.08):
+                    NumberTools.bounce((high + moist) * (4.1 + high - hot)) * 0.5 + 0.5; // * (7.5 + moist * 1.9 - hot * 0.9)
     }
 
 
@@ -401,11 +402,11 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         seed = 0xDEBACL;
         rng = new StatefulRNG(seed);
         // 1.9, 2.5, 5.5, 5.0, 4.1
-        terrain = new Noise.Layered4D(SeededNoise.instance, 10, terrainFreq);
-        terrainRidged = new Noise.Ridged4D(SeededNoise.instance, 9, terrainRidgedFreq);
-        heat = new Noise.Layered4D(SeededNoise.instance, 4, heatFreq);
-        moisture = new Noise.Layered4D(SeededNoise.instance, 5, moistureFreq);
-        otherRidged = new Noise.Ridged4D(SeededNoise.instance, 4, otherFreq);
+        terrain = new Noise.Layered4D(SeededNoise.instance, 8, terrainFreq);
+        terrainRidged = new Noise.Ridged4D(SeededNoise.instance, 10, terrainRidgedFreq);
+        heat = new Noise.Layered4D(SeededNoise.instance, 3, heatFreq);
+        moisture = new Noise.Layered4D(SeededNoise.instance, 4, moistureFreq);
+        otherRidged = new Noise.Ridged4D(SeededNoise.instance, 6, otherFreq);
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
@@ -730,7 +731,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         }
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                codeBiome(x, y, heatData[x][y], moistureData[x][y], heightCodeData[x][y]);
+                codeBiome(x, y, heatData[x][y], moistureData[x][y], heightData[x][y], heightCodeData[x][y]);
             }
         }
         /*
@@ -784,11 +785,15 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                             System.out.println("RIVER x=" + x + ",y=" + y + ':' + (((heightData[x][y] - lowers[hc]) / (differences[hc])) * 19
                                     + shadingData[x][y] * 13) * 0.03125f);
                         */
+
+
                         display.put(x, y, SColor.lerpFloatColors(BIOME_COLOR_TABLE[biomeLowerCodeData[x][y]],
                                 BIOME_DARK_COLOR_TABLE[biomeUpperCodeData[x][y]],
                                 (float) //(((heightData[x][y] - lowers[hc]) / (differences[hc])) * 11 +
                                         shadingData[x][y]// * 21) * 0.03125f
                                 ));
+
+                        //display.put(x, y, SColor.lerpFloatColors(darkTropicalRainforest, desert, (float) (heightData[x][y])));
                 }
             }
         }

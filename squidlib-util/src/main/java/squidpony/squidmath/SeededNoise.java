@@ -1041,7 +1041,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
      * @return a pseudo-random-like int between 0 and 255, inclusive on both
      */
     //0x89 0x95 0xA3 0xB3 0xC5 0xD3 0xE3
-    public static int hash(final int x, final int y, final int z, final int w, final int seed) {
+    public static int hashAlt(final int x, final int y, final int z, final int w, final int seed) {
         return (
                 z    + 0xD3 * (seed + y)
               ^ w    + 0xB5 * (x + z   )
@@ -1058,7 +1058,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
      * @param seed an int to incorporate into the hash
      * @return a pseudo-random-like int between 0 and 255, inclusive on both
      */
-    public static int hashAlt(final int x, final int y, final int z, final int w, final int seed) {
+    public static int hash(final int x, final int y, final int z, final int w, final int seed) {
         int a = 0x632BE5AB;
         return (0x9E3779B9
                 + (a ^= 0x85157AF5 * seed + x)
@@ -1080,7 +1080,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
      * @return a pseudo-random-like int between 0 and 255, inclusive on both
      */
     //0x89 0x95 0xA3 0xB3 0xC5 0xD3 0xE3
-    public static int hash(final int x, final int y, final int z, final int w, final int u, final int v, final int seed) {
+    public static int hashAlt(final int x, final int y, final int z, final int w, final int u, final int v, final int seed) {
         return (
                 z    + 0x89 * (seed + x)
               ^ w    + 0xC1 * (x + y)
@@ -1102,7 +1102,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
      * @param seed an int to incorporate into the hash
      * @return a pseudo-random-like int between 0 and 255, inclusive on both
      */
-    public static int hashAlt(final int x, final int y, final int z, final int w, final int u, final int v, final int seed) {
+    public static int hash(final int x, final int y, final int z, final int w, final int u, final int v, final int seed) {
         int a = 0x632BE5AB;
         return (0x9E3779B9
                 + (a ^= 0x85157AF5 * seed + x)
