@@ -7,7 +7,7 @@ import squidpony.squidmath.*;
 /**
  * Can be used to generate world maps with a wide variety of data, starting with height, temperature and moisture.
  * From there, you can determine biome information in as much detail as your game needs, with a default implementation
- * available that considers any one point as on a gradient between two kinds of biome. The maps this produces are valid
+ * available that assigns a single biome to each cell based on heat/moisture. The maps this produces are valid
  * for spherical or toroidal world projections, and will wrap from edge to opposite edge seamlessly thanks to a
  * technique from the Accidental Noise Library ( https://www.gamedev.net/blog/33/entry-2138456-seamless-noise/ ) that
  * involves getting a 2D slice of 4D Simplex noise. Because of how Simplex noise works, this also allows extremely high
@@ -733,6 +733,141 @@ public class WorldMapGenerator {
         }
 
         rng.setState(rebuildState);
+    }
+
+    /**
+     * A way to get biome information for the cells on a map when you only need a single value to describe a biome, such
+     * as "Grassland" or "TropicalRainforest".
+     * <br>
+     * To use: 1, Construct a SimpleBiomeMapper (constructor takes no arguments). 2, call
+     * {@link #makeBiomes(WorldMapGenerator)} with a WorldMapGenerator that has already produced at least one world map.
+     * 3, get biome codes from the {@link #biomeCodeData} field, where a code is an int that can be used as an index
+     * into the {@link #biomeTable} static field to get a String name for a biome type, or used with an alternate biome
+     * table of your design. Biome tables in this case are 54-element arrays organized into groups of 6 elements. Each
+     * group goes from the coldest temperature first to the warmest temperature last in the group. The first group of 6
+     * contains the dryest biomes, the next 6 are medium-dry, the next are slightly-dry, the next slightly-wet, then
+     * medium-wet, then wettest. After this first block of dry-to-wet groups, there is a group of 6 for coastlines, a
+     * group of 6 for rivers, and lastly a group for lakes. This also assigns moisture codes and heat codes from 0 to 5
+     * for each cell, which may be useful to simplify logic that deals with those factors.
+     */
+    public static class SimpleBiomeMapper
+    {
+        /**
+         * The heat codes for the analyzed map, from 0 to 5 inclusive, with 0 coldest and 5 hottest.
+         */
+        public int[][] heatCodeData,
+        /**
+         * The moisture codes for the analyzed map, from 0 to 5 inclusive, with 0 driest and 5 wettest.
+         */
+        moistureCodeData,
+        /**
+         * The biome codes for the analyzed map, from 0 to 53 inclusive. You can use {@link #biomeTable} to look up
+         * String names for biomes, or construct your own table as you see fit (see docs in {@link SimpleBiomeMapper}).
+         */
+        biomeCodeData;
+
+        public static final double
+                coldestValueLower = 0.0,   coldestValueUpper = 0.15, // 0
+                colderValueLower = 0.15,   colderValueUpper = 0.31,  // 1
+                coldValueLower = 0.31,     coldValueUpper = 0.5,     // 2
+                warmValueLower = 0.5,      warmValueUpper = 0.69,    // 3
+                warmerValueLower = 0.69,   warmerValueUpper = 0.85,  // 4
+                warmestValueLower = 0.85,  warmestValueUpper = 1.0,  // 5
+        
+                driestValueLower = 0.0,    driestValueUpper  = 0.27, // 0
+                drierValueLower = 0.27,    drierValueUpper   = 0.4,  // 1
+                dryValueLower = 0.4,       dryValueUpper     = 0.6,  // 2
+                wetValueLower = 0.6,       wetValueUpper     = 0.8,  // 3
+                wetterValueLower = 0.8,    wetterValueUpper  = 0.9,  // 4
+                wettestValueLower = 0.9,   wettestValueUpper = 1.0;  // 5
+
+        /**
+         * The default biome table to use with biome codes from {@link #biomeCodeData}. Biomes are assigned based on
+         * heat and moisture for the first 36 of 54 elements (coldest to warmest for each group of 6, with the first
+         * group as the dryest and the last group the wettest), then the next 6 are for coastlines (coldest to warmest),
+         * then rivers (coldest to warmest), then lakes (coldest to warmest).
+         */
+        public static final String[] biomeTable = {
+                //COLDEST //COLDER        //COLD            //HOT                  //HOTTER              //HOTTEST
+                "Ice",    "Ice",          "Grassland",      "Desert",              "Desert",             "Desert",             //DRYEST
+                "Ice",    "Tundra",       "Grassland",      "Grassland",           "Desert",             "Desert",             //DRYER
+                "Ice",    "Tundra",       "Woodland",       "Woodland",            "Savanna",            "Desert",             //DRY
+                "Ice",    "Tundra",       "SeasonalForest", "SeasonalForest",      "Savanna",            "Savanna",            //WET
+                "Ice",    "Tundra",       "BorealForest",   "TemperateRainforest", "TropicalRainforest", "Savanna",            //WETTER
+                "Ice",    "BorealForest", "BorealForest",   "TemperateRainforest", "TropicalRainforest", "TropicalRainforest", //WETTEST
+                "Rocky",  "Rocky",        "Beach",          "Beach",               "Beach",              "Beach",              //COASTS
+                "Ice",    "River",        "River",          "River",               "River",              "River",              //RIVERS
+                "Ice",    "River",        "River",          "River",               "River",              "River",              //LAKES
+        };
+
+        /**
+         * Simple constructor; pretty much does nothing. Make sure to call {@link #makeBiomes(WorldMapGenerator)} before
+         * using fields like {@link #biomeCodeData}.
+         */
+        public SimpleBiomeMapper()
+        {
+            heatCodeData = null;
+            moistureCodeData = null;
+            biomeCodeData = null;
+        }
+
+        /**
+         * Analyzes the last world produced by the given WorldMapGenerator and uses all of its generated information to
+         * assign biome codes for each cell (along with heat and moisture codes). After calling this, biome codes can be
+         * taken from {@link #biomeCodeData} and used as indices into {@link #biomeTable} or a custom biome table.
+         * @param world a WorldMapGenerator that should have generated at least one map; it may be at any zoom
+         */
+        public void makeBiomes(WorldMapGenerator world) {
+            if(world == null || world.width <= 0 || world.height <= 0)
+                return;
+            if(heatCodeData == null || (heatCodeData.length != world.width || heatCodeData[0].length != world.width))
+                heatCodeData = new int[world.width][world.height];
+            if(moistureCodeData == null || (moistureCodeData.length != world.width || moistureCodeData[0].length != world.width))
+                moistureCodeData = new int[world.width][world.height];
+            if(biomeCodeData == null || (biomeCodeData.length != world.width || biomeCodeData[0].length != world.width))
+                biomeCodeData = new int[world.width][world.height];
+            final double i_hot = (world.maxHeat == 0.0) ? 1.0 : 1.0 / world.maxHeat;
+            for (int x = 0; x < world.width; x++) {
+                for (int y = 0; y < world.height; y++) {
+                    final double hot = world.heatData[x][y], moist = world.moistureData[x][y], high = world.heightData[x][y];
+                    final int heightCode = world.heightCodeData[x][y];
+                    int hc, mc;
+                    boolean isLake = world.generateRivers && world.partialLakeData.contains(x, y) && heightCode >= 4,
+                            isRiver = world.generateRivers && world.partialRiverData.contains(x, y) && heightCode >= 4;
+                    if (moist >= (wettestValueUpper - (wetterValueUpper - wetterValueLower) * 0.2)) {
+                        mc = 5;
+                    } else if (moist >= (wetterValueUpper - (wetValueUpper - wetValueLower) * 0.2)) {
+                        mc = 4;
+                    } else if (moist >= (wetValueUpper - (dryValueUpper - dryValueLower) * 0.2)) {
+                        mc = 3;
+                    } else if (moist >= (dryValueUpper - (drierValueUpper - drierValueLower) * 0.2)) {
+                        mc = 2;
+                    } else if (moist >= (drierValueUpper - (driestValueUpper) * 0.2)) {
+                        mc = 1;
+                    } else {
+                        mc = 0;
+                    }
+
+                    if (hot >= (warmestValueUpper - (warmerValueUpper - warmerValueLower) * 0.2) * i_hot) {
+                        hc = 5;
+                    } else if (hot >= (warmerValueUpper - (warmValueUpper - warmValueLower) * 0.2) * i_hot) {
+                        hc = 4;
+                    } else if (hot >= (warmValueUpper - (coldValueUpper - coldValueLower) * 0.2) * i_hot) {
+                        hc = 3;
+                    } else if (hot >= (coldValueUpper - (colderValueUpper - colderValueLower) * 0.2) * i_hot) {
+                        hc = 2;
+                    } else if (hot >= (colderValueUpper - (coldestValueUpper) * 0.2) * i_hot) {
+                        hc = 1;
+                    } else {
+                        hc = 0;
+                    }
+
+                    heatCodeData[x][y] = hc;
+                    moistureCodeData[x][y] = mc;
+                    biomeCodeData[x][y] = isLake ? hc + 48 : (isRiver ? hc + 42 : ((heightCode == 4) ? hc + 36 : hc + mc * 6));
+                }
+            }
+        }
     }
 
 }
