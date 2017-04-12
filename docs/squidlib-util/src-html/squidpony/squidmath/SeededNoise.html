@@ -1049,7 +1049,7 @@
 <span class="sourceLineNo">1041</span>     * @return a pseudo-random-like int between 0 and 255, inclusive on both<a name="line.1041"></a>
 <span class="sourceLineNo">1042</span>     */<a name="line.1042"></a>
 <span class="sourceLineNo">1043</span>    //0x89 0x95 0xA3 0xB3 0xC5 0xD3 0xE3<a name="line.1043"></a>
-<span class="sourceLineNo">1044</span>    public static int hash(final int x, final int y, final int z, final int w, final int seed) {<a name="line.1044"></a>
+<span class="sourceLineNo">1044</span>    public static int hashAlt(final int x, final int y, final int z, final int w, final int seed) {<a name="line.1044"></a>
 <span class="sourceLineNo">1045</span>        return (<a name="line.1045"></a>
 <span class="sourceLineNo">1046</span>                z    + 0xD3 * (seed + y)<a name="line.1046"></a>
 <span class="sourceLineNo">1047</span>              ^ w    + 0xB5 * (x + z   )<a name="line.1047"></a>
@@ -1066,7 +1066,7 @@
 <span class="sourceLineNo">1058</span>     * @param seed an int to incorporate into the hash<a name="line.1058"></a>
 <span class="sourceLineNo">1059</span>     * @return a pseudo-random-like int between 0 and 255, inclusive on both<a name="line.1059"></a>
 <span class="sourceLineNo">1060</span>     */<a name="line.1060"></a>
-<span class="sourceLineNo">1061</span>    public static int hashAlt(final int x, final int y, final int z, final int w, final int seed) {<a name="line.1061"></a>
+<span class="sourceLineNo">1061</span>    public static int hash(final int x, final int y, final int z, final int w, final int seed) {<a name="line.1061"></a>
 <span class="sourceLineNo">1062</span>        int a = 0x632BE5AB;<a name="line.1062"></a>
 <span class="sourceLineNo">1063</span>        return (0x9E3779B9<a name="line.1063"></a>
 <span class="sourceLineNo">1064</span>                + (a ^= 0x85157AF5 * seed + x)<a name="line.1064"></a>
@@ -1088,7 +1088,7 @@
 <span class="sourceLineNo">1080</span>     * @return a pseudo-random-like int between 0 and 255, inclusive on both<a name="line.1080"></a>
 <span class="sourceLineNo">1081</span>     */<a name="line.1081"></a>
 <span class="sourceLineNo">1082</span>    //0x89 0x95 0xA3 0xB3 0xC5 0xD3 0xE3<a name="line.1082"></a>
-<span class="sourceLineNo">1083</span>    public static int hash(final int x, final int y, final int z, final int w, final int u, final int v, final int seed) {<a name="line.1083"></a>
+<span class="sourceLineNo">1083</span>    public static int hashAlt(final int x, final int y, final int z, final int w, final int u, final int v, final int seed) {<a name="line.1083"></a>
 <span class="sourceLineNo">1084</span>        return (<a name="line.1084"></a>
 <span class="sourceLineNo">1085</span>                z    + 0x89 * (seed + x)<a name="line.1085"></a>
 <span class="sourceLineNo">1086</span>              ^ w    + 0xC1 * (x + y)<a name="line.1086"></a>
@@ -1110,7 +1110,7 @@
 <span class="sourceLineNo">1102</span>     * @param seed an int to incorporate into the hash<a name="line.1102"></a>
 <span class="sourceLineNo">1103</span>     * @return a pseudo-random-like int between 0 and 255, inclusive on both<a name="line.1103"></a>
 <span class="sourceLineNo">1104</span>     */<a name="line.1104"></a>
-<span class="sourceLineNo">1105</span>    public static int hashAlt(final int x, final int y, final int z, final int w, final int u, final int v, final int seed) {<a name="line.1105"></a>
+<span class="sourceLineNo">1105</span>    public static int hash(final int x, final int y, final int z, final int w, final int u, final int v, final int seed) {<a name="line.1105"></a>
 <span class="sourceLineNo">1106</span>        int a = 0x632BE5AB;<a name="line.1106"></a>
 <span class="sourceLineNo">1107</span>        return (0x9E3779B9<a name="line.1107"></a>
 <span class="sourceLineNo">1108</span>                + (a ^= 0x85157AF5 * seed + x)<a name="line.1108"></a>
