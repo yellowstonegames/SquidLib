@@ -11,16 +11,27 @@ import squidpony.squidmath.*;
  * for spherical or toroidal world projections, and will wrap from edge to opposite edge seamlessly thanks to a
  * technique from the Accidental Noise Library ( https://www.gamedev.net/blog/33/entry-2138456-seamless-noise/ ) that
  * involves getting a 2D slice of 4D Simplex noise. Because of how Simplex noise works, this also allows extremely high
- * zoom levels as long as certain parameters are within reason. The main trade-off this makes to obtain better quality
- * is reduced speed; generating a 512x512 map on a circa-2016 laptop (i7-6700HQ processor at 2.6 GHz) takes about 1
- * second (about 1.15 seconds for an un-zoomed map, 0.95 or so seconds to increase zoom at double resolution). If you
- * don't need a 512x512 map, this takes commensurately less time to generate less grid cells, with 64x64 maps generating
- * faster than they can be accurately seen on the same hardware. River positions are produced using a different method,
- * and do not involve the Simplex noise parts other than using the height map to determine flow. Zooming with rivers
- * is tricky, and generally requires starting from the outermost zoom level and progressively enlarging and adding
- * detail to all rivers as zoom increases on specified points. Certain parts of this class are not necessary to
- * generate, just in case you want river-less maps or something similar; setting {@link #generateRivers} to false will
- * disable river generation (it defaults to true).
+ * zoom levels as long as certain parameters are within reason. You can access the height map with the
+ * {@link #heightData} field, the heat map with the {@link #heatData} field, the moisture map with the
+ * {@link #moistureData} field, and a special map that stores ints representing the codes for various ranges of
+ * elevation (0 to 8 inclusive, with 0 the deepest ocean and 8 the highest mountains) with {@link #heightCodeData}. The
+ * last map should be noted as being the simplest way to find what is land and what is water; any height code 4 or
+ * greater is land, and any height code 3 or less is water. This can produce rivers, and keeps that information in a
+ * GreasedRegion (alongside a GreasedRegion containing lake positions) instead of in the other map data. This class does
+ * not use Coord at all, but if you want maps with width and/or height greater than 256, and you want to use the river
+ * or lake data as a Collection of Coord, then you should call {@link squidpony.squidmath.Coord#expandPoolTo(int, int)}
+ * with your width and height so the Coords remain safely pooled. If you're fine with keeping rivers and lakes as
+ * GreasedRegions and not requesting Coord values from them, then you don't need to do anything with Coord. Certain
+ * parts of this class are not necessary to generate, just in case you want river-less maps or something similar;
+ * setting {@link #generateRivers} to false will disable river generation (it defaults to true).
+ * <br>
+ * The main trade-off this makes to obtain better quality is reduced speed; generating a 512x512 map on a circa-2016
+ * laptop (i7-6700HQ processor at 2.6 GHz) takes about 1 second (about 1.15 seconds for an un-zoomed map, 0.95 or so
+ * seconds to increase zoom at double resolution). If you don't need a 512x512 map, this takes commensurately less time
+ * to generate less grid cells, with 64x64 maps generating faster than they can be accurately seen on the same hardware.
+ * River positions are produced using a different method, and do not involve the Simplex noise parts other than using
+ * the height map to determine flow. Zooming with rivers is tricky, and generally requires starting from the outermost
+ * zoom level and progressively enlarging and adding detail to all rivers as zoom increases on specified points.
  */
 @Beta
 public class WorldMapGenerator {
@@ -105,14 +116,42 @@ public class WorldMapGenerator {
 
     }
 
+    /**
+     * Generates a world using a random RNG state and all parameters randomized.
+     * The worlds this produces will always have width and height as specified in the constructor (default 256x256).
+     * You can call {@link #zoomIn(int, int)} to double the resolution and center on the specified area, but the width
+     * and height of the 2D arrays this changed, such as {@link #heightData} and {@link #moistureData} will be the same.
+     */
     public void generate()
     {
         generate(rng.nextLong());
     }
 
-    public void generate(long state)
+    /**
+     * Generates a world using the specified RNG state as a long. Other parameters will be randomized, using the same
+     * RNG state to start with.
+     * The worlds this produces will always have width and height as specified in the constructor (default 256x256).
+     * You can call {@link #zoomIn(int, int)} to double the resolution and center on the specified area, but the width
+     * and height of the 2D arrays this changed, such as {@link #heightData} and {@link #moistureData} will be the same.
+     * @param state the state to give this generator's RNG; if the same as the last call, this will reuse data
+     */
+    public void generate(long state) {
+        generate(-1.0, -1.0, state);
+    }
+
+    /**
+     * Generates a world using the specified RNG state as a long, with specific water and cooling modifiers that affect
+     * the land-water ratio and the average temperature, respectively.
+     * The worlds this produces will always have width and height as specified in the constructor (default 256x256).
+     * You can call {@link #zoomIn(int, int)} to double the resolution and center on the specified area, but the width
+     * and height of the 2D arrays this changed, such as {@link #heightData} and {@link #moistureData} will be the same.
+     * @param waterMod should be between 0.85 and 1.2; a random value will be used if this is negative
+     * @param coolMod should be between 0.85 and 1.4; a random value will be used if this is negative
+     * @param state the state to give this generator's RNG; if the same as the last call, this will reuse data
+     */
+    public void generate(double waterMod, double coolMod, long state)
     {
-        if(cachedState != state)
+        if(cachedState != state || waterMod != waterModifier || coolMod != coolingModifier)
         {
             seed = state;
             zoom = 0;
@@ -123,13 +162,29 @@ public class WorldMapGenerator {
 
         }
         regenerate(startCacheX.peek(), startCacheY.peek(),
-                (width >> zoom), (height >> zoom), state);
+                (width >> zoom), (height >> zoom), waterMod, coolMod, state);
     }
 
+    /**
+     * Halves the resolution of the map and doubles the area it covers; the 2D arrays this uses keep their sizes. This
+     * version of zoomOut always zooms out from the center of the currently used area.
+     * <br>
+     * Only has an effect if you have previously zoomed in using {@link #zoomIn(int, int)} or its overload.
+     */
     public void zoomOut()
     {
         zoomOut(width >> 1, height >> 1);
     }
+    /**
+     * Halves the resolution of the map and doubles the area it covers; the 2D arrays this uses keep their sizes. This
+     * version of zoomOut allows you to specify where the zoom should be centered, using the current coordinates (if the
+     * map size is 256x256, then coordinates should be between 0 and 255, and will refer to the currently used area and
+     * not necessarily the full world size).
+     * <br>
+     * Only has an effect if you have previously zoomed in using {@link #zoomIn(int, int)} or its overload.
+     * @param zoomCenterX the center X position to zoom out from; if too close to an edge, this will stop moving before it would extend past an edge
+     * @param zoomCenterY the center Y position to zoom out from; if too close to an edge, this will stop moving before it would extend past an edge
+     */
     public void zoomOut(int zoomCenterX, int zoomCenterY)
     {
         if(zoom > 0)
@@ -146,16 +201,36 @@ public class WorldMapGenerator {
                     0), width - (width >> zoom)));
             startCacheY.add(Math.min(Math.max(startCacheY.pop() + (zoomCenterY >> zoom + 1) - (height >> zoom + 2),
                     0), height - (height >> zoom)));
-            regenerate(startCacheX.peek(), startCacheY.peek(),width >> zoom, height >> zoom, cachedState);
+            regenerate(startCacheX.peek(), startCacheY.peek(),width >> zoom, height >> zoom,
+                    waterModifier, coolingModifier, cachedState);
             rng.setState(cachedState);
         }
 
     }
+    /**
+     * Doubles the resolution of the map and halves the area it covers; the 2D arrays this uses keep their sizes. This
+     * version of zoomIn always zooms in to the center of the currently used area.
+     * <br>
+     * Although there is no technical restriction on maximum zoom, zooming in more than 5 times (64x scale or greater)
+     * will make the map appear somewhat less realistic due to rounded shapes appearing more bubble-like and less like a
+     * normal landscape.
+     */
     public void zoomIn()
     {
         zoomIn(width >> 1, height >> 1);
     }
-
+    /**
+     * Doubles the resolution of the map and halves the area it covers; the 2D arrays this uses keep their sizes. This
+     * version of zoomIn allows you to specify where the zoom should be centered, using the current coordinates (if the
+     * map size is 256x256, then coordinates should be between 0 and 255, and will refer to the currently used area and
+     * not necessarily the full world size).
+     * <br>
+     * Although there is no technical restriction on maximum zoom, zooming in more than 5 times (64x scale or greater)
+     * will make the map appear somewhat less realistic due to rounded shapes appearing more bubble-like and less like a
+     * normal landscape.
+     * @param zoomCenterX the center X position to zoom in to; if too close to an edge, this will stop moving before it would extend past an edge
+     * @param zoomCenterY the center Y position to zoom in to; if too close to an edge, this will stop moving before it would extend past an edge
+     */
     public void zoomIn(int zoomCenterX, int zoomCenterY)
     {
         if(seed != cachedState)
@@ -174,15 +249,17 @@ public class WorldMapGenerator {
             startCacheY.add(Math.min(Math.max(startCacheY.peek() + (zoomCenterY >> zoom - 1) - (height >> zoom + 1),
                     0), height - (height >> zoom)));
         }
-        regenerate(startCacheX.peek(), startCacheY.peek(),width >> zoom, height >> zoom, cachedState);
+        regenerate(startCacheX.peek(), startCacheY.peek(),width >> zoom, height >> zoom,
+                waterModifier, coolingModifier, cachedState);
         rng.setState(cachedState);
     }
 
-    protected void regenerate(int startX, int startY, int usedWidth, int usedHeight, long state)
+    protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
+                              double waterMod, double coolMod, long state)
     {
         //long startTime = System.currentTimeMillis();
         boolean fresh = false;
-        if(cachedState != state)
+        if(cachedState != state || waterMod != waterModifier || coolMod != coolingModifier)
         {
             minHeight = Double.POSITIVE_INFINITY;
             maxHeight = Double.NEGATIVE_INFINITY;
@@ -201,8 +278,9 @@ public class WorldMapGenerator {
         }
         rng.setState(state);
         int seedA = rng.nextInt(), seedB = rng.nextInt(), seedC = rng.nextInt(), t;
-        waterModifier = rng.nextDouble(0.25) + 0.89;
-        coolingModifier = rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1;
+
+        waterModifier = (waterMod <= 0) ? rng.nextDouble(0.25) + 0.89 : waterMod;
+        coolingModifier = (coolMod <= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;
 
         double p, q,
                 ps, pc,
