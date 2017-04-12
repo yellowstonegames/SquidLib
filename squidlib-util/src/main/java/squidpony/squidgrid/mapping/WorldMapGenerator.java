@@ -36,20 +36,16 @@ import squidpony.squidmath.*;
 @Beta
 public class WorldMapGenerator {
     public final int width, height;
-    private static final double terrainFreq = 1.75, terrainRidgedFreq = 1.1, heatFreq = 5.05, moistureFreq = 5.2, otherFreq = 5.5;
-    private final Noise.Noise4D terrain, terrainRidged, heat, moisture, otherRidged;
-    private long seed, cachedState;
+    protected static final double terrainFreq = 1.75, terrainRidgedFreq = 1.1, heatFreq = 5.05, moistureFreq = 5.2, otherFreq = 5.5;
+    public final Noise.Noise4D terrain, terrainRidged, heat, moisture, otherRidged;
+    public long seed, cachedState;
     public StatefulRNG rng;
     public boolean generateRivers = true;
     public final double[][] heightData, heatData, moistureData;
     public final GreasedRegion riverData, lakeData,
             partialRiverData, partialLakeData;
     private final GreasedRegion workingData;
-    private final int[][] heightCodeData;
-//            heatCodeData,
-//            moistureCodeData,
-//            biomeUpperCodeData,
-//            biomeLowerCodeData;
+    public final int[][] heightCodeData;
     public double waterModifier = 0.0, coolingModifier = 1.0,
             minHeight = Double.POSITIVE_INFINITY, maxHeight = Double.NEGATIVE_INFINITY,
             minHeightActual = Double.POSITIVE_INFINITY, maxHeightActual = Double.NEGATIVE_INFINITY,
@@ -58,8 +54,8 @@ public class WorldMapGenerator {
     private double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
             minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
             minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
-    private int zoom = 0;
-    private IntVLA startCacheX = new IntVLA(8), startCacheY = new IntVLA(8);
+    public int zoom = 0;
+    protected IntVLA startCacheX = new IntVLA(8), startCacheY = new IntVLA(8);
     public static final double
             deepWaterLower = -1.0, deepWaterUpper = -0.7,        // 0
             mediumWaterLower = -0.7, mediumWaterUpper = -0.3,    // 1
@@ -101,13 +97,6 @@ public class WorldMapGenerator {
         partialLakeData = new GreasedRegion(width, height);
         workingData = new GreasedRegion(width, height);
         heightCodeData = new int[width][height];
-        /*
-        heatCodeData = new int[width][height];
-        moistureCodeData = new int[width][height];
-
-        biomeUpperCodeData = new int[width][height];
-        biomeLowerCodeData = new int[width][height];
-        */
         terrain = new Noise.Layered4D(noiseGenerator, 8, terrainFreq);
         terrainRidged = new Noise.Ridged4D(noiseGenerator, 10, terrainRidgedFreq);
         heat = new Noise.Layered4D(noiseGenerator, 3, heatFreq);
@@ -119,7 +108,7 @@ public class WorldMapGenerator {
     /**
      * Generates a world using a random RNG state and all parameters randomized.
      * The worlds this produces will always have width and height as specified in the constructor (default 256x256).
-     * You can call {@link #zoomIn(int, int)} to double the resolution and center on the specified area, but the width
+     * You can call {@link #zoomIn(int, int, int)} to double the resolution and center on the specified area, but the width
      * and height of the 2D arrays this changed, such as {@link #heightData} and {@link #moistureData} will be the same.
      */
     public void generate()
@@ -131,7 +120,7 @@ public class WorldMapGenerator {
      * Generates a world using the specified RNG state as a long. Other parameters will be randomized, using the same
      * RNG state to start with.
      * The worlds this produces will always have width and height as specified in the constructor (default 256x256).
-     * You can call {@link #zoomIn(int, int)} to double the resolution and center on the specified area, but the width
+     * You can call {@link #zoomIn(int, int, int)} to double the resolution and center on the specified area, but the width
      * and height of the 2D arrays this changed, such as {@link #heightData} and {@link #moistureData} will be the same.
      * @param state the state to give this generator's RNG; if the same as the last call, this will reuse data
      */
@@ -143,7 +132,7 @@ public class WorldMapGenerator {
      * Generates a world using the specified RNG state as a long, with specific water and cooling modifiers that affect
      * the land-water ratio and the average temperature, respectively.
      * The worlds this produces will always have width and height as specified in the constructor (default 256x256).
-     * You can call {@link #zoomIn(int, int)} to double the resolution and center on the specified area, but the width
+     * You can call {@link #zoomIn(int, int, int)} to double the resolution and center on the specified area, but the width
      * and height of the 2D arrays this changed, such as {@link #heightData} and {@link #moistureData} will be the same.
      * @param waterMod should be between 0.85 and 1.2; a random value will be used if this is negative
      * @param coolMod should be between 0.85 and 1.4; a random value will be used if this is negative
@@ -169,11 +158,11 @@ public class WorldMapGenerator {
      * Halves the resolution of the map and doubles the area it covers; the 2D arrays this uses keep their sizes. This
      * version of zoomOut always zooms out from the center of the currently used area.
      * <br>
-     * Only has an effect if you have previously zoomed in using {@link #zoomIn(int, int)} or its overload.
+     * Only has an effect if you have previously zoomed in using {@link #zoomIn(int, int, int)} or its overload.
      */
     public void zoomOut()
     {
-        zoomOut(width >> 1, height >> 1);
+        zoomOut(1, width >> 1, height >> 1);
     }
     /**
      * Halves the resolution of the map and doubles the area it covers; the 2D arrays this uses keep their sizes. This
@@ -181,12 +170,17 @@ public class WorldMapGenerator {
      * map size is 256x256, then coordinates should be between 0 and 255, and will refer to the currently used area and
      * not necessarily the full world size).
      * <br>
-     * Only has an effect if you have previously zoomed in using {@link #zoomIn(int, int)} or its overload.
+     * Only has an effect if you have previously zoomed in using {@link #zoomIn(int, int, int)} or its overload.
      * @param zoomCenterX the center X position to zoom out from; if too close to an edge, this will stop moving before it would extend past an edge
      * @param zoomCenterY the center Y position to zoom out from; if too close to an edge, this will stop moving before it would extend past an edge
      */
-    public void zoomOut(int zoomCenterX, int zoomCenterY)
+    public void zoomOut(int zoomAmount, int zoomCenterX, int zoomCenterY)
     {
+        if(zoomAmount == 0) return;
+        if(zoomAmount < 0) {
+            zoomIn(-zoomAmount, zoomCenterX, zoomCenterY);
+            return;
+        }
         if(zoom > 0)
         {
             if(seed != cachedState)
@@ -194,7 +188,7 @@ public class WorldMapGenerator {
                 generate(rng.nextLong());
             }
 
-            zoom--;
+            zoom -= zoomAmount;
             startCacheX.pop();
             startCacheY.pop();
             startCacheX.add(Math.min(Math.max(startCacheX.pop() + (zoomCenterX >> zoom + 1) - (width >> zoom + 2),
@@ -217,7 +211,7 @@ public class WorldMapGenerator {
      */
     public void zoomIn()
     {
-        zoomIn(width >> 1, height >> 1);
+        zoomIn(1, width >> 1, height >> 1);
     }
     /**
      * Doubles the resolution of the map and halves the area it covers; the 2D arrays this uses keep their sizes. This
@@ -231,13 +225,19 @@ public class WorldMapGenerator {
      * @param zoomCenterX the center X position to zoom in to; if too close to an edge, this will stop moving before it would extend past an edge
      * @param zoomCenterY the center Y position to zoom in to; if too close to an edge, this will stop moving before it would extend past an edge
      */
-    public void zoomIn(int zoomCenterX, int zoomCenterY)
+    public void zoomIn(int zoomAmount, int zoomCenterX, int zoomCenterY)
     {
+        if(zoomAmount == 0) return;
+        if(zoomAmount < 0)
+        {
+            zoomOut(-zoomAmount, zoomCenterX, zoomCenterY);
+            return;
+        }
         if(seed != cachedState)
         {
             generate(rng.nextLong());
         }
-        zoom++;
+        zoom += zoomAmount;
         if(startCacheX.isEmpty())
         {
             startCacheX.add(0);
@@ -257,7 +257,6 @@ public class WorldMapGenerator {
     protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
                               double waterMod, double coolMod, long state)
     {
-        //long startTime = System.currentTimeMillis();
         boolean fresh = false;
         if(cachedState != state || waterMod != waterModifier || coolMod != coolingModifier)
         {
@@ -304,15 +303,13 @@ public class WorldMapGenerator {
                 h = terrain.getNoiseWithSeed(pc +
                                 terrainRidged.getNoiseWithSeed(pc, ps, qc, qs, seedA + seedB),
                         ps, qc, qs, seedA);
-                //p = Math.signum(h) + waterModifier;
-                //h *= p * p;
                 h *= waterModifier;
                 heightData[x][y] = h;
                 heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps, qc
-                                + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedB + seedC)//, seedD + seedC)
+                                + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedB + seedC)
                         , qs, seedB));
                 moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qc, qs
-                                + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedC + seedA)//seedD + seedB)
+                                + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedC + seedA)
                         , seedC));
                 minHeightActual = Math.min(minHeightActual, h);
                 maxHeightActual = Math.max(maxHeightActual, h);
@@ -395,8 +392,7 @@ public class WorldMapGenerator {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 heatData[x][y] = (h = ((heatData[x][y] - minHeat1) * heatDiff));
-                //(h = Math.pow(h, 2.0 - h * 2.0));
-                moistureData[x][y] = (temp = (moistureData[x][y] - minWet0) * wetDiff); // may assign to temp?
+                moistureData[x][y] = (temp = (moistureData[x][y] - minWet0) * wetDiff);
                 if (fresh) {
                     qs = Math.min(qs, h);
                     qc = Math.max(qc, h);
@@ -425,26 +421,19 @@ public class WorldMapGenerator {
                     int stx = (startCacheX.get(i) - startCacheX.get(i - 1)) << (i - 1),
                             sty = (startCacheY.get(i) - startCacheY.get(i - 1)) << (i - 1);
                     if ((i & 3) == 3) {
-                        partialRiverData.zoom(stx, sty).connect8way();//.connect8way();//.connect();
+                        partialRiverData.zoom(stx, sty).connect8way();
                         partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.4));
-                        partialLakeData.zoom(stx, sty).connect8way();//.connect8way();//.connect();
+                        partialLakeData.zoom(stx, sty).connect8way();
                         partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.55));
                     } else {
-                        partialRiverData.zoom(stx, sty).connect8way().thin();//.connect8way();//.connect();
+                        partialRiverData.zoom(stx, sty).connect8way().thin();
                         partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.5));
-                        partialLakeData.zoom(stx, sty).connect8way().thin();//.connect8way();//.connect();
+                        partialLakeData.zoom(stx, sty).connect8way().thin();
                         partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.7));
                     }
                 }
             }
         }
-        /*
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                codeBiome(x, y, heatData[x][y], moistureData[x][y], heightData[x][y], heightCodeData[x][y]);
-            }
-        }*/
-        //ttg = System.currentTimeMillis() - startTime;
     }
     public int codeHeight(final double high)
     {
@@ -826,37 +815,37 @@ public class WorldMapGenerator {
                 moistureCodeData = new int[world.width][world.height];
             if(biomeCodeData == null || (biomeCodeData.length != world.width || biomeCodeData[0].length != world.width))
                 biomeCodeData = new int[world.width][world.height];
-            final double i_hot = (world.maxHeat == 0.0) ? 1.0 : 1.0 / world.maxHeat;
+            final double i_hot = (world.maxHeat == world.minHeat) ? 1.0 : 1.0 / (world.maxHeat - world.minHeat);
             for (int x = 0; x < world.width; x++) {
                 for (int y = 0; y < world.height; y++) {
-                    final double hot = world.heatData[x][y], moist = world.moistureData[x][y], high = world.heightData[x][y];
+                    final double hot = (world.heatData[x][y] - world.minHeat) * i_hot, moist = world.moistureData[x][y];
                     final int heightCode = world.heightCodeData[x][y];
                     int hc, mc;
                     boolean isLake = world.generateRivers && world.partialLakeData.contains(x, y) && heightCode >= 4,
                             isRiver = world.generateRivers && world.partialRiverData.contains(x, y) && heightCode >= 4;
-                    if (moist >= (wettestValueUpper - (wetterValueUpper - wetterValueLower) * 0.2)) {
+                    if (moist > wetterValueUpper) {
                         mc = 5;
-                    } else if (moist >= (wetterValueUpper - (wetValueUpper - wetValueLower) * 0.2)) {
+                    } else if (moist > wetValueUpper) {
                         mc = 4;
-                    } else if (moist >= (wetValueUpper - (dryValueUpper - dryValueLower) * 0.2)) {
+                    } else if (moist > dryValueUpper) {
                         mc = 3;
-                    } else if (moist >= (dryValueUpper - (drierValueUpper - drierValueLower) * 0.2)) {
+                    } else if (moist > drierValueUpper) {
                         mc = 2;
-                    } else if (moist >= (drierValueUpper - (driestValueUpper) * 0.2)) {
+                    } else if (moist > driestValueUpper) {
                         mc = 1;
                     } else {
                         mc = 0;
                     }
 
-                    if (hot >= (warmestValueUpper - (warmerValueUpper - warmerValueLower) * 0.2) * i_hot) {
+                    if (hot > warmerValueUpper) {
                         hc = 5;
-                    } else if (hot >= (warmerValueUpper - (warmValueUpper - warmValueLower) * 0.2) * i_hot) {
+                    } else if (hot > warmValueUpper) {
                         hc = 4;
-                    } else if (hot >= (warmValueUpper - (coldValueUpper - coldValueLower) * 0.2) * i_hot) {
+                    } else if (hot > coldValueUpper) {
                         hc = 3;
-                    } else if (hot >= (coldValueUpper - (colderValueUpper - colderValueLower) * 0.2) * i_hot) {
+                    } else if (hot > colderValueUpper) {
                         hc = 2;
-                    } else if (hot >= (colderValueUpper - (coldestValueUpper) * 0.2) * i_hot) {
+                    } else if (hot > coldestValueUpper) {
                         hc = 1;
                     } else {
                         hc = 0;
