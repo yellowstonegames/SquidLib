@@ -34,8 +34,6 @@ public class PoliticalMapper {
 
     public PoliticalMapper()
     {
-        width = 20;
-        height = 20;
         name = "Permadeath Planet";
         rng = new StatefulRNG(CrossHash.Wisp.hash64(name));
     }
@@ -98,6 +96,8 @@ public class PoliticalMapper {
      */
     public char[][] generate(GreasedRegion land, int factionCount, double controlledFraction) {
         factionCount &= 255;
+        width = land.width;
+        height = land.height;
         MultiSpill spreader = new MultiSpill(new short[width][height], Spill.Measurement.MANHATTAN, rng);
         Coord.expandPoolTo(width, height);
         GreasedRegion map = land.copy();
@@ -185,6 +185,8 @@ public class PoliticalMapper {
         if(atlas.getAndMoveToFirst('~') == null)
             atlas.putAndMoveToFirst('~', "Ocean");
         int factionCount = existingAtlas.size() - 2;
+        width = land.width;
+        height = land.height;
         MultiSpill spreader = new MultiSpill(new short[width][height], Spill.Measurement.MANHATTAN, rng);
         Coord.expandPoolTo(width, height);
         GreasedRegion map = land.copy();
