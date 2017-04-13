@@ -42,70 +42,70 @@
 <span class="sourceLineNo">034</span><a name="line.34"></a>
 <span class="sourceLineNo">035</span>    public PoliticalMapper()<a name="line.35"></a>
 <span class="sourceLineNo">036</span>    {<a name="line.36"></a>
-<span class="sourceLineNo">037</span>        width = 20;<a name="line.37"></a>
-<span class="sourceLineNo">038</span>        height = 20;<a name="line.38"></a>
-<span class="sourceLineNo">039</span>        name = "Permadeath Planet";<a name="line.39"></a>
-<span class="sourceLineNo">040</span>        rng = new StatefulRNG(CrossHash.Wisp.hash64(name));<a name="line.40"></a>
-<span class="sourceLineNo">041</span>    }<a name="line.41"></a>
-<span class="sourceLineNo">042</span>    /**<a name="line.42"></a>
-<span class="sourceLineNo">043</span>     * Constructs a SpillWorldMap using the given world name, and uses the world name as the<a name="line.43"></a>
-<span class="sourceLineNo">044</span>     * basis for all future random generation in this object.<a name="line.44"></a>
-<span class="sourceLineNo">045</span>     *<a name="line.45"></a>
-<span class="sourceLineNo">046</span>     * @param worldName a String name for the world that will be used as a seed for all random generation here<a name="line.46"></a>
-<span class="sourceLineNo">047</span>     */<a name="line.47"></a>
-<span class="sourceLineNo">048</span>    public PoliticalMapper(String worldName) {<a name="line.48"></a>
-<span class="sourceLineNo">049</span>        name = worldName;<a name="line.49"></a>
-<span class="sourceLineNo">050</span>        rng = new StatefulRNG(CrossHash.Wisp.hash64(name));<a name="line.50"></a>
-<span class="sourceLineNo">051</span>    }<a name="line.51"></a>
-<span class="sourceLineNo">052</span>    /**<a name="line.52"></a>
-<span class="sourceLineNo">053</span>     * Constructs a SpillWorldMap using the given world name, and uses the world name as the<a name="line.53"></a>
-<span class="sourceLineNo">054</span>     * basis for all future random generation in this object.<a name="line.54"></a>
-<span class="sourceLineNo">055</span>     *<a name="line.55"></a>
-<span class="sourceLineNo">056</span>     * @param random an RNG to generate the name for the world in a random language, which will also serve as a seed<a name="line.56"></a>
-<span class="sourceLineNo">057</span>     */<a name="line.57"></a>
-<span class="sourceLineNo">058</span>    public PoliticalMapper(RNG random) {<a name="line.58"></a>
-<span class="sourceLineNo">059</span>        this(FakeLanguageGen.randomLanguage(random).word(random, true));<a name="line.59"></a>
-<span class="sourceLineNo">060</span>    }<a name="line.60"></a>
-<span class="sourceLineNo">061</span>    /**<a name="line.61"></a>
-<span class="sourceLineNo">062</span>     * Produces a political map for the land stored in the given WorldMapGenerator, with the given number<a name="line.62"></a>
-<span class="sourceLineNo">063</span>     * of factions trying to take land in the world (essentially, nations). The output is a 2D char array where each<a name="line.63"></a>
-<span class="sourceLineNo">064</span>     * letter char is tied to a different faction, while '~' is always water, and '%' is always wilderness or unclaimed<a name="line.64"></a>
-<span class="sourceLineNo">065</span>     * land. The amount of unclaimed land is determined by the controlledFraction parameter, which will be clamped<a name="line.65"></a>
-<span class="sourceLineNo">066</span>     * between 0.0 and 1.0, with higher numbers resulting in more land owned by factions and lower numbers meaning more<a name="line.66"></a>
-<span class="sourceLineNo">067</span>     * wilderness. This version generates an atlas with the procedural names of all the factions and a<a name="line.67"></a>
-<span class="sourceLineNo">068</span>     * mapping to the chars used in the output; the atlas will be in the {@link #atlas} member of this object. For every<a name="line.68"></a>
-<span class="sourceLineNo">069</span>     * Character key in atlas, there will be a String value in atlas that is the name of the nation, and for the same<a name="line.69"></a>
-<span class="sourceLineNo">070</span>     * key in {@link #spokenLanguages}, there will be a non-empty List of {@link FakeLanguageGen} languages (usually<a name="line.70"></a>
-<span class="sourceLineNo">071</span>     * one, sometimes two) that should match any names generated for the nation. Ocean and Wilderness get the default<a name="line.71"></a>
-<span class="sourceLineNo">072</span>     * FakeLanguageGen instances "ELF" and "DEMONIC", in case you need languages for those areas for some reason.<a name="line.72"></a>
-<span class="sourceLineNo">073</span>     * @param wmg a WorldMapGenerator that has produced a map; this gets the land parts of the map to assign claims to,<a name="line.73"></a>
-<span class="sourceLineNo">074</span>     *            including rivers and lakes as part of nations but not oceans<a name="line.74"></a>
-<span class="sourceLineNo">075</span>     * @param factionCount the number of factions to have claiming land, cannot be negative or more than 255<a name="line.75"></a>
-<span class="sourceLineNo">076</span>     * @param controlledFraction between 0.0 and 1.0 inclusive; higher means more land has a letter, lower has more '%'<a name="line.76"></a>
-<span class="sourceLineNo">077</span>     * @return a 2D char array where letters represent the claiming faction, '~' is water, and '%' is unclaimed<a name="line.77"></a>
-<span class="sourceLineNo">078</span>     */<a name="line.78"></a>
-<span class="sourceLineNo">079</span>    public char[][] generate(WorldMapGenerator wmg, int factionCount, double controlledFraction) {<a name="line.79"></a>
-<span class="sourceLineNo">080</span>        return generate(new GreasedRegion(wmg.heightCodeData, 4, 999), factionCount, controlledFraction);<a name="line.80"></a>
-<span class="sourceLineNo">081</span>    }<a name="line.81"></a>
-<span class="sourceLineNo">082</span>    /**<a name="line.82"></a>
-<span class="sourceLineNo">083</span>     * Produces a political map for the land stored in the "on" cells of the given GreasedRegion, with the given number<a name="line.83"></a>
-<span class="sourceLineNo">084</span>     * of factions trying to take land in the world (essentially, nations). The output is a 2D char array where each<a name="line.84"></a>
-<span class="sourceLineNo">085</span>     * letter char is tied to a different faction, while '~' is always water, and '%' is always wilderness or unclaimed<a name="line.85"></a>
-<span class="sourceLineNo">086</span>     * land. The amount of unclaimed land is determined by the controlledFraction parameter, which will be clamped<a name="line.86"></a>
-<span class="sourceLineNo">087</span>     * between 0.0 and 1.0, with higher numbers resulting in more land owned by factions and lower numbers meaning more<a name="line.87"></a>
-<span class="sourceLineNo">088</span>     * wilderness. This version generates an atlas with the procedural names of all the factions and a<a name="line.88"></a>
-<span class="sourceLineNo">089</span>     * mapping to the chars used in the output; the atlas will be in the {@link #atlas} member of this object. For every<a name="line.89"></a>
-<span class="sourceLineNo">090</span>     * Character key in atlas, there will be a String value in atlas that is the name of the nation, and for the same<a name="line.90"></a>
-<span class="sourceLineNo">091</span>     * key in {@link #spokenLanguages}, there will be a non-empty List of {@link FakeLanguageGen} languages (usually<a name="line.91"></a>
-<span class="sourceLineNo">092</span>     * one, sometimes two) that should match any names generated for the nation. Ocean and Wilderness get the default<a name="line.92"></a>
-<span class="sourceLineNo">093</span>     * FakeLanguageGen instances "ELF" and "DEMONIC", in case you need languages for those areas for some reason.<a name="line.93"></a>
-<span class="sourceLineNo">094</span>     * @param land a GreasedRegion that stores "on" cells for land and "off" cells for anything un-claimable, like ocean<a name="line.94"></a>
-<span class="sourceLineNo">095</span>     * @param factionCount the number of factions to have claiming land, cannot be negative or more than 255<a name="line.95"></a>
-<span class="sourceLineNo">096</span>     * @param controlledFraction between 0.0 and 1.0 inclusive; higher means more land has a letter, lower has more '%'<a name="line.96"></a>
-<span class="sourceLineNo">097</span>     * @return a 2D char array where letters represent the claiming faction, '~' is water, and '%' is unclaimed<a name="line.97"></a>
-<span class="sourceLineNo">098</span>     */<a name="line.98"></a>
-<span class="sourceLineNo">099</span>    public char[][] generate(GreasedRegion land, int factionCount, double controlledFraction) {<a name="line.99"></a>
-<span class="sourceLineNo">100</span>        factionCount &amp;= 255;<a name="line.100"></a>
+<span class="sourceLineNo">037</span>        name = "Permadeath Planet";<a name="line.37"></a>
+<span class="sourceLineNo">038</span>        rng = new StatefulRNG(CrossHash.Wisp.hash64(name));<a name="line.38"></a>
+<span class="sourceLineNo">039</span>    }<a name="line.39"></a>
+<span class="sourceLineNo">040</span>    /**<a name="line.40"></a>
+<span class="sourceLineNo">041</span>     * Constructs a SpillWorldMap using the given world name, and uses the world name as the<a name="line.41"></a>
+<span class="sourceLineNo">042</span>     * basis for all future random generation in this object.<a name="line.42"></a>
+<span class="sourceLineNo">043</span>     *<a name="line.43"></a>
+<span class="sourceLineNo">044</span>     * @param worldName a String name for the world that will be used as a seed for all random generation here<a name="line.44"></a>
+<span class="sourceLineNo">045</span>     */<a name="line.45"></a>
+<span class="sourceLineNo">046</span>    public PoliticalMapper(String worldName) {<a name="line.46"></a>
+<span class="sourceLineNo">047</span>        name = worldName;<a name="line.47"></a>
+<span class="sourceLineNo">048</span>        rng = new StatefulRNG(CrossHash.Wisp.hash64(name));<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    }<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    /**<a name="line.50"></a>
+<span class="sourceLineNo">051</span>     * Constructs a SpillWorldMap using the given world name, and uses the world name as the<a name="line.51"></a>
+<span class="sourceLineNo">052</span>     * basis for all future random generation in this object.<a name="line.52"></a>
+<span class="sourceLineNo">053</span>     *<a name="line.53"></a>
+<span class="sourceLineNo">054</span>     * @param random an RNG to generate the name for the world in a random language, which will also serve as a seed<a name="line.54"></a>
+<span class="sourceLineNo">055</span>     */<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    public PoliticalMapper(RNG random) {<a name="line.56"></a>
+<span class="sourceLineNo">057</span>        this(FakeLanguageGen.randomLanguage(random).word(random, true));<a name="line.57"></a>
+<span class="sourceLineNo">058</span>    }<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    /**<a name="line.59"></a>
+<span class="sourceLineNo">060</span>     * Produces a political map for the land stored in the given WorldMapGenerator, with the given number<a name="line.60"></a>
+<span class="sourceLineNo">061</span>     * of factions trying to take land in the world (essentially, nations). The output is a 2D char array where each<a name="line.61"></a>
+<span class="sourceLineNo">062</span>     * letter char is tied to a different faction, while '~' is always water, and '%' is always wilderness or unclaimed<a name="line.62"></a>
+<span class="sourceLineNo">063</span>     * land. The amount of unclaimed land is determined by the controlledFraction parameter, which will be clamped<a name="line.63"></a>
+<span class="sourceLineNo">064</span>     * between 0.0 and 1.0, with higher numbers resulting in more land owned by factions and lower numbers meaning more<a name="line.64"></a>
+<span class="sourceLineNo">065</span>     * wilderness. This version generates an atlas with the procedural names of all the factions and a<a name="line.65"></a>
+<span class="sourceLineNo">066</span>     * mapping to the chars used in the output; the atlas will be in the {@link #atlas} member of this object. For every<a name="line.66"></a>
+<span class="sourceLineNo">067</span>     * Character key in atlas, there will be a String value in atlas that is the name of the nation, and for the same<a name="line.67"></a>
+<span class="sourceLineNo">068</span>     * key in {@link #spokenLanguages}, there will be a non-empty List of {@link FakeLanguageGen} languages (usually<a name="line.68"></a>
+<span class="sourceLineNo">069</span>     * one, sometimes two) that should match any names generated for the nation. Ocean and Wilderness get the default<a name="line.69"></a>
+<span class="sourceLineNo">070</span>     * FakeLanguageGen instances "ELF" and "DEMONIC", in case you need languages for those areas for some reason.<a name="line.70"></a>
+<span class="sourceLineNo">071</span>     * @param wmg a WorldMapGenerator that has produced a map; this gets the land parts of the map to assign claims to,<a name="line.71"></a>
+<span class="sourceLineNo">072</span>     *            including rivers and lakes as part of nations but not oceans<a name="line.72"></a>
+<span class="sourceLineNo">073</span>     * @param factionCount the number of factions to have claiming land, cannot be negative or more than 255<a name="line.73"></a>
+<span class="sourceLineNo">074</span>     * @param controlledFraction between 0.0 and 1.0 inclusive; higher means more land has a letter, lower has more '%'<a name="line.74"></a>
+<span class="sourceLineNo">075</span>     * @return a 2D char array where letters represent the claiming faction, '~' is water, and '%' is unclaimed<a name="line.75"></a>
+<span class="sourceLineNo">076</span>     */<a name="line.76"></a>
+<span class="sourceLineNo">077</span>    public char[][] generate(WorldMapGenerator wmg, int factionCount, double controlledFraction) {<a name="line.77"></a>
+<span class="sourceLineNo">078</span>        return generate(new GreasedRegion(wmg.heightCodeData, 4, 999), factionCount, controlledFraction);<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    }<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    /**<a name="line.80"></a>
+<span class="sourceLineNo">081</span>     * Produces a political map for the land stored in the "on" cells of the given GreasedRegion, with the given number<a name="line.81"></a>
+<span class="sourceLineNo">082</span>     * of factions trying to take land in the world (essentially, nations). The output is a 2D char array where each<a name="line.82"></a>
+<span class="sourceLineNo">083</span>     * letter char is tied to a different faction, while '~' is always water, and '%' is always wilderness or unclaimed<a name="line.83"></a>
+<span class="sourceLineNo">084</span>     * land. The amount of unclaimed land is determined by the controlledFraction parameter, which will be clamped<a name="line.84"></a>
+<span class="sourceLineNo">085</span>     * between 0.0 and 1.0, with higher numbers resulting in more land owned by factions and lower numbers meaning more<a name="line.85"></a>
+<span class="sourceLineNo">086</span>     * wilderness. This version generates an atlas with the procedural names of all the factions and a<a name="line.86"></a>
+<span class="sourceLineNo">087</span>     * mapping to the chars used in the output; the atlas will be in the {@link #atlas} member of this object. For every<a name="line.87"></a>
+<span class="sourceLineNo">088</span>     * Character key in atlas, there will be a String value in atlas that is the name of the nation, and for the same<a name="line.88"></a>
+<span class="sourceLineNo">089</span>     * key in {@link #spokenLanguages}, there will be a non-empty List of {@link FakeLanguageGen} languages (usually<a name="line.89"></a>
+<span class="sourceLineNo">090</span>     * one, sometimes two) that should match any names generated for the nation. Ocean and Wilderness get the default<a name="line.90"></a>
+<span class="sourceLineNo">091</span>     * FakeLanguageGen instances "ELF" and "DEMONIC", in case you need languages for those areas for some reason.<a name="line.91"></a>
+<span class="sourceLineNo">092</span>     * @param land a GreasedRegion that stores "on" cells for land and "off" cells for anything un-claimable, like ocean<a name="line.92"></a>
+<span class="sourceLineNo">093</span>     * @param factionCount the number of factions to have claiming land, cannot be negative or more than 255<a name="line.93"></a>
+<span class="sourceLineNo">094</span>     * @param controlledFraction between 0.0 and 1.0 inclusive; higher means more land has a letter, lower has more '%'<a name="line.94"></a>
+<span class="sourceLineNo">095</span>     * @return a 2D char array where letters represent the claiming faction, '~' is water, and '%' is unclaimed<a name="line.95"></a>
+<span class="sourceLineNo">096</span>     */<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    public char[][] generate(GreasedRegion land, int factionCount, double controlledFraction) {<a name="line.97"></a>
+<span class="sourceLineNo">098</span>        factionCount &amp;= 255;<a name="line.98"></a>
+<span class="sourceLineNo">099</span>        width = land.width;<a name="line.99"></a>
+<span class="sourceLineNo">100</span>        height = land.height;<a name="line.100"></a>
 <span class="sourceLineNo">101</span>        MultiSpill spreader = new MultiSpill(new short[width][height], Spill.Measurement.MANHATTAN, rng);<a name="line.101"></a>
 <span class="sourceLineNo">102</span>        Coord.expandPoolTo(width, height);<a name="line.102"></a>
 <span class="sourceLineNo">103</span>        GreasedRegion map = land.copy();<a name="line.103"></a>
@@ -193,29 +193,31 @@
 <span class="sourceLineNo">185</span>        if(atlas.getAndMoveToFirst('~') == null)<a name="line.185"></a>
 <span class="sourceLineNo">186</span>            atlas.putAndMoveToFirst('~', "Ocean");<a name="line.186"></a>
 <span class="sourceLineNo">187</span>        int factionCount = existingAtlas.size() - 2;<a name="line.187"></a>
-<span class="sourceLineNo">188</span>        MultiSpill spreader = new MultiSpill(new short[width][height], Spill.Measurement.MANHATTAN, rng);<a name="line.188"></a>
-<span class="sourceLineNo">189</span>        Coord.expandPoolTo(width, height);<a name="line.189"></a>
-<span class="sourceLineNo">190</span>        GreasedRegion map = land.copy();<a name="line.190"></a>
-<span class="sourceLineNo">191</span>        Coord[] centers = map.randomSeparated(0.1, rng, factionCount);<a name="line.191"></a>
-<span class="sourceLineNo">192</span>        int controlled = (int) (map.size() * Math.max(0.0, Math.min(1.0, controlledFraction)));<a name="line.192"></a>
-<span class="sourceLineNo">193</span><a name="line.193"></a>
-<span class="sourceLineNo">194</span>        spreader.initialize(land.toChars());<a name="line.194"></a>
-<span class="sourceLineNo">195</span>        OrderedMap&lt;Coord, Double&gt; entries = new OrderedMap&lt;&gt;();<a name="line.195"></a>
-<span class="sourceLineNo">196</span>        entries.put(Coord.get(-1, -1), 0.0);<a name="line.196"></a>
-<span class="sourceLineNo">197</span>        for (int i = 0; i &lt; factionCount; i++) {<a name="line.197"></a>
-<span class="sourceLineNo">198</span>            entries.put(centers[i], rng.between(0.5, 1.0));<a name="line.198"></a>
-<span class="sourceLineNo">199</span>        }<a name="line.199"></a>
-<span class="sourceLineNo">200</span>        spreader.start(entries, controlled, null);<a name="line.200"></a>
-<span class="sourceLineNo">201</span>        short[][] sm = spreader.spillMap;<a name="line.201"></a>
-<span class="sourceLineNo">202</span>        politicalMap = new char[width][height];<a name="line.202"></a>
-<span class="sourceLineNo">203</span>        for (int x = 0; x &lt; width; x++) {<a name="line.203"></a>
-<span class="sourceLineNo">204</span>            for (int y = 0; y &lt; height; y++) {<a name="line.204"></a>
-<span class="sourceLineNo">205</span>                politicalMap[x][y] = (sm[x][y] == -1) ? '~' : (sm[x][y] == 0) ? '%' : atlas.keyAt((sm[x][y] + 1));<a name="line.205"></a>
-<span class="sourceLineNo">206</span>            }<a name="line.206"></a>
-<span class="sourceLineNo">207</span>        }<a name="line.207"></a>
-<span class="sourceLineNo">208</span>        return politicalMap;<a name="line.208"></a>
-<span class="sourceLineNo">209</span>    }<a name="line.209"></a>
-<span class="sourceLineNo">210</span>}<a name="line.210"></a>
+<span class="sourceLineNo">188</span>        width = land.width;<a name="line.188"></a>
+<span class="sourceLineNo">189</span>        height = land.height;<a name="line.189"></a>
+<span class="sourceLineNo">190</span>        MultiSpill spreader = new MultiSpill(new short[width][height], Spill.Measurement.MANHATTAN, rng);<a name="line.190"></a>
+<span class="sourceLineNo">191</span>        Coord.expandPoolTo(width, height);<a name="line.191"></a>
+<span class="sourceLineNo">192</span>        GreasedRegion map = land.copy();<a name="line.192"></a>
+<span class="sourceLineNo">193</span>        Coord[] centers = map.randomSeparated(0.1, rng, factionCount);<a name="line.193"></a>
+<span class="sourceLineNo">194</span>        int controlled = (int) (map.size() * Math.max(0.0, Math.min(1.0, controlledFraction)));<a name="line.194"></a>
+<span class="sourceLineNo">195</span><a name="line.195"></a>
+<span class="sourceLineNo">196</span>        spreader.initialize(land.toChars());<a name="line.196"></a>
+<span class="sourceLineNo">197</span>        OrderedMap&lt;Coord, Double&gt; entries = new OrderedMap&lt;&gt;();<a name="line.197"></a>
+<span class="sourceLineNo">198</span>        entries.put(Coord.get(-1, -1), 0.0);<a name="line.198"></a>
+<span class="sourceLineNo">199</span>        for (int i = 0; i &lt; factionCount; i++) {<a name="line.199"></a>
+<span class="sourceLineNo">200</span>            entries.put(centers[i], rng.between(0.5, 1.0));<a name="line.200"></a>
+<span class="sourceLineNo">201</span>        }<a name="line.201"></a>
+<span class="sourceLineNo">202</span>        spreader.start(entries, controlled, null);<a name="line.202"></a>
+<span class="sourceLineNo">203</span>        short[][] sm = spreader.spillMap;<a name="line.203"></a>
+<span class="sourceLineNo">204</span>        politicalMap = new char[width][height];<a name="line.204"></a>
+<span class="sourceLineNo">205</span>        for (int x = 0; x &lt; width; x++) {<a name="line.205"></a>
+<span class="sourceLineNo">206</span>            for (int y = 0; y &lt; height; y++) {<a name="line.206"></a>
+<span class="sourceLineNo">207</span>                politicalMap[x][y] = (sm[x][y] == -1) ? '~' : (sm[x][y] == 0) ? '%' : atlas.keyAt((sm[x][y] + 1));<a name="line.207"></a>
+<span class="sourceLineNo">208</span>            }<a name="line.208"></a>
+<span class="sourceLineNo">209</span>        }<a name="line.209"></a>
+<span class="sourceLineNo">210</span>        return politicalMap;<a name="line.210"></a>
+<span class="sourceLineNo">211</span>    }<a name="line.211"></a>
+<span class="sourceLineNo">212</span>}<a name="line.212"></a>
 
 
 
