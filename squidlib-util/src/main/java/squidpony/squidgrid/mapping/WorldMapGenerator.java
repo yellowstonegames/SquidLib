@@ -809,11 +809,11 @@ public class WorldMapGenerator {
         public void makeBiomes(WorldMapGenerator world) {
             if(world == null || world.width <= 0 || world.height <= 0)
                 return;
-            if(heatCodeData == null || (heatCodeData.length != world.width || heatCodeData[0].length != world.width))
+            if(heatCodeData == null || (heatCodeData.length != world.width || heatCodeData[0].length != world.height))
                 heatCodeData = new int[world.width][world.height];
-            if(moistureCodeData == null || (moistureCodeData.length != world.width || moistureCodeData[0].length != world.width))
+            if(moistureCodeData == null || (moistureCodeData.length != world.width || moistureCodeData[0].length != world.height))
                 moistureCodeData = new int[world.width][world.height];
-            if(biomeCodeData == null || (biomeCodeData.length != world.width || biomeCodeData[0].length != world.width))
+            if(biomeCodeData == null || (biomeCodeData.length != world.width || biomeCodeData[0].length != world.height))
                 biomeCodeData = new int[world.width][world.height];
             final double i_hot = (world.maxHeat == world.minHeat) ? 1.0 : 1.0 / (world.maxHeat - world.minHeat);
             for (int x = 0; x < world.width; x++) {
@@ -858,5 +858,4 @@ public class WorldMapGenerator {
             }
         }
     }
-
 }

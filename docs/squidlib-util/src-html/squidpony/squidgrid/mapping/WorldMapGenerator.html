@@ -44,208 +44,208 @@
 <span class="sourceLineNo">036</span>@Beta<a name="line.36"></a>
 <span class="sourceLineNo">037</span>public class WorldMapGenerator {<a name="line.37"></a>
 <span class="sourceLineNo">038</span>    public final int width, height;<a name="line.38"></a>
-<span class="sourceLineNo">039</span>    private static final double terrainFreq = 1.75, terrainRidgedFreq = 1.1, heatFreq = 5.05, moistureFreq = 5.2, otherFreq = 5.5;<a name="line.39"></a>
-<span class="sourceLineNo">040</span>    private final Noise.Noise4D terrain, terrainRidged, heat, moisture, otherRidged;<a name="line.40"></a>
-<span class="sourceLineNo">041</span>    private long seed, cachedState;<a name="line.41"></a>
+<span class="sourceLineNo">039</span>    protected static final double terrainFreq = 1.75, terrainRidgedFreq = 1.1, heatFreq = 5.05, moistureFreq = 5.2, otherFreq = 5.5;<a name="line.39"></a>
+<span class="sourceLineNo">040</span>    public final Noise.Noise4D terrain, terrainRidged, heat, moisture, otherRidged;<a name="line.40"></a>
+<span class="sourceLineNo">041</span>    public long seed, cachedState;<a name="line.41"></a>
 <span class="sourceLineNo">042</span>    public StatefulRNG rng;<a name="line.42"></a>
 <span class="sourceLineNo">043</span>    public boolean generateRivers = true;<a name="line.43"></a>
 <span class="sourceLineNo">044</span>    public final double[][] heightData, heatData, moistureData;<a name="line.44"></a>
 <span class="sourceLineNo">045</span>    public final GreasedRegion riverData, lakeData,<a name="line.45"></a>
 <span class="sourceLineNo">046</span>            partialRiverData, partialLakeData;<a name="line.46"></a>
 <span class="sourceLineNo">047</span>    private final GreasedRegion workingData;<a name="line.47"></a>
-<span class="sourceLineNo">048</span>    private final int[][] heightCodeData;<a name="line.48"></a>
-<span class="sourceLineNo">049</span>//            heatCodeData,<a name="line.49"></a>
-<span class="sourceLineNo">050</span>//            moistureCodeData,<a name="line.50"></a>
-<span class="sourceLineNo">051</span>//            biomeUpperCodeData,<a name="line.51"></a>
-<span class="sourceLineNo">052</span>//            biomeLowerCodeData;<a name="line.52"></a>
-<span class="sourceLineNo">053</span>    public double waterModifier = 0.0, coolingModifier = 1.0,<a name="line.53"></a>
-<span class="sourceLineNo">054</span>            minHeight = Double.POSITIVE_INFINITY, maxHeight = Double.NEGATIVE_INFINITY,<a name="line.54"></a>
-<span class="sourceLineNo">055</span>            minHeightActual = Double.POSITIVE_INFINITY, maxHeightActual = Double.NEGATIVE_INFINITY,<a name="line.55"></a>
-<span class="sourceLineNo">056</span>            minHeat = Double.POSITIVE_INFINITY, maxHeat = Double.NEGATIVE_INFINITY,<a name="line.56"></a>
-<span class="sourceLineNo">057</span>            minWet = Double.POSITIVE_INFINITY, maxWet = Double.NEGATIVE_INFINITY;<a name="line.57"></a>
-<span class="sourceLineNo">058</span>    private double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,<a name="line.58"></a>
-<span class="sourceLineNo">059</span>            minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,<a name="line.59"></a>
-<span class="sourceLineNo">060</span>            minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;<a name="line.60"></a>
-<span class="sourceLineNo">061</span>    private int zoom = 0;<a name="line.61"></a>
-<span class="sourceLineNo">062</span>    private IntVLA startCacheX = new IntVLA(8), startCacheY = new IntVLA(8);<a name="line.62"></a>
-<span class="sourceLineNo">063</span>    public static final double<a name="line.63"></a>
-<span class="sourceLineNo">064</span>            deepWaterLower = -1.0, deepWaterUpper = -0.7,        // 0<a name="line.64"></a>
-<span class="sourceLineNo">065</span>            mediumWaterLower = -0.7, mediumWaterUpper = -0.3,    // 1<a name="line.65"></a>
-<span class="sourceLineNo">066</span>            shallowWaterLower = -0.3, shallowWaterUpper = -0.1,  // 2<a name="line.66"></a>
-<span class="sourceLineNo">067</span>            coastalWaterLower = -0.1, coastalWaterUpper = 0.1,   // 3<a name="line.67"></a>
-<span class="sourceLineNo">068</span>            sandLower = 0.1, sandUpper = 0.18,                   // 4<a name="line.68"></a>
-<span class="sourceLineNo">069</span>            grassLower = 0.18, grassUpper = 0.35,                // 5<a name="line.69"></a>
-<span class="sourceLineNo">070</span>            forestLower = 0.35, forestUpper = 0.6,               // 6<a name="line.70"></a>
-<span class="sourceLineNo">071</span>            rockLower = 0.6, rockUpper = 0.8,                    // 7<a name="line.71"></a>
-<span class="sourceLineNo">072</span>            snowLower = 0.8, snowUpper = 1.0;                    // 8<a name="line.72"></a>
-<span class="sourceLineNo">073</span><a name="line.73"></a>
-<span class="sourceLineNo">074</span>    public static final double[] lowers = {deepWaterLower, mediumWaterLower, shallowWaterLower, coastalWaterLower,<a name="line.74"></a>
-<span class="sourceLineNo">075</span>            sandLower, grassLower, forestLower, rockLower, snowLower};<a name="line.75"></a>
-<span class="sourceLineNo">076</span>    public WorldMapGenerator()<a name="line.76"></a>
+<span class="sourceLineNo">048</span>    public final int[][] heightCodeData;<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    public double waterModifier = 0.0, coolingModifier = 1.0,<a name="line.49"></a>
+<span class="sourceLineNo">050</span>            minHeight = Double.POSITIVE_INFINITY, maxHeight = Double.NEGATIVE_INFINITY,<a name="line.50"></a>
+<span class="sourceLineNo">051</span>            minHeightActual = Double.POSITIVE_INFINITY, maxHeightActual = Double.NEGATIVE_INFINITY,<a name="line.51"></a>
+<span class="sourceLineNo">052</span>            minHeat = Double.POSITIVE_INFINITY, maxHeat = Double.NEGATIVE_INFINITY,<a name="line.52"></a>
+<span class="sourceLineNo">053</span>            minWet = Double.POSITIVE_INFINITY, maxWet = Double.NEGATIVE_INFINITY;<a name="line.53"></a>
+<span class="sourceLineNo">054</span>    private double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,<a name="line.54"></a>
+<span class="sourceLineNo">055</span>            minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,<a name="line.55"></a>
+<span class="sourceLineNo">056</span>            minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    public int zoom = 0;<a name="line.57"></a>
+<span class="sourceLineNo">058</span>    protected IntVLA startCacheX = new IntVLA(8), startCacheY = new IntVLA(8);<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    public static final double<a name="line.59"></a>
+<span class="sourceLineNo">060</span>            deepWaterLower = -1.0, deepWaterUpper = -0.7,        // 0<a name="line.60"></a>
+<span class="sourceLineNo">061</span>            mediumWaterLower = -0.7, mediumWaterUpper = -0.3,    // 1<a name="line.61"></a>
+<span class="sourceLineNo">062</span>            shallowWaterLower = -0.3, shallowWaterUpper = -0.1,  // 2<a name="line.62"></a>
+<span class="sourceLineNo">063</span>            coastalWaterLower = -0.1, coastalWaterUpper = 0.1,   // 3<a name="line.63"></a>
+<span class="sourceLineNo">064</span>            sandLower = 0.1, sandUpper = 0.18,                   // 4<a name="line.64"></a>
+<span class="sourceLineNo">065</span>            grassLower = 0.18, grassUpper = 0.35,                // 5<a name="line.65"></a>
+<span class="sourceLineNo">066</span>            forestLower = 0.35, forestUpper = 0.6,               // 6<a name="line.66"></a>
+<span class="sourceLineNo">067</span>            rockLower = 0.6, rockUpper = 0.8,                    // 7<a name="line.67"></a>
+<span class="sourceLineNo">068</span>            snowLower = 0.8, snowUpper = 1.0;                    // 8<a name="line.68"></a>
+<span class="sourceLineNo">069</span><a name="line.69"></a>
+<span class="sourceLineNo">070</span>    public static final double[] lowers = {deepWaterLower, mediumWaterLower, shallowWaterLower, coastalWaterLower,<a name="line.70"></a>
+<span class="sourceLineNo">071</span>            sandLower, grassLower, forestLower, rockLower, snowLower};<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    public WorldMapGenerator()<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    {<a name="line.73"></a>
+<span class="sourceLineNo">074</span>        this(0x1337BABE1337D00DL, 256, 256, SeededNoise.instance);<a name="line.74"></a>
+<span class="sourceLineNo">075</span>    }<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    public WorldMapGenerator(int mapWidth, int mapHeight)<a name="line.76"></a>
 <span class="sourceLineNo">077</span>    {<a name="line.77"></a>
-<span class="sourceLineNo">078</span>        this(0x1337BABE1337D00DL, 256, 256, SeededNoise.instance);<a name="line.78"></a>
+<span class="sourceLineNo">078</span>        this(0x1337BABE1337D00DL, mapWidth, mapHeight, SeededNoise.instance);<a name="line.78"></a>
 <span class="sourceLineNo">079</span>    }<a name="line.79"></a>
-<span class="sourceLineNo">080</span>    public WorldMapGenerator(int mapWidth, int mapHeight)<a name="line.80"></a>
+<span class="sourceLineNo">080</span>    public WorldMapGenerator(long initialSeed, int mapWidth, int mapHeight)<a name="line.80"></a>
 <span class="sourceLineNo">081</span>    {<a name="line.81"></a>
-<span class="sourceLineNo">082</span>        this(0x1337BABE1337D00DL, mapWidth, mapHeight, SeededNoise.instance);<a name="line.82"></a>
+<span class="sourceLineNo">082</span>        this(initialSeed, mapWidth, mapHeight, SeededNoise.instance);<a name="line.82"></a>
 <span class="sourceLineNo">083</span>    }<a name="line.83"></a>
-<span class="sourceLineNo">084</span>    public WorldMapGenerator(long initialSeed, int mapWidth, int mapHeight)<a name="line.84"></a>
+<span class="sourceLineNo">084</span>    public WorldMapGenerator(long initialSeed, int mapWidth, int mapHeight, Noise.Noise4D noiseGenerator)<a name="line.84"></a>
 <span class="sourceLineNo">085</span>    {<a name="line.85"></a>
-<span class="sourceLineNo">086</span>        this(initialSeed, mapWidth, mapHeight, SeededNoise.instance);<a name="line.86"></a>
-<span class="sourceLineNo">087</span>    }<a name="line.87"></a>
-<span class="sourceLineNo">088</span>    public WorldMapGenerator(long initialSeed, int mapWidth, int mapHeight, Noise.Noise4D noiseGenerator)<a name="line.88"></a>
-<span class="sourceLineNo">089</span>    {<a name="line.89"></a>
-<span class="sourceLineNo">090</span>        width = mapWidth;<a name="line.90"></a>
-<span class="sourceLineNo">091</span>        height = mapHeight;<a name="line.91"></a>
-<span class="sourceLineNo">092</span>        seed = initialSeed;<a name="line.92"></a>
-<span class="sourceLineNo">093</span>        cachedState = ~initialSeed;<a name="line.93"></a>
-<span class="sourceLineNo">094</span>        rng = new StatefulRNG(initialSeed);<a name="line.94"></a>
-<span class="sourceLineNo">095</span>        heightData = new double[width][height];<a name="line.95"></a>
-<span class="sourceLineNo">096</span>        heatData = new double[width][height];<a name="line.96"></a>
-<span class="sourceLineNo">097</span>        moistureData = new double[width][height];<a name="line.97"></a>
-<span class="sourceLineNo">098</span>        riverData = new GreasedRegion(width, height);<a name="line.98"></a>
-<span class="sourceLineNo">099</span>        lakeData = new GreasedRegion(width, height);<a name="line.99"></a>
-<span class="sourceLineNo">100</span>        partialRiverData = new GreasedRegion(width, height);<a name="line.100"></a>
-<span class="sourceLineNo">101</span>        partialLakeData = new GreasedRegion(width, height);<a name="line.101"></a>
-<span class="sourceLineNo">102</span>        workingData = new GreasedRegion(width, height);<a name="line.102"></a>
-<span class="sourceLineNo">103</span>        heightCodeData = new int[width][height];<a name="line.103"></a>
-<span class="sourceLineNo">104</span>        /*<a name="line.104"></a>
-<span class="sourceLineNo">105</span>        heatCodeData = new int[width][height];<a name="line.105"></a>
-<span class="sourceLineNo">106</span>        moistureCodeData = new int[width][height];<a name="line.106"></a>
+<span class="sourceLineNo">086</span>        width = mapWidth;<a name="line.86"></a>
+<span class="sourceLineNo">087</span>        height = mapHeight;<a name="line.87"></a>
+<span class="sourceLineNo">088</span>        seed = initialSeed;<a name="line.88"></a>
+<span class="sourceLineNo">089</span>        cachedState = ~initialSeed;<a name="line.89"></a>
+<span class="sourceLineNo">090</span>        rng = new StatefulRNG(initialSeed);<a name="line.90"></a>
+<span class="sourceLineNo">091</span>        heightData = new double[width][height];<a name="line.91"></a>
+<span class="sourceLineNo">092</span>        heatData = new double[width][height];<a name="line.92"></a>
+<span class="sourceLineNo">093</span>        moistureData = new double[width][height];<a name="line.93"></a>
+<span class="sourceLineNo">094</span>        riverData = new GreasedRegion(width, height);<a name="line.94"></a>
+<span class="sourceLineNo">095</span>        lakeData = new GreasedRegion(width, height);<a name="line.95"></a>
+<span class="sourceLineNo">096</span>        partialRiverData = new GreasedRegion(width, height);<a name="line.96"></a>
+<span class="sourceLineNo">097</span>        partialLakeData = new GreasedRegion(width, height);<a name="line.97"></a>
+<span class="sourceLineNo">098</span>        workingData = new GreasedRegion(width, height);<a name="line.98"></a>
+<span class="sourceLineNo">099</span>        heightCodeData = new int[width][height];<a name="line.99"></a>
+<span class="sourceLineNo">100</span>        terrain = new Noise.Layered4D(noiseGenerator, 8, terrainFreq);<a name="line.100"></a>
+<span class="sourceLineNo">101</span>        terrainRidged = new Noise.Ridged4D(noiseGenerator, 10, terrainRidgedFreq);<a name="line.101"></a>
+<span class="sourceLineNo">102</span>        heat = new Noise.Layered4D(noiseGenerator, 3, heatFreq);<a name="line.102"></a>
+<span class="sourceLineNo">103</span>        moisture = new Noise.Layered4D(noiseGenerator, 4, moistureFreq);<a name="line.103"></a>
+<span class="sourceLineNo">104</span>        otherRidged = new Noise.Ridged4D(noiseGenerator, 6, otherFreq);<a name="line.104"></a>
+<span class="sourceLineNo">105</span><a name="line.105"></a>
+<span class="sourceLineNo">106</span>    }<a name="line.106"></a>
 <span class="sourceLineNo">107</span><a name="line.107"></a>
-<span class="sourceLineNo">108</span>        biomeUpperCodeData = new int[width][height];<a name="line.108"></a>
-<span class="sourceLineNo">109</span>        biomeLowerCodeData = new int[width][height];<a name="line.109"></a>
-<span class="sourceLineNo">110</span>        */<a name="line.110"></a>
-<span class="sourceLineNo">111</span>        terrain = new Noise.Layered4D(noiseGenerator, 8, terrainFreq);<a name="line.111"></a>
-<span class="sourceLineNo">112</span>        terrainRidged = new Noise.Ridged4D(noiseGenerator, 10, terrainRidgedFreq);<a name="line.112"></a>
-<span class="sourceLineNo">113</span>        heat = new Noise.Layered4D(noiseGenerator, 3, heatFreq);<a name="line.113"></a>
-<span class="sourceLineNo">114</span>        moisture = new Noise.Layered4D(noiseGenerator, 4, moistureFreq);<a name="line.114"></a>
-<span class="sourceLineNo">115</span>        otherRidged = new Noise.Ridged4D(noiseGenerator, 6, otherFreq);<a name="line.115"></a>
-<span class="sourceLineNo">116</span><a name="line.116"></a>
+<span class="sourceLineNo">108</span>    /**<a name="line.108"></a>
+<span class="sourceLineNo">109</span>     * Generates a world using a random RNG state and all parameters randomized.<a name="line.109"></a>
+<span class="sourceLineNo">110</span>     * The worlds this produces will always have width and height as specified in the constructor (default 256x256).<a name="line.110"></a>
+<span class="sourceLineNo">111</span>     * You can call {@link #zoomIn(int, int, int)} to double the resolution and center on the specified area, but the width<a name="line.111"></a>
+<span class="sourceLineNo">112</span>     * and height of the 2D arrays this changed, such as {@link #heightData} and {@link #moistureData} will be the same.<a name="line.112"></a>
+<span class="sourceLineNo">113</span>     */<a name="line.113"></a>
+<span class="sourceLineNo">114</span>    public void generate()<a name="line.114"></a>
+<span class="sourceLineNo">115</span>    {<a name="line.115"></a>
+<span class="sourceLineNo">116</span>        generate(rng.nextLong());<a name="line.116"></a>
 <span class="sourceLineNo">117</span>    }<a name="line.117"></a>
 <span class="sourceLineNo">118</span><a name="line.118"></a>
 <span class="sourceLineNo">119</span>    /**<a name="line.119"></a>
-<span class="sourceLineNo">120</span>     * Generates a world using a random RNG state and all parameters randomized.<a name="line.120"></a>
-<span class="sourceLineNo">121</span>     * The worlds this produces will always have width and height as specified in the constructor (default 256x256).<a name="line.121"></a>
-<span class="sourceLineNo">122</span>     * You can call {@link #zoomIn(int, int)} to double the resolution and center on the specified area, but the width<a name="line.122"></a>
-<span class="sourceLineNo">123</span>     * and height of the 2D arrays this changed, such as {@link #heightData} and {@link #moistureData} will be the same.<a name="line.123"></a>
-<span class="sourceLineNo">124</span>     */<a name="line.124"></a>
-<span class="sourceLineNo">125</span>    public void generate()<a name="line.125"></a>
-<span class="sourceLineNo">126</span>    {<a name="line.126"></a>
-<span class="sourceLineNo">127</span>        generate(rng.nextLong());<a name="line.127"></a>
-<span class="sourceLineNo">128</span>    }<a name="line.128"></a>
-<span class="sourceLineNo">129</span><a name="line.129"></a>
-<span class="sourceLineNo">130</span>    /**<a name="line.130"></a>
-<span class="sourceLineNo">131</span>     * Generates a world using the specified RNG state as a long. Other parameters will be randomized, using the same<a name="line.131"></a>
-<span class="sourceLineNo">132</span>     * RNG state to start with.<a name="line.132"></a>
-<span class="sourceLineNo">133</span>     * The worlds this produces will always have width and height as specified in the constructor (default 256x256).<a name="line.133"></a>
-<span class="sourceLineNo">134</span>     * You can call {@link #zoomIn(int, int)} to double the resolution and center on the specified area, but the width<a name="line.134"></a>
-<span class="sourceLineNo">135</span>     * and height of the 2D arrays this changed, such as {@link #heightData} and {@link #moistureData} will be the same.<a name="line.135"></a>
-<span class="sourceLineNo">136</span>     * @param state the state to give this generator's RNG; if the same as the last call, this will reuse data<a name="line.136"></a>
-<span class="sourceLineNo">137</span>     */<a name="line.137"></a>
-<span class="sourceLineNo">138</span>    public void generate(long state) {<a name="line.138"></a>
-<span class="sourceLineNo">139</span>        generate(-1.0, -1.0, state);<a name="line.139"></a>
-<span class="sourceLineNo">140</span>    }<a name="line.140"></a>
-<span class="sourceLineNo">141</span><a name="line.141"></a>
-<span class="sourceLineNo">142</span>    /**<a name="line.142"></a>
-<span class="sourceLineNo">143</span>     * Generates a world using the specified RNG state as a long, with specific water and cooling modifiers that affect<a name="line.143"></a>
-<span class="sourceLineNo">144</span>     * the land-water ratio and the average temperature, respectively.<a name="line.144"></a>
-<span class="sourceLineNo">145</span>     * The worlds this produces will always have width and height as specified in the constructor (default 256x256).<a name="line.145"></a>
-<span class="sourceLineNo">146</span>     * You can call {@link #zoomIn(int, int)} to double the resolution and center on the specified area, but the width<a name="line.146"></a>
-<span class="sourceLineNo">147</span>     * and height of the 2D arrays this changed, such as {@link #heightData} and {@link #moistureData} will be the same.<a name="line.147"></a>
-<span class="sourceLineNo">148</span>     * @param waterMod should be between 0.85 and 1.2; a random value will be used if this is negative<a name="line.148"></a>
-<span class="sourceLineNo">149</span>     * @param coolMod should be between 0.85 and 1.4; a random value will be used if this is negative<a name="line.149"></a>
-<span class="sourceLineNo">150</span>     * @param state the state to give this generator's RNG; if the same as the last call, this will reuse data<a name="line.150"></a>
-<span class="sourceLineNo">151</span>     */<a name="line.151"></a>
-<span class="sourceLineNo">152</span>    public void generate(double waterMod, double coolMod, long state)<a name="line.152"></a>
-<span class="sourceLineNo">153</span>    {<a name="line.153"></a>
-<span class="sourceLineNo">154</span>        if(cachedState != state || waterMod != waterModifier || coolMod != coolingModifier)<a name="line.154"></a>
-<span class="sourceLineNo">155</span>        {<a name="line.155"></a>
-<span class="sourceLineNo">156</span>            seed = state;<a name="line.156"></a>
-<span class="sourceLineNo">157</span>            zoom = 0;<a name="line.157"></a>
-<span class="sourceLineNo">158</span>            startCacheX.clear();<a name="line.158"></a>
-<span class="sourceLineNo">159</span>            startCacheY.clear();<a name="line.159"></a>
-<span class="sourceLineNo">160</span>            startCacheX.add(0);<a name="line.160"></a>
-<span class="sourceLineNo">161</span>            startCacheY.add(0);<a name="line.161"></a>
-<span class="sourceLineNo">162</span><a name="line.162"></a>
-<span class="sourceLineNo">163</span>        }<a name="line.163"></a>
-<span class="sourceLineNo">164</span>        regenerate(startCacheX.peek(), startCacheY.peek(),<a name="line.164"></a>
-<span class="sourceLineNo">165</span>                (width &gt;&gt; zoom), (height &gt;&gt; zoom), waterMod, coolMod, state);<a name="line.165"></a>
+<span class="sourceLineNo">120</span>     * Generates a world using the specified RNG state as a long. Other parameters will be randomized, using the same<a name="line.120"></a>
+<span class="sourceLineNo">121</span>     * RNG state to start with.<a name="line.121"></a>
+<span class="sourceLineNo">122</span>     * The worlds this produces will always have width and height as specified in the constructor (default 256x256).<a name="line.122"></a>
+<span class="sourceLineNo">123</span>     * You can call {@link #zoomIn(int, int, int)} to double the resolution and center on the specified area, but the width<a name="line.123"></a>
+<span class="sourceLineNo">124</span>     * and height of the 2D arrays this changed, such as {@link #heightData} and {@link #moistureData} will be the same.<a name="line.124"></a>
+<span class="sourceLineNo">125</span>     * @param state the state to give this generator's RNG; if the same as the last call, this will reuse data<a name="line.125"></a>
+<span class="sourceLineNo">126</span>     */<a name="line.126"></a>
+<span class="sourceLineNo">127</span>    public void generate(long state) {<a name="line.127"></a>
+<span class="sourceLineNo">128</span>        generate(-1.0, -1.0, state);<a name="line.128"></a>
+<span class="sourceLineNo">129</span>    }<a name="line.129"></a>
+<span class="sourceLineNo">130</span><a name="line.130"></a>
+<span class="sourceLineNo">131</span>    /**<a name="line.131"></a>
+<span class="sourceLineNo">132</span>     * Generates a world using the specified RNG state as a long, with specific water and cooling modifiers that affect<a name="line.132"></a>
+<span class="sourceLineNo">133</span>     * the land-water ratio and the average temperature, respectively.<a name="line.133"></a>
+<span class="sourceLineNo">134</span>     * The worlds this produces will always have width and height as specified in the constructor (default 256x256).<a name="line.134"></a>
+<span class="sourceLineNo">135</span>     * You can call {@link #zoomIn(int, int, int)} to double the resolution and center on the specified area, but the width<a name="line.135"></a>
+<span class="sourceLineNo">136</span>     * and height of the 2D arrays this changed, such as {@link #heightData} and {@link #moistureData} will be the same.<a name="line.136"></a>
+<span class="sourceLineNo">137</span>     * @param waterMod should be between 0.85 and 1.2; a random value will be used if this is negative<a name="line.137"></a>
+<span class="sourceLineNo">138</span>     * @param coolMod should be between 0.85 and 1.4; a random value will be used if this is negative<a name="line.138"></a>
+<span class="sourceLineNo">139</span>     * @param state the state to give this generator's RNG; if the same as the last call, this will reuse data<a name="line.139"></a>
+<span class="sourceLineNo">140</span>     */<a name="line.140"></a>
+<span class="sourceLineNo">141</span>    public void generate(double waterMod, double coolMod, long state)<a name="line.141"></a>
+<span class="sourceLineNo">142</span>    {<a name="line.142"></a>
+<span class="sourceLineNo">143</span>        if(cachedState != state || waterMod != waterModifier || coolMod != coolingModifier)<a name="line.143"></a>
+<span class="sourceLineNo">144</span>        {<a name="line.144"></a>
+<span class="sourceLineNo">145</span>            seed = state;<a name="line.145"></a>
+<span class="sourceLineNo">146</span>            zoom = 0;<a name="line.146"></a>
+<span class="sourceLineNo">147</span>            startCacheX.clear();<a name="line.147"></a>
+<span class="sourceLineNo">148</span>            startCacheY.clear();<a name="line.148"></a>
+<span class="sourceLineNo">149</span>            startCacheX.add(0);<a name="line.149"></a>
+<span class="sourceLineNo">150</span>            startCacheY.add(0);<a name="line.150"></a>
+<span class="sourceLineNo">151</span><a name="line.151"></a>
+<span class="sourceLineNo">152</span>        }<a name="line.152"></a>
+<span class="sourceLineNo">153</span>        regenerate(startCacheX.peek(), startCacheY.peek(),<a name="line.153"></a>
+<span class="sourceLineNo">154</span>                (width &gt;&gt; zoom), (height &gt;&gt; zoom), waterMod, coolMod, state);<a name="line.154"></a>
+<span class="sourceLineNo">155</span>    }<a name="line.155"></a>
+<span class="sourceLineNo">156</span><a name="line.156"></a>
+<span class="sourceLineNo">157</span>    /**<a name="line.157"></a>
+<span class="sourceLineNo">158</span>     * Halves the resolution of the map and doubles the area it covers; the 2D arrays this uses keep their sizes. This<a name="line.158"></a>
+<span class="sourceLineNo">159</span>     * version of zoomOut always zooms out from the center of the currently used area.<a name="line.159"></a>
+<span class="sourceLineNo">160</span>     * &lt;br&gt;<a name="line.160"></a>
+<span class="sourceLineNo">161</span>     * Only has an effect if you have previously zoomed in using {@link #zoomIn(int, int, int)} or its overload.<a name="line.161"></a>
+<span class="sourceLineNo">162</span>     */<a name="line.162"></a>
+<span class="sourceLineNo">163</span>    public void zoomOut()<a name="line.163"></a>
+<span class="sourceLineNo">164</span>    {<a name="line.164"></a>
+<span class="sourceLineNo">165</span>        zoomOut(1, width &gt;&gt; 1, height &gt;&gt; 1);<a name="line.165"></a>
 <span class="sourceLineNo">166</span>    }<a name="line.166"></a>
-<span class="sourceLineNo">167</span><a name="line.167"></a>
-<span class="sourceLineNo">168</span>    /**<a name="line.168"></a>
-<span class="sourceLineNo">169</span>     * Halves the resolution of the map and doubles the area it covers; the 2D arrays this uses keep their sizes. This<a name="line.169"></a>
-<span class="sourceLineNo">170</span>     * version of zoomOut always zooms out from the center of the currently used area.<a name="line.170"></a>
-<span class="sourceLineNo">171</span>     * &lt;br&gt;<a name="line.171"></a>
-<span class="sourceLineNo">172</span>     * Only has an effect if you have previously zoomed in using {@link #zoomIn(int, int)} or its overload.<a name="line.172"></a>
-<span class="sourceLineNo">173</span>     */<a name="line.173"></a>
-<span class="sourceLineNo">174</span>    public void zoomOut()<a name="line.174"></a>
-<span class="sourceLineNo">175</span>    {<a name="line.175"></a>
-<span class="sourceLineNo">176</span>        zoomOut(width &gt;&gt; 1, height &gt;&gt; 1);<a name="line.176"></a>
-<span class="sourceLineNo">177</span>    }<a name="line.177"></a>
-<span class="sourceLineNo">178</span>    /**<a name="line.178"></a>
-<span class="sourceLineNo">179</span>     * Halves the resolution of the map and doubles the area it covers; the 2D arrays this uses keep their sizes. This<a name="line.179"></a>
-<span class="sourceLineNo">180</span>     * version of zoomOut allows you to specify where the zoom should be centered, using the current coordinates (if the<a name="line.180"></a>
-<span class="sourceLineNo">181</span>     * map size is 256x256, then coordinates should be between 0 and 255, and will refer to the currently used area and<a name="line.181"></a>
-<span class="sourceLineNo">182</span>     * not necessarily the full world size).<a name="line.182"></a>
-<span class="sourceLineNo">183</span>     * &lt;br&gt;<a name="line.183"></a>
-<span class="sourceLineNo">184</span>     * Only has an effect if you have previously zoomed in using {@link #zoomIn(int, int)} or its overload.<a name="line.184"></a>
-<span class="sourceLineNo">185</span>     * @param zoomCenterX the center X position to zoom out from; if too close to an edge, this will stop moving before it would extend past an edge<a name="line.185"></a>
-<span class="sourceLineNo">186</span>     * @param zoomCenterY the center Y position to zoom out from; if too close to an edge, this will stop moving before it would extend past an edge<a name="line.186"></a>
-<span class="sourceLineNo">187</span>     */<a name="line.187"></a>
-<span class="sourceLineNo">188</span>    public void zoomOut(int zoomCenterX, int zoomCenterY)<a name="line.188"></a>
-<span class="sourceLineNo">189</span>    {<a name="line.189"></a>
-<span class="sourceLineNo">190</span>        if(zoom &gt; 0)<a name="line.190"></a>
-<span class="sourceLineNo">191</span>        {<a name="line.191"></a>
-<span class="sourceLineNo">192</span>            if(seed != cachedState)<a name="line.192"></a>
-<span class="sourceLineNo">193</span>            {<a name="line.193"></a>
-<span class="sourceLineNo">194</span>                generate(rng.nextLong());<a name="line.194"></a>
-<span class="sourceLineNo">195</span>            }<a name="line.195"></a>
-<span class="sourceLineNo">196</span><a name="line.196"></a>
-<span class="sourceLineNo">197</span>            zoom--;<a name="line.197"></a>
-<span class="sourceLineNo">198</span>            startCacheX.pop();<a name="line.198"></a>
-<span class="sourceLineNo">199</span>            startCacheY.pop();<a name="line.199"></a>
-<span class="sourceLineNo">200</span>            startCacheX.add(Math.min(Math.max(startCacheX.pop() + (zoomCenterX &gt;&gt; zoom + 1) - (width &gt;&gt; zoom + 2),<a name="line.200"></a>
-<span class="sourceLineNo">201</span>                    0), width - (width &gt;&gt; zoom)));<a name="line.201"></a>
-<span class="sourceLineNo">202</span>            startCacheY.add(Math.min(Math.max(startCacheY.pop() + (zoomCenterY &gt;&gt; zoom + 1) - (height &gt;&gt; zoom + 2),<a name="line.202"></a>
-<span class="sourceLineNo">203</span>                    0), height - (height &gt;&gt; zoom)));<a name="line.203"></a>
-<span class="sourceLineNo">204</span>            regenerate(startCacheX.peek(), startCacheY.peek(),width &gt;&gt; zoom, height &gt;&gt; zoom,<a name="line.204"></a>
-<span class="sourceLineNo">205</span>                    waterModifier, coolingModifier, cachedState);<a name="line.205"></a>
-<span class="sourceLineNo">206</span>            rng.setState(cachedState);<a name="line.206"></a>
-<span class="sourceLineNo">207</span>        }<a name="line.207"></a>
-<span class="sourceLineNo">208</span><a name="line.208"></a>
-<span class="sourceLineNo">209</span>    }<a name="line.209"></a>
-<span class="sourceLineNo">210</span>    /**<a name="line.210"></a>
-<span class="sourceLineNo">211</span>     * Doubles the resolution of the map and halves the area it covers; the 2D arrays this uses keep their sizes. This<a name="line.211"></a>
-<span class="sourceLineNo">212</span>     * version of zoomIn always zooms in to the center of the currently used area.<a name="line.212"></a>
-<span class="sourceLineNo">213</span>     * &lt;br&gt;<a name="line.213"></a>
-<span class="sourceLineNo">214</span>     * Although there is no technical restriction on maximum zoom, zooming in more than 5 times (64x scale or greater)<a name="line.214"></a>
-<span class="sourceLineNo">215</span>     * will make the map appear somewhat less realistic due to rounded shapes appearing more bubble-like and less like a<a name="line.215"></a>
-<span class="sourceLineNo">216</span>     * normal landscape.<a name="line.216"></a>
-<span class="sourceLineNo">217</span>     */<a name="line.217"></a>
-<span class="sourceLineNo">218</span>    public void zoomIn()<a name="line.218"></a>
-<span class="sourceLineNo">219</span>    {<a name="line.219"></a>
-<span class="sourceLineNo">220</span>        zoomIn(width &gt;&gt; 1, height &gt;&gt; 1);<a name="line.220"></a>
-<span class="sourceLineNo">221</span>    }<a name="line.221"></a>
-<span class="sourceLineNo">222</span>    /**<a name="line.222"></a>
-<span class="sourceLineNo">223</span>     * Doubles the resolution of the map and halves the area it covers; the 2D arrays this uses keep their sizes. This<a name="line.223"></a>
-<span class="sourceLineNo">224</span>     * version of zoomIn allows you to specify where the zoom should be centered, using the current coordinates (if the<a name="line.224"></a>
-<span class="sourceLineNo">225</span>     * map size is 256x256, then coordinates should be between 0 and 255, and will refer to the currently used area and<a name="line.225"></a>
-<span class="sourceLineNo">226</span>     * not necessarily the full world size).<a name="line.226"></a>
-<span class="sourceLineNo">227</span>     * &lt;br&gt;<a name="line.227"></a>
-<span class="sourceLineNo">228</span>     * Although there is no technical restriction on maximum zoom, zooming in more than 5 times (64x scale or greater)<a name="line.228"></a>
-<span class="sourceLineNo">229</span>     * will make the map appear somewhat less realistic due to rounded shapes appearing more bubble-like and less like a<a name="line.229"></a>
-<span class="sourceLineNo">230</span>     * normal landscape.<a name="line.230"></a>
-<span class="sourceLineNo">231</span>     * @param zoomCenterX the center X position to zoom in to; if too close to an edge, this will stop moving before it would extend past an edge<a name="line.231"></a>
-<span class="sourceLineNo">232</span>     * @param zoomCenterY the center Y position to zoom in to; if too close to an edge, this will stop moving before it would extend past an edge<a name="line.232"></a>
-<span class="sourceLineNo">233</span>     */<a name="line.233"></a>
-<span class="sourceLineNo">234</span>    public void zoomIn(int zoomCenterX, int zoomCenterY)<a name="line.234"></a>
-<span class="sourceLineNo">235</span>    {<a name="line.235"></a>
+<span class="sourceLineNo">167</span>    /**<a name="line.167"></a>
+<span class="sourceLineNo">168</span>     * Halves the resolution of the map and doubles the area it covers; the 2D arrays this uses keep their sizes. This<a name="line.168"></a>
+<span class="sourceLineNo">169</span>     * version of zoomOut allows you to specify where the zoom should be centered, using the current coordinates (if the<a name="line.169"></a>
+<span class="sourceLineNo">170</span>     * map size is 256x256, then coordinates should be between 0 and 255, and will refer to the currently used area and<a name="line.170"></a>
+<span class="sourceLineNo">171</span>     * not necessarily the full world size).<a name="line.171"></a>
+<span class="sourceLineNo">172</span>     * &lt;br&gt;<a name="line.172"></a>
+<span class="sourceLineNo">173</span>     * Only has an effect if you have previously zoomed in using {@link #zoomIn(int, int, int)} or its overload.<a name="line.173"></a>
+<span class="sourceLineNo">174</span>     * @param zoomCenterX the center X position to zoom out from; if too close to an edge, this will stop moving before it would extend past an edge<a name="line.174"></a>
+<span class="sourceLineNo">175</span>     * @param zoomCenterY the center Y position to zoom out from; if too close to an edge, this will stop moving before it would extend past an edge<a name="line.175"></a>
+<span class="sourceLineNo">176</span>     */<a name="line.176"></a>
+<span class="sourceLineNo">177</span>    public void zoomOut(int zoomAmount, int zoomCenterX, int zoomCenterY)<a name="line.177"></a>
+<span class="sourceLineNo">178</span>    {<a name="line.178"></a>
+<span class="sourceLineNo">179</span>        if(zoomAmount == 0) return;<a name="line.179"></a>
+<span class="sourceLineNo">180</span>        if(zoomAmount &lt; 0) {<a name="line.180"></a>
+<span class="sourceLineNo">181</span>            zoomIn(-zoomAmount, zoomCenterX, zoomCenterY);<a name="line.181"></a>
+<span class="sourceLineNo">182</span>            return;<a name="line.182"></a>
+<span class="sourceLineNo">183</span>        }<a name="line.183"></a>
+<span class="sourceLineNo">184</span>        if(zoom &gt; 0)<a name="line.184"></a>
+<span class="sourceLineNo">185</span>        {<a name="line.185"></a>
+<span class="sourceLineNo">186</span>            if(seed != cachedState)<a name="line.186"></a>
+<span class="sourceLineNo">187</span>            {<a name="line.187"></a>
+<span class="sourceLineNo">188</span>                generate(rng.nextLong());<a name="line.188"></a>
+<span class="sourceLineNo">189</span>            }<a name="line.189"></a>
+<span class="sourceLineNo">190</span><a name="line.190"></a>
+<span class="sourceLineNo">191</span>            zoom -= zoomAmount;<a name="line.191"></a>
+<span class="sourceLineNo">192</span>            startCacheX.pop();<a name="line.192"></a>
+<span class="sourceLineNo">193</span>            startCacheY.pop();<a name="line.193"></a>
+<span class="sourceLineNo">194</span>            startCacheX.add(Math.min(Math.max(startCacheX.pop() + (zoomCenterX &gt;&gt; zoom + 1) - (width &gt;&gt; zoom + 2),<a name="line.194"></a>
+<span class="sourceLineNo">195</span>                    0), width - (width &gt;&gt; zoom)));<a name="line.195"></a>
+<span class="sourceLineNo">196</span>            startCacheY.add(Math.min(Math.max(startCacheY.pop() + (zoomCenterY &gt;&gt; zoom + 1) - (height &gt;&gt; zoom + 2),<a name="line.196"></a>
+<span class="sourceLineNo">197</span>                    0), height - (height &gt;&gt; zoom)));<a name="line.197"></a>
+<span class="sourceLineNo">198</span>            regenerate(startCacheX.peek(), startCacheY.peek(),width &gt;&gt; zoom, height &gt;&gt; zoom,<a name="line.198"></a>
+<span class="sourceLineNo">199</span>                    waterModifier, coolingModifier, cachedState);<a name="line.199"></a>
+<span class="sourceLineNo">200</span>            rng.setState(cachedState);<a name="line.200"></a>
+<span class="sourceLineNo">201</span>        }<a name="line.201"></a>
+<span class="sourceLineNo">202</span><a name="line.202"></a>
+<span class="sourceLineNo">203</span>    }<a name="line.203"></a>
+<span class="sourceLineNo">204</span>    /**<a name="line.204"></a>
+<span class="sourceLineNo">205</span>     * Doubles the resolution of the map and halves the area it covers; the 2D arrays this uses keep their sizes. This<a name="line.205"></a>
+<span class="sourceLineNo">206</span>     * version of zoomIn always zooms in to the center of the currently used area.<a name="line.206"></a>
+<span class="sourceLineNo">207</span>     * &lt;br&gt;<a name="line.207"></a>
+<span class="sourceLineNo">208</span>     * Although there is no technical restriction on maximum zoom, zooming in more than 5 times (64x scale or greater)<a name="line.208"></a>
+<span class="sourceLineNo">209</span>     * will make the map appear somewhat less realistic due to rounded shapes appearing more bubble-like and less like a<a name="line.209"></a>
+<span class="sourceLineNo">210</span>     * normal landscape.<a name="line.210"></a>
+<span class="sourceLineNo">211</span>     */<a name="line.211"></a>
+<span class="sourceLineNo">212</span>    public void zoomIn()<a name="line.212"></a>
+<span class="sourceLineNo">213</span>    {<a name="line.213"></a>
+<span class="sourceLineNo">214</span>        zoomIn(1, width &gt;&gt; 1, height &gt;&gt; 1);<a name="line.214"></a>
+<span class="sourceLineNo">215</span>    }<a name="line.215"></a>
+<span class="sourceLineNo">216</span>    /**<a name="line.216"></a>
+<span class="sourceLineNo">217</span>     * Doubles the resolution of the map and halves the area it covers; the 2D arrays this uses keep their sizes. This<a name="line.217"></a>
+<span class="sourceLineNo">218</span>     * version of zoomIn allows you to specify where the zoom should be centered, using the current coordinates (if the<a name="line.218"></a>
+<span class="sourceLineNo">219</span>     * map size is 256x256, then coordinates should be between 0 and 255, and will refer to the currently used area and<a name="line.219"></a>
+<span class="sourceLineNo">220</span>     * not necessarily the full world size).<a name="line.220"></a>
+<span class="sourceLineNo">221</span>     * &lt;br&gt;<a name="line.221"></a>
+<span class="sourceLineNo">222</span>     * Although there is no technical restriction on maximum zoom, zooming in more than 5 times (64x scale or greater)<a name="line.222"></a>
+<span class="sourceLineNo">223</span>     * will make the map appear somewhat less realistic due to rounded shapes appearing more bubble-like and less like a<a name="line.223"></a>
+<span class="sourceLineNo">224</span>     * normal landscape.<a name="line.224"></a>
+<span class="sourceLineNo">225</span>     * @param zoomCenterX the center X position to zoom in to; if too close to an edge, this will stop moving before it would extend past an edge<a name="line.225"></a>
+<span class="sourceLineNo">226</span>     * @param zoomCenterY the center Y position to zoom in to; if too close to an edge, this will stop moving before it would extend past an edge<a name="line.226"></a>
+<span class="sourceLineNo">227</span>     */<a name="line.227"></a>
+<span class="sourceLineNo">228</span>    public void zoomIn(int zoomAmount, int zoomCenterX, int zoomCenterY)<a name="line.228"></a>
+<span class="sourceLineNo">229</span>    {<a name="line.229"></a>
+<span class="sourceLineNo">230</span>        if(zoomAmount == 0) return;<a name="line.230"></a>
+<span class="sourceLineNo">231</span>        if(zoomAmount &lt; 0)<a name="line.231"></a>
+<span class="sourceLineNo">232</span>        {<a name="line.232"></a>
+<span class="sourceLineNo">233</span>            zoomOut(-zoomAmount, zoomCenterX, zoomCenterY);<a name="line.233"></a>
+<span class="sourceLineNo">234</span>            return;<a name="line.234"></a>
+<span class="sourceLineNo">235</span>        }<a name="line.235"></a>
 <span class="sourceLineNo">236</span>        if(seed != cachedState)<a name="line.236"></a>
 <span class="sourceLineNo">237</span>        {<a name="line.237"></a>
 <span class="sourceLineNo">238</span>            generate(rng.nextLong());<a name="line.238"></a>
 <span class="sourceLineNo">239</span>        }<a name="line.239"></a>
-<span class="sourceLineNo">240</span>        zoom++;<a name="line.240"></a>
+<span class="sourceLineNo">240</span>        zoom += zoomAmount;<a name="line.240"></a>
 <span class="sourceLineNo">241</span>        if(startCacheX.isEmpty())<a name="line.241"></a>
 <span class="sourceLineNo">242</span>        {<a name="line.242"></a>
 <span class="sourceLineNo">243</span>            startCacheX.add(0);<a name="line.243"></a>
@@ -265,620 +265,608 @@
 <span class="sourceLineNo">257</span>    protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,<a name="line.257"></a>
 <span class="sourceLineNo">258</span>                              double waterMod, double coolMod, long state)<a name="line.258"></a>
 <span class="sourceLineNo">259</span>    {<a name="line.259"></a>
-<span class="sourceLineNo">260</span>        //long startTime = System.currentTimeMillis();<a name="line.260"></a>
-<span class="sourceLineNo">261</span>        boolean fresh = false;<a name="line.261"></a>
-<span class="sourceLineNo">262</span>        if(cachedState != state || waterMod != waterModifier || coolMod != coolingModifier)<a name="line.262"></a>
-<span class="sourceLineNo">263</span>        {<a name="line.263"></a>
-<span class="sourceLineNo">264</span>            minHeight = Double.POSITIVE_INFINITY;<a name="line.264"></a>
-<span class="sourceLineNo">265</span>            maxHeight = Double.NEGATIVE_INFINITY;<a name="line.265"></a>
-<span class="sourceLineNo">266</span>            minHeat0 = Double.POSITIVE_INFINITY;<a name="line.266"></a>
-<span class="sourceLineNo">267</span>            maxHeat0 = Double.NEGATIVE_INFINITY;<a name="line.267"></a>
-<span class="sourceLineNo">268</span>            minHeat1 = Double.POSITIVE_INFINITY;<a name="line.268"></a>
-<span class="sourceLineNo">269</span>            maxHeat1 = Double.NEGATIVE_INFINITY;<a name="line.269"></a>
-<span class="sourceLineNo">270</span>            minHeat = Double.POSITIVE_INFINITY;<a name="line.270"></a>
-<span class="sourceLineNo">271</span>            maxHeat = Double.NEGATIVE_INFINITY;<a name="line.271"></a>
-<span class="sourceLineNo">272</span>            minWet0 = Double.POSITIVE_INFINITY;<a name="line.272"></a>
-<span class="sourceLineNo">273</span>            maxWet0 = Double.NEGATIVE_INFINITY;<a name="line.273"></a>
-<span class="sourceLineNo">274</span>            minWet = Double.POSITIVE_INFINITY;<a name="line.274"></a>
-<span class="sourceLineNo">275</span>            maxWet = Double.NEGATIVE_INFINITY;<a name="line.275"></a>
-<span class="sourceLineNo">276</span>            cachedState = state;<a name="line.276"></a>
-<span class="sourceLineNo">277</span>            fresh = true;<a name="line.277"></a>
-<span class="sourceLineNo">278</span>        }<a name="line.278"></a>
-<span class="sourceLineNo">279</span>        rng.setState(state);<a name="line.279"></a>
-<span class="sourceLineNo">280</span>        int seedA = rng.nextInt(), seedB = rng.nextInt(), seedC = rng.nextInt(), t;<a name="line.280"></a>
-<span class="sourceLineNo">281</span><a name="line.281"></a>
-<span class="sourceLineNo">282</span>        waterModifier = (waterMod &lt;= 0) ? rng.nextDouble(0.25) + 0.89 : waterMod;<a name="line.282"></a>
-<span class="sourceLineNo">283</span>        coolingModifier = (coolMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;<a name="line.283"></a>
-<span class="sourceLineNo">284</span><a name="line.284"></a>
-<span class="sourceLineNo">285</span>        double p, q,<a name="line.285"></a>
-<span class="sourceLineNo">286</span>                ps, pc,<a name="line.286"></a>
-<span class="sourceLineNo">287</span>                qs, qc,<a name="line.287"></a>
-<span class="sourceLineNo">288</span>                h, temp,<a name="line.288"></a>
-<span class="sourceLineNo">289</span>                i_w = 6.283185307179586 / width, i_h = 6.283185307179586 / height,<a name="line.289"></a>
-<span class="sourceLineNo">290</span>                xPos = startX, yPos = startY, i_uw = usedWidth / (double)width, i_uh = usedHeight / (double)height;<a name="line.290"></a>
-<span class="sourceLineNo">291</span>        double[] trigTable = new double[width &lt;&lt; 1];<a name="line.291"></a>
-<span class="sourceLineNo">292</span>        for (int x = 0; x &lt; width; x++, xPos += i_uw) {<a name="line.292"></a>
-<span class="sourceLineNo">293</span>            p = xPos * i_w;<a name="line.293"></a>
-<span class="sourceLineNo">294</span>            trigTable[x&lt;&lt;1]   = Math.sin(p);<a name="line.294"></a>
-<span class="sourceLineNo">295</span>            trigTable[x&lt;&lt;1|1] = Math.cos(p);<a name="line.295"></a>
-<span class="sourceLineNo">296</span>        }<a name="line.296"></a>
-<span class="sourceLineNo">297</span>        for (int y = 0; y &lt; height; y++, yPos += i_uh) {<a name="line.297"></a>
-<span class="sourceLineNo">298</span>            q = yPos * i_h;<a name="line.298"></a>
-<span class="sourceLineNo">299</span>            qs = Math.sin(q);<a name="line.299"></a>
-<span class="sourceLineNo">300</span>            qc = Math.cos(q);<a name="line.300"></a>
-<span class="sourceLineNo">301</span>            for (int x = 0, xt = 0; x &lt; width; x++) {<a name="line.301"></a>
-<span class="sourceLineNo">302</span>                ps = trigTable[xt++];//Math.sin(p);<a name="line.302"></a>
-<span class="sourceLineNo">303</span>                pc = trigTable[xt++];//Math.cos(p);<a name="line.303"></a>
-<span class="sourceLineNo">304</span>                h = terrain.getNoiseWithSeed(pc +<a name="line.304"></a>
-<span class="sourceLineNo">305</span>                                terrainRidged.getNoiseWithSeed(pc, ps, qc, qs, seedA + seedB),<a name="line.305"></a>
-<span class="sourceLineNo">306</span>                        ps, qc, qs, seedA);<a name="line.306"></a>
-<span class="sourceLineNo">307</span>                //p = Math.signum(h) + waterModifier;<a name="line.307"></a>
-<span class="sourceLineNo">308</span>                //h *= p * p;<a name="line.308"></a>
-<span class="sourceLineNo">309</span>                h *= waterModifier;<a name="line.309"></a>
-<span class="sourceLineNo">310</span>                heightData[x][y] = h;<a name="line.310"></a>
-<span class="sourceLineNo">311</span>                heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps, qc<a name="line.311"></a>
-<span class="sourceLineNo">312</span>                                + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedB + seedC)//, seedD + seedC)<a name="line.312"></a>
-<span class="sourceLineNo">313</span>                        , qs, seedB));<a name="line.313"></a>
-<span class="sourceLineNo">314</span>                moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qc, qs<a name="line.314"></a>
-<span class="sourceLineNo">315</span>                                + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedC + seedA)//seedD + seedB)<a name="line.315"></a>
-<span class="sourceLineNo">316</span>                        , seedC));<a name="line.316"></a>
-<span class="sourceLineNo">317</span>                minHeightActual = Math.min(minHeightActual, h);<a name="line.317"></a>
-<span class="sourceLineNo">318</span>                maxHeightActual = Math.max(maxHeightActual, h);<a name="line.318"></a>
-<span class="sourceLineNo">319</span>                if(fresh) {<a name="line.319"></a>
-<span class="sourceLineNo">320</span>                    minHeight = Math.min(minHeight, h);<a name="line.320"></a>
-<span class="sourceLineNo">321</span>                    maxHeight = Math.max(maxHeight, h);<a name="line.321"></a>
+<span class="sourceLineNo">260</span>        boolean fresh = false;<a name="line.260"></a>
+<span class="sourceLineNo">261</span>        if(cachedState != state || waterMod != waterModifier || coolMod != coolingModifier)<a name="line.261"></a>
+<span class="sourceLineNo">262</span>        {<a name="line.262"></a>
+<span class="sourceLineNo">263</span>            minHeight = Double.POSITIVE_INFINITY;<a name="line.263"></a>
+<span class="sourceLineNo">264</span>            maxHeight = Double.NEGATIVE_INFINITY;<a name="line.264"></a>
+<span class="sourceLineNo">265</span>            minHeat0 = Double.POSITIVE_INFINITY;<a name="line.265"></a>
+<span class="sourceLineNo">266</span>            maxHeat0 = Double.NEGATIVE_INFINITY;<a name="line.266"></a>
+<span class="sourceLineNo">267</span>            minHeat1 = Double.POSITIVE_INFINITY;<a name="line.267"></a>
+<span class="sourceLineNo">268</span>            maxHeat1 = Double.NEGATIVE_INFINITY;<a name="line.268"></a>
+<span class="sourceLineNo">269</span>            minHeat = Double.POSITIVE_INFINITY;<a name="line.269"></a>
+<span class="sourceLineNo">270</span>            maxHeat = Double.NEGATIVE_INFINITY;<a name="line.270"></a>
+<span class="sourceLineNo">271</span>            minWet0 = Double.POSITIVE_INFINITY;<a name="line.271"></a>
+<span class="sourceLineNo">272</span>            maxWet0 = Double.NEGATIVE_INFINITY;<a name="line.272"></a>
+<span class="sourceLineNo">273</span>            minWet = Double.POSITIVE_INFINITY;<a name="line.273"></a>
+<span class="sourceLineNo">274</span>            maxWet = Double.NEGATIVE_INFINITY;<a name="line.274"></a>
+<span class="sourceLineNo">275</span>            cachedState = state;<a name="line.275"></a>
+<span class="sourceLineNo">276</span>            fresh = true;<a name="line.276"></a>
+<span class="sourceLineNo">277</span>        }<a name="line.277"></a>
+<span class="sourceLineNo">278</span>        rng.setState(state);<a name="line.278"></a>
+<span class="sourceLineNo">279</span>        int seedA = rng.nextInt(), seedB = rng.nextInt(), seedC = rng.nextInt(), t;<a name="line.279"></a>
+<span class="sourceLineNo">280</span><a name="line.280"></a>
+<span class="sourceLineNo">281</span>        waterModifier = (waterMod &lt;= 0) ? rng.nextDouble(0.25) + 0.89 : waterMod;<a name="line.281"></a>
+<span class="sourceLineNo">282</span>        coolingModifier = (coolMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;<a name="line.282"></a>
+<span class="sourceLineNo">283</span><a name="line.283"></a>
+<span class="sourceLineNo">284</span>        double p, q,<a name="line.284"></a>
+<span class="sourceLineNo">285</span>                ps, pc,<a name="line.285"></a>
+<span class="sourceLineNo">286</span>                qs, qc,<a name="line.286"></a>
+<span class="sourceLineNo">287</span>                h, temp,<a name="line.287"></a>
+<span class="sourceLineNo">288</span>                i_w = 6.283185307179586 / width, i_h = 6.283185307179586 / height,<a name="line.288"></a>
+<span class="sourceLineNo">289</span>                xPos = startX, yPos = startY, i_uw = usedWidth / (double)width, i_uh = usedHeight / (double)height;<a name="line.289"></a>
+<span class="sourceLineNo">290</span>        double[] trigTable = new double[width &lt;&lt; 1];<a name="line.290"></a>
+<span class="sourceLineNo">291</span>        for (int x = 0; x &lt; width; x++, xPos += i_uw) {<a name="line.291"></a>
+<span class="sourceLineNo">292</span>            p = xPos * i_w;<a name="line.292"></a>
+<span class="sourceLineNo">293</span>            trigTable[x&lt;&lt;1]   = Math.sin(p);<a name="line.293"></a>
+<span class="sourceLineNo">294</span>            trigTable[x&lt;&lt;1|1] = Math.cos(p);<a name="line.294"></a>
+<span class="sourceLineNo">295</span>        }<a name="line.295"></a>
+<span class="sourceLineNo">296</span>        for (int y = 0; y &lt; height; y++, yPos += i_uh) {<a name="line.296"></a>
+<span class="sourceLineNo">297</span>            q = yPos * i_h;<a name="line.297"></a>
+<span class="sourceLineNo">298</span>            qs = Math.sin(q);<a name="line.298"></a>
+<span class="sourceLineNo">299</span>            qc = Math.cos(q);<a name="line.299"></a>
+<span class="sourceLineNo">300</span>            for (int x = 0, xt = 0; x &lt; width; x++) {<a name="line.300"></a>
+<span class="sourceLineNo">301</span>                ps = trigTable[xt++];//Math.sin(p);<a name="line.301"></a>
+<span class="sourceLineNo">302</span>                pc = trigTable[xt++];//Math.cos(p);<a name="line.302"></a>
+<span class="sourceLineNo">303</span>                h = terrain.getNoiseWithSeed(pc +<a name="line.303"></a>
+<span class="sourceLineNo">304</span>                                terrainRidged.getNoiseWithSeed(pc, ps, qc, qs, seedA + seedB),<a name="line.304"></a>
+<span class="sourceLineNo">305</span>                        ps, qc, qs, seedA);<a name="line.305"></a>
+<span class="sourceLineNo">306</span>                h *= waterModifier;<a name="line.306"></a>
+<span class="sourceLineNo">307</span>                heightData[x][y] = h;<a name="line.307"></a>
+<span class="sourceLineNo">308</span>                heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps, qc<a name="line.308"></a>
+<span class="sourceLineNo">309</span>                                + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedB + seedC)<a name="line.309"></a>
+<span class="sourceLineNo">310</span>                        , qs, seedB));<a name="line.310"></a>
+<span class="sourceLineNo">311</span>                moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qc, qs<a name="line.311"></a>
+<span class="sourceLineNo">312</span>                                + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedC + seedA)<a name="line.312"></a>
+<span class="sourceLineNo">313</span>                        , seedC));<a name="line.313"></a>
+<span class="sourceLineNo">314</span>                minHeightActual = Math.min(minHeightActual, h);<a name="line.314"></a>
+<span class="sourceLineNo">315</span>                maxHeightActual = Math.max(maxHeightActual, h);<a name="line.315"></a>
+<span class="sourceLineNo">316</span>                if(fresh) {<a name="line.316"></a>
+<span class="sourceLineNo">317</span>                    minHeight = Math.min(minHeight, h);<a name="line.317"></a>
+<span class="sourceLineNo">318</span>                    maxHeight = Math.max(maxHeight, h);<a name="line.318"></a>
+<span class="sourceLineNo">319</span><a name="line.319"></a>
+<span class="sourceLineNo">320</span>                    minHeat0 = Math.min(minHeat0, p);<a name="line.320"></a>
+<span class="sourceLineNo">321</span>                    maxHeat0 = Math.max(maxHeat0, p);<a name="line.321"></a>
 <span class="sourceLineNo">322</span><a name="line.322"></a>
-<span class="sourceLineNo">323</span>                    minHeat0 = Math.min(minHeat0, p);<a name="line.323"></a>
-<span class="sourceLineNo">324</span>                    maxHeat0 = Math.max(maxHeat0, p);<a name="line.324"></a>
+<span class="sourceLineNo">323</span>                    minWet0 = Math.min(minWet0, temp);<a name="line.323"></a>
+<span class="sourceLineNo">324</span>                    maxWet0 = Math.max(maxWet0, temp);<a name="line.324"></a>
 <span class="sourceLineNo">325</span><a name="line.325"></a>
-<span class="sourceLineNo">326</span>                    minWet0 = Math.min(minWet0, temp);<a name="line.326"></a>
-<span class="sourceLineNo">327</span>                    maxWet0 = Math.max(maxWet0, temp);<a name="line.327"></a>
-<span class="sourceLineNo">328</span><a name="line.328"></a>
-<span class="sourceLineNo">329</span>                }<a name="line.329"></a>
-<span class="sourceLineNo">330</span>            }<a name="line.330"></a>
-<span class="sourceLineNo">331</span>            minHeightActual = Math.min(minHeightActual, minHeight);<a name="line.331"></a>
-<span class="sourceLineNo">332</span>            maxHeightActual = Math.max(maxHeightActual, maxHeight);<a name="line.332"></a>
-<span class="sourceLineNo">333</span><a name="line.333"></a>
-<span class="sourceLineNo">334</span>        }<a name="line.334"></a>
-<span class="sourceLineNo">335</span>        double heightDiff = 2.0 / (maxHeightActual - minHeightActual),<a name="line.335"></a>
-<span class="sourceLineNo">336</span>                heatDiff = 0.8 / (maxHeat0 - minHeat0),<a name="line.336"></a>
-<span class="sourceLineNo">337</span>                wetDiff = 1.0 / (maxWet0 - minWet0),<a name="line.337"></a>
-<span class="sourceLineNo">338</span>                hMod,<a name="line.338"></a>
-<span class="sourceLineNo">339</span>                halfHeight = (height - 1) * 0.5, i_half = 1.0 / halfHeight;<a name="line.339"></a>
-<span class="sourceLineNo">340</span>        double minHeightActual0 = minHeightActual;<a name="line.340"></a>
-<span class="sourceLineNo">341</span>        double maxHeightActual0 = maxHeightActual;<a name="line.341"></a>
-<span class="sourceLineNo">342</span>        yPos = startY;<a name="line.342"></a>
-<span class="sourceLineNo">343</span>        ps = Double.POSITIVE_INFINITY;<a name="line.343"></a>
-<span class="sourceLineNo">344</span>        pc = Double.NEGATIVE_INFINITY;<a name="line.344"></a>
-<span class="sourceLineNo">345</span><a name="line.345"></a>
-<span class="sourceLineNo">346</span>        for (int y = 0; y &lt; height; y++, yPos += i_uh) {<a name="line.346"></a>
-<span class="sourceLineNo">347</span>            temp = Math.abs(yPos - halfHeight) * i_half;<a name="line.347"></a>
-<span class="sourceLineNo">348</span>            temp *= (2.4 - temp);<a name="line.348"></a>
-<span class="sourceLineNo">349</span>            temp = 2.2 - temp;<a name="line.349"></a>
-<span class="sourceLineNo">350</span>            for (int x = 0; x &lt; width; x++) {<a name="line.350"></a>
-<span class="sourceLineNo">351</span>                heightData[x][y] = (h = (heightData[x][y] - minHeightActual) * heightDiff - 1.0);<a name="line.351"></a>
-<span class="sourceLineNo">352</span>                minHeightActual0 = Math.min(minHeightActual0, h);<a name="line.352"></a>
-<span class="sourceLineNo">353</span>                maxHeightActual0 = Math.max(maxHeightActual0, h);<a name="line.353"></a>
-<span class="sourceLineNo">354</span>                heightCodeData[x][y] = (t = codeHeight(h));<a name="line.354"></a>
-<span class="sourceLineNo">355</span>                hMod = 1.0;<a name="line.355"></a>
-<span class="sourceLineNo">356</span>                switch (t) {<a name="line.356"></a>
-<span class="sourceLineNo">357</span>                    case 0:<a name="line.357"></a>
-<span class="sourceLineNo">358</span>                    case 1:<a name="line.358"></a>
-<span class="sourceLineNo">359</span>                    case 2:<a name="line.359"></a>
-<span class="sourceLineNo">360</span>                    case 3:<a name="line.360"></a>
-<span class="sourceLineNo">361</span>                        h = 0.4;<a name="line.361"></a>
-<span class="sourceLineNo">362</span>                        hMod = 0.2;<a name="line.362"></a>
+<span class="sourceLineNo">326</span>                }<a name="line.326"></a>
+<span class="sourceLineNo">327</span>            }<a name="line.327"></a>
+<span class="sourceLineNo">328</span>            minHeightActual = Math.min(minHeightActual, minHeight);<a name="line.328"></a>
+<span class="sourceLineNo">329</span>            maxHeightActual = Math.max(maxHeightActual, maxHeight);<a name="line.329"></a>
+<span class="sourceLineNo">330</span><a name="line.330"></a>
+<span class="sourceLineNo">331</span>        }<a name="line.331"></a>
+<span class="sourceLineNo">332</span>        double heightDiff = 2.0 / (maxHeightActual - minHeightActual),<a name="line.332"></a>
+<span class="sourceLineNo">333</span>                heatDiff = 0.8 / (maxHeat0 - minHeat0),<a name="line.333"></a>
+<span class="sourceLineNo">334</span>                wetDiff = 1.0 / (maxWet0 - minWet0),<a name="line.334"></a>
+<span class="sourceLineNo">335</span>                hMod,<a name="line.335"></a>
+<span class="sourceLineNo">336</span>                halfHeight = (height - 1) * 0.5, i_half = 1.0 / halfHeight;<a name="line.336"></a>
+<span class="sourceLineNo">337</span>        double minHeightActual0 = minHeightActual;<a name="line.337"></a>
+<span class="sourceLineNo">338</span>        double maxHeightActual0 = maxHeightActual;<a name="line.338"></a>
+<span class="sourceLineNo">339</span>        yPos = startY;<a name="line.339"></a>
+<span class="sourceLineNo">340</span>        ps = Double.POSITIVE_INFINITY;<a name="line.340"></a>
+<span class="sourceLineNo">341</span>        pc = Double.NEGATIVE_INFINITY;<a name="line.341"></a>
+<span class="sourceLineNo">342</span><a name="line.342"></a>
+<span class="sourceLineNo">343</span>        for (int y = 0; y &lt; height; y++, yPos += i_uh) {<a name="line.343"></a>
+<span class="sourceLineNo">344</span>            temp = Math.abs(yPos - halfHeight) * i_half;<a name="line.344"></a>
+<span class="sourceLineNo">345</span>            temp *= (2.4 - temp);<a name="line.345"></a>
+<span class="sourceLineNo">346</span>            temp = 2.2 - temp;<a name="line.346"></a>
+<span class="sourceLineNo">347</span>            for (int x = 0; x &lt; width; x++) {<a name="line.347"></a>
+<span class="sourceLineNo">348</span>                heightData[x][y] = (h = (heightData[x][y] - minHeightActual) * heightDiff - 1.0);<a name="line.348"></a>
+<span class="sourceLineNo">349</span>                minHeightActual0 = Math.min(minHeightActual0, h);<a name="line.349"></a>
+<span class="sourceLineNo">350</span>                maxHeightActual0 = Math.max(maxHeightActual0, h);<a name="line.350"></a>
+<span class="sourceLineNo">351</span>                heightCodeData[x][y] = (t = codeHeight(h));<a name="line.351"></a>
+<span class="sourceLineNo">352</span>                hMod = 1.0;<a name="line.352"></a>
+<span class="sourceLineNo">353</span>                switch (t) {<a name="line.353"></a>
+<span class="sourceLineNo">354</span>                    case 0:<a name="line.354"></a>
+<span class="sourceLineNo">355</span>                    case 1:<a name="line.355"></a>
+<span class="sourceLineNo">356</span>                    case 2:<a name="line.356"></a>
+<span class="sourceLineNo">357</span>                    case 3:<a name="line.357"></a>
+<span class="sourceLineNo">358</span>                        h = 0.4;<a name="line.358"></a>
+<span class="sourceLineNo">359</span>                        hMod = 0.2;<a name="line.359"></a>
+<span class="sourceLineNo">360</span>                        break;<a name="line.360"></a>
+<span class="sourceLineNo">361</span>                    case 6:<a name="line.361"></a>
+<span class="sourceLineNo">362</span>                        h = -0.1 * (h - forestLower - 0.08);<a name="line.362"></a>
 <span class="sourceLineNo">363</span>                        break;<a name="line.363"></a>
-<span class="sourceLineNo">364</span>                    case 6:<a name="line.364"></a>
-<span class="sourceLineNo">365</span>                        h = -0.1 * (h - forestLower - 0.08);<a name="line.365"></a>
+<span class="sourceLineNo">364</span>                    case 7:<a name="line.364"></a>
+<span class="sourceLineNo">365</span>                        h *= -0.25;<a name="line.365"></a>
 <span class="sourceLineNo">366</span>                        break;<a name="line.366"></a>
-<span class="sourceLineNo">367</span>                    case 7:<a name="line.367"></a>
-<span class="sourceLineNo">368</span>                        h *= -0.25;<a name="line.368"></a>
+<span class="sourceLineNo">367</span>                    case 8:<a name="line.367"></a>
+<span class="sourceLineNo">368</span>                        h *= -0.4;<a name="line.368"></a>
 <span class="sourceLineNo">369</span>                        break;<a name="line.369"></a>
-<span class="sourceLineNo">370</span>                    case 8:<a name="line.370"></a>
-<span class="sourceLineNo">371</span>                        h *= -0.4;<a name="line.371"></a>
-<span class="sourceLineNo">372</span>                        break;<a name="line.372"></a>
-<span class="sourceLineNo">373</span>                    default:<a name="line.373"></a>
-<span class="sourceLineNo">374</span>                        h *= 0.05;<a name="line.374"></a>
-<span class="sourceLineNo">375</span>                }<a name="line.375"></a>
-<span class="sourceLineNo">376</span>                heatData[x][y] = (h = (((heatData[x][y] - minHeat0) * heatDiff * hMod) + h + 0.6) * temp);<a name="line.376"></a>
-<span class="sourceLineNo">377</span>                if (fresh) {<a name="line.377"></a>
-<span class="sourceLineNo">378</span>                    ps = Math.min(ps, h); //minHeat0<a name="line.378"></a>
-<span class="sourceLineNo">379</span>                    pc = Math.max(pc, h); //maxHeat0<a name="line.379"></a>
-<span class="sourceLineNo">380</span>                }<a name="line.380"></a>
-<span class="sourceLineNo">381</span>            }<a name="line.381"></a>
-<span class="sourceLineNo">382</span>        }<a name="line.382"></a>
-<span class="sourceLineNo">383</span>        if(fresh)<a name="line.383"></a>
-<span class="sourceLineNo">384</span>        {<a name="line.384"></a>
-<span class="sourceLineNo">385</span>            minHeat1 = ps;<a name="line.385"></a>
-<span class="sourceLineNo">386</span>            maxHeat1 = pc;<a name="line.386"></a>
-<span class="sourceLineNo">387</span>        }<a name="line.387"></a>
-<span class="sourceLineNo">388</span>        heatDiff = coolingModifier / (maxHeat1 - minHeat1);<a name="line.388"></a>
-<span class="sourceLineNo">389</span>        qs = Double.POSITIVE_INFINITY;<a name="line.389"></a>
-<span class="sourceLineNo">390</span>        qc = Double.NEGATIVE_INFINITY;<a name="line.390"></a>
-<span class="sourceLineNo">391</span>        ps = Double.POSITIVE_INFINITY;<a name="line.391"></a>
-<span class="sourceLineNo">392</span>        pc = Double.NEGATIVE_INFINITY;<a name="line.392"></a>
-<span class="sourceLineNo">393</span><a name="line.393"></a>
-<span class="sourceLineNo">394</span><a name="line.394"></a>
-<span class="sourceLineNo">395</span>        for (int y = 0; y &lt; height; y++) {<a name="line.395"></a>
-<span class="sourceLineNo">396</span>            for (int x = 0; x &lt; width; x++) {<a name="line.396"></a>
-<span class="sourceLineNo">397</span>                heatData[x][y] = (h = ((heatData[x][y] - minHeat1) * heatDiff));<a name="line.397"></a>
-<span class="sourceLineNo">398</span>                //(h = Math.pow(h, 2.0 - h * 2.0));<a name="line.398"></a>
-<span class="sourceLineNo">399</span>                moistureData[x][y] = (temp = (moistureData[x][y] - minWet0) * wetDiff); // may assign to temp?<a name="line.399"></a>
-<span class="sourceLineNo">400</span>                if (fresh) {<a name="line.400"></a>
-<span class="sourceLineNo">401</span>                    qs = Math.min(qs, h);<a name="line.401"></a>
-<span class="sourceLineNo">402</span>                    qc = Math.max(qc, h);<a name="line.402"></a>
-<span class="sourceLineNo">403</span>                    ps = Math.min(ps, temp);<a name="line.403"></a>
-<span class="sourceLineNo">404</span>                    pc = Math.max(pc, temp);<a name="line.404"></a>
-<span class="sourceLineNo">405</span>                }<a name="line.405"></a>
-<span class="sourceLineNo">406</span>            }<a name="line.406"></a>
-<span class="sourceLineNo">407</span>        }<a name="line.407"></a>
-<span class="sourceLineNo">408</span>        if(fresh)<a name="line.408"></a>
-<span class="sourceLineNo">409</span>        {<a name="line.409"></a>
-<span class="sourceLineNo">410</span>            minHeat = qs;<a name="line.410"></a>
-<span class="sourceLineNo">411</span>            maxHeat = qc;<a name="line.411"></a>
-<span class="sourceLineNo">412</span>            minWet = ps;<a name="line.412"></a>
-<span class="sourceLineNo">413</span>            maxWet = pc;<a name="line.413"></a>
-<span class="sourceLineNo">414</span>        }<a name="line.414"></a>
-<span class="sourceLineNo">415</span>        if(generateRivers) {<a name="line.415"></a>
-<span class="sourceLineNo">416</span>            if (fresh) {<a name="line.416"></a>
-<span class="sourceLineNo">417</span>                addRivers();<a name="line.417"></a>
-<span class="sourceLineNo">418</span>                riverData.connect8way().thin().thin();<a name="line.418"></a>
-<span class="sourceLineNo">419</span>                partialRiverData.remake(riverData);<a name="line.419"></a>
-<span class="sourceLineNo">420</span>                partialLakeData.remake(lakeData);<a name="line.420"></a>
-<span class="sourceLineNo">421</span>            } else {<a name="line.421"></a>
-<span class="sourceLineNo">422</span>                partialRiverData.remake(riverData);<a name="line.422"></a>
-<span class="sourceLineNo">423</span>                partialLakeData.remake(lakeData);<a name="line.423"></a>
-<span class="sourceLineNo">424</span>                for (int i = 1; i &lt;= zoom; i++) {<a name="line.424"></a>
-<span class="sourceLineNo">425</span>                    int stx = (startCacheX.get(i) - startCacheX.get(i - 1)) &lt;&lt; (i - 1),<a name="line.425"></a>
-<span class="sourceLineNo">426</span>                            sty = (startCacheY.get(i) - startCacheY.get(i - 1)) &lt;&lt; (i - 1);<a name="line.426"></a>
-<span class="sourceLineNo">427</span>                    if ((i &amp; 3) == 3) {<a name="line.427"></a>
-<span class="sourceLineNo">428</span>                        partialRiverData.zoom(stx, sty).connect8way();//.connect8way();//.connect();<a name="line.428"></a>
-<span class="sourceLineNo">429</span>                        partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.4));<a name="line.429"></a>
-<span class="sourceLineNo">430</span>                        partialLakeData.zoom(stx, sty).connect8way();//.connect8way();//.connect();<a name="line.430"></a>
-<span class="sourceLineNo">431</span>                        partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.55));<a name="line.431"></a>
-<span class="sourceLineNo">432</span>                    } else {<a name="line.432"></a>
-<span class="sourceLineNo">433</span>                        partialRiverData.zoom(stx, sty).connect8way().thin();//.connect8way();//.connect();<a name="line.433"></a>
-<span class="sourceLineNo">434</span>                        partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.5));<a name="line.434"></a>
-<span class="sourceLineNo">435</span>                        partialLakeData.zoom(stx, sty).connect8way().thin();//.connect8way();//.connect();<a name="line.435"></a>
-<span class="sourceLineNo">436</span>                        partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.7));<a name="line.436"></a>
-<span class="sourceLineNo">437</span>                    }<a name="line.437"></a>
-<span class="sourceLineNo">438</span>                }<a name="line.438"></a>
-<span class="sourceLineNo">439</span>            }<a name="line.439"></a>
-<span class="sourceLineNo">440</span>        }<a name="line.440"></a>
-<span class="sourceLineNo">441</span>        /*<a name="line.441"></a>
-<span class="sourceLineNo">442</span>        for (int y = 0; y &lt; height; y++) {<a name="line.442"></a>
-<span class="sourceLineNo">443</span>            for (int x = 0; x &lt; width; x++) {<a name="line.443"></a>
-<span class="sourceLineNo">444</span>                codeBiome(x, y, heatData[x][y], moistureData[x][y], heightData[x][y], heightCodeData[x][y]);<a name="line.444"></a>
-<span class="sourceLineNo">445</span>            }<a name="line.445"></a>
-<span class="sourceLineNo">446</span>        }*/<a name="line.446"></a>
-<span class="sourceLineNo">447</span>        //ttg = System.currentTimeMillis() - startTime;<a name="line.447"></a>
-<span class="sourceLineNo">448</span>    }<a name="line.448"></a>
-<span class="sourceLineNo">449</span>    public int codeHeight(final double high)<a name="line.449"></a>
-<span class="sourceLineNo">450</span>    {<a name="line.450"></a>
-<span class="sourceLineNo">451</span>        if(high &lt; deepWaterUpper)<a name="line.451"></a>
-<span class="sourceLineNo">452</span>            return 0;<a name="line.452"></a>
-<span class="sourceLineNo">453</span>        if(high &lt; mediumWaterUpper)<a name="line.453"></a>
-<span class="sourceLineNo">454</span>            return 1;<a name="line.454"></a>
-<span class="sourceLineNo">455</span>        if(high &lt; shallowWaterUpper)<a name="line.455"></a>
-<span class="sourceLineNo">456</span>            return 2;<a name="line.456"></a>
-<span class="sourceLineNo">457</span>        if(high &lt; coastalWaterUpper)<a name="line.457"></a>
-<span class="sourceLineNo">458</span>            return 3;<a name="line.458"></a>
-<span class="sourceLineNo">459</span>        if(high &lt; sandUpper)<a name="line.459"></a>
-<span class="sourceLineNo">460</span>            return 4;<a name="line.460"></a>
-<span class="sourceLineNo">461</span>        if(high &lt; grassUpper)<a name="line.461"></a>
-<span class="sourceLineNo">462</span>            return 5;<a name="line.462"></a>
-<span class="sourceLineNo">463</span>        if(high &lt; forestUpper)<a name="line.463"></a>
-<span class="sourceLineNo">464</span>            return 6;<a name="line.464"></a>
-<span class="sourceLineNo">465</span>        if(high &lt; rockUpper)<a name="line.465"></a>
-<span class="sourceLineNo">466</span>            return 7;<a name="line.466"></a>
-<span class="sourceLineNo">467</span>        return 8;<a name="line.467"></a>
-<span class="sourceLineNo">468</span>    }<a name="line.468"></a>
-<span class="sourceLineNo">469</span>    protected final int decodeX(final int coded)<a name="line.469"></a>
-<span class="sourceLineNo">470</span>    {<a name="line.470"></a>
-<span class="sourceLineNo">471</span>        return coded % width;<a name="line.471"></a>
+<span class="sourceLineNo">370</span>                    default:<a name="line.370"></a>
+<span class="sourceLineNo">371</span>                        h *= 0.05;<a name="line.371"></a>
+<span class="sourceLineNo">372</span>                }<a name="line.372"></a>
+<span class="sourceLineNo">373</span>                heatData[x][y] = (h = (((heatData[x][y] - minHeat0) * heatDiff * hMod) + h + 0.6) * temp);<a name="line.373"></a>
+<span class="sourceLineNo">374</span>                if (fresh) {<a name="line.374"></a>
+<span class="sourceLineNo">375</span>                    ps = Math.min(ps, h); //minHeat0<a name="line.375"></a>
+<span class="sourceLineNo">376</span>                    pc = Math.max(pc, h); //maxHeat0<a name="line.376"></a>
+<span class="sourceLineNo">377</span>                }<a name="line.377"></a>
+<span class="sourceLineNo">378</span>            }<a name="line.378"></a>
+<span class="sourceLineNo">379</span>        }<a name="line.379"></a>
+<span class="sourceLineNo">380</span>        if(fresh)<a name="line.380"></a>
+<span class="sourceLineNo">381</span>        {<a name="line.381"></a>
+<span class="sourceLineNo">382</span>            minHeat1 = ps;<a name="line.382"></a>
+<span class="sourceLineNo">383</span>            maxHeat1 = pc;<a name="line.383"></a>
+<span class="sourceLineNo">384</span>        }<a name="line.384"></a>
+<span class="sourceLineNo">385</span>        heatDiff = coolingModifier / (maxHeat1 - minHeat1);<a name="line.385"></a>
+<span class="sourceLineNo">386</span>        qs = Double.POSITIVE_INFINITY;<a name="line.386"></a>
+<span class="sourceLineNo">387</span>        qc = Double.NEGATIVE_INFINITY;<a name="line.387"></a>
+<span class="sourceLineNo">388</span>        ps = Double.POSITIVE_INFINITY;<a name="line.388"></a>
+<span class="sourceLineNo">389</span>        pc = Double.NEGATIVE_INFINITY;<a name="line.389"></a>
+<span class="sourceLineNo">390</span><a name="line.390"></a>
+<span class="sourceLineNo">391</span><a name="line.391"></a>
+<span class="sourceLineNo">392</span>        for (int y = 0; y &lt; height; y++) {<a name="line.392"></a>
+<span class="sourceLineNo">393</span>            for (int x = 0; x &lt; width; x++) {<a name="line.393"></a>
+<span class="sourceLineNo">394</span>                heatData[x][y] = (h = ((heatData[x][y] - minHeat1) * heatDiff));<a name="line.394"></a>
+<span class="sourceLineNo">395</span>                moistureData[x][y] = (temp = (moistureData[x][y] - minWet0) * wetDiff);<a name="line.395"></a>
+<span class="sourceLineNo">396</span>                if (fresh) {<a name="line.396"></a>
+<span class="sourceLineNo">397</span>                    qs = Math.min(qs, h);<a name="line.397"></a>
+<span class="sourceLineNo">398</span>                    qc = Math.max(qc, h);<a name="line.398"></a>
+<span class="sourceLineNo">399</span>                    ps = Math.min(ps, temp);<a name="line.399"></a>
+<span class="sourceLineNo">400</span>                    pc = Math.max(pc, temp);<a name="line.400"></a>
+<span class="sourceLineNo">401</span>                }<a name="line.401"></a>
+<span class="sourceLineNo">402</span>            }<a name="line.402"></a>
+<span class="sourceLineNo">403</span>        }<a name="line.403"></a>
+<span class="sourceLineNo">404</span>        if(fresh)<a name="line.404"></a>
+<span class="sourceLineNo">405</span>        {<a name="line.405"></a>
+<span class="sourceLineNo">406</span>            minHeat = qs;<a name="line.406"></a>
+<span class="sourceLineNo">407</span>            maxHeat = qc;<a name="line.407"></a>
+<span class="sourceLineNo">408</span>            minWet = ps;<a name="line.408"></a>
+<span class="sourceLineNo">409</span>            maxWet = pc;<a name="line.409"></a>
+<span class="sourceLineNo">410</span>        }<a name="line.410"></a>
+<span class="sourceLineNo">411</span>        if(generateRivers) {<a name="line.411"></a>
+<span class="sourceLineNo">412</span>            if (fresh) {<a name="line.412"></a>
+<span class="sourceLineNo">413</span>                addRivers();<a name="line.413"></a>
+<span class="sourceLineNo">414</span>                riverData.connect8way().thin().thin();<a name="line.414"></a>
+<span class="sourceLineNo">415</span>                partialRiverData.remake(riverData);<a name="line.415"></a>
+<span class="sourceLineNo">416</span>                partialLakeData.remake(lakeData);<a name="line.416"></a>
+<span class="sourceLineNo">417</span>            } else {<a name="line.417"></a>
+<span class="sourceLineNo">418</span>                partialRiverData.remake(riverData);<a name="line.418"></a>
+<span class="sourceLineNo">419</span>                partialLakeData.remake(lakeData);<a name="line.419"></a>
+<span class="sourceLineNo">420</span>                for (int i = 1; i &lt;= zoom; i++) {<a name="line.420"></a>
+<span class="sourceLineNo">421</span>                    int stx = (startCacheX.get(i) - startCacheX.get(i - 1)) &lt;&lt; (i - 1),<a name="line.421"></a>
+<span class="sourceLineNo">422</span>                            sty = (startCacheY.get(i) - startCacheY.get(i - 1)) &lt;&lt; (i - 1);<a name="line.422"></a>
+<span class="sourceLineNo">423</span>                    if ((i &amp; 3) == 3) {<a name="line.423"></a>
+<span class="sourceLineNo">424</span>                        partialRiverData.zoom(stx, sty).connect8way();<a name="line.424"></a>
+<span class="sourceLineNo">425</span>                        partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.4));<a name="line.425"></a>
+<span class="sourceLineNo">426</span>                        partialLakeData.zoom(stx, sty).connect8way();<a name="line.426"></a>
+<span class="sourceLineNo">427</span>                        partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.55));<a name="line.427"></a>
+<span class="sourceLineNo">428</span>                    } else {<a name="line.428"></a>
+<span class="sourceLineNo">429</span>                        partialRiverData.zoom(stx, sty).connect8way().thin();<a name="line.429"></a>
+<span class="sourceLineNo">430</span>                        partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.5));<a name="line.430"></a>
+<span class="sourceLineNo">431</span>                        partialLakeData.zoom(stx, sty).connect8way().thin();<a name="line.431"></a>
+<span class="sourceLineNo">432</span>                        partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.7));<a name="line.432"></a>
+<span class="sourceLineNo">433</span>                    }<a name="line.433"></a>
+<span class="sourceLineNo">434</span>                }<a name="line.434"></a>
+<span class="sourceLineNo">435</span>            }<a name="line.435"></a>
+<span class="sourceLineNo">436</span>        }<a name="line.436"></a>
+<span class="sourceLineNo">437</span>    }<a name="line.437"></a>
+<span class="sourceLineNo">438</span>    public int codeHeight(final double high)<a name="line.438"></a>
+<span class="sourceLineNo">439</span>    {<a name="line.439"></a>
+<span class="sourceLineNo">440</span>        if(high &lt; deepWaterUpper)<a name="line.440"></a>
+<span class="sourceLineNo">441</span>            return 0;<a name="line.441"></a>
+<span class="sourceLineNo">442</span>        if(high &lt; mediumWaterUpper)<a name="line.442"></a>
+<span class="sourceLineNo">443</span>            return 1;<a name="line.443"></a>
+<span class="sourceLineNo">444</span>        if(high &lt; shallowWaterUpper)<a name="line.444"></a>
+<span class="sourceLineNo">445</span>            return 2;<a name="line.445"></a>
+<span class="sourceLineNo">446</span>        if(high &lt; coastalWaterUpper)<a name="line.446"></a>
+<span class="sourceLineNo">447</span>            return 3;<a name="line.447"></a>
+<span class="sourceLineNo">448</span>        if(high &lt; sandUpper)<a name="line.448"></a>
+<span class="sourceLineNo">449</span>            return 4;<a name="line.449"></a>
+<span class="sourceLineNo">450</span>        if(high &lt; grassUpper)<a name="line.450"></a>
+<span class="sourceLineNo">451</span>            return 5;<a name="line.451"></a>
+<span class="sourceLineNo">452</span>        if(high &lt; forestUpper)<a name="line.452"></a>
+<span class="sourceLineNo">453</span>            return 6;<a name="line.453"></a>
+<span class="sourceLineNo">454</span>        if(high &lt; rockUpper)<a name="line.454"></a>
+<span class="sourceLineNo">455</span>            return 7;<a name="line.455"></a>
+<span class="sourceLineNo">456</span>        return 8;<a name="line.456"></a>
+<span class="sourceLineNo">457</span>    }<a name="line.457"></a>
+<span class="sourceLineNo">458</span>    protected final int decodeX(final int coded)<a name="line.458"></a>
+<span class="sourceLineNo">459</span>    {<a name="line.459"></a>
+<span class="sourceLineNo">460</span>        return coded % width;<a name="line.460"></a>
+<span class="sourceLineNo">461</span>    }<a name="line.461"></a>
+<span class="sourceLineNo">462</span>    protected final int decodeY(final int coded)<a name="line.462"></a>
+<span class="sourceLineNo">463</span>    {<a name="line.463"></a>
+<span class="sourceLineNo">464</span>        return coded / width;<a name="line.464"></a>
+<span class="sourceLineNo">465</span>    }<a name="line.465"></a>
+<span class="sourceLineNo">466</span>    private static final Direction[] reuse = new Direction[9];<a name="line.466"></a>
+<span class="sourceLineNo">467</span>    private void appendDirToShuffle(RNG rng) {<a name="line.467"></a>
+<span class="sourceLineNo">468</span>        rng.randomPortion(Direction.CARDINALS, reuse);<a name="line.468"></a>
+<span class="sourceLineNo">469</span>        reuse[rng.next(2)] = Direction.DIAGONALS[rng.next(2)];<a name="line.469"></a>
+<span class="sourceLineNo">470</span>        reuse[4] = Direction.DIAGONALS[rng.next(2)];<a name="line.470"></a>
+<span class="sourceLineNo">471</span>        reuse[5] = Direction.OUTWARDS[rng.next(3)];<a name="line.471"></a>
 <span class="sourceLineNo">472</span>    }<a name="line.472"></a>
-<span class="sourceLineNo">473</span>    protected final int decodeY(final int coded)<a name="line.473"></a>
-<span class="sourceLineNo">474</span>    {<a name="line.474"></a>
-<span class="sourceLineNo">475</span>        return coded / width;<a name="line.475"></a>
-<span class="sourceLineNo">476</span>    }<a name="line.476"></a>
-<span class="sourceLineNo">477</span>    private static final Direction[] reuse = new Direction[9];<a name="line.477"></a>
-<span class="sourceLineNo">478</span>    private void appendDirToShuffle(RNG rng) {<a name="line.478"></a>
-<span class="sourceLineNo">479</span>        rng.randomPortion(Direction.CARDINALS, reuse);<a name="line.479"></a>
-<span class="sourceLineNo">480</span>        reuse[rng.next(2)] = Direction.DIAGONALS[rng.next(2)];<a name="line.480"></a>
-<span class="sourceLineNo">481</span>        reuse[4] = Direction.DIAGONALS[rng.next(2)];<a name="line.481"></a>
-<span class="sourceLineNo">482</span>        reuse[5] = Direction.OUTWARDS[rng.next(3)];<a name="line.482"></a>
-<span class="sourceLineNo">483</span>    }<a name="line.483"></a>
-<span class="sourceLineNo">484</span><a name="line.484"></a>
-<span class="sourceLineNo">485</span>    protected void addRivers()<a name="line.485"></a>
-<span class="sourceLineNo">486</span>    {<a name="line.486"></a>
-<span class="sourceLineNo">487</span>        long rebuildState = rng.nextLong();<a name="line.487"></a>
-<span class="sourceLineNo">488</span>        workingData.empty().insertRectangle(8, 8, width - 16, height - 16);<a name="line.488"></a>
-<span class="sourceLineNo">489</span>        riverData.empty().refill(heightCodeData, 6, 100);<a name="line.489"></a>
-<span class="sourceLineNo">490</span>        riverData.quasiRandomRegion(0.000003 * Math.max(width, height)).and(workingData);<a name="line.490"></a>
-<span class="sourceLineNo">491</span>        int[] starts = riverData.asTightEncoded();<a name="line.491"></a>
-<span class="sourceLineNo">492</span>        int len = starts.length, currentPos, choice, adjX, adjY, currX, currY, tcx, tcy, stx, sty, sbx, sby;<a name="line.492"></a>
-<span class="sourceLineNo">493</span>        riverData.clear();<a name="line.493"></a>
-<span class="sourceLineNo">494</span>        lakeData.clear();<a name="line.494"></a>
-<span class="sourceLineNo">495</span>        PER_RIVER:<a name="line.495"></a>
-<span class="sourceLineNo">496</span>        for (int i = 0; i &lt; len; i++) {<a name="line.496"></a>
-<span class="sourceLineNo">497</span>            workingData.clear();<a name="line.497"></a>
-<span class="sourceLineNo">498</span>            currentPos = starts[i];<a name="line.498"></a>
-<span class="sourceLineNo">499</span>            stx = tcx = currX = decodeX(currentPos);<a name="line.499"></a>
-<span class="sourceLineNo">500</span>            sty = tcy = currY = decodeY(currentPos);<a name="line.500"></a>
-<span class="sourceLineNo">501</span>            while (true) {<a name="line.501"></a>
-<span class="sourceLineNo">502</span><a name="line.502"></a>
-<span class="sourceLineNo">503</span>                double best = 999999;<a name="line.503"></a>
-<span class="sourceLineNo">504</span>                choice = -1;<a name="line.504"></a>
-<span class="sourceLineNo">505</span>                appendDirToShuffle(rng);<a name="line.505"></a>
-<span class="sourceLineNo">506</span><a name="line.506"></a>
-<span class="sourceLineNo">507</span>                for (int d = 0; d &lt; 5; d++) {<a name="line.507"></a>
-<span class="sourceLineNo">508</span>                    adjX = (currX + reuse[d].deltaX);<a name="line.508"></a>
-<span class="sourceLineNo">509</span>                    if (adjX &lt; 0 || adjX &gt;= width)<a name="line.509"></a>
-<span class="sourceLineNo">510</span>                    {<a name="line.510"></a>
-<span class="sourceLineNo">511</span>                        if(rng.next(4) == 0)<a name="line.511"></a>
-<span class="sourceLineNo">512</span>                            riverData.or(workingData);<a name="line.512"></a>
-<span class="sourceLineNo">513</span>                        continue PER_RIVER;<a name="line.513"></a>
-<span class="sourceLineNo">514</span>                    }<a name="line.514"></a>
-<span class="sourceLineNo">515</span>                    adjY = (currY + reuse[d].deltaY);<a name="line.515"></a>
-<span class="sourceLineNo">516</span>                    if (adjY &lt; 0 || adjY &gt;= height)<a name="line.516"></a>
-<span class="sourceLineNo">517</span>                    {<a name="line.517"></a>
-<span class="sourceLineNo">518</span>                        if(rng.next(4) == 0)<a name="line.518"></a>
-<span class="sourceLineNo">519</span>                            riverData.or(workingData);<a name="line.519"></a>
-<span class="sourceLineNo">520</span>                        continue PER_RIVER;<a name="line.520"></a>
-<span class="sourceLineNo">521</span>                    }<a name="line.521"></a>
-<span class="sourceLineNo">522</span>                    if (heightData[adjX][adjY] &lt; best &amp;&amp; !workingData.contains(adjX, adjY)) {<a name="line.522"></a>
-<span class="sourceLineNo">523</span>                        best = heightData[adjX][adjY];<a name="line.523"></a>
-<span class="sourceLineNo">524</span>                        choice = d;<a name="line.524"></a>
-<span class="sourceLineNo">525</span>                        tcx = adjX;<a name="line.525"></a>
-<span class="sourceLineNo">526</span>                        tcy = adjY;<a name="line.526"></a>
-<span class="sourceLineNo">527</span>                    }<a name="line.527"></a>
-<span class="sourceLineNo">528</span>                }<a name="line.528"></a>
-<span class="sourceLineNo">529</span>                currX = tcx;<a name="line.529"></a>
-<span class="sourceLineNo">530</span>                currY = tcy;<a name="line.530"></a>
-<span class="sourceLineNo">531</span>                if (best &gt;= heightData[stx][sty]) {<a name="line.531"></a>
-<span class="sourceLineNo">532</span>                    tcx = rng.next(2);<a name="line.532"></a>
-<span class="sourceLineNo">533</span>                    adjX = currX + ((tcx &amp; 1) &lt;&lt; 1) - 1;<a name="line.533"></a>
-<span class="sourceLineNo">534</span>                    adjY = currY + (tcx &amp; 2) - 1;<a name="line.534"></a>
-<span class="sourceLineNo">535</span>                    lakeData.insert(currX, currY);<a name="line.535"></a>
-<span class="sourceLineNo">536</span>                    lakeData.insert(currX + 1, currY);<a name="line.536"></a>
-<span class="sourceLineNo">537</span>                    lakeData.insert(currX - 1, currY);<a name="line.537"></a>
-<span class="sourceLineNo">538</span>                    lakeData.insert(currX, currY + 1);<a name="line.538"></a>
-<span class="sourceLineNo">539</span>                    lakeData.insert(currX, currY - 1);<a name="line.539"></a>
-<span class="sourceLineNo">540</span>                    if (!(adjY &lt; 0 || adjY &gt;= height || adjX &lt; 0 || adjX &gt;= width))<a name="line.540"></a>
-<span class="sourceLineNo">541</span>                    {<a name="line.541"></a>
-<span class="sourceLineNo">542</span>                        if(heightCodeData[adjX][adjY] &lt;= 3) {<a name="line.542"></a>
-<span class="sourceLineNo">543</span>                            riverData.or(workingData);<a name="line.543"></a>
-<span class="sourceLineNo">544</span>                            continue PER_RIVER;<a name="line.544"></a>
-<span class="sourceLineNo">545</span>                        }<a name="line.545"></a>
-<span class="sourceLineNo">546</span>                        else if((heightData[adjX][adjY] -= 0.0002) &lt; lowers[heightCodeData[adjX][adjY]-1])<a name="line.546"></a>
-<span class="sourceLineNo">547</span>                        {<a name="line.547"></a>
-<span class="sourceLineNo">548</span>                            if(rng.next(3) == 0)<a name="line.548"></a>
-<span class="sourceLineNo">549</span>                                riverData.or(workingData);<a name="line.549"></a>
-<span class="sourceLineNo">550</span>                            continue PER_RIVER;<a name="line.550"></a>
-<span class="sourceLineNo">551</span>                        }<a name="line.551"></a>
-<span class="sourceLineNo">552</span>                    }<a name="line.552"></a>
-<span class="sourceLineNo">553</span>                    else<a name="line.553"></a>
-<span class="sourceLineNo">554</span>                    {<a name="line.554"></a>
-<span class="sourceLineNo">555</span>                        if(rng.next(5) == 0)<a name="line.555"></a>
-<span class="sourceLineNo">556</span>                            riverData.or(workingData);<a name="line.556"></a>
-<span class="sourceLineNo">557</span>                        continue PER_RIVER;<a name="line.557"></a>
-<span class="sourceLineNo">558</span>                    }<a name="line.558"></a>
-<span class="sourceLineNo">559</span>                    tcx = rng.next(2);<a name="line.559"></a>
-<span class="sourceLineNo">560</span>                    adjX = currX + ((tcx &amp; 1) &lt;&lt; 1) - 1;<a name="line.560"></a>
-<span class="sourceLineNo">561</span>                    adjY = currY + (tcx &amp; 2) - 1;<a name="line.561"></a>
-<span class="sourceLineNo">562</span>                    if (!(adjY &lt; 0 || adjY &gt;= height || adjX &lt; 0 || adjX &gt;= width))<a name="line.562"></a>
-<span class="sourceLineNo">563</span>                    {<a name="line.563"></a>
-<span class="sourceLineNo">564</span>                        if(heightCodeData[adjX][adjY] &lt;= 3) {<a name="line.564"></a>
-<span class="sourceLineNo">565</span>                            riverData.or(workingData);<a name="line.565"></a>
-<span class="sourceLineNo">566</span>                            continue PER_RIVER;<a name="line.566"></a>
-<span class="sourceLineNo">567</span>                        }<a name="line.567"></a>
-<span class="sourceLineNo">568</span>                        else if((heightData[adjX][adjY] -= 0.0002) &lt; lowers[heightCodeData[adjX][adjY]-1])<a name="line.568"></a>
-<span class="sourceLineNo">569</span>                        {<a name="line.569"></a>
-<span class="sourceLineNo">570</span>                            if(rng.next(3) == 0)<a name="line.570"></a>
-<span class="sourceLineNo">571</span>                                riverData.or(workingData);<a name="line.571"></a>
-<span class="sourceLineNo">572</span>                            continue PER_RIVER;<a name="line.572"></a>
-<span class="sourceLineNo">573</span>                        }<a name="line.573"></a>
-<span class="sourceLineNo">574</span>                    }<a name="line.574"></a>
-<span class="sourceLineNo">575</span>                    else<a name="line.575"></a>
-<span class="sourceLineNo">576</span>                    {<a name="line.576"></a>
-<span class="sourceLineNo">577</span>                        if(rng.next(5) == 0)<a name="line.577"></a>
-<span class="sourceLineNo">578</span>                            riverData.or(workingData);<a name="line.578"></a>
-<span class="sourceLineNo">579</span>                        continue PER_RIVER;<a name="line.579"></a>
-<span class="sourceLineNo">580</span>                    }<a name="line.580"></a>
-<span class="sourceLineNo">581</span><a name="line.581"></a>
-<span class="sourceLineNo">582</span>                }<a name="line.582"></a>
-<span class="sourceLineNo">583</span>                if(choice != -1 &amp;&amp; reuse[choice].isDiagonal())<a name="line.583"></a>
-<span class="sourceLineNo">584</span>                {<a name="line.584"></a>
-<span class="sourceLineNo">585</span>                    tcx = currX - reuse[choice].deltaX;<a name="line.585"></a>
-<span class="sourceLineNo">586</span>                    tcy = currY - reuse[choice].deltaY;<a name="line.586"></a>
-<span class="sourceLineNo">587</span>                    if(heightData[tcx][currY] &lt;= heightData[currX][tcy] &amp;&amp; !workingData.contains(tcx, currY))<a name="line.587"></a>
-<span class="sourceLineNo">588</span>                    {<a name="line.588"></a>
-<span class="sourceLineNo">589</span>                        if(riverData.contains(tcx, currY))<a name="line.589"></a>
-<span class="sourceLineNo">590</span>                        {<a name="line.590"></a>
-<span class="sourceLineNo">591</span>                            riverData.or(workingData);<a name="line.591"></a>
-<span class="sourceLineNo">592</span>                            continue PER_RIVER;<a name="line.592"></a>
-<span class="sourceLineNo">593</span>                        }<a name="line.593"></a>
-<span class="sourceLineNo">594</span>                        workingData.insert(tcx, currY);<a name="line.594"></a>
-<span class="sourceLineNo">595</span>                        if (heightData[tcx][currY] &lt;= 0.075)<a name="line.595"></a>
-<span class="sourceLineNo">596</span>                        {<a name="line.596"></a>
-<span class="sourceLineNo">597</span>                            riverData.or(workingData);<a name="line.597"></a>
-<span class="sourceLineNo">598</span>                            continue PER_RIVER;<a name="line.598"></a>
-<span class="sourceLineNo">599</span>                        }<a name="line.599"></a>
-<span class="sourceLineNo">600</span>                    }<a name="line.600"></a>
-<span class="sourceLineNo">601</span>                    else if(!workingData.contains(currX, tcy))<a name="line.601"></a>
-<span class="sourceLineNo">602</span>                    {<a name="line.602"></a>
-<span class="sourceLineNo">603</span>                        if(riverData.contains(currX, tcy))<a name="line.603"></a>
-<span class="sourceLineNo">604</span>                        {<a name="line.604"></a>
-<span class="sourceLineNo">605</span>                            riverData.or(workingData);<a name="line.605"></a>
-<span class="sourceLineNo">606</span>                            continue PER_RIVER;<a name="line.606"></a>
-<span class="sourceLineNo">607</span>                        }<a name="line.607"></a>
-<span class="sourceLineNo">608</span>                        workingData.insert(currX, tcy);<a name="line.608"></a>
-<span class="sourceLineNo">609</span>                        if (heightData[currX][tcy] &lt;= 0.075)<a name="line.609"></a>
-<span class="sourceLineNo">610</span>                        {<a name="line.610"></a>
-<span class="sourceLineNo">611</span>                            riverData.or(workingData);<a name="line.611"></a>
-<span class="sourceLineNo">612</span>                            continue PER_RIVER;<a name="line.612"></a>
-<span class="sourceLineNo">613</span>                        }<a name="line.613"></a>
-<span class="sourceLineNo">614</span><a name="line.614"></a>
-<span class="sourceLineNo">615</span>                    }<a name="line.615"></a>
+<span class="sourceLineNo">473</span><a name="line.473"></a>
+<span class="sourceLineNo">474</span>    protected void addRivers()<a name="line.474"></a>
+<span class="sourceLineNo">475</span>    {<a name="line.475"></a>
+<span class="sourceLineNo">476</span>        long rebuildState = rng.nextLong();<a name="line.476"></a>
+<span class="sourceLineNo">477</span>        workingData.empty().insertRectangle(8, 8, width - 16, height - 16);<a name="line.477"></a>
+<span class="sourceLineNo">478</span>        riverData.empty().refill(heightCodeData, 6, 100);<a name="line.478"></a>
+<span class="sourceLineNo">479</span>        riverData.quasiRandomRegion(0.000003 * Math.max(width, height)).and(workingData);<a name="line.479"></a>
+<span class="sourceLineNo">480</span>        int[] starts = riverData.asTightEncoded();<a name="line.480"></a>
+<span class="sourceLineNo">481</span>        int len = starts.length, currentPos, choice, adjX, adjY, currX, currY, tcx, tcy, stx, sty, sbx, sby;<a name="line.481"></a>
+<span class="sourceLineNo">482</span>        riverData.clear();<a name="line.482"></a>
+<span class="sourceLineNo">483</span>        lakeData.clear();<a name="line.483"></a>
+<span class="sourceLineNo">484</span>        PER_RIVER:<a name="line.484"></a>
+<span class="sourceLineNo">485</span>        for (int i = 0; i &lt; len; i++) {<a name="line.485"></a>
+<span class="sourceLineNo">486</span>            workingData.clear();<a name="line.486"></a>
+<span class="sourceLineNo">487</span>            currentPos = starts[i];<a name="line.487"></a>
+<span class="sourceLineNo">488</span>            stx = tcx = currX = decodeX(currentPos);<a name="line.488"></a>
+<span class="sourceLineNo">489</span>            sty = tcy = currY = decodeY(currentPos);<a name="line.489"></a>
+<span class="sourceLineNo">490</span>            while (true) {<a name="line.490"></a>
+<span class="sourceLineNo">491</span><a name="line.491"></a>
+<span class="sourceLineNo">492</span>                double best = 999999;<a name="line.492"></a>
+<span class="sourceLineNo">493</span>                choice = -1;<a name="line.493"></a>
+<span class="sourceLineNo">494</span>                appendDirToShuffle(rng);<a name="line.494"></a>
+<span class="sourceLineNo">495</span><a name="line.495"></a>
+<span class="sourceLineNo">496</span>                for (int d = 0; d &lt; 5; d++) {<a name="line.496"></a>
+<span class="sourceLineNo">497</span>                    adjX = (currX + reuse[d].deltaX);<a name="line.497"></a>
+<span class="sourceLineNo">498</span>                    if (adjX &lt; 0 || adjX &gt;= width)<a name="line.498"></a>
+<span class="sourceLineNo">499</span>                    {<a name="line.499"></a>
+<span class="sourceLineNo">500</span>                        if(rng.next(4) == 0)<a name="line.500"></a>
+<span class="sourceLineNo">501</span>                            riverData.or(workingData);<a name="line.501"></a>
+<span class="sourceLineNo">502</span>                        continue PER_RIVER;<a name="line.502"></a>
+<span class="sourceLineNo">503</span>                    }<a name="line.503"></a>
+<span class="sourceLineNo">504</span>                    adjY = (currY + reuse[d].deltaY);<a name="line.504"></a>
+<span class="sourceLineNo">505</span>                    if (adjY &lt; 0 || adjY &gt;= height)<a name="line.505"></a>
+<span class="sourceLineNo">506</span>                    {<a name="line.506"></a>
+<span class="sourceLineNo">507</span>                        if(rng.next(4) == 0)<a name="line.507"></a>
+<span class="sourceLineNo">508</span>                            riverData.or(workingData);<a name="line.508"></a>
+<span class="sourceLineNo">509</span>                        continue PER_RIVER;<a name="line.509"></a>
+<span class="sourceLineNo">510</span>                    }<a name="line.510"></a>
+<span class="sourceLineNo">511</span>                    if (heightData[adjX][adjY] &lt; best &amp;&amp; !workingData.contains(adjX, adjY)) {<a name="line.511"></a>
+<span class="sourceLineNo">512</span>                        best = heightData[adjX][adjY];<a name="line.512"></a>
+<span class="sourceLineNo">513</span>                        choice = d;<a name="line.513"></a>
+<span class="sourceLineNo">514</span>                        tcx = adjX;<a name="line.514"></a>
+<span class="sourceLineNo">515</span>                        tcy = adjY;<a name="line.515"></a>
+<span class="sourceLineNo">516</span>                    }<a name="line.516"></a>
+<span class="sourceLineNo">517</span>                }<a name="line.517"></a>
+<span class="sourceLineNo">518</span>                currX = tcx;<a name="line.518"></a>
+<span class="sourceLineNo">519</span>                currY = tcy;<a name="line.519"></a>
+<span class="sourceLineNo">520</span>                if (best &gt;= heightData[stx][sty]) {<a name="line.520"></a>
+<span class="sourceLineNo">521</span>                    tcx = rng.next(2);<a name="line.521"></a>
+<span class="sourceLineNo">522</span>                    adjX = currX + ((tcx &amp; 1) &lt;&lt; 1) - 1;<a name="line.522"></a>
+<span class="sourceLineNo">523</span>                    adjY = currY + (tcx &amp; 2) - 1;<a name="line.523"></a>
+<span class="sourceLineNo">524</span>                    lakeData.insert(currX, currY);<a name="line.524"></a>
+<span class="sourceLineNo">525</span>                    lakeData.insert(currX + 1, currY);<a name="line.525"></a>
+<span class="sourceLineNo">526</span>                    lakeData.insert(currX - 1, currY);<a name="line.526"></a>
+<span class="sourceLineNo">527</span>                    lakeData.insert(currX, currY + 1);<a name="line.527"></a>
+<span class="sourceLineNo">528</span>                    lakeData.insert(currX, currY - 1);<a name="line.528"></a>
+<span class="sourceLineNo">529</span>                    if (!(adjY &lt; 0 || adjY &gt;= height || adjX &lt; 0 || adjX &gt;= width))<a name="line.529"></a>
+<span class="sourceLineNo">530</span>                    {<a name="line.530"></a>
+<span class="sourceLineNo">531</span>                        if(heightCodeData[adjX][adjY] &lt;= 3) {<a name="line.531"></a>
+<span class="sourceLineNo">532</span>                            riverData.or(workingData);<a name="line.532"></a>
+<span class="sourceLineNo">533</span>                            continue PER_RIVER;<a name="line.533"></a>
+<span class="sourceLineNo">534</span>                        }<a name="line.534"></a>
+<span class="sourceLineNo">535</span>                        else if((heightData[adjX][adjY] -= 0.0002) &lt; lowers[heightCodeData[adjX][adjY]-1])<a name="line.535"></a>
+<span class="sourceLineNo">536</span>                        {<a name="line.536"></a>
+<span class="sourceLineNo">537</span>                            if(rng.next(3) == 0)<a name="line.537"></a>
+<span class="sourceLineNo">538</span>                                riverData.or(workingData);<a name="line.538"></a>
+<span class="sourceLineNo">539</span>                            continue PER_RIVER;<a name="line.539"></a>
+<span class="sourceLineNo">540</span>                        }<a name="line.540"></a>
+<span class="sourceLineNo">541</span>                    }<a name="line.541"></a>
+<span class="sourceLineNo">542</span>                    else<a name="line.542"></a>
+<span class="sourceLineNo">543</span>                    {<a name="line.543"></a>
+<span class="sourceLineNo">544</span>                        if(rng.next(5) == 0)<a name="line.544"></a>
+<span class="sourceLineNo">545</span>                            riverData.or(workingData);<a name="line.545"></a>
+<span class="sourceLineNo">546</span>                        continue PER_RIVER;<a name="line.546"></a>
+<span class="sourceLineNo">547</span>                    }<a name="line.547"></a>
+<span class="sourceLineNo">548</span>                    tcx = rng.next(2);<a name="line.548"></a>
+<span class="sourceLineNo">549</span>                    adjX = currX + ((tcx &amp; 1) &lt;&lt; 1) - 1;<a name="line.549"></a>
+<span class="sourceLineNo">550</span>                    adjY = currY + (tcx &amp; 2) - 1;<a name="line.550"></a>
+<span class="sourceLineNo">551</span>                    if (!(adjY &lt; 0 || adjY &gt;= height || adjX &lt; 0 || adjX &gt;= width))<a name="line.551"></a>
+<span class="sourceLineNo">552</span>                    {<a name="line.552"></a>
+<span class="sourceLineNo">553</span>                        if(heightCodeData[adjX][adjY] &lt;= 3) {<a name="line.553"></a>
+<span class="sourceLineNo">554</span>                            riverData.or(workingData);<a name="line.554"></a>
+<span class="sourceLineNo">555</span>                            continue PER_RIVER;<a name="line.555"></a>
+<span class="sourceLineNo">556</span>                        }<a name="line.556"></a>
+<span class="sourceLineNo">557</span>                        else if((heightData[adjX][adjY] -= 0.0002) &lt; lowers[heightCodeData[adjX][adjY]-1])<a name="line.557"></a>
+<span class="sourceLineNo">558</span>                        {<a name="line.558"></a>
+<span class="sourceLineNo">559</span>                            if(rng.next(3) == 0)<a name="line.559"></a>
+<span class="sourceLineNo">560</span>                                riverData.or(workingData);<a name="line.560"></a>
+<span class="sourceLineNo">561</span>                            continue PER_RIVER;<a name="line.561"></a>
+<span class="sourceLineNo">562</span>                        }<a name="line.562"></a>
+<span class="sourceLineNo">563</span>                    }<a name="line.563"></a>
+<span class="sourceLineNo">564</span>                    else<a name="line.564"></a>
+<span class="sourceLineNo">565</span>                    {<a name="line.565"></a>
+<span class="sourceLineNo">566</span>                        if(rng.next(5) == 0)<a name="line.566"></a>
+<span class="sourceLineNo">567</span>                            riverData.or(workingData);<a name="line.567"></a>
+<span class="sourceLineNo">568</span>                        continue PER_RIVER;<a name="line.568"></a>
+<span class="sourceLineNo">569</span>                    }<a name="line.569"></a>
+<span class="sourceLineNo">570</span><a name="line.570"></a>
+<span class="sourceLineNo">571</span>                }<a name="line.571"></a>
+<span class="sourceLineNo">572</span>                if(choice != -1 &amp;&amp; reuse[choice].isDiagonal())<a name="line.572"></a>
+<span class="sourceLineNo">573</span>                {<a name="line.573"></a>
+<span class="sourceLineNo">574</span>                    tcx = currX - reuse[choice].deltaX;<a name="line.574"></a>
+<span class="sourceLineNo">575</span>                    tcy = currY - reuse[choice].deltaY;<a name="line.575"></a>
+<span class="sourceLineNo">576</span>                    if(heightData[tcx][currY] &lt;= heightData[currX][tcy] &amp;&amp; !workingData.contains(tcx, currY))<a name="line.576"></a>
+<span class="sourceLineNo">577</span>                    {<a name="line.577"></a>
+<span class="sourceLineNo">578</span>                        if(riverData.contains(tcx, currY))<a name="line.578"></a>
+<span class="sourceLineNo">579</span>                        {<a name="line.579"></a>
+<span class="sourceLineNo">580</span>                            riverData.or(workingData);<a name="line.580"></a>
+<span class="sourceLineNo">581</span>                            continue PER_RIVER;<a name="line.581"></a>
+<span class="sourceLineNo">582</span>                        }<a name="line.582"></a>
+<span class="sourceLineNo">583</span>                        workingData.insert(tcx, currY);<a name="line.583"></a>
+<span class="sourceLineNo">584</span>                        if (heightData[tcx][currY] &lt;= 0.075)<a name="line.584"></a>
+<span class="sourceLineNo">585</span>                        {<a name="line.585"></a>
+<span class="sourceLineNo">586</span>                            riverData.or(workingData);<a name="line.586"></a>
+<span class="sourceLineNo">587</span>                            continue PER_RIVER;<a name="line.587"></a>
+<span class="sourceLineNo">588</span>                        }<a name="line.588"></a>
+<span class="sourceLineNo">589</span>                    }<a name="line.589"></a>
+<span class="sourceLineNo">590</span>                    else if(!workingData.contains(currX, tcy))<a name="line.590"></a>
+<span class="sourceLineNo">591</span>                    {<a name="line.591"></a>
+<span class="sourceLineNo">592</span>                        if(riverData.contains(currX, tcy))<a name="line.592"></a>
+<span class="sourceLineNo">593</span>                        {<a name="line.593"></a>
+<span class="sourceLineNo">594</span>                            riverData.or(workingData);<a name="line.594"></a>
+<span class="sourceLineNo">595</span>                            continue PER_RIVER;<a name="line.595"></a>
+<span class="sourceLineNo">596</span>                        }<a name="line.596"></a>
+<span class="sourceLineNo">597</span>                        workingData.insert(currX, tcy);<a name="line.597"></a>
+<span class="sourceLineNo">598</span>                        if (heightData[currX][tcy] &lt;= 0.075)<a name="line.598"></a>
+<span class="sourceLineNo">599</span>                        {<a name="line.599"></a>
+<span class="sourceLineNo">600</span>                            riverData.or(workingData);<a name="line.600"></a>
+<span class="sourceLineNo">601</span>                            continue PER_RIVER;<a name="line.601"></a>
+<span class="sourceLineNo">602</span>                        }<a name="line.602"></a>
+<span class="sourceLineNo">603</span><a name="line.603"></a>
+<span class="sourceLineNo">604</span>                    }<a name="line.604"></a>
+<span class="sourceLineNo">605</span>                }<a name="line.605"></a>
+<span class="sourceLineNo">606</span>                if(riverData.contains(currX, currY))<a name="line.606"></a>
+<span class="sourceLineNo">607</span>                {<a name="line.607"></a>
+<span class="sourceLineNo">608</span>                    riverData.or(workingData);<a name="line.608"></a>
+<span class="sourceLineNo">609</span>                    continue PER_RIVER;<a name="line.609"></a>
+<span class="sourceLineNo">610</span>                }<a name="line.610"></a>
+<span class="sourceLineNo">611</span>                workingData.insert(currX, currY);<a name="line.611"></a>
+<span class="sourceLineNo">612</span>                if (heightData[currX][currY] &lt;= 0.075)<a name="line.612"></a>
+<span class="sourceLineNo">613</span>                {<a name="line.613"></a>
+<span class="sourceLineNo">614</span>                    riverData.or(workingData);<a name="line.614"></a>
+<span class="sourceLineNo">615</span>                    continue PER_RIVER;<a name="line.615"></a>
 <span class="sourceLineNo">616</span>                }<a name="line.616"></a>
-<span class="sourceLineNo">617</span>                if(riverData.contains(currX, currY))<a name="line.617"></a>
-<span class="sourceLineNo">618</span>                {<a name="line.618"></a>
-<span class="sourceLineNo">619</span>                    riverData.or(workingData);<a name="line.619"></a>
-<span class="sourceLineNo">620</span>                    continue PER_RIVER;<a name="line.620"></a>
-<span class="sourceLineNo">621</span>                }<a name="line.621"></a>
-<span class="sourceLineNo">622</span>                workingData.insert(currX, currY);<a name="line.622"></a>
-<span class="sourceLineNo">623</span>                if (heightData[currX][currY] &lt;= 0.075)<a name="line.623"></a>
-<span class="sourceLineNo">624</span>                {<a name="line.624"></a>
-<span class="sourceLineNo">625</span>                    riverData.or(workingData);<a name="line.625"></a>
-<span class="sourceLineNo">626</span>                    continue PER_RIVER;<a name="line.626"></a>
-<span class="sourceLineNo">627</span>                }<a name="line.627"></a>
-<span class="sourceLineNo">628</span>            }<a name="line.628"></a>
-<span class="sourceLineNo">629</span>        }<a name="line.629"></a>
-<span class="sourceLineNo">630</span><a name="line.630"></a>
-<span class="sourceLineNo">631</span>        GreasedRegion tempData = new GreasedRegion(width, height);<a name="line.631"></a>
-<span class="sourceLineNo">632</span>        int riverCount = riverData.size() &gt;&gt; 3, currentMax = riverCount &gt;&gt; 2, idx = 0, prevChoice;<a name="line.632"></a>
-<span class="sourceLineNo">633</span>        for (int h = 5; h &lt; 9; h++) { //, currentMax += riverCount / 18<a name="line.633"></a>
-<span class="sourceLineNo">634</span>            workingData.empty().refill(heightCodeData, h).and(riverData);<a name="line.634"></a>
-<span class="sourceLineNo">635</span>            RIVER:<a name="line.635"></a>
-<span class="sourceLineNo">636</span>            for (int j = 0; j &lt; currentMax &amp;&amp; idx &lt; riverCount; j++) {<a name="line.636"></a>
-<span class="sourceLineNo">637</span>                double vdc = VanDerCorputQRNG.weakDetermine(idx++), best = -999999;<a name="line.637"></a>
-<span class="sourceLineNo">638</span>                currentPos = workingData.atFractionTight(vdc);<a name="line.638"></a>
-<span class="sourceLineNo">639</span>                if(currentPos &lt; 0)<a name="line.639"></a>
-<span class="sourceLineNo">640</span>                    break;<a name="line.640"></a>
-<span class="sourceLineNo">641</span>                stx = sbx = tcx = currX = decodeX(currentPos);<a name="line.641"></a>
-<span class="sourceLineNo">642</span>                sty = sby = tcy = currY = decodeY(currentPos);<a name="line.642"></a>
-<span class="sourceLineNo">643</span>                appendDirToShuffle(rng);<a name="line.643"></a>
-<span class="sourceLineNo">644</span>                choice = -1;<a name="line.644"></a>
-<span class="sourceLineNo">645</span>                prevChoice = -1;<a name="line.645"></a>
-<span class="sourceLineNo">646</span>                for (int d = 0; d &lt; 5; d++) {<a name="line.646"></a>
-<span class="sourceLineNo">647</span>                    adjX = (currX + reuse[d].deltaX);<a name="line.647"></a>
-<span class="sourceLineNo">648</span>                    if (adjX &lt; 0 || adjX &gt;= width)<a name="line.648"></a>
-<span class="sourceLineNo">649</span>                        continue;<a name="line.649"></a>
-<span class="sourceLineNo">650</span>                    adjY = (currY + reuse[d].deltaY);<a name="line.650"></a>
-<span class="sourceLineNo">651</span>                    if (adjY &lt; 0 || adjY &gt;= height)<a name="line.651"></a>
-<span class="sourceLineNo">652</span>                        continue;<a name="line.652"></a>
-<span class="sourceLineNo">653</span>                    if (heightData[adjX][adjY] &gt; best) {<a name="line.653"></a>
-<span class="sourceLineNo">654</span>                        best = heightData[adjX][adjY];<a name="line.654"></a>
-<span class="sourceLineNo">655</span>                        prevChoice = choice;<a name="line.655"></a>
-<span class="sourceLineNo">656</span>                        choice = d;<a name="line.656"></a>
-<span class="sourceLineNo">657</span>                        sbx = tcx;<a name="line.657"></a>
-<span class="sourceLineNo">658</span>                        sby = tcy;<a name="line.658"></a>
-<span class="sourceLineNo">659</span>                        tcx = adjX;<a name="line.659"></a>
-<span class="sourceLineNo">660</span>                        tcy = adjY;<a name="line.660"></a>
-<span class="sourceLineNo">661</span>                    }<a name="line.661"></a>
-<span class="sourceLineNo">662</span>                }<a name="line.662"></a>
-<span class="sourceLineNo">663</span>                currX = sbx;<a name="line.663"></a>
-<span class="sourceLineNo">664</span>                currY = sby;<a name="line.664"></a>
-<span class="sourceLineNo">665</span>                if (prevChoice != -1 &amp;&amp; heightCodeData[currX][currY] &gt;= 4) {<a name="line.665"></a>
-<span class="sourceLineNo">666</span>                    if (reuse[prevChoice].isDiagonal()) {<a name="line.666"></a>
-<span class="sourceLineNo">667</span>                        tcx = currX - reuse[prevChoice].deltaX;<a name="line.667"></a>
-<span class="sourceLineNo">668</span>                        tcy = currY - reuse[prevChoice].deltaY;<a name="line.668"></a>
-<span class="sourceLineNo">669</span>                        if (heightData[tcx][currY] &lt;= heightData[currX][tcy])<a name="line.669"></a>
-<span class="sourceLineNo">670</span>                            tempData.insert(tcx, currY);<a name="line.670"></a>
-<span class="sourceLineNo">671</span>                        else<a name="line.671"></a>
-<span class="sourceLineNo">672</span>                            tempData.insert(currX, tcy);<a name="line.672"></a>
-<span class="sourceLineNo">673</span>                    }<a name="line.673"></a>
-<span class="sourceLineNo">674</span>                    tempData.insert(currX, currY);<a name="line.674"></a>
-<span class="sourceLineNo">675</span>                }<a name="line.675"></a>
-<span class="sourceLineNo">676</span><a name="line.676"></a>
-<span class="sourceLineNo">677</span>                while (true) {<a name="line.677"></a>
-<span class="sourceLineNo">678</span>                    best = -999999;<a name="line.678"></a>
-<span class="sourceLineNo">679</span>                    appendDirToShuffle(rng);<a name="line.679"></a>
-<span class="sourceLineNo">680</span>                    choice = -1;<a name="line.680"></a>
-<span class="sourceLineNo">681</span>                    for (int d = 0; d &lt; 6; d++) {<a name="line.681"></a>
-<span class="sourceLineNo">682</span>                        adjX = (currX + reuse[d].deltaX);<a name="line.682"></a>
-<span class="sourceLineNo">683</span>                        if (adjX &lt; 0 || adjX &gt;= width)<a name="line.683"></a>
-<span class="sourceLineNo">684</span>                            continue;<a name="line.684"></a>
-<span class="sourceLineNo">685</span>                        adjY = (currY + reuse[d].deltaY);<a name="line.685"></a>
-<span class="sourceLineNo">686</span>                        if (adjY &lt; 0 || adjY &gt;= height)<a name="line.686"></a>
-<span class="sourceLineNo">687</span>                            continue;<a name="line.687"></a>
-<span class="sourceLineNo">688</span>                        if (heightData[adjX][adjY] &gt; best &amp;&amp; !riverData.contains(adjX, adjY)) {<a name="line.688"></a>
-<span class="sourceLineNo">689</span>                            best = heightData[adjX][adjY];<a name="line.689"></a>
-<span class="sourceLineNo">690</span>                            choice = d;<a name="line.690"></a>
-<span class="sourceLineNo">691</span>                            sbx = adjX;<a name="line.691"></a>
-<span class="sourceLineNo">692</span>                            sby = adjY;<a name="line.692"></a>
-<span class="sourceLineNo">693</span>                        }<a name="line.693"></a>
-<span class="sourceLineNo">694</span>                    }<a name="line.694"></a>
-<span class="sourceLineNo">695</span>                    currX = sbx;<a name="line.695"></a>
-<span class="sourceLineNo">696</span>                    currY = sby;<a name="line.696"></a>
-<span class="sourceLineNo">697</span>                    if (choice != -1 &amp;&amp; heightCodeData[currX][currY] &gt;= 4) {<a name="line.697"></a>
-<span class="sourceLineNo">698</span>                        if (reuse[choice].isDiagonal()) {<a name="line.698"></a>
-<span class="sourceLineNo">699</span>                            tcx = currX - reuse[choice].deltaX;<a name="line.699"></a>
-<span class="sourceLineNo">700</span>                            tcy = currY - reuse[choice].deltaY;<a name="line.700"></a>
-<span class="sourceLineNo">701</span>                            if (heightData[tcx][currY] &lt;= heightData[currX][tcy])<a name="line.701"></a>
-<span class="sourceLineNo">702</span>                                tempData.insert(tcx, currY);<a name="line.702"></a>
-<span class="sourceLineNo">703</span>                            else<a name="line.703"></a>
-<span class="sourceLineNo">704</span>                                tempData.insert(currX, tcy);<a name="line.704"></a>
-<span class="sourceLineNo">705</span>                        }<a name="line.705"></a>
-<span class="sourceLineNo">706</span>                        tempData.insert(currX, currY);<a name="line.706"></a>
-<span class="sourceLineNo">707</span>                    }<a name="line.707"></a>
-<span class="sourceLineNo">708</span>                    if (best &lt;= heightData[stx][sty] || heightData[currX][currY] &gt; rng.nextDouble(280.0)) {<a name="line.708"></a>
-<span class="sourceLineNo">709</span>                        riverData.or(tempData);<a name="line.709"></a>
-<span class="sourceLineNo">710</span>                        tempData.clear();<a name="line.710"></a>
-<span class="sourceLineNo">711</span><a name="line.711"></a>
-<span class="sourceLineNo">712</span>                        lakeData.insert(currX, currY);<a name="line.712"></a>
-<span class="sourceLineNo">713</span>                        sbx = rng.next(8);<a name="line.713"></a>
-<span class="sourceLineNo">714</span>                        sbx &amp;= sbx &gt;&gt;&gt; 4;<a name="line.714"></a>
-<span class="sourceLineNo">715</span>                        if ((sbx &amp; 1) == 0)<a name="line.715"></a>
-<span class="sourceLineNo">716</span>                            lakeData.insert(currX + 1, currY);<a name="line.716"></a>
-<span class="sourceLineNo">717</span>                        if ((sbx &amp; 2) == 0)<a name="line.717"></a>
-<span class="sourceLineNo">718</span>                            lakeData.insert(currX - 1, currY);<a name="line.718"></a>
-<span class="sourceLineNo">719</span>                        if ((sbx &amp; 4) == 0)<a name="line.719"></a>
-<span class="sourceLineNo">720</span>                            lakeData.insert(currX, currY + 1);<a name="line.720"></a>
-<span class="sourceLineNo">721</span>                        if ((sbx &amp; 8) == 0)<a name="line.721"></a>
-<span class="sourceLineNo">722</span>                            lakeData.insert(currX, currY - 1);<a name="line.722"></a>
-<span class="sourceLineNo">723</span>                        sbx = rng.next(2);<a name="line.723"></a>
-<span class="sourceLineNo">724</span>                        lakeData.insert(currX + (-(sbx &amp; 1) | 1), currY + ((sbx &amp; 2) - 1)); // random diagonal<a name="line.724"></a>
-<span class="sourceLineNo">725</span>                        lakeData.insert(currX, currY + ((sbx &amp; 2) - 1)); // ortho next to random diagonal<a name="line.725"></a>
-<span class="sourceLineNo">726</span>                        lakeData.insert(currX + (-(sbx &amp; 1) | 1), currY); // ortho next to random diagonal<a name="line.726"></a>
-<span class="sourceLineNo">727</span><a name="line.727"></a>
-<span class="sourceLineNo">728</span>                        continue RIVER;<a name="line.728"></a>
-<span class="sourceLineNo">729</span>                    }<a name="line.729"></a>
-<span class="sourceLineNo">730</span>                }<a name="line.730"></a>
-<span class="sourceLineNo">731</span>            }<a name="line.731"></a>
-<span class="sourceLineNo">732</span><a name="line.732"></a>
-<span class="sourceLineNo">733</span>        }<a name="line.733"></a>
-<span class="sourceLineNo">734</span><a name="line.734"></a>
-<span class="sourceLineNo">735</span>        rng.setState(rebuildState);<a name="line.735"></a>
-<span class="sourceLineNo">736</span>    }<a name="line.736"></a>
-<span class="sourceLineNo">737</span><a name="line.737"></a>
-<span class="sourceLineNo">738</span>    /**<a name="line.738"></a>
-<span class="sourceLineNo">739</span>     * A way to get biome information for the cells on a map when you only need a single value to describe a biome, such<a name="line.739"></a>
-<span class="sourceLineNo">740</span>     * as "Grassland" or "TropicalRainforest".<a name="line.740"></a>
-<span class="sourceLineNo">741</span>     * &lt;br&gt;<a name="line.741"></a>
-<span class="sourceLineNo">742</span>     * To use: 1, Construct a SimpleBiomeMapper (constructor takes no arguments). 2, call<a name="line.742"></a>
-<span class="sourceLineNo">743</span>     * {@link #makeBiomes(WorldMapGenerator)} with a WorldMapGenerator that has already produced at least one world map.<a name="line.743"></a>
-<span class="sourceLineNo">744</span>     * 3, get biome codes from the {@link #biomeCodeData} field, where a code is an int that can be used as an index<a name="line.744"></a>
-<span class="sourceLineNo">745</span>     * into the {@link #biomeTable} static field to get a String name for a biome type, or used with an alternate biome<a name="line.745"></a>
-<span class="sourceLineNo">746</span>     * table of your design. Biome tables in this case are 54-element arrays organized into groups of 6 elements. Each<a name="line.746"></a>
-<span class="sourceLineNo">747</span>     * group goes from the coldest temperature first to the warmest temperature last in the group. The first group of 6<a name="line.747"></a>
-<span class="sourceLineNo">748</span>     * contains the dryest biomes, the next 6 are medium-dry, the next are slightly-dry, the next slightly-wet, then<a name="line.748"></a>
-<span class="sourceLineNo">749</span>     * medium-wet, then wettest. After this first block of dry-to-wet groups, there is a group of 6 for coastlines, a<a name="line.749"></a>
-<span class="sourceLineNo">750</span>     * group of 6 for rivers, and lastly a group for lakes. This also assigns moisture codes and heat codes from 0 to 5<a name="line.750"></a>
-<span class="sourceLineNo">751</span>     * for each cell, which may be useful to simplify logic that deals with those factors.<a name="line.751"></a>
-<span class="sourceLineNo">752</span>     */<a name="line.752"></a>
-<span class="sourceLineNo">753</span>    public static class SimpleBiomeMapper<a name="line.753"></a>
-<span class="sourceLineNo">754</span>    {<a name="line.754"></a>
-<span class="sourceLineNo">755</span>        /**<a name="line.755"></a>
-<span class="sourceLineNo">756</span>         * The heat codes for the analyzed map, from 0 to 5 inclusive, with 0 coldest and 5 hottest.<a name="line.756"></a>
-<span class="sourceLineNo">757</span>         */<a name="line.757"></a>
-<span class="sourceLineNo">758</span>        public int[][] heatCodeData,<a name="line.758"></a>
-<span class="sourceLineNo">759</span>        /**<a name="line.759"></a>
-<span class="sourceLineNo">760</span>         * The moisture codes for the analyzed map, from 0 to 5 inclusive, with 0 driest and 5 wettest.<a name="line.760"></a>
-<span class="sourceLineNo">761</span>         */<a name="line.761"></a>
-<span class="sourceLineNo">762</span>        moistureCodeData,<a name="line.762"></a>
-<span class="sourceLineNo">763</span>        /**<a name="line.763"></a>
-<span class="sourceLineNo">764</span>         * The biome codes for the analyzed map, from 0 to 53 inclusive. You can use {@link #biomeTable} to look up<a name="line.764"></a>
-<span class="sourceLineNo">765</span>         * String names for biomes, or construct your own table as you see fit (see docs in {@link SimpleBiomeMapper}).<a name="line.765"></a>
-<span class="sourceLineNo">766</span>         */<a name="line.766"></a>
-<span class="sourceLineNo">767</span>        biomeCodeData;<a name="line.767"></a>
-<span class="sourceLineNo">768</span><a name="line.768"></a>
-<span class="sourceLineNo">769</span>        public static final double<a name="line.769"></a>
-<span class="sourceLineNo">770</span>                coldestValueLower = 0.0,   coldestValueUpper = 0.15, // 0<a name="line.770"></a>
-<span class="sourceLineNo">771</span>                colderValueLower = 0.15,   colderValueUpper = 0.31,  // 1<a name="line.771"></a>
-<span class="sourceLineNo">772</span>                coldValueLower = 0.31,     coldValueUpper = 0.5,     // 2<a name="line.772"></a>
-<span class="sourceLineNo">773</span>                warmValueLower = 0.5,      warmValueUpper = 0.69,    // 3<a name="line.773"></a>
-<span class="sourceLineNo">774</span>                warmerValueLower = 0.69,   warmerValueUpper = 0.85,  // 4<a name="line.774"></a>
-<span class="sourceLineNo">775</span>                warmestValueLower = 0.85,  warmestValueUpper = 1.0,  // 5<a name="line.775"></a>
-<span class="sourceLineNo">776</span>        <a name="line.776"></a>
-<span class="sourceLineNo">777</span>                driestValueLower = 0.0,    driestValueUpper  = 0.27, // 0<a name="line.777"></a>
-<span class="sourceLineNo">778</span>                drierValueLower = 0.27,    drierValueUpper   = 0.4,  // 1<a name="line.778"></a>
-<span class="sourceLineNo">779</span>                dryValueLower = 0.4,       dryValueUpper     = 0.6,  // 2<a name="line.779"></a>
-<span class="sourceLineNo">780</span>                wetValueLower = 0.6,       wetValueUpper     = 0.8,  // 3<a name="line.780"></a>
-<span class="sourceLineNo">781</span>                wetterValueLower = 0.8,    wetterValueUpper  = 0.9,  // 4<a name="line.781"></a>
-<span class="sourceLineNo">782</span>                wettestValueLower = 0.9,   wettestValueUpper = 1.0;  // 5<a name="line.782"></a>
-<span class="sourceLineNo">783</span><a name="line.783"></a>
-<span class="sourceLineNo">784</span>        /**<a name="line.784"></a>
-<span class="sourceLineNo">785</span>         * The default biome table to use with biome codes from {@link #biomeCodeData}. Biomes are assigned based on<a name="line.785"></a>
-<span class="sourceLineNo">786</span>         * heat and moisture for the first 36 of 54 elements (coldest to warmest for each group of 6, with the first<a name="line.786"></a>
-<span class="sourceLineNo">787</span>         * group as the dryest and the last group the wettest), then the next 6 are for coastlines (coldest to warmest),<a name="line.787"></a>
-<span class="sourceLineNo">788</span>         * then rivers (coldest to warmest), then lakes (coldest to warmest).<a name="line.788"></a>
-<span class="sourceLineNo">789</span>         */<a name="line.789"></a>
-<span class="sourceLineNo">790</span>        public static final String[] biomeTable = {<a name="line.790"></a>
-<span class="sourceLineNo">791</span>                //COLDEST //COLDER        //COLD            //HOT                  //HOTTER              //HOTTEST<a name="line.791"></a>
-<span class="sourceLineNo">792</span>                "Ice",    "Ice",          "Grassland",      "Desert",              "Desert",             "Desert",             //DRYEST<a name="line.792"></a>
-<span class="sourceLineNo">793</span>                "Ice",    "Tundra",       "Grassland",      "Grassland",           "Desert",             "Desert",             //DRYER<a name="line.793"></a>
-<span class="sourceLineNo">794</span>                "Ice",    "Tundra",       "Woodland",       "Woodland",            "Savanna",            "Desert",             //DRY<a name="line.794"></a>
-<span class="sourceLineNo">795</span>                "Ice",    "Tundra",       "SeasonalForest", "SeasonalForest",      "Savanna",            "Savanna",            //WET<a name="line.795"></a>
-<span class="sourceLineNo">796</span>                "Ice",    "Tundra",       "BorealForest",   "TemperateRainforest", "TropicalRainforest", "Savanna",            //WETTER<a name="line.796"></a>
-<span class="sourceLineNo">797</span>                "Ice",    "BorealForest", "BorealForest",   "TemperateRainforest", "TropicalRainforest", "TropicalRainforest", //WETTEST<a name="line.797"></a>
-<span class="sourceLineNo">798</span>                "Rocky",  "Rocky",        "Beach",          "Beach",               "Beach",              "Beach",              //COASTS<a name="line.798"></a>
-<span class="sourceLineNo">799</span>                "Ice",    "River",        "River",          "River",               "River",              "River",              //RIVERS<a name="line.799"></a>
-<span class="sourceLineNo">800</span>                "Ice",    "River",        "River",          "River",               "River",              "River",              //LAKES<a name="line.800"></a>
-<span class="sourceLineNo">801</span>        };<a name="line.801"></a>
+<span class="sourceLineNo">617</span>            }<a name="line.617"></a>
+<span class="sourceLineNo">618</span>        }<a name="line.618"></a>
+<span class="sourceLineNo">619</span><a name="line.619"></a>
+<span class="sourceLineNo">620</span>        GreasedRegion tempData = new GreasedRegion(width, height);<a name="line.620"></a>
+<span class="sourceLineNo">621</span>        int riverCount = riverData.size() &gt;&gt; 3, currentMax = riverCount &gt;&gt; 2, idx = 0, prevChoice;<a name="line.621"></a>
+<span class="sourceLineNo">622</span>        for (int h = 5; h &lt; 9; h++) { //, currentMax += riverCount / 18<a name="line.622"></a>
+<span class="sourceLineNo">623</span>            workingData.empty().refill(heightCodeData, h).and(riverData);<a name="line.623"></a>
+<span class="sourceLineNo">624</span>            RIVER:<a name="line.624"></a>
+<span class="sourceLineNo">625</span>            for (int j = 0; j &lt; currentMax &amp;&amp; idx &lt; riverCount; j++) {<a name="line.625"></a>
+<span class="sourceLineNo">626</span>                double vdc = VanDerCorputQRNG.weakDetermine(idx++), best = -999999;<a name="line.626"></a>
+<span class="sourceLineNo">627</span>                currentPos = workingData.atFractionTight(vdc);<a name="line.627"></a>
+<span class="sourceLineNo">628</span>                if(currentPos &lt; 0)<a name="line.628"></a>
+<span class="sourceLineNo">629</span>                    break;<a name="line.629"></a>
+<span class="sourceLineNo">630</span>                stx = sbx = tcx = currX = decodeX(currentPos);<a name="line.630"></a>
+<span class="sourceLineNo">631</span>                sty = sby = tcy = currY = decodeY(currentPos);<a name="line.631"></a>
+<span class="sourceLineNo">632</span>                appendDirToShuffle(rng);<a name="line.632"></a>
+<span class="sourceLineNo">633</span>                choice = -1;<a name="line.633"></a>
+<span class="sourceLineNo">634</span>                prevChoice = -1;<a name="line.634"></a>
+<span class="sourceLineNo">635</span>                for (int d = 0; d &lt; 5; d++) {<a name="line.635"></a>
+<span class="sourceLineNo">636</span>                    adjX = (currX + reuse[d].deltaX);<a name="line.636"></a>
+<span class="sourceLineNo">637</span>                    if (adjX &lt; 0 || adjX &gt;= width)<a name="line.637"></a>
+<span class="sourceLineNo">638</span>                        continue;<a name="line.638"></a>
+<span class="sourceLineNo">639</span>                    adjY = (currY + reuse[d].deltaY);<a name="line.639"></a>
+<span class="sourceLineNo">640</span>                    if (adjY &lt; 0 || adjY &gt;= height)<a name="line.640"></a>
+<span class="sourceLineNo">641</span>                        continue;<a name="line.641"></a>
+<span class="sourceLineNo">642</span>                    if (heightData[adjX][adjY] &gt; best) {<a name="line.642"></a>
+<span class="sourceLineNo">643</span>                        best = heightData[adjX][adjY];<a name="line.643"></a>
+<span class="sourceLineNo">644</span>                        prevChoice = choice;<a name="line.644"></a>
+<span class="sourceLineNo">645</span>                        choice = d;<a name="line.645"></a>
+<span class="sourceLineNo">646</span>                        sbx = tcx;<a name="line.646"></a>
+<span class="sourceLineNo">647</span>                        sby = tcy;<a name="line.647"></a>
+<span class="sourceLineNo">648</span>                        tcx = adjX;<a name="line.648"></a>
+<span class="sourceLineNo">649</span>                        tcy = adjY;<a name="line.649"></a>
+<span class="sourceLineNo">650</span>                    }<a name="line.650"></a>
+<span class="sourceLineNo">651</span>                }<a name="line.651"></a>
+<span class="sourceLineNo">652</span>                currX = sbx;<a name="line.652"></a>
+<span class="sourceLineNo">653</span>                currY = sby;<a name="line.653"></a>
+<span class="sourceLineNo">654</span>                if (prevChoice != -1 &amp;&amp; heightCodeData[currX][currY] &gt;= 4) {<a name="line.654"></a>
+<span class="sourceLineNo">655</span>                    if (reuse[prevChoice].isDiagonal()) {<a name="line.655"></a>
+<span class="sourceLineNo">656</span>                        tcx = currX - reuse[prevChoice].deltaX;<a name="line.656"></a>
+<span class="sourceLineNo">657</span>                        tcy = currY - reuse[prevChoice].deltaY;<a name="line.657"></a>
+<span class="sourceLineNo">658</span>                        if (heightData[tcx][currY] &lt;= heightData[currX][tcy])<a name="line.658"></a>
+<span class="sourceLineNo">659</span>                            tempData.insert(tcx, currY);<a name="line.659"></a>
+<span class="sourceLineNo">660</span>                        else<a name="line.660"></a>
+<span class="sourceLineNo">661</span>                            tempData.insert(currX, tcy);<a name="line.661"></a>
+<span class="sourceLineNo">662</span>                    }<a name="line.662"></a>
+<span class="sourceLineNo">663</span>                    tempData.insert(currX, currY);<a name="line.663"></a>
+<span class="sourceLineNo">664</span>                }<a name="line.664"></a>
+<span class="sourceLineNo">665</span><a name="line.665"></a>
+<span class="sourceLineNo">666</span>                while (true) {<a name="line.666"></a>
+<span class="sourceLineNo">667</span>                    best = -999999;<a name="line.667"></a>
+<span class="sourceLineNo">668</span>                    appendDirToShuffle(rng);<a name="line.668"></a>
+<span class="sourceLineNo">669</span>                    choice = -1;<a name="line.669"></a>
+<span class="sourceLineNo">670</span>                    for (int d = 0; d &lt; 6; d++) {<a name="line.670"></a>
+<span class="sourceLineNo">671</span>                        adjX = (currX + reuse[d].deltaX);<a name="line.671"></a>
+<span class="sourceLineNo">672</span>                        if (adjX &lt; 0 || adjX &gt;= width)<a name="line.672"></a>
+<span class="sourceLineNo">673</span>                            continue;<a name="line.673"></a>
+<span class="sourceLineNo">674</span>                        adjY = (currY + reuse[d].deltaY);<a name="line.674"></a>
+<span class="sourceLineNo">675</span>                        if (adjY &lt; 0 || adjY &gt;= height)<a name="line.675"></a>
+<span class="sourceLineNo">676</span>                            continue;<a name="line.676"></a>
+<span class="sourceLineNo">677</span>                        if (heightData[adjX][adjY] &gt; best &amp;&amp; !riverData.contains(adjX, adjY)) {<a name="line.677"></a>
+<span class="sourceLineNo">678</span>                            best = heightData[adjX][adjY];<a name="line.678"></a>
+<span class="sourceLineNo">679</span>                            choice = d;<a name="line.679"></a>
+<span class="sourceLineNo">680</span>                            sbx = adjX;<a name="line.680"></a>
+<span class="sourceLineNo">681</span>                            sby = adjY;<a name="line.681"></a>
+<span class="sourceLineNo">682</span>                        }<a name="line.682"></a>
+<span class="sourceLineNo">683</span>                    }<a name="line.683"></a>
+<span class="sourceLineNo">684</span>                    currX = sbx;<a name="line.684"></a>
+<span class="sourceLineNo">685</span>                    currY = sby;<a name="line.685"></a>
+<span class="sourceLineNo">686</span>                    if (choice != -1 &amp;&amp; heightCodeData[currX][currY] &gt;= 4) {<a name="line.686"></a>
+<span class="sourceLineNo">687</span>                        if (reuse[choice].isDiagonal()) {<a name="line.687"></a>
+<span class="sourceLineNo">688</span>                            tcx = currX - reuse[choice].deltaX;<a name="line.688"></a>
+<span class="sourceLineNo">689</span>                            tcy = currY - reuse[choice].deltaY;<a name="line.689"></a>
+<span class="sourceLineNo">690</span>                            if (heightData[tcx][currY] &lt;= heightData[currX][tcy])<a name="line.690"></a>
+<span class="sourceLineNo">691</span>                                tempData.insert(tcx, currY);<a name="line.691"></a>
+<span class="sourceLineNo">692</span>                            else<a name="line.692"></a>
+<span class="sourceLineNo">693</span>                                tempData.insert(currX, tcy);<a name="line.693"></a>
+<span class="sourceLineNo">694</span>                        }<a name="line.694"></a>
+<span class="sourceLineNo">695</span>                        tempData.insert(currX, currY);<a name="line.695"></a>
+<span class="sourceLineNo">696</span>                    }<a name="line.696"></a>
+<span class="sourceLineNo">697</span>                    if (best &lt;= heightData[stx][sty] || heightData[currX][currY] &gt; rng.nextDouble(280.0)) {<a name="line.697"></a>
+<span class="sourceLineNo">698</span>                        riverData.or(tempData);<a name="line.698"></a>
+<span class="sourceLineNo">699</span>                        tempData.clear();<a name="line.699"></a>
+<span class="sourceLineNo">700</span><a name="line.700"></a>
+<span class="sourceLineNo">701</span>                        lakeData.insert(currX, currY);<a name="line.701"></a>
+<span class="sourceLineNo">702</span>                        sbx = rng.next(8);<a name="line.702"></a>
+<span class="sourceLineNo">703</span>                        sbx &amp;= sbx &gt;&gt;&gt; 4;<a name="line.703"></a>
+<span class="sourceLineNo">704</span>                        if ((sbx &amp; 1) == 0)<a name="line.704"></a>
+<span class="sourceLineNo">705</span>                            lakeData.insert(currX + 1, currY);<a name="line.705"></a>
+<span class="sourceLineNo">706</span>                        if ((sbx &amp; 2) == 0)<a name="line.706"></a>
+<span class="sourceLineNo">707</span>                            lakeData.insert(currX - 1, currY);<a name="line.707"></a>
+<span class="sourceLineNo">708</span>                        if ((sbx &amp; 4) == 0)<a name="line.708"></a>
+<span class="sourceLineNo">709</span>                            lakeData.insert(currX, currY + 1);<a name="line.709"></a>
+<span class="sourceLineNo">710</span>                        if ((sbx &amp; 8) == 0)<a name="line.710"></a>
+<span class="sourceLineNo">711</span>                            lakeData.insert(currX, currY - 1);<a name="line.711"></a>
+<span class="sourceLineNo">712</span>                        sbx = rng.next(2);<a name="line.712"></a>
+<span class="sourceLineNo">713</span>                        lakeData.insert(currX + (-(sbx &amp; 1) | 1), currY + ((sbx &amp; 2) - 1)); // random diagonal<a name="line.713"></a>
+<span class="sourceLineNo">714</span>                        lakeData.insert(currX, currY + ((sbx &amp; 2) - 1)); // ortho next to random diagonal<a name="line.714"></a>
+<span class="sourceLineNo">715</span>                        lakeData.insert(currX + (-(sbx &amp; 1) | 1), currY); // ortho next to random diagonal<a name="line.715"></a>
+<span class="sourceLineNo">716</span><a name="line.716"></a>
+<span class="sourceLineNo">717</span>                        continue RIVER;<a name="line.717"></a>
+<span class="sourceLineNo">718</span>                    }<a name="line.718"></a>
+<span class="sourceLineNo">719</span>                }<a name="line.719"></a>
+<span class="sourceLineNo">720</span>            }<a name="line.720"></a>
+<span class="sourceLineNo">721</span><a name="line.721"></a>
+<span class="sourceLineNo">722</span>        }<a name="line.722"></a>
+<span class="sourceLineNo">723</span><a name="line.723"></a>
+<span class="sourceLineNo">724</span>        rng.setState(rebuildState);<a name="line.724"></a>
+<span class="sourceLineNo">725</span>    }<a name="line.725"></a>
+<span class="sourceLineNo">726</span><a name="line.726"></a>
+<span class="sourceLineNo">727</span>    /**<a name="line.727"></a>
+<span class="sourceLineNo">728</span>     * A way to get biome information for the cells on a map when you only need a single value to describe a biome, such<a name="line.728"></a>
+<span class="sourceLineNo">729</span>     * as "Grassland" or "TropicalRainforest".<a name="line.729"></a>
+<span class="sourceLineNo">730</span>     * &lt;br&gt;<a name="line.730"></a>
+<span class="sourceLineNo">731</span>     * To use: 1, Construct a SimpleBiomeMapper (constructor takes no arguments). 2, call<a name="line.731"></a>
+<span class="sourceLineNo">732</span>     * {@link #makeBiomes(WorldMapGenerator)} with a WorldMapGenerator that has already produced at least one world map.<a name="line.732"></a>
+<span class="sourceLineNo">733</span>     * 3, get biome codes from the {@link #biomeCodeData} field, where a code is an int that can be used as an index<a name="line.733"></a>
+<span class="sourceLineNo">734</span>     * into the {@link #biomeTable} static field to get a String name for a biome type, or used with an alternate biome<a name="line.734"></a>
+<span class="sourceLineNo">735</span>     * table of your design. Biome tables in this case are 54-element arrays organized into groups of 6 elements. Each<a name="line.735"></a>
+<span class="sourceLineNo">736</span>     * group goes from the coldest temperature first to the warmest temperature last in the group. The first group of 6<a name="line.736"></a>
+<span class="sourceLineNo">737</span>     * contains the dryest biomes, the next 6 are medium-dry, the next are slightly-dry, the next slightly-wet, then<a name="line.737"></a>
+<span class="sourceLineNo">738</span>     * medium-wet, then wettest. After this first block of dry-to-wet groups, there is a group of 6 for coastlines, a<a name="line.738"></a>
+<span class="sourceLineNo">739</span>     * group of 6 for rivers, and lastly a group for lakes. This also assigns moisture codes and heat codes from 0 to 5<a name="line.739"></a>
+<span class="sourceLineNo">740</span>     * for each cell, which may be useful to simplify logic that deals with those factors.<a name="line.740"></a>
+<span class="sourceLineNo">741</span>     */<a name="line.741"></a>
+<span class="sourceLineNo">742</span>    public static class SimpleBiomeMapper<a name="line.742"></a>
+<span class="sourceLineNo">743</span>    {<a name="line.743"></a>
+<span class="sourceLineNo">744</span>        /**<a name="line.744"></a>
+<span class="sourceLineNo">745</span>         * The heat codes for the analyzed map, from 0 to 5 inclusive, with 0 coldest and 5 hottest.<a name="line.745"></a>
+<span class="sourceLineNo">746</span>         */<a name="line.746"></a>
+<span class="sourceLineNo">747</span>        public int[][] heatCodeData,<a name="line.747"></a>
+<span class="sourceLineNo">748</span>        /**<a name="line.748"></a>
+<span class="sourceLineNo">749</span>         * The moisture codes for the analyzed map, from 0 to 5 inclusive, with 0 driest and 5 wettest.<a name="line.749"></a>
+<span class="sourceLineNo">750</span>         */<a name="line.750"></a>
+<span class="sourceLineNo">751</span>        moistureCodeData,<a name="line.751"></a>
+<span class="sourceLineNo">752</span>        /**<a name="line.752"></a>
+<span class="sourceLineNo">753</span>         * The biome codes for the analyzed map, from 0 to 53 inclusive. You can use {@link #biomeTable} to look up<a name="line.753"></a>
+<span class="sourceLineNo">754</span>         * String names for biomes, or construct your own table as you see fit (see docs in {@link SimpleBiomeMapper}).<a name="line.754"></a>
+<span class="sourceLineNo">755</span>         */<a name="line.755"></a>
+<span class="sourceLineNo">756</span>        biomeCodeData;<a name="line.756"></a>
+<span class="sourceLineNo">757</span><a name="line.757"></a>
+<span class="sourceLineNo">758</span>        public static final double<a name="line.758"></a>
+<span class="sourceLineNo">759</span>                coldestValueLower = 0.0,   coldestValueUpper = 0.15, // 0<a name="line.759"></a>
+<span class="sourceLineNo">760</span>                colderValueLower = 0.15,   colderValueUpper = 0.31,  // 1<a name="line.760"></a>
+<span class="sourceLineNo">761</span>                coldValueLower = 0.31,     coldValueUpper = 0.5,     // 2<a name="line.761"></a>
+<span class="sourceLineNo">762</span>                warmValueLower = 0.5,      warmValueUpper = 0.69,    // 3<a name="line.762"></a>
+<span class="sourceLineNo">763</span>                warmerValueLower = 0.69,   warmerValueUpper = 0.85,  // 4<a name="line.763"></a>
+<span class="sourceLineNo">764</span>                warmestValueLower = 0.85,  warmestValueUpper = 1.0,  // 5<a name="line.764"></a>
+<span class="sourceLineNo">765</span>        <a name="line.765"></a>
+<span class="sourceLineNo">766</span>                driestValueLower = 0.0,    driestValueUpper  = 0.27, // 0<a name="line.766"></a>
+<span class="sourceLineNo">767</span>                drierValueLower = 0.27,    drierValueUpper   = 0.4,  // 1<a name="line.767"></a>
+<span class="sourceLineNo">768</span>                dryValueLower = 0.4,       dryValueUpper     = 0.6,  // 2<a name="line.768"></a>
+<span class="sourceLineNo">769</span>                wetValueLower = 0.6,       wetValueUpper     = 0.8,  // 3<a name="line.769"></a>
+<span class="sourceLineNo">770</span>                wetterValueLower = 0.8,    wetterValueUpper  = 0.9,  // 4<a name="line.770"></a>
+<span class="sourceLineNo">771</span>                wettestValueLower = 0.9,   wettestValueUpper = 1.0;  // 5<a name="line.771"></a>
+<span class="sourceLineNo">772</span><a name="line.772"></a>
+<span class="sourceLineNo">773</span>        /**<a name="line.773"></a>
+<span class="sourceLineNo">774</span>         * The default biome table to use with biome codes from {@link #biomeCodeData}. Biomes are assigned based on<a name="line.774"></a>
+<span class="sourceLineNo">775</span>         * heat and moisture for the first 36 of 54 elements (coldest to warmest for each group of 6, with the first<a name="line.775"></a>
+<span class="sourceLineNo">776</span>         * group as the dryest and the last group the wettest), then the next 6 are for coastlines (coldest to warmest),<a name="line.776"></a>
+<span class="sourceLineNo">777</span>         * then rivers (coldest to warmest), then lakes (coldest to warmest).<a name="line.777"></a>
+<span class="sourceLineNo">778</span>         */<a name="line.778"></a>
+<span class="sourceLineNo">779</span>        public static final String[] biomeTable = {<a name="line.779"></a>
+<span class="sourceLineNo">780</span>                //COLDEST //COLDER        //COLD            //HOT                  //HOTTER              //HOTTEST<a name="line.780"></a>
+<span class="sourceLineNo">781</span>                "Ice",    "Ice",          "Grassland",      "Desert",              "Desert",             "Desert",             //DRYEST<a name="line.781"></a>
+<span class="sourceLineNo">782</span>                "Ice",    "Tundra",       "Grassland",      "Grassland",           "Desert",             "Desert",             //DRYER<a name="line.782"></a>
+<span class="sourceLineNo">783</span>                "Ice",    "Tundra",       "Woodland",       "Woodland",            "Savanna",            "Desert",             //DRY<a name="line.783"></a>
+<span class="sourceLineNo">784</span>                "Ice",    "Tundra",       "SeasonalForest", "SeasonalForest",      "Savanna",            "Savanna",            //WET<a name="line.784"></a>
+<span class="sourceLineNo">785</span>                "Ice",    "Tundra",       "BorealForest",   "TemperateRainforest", "TropicalRainforest", "Savanna",            //WETTER<a name="line.785"></a>
+<span class="sourceLineNo">786</span>                "Ice",    "BorealForest", "BorealForest",   "TemperateRainforest", "TropicalRainforest", "TropicalRainforest", //WETTEST<a name="line.786"></a>
+<span class="sourceLineNo">787</span>                "Rocky",  "Rocky",        "Beach",          "Beach",               "Beach",              "Beach",              //COASTS<a name="line.787"></a>
+<span class="sourceLineNo">788</span>                "Ice",    "River",        "River",          "River",               "River",              "River",              //RIVERS<a name="line.788"></a>
+<span class="sourceLineNo">789</span>                "Ice",    "River",        "River",          "River",               "River",              "River",              //LAKES<a name="line.789"></a>
+<span class="sourceLineNo">790</span>        };<a name="line.790"></a>
+<span class="sourceLineNo">791</span><a name="line.791"></a>
+<span class="sourceLineNo">792</span>        /**<a name="line.792"></a>
+<span class="sourceLineNo">793</span>         * Simple constructor; pretty much does nothing. Make sure to call {@link #makeBiomes(WorldMapGenerator)} before<a name="line.793"></a>
+<span class="sourceLineNo">794</span>         * using fields like {@link #biomeCodeData}.<a name="line.794"></a>
+<span class="sourceLineNo">795</span>         */<a name="line.795"></a>
+<span class="sourceLineNo">796</span>        public SimpleBiomeMapper()<a name="line.796"></a>
+<span class="sourceLineNo">797</span>        {<a name="line.797"></a>
+<span class="sourceLineNo">798</span>            heatCodeData = null;<a name="line.798"></a>
+<span class="sourceLineNo">799</span>            moistureCodeData = null;<a name="line.799"></a>
+<span class="sourceLineNo">800</span>            biomeCodeData = null;<a name="line.800"></a>
+<span class="sourceLineNo">801</span>        }<a name="line.801"></a>
 <span class="sourceLineNo">802</span><a name="line.802"></a>
 <span class="sourceLineNo">803</span>        /**<a name="line.803"></a>
-<span class="sourceLineNo">804</span>         * Simple constructor; pretty much does nothing. Make sure to call {@link #makeBiomes(WorldMapGenerator)} before<a name="line.804"></a>
-<span class="sourceLineNo">805</span>         * using fields like {@link #biomeCodeData}.<a name="line.805"></a>
-<span class="sourceLineNo">806</span>         */<a name="line.806"></a>
-<span class="sourceLineNo">807</span>        public SimpleBiomeMapper()<a name="line.807"></a>
-<span class="sourceLineNo">808</span>        {<a name="line.808"></a>
-<span class="sourceLineNo">809</span>            heatCodeData = null;<a name="line.809"></a>
-<span class="sourceLineNo">810</span>            moistureCodeData = null;<a name="line.810"></a>
-<span class="sourceLineNo">811</span>            biomeCodeData = null;<a name="line.811"></a>
-<span class="sourceLineNo">812</span>        }<a name="line.812"></a>
-<span class="sourceLineNo">813</span><a name="line.813"></a>
-<span class="sourceLineNo">814</span>        /**<a name="line.814"></a>
-<span class="sourceLineNo">815</span>         * Analyzes the last world produced by the given WorldMapGenerator and uses all of its generated information to<a name="line.815"></a>
-<span class="sourceLineNo">816</span>         * assign biome codes for each cell (along with heat and moisture codes). After calling this, biome codes can be<a name="line.816"></a>
-<span class="sourceLineNo">817</span>         * taken from {@link #biomeCodeData} and used as indices into {@link #biomeTable} or a custom biome table.<a name="line.817"></a>
-<span class="sourceLineNo">818</span>         * @param world a WorldMapGenerator that should have generated at least one map; it may be at any zoom<a name="line.818"></a>
-<span class="sourceLineNo">819</span>         */<a name="line.819"></a>
-<span class="sourceLineNo">820</span>        public void makeBiomes(WorldMapGenerator world) {<a name="line.820"></a>
-<span class="sourceLineNo">821</span>            if(world == null || world.width &lt;= 0 || world.height &lt;= 0)<a name="line.821"></a>
-<span class="sourceLineNo">822</span>                return;<a name="line.822"></a>
-<span class="sourceLineNo">823</span>            if(heatCodeData == null || (heatCodeData.length != world.width || heatCodeData[0].length != world.width))<a name="line.823"></a>
-<span class="sourceLineNo">824</span>                heatCodeData = new int[world.width][world.height];<a name="line.824"></a>
-<span class="sourceLineNo">825</span>            if(moistureCodeData == null || (moistureCodeData.length != world.width || moistureCodeData[0].length != world.width))<a name="line.825"></a>
-<span class="sourceLineNo">826</span>                moistureCodeData = new int[world.width][world.height];<a name="line.826"></a>
-<span class="sourceLineNo">827</span>            if(biomeCodeData == null || (biomeCodeData.length != world.width || biomeCodeData[0].length != world.width))<a name="line.827"></a>
-<span class="sourceLineNo">828</span>                biomeCodeData = new int[world.width][world.height];<a name="line.828"></a>
-<span class="sourceLineNo">829</span>            final double i_hot = (world.maxHeat == 0.0) ? 1.0 : 1.0 / world.maxHeat;<a name="line.829"></a>
-<span class="sourceLineNo">830</span>            for (int x = 0; x &lt; world.width; x++) {<a name="line.830"></a>
-<span class="sourceLineNo">831</span>                for (int y = 0; y &lt; world.height; y++) {<a name="line.831"></a>
-<span class="sourceLineNo">832</span>                    final double hot = world.heatData[x][y], moist = world.moistureData[x][y], high = world.heightData[x][y];<a name="line.832"></a>
-<span class="sourceLineNo">833</span>                    final int heightCode = world.heightCodeData[x][y];<a name="line.833"></a>
-<span class="sourceLineNo">834</span>                    int hc, mc;<a name="line.834"></a>
-<span class="sourceLineNo">835</span>                    boolean isLake = world.generateRivers &amp;&amp; world.partialLakeData.contains(x, y) &amp;&amp; heightCode &gt;= 4,<a name="line.835"></a>
-<span class="sourceLineNo">836</span>                            isRiver = world.generateRivers &amp;&amp; world.partialRiverData.contains(x, y) &amp;&amp; heightCode &gt;= 4;<a name="line.836"></a>
-<span class="sourceLineNo">837</span>                    if (moist &gt;= (wettestValueUpper - (wetterValueUpper - wetterValueLower) * 0.2)) {<a name="line.837"></a>
-<span class="sourceLineNo">838</span>                        mc = 5;<a name="line.838"></a>
-<span class="sourceLineNo">839</span>                    } else if (moist &gt;= (wetterValueUpper - (wetValueUpper - wetValueLower) * 0.2)) {<a name="line.839"></a>
-<span class="sourceLineNo">840</span>                        mc = 4;<a name="line.840"></a>
-<span class="sourceLineNo">841</span>                    } else if (moist &gt;= (wetValueUpper - (dryValueUpper - dryValueLower) * 0.2)) {<a name="line.841"></a>
-<span class="sourceLineNo">842</span>                        mc = 3;<a name="line.842"></a>
-<span class="sourceLineNo">843</span>                    } else if (moist &gt;= (dryValueUpper - (drierValueUpper - drierValueLower) * 0.2)) {<a name="line.843"></a>
-<span class="sourceLineNo">844</span>                        mc = 2;<a name="line.844"></a>
-<span class="sourceLineNo">845</span>                    } else if (moist &gt;= (drierValueUpper - (driestValueUpper) * 0.2)) {<a name="line.845"></a>
-<span class="sourceLineNo">846</span>                        mc = 1;<a name="line.846"></a>
-<span class="sourceLineNo">847</span>                    } else {<a name="line.847"></a>
-<span class="sourceLineNo">848</span>                        mc = 0;<a name="line.848"></a>
-<span class="sourceLineNo">849</span>                    }<a name="line.849"></a>
-<span class="sourceLineNo">850</span><a name="line.850"></a>
-<span class="sourceLineNo">851</span>                    if (hot &gt;= (warmestValueUpper - (warmerValueUpper - warmerValueLower) * 0.2) * i_hot) {<a name="line.851"></a>
-<span class="sourceLineNo">852</span>                        hc = 5;<a name="line.852"></a>
-<span class="sourceLineNo">853</span>                    } else if (hot &gt;= (warmerValueUpper - (warmValueUpper - warmValueLower) * 0.2) * i_hot) {<a name="line.853"></a>
-<span class="sourceLineNo">854</span>                        hc = 4;<a name="line.854"></a>
-<span class="sourceLineNo">855</span>                    } else if (hot &gt;= (warmValueUpper - (coldValueUpper - coldValueLower) * 0.2) * i_hot) {<a name="line.855"></a>
-<span class="sourceLineNo">856</span>                        hc = 3;<a name="line.856"></a>
-<span class="sourceLineNo">857</span>                    } else if (hot &gt;= (coldValueUpper - (colderValueUpper - colderValueLower) * 0.2) * i_hot) {<a name="line.857"></a>
-<span class="sourceLineNo">858</span>                        hc = 2;<a name="line.858"></a>
-<span class="sourceLineNo">859</span>                    } else if (hot &gt;= (colderValueUpper - (coldestValueUpper) * 0.2) * i_hot) {<a name="line.859"></a>
-<span class="sourceLineNo">860</span>                        hc = 1;<a name="line.860"></a>
-<span class="sourceLineNo">861</span>                    } else {<a name="line.861"></a>
-<span class="sourceLineNo">862</span>                        hc = 0;<a name="line.862"></a>
-<span class="sourceLineNo">863</span>                    }<a name="line.863"></a>
-<span class="sourceLineNo">864</span><a name="line.864"></a>
-<span class="sourceLineNo">865</span>                    heatCodeData[x][y] = hc;<a name="line.865"></a>
-<span class="sourceLineNo">866</span>                    moistureCodeData[x][y] = mc;<a name="line.866"></a>
-<span class="sourceLineNo">867</span>                    biomeCodeData[x][y] = isLake ? hc + 48 : (isRiver ? hc + 42 : ((heightCode == 4) ? hc + 36 : hc + mc * 6));<a name="line.867"></a>
-<span class="sourceLineNo">868</span>                }<a name="line.868"></a>
-<span class="sourceLineNo">869</span>            }<a name="line.869"></a>
-<span class="sourceLineNo">870</span>        }<a name="line.870"></a>
-<span class="sourceLineNo">871</span>    }<a name="line.871"></a>
-<span class="sourceLineNo">872</span><a name="line.872"></a>
-<span class="sourceLineNo">873</span>}<a name="line.873"></a>
+<span class="sourceLineNo">804</span>         * Analyzes the last world produced by the given WorldMapGenerator and uses all of its generated information to<a name="line.804"></a>
+<span class="sourceLineNo">805</span>         * assign biome codes for each cell (along with heat and moisture codes). After calling this, biome codes can be<a name="line.805"></a>
+<span class="sourceLineNo">806</span>         * taken from {@link #biomeCodeData} and used as indices into {@link #biomeTable} or a custom biome table.<a name="line.806"></a>
+<span class="sourceLineNo">807</span>         * @param world a WorldMapGenerator that should have generated at least one map; it may be at any zoom<a name="line.807"></a>
+<span class="sourceLineNo">808</span>         */<a name="line.808"></a>
+<span class="sourceLineNo">809</span>        public void makeBiomes(WorldMapGenerator world) {<a name="line.809"></a>
+<span class="sourceLineNo">810</span>            if(world == null || world.width &lt;= 0 || world.height &lt;= 0)<a name="line.810"></a>
+<span class="sourceLineNo">811</span>                return;<a name="line.811"></a>
+<span class="sourceLineNo">812</span>            if(heatCodeData == null || (heatCodeData.length != world.width || heatCodeData[0].length != world.height))<a name="line.812"></a>
+<span class="sourceLineNo">813</span>                heatCodeData = new int[world.width][world.height];<a name="line.813"></a>
+<span class="sourceLineNo">814</span>            if(moistureCodeData == null || (moistureCodeData.length != world.width || moistureCodeData[0].length != world.height))<a name="line.814"></a>
+<span class="sourceLineNo">815</span>                moistureCodeData = new int[world.width][world.height];<a name="line.815"></a>
+<span class="sourceLineNo">816</span>            if(biomeCodeData == null || (biomeCodeData.length != world.width || biomeCodeData[0].length != world.height))<a name="line.816"></a>
+<span class="sourceLineNo">817</span>                biomeCodeData = new int[world.width][world.height];<a name="line.817"></a>
+<span class="sourceLineNo">818</span>            final double i_hot = (world.maxHeat == world.minHeat) ? 1.0 : 1.0 / (world.maxHeat - world.minHeat);<a name="line.818"></a>
+<span class="sourceLineNo">819</span>            for (int x = 0; x &lt; world.width; x++) {<a name="line.819"></a>
+<span class="sourceLineNo">820</span>                for (int y = 0; y &lt; world.height; y++) {<a name="line.820"></a>
+<span class="sourceLineNo">821</span>                    final double hot = (world.heatData[x][y] - world.minHeat) * i_hot, moist = world.moistureData[x][y];<a name="line.821"></a>
+<span class="sourceLineNo">822</span>                    final int heightCode = world.heightCodeData[x][y];<a name="line.822"></a>
+<span class="sourceLineNo">823</span>                    int hc, mc;<a name="line.823"></a>
+<span class="sourceLineNo">824</span>                    boolean isLake = world.generateRivers &amp;&amp; world.partialLakeData.contains(x, y) &amp;&amp; heightCode &gt;= 4,<a name="line.824"></a>
+<span class="sourceLineNo">825</span>                            isRiver = world.generateRivers &amp;&amp; world.partialRiverData.contains(x, y) &amp;&amp; heightCode &gt;= 4;<a name="line.825"></a>
+<span class="sourceLineNo">826</span>                    if (moist &gt; wetterValueUpper) {<a name="line.826"></a>
+<span class="sourceLineNo">827</span>                        mc = 5;<a name="line.827"></a>
+<span class="sourceLineNo">828</span>                    } else if (moist &gt; wetValueUpper) {<a name="line.828"></a>
+<span class="sourceLineNo">829</span>                        mc = 4;<a name="line.829"></a>
+<span class="sourceLineNo">830</span>                    } else if (moist &gt; dryValueUpper) {<a name="line.830"></a>
+<span class="sourceLineNo">831</span>                        mc = 3;<a name="line.831"></a>
+<span class="sourceLineNo">832</span>                    } else if (moist &gt; drierValueUpper) {<a name="line.832"></a>
+<span class="sourceLineNo">833</span>                        mc = 2;<a name="line.833"></a>
+<span class="sourceLineNo">834</span>                    } else if (moist &gt; driestValueUpper) {<a name="line.834"></a>
+<span class="sourceLineNo">835</span>                        mc = 1;<a name="line.835"></a>
+<span class="sourceLineNo">836</span>                    } else {<a name="line.836"></a>
+<span class="sourceLineNo">837</span>                        mc = 0;<a name="line.837"></a>
+<span class="sourceLineNo">838</span>                    }<a name="line.838"></a>
+<span class="sourceLineNo">839</span><a name="line.839"></a>
+<span class="sourceLineNo">840</span>                    if (hot &gt; warmerValueUpper) {<a name="line.840"></a>
+<span class="sourceLineNo">841</span>                        hc = 5;<a name="line.841"></a>
+<span class="sourceLineNo">842</span>                    } else if (hot &gt; warmValueUpper) {<a name="line.842"></a>
+<span class="sourceLineNo">843</span>                        hc = 4;<a name="line.843"></a>
+<span class="sourceLineNo">844</span>                    } else if (hot &gt; coldValueUpper) {<a name="line.844"></a>
+<span class="sourceLineNo">845</span>                        hc = 3;<a name="line.845"></a>
+<span class="sourceLineNo">846</span>                    } else if (hot &gt; colderValueUpper) {<a name="line.846"></a>
+<span class="sourceLineNo">847</span>                        hc = 2;<a name="line.847"></a>
+<span class="sourceLineNo">848</span>                    } else if (hot &gt; coldestValueUpper) {<a name="line.848"></a>
+<span class="sourceLineNo">849</span>                        hc = 1;<a name="line.849"></a>
+<span class="sourceLineNo">850</span>                    } else {<a name="line.850"></a>
+<span class="sourceLineNo">851</span>                        hc = 0;<a name="line.851"></a>
+<span class="sourceLineNo">852</span>                    }<a name="line.852"></a>
+<span class="sourceLineNo">853</span><a name="line.853"></a>
+<span class="sourceLineNo">854</span>                    heatCodeData[x][y] = hc;<a name="line.854"></a>
+<span class="sourceLineNo">855</span>                    moistureCodeData[x][y] = mc;<a name="line.855"></a>
+<span class="sourceLineNo">856</span>                    biomeCodeData[x][y] = isLake ? hc + 48 : (isRiver ? hc + 42 : ((heightCode == 4) ? hc + 36 : hc + mc * 6));<a name="line.856"></a>
+<span class="sourceLineNo">857</span>                }<a name="line.857"></a>
+<span class="sourceLineNo">858</span>            }<a name="line.858"></a>
+<span class="sourceLineNo">859</span>        }<a name="line.859"></a>
+<span class="sourceLineNo">860</span>    }<a name="line.860"></a>
+<span class="sourceLineNo">861</span>}<a name="line.861"></a>
 
 
 
