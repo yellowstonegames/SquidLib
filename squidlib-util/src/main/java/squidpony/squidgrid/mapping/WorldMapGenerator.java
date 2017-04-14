@@ -42,7 +42,7 @@ public class WorldMapGenerator {
     public StatefulRNG rng;
     public boolean generateRivers = true;
     public final double[][] heightData, heatData, moistureData;
-    public final GreasedRegion riverData, lakeData,
+    public final GreasedRegion landData, riverData, lakeData,
             partialRiverData, partialLakeData;
     private final GreasedRegion workingData;
     public final int[][] heightCodeData;
@@ -91,6 +91,7 @@ public class WorldMapGenerator {
         heightData = new double[width][height];
         heatData = new double[width][height];
         moistureData = new double[width][height];
+        landData = new GreasedRegion(width, height);
         riverData = new GreasedRegion(width, height);
         lakeData = new GreasedRegion(width, height);
         partialRiverData = new GreasedRegion(width, height);
@@ -408,10 +409,12 @@ public class WorldMapGenerator {
             minWet = ps;
             maxWet = pc;
         }
+        landData.refill(heightCodeData, 4, 999);
         if(generateRivers) {
             if (fresh) {
                 addRivers();
                 riverData.connect8way().thin().thin();
+                lakeData.connect8way().thin();
                 partialRiverData.remake(riverData);
                 partialLakeData.remake(lakeData);
             } else {
@@ -473,10 +476,11 @@ public class WorldMapGenerator {
 
     protected void addRivers()
     {
+        landData.refill(heightCodeData, 4, 999);
         long rebuildState = rng.nextLong();
         workingData.empty().insertRectangle(8, 8, width - 16, height - 16);
         riverData.empty().refill(heightCodeData, 6, 100);
-        riverData.quasiRandomRegion(0.000003 * Math.max(width, height)).and(workingData);
+        riverData.quasiRandomRegion(0.00000075 * riverData.size()).and(workingData);
         int[] starts = riverData.asTightEncoded();
         int len = starts.length, currentPos, choice, adjX, adjY, currX, currY, tcx, tcy, stx, sty, sbx, sby;
         riverData.clear();
@@ -532,7 +536,7 @@ public class WorldMapGenerator {
                             riverData.or(workingData);
                             continue PER_RIVER;
                         }
-                        else if((heightData[adjX][adjY] -= 0.0002) < lowers[heightCodeData[adjX][adjY]-1])
+                        else if((heightData[adjX][adjY] -= 0.0002) < sandLower)
                         {
                             if(rng.next(3) == 0)
                                 riverData.or(workingData);
@@ -554,7 +558,7 @@ public class WorldMapGenerator {
                             riverData.or(workingData);
                             continue PER_RIVER;
                         }
-                        else if((heightData[adjX][adjY] -= 0.0002) < lowers[heightCodeData[adjX][adjY]-1])
+                        else if((heightData[adjX][adjY] -= 0.0002) < sandLower)
                         {
                             if(rng.next(3) == 0)
                                 riverData.or(workingData);
@@ -575,45 +579,30 @@ public class WorldMapGenerator {
                     tcy = currY - reuse[choice].deltaY;
                     if(heightData[tcx][currY] <= heightData[currX][tcy] && !workingData.contains(tcx, currY))
                     {
-                        if(riverData.contains(tcx, currY))
+                        if(heightCodeData[tcx][currY] < 4 || riverData.contains(tcx, currY))
                         {
                             riverData.or(workingData);
                             continue PER_RIVER;
                         }
                         workingData.insert(tcx, currY);
-                        if (heightData[tcx][currY] <= 0.075)
-                        {
-                            riverData.or(workingData);
-                            continue PER_RIVER;
-                        }
                     }
                     else if(!workingData.contains(currX, tcy))
                     {
-                        if(riverData.contains(currX, tcy))
+                        if(heightCodeData[currX][tcy] < 4 || riverData.contains(currX, tcy))
                         {
                             riverData.or(workingData);
                             continue PER_RIVER;
                         }
                         workingData.insert(currX, tcy);
-                        if (heightData[currX][tcy] <= 0.075)
-                        {
-                            riverData.or(workingData);
-                            continue PER_RIVER;
-                        }
 
                     }
                 }
-                if(riverData.contains(currX, currY))
+                if(heightCodeData[currX][currY] < 4 || riverData.contains(currX, currY))
                 {
                     riverData.or(workingData);
                     continue PER_RIVER;
                 }
                 workingData.insert(currX, currY);
-                if (heightData[currX][currY] <= 0.075)
-                {
-                    riverData.or(workingData);
-                    continue PER_RIVER;
-                }
             }
         }
 
@@ -655,10 +644,28 @@ public class WorldMapGenerator {
                     if (reuse[prevChoice].isDiagonal()) {
                         tcx = currX - reuse[prevChoice].deltaX;
                         tcy = currY - reuse[prevChoice].deltaY;
-                        if (heightData[tcx][currY] <= heightData[currX][tcy])
+                        if (heightData[tcx][currY] <= heightData[currX][tcy]) {
+                            if(heightCodeData[tcx][currY] < 4)
+                            {
+                                riverData.or(tempData);
+                                continue;
+                            }
                             tempData.insert(tcx, currY);
+                        }
                         else
+                        {
+                            if(heightCodeData[currX][tcy] < 4)
+                            {
+                                riverData.or(tempData);
+                                continue;
+                            }
                             tempData.insert(currX, tcy);
+                        }
+                    }
+                    if(heightCodeData[currX][currY] < 4)
+                    {
+                        riverData.or(tempData);
+                        continue;
                     }
                     tempData.insert(currX, currY);
                 }
@@ -683,21 +690,46 @@ public class WorldMapGenerator {
                     }
                     currX = sbx;
                     currY = sby;
-                    if (choice != -1 && heightCodeData[currX][currY] >= 4) {
+                    if (choice != -1) {
                         if (reuse[choice].isDiagonal()) {
                             tcx = currX - reuse[choice].deltaX;
                             tcy = currY - reuse[choice].deltaY;
-                            if (heightData[tcx][currY] <= heightData[currX][tcy])
+                            if (heightData[tcx][currY] <= heightData[currX][tcy]) {
+                                if(heightCodeData[tcx][currY] < 4)
+                                {
+                                    riverData.or(tempData);
+                                    continue RIVER;
+                                }
                                 tempData.insert(tcx, currY);
+                            }
                             else
+                            {
+                                if(heightCodeData[currX][tcy] < 4)
+                                {
+                                    riverData.or(tempData);
+                                    continue RIVER;
+                                }
                                 tempData.insert(currX, tcy);
+                            }
+                        }
+                        if(heightCodeData[currX][currY] < 4)
+                        {
+                            riverData.or(tempData);
+                            continue RIVER;
                         }
                         tempData.insert(currX, currY);
+                    }
+                    else
+                    {
+                        riverData.or(tempData);
+                        tempData.clear();
+                        continue RIVER;
                     }
                     if (best <= heightData[stx][sty] || heightData[currX][currY] > rng.nextDouble(280.0)) {
                         riverData.or(tempData);
                         tempData.clear();
-
+                        if(heightCodeData[currX][currY] < 4)
+                            continue RIVER;
                         lakeData.insert(currX, currY);
                         sbx = rng.next(8);
                         sbx &= sbx >>> 4;
