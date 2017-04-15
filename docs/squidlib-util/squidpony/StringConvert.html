@@ -204,7 +204,9 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static <a href="../squidpony/StringConvert.html" title="class in squidpony">StringConvert</a>&lt;?&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringConvert.html#get-java.lang.CharSequence-">get</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;name)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/StringConvert.html#get-java.lang.CharSequence-">get</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;name)</code>
+<div class="block">Gets the registered StringConvert for the given type name, if there is one, or returns null otherwise.</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a></code></td>
@@ -271,7 +273,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>spaceIgnoringHasher</h4>
-<pre>public static final&nbsp;<a href="../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../src-html/squidpony/StringConvert.html#line.103">spaceIgnoringHasher</a></pre>
+<pre>public static final&nbsp;<a href="../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../src-html/squidpony/StringConvert.html#line.112">spaceIgnoringHasher</a></pre>
 </li>
 </ul>
 <a name="spaceIgnoringArrayHasher">
@@ -280,7 +282,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>spaceIgnoringArrayHasher</h4>
-<pre>public static final&nbsp;<a href="../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../src-html/squidpony/StringConvert.html#line.144">spaceIgnoringArrayHasher</a></pre>
+<pre>public static final&nbsp;<a href="../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../src-html/squidpony/StringConvert.html#line.153">spaceIgnoringArrayHasher</a></pre>
 </li>
 </ul>
 <a name="registry">
@@ -289,7 +291,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>registry</h4>
-<pre>public static final&nbsp;<a href="../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../squidpony/StringConvert.html" title="class in squidpony">StringConvert</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>[]&gt; <a href="../src-html/squidpony/StringConvert.html#line.166">registry</a></pre>
+<pre>public static final&nbsp;<a href="../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../squidpony/StringConvert.html" title="class in squidpony">StringConvert</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>[]&gt; <a href="../src-html/squidpony/StringConvert.html#line.175">registry</a></pre>
 </li>
 </ul>
 </li>
@@ -372,7 +374,18 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>get</h4>
-<pre>public static&nbsp;<a href="../squidpony/StringConvert.html" title="class in squidpony">StringConvert</a>&lt;?&gt;&nbsp;<a href="../src-html/squidpony/StringConvert.html#line.73">get</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;name)</pre>
+<pre>public static&nbsp;<a href="../squidpony/StringConvert.html" title="class in squidpony">StringConvert</a>&lt;?&gt;&nbsp;<a href="../src-html/squidpony/StringConvert.html#line.82">get</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;name)</pre>
+<div class="block">Gets the registered StringConvert for the given type name, if there is one, or returns null otherwise.
+ The name can have the normal parts of a generic type, such as "OrderedMap&lt;String, ArrayList&lt;String&gt;&gt;",
+ as long as such a type was fully registered. For that example, you could use
+ <code>Converters.convertOrderedMap(Converters.convertString, Converters.convertArrayList(Converters.convertString))</code>
+ to produce and register a StringConvert for the aforementioned generic type.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>name</code> - the name of the type to find a registered StringConvert, such as "ArrayList&lt;String&gt;" or "char[]"</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the registered StringConvert, if it was found, or null if none was found</dd>
+</dl>
 </li>
 </ul>
 <a name="lookup-java.lang.CharSequence...-">
@@ -381,7 +394,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>lookup</h4>
-<pre>public static&nbsp;<a href="../squidpony/StringConvert.html" title="class in squidpony">StringConvert</a>&lt;?&gt;&nbsp;<a href="../src-html/squidpony/StringConvert.html#line.87">lookup</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>...&nbsp;types)</pre>
+<pre>public static&nbsp;<a href="../squidpony/StringConvert.html" title="class in squidpony">StringConvert</a>&lt;?&gt;&nbsp;<a href="../src-html/squidpony/StringConvert.html#line.96">lookup</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>...&nbsp;types)</pre>
 <div class="block">Looks up the StringConvert for a given vararg of Class instances (if an array of Classes is used other than a
  vararg, it must not be altered in the future, nor reused in a way that modifies its elements). Returns null if no
  StringConvert is found. You should usually cast the returned StringConvert, if non-null, to the specific
@@ -400,7 +413,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>asArray</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>[]&nbsp;<a href="../src-html/squidpony/StringConvert.html#line.98">asArray</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>...&nbsp;types)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>[]&nbsp;<a href="../src-html/squidpony/StringConvert.html#line.107">asArray</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>...&nbsp;types)</pre>
 <div class="block">Simply takes a vararg of Class and returns the simple names of the Classes as a String array.
  Can be handy to avoid re-creating arrays implicitly from varargs of Class items.</div>
 <dl>
