@@ -70,6 +70,15 @@ public abstract class StringConvert<T> {
     public abstract String stringify(T item);
     public abstract T restore(String text);
 
+    /**
+     * Gets the registered StringConvert for the given type name, if there is one, or returns null otherwise.
+     * The name can have the normal parts of a generic type, such as "OrderedMap&lt;String, ArrayList&lt;String&gt;&gt;",
+     * as long as such a type was fully registered. For that example, you could use
+     * {@code Converters.convertOrderedMap(Converters.convertString, Converters.convertArrayList(Converters.convertString))}
+     * to produce and register a StringConvert for the aforementioned generic type.
+     * @param name the name of the type to find a registered StringConvert, such as "ArrayList&lt;String&gt;" or "char[]"
+     * @return the registered StringConvert, if it was found, or null if none was found
+     */
     public static StringConvert<?> get(final CharSequence name)
     {
         int i = registry.indexOfA(name);

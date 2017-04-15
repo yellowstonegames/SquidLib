@@ -916,6 +916,51 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
                 return pos;
         }
     }
+    /**
+     * Gets the position in the ordering of the given key, though not as efficiently as some data structures can do it
+     * (e.g. {@link Arrangement} can access ordering position very quickly but doesn't store other values on its own).
+     * Returns a value that is at least 0 if it found k, or -1 if k was not present.
+     * @param k a key or possible key that this should find the index of
+     * @return the index of k, if present, or -1 if it is not present in this OrderedSet
+     */
+    public int indexOf(final Object k)
+    {
+        int pos = positionOf(k);
+        return (pos < 0) ? -1 : order.indexOf(pos);
+    }
+
+    /**
+     * Swaps the positions in the ordering for the given items, if they are both present. Returns true if the ordering
+     * changed as a result of this call, or false if it stayed the same (which can be because left or right was not
+     * present, or because left and right are the same reference (so swapping would do nothing)).
+     * @param left an item that should be present in this OrderedSet
+     * @param right an item that should be present in this OrderedSet
+     * @return true if this OrderedSet changed in ordering as a result of this call, or false otherwise
+     */
+    public boolean swap(final K left, final K right)
+    {
+        if(left == right) return false;
+        int l = indexOf(left);
+        if(l < 0) return false;
+        int r = indexOf(right);
+        if(r < 0) return false;
+        order.swap(l, r);
+        return true;
+    }
+    /**
+     * Swaps the given indices in the ordering, if they are both ints between 0 and size. Returns true if the ordering
+     * changed as a result of this call, or false if it stayed the same (which can be because left or right referred to
+     * an out-of-bounds index, or because left and right are equal (so swapping would do nothing)).
+     * @param left an index of an item in this OrderedSet, at least 0 and less than {@link #size()}
+     * @param right an index of an item in this OrderedSet, at least 0 and less than {@link #size()}
+     * @return true if this OrderedSet changed in ordering as a result of this call, or false otherwise
+     */
+    public boolean swapIndices(final int left, final int right)
+    {
+        if(left < 0 || right < 0 || left >= order.size || right >= order.size || left == right) return false;
+        order.swap(left, right);
+        return true;
+    }
 
     /*
      * Removes all elements from this set.
@@ -998,7 +1043,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
 
 
     /**
-     * Modifies the link vector so that the given entry is removed. This method will complete in logarithmic time.
+     * Modifies the link vector so that the given entry is removed. This method will complete in linear time.
      *
      * @param i the index of an entry.
      */
@@ -1021,7 +1066,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
     /**
      * Modifies the ordering for a shift from s to d.
      * <br>
-     * This method will complete in logarithmic time or better.
+     * This method will complete in linear time or better.
      *
      * @param s the source position.
      * @param d the destination position.
