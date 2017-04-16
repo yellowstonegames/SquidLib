@@ -31,7 +31,7 @@ updated whenever the project is rebuilt fully, which only coincides with release
 
 Current Features:
 --
-###Ease Of Use
+### Ease Of Use
 -   SquidLib is separated into multiple modules, so you can use the code for logic with or without the text-based display code
   -   There's squidlib-util for game logic that doesn't specify a display mode, squidlib for text-based display and input, and squidlib-extra for saving/loading data
 -   Emphasis on cross-platform compatibility
@@ -52,7 +52,7 @@ Current Features:
   -   The best example of this is RNG, a class or generating random numbers, which can use a wide variety of algorithms by taking a RandomnessSource implementation as a constructor argument.
   -   RNG is used throughout SquidLib as a standard tool for randomness, and tends to be better for this than java.util.Random.
 
-###Display features
+### Display features
 -   Uses the scene2d.ui classes from libGDX to display text/images and handle input
 -   Images may be used alongside characters in same panel
   -  Characters can be used as a drop-in fallback mechanism!
@@ -75,7 +75,7 @@ Current Features:
   -   A tint animation can be used to highlight an area or cell without using overlays
 -   Over 2000 icons from http://game-icons.net are in the optional assets, with a distance field effect applied so they can be used along with "stretchable" fonts, and all in a texture atlas for efficient lookup
 
-####Lots of Color
+#### Lots of Color
 -   SColor class extends libGDX's Color and can be used as a drop-in replacement for any usage of that class
 -   Over 500 named colors
 -   Each named color has a sample of its appearance in the Javadoc against multiple backgrounds
@@ -89,7 +89,7 @@ Current Features:
 -   In recent betas (7 onward), there's a filter that adjusts the brightness of red and green to help players with common forms of red-green colorblindness distinguish game objects that would otherwise be too similar
 -   SquidColorCenter (and potentially other IColorCenter implementations) allow finding and adjusting the hue, saturation, and value of colors
 
-###Roguelike-Intended Toolkit
+### Roguelike-Intended Toolkit
 -   Robust Field of View and Line of Sight system
   -  Includes multiple options to fit the desired level of permissiveness for FOV and LOS
   -  Can handle directional FOV by simply specifying an angle and a span in degrees to cover with the FOV
@@ -103,7 +103,7 @@ Current Features:
 -   ZOI is a class for determining zones of influence, using multiple influencing cells and finding the areas that are closer
     to one cell than than are to others (it also can detect where two or more influences are equally close)
 
-###Dungeon Generation Toolkit
+### Dungeon Generation Toolkit
 -   Full-featured Herringbone Wang Tile dungeon generator
   -   Herringbone Wang Tiles can produce less predictable, more varied dungeon layouts than BSP or other methods
   -   Add water, doors, and traps to a dungeon by specifying the percentage of valid cells to affect
@@ -128,7 +128,7 @@ Current Features:
 -   DetailedMimic is like MimicFill, and is a port of [SynTex](https://github.com/mxgmn/SynTex) but can handle color or
     char information, with the former useful for texture generation and the latter for map style imitation.
 
-###SquidAI Pathfinding code
+### SquidAI Pathfinding code
 -   Dijkstra Maps and A* can be used for pathfinding and other purposes.
   -   DijkstraMap provides support for getting to a target, avoiding paths that would make you stop in an invalid cell.
   -   DijkstraMap supports fleeing monsters, optionally sharing one "flee map" for all monsters fleeing the hero.
@@ -148,14 +148,14 @@ Current Features:
   -   CustomDijkstraMap allows pathfinding on unusual map types, such as ones where you can rotate in your cell but it takes time, or where there are thin walls
     -   See ThinWallDemo and RotationDemo in the display module's tests folder for examples; this is an advanced feature, though
 
-###Fully Documented API
+### Fully Documented API
 -   Demos of all functionality included
 -   EverythingDemo shows off lots of features and is fully documented; a good place to start
 -   SquidAIDemo has two AI teams fight each other with large area-of-effect attacks
 -   Several other demos are smaller and meant to test individual features, like RotationDemo to test DijkstraMap's pathfinding with facing when changing direction costs a turn
 -   SquidSetup produces a sample project with a heavily-documented basic example to get started
 
-###Math Toolkit
+### Math Toolkit
 -   Custom extension(s) of Random allows drop-in replacement with added features
   -   XorRNG, which is a XorShift128+ RNG
   -   XoRoRNG, which is a xoroshiro128+ RNG using a very recently-published algorithm
@@ -196,7 +196,7 @@ Current Features:
     -   GreasedRegion is heavily used internally, and though it shouldn't need to be used in most code that uses SquidLib, lots of code can benefit from representing regions as objects
   -   Using these classes can be an excellent tool for making interesting maps, and they can be combined with other strategies
 
-###Data Structures
+### Data Structures
 -   SquidLib needed some unusual features in the course of its development, and we have more than a few unusual data structures to fill those needs
   -   OrderedSet (no relation to the libGDX class that shares the name) is an insertion-ordered Set that also allows lookup of keys by their index in the ordering (like a List)
     -   The variant called Arrangement is bidirectional, allowing you to find the index of a key as well as the key at an index
@@ -213,7 +213,7 @@ Current Features:
 -   The serialization code in squidlib-extra is aware of these data structures and can serialize them efficiently and with less restrictions that normally apply to JSON (you can serialize non-String keys to our dialect of JSON with OrderedMap, for example)
   -   This code also provides ways to compress the JSON output using lz-string encoding, which performs very well here; it uses the tiny library [BlazingChain](https://github.com/tommyettinger/BlazingChain) to do this
 
-###Text generation
+### Text generation
 -   The FakeLanguageGen class can help imitate a linguistic style or mix multiple languages, then produce text in an imaginary language
   -   There are lots of predefined languages in FakeLanguageGen, some of them based on real-world languages, some based on fictional characters
     -   For imitations of real languages, we have Arabic, English, French, Greek (in Latin or Greek alphabets), Hindi, Inuktitut, Japanese (in Latin alphabet), Nahuatl, Norse, Russian (in Latin and Cyrillic alphabets), Somali, Swahili
@@ -228,7 +228,7 @@ Current Features:
 -   Thesaurus provides a simple enough way to add variety to procedural names/titles/descriptions of various things, by cycling through a shuffled list of synonyms and replacing a word (or category) with a synonym when it encounters one it knows
   -   It is also useful for generating procedural names of factions, like "The Magnanimous La Kingdom" or "Reimui-Shwop Emirate"
 
-###Actively Developed
+### Actively Developed
 - Started in 2011 by SquidPony (Eben Howard), SquidLib has since picked up contributions from a number of developers around the world
 - Development has accelerated recently as more people started adding code, with Tommy Ettinger working on things that aren't included in most other roguelike libraries, smelc and David Becker each contributing quite a few pull requests that help stability, performance, and code clarity, and still more developers helping by reporting and commenting on issues
 - SquidLib 2.9.1 is pretty good
