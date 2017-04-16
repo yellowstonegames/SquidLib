@@ -600,7 +600,9 @@ public class CrossHash {
      * An interface that can be used to move the logic for the hashCode() and equals() methods from a class' methods to
      * an implementation of IHasher that certain collections in SquidLib can use. Primarily useful when the key type is
      * an array, which normally doesn't work as expected in Java hash-based collections, but can if the right collection
-     * and IHasher are used.
+     * and IHasher are used. See also {@link Hashers} for additional implementations, some of which need dependencies on
+     * things the rest of CrossHash doesn't, like a case-insensitive String hasher/equator that uses RegExodus to handle
+     * CharSequence comparison on GWT.
      */
     public interface IHasher extends Serializable {
         /**
