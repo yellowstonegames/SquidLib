@@ -28,7 +28,7 @@ public class FakeLanguageGen implements Serializable {
     public static final StatefulRNG srng = new StatefulRNG();
     private static final OrderedSet<FakeLanguageGen> registry = new OrderedSet<>(32);
     protected String summary = null;
-    static final Pattern repeats = Pattern.compile("(.)\\1+"),
+    protected static final Pattern repeats = Pattern.compile("(.)\\1+"),
             vowelClusters = Pattern.compile(
                     "[àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]+",
                     REFlags.IGNORE_CASE | REFlags.UNICODE),
@@ -1365,6 +1365,30 @@ public class FakeLanguageGen implements Serializable {
             new String[]{}, new int[]{1, 2, 3, 4, 5, 6}, new double[]{3, 4, 5, 4, 3, 1}, 0.3, 0.2, 0.0, 0.3, genericSanityChecks, true)
             .addModifiers(new Modifier("c([ie])", "qu$1"),
                     new Modifier("z([ie])", "c$1")).register();
+    /**
+     * Imitation text from an approximation of one of the languages spoken in the 13th-century Mongol Empire. Can be
+     * hard to pronounce. This is closest to Middle Mongolian, and is probably not the best way to approximate modern
+     * Mongolian, which was written for many years in the Cyrillic alphabet (same alphabet as Russian) and has changed a
+     * lot in other ways.
+     * <br>
+     * Ghamgarg zilijuub lirgh arghar zunghichuh naboogh.
+     */
+    public static final FakeLanguageGen MONGOLIAN = new FakeLanguageGen(
+            new String[]{"a", "a", "a", "a", "a", "a", "a", "aa", "aa", "e", "i", "i", "i", "i", "i", "i", "i", "i", "ii",
+                    "o", "o", "o", "o", "oo", "u", "u", "u", "u", "u", "u", "u", "u", "uu", "uu", "ai", "ai"},
+            new String[]{},
+            new String[]{"g", "m", "n", "g", "m", "n", "g", "m", "n", "n", "n", "ch", "gh", "ch", "gh", "gh", "j", "j", "j", "j",
+                    "s", "s", "s", "t", "ts", "kh", "r", "r", "l", "h", "h", "h", "h", "h", "b", "b", "b", "b", "z", "z", "y", "y"},
+            new String[]{},
+            new String[]{"g", "m", "n", "g", "m", "n", "g", "m", "n", "n", "n", "ch", "gh", "ch", "gh", "gh", "gh", "j", "j", "j",
+                    "s", "s", "s", "t", "ts", "kh", "r", "r", "l", "h", "h", "h", "h", "h", "b", "b", "b", "b", "z", "z", "g", "n",
+                    "g", "m", "n", "g", "m", "n", "g", "m", "n", "n", "n", "ch", "gh", "ch", "gh", "gh", "gh", "j", "j", "j", "n",
+                    "s", "s", "s", "t", "ts", "kh", "r", "r", "l", "h", "h", "h", "h", "h", "b", "b", "b", "b", "z", "z", "y", "y",
+                    "ng", "ng", "ng", "ngh", "ngh", "lj", "gch", "sd", "rl", "bl", "sd", "st", "md", "mg", "gd", "gd",
+                    "sv", "rg", "rg", "mr", "tn", "tg", "ds", "dh", "dm", "gts", "rh", "lb", "gr", "gy", "rgh"},
+            new String[]{"ei", "ei", "ei", "uulj", "iig", "is", "is", "an", "aan", "iis", "alai", "ai", "aj", "ali"
+            },
+            new String[]{}, new int[]{1, 2, 3, 4}, new double[]{5, 9, 3, 1}, 0.3, 0.2, 0.0, 0.07, null, true).register();
 
     /**
      * A mix of four different languages, using only ASCII characters, that is meant for generating single words for
