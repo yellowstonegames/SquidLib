@@ -75,6 +75,54 @@ public class LanguageGenTest {
                     new String[]{".", ".", ".", "!", "?"}, 0.12));
         }
 
+        rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.HINDI_ROMANIZED;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 4, 9, new String[]{",", ",", ",", ";", ";"},
+                    new String[]{".", ".", ".", "!", "?"}, 0.12));
+        }
+        rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.ARABIC_ROMANIZED;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 6, 9, new String[]{",", ",", ",", ";", ";"},
+                    new String[]{".", ".", ".", "!", "?"}, 0.18));
+        }
+
+        rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.INUKTITUT;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 5, 12, new String[]{",", ",", ";"},
+                    new String[]{".", ".", "!", "?", "..."}, 0.15));
+        }
+
+        rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.NORSE;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 5, 12, new String[]{",", ",", ";"},
+                    new String[]{".", ".", "!", "?", "..."}, 0.15));
+        }
+
+        rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.NORSE.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_NORSE);
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 5, 12, new String[]{",", ",", ";"},
+                    new String[]{".", ".", "!", "?", "..."}, 0.15));
+        }
+
+        rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.NAHUATL;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 5, 10, new String[]{",", ",", ";"},
+                    new String[]{".", ".", "!", "?", "..."}, 0.1));
+        }
+
+        rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.MONGOLIAN;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 5, 9, new String[]{",", ",", ";", ",", " -"},
+                    new String[]{".", ".", ".", ".", "!", "?", "..."}, 0.16));
+        }
+        System.out.println("\n\nLANGUAGE MIXES:\n\n");
 
         rng.setState(0xf00df00L);
         flg = FakeLanguageGen.ENGLISH.mix(FakeLanguageGen.FRENCH.removeAccents(), 0.5);
@@ -141,34 +189,7 @@ public class LanguageGenTest {
                     new String[]{".", ".", "!", "?", "..."}, 0.15));
         }
 
-        rng.setState(0xf00df00L);
-        flg = FakeLanguageGen.INUKTITUT;
-        for (int i = 0; i < 40; i++) {
-            System.out.println(flg.sentence(rng, 5, 12, new String[]{",", ",", ";"},
-                    new String[]{".", ".", "!", "?", "..."}, 0.15));
-        }
-
-        rng.setState(0xf00df00L);
-        flg = FakeLanguageGen.NORSE;
-        for (int i = 0; i < 40; i++) {
-            System.out.println(flg.sentence(rng, 5, 12, new String[]{",", ",", ";"},
-                    new String[]{".", ".", "!", "?", "..."}, 0.15));
-        }
-
-        rng.setState(0xf00df00L);
-        flg = FakeLanguageGen.NORSE.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_NORSE);
-        for (int i = 0; i < 40; i++) {
-            System.out.println(flg.sentence(rng, 5, 12, new String[]{",", ",", ";"},
-                    new String[]{".", ".", "!", "?", "..."}, 0.15));
-        }
-
-        rng.setState(0xf00df00L);
-        flg = FakeLanguageGen.NAHUATL;
-        for (int i = 0; i < 40; i++) {
-            System.out.println(flg.sentence(rng, 5, 10, new String[]{",", ",", ";"},
-                    new String[]{".", ".", "!", "?", "..."}, 0.1));
-        }
-
+        System.out.println("\n\nFANTASY GROUPS:\n\n");
         rng.setState(0xf00df00L);
         flg = FakeLanguageGen.GOBLIN;
         for (int i = 0; i < 40; i++) {
@@ -207,7 +228,7 @@ public class LanguageGenTest {
         for (int i = 1; i < 10; i++) {
             System.out.print(", " + flg.word(rng, true, rng.between(2, 4)));
         }
-        System.out.println("......");
+        System.out.println("\n\nDEFAULT SENTENCES:\n\n");
         System.out.println('"' + FakeLanguageGen.ENGLISH.sentence(rng, 4, 7, new String[]{" -", ",", ",", ";"}, new String[]{"!", "!", "...", "...", ".", "?"}, 0.2) + "\",");
         System.out.println('"' + FakeLanguageGen.JAPANESE_ROMANIZED.sentence(rng, 4, 7, new String[]{" -", ",", ",", ";"}, new String[]{"!", "!", "...", "...", ".", "?"}, 0.2) + "\",");
         System.out.println('"' + FakeLanguageGen.FRENCH.sentence(rng, 5, 8, new String[]{" -", ",", ",", ";"}, new String[]{"!", "?", ".", "...", ".", "?"}, 0.1) + "\",");
@@ -250,19 +271,10 @@ public class LanguageGenTest {
         flg = FakeLanguageGen.NAHUATL;
         System.out.println('"' + flg.sentence(rng, 3, 6, new String[]{",", ",", ";"},
                 new String[]{"!", "?", ".", ".", "."}, 0.1) + "\",");
+        flg = FakeLanguageGen.MONGOLIAN;
+        System.out.println('"' + flg.sentence(rng, 3, 7, new String[]{",", ",", ";", ",", " -"},
+                new String[]{"!", "?", ".", ".", ".", ".", "..."}, 0.16) + "\",");
 
-        rng.setState(0xf00df00L);
-        flg = FakeLanguageGen.HINDI_ROMANIZED;
-        for (int i = 0; i < 40; i++) {
-            System.out.println(flg.sentence(rng, 4, 9, new String[]{",", ",", ",", ";", ";"},
-                    new String[]{".", ".", ".", "!", "?"}, 0.12));
-        }
-        rng.setState(0xf00df00L);
-        flg = FakeLanguageGen.ARABIC_ROMANIZED;
-        for (int i = 0; i < 40; i++) {
-            System.out.println(flg.sentence(rng, 6, 9, new String[]{",", ",", ",", ";", ";"},
-                    new String[]{".", ".", ".", "!", "?"}, 0.18));
-        }
         System.out.println("\n-----------------------------------------------------------------------------");
         System.out.println();
         FakeLanguageGen[] languages = new FakeLanguageGen[]{
