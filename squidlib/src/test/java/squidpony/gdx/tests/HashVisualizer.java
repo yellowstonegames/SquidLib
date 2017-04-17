@@ -74,7 +74,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 43, rngMode = 0, noiseMode = 52;
+    private int hashMode = 43, rngMode = 0, noiseMode = 57;
     private CrossHash.Storm storm, stormA, stormB, stormC;
     private CrossHash.Chariot chariot, chariotA, chariotB, chariotC;
     private final int[] coordinates = new int[2];
@@ -234,6 +234,74 @@ public class HashVisualizer extends ApplicationAdapter {
                 //gx = mx ^ (mx >> 1), gy = my ^ (my >> 1),
                 out = ((mx + my + (mx * my)) >>> 4 & 0x1ff); //((Integer.bitCount(gx) + Integer.bitCount(gy) & 63) << 3) ^
         return ((out & 0x100) != 0) ? ~out & 0xff : out & 0xff;
+    }
+    public static int fastFloor(double t) {
+        return t >= 0 ? (int) t : (int) t - 1;
+    }
+
+    public static double trigNoise(final double x, final double y, final int seed)
+    {
+        return NumberTools.bounce(Math.sin(x * 3 - y + seed) + Math.sin(y * 3 - x + seed) + Math.cos(x + y + seed));
+    }
+    public static double veryPatternedTrigNoise(final double ox, final double oy, final double oz, final int seed)
+    {
+        final double r = NumberTools.randomFloat(seed) + 1.75,
+                x = r * ox,
+                y = r * oy,
+                z = r * oz;
+        return NumberTools.bounce(5
+                + (Math.sin(x) * Math.sin(y))
+                + (Math.sin(y) * Math.sin(z))
+                + (Math.sin(z) * Math.sin(x))
+                + Math.cos(x + y + z + seed));
+    }
+    public static double wavetrigNoise(final double ox, final double oy, final double oz, final int seed)
+    {
+        final double r = Math.sin(NumberTools.randomDouble(seed - 0x9E3779B9) * ox
+                + NumberTools.randomDouble(seed) * oy
+                + NumberTools.randomDouble(seed + 0x9E3779B9) * oz) * 0.2,
+                x = (r + 0.5) * ox + oy + r * oz,
+                y = (r + 0.55) * oy + oz + r * ox,
+                z = (r + 0.6) * oz + ox + r * oy,
+                sx = Math.sin(x * r * 3.1 * z + y * r * 2.3 + z * r),
+                sy = Math.sin(y * r * 3.1 * x + z * r * 2.3 + x * r),
+                sz = Math.sin(z * r * 3.1 * y + x * r * 2.3 + y * r);
+        return (Math.sin((sx + sy + sz) * 7.1));
+    }
+    public static double paternedTrigNoise(final double x, final double y, final double z, final int seed)
+    {
+        //0x9E3779B9  0x632BE5AB
+        final double r = NumberTools.randomFloat(seed) + 1.67,
+                //ra = NumberTools.randomSignedFloat(seed - 0x9E3779B9) + 0.85,
+                //rb = NumberTools.randomSignedFloat(seed + 0x9E3779B9) + 0.85,
+                //rc = NumberTools.randomSignedFloat(seed + 0x632BE5AB) + 0.85,
+                sx = Math.sin(x), sy = Math.sin(y), sz = Math.sin(z),
+                a0 = Math.cos((y * 3 + z) * r) * (sx + r) * 0.03,
+                a1 = Math.cos((z * 3 + x) * r) * (sy + r) * 0.03,
+                a2 = Math.cos((x - y) * 2 * r) * (sz + r) * 0.03;
+        return //NumberTools.bounce(5 +
+                Math.sin((Math.cos(sx * 2 + sy) + Math.cos(sy * 2 + sz) + Math.cos(sz * 2 + sx)
+                        + Math.sin(Math.sin(x * a0) * (a1 * 3 - a2) * 5 + Math.sin(y * a1) * (a2 * 3 - a0) * 3 - Math.sin(z * a2) * (a0 * 3 - a1) * 2)
+                        + Math.sin(Math.sin(y * a0) * (a1 * 3 - a2) * 5 + Math.sin(z * a1) * (a2 * 3 - a0) * 3 - Math.sin(x * a2) * (a0 * 3 - a1) * 2)
+                        + Math.sin(Math.sin(z * a0) * (a1 * 3 - a2) * 5 + Math.sin(x * a1) * (a2 * 3 - a0) * 3 - Math.sin(y * a2) * (a0 * 3 - a1) * 2)) * 8.0
+                        //+ Math.atan2(Math.sin(y * rr + x * r), Math.cos(r * y - rr * z))
+                        //+ Math.atan2(Math.sin(z * rr + y * r), Math.cos(r * z - rr * x))
+                        /*+ Math.sin(y * rr + x * r - z)
+                        + Math.sin(z * rr + y * r - x)*/
+                );
+    }
+    public static double trigNoise(final double x, final double y, final double z, final int seed)
+    {
+        final double t0 = Math.cos(x + z - y) * 1.6, r0 = Math.cos(t0 + x - z) + 2.9,
+                t1 = Math.cos(y + x - z) * 1.75, r1 = Math.cos(t1 + y - x) + 2.6,
+                t2 = Math.cos(z + y - x) * 1.9, r2 = Math.cos(t2 + z - y) + 2.3;
+        return //NumberTools.bounce(5 +
+                Math.sin(
+                        //Math.cos(x + y + z)
+                        + Math.sin(x * r0 + z * r1 - y * r2 + seed)
+                                + Math.sin(y * r0 + x * r1 - z * r2 + seed)
+                                + Math.sin(z * r0 + y * r1 - x * r2 + seed)
+                );
     }
 
 
@@ -2399,28 +2467,35 @@ public class HashVisualizer extends ApplicationAdapter {
                     }
                     break;
                     case 58:
-                        Gdx.graphics.setTitle("Mason 4D as 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Trig 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
+                                /*
                                 display.put(x, y,
                                         floatGet(
                                                 ((float)MasonNoise.noise(x * 0.03125 + 20, y * 0.03125 + 30, ctr * 0.05125 + 10, 3,1234) * 0.50f) + 0.50f,
                                                 ((float)MasonNoise.noise(x * 0.03125 + 30, y * 0.03125 + 10, ctr * 0.05125 + 20, 3,54321) * 0.50f) + 0.50f,
                                                 ((float)MasonNoise.noise(x * 0.03125 + 10, y * 0.03125 + 20, ctr * 0.05125 + 30, 3,1234321) * 0.50f) + 0.50f,
+                                                1.0f));*/
+                                display.put(x, y,
+                                        floatGet(
+                                                ((float)trigNoise(x * 0.03125 + 20, y * 0.03125 + 30, ctr * 0.05125 + 10, 1234) * 0.50f) + 0.50f,
+                                                ((float)trigNoise(x * 0.03125 + 30, y * 0.03125 + 10, ctr * 0.05125 + 20, 54321) * 0.50f) + 0.50f,
+                                                ((float)trigNoise(x * 0.03125 + 10, y * 0.03125 + 20, ctr * 0.05125 + 30, 1234321) * 0.50f) + 0.50f,
                                                 1.0f));
                             }
                         }
                         break;
                     case 59:
-                        Gdx.graphics.setTitle("Mason 4D as 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Trig 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)(/*Noise.seamless3D(x * 0.0625, y * 0.0625, ctr  * 0.05125,
                                         20.0, 20.0, 20.0, 12) * 0.5
                                         + Noise.seamless3D(x * 0.125, y * 0.125, ctr  * 0.05125,
                                         40.0, 40.0, 20.0, 1234)
-                                        + */MasonNoise.noise(x * 0.03125, y * 0.03125, ctr  * 0.05125,
-                                        3.0,123456) * 0.50f) + 0.50f;
+                                        + */trigNoise(x * 0.03125, y * 0.03125, ctr  * 0.05125,
+                                        123456) * 0.50f) + 0.50f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
