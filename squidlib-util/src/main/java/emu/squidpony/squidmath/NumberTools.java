@@ -98,6 +98,19 @@ public class NumberTools {
         return wfa.get(0);
     }
 
+    public static byte getSelectedByte(final double value, final int whichByte)
+    {
+        wda.set(0, value);
+        return wba.get(whichByte & 7);
+    }
+
+    public static double setSelectedByte(final double value, final int whichByte, final byte newValue)
+    {
+        wda.set(0, value);
+        wba.set(whichByte & 7, newValue);
+        return wda.get(0);
+    }
+
     public static byte getSelectedByte(final float value, final int whichByte)
     {
         wfa.set(0, value);

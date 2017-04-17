@@ -49,6 +49,33 @@ public class NumberTools {
     }
 
     /**
+     * Gets an 8-bit section of the given double {@code value}, using {@code whichByte} to select whether this should
+     * return byte 0 (least significant), 1, 2, and so on up to 7 (most significant).
+     * @param value a float
+     * @param whichByte an int that will be used to select the byte to take from value (any int is allowed, only the bottom 3 bits are used to select)
+     * @return the selected byte from the given float
+     */
+    public static byte getSelectedByte(final double value, final int whichByte)
+    {
+        return (byte)(Double.doubleToLongBits(value) >>> ((whichByte & 7) << 3));
+    }
+
+    /**
+     * Like {@link #getSelectedByte(double, int)}, this sets the byte at a selected position in the int representation of
+     * a double, then returns the double produced by the bit change. Uses {@code whichByte} to select whether this should
+     * set byte 0 (least significant), 1, 2, and so on up to 7 (most significant). {@code newValue} is a byte.
+     * @param value a double
+     * @param whichByte an int that will be used to select the byte to take from value (any int is allowed, only the bottom 3 bits are used to select)
+     * @param newValue a byte that will be placed into the returned double's bits at the selected position
+     * @return a double that results from changing the bits at the selected position to match newValue
+     */
+    public static double setSelectedByte(final double value, final int whichByte, final byte newValue)
+    {
+        return Double.longBitsToDouble((Double.doubleToLongBits(value) & ~(255 << ((whichByte & 7) << 3)))
+                | ((newValue & 255) << ((whichByte & 7) << 3)));
+    }
+
+    /**
      * Very limited-use. Takes any double and produces a double in the -1.0 to 1.0 range, with similar inputs producing
      * close to a consistent rate of up and down through the range. This is meant for noise, where it may be useful to
      * limit the amount of change between nearby points' noise values and prevent sudden "jumps" in noise value.
