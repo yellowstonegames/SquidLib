@@ -166,10 +166,10 @@ public class WorldMapGenerator {
         zoomOut(1, width >> 1, height >> 1);
     }
     /**
-     * Halves the resolution of the map and doubles the area it covers; the 2D arrays this uses keep their sizes. This
-     * version of zoomOut allows you to specify where the zoom should be centered, using the current coordinates (if the
-     * map size is 256x256, then coordinates should be between 0 and 255, and will refer to the currently used area and
-     * not necessarily the full world size).
+     * Halves the resolution of the map and doubles the area it covers repeatedly, halving {@code zoomAmount} times; the
+     * 2D arrays this uses keep their sizes. This version of zoomOut allows you to specify where the zoom should be
+     * centered, using the current coordinates (if the map size is 256x256, then coordinates should be between 0 and
+     * 255, and will refer to the currently used area and not necessarily the full world size).
      * <br>
      * Only has an effect if you have previously zoomed in using {@link #zoomIn(int, int, int)} or its overload.
      * @param zoomCenterX the center X position to zoom out from; if too close to an edge, this will stop moving before it would extend past an edge
@@ -215,10 +215,10 @@ public class WorldMapGenerator {
         zoomIn(1, width >> 1, height >> 1);
     }
     /**
-     * Doubles the resolution of the map and halves the area it covers; the 2D arrays this uses keep their sizes. This
-     * version of zoomIn allows you to specify where the zoom should be centered, using the current coordinates (if the
-     * map size is 256x256, then coordinates should be between 0 and 255, and will refer to the currently used area and
-     * not necessarily the full world size).
+     * Doubles the resolution of the map and halves the area it covers repeatedly, doubling {@code zoomAmount} times;
+     * the 2D arrays this uses keep their sizes. This version of zoomIn allows you to specify where the zoom should be
+     * centered, using the current coordinates (if the map size is 256x256, then coordinates should be between 0 and
+     * 255, and will refer to the currently used area and not necessarily the full world size).
      * <br>
      * Although there is no technical restriction on maximum zoom, zooming in more than 5 times (64x scale or greater)
      * will make the map appear somewhat less realistic due to rounded shapes appearing more bubble-like and less like a
@@ -480,7 +480,7 @@ public class WorldMapGenerator {
         long rebuildState = rng.nextLong();
         workingData.empty().insertRectangle(8, 8, width - 16, height - 16);
         riverData.empty().refill(heightCodeData, 6, 100);
-        riverData.quasiRandomRegion(0.00000075 * riverData.size()).and(workingData);
+        riverData.quasiRandomRegion(0.0066).and(workingData);
         int[] starts = riverData.asTightEncoded();
         int len = starts.length, currentPos, choice, adjX, adjY, currX, currY, tcx, tcy, stx, sty, sbx, sby;
         riverData.clear();
@@ -536,7 +536,7 @@ public class WorldMapGenerator {
                             riverData.or(workingData);
                             continue PER_RIVER;
                         }
-                        else if((heightData[adjX][adjY] -= 0.0002) < sandLower)
+                        else if((heightData[adjX][adjY] -= 0.0002) < 0.0)
                         {
                             if(rng.next(3) == 0)
                                 riverData.or(workingData);
@@ -558,7 +558,7 @@ public class WorldMapGenerator {
                             riverData.or(workingData);
                             continue PER_RIVER;
                         }
-                        else if((heightData[adjX][adjY] -= 0.0002) < sandLower)
+                        else if((heightData[adjX][adjY] -= 0.0002) < 0.0)
                         {
                             if(rng.next(3) == 0)
                                 riverData.or(workingData);
@@ -579,7 +579,7 @@ public class WorldMapGenerator {
                     tcy = currY - reuse[choice].deltaY;
                     if(heightData[tcx][currY] <= heightData[currX][tcy] && !workingData.contains(tcx, currY))
                     {
-                        if(heightCodeData[tcx][currY] < 4 || riverData.contains(tcx, currY))
+                        if(heightCodeData[tcx][currY] < 3 || riverData.contains(tcx, currY))
                         {
                             riverData.or(workingData);
                             continue PER_RIVER;
@@ -588,7 +588,7 @@ public class WorldMapGenerator {
                     }
                     else if(!workingData.contains(currX, tcy))
                     {
-                        if(heightCodeData[currX][tcy] < 4 || riverData.contains(currX, tcy))
+                        if(heightCodeData[currX][tcy] < 3 || riverData.contains(currX, tcy))
                         {
                             riverData.or(workingData);
                             continue PER_RIVER;
@@ -597,7 +597,7 @@ public class WorldMapGenerator {
 
                     }
                 }
-                if(heightCodeData[currX][currY] < 4 || riverData.contains(currX, currY))
+                if(heightCodeData[currX][currY] < 3 || riverData.contains(currX, currY))
                 {
                     riverData.or(workingData);
                     continue PER_RIVER;
@@ -607,7 +607,7 @@ public class WorldMapGenerator {
         }
 
         GreasedRegion tempData = new GreasedRegion(width, height);
-        int riverCount = riverData.size() >> 3, currentMax = riverCount >> 2, idx = 0, prevChoice;
+        int riverCount = riverData.size() >> 4, currentMax = riverCount >> 3, idx = 0, prevChoice;
         for (int h = 5; h < 9; h++) { //, currentMax += riverCount / 18
             workingData.empty().refill(heightCodeData, h).and(riverData);
             RIVER:
@@ -645,7 +645,7 @@ public class WorldMapGenerator {
                         tcx = currX - reuse[prevChoice].deltaX;
                         tcy = currY - reuse[prevChoice].deltaY;
                         if (heightData[tcx][currY] <= heightData[currX][tcy]) {
-                            if(heightCodeData[tcx][currY] < 4)
+                            if(heightCodeData[tcx][currY] < 3)
                             {
                                 riverData.or(tempData);
                                 continue;
@@ -654,7 +654,7 @@ public class WorldMapGenerator {
                         }
                         else
                         {
-                            if(heightCodeData[currX][tcy] < 4)
+                            if(heightCodeData[currX][tcy] < 3)
                             {
                                 riverData.or(tempData);
                                 continue;
@@ -662,7 +662,7 @@ public class WorldMapGenerator {
                             tempData.insert(currX, tcy);
                         }
                     }
-                    if(heightCodeData[currX][currY] < 4)
+                    if(heightCodeData[currX][currY] < 3)
                     {
                         riverData.or(tempData);
                         continue;
@@ -695,7 +695,7 @@ public class WorldMapGenerator {
                             tcx = currX - reuse[choice].deltaX;
                             tcy = currY - reuse[choice].deltaY;
                             if (heightData[tcx][currY] <= heightData[currX][tcy]) {
-                                if(heightCodeData[tcx][currY] < 4)
+                                if(heightCodeData[tcx][currY] < 3)
                                 {
                                     riverData.or(tempData);
                                     continue RIVER;
@@ -704,7 +704,7 @@ public class WorldMapGenerator {
                             }
                             else
                             {
-                                if(heightCodeData[currX][tcy] < 4)
+                                if(heightCodeData[currX][tcy] < 3)
                                 {
                                     riverData.or(tempData);
                                     continue RIVER;
@@ -712,7 +712,7 @@ public class WorldMapGenerator {
                                 tempData.insert(currX, tcy);
                             }
                         }
-                        if(heightCodeData[currX][currY] < 4)
+                        if(heightCodeData[currX][currY] < 3)
                         {
                             riverData.or(tempData);
                             continue RIVER;
@@ -728,7 +728,7 @@ public class WorldMapGenerator {
                     if (best <= heightData[stx][sty] || heightData[currX][currY] > rng.nextDouble(280.0)) {
                         riverData.or(tempData);
                         tempData.clear();
-                        if(heightCodeData[currX][currY] < 4)
+                        if(heightCodeData[currX][currY] < 3)
                             continue RIVER;
                         lakeData.insert(currX, currY);
                         sbx = rng.next(8);
