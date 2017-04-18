@@ -1086,6 +1086,48 @@ public class DungeonUtility {
         }
         return portion;
     }
+    /**
+     * Given a char[][] for the map, produces a double[][] that can be used with FOV.calculateFOV(), but does not treat
+     * any cells as partly transparent, only fully-blocking or fully-permitting light. This is mainly useful if you
+     * expect the FOV radius to be very high or (effectively) infinite, since anything less than complete blockage would
+     * be passed through by infinite-radius FOV. This expects any doors to be represented by '+' if closed or '/' if
+     * open (most door placement defaults to a mix of '+' and '/', so by calling
+     * {@link DungeonUtility#closeDoors(char[][])} you can close all doors at the start), and any walls to be '#' or
+     * line drawing characters. This will assign 1.0 resistance to walls and closed doors or 0.0 for any other cell.
+     *
+     * @param map a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors()
+     * @return a resistance map suitable for use with the FOV class, but with no partially transparent cells
+     */
+    public static double[][] generateSimpleResistances(char[][] map) {
+        int width = map.length;
+        int height = map[0].length;
+        double[][] portion = new double[width][height];
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                switch (map[i][j]) {
+                    case '\1':
+                    case '├':
+                    case '┤':
+                    case '┴':
+                    case '┬':
+                    case '┌':
+                    case '┐':
+                    case '└':
+                    case '┘':
+                    case '│':
+                    case '─':
+                    case '┼':
+                    case '#':
+                    case '+':
+                        portion[i][j] = 1.0;
+                        break;
+                    default:
+                        portion[i][j] = 0.0;
+                }
+            }
+        }
+        return portion;
+    }
 
     /**
      * Given a char[][] for the map, a Map of Character keys to Double values that will be used to determine costs, and
