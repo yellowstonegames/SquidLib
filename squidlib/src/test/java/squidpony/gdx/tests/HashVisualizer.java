@@ -74,7 +74,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 43, rngMode = 0, noiseMode = 57;
+    private int hashMode = 43, rngMode = 0, noiseMode = 60;
     private CrossHash.Storm storm, stormA, stormB, stormC;
     private CrossHash.Chariot chariot, chariotA, chariotB, chariotC;
     private final int[] coordinates = new int[2];
@@ -243,6 +243,21 @@ public class HashVisualizer extends ApplicationAdapter {
     {
         return NumberTools.bounce(Math.sin(x * 3 - y + seed) + Math.sin(y * 3 - x + seed) + Math.cos(x + y + seed));
     }
+    public static double trigNoise(final double ox, final double oy, final double oz, final int seed)
+    {
+        final double
+                x = (NumberTools.randomFloat(seed - 0x9E3779B9) * 0.5 + 0.75) * ox,
+                y = (NumberTools.randomFloat(seed + 0x632BE5AB) * 0.5 + 0.75) * oy,
+                z = (NumberTools.randomFloat(seed + 0x9E3779B9) * 0.5 + 0.75) * oz,
+                sx = (Math.sin(x) + 1) * 0.5, ix = 1.0 - sx,
+                sy = (Math.sin(y) + 1) * 0.5, iy = 1.0 - sy,
+                sz = (Math.sin(z) + 1) * 0.5, iz = 1.0 - sz,
+                a0 = Math.cos(Math.sin(x * sz + y * iz + z) + Math.sin(y * sz + x * iz - z) + Math.sin((x - y) * 0.5)),
+                a1 = Math.cos(Math.sin(x * sy + z * iy + y) + Math.sin(z * sy + x * iy - y) + Math.sin((z - x) * 0.5)),
+                a2 = Math.cos(Math.sin(z * sx + y * ix + x) + Math.sin(y * sx + z * ix - x) + Math.sin((y - z) * 0.5));
+        return (Math.sin((a0 + a1 + a2) * 7.1));
+    }
+
     public static double veryPatternedTrigNoise(final double ox, final double oy, final double oz, final int seed)
     {
         final double r = NumberTools.randomFloat(seed) + 1.75,
@@ -290,7 +305,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         + Math.sin(z * rr + y * r - x)*/
                 );
     }
-    public static double trigNoise(final double x, final double y, final double z, final int seed)
+    public static double bendyTrigNoise(final double x, final double y, final double z, final int seed)
     {
         final double t0 = Math.cos(x + z - y) * 1.6, r0 = Math.cos(t0 + x - z) + 2.9,
                 t1 = Math.cos(y + x - z) * 1.75, r1 = Math.cos(t1 + y - x) + 2.6,
@@ -338,15 +353,14 @@ public class HashVisualizer extends ApplicationAdapter {
         stage = new Stage(view, batch);
         seed = 0xBEEFF00DCAFECABAL;
 
+        Noise.seamless3D(seamless[0], 1337, 1);
+        Noise.seamless3D(seamless[1], 123456, 1);
+        Noise.seamless3D(seamless[2], -9999, 1);
         /*
-        Noise.seamless3D(seamless[0], 1337, 3);
-        Noise.seamless3D(seamless[1], 123456, 3);
-        Noise.seamless3D(seamless[2], -9999, 3);
-        */
         Noise.seamless3D(seamless[0], 1337, 1, MasonNoise.instance);
         Noise.seamless3D(seamless[1], 123456, 1, MasonNoise.instance);
         Noise.seamless3D(seamless[2], -9999, 1, MasonNoise.instance);
-
+        */
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {

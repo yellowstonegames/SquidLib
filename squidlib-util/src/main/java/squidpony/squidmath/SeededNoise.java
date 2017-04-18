@@ -1193,7 +1193,8 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             F6 = (float)(Math.sqrt(7.0) - 1.0) / 6f,
             G6 = F6 / (float)(1.0 + 6.0 * F6),
             LIMIT4 = 0.62f,
-            LIMIT6 = 0.777f
+            //LIMIT6 = 0.777f
+            LIMIT6 = 0.86f
             /*
             sideLength = (float)Math.sqrt(6.0) / (6f * F6 + 1f),
             a6 = (float)(Math.sqrt((sideLength * sideLength)
@@ -1535,7 +1536,8 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             }
             skewOffset += G6;
         }
-        return NumberTools.bounce(5 + 13.5 * n);
+        //return NumberTools.bounce(5.0 + 13.5 * n);
+        return NumberTools.bounce(10.0 + 16.25 * n);
     }
 
 }
