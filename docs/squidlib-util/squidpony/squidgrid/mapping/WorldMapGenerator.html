@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -502,31 +502,41 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
           long&nbsp;state)</code>&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
+<td class="colFirst"><code>protected int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#wrapX-int-">wrapX</a></span>(int&nbsp;x)</code>&nbsp;</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>protected int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#wrapY-int-">wrapY</a></span>(int&nbsp;y)</code>&nbsp;</td>
+</tr>
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomIn--">zoomIn</a></span>()</code>
 <div class="block">Doubles the resolution of the map and halves the area it covers; the 2D arrays this uses keep their sizes.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomIn-int-int-int-">zoomIn</a></span>(int&nbsp;zoomAmount,
       int&nbsp;zoomCenterX,
       int&nbsp;zoomCenterY)</code>
-<div class="block">Doubles the resolution of the map and halves the area it covers; the 2D arrays this uses keep their sizes.</div>
+<div class="block">Doubles the resolution of the map and halves the area it covers repeatedly, doubling <code>zoomAmount</code> times;
+ the 2D arrays this uses keep their sizes.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomOut--">zoomOut</a></span>()</code>
 <div class="block">Halves the resolution of the map and doubles the area it covers; the 2D arrays this uses keep their sizes.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomOut-int-int-int-">zoomOut</a></span>(int&nbsp;zoomAmount,
        int&nbsp;zoomCenterX,
        int&nbsp;zoomCenterY)</code>
-<div class="block">Halves the resolution of the map and doubles the area it covers; the 2D arrays this uses keep their sizes.</div>
+<div class="block">Halves the resolution of the map and doubles the area it covers repeatedly, halving <code>zoomAmount</code> times; the
+ 2D arrays this uses keep their sizes.</div>
 </td>
 </tr>
 </table>
@@ -1289,10 +1299,10 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.178">zoomOut</a>(int&nbsp;zoomAmount,
                     int&nbsp;zoomCenterX,
                     int&nbsp;zoomCenterY)</pre>
-<div class="block">Halves the resolution of the map and doubles the area it covers; the 2D arrays this uses keep their sizes. This
- version of zoomOut allows you to specify where the zoom should be centered, using the current coordinates (if the
- map size is 256x256, then coordinates should be between 0 and 255, and will refer to the currently used area and
- not necessarily the full world size).
+<div class="block">Halves the resolution of the map and doubles the area it covers repeatedly, halving <code>zoomAmount</code> times; the
+ 2D arrays this uses keep their sizes. This version of zoomOut allows you to specify where the zoom should be
+ centered, using the current coordinates (if the map size is 256x256, then coordinates should be between 0 and
+ 255, and will refer to the currently used area and not necessarily the full world size).
  <br>
  Only has an effect if you have previously zoomed in using <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomIn-int-int-int-"><code>zoomIn(int, int, int)</code></a> or its overload.</div>
 <dl>
@@ -1326,10 +1336,10 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.229">zoomIn</a>(int&nbsp;zoomAmount,
                    int&nbsp;zoomCenterX,
                    int&nbsp;zoomCenterY)</pre>
-<div class="block">Doubles the resolution of the map and halves the area it covers; the 2D arrays this uses keep their sizes. This
- version of zoomIn allows you to specify where the zoom should be centered, using the current coordinates (if the
- map size is 256x256, then coordinates should be between 0 and 255, and will refer to the currently used area and
- not necessarily the full world size).
+<div class="block">Doubles the resolution of the map and halves the area it covers repeatedly, doubling <code>zoomAmount</code> times;
+ the 2D arrays this uses keep their sizes. This version of zoomIn allows you to specify where the zoom should be
+ centered, using the current coordinates (if the map size is 256x256, then coordinates should be between 0 and
+ 255, and will refer to the currently used area and not necessarily the full world size).
  <br>
  Although there is no technical restriction on maximum zoom, zooming in more than 5 times (64x scale or greater)
  will make the map appear somewhat less realistic due to rounded shapes appearing more bubble-like and less like a
@@ -1383,13 +1393,31 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <pre>protected final&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.465">decodeY</a>(int&nbsp;coded)</pre>
 </li>
 </ul>
+<a name="wrapX-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>wrapX</h4>
+<pre>protected final&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.469">wrapX</a>(int&nbsp;x)</pre>
+</li>
+</ul>
+<a name="wrapY-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>wrapY</h4>
+<pre>protected final&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.472">wrapY</a>(int&nbsp;y)</pre>
+</li>
+</ul>
 <a name="addRivers--">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>addRivers</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.477">addRivers</a>()</pre>
+<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.483">addRivers</a>()</pre>
 </li>
 </ul>
 </li>

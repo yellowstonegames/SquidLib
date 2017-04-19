@@ -37,7 +37,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         Rocky                  = 11,
         River                  = 12;
 
-    private static final int width = 256, height = 128;
+    private static final int width = 512, height = 512;
 
     private SpriteBatch batch;
     private SquidPanel display;//, overlay;
@@ -384,7 +384,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
 
     public void putMap() {
         // uncomment next line to generate maps as quickly as possible
-        generate(rng.nextLong());
+        //generate(rng.nextLong());
         display.erase();
         int hc, tc;
         int[][] heightCodeData = world.heightCodeData;

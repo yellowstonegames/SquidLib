@@ -466,6 +466,12 @@ public class WorldMapGenerator {
     {
         return coded / width;
     }
+    protected final int wrapX(final int x)  {
+        return (x + width) % width;
+    }
+    protected final int wrapY(final int y)  {
+        return (y + height) % height;
+    }
     private static final Direction[] reuse = new Direction[9];
     private void appendDirToShuffle(RNG rng) {
         rng.randomPortion(Direction.CARDINALS, reuse);
@@ -478,9 +484,10 @@ public class WorldMapGenerator {
     {
         landData.refill(heightCodeData, 4, 999);
         long rebuildState = rng.nextLong();
-        workingData.empty().insertRectangle(8, 8, width - 16, height - 16);
+        //workingData.allOn();
+                //.empty().insertRectangle(8, 8, width - 16, height - 16);
         riverData.empty().refill(heightCodeData, 6, 100);
-        riverData.quasiRandomRegion(0.0066).and(workingData);
+        riverData.quasiRandomRegion(0.0066);
         int[] starts = riverData.asTightEncoded();
         int len = starts.length, currentPos, choice, adjX, adjY, currX, currY, tcx, tcy, stx, sty, sbx, sby;
         riverData.clear();
@@ -498,20 +505,15 @@ public class WorldMapGenerator {
                 appendDirToShuffle(rng);
 
                 for (int d = 0; d < 5; d++) {
-                    adjX = (currX + reuse[d].deltaX);
+                    adjX = wrapX(currX + reuse[d].deltaX);
+                    /*
                     if (adjX < 0 || adjX >= width)
                     {
                         if(rng.next(4) == 0)
                             riverData.or(workingData);
                         continue PER_RIVER;
-                    }
-                    adjY = (currY + reuse[d].deltaY);
-                    if (adjY < 0 || adjY >= height)
-                    {
-                        if(rng.next(4) == 0)
-                            riverData.or(workingData);
-                        continue PER_RIVER;
-                    }
+                    }*/
+                    adjY = wrapY(currY + reuse[d].deltaY);
                     if (heightData[adjX][adjY] < best && !workingData.contains(adjX, adjY)) {
                         best = heightData[adjX][adjY];
                         choice = d;
@@ -523,60 +525,40 @@ public class WorldMapGenerator {
                 currY = tcy;
                 if (best >= heightData[stx][sty]) {
                     tcx = rng.next(2);
-                    adjX = currX + ((tcx & 1) << 1) - 1;
-                    adjY = currY + (tcx & 2) - 1;
+                    adjX = wrapX(currX + ((tcx & 1) << 1) - 1);
+                    adjY = wrapY(currY + (tcx & 2) - 1);
                     lakeData.insert(currX, currY);
-                    lakeData.insert(currX + 1, currY);
-                    lakeData.insert(currX - 1, currY);
-                    lakeData.insert(currX, currY + 1);
-                    lakeData.insert(currX, currY - 1);
-                    if (!(adjY < 0 || adjY >= height || adjX < 0 || adjX >= width))
-                    {
-                        if(heightCodeData[adjX][adjY] <= 3) {
-                            riverData.or(workingData);
-                            continue PER_RIVER;
-                        }
-                        else if((heightData[adjX][adjY] -= 0.0002) < 0.0)
-                        {
-                            if(rng.next(3) == 0)
-                                riverData.or(workingData);
-                            continue PER_RIVER;
-                        }
+                    lakeData.insert(wrapX(currX+1), currY);
+                    lakeData.insert(wrapX(currX-1), currY);
+                    lakeData.insert(currX, wrapY(currY+1));
+                    lakeData.insert(currX, wrapY(currY-1));
+
+                    if(heightCodeData[adjX][adjY] <= 3) {
+                        riverData.or(workingData);
+                        continue PER_RIVER;
                     }
-                    else
-                    {
-                        if(rng.next(5) == 0)
+                    else if((heightData[adjX][adjY] -= 0.0002) < 0.0) {
+                        if (rng.next(3) == 0)
                             riverData.or(workingData);
                         continue PER_RIVER;
                     }
                     tcx = rng.next(2);
-                    adjX = currX + ((tcx & 1) << 1) - 1;
-                    adjY = currY + (tcx & 2) - 1;
-                    if (!(adjY < 0 || adjY >= height || adjX < 0 || adjX >= width))
-                    {
-                        if(heightCodeData[adjX][adjY] <= 3) {
-                            riverData.or(workingData);
-                            continue PER_RIVER;
-                        }
-                        else if((heightData[adjX][adjY] -= 0.0002) < 0.0)
-                        {
-                            if(rng.next(3) == 0)
-                                riverData.or(workingData);
-                            continue PER_RIVER;
-                        }
+                    adjX = wrapX(currX + ((tcx & 1) << 1) - 1);
+                    adjY = wrapY(currY + (tcx & 2) - 1);
+                    if(heightCodeData[adjX][adjY] <= 3) {
+                        riverData.or(workingData);
+                        continue PER_RIVER;
                     }
-                    else
-                    {
-                        if(rng.next(5) == 0)
+                    else if((heightData[adjX][adjY] -= 0.0002) < 0.0) {
+                        if (rng.next(3) == 0)
                             riverData.or(workingData);
                         continue PER_RIVER;
                     }
-
                 }
                 if(choice != -1 && reuse[choice].isDiagonal())
                 {
-                    tcx = currX - reuse[choice].deltaX;
-                    tcy = currY - reuse[choice].deltaY;
+                    tcx = wrapX(currX - reuse[choice].deltaX);
+                    tcy = wrapY(currY - reuse[choice].deltaY);
                     if(heightData[tcx][currY] <= heightData[currX][tcy] && !workingData.contains(tcx, currY))
                     {
                         if(heightCodeData[tcx][currY] < 3 || riverData.contains(tcx, currY))
@@ -622,12 +604,8 @@ public class WorldMapGenerator {
                 choice = -1;
                 prevChoice = -1;
                 for (int d = 0; d < 5; d++) {
-                    adjX = (currX + reuse[d].deltaX);
-                    if (adjX < 0 || adjX >= width)
-                        continue;
-                    adjY = (currY + reuse[d].deltaY);
-                    if (adjY < 0 || adjY >= height)
-                        continue;
+                    adjX = wrapX(currX + reuse[d].deltaX);
+                    adjY = wrapY(currY + reuse[d].deltaY);
                     if (heightData[adjX][adjY] > best) {
                         best = heightData[adjX][adjY];
                         prevChoice = choice;
@@ -642,8 +620,8 @@ public class WorldMapGenerator {
                 currY = sby;
                 if (prevChoice != -1 && heightCodeData[currX][currY] >= 4) {
                     if (reuse[prevChoice].isDiagonal()) {
-                        tcx = currX - reuse[prevChoice].deltaX;
-                        tcy = currY - reuse[prevChoice].deltaY;
+                        tcx = wrapX(currX - reuse[prevChoice].deltaX);
+                        tcy = wrapY(currY - reuse[prevChoice].deltaY);
                         if (heightData[tcx][currY] <= heightData[currX][tcy]) {
                             if(heightCodeData[tcx][currY] < 3)
                             {
@@ -675,12 +653,8 @@ public class WorldMapGenerator {
                     appendDirToShuffle(rng);
                     choice = -1;
                     for (int d = 0; d < 6; d++) {
-                        adjX = (currX + reuse[d].deltaX);
-                        if (adjX < 0 || adjX >= width)
-                            continue;
-                        adjY = (currY + reuse[d].deltaY);
-                        if (adjY < 0 || adjY >= height)
-                            continue;
+                        adjX = wrapX(currX + reuse[d].deltaX);
+                        adjY = wrapY(currY + reuse[d].deltaY);
                         if (heightData[adjX][adjY] > best && !riverData.contains(adjX, adjY)) {
                             best = heightData[adjX][adjY];
                             choice = d;
@@ -692,8 +666,8 @@ public class WorldMapGenerator {
                     currY = sby;
                     if (choice != -1) {
                         if (reuse[choice].isDiagonal()) {
-                            tcx = currX - reuse[choice].deltaX;
-                            tcy = currY - reuse[choice].deltaY;
+                            tcx = wrapX(currX - reuse[choice].deltaX);
+                            tcy = wrapY(currY - reuse[choice].deltaY);
                             if (heightData[tcx][currY] <= heightData[currX][tcy]) {
                                 if(heightCodeData[tcx][currY] < 3)
                                 {
@@ -734,17 +708,17 @@ public class WorldMapGenerator {
                         sbx = rng.next(8);
                         sbx &= sbx >>> 4;
                         if ((sbx & 1) == 0)
-                            lakeData.insert(currX + 1, currY);
+                            lakeData.insert(wrapX(currX + 1), currY);
                         if ((sbx & 2) == 0)
-                            lakeData.insert(currX - 1, currY);
+                            lakeData.insert(wrapX(currX - 1), currY);
                         if ((sbx & 4) == 0)
-                            lakeData.insert(currX, currY + 1);
+                            lakeData.insert(currX, wrapY(currY + 1));
                         if ((sbx & 8) == 0)
-                            lakeData.insert(currX, currY - 1);
+                            lakeData.insert(currX, wrapY(currY - 1));
                         sbx = rng.next(2);
-                        lakeData.insert(currX + (-(sbx & 1) | 1), currY + ((sbx & 2) - 1)); // random diagonal
-                        lakeData.insert(currX, currY + ((sbx & 2) - 1)); // ortho next to random diagonal
-                        lakeData.insert(currX + (-(sbx & 1) | 1), currY); // ortho next to random diagonal
+                        lakeData.insert(wrapX(currX + (-(sbx & 1) | 1)), wrapY(currY + ((sbx & 2) - 1))); // random diagonal
+                        lakeData.insert(currX, wrapY(currY + ((sbx & 2) - 1))); // ortho next to random diagonal
+                        lakeData.insert(wrapX(currX + (-(sbx & 1) | 1)), currY); // ortho next to random diagonal
 
                         continue RIVER;
                     }
