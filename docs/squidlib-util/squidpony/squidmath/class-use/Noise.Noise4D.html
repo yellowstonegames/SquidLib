@@ -112,23 +112,23 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a></code></td>
-<td class="colLast"><span class="typeNameLabel">WorldMapGenerator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#heat">heat</a></span></code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">WorldMapGenerator.TilingMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#heat">heat</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a></code></td>
-<td class="colLast"><span class="typeNameLabel">WorldMapGenerator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#moisture">moisture</a></span></code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">WorldMapGenerator.TilingMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#moisture">moisture</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a></code></td>
-<td class="colLast"><span class="typeNameLabel">WorldMapGenerator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#otherRidged">otherRidged</a></span></code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">WorldMapGenerator.TilingMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#otherRidged">otherRidged</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a></code></td>
-<td class="colLast"><span class="typeNameLabel">WorldMapGenerator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#terrain">terrain</a></span></code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">WorldMapGenerator.TilingMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#terrain">terrain</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a></code></td>
-<td class="colLast"><span class="typeNameLabel">WorldMapGenerator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#terrainRidged">terrainRidged</a></span></code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">WorldMapGenerator.TilingMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#terrainRidged">terrainRidged</a></span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -139,10 +139,23 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#WorldMapGenerator-long-int-int-squidpony.squidmath.Noise.Noise4D-">WorldMapGenerator</a></span>(long&nbsp;initialSeed,
-                 int&nbsp;mapWidth,
-                 int&nbsp;mapHeight,
-                 <a href="../../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;noiseGenerator)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#TilingMap-long-int-int-squidpony.squidmath.Noise.Noise4D-">TilingMap</a></span>(long&nbsp;initialSeed,
+         int&nbsp;mapWidth,
+         int&nbsp;mapHeight,
+         <a href="../../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;noiseGenerator)</code>
+<div class="block">Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
+ as north-to-south.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#TilingMap-long-int-int-squidpony.squidmath.Noise.Noise4D-double-">TilingMap</a></span>(long&nbsp;initialSeed,
+         int&nbsp;mapWidth,
+         int&nbsp;mapHeight,
+         <a href="../../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;noiseGenerator,
+         double&nbsp;octaveMultiplier)</code>
+<div class="block">Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
+ as north-to-south.</div>
+</td>
 </tr>
 </tbody>
 </table>

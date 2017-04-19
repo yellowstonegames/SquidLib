@@ -269,13 +269,13 @@
 <dd>
 <div class="block">A base class for cell level features common to roguelike dungeons.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html#terrain">terrain</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#terrain">terrain</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.TilingMap</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html#terrainFreq">terrainFreq</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#terrainFreq">terrainFreq</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.TilingMap</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html#terrainRidged">terrainRidged</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#terrainRidged">terrainRidged</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.TilingMap</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html#terrainRidgedFreq">terrainRidgedFreq</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#terrainRidgedFreq">terrainRidgedFreq</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.TilingMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/panel/IColoredString.Bucket.html#text">text</a></span> - Variable in class squidpony.panel.<a href="../squidpony/panel/IColoredString.Bucket.html" title="class in squidpony.panel">IColoredString.Bucket</a></dt>
 <dd>&nbsp;</dd>
@@ -408,6 +408,31 @@
 <dd>
 <div class="block">An enumeration of all the kinds of dungeon that DungeonBoneGen
  knows how to draw already.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#TilingMap--">TilingMap()</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.TilingMap</a></dt>
+<dd>
+<div class="block">Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
+ as north-to-south.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#TilingMap-int-int-">TilingMap(int, int)</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.TilingMap</a></dt>
+<dd>
+<div class="block">Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
+ as north-to-south.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#TilingMap-long-int-int-">TilingMap(long, int, int)</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.TilingMap</a></dt>
+<dd>
+<div class="block">Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
+ as north-to-south.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#TilingMap-long-int-int-squidpony.squidmath.Noise.Noise4D-">TilingMap(long, int, int, Noise.Noise4D)</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.TilingMap</a></dt>
+<dd>
+<div class="block">Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
+ as north-to-south.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#TilingMap-long-int-int-squidpony.squidmath.Noise.Noise4D-double-">TilingMap(long, int, int, Noise.Noise4D, double)</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.TilingMap</a></dt>
+<dd>
+<div class="block">Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
+ as north-to-south.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOVCache.html#tmpCache">tmpCache</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOVCache.html" title="class in squidpony.squidgrid">FOVCache</a></dt>
 <dd>&nbsp;</dd>
