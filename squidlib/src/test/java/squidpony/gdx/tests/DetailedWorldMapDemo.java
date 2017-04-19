@@ -14,6 +14,7 @@ import squidpony.squidgrid.gui.gdx.SquidMouse;
 import squidpony.squidgrid.gui.gdx.SquidPanel;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
 import squidpony.squidmath.NumberTools;
+import squidpony.squidmath.SeededNoise;
 import squidpony.squidmath.StatefulRNG;
 
 /**
@@ -303,7 +304,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         stage = new Stage(view, batch);
         seed = 0xDEBACL;
         rng = new StatefulRNG(seed);
-        world = new WorldMapGenerator(seed, width, height);
+        world = new WorldMapGenerator.TilingMap(seed, width, height, SeededNoise.instance, 0.75);
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
@@ -336,10 +337,12 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                 if(button == Input.Buttons.RIGHT)
                 {
                     zoomOut(screenX, screenY);
+                    Gdx.graphics.requestRendering();
                 }
                 else
                 {
                     zoomIn(screenX, screenY);
+                    Gdx.graphics.requestRendering();
                 }
                 return true;
             }
@@ -349,8 +352,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         Gdx.input.setInputProcessor(input);
         display.setPosition(0, 0);
         stage.addActor(display);
-        //Gdx.graphics.setContinuousRendering(false);
-        //Gdx.graphics.requestRendering();
+        Gdx.graphics.setContinuousRendering(false);
+        Gdx.graphics.requestRendering();
     }
 
     public void zoomIn() {

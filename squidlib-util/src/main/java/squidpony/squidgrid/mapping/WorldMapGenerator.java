@@ -34,26 +34,21 @@ import squidpony.squidmath.*;
  * zoom level and progressively enlarging and adding detail to all rivers as zoom increases on specified points.
  */
 @Beta
-public class WorldMapGenerator {
+public abstract class WorldMapGenerator {
     public final int width, height;
-    protected static final double terrainFreq = 1.75, terrainRidgedFreq = 1.1, heatFreq = 5.05, moistureFreq = 5.2, otherFreq = 5.5;
-    public final Noise.Noise4D terrain, terrainRidged, heat, moisture, otherRidged;
     public long seed, cachedState;
     public StatefulRNG rng;
     public boolean generateRivers = true;
     public final double[][] heightData, heatData, moistureData;
     public final GreasedRegion landData, riverData, lakeData,
             partialRiverData, partialLakeData;
-    private final GreasedRegion workingData;
+    protected final GreasedRegion workingData;
     public final int[][] heightCodeData;
     public double waterModifier = 0.0, coolingModifier = 1.0,
             minHeight = Double.POSITIVE_INFINITY, maxHeight = Double.NEGATIVE_INFINITY,
             minHeightActual = Double.POSITIVE_INFINITY, maxHeightActual = Double.NEGATIVE_INFINITY,
             minHeat = Double.POSITIVE_INFINITY, maxHeat = Double.NEGATIVE_INFINITY,
             minWet = Double.POSITIVE_INFINITY, maxWet = Double.NEGATIVE_INFINITY;
-    private double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
-            minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
-            minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
     public int zoom = 0;
     protected IntVLA startCacheX = new IntVLA(8), startCacheY = new IntVLA(8);
     public static final double
@@ -69,19 +64,43 @@ public class WorldMapGenerator {
 
     public static final double[] lowers = {deepWaterLower, mediumWaterLower, shallowWaterLower, coastalWaterLower,
             sandLower, grassLower, forestLower, rockLower, snowLower};
+
+    /**
+     * Constructs a WorldMapGenerator (this class is abstract, so you should typically call this from a subclass or as
+     * part of an anonymous class that implements {@link #regenerate(int, int, int, int, double, double, long)}).
+     * Always makes a 256x256 map. If you were using {@link WorldMapGenerator#WorldMapGenerator(long, int, int)}, then
+     * this would be the same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 256}.
+     */
     public WorldMapGenerator()
     {
-        this(0x1337BABE1337D00DL, 256, 256, SeededNoise.instance);
+        this(0x1337BABE1337D00DL, 256, 256);
     }
+    /**
+     * Constructs a WorldMapGenerator (this class is abstract, so you should typically call this from a subclass or as
+     * part of an anonymous class that implements {@link #regenerate(int, int, int, int, double, double, long)}).
+     * Takes only the width/height of the map. The initial seed is set to the same large long
+     * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and
+     * height of the map cannot be changed after the fact, but you can zoom in.
+     *
+     * @param mapWidth the width of the map(s) to generate; cannot be changed later
+     * @param mapHeight the height of the map(s) to generate; cannot be changed later
+     */
     public WorldMapGenerator(int mapWidth, int mapHeight)
     {
-        this(0x1337BABE1337D00DL, mapWidth, mapHeight, SeededNoise.instance);
+        this(0x1337BABE1337D00DL, mapWidth, mapHeight);
     }
+    /**
+     * Constructs a WorldMapGenerator (this class is abstract, so you should typically call this from a subclass or as
+     * part of an anonymous class that implements {@link #regenerate(int, int, int, int, double, double, long)}).
+     * Takes an initial seed and the width/height of the map. The {@code initialSeed}
+     * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
+     * The width and height of the map cannot be changed after the fact, but you can zoom in.
+     *
+     * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+     * @param mapWidth the width of the map(s) to generate; cannot be changed later
+     * @param mapHeight the height of the map(s) to generate; cannot be changed later
+     */
     public WorldMapGenerator(long initialSeed, int mapWidth, int mapHeight)
-    {
-        this(initialSeed, mapWidth, mapHeight, SeededNoise.instance);
-    }
-    public WorldMapGenerator(long initialSeed, int mapWidth, int mapHeight, Noise.Noise4D noiseGenerator)
     {
         width = mapWidth;
         height = mapHeight;
@@ -98,12 +117,6 @@ public class WorldMapGenerator {
         partialLakeData = new GreasedRegion(width, height);
         workingData = new GreasedRegion(width, height);
         heightCodeData = new int[width][height];
-        terrain = new Noise.Layered4D(noiseGenerator, 8, terrainFreq);
-        terrainRidged = new Noise.Ridged4D(noiseGenerator, 10, terrainRidgedFreq);
-        heat = new Noise.Layered4D(noiseGenerator, 3, heatFreq);
-        moisture = new Noise.Layered4D(noiseGenerator, 4, moistureFreq);
-        otherRidged = new Noise.Ridged4D(noiseGenerator, 6, otherFreq);
-
     }
 
     /**
@@ -255,189 +268,9 @@ public class WorldMapGenerator {
         rng.setState(cachedState);
     }
 
-    protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
-                              double waterMod, double coolMod, long state)
-    {
-        boolean fresh = false;
-        if(cachedState != state || waterMod != waterModifier || coolMod != coolingModifier)
-        {
-            minHeight = Double.POSITIVE_INFINITY;
-            maxHeight = Double.NEGATIVE_INFINITY;
-            minHeat0 = Double.POSITIVE_INFINITY;
-            maxHeat0 = Double.NEGATIVE_INFINITY;
-            minHeat1 = Double.POSITIVE_INFINITY;
-            maxHeat1 = Double.NEGATIVE_INFINITY;
-            minHeat = Double.POSITIVE_INFINITY;
-            maxHeat = Double.NEGATIVE_INFINITY;
-            minWet0 = Double.POSITIVE_INFINITY;
-            maxWet0 = Double.NEGATIVE_INFINITY;
-            minWet = Double.POSITIVE_INFINITY;
-            maxWet = Double.NEGATIVE_INFINITY;
-            cachedState = state;
-            fresh = true;
-        }
-        rng.setState(state);
-        int seedA = rng.nextInt(), seedB = rng.nextInt(), seedC = rng.nextInt(), t;
+    protected abstract void regenerate(int startX, int startY, int usedWidth, int usedHeight,
+                              double waterMod, double coolMod, long state);
 
-        waterModifier = (waterMod <= 0) ? rng.nextDouble(0.25) + 0.89 : waterMod;
-        coolingModifier = (coolMod <= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;
-
-        double p, q,
-                ps, pc,
-                qs, qc,
-                h, temp,
-                i_w = 6.283185307179586 / width, i_h = 6.283185307179586 / height,
-                xPos = startX, yPos = startY, i_uw = usedWidth / (double)width, i_uh = usedHeight / (double)height;
-        double[] trigTable = new double[width << 1];
-        for (int x = 0; x < width; x++, xPos += i_uw) {
-            p = xPos * i_w;
-            trigTable[x<<1]   = Math.sin(p);
-            trigTable[x<<1|1] = Math.cos(p);
-        }
-        for (int y = 0; y < height; y++, yPos += i_uh) {
-            q = yPos * i_h;
-            qs = Math.sin(q);
-            qc = Math.cos(q);
-            for (int x = 0, xt = 0; x < width; x++) {
-                ps = trigTable[xt++];//Math.sin(p);
-                pc = trigTable[xt++];//Math.cos(p);
-                h = terrain.getNoiseWithSeed(pc +
-                                terrainRidged.getNoiseWithSeed(pc, ps, qc, qs, seedA + seedB),
-                        ps, qc, qs, seedA);
-                h *= waterModifier;
-                heightData[x][y] = h;
-                heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps, qc
-                                + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedB + seedC)
-                        , qs, seedB));
-                moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qc, qs
-                                + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedC + seedA)
-                        , seedC));
-                minHeightActual = Math.min(minHeightActual, h);
-                maxHeightActual = Math.max(maxHeightActual, h);
-                if(fresh) {
-                    minHeight = Math.min(minHeight, h);
-                    maxHeight = Math.max(maxHeight, h);
-
-                    minHeat0 = Math.min(minHeat0, p);
-                    maxHeat0 = Math.max(maxHeat0, p);
-
-                    minWet0 = Math.min(minWet0, temp);
-                    maxWet0 = Math.max(maxWet0, temp);
-
-                }
-            }
-            minHeightActual = Math.min(minHeightActual, minHeight);
-            maxHeightActual = Math.max(maxHeightActual, maxHeight);
-
-        }
-        double heightDiff = 2.0 / (maxHeightActual - minHeightActual),
-                heatDiff = 0.8 / (maxHeat0 - minHeat0),
-                wetDiff = 1.0 / (maxWet0 - minWet0),
-                hMod,
-                halfHeight = (height - 1) * 0.5, i_half = 1.0 / halfHeight;
-        double minHeightActual0 = minHeightActual;
-        double maxHeightActual0 = maxHeightActual;
-        yPos = startY;
-        ps = Double.POSITIVE_INFINITY;
-        pc = Double.NEGATIVE_INFINITY;
-
-        for (int y = 0; y < height; y++, yPos += i_uh) {
-            temp = Math.abs(yPos - halfHeight) * i_half;
-            temp *= (2.4 - temp);
-            temp = 2.2 - temp;
-            for (int x = 0; x < width; x++) {
-                heightData[x][y] = (h = (heightData[x][y] - minHeightActual) * heightDiff - 1.0);
-                minHeightActual0 = Math.min(minHeightActual0, h);
-                maxHeightActual0 = Math.max(maxHeightActual0, h);
-                heightCodeData[x][y] = (t = codeHeight(h));
-                hMod = 1.0;
-                switch (t) {
-                    case 0:
-                    case 1:
-                    case 2:
-                    case 3:
-                        h = 0.4;
-                        hMod = 0.2;
-                        break;
-                    case 6:
-                        h = -0.1 * (h - forestLower - 0.08);
-                        break;
-                    case 7:
-                        h *= -0.25;
-                        break;
-                    case 8:
-                        h *= -0.4;
-                        break;
-                    default:
-                        h *= 0.05;
-                }
-                heatData[x][y] = (h = (((heatData[x][y] - minHeat0) * heatDiff * hMod) + h + 0.6) * temp);
-                if (fresh) {
-                    ps = Math.min(ps, h); //minHeat0
-                    pc = Math.max(pc, h); //maxHeat0
-                }
-            }
-        }
-        if(fresh)
-        {
-            minHeat1 = ps;
-            maxHeat1 = pc;
-        }
-        heatDiff = coolingModifier / (maxHeat1 - minHeat1);
-        qs = Double.POSITIVE_INFINITY;
-        qc = Double.NEGATIVE_INFINITY;
-        ps = Double.POSITIVE_INFINITY;
-        pc = Double.NEGATIVE_INFINITY;
-
-
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                heatData[x][y] = (h = ((heatData[x][y] - minHeat1) * heatDiff));
-                moistureData[x][y] = (temp = (moistureData[x][y] - minWet0) * wetDiff);
-                if (fresh) {
-                    qs = Math.min(qs, h);
-                    qc = Math.max(qc, h);
-                    ps = Math.min(ps, temp);
-                    pc = Math.max(pc, temp);
-                }
-            }
-        }
-        if(fresh)
-        {
-            minHeat = qs;
-            maxHeat = qc;
-            minWet = ps;
-            maxWet = pc;
-        }
-        landData.refill(heightCodeData, 4, 999);
-        if(generateRivers) {
-            if (fresh) {
-                addRivers();
-                riverData.connect8way().thin().thin();
-                lakeData.connect8way().thin();
-                partialRiverData.remake(riverData);
-                partialLakeData.remake(lakeData);
-            } else {
-                partialRiverData.remake(riverData);
-                partialLakeData.remake(lakeData);
-                for (int i = 1; i <= zoom; i++) {
-                    int stx = (startCacheX.get(i) - startCacheX.get(i - 1)) << (i - 1),
-                            sty = (startCacheY.get(i) - startCacheY.get(i - 1)) << (i - 1);
-                    if ((i & 3) == 3) {
-                        partialRiverData.zoom(stx, sty).connect8way();
-                        partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.4));
-                        partialLakeData.zoom(stx, sty).connect8way();
-                        partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.55));
-                    } else {
-                        partialRiverData.zoom(stx, sty).connect8way().thin();
-                        partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.5));
-                        partialLakeData.zoom(stx, sty).connect8way().thin();
-                        partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.7));
-                    }
-                }
-            }
-        }
-    }
     public int codeHeight(final double high)
     {
         if(high < deepWaterUpper)
@@ -472,7 +305,7 @@ public class WorldMapGenerator {
     protected final int wrapY(final int y)  {
         return (y + height) % height;
     }
-    private static final Direction[] reuse = new Direction[9];
+    private static final Direction[] reuse = new Direction[6];
     private void appendDirToShuffle(RNG rng) {
         rng.randomPortion(Direction.CARDINALS, reuse);
         reuse[rng.next(2)] = Direction.DIAGONALS[rng.next(2)];
@@ -860,6 +693,290 @@ public class WorldMapGenerator {
                     heatCodeData[x][y] = hc;
                     moistureCodeData[x][y] = mc;
                     biomeCodeData[x][y] = isLake ? hc + 48 : (isRiver ? hc + 42 : ((heightCode == 4) ? hc + 36 : hc + mc * 6));
+                }
+            }
+        }
+    }
+    public static class TilingMap extends WorldMapGenerator {
+        protected static final double terrainFreq = 1.75, terrainRidgedFreq = 1.1, heatFreq = 5.05, moistureFreq = 5.2, otherFreq = 5.5;
+        private double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
+                minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
+                minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
+
+        public final Noise.Noise4D terrain, terrainRidged, heat, moisture, otherRidged;
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
+         * as north-to-south. Always makes a 256x256 map.
+         * Uses SeededNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * If you were using {@link TilingMap#TilingMap(long, int, int, Noise.Noise4D, double)}, then this would be the
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 256, SeededNoise.instance, 1.0}.
+         */
+        public TilingMap() {
+            this(0x1337BABE1337D00DL, 256, 256, SeededNoise.instance, 1.0);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
+         * as north-to-south.
+         * Takes only the width/height of the map. The initial seed is set to the same large long
+         * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and
+         * height of the map cannot be changed after the fact, but you can zoom in.
+         * Uses SeededNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         *
+         * @param mapWidth  the width of the map(s) to generate; cannot be changed later
+         * @param mapHeight the height of the map(s) to generate; cannot be changed later
+         */
+        public TilingMap(int mapWidth, int mapHeight) {
+            this(0x1337BABE1337D00DL, mapWidth, mapHeight, SeededNoise.instance, 1.0);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
+         * as north-to-south.
+         * Takes an initial seed and the width/height of the map. The {@code initialSeed}
+         * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
+         * The width and height of the map cannot be changed after the fact, but you can zoom in.
+         * Uses SeededNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         *
+         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param mapWidth    the width of the map(s) to generate; cannot be changed later
+         * @param mapHeight   the height of the map(s) to generate; cannot be changed later
+         */
+        public TilingMap(long initialSeed, int mapWidth, int mapHeight) {
+            this(initialSeed, mapWidth, mapHeight, SeededNoise.instance, 1.0);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
+         * as north-to-south. Takes an initial seed, the width/height of the map, and a noise generator (a
+         * {@link Noise.Noise4D} implementation, which is usually {@link SeededNoise#instance}. The {@code initialSeed}
+         * parameter may or may not be used, since you can specify the seed to use when you call
+         * {@link #generate(long)}. The width and height of the map cannot be changed after the fact, but you can zoom
+         * in. Currently only SeededNoise makes sense to use as the value for {@code noiseGenerator}, and the seed it's
+         * constructed with doesn't matter because it will change the seed several times at different scales of noise
+         * (it's fine to use the static {@link SeededNoise#instance} because it has no changing state between runs of
+         * the program; it's effectively a constant). The detail level, which is the {@code octaveMultiplier} parameter
+         * that can be passed to another constructor, is always 1.0 with this constructor.
+         *
+         * @param initialSeed      the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param mapWidth         the width of the map(s) to generate; cannot be changed later
+         * @param mapHeight        the height of the map(s) to generate; cannot be changed later
+         * @param noiseGenerator   an instance of a noise generator capable of 4D noise, almost always {@link SeededNoise}
+         */
+        public TilingMap(long initialSeed, int mapWidth, int mapHeight, final Noise.Noise4D noiseGenerator) {
+            this(initialSeed, mapWidth, mapHeight, noiseGenerator, 1.0);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
+         * as north-to-south. Takes an initial seed, the width/height of the map, and parameters for noise
+         * generation (a {@link Noise.Noise4D} implementation, which is usually {@link SeededNoise#instance}, and a
+         * multiplier on how many octaves of noise to use, with 1.0 being normal (high) detail and higher multipliers
+         * producing even more detailed noise when zoomed-in). The {@code initialSeed} parameter may or may not be used,
+         * since you can specify the seed to use when you call {@link #generate(long)}. The width and height of the map
+         * cannot be changed after the fact, but you can zoom in. Currently only SeededNoise makes sense to use as the
+         * value for {@code noiseGenerator}, and the seed it's constructed with doesn't matter because it will change the
+         * seed several times at different scales of noise (it's fine to use the static {@link SeededNoise#instance} because
+         * it has no changing state between runs of the program; it's effectively a constant). The {@code octaveMultiplier}
+         * parameter should probably be no lower than 0.5, but can be arbitrarily high if you're willing to spend much more
+         * time on generating detail only noticeable at very high zoom; normally 1.0 is fine and may even be too high for
+         * maps that don't require zooming.
+         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param mapWidth the width of the map(s) to generate; cannot be changed later
+         * @param mapHeight the height of the map(s) to generate; cannot be changed later
+         * @param noiseGenerator an instance of a noise generator capable of 4D noise, almost always {@link SeededNoise}
+         * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
+         */
+        public TilingMap(long initialSeed, int mapWidth, int mapHeight, final Noise.Noise4D noiseGenerator, double octaveMultiplier) {
+            super(initialSeed, mapWidth, mapHeight);
+            terrain = new Noise.Layered4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
+            terrainRidged = new Noise.Ridged4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainRidgedFreq);
+            heat = new Noise.Layered4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq);
+            moisture = new Noise.Layered4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq);
+            otherRidged = new Noise.Ridged4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
+        }
+
+        protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
+                                  double waterMod, double coolMod, long state)
+        {
+            boolean fresh = false;
+            if(cachedState != state || waterMod != waterModifier || coolMod != coolingModifier)
+            {
+                minHeight = Double.POSITIVE_INFINITY;
+                maxHeight = Double.NEGATIVE_INFINITY;
+                minHeat0 = Double.POSITIVE_INFINITY;
+                maxHeat0 = Double.NEGATIVE_INFINITY;
+                minHeat1 = Double.POSITIVE_INFINITY;
+                maxHeat1 = Double.NEGATIVE_INFINITY;
+                minHeat = Double.POSITIVE_INFINITY;
+                maxHeat = Double.NEGATIVE_INFINITY;
+                minWet0 = Double.POSITIVE_INFINITY;
+                maxWet0 = Double.NEGATIVE_INFINITY;
+                minWet = Double.POSITIVE_INFINITY;
+                maxWet = Double.NEGATIVE_INFINITY;
+                cachedState = state;
+                fresh = true;
+            }
+            rng.setState(state);
+            int seedA = rng.nextInt(), seedB = rng.nextInt(), seedC = rng.nextInt(), t;
+
+            waterModifier = (waterMod <= 0) ? rng.nextDouble(0.25) + 0.89 : waterMod;
+            coolingModifier = (coolMod <= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;
+
+            double p, q,
+                    ps, pc,
+                    qs, qc,
+                    h, temp,
+                    i_w = 6.283185307179586 / width, i_h = 6.283185307179586 / height,
+                    xPos = startX, yPos = startY, i_uw = usedWidth / (double)width, i_uh = usedHeight / (double)height;
+            double[] trigTable = new double[width << 1];
+            for (int x = 0; x < width; x++, xPos += i_uw) {
+                p = xPos * i_w;
+                trigTable[x<<1]   = Math.sin(p);
+                trigTable[x<<1|1] = Math.cos(p);
+            }
+            for (int y = 0; y < height; y++, yPos += i_uh) {
+                q = yPos * i_h;
+                qs = Math.sin(q);
+                qc = Math.cos(q);
+                for (int x = 0, xt = 0; x < width; x++) {
+                    ps = trigTable[xt++];//Math.sin(p);
+                    pc = trigTable[xt++];//Math.cos(p);
+                    h = terrain.getNoiseWithSeed(pc +
+                                    terrainRidged.getNoiseWithSeed(pc, ps, qc, qs, seedA + seedB),
+                            ps, qc, qs, seedA);
+                    h *= waterModifier;
+                    heightData[x][y] = h;
+                    heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps, qc
+                                    + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedB + seedC)
+                            , qs, seedB));
+                    moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qc, qs
+                                    + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedC + seedA)
+                            , seedC));
+                    minHeightActual = Math.min(minHeightActual, h);
+                    maxHeightActual = Math.max(maxHeightActual, h);
+                    if(fresh) {
+                        minHeight = Math.min(minHeight, h);
+                        maxHeight = Math.max(maxHeight, h);
+
+                        minHeat0 = Math.min(minHeat0, p);
+                        maxHeat0 = Math.max(maxHeat0, p);
+
+                        minWet0 = Math.min(minWet0, temp);
+                        maxWet0 = Math.max(maxWet0, temp);
+
+                    }
+                }
+                minHeightActual = Math.min(minHeightActual, minHeight);
+                maxHeightActual = Math.max(maxHeightActual, maxHeight);
+
+            }
+            double heightDiff = 2.0 / (maxHeightActual - minHeightActual),
+                    heatDiff = 0.8 / (maxHeat0 - minHeat0),
+                    wetDiff = 1.0 / (maxWet0 - minWet0),
+                    hMod,
+                    halfHeight = (height - 1) * 0.5, i_half = 1.0 / halfHeight;
+            double minHeightActual0 = minHeightActual;
+            double maxHeightActual0 = maxHeightActual;
+            yPos = startY;
+            ps = Double.POSITIVE_INFINITY;
+            pc = Double.NEGATIVE_INFINITY;
+
+            for (int y = 0; y < height; y++, yPos += i_uh) {
+                temp = Math.abs(yPos - halfHeight) * i_half;
+                temp *= (2.4 - temp);
+                temp = 2.2 - temp;
+                for (int x = 0; x < width; x++) {
+                    heightData[x][y] = (h = (heightData[x][y] - minHeightActual) * heightDiff - 1.0);
+                    minHeightActual0 = Math.min(minHeightActual0, h);
+                    maxHeightActual0 = Math.max(maxHeightActual0, h);
+                    heightCodeData[x][y] = (t = codeHeight(h));
+                    hMod = 1.0;
+                    switch (t) {
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                            h = 0.4;
+                            hMod = 0.2;
+                            break;
+                        case 6:
+                            h = -0.1 * (h - forestLower - 0.08);
+                            break;
+                        case 7:
+                            h *= -0.25;
+                            break;
+                        case 8:
+                            h *= -0.4;
+                            break;
+                        default:
+                            h *= 0.05;
+                    }
+                    heatData[x][y] = (h = (((heatData[x][y] - minHeat0) * heatDiff * hMod) + h + 0.6) * temp);
+                    if (fresh) {
+                        ps = Math.min(ps, h); //minHeat0
+                        pc = Math.max(pc, h); //maxHeat0
+                    }
+                }
+            }
+            if(fresh)
+            {
+                minHeat1 = ps;
+                maxHeat1 = pc;
+            }
+            heatDiff = coolingModifier / (maxHeat1 - minHeat1);
+            qs = Double.POSITIVE_INFINITY;
+            qc = Double.NEGATIVE_INFINITY;
+            ps = Double.POSITIVE_INFINITY;
+            pc = Double.NEGATIVE_INFINITY;
+
+
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    heatData[x][y] = (h = ((heatData[x][y] - minHeat1) * heatDiff));
+                    moistureData[x][y] = (temp = (moistureData[x][y] - minWet0) * wetDiff);
+                    if (fresh) {
+                        qs = Math.min(qs, h);
+                        qc = Math.max(qc, h);
+                        ps = Math.min(ps, temp);
+                        pc = Math.max(pc, temp);
+                    }
+                }
+            }
+            if(fresh)
+            {
+                minHeat = qs;
+                maxHeat = qc;
+                minWet = ps;
+                maxWet = pc;
+            }
+            landData.refill(heightCodeData, 4, 999);
+            if(generateRivers) {
+                if (fresh) {
+                    addRivers();
+                    riverData.connect8way().thin().thin();
+                    lakeData.connect8way().thin();
+                    partialRiverData.remake(riverData);
+                    partialLakeData.remake(lakeData);
+                } else {
+                    partialRiverData.remake(riverData);
+                    partialLakeData.remake(lakeData);
+                    for (int i = 1; i <= zoom; i++) {
+                        int stx = (startCacheX.get(i) - startCacheX.get(i - 1)) << (i - 1),
+                                sty = (startCacheY.get(i) - startCacheY.get(i - 1)) << (i - 1);
+                        if ((i & 3) == 3) {
+                            partialRiverData.zoom(stx, sty).connect8way();
+                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.4));
+                            partialLakeData.zoom(stx, sty).connect8way();
+                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.55));
+                        } else {
+                            partialRiverData.zoom(stx, sty).connect8way().thin();
+                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.5));
+                            partialLakeData.zoom(stx, sty).connect8way().thin();
+                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.7));
+                        }
+                    }
                 }
             }
         }
