@@ -3,6 +3,7 @@ package squidpony.squidgrid.mapping;
 import squidpony.annotation.Beta;
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.*;
+import squidpony.squidmath.Noise.Noise4D;
 
 /**
  * Can be used to generate world maps with a wide variety of data, starting with height, temperature and moisture.
@@ -299,10 +300,10 @@ public abstract class WorldMapGenerator {
     {
         return coded / width;
     }
-    protected final int wrapX(final int x)  {
+    protected int wrapX(final int x)  {
         return (x + width) % width;
     }
-    protected final int wrapY(final int y)  {
+    protected int wrapY(final int y)  {
         return (y + height) % height;
     }
     private static final Direction[] reuse = new Direction[6];
@@ -697,19 +698,26 @@ public abstract class WorldMapGenerator {
             }
         }
     }
+
+    /**
+     * A concrete implementation of {@link WorldMapGenerator} that tiles both east-to-west and north-to-south. It tends
+     * to not appear distorted like {@link SphereMap} does in some areas, even though this is inaccurate for a
+     * rectangular projection of a spherical world (that inaccuracy is likely what players expect in a map, though).
+     * <a href="http://squidpony.github.io/SquidLib/DetailedWorldMapRiverDemo.png" >Example map</a>.
+     */
     public static class TilingMap extends WorldMapGenerator {
         protected static final double terrainFreq = 1.75, terrainRidgedFreq = 1.1, heatFreq = 5.05, moistureFreq = 5.2, otherFreq = 5.5;
         private double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
 
-        public final Noise.Noise4D terrain, terrainRidged, heat, moisture, otherRidged;
+        public final Noise4D terrain, terrainRidged, heat, moisture, otherRidged;
 
         /**
          * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
          * as north-to-south. Always makes a 256x256 map.
          * Uses SeededNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
-         * If you were using {@link TilingMap#TilingMap(long, int, int, Noise.Noise4D, double)}, then this would be the
+         * If you were using {@link TilingMap#TilingMap(long, int, int, Noise4D, double)}, then this would be the
          * same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 256, SeededNoise.instance, 1.0}.
          */
         public TilingMap() {
@@ -750,7 +758,7 @@ public abstract class WorldMapGenerator {
         /**
          * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
          * as north-to-south. Takes an initial seed, the width/height of the map, and a noise generator (a
-         * {@link Noise.Noise4D} implementation, which is usually {@link SeededNoise#instance}. The {@code initialSeed}
+         * {@link Noise4D} implementation, which is usually {@link SeededNoise#instance}. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call
          * {@link #generate(long)}. The width and height of the map cannot be changed after the fact, but you can zoom
          * in. Currently only SeededNoise makes sense to use as the value for {@code noiseGenerator}, and the seed it's
@@ -764,14 +772,14 @@ public abstract class WorldMapGenerator {
          * @param mapHeight        the height of the map(s) to generate; cannot be changed later
          * @param noiseGenerator   an instance of a noise generator capable of 4D noise, almost always {@link SeededNoise}
          */
-        public TilingMap(long initialSeed, int mapWidth, int mapHeight, final Noise.Noise4D noiseGenerator) {
+        public TilingMap(long initialSeed, int mapWidth, int mapHeight, final Noise4D noiseGenerator) {
             this(initialSeed, mapWidth, mapHeight, noiseGenerator, 1.0);
         }
 
         /**
          * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
          * as north-to-south. Takes an initial seed, the width/height of the map, and parameters for noise
-         * generation (a {@link Noise.Noise4D} implementation, which is usually {@link SeededNoise#instance}, and a
+         * generation (a {@link Noise4D} implementation, which is usually {@link SeededNoise#instance}, and a
          * multiplier on how many octaves of noise to use, with 1.0 being normal (high) detail and higher multipliers
          * producing even more detailed noise when zoomed-in). The {@code initialSeed} parameter may or may not be used,
          * since you can specify the seed to use when you call {@link #generate(long)}. The width and height of the map
@@ -788,7 +796,7 @@ public abstract class WorldMapGenerator {
          * @param noiseGenerator an instance of a noise generator capable of 4D noise, almost always {@link SeededNoise}
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
-        public TilingMap(long initialSeed, int mapWidth, int mapHeight, final Noise.Noise4D noiseGenerator, double octaveMultiplier) {
+        public TilingMap(long initialSeed, int mapWidth, int mapHeight, final Noise4D noiseGenerator, double octaveMultiplier) {
             super(initialSeed, mapWidth, mapHeight);
             terrain = new Noise.Layered4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
             terrainRidged = new Noise.Ridged4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainRidgedFreq);
@@ -880,6 +888,312 @@ public abstract class WorldMapGenerator {
             double minHeightActual0 = minHeightActual;
             double maxHeightActual0 = maxHeightActual;
             yPos = startY;
+            ps = Double.POSITIVE_INFINITY;
+            pc = Double.NEGATIVE_INFINITY;
+
+            for (int y = 0; y < height; y++, yPos += i_uh) {
+                temp = Math.abs(yPos - halfHeight) * i_half;
+                temp *= (2.4 - temp);
+                temp = 2.2 - temp;
+                for (int x = 0; x < width; x++) {
+                    heightData[x][y] = (h = (heightData[x][y] - minHeightActual) * heightDiff - 1.0);
+                    minHeightActual0 = Math.min(minHeightActual0, h);
+                    maxHeightActual0 = Math.max(maxHeightActual0, h);
+                    heightCodeData[x][y] = (t = codeHeight(h));
+                    hMod = 1.0;
+                    switch (t) {
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                            h = 0.4;
+                            hMod = 0.2;
+                            break;
+                        case 6:
+                            h = -0.1 * (h - forestLower - 0.08);
+                            break;
+                        case 7:
+                            h *= -0.25;
+                            break;
+                        case 8:
+                            h *= -0.4;
+                            break;
+                        default:
+                            h *= 0.05;
+                    }
+                    heatData[x][y] = (h = (((heatData[x][y] - minHeat0) * heatDiff * hMod) + h + 0.6) * temp);
+                    if (fresh) {
+                        ps = Math.min(ps, h); //minHeat0
+                        pc = Math.max(pc, h); //maxHeat0
+                    }
+                }
+            }
+            if(fresh)
+            {
+                minHeat1 = ps;
+                maxHeat1 = pc;
+            }
+            heatDiff = coolingModifier / (maxHeat1 - minHeat1);
+            qs = Double.POSITIVE_INFINITY;
+            qc = Double.NEGATIVE_INFINITY;
+            ps = Double.POSITIVE_INFINITY;
+            pc = Double.NEGATIVE_INFINITY;
+
+
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    heatData[x][y] = (h = ((heatData[x][y] - minHeat1) * heatDiff));
+                    moistureData[x][y] = (temp = (moistureData[x][y] - minWet0) * wetDiff);
+                    if (fresh) {
+                        qs = Math.min(qs, h);
+                        qc = Math.max(qc, h);
+                        ps = Math.min(ps, temp);
+                        pc = Math.max(pc, temp);
+                    }
+                }
+            }
+            if(fresh)
+            {
+                minHeat = qs;
+                maxHeat = qc;
+                minWet = ps;
+                maxWet = pc;
+            }
+            landData.refill(heightCodeData, 4, 999);
+            if(generateRivers) {
+                if (fresh) {
+                    addRivers();
+                    riverData.connect8way().thin().thin();
+                    lakeData.connect8way().thin();
+                    partialRiverData.remake(riverData);
+                    partialLakeData.remake(lakeData);
+                } else {
+                    partialRiverData.remake(riverData);
+                    partialLakeData.remake(lakeData);
+                    for (int i = 1; i <= zoom; i++) {
+                        int stx = (startCacheX.get(i) - startCacheX.get(i - 1)) << (i - 1),
+                                sty = (startCacheY.get(i) - startCacheY.get(i - 1)) << (i - 1);
+                        if ((i & 3) == 3) {
+                            partialRiverData.zoom(stx, sty).connect8way();
+                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.4));
+                            partialLakeData.zoom(stx, sty).connect8way();
+                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.55));
+                        } else {
+                            partialRiverData.zoom(stx, sty).connect8way().thin();
+                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.5));
+                            partialLakeData.zoom(stx, sty).connect8way().thin();
+                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.7));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * A concrete implementation of {@link WorldMapGenerator} that distorts the map as it nears the poles, expanding the
+     * smaller-diameter latitude lines in extreme north and south regions so they take up the same space as the equator.
+     * This is ideal for projecting onto a 3D sphere, which could squash the poles to counteract the stretch this does.
+     * You might also want to produce an oval map that more-accurately represents the changes in the diameter of a
+     * latitude line on a spherical world; this could be done by using one of the maps this class makes and removing a
+     * portion of each non-equator row, arranging the removal so if the map is n units wide at the equator, the height
+     * should be n divided by {@link Math#PI}, and progressively more cells are removed from rows as you move away from
+     * the equator (down to empty space or 1 cell left at the poles).
+     * <a href="http://i.imgur.com/wth01QD.png" >Example map, showing distortion</a>
+     */
+    public static class SphereMap extends WorldMapGenerator {
+        protected static final double terrainFreq = 2.5, terrainRidgedFreq = 1.3, heatFreq = 5.05, moistureFreq = 5.2, otherFreq = 5.5;
+        private double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
+                minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
+                minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
+
+        public final Noise.Noise3D terrain, terrainRidged, heat, moisture, otherRidged;
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
+         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
+         * have significantly-exaggerated-in-size features while the equator is not distorted.
+         * Always makes a 256x256 map.
+         * Uses SeededNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * If you were using {@link SphereMap#SphereMap(long, int, int, Noise.Noise3D, double)}, then this would be the
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 256, SeededNoise.instance, 1.0}.
+         */
+        public SphereMap() {
+            this(0x1337BABE1337D00DL, 256, 256, SeededNoise.instance, 1.0);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
+         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
+         * have significantly-exaggerated-in-size features while the equator is not distorted.
+         * Takes only the width/height of the map. The initial seed is set to the same large long
+         * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and
+         * height of the map cannot be changed after the fact, but you can zoom in.
+         * Uses SeededNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         *
+         * @param mapWidth  the width of the map(s) to generate; cannot be changed later
+         * @param mapHeight the height of the map(s) to generate; cannot be changed later
+         */
+        public SphereMap(int mapWidth, int mapHeight) {
+            this(0x1337BABE1337D00DL, mapWidth, mapHeight, SeededNoise.instance, 1.0);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
+         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
+         * have significantly-exaggerated-in-size features while the equator is not distorted.
+         * Takes an initial seed and the width/height of the map. The {@code initialSeed}
+         * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
+         * The width and height of the map cannot be changed after the fact, but you can zoom in.
+         * Uses SeededNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         *
+         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param mapWidth    the width of the map(s) to generate; cannot be changed later
+         * @param mapHeight   the height of the map(s) to generate; cannot be changed later
+         */
+        public SphereMap(long initialSeed, int mapWidth, int mapHeight) {
+            this(initialSeed, mapWidth, mapHeight, SeededNoise.instance, 1.0);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
+         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
+         * have significantly-exaggerated-in-size features while the equator is not distorted.
+         * Takes an initial seed, the width/height of the map, and a noise generator (a
+         * {@link Noise.Noise3D} implementation, which is usually {@link SeededNoise#instance}. The {@code initialSeed}
+         * parameter may or may not be used, since you can specify the seed to use when you call
+         * {@link #generate(long)}. The width and height of the map cannot be changed after the fact, but you can zoom
+         * in. Currently only SeededNoise makes sense to use as the value for {@code noiseGenerator}, and the seed it's
+         * constructed with doesn't matter because it will change the seed several times at different scales of noise
+         * (it's fine to use the static {@link SeededNoise#instance} because it has no changing state between runs of
+         * the program; it's effectively a constant). The detail level, which is the {@code octaveMultiplier} parameter
+         * that can be passed to another constructor, is always 1.0 with this constructor.
+         *
+         * @param initialSeed      the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param mapWidth         the width of the map(s) to generate; cannot be changed later
+         * @param mapHeight        the height of the map(s) to generate; cannot be changed later
+         * @param noiseGenerator   an instance of a noise generator capable of 3D noise, almost always {@link SeededNoise}
+         */
+        public SphereMap(long initialSeed, int mapWidth, int mapHeight, final Noise.Noise3D noiseGenerator) {
+            this(initialSeed, mapWidth, mapHeight, noiseGenerator, 1.0);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
+         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
+         * have significantly-exaggerated-in-size features while the equator is not distorted.
+         * Takes an initial seed, the width/height of the map, and parameters for noise
+         * generation (a {@link Noise.Noise3D} implementation, which is usually {@link SeededNoise#instance}, and a
+         * multiplier on how many octaves of noise to use, with 1.0 being normal (high) detail and higher multipliers
+         * producing even more detailed noise when zoomed-in). The {@code initialSeed} parameter may or may not be used,
+         * since you can specify the seed to use when you call {@link #generate(long)}. The width and height of the map
+         * cannot be changed after the fact, but you can zoom in. Currently only SeededNoise makes sense to use as the
+         * value for {@code noiseGenerator}, and the seed it's constructed with doesn't matter because it will change the
+         * seed several times at different scales of noise (it's fine to use the static {@link SeededNoise#instance} because
+         * it has no changing state between runs of the program; it's effectively a constant). The {@code octaveMultiplier}
+         * parameter should probably be no lower than 0.5, but can be arbitrarily high if you're willing to spend much more
+         * time on generating detail only noticeable at very high zoom; normally 1.0 is fine and may even be too high for
+         * maps that don't require zooming.
+         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param mapWidth the width of the map(s) to generate; cannot be changed later
+         * @param mapHeight the height of the map(s) to generate; cannot be changed later
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, almost always {@link SeededNoise}
+         * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
+         */
+        public SphereMap(long initialSeed, int mapWidth, int mapHeight, final Noise.Noise3D noiseGenerator, double octaveMultiplier) {
+            super(initialSeed, mapWidth, mapHeight);
+            terrain = new Noise.Layered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
+            terrainRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainRidgedFreq);
+            heat = new Noise.Layered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq);
+            moisture = new Noise.Layered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq);
+            otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
+        }
+        protected int wrapY(final int y)  {
+            return Math.max(0, Math.min(y, height - 1));
+        }
+
+        protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
+                                  double waterMod, double coolMod, long state)
+        {
+            boolean fresh = false;
+            if(cachedState != state || waterMod != waterModifier || coolMod != coolingModifier)
+            {
+                minHeight = Double.POSITIVE_INFINITY;
+                maxHeight = Double.NEGATIVE_INFINITY;
+                minHeat0 = Double.POSITIVE_INFINITY;
+                maxHeat0 = Double.NEGATIVE_INFINITY;
+                minHeat1 = Double.POSITIVE_INFINITY;
+                maxHeat1 = Double.NEGATIVE_INFINITY;
+                minHeat = Double.POSITIVE_INFINITY;
+                maxHeat = Double.NEGATIVE_INFINITY;
+                minWet0 = Double.POSITIVE_INFINITY;
+                maxWet0 = Double.NEGATIVE_INFINITY;
+                minWet = Double.POSITIVE_INFINITY;
+                maxWet = Double.NEGATIVE_INFINITY;
+                cachedState = state;
+                fresh = true;
+            }
+            rng.setState(state);
+            int seedA = rng.nextInt(), seedB = rng.nextInt(), seedC = rng.nextInt(), t;
+
+            waterModifier = (waterMod <= 0) ? rng.nextDouble(0.25) + 0.89 : waterMod;
+            coolingModifier = (coolMod <= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;
+
+            double p, q,
+                    ps, pc,
+                    qs, qc,
+                    h, temp,
+                    i_w = 6.283185307179586 / width, i_h = 1.0 / (height+2.0),
+                    xPos = startX, yPos, i_uw = usedWidth / (double)width, i_uh = usedHeight / (height+2.0);
+            final double[] trigTable = new double[width << 1];
+            for (int x = 0; x < width; x++, xPos += i_uw) {
+                p = xPos * i_w;
+                trigTable[x<<1]   = Math.sin(p);
+                trigTable[x<<1|1] = Math.cos(p);
+            }
+            yPos = startY + i_uh;
+            for (int y = 0; y < height; y++, yPos += i_uh) {
+                qc = Math.cos(qs = Math.acos(yPos * i_h));
+                qs = Math.sin(qs);
+                for (int x = 0, xt = 0; x < width; x++) {
+                    ps = trigTable[xt++] * qc;//Math.sin(p);
+                    pc = trigTable[xt++] * qc;//Math.cos(p);
+                    h = terrain.getNoiseWithSeed(pc +
+                                    terrainRidged.getNoiseWithSeed(pc, ps, qs,seedA + seedB),
+                            ps, qs, seedA);
+                    h *= waterModifier;
+                    heightData[x][y] = h;
+                    heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps
+                                    + otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
+                            , qs, seedB));
+                    moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qs
+                            + otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
+                            , seedC));
+                    minHeightActual = Math.min(minHeightActual, h);
+                    maxHeightActual = Math.max(maxHeightActual, h);
+                    if(fresh) {
+                        minHeight = Math.min(minHeight, h);
+                        maxHeight = Math.max(maxHeight, h);
+
+                        minHeat0 = Math.min(minHeat0, p);
+                        maxHeat0 = Math.max(maxHeat0, p);
+
+                        minWet0 = Math.min(minWet0, temp);
+                        maxWet0 = Math.max(maxWet0, temp);
+                    }
+                }
+                minHeightActual = Math.min(minHeightActual, minHeight);
+                maxHeightActual = Math.max(maxHeightActual, maxHeight);
+
+            }
+            double heightDiff = 2.0 / (maxHeightActual - minHeightActual),
+                    heatDiff = 0.8 / (maxHeat0 - minHeat0),
+                    wetDiff = 1.0 / (maxWet0 - minWet0),
+                    hMod,
+                    halfHeight = (height - 1) * 0.5, i_half = 1.0 / halfHeight;
+            double minHeightActual0 = minHeightActual;
+            double maxHeightActual0 = maxHeightActual;
+            yPos = startY + i_uh;
             ps = Double.POSITIVE_INFINITY;
             pc = Double.NEGATIVE_INFINITY;
 

@@ -304,7 +304,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         stage = new Stage(view, batch);
         seed = 0xDEBACL;
         rng = new StatefulRNG(seed);
-        world = new WorldMapGenerator.TilingMap(seed, width, height, SeededNoise.instance, 0.75);
+        world = new WorldMapGenerator.SphereMap(seed, width, height, SeededNoise.instance, 0.75);
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
