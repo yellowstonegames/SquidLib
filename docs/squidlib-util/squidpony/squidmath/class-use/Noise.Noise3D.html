@@ -83,6 +83,12 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><a href="#squidpony.squidgrid.mapping">squidpony.squidgrid.mapping</a></td>
+<td class="colLast">
+<div class="block">Tools specifically for generating maps and placing content in them, usually working with 2D char arrays.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#squidpony.squidmath">squidpony.squidmath</a></td>
 <td class="colLast">
 <div class="block">A very broad package containing random number generators, geometry tools, and some classes for combinatorics.</div>
@@ -93,6 +99,69 @@
 </li>
 <li class="blockList">
 <ul class="blockList">
+<li class="blockList"><a name="squidpony.squidgrid.mapping">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a> in <a href="../../../squidpony/squidgrid/mapping/package-summary.html">squidpony.squidgrid.mapping</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../squidpony/squidgrid/mapping/package-summary.html">squidpony.squidgrid.mapping</a> declared as <a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></code></td>
+<td class="colLast"><span class="typeNameLabel">WorldMapGenerator.SphereMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#heat">heat</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></code></td>
+<td class="colLast"><span class="typeNameLabel">WorldMapGenerator.SphereMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#moisture">moisture</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></code></td>
+<td class="colLast"><span class="typeNameLabel">WorldMapGenerator.SphereMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#otherRidged">otherRidged</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></code></td>
+<td class="colLast"><span class="typeNameLabel">WorldMapGenerator.SphereMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#terrain">terrain</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></code></td>
+<td class="colLast"><span class="typeNameLabel">WorldMapGenerator.SphereMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#terrainRidged">terrainRidged</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../squidpony/squidgrid/mapping/package-summary.html">squidpony.squidgrid.mapping</a> with parameters of type <a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#SphereMap-long-int-int-squidpony.squidmath.Noise.Noise3D-">SphereMap</a></span>(long&nbsp;initialSeed,
+         int&nbsp;mapWidth,
+         int&nbsp;mapHeight,
+         <a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>&nbsp;noiseGenerator)</code>
+<div class="block">Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
+ 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
+ have significantly-exaggerated-in-size features while the equator is not distorted.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#SphereMap-long-int-int-squidpony.squidmath.Noise.Noise3D-double-">SphereMap</a></span>(long&nbsp;initialSeed,
+         int&nbsp;mapWidth,
+         int&nbsp;mapHeight,
+         <a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>&nbsp;noiseGenerator,
+         double&nbsp;octaveMultiplier)</code>
+<div class="block">Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
+ 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
+ have significantly-exaggerated-in-size features while the equator is not distorted.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="squidpony.squidmath">
 <!--   -->
 </a>
