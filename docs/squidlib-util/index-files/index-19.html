@@ -189,9 +189,15 @@
 <div class="block">Gets a random value from this OrderedSet in constant time, using the given RNG to generate a random number.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#randomDouble-int-">randomDouble(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Generates a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive) using the given int seed, passing it
+ twice through the (very high-quality and rather fast) <a href="../squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath"><code>PintRNG</code></a> algorithm, derived from PCG-Random.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#randomDoubleCurved-int-">randomDoubleCurved(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Generates a pseudo-random double between -1.0 (exclusive) and 1.0 (exclusive) with a distribution that has a
+ strong central bias (around 0.0).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/SpatialMap.html#randomElement-squidpony.squidmath.RNG-">randomElement(RNG)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/SpatialMap.html" title="class in squidpony.squidgrid">SpatialMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/SpatialMap.html#randomEntry-squidpony.squidmath.RNG-">randomEntry(RNG)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/SpatialMap.html" title="class in squidpony.squidgrid">SpatialMap</a></dt>
@@ -205,7 +211,10 @@
 <div class="block">Gets a random entry from this OrderedMap in constant time, using the given RNG to generate a random number.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#randomFloat-int-">randomFloat(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Generates a pseudo-random float between 0.0f (inclusive) and 1.0f (exclusive) using the given int seed, passing
+ it once through the (very high-quality and rather fast) <a href="../squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath"><code>PintRNG</code></a> algorithm, derived from PCG-Random.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/DungeonUtility.html#randomFloor-char:A:A-">randomFloor(char[][])</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/DungeonUtility.html" title="class in squidpony.squidgrid.mapping">DungeonUtility</a></dt>
 <dd>
 <div class="block">Finds a random Coord where the x and y match up to a [x][y] location on map that has '.' as a value.</div>

@@ -2,6 +2,7 @@ package squidpony.squidgrid.mapping.locks.generators;
 
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.mapping.locks.*;
+import squidpony.squidgrid.mapping.locks.Condition.SwitchState;
 import squidpony.squidgrid.mapping.locks.constraints.ILayoutConstraints;
 import squidpony.squidgrid.mapping.locks.util.GenerationFailureException;
 import squidpony.squidmath.Coord;
@@ -360,16 +361,16 @@ public class LayoutGenerator implements ILayoutGenerator {
      * @return              true if any locks were added, false if none were
      *                      added (which can happen due to the way the random
      *                      decisions are made)
-     * @see Condition.SwitchState
+     * @see SwitchState
      */
     protected boolean switchLockChildRooms(Room room,
-            Condition.SwitchState givenState) {
+            SwitchState givenState) {
         boolean anyLocks = false;
-        Condition.SwitchState state = givenState != Condition.SwitchState.EITHER
+        SwitchState state = givenState != SwitchState.EITHER
                 ? givenState
                 : (random.nextBoolean()
-                    ? Condition.SwitchState.ON
-                    : Condition.SwitchState.OFF);
+                    ? SwitchState.ON
+                    : SwitchState.OFF);
         
         for (Edge edge: room.getEdges()) {
             int neighborId = edge.getTargetRoomId();
@@ -384,7 +385,7 @@ public class LayoutGenerator implements ILayoutGenerator {
                     anyLocks |= switchLockChildRooms(nextRoom, state);
                 }
                 
-                if (givenState == Condition.SwitchState.EITHER) {
+                if (givenState == SwitchState.EITHER) {
                     state = state.invert();
                 }
             }
@@ -456,7 +457,7 @@ public class LayoutGenerator implements ILayoutGenerator {
             }
             if (switchRoom == null) continue;
             
-            if (switchLockChildRooms(baseRoom, Condition.SwitchState.EITHER)) {
+            if (switchLockChildRooms(baseRoom, SwitchState.EITHER)) {
                 switchRoom.setItem(switchSym);
                 return;
             }

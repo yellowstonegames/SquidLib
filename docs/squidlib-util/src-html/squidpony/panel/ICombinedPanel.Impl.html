@@ -106,9 +106,9 @@
 <span class="sourceLineNo">098</span>         */<a name="line.98"></a>
 <span class="sourceLineNo">099</span>        void put(int x, int y, char c, T bgc, T fgc);<a name="line.99"></a>
 <span class="sourceLineNo">100</span><a name="line.100"></a>
-<span class="sourceLineNo">101</span>    /**<a name="line.101"></a>
-<span class="sourceLineNo">102</span>     * Put {@code cs} at (x,y) using {@code bgc} for the background.<a name="line.102"></a>
-<span class="sourceLineNo">103</span>     */<a name="line.103"></a>
+<span class="sourceLineNo">101</span>        /**<a name="line.101"></a>
+<span class="sourceLineNo">102</span>         * Put {@code cs} at (x,y) using {@code bgc} for the background.<a name="line.102"></a>
+<span class="sourceLineNo">103</span>         */<a name="line.103"></a>
 <span class="sourceLineNo">104</span>        void put(int x, int y, T bgc, IColoredString&lt;T&gt; cs);<a name="line.104"></a>
 <span class="sourceLineNo">105</span><a name="line.105"></a>
 <span class="sourceLineNo">106</span>        /**<a name="line.106"></a>
@@ -290,20 +290,30 @@
 <span class="sourceLineNo">282</span>                        }<a name="line.282"></a>
 <span class="sourceLineNo">283</span>                }<a name="line.283"></a>
 <span class="sourceLineNo">284</span><a name="line.284"></a>
-<span class="sourceLineNo">285</span>                @Override<a name="line.285"></a>
-<span class="sourceLineNo">286</span>                public boolean hasActiveAnimations() {<a name="line.286"></a>
-<span class="sourceLineNo">287</span>                        return bg.hasActiveAnimations() || fg.hasActiveAnimations();<a name="line.287"></a>
-<span class="sourceLineNo">288</span>                }<a name="line.288"></a>
-<span class="sourceLineNo">289</span><a name="line.289"></a>
-<span class="sourceLineNo">290</span>                @Override<a name="line.290"></a>
-<span class="sourceLineNo">291</span>                public void setColorCenter(IColorCenter&lt;T&gt; icc) {<a name="line.291"></a>
-<span class="sourceLineNo">292</span>                        bg.setColorCenter(icc);<a name="line.292"></a>
-<span class="sourceLineNo">293</span>                        fg.setColorCenter(icc);<a name="line.293"></a>
-<span class="sourceLineNo">294</span>                }<a name="line.294"></a>
-<span class="sourceLineNo">295</span><a name="line.295"></a>
-<span class="sourceLineNo">296</span>        }<a name="line.296"></a>
-<span class="sourceLineNo">297</span><a name="line.297"></a>
-<span class="sourceLineNo">298</span>}<a name="line.298"></a>
+<span class="sourceLineNo">285</span>                /**<a name="line.285"></a>
+<span class="sourceLineNo">286</span>                 * Convenience method that fills the background with the given color.<a name="line.286"></a>
+<span class="sourceLineNo">287</span>                 * Equivalent to calling {@link #fill(What, Object)} with {@link What#BG} as the first parameter.<a name="line.287"></a>
+<span class="sourceLineNo">288</span>                 * @param color the color to fill the background with<a name="line.288"></a>
+<span class="sourceLineNo">289</span>                 */<a name="line.289"></a>
+<span class="sourceLineNo">290</span>                public void fillBG(T color)<a name="line.290"></a>
+<span class="sourceLineNo">291</span>                {<a name="line.291"></a>
+<span class="sourceLineNo">292</span>                        fill(What.BG, color);<a name="line.292"></a>
+<span class="sourceLineNo">293</span>                }<a name="line.293"></a>
+<span class="sourceLineNo">294</span><a name="line.294"></a>
+<span class="sourceLineNo">295</span>                @Override<a name="line.295"></a>
+<span class="sourceLineNo">296</span>                public boolean hasActiveAnimations() {<a name="line.296"></a>
+<span class="sourceLineNo">297</span>                        return bg.hasActiveAnimations() || fg.hasActiveAnimations();<a name="line.297"></a>
+<span class="sourceLineNo">298</span>                }<a name="line.298"></a>
+<span class="sourceLineNo">299</span><a name="line.299"></a>
+<span class="sourceLineNo">300</span>                @Override<a name="line.300"></a>
+<span class="sourceLineNo">301</span>                public void setColorCenter(IColorCenter&lt;T&gt; icc) {<a name="line.301"></a>
+<span class="sourceLineNo">302</span>                        bg.setColorCenter(icc);<a name="line.302"></a>
+<span class="sourceLineNo">303</span>                        fg.setColorCenter(icc);<a name="line.303"></a>
+<span class="sourceLineNo">304</span>                }<a name="line.304"></a>
+<span class="sourceLineNo">305</span><a name="line.305"></a>
+<span class="sourceLineNo">306</span>        }<a name="line.306"></a>
+<span class="sourceLineNo">307</span><a name="line.307"></a>
+<span class="sourceLineNo">308</span>}<a name="line.308"></a>
 
 
 

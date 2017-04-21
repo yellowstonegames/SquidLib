@@ -8,203 +8,269 @@
 <div class="sourceContainer">
 <pre><span class="sourceLineNo">001</span>package squidpony.squidmath;<a name="line.1"></a>
 <span class="sourceLineNo">002</span><a name="line.2"></a>
-<span class="sourceLineNo">003</span>import com.google.gwt.typedarrays.client.Float64ArrayNative;<a name="line.3"></a>
-<span class="sourceLineNo">004</span>import com.google.gwt.typedarrays.client.Float32ArrayNative;<a name="line.4"></a>
-<span class="sourceLineNo">005</span>import com.google.gwt.typedarrays.client.Int32ArrayNative;<a name="line.5"></a>
-<span class="sourceLineNo">006</span>import com.google.gwt.typedarrays.client.Int8ArrayNative;<a name="line.6"></a>
-<span class="sourceLineNo">007</span>import com.google.gwt.typedarrays.shared.Float64Array;<a name="line.7"></a>
-<span class="sourceLineNo">008</span>import com.google.gwt.typedarrays.shared.Float32Array;<a name="line.8"></a>
-<span class="sourceLineNo">009</span>import com.google.gwt.typedarrays.shared.Int32Array;<a name="line.9"></a>
-<span class="sourceLineNo">010</span>import com.google.gwt.typedarrays.shared.Int8Array;<a name="line.10"></a>
-<span class="sourceLineNo">011</span><a name="line.11"></a>
-<span class="sourceLineNo">012</span>/**<a name="line.12"></a>
-<span class="sourceLineNo">013</span> * Various numeric functions that are important to performance but need alternate implementations on GWT to obtain it.<a name="line.13"></a>
-<span class="sourceLineNo">014</span> * Super-sourced on GWT, but most things here are direct calls to JDK methods when on desktop or Android.<a name="line.14"></a>
-<span class="sourceLineNo">015</span> */<a name="line.15"></a>
-<span class="sourceLineNo">016</span>public class NumberTools {<a name="line.16"></a>
-<span class="sourceLineNo">017</span><a name="line.17"></a>
-<span class="sourceLineNo">018</span>    private static final Int8Array wba = Int8ArrayNative.create(8);<a name="line.18"></a>
-<span class="sourceLineNo">019</span>    private static final Int32Array wia = Int32ArrayNative.create(wba.buffer(), 0, 2);<a name="line.19"></a>
-<span class="sourceLineNo">020</span>    private static final Float32Array wfa = Float32ArrayNative.create(wba.buffer(), 0, 2);<a name="line.20"></a>
-<span class="sourceLineNo">021</span>    private static final Float64Array wda = Float64ArrayNative.create(wba.buffer(), 0, 1);<a name="line.21"></a>
-<span class="sourceLineNo">022</span><a name="line.22"></a>
-<span class="sourceLineNo">023</span>    public static long doubleToLongBits(final double value) {<a name="line.23"></a>
-<span class="sourceLineNo">024</span>        wda.set(0, value);<a name="line.24"></a>
-<span class="sourceLineNo">025</span>        return ((long)wia.get(1) &lt;&lt; 32) | (wia.get(0) &amp; 0xffffffffL);<a name="line.25"></a>
-<span class="sourceLineNo">026</span>    }<a name="line.26"></a>
-<span class="sourceLineNo">027</span><a name="line.27"></a>
-<span class="sourceLineNo">028</span>    public static long doubleToRawLongBits(final double value) {<a name="line.28"></a>
-<span class="sourceLineNo">029</span>        wda.set(0, value);<a name="line.29"></a>
-<span class="sourceLineNo">030</span>        return ((long)wia.get(1) &lt;&lt; 32) | (wia.get(0) &amp; 0xffffffffL);<a name="line.30"></a>
-<span class="sourceLineNo">031</span>    }<a name="line.31"></a>
-<span class="sourceLineNo">032</span><a name="line.32"></a>
-<span class="sourceLineNo">033</span>    public static double longBitsToDouble(final long bits) {<a name="line.33"></a>
-<span class="sourceLineNo">034</span>        wia.set(1, (int)(bits &gt;&gt;&gt; 32));<a name="line.34"></a>
-<span class="sourceLineNo">035</span>        wia.set(0, (int)bits);<a name="line.35"></a>
-<span class="sourceLineNo">036</span>        return wda.get(0);<a name="line.36"></a>
-<span class="sourceLineNo">037</span>    }<a name="line.37"></a>
-<span class="sourceLineNo">038</span><a name="line.38"></a>
-<span class="sourceLineNo">039</span>    public static int doubleToLowIntBits(final double value)<a name="line.39"></a>
-<span class="sourceLineNo">040</span>    {<a name="line.40"></a>
-<span class="sourceLineNo">041</span>        wda.set(0, value);<a name="line.41"></a>
-<span class="sourceLineNo">042</span>        return wia.get(0);<a name="line.42"></a>
-<span class="sourceLineNo">043</span>    }<a name="line.43"></a>
-<span class="sourceLineNo">044</span>    public static int doubleToHighIntBits(final double value)<a name="line.44"></a>
-<span class="sourceLineNo">045</span>    {<a name="line.45"></a>
-<span class="sourceLineNo">046</span>        wda.set(0, value);<a name="line.46"></a>
-<span class="sourceLineNo">047</span>        return wia.get(1);<a name="line.47"></a>
-<span class="sourceLineNo">048</span>    }<a name="line.48"></a>
-<span class="sourceLineNo">049</span>    public static int doubleToMixedIntBits(final double value)<a name="line.49"></a>
-<span class="sourceLineNo">050</span>    {<a name="line.50"></a>
-<span class="sourceLineNo">051</span>        wda.set(0, value);<a name="line.51"></a>
-<span class="sourceLineNo">052</span>        return wia.get(0) ^ wia.get(1);<a name="line.52"></a>
-<span class="sourceLineNo">053</span>    }<a name="line.53"></a>
-<span class="sourceLineNo">054</span><a name="line.54"></a>
-<span class="sourceLineNo">055</span>    public static double setExponent(final double value, final int exponentBits)<a name="line.55"></a>
-<span class="sourceLineNo">056</span>    {<a name="line.56"></a>
-<span class="sourceLineNo">057</span>        wda.set(0, value);<a name="line.57"></a>
-<span class="sourceLineNo">058</span>        wia.set(1, (wia.get(1) &amp; 0xfffff) | exponentBits &lt;&lt; 20);<a name="line.58"></a>
-<span class="sourceLineNo">059</span>        return wda.get(0);<a name="line.59"></a>
-<span class="sourceLineNo">060</span>    }<a name="line.60"></a>
-<span class="sourceLineNo">061</span><a name="line.61"></a>
-<span class="sourceLineNo">062</span>    public static double bounce(final double value)<a name="line.62"></a>
-<span class="sourceLineNo">063</span>    {<a name="line.63"></a>
-<span class="sourceLineNo">064</span>        wda.set(0, value);<a name="line.64"></a>
-<span class="sourceLineNo">065</span>        int s = wia.get(1) &amp; 0xfffff, flip = -((s &amp; 0x80000)&gt;&gt;19);<a name="line.65"></a>
-<span class="sourceLineNo">066</span>        wia.set(1, ((s ^ flip) &amp; 0xfffff) | 0x40100000);<a name="line.66"></a>
-<span class="sourceLineNo">067</span>        wia.set(0, wia.get(0) ^ flip);<a name="line.67"></a>
-<span class="sourceLineNo">068</span>        return wda.get(0) - 5.0;<a name="line.68"></a>
-<span class="sourceLineNo">069</span>    }<a name="line.69"></a>
-<span class="sourceLineNo">070</span><a name="line.70"></a>
-<span class="sourceLineNo">071</span>    public static double bounce(final long value)<a name="line.71"></a>
-<span class="sourceLineNo">072</span>    {<a name="line.72"></a>
-<span class="sourceLineNo">073</span>        int s = (int)(value&gt;&gt;&gt;32&amp;0xfffff), flip = -((s &amp; 0x80000)&gt;&gt;19);<a name="line.73"></a>
-<span class="sourceLineNo">074</span>        wia.set(1, ((s ^ flip) &amp; 0xfffff) | 0x40100000);<a name="line.74"></a>
-<span class="sourceLineNo">075</span>        wia.set(0, ((int)value) ^ flip);<a name="line.75"></a>
-<span class="sourceLineNo">076</span>        return wda.get(0) - 5.0;<a name="line.76"></a>
-<span class="sourceLineNo">077</span>    }<a name="line.77"></a>
-<span class="sourceLineNo">078</span><a name="line.78"></a>
-<span class="sourceLineNo">079</span>    public static double bounce(final int valueLow, final int valueHigh)<a name="line.79"></a>
-<span class="sourceLineNo">080</span>    {<a name="line.80"></a>
-<span class="sourceLineNo">081</span>        int s = valueHigh &amp; 0xfffff, flip = -((s &amp; 0x80000)&gt;&gt;19);<a name="line.81"></a>
-<span class="sourceLineNo">082</span>        wia.set(1, ((s ^ flip) &amp; 0xfffff) | 0x40100000);<a name="line.82"></a>
-<span class="sourceLineNo">083</span>        wia.set(0, valueLow ^ flip);<a name="line.83"></a>
-<span class="sourceLineNo">084</span>        return wda.get(0) - 5.0;<a name="line.84"></a>
-<span class="sourceLineNo">085</span>    }<a name="line.85"></a>
-<span class="sourceLineNo">086</span><a name="line.86"></a>
-<span class="sourceLineNo">087</span>    public static int floatToIntBits(final float value) {<a name="line.87"></a>
-<span class="sourceLineNo">088</span>        wfa.set(0, value);<a name="line.88"></a>
-<span class="sourceLineNo">089</span>        return wia.get(0);<a name="line.89"></a>
+<span class="sourceLineNo">003</span>/**<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * Various numeric functions that are important to performance but need alternate implementations on GWT to obtain it.<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * Super-sourced on GWT, but most things here are direct calls to JDK methods when on desktop or Android.<a name="line.5"></a>
+<span class="sourceLineNo">006</span> */<a name="line.6"></a>
+<span class="sourceLineNo">007</span>public class NumberTools {<a name="line.7"></a>
+<span class="sourceLineNo">008</span>    public static long doubleToLongBits(final double value)<a name="line.8"></a>
+<span class="sourceLineNo">009</span>    {<a name="line.9"></a>
+<span class="sourceLineNo">010</span>        return Double.doubleToLongBits(value);<a name="line.10"></a>
+<span class="sourceLineNo">011</span>    }<a name="line.11"></a>
+<span class="sourceLineNo">012</span>    public static long doubleToRawLongBits(final double value)<a name="line.12"></a>
+<span class="sourceLineNo">013</span>    {<a name="line.13"></a>
+<span class="sourceLineNo">014</span>        return Double.doubleToRawLongBits(value);<a name="line.14"></a>
+<span class="sourceLineNo">015</span>    }<a name="line.15"></a>
+<span class="sourceLineNo">016</span>    public static double longBitsToDouble(final long bits)<a name="line.16"></a>
+<span class="sourceLineNo">017</span>    {<a name="line.17"></a>
+<span class="sourceLineNo">018</span>        return Double.longBitsToDouble(bits);<a name="line.18"></a>
+<span class="sourceLineNo">019</span>    }<a name="line.19"></a>
+<span class="sourceLineNo">020</span>    public static int doubleToLowIntBits(final double value)<a name="line.20"></a>
+<span class="sourceLineNo">021</span>    {<a name="line.21"></a>
+<span class="sourceLineNo">022</span>        return (int)(Double.doubleToLongBits(value) &amp; 0xffffffffL);<a name="line.22"></a>
+<span class="sourceLineNo">023</span>    }<a name="line.23"></a>
+<span class="sourceLineNo">024</span>    public static int doubleToHighIntBits(final double value)<a name="line.24"></a>
+<span class="sourceLineNo">025</span>    {<a name="line.25"></a>
+<span class="sourceLineNo">026</span>        return (int)(Double.doubleToLongBits(value) &gt;&gt;&gt; 32);<a name="line.26"></a>
+<span class="sourceLineNo">027</span>    }<a name="line.27"></a>
+<span class="sourceLineNo">028</span>    public static int doubleToMixedIntBits(final double value)<a name="line.28"></a>
+<span class="sourceLineNo">029</span>    {<a name="line.29"></a>
+<span class="sourceLineNo">030</span>        final long l = Double.doubleToLongBits(value);<a name="line.30"></a>
+<span class="sourceLineNo">031</span>        return (int)l ^ (int)(l &gt;&gt;&gt; 32);<a name="line.31"></a>
+<span class="sourceLineNo">032</span>    }<a name="line.32"></a>
+<span class="sourceLineNo">033</span><a name="line.33"></a>
+<span class="sourceLineNo">034</span>    /**<a name="line.34"></a>
+<span class="sourceLineNo">035</span>     * Makes a modified version of value that uses the specified bits (up to 12) for its exponent and sign.<a name="line.35"></a>
+<span class="sourceLineNo">036</span>     * Meant for some specific cases, like adjusting the exponent on an unknown double to the 1.0 to 2.0 range (which<a name="line.36"></a>
+<span class="sourceLineNo">037</span>     * would pass 0x3ff for exponentBits). If you have a double from 1.0 to 2.0, you can subtract 1.0 from it to get the<a name="line.37"></a>
+<span class="sourceLineNo">038</span>     * often-desirable 0.0-1.0 range. Other common cases are 0x400, which adjusts to between 2.0 and 4.0 (subtracting<a name="line.38"></a>
+<span class="sourceLineNo">039</span>     * 3.0 from this gives the -1.0 to 1.0 range, useful for noise), and 0xBFF, which adjusts to between -2.0 and -1.0.<a name="line.39"></a>
+<span class="sourceLineNo">040</span>     * For the last case, you might think that -0x3ff would work, but sadly it doesn't. You can use<a name="line.40"></a>
+<span class="sourceLineNo">041</span>     * {@code exponentBits |= 0x800} to set the sign bit to negative, or {@code exponentBits &amp;= 0x7ff} for positive.<a name="line.41"></a>
+<span class="sourceLineNo">042</span>     * @param value a double that will have its sign and exponent set to the specified bits<a name="line.42"></a>
+<span class="sourceLineNo">043</span>     * @param exponentBits the bits to use for the sign and exponent section of the returned modification of value<a name="line.43"></a>
+<span class="sourceLineNo">044</span>     * @return the double produced by keeping the significand of value but changing its exponent and sign as given<a name="line.44"></a>
+<span class="sourceLineNo">045</span>     */<a name="line.45"></a>
+<span class="sourceLineNo">046</span>    public static double setExponent(final double value, final int exponentBits)<a name="line.46"></a>
+<span class="sourceLineNo">047</span>    {<a name="line.47"></a>
+<span class="sourceLineNo">048</span>        return Double.longBitsToDouble((Double.doubleToLongBits(value) &amp; 0xfffffffffffffL) | ((long) exponentBits &lt;&lt; 52));<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    }<a name="line.49"></a>
+<span class="sourceLineNo">050</span><a name="line.50"></a>
+<span class="sourceLineNo">051</span>    /**<a name="line.51"></a>
+<span class="sourceLineNo">052</span>     * Gets an 8-bit section of the given double {@code value}, using {@code whichByte} to select whether this should<a name="line.52"></a>
+<span class="sourceLineNo">053</span>     * return byte 0 (least significant), 1, 2, and so on up to 7 (most significant).<a name="line.53"></a>
+<span class="sourceLineNo">054</span>     * @param value a float<a name="line.54"></a>
+<span class="sourceLineNo">055</span>     * @param whichByte an int that will be used to select the byte to take from value (any int is allowed, only the bottom 3 bits are used to select)<a name="line.55"></a>
+<span class="sourceLineNo">056</span>     * @return the selected byte from the given float<a name="line.56"></a>
+<span class="sourceLineNo">057</span>     */<a name="line.57"></a>
+<span class="sourceLineNo">058</span>    public static byte getSelectedByte(final double value, final int whichByte)<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    {<a name="line.59"></a>
+<span class="sourceLineNo">060</span>        return (byte)(Double.doubleToLongBits(value) &gt;&gt;&gt; ((whichByte &amp; 7) &lt;&lt; 3));<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    }<a name="line.61"></a>
+<span class="sourceLineNo">062</span><a name="line.62"></a>
+<span class="sourceLineNo">063</span>    /**<a name="line.63"></a>
+<span class="sourceLineNo">064</span>     * Like {@link #getSelectedByte(double, int)}, this sets the byte at a selected position in the int representation of<a name="line.64"></a>
+<span class="sourceLineNo">065</span>     * a double, then returns the double produced by the bit change. Uses {@code whichByte} to select whether this should<a name="line.65"></a>
+<span class="sourceLineNo">066</span>     * set byte 0 (least significant), 1, 2, and so on up to 7 (most significant). {@code newValue} is a byte.<a name="line.66"></a>
+<span class="sourceLineNo">067</span>     * @param value a double<a name="line.67"></a>
+<span class="sourceLineNo">068</span>     * @param whichByte an int that will be used to select the byte to take from value (any int is allowed, only the bottom 3 bits are used to select)<a name="line.68"></a>
+<span class="sourceLineNo">069</span>     * @param newValue a byte that will be placed into the returned double's bits at the selected position<a name="line.69"></a>
+<span class="sourceLineNo">070</span>     * @return a double that results from changing the bits at the selected position to match newValue<a name="line.70"></a>
+<span class="sourceLineNo">071</span>     */<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    public static double setSelectedByte(final double value, final int whichByte, final byte newValue)<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    {<a name="line.73"></a>
+<span class="sourceLineNo">074</span>        return Double.longBitsToDouble((Double.doubleToLongBits(value) &amp; ~(255 &lt;&lt; ((whichByte &amp; 7) &lt;&lt; 3)))<a name="line.74"></a>
+<span class="sourceLineNo">075</span>                | ((newValue &amp; 255) &lt;&lt; ((whichByte &amp; 7) &lt;&lt; 3)));<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    }<a name="line.76"></a>
+<span class="sourceLineNo">077</span><a name="line.77"></a>
+<span class="sourceLineNo">078</span>    /**<a name="line.78"></a>
+<span class="sourceLineNo">079</span>     * Very limited-use. Takes any double and produces a double in the -1.0 to 1.0 range, with similar inputs producing<a name="line.79"></a>
+<span class="sourceLineNo">080</span>     * close to a consistent rate of up and down through the range. This is meant for noise, where it may be useful to<a name="line.80"></a>
+<span class="sourceLineNo">081</span>     * limit the amount of change between nearby points' noise values and prevent sudden "jumps" in noise value.<a name="line.81"></a>
+<span class="sourceLineNo">082</span>     * @param value any double<a name="line.82"></a>
+<span class="sourceLineNo">083</span>     * @return a double from -1.0 (inclusive) to 1.0 (exclusive)<a name="line.83"></a>
+<span class="sourceLineNo">084</span>     */<a name="line.84"></a>
+<span class="sourceLineNo">085</span>    public static double bounce(final double value)<a name="line.85"></a>
+<span class="sourceLineNo">086</span>    {<a name="line.86"></a>
+<span class="sourceLineNo">087</span>        long s = Double.doubleToLongBits(value) &amp; 0xfffffffffffffL;<a name="line.87"></a>
+<span class="sourceLineNo">088</span>        return Double.longBitsToDouble(((s ^ -((s &amp; 0x8000000000000L)&gt;&gt;51)) &amp; 0xfffffffffffffL)<a name="line.88"></a>
+<span class="sourceLineNo">089</span>                | 0x4010000000000000L) - 5.0;<a name="line.89"></a>
 <span class="sourceLineNo">090</span>    }<a name="line.90"></a>
-<span class="sourceLineNo">091</span>    public static int floatToRawIntBits(final float value) {<a name="line.91"></a>
-<span class="sourceLineNo">092</span>        wfa.set(0, value);<a name="line.92"></a>
-<span class="sourceLineNo">093</span>        return wia.get(0);<a name="line.93"></a>
-<span class="sourceLineNo">094</span>    }<a name="line.94"></a>
-<span class="sourceLineNo">095</span><a name="line.95"></a>
-<span class="sourceLineNo">096</span>    public static float intBitsToFloat(final int bits) {<a name="line.96"></a>
-<span class="sourceLineNo">097</span>        wia.set(0, bits);<a name="line.97"></a>
-<span class="sourceLineNo">098</span>        return wfa.get(0);<a name="line.98"></a>
-<span class="sourceLineNo">099</span>    }<a name="line.99"></a>
-<span class="sourceLineNo">100</span><a name="line.100"></a>
-<span class="sourceLineNo">101</span>    public static byte getSelectedByte(final double value, final int whichByte)<a name="line.101"></a>
-<span class="sourceLineNo">102</span>    {<a name="line.102"></a>
-<span class="sourceLineNo">103</span>        wda.set(0, value);<a name="line.103"></a>
-<span class="sourceLineNo">104</span>        return wba.get(whichByte &amp; 7);<a name="line.104"></a>
-<span class="sourceLineNo">105</span>    }<a name="line.105"></a>
-<span class="sourceLineNo">106</span><a name="line.106"></a>
-<span class="sourceLineNo">107</span>    public static double setSelectedByte(final double value, final int whichByte, final byte newValue)<a name="line.107"></a>
-<span class="sourceLineNo">108</span>    {<a name="line.108"></a>
-<span class="sourceLineNo">109</span>        wda.set(0, value);<a name="line.109"></a>
-<span class="sourceLineNo">110</span>        wba.set(whichByte &amp; 7, newValue);<a name="line.110"></a>
-<span class="sourceLineNo">111</span>        return wda.get(0);<a name="line.111"></a>
-<span class="sourceLineNo">112</span>    }<a name="line.112"></a>
-<span class="sourceLineNo">113</span><a name="line.113"></a>
-<span class="sourceLineNo">114</span>    public static byte getSelectedByte(final float value, final int whichByte)<a name="line.114"></a>
-<span class="sourceLineNo">115</span>    {<a name="line.115"></a>
-<span class="sourceLineNo">116</span>        wfa.set(0, value);<a name="line.116"></a>
-<span class="sourceLineNo">117</span>        return wba.get(whichByte &amp; 3);<a name="line.117"></a>
-<span class="sourceLineNo">118</span>    }<a name="line.118"></a>
-<span class="sourceLineNo">119</span><a name="line.119"></a>
-<span class="sourceLineNo">120</span>    public static float setSelectedByte(final float value, final int whichByte, final byte newValue)<a name="line.120"></a>
-<span class="sourceLineNo">121</span>    {<a name="line.121"></a>
-<span class="sourceLineNo">122</span>        wfa.set(0, value);<a name="line.122"></a>
-<span class="sourceLineNo">123</span>        wba.set(whichByte &amp; 3, newValue);<a name="line.123"></a>
-<span class="sourceLineNo">124</span>        return wfa.get(0);<a name="line.124"></a>
-<span class="sourceLineNo">125</span>    }<a name="line.125"></a>
-<span class="sourceLineNo">126</span><a name="line.126"></a>
-<span class="sourceLineNo">127</span>    public static double randomDouble(int seed)<a name="line.127"></a>
+<span class="sourceLineNo">091</span>    /**<a name="line.91"></a>
+<span class="sourceLineNo">092</span>     * Very limited-use. Takes the significand bits of a double, represented as a long of which this uses 52 bits, and<a name="line.92"></a>
+<span class="sourceLineNo">093</span>     * produces a double in the -1.0 to 1.0 range, with similar inputs producing close to a consistent rate of up and<a name="line.93"></a>
+<span class="sourceLineNo">094</span>     * down through the range. This is meant for noise, where it may be useful to limit the amount of change between<a name="line.94"></a>
+<span class="sourceLineNo">095</span>     * nearby points' noise values and prevent sudden "jumps" in noise value.<a name="line.95"></a>
+<span class="sourceLineNo">096</span>     * @param value any long; only the lower 52 bits will be used<a name="line.96"></a>
+<span class="sourceLineNo">097</span>     * @return a double from -1.0 (inclusive) to 1.0 (exclusive)<a name="line.97"></a>
+<span class="sourceLineNo">098</span>     */<a name="line.98"></a>
+<span class="sourceLineNo">099</span>    public static double bounce(final long value)<a name="line.99"></a>
+<span class="sourceLineNo">100</span>    {<a name="line.100"></a>
+<span class="sourceLineNo">101</span>        long s = value &amp; 0xfffffffffffffL;<a name="line.101"></a>
+<span class="sourceLineNo">102</span>        return Double.longBitsToDouble(((s ^ -((s &amp; 0x8000000000000L)&gt;&gt;51)) &amp; 0xfffffffffffffL)<a name="line.102"></a>
+<span class="sourceLineNo">103</span>                | 0x4010000000000000L) - 5.0;<a name="line.103"></a>
+<span class="sourceLineNo">104</span>    }<a name="line.104"></a>
+<span class="sourceLineNo">105</span>    /**<a name="line.105"></a>
+<span class="sourceLineNo">106</span>     * Very limited-use. Takes the significand bits of a double, represented as a pair of ints {@code valueLow} and<a name="line.106"></a>
+<span class="sourceLineNo">107</span>     * {@code valueHigh}, using all bits in valueLow and the least-significant 20 bits of valueHigh, and<a name="line.107"></a>
+<span class="sourceLineNo">108</span>     * produces a double in the -1.0 to 1.0 range, with similar inputs producing close to a consistent rate of up and<a name="line.108"></a>
+<span class="sourceLineNo">109</span>     * down through the range. This is meant for noise, where it may be useful to limit the amount of change between<a name="line.109"></a>
+<span class="sourceLineNo">110</span>     * nearby points' noise values and prevent sudden "jumps" in noise value.<a name="line.110"></a>
+<span class="sourceLineNo">111</span>     * @param valueLow any int; all bits will be used as the less-significant bits of the significand<a name="line.111"></a>
+<span class="sourceLineNo">112</span>     * @param valueHigh any int; only the bottom 20 bits will be used as the more-significant bits of the significand<a name="line.112"></a>
+<span class="sourceLineNo">113</span>     * @return a double from -1.0 (inclusive) to 1.0 (exclusive)<a name="line.113"></a>
+<span class="sourceLineNo">114</span>     */<a name="line.114"></a>
+<span class="sourceLineNo">115</span><a name="line.115"></a>
+<span class="sourceLineNo">116</span>    public static double bounce(final int valueLow, final int valueHigh)<a name="line.116"></a>
+<span class="sourceLineNo">117</span>    {<a name="line.117"></a>
+<span class="sourceLineNo">118</span>        long s = (((long) valueHigh) &lt;&lt; 32 | valueLow) &amp; 0xfffffffffffffL;<a name="line.118"></a>
+<span class="sourceLineNo">119</span>        return Double.longBitsToDouble(((s ^ -((s &amp; 0x8000000000000L)&gt;&gt;51)) &amp; 0xfffffffffffffL)<a name="line.119"></a>
+<span class="sourceLineNo">120</span>                | 0x4010000000000000L) - 5.0;<a name="line.120"></a>
+<span class="sourceLineNo">121</span>    }<a name="line.121"></a>
+<span class="sourceLineNo">122</span><a name="line.122"></a>
+<span class="sourceLineNo">123</span>    public static int floatToIntBits(final float value)<a name="line.123"></a>
+<span class="sourceLineNo">124</span>    {<a name="line.124"></a>
+<span class="sourceLineNo">125</span>        return Float.floatToIntBits(value);<a name="line.125"></a>
+<span class="sourceLineNo">126</span>    }<a name="line.126"></a>
+<span class="sourceLineNo">127</span>    public static int floatToRawIntBits(final float value)<a name="line.127"></a>
 <span class="sourceLineNo">128</span>    {<a name="line.128"></a>
-<span class="sourceLineNo">129</span>        seed ^= seed &gt;&gt;&gt; (4 + (seed &gt;&gt;&gt; 28));<a name="line.129"></a>
-<span class="sourceLineNo">130</span>        wia.set(0, ((seed *= 277803737) &gt;&gt;&gt; 22) ^ seed);<a name="line.130"></a>
-<span class="sourceLineNo">131</span>        seed += 0x9E3779B9;<a name="line.131"></a>
-<span class="sourceLineNo">132</span>        seed ^= seed &gt;&gt;&gt; (4 + (seed &gt;&gt;&gt; 28));<a name="line.132"></a>
-<span class="sourceLineNo">133</span>        wia.set(1, ((((seed *= 277803737) &gt;&gt;&gt; 22) ^ seed) &amp; 0xfffff) | 0x3ff00000);<a name="line.133"></a>
-<span class="sourceLineNo">134</span>        return wda.get(0) - 1.0;<a name="line.134"></a>
-<span class="sourceLineNo">135</span>    }<a name="line.135"></a>
-<span class="sourceLineNo">136</span>    public static float randomFloat(int seed)<a name="line.136"></a>
-<span class="sourceLineNo">137</span>    {<a name="line.137"></a>
-<span class="sourceLineNo">138</span>        seed ^= seed &gt;&gt;&gt; (4 + (seed &gt;&gt;&gt; 28));<a name="line.138"></a>
-<span class="sourceLineNo">139</span>        wia.set(0, (((seed *= 0x108EF2D9) &gt;&gt;&gt; 22 ^ seed) &gt;&gt;&gt; 9) | 0x3f800000);<a name="line.139"></a>
-<span class="sourceLineNo">140</span>        return (wfa.get(0) - 1f);<a name="line.140"></a>
-<span class="sourceLineNo">141</span>    }<a name="line.141"></a>
-<span class="sourceLineNo">142</span><a name="line.142"></a>
-<span class="sourceLineNo">143</span>    /**<a name="line.143"></a>
-<span class="sourceLineNo">144</span>     * Generates a pseudo-random float between -1.0f (exclusive) and 1.0f (exclusive) using the given int seed, passing<a name="line.144"></a>
-<span class="sourceLineNo">145</span>     * it once through the (very high-quality and rather fast) {@link PintRNG} algorithm, derived from PCG-Random. This<a name="line.145"></a>
-<span class="sourceLineNo">146</span>     * produces a random int, which this produces a float from using {@link #intBitsToFloat(int)} (long)} or something<a name="line.146"></a>
-<span class="sourceLineNo">147</span>     * functionally equivalent on GWT. The sign bit of the result is determined by data that is not used by the float<a name="line.147"></a>
-<span class="sourceLineNo">148</span>     * otherwise, and keeps the results almost linear in distribution between -1.0 and 1.0, exclusive for both (0 shows<a name="line.148"></a>
-<span class="sourceLineNo">149</span>     * up twice as often as any single other result, but this shouldn't affect the odds very strongly; it's about a 1 in<a name="line.149"></a>
-<span class="sourceLineNo">150</span>     * 8 million chance of exactly 0 occurring vs. a 1 in 16 million of any other specific float this can produce).<a name="line.150"></a>
-<span class="sourceLineNo">151</span>     * &lt;br&gt;<a name="line.151"></a>
-<span class="sourceLineNo">152</span>     * Consider calling this with {@code NumberTools.randomSignedFloat(seed += 0x9E3779B9)} for an optimal period of 2<a name="line.152"></a>
-<span class="sourceLineNo">153</span>     * to the 32 when repeatedly called, but {@code NumberTools.randomSignedFloat(++seed)} will also work just fine.<a name="line.153"></a>
-<span class="sourceLineNo">154</span>     * @param seed any int to be used as a seed<a name="line.154"></a>
-<span class="sourceLineNo">155</span>     * @return a pseudo-random float from -1.0f (exclusive) to 1.0f (exclusive)<a name="line.155"></a>
+<span class="sourceLineNo">129</span>        return Float.floatToRawIntBits(value);<a name="line.129"></a>
+<span class="sourceLineNo">130</span>    }<a name="line.130"></a>
+<span class="sourceLineNo">131</span>    public static float intBitsToFloat(final int bits)<a name="line.131"></a>
+<span class="sourceLineNo">132</span>    {<a name="line.132"></a>
+<span class="sourceLineNo">133</span>        return Float.intBitsToFloat(bits);<a name="line.133"></a>
+<span class="sourceLineNo">134</span>    }<a name="line.134"></a>
+<span class="sourceLineNo">135</span><a name="line.135"></a>
+<span class="sourceLineNo">136</span>    /**<a name="line.136"></a>
+<span class="sourceLineNo">137</span>     * Gets an 8-bit section of the given float {@code value}, using {@code whichByte} to select whether this should<a name="line.137"></a>
+<span class="sourceLineNo">138</span>     * return byte 0 (least significant), 1, 2, or 3 (most significant).<a name="line.138"></a>
+<span class="sourceLineNo">139</span>     * @param value a float<a name="line.139"></a>
+<span class="sourceLineNo">140</span>     * @param whichByte an int that will be used to select the byte to take from value (any int is allowed, only the bottom 2 bits are used to select)<a name="line.140"></a>
+<span class="sourceLineNo">141</span>     * @return the selected byte from the given float<a name="line.141"></a>
+<span class="sourceLineNo">142</span>     */<a name="line.142"></a>
+<span class="sourceLineNo">143</span>    public static byte getSelectedByte(final float value, final int whichByte)<a name="line.143"></a>
+<span class="sourceLineNo">144</span>    {<a name="line.144"></a>
+<span class="sourceLineNo">145</span>        return (byte)(Float.floatToIntBits(value) &gt;&gt;&gt; ((whichByte &amp; 3) &lt;&lt; 3));<a name="line.145"></a>
+<span class="sourceLineNo">146</span>    }<a name="line.146"></a>
+<span class="sourceLineNo">147</span><a name="line.147"></a>
+<span class="sourceLineNo">148</span>    /**<a name="line.148"></a>
+<span class="sourceLineNo">149</span>     * Like {@link #getSelectedByte(float, int)}, this sets the byte at a selected position in the int representation of<a name="line.149"></a>
+<span class="sourceLineNo">150</span>     * a float, then returns the float produced by the bit change. Uses {@code whichByte} to select whether this should<a name="line.150"></a>
+<span class="sourceLineNo">151</span>     * set byte 0 (least significant), 1, 2, or 3 (most significant). {@code newValue} is a byte.<a name="line.151"></a>
+<span class="sourceLineNo">152</span>     * @param value a float<a name="line.152"></a>
+<span class="sourceLineNo">153</span>     * @param whichByte an int that will be used to select the byte to take from value (any int is allowed, only the bottom 2 bits are used to select)<a name="line.153"></a>
+<span class="sourceLineNo">154</span>     * @param newValue a byte that will be placed into the returned float's bits at the selected position<a name="line.154"></a>
+<span class="sourceLineNo">155</span>     * @return a float that results from changing the bits at the selected position to match newValue<a name="line.155"></a>
 <span class="sourceLineNo">156</span>     */<a name="line.156"></a>
-<span class="sourceLineNo">157</span>    public static float randomSignedFloat(int seed)<a name="line.157"></a>
+<span class="sourceLineNo">157</span>    public static float setSelectedByte(final float value, final int whichByte, final byte newValue)<a name="line.157"></a>
 <span class="sourceLineNo">158</span>    {<a name="line.158"></a>
-<span class="sourceLineNo">159</span>        seed ^= seed &gt;&gt;&gt; (4 + (seed &gt;&gt;&gt; 28));<a name="line.159"></a>
-<span class="sourceLineNo">160</span>        wia.set(0, (((seed *= 0x108EF2D9) &gt;&gt;&gt; 22 ^ seed) &gt;&gt;&gt; 9) | 0x3f800000);<a name="line.160"></a>
-<span class="sourceLineNo">161</span>        return (wfa.get(0) - 1f) * (seed &gt;&gt; 31 | 1);<a name="line.161"></a>
-<span class="sourceLineNo">162</span>    }<a name="line.162"></a>
-<span class="sourceLineNo">163</span><a name="line.163"></a>
-<span class="sourceLineNo">164</span><a name="line.164"></a>
-<span class="sourceLineNo">165</span>    public static double randomDoubleCurved(int seed)<a name="line.165"></a>
-<span class="sourceLineNo">166</span>    {<a name="line.166"></a>
-<span class="sourceLineNo">167</span>        seed ^= seed &gt;&gt;&gt; (4 + (seed &gt;&gt;&gt; 28));<a name="line.167"></a>
-<span class="sourceLineNo">168</span>        wia.set(0, ((((seed *= 277803737) &gt;&gt;&gt; 22) ^ seed) &gt;&gt;&gt; 9) | 0x3f800000);<a name="line.168"></a>
-<span class="sourceLineNo">169</span>        seed += 0x9E3779B9;<a name="line.169"></a>
-<span class="sourceLineNo">170</span>        seed ^= seed &gt;&gt;&gt; (4 + (seed &gt;&gt;&gt; 28));<a name="line.170"></a>
-<span class="sourceLineNo">171</span>        wia.set(1, ((((seed *= 277803737) &gt;&gt;&gt; 22) ^ seed) &gt;&gt;&gt; 9) | 0x3f800000);<a name="line.171"></a>
-<span class="sourceLineNo">172</span>        return (wfa.get(0) - 1.0) * (wfa.get(1) - 1.0) * (seed &gt;&gt; 31 | 1);<a name="line.172"></a>
-<span class="sourceLineNo">173</span>    }<a name="line.173"></a>
-<span class="sourceLineNo">174</span><a name="line.174"></a>
-<span class="sourceLineNo">175</span>    static int hashWisp(final float[] data) {<a name="line.175"></a>
-<span class="sourceLineNo">176</span>        if (data == null)<a name="line.176"></a>
-<span class="sourceLineNo">177</span>            return 0;<a name="line.177"></a>
-<span class="sourceLineNo">178</span>        int result = 0x9E3779B9, a = 0x632BE5AB;<a name="line.178"></a>
-<span class="sourceLineNo">179</span>        final int len = data.length;<a name="line.179"></a>
-<span class="sourceLineNo">180</span>        double t;<a name="line.180"></a>
-<span class="sourceLineNo">181</span>        for (int i = 0; i &lt; len; i++) {<a name="line.181"></a>
-<span class="sourceLineNo">182</span>            result += (a ^= 0x85157AF5 * ((int) (-0xD0E8.9D2D311E289Fp-25f * (t = data[i]) + t * -0x1.39b4dce80194cp9f)));<a name="line.182"></a>
-<span class="sourceLineNo">183</span>        }<a name="line.183"></a>
-<span class="sourceLineNo">184</span>        return result * (a | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.184"></a>
-<span class="sourceLineNo">185</span>    }<a name="line.185"></a>
-<span class="sourceLineNo">186</span><a name="line.186"></a>
-<span class="sourceLineNo">187</span>    static int hashWisp(final double[] data)<a name="line.187"></a>
-<span class="sourceLineNo">188</span>    {<a name="line.188"></a>
-<span class="sourceLineNo">189</span>        if (data == null)<a name="line.189"></a>
-<span class="sourceLineNo">190</span>            return 0;<a name="line.190"></a>
-<span class="sourceLineNo">191</span>        int result = 0x9E3779B9, a = 0x632BE5AB;<a name="line.191"></a>
-<span class="sourceLineNo">192</span>        final int len = data.length;<a name="line.192"></a>
-<span class="sourceLineNo">193</span>        for (int i = 0; i &lt; len; i++) {<a name="line.193"></a>
-<span class="sourceLineNo">194</span>            wda.set(0, data[i]);<a name="line.194"></a>
-<span class="sourceLineNo">195</span>            result += (a ^= 0x85157AF5 * wia.get(0)) + (a ^= 0x85157AF5 * wia.get(1));<a name="line.195"></a>
-<span class="sourceLineNo">196</span>        }<a name="line.196"></a>
-<span class="sourceLineNo">197</span>        return result * (a | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.197"></a>
+<span class="sourceLineNo">159</span>        return Float.intBitsToFloat((Float.floatToIntBits(value) &amp; ~(255 &lt;&lt; ((whichByte &amp; 3) &lt;&lt; 3)))<a name="line.159"></a>
+<span class="sourceLineNo">160</span>                | ((newValue &amp; 255) &lt;&lt; ((whichByte &amp; 3) &lt;&lt; 3)));<a name="line.160"></a>
+<span class="sourceLineNo">161</span>    }<a name="line.161"></a>
+<span class="sourceLineNo">162</span><a name="line.162"></a>
+<span class="sourceLineNo">163</span>    /**<a name="line.163"></a>
+<span class="sourceLineNo">164</span>     * Generates a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive) using the given int seed, passing it<a name="line.164"></a>
+<span class="sourceLineNo">165</span>     * twice through the (very high-quality and rather fast) {@link PintRNG} algorithm, derived from PCG-Random. This<a name="line.165"></a>
+<span class="sourceLineNo">166</span>     * produces a pair of random ints, which this produces a double from using the equivalent of<a name="line.166"></a>
+<span class="sourceLineNo">167</span>     * {@link #longBitsToDouble(long)} or something functionally equivalent on GWT.<a name="line.167"></a>
+<span class="sourceLineNo">168</span>     * &lt;br&gt;<a name="line.168"></a>
+<span class="sourceLineNo">169</span>     * Consider calling this with {@code NumberTools.randomDouble(seed += 0x3C6EF372)} for an optimal period of 2 to the<a name="line.169"></a>
+<span class="sourceLineNo">170</span>     * 31 when repeatedly called, but {@code NumberTools.randomDouble(++seed)} will also work just fine.<a name="line.170"></a>
+<span class="sourceLineNo">171</span>     * @param seed any int to be used as a seed<a name="line.171"></a>
+<span class="sourceLineNo">172</span>     * @return a pseudo-random double from 0.0 (inclusive) to 1.0 (exclusive)<a name="line.172"></a>
+<span class="sourceLineNo">173</span>     */<a name="line.173"></a>
+<span class="sourceLineNo">174</span>    public static double randomDouble(int seed)<a name="line.174"></a>
+<span class="sourceLineNo">175</span>    {<a name="line.175"></a>
+<span class="sourceLineNo">176</span>        seed ^= seed &gt;&gt;&gt; (4 + (seed &gt;&gt;&gt; 28));<a name="line.176"></a>
+<span class="sourceLineNo">177</span>        long bits = ((seed *= 0x108EF2D9) &gt;&gt;&gt; 22 ^ seed) &amp; 0xffffffffL;<a name="line.177"></a>
+<span class="sourceLineNo">178</span>        seed += 0x9E3779B9;<a name="line.178"></a>
+<span class="sourceLineNo">179</span>        seed ^= seed &gt;&gt;&gt; (4 + (seed &gt;&gt;&gt; 28));<a name="line.179"></a>
+<span class="sourceLineNo">180</span>        bits |= ((((seed *= 0x108EF2D9) &gt;&gt;&gt; 22 ^ seed) &amp; 0xfffffL) &lt;&lt; 32 | 0x3ff0000000000000L);<a name="line.180"></a>
+<span class="sourceLineNo">181</span>        return Double.longBitsToDouble(bits) - 1.0;<a name="line.181"></a>
+<span class="sourceLineNo">182</span>    }<a name="line.182"></a>
+<span class="sourceLineNo">183</span>    /**<a name="line.183"></a>
+<span class="sourceLineNo">184</span>     * Generates a pseudo-random float between 0.0f (inclusive) and 1.0f (exclusive) using the given int seed, passing<a name="line.184"></a>
+<span class="sourceLineNo">185</span>     * it once through the (very high-quality and rather fast) {@link PintRNG} algorithm, derived from PCG-Random. This<a name="line.185"></a>
+<span class="sourceLineNo">186</span>     * produces a random int, which this produces a float from using {@link #intBitsToFloat(int)} (long)} or something<a name="line.186"></a>
+<span class="sourceLineNo">187</span>     * functionally equivalent on GWT.<a name="line.187"></a>
+<span class="sourceLineNo">188</span>     * &lt;br&gt;<a name="line.188"></a>
+<span class="sourceLineNo">189</span>     * Consider calling this with {@code NumberTools.randomSignedFloat(seed += 0x9E3779B9)} for an optimal period of 2<a name="line.189"></a>
+<span class="sourceLineNo">190</span>     * to the 32 when repeatedly called, but {@code NumberTools.randomSignedFloat(++seed)} will also work just fine.<a name="line.190"></a>
+<span class="sourceLineNo">191</span>     * @param seed any int to be used as a seed<a name="line.191"></a>
+<span class="sourceLineNo">192</span>     * @return a pseudo-random float from -1.0f (exclusive) to 1.0f (exclusive)<a name="line.192"></a>
+<span class="sourceLineNo">193</span>     */<a name="line.193"></a>
+<span class="sourceLineNo">194</span>    public static float randomFloat(int seed)<a name="line.194"></a>
+<span class="sourceLineNo">195</span>    {<a name="line.195"></a>
+<span class="sourceLineNo">196</span>        seed ^= seed &gt;&gt;&gt; (4 + (seed &gt;&gt;&gt; 28));<a name="line.196"></a>
+<span class="sourceLineNo">197</span>        return (Float.intBitsToFloat((((seed *= 0x108EF2D9) &gt;&gt;&gt; 22 ^ seed) &gt;&gt;&gt; 9) | 0x3f800000) - 1f);<a name="line.197"></a>
 <span class="sourceLineNo">198</span>    }<a name="line.198"></a>
-<span class="sourceLineNo">199</span>}<a name="line.199"></a>
+<span class="sourceLineNo">199</span>    /**<a name="line.199"></a>
+<span class="sourceLineNo">200</span>     * Generates a pseudo-random float between -1.0f (exclusive) and 1.0f (exclusive) using the given int seed, passing<a name="line.200"></a>
+<span class="sourceLineNo">201</span>     * it once through the (very high-quality and rather fast) {@link PintRNG} algorithm, derived from PCG-Random. This<a name="line.201"></a>
+<span class="sourceLineNo">202</span>     * produces a random int, which this produces a float from using {@link #intBitsToFloat(int)} (long)} or something<a name="line.202"></a>
+<span class="sourceLineNo">203</span>     * functionally equivalent on GWT. The sign bit of the result is determined by data that is not used by the float<a name="line.203"></a>
+<span class="sourceLineNo">204</span>     * otherwise, and keeps the results almost linear in distribution between -1.0 and 1.0, exclusive for both (0 shows<a name="line.204"></a>
+<span class="sourceLineNo">205</span>     * up twice as often as any single other result, but this shouldn't affect the odds very strongly; it's about a 1 in<a name="line.205"></a>
+<span class="sourceLineNo">206</span>     * 8 million chance of exactly 0 occurring vs. a 1 in 16 million of any other specific float this can produce).<a name="line.206"></a>
+<span class="sourceLineNo">207</span>     * &lt;br&gt;<a name="line.207"></a>
+<span class="sourceLineNo">208</span>     * Consider calling this with {@code NumberTools.randomSignedFloat(seed += 0x9E3779B9)} for an optimal period of 2<a name="line.208"></a>
+<span class="sourceLineNo">209</span>     * to the 32 when repeatedly called, but {@code NumberTools.randomSignedFloat(++seed)} will also work just fine.<a name="line.209"></a>
+<span class="sourceLineNo">210</span>     * @param seed any int to be used as a seed<a name="line.210"></a>
+<span class="sourceLineNo">211</span>     * @return a pseudo-random float from -1.0f (exclusive) to 1.0f (exclusive)<a name="line.211"></a>
+<span class="sourceLineNo">212</span>     */<a name="line.212"></a>
+<span class="sourceLineNo">213</span>    public static float randomSignedFloat(int seed)<a name="line.213"></a>
+<span class="sourceLineNo">214</span>    {<a name="line.214"></a>
+<span class="sourceLineNo">215</span>        seed ^= seed &gt;&gt;&gt; (4 + (seed &gt;&gt;&gt; 28));<a name="line.215"></a>
+<span class="sourceLineNo">216</span>        return (Float.intBitsToFloat((((seed *= 0x108EF2D9) &gt;&gt;&gt; 22 ^ seed) &gt;&gt;&gt; 9) | 0x3f800000) - 1f) * (seed &gt;&gt; 31 | 1);<a name="line.216"></a>
+<span class="sourceLineNo">217</span>    }<a name="line.217"></a>
+<span class="sourceLineNo">218</span><a name="line.218"></a>
+<span class="sourceLineNo">219</span>    /**<a name="line.219"></a>
+<span class="sourceLineNo">220</span>     * Generates a pseudo-random double between -1.0 (exclusive) and 1.0 (exclusive) with a distribution that has a<a name="line.220"></a>
+<span class="sourceLineNo">221</span>     * strong central bias (around 0.0). Uses the given int seed, passing it twice through the (very high-quality and<a name="line.221"></a>
+<span class="sourceLineNo">222</span>     * rather fast) {@link PintRNG} algorithm, derived from PCG-Random. This produces a pair of random ints, which this<a name="line.222"></a>
+<span class="sourceLineNo">223</span>     * uses to generate a pair of floats between 0.0 (inclusive)and 1.0 (exclusive) using the equivalent of<a name="line.223"></a>
+<span class="sourceLineNo">224</span>     * {@link #intBitsToFloat(int)} or something functionally equivalent on GWT, multiplies the floats, and sets the<a name="line.224"></a>
+<span class="sourceLineNo">225</span>     * sign pseudo-randomly based on an unused bit from earlier.<a name="line.225"></a>
+<span class="sourceLineNo">226</span>     * &lt;br&gt;<a name="line.226"></a>
+<span class="sourceLineNo">227</span>     * Consider calling this with {@code NumberTools.randomDoubleCurved(seed += 0x3C6EF372)} for an optimal period of 2<a name="line.227"></a>
+<span class="sourceLineNo">228</span>     * to the 31 when repeatedly called, but {@code NumberTools.randomDoubleCurved(++seed)} will also work just fine.<a name="line.228"></a>
+<span class="sourceLineNo">229</span>     * @param seed any int to be used as a seed<a name="line.229"></a>
+<span class="sourceLineNo">230</span>     * @return a pseudo-random double from -1.0 (exclusive) to 1.0 (exclusive), distributed on a curve centered on 0.0<a name="line.230"></a>
+<span class="sourceLineNo">231</span>     */<a name="line.231"></a>
+<span class="sourceLineNo">232</span>    public static double randomDoubleCurved(int seed)<a name="line.232"></a>
+<span class="sourceLineNo">233</span>    {<a name="line.233"></a>
+<span class="sourceLineNo">234</span>        seed ^= seed &gt;&gt;&gt; (4 + (seed &gt;&gt;&gt; 28));<a name="line.234"></a>
+<span class="sourceLineNo">235</span>        float a = Float.intBitsToFloat((((seed *= 0x108EF2D9) &gt;&gt;&gt; 22 ^ seed) &gt;&gt;&gt; 9) | 0x3f800000);<a name="line.235"></a>
+<span class="sourceLineNo">236</span>        seed += 0x9E3779B9;<a name="line.236"></a>
+<span class="sourceLineNo">237</span>        seed ^= seed &gt;&gt;&gt; (4 + (seed &gt;&gt;&gt; 28));<a name="line.237"></a>
+<span class="sourceLineNo">238</span>        return  (a - 1.0) * (Float.intBitsToFloat((((seed *= 0x108EF2D9) &gt;&gt;&gt; 22 ^ seed) &gt;&gt;&gt; 9) | 0x3f800000) - 1.0) * (seed &gt;&gt; 31 | 1);<a name="line.238"></a>
+<span class="sourceLineNo">239</span>    }<a name="line.239"></a>
+<span class="sourceLineNo">240</span><a name="line.240"></a>
+<span class="sourceLineNo">241</span>    static int hashWisp(final float[] data)<a name="line.241"></a>
+<span class="sourceLineNo">242</span>    {<a name="line.242"></a>
+<span class="sourceLineNo">243</span>        if (data == null)<a name="line.243"></a>
+<span class="sourceLineNo">244</span>            return 0;<a name="line.244"></a>
+<span class="sourceLineNo">245</span>        int result = 0x9E3779B9, a = 0x632BE5AB;<a name="line.245"></a>
+<span class="sourceLineNo">246</span>        final int len = data.length;<a name="line.246"></a>
+<span class="sourceLineNo">247</span>        for (int i = 0; i &lt; len; i++) {<a name="line.247"></a>
+<span class="sourceLineNo">248</span>            result += (a ^= 0x85157AF5 * Float.floatToIntBits(data[i]));<a name="line.248"></a>
+<span class="sourceLineNo">249</span>        }<a name="line.249"></a>
+<span class="sourceLineNo">250</span>        return result * (a | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.250"></a>
+<span class="sourceLineNo">251</span>    }<a name="line.251"></a>
+<span class="sourceLineNo">252</span><a name="line.252"></a>
+<span class="sourceLineNo">253</span>    static int hashWisp(final double[] data)<a name="line.253"></a>
+<span class="sourceLineNo">254</span>    {<a name="line.254"></a>
+<span class="sourceLineNo">255</span>        if (data == null)<a name="line.255"></a>
+<span class="sourceLineNo">256</span>            return 0;<a name="line.256"></a>
+<span class="sourceLineNo">257</span>        long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;<a name="line.257"></a>
+<span class="sourceLineNo">258</span>        final int len = data.length;<a name="line.258"></a>
+<span class="sourceLineNo">259</span>        double t;<a name="line.259"></a>
+<span class="sourceLineNo">260</span>        for (int i = 0; i &lt; len; i++) {<a name="line.260"></a>
+<span class="sourceLineNo">261</span>            result += (a ^= 0x8329C6EB9E6AD3E3L * ((long) (-0xD0E8.9D2D311E289Fp-25 * (t = data[i]) + t * -0x1.39b4dce80194cp9)));<a name="line.261"></a>
+<span class="sourceLineNo">262</span>        }<a name="line.262"></a>
+<span class="sourceLineNo">263</span>        return (int)((result = (result * (a | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37))) ^ (result &gt;&gt;&gt; 32));<a name="line.263"></a>
+<span class="sourceLineNo">264</span>    }<a name="line.264"></a>
+<span class="sourceLineNo">265</span>}<a name="line.265"></a>
 
 
 

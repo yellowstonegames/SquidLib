@@ -144,8 +144,8 @@
 <span class="sourceLineNo">136</span>    /**<a name="line.136"></a>
 <span class="sourceLineNo">137</span>     * Hashes the input double array or vararg and produces a double with unpredictable value, between -1.0 inclusive<a name="line.137"></a>
 <span class="sourceLineNo">138</span>     * and 1.0 exclusive.<a name="line.138"></a>
-<span class="sourceLineNo">139</span>     * @param data<a name="line.139"></a>
-<span class="sourceLineNo">140</span>     * @return<a name="line.140"></a>
+<span class="sourceLineNo">139</span>     * @param data an array or vararg of double items; should not include NaN or infinite values but has no other limits<a name="line.139"></a>
+<span class="sourceLineNo">140</span>     * @return an unpredictable double between -1.0 inclusive and 1.0 exclusive<a name="line.140"></a>
 <span class="sourceLineNo">141</span>     */<a name="line.141"></a>
 <span class="sourceLineNo">142</span>    public static double hash(double... data) {<a name="line.142"></a>
 <span class="sourceLineNo">143</span>        if(data == null) return 0.0;<a name="line.143"></a>

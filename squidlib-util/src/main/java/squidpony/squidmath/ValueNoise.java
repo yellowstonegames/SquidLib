@@ -136,8 +136,8 @@ public class ValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D, 
     /**
      * Hashes the input double array or vararg and produces a double with unpredictable value, between -1.0 inclusive
      * and 1.0 exclusive.
-     * @param data
-     * @return
+     * @param data an array or vararg of double items; should not include NaN or infinite values but has no other limits
+     * @return an unpredictable double between -1.0 inclusive and 1.0 exclusive
      */
     public static double hash(double... data) {
         if(data == null) return 0.0;

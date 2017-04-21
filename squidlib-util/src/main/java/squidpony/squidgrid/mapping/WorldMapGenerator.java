@@ -3,6 +3,7 @@ package squidpony.squidgrid.mapping;
 import squidpony.annotation.Beta;
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.*;
+import squidpony.squidmath.Noise.Noise3D;
 import squidpony.squidmath.Noise.Noise4D;
 
 /**
@@ -717,7 +718,7 @@ public abstract class WorldMapGenerator {
          * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
          * as north-to-south. Always makes a 256x256 map.
          * Uses SeededNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
-         * If you were using {@link TilingMap#TilingMap(long, int, int, Noise4D, double)}, then this would be the
+         * If you were using {@link squidpony.squidgrid.mapping.WorldMapGenerator.TilingMap#TilingMap(long, int, int, squidpony.squidmath.Noise.Noise4D, double)}, then this would be the
          * same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 256, SeededNoise.instance, 1.0}.
          */
         public TilingMap() {
@@ -1007,7 +1008,7 @@ public abstract class WorldMapGenerator {
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
 
-        public final Noise.Noise3D terrain, terrainRidged, heat, moisture, otherRidged;
+        public final Noise3D terrain, terrainRidged, heat, moisture, otherRidged;
 
         /**
          * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
@@ -1015,7 +1016,7 @@ public abstract class WorldMapGenerator {
          * have significantly-exaggerated-in-size features while the equator is not distorted.
          * Always makes a 256x256 map.
          * Uses SeededNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
-         * If you were using {@link SphereMap#SphereMap(long, int, int, Noise.Noise3D, double)}, then this would be the
+         * If you were using {@link WorldMapGenerator.SphereMap#SphereMap(long, int, int, Noise3D, double)}, then this would be the
          * same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 256, SeededNoise.instance, 1.0}.
          */
         public SphereMap() {
@@ -1060,7 +1061,7 @@ public abstract class WorldMapGenerator {
          * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
          * have significantly-exaggerated-in-size features while the equator is not distorted.
          * Takes an initial seed, the width/height of the map, and a noise generator (a
-         * {@link Noise.Noise3D} implementation, which is usually {@link SeededNoise#instance}. The {@code initialSeed}
+         * {@link Noise3D} implementation, which is usually {@link SeededNoise#instance}. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call
          * {@link #generate(long)}. The width and height of the map cannot be changed after the fact, but you can zoom
          * in. Currently only SeededNoise makes sense to use as the value for {@code noiseGenerator}, and the seed it's
@@ -1074,7 +1075,7 @@ public abstract class WorldMapGenerator {
          * @param mapHeight        the height of the map(s) to generate; cannot be changed later
          * @param noiseGenerator   an instance of a noise generator capable of 3D noise, almost always {@link SeededNoise}
          */
-        public SphereMap(long initialSeed, int mapWidth, int mapHeight, final Noise.Noise3D noiseGenerator) {
+        public SphereMap(long initialSeed, int mapWidth, int mapHeight, final Noise3D noiseGenerator) {
             this(initialSeed, mapWidth, mapHeight, noiseGenerator, 1.0);
         }
 
@@ -1083,7 +1084,7 @@ public abstract class WorldMapGenerator {
          * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
          * have significantly-exaggerated-in-size features while the equator is not distorted.
          * Takes an initial seed, the width/height of the map, and parameters for noise
-         * generation (a {@link Noise.Noise3D} implementation, which is usually {@link SeededNoise#instance}, and a
+         * generation (a {@link Noise3D} implementation, which is usually {@link SeededNoise#instance}, and a
          * multiplier on how many octaves of noise to use, with 1.0 being normal (high) detail and higher multipliers
          * producing even more detailed noise when zoomed-in). The {@code initialSeed} parameter may or may not be used,
          * since you can specify the seed to use when you call {@link #generate(long)}. The width and height of the map
@@ -1100,7 +1101,7 @@ public abstract class WorldMapGenerator {
          * @param noiseGenerator an instance of a noise generator capable of 3D noise, almost always {@link SeededNoise}
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
-        public SphereMap(long initialSeed, int mapWidth, int mapHeight, final Noise.Noise3D noiseGenerator, double octaveMultiplier) {
+        public SphereMap(long initialSeed, int mapWidth, int mapHeight, final Noise3D noiseGenerator, double octaveMultiplier) {
             super(initialSeed, mapWidth, mapHeight);
             terrain = new Noise.Layered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
             terrainRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainRidgedFreq);
@@ -1143,7 +1144,7 @@ public abstract class WorldMapGenerator {
                     ps, pc,
                     qs, qc,
                     h, temp,
-                    i_w = 6.283185307179586 / width, i_h = 1.0 / (height+2.0),
+                    i_w = 6.283185307179586 / width, i_h = (3.141592653589793) / (height+2.0),
                     xPos = startX, yPos, i_uw = usedWidth / (double)width, i_uh = usedHeight / (height+2.0);
             final double[] trigTable = new double[width << 1];
             for (int x = 0; x < width; x++, xPos += i_uw) {
@@ -1153,8 +1154,10 @@ public abstract class WorldMapGenerator {
             }
             yPos = startY + i_uh;
             for (int y = 0; y < height; y++, yPos += i_uh) {
-                qc = Math.cos(qs = Math.acos(yPos * i_h));
+                qs = -1.5707963267948966 + yPos * i_h;
+                qc = Math.cos(qs);
                 qs = Math.sin(qs);
+                //qs = Math.sin(qs);
                 for (int x = 0, xt = 0; x < width; x++) {
                     ps = trigTable[xt++] * qc;//Math.sin(p);
                     pc = trigTable[xt++] * qc;//Math.cos(p);

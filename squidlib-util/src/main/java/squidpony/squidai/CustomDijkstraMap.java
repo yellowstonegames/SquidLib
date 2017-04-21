@@ -4,6 +4,7 @@ import squidpony.annotation.Beta;
 import squidpony.squidai.DijkstraMap.Measurement;
 import squidpony.squidgrid.Adjacency;
 import squidpony.squidgrid.Adjacency.BasicAdjacency;
+import squidpony.squidgrid.Adjacency.RotationAdjacency;
 import squidpony.squidgrid.Radius;
 import squidpony.squidmath.CrossHash;
 import squidpony.squidmath.IntDoubleOrderedMap;
@@ -34,8 +35,8 @@ public class CustomDijkstraMap implements Serializable {
 
     /**
      * The main factor in determining the "Custom" behavior of CustomDijkstraMap; using an Adjacency implementation like
-     * {@link Adjacency.BasicAdjacency} should cause this class to mimic {@link DijkstraMap}, but using
-     * {@link Adjacency.RotationAdjacency} will be very different.
+     * {@link BasicAdjacency} should cause this class to mimic {@link DijkstraMap}, but using
+     * {@link RotationAdjacency} will be very different.
      */
     public Adjacency adjacency;
 

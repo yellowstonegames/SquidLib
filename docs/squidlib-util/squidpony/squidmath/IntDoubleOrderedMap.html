@@ -113,7 +113,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.60">IntDoubleOrderedMap</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.50">IntDoubleOrderedMap</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true" title="class or interface in java.util">SortedMap</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;, <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang">Cloneable</a></pre>
 <div class="block">A type-specific linked hash map with with a fast, primitive-based implementation, originally from fastutil as Int2DoubleLinkedOpenHashMap.
@@ -146,8 +146,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <dt><span class="simpleTagLabel">Author:</span></dt>
 <dd>Sebastiano Vigna (responsible for all the hard parts), Tommy Ettinger (just responsible for squashing several layers of parent classes into one monster class)</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><code>HashCommon</code>, 
-<a href="../../serialized-form.html#squidpony.squidmath.IntDoubleOrderedMap">Serialized Form</a></dd>
+<dd><a href="../../serialized-form.html#squidpony.squidmath.IntDoubleOrderedMap">Serialized Form</a></dd>
 </dl>
 </li>
 </ul>
@@ -198,7 +197,8 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a></span></code>
-<div class="block">The entry class for a hash map does not record key and value, but rather the position in the hash table of the corresponding entry.</div>
+<div class="block">The entry class for a hash map does not record key and value, but rather the position in the hash table of the
+ corresponding entry.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -784,7 +784,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>key</h4>
-<pre>protected&nbsp;int[] <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.65">key</a></pre>
+<pre>protected&nbsp;int[] <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.55">key</a></pre>
 <div class="block">The array of keys.</div>
 </li>
 </ul>
@@ -794,7 +794,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>value</h4>
-<pre>protected&nbsp;double[] <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.69">value</a></pre>
+<pre>protected&nbsp;double[] <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.59">value</a></pre>
 <div class="block">The array of values.</div>
 </li>
 </ul>
@@ -804,7 +804,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>mask</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.73">mask</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.63">mask</a></pre>
 <div class="block">The mask for wrapping a position counter.</div>
 </li>
 </ul>
@@ -814,7 +814,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>containsNullKey</h4>
-<pre>protected&nbsp;boolean <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.77">containsNullKey</a></pre>
+<pre>protected&nbsp;boolean <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.67">containsNullKey</a></pre>
 <div class="block">Whether this set contains the key zero.</div>
 </li>
 </ul>
@@ -824,7 +824,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>first</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.81">first</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.71">first</a></pre>
 <div class="block">The index of the first entry in iteration order. It is valid iff <a href="../../squidpony/squidmath/IntDoubleOrderedMap.html#size"><code>size</code></a> is nonzero; otherwise, it contains -1.</div>
 </li>
 </ul>
@@ -834,7 +834,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>last</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.85">last</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.75">last</a></pre>
 <div class="block">The index of the last entry in iteration order. It is valid iff <a href="../../squidpony/squidmath/IntDoubleOrderedMap.html#size"><code>size</code></a> is nonzero; otherwise, it contains -1.</div>
 </li>
 </ul>
@@ -844,7 +844,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>link</h4>
-<pre>protected&nbsp;long[] <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.90">link</a></pre>
+<pre>protected&nbsp;long[] <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.80">link</a></pre>
 <div class="block">For each entry, the next and the previous entry in iteration order, stored as <code>((prev & 0xFFFFFFFFL) << 32) | (next & 0xFFFFFFFFL)</code>. The first entry contains predecessor -1, and the
  last entry contains successor -1.</div>
 </li>
@@ -855,7 +855,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>n</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.94">n</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.84">n</a></pre>
 <div class="block">The current table size.</div>
 </li>
 </ul>
@@ -865,7 +865,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>maxFill</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.98">maxFill</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.88">maxFill</a></pre>
 <div class="block">Threshold after which we rehash. It must be the table size times <a href="../../squidpony/squidmath/IntDoubleOrderedMap.html#f"><code>f</code></a>.</div>
 </li>
 </ul>
@@ -875,7 +875,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>size</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.102">size</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.92">size</a></pre>
 <div class="block">Number of entries in the set (including the key zero, if present).</div>
 </li>
 </ul>
@@ -885,7 +885,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>f</h4>
-<pre>public final&nbsp;float <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.106">f</a></pre>
+<pre>public final&nbsp;float <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.96">f</a></pre>
 <div class="block">The acceptable load factor.</div>
 </li>
 </ul>
@@ -895,7 +895,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>entries</h4>
-<pre>protected volatile&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.MapEntrySet.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntrySet</a> <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.110">entries</a></pre>
+<pre>protected volatile&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.MapEntrySet.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntrySet</a> <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.100">entries</a></pre>
 <div class="block">Cached set of entries.</div>
 </li>
 </ul>
@@ -905,7 +905,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>keys</h4>
-<pre>protected volatile&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.KeySet.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.KeySet</a> <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.114">keys</a></pre>
+<pre>protected volatile&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.KeySet.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.KeySet</a> <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.104">keys</a></pre>
 <div class="block">Cached set of keys.</div>
 </li>
 </ul>
@@ -915,7 +915,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>values</h4>
-<pre>protected volatile&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.DoubleCollection</a> <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.118">values</a></pre>
+<pre>protected volatile&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.DoubleCollection</a> <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.108">values</a></pre>
 <div class="block">Cached collection of values.</div>
 </li>
 </ul>
@@ -925,7 +925,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>defRetValue</h4>
-<pre>protected&nbsp;double <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.122">defRetValue</a></pre>
+<pre>protected&nbsp;double <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.112">defRetValue</a></pre>
 <div class="block">Default return value.</div>
 </li>
 </ul>
@@ -935,7 +935,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>DEFAULT_INITIAL_SIZE</h4>
-<pre>public static final&nbsp;int <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.127">DEFAULT_INITIAL_SIZE</a></pre>
+<pre>public static final&nbsp;int <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.117">DEFAULT_INITIAL_SIZE</a></pre>
 <div class="block">The initial default size of a hash table.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -949,7 +949,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>DEFAULT_LOAD_FACTOR</h4>
-<pre>public static final&nbsp;float <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.131">DEFAULT_LOAD_FACTOR</a></pre>
+<pre>public static final&nbsp;float <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.121">DEFAULT_LOAD_FACTOR</a></pre>
 <div class="block">The default load factor of a hash table.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -963,7 +963,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>FAST_LOAD_FACTOR</h4>
-<pre>public static final&nbsp;float <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.135">FAST_LOAD_FACTOR</a></pre>
+<pre>public static final&nbsp;float <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.125">FAST_LOAD_FACTOR</a></pre>
 <div class="block">The load factor for a (usually small) table that is meant to be particularly fast.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -977,7 +977,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockListLast">
 <li class="blockList">
 <h4>VERY_FAST_LOAD_FACTOR</h4>
-<pre>public static final&nbsp;float <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.139">VERY_FAST_LOAD_FACTOR</a></pre>
+<pre>public static final&nbsp;float <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.129">VERY_FAST_LOAD_FACTOR</a></pre>
 <div class="block">The load factor for a (usually very small) table that is meant to be extremely fast.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -999,7 +999,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>IntDoubleOrderedMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.158">IntDoubleOrderedMap</a>(int&nbsp;expected,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.148">IntDoubleOrderedMap</a>(int&nbsp;expected,
                            float&nbsp;f)</pre>
 <div class="block">Creates a new hash map.
  <p>
@@ -1017,7 +1017,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>IntDoubleOrderedMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.176">IntDoubleOrderedMap</a>(int&nbsp;expected)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.166">IntDoubleOrderedMap</a>(int&nbsp;expected)</pre>
 <div class="block">Creates a new hash map with 0.75f as load factor.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1031,7 +1031,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>IntDoubleOrderedMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.183">IntDoubleOrderedMap</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.173">IntDoubleOrderedMap</a>()</pre>
 <div class="block">Creates a new hash map with initial expected 16 entries and 0.75f as load factor.</div>
 </li>
 </ul>
@@ -1041,7 +1041,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>IntDoubleOrderedMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.193">IntDoubleOrderedMap</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;m,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.183">IntDoubleOrderedMap</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;m,
                            float&nbsp;f)</pre>
 <div class="block">Creates a new hash map copying a given one.</div>
 <dl>
@@ -1057,7 +1057,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>IntDoubleOrderedMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.203">IntDoubleOrderedMap</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;m)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.193">IntDoubleOrderedMap</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;m)</pre>
 <div class="block">Creates a new hash map with 0.75f as load factor copying a given one.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1071,7 +1071,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>IntDoubleOrderedMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.213">IntDoubleOrderedMap</a>(<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;m,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.203">IntDoubleOrderedMap</a>(<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;m,
                            float&nbsp;f)</pre>
 <div class="block">Creates a new hash map copying a given type-specific one.</div>
 <dl>
@@ -1087,7 +1087,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>IntDoubleOrderedMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.223">IntDoubleOrderedMap</a>(<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;m)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.213">IntDoubleOrderedMap</a>(<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;m)</pre>
 <div class="block">Creates a new hash map with 0.75f as load factor copying a given type-specific one.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1101,7 +1101,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>IntDoubleOrderedMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.235">IntDoubleOrderedMap</a>(int[]&nbsp;k,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.225">IntDoubleOrderedMap</a>(int[]&nbsp;k,
                            double[]&nbsp;v,
                            float&nbsp;f)</pre>
 <div class="block">Creates a new hash map using the elements of two parallel arrays.</div>
@@ -1121,7 +1121,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockListLast">
 <li class="blockList">
 <h4>IntDoubleOrderedMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.250">IntDoubleOrderedMap</a>(int[]&nbsp;k,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.240">IntDoubleOrderedMap</a>(int[]&nbsp;k,
                            double[]&nbsp;v)</pre>
 <div class="block">Creates a new hash map with 0.75f as load factor using the elements of two parallel arrays.</div>
 <dl>
@@ -1147,7 +1147,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>defaultReturnValue</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.141">defaultReturnValue</a>(double&nbsp;rv)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.131">defaultReturnValue</a>(double&nbsp;rv)</pre>
 </li>
 </ul>
 <a name="defaultReturnValue--">
@@ -1156,7 +1156,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>defaultReturnValue</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.145">defaultReturnValue</a>()</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.135">defaultReturnValue</a>()</pre>
 </li>
 </ul>
 <a name="containsKey-java.lang.Object-">
@@ -1165,7 +1165,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <ul class="blockList">
 <li class="blockList">
 <h4>containsKey</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.255">containsKey</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;ok)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.245">containsKey</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;ok)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#containsKey-java.lang.Object-" title="class or interface in java.util">containsKey</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</code></dd>
@@ -1179,7 +1179,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap
 <li class="blockList">
 <h4>get</h4>
 <pre><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang">@Deprecated</a>
-public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.268">get</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;ok)</pre>
+public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.258">get</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;ok)</pre>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;<span class="deprecationComment">Please use the corresponding type-specific method instead.</span></div>
 <div class="block">Delegates to the corresponding type-specific method, taking care of returning <code>null</code> on a missing key.
  <p>
@@ -1197,7 +1197,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.h
 <ul class="blockList">
 <li class="blockList">
 <h4>putAll</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.308">putAll</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;m)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.298">putAll</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,? extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;m)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#putAll-java.util.Map-" title="class or interface in java.util">putAll</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</code></dd>
@@ -1210,7 +1210,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.h
 <ul class="blockList">
 <li class="blockList">
 <h4>putAll</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.328">putAll</a>(<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;m)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.318">putAll</a>(<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;m)</pre>
 </li>
 </ul>
 <a name="putAll-int:A-double:A-">
@@ -1219,7 +1219,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.h
 <ul class="blockList">
 <li class="blockList">
 <h4>putAll</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.340">putAll</a>(int[]&nbsp;k,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.330">putAll</a>(int[]&nbsp;k,
                    double[]&nbsp;v)</pre>
 </li>
 </ul>
@@ -1229,7 +1229,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.h
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.378">put</a>(int&nbsp;k,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.368">put</a>(int&nbsp;k,
                   double&nbsp;v)</pre>
 </li>
 </ul>
@@ -1240,7 +1240,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.h
 <li class="blockList">
 <h4>put</h4>
 <pre><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang">@Deprecated</a>
-public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.393">put</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;ok,
+public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.383">put</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;ok,
                                <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;ov)</pre>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;<span class="deprecationComment">Please use the corresponding type-specific method instead.</span></div>
 <dl>
@@ -1255,7 +1255,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.h
 <ul class="blockList">
 <li class="blockList">
 <h4>addTo</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.418">addTo</a>(int&nbsp;k,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.408">addTo</a>(int&nbsp;k,
                     double&nbsp;incr)</pre>
 <div class="block">Adds an increment to value currently associated with a key.
  <p>
@@ -1276,7 +1276,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.h
 <ul class="blockList">
 <li class="blockList">
 <h4>shiftKeys</h4>
-<pre>protected final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.454">shiftKeys</a>(int&nbsp;pos)</pre>
+<pre>protected final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.444">shiftKeys</a>(int&nbsp;pos)</pre>
 <div class="block">Shifts left entries with the specified hash code, starting at the specified position, and empties the resulting free entry.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1290,7 +1290,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.h
 <ul class="blockList">
 <li class="blockList">
 <h4>remove</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.476">remove</a>(int&nbsp;k)</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.466">remove</a>(int&nbsp;k)</pre>
 </li>
 </ul>
 <a name="remove-java.lang.Object-">
@@ -1300,7 +1300,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.h
 <li class="blockList">
 <h4>remove</h4>
 <pre><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang">@Deprecated</a>
-public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.500">remove</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;ok)</pre>
+public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.490">remove</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;ok)</pre>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;<span class="deprecationComment">Please use the corresponding type-specific method instead.</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -1314,7 +1314,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.h
 <ul class="blockList">
 <li class="blockList">
 <h4>removeFirstDouble</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.530">removeFirstDouble</a>()</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.520">removeFirstDouble</a>()</pre>
 <div class="block">Removes the mapping associated with the first key in iteration order.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1330,7 +1330,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.h
 <ul class="blockList">
 <li class="blockList">
 <h4>removeLastDouble</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.554">removeLastDouble</a>()</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.544">removeLastDouble</a>()</pre>
 <div class="block">Removes the mapping associated with the last key in iteration order.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1346,7 +1346,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.h
 <ul class="blockList">
 <li class="blockList">
 <h4>getAndMoveToFirst</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.614">getAndMoveToFirst</a>(int&nbsp;k)</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.604">getAndMoveToFirst</a>(int&nbsp;k)</pre>
 <div class="block">Returns the value to which the given key is mapped; if the key is present, it is moved to the first position of the iteration order.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1362,7 +1362,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.h
 <ul class="blockList">
 <li class="blockList">
 <h4>getAndMoveToLast</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.647">getAndMoveToLast</a>(int&nbsp;k)</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.637">getAndMoveToLast</a>(int&nbsp;k)</pre>
 <div class="block">Returns the value to which the given key is mapped; if the key is present, it is moved to the last position of the iteration order.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1378,7 +1378,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.h
 <ul class="blockList">
 <li class="blockList">
 <h4>putAndMoveToFirst</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.681">putAndMoveToFirst</a>(int&nbsp;k,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.671">putAndMoveToFirst</a>(int&nbsp;k,
                                 double&nbsp;v)</pre>
 <div class="block">Adds a pair to the map; if the key is already present, it is moved to the first position of the iteration order.</div>
 <dl>
@@ -1396,7 +1396,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.h
 <ul class="blockList">
 <li class="blockList">
 <h4>putAndMoveToLast</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.728">putAndMoveToLast</a>(int&nbsp;k,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.718">putAndMoveToLast</a>(int&nbsp;k,
                                double&nbsp;v)</pre>
 <div class="block">Adds a pair to the map; if the key is already present, it is moved to the last position of the iteration order.</div>
 <dl>
@@ -1414,7 +1414,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.h
 <ul class="blockList">
 <li class="blockList">
 <h4>get</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.768">get</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;ok)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.758">get</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;ok)</pre>
 </li>
 </ul>
 <a name="get-int-">
@@ -1423,7 +1423,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.h
 <ul class="blockList">
 <li class="blockList">
 <h4>get</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.784">get</a>(int&nbsp;k)</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.774">get</a>(int&nbsp;k)</pre>
 </li>
 </ul>
 <a name="containsKey-int-">
@@ -1432,7 +1432,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.h
 <ul class="blockList">
 <li class="blockList">
 <h4>containsKey</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.799">containsKey</a>(int&nbsp;k)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.789">containsKey</a>(int&nbsp;k)</pre>
 </li>
 </ul>
 <a name="containsValue-double-">
@@ -1441,7 +1441,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.h
 <ul class="blockList">
 <li class="blockList">
 <h4>containsValue</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.814">containsValue</a>(double&nbsp;v)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.804">containsValue</a>(double&nbsp;v)</pre>
 </li>
 </ul>
 <a name="clear--">
@@ -1450,7 +1450,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.h
 <ul class="blockList">
 <li class="blockList">
 <h4>clear</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.826">clear</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.816">clear</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#clear--" title="class or interface in java.util">clear</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</code></dd>
@@ -1463,7 +1463,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.h
 <ul class="blockList">
 <li class="blockList">
 <h4>size</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.834">size</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.824">size</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#size--" title="class or interface in java.util">size</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</code></dd>
@@ -1476,7 +1476,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.h
 <ul class="blockList">
 <li class="blockList">
 <h4>isEmpty</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.838">isEmpty</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.828">isEmpty</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#isEmpty--" title="class or interface in java.util">isEmpty</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</code></dd>
@@ -1490,7 +1490,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.h
 <li class="blockList">
 <h4>growthFactor</h4>
 <pre><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang">@Deprecated</a>
-public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.849">growthFactor</a>(int&nbsp;growthFactor)</pre>
+public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.839">growthFactor</a>(int&nbsp;growthFactor)</pre>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;<span class="deprecationComment">Since <code>fastutil</code> 6.1.0, hash tables are doubled when they are too full.</span></div>
 <div class="block">A no-op for backward compatibility.</div>
 <dl>
@@ -1506,7 +1506,7 @@ public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrder
 <li class="blockList">
 <h4>growthFactor</h4>
 <pre><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang">@Deprecated</a>
-public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.860">growthFactor</a>()</pre>
+public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.850">growthFactor</a>()</pre>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;<span class="deprecationComment">Since <code>fastutil</code> 6.1.0, hash tables are doubled when they are too full.</span></div>
 <div class="block">Gets the growth factor (2).</div>
 <dl>
@@ -1523,7 +1523,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrdere
 <ul class="blockList">
 <li class="blockList">
 <h4>fixPointers</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.938">fixPointers</a>(int&nbsp;i)</pre>
+<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.928">fixPointers</a>(int&nbsp;i)</pre>
 <div class="block">Modifies the <a href="../../squidpony/squidmath/IntDoubleOrderedMap.html#link"><code>link</code></a> vector so that the given entry is removed. This method will complete in constant time.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1537,7 +1537,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrdere
 <ul class="blockList">
 <li class="blockList">
 <h4>fixPointers</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.972">fixPointers</a>(int&nbsp;s,
+<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.962">fixPointers</a>(int&nbsp;s,
                            int&nbsp;d)</pre>
 <div class="block">Modifies the <a href="../../squidpony/squidmath/IntDoubleOrderedMap.html#link"><code>link</code></a> vector for a shift from s to d. <P>This method will complete in constant time.</div>
 <dl>
@@ -1553,7 +1553,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrdere
 <ul class="blockList">
 <li class="blockList">
 <h4>firstIntKey</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1004">firstIntKey</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.994">firstIntKey</a>()</pre>
 <div class="block">Returns the first key of this map in iteration order.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1567,7 +1567,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrdere
 <ul class="blockList">
 <li class="blockList">
 <h4>lastIntKey</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1014">lastIntKey</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1004">lastIntKey</a>()</pre>
 <div class="block">Returns the last key of this map in iteration order.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1581,7 +1581,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrdere
 <ul class="blockList">
 <li class="blockList">
 <h4>comparator</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html?is-external=true" title="class or interface in java.util">Comparator</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1019">comparator</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html?is-external=true" title="class or interface in java.util">Comparator</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1009">comparator</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true#comparator--" title="class or interface in java.util">comparator</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true" title="class or interface in java.util">SortedMap</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</code></dd>
@@ -1594,7 +1594,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrdere
 <ul class="blockList">
 <li class="blockList">
 <h4>tailMap</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1023">tailMap</a>(int&nbsp;from)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1013">tailMap</a>(int&nbsp;from)</pre>
 </li>
 </ul>
 <a name="headMap-int-">
@@ -1603,7 +1603,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrdere
 <ul class="blockList">
 <li class="blockList">
 <h4>headMap</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1027">headMap</a>(int&nbsp;to)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1017">headMap</a>(int&nbsp;to)</pre>
 </li>
 </ul>
 <a name="subMap-int-int-">
@@ -1612,7 +1612,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrdere
 <ul class="blockList">
 <li class="blockList">
 <h4>subMap</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1031">subMap</a>(int&nbsp;from,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1021">subMap</a>(int&nbsp;from,
                                   int&nbsp;to)</pre>
 </li>
 </ul>
@@ -1622,7 +1622,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrdere
 <ul class="blockList">
 <li class="blockList">
 <h4>tailMap</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1035">tailMap</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;from)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1025">tailMap</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;from)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true#tailMap-K-" title="class or interface in java.util">tailMap</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true" title="class or interface in java.util">SortedMap</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</code></dd>
@@ -1635,7 +1635,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrdere
 <ul class="blockList">
 <li class="blockList">
 <h4>headMap</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1039">headMap</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;to)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1029">headMap</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;to)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true#headMap-K-" title="class or interface in java.util">headMap</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedMap.html?is-external=true" title="class or interface in java.util">SortedMap</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</code></dd>
@@ -1648,7 +1648,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrdere
 <ul class="blockList">
 <li class="blockList">
 <h4>subMap</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1043">subMap</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;from,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1033">subMap</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;from,
                                   <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;to)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -1662,7 +1662,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrdere
 <ul class="blockList">
 <li class="blockList">
 <h4>entrySet</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1545">entrySet</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1535">entrySet</a>()</pre>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;<span class="deprecationComment">prefer <a href="../../squidpony/squidmath/IntDoubleOrderedMap.html#mapEntrySet--"><code>mapEntrySet()</code></a></span></div>
 <div class="block">THIS ONE IS BAD; it copies the entry set to allow it to be considered a Set of Map.Entry with the right (boxed)
  key and value types. Prefer <code>mapEntrySet()</code>!!!</div>
@@ -1684,7 +1684,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrdere
 <ul class="blockList">
 <li class="blockList">
 <h4>mapEntrySet</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.MapEntrySet.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntrySet</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1549">mapEntrySet</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.MapEntrySet.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntrySet</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1539">mapEntrySet</a>()</pre>
 </li>
 </ul>
 <a name="keySet--">
@@ -1693,7 +1693,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrdere
 <ul class="blockList">
 <li class="blockList">
 <h4>keySet</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.KeySet.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.KeySet</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1862">keySet</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.KeySet.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.KeySet</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1852">keySet</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#keySet--" title="class or interface in java.util">keySet</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</code></dd>
@@ -1708,7 +1708,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrdere
 <ul class="blockList">
 <li class="blockList">
 <h4>values</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.DoubleCollection</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1917">values</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.DoubleCollection</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1907">values</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#values--" title="class or interface in java.util">values</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</code></dd>
@@ -1724,7 +1724,7 @@ public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrdere
 <li class="blockList">
 <h4>rehash</h4>
 <pre><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang">@Deprecated</a>
-public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1932">rehash</a>()</pre>
+public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1922">rehash</a>()</pre>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;<span class="deprecationComment">A no-op.</span></div>
 <div class="block">A no-op for backward compatibility. The kind of tables implemented by this class never need rehashing.
  <p>
@@ -1743,7 +1743,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOr
 <ul class="blockList">
 <li class="blockList">
 <h4>trim</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1946">trim</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1936">trim</a>()</pre>
 <div class="block">Rehashes the map, making the table as small as possible.
  <p>
  <P>This method rehashes the table to the smallest size satisfying the load factor. It can be used when the set will not be changed anymore, so to optimize access speed and size.
@@ -1763,7 +1763,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOr
 <ul class="blockList">
 <li class="blockList">
 <h4>trim</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1970">trim</a>(int&nbsp;n)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1960">trim</a>(int&nbsp;n)</pre>
 <div class="block">Rehashes this map if the table is too large.
  <p>
  <P>Let <var>N</var> be the smallest table size that can hold <code>max(n,<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html#size--"><code>size()</code></a>)</code> entries, still satisfying the load factor. If the current table size is smaller than or equal to
@@ -1787,7 +1787,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOr
 <ul class="blockList">
 <li class="blockList">
 <h4>rehash</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1990">rehash</a>(int&nbsp;newN)</pre>
+<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1980">rehash</a>(int&nbsp;newN)</pre>
 <div class="block">Rehashes the map.
  <p>
  <P>This method implements the basic rehashing strategy, and may be overriden by subclasses implementing different rehashing strategies (e.g., disk-based rehashing). However, you should not
@@ -1804,7 +1804,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOr
 <ul class="blockList">
 <li class="blockList">
 <h4>clone</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.2042">clone</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.2032">clone</a>()</pre>
 <div class="block">Returns a deep copy of this map.
  <p>
  <P>This method performs a deep copy of this hash map; the data stored in the map, however, is not cloned. Note that this makes a difference only for object keys.</div>
@@ -1822,7 +1822,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOr
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.2051">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.2041">hashCode</a>()</pre>
 <div class="block">Returns a hash code for this map.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -1840,7 +1840,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOr
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.2067">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.2057">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.util">equals</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</code></dd>
@@ -1856,7 +1856,7 @@ public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOr
 <li class="blockList">
 <h4>firstKey</h4>
 <pre><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang">@Deprecated</a>
-public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.2085">firstKey</a>()</pre>
+public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.2075">firstKey</a>()</pre>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;<span class="deprecationComment">Please use the corresponding type-specific method instead.</span></div>
 <div class="block">Delegates to the corresponding type-specific method.</div>
 <dl>
@@ -1872,7 +1872,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <li class="blockList">
 <h4>lastKey</h4>
 <pre><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang">@Deprecated</a>
-public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.2095">lastKey</a>()</pre>
+public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.2085">lastKey</a>()</pre>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;<span class="deprecationComment">Please use the corresponding type-specific method instead.</span></div>
 <div class="block">Delegates to the corresponding type-specific method.</div>
 <dl>
@@ -1887,7 +1887,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>maxFill</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.2107">maxFill</a>(int&nbsp;n,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.2097">maxFill</a>(int&nbsp;n,
                           float&nbsp;f)</pre>
 <div class="block">Returns the maximum number of entries that can be filled before rehashing.</div>
 <dl>
@@ -1905,7 +1905,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>maxFill</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.2120">maxFill</a>(long&nbsp;n,
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.2110">maxFill</a>(long&nbsp;n,
                            float&nbsp;f)</pre>
 <div class="block">Returns the maximum number of entries that can be filled before rehashing.</div>
 <dl>
@@ -1923,7 +1923,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>arraySize</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.2134">arraySize</a>(int&nbsp;expected,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.2124">arraySize</a>(int&nbsp;expected,
                             float&nbsp;f)</pre>
 <div class="block">Returns the least power of two smaller than or equal to 2<sup>30</sup> and larger than or equal to <code>Math.ceil( expected / f )</code>.</div>
 <dl>
@@ -1943,7 +1943,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>containsValue</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.2587">containsValue</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;ov)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.2577">containsValue</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;ov)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true#containsValue-java.lang.Object-" title="class or interface in java.util">containsValue</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</code></dd>
@@ -1958,7 +1958,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockList">
 <li class="blockList">
 <h4>objectUnwrap</h4>
-<pre>public static&nbsp;&lt;K&gt;&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.2637">objectUnwrap</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;? extends K&gt;&nbsp;i,
+<pre>public static&nbsp;&lt;K&gt;&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.2627">objectUnwrap</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;? extends K&gt;&nbsp;i,
                                    K[]&nbsp;array,
                                    int&nbsp;offset,
                                    int&nbsp;max)</pre>
@@ -1985,7 +1985,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.
 <ul class="blockListLast">
 <li class="blockList">
 <h4>objectUnwrap</h4>
-<pre>public static&nbsp;&lt;K&gt;&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.2654">objectUnwrap</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;? extends K&gt;&nbsp;i,
+<pre>public static&nbsp;&lt;K&gt;&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.2644">objectUnwrap</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;? extends K&gt;&nbsp;i,
                                    K[]&nbsp;array)</pre>
 <div class="block">Unwraps an iterator into an array.
 
