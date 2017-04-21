@@ -282,7 +282,6 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param map an int[][] that should have some ints between lower and upper
      * @param lower lower bound, inclusive; all on cells will have values in map that are at least equal to lower
      * @param upper upper bound, exclusive; all on cells will have values in map that are less than upper
-     * @return this for chaining
      */
     public GreasedRegion(final int[][] map, final int lower, final int upper)
     {

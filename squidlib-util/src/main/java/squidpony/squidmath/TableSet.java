@@ -463,9 +463,6 @@ public class TableSet<C, R> implements java.io.Serializable {
             rehash(needed);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public boolean addAll(Collection<? extends C> c, Collection<? extends R> r) {
         // The resulting collection will be at least c.size() big
         if (f <= .5)

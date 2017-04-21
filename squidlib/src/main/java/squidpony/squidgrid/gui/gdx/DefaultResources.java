@@ -551,7 +551,10 @@ public class DefaultResources implements LifecycleListener {
      * circled letters and digits and the necessary box drawing characters. The high glyph count means the part of the
      * image for each glyph is smaller, though, so this may look slightly pixelated if it starts small and is resized to
      * much larger. A cell width of 11 and cell height of 20 is ideal (or some approximate multiple of that aspect
-     * ratio); this allows the font to resize fairly well to larger sizes using Viewports.
+     * ratio); this allows the font to resize fairly well to larger sizes using Viewports. As an aside, Luc Devroye (a
+     * true typography expert) called Iosevka <a href="http://luc.devroye.org/fonts-82704.html">"A tour de force that
+     * deserves an award."</a> You may want to try using both this sans-serif version of Iosevka and the slab-serif
+     * version SquidLib has, {@link #getStretchableSlabFont()}, though they have subtly different sizes.
      * <br>
      * Preview: http://i.imgur.com/sm0ULbU.png
      * <br>
@@ -591,7 +594,10 @@ public class DefaultResources implements LifecycleListener {
      * circled letters and digits and the necessary box drawing characters. The high glyph count means the part of the
      * image for each glyph is smaller, though, so this may look slightly pixelated if it starts small and is resized to
      * much larger. A cell width of 11 and cell height of 20 is ideal (or some approximate multiple of that aspect
-     * ratio); this allows the font to resize fairly well to larger sizes using Viewports.
+     * ratio); this allows the font to resize fairly well to larger sizes using Viewports. As an aside, Luc Devroye (a
+     * true typography expert) called Iosevka <a href="http://luc.devroye.org/fonts-82704.html">"A tour de force that
+     * deserves an award."</a> You may want to try using both this version of Iosevka with slab serifs and the other
+     * version SquidLib has, {@link #getStretchableLeanFont()}, though they have subtly different sizes.
      * <br>
      * Preview: http://i.imgur.com/5kb697p.png
      * <br>
@@ -603,7 +609,7 @@ public class DefaultResources implements LifecycleListener {
      *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-distance.fnt</li>
      *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-distance.png</li>
      * </ul>
-     * @return the TextCellFactory object that can represent many sizes of the font Iosevka.ttf
+     * @return the TextCellFactory object that can represent many sizes of the font Iosevka-Slab.ttf
      */
     public static TextCellFactory getStretchableSlabFont()
     {
@@ -628,8 +634,8 @@ public class DefaultResources implements LifecycleListener {
      * operating systems and a clean-looking, legible font, though it has some visual quirks like a "tail" on lower-case
      * 'l', that take some getting used to. A possible requirement for this font is that the size of the text in a
      * SquidPanel or SquidLayers may need to be increased 1-5 pixels past what the cell width and height are; this can
-     * be done with {@link SquidPanel#setTextSize(int, int)} or {@link SquidLayers#setTextSize(int, int)}, giving 1-2
-     * more than the cell width for x and 3-5 more than the cell height for y.
+     * be done with {@link SquidPanel#setTextSize(float, float)} or {@link SquidLayers#setTextSize(float, float)},
+     * giving 1-2 more than the cell width for x and 3-5 more than the cell height for y.
      * <br>
      * Preview: http://i.imgur.com/1haETOe.png
      * <br>

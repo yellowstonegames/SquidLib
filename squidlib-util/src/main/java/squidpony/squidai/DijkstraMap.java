@@ -292,12 +292,12 @@ public class DijkstraMap implements Serializable {
     }
 
     /**
-     * Used to initialize or re-initialize a DijkstraMap that needs a new PhysicalMap because it either wasn't given
+     * Used to initialize or re-initialize a DijkstraMap that needs a new physicalMap because it either wasn't given
      * one when it was constructed, or because the contents of the terrain have changed permanently (not if a
      * creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ).
      *
-     * @param level
-     * @return
+     * @param level a 2D double array that should be used as the physicalMap for this DijkstraMap
+     * @return this for chaining
      */
     public DijkstraMap initialize(final double[][] level) {
         width = level.length;
@@ -317,12 +317,12 @@ public class DijkstraMap implements Serializable {
     }
 
     /**
-     * Used to initialize or re-initialize a DijkstraMap that needs a new PhysicalMap because it either wasn't given
+     * Used to initialize or re-initialize a DijkstraMap that needs a new physicalMap because it either wasn't given
      * one when it was constructed, or because the contents of the terrain have changed permanently (not if a
      * creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ).
      *
-     * @param level
-     * @return
+     * @param level a 2D char array that this will use to establish which cells are walls ('#' as wall, others as floor)
+     * @return this for chaining
      */
     public DijkstraMap initialize(final char[][] level) {
         width = level.length;
@@ -350,9 +350,9 @@ public class DijkstraMap implements Serializable {
      * creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ). This
      * initialize() method allows you to specify an alternate wall char other than the default character, '#' .
      *
-     * @param level
-     * @param alternateWall
-     * @return
+     * @param level a 2D char array that this will use to establish which cells are walls (alternateWall defines the wall char, everything else is floor)
+     * @param alternateWall the char to consider a wall when it appears in level
+     * @return this for chaining
      */
     public DijkstraMap initialize(final char[][] level, char alternateWall) {
         width = level.length;
@@ -777,12 +777,20 @@ public class DijkstraMap implements Serializable {
      * which will have a value defined by the WALL constant in this class, and areas that the scan was
      * unable to reach, which will have a value defined by the DARK constant in this class (typically,
      * these areas should not be used to place NPCs or items and should be filled with walls). This uses the
-     * current measurement. The result is stored in the {@link #gradientMap} field and a copy is returned.
+     * current measurement. The result is stored in the {@link #gradientMap} field, and nothing is returned.
+     * If you want the data returned, you can use {@link #scan(Collection)} (which calls this method with
+     * null for the start parameter, then modifies the gradientMap field and returns a copy), or you can
+     * just retrieve the gradientMap (maybe copying it; {@link squidpony.ArrayTools#copy(double[][])} is a
+     * convenient option for copying a 2D double array). If start is non-null, which is usually used when
+     * finding a single path, then cells that didn't need to be explored (because they were further than the
+     * path needed to go from start to goal) will have the value {@link #FLOOR}. You may wish to assign a
+     * different value to these cells in some cases (especially if start is null, which means any cells that
+     * are still FLOOR could not be reached from any goal), and the overloads of scan that return 2D double
+     * arrays do change FLOOR to {@link #DARK}, which is usually treated similarly to {@link #WALL}.
      *
      * @param start a Coord representing the location of the pathfinder; may be null, which has this scan the whole map
      * @param impassable A Collection of Coord keys representing the locations of enemies or other moving obstacles to a
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
-     * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
     public void scan(final Coord start, final Collection<Coord> impassable) {
 
@@ -906,13 +914,21 @@ public class DijkstraMap implements Serializable {
      * reach than the given limit, it will have a value of DARK if it was passable instead of the distance. The
      * exceptions are walls, which will have a value defined by the WALL constant in this class, and areas that the scan
      * was unable to reach, which will have a value defined by the DARK constant in this class. This uses the
-     * current measurement. The result is stored in the {@link #gradientMap} field and a copy is returned.
+     * current measurement. The result is stored in the {@link #gradientMap} field, and nothing is returned.
+     * If you want the data returned, you can use {@link #partialScan(int, Collection)} (which calls this method with
+     * null for the start parameter, then modifies the gradientMap field and returns a copy), or you can
+     * just retrieve the gradientMap (maybe copying it; {@link squidpony.ArrayTools#copy(double[][])} is a
+     * convenient option for copying a 2D double array). If start is non-null, which is usually used when
+     * finding a single path, then cells that didn't need to be explored (because they were further than the
+     * path needed to go from start to goal) will have the value {@link #FLOOR}. You may wish to assign a
+     * different value to these cells in some cases (especially if start is null, which means any cells that
+     * are still FLOOR could not be reached from any goal), and the overloads of partialScan that return 2D double
+     * arrays do change FLOOR to {@link #DARK}, which is usually treated similarly to {@link #WALL}.
      *
      * @param start a Coord representing the location of the pathfinder; may be null to have this scan more of the map
      * @param limit      The maximum number of steps to scan outward from a goal.
      * @param impassable A Collection of Coord keys representing the locations of enemies or other moving obstacles to a
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
-     * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
     public void partialScan(final Coord start, final int limit, final Collection<Coord> impassable) {
 
@@ -1269,13 +1285,21 @@ public class DijkstraMap implements Serializable {
      * which will have a value defined by the WALL constant in this class, and areas that the scan was
      * unable to reach, which will have a value defined by the DARK constant in this class. (typically,
      * these areas should not be used to place NPCs or items and should be filled with walls). This uses the
-     * current measurement.  The result is stored in the {@link #gradientMap} field and a copy is returned.
+     * current measurement.  The result is stored in the {@link #gradientMap} field, and nothing is returned.
+     * If you want the data returned, you can use {@link #scan(Collection, int)} (which calls this method with
+     * null for the start parameter, then modifies the gradientMap field and returns a copy), or you can
+     * just retrieve the gradientMap (maybe copying it; {@link squidpony.ArrayTools#copy(double[][])} is a
+     * convenient option for copying a 2D double array). If start is non-null, which is usually used when
+     * finding a single path, then cells that didn't need to be explored (because they were further than the
+     * path needed to go from start to goal) will have the value {@link #FLOOR}. You may wish to assign a
+     * different value to these cells in some cases (especially if start is null, which means any cells that
+     * are still FLOOR could not be reached from any goal), and the overloads of scan that return 2D double
+     * arrays do change FLOOR to {@link #DARK}, which is usually treated similarly to {@link #WALL}.
      *
      * @param impassable A Collection of Coord keys representing the locations of enemies or other moving obstacles to a
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
      * @param size       The length of one side of a square creature using this to find a path, i.e. 2 for a 2x2 cell
      *                   creature. Non-square creatures are not supported because turning is really hard.
-     * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
     public void scan(final Coord start, final Collection<Coord> impassable, final int size) {
 
@@ -1442,13 +1466,21 @@ public class DijkstraMap implements Serializable {
      * which will have a value defined by the WALL constant in this class, and areas that the scan was
      * unable to reach, which will have a value defined by the DARK constant in this class. (typically,
      * these areas should not be used to place NPCs or items and should be filled with walls). This uses the
-     * current measurement.  The result is stored in the {@link #gradientMap} field and a copy is returned.
+     * current measurement.  The result is stored in the {@link #gradientMap} field, and nothing is returned.
+     * If you want the data returned, you can use {@link #partialScan(int, Collection, int)} (which calls this method
+     * with null for the start parameter, then modifies the gradientMap field and returns a copy), or you can
+     * just retrieve the gradientMap (maybe copying it; {@link squidpony.ArrayTools#copy(double[][])} is a
+     * convenient option for copying a 2D double array). If start is non-null, which is usually used when
+     * finding a single path, then cells that didn't need to be explored (because they were further than the
+     * path needed to go from start to goal) will have the value {@link #FLOOR}. You may wish to assign a
+     * different value to these cells in some cases (especially if start is null, which means any cells that
+     * are still FLOOR could not be reached from any goal), and the overloads of partialScan that return 2D double
+     * arrays do change FLOOR to {@link #DARK}, which is usually treated similarly to {@link #WALL}.
      *
      * @param impassable A Collection of Coord keys representing the locations of enemies or other moving obstacles to a
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
      * @param size       The length of one side of a square creature using this to find a path, i.e. 2 for a 2x2 cell
      *                   creature. Non-square creatures are not supported because turning is really hard.
-     * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
     public void partialScan(final int limit, final Coord start, final Collection<Coord> impassable, final int size) {
 

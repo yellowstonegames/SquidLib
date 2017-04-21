@@ -38,7 +38,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         Rocky                  = 11,
         River                  = 12;
 
-    private static final int width = 512, height = 512;
+    private static final int width = 314 * 4, height = 400;
 
     private SpriteBatch batch;
     private SquidPanel display;//, overlay;

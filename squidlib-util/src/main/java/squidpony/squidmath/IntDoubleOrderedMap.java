@@ -15,16 +15,7 @@
  */
 package squidpony.squidmath;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.SortedSet;
+import java.util.*;
 
 /**
  * A type-specific linked hash map with with a fast, primitive-based implementation, originally from fastutil as Int2DoubleLinkedOpenHashMap.
@@ -55,7 +46,6 @@ import java.util.SortedSet;
  * See https://github.com/vigna/fastutil for the original library.
  * @author Sebastiano Vigna (responsible for all the hard parts)
  * @author Tommy Ettinger (just responsible for squashing several layers of parent classes into one monster class)
- * @see HashCommon
  */
 public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.Serializable, Cloneable {
     private static final long serialVersionUID = 0L;
@@ -318,7 +308,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
                 put(e.getIntKey(), e.getDoubleValue());
             }
         } else {
-            Map.Entry<? extends Integer, ? extends Double> e;
+            Entry<? extends Integer, ? extends Double> e;
             while (n-- != 0) {
                 e = i.next();
                 put(e.getKey(), e.getValue());
@@ -862,8 +852,8 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
     }
 
     /**
-     * The entry class for a hash map does not record key and value, but rather the position in the hash table of the corresponding entry. This is necessary so that calls to
-     * {@link Map.Entry#setValue(Object)} are reflected in the map
+     * The entry class for a hash map does not record key and value, but rather the position in the hash table of the
+     * corresponding entry. This is necessary so that calls to {@link java.util.Map.Entry#setValue(Object)} are reflected in the map
      */
     public final class MapEntry implements Entry<Integer, Double> {
         // The table index this entry refers to, or -1 if this entry has been deleted.
@@ -916,8 +906,8 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
 
         @SuppressWarnings("unchecked")
         public boolean equals(final Object o) {
-            if (!(o instanceof Map.Entry)) return false;
-            Map.Entry<Integer, Double> e = (Map.Entry<Integer, Double>) o;
+            if (!(o instanceof Entry)) return false;
+            Entry<Integer, Double> e = (Entry<Integer, Double>) o;
             return (key[index] == e.getKey()) && (value[index] == e.getValue());
         }
 
@@ -1309,8 +1299,8 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
 
         @SuppressWarnings("unchecked")
         public boolean contains(final Object o) {
-            if (!(o instanceof Map.Entry)) return false;
-            final Map.Entry<Integer, Double> e = (Map.Entry<Integer, Double>) o;
+            if (!(o instanceof Entry)) return false;
+            final Entry<Integer, Double> e = (Entry<Integer, Double>) o;
             final int k = e.getKey();
             if (k == 0)
                 return IntDoubleOrderedMap.this.containsNullKey && (value[n] == e.getValue());
@@ -1329,8 +1319,8 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
 
         @SuppressWarnings("unchecked")
         public boolean remove(final Object o) {
-            if (!(o instanceof Map.Entry)) return false;
-            final Map.Entry<Integer, Double> e = (Map.Entry<Integer, Double>) o;
+            if (!(o instanceof Entry)) return false;
+            final Entry<Integer, Double> e = (Entry<Integer, Double>) o;
             final int k = e.getKey();
             final double v = e.getValue();
             if (k == 0) {
