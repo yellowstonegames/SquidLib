@@ -442,6 +442,20 @@
 <dd>
 <div class="block">Sets up a ColorizeFilter with the desired color to colorize towards.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#colorLighting-double:A:A-float-">colorLighting(double[][], float)</a></span> - Static method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>
+<dd>
+<div class="block">Given a 2D double array that was probably produced by FOV and a packed color as a float, this gets a 3D float
+ array (really just two same-size 2D float arrays in one parent array) that stores the brightnesses in the first
+ 2D array element and the colors in the second 2D array element (using the given color if a cell has a value in
+ lights that is greater than 0, or defaulting to white if the cell is unlit).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#colorLightingInto-float:A:A:A-double:A:A-float-">colorLightingInto(float[][][], double[][], float)</a></span> - Static method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>
+<dd>
+<div class="block">Given a 2D double array that was probably produced by FOV and a packed color as a float, this assigns into reuse
+ a 3D float array (really just two same-size 2D float arrays in one parent array) that stores the brightnesses in
+ the first 2D array element and the colors in the second 2D array element (using the given color if a cell has a
+ value in lights that is greater than 0, or defaulting to white if the cell is unlit).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#colors">colors</a></span> - Variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#COLUMBIA_BLUE">COLUMBIA_BLUE</a></span> - Static variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>

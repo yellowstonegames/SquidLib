@@ -2,6 +2,7 @@ package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.NumberUtils;
+import squidpony.ArrayTools;
 import squidpony.StringKit;
 import squidpony.squidmath.CrossHash;
 import squidpony.squidmath.NumberTools;
@@ -7025,6 +7026,104 @@ public class SColor extends Color {
                 | (((int)(bs + change * (be - bs)) & 0xff) << 16)
                 | (((int)(as + change * (ae - as)) & 0xfe) << 24));
     }
+
+    /**
+     * Similar to {@link #colorLighting(double[][], float)}, but meant for an initial state before you have FOV or color
+     * data to fill the lighting with, and you just need a map of a specific size that starts with no lighting. This
+     * will produce a map that has white as the lighting color for all cells, but no cells will be lit. It is likely you
+     * will want to pass this as basis to {@link #mixColoredLighting(float[][][], float[][][])}.
+     * @param width the width of the colored lighting area to generate
+     * @param height the height of the colored lighting area to generate
+     * @return the colored lighting 3D float array, with no cells lit and all colors set to white
+     */
+    public static float[][][] blankColoredLighting(int width, int height)
+    {
+        return new float[][][]
+                {
+                        new float[width][height],
+                        ArrayTools.fill(-0x1.fffffep126f, width, height)
+                };
+    }
+
+    /**
+     * Removes any information from the given 3D float array for colored lighting, making it as if it had just been
+     * built by {@link #blankColoredLighting(int, int)}, but without any allocations. This blank state is different from
+     * being simply filled with all 0 or all default values; the two sub-arrays receive different contents (the one that
+     * stores brightness is all 0, the one that stores colors will be filled with the float that encodes white).
+     * @param original a 3d float array used for colored lighting; will be modified to be completely blank
+     * @return original, after modification
+     */
+    public static float[][][] eraseColoredLighting(float[][][] original)
+    {
+        ArrayTools.fill(original[0], 0f);
+        ArrayTools.fill(original[1], -0x1.fffffep126f);
+        return original;
+    }
+    /**
+     * Given a 2D double array that was probably produced by FOV and a packed color as a float, this gets a 3D float
+     * array (really just two same-size 2D float arrays in one parent array) that stores the brightnesses in the first
+     * 2D array element and the colors in the second 2D array element (using the given color if a cell has a value in
+     * lights that is greater than 0, or defaulting to white if the cell is unlit). This has little use on its own, and
+     * is meant to be given to {@link #mixColoredLighting(float[][][], float[][][])} so that multiple colors of lights
+     * can be mixed.
+     * @param lights a 2D double array that should probably come from FOV
+     * @param color a packed float as produced by {@link #floatGet(float, float, float, float)}
+     * @return a 3D float array containing two 2D sub-arrays, the first holding brightness and the second holding color
+     */
+    public static float[][][] colorLighting(double[][] lights, float color)
+    {
+        return colorLightingInto(new float[2][lights.length][lights[0].length], lights, color);
+    }
+    /**
+     * Given a 2D double array that was probably produced by FOV and a packed color as a float, this assigns into reuse
+     * a 3D float array (really just two same-size 2D float arrays in one parent array) that stores the brightnesses in
+     * the first 2D array element and the colors in the second 2D array element (using the given color if a cell has a
+     * value in lights that is greater than 0, or defaulting to white if the cell is unlit). This method requires that
+     * reuse has length of at least 2, where elements 0 and 1 must be 2D arrays of identical dimensions; this is the
+     * format that {@link #colorLighting(double[][], float)} produces. This has little use on its own, and  is meant to
+     * be given to {@link #mixColoredLighting(float[][][], float[][][])} so that multiple colors of lights can be mixed.
+     * @param reuse
+     *              a 3D float array of the exact format produced by {@link #colorLighting(double[][], float)} or
+     *              {@link #mixColoredLighting(float[][][], float[][][])}, and must have length 2; will be modified!
+     * @param lights a 2D double array that should probably come from FOV
+     * @param color a packed float as produced by {@link #floatGet(float, float, float, float)}
+     * @return reuse after modification
+     */
+    public static float[][][] colorLightingInto(float[][][] reuse, double[][] lights, float color)
+    {
+        for (int x = 0; x < lights.length; x++) {
+            for (int y = 0; y < lights[0].length; y++) {
+                reuse[1][x][y] = ((reuse[0][x][y] = (float) lights[x][y]) > 0f)
+                        ? color
+                        : -0x1.fffffep126f; // the color white as a float
+            }
+        }
+        return reuse;
+    }
+
+    /**
+     * Adds two 3D arrays produced by {@link #colorLighting(double[][], float)} or this method and modifies the basis
+     * parameter so it contains the combined brightnesses and colors of basis and other, in a pair of 2D arrays.
+     * @param basis a 3D float array holding two 2D sub-arrays, as produced by {@link #colorLighting(double[][], float)}; will be modified!
+     * @param other a 3D float array holding two 2D sub-arrays, as produced by {@link #colorLighting(double[][], float)}; will not be modified
+     * @return basis, after modification; it can be passed to this method as basis again
+     */
+    public static float[][][] mixColoredLighting(float[][][] basis, float[][][] other)
+    {
+        int w = basis[0].length, h = basis[0][0].length;
+        for (int x = 0; x < w && x < w; x++) {
+            for (int y = 0; y < h && y < h; y++) {
+                basis[1][x][y] = (basis[1][x][y] == -0x1.fffffep126f) // white as float
+                        ? other[1][x][y]
+                        : (other[1][x][y] == -0x1.fffffep126f) // white as float
+                        ? basis[1][x][y]
+                        : lerpFloatColors(basis[1][x][y], other[1][x][y], (other[0][x][y] - basis[0][x][y]) * 0.5f + 0.5f);
+                basis[0][x][y] = Math.min(1.0f, basis[0][x][y] + other[0][x][y]);
+            }
+        }
+        return basis;
+    }
+
 
     @Override
     public String toString() {

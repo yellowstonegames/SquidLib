@@ -361,7 +361,11 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char-com.badlogic.gdx.graphics.Color-">put(int, int, char, Color)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></dt>
 <dd>
-<div class="block">Place a char c into the foreground, with a foreground color specified by an index into the default palette.</div>
+<div class="block">Place a char c into the foreground, with a foreground color as a libGDX Color (or SColor).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char-float-">put(int, int, char, float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></dt>
+<dd>
+<div class="block">Place a char c into the foreground, with a foreground color as a packed float.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char-int-int-">put(int, int, char, int, int)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></dt>
 <dd>
@@ -376,8 +380,9 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char-int-int-int-">put(int, int, char, int, int, int)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></dt>
 <dd>
 <div class="block">Place a char c into the foreground, with a foreground color specified by an index into the default palette, a
- background color specified in the same way, and a lightness variation for the background (0 is no change, 100 is
- very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).</div>
+ background color specified in the same way, and a lightness variation for the background (255 will make the
+ background equal the background panel's <a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#getLightingColor--"><code>SquidPanel.getLightingColor()</code></a>, -255 will use the background
+ as-is, and values in between will be linearly interpolated between those two extremes).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char-java.util.ArrayList-int-int-int-">put(int, int, char, ArrayList&lt;Color&gt;, int, int, int)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></dt>
 <dd>
@@ -388,14 +393,44 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char-com.badlogic.gdx.graphics.Color-com.badlogic.gdx.graphics.Color-int-">put(int, int, char, Color, Color, int)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></dt>
 <dd>
 <div class="block">Place a char c into the foreground, with a foreground and background libGDX Color and a lightness variation for
- the background (0 is no change, 255 will nearly double the brightness (capping at white), -255 will reduce the
- color to nearly black (for most colors, all the way to black), and values in between will be proportional.</div>
+ the background (255 will make the background equal the background panel's
+ <a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#getLightingColor--"><code>SquidPanel.getLightingColor()</code></a>, -255 will use the background as-is, and values in between will be
+ linearly interpolated between those two extremes).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char-com.badlogic.gdx.graphics.Color-com.badlogic.gdx.graphics.Color-int-com.badlogic.gdx.graphics.Color-">put(int, int, char, Color, Color, int, Color)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></dt>
+<dd>
+<div class="block">Place a char c into the foreground, with a foreground and background libGDX Color and a lightness variation for
+ the background (255 will make the background equal the background panel's
+ <a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#getLightingColor--"><code>SquidPanel.getLightingColor()</code></a>, -255 will use the background as-is, and values in between will be
+ linearly interpolated between those two extremes).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char-float-float-int-">put(int, int, char, float, float, int)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></dt>
+<dd>
+<div class="block">Place a char c into the foreground, with a foreground and background color each encoded as a packed float and a
+ lightness variation for the background (255 will make the background equal the background panel's
+ <a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#getLightingColor--"><code>SquidPanel.getLightingColor()</code></a>, -255 will use encodedBackground as-is, and values in between will be
+ linearly interpolated between those two extremes).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char-float-float-int-float-">put(int, int, char, float, float, int, float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></dt>
+<dd>
+<div class="block">Place a char c into the foreground, with a foreground, background, and mix color (which affects the background)
+ each encoded as a packed float and a lightness variation for the background (255 will make the background equal
+ mixColor, -255 will use encodedBackground as-is, and values in between will be linearly interpolated between
+ those two extremes).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char-float-float-float-float-">put(int, int, char, float, float, float, float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></dt>
+<dd>
+<div class="block">Place a char c into the foreground, with a foreground, background, and mix color (which affects the background)
+ each encoded as a packed float and a lightness variation for the background (using the style that SquidPanel
+ does, with the "lightness" a float between 0.0f and 1.0f inclusive, encodedBackground used on its own for 0
+ lightness, mixBackground used on its own for 1 lightness, and values in between mixing the two).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char-int-java.util.ArrayList-int-java.util.ArrayList-int-">put(int, int, char, int, ArrayList&lt;Color&gt;, int, ArrayList&lt;Color&gt;, int)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></dt>
 <dd>
 <div class="block">Place a char c into the foreground, with a foreground color specified by an index into alternatePalette, a
- background color specified in the same way, and a lightness variation for the background (0 is no change, 100 is
- very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).</div>
+ background color specified in the same way, and a lightness variation for the background (255 will make the
+ background equal the background panel's <a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#getLightingColor--"><code>SquidPanel.getLightingColor()</code></a>, -255 will use the background
+ as-is, and values in between will be linearly interpolated between those two extremes).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char:A:A-">put(int, int, char[][])</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></dt>
 <dd>&nbsp;</dd>
@@ -406,26 +441,30 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char:A:A-int:A:A-int:A:A-int:A:A-">put(int, int, char[][], int[][], int[][], int[][])</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></dt>
 <dd>
 <div class="block">Place a char[][] c into the foreground, with a foreground color specified by an index into alternatePalette, a
- background color specified in the same way, and a lightness variation for the background (0 is no change, 100 is
- very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).</div>
+ background color specified in the same way, and a lightness variation for the background (255 will make the
+ background equal the background panel's <a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#getLightingColor--"><code>SquidPanel.getLightingColor()</code></a>, -255 will use the background
+ as-is, and values in between will be linearly interpolated between those two extremes).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char:A:A-java.util.ArrayList-int:A:A-int:A:A-int:A:A-">put(int, int, char[][], ArrayList&lt;Color&gt;, int[][], int[][], int[][])</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></dt>
 <dd>
 <div class="block">Place a char c into the foreground, with a foreground color specified by an index into alternatePalette, a
- background color specified in the same way, and a lightness variation for the background (0 is no change, 100 is
- very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).</div>
+ background color specified in the same way, and a lightness variation for the background (255 will make the
+ background equal the background panel's <a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#getLightingColor--"><code>SquidPanel.getLightingColor()</code></a>, -255 will use the background
+ as-is, and values in between will be linearly interpolated between those two extremes).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char:A:A-com.badlogic.gdx.graphics.Color:A:A-com.badlogic.gdx.graphics.Color:A:A-int:A:A-">put(int, int, char[][], Color[][], Color[][], int[][])</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></dt>
 <dd>
 <div class="block">Place a char c into the foreground, with a foreground color specified by an index into alternatePalette, a
- background color specified in the same way, and a lightness variation for the background (0 is no change, 100 is
- very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).</div>
+ background color specified in the same way, and a lightness variation for the background (255 will make the
+ background equal the background panel's <a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#getLightingColor--"><code>SquidPanel.getLightingColor()</code></a>, -255 will use the background
+ as-is, and values in between will be linearly interpolated between those two extremes).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char:A:A-int:A:A-java.util.ArrayList-int:A:A-java.util.ArrayList-int:A:A-">put(int, int, char[][], int[][], ArrayList&lt;Color&gt;, int[][], ArrayList&lt;Color&gt;, int[][])</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></dt>
 <dd>
 <div class="block">Place a char c into the foreground, with a foreground color specified by an index into alternatePalette, a
- background color specified in the same way, and a lightness variation for the background (0 is no change, 100 is
- very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).</div>
+ background color specified in the same way, and a lightness variation for the background (255 will make the
+ background equal the background panel's <a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#getLightingColor--"><code>SquidPanel.getLightingColor()</code></a>, -255 will use the background
+ as-is, and values in between will be linearly interpolated between those two extremes).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#put-char:A:A-">put(char[][])</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></dt>
 <dd>
@@ -476,7 +515,13 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#put-int-int-float-">put(int, int, float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#put-int-int-float-float-">put(int, int, float, float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#put-int-int-float-float-float-">put(int, int, float, float, float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#put-int-int-com.badlogic.gdx.graphics.Color-float-">put(int, int, Color, float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#put-int-int-com.badlogic.gdx.graphics.Color-float-com.badlogic.gdx.graphics.Color-">put(int, int, Color, float, Color)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#put-int-int-char-">put(int, int, char)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></dt>
 <dd>&nbsp;</dd>
@@ -498,12 +543,29 @@
 <dd>
 <div class="block">Takes a unicode char for input.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#put-int-int-char-float-float-">put(int, int, char, float, float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></dt>
+<dd>
+<div class="block">Takes a unicode char for input and a color multiplier that determines how much of <a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#lightingColor"><code>SquidPanel.lightingColor</code></a> will
+ affect the given encodedColor.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#put-int-int-char-float-float-float-">put(int, int, char, float, float, float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></dt>
+<dd>
+<div class="block">Intended for colored lighting; takes a unicode char for input and a color multiplier that determines how much of
+ mixColor will affect encodedColor.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#put-int-int-char-com.badlogic.gdx.graphics.Color-float-">put(int, int, char, Color, float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></dt>
 <dd>
 <div class="block">Puts the given character at position x, y, with its color determined by the given color interpolated with
  this SquidPanel's lightingColor (default is white light) by the amount specified by colorMultiplier (0.0
  causes no change to the given color, 1.0 uses the lightingColor only, and anything between 0 and 1 will
  produce some tint to color, and probably cache the produced color in the IColorCenter this uses).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#put-int-int-char-com.badlogic.gdx.graphics.Color-float-com.badlogic.gdx.graphics.Color-">put(int, int, char, Color, float, Color)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></dt>
+<dd>
+<div class="block">Puts the given character at position x, y, with its color determined by the given color interpolated with
+ the given mix color by the amount specified by mixAmount (0.0 causes no change to the given color, 1.0 uses mix
+ only, and anything between 0 and 1 will produce some tint to color, and probably cache the produced color in the
+ IColorCenter this uses).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html#putBoxedString-int-int-java.lang.String-">putBoxedString(int, int, String)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></dt>
 <dd>
