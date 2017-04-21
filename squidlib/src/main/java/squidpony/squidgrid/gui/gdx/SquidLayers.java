@@ -567,15 +567,28 @@ public class SquidLayers extends Group {
     }
 
     /**
-     * Place a char c into the foreground, with a foreground color specified by an index into the default palette.
+     * Place a char c into the foreground, with a foreground color as a libGDX Color (or SColor).
      *
      * @param x               in grid cells.
      * @param y               in grid cells.
      * @param c               a character to be drawn in the foreground
-     * @param foreground    Color for the char being drawn
+     * @param foreground      Color for the char being drawn
      */
     public SquidLayers put(int x, int y, char c, Color foreground) {
         foregroundPanel.put(x, y, c, foreground);
+        return this;
+    }
+
+    /**
+     * Place a char c into the foreground, with a foreground color as a packed float.
+     *
+     * @param x                  in grid cells.
+     * @param y                  in grid cells.
+     * @param c                  a character to be drawn in the foreground
+     * @param encodedForeground  float encoding the color for the char being drawn
+     */
+    public SquidLayers put(int x, int y, char c, float encodedForeground) {
+        foregroundPanel.put(x, y, c, encodedForeground);
         return this;
     }
 
@@ -612,8 +625,9 @@ public class SquidLayers extends Group {
 
     /**
      * Place a char c into the foreground, with a foreground color specified by an index into the default palette, a
-     * background color specified in the same way, and a lightness variation for the background (0 is no change, 100 is
-     * very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).
+     * background color specified in the same way, and a lightness variation for the background (255 will make the
+     * background equal the background panel's {@link SquidPanel#getLightingColor()}, -255 will use the background
+     * as-is, and values in between will be linearly interpolated between those two extremes).
      *
      * @param x                   in grid cells.
      * @param y                   in grid cells.
@@ -623,10 +637,8 @@ public class SquidLayers extends Group {
      * @param backgroundLightness int between -255 and 255 , lower numbers are darker, higher lighter.
      */
     public SquidLayers put(int x, int y, char c, int foregroundIndex, int backgroundIndex, int backgroundLightness) {
-        backgroundLightness = clamp(backgroundLightness, -255, 255);
         foregroundPanel.put(x, y, c, foregroundIndex, palette);
-        lightnesses[x][y] = 256 + clamp(backgroundLightness, -255, 255);
-        backgroundPanel.put(x, y, palette.get(backgroundIndex), lightnesses[x][y] * 0.001953125f);
+        backgroundPanel.put(x, y, palette.get(backgroundIndex), (lightnesses[x][y] = 256 + clamp(backgroundLightness, -255, 255)) * 0.001953125f);
         return this;
     }
     /**
@@ -644,36 +656,116 @@ public class SquidLayers extends Group {
      */
     public SquidLayers put(int x, int y, char c, ArrayList<Color> alternatePalette, int foregroundIndex, int backgroundIndex, int backgroundLightness) {
         foregroundPanel.put(x, y, c, foregroundIndex, alternatePalette);
-        lightnesses[x][y] = 256 + clamp(backgroundLightness, -255, 255);
-
-        backgroundPanel.put(x, y, alternatePalette.get(backgroundIndex), lightnesses[x][y] * 0.001953125f);
+        backgroundPanel.put(x, y, alternatePalette.get(backgroundIndex), (lightnesses[x][y] = 256 + clamp(backgroundLightness, -255, 255)) * 0.001953125f);
         return this;
     }
 
     /**
      * Place a char c into the foreground, with a foreground and background libGDX Color and a lightness variation for
-     * the background (0 is no change, 255 will nearly double the brightness (capping at white), -255 will reduce the
-     * color to nearly black (for most colors, all the way to black), and values in between will be proportional.
+     * the background (255 will make the background equal the background panel's
+     * {@link SquidPanel#getLightingColor()}, -255 will use the background as-is, and values in between will be
+     * linearly interpolated between those two extremes).
      *
      * @param x                   in grid cells.
      * @param y                   in grid cells.
      * @param c                   a character to be drawn in the foreground
      * @param foreground            Color for the char being drawn
      * @param background            Color for the background
-     * @param backgroundLightness int between -255 and 255 , lower numbers are darker, higher lighter.
+     * @param backgroundLightness int between -255 and 255 , lower numbers are changed less, higher changed closer to the lighting color
      */
     public SquidLayers put(int x, int y, char c, Color foreground, Color background, int backgroundLightness) {
         foregroundPanel.put(x, y, c, foreground);
-        lightnesses[x][y] = 256 + clamp(backgroundLightness, -255, 255);
+        backgroundPanel.put(x, y, background, (lightnesses[x][y] = 256 + clamp(backgroundLightness, -255, 255)) * 0.001953125f);
+        return this;
+    }
 
-        backgroundPanel.put(x, y, background, lightnesses[x][y] * 0.001953125f);
+    /**
+     * Place a char c into the foreground, with a foreground and background libGDX Color and a lightness variation for
+     * the background (255 will make the background equal the background panel's
+     * {@link SquidPanel#getLightingColor()}, -255 will use the background as-is, and values in between will be
+     * linearly interpolated between those two extremes).
+     *
+     * @param x                   in grid cells.
+     * @param y                   in grid cells.
+     * @param c                   a character to be drawn in the foreground
+     * @param foreground          Color for the char being drawn
+     * @param background          Color for the background
+     * @param mixAmount           int between -255 and 255 , lower numbers are changed less, higher changed closer to mixBackground
+     * @param mixBackground       Color to mix with the background, dependent on mixAmount
+     */
+    public SquidLayers put(int x, int y, char c, Color foreground, Color background, int mixAmount, Color mixBackground) {
+        foregroundPanel.put(x, y, c, foreground);
+        backgroundPanel.put(x, y, background,
+                (lightnesses[x][y] = 256 + clamp(mixAmount, -255, 255)) * 0.001953125f,
+                mixBackground);
+        return this;
+    }
+    /**
+     * Place a char c into the foreground, with a foreground and background color each encoded as a packed float and a
+     * lightness variation for the background (255 will make the background equal the background panel's
+     * {@link SquidPanel#getLightingColor()}, -255 will use encodedBackground as-is, and values in between will be
+     * linearly interpolated between those two extremes).
+     *
+     * @param x                   in grid cells.
+     * @param y                   in grid cells.
+     * @param c                   a character to be drawn in the foreground
+     * @param encodedForeground   float encoding the color for the char being drawn
+     * @param encodedBackground   float encoding the color for the background
+     * @param backgroundLightness int between -255 and 255 , lower numbers are darker, higher lighter.
+     */
+    public SquidLayers put(int x, int y, char c, float encodedForeground, float encodedBackground, int backgroundLightness) {
+        foregroundPanel.put(x, y, c, encodedForeground);
+        backgroundPanel.put(x, y, encodedBackground,
+                (lightnesses[x][y] = 256 + clamp(backgroundLightness, -255, 255)) * 0.001953125f);
+        return this;
+    }
+    /**
+     * Place a char c into the foreground, with a foreground, background, and mix color (which affects the background)
+     * each encoded as a packed float and a lightness variation for the background (255 will make the background equal
+     * mixColor, -255 will use encodedBackground as-is, and values in between will be linearly interpolated between
+     * those two extremes).
+     *
+     * @param x                   in grid cells.
+     * @param y                   in grid cells.
+     * @param c                   a character to be drawn in the foreground
+     * @param encodedForeground   float encoding the color for the char being drawn
+     * @param encodedBackground   float encoding the color for the background
+     * @param backgroundLightness int between -255 and 255 , lower numbers are darker, higher lighter.
+     * @param mixBackground       float encoding a color to mix with the background instead of the normal lighting color
+     */
+    public SquidLayers put(int x, int y, char c, float encodedForeground, float encodedBackground, int backgroundLightness, float mixBackground) {
+        foregroundPanel.put(x, y, c, encodedForeground);
+        backgroundPanel.put(x, y, encodedBackground,
+                (lightnesses[x][y] = 256 + clamp(backgroundLightness, -255, 255)) * 0.001953125f, mixBackground);
+        return this;
+    }
+    /**
+     * Place a char c into the foreground, with a foreground, background, and mix color (which affects the background)
+     * each encoded as a packed float and a lightness variation for the background (using the style that SquidPanel
+     * does, with the "lightness" a float between 0.0f and 1.0f inclusive, encodedBackground used on its own for 0
+     * lightness, mixBackground used on its own for 1 lightness, and values in between mixing the two).
+     *
+     * @param x                   in grid cells.
+     * @param y                   in grid cells.
+     * @param c                   a character to be drawn in the foreground
+     * @param encodedForeground   float encoding the color for the char being drawn
+     * @param encodedBackground   float encoding the color for the background
+     * @param backgroundLightness float between 0.0f and 1.0f (both inclusive); higher means closer to mixBackground
+     * @param mixBackground       float encoding a color to mix with the background instead of the normal lighting color
+     */
+    public SquidLayers put(int x, int y, char c, float encodedForeground, float encodedBackground, float backgroundLightness, float mixBackground) {
+        foregroundPanel.put(x, y, c, encodedForeground);
+        lightnesses[x][y] = (int)(backgroundLightness * 512);
+        backgroundPanel.put(x, y, encodedBackground,
+                backgroundLightness, mixBackground);
         return this;
     }
 
     /**
      * Place a char c into the foreground, with a foreground color specified by an index into alternatePalette, a
-     * background color specified in the same way, and a lightness variation for the background (0 is no change, 100 is
-     * very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).
+     * background color specified in the same way, and a lightness variation for the background (255 will make the
+     * background equal the background panel's {@link SquidPanel#getLightingColor()}, -255 will use the background
+     * as-is, and values in between will be linearly interpolated between those two extremes).
      *
      * @param x                   in grid cells.
      * @param y                   in grid cells.
@@ -713,8 +805,9 @@ public class SquidLayers extends Group {
 
     /**
      * Place a char[][] c into the foreground, with a foreground color specified by an index into alternatePalette, a
-     * background color specified in the same way, and a lightness variation for the background (0 is no change, 100 is
-     * very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).
+     * background color specified in the same way, and a lightness variation for the background (255 will make the
+     * background equal the background panel's {@link SquidPanel#getLightingColor()}, -255 will use the background
+     * as-is, and values in between will be linearly interpolated between those two extremes).
      *
      * @param x                   in grid cells.
      * @param y                   in grid cells.
@@ -737,8 +830,9 @@ public class SquidLayers extends Group {
 
     /**
      * Place a char c into the foreground, with a foreground color specified by an index into alternatePalette, a
-     * background color specified in the same way, and a lightness variation for the background (0 is no change, 100 is
-     * very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).
+     * background color specified in the same way, and a lightness variation for the background (255 will make the
+     * background equal the background panel's {@link SquidPanel#getLightingColor()}, -255 will use the background
+     * as-is, and values in between will be linearly interpolated between those two extremes).
      *
      * @param x                   in grid cells.
      * @param y                   in grid cells.
@@ -763,8 +857,9 @@ public class SquidLayers extends Group {
     }
     /**
      * Place a char c into the foreground, with a foreground color specified by an index into alternatePalette, a
-     * background color specified in the same way, and a lightness variation for the background (0 is no change, 100 is
-     * very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).
+     * background color specified in the same way, and a lightness variation for the background (255 will make the
+     * background equal the background panel's {@link SquidPanel#getLightingColor()}, -255 will use the background
+     * as-is, and values in between will be linearly interpolated between those two extremes).
      *
      * @param x                   in grid cells.
      * @param y                   in grid cells.
@@ -787,8 +882,9 @@ public class SquidLayers extends Group {
 
     /**
      * Place a char c into the foreground, with a foreground color specified by an index into alternatePalette, a
-     * background color specified in the same way, and a lightness variation for the background (0 is no change, 100 is
-     * very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).
+     * background color specified in the same way, and a lightness variation for the background (255 will make the
+     * background equal the background panel's {@link SquidPanel#getLightingColor()}, -255 will use the background
+     * as-is, and values in between will be linearly interpolated between those two extremes).
      *
      * @param x                   in grid cells.
      * @param y                   in grid cells.

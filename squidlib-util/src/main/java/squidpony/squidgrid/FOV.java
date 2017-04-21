@@ -280,7 +280,8 @@ public class FOV implements Serializable {
      * represent a percentage of fully lit. Always uses shadowcasting FOV,
      * which allows this method to be static since it doesn't need to keep any
      * state around, and can reuse the state the user gives it via the
-     * {@code light} parameter.
+     * {@code light} parameter.  The values in light are always cleared before
+     * this is run, because prior state can make this give incorrect results.
      * <br>
      * The starting point for the calculation is considered to be at the center
      * of the origin cell. Radius determinations based on Euclidean
@@ -302,7 +303,8 @@ public class FOV implements Serializable {
      * represent a percentage of fully lit. Always uses shadowcasting FOV,
      * which allows this method to be static since it doesn't need to keep any
      * state around, and can reuse the state the user gives it via the
-     * {@code light} parameter.
+     * {@code light} parameter. The values in light are always cleared before
+     * this is run, because prior state can make this give incorrect results.
      * <br>
      * The starting point for the calculation is considered to be at the center
      * of the origin cell. Radius determinations based on Euclidean
@@ -325,7 +327,8 @@ public class FOV implements Serializable {
      * represent a percentage of fully lit. Always uses shadowcasting FOV,
      * which allows this method to be static since it doesn't need to keep any
      * state around, and can reuse the state the user gives it via the
-     * {@code light} parameter.
+     * {@code light} parameter. The values in light are always cleared before
+     * this is run, because prior state can make this give incorrect results.
      * <br>
      * The starting point for the calculation is considered to be at the center
      * of the origin cell. Radius determinations are determined by the provided
@@ -342,7 +345,7 @@ public class FOV implements Serializable {
 
         double rad = Math.max(1, radius);
         double decay = 1.0 / rad;
-
+        ArrayTools.fill(light, 0);
         light[startX][startY] = 1;//make the starting space full power
 
 
@@ -657,6 +660,23 @@ public class FOV implements Serializable {
         return lightMap;
     }
 
+    /**
+     * Adds an FOV map to another in the simplest way possible; does not check line-of-sight between FOV maps.
+     * Clamps the highest value for any single position at 1.0. Modifies the basis parameter in-place and makes no
+     * allocations; this is different from {@link #addFOVs(double[][]...)}, which creates a new 2D array.
+     * @param basis a 2D double array, which can be empty or returned by calculateFOV() or reuseFOV(); modified!
+     * @param addend another 2D double array that will be added into basis; this one will not be modified
+     * @return the sum of the 2D double arrays passed, using the dimensions of basis if they don't match
+     */
+    public static double[][] addFOVsInto(double[][] basis, double[][] addend)
+    {
+        for (int x = 0; x < basis.length && x < addend.length; x++) {
+                for (int y = 0; y < basis[x].length && y < addend[x].length; y++) {
+                    basis[x][y] = Math.min(1.0, basis[x][y] + addend[x][y]);
+                }
+            }
+        return basis;
+    }
     /**
      * Adds multiple FOV maps together in the simplest way possible; does not check line-of-sight between FOV maps.
      * Clamps the highest value for any single position at 1.0.

@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.NumberUtils;
 import squidpony.ArrayTools;
 import squidpony.IColorCenter;
 import squidpony.StringKit;
@@ -48,7 +49,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     protected final float[][] colors;
     protected Color lightingColor = SColor.WHITE, tmpColor = new Color();
     protected final TextCellFactory textFactory;
-    protected float xOffset, yOffset;
+    protected float xOffset, yOffset, lightingFloat = NumberUtils.intToFloatColor(0xffffffff);
     public final OrderedSet<AnimatedEntity> animatedEntities;
     public final OrderedSet<Actor> autoActors;
     /**
@@ -455,8 +456,20 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         put(x, y, '\0', encodedColor);
     }
 
+    public void put(int x, int y, float encodedColor, float colorMultiplier) {
+        put(x, y, '\0', encodedColor, colorMultiplier);
+    }
+
+    public void put(int x, int y, float encodedColor, float colorMultiplier, float mixColor) {
+        put(x, y, '\0', encodedColor, colorMultiplier, mixColor);
+    }
+
     public void put(int x, int y, Color color, float colorMultiplier) {
         put(x, y, '\0', color, colorMultiplier);
+    }
+
+    public void put(int x, int y, Color color, float mixAmount, Color mix) {
+        put(x, y, '\0', color, mixAmount, mix);
     }
 
     @Override
@@ -509,7 +522,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param x
      * @param y
      * @param c
-     * @param encodedColor
+     * @param encodedColor a float color as produced by {@link SColor#floatGet(float, float, float, float)}
      */
     public void put(int x, int y, char c, float encodedColor) {
         if (x < 0 || x >= contents.length || y < 0 || y >= contents[0].length) {
@@ -519,19 +532,77 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         colors[x][y] = encodedColor;
     }
 
-	/**
-     * Puts the given character at position x, y, with its color determined by the given color interpolated with
-     * this SquidPanel's lightingColor (default is white light) by the amount specified by colorMultiplier (0.0
-     * causes no change to the given color, 1.0 uses the lightingColor only, and anything between 0 and 1 will
-     * produce some tint to color, and probably cache the produced color in the IColorCenter this uses).
-	 */
-	public void put(int x, int y, char c, Color color, float colorMultiplier) {
+    /**
+     * Takes a unicode char for input and a color multiplier that determines how much of {@link #lightingColor} will
+     * affect the given encodedColor. The encodedColor is a float that might be produced by {@link Color#toFloatBits()}
+     * or by mixing multiple such floats with {@link SColor#lerpFloatColors(float, float, float)}.
+     *
+     * @param x
+     * @param y
+     * @param c
+     * @param encodedColor a float color as produced by {@link SColor#floatGet(float, float, float, float)}
+     * @param colorMultiplier how much of {@link #lightingColor} to use in place of encodedColor, from 0.0 to 1.0
+     */
+    public void put(int x, int y, char c, float encodedColor, float colorMultiplier) {
         if (x < 0 || x >= contents.length || y < 0 || y >= contents[0].length) {
             return;//skip if out of bounds
         }
         contents[x][y] = c;
-		colors[x][y] = scc.lerp(color, lightingColor, colorMultiplier).toFloatBits();
-	}
+        colors[x][y] = SColor.lerpFloatColors(encodedColor, lightingFloat, colorMultiplier);
+    }
+
+    /**
+     * Intended for colored lighting; takes a unicode char for input and a color multiplier that determines how much of
+     * mixColor will affect encodedColor. Both encodedColor and mixColor are floats that might be produced by
+     * {@link Color#toFloatBits()} or by mixing multiple such floats with
+     * {@link SColor#lerpFloatColors(float, float, float)}; colorMultiplier is a normal float between 0.0f and 1.0f .
+     *
+     * @param x
+     * @param y
+     * @param c
+     * @param encodedColor a float color as produced by {@link SColor#floatGet(float, float, float, float)}
+     * @param colorMultiplier how much of mixColor to use in place of encodedColor, from 0.0 to 1.0
+     * @param mixColor a color to mix with encodedColor, typically as part of colored lighting
+     */
+    public void put(int x, int y, char c, float encodedColor, float colorMultiplier, float mixColor) {
+        if (x < 0 || x >= contents.length || y < 0 || y >= contents[0].length) {
+            return;//skip if out of bounds
+        }
+        contents[x][y] = c;
+        colors[x][y] = SColor.lerpFloatColors(encodedColor, mixColor, colorMultiplier);
+    }
+
+    /**
+     * Puts the given character at position x, y, with its color determined by the given color interpolated with
+     * this SquidPanel's lightingColor (default is white light) by the amount specified by colorMultiplier (0.0
+     * causes no change to the given color, 1.0 uses the lightingColor only, and anything between 0 and 1 will
+     * produce some tint to color, and probably cache the produced color in the IColorCenter this uses).
+     */
+    public void put(int x, int y, char c, Color color, float colorMultiplier) {
+        if (x < 0 || x >= contents.length || y < 0 || y >= contents[0].length) {
+            return;//skip if out of bounds
+        }
+        contents[x][y] = c;
+        colors[x][y] = scc.lerp(color, lightingColor, colorMultiplier).toFloatBits();
+    }
+
+    /**
+     * Puts the given character at position x, y, with its color determined by the given color interpolated with
+     * the given mix color by the amount specified by mixAmount (0.0 causes no change to the given color, 1.0 uses mix
+     * only, and anything between 0 and 1 will produce some tint to color, and probably cache the produced color in the
+     * IColorCenter this uses).
+     * <br>
+     * Note, unlike {@link #put(int, int, char, float, float, float)}, this will use the IColorCenter to produce the
+     * finished color, which may be slightly slower if you don't need any of IColorCenter's features, and will use
+     * more memory if many colors are cached, but has the advantage of being able to adjust colors with filters.
+     */
+    public void put(int x, int y, char c, Color color, float mixAmount, Color mix) {
+        if (x < 0 || x >= contents.length || y < 0 || y >= contents[0].length) {
+            return;//skip if out of bounds
+        }
+        contents[x][y] = c;
+        colors[x][y] = scc.lerp(color, mix, mixAmount).toFloatBits();
+    }
 
     @Override
 	public int cellWidth() {
@@ -2061,6 +2132,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
     public void setLightingColor(Color lightingColor) {
         this.lightingColor = lightingColor;
+        lightingFloat = lightingColor.toFloatBits();
     }
 
     protected float clampDuration(float duration) {
