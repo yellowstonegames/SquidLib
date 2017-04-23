@@ -10,6 +10,8 @@ import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.ProbabilityTable;
 import squidpony.squidmath.StatefulRNG;
 import squidpony.squidmath.ThunderRNG;
+import squidpony.store.text.BonusConverters;
+import squidpony.store.text.TextStorage;
 
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -18,12 +20,12 @@ import java.util.EnumMap;
  * Just a test.
  * Created by Tommy Ettinger on 9/17/2016.
  */
-public class SquidStorageTest extends ApplicationAdapter {
+public class TextStorageTest extends ApplicationAdapter {
     @Override
     public void create() {
         super.create();
         if(true) {
-            SquidStorage store = new SquidStorage("StorageTest");
+            TextStorage store = new TextStorage("TextStorage");
             store.compress = true;
             System.out.println(store.preferences.get().values());
             StatefulRNG srng = new StatefulRNG("Hello, Storage!"), r2;
@@ -32,19 +34,19 @@ public class SquidStorageTest extends ApplicationAdapter {
             SpillWorldMap world = new SpillWorldMap(120, 80, "FutureLandXtreme"), w2;
             world.generate(15, true);
             GreasedRegion grease = new GreasedRegion(new ThunderRNG(75L), 75, 75), g2;
-            store.put("rng", srng);
-            store.put("language", randomLanguage);
-            store.put("world", world);
-            store.put("grease", grease);
+            store.put("rng", srng, BonusConverters.convertStatefulRNG);
+            store.put("language", randomLanguage, Converters.convertFakeLanguageGen);
+            store.put("world", world, BonusConverters.convertSpillWorldMap);
+            store.put("grease", grease, Converters.convertGreasedRegion);
 
             System.out.println(store.show());
             store.store("Test");
 
             System.out.println("Stored preference bytes: " + store.preferencesSize());
-            r2 = store.get("Test", "rng", StatefulRNG.class);
-            lang2 = store.get("Test", "language", FakeLanguageGen.class);
-            w2 = store.get("Test", "world", SpillWorldMap.class);
-            g2 = store.get("Test", "grease", GreasedRegion.class);
+            r2 = store.get("Test", "rng", BonusConverters.convertStatefulRNG, StatefulRNG.class);
+            lang2 = store.get("Test", "language", Converters.convertFakeLanguageGen, FakeLanguageGen.class);
+            w2 = store.get("Test", "world", BonusConverters.convertSpillWorldMap, SpillWorldMap.class);
+            g2 = store.get("Test", "grease", Converters.convertGreasedRegion, GreasedRegion.class);
             long seed1 = srng.getState(), seed2 = r2.getState();
             System.out.println("StatefulRNG states equal: " + (seed1 == seed2));
             System.out.println("FakeLanguageGen values equal: " + randomLanguage.equals(lang2));
@@ -139,6 +141,6 @@ public class SquidStorageTest extends ApplicationAdapter {
         config.title = "SquidLib Test: SquidStorage";
         config.width = 512;
         config.height = 128;
-        new LwjglApplication(new SquidStorageTest(), config);
+        new LwjglApplication(new TextStorageTest(), config);
     }
 }

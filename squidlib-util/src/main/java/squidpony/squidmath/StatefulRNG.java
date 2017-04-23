@@ -28,9 +28,15 @@ public class StatefulRNG extends RNG {
     /**
      * String-seeded constructor uses the hash of the String as a seed for LightRNG, which is of high quality, but low
      * period (which rarely matters for games), and has good speed and tiny state size.
+     *
+     * Note: This constructor changed behavior on April 22, 2017, when it was noticed that it was not seeding very
+     * effectively (only assigning to 32 bits of seed instead of all 64). If you want to keep the older behavior, you
+     * can by replacing {@code new StatefulRNG(text)} with  {@code new StatefulRNG(CrossHash.hash(text))} . The new
+     * technique assigns to all 64 bits and has less correlation between similar inputs causing similar starting states.
+     * It's also faster, but that shouldn't matter in a constructor.
      */
     public StatefulRNG(String seedString) {
-        this(new LightRNG(CrossHash.hash(seedString)));
+        this(new LightRNG(CrossHash.Wisp.hash64(seedString)));
     }
 
     @Override

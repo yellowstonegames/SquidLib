@@ -1,19 +1,21 @@
-package squidpony;
+package squidpony.store.json;
 
+import blazing.chain.LZSEncoding;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
-import squidpony.store.json.JsonCompressor;
+import com.badlogic.gdx.utils.SerializationException;
 
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
 
 /**
- * A variant of {@link DataConverter} (and an extension of libGDX's {@link com.badlogic.gdx.utils.Json} class) that
+ * A variant of {@link JsonConverter} (and an extension of libGDX's {@link Json} class) that
  * compresses its JSON output and reads compressed input. Due to limits on the String compression library this uses
  * (namely, it only compresses Strings, so input must be able to be interpreted as a String), this only allows String
  * and FileHandle input formats, and throws exceptions if you try to deserialize a char array, InputStream, or Reader
- * with fromJson() . Otherwise, it acts like DataConverter, so the same docs apply:
+ * with fromJson() . Otherwise, it acts like JsonConverter, so the same docs apply:
  * <br>
  * Augmented version of LibGDX's Json class that knows how to handle various data types common in SquidLib.
  * This includes OrderedMap, which notably allows non-String keys (LibGDX's default Map serializer requires keys to be
@@ -22,13 +24,15 @@ import java.io.Writer;
  * and various collections (IntDoubleOrderedMap, IntVLA, Arrangement, K2, and K2V1 at least).
  * Created by Tommy Ettinger on 1/9/2017.
  */
-public class DataCompressor extends JsonCompressor {
-    public DataCompressor() {
+public class JsonCompressor extends Json {
+    public JsonCompressor() {
         super();
+        JsonConverter.initialize(this);
     }
 
-    public DataCompressor(JsonWriter.OutputType outputType) {
+    public JsonCompressor(JsonWriter.OutputType outputType) {
         super(outputType);
+        JsonConverter.initialize(this);
     }
 
     /**
@@ -38,7 +42,7 @@ public class DataCompressor extends JsonCompressor {
      */
     @Override
     public String toJson(Object object, Class knownType, Class elementType) {
-        return super.toJson(object, knownType, elementType);
+        return LZSEncoding.compressToUTF16(super.toJson(object, knownType, elementType));
     }
 
     /**
@@ -49,7 +53,11 @@ public class DataCompressor extends JsonCompressor {
      */
     @Override
     public void toJson (Object object, Class knownType, Class elementType, FileHandle file) {
-        super.toJson(object, knownType, elementType, file);
+        try {
+            file.writeString(this.toJson(object, knownType, elementType), false, "UTF-8");
+        } catch (Exception ex) {
+            throw new SerializationException("Error writing file: " + file, ex);
+        }
     }
 
     /**
@@ -118,7 +126,7 @@ public class DataCompressor extends JsonCompressor {
      */
     @Override
     public <T> T fromJson(Class<T> type, FileHandle file) {
-        return super.fromJson(type, file);
+        return super.fromJson(type, LZSEncoding.decompressFromUTF16(file.readString("UTF-8")));
     }
 
     /**
@@ -129,7 +137,7 @@ public class DataCompressor extends JsonCompressor {
      */
     @Override
     public <T> T fromJson(Class<T> type, Class elementType, FileHandle file) {
-        return super.fromJson(type, elementType, file);
+        return super.fromJson(type, elementType, LZSEncoding.decompressFromUTF16(file.readString("UTF-8")));
     }
 
     /**
@@ -166,7 +174,7 @@ public class DataCompressor extends JsonCompressor {
      */
     @Override
     public <T> T fromJson(Class<T> type, String json) {
-        return super.fromJson(type, json);
+        return super.fromJson(type, LZSEncoding.decompressFromUTF16(json));
     }
 
     /**
@@ -177,6 +185,6 @@ public class DataCompressor extends JsonCompressor {
      */
     @Override
     public <T> T fromJson(Class<T> type, Class elementType, String json) {
-        return super.fromJson(type, elementType, json);
+        return super.fromJson(type, elementType, LZSEncoding.decompressFromUTF16(json));
     }
 }

@@ -1,27 +1,39 @@
-package squidpony;
+package squidpony.store.json;
 
+import blazing.chain.LZSEncoding;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.utils.JsonWriter;
+import squidpony.StringStringMap;
 import squidpony.annotation.Beta;
-import squidpony.store.json.JsonStorage;
+
+import java.util.Map;
 
 /**
  * Helps games store information in libGDX's Preferences class as Strings, then get it back out.
  * Created by Tommy Ettinger on 9/16/2016.
  */
 @Beta
-public class SquidStorage extends JsonStorage {
+public class JsonStorage {
+    public final Preferences preferences;
+    public final String storageName;
+    public final JsonConverter json;
+    protected StringStringMap contents;
+    public boolean compress = true;
+
     /**
-     * Please don't use this constructor if possible; it simply calls {@link #SquidStorage(String)} with the constant
+     * Please don't use this constructor if possible; it simply calls {@link #JsonStorage(String)} with the constant
      * String "nameless". This could easily overlap with other files/sections in Preferences, so you should always
      * prefer giving a String argument to the constructor, typically the name of the game.
-     * @see #SquidStorage(String) the recommended constructor to use
+     * @see #JsonStorage(String) the recommended constructor to use
      */
-    public SquidStorage()
+    public JsonStorage()
     {
-        super("nameless");
+        this("nameless");
     }
 
     /**
-     * Creates a SquidStorage with the given fileName to save using Preferences from libGDX. The name should generally
+     * Creates a JsonStorage with the given fileName to save using Preferences from libGDX. The name should generally
      * be the name of this game or application, and must be a valid name for a file (so no slashes, backslashes, colons,
      * semicolons, or commas for certain, and other non-alphanumeric characters are also probably invalid). You should
      * not assume anything is present in the Preferences storage unless you have put it there, and this applies doubly
@@ -39,9 +51,13 @@ public class SquidStorage extends JsonStorage {
      * The custom char[][] representation is about half the normal size by omitting commas after each char.
      * @param fileName the valid file name to create or open from Preferences; typically the name of the game/app.
      */
-    public SquidStorage(final String fileName)
+    public JsonStorage(final String fileName)
     {
-        super(fileName);
+        storageName = fileName;
+        preferences = Gdx.app.getPreferences(storageName);
+        json = new JsonConverter(JsonWriter.OutputType.minimal);
+
+        contents = new StringStringMap(16, 0.2f);
     }
 
     /**
@@ -52,9 +68,9 @@ public class SquidStorage extends JsonStorage {
      * @param o the Object to prepare to store
      * @return this for chaining
      */
-    public SquidStorage put(String innerName, Object o)
+    public JsonStorage put(String innerName, Object o)
     {
-        super.put(innerName, o);
+        contents.put(innerName, json.toJson(o));
         return this;
     }
 
@@ -68,9 +84,13 @@ public class SquidStorage extends JsonStorage {
      * @param outerName one of the two Strings needed to retrieve any of the objects in the current group
      * @return this for chaining
      */
-    public SquidStorage store(String outerName)
+    public JsonStorage store(String outerName)
     {
-        super.store(outerName);
+        if(compress)
+            preferences.putString(outerName, LZSEncoding.compressToUTF16(json.toJson(contents, StringStringMap.class)));
+        else
+            preferences.putString(outerName, json.toJson(contents, StringStringMap.class));
+        preferences.flush();
         return this;
     }
 
@@ -81,16 +101,19 @@ public class SquidStorage extends JsonStorage {
      */
     public String show()
     {
-        return super.show();
+        if(compress)
+            return LZSEncoding.compressToUTF16(json.toJson(contents, StringStringMap.class));
+        else
+            return json.toJson(contents, StringStringMap.class);
     }
 
     /**
      * Clears the current group of objects; recommended if you intend to store under multiple outerName keys.
      * @return this for chaining
      */
-    public SquidStorage clear()
+    public JsonStorage clear()
     {
-        super.clear();
+        contents.clear();
         return this;
     }
 
@@ -101,9 +124,9 @@ public class SquidStorage extends JsonStorage {
      * @param innerName the String key used to put an object in the current group with {@link #put(String, Object)}
      * @return this for chaining
      */
-    public SquidStorage remove(String innerName)
+    public JsonStorage remove(String innerName)
     {
-        super.remove(innerName);
+        contents.remove(innerName);
         return this;
     }
 
@@ -121,7 +144,16 @@ public class SquidStorage extends JsonStorage {
     @SuppressWarnings("unchecked")
     public <T> T get(String outerName, String innerName, Class<T> type)
     {
-        return super.get(outerName, innerName, type);
+        StringStringMap om;
+        String got;
+        if(compress)
+            got = LZSEncoding.decompressFromUTF16(preferences.getString(outerName));
+        else
+            got = preferences.getString(outerName);
+        if(got == null) return null;
+        om = json.fromJson(StringStringMap.class, got);
+        if(om == null) return null;
+        return json.fromJson(type, om.get(innerName));
     }
 
     /**
@@ -133,7 +165,14 @@ public class SquidStorage extends JsonStorage {
      */
     public int preferencesSize()
     {
-        return super.preferencesSize();
+        Map<String, ?> p = preferences.get();
+        int byteSize = 0;
+        for(String k : p.keySet())
+        {
+            byteSize += k.length();
+            byteSize += preferences.getString(k, "").length();
+        }
+        return byteSize * 2;
     }
 
 }

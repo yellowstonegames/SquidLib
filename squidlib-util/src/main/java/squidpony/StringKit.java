@@ -105,7 +105,7 @@ public class StringKit {
         StringBuilder sb = new StringBuilder(64);
         sb.append(elements[0]);
         for (int i = 1; i < elements.length; i++) {
-            sb.append(delimiter).append(elements[i]).append('L');
+            sb.append(delimiter).append(elements[i]);
         }
         return sb.toString();
     }
@@ -179,7 +179,8 @@ public class StringKit {
      * @return
      */
     public static String joinAlt(boolean... elements) {
-        if (elements == null || elements.length == 0) return "";
+        if (elements == null) return "N";
+        if(elements.length == 0) return "";
         StringBuilder sb = new StringBuilder(64);
         for (int i = 0; i < elements.length; i++) {
             sb.append(elements[i] ? '1' : '0');
@@ -469,7 +470,7 @@ public class StringKit {
      * @return the long that cs represents
      */
     public static long longFromHex(final CharSequence cs, final int start, int end) {
-        int len, h, lim = 8;
+        int len, h, lim = 16;
         if (cs == null || start < 0 || end <= 0 || end - start <= 0
                 || (len = cs.length()) - start <= 0 || end > len)
             return 0;
@@ -478,12 +479,12 @@ public class StringKit {
             len = -1;
             h = 0;
             ++end;
-            lim = 9;
+            lim = 17;
         } else if (c == '+') {
             len = 1;
             h = 0;
             ++end;
-            lim = 9;
+            lim = 17;
         } else if (c > 102 || (h = hexCodes[c]) < 0)
             return 0;
         else {
@@ -685,14 +686,12 @@ public class StringKit {
         if(c == '-')
         {
             len = -1;
-            h = 0;
             ++end;
             lim = 11;
         }
         else if(c == '+')
         {
             len = 1;
-            h = 0;
             ++end;
             lim = 11;
         }
@@ -702,7 +701,7 @@ public class StringKit {
         {
             len = 1;
         }
-        int data = h;
+        int data = 0;
         for (int i = start; i < end && i < start + lim; i++) {
             if((c = cs.charAt(i)) > 102 || (h = hexCodes[c]) < 0 || h > 9)
                 return data * len;
