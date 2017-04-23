@@ -305,9 +305,15 @@ extends <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.s
 <ul class="blockListLast">
 <li class="blockList">
 <h4>StatefulRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/StatefulRNG.html#line.32">StatefulRNG</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;seedString)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/StatefulRNG.html#line.38">StatefulRNG</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;seedString)</pre>
 <div class="block">String-seeded constructor uses the hash of the String as a seed for LightRNG, which is of high quality, but low
- period (which rarely matters for games), and has good speed and tiny state size.</div>
+ period (which rarely matters for games), and has good speed and tiny state size.
+
+ Note: This constructor changed behavior on April 22, 2017, when it was noticed that it was not seeding very
+ effectively (only assigning to 32 bits of seed instead of all 64). If you want to keep the older behavior, you
+ can by replacing <code>new StatefulRNG(text)</code> with  <code>new StatefulRNG(CrossHash.hash(text))</code> . The new
+ technique assigns to all 64 bits and has less correlation between similar inputs causing similar starting states.
+ It's also faster, but that shouldn't matter in a constructor.</div>
 </li>
 </ul>
 </li>
@@ -324,7 +330,7 @@ extends <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.s
 <ul class="blockList">
 <li class="blockList">
 <h4>setRandomness</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/StatefulRNG.html#line.37">setRandomness</a>(<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;random)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/StatefulRNG.html#line.43">setRandomness</a>(<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;random)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../squidpony/squidmath/RNG.html#setRandomness-squidpony.squidmath.RandomnessSource-">setRandomness</a></code>&nbsp;in class&nbsp;<code><a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></code></dd>
@@ -337,7 +343,7 @@ extends <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.s
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;<a href="../../src-html/squidpony/squidmath/StatefulRNG.html#line.48">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;<a href="../../src-html/squidpony/squidmath/StatefulRNG.html#line.54">copy</a>()</pre>
 <div class="block">Creates a copy of this StatefulRNG; it will generate the same random numbers, given the same calls in order, as
  this StatefulRNG at the point copy() is called. The copy will not share references with this StatefulRNG.</div>
 <dl>
@@ -354,7 +360,7 @@ extends <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.s
 <ul class="blockList">
 <li class="blockList">
 <h4>getState</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/StatefulRNG.html#line.56">getState</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/StatefulRNG.html#line.62">getState</a>()</pre>
 <div class="block">Get a long that can be used to reproduce the sequence of random numbers this object will generate starting now.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -368,7 +374,7 @@ extends <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.s
 <ul class="blockList">
 <li class="blockList">
 <h4>setState</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/StatefulRNG.html#line.66">setState</a>(long&nbsp;state)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/StatefulRNG.html#line.72">setState</a>(long&nbsp;state)</pre>
 <div class="block">Sets the state of the random number generator to a given long, which will alter future random numbers this
  produces based on the state.</div>
 <dl>
@@ -383,7 +389,7 @@ extends <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.s
 <ul class="blockListLast">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/StatefulRNG.html#line.72">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/StatefulRNG.html#line.78">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../squidpony/squidmath/RNG.html#toString--">toString</a></code>&nbsp;in class&nbsp;<code><a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></code></dd>

@@ -18,12 +18,6 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
-var altColor = "altColor";
-var rowColor = "rowColor";
-var tableTab = "tableTab";
-var activeTableTab = "activeTableTab";
 </script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
@@ -37,7 +31,8 @@ var activeTableTab = "activeTableTab";
 <!--   -->
 </a>
 <ul class="navList" title="Navigation">
-<li><a href="../squidpony/package-summary.html">Package</a></li>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
 <li class="navBarCell1Rev">Class</li>
 <li><a href="class-use/DataConverter.html">Use</a></li>
 <li><a href="package-tree.html">Tree</a></li>
@@ -74,15 +69,15 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li><a href="#nested.classes.inherited.from.class.com.badlogic.gdx.utils.Json">Nested</a>&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.squidpony.store.json.JsonConverter">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#method.summary">Method</a></li>
+<li><a href="#methods.inherited.from.class.squidpony.store.json.JsonConverter">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#method.detail">Method</a></li>
+<li>Method</li>
 </ul>
 </div>
 <a name="skip.navbar.top">
@@ -102,7 +97,12 @@ var activeTableTab = "activeTableTab";
 <li>com.badlogic.gdx.utils.Json</li>
 <li>
 <ul class="inheritance">
+<li><a href="../squidpony/store/json/JsonConverter.html" title="class in squidpony.store.json">squidpony.store.json.JsonConverter</a></li>
+<li>
+<ul class="inheritance">
 <li>squidpony.DataConverter</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -113,8 +113,8 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <hr>
 <br>
-<pre>public class <a href="../src-html/squidpony/DataConverter.html#line.21">DataConverter</a>
-extends com.badlogic.gdx.utils.Json</pre>
+<pre>public class <a href="../src-html/squidpony/DataConverter.html#line.14">DataConverter</a>
+extends <a href="../squidpony/store/json/JsonConverter.html" title="class in squidpony.store.json">JsonConverter</a></pre>
 <div class="block">Augmented version of LibGDX's Json class that knows how to handle various data types common in SquidLib.
  This includes OrderedMap, which notably allows non-String keys (LibGDX's default Map serializer requires keys to be
  Strings), but does not currently allow the IHasher to be set (which only should affect OrderedMaps with array keys).
@@ -148,17 +148,13 @@ extends com.badlogic.gdx.utils.Json</pre>
 <!--   -->
 </a>
 <h3>Field Summary</h3>
-<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
-<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Field and Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/DataConverter.html#INVALID">INVALID</a></span></code>&nbsp;</td>
-</tr>
-</table>
+<ul class="blockList">
+<li class="blockList"><a name="fields.inherited.from.class.squidpony.store.json.JsonConverter">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;squidpony.store.json.<a href="../squidpony/store/json/JsonConverter.html" title="class in squidpony.store.json">JsonConverter</a></h3>
+<code><a href="../squidpony/store/json/JsonConverter.html#INVALID">INVALID</a></code></li>
+</ul>
 </li>
 </ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -193,17 +189,13 @@ extends com.badlogic.gdx.utils.Json</pre>
 <!--   -->
 </a>
 <h3>Method Summary</h3>
-<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tr id="i0" class="altColor">
-<td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/DataConverter.html#initialize-com.badlogic.gdx.utils.Json-">initialize</a></span>(com.badlogic.gdx.utils.Json&nbsp;json)</code>&nbsp;</td>
-</tr>
-</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.squidpony.store.json.JsonConverter">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;squidpony.store.json.<a href="../squidpony/store/json/JsonConverter.html" title="class in squidpony.store.json">JsonConverter</a></h3>
+<code><a href="../squidpony/store/json/JsonConverter.html#initialize-com.badlogic.gdx.utils.Json-">initialize</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.com.badlogic.gdx.utils.Json">
 <!--   -->
@@ -226,23 +218,6 @@ extends com.badlogic.gdx.utils.Json</pre>
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
-<!-- ============ FIELD DETAIL =========== -->
-<ul class="blockList">
-<li class="blockList"><a name="field.detail">
-<!--   -->
-</a>
-<h3>Field Detail</h3>
-<a name="INVALID">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>INVALID</h4>
-<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> <a href="../src-html/squidpony/DataConverter.html#line.42">INVALID</a></pre>
-</li>
-</ul>
-</li>
-</ul>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.detail">
@@ -255,7 +230,7 @@ extends com.badlogic.gdx.utils.Json</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>DataConverter</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/DataConverter.html#line.27">DataConverter</a>()</pre>
+<pre>public&nbsp;<a href="../src-html/squidpony/DataConverter.html#line.20">DataConverter</a>()</pre>
 <div class="block">Creates a new DataConverter using "minimal" output type, so it omits double quotes whenever possible but gives
  up compatibility with most other JSON readers. Give the constructor
  <code>JsonWriter.json(java.lang.String)</code> if you need full compatibility.</div>
@@ -267,30 +242,13 @@ extends com.badlogic.gdx.utils.Json</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>DataConverter</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/DataConverter.html#line.37">DataConverter</a>(com.badlogic.gdx.utils.JsonWriter.OutputType&nbsp;outputType)</pre>
+<pre>public&nbsp;<a href="../src-html/squidpony/DataConverter.html#line.29">DataConverter</a>(com.badlogic.gdx.utils.JsonWriter.OutputType&nbsp;outputType)</pre>
 <div class="block">Creates a new DataConverter with the given OutputType; typically minimal is fine, but compatibility may require
  you to use json; the javascript type is a sort of middle ground.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>outputType</code> - a JsonWriter.OutputType enum value that determines what syntax can be omitted from the output</dd>
 </dl>
-</li>
-</ul>
-</li>
-</ul>
-<!-- ============ METHOD DETAIL ========== -->
-<ul class="blockList">
-<li class="blockList"><a name="method.detail">
-<!--   -->
-</a>
-<h3>Method Detail</h3>
-<a name="initialize-com.badlogic.gdx.utils.Json-">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>initialize</h4>
-<pre>public static&nbsp;void&nbsp;<a href="../src-html/squidpony/DataConverter.html#line.44">initialize</a>(com.badlogic.gdx.utils.Json&nbsp;json)</pre>
 </li>
 </ul>
 </li>
@@ -309,7 +267,8 @@ extends com.badlogic.gdx.utils.Json</pre>
 <!--   -->
 </a>
 <ul class="navList" title="Navigation">
-<li><a href="../squidpony/package-summary.html">Package</a></li>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
 <li class="navBarCell1Rev">Class</li>
 <li><a href="class-use/DataConverter.html">Use</a></li>
 <li><a href="package-tree.html">Tree</a></li>
@@ -346,15 +305,15 @@ extends com.badlogic.gdx.utils.Json</pre>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li><a href="#nested.classes.inherited.from.class.com.badlogic.gdx.utils.Json">Nested</a>&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.squidpony.store.json.JsonConverter">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#method.summary">Method</a></li>
+<li><a href="#methods.inherited.from.class.squidpony.store.json.JsonConverter">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#method.detail">Method</a></li>
+<li>Method</li>
 </ul>
 </div>
 <a name="skip.navbar.bottom">

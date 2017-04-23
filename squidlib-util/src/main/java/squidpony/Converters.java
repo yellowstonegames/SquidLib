@@ -3,6 +3,9 @@ package squidpony;
 import squidpony.squidmath.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  * Ways to produce concrete implementations of StringConvert for various data structures.
@@ -48,7 +51,11 @@ public class Converters {
             @Override
             public OrderedSet<K> restore(String text) {
                 ObText.ContentMatcher m = makeMatcher(text);
-                OrderedSet<K> d = new OrderedSet<>();
+                OrderedSet<K> d;
+                if(convert.isArray)
+                    d = new OrderedSet<>(CrossHash.generalHasher);
+                else
+                    d = new OrderedSet<>();
                 while (m.find()) {
                     if (m.hasMatch()) {
                         d.add(convert.restore(m.getMatch()));
@@ -98,7 +105,11 @@ public class Converters {
             @Override
             public OrderedMap<K, V> restore(String text) {
                 ObText.ContentMatcher m = makeMatcher(text);
-                OrderedMap<K, V> d = new OrderedMap<>();
+                OrderedMap<K, V> d;
+                if(convertK.isArray)
+                    d = new OrderedMap<>(CrossHash.generalHasher);
+                else
+                    d = new OrderedMap<>();
                 String t;
                 while (m.find()) {
                     if (m.hasMatch()) {
@@ -119,6 +130,108 @@ public class Converters {
 
     public static <K, V> StringConvert<OrderedMap<K, V>> convertOrderedMap(final Class<K> typeK, final Class<V> typeV) {
         return convertOrderedMap((StringConvert<K>) StringConvert.get(typeK.getSimpleName()),
+                (StringConvert<V>) StringConvert.get(typeV.getSimpleName()));
+    }
+
+    public static <K> StringConvert<HashSet<K>> convertHashSet(final StringConvert<K> convert) {
+        CharSequence[] types = StringConvert.asArray("HashSet", convert.name);
+        StringConvert found = StringConvert.lookup(types);
+        if (found != null)
+            return found; // in this case we've already created a StringConvert for this type combination
+
+        return new StringConvert<HashSet<K>>(types) {
+            @Override
+            public String stringify(HashSet<K> item) {
+                StringBuilder sb = new StringBuilder(100);
+                Iterator<K> it = item.iterator();
+                K k;
+                while (it.hasNext()){
+                    k = it.next();
+                    if (item == k)
+                        return "";
+                    ObText.appendQuoted(sb, convert.stringify(k));
+                    if (it.hasNext())
+                        sb.append(' ');
+                }
+                return sb.toString();
+            }
+
+            @Override
+            public HashSet<K> restore(String text) {
+                ObText.ContentMatcher m = makeMatcher(text);
+                HashSet<K> d = new HashSet<>();
+                while (m.find()) {
+                    if (m.hasMatch()) {
+                        d.add(convert.restore(m.getMatch()));
+                    }
+                }
+                return d;
+            }
+        };
+    }
+
+    public static <K> StringConvert<HashSet<K>> convertHashSet(final CharSequence type) {
+        return convertHashSet((StringConvert<K>) StringConvert.get(type));
+    }
+
+    public static <K> StringConvert<HashSet<K>> convertHashSet(final Class<K> type) {
+        return convertHashSet((StringConvert<K>) StringConvert.get(type.getSimpleName()));
+    }
+
+    public static <K, V> StringConvert<HashMap<K, V>> convertHashMap(final StringConvert<K> convertK, final StringConvert<V> convertV) {
+        CharSequence[] types = StringConvert.asArray("HashMap", convertK.name, convertV.name);
+        StringConvert found = StringConvert.lookup(types);
+        if (found != null)
+            return found; // in this case we've already created a StringConvert for this type combination
+
+        return new StringConvert<HashMap<K, V>>(types) {
+            @Override
+            public String stringify(HashMap<K, V> item) {
+                StringBuilder sb = new StringBuilder(100);
+                K k;
+                V v;
+                Iterator<K> kit = item.keySet().iterator();
+                Iterator<V> vit = item.values().iterator();
+                while (kit.hasNext()) {
+                    k = kit.next();
+                    if (k == item)
+                        return "";
+                    appendQuoted(sb, convertK.stringify(k));
+                    sb.append(' ');
+                    v = vit.next();
+                    if (v == item)
+                        return "";
+                    appendQuoted(sb, convertV.stringify(v));
+                    if (kit.hasNext())
+                        sb.append('\n');
+                }
+                return sb.toString();
+            }
+
+            @Override
+            public HashMap<K, V> restore(String text) {
+                ObText.ContentMatcher m = makeMatcher(text);
+                HashMap<K, V> d = new HashMap<>();
+                String t;
+                while (m.find()) {
+                    if (m.hasMatch()) {
+                        t = m.getMatch();
+                        if (m.find() && m.hasMatch()) {
+                            d.put(convertK.restore(t), convertV.restore(m.getMatch()));
+                        }
+                    }
+                }
+                return d;
+            }
+        };
+    }
+
+    public static <K, V> StringConvert<HashMap<K, V>> convertHashMap(final CharSequence typeK, final CharSequence typeV) {
+        return convertHashMap((StringConvert<K>) StringConvert.get(typeK), (StringConvert<V>) StringConvert.get(typeV));
+    }
+
+    public static <K, V> StringConvert<HashMap<K, V>> convertHashMap(final Class<K> typeK, final Class<V> typeV) {
+        return convertHashMap((StringConvert<K>) StringConvert.get(typeK.getSimpleName()),
                 (StringConvert<V>) StringConvert.get(typeV.getSimpleName()));
     }
 
@@ -168,22 +281,29 @@ public class Converters {
     public static final StringConvert<Coord> convertCoord = new StringConvert<Coord>("Coord") {
         @Override
         public String stringify(Coord item) {
+            if(item == null) return "n";
             return item.x + "," + item.y;
         }
 
         @Override
         public Coord restore(String text) {
+            if(text == null || text.equals("n")) return null;
             return Coord.get(StringKit.intFromDec(text), StringKit.intFromDec(text, text.indexOf(',') + 1, text.length()));
         }
     };
 
-    public static final StringConvert<Coord[]> convertArrayCoord = new StringConvert<Coord[]>("Coord[]") {
+    public static final StringConvert<Coord[]> convertArrayCoord = new StringConvert<Coord[]>(true,"Coord[]") {
         @Override
         public String stringify(Coord[] item) {
+            if(item == null)
+                return "N";
             int len = item.length;
             StringBuilder sb = new StringBuilder(len * 5);
             for (int i = 0; i < len; ) {
-                sb.append(item[i].x).append(',').append(item[i].y);
+                if(item[i] == null)
+                    sb.append('n');
+                else
+                    sb.append(item[i].x).append(',').append(item[i].y);
                 if (++i < len)
                     sb.append(';');
             }
@@ -192,10 +312,17 @@ public class Converters {
 
         @Override
         public Coord[] restore(String text) {
+            if(text == null || text.equals("N"))
+                return null;
             Coord[] coords = new Coord[StringKit.count(text, ';') + 1];
             int start = -1, end = text.indexOf(',');
             for (int i = 0; i < coords.length; i++) {
-                coords[i] = Coord.get(StringKit.intFromDec(text, start + 1, end),
+                if(text.charAt(start+1) == 'n') {
+                    coords[i] = null;
+                    start = text.indexOf(';', end + 1);
+                }
+                else
+                    coords[i] = Coord.get(StringKit.intFromDec(text, start + 1, end),
                         StringKit.intFromDec(text, end + 1, (start = text.indexOf(';', end + 1))));
                 end = text.indexOf(',', start + 1);
             }
@@ -249,6 +376,14 @@ public class Converters {
             return ObText.deserializeFromString(text);
         }
     };
+
+
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /////// CORE JDK TYPES, PRIMITIVES, AND PRIMITIVE ARRAYS ARE THE ONLY TYPES AFTER THIS POINT
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     /**
      * Simple implementation to help when passing StringConverts around with data that is already a String.
@@ -362,7 +497,7 @@ public class Converters {
         }
     };
 
-    public static final StringConvert<boolean[]> convertArrayBoolean = new StringConvert<boolean[]>("boolean[]") {
+    public static final StringConvert<boolean[]> convertArrayBoolean = new StringConvert<boolean[]>(true,"boolean[]") {
         @Override
         public String stringify(boolean[] item) {
             return StringKit.joinAlt(item);
@@ -370,6 +505,7 @@ public class Converters {
 
         @Override
         public boolean[] restore(String text) {
+            if(text == null || text.equals("N")) return null;
             int amount = text.length();
             if (amount <= 0) return new boolean[0];
             boolean[] splat = new boolean[amount];
@@ -380,14 +516,16 @@ public class Converters {
         }
     };
 
-    public static final StringConvert<byte[]> convertArrayByte = new StringConvert<byte[]>("byte[]") {
+    public static final StringConvert<byte[]> convertArrayByte = new StringConvert<byte[]>(true,"byte[]") {
         @Override
         public String stringify(byte[] item) {
+            if(item == null) return "N";
             return StringKit.join(",", item);
         }
 
         @Override
         public byte[] restore(String text) {
+            if(text == null || text.equals("N")) return null;
             int amount = StringKit.count(text, ",");
             if (amount <= 0) return new byte[]{Byte.decode(text)};
             byte[] splat = new byte[amount + 1];
@@ -405,14 +543,16 @@ public class Converters {
     };
 
 
-    public static final StringConvert<short[]> convertArrayShort = new StringConvert<short[]>("short[]") {
+    public static final StringConvert<short[]> convertArrayShort = new StringConvert<short[]>(true,"short[]") {
         @Override
         public String stringify(short[] item) {
+            if(item == null) return "N";
             return StringKit.join(",", item);
         }
 
         @Override
         public short[] restore(String text) {
+            if(text == null || text.equals("N")) return null;
             int amount = StringKit.count(text, ",");
             if (amount <= 0) return new short[]{Short.decode(text)};
             short[] splat = new short[amount + 1];
@@ -429,14 +569,16 @@ public class Converters {
         }
     };
 
-    public static final StringConvert<int[]> convertArrayInt = new StringConvert<int[]>("int[]") {
+    public static final StringConvert<int[]> convertArrayInt = new StringConvert<int[]>(true,"int[]") {
         @Override
         public String stringify(int[] item) {
+            if(item == null) return "N";
             return StringKit.join(",", item);
         }
 
         @Override
         public int[] restore(String text) {
+            if(text == null || text.equals("N")) return null;
             int amount = StringKit.count(text, ",");
             if (amount <= 0) return new int[]{Integer.decode(text)};
             int[] splat = new int[amount + 1];
@@ -454,14 +596,16 @@ public class Converters {
     };
 
 
-    public static final StringConvert<long[]> convertArrayLong = new StringConvert<long[]>("long[]") {
+    public static final StringConvert<long[]> convertArrayLong = new StringConvert<long[]>(true,"long[]") {
         @Override
         public String stringify(long[] item) {
+            if(item == null) return "N";
             return StringKit.join(",", item);
         }
 
         @Override
         public long[] restore(String text) {
+            if(text == null || text.equals("N")) return null;
             int amount = StringKit.count(text, ",");
             if (amount <= 0) return new long[]{Long.decode(text)};
             long[] splat = new long[amount + 1];
@@ -478,14 +622,16 @@ public class Converters {
         }
     };
 
-    public static final StringConvert<float[]> convertArrayFloat = new StringConvert<float[]>("float[]") {
+    public static final StringConvert<float[]> convertArrayFloat = new StringConvert<float[]>(true,"float[]") {
         @Override
         public String stringify(float[] item) {
+            if(item == null) return "N";
             return StringKit.join(",", item);
         }
 
         @Override
         public float[] restore(String text) {
+            if(text == null || text.equals("N")) return null;
             int amount = StringKit.count(text, ",");
             if (amount <= 0) return new float[]{Float.parseFloat(text)};
             float[] splat = new float[amount + 1];
@@ -502,14 +648,16 @@ public class Converters {
         }
     };
 
-    public static final StringConvert<double[]> convertArrayDouble = new StringConvert<double[]>("double[]") {
+    public static final StringConvert<double[]> convertArrayDouble = new StringConvert<double[]>(true,"double[]") {
         @Override
         public String stringify(double[] item) {
+            if(item == null) return "N";
             return StringKit.join(",", item);
         }
 
         @Override
         public double[] restore(String text) {
+            if(text == null || text.equals("N")) return null;
             int amount = StringKit.count(text, ",");
             if (amount <= 0) return new double[]{Double.parseDouble(text)};
             double[] splat = new double[amount + 1];
@@ -527,9 +675,10 @@ public class Converters {
     };
 
 
-    public static final StringConvert<char[]> convertArrayChar = new StringConvert<char[]>("char[]") {
+    public static final StringConvert<char[]> convertArrayChar = new StringConvert<char[]>(true,"char[]") {
         @Override
         public String stringify(char[] item) {
+            if(item == null) return "";
             return String.valueOf(item);
         }
 
@@ -539,7 +688,7 @@ public class Converters {
         }
     };
 
-    public static final StringConvert<boolean[][]> convertArrayBoolean2D = new StringConvert<boolean[][]>() {
+    public static final StringConvert<boolean[][]> convertArrayBoolean2D = new StringConvert<boolean[][]>(true, "boolean[][]") {
         @Override
         public String stringify(boolean[][] item) {
             if(item == null)
@@ -587,7 +736,7 @@ public class Converters {
         }
     };
 
-    public static final StringConvert<byte[][]> convertArrayByte2D = new StringConvert<byte[][]>() {
+    public static final StringConvert<byte[][]> convertArrayByte2D = new StringConvert<byte[][]>(true, "byte[][]") {
         @Override
         public String stringify(byte[][] item) {
             if(item == null)
@@ -628,7 +777,7 @@ public class Converters {
                         continue;
                     }
                     val[i] = new byte[amount + 1];
-                    int dl = 1, idx = -dl, idx2;
+                    int dl = 1, idx = start - dl, idx2;
                     for (int j = 0; j < amount; j++) {
                         val[i][j] = Byte.decode(StringKit.safeSubstring(text, idx + dl, idx = text.indexOf(',', idx + dl)));
                     }
@@ -648,7 +797,7 @@ public class Converters {
     };
 
 
-    public static final StringConvert<short[][]> convertArrayShort2D = new StringConvert<short[][]>() {
+    public static final StringConvert<short[][]> convertArrayShort2D = new StringConvert<short[][]>(true, "short[][]") {
         @Override
         public String stringify(short[][] item) {
             if(item == null)
@@ -689,7 +838,7 @@ public class Converters {
                         continue;
                     }
                     val[i] = new short[amount + 1];
-                    int dl = 1, idx = -dl, idx2;
+                    int dl = 1, idx = start - dl, idx2;
                     for (int j = 0; j < amount; j++) {
                         val[i][j] = Short.decode(StringKit.safeSubstring(text, idx + dl, idx = text.indexOf(',', idx + dl)));
                     }
@@ -708,7 +857,7 @@ public class Converters {
         }
     };
 
-    public static final StringConvert<int[][]> convertArrayInt2D = new StringConvert<int[][]>() {
+    public static final StringConvert<int[][]> convertArrayInt2D = new StringConvert<int[][]>(true, "int[][]") {
         @Override
         public String stringify(int[][] item) {
             if(item == null)
@@ -749,7 +898,7 @@ public class Converters {
                         continue;
                     }
                     val[i] = new int[amount + 1];
-                    int dl = 1, idx = -dl, idx2;
+                    int dl = 1, idx = start - dl, idx2;
                     for (int j = 0; j < amount; j++) {
                         val[i][j] = Integer.decode(StringKit.safeSubstring(text, idx + dl, idx = text.indexOf(',', idx + dl)));
                     }
@@ -768,7 +917,7 @@ public class Converters {
         }
     };
 
-    public static final StringConvert<long[][]> convertArrayLong2D = new StringConvert<long[][]>() {
+    public static final StringConvert<long[][]> convertArrayLong2D = new StringConvert<long[][]>(true, "long[][]") {
         @Override
         public String stringify(long[][] item) {
             if(item == null)
@@ -809,7 +958,7 @@ public class Converters {
                         continue;
                     }
                     val[i] = new long[amount + 1];
-                    int dl = 1, idx = -dl, idx2;
+                    int dl = 1, idx = start - dl, idx2;
                     for (int j = 0; j < amount; j++) {
                         val[i][j] = Long.decode(StringKit.safeSubstring(text, idx + dl, idx = text.indexOf(',', idx + dl)));
                     }
@@ -828,7 +977,7 @@ public class Converters {
         }
     };
 
-    public static final StringConvert<float[][]> convertArrayFloat2D = new StringConvert<float[][]>() {
+    public static final StringConvert<float[][]> convertArrayFloat2D = new StringConvert<float[][]>(true, "float[][]") {
         @Override
         public String stringify(float[][] item) {
             if(item == null)
@@ -869,7 +1018,7 @@ public class Converters {
                         continue;
                     }
                     val[i] = new float[amount + 1];
-                    int dl = 1, idx = -dl, idx2;
+                    int dl = 1, idx = start - dl, idx2;
                     for (int j = 0; j < amount; j++) {
                         val[i][j] = Float.parseFloat(StringKit.safeSubstring(text, idx + dl, idx = text.indexOf(',', idx + dl)));
                     }
@@ -888,7 +1037,7 @@ public class Converters {
         }
     };
 
-    public static final StringConvert<double[][]> convertArrayDouble2D = new StringConvert<double[][]>() {
+    public static final StringConvert<double[][]> convertArrayDouble2D = new StringConvert<double[][]>(true, "double[][]") {
         @Override
         public String stringify(double[][] item) {
             if(item == null)
@@ -929,7 +1078,7 @@ public class Converters {
                         continue;
                     }
                     val[i] = new double[amount + 1];
-                    int dl = 1, idx = -dl, idx2;
+                    int dl = 1, idx = start - dl, idx2;
                     for (int j = 0; j < amount; j++) {
                         val[i][j] = Double.parseDouble(StringKit.safeSubstring(text, idx + dl, idx = text.indexOf(',', idx + dl)));
                     }
@@ -949,7 +1098,7 @@ public class Converters {
     };
 
 
-    public static final StringConvert<char[][]> convertArrayChar2D = new StringConvert<char[][]>("char[][]") {
+    public static final StringConvert<char[][]> convertArrayChar2D = new StringConvert<char[][]>(true, "char[][]") {
         @Override
         public String stringify(char[][] item) {
             int len, l2, sum;

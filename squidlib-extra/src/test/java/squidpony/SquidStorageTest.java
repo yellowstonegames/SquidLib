@@ -22,7 +22,7 @@ public class SquidStorageTest extends ApplicationAdapter {
     @Override
     public void create() {
         super.create();
-        if(false) {
+        if(true) {
             SquidStorage store = new SquidStorage("StorageTest");
             store.compress = true;
             System.out.println(store.preferences.get().values());

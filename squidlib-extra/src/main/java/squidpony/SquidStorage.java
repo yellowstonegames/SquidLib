@@ -1,25 +1,14 @@
 package squidpony;
 
-import blazing.chain.LZSEncoding;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.utils.JsonWriter;
 import squidpony.annotation.Beta;
-
-import java.util.Map;
+import squidpony.store.json.JsonStorage;
 
 /**
  * Helps games store information in libGDX's Preferences class as Strings, then get it back out.
  * Created by Tommy Ettinger on 9/16/2016.
  */
 @Beta
-public class SquidStorage {
-    public final Preferences preferences;
-    public final String storageName;
-    public final DataConverter json;
-    protected StringStringMap contents;
-    public boolean compress = true;
-
+public class SquidStorage extends JsonStorage {
     /**
      * Please don't use this constructor if possible; it simply calls {@link #SquidStorage(String)} with the constant
      * String "nameless". This could easily overlap with other files/sections in Preferences, so you should always
@@ -28,7 +17,7 @@ public class SquidStorage {
      */
     public SquidStorage()
     {
-        this("nameless");
+        super("nameless");
     }
 
     /**
@@ -52,11 +41,7 @@ public class SquidStorage {
      */
     public SquidStorage(final String fileName)
     {
-        storageName = fileName;
-        preferences = Gdx.app.getPreferences(storageName);
-        json = new DataConverter(JsonWriter.OutputType.minimal);
-
-        contents = new StringStringMap(16, 0.2f);
+        super(fileName);
     }
 
     /**
@@ -69,7 +54,7 @@ public class SquidStorage {
      */
     public SquidStorage put(String innerName, Object o)
     {
-        contents.put(innerName, json.toJson(o));
+        super.put(innerName, o);
         return this;
     }
 
@@ -85,11 +70,7 @@ public class SquidStorage {
      */
     public SquidStorage store(String outerName)
     {
-        if(compress)
-            preferences.putString(outerName, LZSEncoding.compressToUTF16(json.toJson(contents, StringStringMap.class)));
-        else
-            preferences.putString(outerName, json.toJson(contents, StringStringMap.class));
-        preferences.flush();
+        super.store(outerName);
         return this;
     }
 
@@ -100,10 +81,7 @@ public class SquidStorage {
      */
     public String show()
     {
-        if(compress)
-            return LZSEncoding.compressToUTF16(json.toJson(contents, StringStringMap.class));
-        else
-            return json.toJson(contents, StringStringMap.class);
+        return super.show();
     }
 
     /**
@@ -112,7 +90,7 @@ public class SquidStorage {
      */
     public SquidStorage clear()
     {
-        contents.clear();
+        super.clear();
         return this;
     }
 
@@ -125,7 +103,7 @@ public class SquidStorage {
      */
     public SquidStorage remove(String innerName)
     {
-        contents.remove(innerName);
+        super.remove(innerName);
         return this;
     }
 
@@ -143,16 +121,7 @@ public class SquidStorage {
     @SuppressWarnings("unchecked")
     public <T> T get(String outerName, String innerName, Class<T> type)
     {
-        StringStringMap om;
-        String got;
-        if(compress)
-            got = LZSEncoding.decompressFromUTF16(preferences.getString(outerName));
-        else
-            got = preferences.getString(outerName);
-        if(got == null) return null;
-        om = json.fromJson(StringStringMap.class, got);
-        if(om == null) return null;
-        return json.fromJson(type, om.get(innerName));
+        return super.get(outerName, innerName, type);
     }
 
     /**
@@ -164,14 +133,7 @@ public class SquidStorage {
      */
     public int preferencesSize()
     {
-        Map<String, ?> p = preferences.get();
-        int byteSize = 0;
-        for(String k : p.keySet())
-        {
-            byteSize += k.length();
-            byteSize += preferences.getString(k, "").length();
-        }
-        return byteSize * 2;
+        return super.preferencesSize();
     }
 
 }
