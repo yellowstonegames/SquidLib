@@ -74,7 +74,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 43, rngMode = 0, noiseMode = 60;
+    private int hashMode = 43, rngMode = 0, noiseMode = 57;
     private CrossHash.Storm storm, stormA, stormB, stormC;
     private CrossHash.Chariot chariot, chariotA, chariotB, chariotC;
     private final int[] coordinates = new int[2];
@@ -317,6 +317,37 @@ public class HashVisualizer extends ApplicationAdapter {
                                 + Math.sin(y * r0 + x * r1 - z * r2 + seed)
                                 + Math.sin(z * r0 + y * r1 - x * r2 + seed)
                 );
+    }
+    public static int prepareSeed(final int seed)
+    {
+        return (seed ^ 0xD0E89D2D) >>> 19 | (seed ^ 0xD0E89D2D) << 13;
+    }
+    public static double tabbyNoise(final float ox, final float oy, final float oz, final int seed)
+    {
+        final int r = PintRNG.determine(seed);
+        final float
+                x = ox *  5 + oy * 2 - oz,
+                y = oy *  5 + oz * 2 - ox,
+                z = oz * -5 - ox * 2 + oy;
+
+        final int xf = SeededNoise.fastFloor(x),
+                  yf = SeededNoise.fastFloor(y),
+                  zf = SeededNoise.fastFloor(z);
+
+        final float
+                xrl = NumberTools.randomSignedFloat(prepareSeed(xf^r)),
+                yrl = NumberTools.randomSignedFloat(prepareSeed(yf^r)),
+                zrl = NumberTools.randomSignedFloat(prepareSeed(zf^r)),
+                xrh = NumberTools.randomSignedFloat(prepareSeed(xf+1^r)),
+                yrh = NumberTools.randomSignedFloat(prepareSeed(yf+1^r)),
+                zrh = NumberTools.randomSignedFloat(prepareSeed(zf+1^r)),
+                dx = (x - xf) * 16,
+                dy = (y - yf) * 16,
+                dz = (z - zf) * 16;
+        return NumberTools.bounce(
+                (xrh * dx + xrl * (16 - dx)
+               + yrh * dy + yrl * (16 - dy)
+               + zrh * dz + zrl * (16 - dz)) + 80.0);
     }
 
 
@@ -2493,22 +2524,22 @@ public class HashVisualizer extends ApplicationAdapter {
                                                 1.0f));*/
                                 display.put(x, y,
                                         floatGet(
-                                                ((float)trigNoise(x * 0.03125 + 20, y * 0.03125 + 30, ctr * 0.05125 + 10, 1234) * 0.50f) + 0.50f,
-                                                ((float)trigNoise(x * 0.03125 + 30, y * 0.03125 + 10, ctr * 0.05125 + 20, 54321) * 0.50f) + 0.50f,
-                                                ((float)trigNoise(x * 0.03125 + 10, y * 0.03125 + 20, ctr * 0.05125 + 30, 1234321) * 0.50f) + 0.50f,
+                                                ((float)tabbyNoise(x * 0.03125f + 20, y * 0.03125f + 30, ctr * 0.05125f + 10, 1234) * 0.50f) + 0.50f,
+                                                ((float)tabbyNoise(x * 0.03125f + 30, y * 0.03125f + 10, ctr * 0.05125f + 20, 54321) * 0.50f) + 0.50f,
+                                                ((float)tabbyNoise(x * 0.03125f + 10, y * 0.03125f + 20, ctr * 0.05125f + 30, 1234321) * 0.50f) + 0.50f,
                                                 1.0f));
                             }
                         }
                         break;
                     case 59:
-                        Gdx.graphics.setTitle("Trig 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Tabby 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)(/*Noise.seamless3D(x * 0.0625, y * 0.0625, ctr  * 0.05125,
                                         20.0, 20.0, 20.0, 12) * 0.5
                                         + Noise.seamless3D(x * 0.125, y * 0.125, ctr  * 0.05125,
                                         40.0, 40.0, 20.0, 1234)
-                                        + */trigNoise(x * 0.03125, y * 0.03125, ctr  * 0.05125,
+                                        + */tabbyNoise(x * 0.03125f, y * 0.03125f, ctr  * 0.05125f,
                                         123456) * 0.50f) + 0.50f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
