@@ -1,5 +1,6 @@
 package squidpony;
 
+import squidpony.squidmath.Arrangement;
 import squidpony.squidmath.OrderedMap;
 import squidpony.squidmath.OrderedSet;
 
@@ -201,5 +202,21 @@ public class Maker {
     public static <T> OrderedSet<T> makeOS(T... elements) {
         if(elements == null) return null;
         return new OrderedSet<>(elements);
+    }
+
+    /**
+     * Makes a Arrangement (Arrange) of T given an array or vararg of T elements. Duplicate items in elements will have
+     * all but one item discarded, using the later item in elements. As is always the case with Arrangement, each item
+     * will be mapped bi-directionally to its index in the iteration order, and an item can be retrieved with
+     * {@link Arrangement#keyAt(int)} if you only know its index, or the int index for an item can be retrieved with
+     * {@link Arrangement#getInt(Object)} if you only have an item.
+     * @param elements an array or vararg of T
+     * @param <T> just about any non-primitive type
+     * @return a newly-allocated Arrangement containing all of the non-duplicate items in elements, in order
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> Arrangement<T> makeArrange(T... elements) {
+        if(elements == null) return null;
+        return new Arrangement<>(elements);
     }
 }
