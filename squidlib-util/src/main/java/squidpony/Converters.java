@@ -2,10 +2,7 @@ package squidpony;
 
 import squidpony.squidmath.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * Ways to produce concrete implementations of StringConvert for various data structures.
@@ -235,6 +232,55 @@ public class Converters {
                 (StringConvert<V>) StringConvert.get(typeV.getSimpleName()));
     }
 
+    public static <K> StringConvert<Arrangement<K>> convertArrangement(final StringConvert<K> convert) {
+        CharSequence[] types = StringConvert.asArray("Arrangement", convert.name);
+        StringConvert found = StringConvert.lookup(types);
+        if (found != null)
+            return found; // in this case we've already created a StringConvert for this type combination
+
+        return new StringConvert<Arrangement<K>>(types) {
+            @Override
+            public String stringify(Arrangement<K> item) {
+                StringBuilder sb = new StringBuilder(100);
+                K k;
+                for (int i = 0; i < item.size(); ) {
+                    k = item.keyAt(i);
+                    if (item == k)
+                        return "";
+                    ObText.appendQuoted(sb, convert.stringify(k));
+                    if (++i < item.size())
+                        sb.append(' ');
+                }
+                return sb.toString();
+            }
+
+            @Override
+            public Arrangement<K> restore(String text) {
+                ObText.ContentMatcher m = makeMatcher(text);
+                Arrangement<K> d;
+                if(convert.isArray)
+                    d = new Arrangement<>(CrossHash.generalHasher);
+                else
+                    d = new Arrangement<>();
+                while (m.find()) {
+                    if (m.hasMatch()) {
+                        d.add(convert.restore(m.getMatch()));
+                    }
+                }
+                return d;
+            }
+        };
+    }
+
+    public static <K> StringConvert<Arrangement<K>> convertArrangement(final CharSequence type) {
+        return convertArrangement((StringConvert<K>) StringConvert.get(type));
+    }
+
+    public static <K> StringConvert<Arrangement<K>> convertArrangement(final Class<K> type) {
+        return convertArrangement((StringConvert<K>) StringConvert.get(type.getSimpleName()));
+    }
+
+
     public static <K> StringConvert<ArrayList<K>> convertArrayList(final StringConvert<K> convert) {
         CharSequence[] types = StringConvert.asArray("ArrayList", convert.name);
         StringConvert found = StringConvert.lookup(types);
@@ -276,6 +322,48 @@ public class Converters {
 
     public static <K> StringConvert<ArrayList<K>> convertArrayList(final Class<K> type) {
         return convertArrayList((StringConvert<K>) StringConvert.get(type.getSimpleName()));
+    }
+    public static <K> StringConvert<List<K>> convertList(final StringConvert<K> convert) {
+        CharSequence[] types = StringConvert.asArray("List", convert.name);
+        StringConvert found = StringConvert.lookup(types);
+        if (found != null)
+            return found; // in this case we've already created a StringConvert for this type combination
+        return new StringConvert<List<K>>(types) {
+            @Override
+            public String stringify(List<K> item) {
+                StringBuilder sb = new StringBuilder(100);
+                K k;
+                for (int i = 0; i < item.size(); ) {
+                    k = item.get(i);
+                    if (item == k)
+                        return "";
+                    appendQuoted(sb, convert.stringify(k));
+                    if (++i < item.size())
+                        sb.append(' ');
+                }
+                return sb.toString();
+            }
+
+            @Override
+            public ArrayList<K> restore(String text) {
+                ObText.ContentMatcher m = makeMatcher(text);
+                ArrayList<K> d = new ArrayList<>();
+                while (m.find()) {
+                    if (m.hasMatch()) {
+                        d.add(convert.restore(m.getMatch()));
+                    }
+                }
+                return d;
+            }
+        };
+    }
+
+    public static <K> StringConvert<List<K>> convertList(final CharSequence type) {
+        return convertList((StringConvert<K>) StringConvert.get(type));
+    }
+
+    public static <K> StringConvert<List<K>> convertList(final Class<K> type) {
+        return convertList((StringConvert<K>) StringConvert.get(type.getSimpleName()));
     }
 
     public static final StringConvert<Coord> convertCoord = new StringConvert<Coord>("Coord") {

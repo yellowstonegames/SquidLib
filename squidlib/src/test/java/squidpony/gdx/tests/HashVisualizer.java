@@ -322,35 +322,55 @@ public class HashVisualizer extends ApplicationAdapter {
     {
         return (seed ^ 0xD0E89D2D) >>> 19 | (seed ^ 0xD0E89D2D) << 13;
     }
-    public static double tabbyNoise(final float ox, final float oy, final float oz, final int seed)
-    {
-        final int r = PintRNG.determine(seed);
-        final float
-                x = ox *  5 + oy * 2 - oz,
-                y = oy *  5 + oz * 2 - ox,
-                z = oz * -5 - ox * 2 + oy;
+    public static double tabbyNoise(final float ox, final float oy, final float oz, final int seed) {
+        final float skew = (ox + oy + oz) / 128f,
+                c = (float) Math.cos(ox + oy + oz) * 0.125f,
+                s = (float) Math.sin(ox - oy - oz) * 0.125f,
+                x = ((ox - oz) * 1.3f + oy * 0.8f * s - oz * c * 0.5f) * skew,
+                y = ((oy - ox) * 1.3f + oz * 0.8f * s - ox * c * 0.5f) * skew,
+                z = ((oz - oy) * 1.3f + ox * 0.8f * s - oy * c * 0.5f) * skew;
 
-        final int xf = SeededNoise.fastFloor(x),
-                  yf = SeededNoise.fastFloor(y),
-                  zf = SeededNoise.fastFloor(z);
+        final int
+                xf = SeededNoise.fastFloor(x),
+                yf = SeededNoise.fastFloor(y),
+                zf = SeededNoise.fastFloor(z);
 
         final float
-                xrl = NumberTools.randomSignedFloat(prepareSeed(xf^r)),
-                yrl = NumberTools.randomSignedFloat(prepareSeed(yf^r)),
-                zrl = NumberTools.randomSignedFloat(prepareSeed(zf^r)),
-                xrh = NumberTools.randomSignedFloat(prepareSeed(xf+1^r)),
-                yrh = NumberTools.randomSignedFloat(prepareSeed(yf+1^r)),
-                zrh = NumberTools.randomSignedFloat(prepareSeed(zf+1^r)),
-                dx = (x - xf) * 16,
-                dy = (y - yf) * 16,
-                dz = (z - zf) * 16;
-        return NumberTools.bounce(
-                (xrh * dx + xrl * (16 - dx)
-               + yrh * dy + yrl * (16 - dy)
-               + zrh * dz + zrl * (16 - dz)) + 80.0);
+                dx = (x - xf),
+                dy = (y - yf),
+                dz = (z - zf);
+        final int
+                mx = SeededNoise.fastFloor(dx * 3 - 1),
+                my = SeededNoise.fastFloor(dy * 3 - 1),
+                mz = SeededNoise.fastFloor(dz * 3 - 1);
+        final float
+                xrl = NumberTools.randomSignedFloat(prepareSeed(xf + seed * 65537)),
+                yrl = NumberTools.randomSignedFloat(prepareSeed(yf + seed * 31)),
+                zrl = NumberTools.randomSignedFloat(prepareSeed(zf + seed * 421)),
+                spot = NumberTools.randomSignedFloat(prepareSeed(xf + yf + zf - seed)) * 0.75f + s + c,
+                ax = (dx - 0.5f) * (dx - 0.5f) * 2f,
+                ay = (dy - 0.5f) * (dy - 0.5f) * 2f,
+                az = (dz - 0.5f) * (dz - 0.5f) * 2f;
+
+        return NumberTools.bounce(5f +
+               (xrl * (1f - ax)
+              + yrl * (1f - ay)
+              + zrl * (1f - az)
+                + ((mx == 0) ? spot : NumberTools.randomSignedFloat(prepareSeed(xf + mx + seed * 65537))) * ax
+                + ((my == 0) ? spot : NumberTools.randomSignedFloat(prepareSeed(yf + my + seed * 31   ))) * ay
+                + ((mz == 0) ? spot : NumberTools.randomSignedFloat(prepareSeed(zf + mz + seed * 421  ))) * az
+               ));
+
+
+        /*final double spot = (Math.sin(x + y + z) - (c + s) * 6f) * 0.0625f;
+        return Math.sin(
+                +
+              ( Math.cos(ox - oy + y + z - x * spot)
+              + Math.cos(x + oy - oz + z - y * spot)
+              + Math.cos(x + oz - ox + y - z * spot)
+              ));
+              */
     }
-
-
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -588,6 +608,12 @@ public class HashVisualizer extends ApplicationAdapter {
                     case 'r':
                         testType = 5;
                         seed = fuzzy.nextLong();
+                        putMap();
+                        //Gdx.graphics.requestRendering();
+                        break;
+                    case 'K': // sKip
+                    case 'k':
+                        ctr += 1000;
                         putMap();
                         //Gdx.graphics.requestRendering();
                         break;
