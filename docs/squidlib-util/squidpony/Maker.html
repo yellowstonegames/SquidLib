@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -109,7 +109,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <hr>
 <br>
-<pre>public class <a href="../src-html/squidpony/Maker.html#line.16">Maker</a>
+<pre>public class <a href="../src-html/squidpony/Maker.html#line.17">Maker</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">Utility methods for more easily constructing data structures, particularly those in Java's standard library.
  All static methods and inner classes; meant to be imported with <code>import static squidpony.Maker.*</code>.
@@ -172,12 +172,18 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>static &lt;T&gt;&nbsp;<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;T&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Maker.html#makeArrange-T...-">makeArrange</a></span>(T...&nbsp;elements)</code>
+<div class="block">Makes a Arrangement (Arrange) of T given an array or vararg of T elements.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>static &lt;K,V&gt;&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/LinkedHashMap.html?is-external=true" title="class or interface in java.util">LinkedHashMap</a>&lt;K,V&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Maker.html#makeLHM--">makeLHM</a></span>()</code>
 <div class="block">Makes an empty LinkedHashMap (LHM); needs key and value types to be specified in order to work.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static &lt;K,V&gt;&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/LinkedHashMap.html?is-external=true" title="class or interface in java.util">LinkedHashMap</a>&lt;K,V&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Maker.html#makeLHM-K-V-java.lang.Object...-">makeLHM</a></span>(K&nbsp;k0,
        V&nbsp;v0,
@@ -186,25 +192,25 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  parameters key-value pairs, casting the Objects at positions 0, 2, 4...</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static &lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/LinkedHashSet.html?is-external=true" title="class or interface in java.util">LinkedHashSet</a>&lt;T&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Maker.html#makeLHS-T...-">makeLHS</a></span>(T...&nbsp;elements)</code>
 <div class="block">Makes a LinkedHashSet (LHS) of T given an array or vararg of T elements.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static &lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Maker.html#makeList-T...-">makeList</a></span>(T...&nbsp;elements)</code>
 <div class="block">Makes an ArrayList of T given an array or vararg of T elements.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static &lt;K,V&gt;&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Maker.html#makeOM--">makeOM</a></span>()</code>
 <div class="block">Makes an empty OrderedMap (OM); needs key and value types to be specified in order to work.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static &lt;K,V&gt;&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Maker.html#makeOM-float-K-V-java.lang.Object...-">makeOM</a></span>(float&nbsp;factor,
       K&nbsp;k0,
@@ -215,7 +221,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  at positions 0, 2, 4...</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static &lt;K,V&gt;&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Maker.html#makeOM-K-V-java.lang.Object...-">makeOM</a></span>(K&nbsp;k0,
       V&nbsp;v0,
@@ -224,7 +230,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  parameters key-value pairs, casting the Objects at positions 0, 2, 4...</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>static &lt;T&gt;&nbsp;<a href="../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;T&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Maker.html#makeOS-T...-">makeOS</a></span>(T...&nbsp;elements)</code>
 <div class="block">Makes a OrderedSet (OS) of T given an array or vararg of T elements.</div>
@@ -258,7 +264,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>issueLog</h4>
-<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a> <a href="../src-html/squidpony/Maker.html#line.23">issueLog</a></pre>
+<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a> <a href="../src-html/squidpony/Maker.html#line.24">issueLog</a></pre>
 <div class="block">Stores any information relating to non-fatal issues, such as caught and handled Exceptions that still change the
  behavior of methods. Typically shouldn't be cleared while debugging, since it could be useful later on, and
  hopefully won't need to be written to in a release build.</div>
@@ -278,7 +284,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Maker</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/Maker.html#line.16">Maker</a>()</pre>
+<pre>public&nbsp;<a href="../src-html/squidpony/Maker.html#line.17">Maker</a>()</pre>
 </li>
 </ul>
 </li>
@@ -297,7 +303,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>makeLHM</h4>
-<pre>public static&nbsp;&lt;K,V&gt;&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/LinkedHashMap.html?is-external=true" title="class or interface in java.util">LinkedHashMap</a>&lt;K,V&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.38">makeLHM</a>(K&nbsp;k0,
+<pre>public static&nbsp;&lt;K,V&gt;&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/LinkedHashMap.html?is-external=true" title="class or interface in java.util">LinkedHashMap</a>&lt;K,V&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.39">makeLHM</a>(K&nbsp;k0,
                                                V&nbsp;v0,
                                                <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>...&nbsp;rest)</pre>
 <div class="block">Makes a LinkedHashMap (LHM) with key and value types inferred from the types of k0 and v0, and considers all
@@ -324,7 +330,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>makeLHM</h4>
-<pre>public static&nbsp;&lt;K,V&gt;&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/LinkedHashMap.html?is-external=true" title="class or interface in java.util">LinkedHashMap</a>&lt;K,V&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.79">makeLHM</a>()</pre>
+<pre>public static&nbsp;&lt;K,V&gt;&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/LinkedHashMap.html?is-external=true" title="class or interface in java.util">LinkedHashMap</a>&lt;K,V&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.80">makeLHM</a>()</pre>
 <div class="block">Makes an empty LinkedHashMap (LHM); needs key and value types to be specified in order to work. For an empty
  LinkedHashMap with String keys and Coord values, you could use <code>Maker.&lt;String, Coord&gt;makeLHM();</code>. Using
  the new keyword is probably just as easy in this case; this method is provided for completeness relative to
@@ -346,7 +352,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>makeList</h4>
-<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.91">makeList</a>(T...&nbsp;elements)</pre>
+<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.92">makeList</a>(T...&nbsp;elements)</pre>
 <div class="block">Makes an ArrayList of T given an array or vararg of T elements.</div>
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
@@ -366,7 +372,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>makeLHS</h4>
-<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/LinkedHashSet.html?is-external=true" title="class or interface in java.util">LinkedHashSet</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.106">makeLHS</a>(T...&nbsp;elements)</pre>
+<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/LinkedHashSet.html?is-external=true" title="class or interface in java.util">LinkedHashSet</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.107">makeLHS</a>(T...&nbsp;elements)</pre>
 <div class="block">Makes a LinkedHashSet (LHS) of T given an array or vararg of T elements. Duplicate items in elements will have
  all but one item discarded, using the later item in elements.</div>
 <dl>
@@ -387,7 +393,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>makeOM</h4>
-<pre>public static&nbsp;&lt;K,V&gt;&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.127">makeOM</a>(K&nbsp;k0,
+<pre>public static&nbsp;&lt;K,V&gt;&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.128">makeOM</a>(K&nbsp;k0,
                                            V&nbsp;v0,
                                            <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>...&nbsp;rest)</pre>
 <div class="block">Makes an OrderedMap (OM) with key and value types inferred from the types of k0 and v0, and considers all
@@ -416,7 +422,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>makeOM</h4>
-<pre>public static&nbsp;&lt;K,V&gt;&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.147">makeOM</a>(float&nbsp;factor,
+<pre>public static&nbsp;&lt;K,V&gt;&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.148">makeOM</a>(float&nbsp;factor,
                                            K&nbsp;k0,
                                            V&nbsp;v0,
                                            <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>...&nbsp;rest)</pre>
@@ -446,7 +452,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>makeOM</h4>
-<pre>public static&nbsp;&lt;K,V&gt;&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.188">makeOM</a>()</pre>
+<pre>public static&nbsp;&lt;K,V&gt;&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.189">makeOM</a>()</pre>
 <div class="block">Makes an empty OrderedMap (OM); needs key and value types to be specified in order to work. For an empty
  OrderedMap with String keys and Coord values, you could use <code>Maker.&lt;String, Coord&gt;makeOM();</code>. Using
  the new keyword is probably just as easy in this case; this method is provided for completeness relative to
@@ -465,10 +471,10 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </a><a name="makeOS-T...-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>makeOS</h4>
-<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.201">makeOS</a>(T...&nbsp;elements)</pre>
+<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.202">makeOS</a>(T...&nbsp;elements)</pre>
 <div class="block">Makes a OrderedSet (OS) of T given an array or vararg of T elements. Duplicate items in elements will have
  all but one item discarded, using the later item in elements.</div>
 <dl>
@@ -478,6 +484,30 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <dd><code>elements</code> - an array or vararg of T</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a newly-allocated OrderedSet containing all of the non-duplicate items in elements, in order</dd>
+</dl>
+</li>
+</ul>
+<a name="makeArrange-java.lang.Object:A-">
+<!--   -->
+</a><a name="makeArrange-T...-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>makeArrange</h4>
+<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.218">makeArrange</a>(T...&nbsp;elements)</pre>
+<div class="block">Makes a Arrangement (Arrange) of T given an array or vararg of T elements. Duplicate items in elements will have
+ all but one item discarded, using the later item in elements. As is always the case with Arrangement, each item
+ will be mapped bi-directionally to its index in the iteration order, and an item can be retrieved with
+ <a href="../squidpony/squidmath/Arrangement.html#keyAt-int-"><code>Arrangement.keyAt(int)</code></a> if you only know its index, or the int index for an item can be retrieved with
+ <a href="../squidpony/squidmath/Arrangement.html#getInt-java.lang.Object-"><code>Arrangement.getInt(Object)</code></a> if you only have an item.</div>
+<dl>
+<dt><span class="paramLabel">Type Parameters:</span></dt>
+<dd><code>T</code> - just about any non-primitive type</dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>elements</code> - an array or vararg of T</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a newly-allocated Arrangement containing all of the non-duplicate items in elements, in order</dd>
 </dl>
 </li>
 </ul>

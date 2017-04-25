@@ -77,6 +77,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private int hashMode = 43, rngMode = 0, noiseMode = 57;
     private CrossHash.Storm storm, stormA, stormB, stormC;
     private CrossHash.Chariot chariot, chariotA, chariotB, chariotC;
+    private CrossHash.Mist mist, mistA, mistB, mistC;
     private final int[] coordinates = new int[2];
     private final int[] coordinate = new int[1];
     private final double[] doubleCoordinates = new double[2], doubleCoordinate = new double[1];
@@ -115,7 +116,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
+    private int testType = 1;
 
     private RandomnessSource fuzzy, random;
     private Random jreRandom;
@@ -399,6 +400,10 @@ public class HashVisualizer extends ApplicationAdapter {
         chariotA = CrossHash.Chariot.alpha;
         chariotB = CrossHash.Chariot.beta;
         chariotC = CrossHash.Chariot.chi;
+        mist = new CrossHash.Mist();
+        mistA = CrossHash.Mist.alpha;
+        mistB = CrossHash.Mist.beta;
+        mistC = CrossHash.Mist.chi;
         fuzzy = new ThunderRNG(0xBEEFCAFEF00DCABAL);
         view = new ScreenViewport();
         stage = new Stage(view, batch);
@@ -571,7 +576,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 break;
                             case 1:
                                 hashMode++;
-                                hashMode %= 38;
+                                hashMode %= 66;
                                 break;
                             default:
                                 hashMode++;
@@ -650,7 +655,7 @@ public class HashVisualizer extends ApplicationAdapter {
             case 1: {
                 switch (hashMode) {
                     case 0:
-                        Gdx.graphics.setTitle("Arrays.hashCode");
+                        Gdx.graphics.setTitle("Arrays.hashCode on length 2, low bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -661,7 +666,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 1:
-                        Gdx.graphics.setTitle("Storm (alpha)");
+                        Gdx.graphics.setTitle("Storm (alpha) on length 2, low bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -672,7 +677,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 2:
-                        Gdx.graphics.setTitle("Storm (beta)");
+                        Gdx.graphics.setTitle("Storm (beta) on length 2, low bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -683,7 +688,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 3:
-                        Gdx.graphics.setTitle("Storm (chi)");
+                        Gdx.graphics.setTitle("Storm (chi) on length 2, low bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -694,7 +699,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 4:
-                        Gdx.graphics.setTitle("Arrays.hashCode");
+                        Gdx.graphics.setTitle("Arrays.hashCode on length 1, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -704,7 +709,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 5:
-                        Gdx.graphics.setTitle("Storm (alpha)");
+                        Gdx.graphics.setTitle("Storm (alpha) on length 1, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -714,7 +719,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 6:
-                        Gdx.graphics.setTitle("Storm (beta)");
+                        Gdx.graphics.setTitle("Storm (beta) on length 1, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -724,7 +729,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 7:
-                        Gdx.graphics.setTitle("Storm (chi)");
+                        Gdx.graphics.setTitle("Storm (chi) on length 1, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -734,7 +739,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 8:
-                        Gdx.graphics.setTitle("Storm (alpha)");
+                        Gdx.graphics.setTitle("Storm (alpha) 64 on length 2, low bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -745,7 +750,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 9:
-                        Gdx.graphics.setTitle("Storm (beta)");
+                        Gdx.graphics.setTitle("Storm (beta) 64 on length 2, low bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -756,7 +761,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 10:
-                        Gdx.graphics.setTitle("Storm (chi)");
+                        Gdx.graphics.setTitle("Storm (chi) 64 on length 2, low bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -767,7 +772,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 11:
-                        Gdx.graphics.setTitle("Storm (alpha)");
+                        Gdx.graphics.setTitle("Storm (alpha) 64 on length 1, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -777,7 +782,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 12:
-                        Gdx.graphics.setTitle("Storm (beta)");
+                        Gdx.graphics.setTitle("Storm (beta) 64 on length 1, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -787,7 +792,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 13:
-                        Gdx.graphics.setTitle("Storm (chi)");
+                        Gdx.graphics.setTitle("Storm (chi) 64 on length 1, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -797,7 +802,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 14:
-                        Gdx.graphics.setTitle("Arrays.hashCode");
+                        Gdx.graphics.setTitle("Arrays.hashCode on length 2, high bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -808,7 +813,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 15:
-                        Gdx.graphics.setTitle("Storm (alpha)");
+                        Gdx.graphics.setTitle("Storm (alpha) on length 2, high bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -819,7 +824,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 16:
-                        Gdx.graphics.setTitle("Storm (beta)");
+                        Gdx.graphics.setTitle("Storm (beta) on length 2, high bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -830,7 +835,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 17:
-                        Gdx.graphics.setTitle("Storm (chi)");
+                        Gdx.graphics.setTitle("Storm (chi) on length 2, high bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -841,7 +846,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 18:
-                        Gdx.graphics.setTitle("Arrays.hashCode");
+                        Gdx.graphics.setTitle("Arrays.hashCode on length 1, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -851,7 +856,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 19:
-                        Gdx.graphics.setTitle("Storm (alpha)");
+                        Gdx.graphics.setTitle("Storm (alpha) on length 1, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -861,7 +866,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 20:
-                        Gdx.graphics.setTitle("Storm (beta)");
+                        Gdx.graphics.setTitle("Storm (beta) on length 1, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -871,7 +876,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 21:
-                        Gdx.graphics.setTitle("Storm (chi)");
+                        Gdx.graphics.setTitle("Storm (chi) on length 1, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -881,7 +886,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 22:
-                        Gdx.graphics.setTitle("Storm (alpha)");
+                        Gdx.graphics.setTitle("Storm (alpha) 64 on length 2, high bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -892,7 +897,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 23:
-                        Gdx.graphics.setTitle("Storm (beta)");
+                        Gdx.graphics.setTitle("Storm (beta) 64 on length 2, high bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -903,7 +908,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 24:
-                        Gdx.graphics.setTitle("Storm (chi)");
+                        Gdx.graphics.setTitle("Storm (chi) 64 on length 2, high bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -914,7 +919,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 25:
-                        Gdx.graphics.setTitle("Storm (alpha)");
+                        Gdx.graphics.setTitle("Storm (alpha) 64 on length 1, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -924,7 +929,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 26:
-                        Gdx.graphics.setTitle("Storm (beta)");
+                        Gdx.graphics.setTitle("Storm (beta) 64 on length 1, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -934,7 +939,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 27:
-                        Gdx.graphics.setTitle("Storm (chi)");
+                        Gdx.graphics.setTitle("Storm (chi) 64 on length 1, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -944,7 +949,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 28:
-                        Gdx.graphics.setTitle("Arrays.hashCode");
+                        Gdx.graphics.setTitle("Arrays.hashCode on length 1, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -954,7 +959,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 29:
-                        Gdx.graphics.setTitle("Chariot (alpha)");
+                        Gdx.graphics.setTitle("Chariot (alpha) on length 1, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -964,7 +969,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 30:
-                        Gdx.graphics.setTitle("Chariot (beta)");
+                        Gdx.graphics.setTitle("Chariot (beta) on length 1, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -974,7 +979,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 31:
-                        Gdx.graphics.setTitle("Chariot (chi)");
+                        Gdx.graphics.setTitle("Chariot (chi) on length 1, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -984,7 +989,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 32:
-                        Gdx.graphics.setTitle("Chariot (alpha)");
+                        Gdx.graphics.setTitle("Chariot (alpha) on length 2, high bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -995,7 +1000,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 33:
-                        Gdx.graphics.setTitle("Chariot (beta)");
+                        Gdx.graphics.setTitle("Chariot (beta) on length 2, high bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -1006,7 +1011,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 34:
-                        Gdx.graphics.setTitle("Chariot (chi)");
+                        Gdx.graphics.setTitle("Chariot (chi) on length 2, high bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
@@ -1017,7 +1022,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 35:
-                        Gdx.graphics.setTitle("Chariot (alpha)");
+                        Gdx.graphics.setTitle("Chariot (alpha) on length 1, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -1027,7 +1032,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 36:
-                        Gdx.graphics.setTitle("Chariot (beta)");
+                        Gdx.graphics.setTitle("Chariot (beta) on length 1, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -1037,7 +1042,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 37:
-                        Gdx.graphics.setTitle("Chariot (chi)");
+                        Gdx.graphics.setTitle("Chariot (chi) on length 1, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
@@ -1046,6 +1051,304 @@ public class HashVisualizer extends ApplicationAdapter {
                             }
                         }
                         break;
+                        
+                        
+                        
+                    case 38:
+                        Gdx.graphics.setTitle("Arrays.hashCode on length 2, low bits");
+                        for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
+                            for (int y = 0; y < height; y++) {
+                                coordinates[1] = y;
+                                code = Arrays.hashCode(coordinates) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 39:
+                        Gdx.graphics.setTitle("Mist (alpha) on length 2, low bits");
+                        for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
+                            for (int y = 0; y < height; y++) {
+                                coordinates[1] = y;
+                                code = mistA.hash(coordinates) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 40:
+                        Gdx.graphics.setTitle("Mist (beta) on length 2, low bits");
+                        for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
+                            for (int y = 0; y < height; y++) {
+                                coordinates[1] = y;
+                                code = mistB.hash(coordinates) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 41:
+                        Gdx.graphics.setTitle("Mist (chi) on length 2, low bits");
+                        for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
+                            for (int y = 0; y < height; y++) {
+                                coordinates[1] = y;
+                                code = mistC.hash(coordinates) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 42:
+                        Gdx.graphics.setTitle("Arrays.hashCode on length 1, low bits");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                coordinate[0] = (x << 9) | y;
+                                code = Arrays.hashCode(coordinate) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 43:
+                        Gdx.graphics.setTitle("Mist (alpha) on length 1, low bits");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                coordinate[0] = (x << 9) | y;
+                                code = mistA.hash(coordinate) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 44:
+                        Gdx.graphics.setTitle("Mist (beta) on length 1, low bits");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                coordinate[0] = (x << 9) | y;
+                                code = mistB.hash(coordinate) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 45:
+                        Gdx.graphics.setTitle("Mist (chi) on length 1, low bits");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                coordinate[0] = (x << 9) | y;
+                                code = mistC.hash(coordinate) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 46:
+                        Gdx.graphics.setTitle("Mist (alpha) 64 on length 2, low bits");
+                        for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
+                            for (int y = 0; y < height; y++) {
+                                coordinates[1] = y;
+                                code = mistA.hash64(coordinates) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 47:
+                        Gdx.graphics.setTitle("Mist (beta) 64 on length 2, low bits");
+                        for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
+                            for (int y = 0; y < height; y++) {
+                                coordinates[1] = y;
+                                code = mistB.hash64(coordinates) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 48:
+                        Gdx.graphics.setTitle("Mist (chi) 64 on length 2, low bits");
+                        for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
+                            for (int y = 0; y < height; y++) {
+                                coordinates[1] = y;
+                                code = mistC.hash64(coordinates) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 49:
+                        Gdx.graphics.setTitle("Mist (alpha) 64 on length 1, low bits");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                coordinate[0] = (x << 9) | y;
+                                code = mistA.hash64(coordinate) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 50:
+                        Gdx.graphics.setTitle("Mist (beta) 64 on length 1, low bits");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                coordinate[0] = (x << 9) | y;
+                                code = mistB.hash64(coordinate) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 51:
+                        Gdx.graphics.setTitle("Mist (chi) 64 on length 1, low bits");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                coordinate[0] = (x << 9) | y;
+                                code = mistC.hash64(coordinate) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 52:
+                        Gdx.graphics.setTitle("Arrays.hashCode on length 2, high bits");
+                        for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
+                            for (int y = 0; y < height; y++) {
+                                coordinates[1] = y;
+                                code = Arrays.hashCode(coordinates) & 0xFFFFFF00L | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 53:
+                        Gdx.graphics.setTitle("Mist (alpha) on length 2, high bits");
+                        for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
+                            for (int y = 0; y < height; y++) {
+                                coordinates[1] = y;
+                                code = mistA.hash(coordinates) & 0xFFFFFF00L | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 54:
+                        Gdx.graphics.setTitle("Mist (beta) on length 2, high bits");
+                        for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
+                            for (int y = 0; y < height; y++) {
+                                coordinates[1] = y;
+                                code = mistB.hash(coordinates) & 0xFFFFFF00L | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 55:
+                        Gdx.graphics.setTitle("Mist (chi) on length 2, high bits");
+                        for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
+                            for (int y = 0; y < height; y++) {
+                                coordinates[1] = y;
+                                code = mistC.hash(coordinates) & 0xFFFFFF00L | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 56:
+                        Gdx.graphics.setTitle("Arrays.hashCode on length 1, high bits");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                coordinate[0] = (x << 9) | y;
+                                code = Arrays.hashCode(coordinate) & 0xFFFFFF00L | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 57:
+                        Gdx.graphics.setTitle("Mist (alpha) on length 1, high bits");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                coordinate[0] = (x << 9) | y;
+                                code = mistA.hash(coordinate) & 0xFFFFFF00L | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 58:
+                        Gdx.graphics.setTitle("Mist (beta) on length 1, high bits");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                coordinate[0] = (x << 9) | y;
+                                code = mistB.hash(coordinate) & 0xFFFFFF00L | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 59:
+                        Gdx.graphics.setTitle("Mist (chi) on length 1, high bits");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                coordinate[0] = (x << 9) | y;
+                                code = mistC.hash(coordinate) & 0xFFFFFF00L | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 60:
+                        Gdx.graphics.setTitle("Mist (alpha) 64 on length 2, high bits");
+                        for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
+                            for (int y = 0; y < height; y++) {
+                                coordinates[1] = y;
+                                code = mistA.hash64(coordinates) & 0xFFFFFF00L | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 61:
+                        Gdx.graphics.setTitle("Mist (beta) 64 on length 2, high bits");
+                        for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
+                            for (int y = 0; y < height; y++) {
+                                coordinates[1] = y;
+                                code = mistB.hash64(coordinates) & 0xFFFFFF00L | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 62:
+                        Gdx.graphics.setTitle("Mist (chi) 64 on length 2, high bits");
+                        for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
+                            for (int y = 0; y < height; y++) {
+                                coordinates[1] = y;
+                                code = mistC.hash64(coordinates) & 0xFFFFFF00L | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 63:
+                        Gdx.graphics.setTitle("Mist (alpha) 64 on length 1, high bits");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                coordinate[0] = (x << 9) | y;
+                                code = mistA.hash64(coordinate) & 0xFFFFFF00L | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 64:
+                        Gdx.graphics.setTitle("Mist (beta) 64 on length 1, high bits");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                coordinate[0] = (x << 9) | y;
+                                code = mistB.hash64(coordinate) & 0xFFFFFF00L | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 65:
+                        Gdx.graphics.setTitle("Mist (chi) 64 on length 1, high bits");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                coordinate[0] = (x << 9) | y;
+                                code = mistC.hash64(coordinate) & 0xFFFFFF00L | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+
                 }
             }
             break;
