@@ -164,7 +164,10 @@ public class DungeonGenerator {
 
     /**
      * Make a DungeonGenerator with the given height and width; the RNG used for generating a dungeon and
-     * adding features will be a LightRNG using a random seed.
+     * adding features will be a LightRNG using a random seed. If width or height is greater than 256, then this will
+     * expand the Coord pool from its 256x256 default so it stores a reference to each Coord that might be used in the
+     * creation of the dungeon (if width and height are 300 and 300, the Coord pool will be 300x300; if width and height
+     * are 500 and 100, the Coord pool will be 500x256 because it won't shrink below the default size of 256x256).
      * @param width The width of the dungeon in cells
      * @param height The height of the dungeon in cells
      */
@@ -174,7 +177,11 @@ public class DungeonGenerator {
     }
 
     /**
-     * Make a DungeonGenerator with the given height, width, and RNG. Use this if you want to seed the RNG.
+     * Make a DungeonGenerator with the given height, width, and RNG. Use this if you want to seed the RNG. If width or
+     * height is greater than 256, then this will expand the Coord pool from its 256x256 default so it stores a
+     * reference to each Coord that might be used in the creation of the dungeon (if width and height are 300 and 300,
+     * the Coord pool will be 300x300; if width and height are 500 and 100, the Coord pool will be 500x256 because it
+     * won't shrink below the default size of 256x256).
      * @param width The width of the dungeon in cells
      * @param height The height of the dungeon in cells
      * @param rng The RNG to use for all purposes in this class; if it is a StatefulRNG, then it will be used as-is,
@@ -182,6 +189,7 @@ public class DungeonGenerator {
      */
     public DungeonGenerator(int width, int height, RNG rng)
     {
+        Coord.expandPoolTo(width, height);
         this.rng = (rng instanceof StatefulRNG) ? (StatefulRNG) rng : new StatefulRNG(rng.nextLong());
         gen = new DungeonBoneGen(this.rng);
         utility = new DungeonUtility(this.rng);
@@ -203,6 +211,7 @@ public class DungeonGenerator {
         rebuildSeed = rng.getState();
         height = copying.height;
         width = copying.width;
+        Coord.expandPoolTo(width, height);
         fx = new EnumMap<>(copying.fx);
         dungeon = copying.dungeon;
     }
@@ -708,7 +717,7 @@ public class DungeonGenerator {
             rng.shuffleInPlace(scatter);
             GreasedRegion allWater = new GreasedRegion(width, height);
             for (int i = 0; i < scatter.length; i++) {
-                if (remainingWater > 5) //remainingWater >= targetWater * 0.02 &&
+                if (remainingWater > 5)
                 {
                     if(!floors.contains(scatter[i]))
                         continue;

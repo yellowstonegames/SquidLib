@@ -82,7 +82,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private double[][] res;
     private int[][] lights;
     private Color[][] colors, bgColors;
-    private double[][] fovmap, pathMap;
+    private double[][] fovmap;
     private AnimatedEntity player;
     private FOV fov;
     /**
@@ -197,7 +197,7 @@ public class EverythingDemo extends ApplicationAdapter {
 
         batch = new SpriteBatch();
         width = 90;
-        height = 25;
+        height = 26;
         totalWidth = width * 3;
         totalHeight = height * 3;
         //Only needed if totalWidth and/or totalHeight is 257 or larger
@@ -311,7 +311,7 @@ public class EverythingDemo extends ApplicationAdapter {
         getToPlayer = new DijkstraMap(decoDungeon, DijkstraMap.Measurement.CHEBYSHEV);
         getToPlayer.rng = rng;
         getToPlayer.setGoal(pl);
-        pathMap = getToPlayer.scan(null);
+        getToPlayer.scan(null);
 
         player = display.animateActor(pl.x, pl.y, '@',
                 fgCenter.loopingGradient(SColor.CAPE_JASMINE, SColor.HAN_PURPLE, 45), 1.5f, false);
@@ -561,16 +561,14 @@ public class EverythingDemo extends ApplicationAdapter {
                 final Vector3 pos = camera.position.cpy(), original = camera.position.cpy(),
                         nextPos = camera.position.cpy().add(
                                 midX > totalWidth - (width + 1) * 0.5f || midX < (width + 1) * 0.5f ? 0 : (xmod * cellWidth),
-                                midY > totalHeight - (height + 1) * 0.5f || midY < (height - 1) * 0.5f ? 0 : (-ymod * cellHeight),
+                                midY > totalHeight - (height + 1) * 0.5f || midY < (height + 1) * 0.5f ? 0 : (-ymod * cellHeight),
                                 0);
                 display.slide(player, newX, newY);
-                //movingCamera = true;
                 display.addAction(
                         new TemporalAction(display.getAnimationDuration()) {
                             @Override
                             protected void update(float percent) {
                                 pos.lerp(nextPos, percent);
-                                //System.out.println(pos.toString());
                                 camera.position.set(pos);
                                 pos.set(original);
                                 camera.update();
@@ -580,14 +578,11 @@ public class EverythingDemo extends ApplicationAdapter {
                                 super.end();
                                 display.setGridOffsetX(player.gridX - (width >> 1));
                                 display.setGridOffsetY(player.gridY - (height >> 1));
-                                //display.getForegroundLayer().fixPositions();
                                 camera.position.set(original);
                                 camera.update();
 
                             }
                         });
-                //player.actor.setPosition(fg.adjustX(newX, false), fg.adjustY(newY));
-
             }
             phase = Phase.PLAYER_ANIM;
         }
