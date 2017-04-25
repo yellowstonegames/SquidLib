@@ -8,8 +8,6 @@ import squidpony.squidmath.*;
 
 import java.util.*;
 
-import static squidpony.squidmath.CoordPacker.*;
-
 /**
  * A good way to create a more-complete dungeon, layering different effects and modifications on top of a dungeon
  * produced by DungeonBoneGen or another dungeon without such effects. Unlike DungeonGenerator, this class uses
@@ -203,7 +201,7 @@ public class SectionDungeonGenerator {
 
 
     /**
-     * Make a DungeonGenerator with a LightRNG using a random seed, height 40, and width 40.
+     * Make a SectionDungeonGenerator with a LightRNG using a random seed, height 40, and width 40.
      */
     public SectionDungeonGenerator()
     {
@@ -218,8 +216,11 @@ public class SectionDungeonGenerator {
     }
 
     /**
-     * Make a DungeonGenerator with the given height and width; the RNG used for generating a dungeon and
-     * adding features will be a LightRNG using a random seed.
+     * Make a SectionDungeonGenerator with the given height and width; the RNG used for generating a dungeon and
+     * adding features will be a LightRNG using a random seed. If width or height is greater than 256, then this will
+     * expand the Coord pool from its 256x256 default so it stores a reference to each Coord that might be used in the
+     * creation of the dungeon (if width and height are 300 and 300, the Coord pool will be 300x300; if width and height
+     * are 500 and 100, the Coord pool will be 500x256 because it won't shrink below the default size of 256x256).
      * @param width The width of the dungeon in cells
      * @param height The height of the dungeon in cells
      */
@@ -229,7 +230,11 @@ public class SectionDungeonGenerator {
     }
 
     /**
-     * Make a DungeonGenerator with the given height, width, and RNG. Use this if you want to seed the RNG.
+     * Make a SectionDungeonGenerator with the given height, width, and RNG. Use this if you want to seed the RNG. If
+     * width or height is greater than 256, then this will expand the Coord pool from its 256x256 default so it stores a
+     * reference to each Coord that might be used in the creation of the dungeon (if width and height are 300 and 300,
+     * the Coord pool will be 300x300; if width and height are 500 and 100, the Coord pool will be 500x256 because it
+     * won't shrink below the default size of 256x256).
      * @param width The width of the dungeon in cells
      * @param height The height of the dungeon in cells
      * @param rng The RNG to use for all purposes in this class; if it is a StatefulRNG, then it will be used as-is,
@@ -237,6 +242,7 @@ public class SectionDungeonGenerator {
      */
     public SectionDungeonGenerator(int width, int height, RNG rng)
     {
+        Coord.expandPoolTo(width, height);
         this.rng = (rng instanceof StatefulRNG) ? (StatefulRNG) rng : new StatefulRNG(rng.nextLong());
         utility = new DungeonUtility(this.rng);
         rebuildSeed = this.rng.getState();
@@ -258,6 +264,7 @@ public class SectionDungeonGenerator {
         rebuildSeed = rng.getState();
         height = copying.height;
         width = copying.width;
+        Coord.expandPoolTo(width, height);
         roomFX = new EnumMap<>(copying.roomFX);
         corridorFX = new EnumMap<>(copying.corridorFX);
         caveFX = new EnumMap<>(copying.caveFX);
@@ -1182,8 +1189,8 @@ public class SectionDungeonGenerator {
                 }
             }
         }
-        short[] floors = pack(map, '.'), working;
-        floorCount = count(floors);
+        GreasedRegion floors = new GreasedRegion(map, '.'), working = new GreasedRegion(width, height);
+        floorCount = floors.size();
         float waterRate = waterFill / 100.0f, grassRate = grassFill / 100.0f;
         if(waterRate + grassRate > 1.0f)
         {
@@ -1198,20 +1205,19 @@ public class SectionDungeonGenerator {
         Coord[] scatter;
         int remainingWater = targetWater, remainingGrass = targetGrass;
         if(targetWater > 0) {
-            scatter = fractionPacked(floors, 7);
-            scatter = rng.shuffle(scatter, new Coord[scatter.length]);
-            ArrayList<Coord> allWater = new ArrayList<>(targetWater);
+            scatter = floors.quasiRandomSeparated(1.0 / 7.0);
+            rng.shuffleInPlace(scatter);
+            GreasedRegion allWater = new GreasedRegion(width, height);
             for (int i = 0; i < scatter.length; i++) {
-                if (remainingWater > 5) //remainingWater >= targetWater * 0.02 &&
+                if (remainingWater > 5)
                 {
-                    if(!queryPacked(floors, scatter[i].x, scatter[i].y))
+                    if(!floors.contains(scatter[i]))
                         continue;
-                    working = spill(floors, packOne(scatter[i]), rng.between(4, Math.min(remainingWater, sizeWaterPools)), rng);
+                    working.empty().insert(scatter[i]).spill(floors, rng.between(4, Math.min(remainingWater, sizeWaterPools)), rng);
 
-                    floors = differencePacked(floors, working);
-                    Coord[] pts = allPacked(working);
-                    remainingWater -= pts.length;
-                    Collections.addAll(allWater, pts);
+                    floors.andNot(working);
+                    remainingWater -= working.size();
+                    allWater.addAll(working);
                 } else
                     break;
             }
@@ -1229,23 +1235,19 @@ public class SectionDungeonGenerator {
                     map[pt.x][pt.y] = ',';
             }
         }
+
         if(targetGrass > 0) {
-            scatter = fractionPacked(floors, 7);
-            scatter = rng.shuffle(scatter, new Coord[scatter.length]);
-            Coord p;
+            scatter = floors.quasiRandomSeparated(1.03/6.7);
+            rng.shuffleInPlace(scatter);
             for (int i = 0; i < scatter.length; i++) {
                 if (remainingGrass > 5) //remainingGrass >= targetGrass * 0.02 &&
                 {
-                    working = spill(floors, packOne(scatter[i]), rng.between(4, Math.min(remainingGrass, sizeGrassPools)), rng);
-                    if (working.length == 0)
+                    working.empty().insert(scatter[i]).spill(floors, rng.between(4, Math.min(remainingGrass, sizeGrassPools)), rng);
+                    if (working.isEmpty())
                         continue;
-                    floors = differencePacked(floors, working);
-                    Coord[] pts = allPacked(working);
-                    remainingGrass -= pts.length;
-                    for (int c = 0; c < pts.length; c++) {
-                        p = pts[c];
-                        map[p.x][p.y] = '"';
-                    }
+                    floors.andNot(working);
+                    remainingGrass -= working.size();
+                    map = working.inverseMask(map, '"');
                 } else
                     break;
             }
