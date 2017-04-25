@@ -310,7 +310,7 @@ public class HashBenchmark {
         doStormInt();
     }
 
-
+/*
     public long doChariotInt()
     {
         final LongPeriodRNG rng = new LongPeriodRNG(iseed);
@@ -329,7 +329,7 @@ public class HashBenchmark {
         iseed = 9000;
         doChariotInt();
     }
-
+*/
 
     public long doFalcon()
     {
@@ -406,7 +406,7 @@ public class HashBenchmark {
         iseed = 9000;
         doWispInt();
     }
-
+    /*
     public long doWispDouble32()
     {
         final ThunderRNG rng = new ThunderRNG(seed);
@@ -493,6 +493,44 @@ public class HashBenchmark {
     public void measureWispDouble64Alt() throws InterruptedException {
         seed = 9000;
         doWispDouble64Alt();
+    }
+    */
+    public long doMist()
+    {
+        final LongPeriodRNG rng = new LongPeriodRNG(seed);
+        final CrossHash.Mist storm = CrossHash.Mist.mu;
+        for (int i = 0; i < 1000000; i++) {
+            rng.nextLong();
+            seed += storm.hash64(rng.state);
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureMist() throws InterruptedException {
+        seed = 9000;
+        doMist();
+    }
+
+    public long doMistInt()
+    {
+        final LongPeriodRNG rng = new LongPeriodRNG(iseed);
+        final CrossHash.Mist storm = CrossHash.Mist.mu;
+        for (int i = 0; i < 1000000; i++) {
+            rng.nextLong();
+            iseed += storm.hash(rng.state);
+        }
+        return iseed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureMistInt() throws InterruptedException {
+        iseed = 9000;
+        doMistInt();
     }
 
     public long doControl()

@@ -17,49 +17,61 @@ import java.util.Objects;
  * slow if you are running many hashes or hashing very large data; in that case you
  * should consider one of the inner classes, Lightning or Storm.
  * <br>
- * There are two static inner classes in CrossHash, Lightning and Storm, that provide different
- * hashing properties, as well as the inner IHasher interface.
+ * There are several static inner classes in CrossHash, Lightning, Storm, Falcon, Chariot, Wisp,
+ * and Mist, that provide different hashing properties, as well as the inner IHasher interface.
+ * Of these, Wisp should be the default choice in most cases. If you need a salt to alter the
+ * hash function, using one of a large family of such functions instead of a single function like
+ * Wisp, then Storm and Mist are good choices (Mist is faster, Storm is more stable API-wise).
+ * Falcon and Lightning are mostly superseded by Wisp. Chariot has some limitations, and uses
+ * potentially much more memory than the others (which use almost none).
  * <br>
- * IHasher values are provided as static fields, and use FNV-1a to hash a specific type or fall
+ * IHasher values are provided as static fields, and use Wisp to hash a specific type or fall
  * back to Object.hashCode if given an object with the wrong type. IHasher values are optional
  * parts of OrderedMap and OrderedSet, and allow arrays to be used as keys in those collections
  * while keeping hashing by value instead of the normal hashing by reference for arrays. You
- * probably won't ever need to make a class that implements IHasher yourself.
+ * probably won't ever need to make a class that implements IHasher yourself; for some cases you
+ * may want to look at the {@link Hashers} class for additional functions.
  * <br>
- * The inner classes provide alternate, faster hashing algorithms. Lightning has no theoretical
- * basis or grounds in any reason other than empirical testing for why it does what it does, and
- * this seems to be in line with many widely-used hashes (see: The Art of Hashing,
- * http://eternallyconfuzzled.com/tuts/algorithms/jsw_tut_hashing.aspx ). That said, it performs
- * very well, just slightly behind Arrays.hashCode (18-20 ms instead of 15 ms for over a million
- * hashes of 16-element long arrays, including overhead for generating them, while SipHash and
- * FNV-1a take approximately 80 ms and 135-155 ms, respectively, for the same data).
+ * The inner classes provide alternate, faster hashing algorithms. Lightning, Wisp, and Falcon
+ * have no theoretical basis or grounds in any reason other than empirical testing for why they
+ * do what they do, and this seems to be in line with many widely-used hashes (see: The Art of
+ * Hashing, http://eternallyconfuzzled.com/tuts/algorithms/jsw_tut_hashing.aspx ). That said, Wisp
+ * performs very well, ahead of Arrays.hashCode (10.5 ms instead of 15 ms) for over a million
+ * hashes of 16-element long arrays, not including overhead for generating them, while SipHash and
+ * FNV-1a take approximately 80 ms and 135-155 ms, respectively, for the same data). Lightning and
+ * Falcon perform less-well, with Lightning taking 17 ms instead of 15 ms for Arrays.hashCode, and
+ * Falcon taking about 12.3 ms but slowing down somewhat if a 32-bit hash is requested from long
+ * data. All of these have good, low, collision rates on Strings and long arrays.
  * <br>
  * Storm is a variant on Lightning with 64 bits for a salt-like modifier as a member variable,
- * which can make 2 to the 64 individual hashing functions from one set of code. Storm has some
- * properties of a cryptographic hash, but is not recommended it for that usage. It is, however
- * ideal for situations that show up often in game development where end users may be able to see
- * and possibly alter some information that you don't want changed (i.e. save data stored on a
- * device or in the browser's LocalStorage). If you want a way to verify the data is what you
+ * which can make 2 to the 64 individual hashing functions from one set of code. Mist is similar,
+ * but has 128 bits for some hashes (including any calls to hash64()) and 64 bits for some other
+ * hashes (only calls to hash() with data that doesn't involve long or double arrays). Storm and Mist
+ * have some properties of a cryptographic hash, but is not recommended it for that usage. It is,
+ * however ideal for situations that show up often in game development where end users may be able
+ * to see and possibly alter some information that you don't want changed (i.e. save data stored on
+ * a device or in the browser's LocalStorage). If you want a way to verify the data is what you
  * think it is, you can store a hash, using one of the many-possible hash functions this can
  * produce, somewhere else and verify that the saved data has the hash it did last time; if the
  * exact hashing function isn't known (or exact functions aren't known) by a tampering user,
  * then it is unlikely they can make the hash match even if they can edit it. Storm is slightly
- * slower than Lightning, at about 25-26 ms for a million hashes (still including some RNG
- * overhead) instead of Lightning's 18-20 ms, but should never be worse than twice as slow as
- * Arrays.hashCode, and is still about three times faster than the similar SipHash that SquidLib
- * previously had in this class.
+ * slower than Lightning just like Mist is slightly slower than Wisp, at about 20 ms for a
+ * million hashes with Storm instead of Lightning's 17 ms, and at about 18 ms for Mist for the same
+ * data instead of Wisp's 10.5, but should never be worse than twice as slow as Arrays.hashCode, and
+ * is still about three times faster than the similar SipHash that SquidLib previously had here.
  * <br>
  * All of the hashes used here have about the same rate of collisions on identical data
- * (testing used Arrays.hashCode, FNV-1a, Lightning, Storm, and the now-removed SipHash), but
- * Lightning (and Storm) seem to do better than the rest on collision rates more often than
- * they do worse than all the others. Lightning has been changed frequently but is considered
- * stable now, but it isn't being considered to replace the FNV-1a algorithm in CrossHash for
- * compatibility reasons. It seems to meet all the criteria for a good hash function, though,
- * including doing well with a visual test that shows issues in FNV-1a and especially
- * Arrays.hashCode. Storm is still not necessarily in a final version; the commit that removed
- * SipHash also changed Storm's algorithm to more heavily factor in the salt and allow that
- * salt to alter any patterns present in the output, making similar data hash very differently
- * when the salts are different.
+ * (testing used Arrays.hashCode, all the hashes in here now, and the now-removed SipHash), with
+ * any fluctuation within some small margin of error. Lightning has been changed frequently but
+ * is considered stable now, but it isn't being considered to replace the FNV-1a algorithm in
+ * CrossHash for compatibility reasons. Both Lightning and Wisp seem to meet all the criteria for
+ * a good hash function, though, including doing well with a visual test that shows issues in
+ * FNV-1a and especially Arrays.hashCode. Wisp is considered stable now, and is not considered yet
+ * for replacing FNV-1a for the same reason. Chariot is not recommended. Falcon is only recommended
+ * if you need an alternate algorithm for some reason and need only 64-bit hashes; it has issues when
+ * generating 32-bit hashes of long arrays or double arrays. Mist is not considered stable yet, but
+ * probably will be soon; it offers an improvement on speed and salting over Storm, and its collision
+ * rates were very very low in testing.
  * <br>
  * To help find patterns in hash output in a visual way, you can hash an x,y point, take the bottom 24 bits,
  * and use that as an RGB color for the pixel at that x,y point. On a 512x512 grid of points, the patterns
@@ -1071,7 +1083,7 @@ public class CrossHash {
     // 0x CA1C479692B5C6ABL
     // 0x C6B5275692B5CC83 // untested so far
     @SuppressWarnings("NumericOverflow")
-    public static class Lightning {
+    public static final class Lightning {
 
         public static long hash64(final boolean[] data) {
             if (data == null)
@@ -1435,7 +1447,7 @@ public class CrossHash {
      * These can be useful when, for example, you want to get multiple hashes of a single array or String
      * as part of cuckoo hashing or similar techniques that need multiple hashes for the same inputs.
      */
-    public static class Storm implements Serializable {
+    public static final class Storm implements Serializable {
         private static final long serialVersionUID = 3152426757973945155L;
 
         private transient long $alt;
@@ -1865,7 +1877,7 @@ public class CrossHash {
      * Created by Tommy Ettinger on 1/16/2016.
      */
     @Beta
-    public static class Falcon {
+    public static final class Falcon {
         public static long hash64(final boolean[] data) {
             if (data == null)
                 return 0;
@@ -2235,7 +2247,7 @@ public class CrossHash {
      * if GWT is a potential target, since Wisp doesn't rely on having certain JVM optimizations that are probably only
      * available on desktop platforms.
      */
-    public static class Wisp {
+    public static final class Wisp {
         public static long hash64(final boolean[] data) {
             if (data == null)
                 return 0;
@@ -2732,7 +2744,7 @@ public class CrossHash {
      * microseconds of difference per million hashes, and the quality is pretty much indistinguishable (which is good).
      */
     @Beta
-    public static class Chariot implements Serializable {
+    public static final class Chariot implements Serializable {
         private static final long serialVersionUID = 3152426757973945155L;
 
         private final long $alt0, $alt1;
@@ -3132,5 +3144,480 @@ public class CrossHash {
             sum ^= $tore[limit + 1] + sum >>> (5 + (sum >>> 59));
             return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
         }
+    }
+
+    /**
+     * A whole cluster of Wisp-like hash functions that sacrifice a small degree of speed, but can be built with up
+     * to 128 bits of salt values that help to obscure what hashing function is actually being used. This class is
+     * similar to Storm in how you can construct one (using a CharSequence, one long to use to produce a salt, or in
+     * this class two longs to use to produce a salt), but differs from Storm by being somewhat faster, having many
+     * more possible salt "states" when using the constructors that take two longs or a CharSequence, and also by using
+     * 32-bit math when only 32-bit inputs and output are used (relevant for GWT with its slower 64-bit math).
+     * The salt values are mostly a pair of longs, but for the hash() functions that don't take a long array or double
+     * array, a different salt value is used, a pair of ints.
+     * <br>
+     * The salt fields are not serialized, so it is important that the same salt will be given by the
+     * program when the same hash results are wanted for some inputs.
+     * <br>
+     * A group of 24 static, final, pre-initialized Mist members are present in this class, each with the
+     * name of a letter in the Greek alphabet (this uses the convention on Wikipedia,
+     * https://en.wikipedia.org/wiki/Greek_alphabet#Letters , where lambda is spelled with a 'b'). The whole
+     * group of 24 pre-initialized members are also present in a static array called {@code predefined}.
+     * These can be useful when, for example, you want to get multiple hashes of a single array or String
+     * as part of cuckoo hashing or similar techniques that need multiple hashes for the same inputs.
+     */
+    @Beta
+    public static final class Mist implements Serializable {
+        private static final long serialVersionUID = -1275284837479983271L;
+
+        private transient final long $l1, $l2;
+
+        private transient final int $i1, $i2;
+
+        public Mist() {
+            this(0x1234567876543210L, 0xEDCBA98789ABCDEFL);
+        }
+
+        public Mist(final CharSequence alteration) {
+            this(Wisp.hash64(alteration), Falcon.hash64(alteration));
+        }
+        private static int permute(final long state)
+        {
+            int s = (int)state ^ 0xD0E89D2D;
+            s = (s >>> 19 | s << 13);
+            s ^= state >>> (5 + (state >>> 59));
+            return ((s *= 277803737) >>> 22) ^ s;
+        }
+
+        @SuppressWarnings("NumericOverflow")
+        public Mist(final long alteration) {
+            $i1 = permute(alteration);
+            long s = alteration + $i1;
+            s = (s ^ (s >>> 30)) * 0xBF58476D1CE4E5B9L;
+            s = (s ^ (s >>> 27)) * 0x94D049BB133111EBL;
+            s ^= s >>> 31;
+            $l1 = s;
+            $i2 = permute(s + 0x9E3779B97F4A7C15L);
+            s = alteration + 6 * 0x9E3779B97F4A7C15L;
+            s = (s ^ (s >>> 30)) * 0xBF58476D1CE4E5B9L;
+            s = (s ^ (s >>> 27)) * 0x94D049BB133111EBL;
+            s ^= s >>> 31;
+            $l2 = s;
+        }
+
+        @SuppressWarnings("NumericOverflow")
+        public Mist(final long alteration1, long alteration2) {
+            $i1 = permute(alteration1);
+            $l1 = alteration1 + $i1;
+            $i2 = permute(alteration2 + $i1);
+            $l2 = alteration2 + $i2;
+        }
+
+        public static final Mist alpha = new Mist("alpha"), beta = new Mist("beta"), gamma = new Mist("gamma"),
+                delta = new Mist("delta"), epsilon = new Mist("epsilon"), zeta = new Mist("zeta"),
+                eta = new Mist("eta"), theta = new Mist("theta"), iota = new Mist("iota"),
+                kappa = new Mist("kappa"), lambda = new Mist("lambda"), mu = new Mist("mu"),
+                nu = new Mist("nu"), xi = new Mist("xi"), omicron = new Mist("omicron"), pi = new Mist("pi"),
+                rho = new Mist("rho"), sigma = new Mist("sigma"), tau = new Mist("tau"),
+                upsilon = new Mist("upsilon"), phi = new Mist("phi"), chi = new Mist("chi"), psi = new Mist("psi"),
+                omega = new Mist("omega");
+        public static final Mist[] predefined = new Mist[]{alpha, beta, gamma, delta, epsilon, zeta, eta, theta, iota,
+                kappa, lambda, mu, nu, xi, omicron, pi, rho, sigma, tau, upsilon, phi, chi, psi, omega};
+
+        public long hash64(final boolean[] data) {
+            if (data == null)
+                return 0;
+            final int len = data.length;
+            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x8329C6EB9E6AD3E3L * (data[i] ? 0x9E3779B97F4A7C15L : 0x789ABCDEFEDCBA98L)) ^ $l2 * a + $l1;
+            }
+            return result * (a * $l1 | 1L) ^ (result >>> 27 | result << 37);
+        }
+
+
+        public long hash64(final byte[] data) {
+            if (data == null)
+                return 0;
+            final int len = data.length;
+            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;
+            }
+            return result * (a * $l1 | 1L) ^ (result >>> 27 | result << 37);
+        }
+
+        public long hash64(final short[] data) {
+            if (data == null)
+                return 0;
+            final int len = data.length;
+            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;
+            }
+            return result * (a * $l1 | 1L) ^ (result >>> 27 | result << 37);
+        }
+
+        public long hash64(final char[] data) {
+            if (data == null)
+                return 0;
+            final int len = data.length;
+            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;
+            }
+            return result * (a * $l1 | 1L) ^ (result >>> 27 | result << 37);
+        }
+
+        public long hash64(final int[] data) {
+            if (data == null)
+                return 0;
+            final int len = data.length;
+            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;
+            }
+            return result * (a * $l1 | 1L) ^ (result >>> 27 | result << 37);
+        }
+
+        public long hash64(final long[] data) {
+            if (data == null)
+                return 0;
+            final int len = data.length;
+            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;
+            }
+            return result * (a * $l1 | 1L) ^ (result >>> 27 | result << 37);
+        }
+
+
+        public long hash64(final float[] data) {
+            if (data == null)
+                return 0;
+            final int len = data.length;
+            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.floatToIntBits(data[i])) ^ $l2 * a + $l1;
+            }
+            return result * (a * $l1 | 1L) ^ (result >>> 27 | result << 37);
+        }
+
+        public long hash64(final double[] data) {
+            if (data == null)
+                return 0;
+            final int len = data.length;
+            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.doubleToLongBits(data[i])) ^ $l2 * a + $l1;
+            }
+            return result * (a * $l1 | 1L) ^ (result >>> 27 | result << 37);
+        }
+
+        public long hash64(final char[] data, final int start, final int end) {
+            if (data == null || start >= end)
+                return 0;
+            final int len = data.length;
+            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            for (int i = start; i < end && i < len; i++) {
+                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;
+            }
+            return result * (a * $l1 | 1L) ^ (result >>> 27 | result << 37);
+        }
+
+        public long hash64(final char[] data, final int start, final int end, final int step) {
+            if (data == null || start >= end || step <= 0)
+                return 0;
+            final int len = data.length;
+            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            for (int i = start; i < end && i < len; i += step) {
+                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;
+            }
+            return result * (a * $l1 | 1L) ^ (result >>> 27 | result << 37);
+        }
+
+        public long hash64(final CharSequence data) {
+            if (data == null)
+                return 0;
+            final int len = data.length();
+            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x8329C6EB9E6AD3E3L * data.charAt(i)) ^ $l2 * a + $l1;
+            }
+            return result * (a * $l1 | 1L) ^ (result >>> 27 | result << 37);
+        }
+
+        public long hash64(final char[][] data) {
+            if (data == null)
+                return 0;
+            final int len = data.length;
+            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ $l2 * a + $l1;
+            }
+            return result * (a * $l1 | 1L) ^ (result >>> 27 | result << 37);
+        }
+
+        public long hash64(final long[][] data) {
+            if (data == null)
+                return 0;
+            final int len = data.length;
+            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ $l2 * a + $l1;
+            }
+            return result * (a * $l1 | 1L) ^ (result >>> 27 | result << 37);
+        }
+
+        public long hash64(final CharSequence[] data) {
+            if (data == null)
+                return 0;
+            final int len = data.length;
+            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ $l2 * a + $l1;
+            }
+            return result * (a * $l1 | 1L) ^ (result >>> 27 | result << 37);
+        }
+
+        public long hash64(final Iterable<? extends CharSequence> data) {
+            if (data == null)
+                return 0;
+            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            for (CharSequence datum : data) {
+                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(datum)) ^ $l2 * a + $l1;
+            }
+            return result * (a * $l1 | 1L) ^ (result >>> 27 | result << 37);
+        }
+
+        public long hash64(final CharSequence[]... data) {
+            if (data == null)
+                return 0;
+            final int len = data.length;
+            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ $l2 * a + $l1;
+            }
+            return result * (a * $l1 | 1L) ^ (result >>> 27 | result << 37);
+        }
+
+        public long hash64(final Object[] data) {
+            if (data == null)
+                return 0;
+            final int len = data.length;
+            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            Object o;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x8329C6EB9E6AD3E3L * ((o = data[i]) == null ? -1 : o.hashCode())) ^ $l2 * a + $l1;
+            }
+            return result * (a * $l1 | 1L) ^ (result >>> 27 | result << 37);
+        }
+
+        public int hash(final boolean[] data) {
+            if (data == null)
+                return 0;
+            final int len = data.length;
+            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x85157AF5 * (data[i] ? 0x789ABCDE : 0x62E2AC0D)) ^ $i2 * a + $i1;
+            }
+            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
+        }
+
+        public int hash(final byte[] data) {
+            if (data == null)
+                return 0;
+            final int len = data.length;
+            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x85157AF5 * data[i]) ^ $i2 * a + $i1;
+            }
+            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
+        }
+
+        public int hash(final short[] data) {
+            if (data == null)
+                return 0;
+            final int len = data.length;
+            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x85157AF5 * data[i]) ^ $i2 * a + $i1;
+            }
+            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
+        }
+
+        public int hash(final char[] data) {
+            if (data == null)
+                return 0;
+            final int len = data.length;
+            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x85157AF5 * data[i]) ^ $i2 * a + $i1;
+            }
+            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
+        }
+
+        public int hash(final int[] data) {
+            if (data == null)
+                return 0;
+            final int len = data.length;
+            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x85157AF5 * data[i]) ^ $i2 * a + $i1;
+            }
+            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
+        }
+
+        public int hash(final long[] data) {
+            if (data == null)
+                return 0;
+            final int len = data.length;
+            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;
+            }
+            return (int)((result = (result * (a * $l1 | 1L) ^ (result >>> 27 | result << 37))) ^ (result >>> 32));
+        }
+
+
+        public int hash(final float[] data) {
+            if (data == null)
+                return 0;
+            final int len = data.length;
+            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x85157AF5 * NumberTools.floatToIntBits(data[i])) ^ $i2 * a + $i1;
+            }
+            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
+        }
+
+        public int hash(final double[] data) {
+            if (data == null)
+                return 0;
+            final int len = data.length;
+            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.doubleToLongBits(data[i])) ^ $l2 * a + $l1;
+            }
+            return (int)((result = (result * (a * $l1 | 1L) ^ (result >>> 27 | result << 37))) ^ (result >>> 32));
+        }
+
+        public int hash(final char[] data, final int start, final int end) {
+            if (data == null || start >= end)
+                return 0;
+            final int len = data.length;
+            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
+            for (int i = start; i < end && i < len; i++) {
+                result += (a ^= 0x85157AF5 * data[i]) ^ $i2 * a + $i1;
+            }
+            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
+        }
+
+        public int hash(final char[] data, final int start, final int end, final int step) {
+            if (data == null || start >= end || step <= 0)
+                return 0;
+            final int len = data.length;
+            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
+            for (int i = start; i < end && i < len; i += step) {
+                result += (a ^= 0x85157AF5 * data[i]) ^ $i2 * a + $i1;
+            }
+            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
+        }
+
+        public int hash(final CharSequence data) {
+            if (data == null)
+                return 0;
+            final int len = data.length();
+            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x85157AF5 * data.charAt(i)) ^ $i2 * a + $i1;
+            }
+            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
+        }
+
+        public int hash(final char[][] data) {
+            if (data == null)
+                return 0;
+            final int len = data.length;
+            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x85157AF5 * hash(data[i])) ^ $i2 * a + $i1;
+            }
+            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
+        }
+
+        public int hash(final long[][] data) {
+            if (data == null)
+                return 0;
+            final int len = data.length;
+            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x85157AF5 * hash(data[i])) ^ $i2 * a + $i1;
+            }
+            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
+        }
+
+        public int hash(final CharSequence[] data) {
+            if (data == null)
+                return 0;
+            final int len = data.length;
+            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x85157AF5 * hash(data[i])) ^ $i2 * a + $i1;
+            }
+            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
+        }
+
+        public int hash(final Iterable<? extends CharSequence> data) {
+
+            if (data == null)
+                return 0;
+            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
+            for (CharSequence datum : data) {
+                result += (a ^= 0x85157AF5 * hash(datum)) ^ $i2 * a + $i1;
+            }
+            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
+        }
+
+        public int hash(final CharSequence[]... data) {
+            if (data == null)
+                return 0;
+            final int len = data.length;
+            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x85157AF5 * hash(data[i])) ^ $i2 * a + $i1;
+            }
+            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
+        }
+
+        public int hash(final Object[] data) {
+            if (data == null)
+                return 0;
+            final int len = data.length;
+            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
+            Object o;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x85157AF5 * ((o = data[i]) == null ? -1 : o.hashCode())) ^ $i2 * a + $i1;
+            }
+            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
+        }
+        public int hash(final List<? extends CharSequence> data) {
+            if (data == null)
+                return 0;
+            final int len = data.size();
+            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x85157AF5 * hash(data.get(i))) ^ $i2 * a + $i1;
+            }
+            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
+        }
+
+        public int hash(final Object data) {
+            if (data == null)
+                return 0;
+            int a = 0x632BE5AB ^ 0x85157AF5 * data.hashCode(), result = 0x9E3779B9 + $i2 + (a ^ $i2 * a + $i1);
+            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
+        }
+
     }
 }
