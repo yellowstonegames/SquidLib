@@ -68,13 +68,13 @@ public class HashVisualizer extends ApplicationAdapter {
     private SpriteBatch batch;
     private SquidColorCenter colorFactory;
     private SquidPanel display;//, overlay;
-    private int width, height;
-    private int cellWidth, cellHeight;
+    private static final int width = 512, height = 512;
+    private static final int cellWidth = 1, cellHeight = 1;
     private SquidInput input;
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 43, rngMode = 0, noiseMode = 57;
+    private int hashMode = 43, rngMode = 0, noiseMode = 68;
     private CrossHash.Storm storm, stormA, stormB, stormC;
     private CrossHash.Chariot chariot, chariotA, chariotB, chariotC;
     private CrossHash.Mist mist, mistA, mistB, mistC;
@@ -111,12 +111,16 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Noise4D turb4D = new Noise.Turbulent4D(layered4D, ridged4D, 1, 1);
     private final Noise.Noise6D turb6D = new Noise.Turbulent6D(layered6D, ridged6D, 1, 1);
 
+    private final double[] turing = TuringPattern.initialize(width, height);
+    private final int[][] turingActivate = TuringPattern.offsetsCircle(width, height, 4.5),
+            turingInhibit = TuringPattern.offsetsCircle(width, height, 9);
+
     // 0 commonly used hashes
     // 1 variants on Storm and other hashes
     // 3 artistic visualizations of hash functions
     // 4 noise
     // 5 RNG results
-    private int testType = 1;
+    private int testType = 4;
 
     private RandomnessSource fuzzy, random;
     private Random jreRandom;
@@ -375,10 +379,6 @@ public class HashVisualizer extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        width = 512;
-        height = 512;
-        cellWidth = 1;
-        cellHeight = 1;
         display = new SquidPanel(width, height, cellWidth, cellHeight);
         //overlay = new SquidPanel(16, 8, DefaultResources.getStretchableFont().width(32).height(64).initBySize());
         IFilter<Color> filter0 = new Filters.PaletteFilter(
@@ -426,7 +426,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         {
                             case 4:
                                 noiseMode++;
-                                noiseMode %= 68;
+                                noiseMode %= 69;
                                 switch (noiseMode)
                                 {
                                     case 16:
@@ -2841,7 +2841,7 @@ public class HashVisualizer extends ApplicationAdapter {
                     }
                     break;
                     case 58:
-                        Gdx.graphics.setTitle("Trig 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Tabby 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 /*
@@ -2870,6 +2870,17 @@ public class HashVisualizer extends ApplicationAdapter {
                                         40.0, 40.0, 20.0, 1234)
                                         + */tabbyNoise(x * 0.03125f, y * 0.03125f, ctr  * 0.05125f,
                                         123456) * 0.50f) + 0.50f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+
+                    case 68:
+                        Gdx.graphics.setTitle("Turing Pattern at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        TuringPattern.step(turing, turingActivate, 0.4, turingInhibit, -0.4);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float)(turing[x * height + y]) * 0.5f + 0.5f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
@@ -3507,8 +3518,6 @@ public class HashVisualizer extends ApplicationAdapter {
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
-        this.width = width;
-        this.height = height;
         view.update(width, height, true);
         view.apply(true);
         //display = new SquidPanel(this.width, this.height, cellWidth, cellHeight);
@@ -3518,8 +3527,8 @@ public class HashVisualizer extends ApplicationAdapter {
     public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "SquidLib Test: Hash Visualization";
-        config.width = 512;
-        config.height = 512;
+        config.width = width;
+        config.height = height;
         config.foregroundFPS = 0;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);
