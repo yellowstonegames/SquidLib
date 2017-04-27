@@ -63,6 +63,50 @@ public interface Zone extends Serializable, Iterable<Coord> {
      */
     boolean contains(Coord c);
 
+	/**
+	 * @param other
+	 * @return true if all cells of {@code other} are in {@code this}.
+	 */
+	boolean contains(Zone other);
+
+	/**
+	 * @param other
+	 * @return true if {@code this} and {@code other} have a common cell.
+	 */
+	boolean intersectsWith(Zone other);
+
+	/**
+	 * @return The approximate center of this zone, or null if this zone
+	 *         is empty.
+	 */
+	/* @Nullable */ Coord getCenter();
+
+	/**
+	 * @return The distance between the leftmost cell and the rightmost cell, or
+	 *         anything negative if {@code this} zone is empty.
+	 */
+	int getWidth();
+
+	/**
+	 * @return The distance between the topmost cell and the lowest cell, or
+	 *         anything negative if {@code this} zone is empty.
+	 */
+	int getHeight();
+
+	/**
+	 * @param smallestOrBiggest
+	 * @return The x-coordinate of the Coord within {@code this} that has the
+	 *         smallest (or biggest) x-coordinate. Or -1 if the zone is empty.
+	 */
+	int x(boolean smallestOrBiggest);
+
+	/**
+	 * @param smallestOrBiggest
+	 * @return The y-coordinate of the Coord within {@code this} that has the
+	 *         smallest (or biggest) y-coordinate. Or -1 if the zone is empty.
+	 */
+	int y(boolean smallestOrBiggest);
+
     /**
      * @return All cells in this zone.
      */
@@ -77,13 +121,40 @@ public interface Zone extends Serializable, Iterable<Coord> {
      */
     abstract class Skeleton implements Zone {
 
-        private static final long serialVersionUID = 4436698111716212256L;
+		private transient Coord center = null;
+		private transient int width = -2;
+		private transient int height = -2;
 
-        @Override
-        /* Convenience implementation, feel free to override */
-        public boolean contains(Coord c) {
-            return contains(c.x, c.y);
-        }
+		private static final long serialVersionUID = 4436698111716212256L;
+
+		@Override
+		/* Convenience implementation, feel free to override */
+		public boolean contains(Coord c) {
+			return contains(c.x, c.y);
+		}
+
+		@Override
+		/* Convenience implementation, feel free to override */
+		public boolean contains(Zone other) {
+			for (Coord c : other) {
+				if (!contains(c))
+					return false;
+			}
+			return true;
+		}
+
+		@Override
+		public boolean intersectsWith(Zone other) {
+			final int tsz = size();
+			final int osz = other.size();
+			final Iterable<Coord> iteratedOver = tsz < osz ? this : other;
+			final Zone other_ = tsz < osz ? other : this;
+			for (Coord c : iteratedOver) {
+				if (other_.contains(c))
+					return true;
+			}
+			return false;
+		}
 
 		@Override
 		/*
@@ -94,5 +165,79 @@ public interface Zone extends Serializable, Iterable<Coord> {
 			return getAll().iterator();
 		}
 
-    }
+		@Override
+		/* Convenience implementation, feel free to override. */
+		public int getWidth() {
+			if (width == -2)
+				width = isEmpty() ? -1 : x(false) - x(true);
+			return width;
+		}
+
+		@Override
+		/* Convenience implementation, feel free to override. */
+		public int getHeight() {
+			if (height == -2)
+				height = isEmpty() ? -1 : y(false) - y(true);
+			return height;
+		}
+
+		@Override
+		/* Convenience implementation, feel free to override. */
+		public int x(boolean smallestOrBiggest) {
+			return smallestOrBiggest ? smallest(true) : biggest(true);
+		}
+
+		@Override
+		/* Convenience implementation, feel free to override. */
+		public int y(boolean smallestOrBiggest) {
+			return smallestOrBiggest ? smallest(false) : biggest(false);
+		}
+
+		@Override
+		/* Convenience implementation, feel free to override. */
+		/*
+		 * A possible enhancement would be to check that the center is within
+		 * the zone, and if not to return the coord closest to the center, that
+		 * is in the zone .
+		 */
+		public /* @Nullable */ Coord getCenter() {
+			if (center == null) {
+				/* Need to compute it */
+				if (isEmpty())
+					return null;
+				int x = 0, y = 0;
+				float nb = 0;
+				for (Coord c : this) {
+					x += c.x;
+					y += c.y;
+					nb++;
+				}
+				/* Remember it */
+				center = Coord.get(Math.round(x / nb), Math.round(y / nb));
+			}
+			return center;
+		}
+
+		private int smallest(boolean xOrY) {
+			if (isEmpty())
+				return -1;
+			int min = Integer.MAX_VALUE;
+			for (Coord c : this) {
+				final int val = xOrY ? c.x : c.y;
+				if (val < min)
+					min = val;
+			}
+			return min;
+		}
+
+		private int biggest(boolean xOrY) {
+			int max = -1;
+			for (Coord c : this) {
+				final int val = xOrY ? c.x : c.y;
+				if (max < val)
+					max = val;
+			}
+			return max;
+		}
+	}
 }
