@@ -239,7 +239,7 @@ public class Maker {
         return makeK2(0.625f, a0, b0, rest);
     }
     /**
-     * Makes a K2 (two-key set/bimap)  with the given load factor (which should be between 0.1 and 0.9), A and B key
+     * Makes a K2 (two-key set/bimap) with the given load factor (which should be between 0.1 and 0.9), A and B key
      * types inferred from the types of a0 and b0, and considers all parameters A-B pairs, casting the Objects at
      * positions 0, 2, 4... etc. to A and the objects at positions 1, 3, 5... etc. to B. If rest has an odd-number
      * length, then it discards the last item. If any pair of items in rest cannot be cast to the correct type of A or

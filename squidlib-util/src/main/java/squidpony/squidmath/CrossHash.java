@@ -856,6 +856,50 @@ public class CrossHash {
 
     public static final IHasher char2DHasher = new Char2DHasher();
 
+    private static class Int2DHasher implements IHasher, Serializable {
+        private static final long serialVersionUID = 3L;
+
+        Int2DHasher() {
+        }
+
+        @Override
+        public int hash(final Object data) {
+            return (data instanceof int[][]) ? CrossHash.Wisp.hash((int[][]) data) : data.hashCode();
+        }
+
+        @Override
+        public boolean areEqual(Object left, Object right) {
+            return left == right
+                    || ((left instanceof int[][] && right instanceof int[][])
+                    ? equalityHelper((int[][]) left, (int[][]) right, intHasher)
+                    : Objects.equals(left, right));
+        }
+    }
+
+    public static final IHasher int2DHasher = new Int2DHasher();
+
+    private static class Long2DHasher implements IHasher, Serializable {
+        private static final long serialVersionUID = 3L;
+
+        Long2DHasher() {
+        }
+
+        @Override
+        public int hash(final Object data) {
+            return (data instanceof long[][]) ? CrossHash.Wisp.hash((long[][]) data) : data.hashCode();
+        }
+
+        @Override
+        public boolean areEqual(Object left, Object right) {
+            return left == right
+                    || ((left instanceof long[][] && right instanceof long[][])
+                    ? equalityHelper((long[][]) left, (long[][]) right, longHasher)
+                    : Objects.equals(left, right));
+        }
+    }
+
+    public static final IHasher long2DHasher = new Long2DHasher();
+
     private static class StringHasher implements IHasher, Serializable {
         private static final long serialVersionUID = 3L;
 
@@ -979,6 +1023,8 @@ public class CrossHash {
                     else if(left instanceof float[]) return Arrays.equals((float[]) left, (float[]) right);
                     else if(left instanceof short[]) return Arrays.equals((short[]) left, (short[]) right);
                     else if(left instanceof char[][]) return equalityHelper((char[][]) left, (char[][]) right, charHasher);
+                    else if(left instanceof int[][]) return equalityHelper((int[][]) left, (int[][]) right, intHasher);
+                    else if(left instanceof long[][]) return equalityHelper((long[][]) left, (long[][]) right, longHasher);
                     else if(left instanceof CharSequence[]) return equalityHelper((CharSequence[]) left, (CharSequence[]) right, stringHasher);
                     else if(left instanceof Object[]) return Arrays.equals((Object[]) left, (Object[]) right);
                 }
@@ -2409,6 +2455,17 @@ public class CrossHash {
             return result * (a | 1L) ^ (result >>> 27 | result << 37);
         }
 
+        public static long hash64(final int[][] data) {
+            if (data == null)
+                return 0;
+            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
+            final int len = data.length;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i]));
+            }
+            return result * (a | 1L) ^ (result >>> 27 | result << 37);
+        }
+
         public static long hash64(final long[][] data) {
             if (data == null)
                 return 0;
@@ -2462,7 +2519,7 @@ public class CrossHash {
             }
             return result * (a | 1L) ^ (result >>> 27 | result << 37);
         }
-
+        
         public static long hash64(final Object[] data) {
             if (data == null)
                 return 0;
@@ -2635,6 +2692,17 @@ public class CrossHash {
         }
 
         public static int hash(final char[][] data) {
+            if (data == null)
+                return 0;
+            int result = 0x9E3779B9, a = 0x632BE5AB;
+            final int len = data.length;
+            for (int i = 0; i < len; i++) {
+                result += (a ^= 0x85157AF5 * hash(data[i]));
+            }
+            return result * (a | 1) ^ (result >>> 11 | result << 21);
+        }
+
+        public static int hash(final int[][] data) {
             if (data == null)
                 return 0;
             int result = 0x9E3779B9, a = 0x632BE5AB;

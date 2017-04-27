@@ -392,11 +392,11 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             // m.size() elements
         else
             tryCapacity(size() + m.size()); // The resulting map will be
-        int n = m.size(), idx = size;
+        int n = m.size();
         final Iterator<? extends K> i = m
                 .keySet().iterator();
         while (n-- != 0) {
-            put(i.next(), idx++);
+            add(i.next());
         }
     }
 
@@ -408,7 +408,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             tryCapacity(size() + keyArray.length); // The resulting map will be
         int n = keyArray.length;
         for (int i = 0; i < n; i++) {
-            put(keyArray[i], i);
+            add(keyArray[i]);
         }
     }
 
@@ -418,11 +418,45 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             // m.size() elements
         else
             tryCapacity(size() + keyArray.size()); // The resulting map will be
-        int n = keyArray.size();
         Iterator<? extends K> it = keyArray.iterator();
         while (it.hasNext())
-            put(it.next(), 0); // value arguments to put are disregarded
+            add(it.next());
     }
+    public void addAllIfAbsent(Map<? extends K, ? extends Integer> m) {
+        if (f <= .5)
+            ensureCapacity(m.size()); // The resulting map will be sized for
+            // m.size() elements
+        else
+            tryCapacity(size() + m.size()); // The resulting map will be
+        int n = m.size();
+        final Iterator<? extends K> i = m
+                .keySet().iterator();
+        while (n-- != 0) {
+            addIfAbsent(i.next());
+        }
+    }
+
+    public void addAllIfAbsent(K[] keyArray) {
+        if (f <= .5)
+            ensureCapacity(keyArray.length);
+        else
+            tryCapacity(size() + keyArray.length);
+        int n = keyArray.length;
+        for (int i = 0; i < n; i++) {
+            addIfAbsent(keyArray[i]);
+        }
+    }
+
+    public void addAllIfAbsent(Collection<? extends K> keyArray) {
+        if (f <= .5)
+            ensureCapacity(keyArray.size());
+        else
+            tryCapacity(size() + keyArray.size());
+        Iterator<? extends K> it = keyArray.iterator();
+        while (it.hasNext())
+            addIfAbsent(it.next());
+    }
+
     private int insert(final K k, final int v) {
         int pos;
         if (k == null) {
@@ -526,6 +560,14 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         final int oldValue = value[pos];
         value[pos] = size - 1;
         return oldValue;
+    }
+
+    public int addIfAbsent(final K k)
+    {
+        int kPos;
+        if((kPos = getInt(k)) < 0)
+            return add(k);
+        return kPos;
     }
 
     protected void fixValues(int start)
@@ -2744,7 +2786,32 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         }
     }
 
-    public IntVLA getMany(Iterable<K> keys)
+    public int[] getArray(K[] keys)
+    {
+        if(keys == null)
+            return new int[0];
+        int len = keys.length;
+        int[] vals = new int[len];
+        for (int i = 0; i < len; i++) {
+            vals[i] = getInt(keys[i]);
+        }
+        return vals;
+    }
+
+    public int[] getArray(Collection<? extends K> keys)
+    {
+        if(keys == null)
+            return new int[0];
+        int len = keys.size(), i = 0;
+        int[] vals = new int[len];
+        for(K k : keys)
+        {
+            vals[i++] = getInt(k);
+        }
+        return vals;
+    }
+
+    public IntVLA getMany(Iterable<? extends K> keys)
     {
         if(keys == null)
             return new IntVLA();

@@ -200,6 +200,10 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/SpatialMap.html#randomElement-squidpony.squidmath.RNG-">randomElement(RNG)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/SpatialMap.html" title="class in squidpony.squidgrid">SpatialMap</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/BundleBiMap.html#randomElement-squidpony.squidmath.RNG-">randomElement(RNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/BundleBiMap.html" title="class in squidpony.squidmath">BundleBiMap</a></dt>
+<dd>
+<div class="block">Gets a random E from this BundleBiMap's individual elements using the given RNG.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/SpatialMap.html#randomEntry-squidpony.squidmath.RNG-">randomEntry(RNG)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/SpatialMap.html" title="class in squidpony.squidgrid">SpatialMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#randomEntry-squidpony.squidmath.RNG-">randomEntry(RNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
@@ -442,6 +446,10 @@
 <dd>
 <div class="block">Generates a pseudo-random float between -1.0f (exclusive) and 1.0f (exclusive) using the given int seed, passing
  it once through the (very high-quality and rather fast) <a href="../squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath"><code>PintRNG</code></a> algorithm, derived from PCG-Random.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/BundleBiMap.html#randomSingle-squidpony.squidmath.RNG-">randomSingle(RNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/BundleBiMap.html" title="class in squidpony.squidmath">BundleBiMap</a></dt>
+<dd>
+<div class="block">Gets a random S from this BundleBiMap using the given RNG.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/DungeonUtility.html#randomStep-char:A:A-squidpony.squidmath.Coord-boolean-">randomStep(char[][], Coord, boolean)</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/DungeonUtility.html" title="class in squidpony.squidgrid.mapping">DungeonUtility</a></dt>
 <dd>
@@ -1254,6 +1262,13 @@
 <div class="block">Given an array or varargs of replacement indices for this Arrangement's iteration order, reorders this so the
  first item in the returned version is the same as <code>getAt(ordering[0])</code> (with some care taken for negative
  or too-large indices), the second item in the returned version is the same as <code>getAt(ordering[1])</code>, etc.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/BundleBiMap.html#reorder-int...-">reorder(int...)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/BundleBiMap.html" title="class in squidpony.squidmath">BundleBiMap</a></dt>
+<dd>
+<div class="block">Reorders this BundleBiMap using <code>ordering</code>, which has the same length as this object's <a href="../squidpony/squidmath/BundleBiMap.html#size--"><code>BundleBiMap.size()</code></a>
+ and can be generated with <a href="../squidpony/ArrayTools.html#range-int-"><code>ArrayTools.range(int)</code></a> (which, if applied, would produce no
+ change to the current ordering), <a href="../squidpony/squidmath/RNG.html#randomOrdering-int-"><code>RNG.randomOrdering(int)</code></a> (which gives a random ordering, and if
+ applied immediately would be the same as calling <a href="../squidpony/squidmath/BundleBiMap.html#shuffle-squidpony.squidmath.RNG-"><code>BundleBiMap.shuffle(RNG)</code></a>), or made in some other way.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntVLA.html#reorder-int...-">reorder(int...)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></dt>
 <dd>
