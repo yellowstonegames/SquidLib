@@ -20,13 +20,15 @@ public interface Rectangle extends Zone {
      */
     Coord getBottomLeft();
 
-    /**
+    @Override
+	/**
      * @return The room's width (from {@link #getBottomLeft()). It is greater or
      * equal than 0.
      */
     int getWidth();
 
-    /**
+    @Override
+	/**
      * @return The room's height (from {@link #getBottomLeft()). It is greater
      * or equal than 0.
      */
@@ -298,7 +300,7 @@ public interface Rectangle extends Zone {
 	/**
 	 * @author smelC
 	 */
-	class Impl implements Rectangle {
+	class Impl extends Zone.Skeleton implements Rectangle {
 
 		protected final Coord bottomLeft;
 		protected final int width;
@@ -384,6 +386,21 @@ public interface Rectangle extends Zone {
 		@Override
 		public boolean contains(Coord c) {
             return contains(c.x, c.y);
+		}
+
+		@Override
+		public int x(boolean smallestOrBiggest) {
+			return bottomLeft.x + (smallestOrBiggest ? 0 : getWidth() - 1);
+		}
+
+		@Override
+		public int y(boolean smallestOrBiggest) {
+			return bottomLeft.y - (smallestOrBiggest ? (getHeight() - 1) : 0);
+		}
+
+		@Override
+		public Coord getCenter() {
+			return Utils.center(this);
 		}
 
 		@Override

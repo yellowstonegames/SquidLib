@@ -1,6 +1,5 @@
 package squidpony.squidgrid.zone;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import squidpony.squidgrid.zone.Zone.Skeleton;
@@ -19,12 +18,6 @@ public class ListZone extends Skeleton {
 
 	public ListZone(List<Coord> coords) {
 		this.coords = coords;
-	}
-
-	public ListZone(Coord[] coords) {
-		this.coords = new ArrayList<Coord>(coords.length);
-		for (int i = 0; i < coords.length; i++)
-			this.coords.add(coords[i]);
 	}
 
 	@Override
