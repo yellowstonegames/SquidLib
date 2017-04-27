@@ -1,6 +1,7 @@
 package squidpony;
 
 import squidpony.squidmath.Arrangement;
+import squidpony.squidmath.K2;
 import squidpony.squidmath.OrderedMap;
 import squidpony.squidmath.OrderedSet;
 
@@ -219,4 +220,84 @@ public class Maker {
         if(elements == null) return null;
         return new Arrangement<>(elements);
     }
+    /**
+     * Makes a K2 (two-key set/bimap) with A and B key types inferred from the types of a0 and b0, and considers all
+     * parameters A-B pairs, casting the Objects at positions 0, 2, 4... etc. to A and the objects at positions
+     * 1, 3, 5... etc. to B. If rest has an odd-number length, then it discards the last item. If any pair of items in
+     * rest cannot be cast to the correct type of A or B, then this inserts nothing for that pair and logs information
+     * on the problematic pair to the static Maker.issueLog field.
+     * @param a0 the first A key; used to infer the types of other keys if generic parameters aren't specified.
+     * @param b0 the first B key; used to infer the types of other values if generic parameters aren't specified.
+     * @param rest an array or vararg of keys and values in pairs; should contain alternating A, B, A, B... elements
+     * @param <A> a type of keys in the returned K2; if not specified, will be inferred from a0
+     * @param <B> a type of keys in the returned K2; if not specified, will be inferred from b0
+     * @return a freshly-made K2 with A and B keys, using a0, b0, and the contents of rest to fill it
+     */
+    @SuppressWarnings("unchecked")
+    public static <A, B> K2<A, B> makeK2(A a0, B b0, Object... rest)
+    {
+        return makeK2(0.625f, a0, b0, rest);
+    }
+    /**
+     * Makes a K2 (two-key set/bimap)  with the given load factor (which should be between 0.1 and 0.9), A and B key
+     * types inferred from the types of a0 and b0, and considers all parameters A-B pairs, casting the Objects at
+     * positions 0, 2, 4... etc. to A and the objects at positions 1, 3, 5... etc. to B. If rest has an odd-number
+     * length, then it discards the last item. If any pair of items in rest cannot be cast to the correct type of A or
+     * B, then this inserts nothing for that pair and logs information on the problematic pair to the static
+     * Maker.issueLog field.
+     * @param factor the load factor; should be between 0.1 and 0.9, and 0.75f is a safe choice
+     * @param a0 the first A key; used to infer the types of other keys if generic parameters aren't specified.
+     * @param b0 the first B key; used to infer the types of other values if generic parameters aren't specified.
+     * @param rest an array or vararg of keys and values in pairs; should contain alternating A, B, A, B... elements
+     * @param <A> a type of keys in the returned K2; if not specified, will be inferred from a0
+     * @param <B> a type of keys in the returned K2; if not specified, will be inferred from b0
+     * @return a freshly-made K2 with A and B keys, using a0, b0, and the contents of rest to fill it
+     */
+    @SuppressWarnings("unchecked")
+    public static <A, B> K2<A, B> makeK2(float factor, A a0, B b0, Object... rest)
+    {
+        if(rest == null)
+            rest = new Object[0];
+        K2<A, B> k2 = new K2<>(1 + (rest.length >> 1), factor);
+        k2.put(a0, b0);
+
+        for (int i = 0; i < rest.length - 1; i+=2) {
+            try {
+                k2.put((A) rest[i], (B) rest[i + 1]);
+            }catch (ClassCastException cce) {
+                issueLog.append("makeK2 call had a casting problem with pair at rest[");
+                issueLog.append(i);
+                issueLog.append("] and/or rest[");
+                issueLog.append(i + 1);
+                issueLog.append("], with contents: ");
+                issueLog.append(rest[i]);
+                issueLog.append(", ");
+                issueLog.append(rest[i+1]);
+                issueLog.append(".\n\nException messages:\n");
+                issueLog.append(cce);
+                String msg = cce.getMessage();
+                if (msg != null) {
+                    issueLog.append('\n');
+                    issueLog.append(msg);
+                }
+                issueLog.append('\n');
+            }
+        }
+        return k2;
+    }
+
+    /**
+     * Makes an empty K2 (two-key set/bimap); needs A and B key types to be specified in order to work. For an empty
+     * K2 with String A keys Coord B keys, you could use {@code Maker.<String, Coord>makeK2();}. Using
+     * the new keyword is probably just as easy in this case; this method is provided for completeness relative to
+     * makeK2() with 2 or more parameters.
+     * @param <A> the type of "A" keys in the returned K2; cannot be inferred and must be specified
+     * @param <B> the type of "B" keys in the returned K2; cannot be inferred and must be specified
+     * @return an empty K2 with the given key and value types.
+     */
+    public static <A, B> K2<A, B> makeK2()
+    {
+        return new K2<>();
+    }
+
 }
