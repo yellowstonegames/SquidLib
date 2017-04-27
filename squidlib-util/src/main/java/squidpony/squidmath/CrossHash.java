@@ -3170,9 +3170,9 @@ public class CrossHash {
     public static final class Mist implements Serializable {
         private static final long serialVersionUID = -1275284837479983271L;
 
-        private transient final long $l1, $l2;
+        private transient long $l1, $l2;
 
-        private transient final int $i1, $i2;
+        private transient int $i1, $i2;
 
         public Mist() {
             this(0x1234567876543210L, 0xEDCBA98789ABCDEFL);
@@ -3192,17 +3192,16 @@ public class CrossHash {
         @SuppressWarnings("NumericOverflow")
         public Mist(final long alteration) {
             $i1 = permute(alteration);
-            long s = alteration + $i1;
-            s = (s ^ (s >>> 30)) * 0xBF58476D1CE4E5B9L;
-            s = (s ^ (s >>> 27)) * 0x94D049BB133111EBL;
-            s ^= s >>> 31;
-            $l1 = s;
-            $i2 = permute(s + 0x9E3779B97F4A7C15L);
-            s = alteration + 6 * 0x9E3779B97F4A7C15L;
-            s = (s ^ (s >>> 30)) * 0xBF58476D1CE4E5B9L;
-            s = (s ^ (s >>> 27)) * 0x94D049BB133111EBL;
-            s ^= s >>> 31;
-            $l2 = s;
+            $l1 = alteration + $i1;
+            $l1 = ($l1 ^ ($l1 >>> 30)) * 0xBF58476D1CE4E5B9L;
+            $l1 = ($l1 ^ ($l1 >>> 27)) * 0x94D049BB133111EBL;
+            $l1 ^= $l1 >>> 31;
+
+            $i2 = permute($l1 + 0x9E3779B97F4A7C15L);
+            $l2 = alteration + 6 * 0x9E3779B97F4A7C15L;
+            $l2 = ($l2 ^ ($l2 >>> 30)) * 0xBF58476D1CE4E5B9L;
+            $l2 = ($l2 ^ ($l2 >>> 27)) * 0x94D049BB133111EBL;
+            $l2 ^= $l2 >>> 31;
         }
 
         @SuppressWarnings("NumericOverflow")
@@ -3211,6 +3210,30 @@ public class CrossHash {
             $l1 = alteration1 + $i1;
             $i2 = permute(alteration2 + $i1);
             $l2 = alteration2 + $i2;
+        }
+
+        /**
+         * Alters all of the salt values in a pseudo-random way based on the previous salt value.
+         * This will effectively make this Mist object a different, incompatible hashing functor.
+         * Meant for use in Cuckoo Hashing, which can need the hash function to be updated or changed.
+         * An alternative is to select a different Mist object from {@link #predefined}, or to simply
+         * construct a new Mist with a different parameter or set of parameters.
+         */
+        @SuppressWarnings("NumericOverflow")
+        public void randomize()
+        {
+            $i1 = permute($l2 + 3 * 0x9E3779B97F4A7C15L);
+            $l1 = $l2 + $i1;
+            $l1 = ($l1 ^ ($l1 >>> 30)) * 0xBF58476D1CE4E5B9L;
+            $l1 = ($l1 ^ ($l1 >>> 27)) * 0x94D049BB133111EBL;
+            $l1 ^= $l1 >>> 31;
+
+            $i2 = permute($l1 + 5 * 0x9E3779B97F4A7C15L);
+            $l2 = $l1 + 6 * 0x9E3779B97F4A7C15L;
+            $l2 = ($l2 ^ ($l2 >>> 30)) * 0xBF58476D1CE4E5B9L;
+            $l2 = ($l2 ^ ($l2 >>> 27)) * 0x94D049BB133111EBL;
+            $l2 ^= $l2 >>> 31;
+
         }
 
         public static final Mist alpha = new Mist("alpha"), beta = new Mist("beta"), gamma = new Mist("gamma"),
