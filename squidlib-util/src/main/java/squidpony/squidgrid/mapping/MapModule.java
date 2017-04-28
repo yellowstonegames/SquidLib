@@ -1,5 +1,6 @@
 package squidpony.squidgrid.mapping;
 
+import squidpony.ArrayTools;
 import squidpony.GwtCompatibility;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.CoordPacker;
@@ -59,8 +60,8 @@ public class MapModule implements Comparable<MapModule>, Serializable {
     {
         if(map == null || map.length <= 0)
             throw new UnsupportedOperationException("Given map cannot be empty in MapModule");
-        this.map = GwtCompatibility.copy2D(map);
-        environment = GwtCompatibility.fill2D(MixedGenerator.ROOM_FLOOR, this.map.length, this.map[0].length);
+        this.map = ArrayTools.copy(map);
+        environment = ArrayTools.fill(MixedGenerator.ROOM_FLOOR, this.map.length, this.map[0].length);
         for (int x = 0; x < map.length; x++) {
             for (int y = 0; y < map[0].length; y++) {
                 if(this.map[x][y] == '#')
@@ -108,8 +109,8 @@ public class MapModule implements Comparable<MapModule>, Serializable {
      */
     public MapModule(char[][] map, Coord[] validDoors, Coord min, Coord max)
     {
-        this.map = GwtCompatibility.copy2D(map);
-        environment = GwtCompatibility.fill2D(MixedGenerator.ROOM_FLOOR, this.map.length, this.map[0].length);
+        this.map = ArrayTools.copy(map);
+        environment = ArrayTools.fill(MixedGenerator.ROOM_FLOOR, this.map.length, this.map[0].length);
         for (int x = 0; x < map.length; x++) {
             for (int y = 0; y < map[0].length; y++) {
                 if(this.map[x][y] == '#')

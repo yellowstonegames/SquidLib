@@ -3,15 +3,11 @@ package squidpony.squidai;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.PoissonDisk;
-import squidpony.squidmath.RNG;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.*;
 
-import squidpony.squidmath.OrderedMap;
-import squidpony.squidmath.OrderedSet;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Map;
 
 import static squidpony.squidmath.CoordPacker.*;
 
@@ -525,7 +521,7 @@ public class WaypointPathfinder {
             long temp;
             result = from.hashCode();
             result = 31 * result + to.hashCode();
-            temp = Double.doubleToLongBits(cost);
+            temp = NumberTools.doubleToLongBits(cost);
             result = 31 * result + (int) (temp ^ (temp >>> 32));
             return result;
         }

@@ -5,7 +5,36 @@ import squidpony.squidgrid.Direction;
 import java.io.Serializable;
 
 /**
- * A 2D coordinate.
+ * A 2D coordinate with (constant) x and y fields. Coord objects are immutable; a single pool of Coord values, with
+ * x and y each ranging from -3 to 255, is shared by all users of Coord. This pool helps reduce pressure on the
+ * garbage collector when many Coord values would have been created for some purpose and quickly discarded; instead
+ * of creating a new Coord with a constructor, you use the static method {@link #get(int, int)}, which retrieves an
+ * already-existing Coord from the pool if possible, and always returns a usable Coord.
+ * <br>
+ * The Coord class is a fundamental part of SquidLib; any class that uses positions on a grid makes use of it here.
+ * It finds usage naturally in classes throughout {@link squidpony.squidgrid}, with {@link squidpony.squidgrid.zone}
+ * providing an abstraction around groups of Coord and {@link squidpony.squidgrid.iterator} providing various ways to
+ * iterate through the Coords that make up a larger shape. In this package, {@link squidpony.squidmath}, a few classes
+ * should be pointed out. {@link CoordPacker} is a class with all static methods that provides various ways to compress
+ * the memory usage of regions made of many Coord values (and can be constructed in other ways but still provide Coords
+ * later), but since Coords don't use much memory anyway, the real use of the class is for manipulating the shapes and
+ * sizes of the regions those Coords are part of. {@link GreasedRegion} has similar functionality to CoordPacker, but
+ * where CoordPacker is purely static, taking and returning regions as encoded, usually-low-memory-cost arrays of
+ * {@code short} that it considers immutable, a GreasedRegion is a mutable object that allows the same region-altering
+ * techniques to be applied in-place in a way that is relatively (very) low-time-cost. If deciding between the two,
+ * GreasedRegion should usually be preferred, and CoordPacker cannot actually be used when storing regions in larger
+ * than a 256x256 space (usually when the Coord pool has been expanded; see below); GreasedRegion can store potentially
+ * large positions.
+ * <br>
+ * More on the Coord pool used by this class:  Coords can't always be retrieved from the pool; Coord.get constructs a
+ * new Coord if one of x or y is unusually large (greater than 255) or too negative (below -3). The upper limit of 255
+ * is not a hard rule; you can increase the limit on the pool by calling {@link #expandPoolTo(int, int)} or
+ * {@link #expandPool(int, int)}, which cause more memory to be spent initially on storing Coords but can save memory
+ * or ease GC pressure over the long term by preventing duplicate Coords from being created many times. The pool can
+ * never shrink because allowing that would cause completely unpredictable results if existing Coords were in use, or
+ * could easily cause crashes on Android after resuming an application that had previously shrunken the pool due to
+ * platform quirks. Long story short, you should only expand the pool size when your game needs a larger set of 2D
+ * points it will commonly use, and in most cases you shouldn't need to change it at all.
  * 
  * Created by Tommy Ettinger on 8/12/2015.
  */
@@ -22,12 +51,12 @@ public class Coord implements Serializable {
     {
         this(0, 0);
     }
-    protected Coord(int x, int y)
+    protected Coord(final int x, final int y)
     {
         this.x = x;
         this.y = y;
     }
-    public static Coord get(int x, int y)
+    public static Coord get(final int x, final int y)
     {
         if(x >= -3 && y >= -3 && x < POOL.length - 3 && y < POOL[x + 3].length - 3)
             return POOL[x + 3][y + 3];
@@ -40,7 +69,7 @@ public class Coord implements Serializable {
 	 * @param to the ending Coord to measure to
 	 * @return The degree from {@code from} to {@code to}; 0 is up
 	 */
-	public static double degrees(Coord from, Coord to) {
+	public static double degrees(final Coord from, final Coord to) {
 		final int x = to.x - from.x;
 		final int y = to.y - from.y;
 		double angle = Math.atan2(y, x);
@@ -65,7 +94,7 @@ public class Coord implements Serializable {
      * @param y the amount of y distance to move
      * @return a Coord (usually cached and not a new instance) that has been moved the specified distance
      */
-    public Coord translate(int x, int y)
+    public Coord translate(final int x, final int y)
     {
         return get(this.x + x, this.y + y);
     }
@@ -78,7 +107,7 @@ public class Coord implements Serializable {
      * @param height one higher than the maximum y value this can use; typically the length of an array
      * @return a Coord (usually cached and not a new instance) that has been moved the specified distance
      */
-    public Coord translateCapped(int x, int y, int width, int height)
+    public Coord translateCapped(final int x, final int y, final int width, final int height)
     {
         return get(Math.min(Math.max(0, this.x + x), width - 1), Math.min(Math.max(0, this.y + y), height - 1));
     }
@@ -88,7 +117,7 @@ public class Coord implements Serializable {
      * @param other another Coord
      * @return a Coord (usually cached and not a new instance) with {@code x = this.x + other.x; y = this.y + other.y}
      */
-    public Coord add(Coord other)
+    public Coord add(final Coord other)
     {
         return get(x + other.x, y + other.y);
     }
@@ -99,7 +128,7 @@ public class Coord implements Serializable {
      * @param operand a value to add each of x and y to
      * @return a Coord (usually cached and not a new instance) with {@code x = this.x + operand; y = this.y + operand}
      */
-    public Coord add(int operand)
+    public Coord add(final int operand)
     {
         return get(x + operand, y + operand);
     }
@@ -111,7 +140,7 @@ public class Coord implements Serializable {
      * @return a Coord (usually cached and not a new instance) with {@code x = this.x + operand; y = this.y +
      *          operand}, with both x and y rounded accordingly
      */
-    public Coord add(double operand)
+    public Coord add(final double operand)
     {
         return get((int)Math.round(x + operand), (int)Math.round(y + operand));
     }
@@ -122,7 +151,7 @@ public class Coord implements Serializable {
      * @param other another Coord
      * @return a Coord (usually cached and not a new instance) with {@code x = this.x - other.x; y = this.y - other.y}
      */
-    public Coord subtract(Coord other)
+    public Coord subtract(final Coord other)
     {
         return get(x - other.x, y - other.y);
     }
@@ -133,7 +162,7 @@ public class Coord implements Serializable {
      * @param operand a value to subtract from each of x and y
      * @return a Coord (usually cached and not a new instance) with {@code x = this.x - operand; y = this.y - operand}
      */
-    public Coord subtract(int operand)
+    public Coord subtract(final int operand)
     {
         return get(x - operand, y - operand);
     }
@@ -145,7 +174,7 @@ public class Coord implements Serializable {
      * @return a Coord (usually cached and not a new instance) with {@code x = this.x - operand; y = this.y -
      *          operand}, with both x and y rounded accordingly
      */
-    public Coord subtract(double operand)
+    public Coord subtract(final double operand)
     {
         return get((int)Math.round(x - operand), (int)Math.round(y - operand));
     }
@@ -155,7 +184,7 @@ public class Coord implements Serializable {
      * @param other another Coord
      * @return a Coord (usually cached and not a new instance) with {@code x = this.x * other.x; y = this.y * other.y}
      */
-    public Coord multiply(Coord other)
+    public Coord multiply(final Coord other)
     {
         return get(x * other.x, y * other.y);
     }
@@ -165,7 +194,7 @@ public class Coord implements Serializable {
      * @param operand a value to multiply each of x and y by
      * @return a Coord (usually cached and not a new instance) with {@code x = this.x * operand; y = this.y * operand}
      */
-    public Coord multiply(int operand)
+    public Coord multiply(final int operand)
     {
         return get(x * operand, y * operand);
     }
@@ -177,7 +206,7 @@ public class Coord implements Serializable {
      * @return a Coord (usually cached and not a new instance) with {@code x = this.x * operand; y = this.y *
      *          operand}, with both x and y rounded accordingly
      */
-    public Coord multiply(double operand)
+    public Coord multiply(final double operand)
     {
         return get((int)Math.round(x * operand), (int)Math.round(y * operand));
     }
@@ -188,7 +217,7 @@ public class Coord implements Serializable {
      * @param other another Coord
      * @return a Coord (usually cached and not a new instance) with {@code x = this.x / other.x; y = this.y / other.y}
      */
-    public Coord divide(Coord other)
+    public Coord divide(final Coord other)
     {
         return get(x / other.x, y / other.y);
     }
@@ -198,7 +227,7 @@ public class Coord implements Serializable {
      * @param operand a value to divide each of x and y by
      * @return a Coord (usually cached and not a new instance) with {@code x = this.x / operand; y = this.y / operand}
      */
-    public Coord divide(int operand)
+    public Coord divide(final int operand)
     {
         return get(x / operand, y / operand);
     }
@@ -211,7 +240,7 @@ public class Coord implements Serializable {
      * @return a Coord (usually cached and not a new instance) with {@code x = this.x / operand; y = this.y /
      *          operand}, with both x and y rounded accordingly
      */
-    public Coord divide(double operand)
+    public Coord divide(final double operand)
     {
         return get((int)(x / operand), (int)(y / operand));
     }
@@ -224,7 +253,7 @@ public class Coord implements Serializable {
      * @return a Coord (usually cached and not a new instance) with {@code x = this.x / operand; y = this.y /
      *          operand}, with both x and y rounded accordingly
      */
-    public Coord divideRounding(double operand)
+    public Coord divideRounding(final double operand)
     {
         return get((int)Math.round(x / operand), (int)Math.round(y / operand));
     }
@@ -235,7 +264,7 @@ public class Coord implements Serializable {
      * @param other another Coord
      * @return a Coord (usually cached and not a new instance) halfway between this and other, rounded nearest.
      */
-    public Coord average(Coord other)
+    public Coord average(final Coord other)
     {
         return get(Math.round((x + other.x) / 2.0f), Math.round((y + other.y) / 2.0f));
     }
@@ -244,7 +273,7 @@ public class Coord implements Serializable {
 	 *            A non-{@code null} direction.
 	 * @return The coordinate obtained by applying {@code d} on {@code this}.
 	 */
-	public Coord translate(Direction d) {
+	public Coord translate(final Direction d) {
 		return Coord.get(x + d.deltaX, y + d.deltaY);
 	}
 
@@ -252,7 +281,7 @@ public class Coord implements Serializable {
 	 * @param i
 	 * @return {@code (x*i,y*i)}.
 	 */
-	public Coord scale(int i) {
+	public Coord scale(final int i) {
 		return Coord.get(x * i, y * i);
 	}
 
@@ -260,25 +289,43 @@ public class Coord implements Serializable {
 	 * @param i
 	 * @return {@code (x*i,y*j)}.
 	 */
-	public Coord scale(int i, int j) {
+	public Coord scale(final int i, final int j) {
 		return Coord.get(x * i, y * j);
 	}
 
-    public double distance(double x2, double y2)
+    public double distance(final double x2, final double y2)
     {
         return Math.sqrt((x2 - x) * (x2 - x) + (y2 - y) * (y2 - y));
     }
-    public double distance(Coord co)
+    public double distance(final Coord co)
     {
         return Math.sqrt((co.x - x) * (co.x - x) + (co.y - y) * (co.y - y));
     }
-    public double distanceSq(double x2, double y2)
+    public double distanceSq(final double x2, final double y2)
     {
         return (x2 - x) * (x2 - x) + (y2 - y) * (y2 - y);
     }
-    public double distanceSq(Coord co)
+    public double distanceSq(final Coord co) { return (co.x - x) * (co.x - x) + (co.y - y) * (co.y - y); }
+
+    /**
+     * Gets a Coord based off this instance but with odd values for x and/or y decreased to the nearest even number.
+     * May be useful for thin-wall maps as produced by {@link squidpony.squidgrid.mapping.ThinDungeonGenerator} and used
+     * with {@link squidpony.squidgrid.Adjacency.ThinWallAdjacency}.
+     * @return a Coord (probably from the pool) with even x and even y, changing (decrementing) only if they are odd
+     */
+    public Coord makeEven()
     {
-        return (co.x - x) * (co.x - x) + (co.y - y) * (co.y - y);
+        return get(x & -2, y & -2);
+    }
+
+    /**
+     * Gets a Coord based off this instance but with even values for x and/or y increased to the nearest odd number.
+     * May be useful for thin-wall maps as produced by {@link squidpony.squidgrid.mapping.ThinDungeonGenerator} and used
+     * with {@link squidpony.squidgrid.Adjacency.ThinWallAdjacency}.
+     * @return a Coord (probably from the pool) with odd x and odd y, changing (incrementing) only if they are even
+     */
+    public Coord makeOdd() {
+        return get(x | 1, y | 1);
     }
 
 	/**
@@ -286,7 +333,7 @@ public class Coord implements Serializable {
 	 * @return Whether {@code this} is adjacent to {@code c}. Not that a cell is
 	 *         not adjacent to itself with this method.
 	 */
-	public boolean isAdjacent(Coord c) {
+	public boolean isAdjacent(final Coord c) {
 		switch (Math.abs(x - c.x)) {
 		case 0:
 			return Math.abs(y - c.y) == 1;
@@ -300,7 +347,7 @@ public class Coord implements Serializable {
 	/**
 	 * Precondition: {@code this} is {@link #isAdjacent(Coord) adjacent} to
 	 * {@code adjacent}.
-	 * 
+     *
 	 * @param adjacent
 	 *            A {@link Coord} that is {@link #isAdjacent(Coord) adjacent} to
 	 *            {@code this}.
@@ -310,15 +357,38 @@ public class Coord implements Serializable {
 	 * @throws IllegalStateException
 	 *             If {@code this} isn't adjacent to {@code adjacent}.
 	 */
-	/* KISS implementation */
-	public Direction toGoTo(Coord adjacent) {
-		assert isAdjacent(adjacent);
-		for (Direction d : Direction.values()) {
-			/* Not calling #translate, to avoid calling the cache */
-			if (x + d.deltaX == adjacent.x && y + d.deltaY == adjacent.y)
-				return d;
-		}
-		throw new IllegalStateException(this + " is not adjacent to " + adjacent);
+	/* different implementation than before, closer to isAdjacent() */
+	public Direction toGoTo(final Coord adjacent) {
+        switch (adjacent.x - x) {
+            case 0:
+                switch (adjacent.y - y)
+                {
+                    case -1: return Direction.UP;
+                    case 1: return Direction.DOWN;
+                    default:
+                        throw new IllegalStateException(this + " is not adjacent to " + adjacent);
+                }
+            case 1:
+                switch (adjacent.y - y)
+                {
+                    case -1: return Direction.UP_RIGHT;
+                    case 0: return Direction.RIGHT;
+                    case 1: return Direction.DOWN_RIGHT;
+                    default:
+                        throw new IllegalStateException(this + " is not adjacent to " + adjacent);
+                }
+            case -1:
+                switch (adjacent.y - y)
+                {
+                    case -1: return Direction.UP_LEFT;
+                    case 0: return Direction.LEFT;
+                    case 1: return Direction.DOWN_LEFT;
+                    default:
+                        throw new IllegalStateException(this + " is not adjacent to " + adjacent);
+                }
+            default:
+                throw new IllegalStateException(this + " is not adjacent to " + adjacent);
+        }
 	}
 
     /**
@@ -328,7 +398,7 @@ public class Coord implements Serializable {
      * @param height the upper limit on y to check, exclusive
      * @return true if this Coord is within the limits of width and height and has non-negative x and y
      */
-    public boolean isWithin(int width, int height)
+    public boolean isWithin(final int width, final int height)
     {
         return x >= 0 && y >= 0 && x < width && y < height;
     }
@@ -349,7 +419,7 @@ public class Coord implements Serializable {
         return x;
     }
 
-    public Coord setX(int x) {
+    public Coord setX(final int x) {
         return get(x, y);
     }
 
@@ -357,7 +427,7 @@ public class Coord implements Serializable {
         return y;
     }
 
-    public Coord setY(int y) {
+    public Coord setY(final int y) {
         return get(x, y);
     }
 
@@ -367,12 +437,23 @@ public class Coord implements Serializable {
         return "(" + x + "," + y + ")";
     }
 
+    /**
+     * Gets the hash code for this Coord; does not use the standard "auto-complete" style of hash that most IDEs will
+     * generate, but instead uses bit mixing (differently for x and y, with each multiplied by a different large int), a
+     * XOR of the mixed x and y, a seemingly-random right shift, and an overflowing multiplication by a large prime.
+     * <br>
+     * This changed at least twice in SquidLib's history. In general, you shouldn't rely on hashCodes to stay the same
+     * across platforms and versions, whether for the JDK or this library. SquidLib (tries to) never depend on the
+     * unpredictable ordering of some hash-based collections like HashSet and HashMap, instead using its own
+     * {@link OrderedSet} and {@link OrderedMap}; if you use the ordered kinds, then the only things that matter about
+     * this hash code are that it is fast (it's fast enough) and that it doesn't collide often (which is now much more
+     * accurate than in the last version of this method).
+     * @return an int that should, for most different Coord values, be significantly different from the other hash codes
+     */
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 113 * hash + x;
-        hash = 113 * hash + y;
-        return hash;
+        int x2 = 0x9E3779B9 * x, y2 = 0x632BE5AB * y;
+        return ((x2 ^ y2) >>> ((x2 & 7) + (y2 & 7))) * 0x85157AF5;
     }
 
     /**
@@ -393,7 +474,7 @@ public class Coord implements Serializable {
      * @param y the y position to encode
      * @return the coded int that a Coord at (x,y) would produce with encode()
      */
-    public static int pureEncode(int x, int y)
+    public static int pureEncode(final int x, final int y)
     {
         return ((x + 256) << 16) ^ (y + 256);
     }
@@ -406,7 +487,7 @@ public class Coord implements Serializable {
      * @param code an encoded int from a Coord, but not a subclass of Coord
      * @return the Coord that gave hash as its hashCode()
      */
-    public static Coord decode(int code)
+    public static Coord decode(final int code)
     {
         return get((code >>> 16) - 256, (code & 0xFFFF) - 256);
     }
@@ -471,7 +552,7 @@ public class Coord implements Serializable {
      * @param width the new width for the pool of cached Coords; will be ignored if smaller than the current width
      * @param height the new height for the pool of cached Coords; will be ignored if smaller than the current height
      */
-    public static void expandPoolTo(int width, int height)
+    public static void expandPoolTo(final int width, final int height)
     {
         expandPool(Math.max(0, width + 3 - POOL.length), Math.max(0, height + 3 - POOL[0].length));
     }
@@ -486,7 +567,7 @@ public class Coord implements Serializable {
      * @param xIncrease the amount to increase cache's width by
      * @param yIncrease the amount to increase cache's height by
      */
-    public static void expandPool(int xIncrease, int yIncrease)
+    public static void expandPool(final int xIncrease, final int yIncrease)
     {
         if(xIncrease < 0 || yIncrease < 0 || (xIncrease | yIncrease) == 0 )
             return;

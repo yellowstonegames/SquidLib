@@ -7,19 +7,24 @@ import java.util.Arrays;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Customized extension of Random to allow for common roguelike operations.
- *
- * Uses the Mersenne Twister algorithm to provide superior results. Because of
- * the seed requirements for the MT, the seed setting methods and constructors
- * that take a long do not set the seed. The methods that use a byte[] to set
- * the seed must be used instead if a custom seed is desired.
+ * RandomnessSource using Mersenne Twister algorithm (not recommended).
+ * <br>
+ * Uses the Mersenne Twister algorithm to provide results with a longer period.
+ * Mersenne Twister has known statistical vulnerabilities, however, and this
+ * implementation is incredibly slow, which is why it is deprecated. You should
+ * use {@link LongPeriodRNG} for most of the cases that MersenneTwister would be
+ * good at in theory, or {@link IsaacRNG} for cases that need an extremely large
+ * period and cryptographic-like properties.
+ * <br>
  *
  * @author Daniel Dyer (Java Port)
  * @author Makoto Matsumoto and Takuji Nishimura (original C version)
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Lewis Potter
+ * @deprecated
  */
 @GwtIncompatible /* Because of SecureRandom */
+@Deprecated /* This code is really, really slow due to threading behavior, and should be avoided. */
 public class MersenneTwister implements RandomnessSource {
 
 	// The actual seed size isn't that important, but it should be a multiple of 4.
@@ -178,7 +183,7 @@ public class MersenneTwister implements RandomnessSource {
 
     /**
      * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
-     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
+     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to
      * copy the state so it isn't shared, usually, and produce a new value with the same exact state.
      *
      * @return a copy of this RandomnessSource
@@ -191,4 +196,29 @@ public class MersenneTwister implements RandomnessSource {
         return next;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MersenneTwister that = (MersenneTwister) o;
+
+        if (mtIndex != that.mtIndex) return false;
+        if (!Arrays.equals(seed, that.seed)) return false;
+        return Arrays.equals(mt, that.mt);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = CrossHash.Lightning.hash(seed);
+        result = 31 * result + CrossHash.Lightning.hash(mt);
+        result = 31 * result + mtIndex;
+        return result;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "MersenneTwister with hidden state (id is " + System.identityHashCode(this)  + ')';
+    }
 }

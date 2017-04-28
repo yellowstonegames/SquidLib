@@ -15,7 +15,7 @@ import squidpony.squidmath.RNG;
 public class DijkstraDungeonTest {
     public static void main(String[] args) {
         for (DijkstraMap.Measurement m : DijkstraMap.Measurement.values()) {
-            LightRNG lrng = new LightRNG(0x57a8deadbeef0ffal);
+            LightRNG lrng = new LightRNG(0x57a8deadbeef0ffaL);
             RNG rng = new RNG(lrng);
             DungeonGenerator dg = new DungeonGenerator(40, 40, rng);
             char[][] dun = dg.generate();
@@ -53,8 +53,7 @@ public class DijkstraDungeonTest {
             System.out.println(dg);
 
 
-            lrng.setState(0x57a8deadbeef0ffal);
-            rng = new RNG(lrng);
+            lrng.setState(0x57a8deadbeef0ffaL);
             dg = new DungeonGenerator(40, 40, rng);
             dun = dg.generate();
             dijkstra.initialize(dun);
@@ -97,8 +96,7 @@ public class DijkstraDungeonTest {
             System.out.println();
 
 
-            lrng.setState(0x57a8deadbeef0ffal);
-            rng = new RNG(lrng);
+            lrng.setState(0x57a8deadbeef0ffaL);
             dg = new DungeonGenerator(40, 40, rng);
             dun = dg.generate();
             dijkstra.initialize(dun);
