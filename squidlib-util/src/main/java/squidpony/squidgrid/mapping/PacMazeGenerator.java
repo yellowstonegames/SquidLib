@@ -1,6 +1,6 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.GwtCompatibility;
+import squidpony.ArrayTools;
 import squidpony.squidmath.RNG;
 
 /**
@@ -142,7 +142,7 @@ public class PacMazeGenerator {
     public int[][] getEnvironment()
     {
         if(env == null)
-            return GwtCompatibility.fill2D(MixedGenerator.CORRIDOR_WALL, width, height);
+            return ArrayTools.fill(MixedGenerator.CORRIDOR_WALL, width, height);
         return env;
     }
 
@@ -163,7 +163,7 @@ public class PacMazeGenerator {
      */
     public char[][] getMaze() {
         if(maze == null)
-            return GwtCompatibility.fill2D('#', width, height);
+            return ArrayTools.fill('#', width, height);
         return maze;
     }
 }

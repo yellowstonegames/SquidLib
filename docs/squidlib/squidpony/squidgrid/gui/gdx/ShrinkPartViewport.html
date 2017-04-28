@@ -118,20 +118,10 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <hr>
 <br>
-<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ShrinkPartViewport.html#line.40">ShrinkPartViewport</a>
+<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ShrinkPartViewport.html#line.30">ShrinkPartViewport</a>
 extends com.badlogic.gdx.utils.viewport.ScalingViewport</pre>
-<div class="block">A viewport that scales the world using <code>Scaling</code>.
- <p>
- <code>Scaling.fit</code> keeps the aspect ratio by scaling the world up to fit the screen, adding black bars (letterboxing) for the
- remaining space.
- <p>
- <code>Scaling.fill</code> keeps the aspect ratio by scaling the world up to take the whole screen (some of the world may be off
- screen).
- <p>
- <code>Scaling.stretch</code> does not keep the aspect ratio, the world is scaled to take the whole screen.
- <p>
- <code>Scaling.none</code> keeps the aspect ratio by using a fixed size world (the world may not fill the screen or some of the world
- may be off screen).</div>
+<div class="block">A viewport that scales the world using <code>Scaling.stretch</code> on a sub-region of the screen.
+ Does not keep the aspect ratio, the world is scaled to take up the requested region of the screen.</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
 <dd>Daniel Holderbaum, Nathan Sweet
@@ -156,6 +146,10 @@ extends com.badlogic.gdx.utils.viewport.ScalingViewport</pre>
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>float</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/ShrinkPartViewport.html#barHeight">barHeight</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/ShrinkPartViewport.html#barWidth">barWidth</a></span></code>&nbsp;</td>
 </tr>
@@ -184,6 +178,19 @@ extends com.badlogic.gdx.utils.viewport.ScalingViewport</pre>
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/ShrinkPartViewport.html#ShrinkPartViewport-float-float-float-com.badlogic.gdx.graphics.Camera-">ShrinkPartViewport</a></span>(float&nbsp;worldWidth,
                   float&nbsp;worldHeight,
                   float&nbsp;barWidth,
+                  com.badlogic.gdx.graphics.Camera&nbsp;camera)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/ShrinkPartViewport.html#ShrinkPartViewport-float-float-float-float-">ShrinkPartViewport</a></span>(float&nbsp;worldWidth,
+                  float&nbsp;worldHeight,
+                  float&nbsp;barWidth,
+                  float&nbsp;barHeight)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/ShrinkPartViewport.html#ShrinkPartViewport-float-float-float-float-com.badlogic.gdx.graphics.Camera-">ShrinkPartViewport</a></span>(float&nbsp;worldWidth,
+                  float&nbsp;worldHeight,
+                  float&nbsp;barWidth,
+                  float&nbsp;barHeight,
                   com.badlogic.gdx.graphics.Camera&nbsp;camera)</code>&nbsp;</td>
 </tr>
 </table>
@@ -250,10 +257,19 @@ extends com.badlogic.gdx.utils.viewport.ScalingViewport</pre>
 <a name="barWidth">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>barWidth</h4>
-<pre>public&nbsp;float <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ShrinkPartViewport.html#line.41">barWidth</a></pre>
+<pre>public&nbsp;float <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ShrinkPartViewport.html#line.31">barWidth</a></pre>
+</li>
+</ul>
+<a name="barHeight">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>barHeight</h4>
+<pre>public&nbsp;float <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ShrinkPartViewport.html#line.31">barHeight</a></pre>
 </li>
 </ul>
 </li>
@@ -270,21 +286,46 @@ extends com.badlogic.gdx.utils.viewport.ScalingViewport</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>ShrinkPartViewport</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ShrinkPartViewport.html#line.43">ShrinkPartViewport</a>(float&nbsp;worldWidth,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ShrinkPartViewport.html#line.33">ShrinkPartViewport</a>(float&nbsp;worldWidth,
                           float&nbsp;worldHeight,
                           float&nbsp;barWidth)</pre>
 <div class="block">Creates a new viewport using a new <code>OrthographicCamera</code>.</div>
 </li>
 </ul>
+<a name="ShrinkPartViewport-float-float-float-float-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ShrinkPartViewport</h4>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ShrinkPartViewport.html#line.36">ShrinkPartViewport</a>(float&nbsp;worldWidth,
+                          float&nbsp;worldHeight,
+                          float&nbsp;barWidth,
+                          float&nbsp;barHeight)</pre>
+</li>
+</ul>
 <a name="ShrinkPartViewport-float-float-float-com.badlogic.gdx.graphics.Camera-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ShrinkPartViewport</h4>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ShrinkPartViewport.html#line.40">ShrinkPartViewport</a>(float&nbsp;worldWidth,
+                          float&nbsp;worldHeight,
+                          float&nbsp;barWidth,
+                          com.badlogic.gdx.graphics.Camera&nbsp;camera)</pre>
+</li>
+</ul>
+<a name="ShrinkPartViewport-float-float-float-float-com.badlogic.gdx.graphics.Camera-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ShrinkPartViewport</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ShrinkPartViewport.html#line.47">ShrinkPartViewport</a>(float&nbsp;worldWidth,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ShrinkPartViewport.html#line.44">ShrinkPartViewport</a>(float&nbsp;worldWidth,
                           float&nbsp;worldHeight,
                           float&nbsp;barWidth,
+                          float&nbsp;barHeight,
                           com.badlogic.gdx.graphics.Camera&nbsp;camera)</pre>
 </li>
 </ul>
@@ -302,7 +343,7 @@ extends com.badlogic.gdx.utils.viewport.ScalingViewport</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>update</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ShrinkPartViewport.html#line.53">update</a>(int&nbsp;screenWidth,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ShrinkPartViewport.html#line.51">update</a>(int&nbsp;screenWidth,
                    int&nbsp;screenHeight,
                    boolean&nbsp;centerCamera)</pre>
 <dl>
@@ -317,7 +358,7 @@ extends com.badlogic.gdx.utils.viewport.ScalingViewport</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getScaling</h4>
-<pre>public&nbsp;com.badlogic.gdx.utils.Scaling&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ShrinkPartViewport.html#line.64">getScaling</a>()</pre>
+<pre>public&nbsp;com.badlogic.gdx.utils.Scaling&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ShrinkPartViewport.html#line.61">getScaling</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>getScaling</code>&nbsp;in class&nbsp;<code>com.badlogic.gdx.utils.viewport.ScalingViewport</code></dd>
@@ -392,6 +433,6 @@ extends com.badlogic.gdx.utils.viewport.ScalingViewport</pre>
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

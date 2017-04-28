@@ -18,8 +18,8 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var methods = {"i0":10,"i1":9,"i2":9,"i3":10,"i4":10};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../squidpony/squidgrid/Adjacency.ThinWallAdjacency.html" title="class in squidpony.squidgrid"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../squidpony/squidgrid/BevelFOV.html" title="class in squidpony.squidgrid"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -109,7 +109,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/squidgrid/DetailedMimic.html#line.36">DetailedMimic</a>
+<pre>public class <a href="../../src-html/squidpony/squidgrid/DetailedMimic.html#line.35">DetailedMimic</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">Similar to MimicFill, this class can be used to imitate the style of an existing piece of data, but this works on
  more than just booleans; it can produce similar styles of texture (its original use in SynTex), of map, of item
@@ -144,7 +144,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../squidpony/squidgrid/mapping/AestheticDifference.html" title="interface in squidpony.squidgrid.mapping">AestheticDifference</a></code></td>
+<td class="colFirst"><code><a href="../../squidpony/squidgrid/AestheticDifference.html" title="interface in squidpony.squidgrid">AestheticDifference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/DetailedMimic.html#difference">difference</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -166,11 +166,21 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/DetailedMimic.html#DetailedMimic-squidpony.squidgrid.mapping.AestheticDifference-">DetailedMimic</a></span>(<a href="../../squidpony/squidgrid/mapping/AestheticDifference.html" title="interface in squidpony.squidgrid.mapping">AestheticDifference</a>&nbsp;diff)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/DetailedMimic.html#DetailedMimic--">DetailedMimic</a></span>()</code>
+<div class="block">Constructor that uses an unseeded RNG and, without any instruction otherwise, assumes the ints this is asked to
+ compare are colors in RGBA8888 format.</div>
+</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/DetailedMimic.html#DetailedMimic-squidpony.squidgrid.mapping.AestheticDifference-squidpony.squidmath.RNG-">DetailedMimic</a></span>(<a href="../../squidpony/squidgrid/mapping/AestheticDifference.html" title="interface in squidpony.squidgrid.mapping">AestheticDifference</a>&nbsp;diff,
-             <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/DetailedMimic.html#DetailedMimic-squidpony.squidgrid.AestheticDifference-">DetailedMimic</a></span>(<a href="../../squidpony/squidgrid/AestheticDifference.html" title="interface in squidpony.squidgrid">AestheticDifference</a>&nbsp;diff)</code>
+<div class="block">Constructor that uses an unseeded RNG (effectively a random seed) and the given AestheticDifference.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/DetailedMimic.html#DetailedMimic-squidpony.squidgrid.AestheticDifference-squidpony.squidmath.RNG-">DetailedMimic</a></span>(<a href="../../squidpony/squidgrid/AestheticDifference.html" title="interface in squidpony.squidgrid">AestheticDifference</a>&nbsp;diff,
+             <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
+<div class="block">Constructor that uses the given RNG and the given AestheticDifference.</div>
+</td>
 </tr>
 </table>
 </li>
@@ -182,7 +192,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
@@ -194,9 +204,29 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
        int&nbsp;height,
        int&nbsp;detailLevel,
        int&nbsp;proximity,
-       boolean&nbsp;discrete)</code>&nbsp;</td>
+       boolean&nbsp;discrete)</code>
+<div class="block">DISCOURAGED; use <a href="../../squidpony/squidgrid/DetailedMimic.html#neoProcess-int:A-int-int-int-int-int-int-boolean-"><code>neoProcess(int[], int, int, int, int, int, int, boolean)</code></a> instead, which doesn't need a
+ separate analysis step.</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>static int[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/DetailedMimic.html#convertCharToInt-char:A:A-">convertCharToInt</a></span>(char[][]&nbsp;map)</code>
+<div class="block">Utility method to produce 1D int arrays this can process when discrete is true or difference is null.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>static char[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/DetailedMimic.html#convertIntToChar-int:A-int-int-">convertIntToChar</a></span>(int[]&nbsp;arr,
+                int&nbsp;w,
+                int&nbsp;h)</code>
+<div class="block">Utility method that takes a 1D int array that represents chars (such as a sample produced by
+ <a href="../../squidpony/squidgrid/DetailedMimic.html#convertCharToInt-char:A:A-"><code>convertCharToInt(char[][])</code></a> or, more likely, the result of processing such a sample with this class) and
+ returns a 2D char array with the requested width and height (which should match the targetWidth and targetHeight
+ given during processing).</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>int[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/DetailedMimic.html#neoProcess-int:A-int-int-int-int-int-int-boolean-">neoProcess</a></span>(int[]&nbsp;sample,
           int&nbsp;sampleWidth,
@@ -205,9 +235,13 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
           int&nbsp;targetHeight,
           int&nbsp;detailLevel,
           int&nbsp;proximity,
-          boolean&nbsp;discrete)</code>&nbsp;</td>
+          boolean&nbsp;discrete)</code>
+<div class="block">Processes a 1D int array representing 2D storage of values that can be compared by this object's
+ AestheticDifference (or any values if that is null or discrete is true), and returns a 1D array representing data
+ with potentially different dimensions but similar appearance to sample.</div>
+</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>int[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/DetailedMimic.html#process-int:A-int-int-int-int-int-int-double-boolean-">process</a></span>(int[]&nbsp;sample,
        int&nbsp;sampleWidth,
@@ -217,7 +251,10 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
        int&nbsp;detailLevel,
        int&nbsp;proximity,
        double&nbsp;temperature,
-       boolean&nbsp;discrete)</code>&nbsp;</td>
+       boolean&nbsp;discrete)</code>
+<div class="block">DISCOURAGED; use <a href="../../squidpony/squidgrid/DetailedMimic.html#neoProcess-int:A-int-int-int-int-int-int-boolean-"><code>neoProcess(int[], int, int, int, int, int, int, boolean)</code></a> instead, which doesn't need a
+ separate analysis step.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -247,7 +284,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>random</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a> <a href="../../src-html/squidpony/squidgrid/DetailedMimic.html#line.83">random</a></pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a> <a href="../../src-html/squidpony/squidgrid/DetailedMimic.html#line.158">random</a></pre>
 </li>
 </ul>
 <a name="difference">
@@ -256,7 +293,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>difference</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidgrid/mapping/AestheticDifference.html" title="interface in squidpony.squidgrid.mapping">AestheticDifference</a> <a href="../../src-html/squidpony/squidgrid/DetailedMimic.html#line.84">difference</a></pre>
+<pre>public&nbsp;<a href="../../squidpony/squidgrid/AestheticDifference.html" title="interface in squidpony.squidgrid">AestheticDifference</a> <a href="../../src-html/squidpony/squidgrid/DetailedMimic.html#line.159">difference</a></pre>
 </li>
 </ul>
 </li>
@@ -267,23 +304,56 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="DetailedMimic-squidpony.squidgrid.mapping.AestheticDifference-">
+<a name="DetailedMimic--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>DetailedMimic</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/DetailedMimic.html#line.42">DetailedMimic</a>(<a href="../../squidpony/squidgrid/mapping/AestheticDifference.html" title="interface in squidpony.squidgrid.mapping">AestheticDifference</a>&nbsp;diff)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/DetailedMimic.html#line.42">DetailedMimic</a>()</pre>
+<div class="block">Constructor that uses an unseeded RNG and, without any instruction otherwise, assumes the ints this is asked to
+ compare are colors in RGBA8888 format. You can specify your own implementation of the AestheticDifference
+ interface (one function) and pass it to other constructors, as well.</div>
 </li>
 </ul>
-<a name="DetailedMimic-squidpony.squidgrid.mapping.AestheticDifference-squidpony.squidmath.RNG-">
+<a name="DetailedMimic-squidpony.squidgrid.AestheticDifference-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>DetailedMimic</h4>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/DetailedMimic.html#line.56">DetailedMimic</a>(<a href="../../squidpony/squidgrid/AestheticDifference.html" title="interface in squidpony.squidgrid">AestheticDifference</a>&nbsp;diff)</pre>
+<div class="block">Constructor that uses an unseeded RNG (effectively a random seed) and the given AestheticDifference. An example
+ piece of code that implements an AestheticDifference is available in the docs for
+ <a href="../../squidpony/squidgrid/AestheticDifference.html#difference-int-int-"><code>AestheticDifference.difference(int, int)</code></a>; it is also considered a functional interface if you use Java 8
+ or newer. You can also use the ready-made implementation <a href="../../squidpony/squidgrid/AestheticDifference.html#rgba8888"><code>AestheticDifference.rgba8888</code></a> if you have int
+ data that represents RGBA8888 colors, which can be obtained from libGDX Colors or SColors in the display module.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>diff</code> - an implementation of the AestheticDifference interface, such as <a href="../../squidpony/squidgrid/AestheticDifference.html#rgba8888"><code>AestheticDifference.rgba8888</code></a>;
+             may be null, but that forces all calls to processing methods to treat discrete as true</dd>
+</dl>
+</li>
+</ul>
+<a name="DetailedMimic-squidpony.squidgrid.AestheticDifference-squidpony.squidmath.RNG-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>DetailedMimic</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/DetailedMimic.html#line.46">DetailedMimic</a>(<a href="../../squidpony/squidgrid/mapping/AestheticDifference.html" title="interface in squidpony.squidgrid.mapping">AestheticDifference</a>&nbsp;diff,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/DetailedMimic.html#line.71">DetailedMimic</a>(<a href="../../squidpony/squidgrid/AestheticDifference.html" title="interface in squidpony.squidgrid">AestheticDifference</a>&nbsp;diff,
                      <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
+<div class="block">Constructor that uses the given RNG and the given AestheticDifference. An example
+ piece of code that implements an AestheticDifference is available in the docs for
+ <a href="../../squidpony/squidgrid/AestheticDifference.html#difference-int-int-"><code>AestheticDifference.difference(int, int)</code></a>; it is also considered a functional interface if you use Java 8
+ or newer. You can also use the ready-made implementation <a href="../../squidpony/squidgrid/AestheticDifference.html#rgba8888"><code>AestheticDifference.rgba8888</code></a> if you have int
+ data that represents RGBA8888 colors, which can be obtained from libGDX Colors or SColors in the display module.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>diff</code> - an implementation of the AestheticDifference interface, such as <a href="../../squidpony/squidgrid/AestheticDifference.html#rgba8888"><code>AestheticDifference.rgba8888</code></a>;
+             may be null, but that forces all calls to processing methods to treat discrete as true</dd>
+<dd><code>rng</code> - an RNG to generate random factors; may be seeded to produce reliable output</dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -300,12 +370,27 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>analyze</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/DetailedMimic.html#line.53">analyze</a>(int[]&nbsp;sample,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/DetailedMimic.html#line.92">analyze</a>(int[]&nbsp;sample,
                     int&nbsp;width,
                     int&nbsp;height,
                     int&nbsp;detailLevel,
                     int&nbsp;proximity,
                     boolean&nbsp;discrete)</pre>
+<div class="block">DISCOURAGED; use <a href="../../squidpony/squidgrid/DetailedMimic.html#neoProcess-int:A-int-int-int-int-int-int-boolean-"><code>neoProcess(int[], int, int, int, int, int, int, boolean)</code></a> instead, which doesn't need a
+ separate analysis step.
+ Analyzes a sample as a 1D int array and stores the needed info to call
+ <a href="../../squidpony/squidgrid/DetailedMimic.html#process-int:A-int-int-int-int-int-int-double-boolean-"><code>process(int[], int, int, int, int, int, int, double, boolean)</code></a> any number of times later on without
+ recalculating some heavy-weight information.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>sample</code> - a 1D array of ints that can be compared by the AestheticDifference this uses (or any ints if
+               discrete is true)</dd>
+<dd><code>width</code> - the width of the area in sample this should use (sample can be interpreted as different shapes)</dd>
+<dd><code>height</code> - the height of the area in sample this should use (sample can be interpreted as different shapes)</dd>
+<dd><code>detailLevel</code> - how much detail to try for; if 0 or less this does nothing, 2 works well in general</dd>
+<dd><code>proximity</code> - how far away to consider cells as affecting another; 3 works well</dd>
+<dd><code>discrete</code> - false if this can produce ints other than those in the input; true if it uses a fixed set</dd>
+</dl>
 </li>
 </ul>
 <a name="process-int:A-int-int-int-int-int-int-double-boolean-">
@@ -314,7 +399,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>process</h4>
-<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidgrid/DetailedMimic.html#line.59">process</a>(int[]&nbsp;sample,
+<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidgrid/DetailedMimic.html#line.118">process</a>(int[]&nbsp;sample,
                      int&nbsp;sampleWidth,
                      int&nbsp;sampleHeight,
                      int&nbsp;targetWidth,
@@ -323,15 +408,37 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
                      int&nbsp;proximity,
                      double&nbsp;temperature,
                      boolean&nbsp;discrete)</pre>
+<div class="block">DISCOURAGED; use <a href="../../squidpony/squidgrid/DetailedMimic.html#neoProcess-int:A-int-int-int-int-int-int-boolean-"><code>neoProcess(int[], int, int, int, int, int, int, boolean)</code></a> instead, which doesn't need a
+ separate analysis step.
+ Processes a sample as a 1D int array and returns a different 1D int array that mimics the input. If the last time
+ this was called used the same sample, sampleWidth, and sampleHeight parameters, or if
+ <a href="../../squidpony/squidgrid/DetailedMimic.html#analyze-int:A-int-int-int-int-boolean-"><code>analyze(int[], int, int, int, int, boolean)</code></a> was called with its width equal to sampleWidth and its
+ height equal to sampleHeight, then this doesn't need to perform as many expensive calculations.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>sample</code> - a 1D array of ints that can be compared by the AestheticDifference this uses (or any ints if
+               discrete is true)</dd>
+<dd><code>sampleWidth</code> - the width of the area in sample this should use (sample can be interpreted as different shapes)</dd>
+<dd><code>sampleHeight</code> - the height of the area in sample this should use (sample can be interpreted as different shapes)</dd>
+<dd><code>targetWidth</code> - the desired width of the output</dd>
+<dd><code>targetHeight</code> - the desired height of the output</dd>
+<dd><code>detailLevel</code> - how much detail to try for; if 0 or less this doesn't perform analysis and has somewhat lower
+                    quality, but 2 works well in general</dd>
+<dd><code>proximity</code> - how far away to consider cells as affecting another; 3 works well</dd>
+<dd><code>temperature</code> - a level of unpredictability in the output relative to the input; must be greater than 0</dd>
+<dd><code>discrete</code> - false if this can produce ints other than those in the input; true if it uses a fixed set</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a new 1D int array that can be interpreted as having targetWidth and targetHeight, and mimics sample</dd>
+</dl>
 </li>
 </ul>
 <a name="neoProcess-int:A-int-int-int-int-int-int-boolean-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>neoProcess</h4>
-<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidgrid/DetailedMimic.html#line.76">neoProcess</a>(int[]&nbsp;sample,
+<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidgrid/DetailedMimic.html#line.151">neoProcess</a>(int[]&nbsp;sample,
                         int&nbsp;sampleWidth,
                         int&nbsp;sampleHeight,
                         int&nbsp;targetWidth,
@@ -339,6 +446,62 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
                         int&nbsp;detailLevel,
                         int&nbsp;proximity,
                         boolean&nbsp;discrete)</pre>
+<div class="block">Processes a 1D int array representing 2D storage of values that can be compared by this object's
+ AestheticDifference (or any values if that is null or discrete is true), and returns a 1D array representing data
+ with potentially different dimensions but similar appearance to sample.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>sample</code> - a 1D array of ints that can be compared by the AestheticDifference this uses (or any ints if
+               discrete is true)</dd>
+<dd><code>sampleWidth</code> - the width of the area in sample this should use (sample can be interpreted as different shapes)</dd>
+<dd><code>sampleHeight</code> - the height of the area in sample this should use (sample can be interpreted as different shapes)</dd>
+<dd><code>targetWidth</code> - the desired width of the output</dd>
+<dd><code>targetHeight</code> - the desired height of the output</dd>
+<dd><code>detailLevel</code> - how much detail to try for; here this will always be treated as at least 1</dd>
+<dd><code>proximity</code> - how far away to consider cells as affecting another; 3 works well</dd>
+<dd><code>discrete</code> - false if this can produce ints other than those in the input; true if it uses a fixed set</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a new 1D int array that can be interpreted as having targetWidth and targetHeight, and mimics sample</dd>
+</dl>
+</li>
+</ul>
+<a name="convertCharToInt-char:A:A-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>convertCharToInt</h4>
+<pre>public static&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidgrid/DetailedMimic.html#line.513">convertCharToInt</a>(char[][]&nbsp;map)</pre>
+<div class="block">Utility method to produce 1D int arrays this can process when discrete is true or difference is null.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>map</code> - a 2D char array</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an int array that can be used as a sample</dd>
+</dl>
+</li>
+</ul>
+<a name="convertIntToChar-int:A-int-int-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>convertIntToChar</h4>
+<pre>public static&nbsp;char[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/DetailedMimic.html#line.535">convertIntToChar</a>(int[]&nbsp;arr,
+                                        int&nbsp;w,
+                                        int&nbsp;h)</pre>
+<div class="block">Utility method that takes a 1D int array that represents chars (such as a sample produced by
+ <a href="../../squidpony/squidgrid/DetailedMimic.html#convertCharToInt-char:A:A-"><code>convertCharToInt(char[][])</code></a> or, more likely, the result of processing such a sample with this class) and
+ returns a 2D char array with the requested width and height (which should match the targetWidth and targetHeight
+ given during processing).</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>arr</code> - a 1D int array that represents char values</dd>
+<dd><code>w</code> - the width that arr can be interpreted as; should probably match the targetWidth given in processing</dd>
+<dd><code>h</code> - the height that arr can be interpreted as; should probably match the targetHeight given in processing</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a 2D char array with the given width and height, probably filled with the data from arr</dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -369,7 +532,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../squidpony/squidgrid/Adjacency.ThinWallAdjacency.html" title="class in squidpony.squidgrid"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../squidpony/squidgrid/BevelFOV.html" title="class in squidpony.squidgrid"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -410,6 +573,6 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

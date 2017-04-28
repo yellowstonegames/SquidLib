@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../squidpony/squidgrid/mapping/Placement.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../squidpony/squidgrid/mapping/PoliticalMapper.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../squidpony/squidgrid/mapping/Rectangle.Impl.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -101,11 +101,11 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></dd>
+<dd><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;, <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></dd>
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><a href="../../../squidpony/squidgrid/mapping/Rectangle.Impl.html" title="class in squidpony.squidgrid.mapping">Rectangle.Impl</a></dd>
+<dd><a href="../../../squidpony/squidgrid/mapping/locks/util/Rect2I.html" title="class in squidpony.squidgrid.mapping.locks.util">Rect2I</a>, <a href="../../../squidpony/squidgrid/mapping/Rectangle.Impl.html" title="class in squidpony.squidgrid.mapping">Rectangle.Impl</a></dd>
 </dl>
 <hr>
 <br>
@@ -188,6 +188,13 @@ extends <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface i
 <h3>Methods inherited from interface&nbsp;squidpony.squidgrid.zone.<a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></h3>
 <code><a href="../../../squidpony/squidgrid/zone/Zone.html#contains-squidpony.squidmath.Coord-">contains</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#contains-int-int-">contains</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#getAll--">getAll</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#isEmpty--">isEmpty</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#size--">size</a></code></li>
 </ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.java.lang.Iterable">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;java.lang.<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a></h3>
+<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true#forEach-java.util.function.Consumer-" title="class or interface in java.lang">forEach</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true#iterator--" title="class or interface in java.lang">iterator</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true#spliterator--" title="class or interface in java.lang">spliterator</a></code></li>
+</ul>
 </li>
 </ul>
 </li>
@@ -224,7 +231,7 @@ extends <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface i
 <pre>int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.html#line.27">getWidth</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>The room's width (from {@link #getBottomLeft()). It is greater or
+<dd>The room's width (from <a href="../../../squidpony/squidgrid/mapping/Rectangle.html#getBottomLeft--"><code>getBottomLeft()</code></a>). It is greater or
  equal than 0.</dd>
 </dl>
 </li>
@@ -238,7 +245,7 @@ extends <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface i
 <pre>int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/Rectangle.html#line.33">getHeight</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>The room's height (from {@link #getBottomLeft()). It is greater
+<dd>The room's height (from <a href="../../../squidpony/squidgrid/mapping/Rectangle.html#getBottomLeft--"><code>getBottomLeft()</code></a>). It is greater
  or equal than 0.</dd>
 </dl>
 </li>
@@ -271,7 +278,7 @@ extends <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface i
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../squidpony/squidgrid/mapping/Placement.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../squidpony/squidgrid/mapping/PoliticalMapper.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../squidpony/squidgrid/mapping/Rectangle.Impl.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -312,6 +319,6 @@ extends <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface i
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

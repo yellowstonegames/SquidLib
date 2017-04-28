@@ -35,7 +35,7 @@
 <span class="sourceLineNo">027</span>            for (int y = 0; y &lt; height; y++) {<a name="line.27"></a>
 <span class="sourceLineNo">028</span>                //Get noise<a name="line.28"></a>
 <span class="sourceLineNo">029</span>                double n = 0;<a name="line.29"></a>
-<span class="sourceLineNo">030</span>                double xi = width * 1.1, yi = height * 1.1;//Math.max(width, height);<a name="line.30"></a>
+<span class="sourceLineNo">030</span>                double xi = width * 0.1375, yi = height * 0.1375;//Math.max(width, height);<a name="line.30"></a>
 <span class="sourceLineNo">031</span><a name="line.31"></a>
 <span class="sourceLineNo">032</span>                for (int p = 0; p &lt; perldivisors.length; p++) {<a name="line.32"></a>
 <span class="sourceLineNo">033</span>                    n += PerlinNoise.noise((x + offset) / xi, (y + offset) / yi) / perldivisors[p];<a name="line.33"></a>

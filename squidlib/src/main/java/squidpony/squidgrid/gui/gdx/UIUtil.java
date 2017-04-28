@@ -16,7 +16,7 @@ import com.badlogic.gdx.utils.Pools;
 public class UIUtil {
 
 	/**
-	 * Writes {@code text} at {@code (x, y)} by cuttinga using "…" if it gets
+	 * Writes {@code text} at {@code (x, y)} by cutting off using "…" if it gets
 	 * wider than {@code width}.
 	 * 
 	 * @param batch
@@ -27,7 +27,7 @@ public class UIUtil {
 	 * @param color
 	 *            The text's color
 	 * @param align
-	 *            The alignment (see {@link Align}).
+	 *            The alignment (see {@link com.badlogic.gdx.utils.Align}).
 	 * @param width
 	 *            The desired width of the text
 	 * @param x
@@ -35,8 +35,8 @@ public class UIUtil {
 	 * @param y
 	 *            Where to draw
 	 */
-	public static void drawPossiblyElipsedText(Batch batch, BitmapFont font, String text, Color color,
-			int align, float width, float x, float y) {
+	public static void drawLimitedWidthText(Batch batch, BitmapFont font, String text, Color color,
+											int align, float width, float x, float y) {
 		final GlyphLayout glyph = Pools.obtain(GlyphLayout.class);
 		glyph.setText(font, text, 0, text.length(), color, width, align,
 				/* do not wrap */ false, /* the ellipsis */ "…");

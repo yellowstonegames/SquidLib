@@ -17,7 +17,7 @@
 <span class="sourceLineNo">009</span>import squidpony.squidmath.OrderedSet;<a name="line.9"></a>
 <span class="sourceLineNo">010</span><a name="line.10"></a>
 <span class="sourceLineNo">011</span>import java.util.ArrayList;<a name="line.11"></a>
-<span class="sourceLineNo">012</span>import java.util.Set;<a name="line.12"></a>
+<span class="sourceLineNo">012</span>import java.util.Collection;<a name="line.12"></a>
 <span class="sourceLineNo">013</span><a name="line.13"></a>
 <span class="sourceLineNo">014</span>/**<a name="line.14"></a>
 <span class="sourceLineNo">015</span> * An AOE type that has a center Coord only and only affects that single Coord. Useful if you need an AOE implementation<a name="line.15"></a>
@@ -63,7 +63,7 @@
 <span class="sourceLineNo">055</span>    }<a name="line.55"></a>
 <span class="sourceLineNo">056</span><a name="line.56"></a>
 <span class="sourceLineNo">057</span>    @Override<a name="line.57"></a>
-<span class="sourceLineNo">058</span>    public boolean mayContainTarget(Set&lt;Coord&gt; targets) {<a name="line.58"></a>
+<span class="sourceLineNo">058</span>    public boolean mayContainTarget(Collection&lt;Coord&gt; targets) {<a name="line.58"></a>
 <span class="sourceLineNo">059</span>        for (Coord p : targets)<a name="line.59"></a>
 <span class="sourceLineNo">060</span>        {<a name="line.60"></a>
 <span class="sourceLineNo">061</span>            if(center.x == p.x &amp;&amp; center.y == p.y)<a name="line.61"></a>
@@ -73,7 +73,7 @@
 <span class="sourceLineNo">065</span>    }<a name="line.65"></a>
 <span class="sourceLineNo">066</span><a name="line.66"></a>
 <span class="sourceLineNo">067</span>    @Override<a name="line.67"></a>
-<span class="sourceLineNo">068</span>    public OrderedMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; idealLocations(Set&lt;Coord&gt; targets, Set&lt;Coord&gt; requiredExclusions) {<a name="line.68"></a>
+<span class="sourceLineNo">068</span>    public OrderedMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; idealLocations(Collection&lt;Coord&gt; targets, Collection&lt;Coord&gt; requiredExclusions) {<a name="line.68"></a>
 <span class="sourceLineNo">069</span>        if(targets == null)<a name="line.69"></a>
 <span class="sourceLineNo">070</span>            return new OrderedMap&lt;&gt;();<a name="line.70"></a>
 <span class="sourceLineNo">071</span><a name="line.71"></a>
@@ -101,7 +101,7 @@
 <span class="sourceLineNo">093</span><a name="line.93"></a>
 <span class="sourceLineNo">094</span><a name="line.94"></a>
 <span class="sourceLineNo">095</span>    @Override<a name="line.95"></a>
-<span class="sourceLineNo">096</span>    public OrderedMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; idealLocations(Set&lt;Coord&gt; priorityTargets, Set&lt;Coord&gt; lesserTargets, Set&lt;Coord&gt; requiredExclusions) {<a name="line.96"></a>
+<span class="sourceLineNo">096</span>    public OrderedMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; idealLocations(Collection&lt;Coord&gt; priorityTargets, Collection&lt;Coord&gt; lesserTargets, Collection&lt;Coord&gt; requiredExclusions) {<a name="line.96"></a>
 <span class="sourceLineNo">097</span>        if(priorityTargets == null)<a name="line.97"></a>
 <span class="sourceLineNo">098</span>            return idealLocations(lesserTargets, requiredExclusions);<a name="line.98"></a>
 <span class="sourceLineNo">099</span>        if(requiredExclusions == null) requiredExclusions = new OrderedSet&lt;&gt;();<a name="line.99"></a>

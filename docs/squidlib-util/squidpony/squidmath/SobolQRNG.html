@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -113,7 +113,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.56">SobolQRNG</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.57">SobolQRNG</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></pre>
 <div class="block">Implementation of a Sobol sequence as a Quasi-Random Number Generator.
@@ -134,14 +134,16 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
    <li>sequential generation of points: <a href="../../squidpony/squidmath/SobolQRNG.html#nextVector--"><code>nextVector()</code></a>, <a href="../../squidpony/squidmath/SobolQRNG.html#nextIntVector--"><code>nextIntVector()</code></a>,
    <a href="../../squidpony/squidmath/SobolQRNG.html#nextLongVector--"><code>nextLongVector()</code></a>, and the bounded variants on each of those</li>
    <li>random access to the i-th point in the sequence: <a href="../../squidpony/squidmath/SobolQRNG.html#skipTo-int-"><code>skipTo(int)</code></a></li>
- </ul></div>
+ </ul>
+
+ For reference,
+ <a href="http://en.wikipedia.org/wiki/Sobol_sequence">Sobol sequence (Wikipedia)</a>
+ and the data, <a href="http://web.maths.unsw.edu.au/~fkuo/sobol/">Sobol sequence direction numbers</a>
+
+ Created by Tommy Ettinger on 5/2/2015 based off Apache Commons Math 4.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="http://en.wikipedia.org/wiki/Sobol_sequence">Sobol sequence (Wikipedia)</a>, 
-<a href="http://web.maths.unsw.edu.au/~fkuo/sobol/">Sobol sequence direction numbers</a>
-
- Created by Tommy Ettinger on 5/2/2015 based off Apache Commons Math 4., 
-<a href="../../serialized-form.html#squidpony.squidmath.SobolQRNG">Serialized Form</a></dd>
+<dd><a href="../../serialized-form.html#squidpony.squidmath.SobolQRNG">Serialized Form</a></dd>
 </dl>
 </li>
 </ul>
@@ -194,88 +196,100 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SobolQRNG.html#equals-java.lang.Object-">equals</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SobolQRNG.html#fillVector-double:A-">fillVector</a></span>(double[]&nbsp;toFill)</code>
 <div class="block">Generate a random vector.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SobolQRNG.html#getNextIndex--">getNextIndex</a></span>()</code>
 <div class="block">Returns the index i of the next point in the Sobol sequence that will be returned
  by calling <a href="../../squidpony/squidmath/SobolQRNG.html#nextVector--"><code>nextVector()</code></a>.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SobolQRNG.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SobolQRNG.html#next-int-">next</a></span>(int&nbsp;bits)</code>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SobolQRNG.html#nextCoord-int-int-">nextCoord</a></span>(int&nbsp;xLimit,
          int&nbsp;yLimit)</code>
 <div class="block">Generate a random vector.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SobolQRNG.html#nextDouble--">nextDouble</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SobolQRNG.html#nextDouble-double-">nextDouble</a></span>(double&nbsp;max)</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>int[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SobolQRNG.html#nextIntVector--">nextIntVector</a></span>()</code>
 <div class="block">Generate a random vector.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>int[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SobolQRNG.html#nextIntVector-int-">nextIntVector</a></span>(int&nbsp;max)</code>
 <div class="block">Generate a random vector.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SobolQRNG.html#nextLong--">nextLong</a></span>()</code>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>long[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SobolQRNG.html#nextLongVector--">nextLongVector</a></span>()</code>
 <div class="block">Generate a random vector.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>long[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SobolQRNG.html#nextLongVector-long-">nextLongVector</a></span>(long&nbsp;max)</code>
 <div class="block">Generate a random vector.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SobolQRNG.html#nextVector--">nextVector</a></span>()</code>
 <div class="block">Generate a random vector.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SobolQRNG.html#nextVector-double-">nextVector</a></span>(double&nbsp;max)</code>
 <div class="block">Generate a random vector.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SobolQRNG.html#skipTo-int-">skipTo</a></span>(int&nbsp;index)</code>
 <div class="block">Skip to the i-th point in the Sobol sequence.</div>
 </td>
+</tr>
+<tr id="i17" class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SobolQRNG.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -283,7 +297,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
-<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#clone--" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#getClass--" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#notify--" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#notifyAll--" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait--" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait-long-" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait-long-int-" title="class or interface in java.lang">wait</a></code></li>
+<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#clone--" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#getClass--" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#notify--" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#notifyAll--" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait--" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait-long-" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait-long-int-" title="class or interface in java.lang">wait</a></code></li>
 </ul>
 </li>
 </ul>
@@ -305,7 +319,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>SobolQRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.118">SobolQRNG</a>(int&nbsp;dimension)
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.119">SobolQRNG</a>(int&nbsp;dimension)
           throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/ArithmeticException.html?is-external=true" title="class or interface in java.lang">ArithmeticException</a></pre>
 <div class="block">Construct a new Sobol sequence generator for the given space dimension.
  You should call <a href="../../squidpony/squidmath/SobolQRNG.html#skipTo-int-"><code>skipTo(int)</code></a> with a fairly large number (over 1000) to ensure the results aren't
@@ -325,7 +339,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>SobolQRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.151">SobolQRNG</a>(int&nbsp;dimension,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.152">SobolQRNG</a>(int&nbsp;dimension,
                  boolean&nbsp;ignored)
           throws <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/ArithmeticException.html?is-external=true" title="class or interface in java.lang">ArithmeticException</a></pre>
 <div class="block">Construct a new Sobol sequence generator for the given space dimension.
@@ -355,7 +369,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextVector</h4>
-<pre>public&nbsp;double[]&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.336">nextVector</a>()</pre>
+<pre>public&nbsp;double[]&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.337">nextVector</a>()</pre>
 <div class="block">Generate a random vector.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -369,7 +383,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>fillVector</h4>
-<pre>public&nbsp;double[]&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.356">fillVector</a>(double[]&nbsp;toFill)</pre>
+<pre>public&nbsp;double[]&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.357">fillVector</a>(double[]&nbsp;toFill)</pre>
 <div class="block">Generate a random vector.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -383,7 +397,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextCoord</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.375">nextCoord</a>(int&nbsp;xLimit,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.376">nextCoord</a>(int&nbsp;xLimit,
                        int&nbsp;yLimit)</pre>
 <div class="block">Generate a random vector.</div>
 <dl>
@@ -398,7 +412,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextVector</h4>
-<pre>public&nbsp;double[]&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.413">nextVector</a>(double&nbsp;max)</pre>
+<pre>public&nbsp;double[]&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.414">nextVector</a>(double&nbsp;max)</pre>
 <div class="block">Generate a random vector.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -414,7 +428,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLongVector</h4>
-<pre>public&nbsp;long[]&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.434">nextLongVector</a>()</pre>
+<pre>public&nbsp;long[]&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.435">nextLongVector</a>()</pre>
 <div class="block">Generate a random vector.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -428,7 +442,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLongVector</h4>
-<pre>public&nbsp;long[]&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.455">nextLongVector</a>(long&nbsp;max)</pre>
+<pre>public&nbsp;long[]&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.456">nextLongVector</a>(long&nbsp;max)</pre>
 <div class="block">Generate a random vector.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -444,7 +458,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextIntVector</h4>
-<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.478">nextIntVector</a>()</pre>
+<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.479">nextIntVector</a>()</pre>
 <div class="block">Generate a random vector.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -458,7 +472,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextIntVector</h4>
-<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.500">nextIntVector</a>(int&nbsp;max)</pre>
+<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.501">nextIntVector</a>(int&nbsp;max)</pre>
 <div class="block">Generate a random vector.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -474,7 +488,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>skipTo</h4>
-<pre>public&nbsp;double[]&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.530">skipTo</a>(int&nbsp;index)</pre>
+<pre>public&nbsp;double[]&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.531">skipTo</a>(int&nbsp;index)</pre>
 <div class="block">Skip to the i-th point in the Sobol sequence.
  <p>
  This operation can be performed in O(1).
@@ -495,7 +509,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>getNextIndex</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.562">getNextIndex</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.563">getNextIndex</a>()</pre>
 <div class="block">Returns the index i of the next point in the Sobol sequence that will be returned
  by calling <a href="../../squidpony/squidmath/SobolQRNG.html#nextVector--"><code>nextVector()</code></a>.</div>
 <dl>
@@ -510,7 +524,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.572">next</a>(int&nbsp;bits)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.573">next</a>(int&nbsp;bits)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#next-int-">RandomnessSource</a></code></span></div>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
@@ -529,7 +543,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.585">nextLong</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.586">nextLong</a>()</pre>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.
  <p/>
@@ -548,7 +562,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextDouble</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.592">nextDouble</a>()</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.593">nextDouble</a>()</pre>
 </li>
 </ul>
 <a name="nextDouble-double-">
@@ -557,24 +571,63 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextDouble</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.596">nextDouble</a>(double&nbsp;max)</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.597">nextDouble</a>(double&nbsp;max)</pre>
 </li>
 </ul>
 <a name="copy--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.606">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.607">copy</a>()</pre>
 <div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
- copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
+ copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to
  copy the state so it isn't shared, usually, and produce a new value with the same exact state.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/squidmath/RandomnessSource.html#copy--">copy</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a copy of this RandomnessSource</dd>
+</dl>
+</li>
+</ul>
+<a name="toString--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>toString</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.614">toString</a>()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="equals-java.lang.Object-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>equals</h4>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.620">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="hashCode--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>hashCode</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SobolQRNG.html#line.631">hashCode</a>()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -647,6 +700,6 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

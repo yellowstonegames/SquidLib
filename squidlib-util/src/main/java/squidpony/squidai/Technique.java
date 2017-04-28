@@ -4,6 +4,7 @@ import squidpony.squidmath.Coord;
 import squidpony.squidmath.OrderedMap;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -129,7 +130,7 @@ public class Technique {
      * @param requiredExclusions Set of Coord where each value is something this Technique will really try to avoid.
      * @return OrderedMap of Coord keys representing target points to pass to apply, to ArrayList of Coord values representing what targets' locations will be affected.
      */
-    public OrderedMap<Coord, ArrayList<Coord>> idealLocations(Coord user, Set<Coord> targets, Set<Coord> requiredExclusions) {
+    public OrderedMap<Coord, ArrayList<Coord>> idealLocations(Coord user, Collection<Coord> targets, Collection<Coord> requiredExclusions) {
         aoe.setOrigin(user);
         return aoe.idealLocations(targets, requiredExclusions);
 

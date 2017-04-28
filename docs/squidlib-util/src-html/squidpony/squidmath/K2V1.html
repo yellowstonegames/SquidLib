@@ -8,7 +8,7 @@
 <div class="sourceContainer">
 <pre><span class="sourceLineNo">001</span>package squidpony.squidmath;<a name="line.1"></a>
 <span class="sourceLineNo">002</span><a name="line.2"></a>
-<span class="sourceLineNo">003</span>import squidpony.GwtCompatibility;<a name="line.3"></a>
+<span class="sourceLineNo">003</span>import squidpony.ArrayTools;<a name="line.3"></a>
 <span class="sourceLineNo">004</span><a name="line.4"></a>
 <span class="sourceLineNo">005</span>import java.util.ArrayList;<a name="line.5"></a>
 <span class="sourceLineNo">006</span>import java.util.Iterator;<a name="line.6"></a>
@@ -436,18 +436,18 @@
 <span class="sourceLineNo">428</span><a name="line.428"></a>
 <span class="sourceLineNo">429</span>    /**<a name="line.429"></a>
 <span class="sourceLineNo">430</span>     * Reorders this K2V1 using {@code ordering}, which have the same length as this K2V1's {@link #size()}<a name="line.430"></a>
-<span class="sourceLineNo">431</span>     * and can be generated with {@link squidpony.GwtCompatibility#range(int)} (which, if applied, would produce no<a name="line.431"></a>
+<span class="sourceLineNo">431</span>     * and can be generated with {@link ArrayTools#range(int)} (which, if applied, would produce no<a name="line.431"></a>
 <span class="sourceLineNo">432</span>     * change to the current ordering), {@link RNG#randomOrdering(int)} (which gives a random ordering, and if<a name="line.432"></a>
 <span class="sourceLineNo">433</span>     * applied immediately would be the same as calling {@link #shuffle(RNG)}), or made in some other way. If you<a name="line.433"></a>
 <span class="sourceLineNo">434</span>     * already have an ordering and want to make a different ordering that can undo the change, you can use<a name="line.434"></a>
-<span class="sourceLineNo">435</span>     * {@link squidpony.GwtCompatibility#invertOrdering(int[])} called on the original ordering.<a name="line.435"></a>
+<span class="sourceLineNo">435</span>     * {@link ArrayTools#invertOrdering(int[])} called on the original ordering.<a name="line.435"></a>
 <span class="sourceLineNo">436</span>     * @param ordering an int array or vararg that should contain each int from 0 to {@link #size()} (or less)<a name="line.436"></a>
 <span class="sourceLineNo">437</span>     * @return this for chaining<a name="line.437"></a>
 <span class="sourceLineNo">438</span>     */<a name="line.438"></a>
 <span class="sourceLineNo">439</span>    public K2V1&lt;A, B, Q&gt; reorder(int... ordering)<a name="line.439"></a>
 <span class="sourceLineNo">440</span>    {<a name="line.440"></a>
 <span class="sourceLineNo">441</span>        keys.reorder(ordering);<a name="line.441"></a>
-<span class="sourceLineNo">442</span>        GwtCompatibility.reorder(values, ordering);<a name="line.442"></a>
+<span class="sourceLineNo">442</span>        ArrayTools.reorder(values, ordering);<a name="line.442"></a>
 <span class="sourceLineNo">443</span>        return this;<a name="line.443"></a>
 <span class="sourceLineNo">444</span>    }<a name="line.444"></a>
 <span class="sourceLineNo">445</span><a name="line.445"></a>
@@ -461,7 +461,7 @@
 <span class="sourceLineNo">453</span>    {<a name="line.453"></a>
 <span class="sourceLineNo">454</span>        int[] ordering = rng.randomOrdering(keys.keysA.size);<a name="line.454"></a>
 <span class="sourceLineNo">455</span>        keys.reorder(ordering);<a name="line.455"></a>
-<span class="sourceLineNo">456</span>        GwtCompatibility.reorder(values, ordering);<a name="line.456"></a>
+<span class="sourceLineNo">456</span>        ArrayTools.reorder(values, ordering);<a name="line.456"></a>
 <span class="sourceLineNo">457</span>        return this;<a name="line.457"></a>
 <span class="sourceLineNo">458</span>    }<a name="line.458"></a>
 <span class="sourceLineNo">459</span>    /**<a name="line.459"></a>

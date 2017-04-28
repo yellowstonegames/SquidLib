@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../squidpony/squidmath/IsaacRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../squidpony/squidmath/JavaRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../squidpony/squidmath/K2V1.html" title="class in squidpony.squidmath"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -110,7 +110,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre><a href="../../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../src-html/squidpony/squidmath/K2.html#line.18">K2</a>&lt;A,B&gt;
+public class <a href="../../src-html/squidpony/squidmath/K2.html#line.19">K2</a>&lt;A,B&gt;
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">An ordered bidirectional map-like data structure, with unique A keys and unique B keys updated together like a map
  that can be queried by A keys, B keys, or int indices. Does not implement any interfaces that you would expect for a
@@ -160,14 +160,26 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/K2.html#K2-java.lang.Iterable-java.lang.Iterable-">K2</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&gt;&nbsp;aKeys,
-  <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;bKeys)</code>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/K2.html#K2-int-float-squidpony.squidmath.CrossHash.IHasher-squidpony.squidmath.CrossHash.IHasher-">K2</a></span>(int&nbsp;expected,
+  float&nbsp;f,
+  <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasherA,
+  <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasherB)</code>
+<div class="block">Constructs a K2 with the expected number of indices to hold (the number of A and number of B items are always
+ equal, and this will be more efficient if expected is greater than that number), the load factor to use,
+ between 0.1f and 0.8f usually (using load factors higher than 0.8f can cause problems), and two IHasher
+ implementations, such as <a href="../../squidpony/squidmath/CrossHash.html#generalHasher"><code>CrossHash.generalHasher</code></a>, that will be used to hash and compare for equality with
+ A keys and B keys, respectively.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/K2.html#K2-java.lang.Iterable-java.lang.Iterable-">K2</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;? extends <a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&gt;&nbsp;aKeys,
+  <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;? extends <a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;bKeys)</code>
 <div class="block">Constructs a K2 from a pair of Iterables that will be processed in pairs, adding a unique A from aKeys if and
  only if it can also add a unique B from bKeys, otherwise skipping that pair.</div>
 </td>
 </tr>
-<tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/K2.html#K2-squidpony.squidmath.K2-">K2</a></span>(<a href="../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;other)</code>&nbsp;</td>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/K2.html#K2-squidpony.squidmath.K2-">K2</a></span>(<a href="../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;? extends <a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,? extends <a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;other)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -323,14 +335,14 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i22" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/K2.html#putAll-java.lang.Iterable-java.lang.Iterable-">putAll</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&gt;&nbsp;aKeys,
-      <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;bKeys)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/K2.html#putAll-java.lang.Iterable-java.lang.Iterable-">putAll</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;? extends <a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&gt;&nbsp;aKeys,
+      <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;? extends <a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;bKeys)</code>
 <div class="block">Puts all unique A and B keys in <code>aKeys</code> and <code>bKeys</code> into this K2 at the end.</div>
 </td>
 </tr>
 <tr id="i23" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/K2.html#putAll-squidpony.squidmath.K2-">putAll</a></span>(<a href="../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;other)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/K2.html#putAll-squidpony.squidmath.K2-">putAll</a></span>(<a href="../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;? extends <a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,? extends <a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;other)</code>
 <div class="block">Puts all unique A and B keys in <code>other</code> into this K2, respecting other's ordering.</div>
 </td>
 </tr>
@@ -378,7 +390,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <td class="colFirst"><code><a href="../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/K2.html#reorder-int...-">reorder</a></span>(int...&nbsp;ordering)</code>
 <div class="block">Reorders this K2 using <code>ordering</code>, which have the same length as this K2's <a href="../../squidpony/squidmath/K2.html#size--"><code>size()</code></a>
- and can be generated with <a href="../../squidpony/GwtCompatibility.html#range-int-"><code>GwtCompatibility.range(int)</code></a> (which, if applied, would produce no
+ and can be generated with <a href="../../squidpony/ArrayTools.html#range-int-"><code>ArrayTools.range(int)</code></a> (which, if applied, would produce no
  change to the current ordering), <a href="../../squidpony/squidmath/RNG.html#randomOrdering-int-"><code>RNG.randomOrdering(int)</code></a> (which gives a random ordering, and if
  applied immediately would be the same as calling <a href="../../squidpony/squidmath/K2.html#shuffle-squidpony.squidmath.RNG-"><code>shuffle(RNG)</code></a>), or made in some other way.</div>
 </td>
@@ -426,7 +438,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>K2</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.26">K2</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.27">K2</a>()</pre>
 <div class="block">Constructs an empty K2.</div>
 </li>
 </ul>
@@ -451,7 +463,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>K2</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.50">K2</a>(int&nbsp;expected,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.49">K2</a>(int&nbsp;expected,
           float&nbsp;f)</pre>
 <div class="block">Constructs a K2 with the expected number of indices to hold (the number of A and number of B items is always
  the same, and this will be more efficient if expected is greater than that number) and the load factor to use,
@@ -463,14 +475,42 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
+<a name="K2-int-float-squidpony.squidmath.CrossHash.IHasher-squidpony.squidmath.CrossHash.IHasher-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>K2</h4>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.70">K2</a>(int&nbsp;expected,
+          float&nbsp;f,
+          <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasherA,
+          <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a>&nbsp;hasherB)</pre>
+<div class="block">Constructs a K2 with the expected number of indices to hold (the number of A and number of B items are always
+ equal, and this will be more efficient if expected is greater than that number), the load factor to use,
+ between 0.1f and 0.8f usually (using load factors higher than 0.8f can cause problems), and two IHasher
+ implementations, such as <a href="../../squidpony/squidmath/CrossHash.html#generalHasher"><code>CrossHash.generalHasher</code></a>, that will be used to hash and compare for equality with
+ A keys and B keys, respectively. Specifying an IHasher is usually needed if your keys are arrays (there are
+ existing implementations for 1D arrays of all primitive types, CharSequence, and Object in CrossHash), or if you
+ want hashing by identity and reference equality (which would use <a href="../../squidpony/squidmath/CrossHash.html#identityHasher"><code>CrossHash.identityHasher</code></a>, and might be
+ useful if keys are mutable). Other options are possible with custom IHashers, like hashing Strings but ignoring,
+ or only considering, a certain character for the hash and equality checks.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>expected</code> - the amount of indices (the count of A items is the same as the count of B items) this should hold</dd>
+<dd><code>f</code> - the load factor, probably between 0.1f and 0.8f</dd>
+<dd><code>hasherA</code> - an implementation of CrossHash.IHasher meant for A keys</dd>
+<dd><code>hasherB</code> - an implementation of CrossHash.IHasher meant for B keys</dd>
+</dl>
+</li>
+</ul>
 <a name="K2-java.lang.Iterable-java.lang.Iterable-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>K2</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.62">K2</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&gt;&nbsp;aKeys,
-          <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;bKeys)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.82">K2</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;? extends <a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&gt;&nbsp;aKeys,
+          <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;? extends <a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;bKeys)</pre>
 <div class="block">Constructs a K2 from a pair of Iterables that will be processed in pairs, adding a unique A from aKeys if and
  only if it can also add a unique B from bKeys, otherwise skipping that pair.</div>
 <dl>
@@ -486,7 +526,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>K2</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.70">K2</a>(<a href="../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;other)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.90">K2</a>(<a href="../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;? extends <a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,? extends <a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;other)</pre>
 </li>
 </ul>
 <a name="K2-squidpony.squidmath.Arrangement-squidpony.squidmath.Arrangement-">
@@ -495,7 +535,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>K2</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.84">K2</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&gt;&nbsp;aItems,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.104">K2</a>(<a href="../../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&gt;&nbsp;aItems,
           <a href="../../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;bItems)</pre>
 </li>
 </ul>
@@ -515,7 +555,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>containsA</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.103">containsA</a>(<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&nbsp;key)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.123">containsA</a>(<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&nbsp;key)</pre>
 <div class="block">Returns true if this contains the A, key, in its collection of A items.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -533,7 +573,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>containsB</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.109">containsB</a>(<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&nbsp;key)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.129">containsB</a>(<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&nbsp;key)</pre>
 <div class="block">Returns true if this contains the B, key, in its collection of B items.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -549,7 +589,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>containsIndex</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.116">containsIndex</a>(int&nbsp;index)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.136">containsIndex</a>(int&nbsp;index)</pre>
 <div class="block">Returns true if index is between 0 (inclusive) and <a href="../../squidpony/squidmath/K2.html#size--"><code>size()</code></a> (exclusive), or false otherwise.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -565,7 +605,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>indexOfA</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.124">indexOfA</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.144">indexOfA</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</pre>
 <div class="block">Given an A object key, finds the position in the ordering that A has, or -1 if key is not present.
  Unlike <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true#indexOf-java.lang.Object-" title="class or interface in java.util"><code>List.indexOf(Object)</code></a>, this runs in constant time.</div>
 <dl>
@@ -582,7 +622,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>indexOfB</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.134">indexOfB</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.154">indexOfB</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</pre>
 <div class="block">Given a B object key, finds the position in the ordering that B has, or -1 if key is not present.
  Unlike <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true#indexOf-java.lang.Object-" title="class or interface in java.util"><code>List.indexOf(Object)</code></a>, this runs in constant time.</div>
 <dl>
@@ -599,7 +639,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getAAt</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.144">getAAt</a>(int&nbsp;index)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.164">getAAt</a>(int&nbsp;index)</pre>
 <div class="block">Given an int index, finds the associated A key (using index as a point in the ordering).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -615,7 +655,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getBAt</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.153">getBAt</a>(int&nbsp;index)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.173">getBAt</a>(int&nbsp;index)</pre>
 <div class="block">Given an int index, finds the associated B key (using index as a point in the ordering).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -631,7 +671,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getBFromA</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.163">getBFromA</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.183">getBFromA</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</pre>
 <div class="block">Given an A object, finds the associated B object (it will be at the same point in the ordering).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -647,7 +687,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getAFromB</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.173">getAFromB</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.193">getAFromB</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</pre>
 <div class="block">Given a B object, finds the associated A object (it will be at the same point in the ordering).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -663,7 +703,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>randomA</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.183">randomA</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.203">randomA</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</pre>
 <div class="block">Gets a random A from this K2 using the given RNG.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -679,7 +719,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>randomB</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.193">randomB</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.213">randomB</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</pre>
 <div class="block">Gets a random B from this K2 using the given RNG.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -697,7 +737,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>alterA</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.205">alterA</a>(<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&nbsp;past,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.225">alterA</a>(<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&nbsp;past,
                       <a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&nbsp;future)</pre>
 <div class="block">Changes an existing A key, <code>past</code>, to another A key, <code>future</code>, if past exists in this K2
  and future does not yet exist in this K2. This will retain past's point in the ordering for future, so
@@ -719,7 +759,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>alterB</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.220">alterB</a>(<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&nbsp;past,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.240">alterB</a>(<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&nbsp;past,
                       <a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&nbsp;future)</pre>
 <div class="block">Changes an existing B key, <code>past</code>, to another B key, <code>future</code>, if past exists in this K2
  and future does not yet exist in this K2. This will retain past's point in the ordering for future, so
@@ -741,7 +781,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>alterAAt</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.236">alterAAt</a>(int&nbsp;index,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.256">alterAAt</a>(int&nbsp;index,
                         <a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&nbsp;future)</pre>
 <div class="block">Changes the A key at <code>index</code> to another A key, <code>future</code>, if index is valid and future does not
  yet exist in this K2. The position in the ordering for future will be the same as index, and the same
@@ -764,7 +804,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>alterBAt</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.253">alterBAt</a>(int&nbsp;index,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.273">alterBAt</a>(int&nbsp;index,
                         <a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&nbsp;future)</pre>
 <div class="block">Changes the B key at <code>index</code> to another B key, <code>future</code>, if index is valid and future does not
  yet exist in this K2. The position in the ordering for future will be the same as index, and the same
@@ -787,7 +827,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.267">put</a>(<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&nbsp;a,
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.287">put</a>(<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&nbsp;a,
                    <a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&nbsp;b)</pre>
 <div class="block">Adds an A key and a B key at the same point in the ordering (the end) to this K2. Neither parameter can be
  present in this collection before this is called. If you want to change or update an existing key, use
@@ -807,8 +847,8 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>putAll</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.286">putAll</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&gt;&nbsp;aKeys,
-                      <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;bKeys)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.306">putAll</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;? extends <a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&gt;&nbsp;aKeys,
+                      <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;? extends <a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;bKeys)</pre>
 <div class="block">Puts all unique A and B keys in <code>aKeys</code> and <code>bKeys</code> into this K2 at the end. If an A in aKeys or a B
  in bKeys is already present when this would add one, this will not put the A and B keys at that point in the
  iteration order, and will place the next unique A and B it finds in the arguments at that position instead.</div>
@@ -827,7 +867,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>putAll</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.305">putAll</a>(<a href="../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;other)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.325">putAll</a>(<a href="../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;? extends <a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,? extends <a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;other)</pre>
 <div class="block">Puts all unique A and B keys in <code>other</code> into this K2, respecting other's ordering. If an A or a B in other
  is already present when this would add one, this will not put the A and B keys at that point in the iteration
  order, and will place the next unique A and B it finds in the arguments at that position instead.</div>
@@ -847,7 +887,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>putAt</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.326">putAt</a>(int&nbsp;index,
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.346">putAt</a>(int&nbsp;index,
                      <a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&nbsp;a,
                      <a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&nbsp;b)</pre>
 <div class="block">Adds an A key and a B key at the given index in the ordering to this K2. Neither a nor b can be
@@ -872,7 +912,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>removeA</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.343">removeA</a>(<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&nbsp;removing)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.363">removeA</a>(<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&nbsp;removing)</pre>
 <div class="block">Removes a given A key, if <code>removing</code> exists in this K2's A keys, and also removes any keys
  associated with its point in the ordering.</div>
 <dl>
@@ -891,7 +931,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>removeB</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.354">removeB</a>(<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&nbsp;removing)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.374">removeB</a>(<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&nbsp;removing)</pre>
 <div class="block">Removes a given B key, if <code>removing</code> exists in this K2's B keys, and also removes any keys
  associated with its point in the ordering.</div>
 <dl>
@@ -908,7 +948,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>removeAt</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.364">removeAt</a>(int&nbsp;index)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.384">removeAt</a>(int&nbsp;index)</pre>
 <div class="block">Removes a given point in the ordering, if <code>index</code> is at least 0 and less than <a href="../../squidpony/squidmath/K2.html#size--"><code>size()</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -924,13 +964,13 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>reorder</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.381">reorder</a>(int...&nbsp;ordering)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.401">reorder</a>(int...&nbsp;ordering)</pre>
 <div class="block">Reorders this K2 using <code>ordering</code>, which have the same length as this K2's <a href="../../squidpony/squidmath/K2.html#size--"><code>size()</code></a>
- and can be generated with <a href="../../squidpony/GwtCompatibility.html#range-int-"><code>GwtCompatibility.range(int)</code></a> (which, if applied, would produce no
+ and can be generated with <a href="../../squidpony/ArrayTools.html#range-int-"><code>ArrayTools.range(int)</code></a> (which, if applied, would produce no
  change to the current ordering), <a href="../../squidpony/squidmath/RNG.html#randomOrdering-int-"><code>RNG.randomOrdering(int)</code></a> (which gives a random ordering, and if
  applied immediately would be the same as calling <a href="../../squidpony/squidmath/K2.html#shuffle-squidpony.squidmath.RNG-"><code>shuffle(RNG)</code></a>), or made in some other way. If you
  already have an ordering and want to make a different ordering that can undo the change, you can use
- <a href="../../squidpony/GwtCompatibility.html#invertOrdering-int:A-"><code>GwtCompatibility.invertOrdering(int[])</code></a> called on the original ordering.</div>
+ <a href="../../squidpony/ArrayTools.html#invertOrdering-int:A-"><code>ArrayTools.invertOrdering(int[])</code></a> called on the original ordering.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>ordering</code> - an int array or vararg that should contain each int from 0 to <a href="../../squidpony/squidmath/K2.html#size--"><code>size()</code></a> (or less)</dd>
@@ -945,7 +985,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>shuffle</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.394">shuffle</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>,<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.414">shuffle</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 <div class="block">Generates a random ordering with rng and applies the same ordering to all kinds of keys this has; they will
  maintain their current association to other keys but their ordering/indices will change.</div>
 <dl>
@@ -962,7 +1002,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>iteratorA</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.408">iteratorA</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.428">iteratorA</a>()</pre>
 <div class="block">Creates a new iterator over the A keys this holds. This can be problematic for garbage collection if called very
  frequently; it may be better to access items by index (which also lets you access other keys associated with that
  index) using <a href="../../squidpony/squidmath/K2.html#getAAt-int-"><code>getAAt(int)</code></a> in a for(int i=0...) loop.</div>
@@ -978,7 +1018,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>iteratorB</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.418">iteratorB</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.438">iteratorB</a>()</pre>
 <div class="block">Creates a new iterator over the B keys this holds. This can be problematic for garbage collection if called very
  frequently; it may be better to access items by index (which also lets you access other keys associated with that
  index) using <a href="../../squidpony/squidmath/K2.html#getBAt-int-"><code>getBAt(int)</code></a> in a for(int i=0...) loop.</div>
@@ -994,7 +1034,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getSetA</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.427">getSetA</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.447">getSetA</a>()</pre>
 <div class="block">Gets and caches the A keys as a Collection that implements SortedSet (and so also implements Set).</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1008,7 +1048,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getSetB</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.434">getSetB</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.454">getSetB</a>()</pre>
 <div class="block">Gets and caches the B keys as a Collection that implements SortedSet (and so also implements Set).</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1022,7 +1062,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getOrderedSetA</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.442">getOrderedSetA</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.462">getOrderedSetA</a>()</pre>
 <div class="block">To be called sparingly, since this allocates a new OrderedSet instead of reusing one.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1036,7 +1076,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getOrderedSetB</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.450">getOrderedSetB</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.470">getOrderedSetB</a>()</pre>
 <div class="block">To be called sparingly, since this allocates a new OrderedSet instead of reusing one.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1050,7 +1090,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>keyCount</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.454">keyCount</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.474">keyCount</a>()</pre>
 </li>
 </ul>
 <a name="valueCount--">
@@ -1059,7 +1099,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>valueCount</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.457">valueCount</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.477">valueCount</a>()</pre>
 </li>
 </ul>
 <a name="size--">
@@ -1068,7 +1108,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>size</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.461">size</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.481">size</a>()</pre>
 </li>
 </ul>
 <a name="isEmpty--">
@@ -1077,7 +1117,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>isEmpty</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.465">isEmpty</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/K2.html#line.485">isEmpty</a>()</pre>
 </li>
 </ul>
 </li>
@@ -1108,7 +1148,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../squidpony/squidmath/IsaacRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../squidpony/squidmath/JavaRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../squidpony/squidmath/K2V1.html" title="class in squidpony.squidmath"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -1149,6 +1189,6 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

@@ -92,7 +92,7 @@
 <span class="sourceLineNo">084</span>    }<a name="line.84"></a>
 <span class="sourceLineNo">085</span><a name="line.85"></a>
 <span class="sourceLineNo">086</span>    @Override<a name="line.86"></a>
-<span class="sourceLineNo">087</span>    public boolean mayContainTarget(Set&lt;Coord&gt; targets) {<a name="line.87"></a>
+<span class="sourceLineNo">087</span>    public boolean mayContainTarget(Collection&lt;Coord&gt; targets) {<a name="line.87"></a>
 <span class="sourceLineNo">088</span>        for (Coord p : targets)<a name="line.88"></a>
 <span class="sourceLineNo">089</span>        {<a name="line.89"></a>
 <span class="sourceLineNo">090</span>            if(radiusType.radius(center.x, center.y, p.x, p.y) &lt;= radius)<a name="line.90"></a>
@@ -102,7 +102,7 @@
 <span class="sourceLineNo">094</span>    }<a name="line.94"></a>
 <span class="sourceLineNo">095</span><a name="line.95"></a>
 <span class="sourceLineNo">096</span>    @Override<a name="line.96"></a>
-<span class="sourceLineNo">097</span>    public OrderedMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; idealLocations(Set&lt;Coord&gt; targets, Set&lt;Coord&gt; requiredExclusions) {<a name="line.97"></a>
+<span class="sourceLineNo">097</span>    public OrderedMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; idealLocations(Collection&lt;Coord&gt; targets, Collection&lt;Coord&gt; requiredExclusions) {<a name="line.97"></a>
 <span class="sourceLineNo">098</span>        if(targets == null)<a name="line.98"></a>
 <span class="sourceLineNo">099</span>            return new OrderedMap&lt;&gt;();<a name="line.99"></a>
 <span class="sourceLineNo">100</span>        if(requiredExclusions == null) requiredExclusions = new OrderedSet&lt;&gt;();<a name="line.100"></a>
@@ -244,7 +244,7 @@
 <span class="sourceLineNo">236</span>    }<a name="line.236"></a>
 <span class="sourceLineNo">237</span><a name="line.237"></a>
 <span class="sourceLineNo">238</span>    @Override<a name="line.238"></a>
-<span class="sourceLineNo">239</span>    public OrderedMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; idealLocations(Set&lt;Coord&gt; priorityTargets, Set&lt;Coord&gt; lesserTargets, Set&lt;Coord&gt; requiredExclusions) {<a name="line.239"></a>
+<span class="sourceLineNo">239</span>    public OrderedMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; idealLocations(Collection&lt;Coord&gt; priorityTargets, Collection&lt;Coord&gt; lesserTargets, Collection&lt;Coord&gt; requiredExclusions) {<a name="line.239"></a>
 <span class="sourceLineNo">240</span>        if(priorityTargets == null)<a name="line.240"></a>
 <span class="sourceLineNo">241</span>            return idealLocations(lesserTargets, requiredExclusions);<a name="line.241"></a>
 <span class="sourceLineNo">242</span>        if(requiredExclusions == null) requiredExclusions = new OrderedSet&lt;&gt;();<a name="line.242"></a>
