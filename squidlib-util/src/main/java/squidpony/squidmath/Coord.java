@@ -434,7 +434,7 @@ public class Coord implements Serializable {
     @Override
     public String toString()
     {
-        return "Coord (x " + x + ", y " + y + ")";
+        return "(" + x + "," + y + ")";
     }
 
     /**
