@@ -23,9 +23,11 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * A bi-directional mapping of objects to positions in an ordering (which this generates), and vice versa.
- * Useful for various indirection techniques where you want to be able to retrieve a value in several ways, such as with
- * multiple Arrangements all sharing the same ordering but with different types for keys.
+ * A bi-directional mapping of non-unique objects to positions in an ordering (which this generates), and vice versa.
+ * This class is very similar to {@link Arrangement}, but is bag-like instead of set-like, allowing repeats of the same
+ * key with different positions in the ordering. Useful for various indirection techniques where you want to be able to
+ * retrieve a value in several ways, such as with  multiple MultiArrangements all sharing the same ordering but with
+ * different types for keys.
  * <br>
  * Originally, this started as a generic linked hash map with with a fast implementation, originally from fastutil as
  * Object2IntLinkedOpenHashMap but modified to support indexed access. The code is extremely close to {@link OrderedMap},
@@ -58,7 +60,7 @@ import java.util.*;
  * @author Tommy Ettinger (mostly responsible for squashing several layers of parent classes into one monster class)
  */
 @Beta
-public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Serializable, Cloneable {
+public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable {
     private static final long serialVersionUID = 0L;
     /**
      * The array of keys.
@@ -67,7 +69,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     /**
      * The array of values.
      */
-    protected int[] value;
+    protected IntVLA[] value;
     /**
      * The mask for wrapping a position counter.
      */
@@ -84,11 +86,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      * The index of the last entry in iteration order. It is valid iff {@link #size} is nonzero; otherwise, it contains -1.
      */
     protected int last = -1;
-    /*
-     * For each entry, the next and the previous entry in iteration order, stored as <code>((prev & 0xFFFFFFFFL) << 32) | (next & 0xFFFFFFFFL)</code>. The first entry contains predecessor -1, and the
-     * last entry contains successor -1.
-     */
-    //protected long[] link;
+
     protected IntVLA order;
     /**
      * The current table size.
@@ -106,10 +104,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      * The acceptable load factor.
      */
     public final float f;
-    /**
-     * Cached set of entries.
-     */
-    protected volatile MapEntrySet entries;
+
     /**
      * Cached set of keys.
      */
@@ -117,7 +112,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     /**
      * Cached collection of values.
      */
-    protected volatile Collection<Integer> values;
+    protected volatile IntVLA values;
     /**
      * Default return value.
      */
@@ -130,7 +125,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     /**
      * The default load factor of a hash table.
      */
-    public static final float DEFAULT_LOAD_FACTOR = .5f; // .375f // .1875f; // .75f;
+    public static final float DEFAULT_LOAD_FACTOR = .75f; // .375f // .1875f; // .75f;
     /**
      * The load factor for a (usually small) table that is meant to be particularly fast.
      */
@@ -143,7 +138,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     protected CrossHash.IHasher hasher = null;
 
     /**
-     * Creates a new Arrangement.
+     * Creates a new MultiArrangement.
      * <p>
      * <p>The actual table size will be the least power of two greater than <code>expected</code>/<code>f</code>.
      *
@@ -152,7 +147,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      */
 
     @SuppressWarnings("unchecked")
-    public Arrangement(final int expected, final float f) {
+    public MultiArrangement(final int expected, final float f) {
         if (f <= 0 || f > 1)
             throw new IllegalArgumentException("Load factor must be greater than 0 and smaller than or equal to 1");
         if (expected < 0) throw new IllegalArgumentException("The expected number of elements must be nonnegative");
@@ -161,49 +156,30 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         mask = n - 1;
         maxFill = maxFill(n, f);
         key = (K[]) new Object[n + 1];
-        value = new int[n + 1];
+        value = new IntVLA[n + 1];
         //link = new long[n + 1];
         order = new IntVLA(expected);
         hasher = CrossHash.defaultHasher;
     }
 
     /**
-     * Creates a new Arrangement with 0.5f as load factor.
+     * Creates a new MultiArrangement with 0.5f as load factor.
      *
-     * @param expected the expected number of elements in the Arrangement.
+     * @param expected the expected number of elements in the MultiArrangement.
      */
-    public Arrangement(final int expected) {
+    public MultiArrangement(final int expected) {
         this(expected, DEFAULT_LOAD_FACTOR);
     }
 
     /**
-     * Creates a new Arrangement with initial expected 16 entries and 0.5f as load factor.
+     * Creates a new MultiArrangement with initial expected 16 entries and 0.5f as load factor.
      */
-    public Arrangement() {
+    public MultiArrangement() {
         this(DEFAULT_INITIAL_SIZE, DEFAULT_LOAD_FACTOR);
     }
 
-    /**
-     * Creates a new Arrangement copying a given one.
-     *
-     * @param m a {@link Map} to be copied into the new Arrangement.
-     * @param f the load factor.
-     */
-    public Arrangement(final Map<? extends K, ? extends Integer> m, final float f) {
-        this(m.size(), f, (m instanceof Arrangement) ? ((Arrangement) m).hasher : CrossHash.defaultHasher);
-        putAll(m);
-    }
 
-    /**
-     * Creates a new Arrangement with 0.5f as load factor copying a given one.
-     *
-     * @param m a {@link Map} to be copied into the new Arrangement.
-     */
-    public Arrangement(final Map<? extends K, ? extends Integer> m) {
-        this(m, (m instanceof Arrangement) ? ((Arrangement) m).f : DEFAULT_LOAD_FACTOR, (m instanceof Arrangement) ? ((Arrangement) m).hasher : CrossHash.defaultHasher);
-    }
-
-    public Arrangement(final Arrangement<? extends K> a) {
+    public MultiArrangement(final MultiArrangement<? extends K> a) {
         this(a.size(), a.f, a.hasher);
         ensureCapacity(a.size()); // The resulting map will be sized for
         System.arraycopy(a.key, 0, key, 0, a.key.length);
@@ -213,16 +189,16 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     }
 
     /**
-     * Creates a new Arrangement using the elements of an array.
+     * Creates a new MultiArrangement using the elements of an array.
      *
-     * @param keyArray the array of keys of the new Arrangement.
+     * @param keyArray the array of keys of the new MultiArrangement.
      * @param f the load factor.
      * @throws IllegalArgumentException if <code>k</code> and <code>v</code> have different lengths.
      */
-    public Arrangement(final K[] keyArray, final float f) {
+    public MultiArrangement(final K[] keyArray, final float f) {
         this(keyArray.length, f);
         for (int i = 0; i < keyArray.length; i++)
-            put(keyArray[i], i);
+            add(keyArray[i]);
     }
 
     /**
@@ -231,7 +207,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      * @param keyColl the collection of keys of the new Arrangement.
      * @throws IllegalArgumentException if <code>k</code> and <code>v</code> have different lengths.
      */
-    public Arrangement(final Collection<K> keyColl) {
+    public MultiArrangement(final Collection<K> keyColl) {
         this(keyColl, DEFAULT_LOAD_FACTOR);
     }
     /**
@@ -241,13 +217,13 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      * @param f the load factor.
      * @throws IllegalArgumentException if <code>k</code> and <code>v</code> have different lengths.
      */
-    public Arrangement(final Collection<K> keyColl, final float f) {
+    public MultiArrangement(final Collection<K> keyColl, final float f) {
         this(keyColl.size(), f);
         Iterator<K> ki = keyColl.iterator();
         int idx = 0;
         while (ki.hasNext())
         {
-            put(ki.next(), idx++);
+            add(ki.next());
         }
     }
 
@@ -257,7 +233,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      * @param keyArray the array of keys of the new Arrangement.
      * @throws IllegalArgumentException if <code>k</code> and <code>v</code> have different lengths.
      */
-    public Arrangement(final K[] keyArray) {
+    public MultiArrangement(final K[] keyArray) {
         this(keyArray, DEFAULT_LOAD_FACTOR);
     }
 
@@ -271,7 +247,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      * @param hasher used to hash items; typically only needed when K is an array, where CrossHash has implementations
      */
     @SuppressWarnings("unchecked")
-    public Arrangement(final int expected, final float f, CrossHash.IHasher hasher) {
+    public MultiArrangement(final int expected, final float f, CrossHash.IHasher hasher) {
         if (f <= 0 || f > 1)
             throw new IllegalArgumentException("Load factor must be greater than 0 and smaller than or equal to 1");
         if (expected < 0) throw new IllegalArgumentException("The expected number of elements must be nonnegative");
@@ -280,7 +256,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         mask = n - 1;
         maxFill = maxFill(n, f);
         key = (K[]) new Object[n + 1];
-        value = new int[n + 1];
+        value = new IntVLA[n + 1];
         //link = new long[n + 1];
         order = new IntVLA(expected);
         this.hasher = (hasher == null) ? CrossHash.defaultHasher : hasher;
@@ -291,36 +267,15 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      * @param expected the expected number of elements in the Arrangement.
      * @param hasher used to hash items; typically only needed when K is an array, where CrossHash has implementations
      */
-    public Arrangement(final int expected, CrossHash.IHasher hasher) {
+    public MultiArrangement(final int expected, CrossHash.IHasher hasher) {
         this(expected, DEFAULT_LOAD_FACTOR, hasher);
     }
 
     /**
      * Creates a new Arrangement with initial expected 16 entries and 0.5f as load factor.
      */
-    public Arrangement(CrossHash.IHasher hasher) {
+    public MultiArrangement(CrossHash.IHasher hasher) {
         this(DEFAULT_INITIAL_SIZE, DEFAULT_LOAD_FACTOR, hasher);
-    }
-
-    /**
-     * Creates a new Arrangement copying a given one.
-     *
-     * @param m a {@link Map} to be copied into the new Arrangement.
-     * @param f the load factor.
-     * @param hasher used to hash items; typically only needed when K is an array, where CrossHash has implementations
-     */
-    public Arrangement(final Map<? extends K, ? extends Integer> m, final float f, CrossHash.IHasher hasher) {
-        this(m.size(), f, hasher);
-        putAll(m);
-    }
-
-    /**
-     * Creates a new Arrangement with 0.5f as load factor copying a given one.
-     * @param m a {@link Map} to be copied into the new Arrangement.
-     * @param hasher used to hash items; typically only needed when K is an array, where CrossHash has implementations
-     */
-    public Arrangement(final Map<? extends K, ? extends Integer> m, CrossHash.IHasher hasher) {
-        this(m, DEFAULT_LOAD_FACTOR, hasher);
     }
 
     /**
@@ -331,11 +286,11 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      * @param hasher used to hash items; typically only needed when K is an array, where CrossHash has implementations
      * @throws IllegalArgumentException if <code>k</code> and <code>v</code> have different lengths.
      */
-    public Arrangement(final K[] keyArray, final float f, CrossHash.IHasher hasher) {
+    public MultiArrangement(final K[] keyArray, final float f, CrossHash.IHasher hasher) {
         this(keyArray.length, f, hasher);
 
         for (int i = 0; i < keyArray.length; i++)
-            put(keyArray[i], i);
+            add(keyArray[i]);
     }
     /**
      * Creates a new Arrangement with 0.5f as load factor using the elements of two parallel arrays.
@@ -344,7 +299,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      * @param hasher used to hash items; typically only needed when K is an array, where CrossHash has implementations
      * @throws IllegalArgumentException if <code>k</code> and <code>v</code> have different lengths.
      */
-    public Arrangement(final K[] keyArray, CrossHash.IHasher hasher) {
+    public MultiArrangement(final K[] keyArray, CrossHash.IHasher hasher) {
         this(keyArray, DEFAULT_LOAD_FACTOR, hasher);
     }
 
@@ -365,42 +320,30 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             rehash(needed);
     }
     private int removeEntry(final int pos) {
-        size--;
+        --size;
         fixOrder(pos);
         shiftKeys(pos);
-        final int oldValue = value[pos];
-        fixValues(oldValue);
-        if (size < (maxFill >>> 2) && n > DEFAULT_INITIAL_SIZE)
+        final IntVLA oldValue = value[pos];
+        final int popped = oldValue.pop();
+        fixValues();
+        if (oldValue.size == 0 && size < (maxFill >>> 2) && n > DEFAULT_INITIAL_SIZE)
             rehash(n / 2);
-        return oldValue;
+        return popped;
     }
     private int removeNullEntry() {
         containsNullKey = false;
         key[n] = null;
-        final int oldValue = value[n];
-        size--;
+        final IntVLA oldValue = value[n];
+        final int popped = oldValue.pop();
+        --size;
         fixOrder(n);
-        fixValues(oldValue);
-        if (size < (maxFill >>> 2) && n > DEFAULT_INITIAL_SIZE)
+        fixValues();
+        if (oldValue.size == 0 && size < (maxFill >>> 2) && n > DEFAULT_INITIAL_SIZE)
             rehash(n / 2);
-        return oldValue;
-    }
-    @Override
-    public void putAll(Map<? extends K, ? extends Integer> m) {
-        if (f <= .5)
-            ensureCapacity(m.size()); // The resulting map will be sized for
-            // m.size() elements
-        else
-            tryCapacity(size() + m.size()); // The resulting map will be
-        int n = m.size();
-        final Iterator<? extends K> i = m
-                .keySet().iterator();
-        while (n-- != 0) {
-            add(i.next());
-        }
+        return popped;
     }
 
-    public void putAll(K[] keyArray) {
+    public void addAll(K[] keyArray) {
         if (f <= .5)
             ensureCapacity(keyArray.length); // The resulting map will be sized for
             // m.size() elements
@@ -412,7 +355,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         }
     }
 
-    public void putAll(Collection<? extends K> keyArray) {
+    public void addAll(Collection<? extends K> keyArray) {
         if (f <= .5)
             ensureCapacity(keyArray.size()); // The resulting map will be sized for
             // m.size() elements
@@ -457,44 +400,17 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             addIfAbsent(it.next());
     }
 
-    private int insert(final K k, final int v) {
-        int pos;
-        if (k == null) {
-            if (containsNullKey)
-                return n;
-            containsNullKey = true;
-            pos = n;
-        } else {
-            K curr;
-            final K[] key = this.key;
-            // The starting point.
-            if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) != null) {
-                if (hasher.areEqual(curr, k)) {
-                    return pos;
-                }
-                while ((curr = key[pos = (pos + 1) & mask]) != null)
-                    if (hasher.areEqual(curr, k)) {
-                        return pos;
-                    }
-            }
-        }
-        key[pos] = k;
-        if (size == 0) {
-            first = last = pos;
-        } else {
-            last = pos;
-        }
-        order.add(pos);
-        value[pos] = size;
-        if (size++ >= maxFill)
-            rehash(arraySize(size + 1, f));
-        return -1;
+    private int insert(final K k) {
+        return insertAt(k, order.size);
     }
     private int insertAt(final K k, final int at) {
         int pos;
         if (k == null) {
-            if (containsNullKey)
+            if (containsNullKey) {
+                value[n].add(at);
+                order.add(n);
                 return n;
+            }
             containsNullKey = true;
             pos = n;
         } else {
@@ -503,13 +419,13 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             // The starting point.
             if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) != null) {
                 if (hasher.areEqual(curr, k)) {
-                    order.removeIndex(value[pos]);
+                    value[pos].add(at);
                     order.insert(at, pos);
                     return pos;
                 }
                 while ((curr = key[pos = (pos + 1) & mask]) != null)
                     if (hasher.areEqual(curr, k)) {
-                        order.removeIndex(value[pos]);
+                        value[pos].add(at);
                         order.insert(at, pos);
                         return pos;
                     }
@@ -522,58 +438,37 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             last = pos;
         }
         order.insert(at, pos);
-        value[pos] = at;
+        value[pos] = new IntVLA(8);
+        value[pos].add(at);
         if (size++ >= maxFill)
             rehash(arraySize(size + 1, f));
         return -1;
     }
 
-    /**
-     * Puts the key k into this Arrangement with a value equal to the current number of keys; v is disregarded.
-     * @param k any K type, including null
-     * @param v any Integer, doesn't matter what it is and will be disregarded. Only here for compatibility
-     * @return the Integer that was previously associated with k, or -1 if there was none
-     */
-    @Deprecated
-    public Integer put(final K k, final Integer v) {
-        final int pos = insert(k, v);
-        if (pos < 0)
-            return defRetValue;
-        final Integer oldValue = value[pos];
-        value[pos] = size-1;
-        return oldValue;
-    }
-
-    public int put(final K k, final int v) {
-        final int pos = insert(k, v);
-        if (pos < 0)
-            return defRetValue;
-        final int oldValue = value[pos];
-        value[pos] = size-1;
-        return oldValue;
-    }
-
     public int add(final K k) {
-        final int pos = insert(k, size);
+        final int pos = insert(k);
         if (pos < 0)
             return defRetValue;
-        final int oldValue = value[pos];
-        value[pos] = size - 1;
-        return oldValue;
+        final IntVLA oldValue = value[pos];
+        oldValue.add(size - 1);
+        return order.size - 1;
     }
 
     public int addIfAbsent(final K k)
     {
         int kPos;
-        if((kPos = getInt(k)) < 0)
+        if(containsKey(k))
             return add(k);
-        return kPos;
+        return -1;
     }
 
-    protected void fixValues(int start)
+    protected void fixValues()
     {
-        for (int i = start; i < size; i++) {
-            value[order.items[i]] = i;
+        for (int i = 0; i < order.size; i++) {
+            value[order.items[i]].clear();
+        }
+        for (int i = 0; i < order.size; i++) {
+            value[order.items[i]].add(i);
         }
     }
 
@@ -608,28 +503,28 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         }
     }
     @SuppressWarnings("unchecked")
-    protected Integer rem(final Object k) {
+    protected int rem(final Object k) {
         if ((K) k == null) {
             if (containsNullKey)
                 return removeNullEntry();
-            return null;
+            return defRetValue;
         }
         K curr;
         final K[] key = this.key;
         int pos;
         // The starting point.
         if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
-            return null;
+            return defRetValue;
         if (hasher.areEqual(k, curr))
             return removeEntry(pos);
         while (true) {
             if ((curr = key[pos = (pos + 1) & mask]) == null)
-                return null;
+                return defRetValue;
             if (hasher.areEqual(k, curr))
                 return removeEntry(pos);
         }
     }
-    public Integer remove(Object o)
+    public int remove(Object o)
     {
         return rem(o);
     }
@@ -655,11 +550,6 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
                 return removeEntry(pos);
         }
     }
-    private int setValue(final int pos, final int v) {
-        final int oldValue = value[pos];
-        value[pos] = v;
-        return oldValue;
-    }
     /**
      * Removes the mapping associated with the first key in iteration order.
      *
@@ -669,32 +559,8 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      *             is this map is empty.
      */
     public K removeFirst() {
-        if (size == 0)
-            throw new NoSuchElementException();
-        final int pos = first;
-        K fst = key[pos];
-        order.removeIndex(0);
-        if(order.size > 0)
-            first = order.get(0);
-        else
-            first = -1;
-        // Abbreviated version of fixOrder(pos)
-        /*first = (int) link[pos];
-        if (0 <= first) {
-            // Special case of SET_PREV( link[ first ], -1 )
-            link[first] |= (-1 & 0xFFFFFFFFL) << 32;
-        }*/
-        size--;
-        final int v = value[pos];
-        if (pos == n) {
-            containsNullKey = false;
-            key[n] = null;
-        } else
-            shiftKeys(pos);
-        fixValues(v);
-        if (size < maxFill / 4 && n > DEFAULT_INITIAL_SIZE)
-            rehash(n / 2);
-        return fst;
+        return removeAt(0);
+
     }
     /**
      * Removes the mapping associated with the last key in iteration order.
@@ -705,34 +571,8 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      *             is this map is empty.
      */
     public K removeLast() {
-        if (size == 0)
-            throw new NoSuchElementException();
-        final int pos = last;
-        K lst = key[pos];
-        order.pop();
-        if(order.size > 0)
-            last = order.get(order.size - 1);
-        else
-            last = -1;
+        return removeAt(order.size - 1);
 
-        // Abbreviated version of fixOrder(pos)
-        /*
-        last = (int) (link[pos] >>> 32);
-        if (0 <= last) {
-            // Special case of SET_NEXT( link[ last ], -1 )
-            link[last] |= -1 & 0xFFFFFFFFL;
-        }*/
-        size--;
-        if (pos == n) {
-            containsNullKey = false;
-            key[n] = null;
-        } else
-            shiftKeys(pos);
-        //fixValues(v); // one case where we don't need to do this; the last item is just given -1
-        value[pos] = -1;
-        if (size < maxFill / 4 && n > DEFAULT_INITIAL_SIZE)
-            rehash(n / 2);
-        return lst;
     }
     private void moveIndexToFirst(final int i) {
         if(size <= 1 || first == i)
@@ -754,7 +594,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         link[i] = ((-1 & 0xFFFFFFFFL) << 32) | (first & 0xFFFFFFFFL);
         */
         first = i;
-        fixValues(0);
+        fixValues();
     }
     private void moveIndexToLast(final int i) {
         if(size <= 1 || last == i)
@@ -776,218 +616,58 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         link[i] = ((last & 0xFFFFFFFFL) << 32) | (-1 & 0xFFFFFFFFL);
         */
         last = i;
-        fixValues(i);
+        fixValues();
+    }
+
+    /**
+     * Different from the typical get method; clears the non-null IntVLA, container, and fills it with any positions
+     * associated with k in this MultiArrangement. If you want to append to container instead of clearing it, use
+     * {@link #append(IntVLA, Object)}.
+     * @param container a non-null IntVLA; will be modified! Even if no entries are added, will be cleared
+     * @param k a K object or something that can be treated as one to search for
+     * @return the number of items added to container; 0 if none were added
+     */
+    public int get(final IntVLA container, final Object k) {
+        container.clear();
+        return append(container, k);
     }
     /**
-     * Returns the value to which the given key is mapped; if the key is
-     * present, it is moved to the first position of the iteration order.
-     *
-     * @param k
-     *            the key.
-     * @return the corresponding value, or -1 if no value was present for the given key.
+     * Different from the typical get method; adds to the non-null IntVLA, container, filling with any positions
+     * associated with k in this MultiArrangement. If you want a more convenient method for the case where you want
+     * container to hold only the items associated with k (discarding old contents), use {@link #get(IntVLA, Object)}.
+     * @param container a non-null IntVLA; will be modified unless nothing is associated with k
+     * @param k a K object or something that can be treated as one to search for
+     * @return the number of items added to container; 0 if none were added
      */
-    public int getAndMoveToFirst(final K k) {
-        if (k == null) {
-            if (containsNullKey) {
-                moveIndexToFirst(n);
-                return value[n];
-            }
-            return defRetValue;
-        }
-        K curr;
-        final K[] key = this.key;
-        int pos;
-        // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
-            return defRetValue;
-        if (hasher.areEqual(k, curr)) {
-            moveIndexToFirst(pos);
-            return value[pos];
-        }
-        // There's always an unused entry.
-        while (true) {
-            if ((curr = key[pos = (pos + 1) & mask]) == null)
-                return defRetValue;
-            if (hasher.areEqual(k, curr)) {
-                moveIndexToFirst(pos);
-                return value[pos];
-            }
-        }
-    }
-    /**
-     * Returns the value to which the given key is mapped; if the key is
-     * present, it is moved to the last position of the iteration order.
-     *
-     * @param k
-     *            the key.
-     * @return the corresponding value, or -1 if no value was present for the given key.
-     */
-    public int getAndMoveToLast(final K k) {
-        if (k == null) {
-            if (containsNullKey) {
-                moveIndexToLast(n);
-                return value[n];
-            }
-            return defRetValue;
-        }
-        K curr;
-        final K[] key = this.key;
-        int pos;
-        // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
-            return defRetValue;
-        if (hasher.areEqual(k, curr)) {
-            moveIndexToLast(pos);
-            return value[pos];
-        }
-        // There's always an unused entry.
-        while (true) {
-            if ((curr = key[pos = (pos + 1) & mask]) == null)
-                return defRetValue;
-            if (hasher.areEqual(k, curr)) {
-                moveIndexToLast(pos);
-                return value[pos];
-            }
-        }
-    }
-    /**
-     * Adds a pair to the map; if the key is already present, it is moved to the
-     * first position of the iteration order.
-     *
-     * @param k
-     *            the key.
-     * @param v
-     *            the value.
-     * @return the old value, or -1 if no value was present for the given key.
-     */
-    public int putAndMoveToFirst(final K k, final int v) {
-        int pos;
-        if (k == null) {
-            if (containsNullKey) {
-                moveIndexToFirst(n);
-                return setValue(n, 0);
-            }
-            containsNullKey = true;
-            pos = n;
-        } else {
-            K curr;
-            final K[] key = this.key;
-            // The starting point.
-            if (!((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)) {
-                if (hasher.areEqual(curr, k)) {
-                    moveIndexToFirst(pos);
-                    return setValue(pos, 0);
-                }
-                while (!((curr = key[pos = (pos + 1) & mask]) == null))
-                    if (hasher.areEqual(curr, k)) {
-                        moveIndexToFirst(pos);
-                        return setValue(pos, 0);
-                    }
-            }
-        }
-        key[pos] = k;
-        if (size == 0) {
-            first = last = pos;
-            // Special case of SET_UPPER_LOWER( link[ pos ], -1, -1 );
-            //link[pos] = -1L;
-        } else {
-            //link[first] ^= ((link[first] ^ ((pos & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
-            //link[pos] = ((-1 & 0xFFFFFFFFL) << 32) | (first & 0xFFFFFFFFL);
-            first = pos;
-        }
-        order.insert(0, pos);
-        fixValues(0);
-        if (size++ >= maxFill)
-            rehash(arraySize(size, f));
-        return defRetValue;
-    }
-    /**
-     * Adds a pair to the map; if the key is already present, it is moved to the
-     * last position of the iteration order.
-     *
-     * @param k
-     *            the key.
-     * @param v
-     *            the value.
-     * @return the old value, or -1 if no value was present for the given key.
-     */
-    public int putAndMoveToLast(final K k, final int v) {
-        int pos;
-        if (k == null) {
-            if (containsNullKey) {
-                moveIndexToLast(n);
-                return setValue(n, size - 1);
-            }
-            containsNullKey = true;
-            pos = n;
-        } else {
-            K curr;
-            final K[] key = this.key;
-            // The starting point.
-            if (!((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)) {
-                if (hasher.areEqual(curr, k)) {
-                    moveIndexToLast(pos);
-                    return setValue(pos, size - 1);
-                }
-                while (!((curr = key[pos = (pos + 1) & mask]) == null))
-                    if (hasher.areEqual(curr, k)) {
-                        moveIndexToLast(pos);
-                        return setValue(pos, size - 1);
-                    }
-            }
-        }
-        key[pos] = k;
-        value[pos] = size;
-        if (size == 0) {
-            first = last = pos;
-            // Special case of SET_UPPER_LOWER( link[ pos ], -1, -1 );
-            //link[pos] = -1L;
-        } else {
-            //link[last] ^= ((link[last] ^ (pos & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-            //link[pos] = ((last & 0xFFFFFFFFL) << 32) | (-1 & 0xFFFFFFFFL);
-            last = pos;
-        }
-        order.add(pos);
-        if (size++ >= maxFill)
-            rehash(arraySize(size, f));
-        return defRetValue;
-    }
-    public Integer get(final Object k) {
+    public int append(final IntVLA container, final Object k) {
         if (k == null)
-            return containsNullKey ? value[n] : defRetValue;
-        K curr;
-        final K[] key = this.key;
-        int pos;
-        // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
-            return defRetValue;
-        if (hasher.areEqual(k, curr))
-            return value[pos];
-        // There's always an unused entry.
-        while (true) {
-            if ((curr = key[pos = (pos + 1) & mask]) == null)
-                return defRetValue;
-            if (hasher.areEqual(k, curr))
-                return value[pos];
+        {
+            if(containsNullKey) {
+                container.addAll(value[n]);
+                return value[n].size;
+            }
+            else
+                return 0;
         }
-    }
-    public int getInt(final Object k) {
-        if (k == null)
-            return containsNullKey ? value[n] : defRetValue;
         K curr;
         final K[] key = this.key;
         int pos;
         // The starting point.
         if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
-            return defRetValue;
-        if (hasher.areEqual(k, curr))
-            return value[pos];
+            return 0;
+        if (hasher.areEqual(k, curr)) {
+            container.addAll(value[pos]);
+            return value[pos].size;
+        }
         // There's always an unused entry.
         while (true) {
             if ((curr = key[pos = (pos + 1) & mask]) == null)
-                return defRetValue;
+                return 0;
             if (hasher.areEqual(k, curr))
-                return value[pos];
+            {
+                container.addAll(value[pos]);
+                return value[pos].size;
+            }
         }
     }
 
@@ -1011,9 +691,8 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         }
     }
     public boolean containsValue(final int v) {
-        return v >= 0 && v < size;
+        return v >= 0 && v < order.size;
     }
-    @Override
     public boolean containsValue(final Object ov) {
         return ov != null && containsValue(((Integer) ov).intValue());
     }
@@ -1029,7 +708,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         size = 0;
         containsNullKey = false;
         Arrays.fill(key, null);
-        Arrays.fill(value, -1);
+        Arrays.fill(value, null);
         first = last = -1;
         order.clear();
     }
@@ -1052,72 +731,6 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         return new KeyIterator();
     }
 
-    /**
-     * The entry class for a hash map does not record key and value, but rather
-     * the position in the hash table of the corresponding entry. This is
-     * necessary so that calls to {@link java.util.Map.Entry#setValue(Object)}
-     * are reflected in the map
-     */
-    final class MapEntry
-            implements
-            Map.Entry<K, Integer> {
-        // The table index this entry refers to, or -1 if this entry has been
-        // deleted.
-        int index;
-        MapEntry(final int index) {
-            this.index = index;
-        }
-        MapEntry() {
-        }
-        public K getKey() {
-            return key[index];
-        }
-        /**
-         * {@inheritDoc}
-         *
-         * @deprecated Please use the corresponding type-specific method
-         *             instead.
-         */
-        @Deprecated
-        public Integer getValue() {
-            return value[index];
-        }
-        public int getIntValue() {
-            return value[index];
-        }
-        public int setValue(final int v) {
-            final int oldValue = value[index];
-            value[index] = v;
-            return oldValue;
-        }
-        public Integer setValue(final Integer v) {
-            return setValue(v.intValue());
-        }
-
-        @SuppressWarnings("unchecked")
-        public boolean equals(final Object o) {
-            if (!(o instanceof Map.Entry))
-                return false;
-            Map.Entry<K, Integer> e = (Map.Entry<K, Integer>) o;
-            return (key[index] == null
-                    ? e.getKey() == null
-                    : key[index].equals(e.getKey()))
-                    && (value[index] == e.getValue());
-        }
-        public int hashCode() {
-            return (key[index] == null ? 0 : hasher.hash(key[index]))
-                    ^ value[index];
-        }
-        public String toString() {
-            return key[index] + "=>" + value[index];
-        }
-    }
-
-    /**
-     * Modifies the link vector so that the given entry is removed. This method will complete in logarithmic time.
-     *
-     * @param i the index of an entry.
-     */
     protected void fixOrder(final int i) {
         if (size == 0) {
             order.clear();
@@ -1248,10 +861,10 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         throw new UnsupportedOperationException();
     }
     /**
-     * A list iterator over a Arrangement.
+     * A list iterator over a MultiArrangement.
      *
      * <P>
-     * This class provides a list iterator over a Arrangement. The
+     * This class provides a list iterator over a MultiArrangement. The
      * constructor runs in constant time.
      */
     private class MapIterator {
@@ -1406,7 +1019,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
                 key[n] = null;
             } else {
                 K curr;
-                final K[] key = Arrangement.this.key;
+                final K[] key = MultiArrangement.this.key;
                 // We have to horribly duplicate the shiftKeys() code because we
                 // need to update next/prev.
                 for (;;) {
@@ -1414,7 +1027,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
                     for (;;) {
                         if ((curr = key[pos]) == null) {
                             key[last] = null;
-                            fixValues(index);
+                            fixValues();
                             return;
                         }
                         slot = HashCommon.mix(hasher.hash(curr)) & mask;
@@ -1445,306 +1058,6 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
                 previousEntry();
             return n - i - 1;
         }
-    }
-    private class EntryIterator extends MapIterator
-            implements
-            Iterator<Entry<K, Integer>>, Serializable {
-        private static final long serialVersionUID = 0L;
-
-        private MapEntry entry;
-        public EntryIterator() {
-        }
-        public MapEntry next() {
-            return entry = new MapEntry(nextEntry());
-        }
-        public MapEntry previous() {
-            return entry = new MapEntry(previousEntry());
-        }
-        @Override
-        public void remove() {
-            super.remove();
-            entry.index = -1; // You cannot use a deleted entry.
-        }
-        public void set(Entry<K, Integer> ok) {
-            throw new UnsupportedOperationException();
-        }
-        public void add(Entry<K, Integer> ok) {
-            throw new UnsupportedOperationException();
-        }
-    }
-
-    public class FastEntryIterator extends MapIterator implements ListIterator<MapEntry>, Serializable {
-        private static final long serialVersionUID = 0L;
-
-        final MapEntry entry = new MapEntry();
-
-        public FastEntryIterator() {
-        }
-        public MapEntry next() {
-            entry.index = nextEntry();
-            return entry;
-        }
-        public MapEntry previous() {
-            entry.index = previousEntry();
-            return entry;
-        }
-        public void set(MapEntry ok) {
-            throw new UnsupportedOperationException();
-        }
-        public void add(MapEntry ok) {
-            throw new UnsupportedOperationException();
-        }
-    }
-    private final class MapEntrySet
-            implements Cloneable, SortedSet<Entry<K, Integer>>, Set<Entry<K, Integer>>, Collection<Entry<K, Integer>>, Serializable {
-        private static final long serialVersionUID = 0L;
-        public EntryIterator iterator() {
-            return new EntryIterator();
-        }
-        public Comparator<? super Entry<K, Integer>> comparator() {
-            return null;
-        }
-        public SortedSet<Entry<K, Integer>> subSet(
-                Entry<K, Integer> fromElement,
-                Entry<K, Integer> toElement) {
-            throw new UnsupportedOperationException();
-        }
-        public SortedSet<Entry<K, Integer>> headSet(
-                Entry<K, Integer> toElement) {
-            throw new UnsupportedOperationException();
-        }
-        public SortedSet<Entry<K, Integer>> tailSet(
-                Entry<K, Integer> fromElement) {
-            throw new UnsupportedOperationException();
-        }
-        public Entry<K, Integer> first() {
-            if (size == 0)
-                throw new NoSuchElementException();
-            return new MapEntry(Arrangement.this.first);
-        }
-        public Entry<K, Integer> last() {
-            if (size == 0)
-                throw new NoSuchElementException();
-            return new MapEntry(Arrangement.this.last);
-        }
-        @SuppressWarnings("unchecked")
-        public boolean contains(final Object o) {
-            if (!(o instanceof Map.Entry))
-                return false;
-            final Entry<?, ?> e = (Entry<?, ?>) o;
-            final K k = (K) e.getKey();
-            final int v = (Integer) e.getValue();
-            if (k == null)
-                return containsNullKey
-                        && (value[n] == v);
-            K curr;
-            final K[] key = Arrangement.this.key;
-            int pos;
-            // The starting point.
-            if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
-                return false;
-            if (hasher.areEqual(k, curr))
-                return value[pos] == v;
-            // There's always an unused entry.
-            while (true) {
-                if ((curr = key[pos = (pos + 1) & mask]) == null)
-                    return false;
-                if (hasher.areEqual(k, curr))
-                    return value[pos] == v;
-            }
-        }
-        @SuppressWarnings("unchecked")
-        protected boolean rem(final Object o) {
-            if (!(o instanceof Map.Entry))
-                return false;
-            final Entry<?, ?> e = (Entry<?, ?>) o;
-            final K k = (K) e.getKey();
-            final int v = (Integer) e.getValue();
-            if (k == null) {
-                if (containsNullKey
-                        && value[n] == v) {
-                    removeNullEntry();
-                    return true;
-                }
-                return false;
-            }
-            K curr;
-            final K[] key = Arrangement.this.key;
-            int pos;
-            // The starting point.
-            if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
-                return false;
-            if (hasher.areEqual(curr, k)) {
-                if (value[pos] == v) {
-                    removeEntry(pos);
-                    return true;
-                }
-                return false;
-            }
-            while (true) {
-                if ((curr = key[pos = (pos + 1) & mask]) == null)
-                    return false;
-                if (hasher.areEqual(curr, k)) {
-                    if (value[pos] == v) {
-                        removeEntry(pos);
-                        return true;
-                    }
-                }
-            }
-        }
-        @Override
-        public boolean remove(Object o)
-        {
-            return rem(o);
-        }
-        public int size() {
-            return size;
-        }
-        public void clear() {
-            Arrangement.this.clear();
-        }
-
-        public FastEntryIterator fastIterator() {
-            return new FastEntryIterator();
-        }
-
-        @Override
-        public boolean equals(final Object o) {
-            if (o == this)
-                return true;
-            if (!(o instanceof Set))
-                return false;
-            Set<?> s = (Set<?>) o;
-            return s.size() == size() && containsAll(s);
-        }
-
-        public Object[] toArray() {
-            final Object[] a = new Object[size()];
-            objectUnwrap(iterator(), a);
-            return a;
-        }
-
-        @SuppressWarnings("unchecked")
-        public <T> T[] toArray(T[] a) {
-            if (a == null || a.length < size()) a = (T[]) new Object[size()];
-            objectUnwrap(iterator(), a);
-            return a;
-        }
-
-        /**
-         * Unsupported.
-         *
-         * @param c ignored
-         * @return nothing, throws UnsupportedOperationException
-         * @throws UnsupportedOperationException always
-         */
-        public boolean addAll(Collection<? extends Entry<K, Integer>> c) {
-            throw new UnsupportedOperationException("addAll not supported");
-        }
-
-        /**
-         * Unsupported.
-         *
-         * @param k ignored
-         * @return nothing, throws UnsupportedOperationException
-         * @throws UnsupportedOperationException always
-         */
-        public boolean add(Entry<K, Integer> k) {
-            throw new UnsupportedOperationException("add not supported");
-        }
-
-        /**
-         * Checks whether this collection contains all elements from the given
-         * collection.
-         *
-         * @param c a collection.
-         * @return <code>true</code> if this collection contains all elements of the
-         * argument.
-         */
-        public boolean containsAll(Collection<?> c) {
-            int n = c.size();
-            final Iterator<?> i = c.iterator();
-            while (n-- != 0)
-                if (!contains(i.next()))
-                    return false;
-            return true;
-        }
-
-        /**
-         * Retains in this collection only elements from the given collection.
-         *
-         * @param c a collection.
-         * @return <code>true</code> if this collection changed as a result of the
-         * call.
-         */
-        public boolean retainAll(Collection<?> c) {
-            boolean retVal = false;
-            int n = size();
-            final Iterator<?> i = iterator();
-            while (n-- != 0) {
-                if (!c.contains(i.next())) {
-                    i.remove();
-                    retVal = true;
-                }
-            }
-            return retVal;
-        }
-
-        /**
-         * Remove from this collection all elements in the given collection. If the
-         * collection is an instance of this class, it uses faster iterators.
-         *
-         * @param c a collection.
-         * @return <code>true</code> if this collection changed as a result of the
-         * call.
-         */
-        public boolean removeAll(Collection<?> c) {
-            boolean retVal = false;
-            int n = c.size();
-            final Iterator<?> i = c.iterator();
-            while (n-- != 0)
-                if (remove(i.next()))
-                    retVal = true;
-            return retVal;
-        }
-
-        public boolean isEmpty() {
-            return size() == 0;
-        }
-
-        @Override
-        public String toString() {
-            final StringBuilder s = new StringBuilder();
-            final EntryIterator i = iterator();
-            int n = size();
-            Object k;
-            boolean first = true;
-            s.append("{");
-            while (n-- != 0) {
-                if (first)
-                    first = false;
-                else
-                    s.append(", ");
-                k = i.next();
-                if (this == k)
-                    s.append("(this collection)");
-                else
-                    s.append(String.valueOf(k));
-            }
-            s.append("}");
-            return s.toString();
-        }
-
-    }
-
-    @Override
-    public SortedSet<Entry<K, Integer>> entrySet() {
-        if (entries == null) entries = new MapEntrySet();
-        return entries;
-    }
-    public MapEntrySet mapEntrySet() {
-        if (entries == null) entries = new MapEntrySet();
-        return entries;
     }
 
     /**
@@ -1783,7 +1096,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         }
 
         public void clear() {
-            Arrangement.this.clear();
+            MultiArrangement.this.clear();
         }
 
         public K first() {
@@ -2013,21 +1326,20 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             return containsValue(v);
         }
         public void clear() {
-            Arrangement.this.clear();
+            MultiArrangement.this.clear();
         }
     }
-    public Collection<Integer> values() {
-        if (values == null) values = new ValueCollection();
-        return values;
+    public ArrayList<Integer> values() {
+        ArrayList<Integer> v = new ArrayList<>(order.size);
+        for (int i = 0; i < order.size; i++) {
+            v.add(i);
+        }
+        return v;
     }
 
     public ArrayList<Integer> valuesAsList()
     {
-        ArrayList<Integer> ls = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            ls.add(i);
-        }
-        return ls;
+        return values();
     }
 
     public IntVLA valuesAsIntVLA()
@@ -2100,10 +1412,10 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     @SuppressWarnings("unchecked")
     protected void rehash(final int newN) {
         final K key[] = this.key;
-        final int[] value = this.value;
+        final IntVLA[] value = this.value;
         final int mask = newN - 1; // Note that this is used by the hashing macro
         final K newKey[] = (K[]) new Object[newN + 1];
-        final int[] newValue = new int[newN + 1];
+        final IntVLA[] newValue = new IntVLA[newN + 1];
         int i, pos, sz = order.size, originalFirst = first, originalLast = last;
         for (int q = 0; q < sz; q++) {
             i = order.get(q);
@@ -2132,7 +1444,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      * Returns a deep copy of this map.
      *
      * <P>
-     * This method performs a deep copy of this Arrangement; the data stored in the
+     * This method performs a deep copy of this MultiArrangement; the data stored in the
      * map, however, is not cloned. Note that this makes a difference only for
      * object keys.
      *
@@ -2140,13 +1452,13 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      */
     @SuppressWarnings("unchecked")
     @GwtIncompatible
-    public Arrangement<K> clone() {
-        Arrangement<K> c;
+    public MultiArrangement<K> clone() {
+        MultiArrangement<K> c;
         try {
-            c = (Arrangement<K>) super.clone();
+            c = (MultiArrangement<K>) super.clone();
             c.key = (K[]) new Object[n + 1];
             System.arraycopy(key, 0, c.key, 0, n + 1);
-            c.value = new int[n + 1];
+            c.value = new IntVLA[n + 1];
             System.arraycopy(value, 0, c.value, 0, n + 1);
             c.order = (IntVLA) order.clone();
             c.hasher = hasher;
@@ -2173,13 +1485,13 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
                 i++;
             if (this != key[i])
                 t = hasher.hash(key[i]);
-            t ^= value[i];
+            t ^= value[i].hashWisp();
             h += t;
             i++;
         }
         // Zero / null keys have hash zero.
         if (containsNullKey)
-            h += value[n];
+            h += value[n].hashWisp();
         return h;
     }
     /**
@@ -2228,15 +1540,6 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         private HashCommon() {
         }
 
-        ;
-
-        /**
-         * This reference is used to fill keys and values of removed entries (if
-         * they are objects). <code>null</code> cannot be used as it would confuse the
-         * search algorithm in the presence of an actual <code>null</code> key.
-         */
-        public static final Object REMOVED = new Object();
-
         /**
          * 2<sup>32</sup> &middot; &phi;, &phi; = (&#x221A;5 &minus; 1)/2.
          */
@@ -2254,48 +1557,12 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
          */
         private static final long INV_LONG_PHI = 0xF1DE83E19937733DL;
 
-        /**
-         * Avalanches the bits of an integer by applying the finalisation step of MurmurHash3.
-         * <br>
-         * <br>This method implements the finalisation step of Austin Appleby's <a href="http://code.google.com/p/smhasher/">MurmurHash3</a>.
-         * Its purpose is to avalanche the bits of the argument to within 0.25% bias.
-         *
-         * @param x an integer.
-         * @return a hash value with good avalanching properties.
-         */
-        static int murmurHash3(int x) {
-            x ^= x >>> 16;
-            x *= 0x85ebca6b;
-            x ^= x >>> 13;
-            x *= 0xc2b2ae35;
-            x ^= x >>> 16;
-            return x;
-        }
-
-
-        /**
-         * Avalanches the bits of a long integer by applying the finalisation step of MurmurHash3.
-         * <br>
-         * <br>This method implements the finalisation step of Austin Appleby's <a href="http://code.google.com/p/smhasher/">MurmurHash3</a>.
-         * Its purpose is to avalanche the bits of the argument to within 0.25% bias.
-         *
-         * @param x a long integer.
-         * @return a hash value with good avalanching properties.
-         */
-        static long murmurHash3(long x) {
-            x ^= x >>> 33;
-            x *= 0xff51afd7ed558ccdL;
-            x ^= x >>> 33;
-            x *= 0xc4ceb9fe1a85ec53L;
-            x ^= x >>> 33;
-            return x;
-        }
 
         /**
          * Quickly mixes the bits of an integer.
          * <br>This method mixes the bits of the argument by multiplying by the golden ratio and
          * xorshifting the result. It is borrowed from <a href="https://github.com/OpenHFT/Koloboke">Koloboke</a>, and
-         * it has slightly worse behaviour than {@link #murmurHash3(int)} (in open-addressing hash tables the average number of probes
+         * it has slightly worse behaviour than murmurHash3 (in open-addressing hash tables the average number of probes
          * is slightly larger), but it's much faster.
          *
          * @param x an integer.
@@ -2321,7 +1588,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
          * Quickly mixes the bits of a long integer.
          * <br>This method mixes the bits of the argument by multiplying by the golden ratio and
          * xorshifting twice the result. It is borrowed from <a href="https://github.com/OpenHFT/Koloboke">Koloboke</a>, and
-         * it has slightly worse behaviour than {@link #murmurHash3(long)} (in open-addressing hash tables the average number of probes
+         * it has slightly worse behaviour than murmurHash3 (in open-addressing hash tables the average number of probes
          * is slightly larger), but it's much faster.
          *
          * @param x a long integer.
@@ -2378,17 +1645,6 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             x |= x >> 8;
             x |= x >> 16;
             return (x | x >> 32) + 1;
-        }
-
-        /**
-         * Returns the least power of two larger than or equal to <code>Math.ceil( expected / f )</code>.
-         *
-         * @param expected the expected number of elements in a hash table.
-         * @param f        the load factor.
-         * @return the minimum possible size for a backing big array.
-         */
-        static long bigArraySize(final long expected, final float f) {
-            return nextPowerOfTwo((long) Math.ceil(expected / f));
         }
     }
 
@@ -2468,7 +1724,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         while (i < n) {
             if (first) first = false;
             else s.append(", ");
-            s.append(entryAt(i++));
+            s.append(keyAt(i)).append(':').append(i);
         }
         s.append("}");
         return s.toString();
@@ -2477,68 +1733,19 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof Map))
+        if (!(o instanceof MultiArrangement))
             return false;
-        Map<?, ?> m = (Map<?, ?>) o;
+        MultiArrangement<?> m = (MultiArrangement<?>) o;
         if (m.size() != size())
             return false;
-        return entrySet().containsAll(m.entrySet());
+        if(!m.order.equals(order))
+            return false;
+        for (int i = 0; i < order.size; i++) {
+            if(!keyAt(i).equals(m.keyAt(i))) return false;
+        }
+        return true;
     }
 
-    @GwtIncompatible
-    private void writeObject(java.io.ObjectOutputStream s)
-            throws java.io.IOException {
-        final K key[] = this.key;
-        final int[] value = this.value;
-        final MapIterator i = new MapIterator();
-        s.defaultWriteObject();
-        s.writeObject(hasher);
-        for (int j = size, e; j-- != 0;) {
-            e = i.nextEntry();
-            s.writeObject(key[e]);
-            s.writeInt(value[e]);
-        }
-    }
-    @GwtIncompatible
-    @SuppressWarnings("unchecked")
-    private void readObject(java.io.ObjectInputStream s)
-            throws java.io.IOException, ClassNotFoundException {
-        s.defaultReadObject();
-        hasher = (CrossHash.IHasher) s.readObject();
-        n = arraySize(size, f);
-        maxFill = maxFill(n, f);
-        mask = n - 1;
-        final K key[] = this.key = (K[]) new Object[n + 1];
-        final int[] value = this.value = new int[n + 1];
-        final IntVLA order = this.order = new IntVLA(n + 1);
-        int prev = -1;
-        first = last = -1;
-        K k;
-        int v;
-        for (int i = size, pos; i-- != 0;) {
-            k = (K) s.readObject();
-            v = s.readInt();
-            if (k == null) {
-                pos = n;
-                containsNullKey = true;
-            } else {
-                pos = HashCommon.mix(hasher.hash(k))
-                        & mask;
-                while (!(key[pos] == null))
-                    pos = (pos + 1) & mask;
-            }
-
-            key[pos] = k;
-            value[pos] = v;
-            if (first != -1) {
-                prev = pos;
-            } else {
-                prev = first = pos;
-            }
-            order.add(pos);
-        }
-        last = prev;
-    }
 
     /**
      * Gets the value at the given index in the iteration order in constant time (random-access).
@@ -2546,13 +1753,9 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      * @return the value at the index, if the index is valid, otherwise the default return value
      */
     public int getAt(final int idx) {
-        int pos;
         if (idx < 0 || idx >= order.size)
             return defRetValue;
-        // The starting point.
-        if (key[pos = order.get(idx)] == null)
-            return containsNullKey ? value[n] : defRetValue;
-        return value[pos];
+        return idx;
     }
     /**
      * Gets the key at the given index in the iteration order in constant time (random-access).
@@ -2564,18 +1767,6 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             return null;
         // The starting point.
         return key[order.get(idx)];
-    }
-
-    /**
-     * Gets the key-value Map.Entry at the given index in the iteration order in constant time (random-access).
-     * @param idx the index in the iteration order of the entry to fetch
-     * @return the key-value entry at the index, if the index is valid, otherwise null
-     */
-    public Entry<K, Integer> entryAt(final int idx)
-    {
-        if (idx < 0 || idx >= order.size)
-            return null;
-        return new MapEntry(order.get(idx));
     }
 
     /**
@@ -2604,34 +1795,24 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      * Equivalent to {@link #add(Object)}, except that it can place k at any point in the ordering (shifting up later
      * entries and changing their values to match their new positions in the ordering).
      * @param idx the position in the ordering to place k at; will not be used if negative or greater than the current size (it can be equal to the current size)
-     * @param k the key to add into this Arrangement; its value will be idx
-     * @return the previous position in the ordering that k had if already present, the previous size of the Arrangement if k was just added now, or -1 if idx is invalid
+     * @param k the key to add into this MultiArrangement; its value will be idx
+     * @return the previous position in the ordering that k had if already present, the previous size of the MultiArrangement if k was just added now, or -1 if idx is invalid
      */
     public int addAt(final int idx, final K k) {
         if(idx < 0 || idx > size)
             return -1;
-        final int pos = insertAt(k, idx), oldValue = value[pos];
-        fixValues(idx);
-        if (pos < 0)
-            return size - 1;
-        return oldValue;
-    }
-    /**
-     * Gets a random value from this Arrangement in constant time, using the given RNG to generate a random number.
-     * @param rng used to generate a random index for a value
-     * @return a random value from this Arrangement, or -1 if this is empty
-     */
-    public int randomValue(RNG rng)
-    {
-        if(rng == null)
-            return defRetValue;
-        return getAt(rng.nextInt(order.size));
+        final int pos = insertAt(k, idx);
+        if (pos < 0) return defRetValue;
+        final IntVLA oldValue = value[pos];
+        oldValue.add(idx);
+        fixValues();
+        return idx;
     }
 
     /**
-     * Gets a random key from this Arrangement in constant time, using the given RNG to generate a random number.
+     * Gets a random key from this MultiArrangement in constant time, using the given RNG to generate a random number.
      * @param rng used to generate a random index for a key
-     * @return a random key from this Arrangement, or null if this is empty
+     * @return a random key from this MultiArrangement, or null if this is empty
      */
     public K randomKey(RNG rng)
     {
@@ -2641,33 +1822,23 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     }
 
     /**
-     * Gets a random entry from this Arrangement in constant time, using the given RNG to generate a random number.
-     * @param rng used to generate a random index for a entry
-     * @return a random key-value entry from this Arrangement
-     */
-    public Entry<K, Integer> randomEntry(RNG rng)
-    {
-        return new MapEntry(order.getRandomElement(rng));
-    }
-
-    /**
-     * Randomly alters the iteration order for this Arrangement using the given RNG to shuffle.
+     * Randomly alters the iteration order for this MultiArrangement using the given RNG to shuffle.
      * @param rng used to generate a random ordering
      * @return this for chaining
      */
-    public Arrangement<K> shuffle(RNG rng)
+    public MultiArrangement<K> shuffle(RNG rng)
     {
         if(size < 2)
             return this;
         order.shuffle(rng);
         first = order.get(0);
         last = order.peek();
-        fixValues(0);
+        fixValues();
         return this;
     }
 
     /**
-     * Given an array or varargs of replacement indices for this Arrangement's iteration order, reorders this so the
+     * Given an array or varargs of replacement indices for this MultiArrangement's iteration order, reorders this so the
      * first item in the returned version is the same as {@code getAt(ordering[0])} (with some care taken for negative
      * or too-large indices), the second item in the returned version is the same as {@code getAt(ordering[1])}, etc.
      * <br>
@@ -2677,32 +1848,35 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      * affected as {@code size()}, and reversed distances are measured from the end of this Map's entries instead of
      * the end of ordering. Duplicate values in ordering will produce duplicate values in the returned Map.
      * <br>
-     * This method modifies this Arrangement in-place and also returns it for chaining.
+     * This method modifies this MultiArrangement in-place and also returns it for chaining.
      * @param ordering an array or varargs of int indices, where the nth item in ordering changes the nth item in this
      *                 Map to have the value currently in this Map at the index specified by the value in ordering
      * @return this for chaining, after modifying it in-place
      */
-    public Arrangement<K> reorder(int... ordering)
+    public MultiArrangement<K> reorder(int... ordering)
     {
         if(ordering == null || ordering.length <= 0)
             return this;
         order.reorder(ordering);
         first = order.get(0);
         last = order.peek();
-        fixValues(0);
+        fixValues();
         return this;
     }
-    private int alterEntry(final int pos, final K replacement) {
+    private boolean alterEntry(final int pos, final K replacement) {
         key[pos] = null;
 
-        final int[] value = this.value;
-        int v = value[pos];
-        value[pos] = -1;
+        final IntVLA[] value = this.value;
+        final IntVLA v = value[pos];
+        value[pos] = null;
 
         int rep;
         if (replacement == null) {
             if (containsNullKey)
-                return v;
+            {
+                value[n].addAll(v);
+                return true;
+            }
             rep = n;
             containsNullKey = true;
         } else {
@@ -2712,23 +1886,31 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             // The starting point.
             if (!((curr = key[rep = HashCommon.mix(hasher.hash(replacement)) & mask]) == null)) {
                 if (hasher.areEqual(curr, replacement))
-                    return v;
-                while (!((curr = key[rep = (rep + 1) & mask]) == null))
+                {
+                    value[rep].addAll(v);
+                    return true;
+                }
+                while ((curr = key[rep = (rep + 1) & mask]) != null)
+                {
                     if (hasher.areEqual(curr, replacement))
-                        return v;
+                    {
+                        value[rep].addAll(v);
+                        return true;
+                    }
+                }
             }
             key[rep] = replacement;
             value[rep] = v;
         }
         fixOrder(pos, rep);
-        return v;
+        return false;
     }
-    private int alterNullEntry(final K replacement) {
+    private boolean alterNullEntry(final K replacement) {
         containsNullKey = false;
         key[n] = null;
-        final int[] value = this.value;
-        int v = value[n];
-        value[n] = -1;
+        final IntVLA[] value = this.value;
+        final IntVLA v = value[n];
+        value[n] = null;
 
         int rep;
         if (replacement == null) {
@@ -2740,17 +1922,24 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             // The starting point.
             if ((curr = key[rep = HashCommon.mix(hasher.hash(replacement)) & mask]) != null) {
                 if (hasher.areEqual(curr, replacement))
-                    return v;
+                {
+                    value[rep].addAll(v);
+                    return true;
+                }
                 while ((curr = key[rep = (rep + 1) & mask]) != null)
+                {
                     if (hasher.areEqual(curr, replacement))
-                        return v;
+                    {
+                        value[rep].addAll(v);
+                        return true;
+                    }
+                }
             }
             key[rep] = replacement;
             value[rep] = v;
-
         }
         fixOrder(n, rep);
-        return v;
+        return false;
     }
 
     /**
@@ -2760,27 +1949,27 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      * @param replacement the key to replace original with
      * @return the value associated with original before, and replacement now
      */
-    public int alter(final K original, final K replacement) {
+    public boolean alter(final K original, final K replacement) {
         if (original == null) {
             if (containsNullKey) {
                 return alterNullEntry(replacement);
             }
             else
-                return add(replacement);
+                return add(replacement) >= 0;
         }
         else if(hasher.areEqual(original, replacement))
-            return getInt(original);
+            return false;
         K curr;
         final K[] key = this.key;
         int pos;
         // The starting point.
         if ((curr = key[pos = HashCommon.mix(hasher.hash(original)) & mask]) == null)
-            return add(replacement);
+            return add(replacement) >= 0;
         if (hasher.areEqual(original, curr))
             return alterEntry(pos, replacement);
         while (true) {
             if ((curr = key[pos = (pos + 1) & mask]) == null)
-                return add(replacement);
+                return add(replacement) >= 0;
             if (hasher.areEqual(original, curr))
                 return alterEntry(pos, replacement);
         }
@@ -2791,11 +1980,11 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         if(keys == null)
             return new int[0];
         int len = keys.length;
-        int[] vals = new int[len];
+        IntVLA container = new IntVLA(len);
         for (int i = 0; i < len; i++) {
-            vals[i] = getInt(keys[i]);
+            append(container, keys[i]);
         }
-        return vals;
+        return container.toArray();
     }
 
     public int[] getArray(Collection<? extends K> keys)
@@ -2803,12 +1992,12 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         if(keys == null)
             return new int[0];
         int len = keys.size(), i = 0;
-        int[] vals = new int[len];
+        IntVLA container = new IntVLA(len);
         for(K k : keys)
         {
-            vals[i++] = getInt(k);
+            append(container, k);
         }
-        return vals;
+        return container.toArray();
     }
 
     public IntVLA getMany(Iterable<? extends K> keys)
@@ -2818,7 +2007,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         IntVLA vals = new IntVLA();
         for(K k : keys)
         {
-            vals.add(getInt(k));
+            append(vals, k);
         }
         return vals;
     }
@@ -2847,15 +2036,15 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     }
 
     /**
-     * Produces a copy of this Arrangement, but only using up to the given amount of items to take. Does a shallow copy
+     * Produces a copy of this MultiArrangement, but only using up to the given amount of items to take. Does a shallow copy
      * of individual keys, so the references will be shared.
-     * @param amount the number of items to copy from this Arrangement; will copy all items if greater than size
-     * @return a new Arrangement with up to amount items copied from this into it.
+     * @param amount the number of items to copy from this MultiArrangement; will copy all items if greater than size
+     * @return a new MultiArrangement with up to amount items copied from this into it.
      */
-    public Arrangement<K> take(int amount)
+    public MultiArrangement<K> take(int amount)
     {
         amount = Math.min(size, Math.max(0, amount));
-        Arrangement<K> nx = new Arrangement<>(amount, f);
+        MultiArrangement<K> nx = new MultiArrangement<>(amount, f);
         for (int i = 0; i < amount; i++) {
             nx.add(keyAt(i));
         }
@@ -2894,14 +2083,19 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     public boolean swap(final K left, final K right)
     {
         if(left == right) return false;
-        int l = getInt(left);
-        if(l < 0) return false;
-        int r = getInt(right);
-        if(r < 0) return false;
-        int posL = order.get(l), posR = order.get(r);
-        value[posL] = r;
+        int posL = positionOf(left), posR = positionOf(right);
+        IntVLA l = value[posL];
+        if(l == null) return false;
+        IntVLA r = value[posR];
+        if(r == null) return false;
         value[posR] = l;
-        order.swap(l, r);
+        value[posL] = r;
+        for (int i = 0; i < l.size; i++) {
+            order.set(l.get(i), posR);
+        }
+        for (int i = 0; i < r.size; i++) {
+            order.set(r.get(i), posL);
+        }
         return true;
     }
     /**
@@ -2916,9 +2110,10 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     {
         if(left < 0 || right < 0 || left >= order.size || right >= order.size || left == right) return false;
         int posL = order.get(left), posR = order.get(right);
-        value[posL] = right;
-        value[posR] = left;
+        value[posL].set(value[posL].indexOf(left), right);
+        value[posR].set(value[posR].indexOf(right), left);
         order.swap(left, right);
         return true;
     }
+
 }
