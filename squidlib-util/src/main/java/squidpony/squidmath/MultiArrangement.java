@@ -108,7 +108,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
     /**
      * Cached set of keys.
      */
-    protected volatile KeySet keys;
+    protected volatile KeyList keys;
     /**
      * Cached collection of values.
      */
@@ -320,11 +320,11 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
             rehash(needed);
     }
     private int removeEntry(final int pos) {
-        --size;
-        fixOrder(pos);
-        shiftKeys(pos);
         final IntVLA oldValue = value[pos];
         final int popped = oldValue.pop();
+        if(oldValue.size == 0) --size;
+        fixOrder(pos);
+        shiftKeys(pos);
         fixValues();
         if (oldValue.size == 0 && size < (maxFill >>> 2) && n > DEFAULT_INITIAL_SIZE)
             rehash(n / 2);
@@ -335,7 +335,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
         key[n] = null;
         final IntVLA oldValue = value[n];
         final int popped = oldValue.pop();
-        --size;
+        if(oldValue.size == 0) --size;
         fixOrder(n);
         fixValues();
         if (oldValue.size == 0 && size < (maxFill >>> 2) && n > DEFAULT_INITIAL_SIZE)
@@ -450,7 +450,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
         if (pos < 0)
             return defRetValue;
         final IntVLA oldValue = value[pos];
-        oldValue.add(size - 1);
+        oldValue.add(order.size - 1);
         return order.size - 1;
     }
 
@@ -575,7 +575,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
 
     }
     private void moveIndexToFirst(final int i) {
-        if(size <= 1 || first == i)
+        if(order.size <= 1 || first == i)
             return;
         order.moveToFirst(i);
         if (last == i) {
@@ -597,7 +597,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
         fixValues();
     }
     private void moveIndexToLast(final int i) {
-        if(size <= 1 || last == i)
+        if(order.size <= 1 || last == i)
             return;
         order.moveToLast(i);
         if (first == i) {
@@ -714,7 +714,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
     }
 
     public int size() {
-        return size;
+        return order.size;
     }
 
     public boolean isEmpty() {
@@ -777,7 +777,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
      * @param d the destination position.
      */
     protected void fixOrder(int s, int d) {
-        if (size == 1) {
+        if (order.size == 1) {
             first = last = d;
             // Special case of SET_UPPER_LOWER( link[ d ], -1, -1 )
             //link[d] = -1L;
@@ -838,7 +838,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
      */
     public boolean retainAll(Collection<?> c) {
         boolean retVal = false;
-        int n = size;
+        int n = order.size;
         while (n-- != 0) {
             if (!c.contains(key[order.get(n)])) {
                 removeAt(n);
@@ -941,7 +941,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
                 return;
             }
             if (next == -1) {
-                index = size;
+                index = order.size;
                 return;
             }
             index = 0;
@@ -1010,8 +1010,10 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
                 first = next;
             if (next == -1)
                 last = prev;
-            order.removeIndex(index);
-            size--;
+            final IntVLA iv = value[order.removeIndex(index)];
+            iv.removeValue(index);
+            if(iv.size == 0)
+                size--;
             int last, slot, pos = curr;
             curr = -1;
             if (pos == n) {
@@ -1084,7 +1086,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
         public void remove() { super.remove(); }
     }
 
-    public final class KeySet implements SortedSet<K>, Serializable {
+    public final class KeyList extends AbstractList<K> implements Serializable {
         private static final long serialVersionUID = 0L;
 
         public KeyIterator iterator() {
@@ -1092,7 +1094,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
         }
 
         public int size() {
-            return size;
+            return order.size;
         }
 
         public void clear() {
@@ -1107,22 +1109,6 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
         public K last() {
             if (size == 0) throw new NoSuchElementException();
             return key[last];
-        }
-
-        public Comparator<K> comparator() {
-            return null;
-        }
-
-        public final SortedSet<K> tailSet(K from) {
-            throw new UnsupportedOperationException();
-        }
-
-        public final SortedSet<K> headSet(K to) {
-            throw new UnsupportedOperationException();
-        }
-
-        public final SortedSet<K> subSet(K from, K to) {
-            throw new UnsupportedOperationException();
         }
 
         @SuppressWarnings("unchecked")
@@ -1145,6 +1131,17 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
          */
         public boolean add(final K o) {
             throw new UnsupportedOperationException("Cannot add to the key set directly");
+        }
+
+        /**
+         * {@inheritDoc}
+         *
+         * @param index
+         * @throws IndexOutOfBoundsException {@inheritDoc}
+         */
+        @Override
+        public K get(int index) {
+            return keyAt(index);
         }
 
         /**
@@ -1207,12 +1204,18 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
         public boolean equals(final Object o) {
             if (o == this)
                 return true;
-            if (!(o instanceof Set))
+            if (!(o instanceof List))
                 return false;
-            Set<?> s = (Set<?>) o;
-            if (s.size() != size())
-                return false;
-            return containsAll(s);
+
+            KeyIterator e1 = iterator();
+            ListIterator<?> e2 = ((List<?>) o).listIterator();
+            while (e1.hasNext() && e2.hasNext()) {
+                K o1 = e1.next();
+                Object o2 = e2.next();
+                if (!(o1==null ? o2==null : o1.equals(o2)))
+                    return false;
+            }
+            return !(e1.hasNext() || e2.hasNext());
         }
         /**
          * Unwraps an iterator into an array starting at a given offset for a given number of elements.
@@ -1270,18 +1273,18 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
         }
     }
 
-    public KeySet keySet() {
-        if (keys == null) keys = new KeySet();
+    public KeyList keyList() {
+        if (keys == null) keys = new KeyList();
         return keys;
     }
 
-    public OrderedSet<K> keysAsOrderedSet()
+    public ArrayList<K> keysAsArrayList()
     {
-        OrderedSet<K> os = new OrderedSet<K>(size, f, hasher);
-        for (int i = 0; i < size; i++) {
-            os.add(keyAt(i));
+        ArrayList<K> al = new ArrayList<>(order.size);
+        for (int i = 0; i < order.size; i++) {
+            al.add(keyAt(i));
         }
-        return os;
+        return al;
     }
 
     /**
@@ -1307,9 +1310,10 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
         }
         public ValueIterator() {}
         public Integer next() {
-            return (index >= size - 1) ? -1 : ++index;
-        }public int nextInt() {
-            return (index >= size - 1) ? -1 : ++index;
+            return (index >= order.size - 1) ? -1 : ++index;
+        }
+        public int nextInt() {
+            return (index >= order.size - 1) ? -1 : ++index;
         }
         public void remove() { super.remove(); }
     }
@@ -1799,7 +1803,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
      * @return the previous position in the ordering that k had if already present, the previous size of the MultiArrangement if k was just added now, or -1 if idx is invalid
      */
     public int addAt(final int idx, final K k) {
-        if(idx < 0 || idx > size)
+        if(idx < 0 || idx > order.size)
             return -1;
         final int pos = insertAt(k, idx);
         if (pos < 0) return defRetValue;
@@ -1828,7 +1832,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
      */
     public MultiArrangement<K> shuffle(RNG rng)
     {
-        if(size < 2)
+        if(order.size < 2)
             return this;
         order.shuffle(rng);
         first = order.get(0);
@@ -2043,7 +2047,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
      */
     public MultiArrangement<K> take(int amount)
     {
-        amount = Math.min(size, Math.max(0, amount));
+        amount = Math.min(order.size, Math.max(0, amount));
         MultiArrangement<K> nx = new MultiArrangement<>(amount, f);
         for (int i = 0; i < amount; i++) {
             nx.add(keyAt(i));
