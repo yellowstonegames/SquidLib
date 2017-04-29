@@ -286,6 +286,39 @@
 </tr>
 </tbody>
 </table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> with parameters of type <a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><span class="typeNameLabel">TuringPattern.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/TuringPattern.html#addNoise-double:A-int-int-double-squidpony.squidmath.Noise.Noise3D-double-int-">addNoise</a></span>(double[]&nbsp;substance,
+        int&nbsp;width,
+        int&nbsp;height,
+        double&nbsp;multiplier,
+        <a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>&nbsp;noise,
+        double&nbsp;z,
+        int&nbsp;seed)</code>
+<div class="block">Simply adds the result of a noise call, multiplied by the given multiplier, to each point in substance.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><span class="typeNameLabel">TuringPattern.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/TuringPattern.html#distort-int:A:A-int-int-squidpony.squidmath.Noise.Noise3D-double-int-">distort</a></span>(int[][]&nbsp;offsets,
+       int&nbsp;width,
+       int&nbsp;height,
+       <a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>&nbsp;noise,
+       double&nbsp;z,
+       int&nbsp;seed)</code>
+<div class="block">Alters the given offset information (as a jagged 2D int array) with the given Noise3D instance and seed, allowing
+ a z position for the 3D component so this can change over time with changing z.</div>
+</td>
+</tr>
+</tbody>
+</table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
 <caption><span>Constructors in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> with parameters of type <a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
