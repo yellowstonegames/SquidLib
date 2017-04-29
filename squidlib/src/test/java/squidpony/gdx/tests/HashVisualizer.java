@@ -110,10 +110,12 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Noise3D turb3D = new Noise.Turbulent3D(layered3D, ridged3D, 1, 1);
     private final Noise.Noise4D turb4D = new Noise.Turbulent4D(layered4D, ridged4D, 1, 1);
     private final Noise.Noise6D turb6D = new Noise.Turbulent6D(layered6D, ridged6D, 1, 1);
+    private final Noise.Noise2D stretchScaled2D = new Noise.Scaled2D(SeededNoise.instance, 0.035, 0.035);
+    private final Noise.Noise3D stretchScaled3D = new Noise.Scaled3D(SeededNoise.instance, 0.035, 0.035, 0.035);
 
     private final double[] turing = TuringPattern.initialize(width, height);
-    private final int[][] turingActivate = TuringPattern.offsetsCircle(width, height, 4.5),
-            turingInhibit = TuringPattern.offsetsCircle(width, height, 9);
+    private final int[][] turingActivate = TuringPattern.offsetsCircle(width, height, 4),
+            turingInhibit = TuringPattern.offsetsCircle(width, height, 8);
 
     // 0 commonly used hashes
     // 1 variants on Storm and other hashes
@@ -421,12 +423,16 @@ public class HashVisualizer extends ApplicationAdapter {
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
                 switch (key) {
+                    case 'u':
+                    case 'U':
                     case SquidInput.ENTER:
                         switch (testType)
                         {
                             case 4:
-                                noiseMode++;
-                                noiseMode %= 69;
+                                if(key == SquidInput.ENTER) {
+                                    noiseMode++;
+                                    noiseMode %= 70;
+                                }
                                 switch (noiseMode)
                                 {
                                     case 16:
@@ -563,6 +569,14 @@ public class HashVisualizer extends ApplicationAdapter {
                                     case 57:
                                         ArrayTools.fill(seamless[0], 0.0);
                                         Noise.seamless2D(seamless[0][0], -31337, 1, MasonNoise.instance);
+                                        break;
+                                    case 68:
+                                        TuringPattern.initializeInto(turing, ctr);
+                                        break;
+                                    case 69:
+                                        TuringPattern.offsetsCircleInto(turingActivate, width, height, 4);
+                                        TuringPattern.offsetsCircleInto(turingInhibit, width, height, 8);
+                                        TuringPattern.initializeInto(turing, width, height, stretchScaled2D, ctr);
                                         break;
                                 }
                                 break;
@@ -2877,7 +2891,20 @@ public class HashVisualizer extends ApplicationAdapter {
 
                     case 68:
                         Gdx.graphics.setTitle("Turing Pattern at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        TuringPattern.step(turing, turingActivate, 0.4, turingInhibit, -0.4);
+                        TuringPattern.distort(turingActivate, width, height, stretchScaled3D, ctr * 5, 778899);
+                        TuringPattern.distort(turingInhibit, width, height, stretchScaled3D, ctr * 5, 556677);
+                        TuringPattern.step(turing, turingActivate, 0.2, turingInhibit, -0.2);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float)(turing[x * height + y]) * 0.5f + 0.5f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+
+                    case 69:
+                        Gdx.graphics.setTitle("Turing Pattern from SeededNoise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        TuringPattern.step(turing, turingActivate, 0.1, turingInhibit, -0.1);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)(turing[x * height + y]) * 0.5f + 0.5f;
