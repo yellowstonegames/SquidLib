@@ -100,10 +100,15 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
+<li><a href="../../../../../squidpony/squidgrid/zone/Zone.Skeleton.html" title="class in squidpony.squidgrid.zone">squidpony.squidgrid.zone.Zone.Skeleton</a></li>
+<li>
+<ul class="inheritance">
 <li><a href="../../../../../squidpony/squidgrid/mapping/Rectangle.Impl.html" title="class in squidpony.squidgrid.mapping">squidpony.squidgrid.mapping.Rectangle.Impl</a></li>
 <li>
 <ul class="inheritance">
 <li>squidpony.squidgrid.mapping.locks.util.Rect2I</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -280,7 +285,14 @@ extends <a href="../../../../../squidpony/squidgrid/mapping/Rectangle.Impl.html"
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;squidpony.squidgrid.mapping.<a href="../../../../../squidpony/squidgrid/mapping/Rectangle.Impl.html" title="class in squidpony.squidgrid.mapping">Rectangle.Impl</a></h3>
-<code><a href="../../../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#equals-java.lang.Object-">equals</a>, <a href="../../../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#expand8way-int-">expand8way</a>, <a href="../../../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#hashCode--">hashCode</a>, <a href="../../../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#iterator--">iterator</a>, <a href="../../../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#toString--">toString</a></code></li>
+<code><a href="../../../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#equals-java.lang.Object-">equals</a>, <a href="../../../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#expand8way-int-">expand8way</a>, <a href="../../../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#getCenter--">getCenter</a>, <a href="../../../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#hashCode--">hashCode</a>, <a href="../../../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#iterator--">iterator</a>, <a href="../../../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#toString--">toString</a>, <a href="../../../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#x-boolean-">x</a>, <a href="../../../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#y-boolean-">y</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.squidpony.squidgrid.zone.Zone.Skeleton">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;squidpony.squidgrid.zone.<a href="../../../../../squidpony/squidgrid/zone/Zone.Skeleton.html" title="class in squidpony.squidgrid.zone">Zone.Skeleton</a></h3>
+<code><a href="../../../../../squidpony/squidgrid/zone/Zone.Skeleton.html#contains-squidpony.squidgrid.zone.Zone-">contains</a>, <a href="../../../../../squidpony/squidgrid/zone/Zone.Skeleton.html#intersectsWith-squidpony.squidgrid.zone.Zone-">intersectsWith</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -288,6 +300,13 @@ extends <a href="../../../../../squidpony/squidgrid/mapping/Rectangle.Impl.html"
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
 <code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#clone--" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#getClass--" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#notify--" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#notifyAll--" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait--" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait-long-" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait-long-int-" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.squidpony.squidgrid.zone.Zone">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;squidpony.squidgrid.zone.<a href="../../../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></h3>
+<code><a href="../../../../../squidpony/squidgrid/zone/Zone.html#contains-squidpony.squidgrid.zone.Zone-">contains</a>, <a href="../../../../../squidpony/squidgrid/zone/Zone.html#intersectsWith-squidpony.squidgrid.zone.Zone-">intersectsWith</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Iterable">
@@ -403,11 +422,13 @@ extends <a href="../../../../../squidpony/squidgrid/mapping/Rectangle.Impl.html"
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../squidpony/squidgrid/mapping/Rectangle.html#getWidth--">getWidth</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../squidpony/squidgrid/zone/Zone.html#getWidth--">getWidth</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#getWidth--">getWidth</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../squidpony/squidgrid/mapping/Rectangle.Impl.html" title="class in squidpony.squidgrid.mapping">Rectangle.Impl</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>The room's width (from <a href="../../../../../squidpony/squidgrid/mapping/Rectangle.html#getBottomLeft--"><code>Rectangle.getBottomLeft()</code></a>). It is greater or
- equal than 0.</dd>
+<dd>The distance between the leftmost cell and the rightmost cell, or
+         anything negative if <code>this</code> zone is empty.</dd>
 </dl>
 </li>
 </ul>
@@ -421,11 +442,13 @@ extends <a href="../../../../../squidpony/squidgrid/mapping/Rectangle.Impl.html"
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../squidpony/squidgrid/mapping/Rectangle.html#getHeight--">getHeight</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../squidpony/squidgrid/zone/Zone.html#getHeight--">getHeight</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#getHeight--">getHeight</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../squidpony/squidgrid/mapping/Rectangle.Impl.html" title="class in squidpony.squidgrid.mapping">Rectangle.Impl</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>The room's height (from <a href="../../../../../squidpony/squidgrid/mapping/Rectangle.html#getBottomLeft--"><code>Rectangle.getBottomLeft()</code></a>). It is greater
- or equal than 0.</dd>
+<dd>The distance between the topmost cell and the lowest cell, or
+         anything negative if <code>this</code> zone is empty.</dd>
 </dl>
 </li>
 </ul>

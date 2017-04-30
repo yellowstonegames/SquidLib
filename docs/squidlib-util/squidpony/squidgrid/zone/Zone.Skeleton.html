@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -113,7 +113,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../squidpony/squidgrid/zone/CoordPackerZone.html" title="class in squidpony.squidgrid.zone">CoordPackerZone</a>, <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>, <a href="../../../squidpony/squidgrid/zone/ListZone.html" title="class in squidpony.squidgrid.zone">ListZone</a></dd>
+<dd><a href="../../../squidpony/squidgrid/zone/CoordPackerZone.html" title="class in squidpony.squidgrid.zone">CoordPackerZone</a>, <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>, <a href="../../../squidpony/squidgrid/zone/ListZone.html" title="class in squidpony.squidgrid.zone">ListZone</a>, <a href="../../../squidpony/squidgrid/mapping/Rectangle.Impl.html" title="class in squidpony.squidgrid.mapping">Rectangle.Impl</a></dd>
 </dl>
 <dl>
 <dt>Enclosing interface:</dt>
@@ -121,7 +121,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public abstract static class <a href="../../../src-html/squidpony/squidgrid/zone/Zone.html#line.78">Zone.Skeleton</a>
+<pre>public abstract static class <a href="../../../src-html/squidpony/squidgrid/zone/Zone.html#line.122">Zone.Skeleton</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></pre>
 <div class="block">A convenience partial implementation. Please try for all new
@@ -188,8 +188,36 @@ implements <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interfac
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#contains-squidpony.squidmath.Coord-">contains</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#contains-squidpony.squidgrid.zone.Zone-">contains</a></span>(<a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a>&nbsp;other)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#getCenter--">getCenter</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#getHeight--">getHeight</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#getWidth--">getWidth</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#intersectsWith-squidpony.squidgrid.zone.Zone-">intersectsWith</a></span>(<a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a>&nbsp;other)</code>&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#iterator--">iterator</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#x-boolean-">x</a></span>(boolean&nbsp;smallestOrBiggest)</code>&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#y-boolean-">y</a></span>(boolean&nbsp;smallestOrBiggest)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -233,7 +261,7 @@ implements <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interfac
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Skeleton</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.78">Skeleton</a>()</pre>
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.122">Skeleton</a>()</pre>
 </li>
 </ul>
 </li>
@@ -250,7 +278,7 @@ implements <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>contains</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.84">contains</a>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.132">contains</a>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#contains-squidpony.squidmath.Coord-">contains</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
@@ -259,16 +287,126 @@ implements <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interfac
 </dl>
 </li>
 </ul>
+<a name="contains-squidpony.squidgrid.zone.Zone-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>contains</h4>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.138">contains</a>(<a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a>&nbsp;other)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#contains-squidpony.squidgrid.zone.Zone-">contains</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if all cells of <code>other</code> are in <code>this</code>.</dd>
+</dl>
+</li>
+</ul>
+<a name="intersectsWith-squidpony.squidgrid.zone.Zone-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>intersectsWith</h4>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.147">intersectsWith</a>(<a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a>&nbsp;other)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#intersectsWith-squidpony.squidgrid.zone.Zone-">intersectsWith</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if <code>this</code> and <code>other</code> have a common cell.</dd>
+</dl>
+</li>
+</ul>
 <a name="iterator--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>iterator</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.164">iterator</a>()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true#iterator--" title="class or interface in java.lang">iterator</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a name="getWidth--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getWidth</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.170">getWidth</a>()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#getWidth--">getWidth</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The distance between the leftmost cell and the rightmost cell, or
+         anything negative if <code>this</code> zone is empty.</dd>
+</dl>
+</li>
+</ul>
+<a name="getHeight--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getHeight</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.178">getHeight</a>()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#getHeight--">getHeight</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The distance between the topmost cell and the lowest cell, or
+         anything negative if <code>this</code> zone is empty.</dd>
+</dl>
+</li>
+</ul>
+<a name="x-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>x</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.186">x</a>(boolean&nbsp;smallestOrBiggest)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#x-boolean-">x</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The x-coordinate of the Coord within <code>this</code> that has the
+         smallest (or biggest) x-coordinate. Or -1 if the zone is empty.</dd>
+</dl>
+</li>
+</ul>
+<a name="y-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>y</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.192">y</a>(boolean&nbsp;smallestOrBiggest)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#y-boolean-">y</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The y-coordinate of the Coord within <code>this</code> that has the
+         smallest (or biggest) y-coordinate. Or -1 if the zone is empty.</dd>
+</dl>
+</li>
+</ul>
+<a name="getCenter--">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>iterator</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.93">iterator</a>()</pre>
+<h4>getCenter</h4>
+<pre>public&nbsp;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.203">getCenter</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true#iterator--" title="class or interface in java.lang">iterator</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
+<dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#getCenter--">getCenter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The approximate center of this zone, or null if this zone
+         is empty.</dd>
 </dl>
 </li>
 </ul>

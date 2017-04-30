@@ -212,7 +212,7 @@
 <span class="sourceLineNo">204</span>    }<a name="line.204"></a>
 <span class="sourceLineNo">205</span><a name="line.205"></a>
 <span class="sourceLineNo">206</span>    public Arrangement(final Arrangement&lt;? extends K&gt; a) {<a name="line.206"></a>
-<span class="sourceLineNo">207</span>        this(a.size(), a.f);<a name="line.207"></a>
+<span class="sourceLineNo">207</span>        this(a.size(), a.f, a.hasher);<a name="line.207"></a>
 <span class="sourceLineNo">208</span>        ensureCapacity(a.size()); // The resulting map will be sized for<a name="line.208"></a>
 <span class="sourceLineNo">209</span>        System.arraycopy(a.key, 0, key, 0, a.key.length);<a name="line.209"></a>
 <span class="sourceLineNo">210</span>        System.arraycopy(a.value, 0, value, 0, a.value.length);<a name="line.210"></a>
@@ -2869,7 +2869,67 @@
 <span class="sourceLineNo">2861</span>        }<a name="line.2861"></a>
 <span class="sourceLineNo">2862</span>        return nx;<a name="line.2862"></a>
 <span class="sourceLineNo">2863</span>    }<a name="line.2863"></a>
-<span class="sourceLineNo">2864</span>}<a name="line.2864"></a>
+<span class="sourceLineNo">2864</span>    protected int positionOf(final Object k) {<a name="line.2864"></a>
+<span class="sourceLineNo">2865</span>        if (k == null)<a name="line.2865"></a>
+<span class="sourceLineNo">2866</span>        {<a name="line.2866"></a>
+<span class="sourceLineNo">2867</span>            return (containsNullKey) ? n : -1;<a name="line.2867"></a>
+<span class="sourceLineNo">2868</span>        }<a name="line.2868"></a>
+<span class="sourceLineNo">2869</span>        K curr;<a name="line.2869"></a>
+<span class="sourceLineNo">2870</span>        final K[] key = this.key;<a name="line.2870"></a>
+<span class="sourceLineNo">2871</span>        int pos;<a name="line.2871"></a>
+<span class="sourceLineNo">2872</span>        // The starting point.<a name="line.2872"></a>
+<span class="sourceLineNo">2873</span>        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) &amp; mask]) == null)<a name="line.2873"></a>
+<span class="sourceLineNo">2874</span>            return -1;<a name="line.2874"></a>
+<span class="sourceLineNo">2875</span>        if (hasher.areEqual(k, curr))<a name="line.2875"></a>
+<span class="sourceLineNo">2876</span>            return pos;<a name="line.2876"></a>
+<span class="sourceLineNo">2877</span>        // There's always an unused entry.<a name="line.2877"></a>
+<span class="sourceLineNo">2878</span>        while (true) {<a name="line.2878"></a>
+<span class="sourceLineNo">2879</span>            if ((curr = key[pos = pos + 1 &amp; mask]) == null)<a name="line.2879"></a>
+<span class="sourceLineNo">2880</span>                return -1;<a name="line.2880"></a>
+<span class="sourceLineNo">2881</span>            if (hasher.areEqual(k, curr))<a name="line.2881"></a>
+<span class="sourceLineNo">2882</span>                return pos;<a name="line.2882"></a>
+<span class="sourceLineNo">2883</span>        }<a name="line.2883"></a>
+<span class="sourceLineNo">2884</span>    }<a name="line.2884"></a>
+<span class="sourceLineNo">2885</span><a name="line.2885"></a>
+<span class="sourceLineNo">2886</span>    /**<a name="line.2886"></a>
+<span class="sourceLineNo">2887</span>     * Swaps the positions in the ordering for the given items, if they are both present. Returns true if the ordering<a name="line.2887"></a>
+<span class="sourceLineNo">2888</span>     * changed as a result of this call, or false if it stayed the same (which can be because left or right was not<a name="line.2888"></a>
+<span class="sourceLineNo">2889</span>     * present, or because left and right are the same reference (so swapping would do nothing)).<a name="line.2889"></a>
+<span class="sourceLineNo">2890</span>     * @param left an item that should be present in this OrderedSet<a name="line.2890"></a>
+<span class="sourceLineNo">2891</span>     * @param right an item that should be present in this OrderedSet<a name="line.2891"></a>
+<span class="sourceLineNo">2892</span>     * @return true if this OrderedSet changed in ordering as a result of this call, or false otherwise<a name="line.2892"></a>
+<span class="sourceLineNo">2893</span>     */<a name="line.2893"></a>
+<span class="sourceLineNo">2894</span>    public boolean swap(final K left, final K right)<a name="line.2894"></a>
+<span class="sourceLineNo">2895</span>    {<a name="line.2895"></a>
+<span class="sourceLineNo">2896</span>        if(left == right) return false;<a name="line.2896"></a>
+<span class="sourceLineNo">2897</span>        int l = getInt(left);<a name="line.2897"></a>
+<span class="sourceLineNo">2898</span>        if(l &lt; 0) return false;<a name="line.2898"></a>
+<span class="sourceLineNo">2899</span>        int r = getInt(right);<a name="line.2899"></a>
+<span class="sourceLineNo">2900</span>        if(r &lt; 0) return false;<a name="line.2900"></a>
+<span class="sourceLineNo">2901</span>        int posL = order.get(l), posR = order.get(r);<a name="line.2901"></a>
+<span class="sourceLineNo">2902</span>        value[posL] = r;<a name="line.2902"></a>
+<span class="sourceLineNo">2903</span>        value[posR] = l;<a name="line.2903"></a>
+<span class="sourceLineNo">2904</span>        order.swap(l, r);<a name="line.2904"></a>
+<span class="sourceLineNo">2905</span>        return true;<a name="line.2905"></a>
+<span class="sourceLineNo">2906</span>    }<a name="line.2906"></a>
+<span class="sourceLineNo">2907</span>    /**<a name="line.2907"></a>
+<span class="sourceLineNo">2908</span>     * Swaps the given indices in the ordering, if they are both ints between 0 and size. Returns true if the ordering<a name="line.2908"></a>
+<span class="sourceLineNo">2909</span>     * changed as a result of this call, or false if it stayed the same (which can be because left or right referred to<a name="line.2909"></a>
+<span class="sourceLineNo">2910</span>     * an out-of-bounds index, or because left and right are equal (so swapping would do nothing)).<a name="line.2910"></a>
+<span class="sourceLineNo">2911</span>     * @param left an index of an item in this OrderedSet, at least 0 and less than {@link #size()}<a name="line.2911"></a>
+<span class="sourceLineNo">2912</span>     * @param right an index of an item in this OrderedSet, at least 0 and less than {@link #size()}<a name="line.2912"></a>
+<span class="sourceLineNo">2913</span>     * @return true if this OrderedSet changed in ordering as a result of this call, or false otherwise<a name="line.2913"></a>
+<span class="sourceLineNo">2914</span>     */<a name="line.2914"></a>
+<span class="sourceLineNo">2915</span>    public boolean swapIndices(final int left, final int right)<a name="line.2915"></a>
+<span class="sourceLineNo">2916</span>    {<a name="line.2916"></a>
+<span class="sourceLineNo">2917</span>        if(left &lt; 0 || right &lt; 0 || left &gt;= order.size || right &gt;= order.size || left == right) return false;<a name="line.2917"></a>
+<span class="sourceLineNo">2918</span>        int posL = order.get(left), posR = order.get(right);<a name="line.2918"></a>
+<span class="sourceLineNo">2919</span>        value[posL] = right;<a name="line.2919"></a>
+<span class="sourceLineNo">2920</span>        value[posR] = left;<a name="line.2920"></a>
+<span class="sourceLineNo">2921</span>        order.swap(left, right);<a name="line.2921"></a>
+<span class="sourceLineNo">2922</span>        return true;<a name="line.2922"></a>
+<span class="sourceLineNo">2923</span>    }<a name="line.2923"></a>
+<span class="sourceLineNo">2924</span>}<a name="line.2924"></a>
 
 
 

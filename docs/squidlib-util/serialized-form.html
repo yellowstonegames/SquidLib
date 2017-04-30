@@ -1182,7 +1182,7 @@
 <li class="blockList"><a name="squidpony.squidgrid.mapping.Rectangle.Impl">
 <!--   -->
 </a>
-<h3>Class <a href="squidpony/squidgrid/mapping/Rectangle.Impl.html" title="class in squidpony.squidgrid.mapping">squidpony.squidgrid.mapping.Rectangle.Impl</a> extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<h3>Class <a href="squidpony/squidgrid/mapping/Rectangle.Impl.html" title="class in squidpony.squidgrid.mapping">squidpony.squidgrid.mapping.Rectangle.Impl</a> extends <a href="squidpony/squidgrid/zone/Zone.Skeleton.html" title="class in squidpony.squidgrid.zone">Zone.Skeleton</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
 <dd>-6197401003733967116L</dd>
@@ -1747,6 +1747,26 @@
 <dd>3152426757973945155L</dd>
 </dl>
 </li>
+<li class="blockList"><a name="squidpony.squidmath.DashRNG">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/DashRNG.html" title="class in squidpony.squidmath">squidpony.squidmath.DashRNG</a> extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>state</h4>
+<pre>long state</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="blockList"><a name="squidpony.squidmath.DeckRNG">
 <!--   -->
 </a>
@@ -2274,6 +2294,131 @@
 </ul>
 </li>
 </ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.MultiArrangement">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/MultiArrangement.html" title="class in squidpony.squidmath">squidpony.squidmath.MultiArrangement</a> extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>key</h4>
+<pre><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[] key</pre>
+<div class="block">The array of keys.</div>
+</li>
+<li class="blockList">
+<h4>value</h4>
+<pre><a href="squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>[] value</pre>
+<div class="block">The array of values.</div>
+</li>
+<li class="blockList">
+<h4>mask</h4>
+<pre>int mask</pre>
+<div class="block">The mask for wrapping a position counter.</div>
+</li>
+<li class="blockList">
+<h4>containsNullKey</h4>
+<pre>boolean containsNullKey</pre>
+<div class="block">Whether this set contains the key zero.</div>
+</li>
+<li class="blockList">
+<h4>first</h4>
+<pre>int first</pre>
+<div class="block">The index of the first entry in iteration order. It is valid iff <a href="squidpony/squidmath/MultiArrangement.html#size"><code>MultiArrangement.size</code></a> is nonzero; otherwise, it contains -1.</div>
+</li>
+<li class="blockList">
+<h4>last</h4>
+<pre>int last</pre>
+<div class="block">The index of the last entry in iteration order. It is valid iff <a href="squidpony/squidmath/MultiArrangement.html#size"><code>MultiArrangement.size</code></a> is nonzero; otherwise, it contains -1.</div>
+</li>
+<li class="blockList">
+<h4>order</h4>
+<pre><a href="squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a> order</pre>
+</li>
+<li class="blockList">
+<h4>n</h4>
+<pre>int n</pre>
+<div class="block">The current table size.</div>
+</li>
+<li class="blockList">
+<h4>maxFill</h4>
+<pre>int maxFill</pre>
+<div class="block">Threshold after which we rehash. It must be the table size times <a href="squidpony/squidmath/MultiArrangement.html#f"><code>MultiArrangement.f</code></a>.</div>
+</li>
+<li class="blockList">
+<h4>size</h4>
+<pre>int size</pre>
+<div class="block">Number of entries in the set (including the key zero, if present).</div>
+</li>
+<li class="blockList">
+<h4>f</h4>
+<pre>float f</pre>
+<div class="block">The acceptable load factor.</div>
+</li>
+<li class="blockList">
+<h4>keys</h4>
+<pre><a href="squidpony/squidmath/MultiArrangement.KeyList.html" title="class in squidpony.squidmath">MultiArrangement.KeyList</a> keys</pre>
+<div class="block">Cached set of keys.</div>
+</li>
+<li class="blockList">
+<h4>values</h4>
+<pre><a href="squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a> values</pre>
+<div class="block">Cached collection of values.</div>
+</li>
+<li class="blockList">
+<h4>defRetValue</h4>
+<pre>int defRetValue</pre>
+<div class="block">Default return value.</div>
+</li>
+<li class="blockListLast">
+<h4>hasher</h4>
+<pre><a href="squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> hasher</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.MultiArrangement.KeyIterator">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/MultiArrangement.KeyIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.MultiArrangement.KeyIterator</a> extends squidpony.squidmath.MultiArrangement.MapIterator implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.MultiArrangement.KeyList">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/MultiArrangement.KeyList.html" title="class in squidpony.squidmath">squidpony.squidmath.MultiArrangement.KeyList</a> extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractList.html?is-external=true" title="class or interface in java.util">AbstractList</a>&lt;<a href="squidpony/squidmath/MultiArrangement.html" title="type parameter in MultiArrangement">K</a>&gt; implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.MultiArrangement.ValueCollection">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/MultiArrangement.ValueCollection.html" title="class in squidpony.squidmath">squidpony.squidmath.MultiArrangement.ValueCollection</a> extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractCollection.html?is-external=true" title="class or interface in java.util">AbstractCollection</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt; implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.MultiArrangement.ValueIterator">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/MultiArrangement.ValueIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.MultiArrangement.ValueIterator</a> extends squidpony.squidmath.MultiArrangement.MapIterator implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
 </li>
 <li class="blockList"><a name="squidpony.squidmath.NeuralParticle">
 <!--   -->
