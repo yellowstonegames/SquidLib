@@ -89,10 +89,14 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#squidpony.squidgrid.zone">squidpony.squidgrid.zone</a></td>
+<td class="colFirst"><a href="#squidpony.squidgrid.mapping.locks.util">squidpony.squidgrid.mapping.locks.util</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="#squidpony.squidgrid.zone">squidpony.squidgrid.zone</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#squidpony.squidmath">squidpony.squidmath</a></td>
 <td class="colLast">
 <div class="block">A very broad package containing random number generators, geometry tools, and some classes for combinatorics.</div>
@@ -136,10 +140,51 @@
 </tbody>
 </table>
 </li>
+<li class="blockList"><a name="squidpony.squidgrid.mapping.locks.util">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a> in <a href="../../../../squidpony/squidgrid/mapping/locks/util/package-summary.html">squidpony.squidgrid.mapping.locks.util</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../squidpony/squidgrid/mapping/locks/util/package-summary.html">squidpony.squidgrid.mapping.locks.util</a> that implement <a href="../../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/locks/util/Rect2I.html" title="class in squidpony.squidgrid.mapping.locks.util">Rect2I</a></span></code>
+<div class="block">Created by Tommy Ettinger on 1/4/2017.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="squidpony.squidgrid.zone">
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a> in <a href="../../../../squidpony/squidgrid/zone/package-summary.html">squidpony.squidgrid.zone</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subinterfaces, and an explanation">
+<caption><span>Subinterfaces of <a href="../../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a> in <a href="../../../../squidpony/squidgrid/zone/package-summary.html">squidpony.squidgrid.zone</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Interface and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>interface&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/zone/ImmutableZone.html" title="interface in squidpony.squidgrid.zone">ImmutableZone</a></span></code>
+<div class="block">Created by Tommy Ettinger on 11/24/2016.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>interface&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/zone/MutableZone.html" title="interface in squidpony.squidgrid.zone">MutableZone</a></span></code>
+<div class="block">Created by Tommy Ettinger on 11/24/2016.</div>
+</td>
+</tr>
+</tbody>
+</table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
 <caption><span>Classes in <a href="../../../../squidpony/squidgrid/zone/package-summary.html">squidpony.squidgrid.zone</a> that implement <a href="../../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -167,6 +212,67 @@
 </tr>
 </tbody>
 </table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../squidpony/squidgrid/zone/package-summary.html">squidpony.squidgrid.zone</a> that return <a href="../../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></td>
+<td class="colLast"><span class="typeNameLabel">MutableZone.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/zone/MutableZone.html#expand-int-">expand</a></span>(int&nbsp;distance)</code>
+<div class="block">Expands this Zone in the four cardinal directions, performing the expansion consecutively <code>distance</code> times.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></td>
+<td class="colLast"><span class="typeNameLabel">ImmutableZone.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/zone/ImmutableZone.html#expand-int-">expand</a></span>(int&nbsp;distance)</code>
+<div class="block">Expands the area of this Zone in the four cardinal directions, performing the expansion consecutively
+ <code>distance</code> times.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></td>
+<td class="colLast"><span class="typeNameLabel">MutableZone.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/zone/MutableZone.html#expand8way-int-">expand8way</a></span>(int&nbsp;distance)</code>
+<div class="block">Expands this Zone in the four cardinal and four diagonal directions, performing the expansion consecutively
+ <code>distance</code> times.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></td>
+<td class="colLast"><span class="typeNameLabel">ImmutableZone.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/zone/ImmutableZone.html#expand8way-int-">expand8way</a></span>(int&nbsp;distance)</code>
+<div class="block">Expands the area of this Zone in the four cardinal and four diagonal directions, performing the expansion
+ consecutively <code>distance</code> times.</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../squidpony/squidgrid/zone/package-summary.html">squidpony.squidgrid.zone</a> with parameters of type <a href="../../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">Zone.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/zone/Zone.html#contains-squidpony.squidgrid.zone.Zone-">contains</a></span>(<a href="../../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a>&nbsp;other)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">Zone.Skeleton.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/zone/Zone.Skeleton.html#contains-squidpony.squidgrid.zone.Zone-">contains</a></span>(<a href="../../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a>&nbsp;other)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">Zone.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/zone/Zone.html#intersectsWith-squidpony.squidgrid.zone.Zone-">intersectsWith</a></span>(<a href="../../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a>&nbsp;other)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">Zone.Skeleton.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/zone/Zone.Skeleton.html#intersectsWith-squidpony.squidgrid.zone.Zone-">intersectsWith</a></span>(<a href="../../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a>&nbsp;other)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
 </li>
 <li class="blockList"><a name="squidpony.squidmath">
 <!--   -->
@@ -182,7 +288,7 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span></code>
-<div class="block">Region encoding of 64x64 areas as a number of long arrays; uncompressed (fatty), but fast (greased lightning).</div>
+<div class="block">Region encoding of on/off information about areas using bitsets; uncompressed (fatty), but fast (greased lightning).</div>
 </td>
 </tr>
 </tbody>
@@ -239,6 +345,6 @@
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

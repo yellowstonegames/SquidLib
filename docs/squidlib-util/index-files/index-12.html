@@ -94,12 +94,20 @@
  the same, and this will be more efficient if expected is greater than that number) and the load factor to use,
  between 0.1f and 0.8f usually (using load factors higher than 0.8f can cause problems).</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/K2.html#K2-java.lang.Iterable-java.lang.Iterable-">K2(Iterable&lt;A&gt;, Iterable&lt;B&gt;)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/K2.html#K2-int-float-squidpony.squidmath.CrossHash.IHasher-squidpony.squidmath.CrossHash.IHasher-">K2(int, float, CrossHash.IHasher, CrossHash.IHasher)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a></dt>
+<dd>
+<div class="block">Constructs a K2 with the expected number of indices to hold (the number of A and number of B items are always
+ equal, and this will be more efficient if expected is greater than that number), the load factor to use,
+ between 0.1f and 0.8f usually (using load factors higher than 0.8f can cause problems), and two IHasher
+ implementations, such as <a href="../squidpony/squidmath/CrossHash.html#generalHasher"><code>CrossHash.generalHasher</code></a>, that will be used to hash and compare for equality with
+ A keys and B keys, respectively.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/K2.html#K2-java.lang.Iterable-java.lang.Iterable-">K2(Iterable&lt;? extends A&gt;, Iterable&lt;? extends B&gt;)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a></dt>
 <dd>
 <div class="block">Constructs a K2 from a pair of Iterables that will be processed in pairs, adding a unique A from aKeys if and
  only if it can also add a unique B from bKeys, otherwise skipping that pair.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/K2.html#K2-squidpony.squidmath.K2-">K2(K2&lt;A, B&gt;)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/K2.html#K2-squidpony.squidmath.K2-">K2(K2&lt;? extends A, ? extends B&gt;)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/K2.html#K2-squidpony.squidmath.Arrangement-squidpony.squidmath.Arrangement-">K2(Arrangement&lt;A&gt;, Arrangement&lt;B&gt;)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a></dt>
 <dd>&nbsp;</dd>
@@ -128,6 +136,10 @@
 <dd>
 <div class="block">Constructs a K2V1 from another K2V1 with ths same A, B, and Q types.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Chariot.html#kappa">kappa</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Mist.html#kappa">kappa</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath">CrossHash.Mist</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Storm.html#kappa">kappa</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath">CrossHash.Storm</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#key">key</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
@@ -135,6 +147,10 @@
 <div class="block">The array of keys.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#key">key</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
+<dd>
+<div class="block">The array of keys.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MultiArrangement.html#key">key</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/MultiArrangement.html" title="class in squidpony.squidmath">MultiArrangement</a></dt>
 <dd>
 <div class="block">The array of keys.</div>
 </dd>
@@ -146,9 +162,11 @@
 <dd>
 <div class="block">The array of keys.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/RegionMap.Entry.html#key">key</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/RegionMap.Entry.html" title="class in squidpony.squidmath">RegionMap.Entry</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#keyAt-int-">keyAt(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
+<dd>
+<div class="block">Gets the key at the given index in the iteration order in constant time (random-access).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MultiArrangement.html#keyAt-int-">keyAt(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MultiArrangement.html" title="class in squidpony.squidmath">MultiArrangement</a></dt>
 <dd>
 <div class="block">Gets the key at the given index in the iteration order in constant time (random-access).</div>
 </dd>
@@ -170,7 +188,17 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#KeyIterator--">KeyIterator()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.KeyIterator</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MultiArrangement.KeyIterator.html#KeyIterator--">KeyIterator()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/MultiArrangement.KeyIterator.html" title="class in squidpony.squidmath">MultiArrangement.KeyIterator</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedMap.KeyIterator.html#KeyIterator--">KeyIterator()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedMap.KeyIterator.html" title="class in squidpony.squidmath">OrderedMap.KeyIterator</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/Condition.html#keyLevel">keyLevel</a></span> - Variable in class squidpony.squidgrid.mapping.locks.<a href="../squidpony/squidgrid/mapping/locks/Condition.html" title="class in squidpony.squidgrid.mapping.locks">Condition</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.KeyLevelRoomMapping.html#KeyLevelRoomMapping--">KeyLevelRoomMapping()</a></span> - Constructor for class squidpony.squidgrid.mapping.locks.generators.<a href="../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.KeyLevelRoomMapping.html" title="class in squidpony.squidgrid.mapping.locks.generators">LayoutGenerator.KeyLevelRoomMapping</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MultiArrangement.html#keyList--">keyList()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MultiArrangement.html" title="class in squidpony.squidmath">MultiArrangement</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MultiArrangement.KeyList.html#KeyList--">KeyList()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/MultiArrangement.KeyList.html" title="class in squidpony.squidmath">MultiArrangement.KeyList</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#keys">keys</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
@@ -180,15 +208,15 @@
 <dd>
 <div class="block">Cached set of keys.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MultiArrangement.html#keys">keys</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/MultiArrangement.html" title="class in squidpony.squidmath">MultiArrangement</a></dt>
+<dd>
+<div class="block">Cached set of keys.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedMap.html#keys">keys</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a></dt>
 <dd>
 <div class="block">Cached set of keys.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/RegionMap.html#keys--">keys()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/RegionMap.html" title="class in squidpony.squidmath">RegionMap</a></dt>
-<dd>
-<div class="block">Returns an iterator for the keys in the map.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/RegionMap.Keys.html#Keys-squidpony.squidmath.RegionMap-">Keys(RegionMap&lt;?&gt;)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/RegionMap.Keys.html" title="class in squidpony.squidmath">RegionMap.Keys</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MultiArrangement.html#keysAsArrayList--">keysAsArrayList()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MultiArrangement.html" title="class in squidpony.squidmath">MultiArrangement</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#keysAsOrderedSet--">keysAsOrderedSet()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>&nbsp;</dd>
@@ -197,6 +225,10 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#keysAt-int...-">keysAt(int...)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#keysAt-squidpony.squidmath.IntVLA-">keysAt(IntVLA)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MultiArrangement.html#keysAt-int...-">keysAt(int...)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MultiArrangement.html" title="class in squidpony.squidmath">MultiArrangement</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MultiArrangement.html#keysAt-squidpony.squidmath.IntVLA-">keysAt(IntVLA)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MultiArrangement.html" title="class in squidpony.squidmath">MultiArrangement</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#keySet--">keySet()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>&nbsp;</dd>
@@ -259,6 +291,6 @@
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

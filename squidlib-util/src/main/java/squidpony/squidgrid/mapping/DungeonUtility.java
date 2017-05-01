@@ -1,5 +1,6 @@
 package squidpony.squidgrid.mapping;
 
+import squidpony.ArrayTools;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.*;
@@ -888,13 +889,13 @@ public class DungeonUtility {
                         portion[i][j] = -10;
                         break;
                     case ',':
-                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i / 4.0, j / 4.0) / 2.5 - 0.45));
+                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i* 1.5, j* 1.5) / 2.5 - 0.45));
                         break;
                     case '~':
-                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i / 4.0, j / 4.0) / 2.5 - 0.65));
+                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i* 1.5, j* 1.5) / 2.5 - 0.65));
                         break;
                     case '"':
-                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i / 4.0, j / 4.0) / 4.0 - 1.5));
+                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i* 1.5, j* 1.5) / 4.0 - 1.5));
                         break;
                     case '^':
                         portion[i][j] = 40;
@@ -949,13 +950,13 @@ public class DungeonUtility {
                         portion[i][j] = -10;
                         break;
                     case ',':
-                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 25.0) / 2.5 - 0.45));
+                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) / 2.5 - 0.45));
                         break;
                     case '~':
-                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 25.0) / 2.5 - 0.65));
+                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) / 2.5 - 0.65));
                         break;
                     case '"':
-                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 35.0) / 4.0 - 1.5));
+                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.45) / 4.0 - 1.5));
                         break;
                     case '^':
                         portion[i][j] = 40;
@@ -1013,22 +1014,22 @@ public class DungeonUtility {
                         portion[i][j] = -10;
                         break;
                     case ',':
-                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 25.0) / 2.5 - 0.45));
+                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) / 2.5 - 0.45));
                         break;
                     case '~':
-                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 25.0) / 2.5 - 0.65));
+                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) / 2.5 - 0.65));
                         break;
                     case '"':
-                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 35.0) / 4.0 - 1.5));
+                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.45) / 4.0 - 1.5));
                         break;
                     case '^':
                         portion[i][j] = 40;
                         break;
                     default:
                         if (map[i][j] == deepLiquid)
-                            portion[i][j] = (int) (180 * (PerlinNoise.noise(i / 5.0, j / 5.0, frame / 21.0) / 2.5 - 0.7));
+                            portion[i][j] = (int) (180 * (PerlinNoise.noise(i * 1.2, j * 1.2, frame / 21.0) / 2.5 - 0.7));
                         else if (map[i][j] == shallowLiquid)
-                            portion[i][j] = (int) (110 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 30.0) / 2.5 - 0.45));
+                            portion[i][j] = (int) (110 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame / 30.0) / 2.5 - 0.45));
                         else portion[i][j] = 0;
                 }
             }
@@ -1078,6 +1079,48 @@ public class DungeonUtility {
                     case ',':
                     case '~':
                     case '^':
+                    default:
+                        portion[i][j] = 0.0;
+                }
+            }
+        }
+        return portion;
+    }
+    /**
+     * Given a char[][] for the map, produces a double[][] that can be used with FOV.calculateFOV(), but does not treat
+     * any cells as partly transparent, only fully-blocking or fully-permitting light. This is mainly useful if you
+     * expect the FOV radius to be very high or (effectively) infinite, since anything less than complete blockage would
+     * be passed through by infinite-radius FOV. This expects any doors to be represented by '+' if closed or '/' if
+     * open (most door placement defaults to a mix of '+' and '/', so by calling
+     * {@link DungeonUtility#closeDoors(char[][])} you can close all doors at the start), and any walls to be '#' or
+     * line drawing characters. This will assign 1.0 resistance to walls and closed doors or 0.0 for any other cell.
+     *
+     * @param map a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors()
+     * @return a resistance map suitable for use with the FOV class, but with no partially transparent cells
+     */
+    public static double[][] generateSimpleResistances(char[][] map) {
+        int width = map.length;
+        int height = map[0].length;
+        double[][] portion = new double[width][height];
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                switch (map[i][j]) {
+                    case '\1':
+                    case '├':
+                    case '┤':
+                    case '┴':
+                    case '┬':
+                    case '┌':
+                    case '┐':
+                    case '└':
+                    case '┘':
+                    case '│':
+                    case '─':
+                    case '┼':
+                    case '#':
+                    case '+':
+                        portion[i][j] = 1.0;
+                        break;
                     default:
                         portion[i][j] = 0.0;
                 }
@@ -1336,51 +1379,6 @@ public class DungeonUtility {
         return 0 <= x && x < level.length && 0 <= y && y < level[x].length;
     }
 
-	/**
-	 * Fills {@code array2d} with {@code value}.
-	 * 
-	 * @param array2d
-	 * @param value
-	 */
-	public static void fill(boolean[][] array2d, boolean value) {
-		final int width = array2d.length;
-		final int height = width == 0 ? 0 : array2d[0].length;
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++)
-				array2d[x][y] = value;
-		}
-	}
-
-	/**
-	 * Fills {@code array2d} with {@code value}.
-	 * 
-	 * @param array2d
-	 * @param value
-	 */
-	public static void fill(double[][] array2d, double value) {
-		final int width = array2d.length;
-		final int height = width == 0 ? 0 : array2d[0].length;
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++)
-				array2d[x][y] = value;
-		}
-	}
-
-	/**
-	 * Fills {@code array2d} with {@code value}.
-	 * 
-	 * @param array2d
-	 * @param value
-	 */
-	public static void fill(int[][] array2d, int value) {
-		final int width = array2d.length;
-		final int height = width == 0 ? 0 : array2d[0].length;
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++)
-				array2d[x][y] = value;
-		}
-	}
-
     /**
      * An easy way to get the Coord items in a List of Coord that are at the edge of the region. Not the most
      * efficient way to do this; If you find you need to do more complicated manipulations of regions or are
@@ -1543,5 +1541,45 @@ public class DungeonUtility {
                 return true;
         }
         return false;
+    }
+    /**
+     * Fills {@code array2d} with {@code value}; delegates to ArrayTools, and using ArrayTools is preferred.
+     * @param array2d a 2D array that will be modified in-place
+     * @param value the value to fill all of array2D with
+     * @deprecated Use {@link ArrayTools#fill(boolean[][], boolean)} instead
+     */
+    @Deprecated
+    public static void fill(boolean[][] array2d, boolean value) {
+        ArrayTools.fill(array2d, value);
+    }
+    /**
+     * Fills {@code array2d} with {@code value}; delegates to ArrayTools, and using ArrayTools is preferred.
+     * @param array2d a 2D array that will be modified in-place
+     * @param value the value to fill all of array2D with
+     * @deprecated Use {@link ArrayTools#fill(char[][], char)} instead
+     */
+    @Deprecated
+    public static void fill(char[][] array2d, char value) {
+        ArrayTools.fill(array2d, value);
+    }
+    /**
+     * Fills {@code array2d} with {@code value}; delegates to ArrayTools, and using ArrayTools is preferred.
+     * @param array2d a 2D array that will be modified in-place
+     * @param value the value to fill all of array2D with
+     * @deprecated Use {@link ArrayTools#fill(int[][], int)} instead
+     */
+    @Deprecated
+    public static void fill(int[][] array2d, int value) {
+        ArrayTools.fill(array2d, value);
+    }
+    /**
+     * Fills {@code array2d} with {@code value}; delegates to ArrayTools, and using ArrayTools is preferred.
+     * @param array2d a 2D array that will be modified in-place
+     * @param value the value to fill all of array2D with
+     * @deprecated Use {@link ArrayTools#fill(double[][], double)} instead
+     */
+    @Deprecated
+    public static void fill(double[][] array2d, double value) {
+        ArrayTools.fill(array2d, value);
     }
 }

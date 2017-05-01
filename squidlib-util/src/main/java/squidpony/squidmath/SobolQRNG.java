@@ -48,8 +48,9 @@ import java.util.StringTokenizer;
  *   <li>random access to the i-th point in the sequence: {@link #skipTo(int)}</li>
  * </ul>
  *
- * @see <a href="http://en.wikipedia.org/wiki/Sobol_sequence">Sobol sequence (Wikipedia)</a>
- * @see <a href="http://web.maths.unsw.edu.au/~fkuo/sobol/">Sobol sequence direction numbers</a>
+ * For reference,
+ * <a href="http://en.wikipedia.org/wiki/Sobol_sequence">Sobol sequence (Wikipedia)</a>
+ * and the data, <a href="http://web.maths.unsw.edu.au/~fkuo/sobol/">Sobol sequence direction numbers</a>
  *
  * Created by Tommy Ettinger on 5/2/2015 based off Apache Commons Math 4.
  */
@@ -598,7 +599,7 @@ public class SobolQRNG implements RandomnessSource {
     }
     /**
      * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
-     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
+     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to
      * copy the state so it isn't shared, usually, and produce a new value with the same exact state.
      * @return a copy of this RandomnessSource
      */
@@ -608,5 +609,30 @@ public class SobolQRNG implements RandomnessSource {
         next.count = count;
         next.skipTo(count);
         return next;
+    }
+    @Override
+    public String toString()
+    {
+        return "SobolQRNG with rank " + dimension + " and index " + count;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SobolQRNG sobolQRNG = (SobolQRNG) o;
+
+        if (dimension != sobolQRNG.dimension) return false;
+        return (count == sobolQRNG.count);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = dimension;
+        result = 31 * result + count;
+        result = 31 * result + CrossHash.Lightning.hash(direction);
+        result = 31 * result + CrossHash.Lightning.hash(x);
+        return result;
     }
 }

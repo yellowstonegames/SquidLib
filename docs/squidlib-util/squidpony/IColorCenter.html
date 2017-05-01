@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6,"i12":6,"i13":6,"i14":6,"i15":6,"i16":6,"i17":6,"i18":6,"i19":6,"i20":6,"i21":6,"i22":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6,"i12":6,"i13":6,"i14":6,"i15":6,"i16":6,"i17":6,"i18":6,"i19":6,"i20":6,"i21":6,"i22":6,"i23":6,"i24":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -109,7 +109,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public interface <a href="../src-html/squidpony/IColorCenter.html#line.38">IColorCenter</a>&lt;T&gt;</pre>
+<pre>public interface <a href="../src-html/squidpony/IColorCenter.html#line.39">IColorCenter</a>&lt;T&gt;</pre>
 <div class="block">How to manage colors, making sure that a color is allocated at most once.
  
  <p>
@@ -268,13 +268,30 @@ var activeTableTab = "activeTableTab";
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/IColorCenter.html#getWhite--">getWhite</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i19" class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/IColorCenter.html#gradient-T-T-">gradient</a></span>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;fromColor,
+        <a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;toColor)</code>
+<div class="block">Finds a gradient with 16 steps going from fromColor to toColor,
+ both included in the gradient.</div>
+</td>
+</tr>
+<tr id="i20" class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/IColorCenter.html#gradient-T-T-int-">gradient</a></span>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;fromColor,
+        <a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;toColor,
+        int&nbsp;steps)</code>
+<div class="block">Finds a gradient with the specified number of steps going from fromColor to toColor,
+ both included in the gradient.</div>
+</td>
+</tr>
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/IColorCenter.html#greify-T-boolean-">greify</a></span>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;t,
       boolean&nbsp;doAlpha)</code>
 <div class="block">Gets a copy of t and modifies it to make a shade of gray with the same brightness.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/IColorCenter.html#lerp-T-T-float-">lerp</a></span>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;start,
     <a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;end,
@@ -282,7 +299,7 @@ var activeTableTab = "activeTableTab";
 <div class="block">Gets the linear interpolation from Color start to Color end, changing by the fraction given by change.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/IColorCenter.html#saturate-T-float-">saturate</a></span>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;color,
         float&nbsp;degree)</code>
@@ -290,7 +307,7 @@ var activeTableTab = "activeTableTab";
  returns the new color (saturated somewhat).</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/IColorCenter.html#saturated-T-">saturated</a></span>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;color)</code>
 <div class="block">Fully saturates color (makes it a vivid color like red or green and less gray) and returns the modified copy.</div>
@@ -317,7 +334,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>get</h4>
-<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.55">get</a>(int&nbsp;red,
+<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.56">get</a>(int&nbsp;red,
       int&nbsp;green,
       int&nbsp;blue,
       int&nbsp;opacity)</pre>
@@ -342,7 +359,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>get</h4>
-<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.69">get</a>(int&nbsp;red,
+<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.70">get</a>(int&nbsp;red,
       int&nbsp;green,
       int&nbsp;blue)</pre>
 <dl>
@@ -364,7 +381,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>getHSV</h4>
-<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.84">getHSV</a>(float&nbsp;hue,
+<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.85">getHSV</a>(float&nbsp;hue,
          float&nbsp;saturation,
          float&nbsp;value,
          float&nbsp;opacity)</pre>
@@ -390,7 +407,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>getHSV</h4>
-<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.98">getHSV</a>(float&nbsp;hue,
+<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.99">getHSV</a>(float&nbsp;hue,
          float&nbsp;saturation,
          float&nbsp;value)</pre>
 <dl>
@@ -414,7 +431,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>getWhite</h4>
-<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.103">getWhite</a>()</pre>
+<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.104">getWhite</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>Opaque white.</dd>
@@ -427,7 +444,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>getBlack</h4>
-<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.108">getBlack</a>()</pre>
+<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.109">getBlack</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>Opaque black.</dd>
@@ -440,7 +457,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>getTransparent</h4>
-<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.113">getTransparent</a>()</pre>
+<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.114">getTransparent</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The fully transparent color.</dd>
@@ -453,7 +470,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>getRandom</h4>
-<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.122">getRandom</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.123">getRandom</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
             int&nbsp;opacity)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -473,7 +490,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>getRed</h4>
-<pre>int&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.128">getRed</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;c)</pre>
+<pre>int&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.129">getRed</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;c)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>c</code> - a concrete color</dd>
@@ -490,7 +507,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>getGreen</h4>
-<pre>int&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.135">getGreen</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;c)</pre>
+<pre>int&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.136">getGreen</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;c)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>c</code> - a concrete color</dd>
@@ -508,7 +525,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>getBlue</h4>
-<pre>int&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.141">getBlue</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;c)</pre>
+<pre>int&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.142">getBlue</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;c)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>c</code> - a concrete color</dd>
@@ -525,7 +542,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>getAlpha</h4>
-<pre>int&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.148">getAlpha</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;c)</pre>
+<pre>int&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.149">getAlpha</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;c)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>c</code> - a concrete color</dd>
@@ -543,7 +560,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>getHue</h4>
-<pre>float&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.156">getHue</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;c)</pre>
+<pre>float&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.157">getHue</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;c)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>c</code> - a concrete color</dd>
@@ -561,7 +578,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>getSaturation</h4>
-<pre>float&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.164">getSaturation</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;c)</pre>
+<pre>float&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.165">getSaturation</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;c)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>c</code> - a concrete color</dd>
@@ -579,7 +596,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>getValue</h4>
-<pre>float&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.172">getValue</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;c)</pre>
+<pre>float&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.173">getValue</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;c)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>c</code> - a concrete color</dd>
@@ -597,7 +614,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>filter</h4>
-<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.178">filter</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;c)</pre>
+<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.179">filter</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;c)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>c</code> - </dd>
@@ -612,7 +629,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>filter</h4>
-<pre><a href="../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&gt;&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.185">filter</a>(<a href="../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&gt;&nbsp;ics)</pre>
+<pre><a href="../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&gt;&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.186">filter</a>(<a href="../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&gt;&nbsp;ics)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>ics</code> - </dd>
@@ -630,7 +647,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>greify</h4>
-<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.197">greify</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;t,
+<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.198">greify</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;t,
          boolean&nbsp;doAlpha)</pre>
 <div class="block">Gets a copy of t and modifies it to make a shade of gray with the same brightness.
  The doAlpha parameter causes the alpha to be considered in the calculation of brightness and also changes the
@@ -653,7 +670,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>lerp</h4>
-<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.206">lerp</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;start,
+<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.207">lerp</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;start,
        <a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;end,
        float&nbsp;change)</pre>
 <div class="block">Gets the linear interpolation from Color start to Color end, changing by the fraction given by change.</div>
@@ -675,7 +692,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>desaturated</h4>
-<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.214">desaturated</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;color)</pre>
+<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.215">desaturated</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;color)</pre>
 <div class="block">Gets a fully-desaturated version of the given color (keeping its brightness, but making it grayscale).
  Keeps alpha the same; if you want alpha to be considered (and brightness to be calculated differently), then
  you can use greify() in this class instead.</div>
@@ -695,7 +712,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>desaturate</h4>
-<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.223">desaturate</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;color,
+<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.224">desaturate</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;color,
              float&nbsp;degree)</pre>
 <div class="block">Brings a color closer to grayscale by the specified degree and returns the new color (desaturated somewhat).
  Alpha is left unchanged.</div>
@@ -716,7 +733,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>saturated</h4>
-<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.231">saturated</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;color)</pre>
+<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.232">saturated</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;color)</pre>
 <div class="block">Fully saturates color (makes it a vivid color like red or green and less gray) and returns the modified copy.
  Leaves alpha unchanged.</div>
 <dl>
@@ -732,10 +749,10 @@ var activeTableTab = "activeTableTab";
 </a><a name="saturate-T-float-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>saturate</h4>
-<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.242">saturate</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;color,
+<pre><a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.243">saturate</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;color,
            float&nbsp;degree)</pre>
 <div class="block">Saturates color (makes it closer to a vivid color like red or green and less gray) by the specified degree and
  returns the new color (saturated somewhat). If this is called on a color that is very close to gray, this does
@@ -746,6 +763,50 @@ var activeTableTab = "activeTableTab";
 <dd><code>degree</code> - a float between 0.0f and 1.0f; more makes it more colorful</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the saturated (and if a filter is used, also filtered) new color</dd>
+</dl>
+</li>
+</ul>
+<a name="gradient-java.lang.Object-java.lang.Object-">
+<!--   -->
+</a><a name="gradient-T-T-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>gradient</h4>
+<pre><a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&gt;&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.252">gradient</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;fromColor,
+                      <a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;toColor)</pre>
+<div class="block">Finds a gradient with 16 steps going from fromColor to toColor,
+ both included in the gradient.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fromColor</code> - the color to start with, included in the gradient</dd>
+<dd><code>toColor</code> - the color to end on, included in the gradient</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an ArrayList composed of the blending steps from fromColor to toColor, with length equal to steps</dd>
+</dl>
+</li>
+</ul>
+<a name="gradient-java.lang.Object-java.lang.Object-int-">
+<!--   -->
+</a><a name="gradient-T-T-int-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>gradient</h4>
+<pre><a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&gt;&nbsp;<a href="../src-html/squidpony/IColorCenter.html#line.262">gradient</a>(<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;fromColor,
+                      <a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&nbsp;toColor,
+                      int&nbsp;steps)</pre>
+<div class="block">Finds a gradient with the specified number of steps going from fromColor to toColor,
+ both included in the gradient.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fromColor</code> - the color to start with, included in the gradient</dd>
+<dd><code>toColor</code> - the color to end on, included in the gradient</dd>
+<dd><code>steps</code> - the number of elements to use in the gradient</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an ArrayList composed of the blending steps from fromColor to toColor, with length equal to steps</dd>
 </dl>
 </li>
 </ul>
@@ -818,6 +879,6 @@ var activeTableTab = "activeTableTab";
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

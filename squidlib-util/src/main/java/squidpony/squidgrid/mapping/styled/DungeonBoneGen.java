@@ -1,5 +1,6 @@
 package squidpony.squidgrid.mapping.styled;
 
+import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
@@ -99,7 +100,7 @@ public class DungeonBoneGen {
     private char[][] dungeon;
 
     /**
-     * Constructs a DungeonGen that uses the given java.util.Random .
+     * Constructs a DungeonBoneGen that uses the given java.util.Random .
      *
      * @param random A Random number generator to be used during the dungeon generation; it will
      *               be used to generate a seed for the internal RNG this class uses.
@@ -108,7 +109,7 @@ public class DungeonBoneGen {
         this(new RNG(random.nextLong()));
     }
     /**
-     * Constructs a DungeonGen that uses the given squidpony.squidmath.RNG.
+     * Constructs a DungeonBoneGen that uses the given squidpony.squidmath.RNG.
      *
      * @param random A squidpony.squidmath.RNG to be used during the dungeon generation.
      */
@@ -120,12 +121,13 @@ public class DungeonBoneGen {
     }
 
     /**
-     * Constructs a DungeonGen that uses the default RNG.
+     * Constructs a DungeonBoneGen that uses the default RNG.
      */
     public DungeonBoneGen() {
         this(new RNG(new LightRNG()));
     }
 
+    /*
     private char[][] insert(char[][] mat, String[] items, int coord1, int coord2) {
         if (mat.length == 0 || items.length == 0 || items[0].length() == 0)
             return mat;
@@ -141,7 +143,7 @@ public class DungeonBoneGen {
         return mat;
 
     }
-
+    */
     private Tile chooseTile(Tile[] list, int numlist, int[] y_positions, int[] x_positions) {
         int a = c_color[y_positions[0]][x_positions[0]];
         int b = c_color[y_positions[1]][x_positions[1]];
@@ -251,8 +253,8 @@ public class DungeonBoneGen {
 
     /**
      * Generate a dungeon given a TilesetType enum.
-     * The main way of generating dungeons with DungeonGen.
-     * Consider using DungeonGen.wallWrap to surround the edges with walls.
+     * The main way of generating dungeons with DungeonBoneGen.
+     * Consider using DungeonBoneGen.wallWrap to surround the edges with walls.
      * Assigns the returned result to a member of this class, 'dungeon'.
      *
      * @param tt A TilesetType enum; try lots of these out to see how they look.
@@ -317,7 +319,7 @@ public class DungeonBoneGen {
     /**
      * Generate a dungeon given a Tileset.
      * If you have your own Tileset gained by parsing your own JSON, use
-     * this to generate a dungeon using it. Consider using DungeonGen.wallWrap
+     * this to generate a dungeon using it. Consider using DungeonBoneGen.wallWrap
      * to surround the edges with walls. Assigns the returned result to a member
      * of this class, 'dungeon'.
      *
@@ -330,6 +332,7 @@ public class DungeonBoneGen {
         wide = w;
         high = h;
         char[][] trans_output = new char[h][w];
+        GreasedRegion out = new GreasedRegion(wide, high);
         int sidelen = ts.config.short_side_length;
         int xmax = (w / sidelen) + 6;
         int ymax = (h / sidelen) + 6;
@@ -342,12 +345,11 @@ public class DungeonBoneGen {
         if (ts.config.is_corner) {
             c_color = new int[ymax][xmax];
             int i = 0, j = 0, ypos = -1 * sidelen;
-            int[] cc = new int[]{ts.config.num_color_0, ts.config.num_color_1, ts.config.num_color_2, ts.config.num_color_3};
+            int[] cc = ts.config.num_colors;
 
             for (j = 0; j < ymax; ++j) {
                 for (i = 0; i < xmax; ++i) {
-                    int p = (i - j + 1) & 3; // corner type
-                    c_color[j][i] = rng.nextInt(cc[p]);
+                    c_color[j][i] = rng.nextInt(cc[(i - j + 1) & 3]); // select from cc based on corner type
                 }
             }
 
@@ -404,7 +406,8 @@ public class DungeonBoneGen {
                         if (t == null)
                             return null;
 
-                        trans_output = insert(trans_output, t.data, ypos, xpos);
+                        //trans_output = insert(trans_output, t.data, ypos, xpos);
+                        out.or(new GreasedRegion(t.data, t.width, t.height, wide, high).translate(xpos, ypos));
                     }
                     xpos += sidelen * 2;
                     // now we're at the end of a previous vertical one
@@ -418,7 +421,8 @@ public class DungeonBoneGen {
 
                         if (t == null)
                             return null;
-                        trans_output = insert(trans_output, t.data, ypos, xpos);
+                        //trans_output = insert(trans_output, t.data, ypos, xpos);
+                        out.or(new GreasedRegion(t.data, t.width, t.height, wide, high).translate(xpos, ypos));
                     }
                 }
                 ypos += sidelen;
@@ -458,7 +462,8 @@ public class DungeonBoneGen {
 
                         if (t == null)
                             return null;
-                        trans_output = insert(trans_output, t.data, ypos, xpos);
+                        //trans_output = insert(trans_output, t.data, ypos, xpos);
+                        out.or(new GreasedRegion(t.data, t.width, t.height, wide, high).translate(xpos, ypos));
                     }
                     xpos += sidelen * 2;
                     // now we're at the end of a previous vertical one
@@ -472,20 +477,20 @@ public class DungeonBoneGen {
 
                         if (t == null)
                             return null;
-                        trans_output = insert(trans_output, t.data, ypos, xpos);
+                        //trans_output = insert(trans_output, t.data, ypos, xpos);
+                        out.or(new GreasedRegion(t.data, t.width, t.height, wide, high).translate(xpos, ypos));
                     }
                 }
                 ypos += sidelen;
             }
         }
-        char[][] output = new char[w][h];
-        for (int x = 0; x < w; x++) {
+        /*for (int x = 0; x < w; x++) {
             for (int y = 0; y < h; y++) {
                 output[x][y] = trans_output[y][x];
             }
-        }
-        dungeon = output;
-        return output;
+        }*/
+        dungeon = out.toChars();
+        return dungeon;
     }
 
     /**
@@ -509,12 +514,12 @@ public class DungeonBoneGen {
         return sb.toString();
     }
 
-    /**
+    /*
      * Gets an array of all herringbone tiles associated with a TilesetType enum.
      *
      * @param tt a TilesetType enum
      * @return an array of 2D char arrays representing tiles
-     */
+     * /
     public String[][] getTiles(TilesetType tt) {
         final Tileset ts = tt.getTileset();
 
@@ -526,5 +531,5 @@ public class DungeonBoneGen {
             result[ts.h_tiles.length + i] = ts.v_tiles[i].data;
         }
         return result;
-    }
+    }*/
 }

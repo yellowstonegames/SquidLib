@@ -19,7 +19,7 @@
 <span class="sourceLineNo">011</span><a name="line.11"></a>
 <span class="sourceLineNo">012</span>import java.util.ArrayList;<a name="line.12"></a>
 <span class="sourceLineNo">013</span>import java.util.Arrays;<a name="line.13"></a>
-<span class="sourceLineNo">014</span>import java.util.Set;<a name="line.14"></a>
+<span class="sourceLineNo">014</span>import java.util.Collection;<a name="line.14"></a>
 <span class="sourceLineNo">015</span><a name="line.15"></a>
 <span class="sourceLineNo">016</span>/**<a name="line.16"></a>
 <span class="sourceLineNo">017</span> * An AOE type that has a center and a radius, and uses shadowcasting to create a burst of rays from the center, out to<a name="line.17"></a>
@@ -92,7 +92,7 @@
 <span class="sourceLineNo">084</span>    }<a name="line.84"></a>
 <span class="sourceLineNo">085</span><a name="line.85"></a>
 <span class="sourceLineNo">086</span>    @Override<a name="line.86"></a>
-<span class="sourceLineNo">087</span>    public boolean mayContainTarget(Set&lt;Coord&gt; targets) {<a name="line.87"></a>
+<span class="sourceLineNo">087</span>    public boolean mayContainTarget(Collection&lt;Coord&gt; targets) {<a name="line.87"></a>
 <span class="sourceLineNo">088</span>        for (Coord p : targets)<a name="line.88"></a>
 <span class="sourceLineNo">089</span>        {<a name="line.89"></a>
 <span class="sourceLineNo">090</span>            if(radiusType.radius(center.x, center.y, p.x, p.y) &lt;= radius)<a name="line.90"></a>
@@ -102,7 +102,7 @@
 <span class="sourceLineNo">094</span>    }<a name="line.94"></a>
 <span class="sourceLineNo">095</span><a name="line.95"></a>
 <span class="sourceLineNo">096</span>    @Override<a name="line.96"></a>
-<span class="sourceLineNo">097</span>    public OrderedMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; idealLocations(Set&lt;Coord&gt; targets, Set&lt;Coord&gt; requiredExclusions) {<a name="line.97"></a>
+<span class="sourceLineNo">097</span>    public OrderedMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; idealLocations(Collection&lt;Coord&gt; targets, Collection&lt;Coord&gt; requiredExclusions) {<a name="line.97"></a>
 <span class="sourceLineNo">098</span>        if(targets == null)<a name="line.98"></a>
 <span class="sourceLineNo">099</span>            return new OrderedMap&lt;&gt;();<a name="line.99"></a>
 <span class="sourceLineNo">100</span>        if(requiredExclusions == null) requiredExclusions = new OrderedSet&lt;&gt;();<a name="line.100"></a>
@@ -237,7 +237,7 @@
 <span class="sourceLineNo">229</span><a name="line.229"></a>
 <span class="sourceLineNo">230</span><a name="line.230"></a>
 <span class="sourceLineNo">231</span>    @Override<a name="line.231"></a>
-<span class="sourceLineNo">232</span>    public OrderedMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; idealLocations(Set&lt;Coord&gt; priorityTargets, Set&lt;Coord&gt; lesserTargets, Set&lt;Coord&gt; requiredExclusions) {<a name="line.232"></a>
+<span class="sourceLineNo">232</span>    public OrderedMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; idealLocations(Collection&lt;Coord&gt; priorityTargets, Collection&lt;Coord&gt; lesserTargets, Collection&lt;Coord&gt; requiredExclusions) {<a name="line.232"></a>
 <span class="sourceLineNo">233</span>        if(priorityTargets == null)<a name="line.233"></a>
 <span class="sourceLineNo">234</span>            return idealLocations(lesserTargets, requiredExclusions);<a name="line.234"></a>
 <span class="sourceLineNo">235</span>        if(requiredExclusions == null) requiredExclusions = new OrderedSet&lt;&gt;();<a name="line.235"></a>

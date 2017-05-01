@@ -56,8 +56,8 @@ public class OrganicMapGenerator {
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     map[x][y] = '#';
-                    temp = (PerlinNoise.noise(x / 1.7 + shift, y / 1.7 + shift) * 5
-                            + PerlinNoise.noise(x / 0.7 + shift2, y / 0.7 + shift2) * 3) / 8.0;
+                    temp = (PerlinNoise.noise(x * 4.7 + shift, y * 4.7 + shift) * 5
+                            + PerlinNoise.noise(x * 11.4 + shift2, y * 11.4 + shift2) * 3) / 8.0;
                     if (temp >= noiseMin && temp <= noiseMax) {
                         working[x][y] = true;
                         ctr++;

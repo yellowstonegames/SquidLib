@@ -130,9 +130,7 @@ public class SquidID implements Serializable, Comparable<SquidID> {
 
     @Override
     public int hashCode() {
-        int result = (int) (low ^ (low >>> 32));
-        result = 31 * result + (int) (high ^ (high >>> 32));
-        return result;
+        return (int) (31 * (low ^ (low >>> 32)) + (high ^ (high >>> 32)));
     }
 
     @Override

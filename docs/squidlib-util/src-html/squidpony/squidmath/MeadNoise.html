@@ -1,0 +1,507 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * Derived from Joise, which is derived from the Accidental Noise Library.<a name="line.2"></a>
+<span class="sourceLineNo">003</span> * Licenses for these projects are as follows<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * <a name="line.4"></a>
+<span class="sourceLineNo">005</span> * ============================================================================<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * | Joise<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * ============================================================================<a name="line.7"></a>
+<span class="sourceLineNo">008</span> * <a name="line.8"></a>
+<span class="sourceLineNo">009</span> * Copyright (C) 2016 Jason Taylor<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * <a name="line.10"></a>
+<span class="sourceLineNo">011</span> * Licensed under the Apache License, Version 2.0 (the "License");<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * you may not use this file except in compliance with the License.<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * You may obtain a copy of the License at<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * <a name="line.14"></a>
+<span class="sourceLineNo">015</span> *      http://www.apache.org/licenses/LICENSE-2.0<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * <a name="line.16"></a>
+<span class="sourceLineNo">017</span> * Unless required by applicable law or agreed to in writing, software<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * See the License for the specific language governing permissions and<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * limitations under the License.<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * <a name="line.22"></a>
+<span class="sourceLineNo">023</span> * ============================================================================<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * | Accidental Noise Library<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * | --------------------------------------------------------------------------<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * | Joise is a derivative work based on Josua Tippetts' C++ library:<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * | http://accidentalnoise.sourceforge.net/index.html<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * ============================================================================<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * <a name="line.29"></a>
+<span class="sourceLineNo">030</span> * Copyright (C) 2011 Joshua Tippetts<a name="line.30"></a>
+<span class="sourceLineNo">031</span> * <a name="line.31"></a>
+<span class="sourceLineNo">032</span> *   This software is provided 'as-is', without any express or implied<a name="line.32"></a>
+<span class="sourceLineNo">033</span> *   warranty.  In no event will the authors be held liable for any damages<a name="line.33"></a>
+<span class="sourceLineNo">034</span> *   arising from the use of this software.<a name="line.34"></a>
+<span class="sourceLineNo">035</span> * <a name="line.35"></a>
+<span class="sourceLineNo">036</span> *   Permission is granted to anyone to use this software for any purpose,<a name="line.36"></a>
+<span class="sourceLineNo">037</span> *   including commercial applications, and to alter it and redistribute it<a name="line.37"></a>
+<span class="sourceLineNo">038</span> *   freely, subject to the following restrictions:<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * <a name="line.39"></a>
+<span class="sourceLineNo">040</span> *   1. The origin of this software must not be misrepresented; you must not<a name="line.40"></a>
+<span class="sourceLineNo">041</span> *      claim that you wrote the original software. If you use this software<a name="line.41"></a>
+<span class="sourceLineNo">042</span> *      in a product, an acknowledgment in the product documentation would be<a name="line.42"></a>
+<span class="sourceLineNo">043</span> *      appreciated but is not required.<a name="line.43"></a>
+<span class="sourceLineNo">044</span> *   2. Altered source versions must be plainly marked as such, and must not be<a name="line.44"></a>
+<span class="sourceLineNo">045</span> *      misrepresented as being the original software.<a name="line.45"></a>
+<span class="sourceLineNo">046</span> *   3. This notice may not be removed or altered from any source distribution.<a name="line.46"></a>
+<span class="sourceLineNo">047</span> */<a name="line.47"></a>
+<span class="sourceLineNo">048</span>package squidpony.squidmath;<a name="line.48"></a>
+<span class="sourceLineNo">049</span><a name="line.49"></a>
+<span class="sourceLineNo">050</span>import squidpony.annotation.Beta;<a name="line.50"></a>
+<span class="sourceLineNo">051</span><a name="line.51"></a>
+<span class="sourceLineNo">052</span>import static squidpony.squidmath.NumberTools.randomSignedFloat;<a name="line.52"></a>
+<span class="sourceLineNo">053</span><a name="line.53"></a>
+<span class="sourceLineNo">054</span>/**<a name="line.54"></a>
+<span class="sourceLineNo">055</span> * Experiments with noise functions that use an alternate "honeycomb" or tiling pattern of cells in higher dimensions,<a name="line.55"></a>
+<span class="sourceLineNo">056</span> * but defaults to the simplex honeycomb used by SeededNoise if this can't make an attempt to change it. Currently, only<a name="line.56"></a>
+<span class="sourceLineNo">057</span> * 4D noise methods, such as {@link #noise(float, float, float, float, int)}, use a diferent honeycomb, which turns out<a name="line.57"></a>
+<span class="sourceLineNo">058</span> * to produce a very grid-aligned noise when used with {@link Noise#seamless2D(double[][], int, int, Noise.Noise4D)}.<a name="line.58"></a>
+<span class="sourceLineNo">059</span> * This might seem like a problem, but seamless noise normally has a hard time producing grid patterns intentionally, so<a name="line.59"></a>
+<span class="sourceLineNo">060</span> * if you want a nice circuit-board pattern or something similarly grid-heavy... this might help? The "mead" in the name<a name="line.60"></a>
+<span class="sourceLineNo">061</span> * is a reference to the beverage made from honey, and the extensive work my brain had to do to understand 4D honeycomb<a name="line.61"></a>
+<span class="sourceLineNo">062</span> * patterns. It seems that the grid is a result of using a honeycomb that can be formed from alternating hypercubes,<a name="line.62"></a>
+<span class="sourceLineNo">063</span> * where the hypercubes contribute square faces when projected in some ways.<a name="line.63"></a>
+<span class="sourceLineNo">064</span> * &lt;br&gt;<a name="line.64"></a>
+<span class="sourceLineNo">065</span> * Preview in black and white, being fed to seamless2D: http://i.imgur.com/0UBWDVW.png<a name="line.65"></a>
+<span class="sourceLineNo">066</span> * Preview in color, also being fed to seamless2D but with one call per color channel: http://i.imgur.com/46DI3uz.png<a name="line.66"></a>
+<span class="sourceLineNo">067</span> * &lt;br&gt;<a name="line.67"></a>
+<span class="sourceLineNo">068</span> * All functions can take an int seed that should significantly change the pattern of noise produced. Based on code from<a name="line.68"></a>
+<span class="sourceLineNo">069</span> * Joise; the full library is available at https://github.com/SudoPlayGames/Joise . Joise is derived from the Accidental<a name="line.69"></a>
+<span class="sourceLineNo">070</span> * Noise Library, available in C++ at http://accidentalnoise.sourceforge.net/index.html .<a name="line.70"></a>
+<span class="sourceLineNo">071</span> */<a name="line.71"></a>
+<span class="sourceLineNo">072</span>@Beta<a name="line.72"></a>
+<span class="sourceLineNo">073</span>public class MeadNoise extends SeededNoise {<a name="line.73"></a>
+<span class="sourceLineNo">074</span><a name="line.74"></a>
+<span class="sourceLineNo">075</span>    public static final MeadNoise instance = new MeadNoise();<a name="line.75"></a>
+<span class="sourceLineNo">076</span><a name="line.76"></a>
+<span class="sourceLineNo">077</span>    public MeadNoise() {<a name="line.77"></a>
+<span class="sourceLineNo">078</span>        super(0x1337BEEF);<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    }<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    public MeadNoise(int seed)<a name="line.80"></a>
+<span class="sourceLineNo">081</span>    {<a name="line.81"></a>
+<span class="sourceLineNo">082</span>        super(seed);<a name="line.82"></a>
+<span class="sourceLineNo">083</span>    }<a name="line.83"></a>
+<span class="sourceLineNo">084</span><a name="line.84"></a>
+<span class="sourceLineNo">085</span>    public double getNoise(final double x, final double y) {<a name="line.85"></a>
+<span class="sourceLineNo">086</span>        return noise(x, y, defaultSeed);<a name="line.86"></a>
+<span class="sourceLineNo">087</span>    }<a name="line.87"></a>
+<span class="sourceLineNo">088</span>    public double getNoise(final double x, final double y, final double z) {<a name="line.88"></a>
+<span class="sourceLineNo">089</span>        return noise(x, y, z, defaultSeed);<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    }<a name="line.90"></a>
+<span class="sourceLineNo">091</span>    public double getNoise(final double x, final double y, final double z, final double w) {<a name="line.91"></a>
+<span class="sourceLineNo">092</span>        return noise(x, y, z, w, defaultSeed);<a name="line.92"></a>
+<span class="sourceLineNo">093</span>    }<a name="line.93"></a>
+<span class="sourceLineNo">094</span>    public double getNoise(final double x, final double y, final double z, final double w, final double u, final double v) {<a name="line.94"></a>
+<span class="sourceLineNo">095</span>        return noise(x, y, z, w, u, v, defaultSeed);<a name="line.95"></a>
+<span class="sourceLineNo">096</span>    }<a name="line.96"></a>
+<span class="sourceLineNo">097</span><a name="line.97"></a>
+<span class="sourceLineNo">098</span>    public double getNoiseWithSeed(final double x, final double y, final int seed) {<a name="line.98"></a>
+<span class="sourceLineNo">099</span>        return noise(x, y, seed);<a name="line.99"></a>
+<span class="sourceLineNo">100</span>    }<a name="line.100"></a>
+<span class="sourceLineNo">101</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final int seed) {<a name="line.101"></a>
+<span class="sourceLineNo">102</span>        return noise(x, y, z, seed);<a name="line.102"></a>
+<span class="sourceLineNo">103</span>    }<a name="line.103"></a>
+<span class="sourceLineNo">104</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final int seed) {<a name="line.104"></a>
+<span class="sourceLineNo">105</span>        return noise(x, y, z, w, seed);<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    }<a name="line.106"></a>
+<span class="sourceLineNo">107</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, final int seed) {<a name="line.107"></a>
+<span class="sourceLineNo">108</span>        return noise(x, y, z, w, u, v, seed);<a name="line.108"></a>
+<span class="sourceLineNo">109</span>    }<a name="line.109"></a>
+<span class="sourceLineNo">110</span><a name="line.110"></a>
+<span class="sourceLineNo">111</span>    /**<a name="line.111"></a>
+<span class="sourceLineNo">112</span>     * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 8 bits.<a name="line.112"></a>
+<span class="sourceLineNo">113</span>     * @param x an int to incorporate into the hash<a name="line.113"></a>
+<span class="sourceLineNo">114</span>     * @param y an int to incorporate into the hash<a name="line.114"></a>
+<span class="sourceLineNo">115</span>     * @param seed an int to incorporate into the hash<a name="line.115"></a>
+<span class="sourceLineNo">116</span>     * @return a pseudo-random-like int between 0 and 255, inclusive on both<a name="line.116"></a>
+<span class="sourceLineNo">117</span>     */<a name="line.117"></a>
+<span class="sourceLineNo">118</span>    //0x89 0x95 0xA3 0xB3 0xC5 0xD3 0xE3<a name="line.118"></a>
+<span class="sourceLineNo">119</span>    /*<a name="line.119"></a>
+<span class="sourceLineNo">120</span>    public static int hash(final int x, final int y, final int seed) {<a name="line.120"></a>
+<span class="sourceLineNo">121</span>        return   ((x    ^ 0x9E3779B9 * (seed + y))<a name="line.121"></a>
+<span class="sourceLineNo">122</span>                + (y    ^ 0x632BE5AB * (x + seed))<a name="line.122"></a>
+<span class="sourceLineNo">123</span>                + (seed ^ 0x632BE5AB * (y + x))) &gt;&gt;&gt; 24;<a name="line.123"></a>
+<span class="sourceLineNo">124</span>    }<a name="line.124"></a>
+<span class="sourceLineNo">125</span>    */<a name="line.125"></a>
+<span class="sourceLineNo">126</span>    public static int hash(final int x, final int y, final int seed) {<a name="line.126"></a>
+<span class="sourceLineNo">127</span>        int a = 0x632BE5AB;<a name="line.127"></a>
+<span class="sourceLineNo">128</span>        return  (0x9E3779B9<a name="line.128"></a>
+<span class="sourceLineNo">129</span>                + (a ^= 0x85157AF5 * seed + x)<a name="line.129"></a>
+<span class="sourceLineNo">130</span>                + (a ^= 0x85157AF5 * x + y)<a name="line.130"></a>
+<span class="sourceLineNo">131</span>                + (a ^= 0x85157AF5 * y + seed)) * a &gt;&gt;&gt; 24;<a name="line.131"></a>
+<span class="sourceLineNo">132</span>    }<a name="line.132"></a>
+<span class="sourceLineNo">133</span><a name="line.133"></a>
+<span class="sourceLineNo">134</span>    /**<a name="line.134"></a>
+<span class="sourceLineNo">135</span>     * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 8 bits.<a name="line.135"></a>
+<span class="sourceLineNo">136</span>     * @param x an int to incorporate into the hash<a name="line.136"></a>
+<span class="sourceLineNo">137</span>     * @param y an int to incorporate into the hash<a name="line.137"></a>
+<span class="sourceLineNo">138</span>     * @param z an int to incorporate into the hash<a name="line.138"></a>
+<span class="sourceLineNo">139</span>     * @param seed an int to incorporate into the hash<a name="line.139"></a>
+<span class="sourceLineNo">140</span>     * @return a pseudo-random-like int between 0 and 255, inclusive on both<a name="line.140"></a>
+<span class="sourceLineNo">141</span>     */<a name="line.141"></a>
+<span class="sourceLineNo">142</span>    //0x89 0x95 0xA3 0xB3 0xC5 0xD3 0xE3<a name="line.142"></a>
+<span class="sourceLineNo">143</span>    /*<a name="line.143"></a>
+<span class="sourceLineNo">144</span>    public static int hash(final int x, final int y, final int z, final int seed) {<a name="line.144"></a>
+<span class="sourceLineNo">145</span>        return   (z    + 0xD3 * (seed + y)<a name="line.145"></a>
+<span class="sourceLineNo">146</span>                ^ seed + 0xB5 * (x + z   )<a name="line.146"></a>
+<span class="sourceLineNo">147</span>                ^ x    + 0xC1 * (y + seed)<a name="line.147"></a>
+<span class="sourceLineNo">148</span>                ^ y    + 0xE3 * (z + x   )) &amp; 255;<a name="line.148"></a>
+<span class="sourceLineNo">149</span>    }<a name="line.149"></a>
+<span class="sourceLineNo">150</span>    */<a name="line.150"></a>
+<span class="sourceLineNo">151</span>    public static int hash(final int x, final int y, final int z, final int seed) {<a name="line.151"></a>
+<span class="sourceLineNo">152</span>        int a = 0x632BE5AB;<a name="line.152"></a>
+<span class="sourceLineNo">153</span>        return  (0x9E3779B9<a name="line.153"></a>
+<span class="sourceLineNo">154</span>                + (a ^= 0x85157AF5 * seed + x)<a name="line.154"></a>
+<span class="sourceLineNo">155</span>                + (a ^= 0x85157AF5 * x + y)<a name="line.155"></a>
+<span class="sourceLineNo">156</span>                + (a ^= 0x85157AF5 * y + z)<a name="line.156"></a>
+<span class="sourceLineNo">157</span>                + (a ^= 0x85157AF5 * z + seed)) * a &gt;&gt;&gt; 24;<a name="line.157"></a>
+<span class="sourceLineNo">158</span>    }<a name="line.158"></a>
+<span class="sourceLineNo">159</span>    <a name="line.159"></a>
+<span class="sourceLineNo">160</span>    /**<a name="line.160"></a>
+<span class="sourceLineNo">161</span>     * Possibly useful outside SeededNoise. A customized 5-input hash that mixes around all inputs fairly well, and<a name="line.161"></a>
+<span class="sourceLineNo">162</span>     * produces 8 bits.<a name="line.162"></a>
+<span class="sourceLineNo">163</span>     * @param x an int to incorporate into the hash<a name="line.163"></a>
+<span class="sourceLineNo">164</span>     * @param y an int to incorporate into the hash<a name="line.164"></a>
+<span class="sourceLineNo">165</span>     * @param z an int to incorporate into the hash<a name="line.165"></a>
+<span class="sourceLineNo">166</span>     * @param w an int to incorporate into the hash<a name="line.166"></a>
+<span class="sourceLineNo">167</span>     * @param seed an int to incorporate into the hash<a name="line.167"></a>
+<span class="sourceLineNo">168</span>     * @return a pseudo-random-like int between 0 and 255, inclusive on both<a name="line.168"></a>
+<span class="sourceLineNo">169</span>     */<a name="line.169"></a>
+<span class="sourceLineNo">170</span>    //0x89 0x95 0xA3 0xB3 0xC5 0xD3 0xE3<a name="line.170"></a>
+<span class="sourceLineNo">171</span>    public static int hash(final int x, final int y, final int z, final int w, final int seed) {<a name="line.171"></a>
+<span class="sourceLineNo">172</span>        return (<a name="line.172"></a>
+<span class="sourceLineNo">173</span>                z    + 0xD3 * (seed + y)<a name="line.173"></a>
+<span class="sourceLineNo">174</span>              ^ w    + 0xB5 * (x + z   )<a name="line.174"></a>
+<span class="sourceLineNo">175</span>              ^ seed + 0xC1 * (y + w   )<a name="line.175"></a>
+<span class="sourceLineNo">176</span>              ^ x    + 0x95 * (z + seed)<a name="line.176"></a>
+<span class="sourceLineNo">177</span>              ^ y    + 0xA3 * (w + x   )) &amp; 255;<a name="line.177"></a>
+<span class="sourceLineNo">178</span>    }<a name="line.178"></a>
+<span class="sourceLineNo">179</span>    /**<a name="line.179"></a>
+<span class="sourceLineNo">180</span>     * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that generates 32 bits.<a name="line.180"></a>
+<span class="sourceLineNo">181</span>     * @param x an int to incorporate into the hash<a name="line.181"></a>
+<span class="sourceLineNo">182</span>     * @param y an int to incorporate into the hash<a name="line.182"></a>
+<span class="sourceLineNo">183</span>     * @param z an int to incorporate into the hash<a name="line.183"></a>
+<span class="sourceLineNo">184</span>     * @param w an int to incorporate into the hash<a name="line.184"></a>
+<span class="sourceLineNo">185</span>     * @param seed an int to incorporate into the hash<a name="line.185"></a>
+<span class="sourceLineNo">186</span>     * @return a pseudo-random-like int with the full range of possible values<a name="line.186"></a>
+<span class="sourceLineNo">187</span>     */<a name="line.187"></a>
+<span class="sourceLineNo">188</span>    public static int hashAlt(final int x, final int y, final int z, final int w, final int seed) {<a name="line.188"></a>
+<span class="sourceLineNo">189</span>        int a = 0x632BE5AB, result = (0x9E3779B9<a name="line.189"></a>
+<span class="sourceLineNo">190</span>                + (a ^= 0x85157AF5 * seed + x)<a name="line.190"></a>
+<span class="sourceLineNo">191</span>                + (a ^= 0x85157AF5 * x + y)<a name="line.191"></a>
+<span class="sourceLineNo">192</span>                + (a ^= 0x85157AF5 * y + z)<a name="line.192"></a>
+<span class="sourceLineNo">193</span>                + (a ^= 0x85157AF5 * z + w)<a name="line.193"></a>
+<span class="sourceLineNo">194</span>                + (a ^= 0x85157AF5 * w + seed));<a name="line.194"></a>
+<span class="sourceLineNo">195</span>        return (result * (a | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21));<a name="line.195"></a>
+<span class="sourceLineNo">196</span>    }<a name="line.196"></a>
+<span class="sourceLineNo">197</span>    /**<a name="line.197"></a>
+<span class="sourceLineNo">198</span>     * Possibly useful outside SeededNoise. A customized 5-input hash that mixes around all inputs fairly well, and<a name="line.198"></a>
+<span class="sourceLineNo">199</span>     * produces 8 bits.<a name="line.199"></a>
+<span class="sourceLineNo">200</span>     * @param x an int to incorporate into the hash<a name="line.200"></a>
+<span class="sourceLineNo">201</span>     * @param y an int to incorporate into the hash<a name="line.201"></a>
+<span class="sourceLineNo">202</span>     * @param z an int to incorporate into the hash<a name="line.202"></a>
+<span class="sourceLineNo">203</span>     * @param w an int to incorporate into the hash<a name="line.203"></a>
+<span class="sourceLineNo">204</span>     * @param u an int to incorporate into the hash<a name="line.204"></a>
+<span class="sourceLineNo">205</span>     * @param v an int to incorporate into the hash<a name="line.205"></a>
+<span class="sourceLineNo">206</span>     * @param seed an int to incorporate into the hash<a name="line.206"></a>
+<span class="sourceLineNo">207</span>     * @return a pseudo-random-like int between 0 and 255, inclusive on both<a name="line.207"></a>
+<span class="sourceLineNo">208</span>     */<a name="line.208"></a>
+<span class="sourceLineNo">209</span>    //0x89 0x95 0xA3 0xB3 0xC5 0xD3 0xE3<a name="line.209"></a>
+<span class="sourceLineNo">210</span>    public static int hash(final int x, final int y, final int z, final int w, final int u, final int v, final int seed) {<a name="line.210"></a>
+<span class="sourceLineNo">211</span>        return (<a name="line.211"></a>
+<span class="sourceLineNo">212</span>                z    + 0x89 * (seed + x)<a name="line.212"></a>
+<span class="sourceLineNo">213</span>              ^ w    + 0xC1 * (x + y)<a name="line.213"></a>
+<span class="sourceLineNo">214</span>              ^ u    + 0x95 * (y + z)<a name="line.214"></a>
+<span class="sourceLineNo">215</span>              ^ v    + 0xD3 * (z + w)<a name="line.215"></a>
+<span class="sourceLineNo">216</span>              ^ seed + 0xA3 * (w + u)<a name="line.216"></a>
+<span class="sourceLineNo">217</span>              ^ x    + 0xE3 * (u + v)<a name="line.217"></a>
+<span class="sourceLineNo">218</span>              ^ y    + 0xB5 * (v + seed)) &amp; 255;<a name="line.218"></a>
+<span class="sourceLineNo">219</span>    }<a name="line.219"></a>
+<span class="sourceLineNo">220</span><a name="line.220"></a>
+<span class="sourceLineNo">221</span>    /**<a name="line.221"></a>
+<span class="sourceLineNo">222</span>     * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 8 bits.<a name="line.222"></a>
+<span class="sourceLineNo">223</span>     * @param x an int to incorporate into the hash<a name="line.223"></a>
+<span class="sourceLineNo">224</span>     * @param y an int to incorporate into the hash<a name="line.224"></a>
+<span class="sourceLineNo">225</span>     * @param z an int to incorporate into the hash<a name="line.225"></a>
+<span class="sourceLineNo">226</span>     * @param w an int to incorporate into the hash<a name="line.226"></a>
+<span class="sourceLineNo">227</span>     * @param u an int to incorporate into the hash<a name="line.227"></a>
+<span class="sourceLineNo">228</span>     * @param v an int to incorporate into the hash<a name="line.228"></a>
+<span class="sourceLineNo">229</span>     * @param seed an int to incorporate into the hash<a name="line.229"></a>
+<span class="sourceLineNo">230</span>     * @return a pseudo-random-like int between 0 and 255, inclusive on both<a name="line.230"></a>
+<span class="sourceLineNo">231</span>     */<a name="line.231"></a>
+<span class="sourceLineNo">232</span>    public static int hashAlt(final int x, final int y, final int z, final int w, final int u, final int v, final int seed) {<a name="line.232"></a>
+<span class="sourceLineNo">233</span>        int a = 0x632BE5AB;<a name="line.233"></a>
+<span class="sourceLineNo">234</span>        return (0x9E3779B9<a name="line.234"></a>
+<span class="sourceLineNo">235</span>                + (a ^= 0x85157AF5 * seed + x)<a name="line.235"></a>
+<span class="sourceLineNo">236</span>                + (a ^= 0x85157AF5 * x + y)<a name="line.236"></a>
+<span class="sourceLineNo">237</span>                + (a ^= 0x85157AF5 * y + z)<a name="line.237"></a>
+<span class="sourceLineNo">238</span>                + (a ^= 0x85157AF5 * z + w)<a name="line.238"></a>
+<span class="sourceLineNo">239</span>                + (a ^= 0x85157AF5 * w + u)<a name="line.239"></a>
+<span class="sourceLineNo">240</span>                + (a ^= 0x85157AF5 * u + v)<a name="line.240"></a>
+<span class="sourceLineNo">241</span>                + (a ^= 0x85157AF5 * v + seed)) * a &gt;&gt;&gt; 24;<a name="line.241"></a>
+<span class="sourceLineNo">242</span>    }<a name="line.242"></a>
+<span class="sourceLineNo">243</span><a name="line.243"></a>
+<span class="sourceLineNo">244</span>    /*<a name="line.244"></a>
+<span class="sourceLineNo">245</span>    private static int hash(final int x, final int y, final int z, final int w, final int u, final int v, final int seed) {<a name="line.245"></a>
+<span class="sourceLineNo">246</span>        final int result = 191 * x + 151 * y + 181 * w + 139 * z + 179 * u + 149 * v + 167 * seed;<a name="line.246"></a>
+<span class="sourceLineNo">247</span>        return 0xFF &amp; (result ^ (result &gt;&gt;&gt; 7));<a name="line.247"></a>
+<span class="sourceLineNo">248</span>    }<a name="line.248"></a>
+<span class="sourceLineNo">249</span>    */<a name="line.249"></a>
+<span class="sourceLineNo">250</span>//    /**<a name="line.250"></a>
+<span class="sourceLineNo">251</span>//     * Possibly useful outside SeededNoise. A fast, low-to-mid-quality hash that generates 8 bits.<a name="line.251"></a>
+<span class="sourceLineNo">252</span>//     * @param x an int to incorporate into the hash<a name="line.252"></a>
+<span class="sourceLineNo">253</span>//     * @param y an int to incorporate into the hash<a name="line.253"></a>
+<span class="sourceLineNo">254</span>//     * @param seed an int to incorporate into the hash<a name="line.254"></a>
+<span class="sourceLineNo">255</span>//     * @return a pseudo-random-like int between 0 and 255, inclusive on both<a name="line.255"></a>
+<span class="sourceLineNo">256</span>//     */<a name="line.256"></a>
+<span class="sourceLineNo">257</span>//    public static int hash(final int x, final int y, int seed) {<a name="line.257"></a>
+<span class="sourceLineNo">258</span>//        return ((seed = x * 0x5a34f ^ y * 0xc29cb ^ seed * 0x63413) ^ ((seed &gt;&gt;&gt; 31 - (seed &amp; 30)) | seed &lt;&lt; 1 + (seed &amp; 30))) &amp; 255;<a name="line.258"></a>
+<span class="sourceLineNo">259</span>//    }<a name="line.259"></a>
+<span class="sourceLineNo">260</span>//<a name="line.260"></a>
+<span class="sourceLineNo">261</span>//    /**<a name="line.261"></a>
+<span class="sourceLineNo">262</span>//     * Possibly useful outside SeededNoise. A fast, low-to-mid-quality hash that generates 8 bits.<a name="line.262"></a>
+<span class="sourceLineNo">263</span>//     * @param x an int to incorporate into the hash<a name="line.263"></a>
+<span class="sourceLineNo">264</span>//     * @param y an int to incorporate into the hash<a name="line.264"></a>
+<span class="sourceLineNo">265</span>//     * @param z an int to incorporate into the hash<a name="line.265"></a>
+<span class="sourceLineNo">266</span>//     * @param seed an int to incorporate into the hash<a name="line.266"></a>
+<span class="sourceLineNo">267</span>//     * @return a pseudo-random-like int between 0 and 255, inclusive on both<a name="line.267"></a>
+<span class="sourceLineNo">268</span>//     */<a name="line.268"></a>
+<span class="sourceLineNo">269</span>//    public static int hash(final int x, final int y, final int z, int seed) {<a name="line.269"></a>
+<span class="sourceLineNo">270</span>//        return ((seed = x * 0x5a34f ^ y * 0xc29cb ^ z ^ 0x13333 ^ seed * 0x63413)<a name="line.270"></a>
+<span class="sourceLineNo">271</span>//                ^ ((seed &gt;&gt;&gt; 31 - (seed &amp; 30)) | seed &lt;&lt; 1 + (seed &amp; 30))) &amp; 255;<a name="line.271"></a>
+<span class="sourceLineNo">272</span>//    }<a name="line.272"></a>
+<span class="sourceLineNo">273</span>//    /**<a name="line.273"></a>
+<span class="sourceLineNo">274</span>//     * Possibly useful outside SeededNoise. A fast, low-to-mid-quality hash that generates 8 bits.<a name="line.274"></a>
+<span class="sourceLineNo">275</span>//     * @param x an int to incorporate into the hash<a name="line.275"></a>
+<span class="sourceLineNo">276</span>//     * @param y an int to incorporate into the hash<a name="line.276"></a>
+<span class="sourceLineNo">277</span>//     * @param z an int to incorporate into the hash<a name="line.277"></a>
+<span class="sourceLineNo">278</span>//     * @param w an int to incorporate into the hash<a name="line.278"></a>
+<span class="sourceLineNo">279</span>//     * @param seed an int to incorporate into the hash<a name="line.279"></a>
+<span class="sourceLineNo">280</span>//     * @return a pseudo-random-like int between 0 and 255, inclusive on both<a name="line.280"></a>
+<span class="sourceLineNo">281</span>//     */<a name="line.281"></a>
+<span class="sourceLineNo">282</span>//    public static int hash(final int x, final int y, final int z, final int w, int seed) {<a name="line.282"></a>
+<span class="sourceLineNo">283</span>//        return ((seed = x * 0x5a34f ^ y * 0xc29cb ^ z ^ 0x13333 ^ w * 0x42023 ^ seed * 0x63413)<a name="line.283"></a>
+<span class="sourceLineNo">284</span>//                ^ ((seed &gt;&gt;&gt; 31 - (seed &amp; 30)) | seed &lt;&lt; 1 + (seed &amp; 30))) &amp; 255;<a name="line.284"></a>
+<span class="sourceLineNo">285</span>//    }<a name="line.285"></a>
+<span class="sourceLineNo">286</span>//    /**<a name="line.286"></a>
+<span class="sourceLineNo">287</span>//     * Possibly useful outside SeededNoise. A fast, low-to-mid-quality hash that generates 8 bits.<a name="line.287"></a>
+<span class="sourceLineNo">288</span>//     * @param x an int to incorporate into the hash<a name="line.288"></a>
+<span class="sourceLineNo">289</span>//     * @param y an int to incorporate into the hash<a name="line.289"></a>
+<span class="sourceLineNo">290</span>//     * @param z an int to incorporate into the hash<a name="line.290"></a>
+<span class="sourceLineNo">291</span>//     * @param w an int to incorporate into the hash<a name="line.291"></a>
+<span class="sourceLineNo">292</span>//     * @param u an int to incorporate into the hash<a name="line.292"></a>
+<span class="sourceLineNo">293</span>//     * @param v an int to incorporate into the hash<a name="line.293"></a>
+<span class="sourceLineNo">294</span>//     * @param seed an int to incorporate into the hash<a name="line.294"></a>
+<span class="sourceLineNo">295</span>//     * @return a pseudo-random-like int between 0 and 255, inclusive on both<a name="line.295"></a>
+<span class="sourceLineNo">296</span>//     */<a name="line.296"></a>
+<span class="sourceLineNo">297</span>//    public static int hash(final int x, final int y, final int z, final int w, final int u, final int v, int seed) {<a name="line.297"></a>
+<span class="sourceLineNo">298</span>//        return ((seed = x * 0x5a34f ^ y * 0xc29cb ^ z ^ 0x13333 ^ w * 0x42023 ^ u * 0xb34eb ^ v * 0x2feb7 ^ seed * 0x63413)<a name="line.298"></a>
+<span class="sourceLineNo">299</span>//                ^ ((seed &gt;&gt;&gt; 31 - (seed &amp; 30)) | seed &lt;&lt; 1 + (seed &amp; 30))) &amp; 255;<a name="line.299"></a>
+<span class="sourceLineNo">300</span>//    }<a name="line.300"></a>
+<span class="sourceLineNo">301</span><a name="line.301"></a>
+<span class="sourceLineNo">302</span>    public static double noise(final double x, final double y, final double z, final double w, final int seed) {<a name="line.302"></a>
+<span class="sourceLineNo">303</span>        return noise((float)x, (float)y, (float)z, (float)w, seed);<a name="line.303"></a>
+<span class="sourceLineNo">304</span>    }<a name="line.304"></a>
+<span class="sourceLineNo">305</span>    public static double noise(final float x, final float y, final float z, final float w, final int seed) {<a name="line.305"></a>
+<span class="sourceLineNo">306</span>        double n = 0.0;<a name="line.306"></a>
+<span class="sourceLineNo">307</span>        //final float s = (x + y + z + w) * F4;<a name="line.307"></a>
+<span class="sourceLineNo">308</span>        final int seed2 = (seed &gt;&gt;&gt; 21) ^ (seed &amp; 0x7ff) - (seed &gt;&gt;&gt; 11 &amp; 0x3ff),<a name="line.308"></a>
+<span class="sourceLineNo">309</span>                i = fastFloor(x * 2.430f + seed2),<a name="line.309"></a>
+<span class="sourceLineNo">310</span>                j = fastFloor(y * 2.430f + seed2),<a name="line.310"></a>
+<span class="sourceLineNo">311</span>                k = fastFloor(z * 2.430f + seed2),<a name="line.311"></a>
+<span class="sourceLineNo">312</span>                l = fastFloor(w * 2.430f + seed2);<a name="line.312"></a>
+<span class="sourceLineNo">313</span>        final float<a name="line.313"></a>
+<span class="sourceLineNo">314</span>                x0 = x * 2.430f + seed2 - i, x05 = x0 - 0.5f,<a name="line.314"></a>
+<span class="sourceLineNo">315</span>                y0 = y * 2.430f + seed2 - j, y05 = y0 - 0.5f,<a name="line.315"></a>
+<span class="sourceLineNo">316</span>                z0 = z * 2.430f + seed2 - k, z05 = z0 - 0.5f,<a name="line.316"></a>
+<span class="sourceLineNo">317</span>                w0 = w * 2.430f + seed2 - l, w05 = w0 - 0.5f;<a name="line.317"></a>
+<span class="sourceLineNo">318</span>        final float dist = x05 * x05 + y05 * y05 + z05 * z05 + w05 * w05,<a name="line.318"></a>
+<span class="sourceLineNo">319</span>        xc, yc, zc, wc;<a name="line.319"></a>
+<span class="sourceLineNo">320</span>        final boolean isCentral = (dist &lt;= 0.35);<a name="line.320"></a>
+<span class="sourceLineNo">321</span>        final int xx, yy, zz, ww;<a name="line.321"></a>
+<span class="sourceLineNo">322</span>        if(isCentral)<a name="line.322"></a>
+<span class="sourceLineNo">323</span>        {<a name="line.323"></a>
+<span class="sourceLineNo">324</span>            xx = i * 2;<a name="line.324"></a>
+<span class="sourceLineNo">325</span>            yy = j * 2;<a name="line.325"></a>
+<span class="sourceLineNo">326</span>            zz = k * 2;<a name="line.326"></a>
+<span class="sourceLineNo">327</span>            ww = l * 2;<a name="line.327"></a>
+<span class="sourceLineNo">328</span>            xc = x0;<a name="line.328"></a>
+<span class="sourceLineNo">329</span>            yc = y0;<a name="line.329"></a>
+<span class="sourceLineNo">330</span>            zc = z0;<a name="line.330"></a>
+<span class="sourceLineNo">331</span>            wc = w0;<a name="line.331"></a>
+<span class="sourceLineNo">332</span>        }<a name="line.332"></a>
+<span class="sourceLineNo">333</span>        else<a name="line.333"></a>
+<span class="sourceLineNo">334</span>        {<a name="line.334"></a>
+<span class="sourceLineNo">335</span>            xx = i * 2 + (x0 &lt; 0.5f ? -1 : 1);<a name="line.335"></a>
+<span class="sourceLineNo">336</span>            yy = j * 2 + (y0 &lt; 0.5f ? -1 : 1);<a name="line.336"></a>
+<span class="sourceLineNo">337</span>            zz = k * 2 + (z0 &lt; 0.5f ? -1 : 1);<a name="line.337"></a>
+<span class="sourceLineNo">338</span>            ww = l * 2 + (w0 &lt; 0.5f ? -1 : 1);<a name="line.338"></a>
+<span class="sourceLineNo">339</span>            xc = (x0 &lt; 0.5f ? 0.5f + x0 : x0 - 0.5f);<a name="line.339"></a>
+<span class="sourceLineNo">340</span>            yc = (y0 &lt; 0.5f ? 0.5f + y0 : y0 - 0.5f);<a name="line.340"></a>
+<span class="sourceLineNo">341</span>            zc = (z0 &lt; 0.5f ? 0.5f + z0 : z0 - 0.5f);<a name="line.341"></a>
+<span class="sourceLineNo">342</span>            wc = (w0 &lt; 0.5f ? 0.5f + w0 : w0 - 0.5f);<a name="line.342"></a>
+<span class="sourceLineNo">343</span>        }<a name="line.343"></a>
+<span class="sourceLineNo">344</span>        /*<a name="line.344"></a>
+<span class="sourceLineNo">345</span>        final int c = (x0 &gt; y0 ? 128 : 0) | (x0 &gt; z0 ? 64 : 0) | (y0 &gt; z0 ? 32 : 0) | (x0 &gt; w0 ? 16 : 0) | (y0 &gt; w0 ? 8 : 0) | (z0 &gt; w0 ? 4 : 0);<a name="line.345"></a>
+<span class="sourceLineNo">346</span>        final int i1 = SIMPLEX[c] &gt;&gt;&gt; 2,<a name="line.346"></a>
+<span class="sourceLineNo">347</span>                j1 = SIMPLEX[c | 1] &gt;&gt;&gt; 2,<a name="line.347"></a>
+<span class="sourceLineNo">348</span>                k1 = SIMPLEX[c | 2] &gt;&gt;&gt; 2,<a name="line.348"></a>
+<span class="sourceLineNo">349</span>                l1 = SIMPLEX[c | 3] &gt;&gt;&gt; 2,<a name="line.349"></a>
+<span class="sourceLineNo">350</span>                i2 = SIMPLEX[c] &gt;&gt;&gt; 1 &amp; 1,<a name="line.350"></a>
+<span class="sourceLineNo">351</span>                j2 = SIMPLEX[c | 1] &gt;&gt;&gt; 1 &amp; 1,<a name="line.351"></a>
+<span class="sourceLineNo">352</span>                k2 = SIMPLEX[c | 2] &gt;&gt;&gt; 1 &amp; 1,<a name="line.352"></a>
+<span class="sourceLineNo">353</span>                l2 = SIMPLEX[c | 3] &gt;&gt;&gt; 1 &amp; 1,<a name="line.353"></a>
+<span class="sourceLineNo">354</span>                i3 = SIMPLEX[c] &amp; 1,<a name="line.354"></a>
+<span class="sourceLineNo">355</span>                j3 = SIMPLEX[c | 1] &amp; 1,<a name="line.355"></a>
+<span class="sourceLineNo">356</span>                k3 = SIMPLEX[c | 2] &amp; 1,<a name="line.356"></a>
+<span class="sourceLineNo">357</span>                l3 = SIMPLEX[c | 3] &amp; 1;<a name="line.357"></a>
+<span class="sourceLineNo">358</span><a name="line.358"></a>
+<span class="sourceLineNo">359</span>        final float x1 = x0 - i1 + G4,<a name="line.359"></a>
+<span class="sourceLineNo">360</span>                y1 = y0 - j1 + G4,<a name="line.360"></a>
+<span class="sourceLineNo">361</span>                z1 = z0 - k1 + G4,<a name="line.361"></a>
+<span class="sourceLineNo">362</span>                w1 = w0 - l1 + G4,<a name="line.362"></a>
+<span class="sourceLineNo">363</span>                x2 = x0 - i2 + 2f * G4,<a name="line.363"></a>
+<span class="sourceLineNo">364</span>                y2 = y0 - j2 + 2f * G4,<a name="line.364"></a>
+<span class="sourceLineNo">365</span>                z2 = z0 - k2 + 2f * G4,<a name="line.365"></a>
+<span class="sourceLineNo">366</span>                w2 = w0 - l2 + 2f * G4,<a name="line.366"></a>
+<span class="sourceLineNo">367</span>                x3 = x0 - i3 + 3f * G4,<a name="line.367"></a>
+<span class="sourceLineNo">368</span>                y3 = y0 - j3 + 3f * G4,<a name="line.368"></a>
+<span class="sourceLineNo">369</span>                z3 = z0 - k3 + 3f * G4,<a name="line.369"></a>
+<span class="sourceLineNo">370</span>                w3 = w0 - l3 + 3f * G4,<a name="line.370"></a>
+<span class="sourceLineNo">371</span>                x4 = x0 - 1f + 4f * G4,<a name="line.371"></a>
+<span class="sourceLineNo">372</span>                y4 = y0 - 1f + 4f * G4,<a name="line.372"></a>
+<span class="sourceLineNo">373</span>                z4 = z0 - 1f + 4f * G4,<a name="line.373"></a>
+<span class="sourceLineNo">374</span>                w4 = w0 - 1f + 4f * G4;*/<a name="line.374"></a>
+<span class="sourceLineNo">375</span>        int h;<a name="line.375"></a>
+<span class="sourceLineNo">376</span>        float t;<a name="line.376"></a>
+<span class="sourceLineNo">377</span>        h = hashAlt(xx+1, yy, zz, ww, seed);<a name="line.377"></a>
+<span class="sourceLineNo">378</span>        t = xc - 0.4f;<a name="line.378"></a>
+<span class="sourceLineNo">379</span>        if (t &gt;= 0f)<a name="line.379"></a>
+<span class="sourceLineNo">380</span>        {<a name="line.380"></a>
+<span class="sourceLineNo">381</span>            t *= t;<a name="line.381"></a>
+<span class="sourceLineNo">382</span>            n += t * t * ((x05+1) * randomSignedFloat(h += 0x9E3779B9) + (y05) * randomSignedFloat(h += 0x9E3779B9) + (z05) * randomSignedFloat(h += 0x9E3779B9) + (w05) * randomSignedFloat(h + 0x9E3779B9));<a name="line.382"></a>
+<span class="sourceLineNo">383</span>        }<a name="line.383"></a>
+<span class="sourceLineNo">384</span>        h = hashAlt(xx-1, yy, zz, ww, seed);<a name="line.384"></a>
+<span class="sourceLineNo">385</span>        t = 0.6f - xc;<a name="line.385"></a>
+<span class="sourceLineNo">386</span>        if (t &gt;= 0f)<a name="line.386"></a>
+<span class="sourceLineNo">387</span>        {<a name="line.387"></a>
+<span class="sourceLineNo">388</span>            t *= t;<a name="line.388"></a>
+<span class="sourceLineNo">389</span>            n += t * t * ((x05-1) * randomSignedFloat(h += 0x9E3779B9) + (y05) * randomSignedFloat(h += 0x9E3779B9) + (z05) * randomSignedFloat(h += 0x9E3779B9) + (w05) * randomSignedFloat(h + 0x9E3779B9));<a name="line.389"></a>
+<span class="sourceLineNo">390</span>        }<a name="line.390"></a>
+<span class="sourceLineNo">391</span>        h = hashAlt(xx, yy+1, zz, ww, seed);<a name="line.391"></a>
+<span class="sourceLineNo">392</span>        t = yc - 0.4f;<a name="line.392"></a>
+<span class="sourceLineNo">393</span>        if (t &gt;= 0f)<a name="line.393"></a>
+<span class="sourceLineNo">394</span>        {<a name="line.394"></a>
+<span class="sourceLineNo">395</span>            t *= t;<a name="line.395"></a>
+<span class="sourceLineNo">396</span>            n += t * t * ((x05) * randomSignedFloat(h += 0x9E3779B9) + (y05+1) * randomSignedFloat(h += 0x9E3779B9) + (z05) * randomSignedFloat(h += 0x9E3779B9) + (w05) * randomSignedFloat(h + 0x9E3779B9));<a name="line.396"></a>
+<span class="sourceLineNo">397</span>        }<a name="line.397"></a>
+<span class="sourceLineNo">398</span>        h = hashAlt(xx, yy-1, zz, ww, seed);<a name="line.398"></a>
+<span class="sourceLineNo">399</span>        t = 0.6f - yc;<a name="line.399"></a>
+<span class="sourceLineNo">400</span>        if (t &gt;= 0f)<a name="line.400"></a>
+<span class="sourceLineNo">401</span>        {<a name="line.401"></a>
+<span class="sourceLineNo">402</span>            t *= t;<a name="line.402"></a>
+<span class="sourceLineNo">403</span>            n += t * t * ((x05) * randomSignedFloat(h += 0x9E3779B9) + (y05-1) * randomSignedFloat(h += 0x9E3779B9) + (z05) * randomSignedFloat(h += 0x9E3779B9) + (w05) * randomSignedFloat(h + 0x9E3779B9));<a name="line.403"></a>
+<span class="sourceLineNo">404</span>        }<a name="line.404"></a>
+<span class="sourceLineNo">405</span>        h = hashAlt(xx, yy, zz+1, ww, seed);<a name="line.405"></a>
+<span class="sourceLineNo">406</span>        t = zc - 0.4f;<a name="line.406"></a>
+<span class="sourceLineNo">407</span>        if (t &gt;= 0f)<a name="line.407"></a>
+<span class="sourceLineNo">408</span>        {<a name="line.408"></a>
+<span class="sourceLineNo">409</span>            t *= t;<a name="line.409"></a>
+<span class="sourceLineNo">410</span>            n += t * t * ((x05) * randomSignedFloat(h += 0x9E3779B9) + (y05) * randomSignedFloat(h += 0x9E3779B9) + (z05+1) * randomSignedFloat(h += 0x9E3779B9) + (w05) * randomSignedFloat(h + 0x9E3779B9));<a name="line.410"></a>
+<span class="sourceLineNo">411</span>        }<a name="line.411"></a>
+<span class="sourceLineNo">412</span>        h = hashAlt(xx, yy, zz-1, ww, seed);<a name="line.412"></a>
+<span class="sourceLineNo">413</span>        t = 0.6f - zc;<a name="line.413"></a>
+<span class="sourceLineNo">414</span>        if (t &gt;= 0f)<a name="line.414"></a>
+<span class="sourceLineNo">415</span>        {<a name="line.415"></a>
+<span class="sourceLineNo">416</span>            t *= t;<a name="line.416"></a>
+<span class="sourceLineNo">417</span>            n += t * t * ((x05) * randomSignedFloat(h += 0x9E3779B9) + (y05) * randomSignedFloat(h += 0x9E3779B9) + (z05-1) * randomSignedFloat(h += 0x9E3779B9) + (w05) * randomSignedFloat(h + 0x9E3779B9));<a name="line.417"></a>
+<span class="sourceLineNo">418</span>        }<a name="line.418"></a>
+<span class="sourceLineNo">419</span>        h = hashAlt(xx, yy, zz, ww+1, seed);<a name="line.419"></a>
+<span class="sourceLineNo">420</span>        t = wc - 0.4f;<a name="line.420"></a>
+<span class="sourceLineNo">421</span>        if (t &gt;= 0f)<a name="line.421"></a>
+<span class="sourceLineNo">422</span>        {<a name="line.422"></a>
+<span class="sourceLineNo">423</span>            t *= t;<a name="line.423"></a>
+<span class="sourceLineNo">424</span>            n += t * t * ((x05) * randomSignedFloat(h += 0x9E3779B9) + (y05) * randomSignedFloat(h += 0x9E3779B9) + (z05) * randomSignedFloat(h += 0x9E3779B9) + (w05+1) * randomSignedFloat(h + 0x9E3779B9));<a name="line.424"></a>
+<span class="sourceLineNo">425</span>        }<a name="line.425"></a>
+<span class="sourceLineNo">426</span>        h = hashAlt(xx, yy, zz, ww-1, seed);<a name="line.426"></a>
+<span class="sourceLineNo">427</span>        t = 0.6f - wc;<a name="line.427"></a>
+<span class="sourceLineNo">428</span>        if (t &gt;= 0f)<a name="line.428"></a>
+<span class="sourceLineNo">429</span>        {<a name="line.429"></a>
+<span class="sourceLineNo">430</span>            t *= t;<a name="line.430"></a>
+<span class="sourceLineNo">431</span>            n += t * t * ((x05) * randomSignedFloat(h += 0x9E3779B9) + (y05) * randomSignedFloat(h += 0x9E3779B9) + (z05) * randomSignedFloat(h += 0x9E3779B9) + (w05-1) * randomSignedFloat(h + 0x9E3779B9));<a name="line.431"></a>
+<span class="sourceLineNo">432</span>        }<a name="line.432"></a>
+<span class="sourceLineNo">433</span>        return 4 * n;<a name="line.433"></a>
+<span class="sourceLineNo">434</span>    }<a name="line.434"></a>
+<span class="sourceLineNo">435</span>}<a name="line.435"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

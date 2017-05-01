@@ -107,12 +107,18 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="#squidpony.squidgrid">squidpony.squidgrid</a></td>
+<td class="colLast">
+<div class="block">Tools for working with data on a grid, including LOS and FOV; overlaps with geometry code in squidpony.squidmath .</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#squidpony.squidgrid.mapping">squidpony.squidgrid.mapping</a></td>
 <td class="colLast">
 <div class="block">Tools specifically for generating maps and placing content in them, usually working with 2D char arrays.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#squidpony.squidmath">squidpony.squidmath</a></td>
 <td class="colLast">
 <div class="block">A very broad package containing random number generators, geometry tools, and some classes for combinatorics.</div>
@@ -152,6 +158,18 @@
  applied when two adjacent characters in the source string match two adjacent
  characters in the target string, but in reverse order, rather than a general
  allowance for adjacent character swaps.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/ObText.html" title="class in squidpony">ObText</a></span></code>
+<div class="block">A simple format parser for String-based configuration or data files where JSON is overkill.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/StringConvert.html" title="class in squidpony">StringConvert</a>&lt;T&gt;</span></code>
+<div class="block">Used to standardize conversion for a given type, <code>T</code>, to and from a serialized String format.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -247,6 +265,26 @@
 </tbody>
 </table>
 </li>
+<li class="blockList"><a name="squidpony.squidgrid">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">Beta</a> in <a href="../../../squidpony/squidgrid/package-summary.html">squidpony.squidgrid</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../squidpony/squidgrid/package-summary.html">squidpony.squidgrid</a> with annotations of type <a href="../../../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">Beta</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/BevelFOV.html" title="class in squidpony.squidgrid">BevelFOV</a></span></code>
+<div class="block">Use FOV instead, probably with type SHADOW; this has the same results as shadowcasting FOV but is slower, currently.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="squidpony.squidgrid.mapping">
 <!--   -->
 </a>
@@ -273,13 +311,28 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MetsaMapFactory.html" title="class in squidpony.squidgrid.mapping">MetsaMapFactory</a></span></code>
-<div class="block">A map generation factory using perlin noise to make island chain style maps.</div>
+<div class="block">A map generation factory using Perlin noise to make island chain style maps.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/ModularMapGenerator.html" title="class in squidpony.squidgrid.mapping">ModularMapGenerator</a></span></code>
 <div class="block">Generator for maps of high-tech areas like space stations or starships, with repeated modules laid out in random ways.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/PoliticalMapper.html" title="class in squidpony.squidgrid.mapping">PoliticalMapper</a></span></code>
+<div class="block">When you have a world map as produced by <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator</code></a> or some other source, you may want to fill it with
+ claims by various nations/factions, possibly procedural or possibly hand-made.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SectionMap.html" title="class in squidpony.squidgrid.mapping">SectionMap</a></span></code>
+<div class="block">A Map-like collection that allows storing subdivisions of a 2D array with names (always Strings) and
+ identifying numbers, then looking up <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath"><code>Coord</code></a>s to find the associated name and/or number, or or looking up
+ a subdivision with a name or number to get a <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath"><code>GreasedRegion</code></a> back.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -296,8 +349,8 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/TiledLevel.html" title="class in squidpony.squidgrid.mapping">TiledLevel</a></span></code>
-<div class="block">Holds a single level.</div>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></span></code>
+<div class="block">Can be used to generate world maps with a wide variety of data, starting with height, temperature and moisture.</div>
 </td>
 </tr>
 </tbody>
@@ -321,12 +374,36 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CrossHash.Falcon.html" title="class in squidpony.squidmath">CrossHash.Falcon</a></span></code>&nbsp;</td>
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/BundleBiMap.html" title="class in squidpony.squidmath">BundleBiMap</a>&lt;E,S&gt;</span></code>
+<div class="block">An ordered bidirectional map-like data structure, with "bundles" of unique E (for Element) keys and unique S (for
+ Single) keys updated together like a map that can be queried by E key bundles, S keys, or int indices, as well as
+ like a multimap that can be queried by lone E keys.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CrossHash.Wisp.html" title="class in squidpony.squidmath">CrossHash.Wisp</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CrossHash.Chariot.html" title="class in squidpony.squidmath">CrossHash.Chariot</a></span></code>
+<div class="block">Strongly universal hashing based loosely on Daniel Lemire's (Apache-licensed) code and paper, available at
+ https://github.com/lemire/StronglyUniversalStringHashing .</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CrossHash.Falcon.html" title="class in squidpony.squidmath">CrossHash.Falcon</a></span></code>
+<div class="block">An alternative hashing function that is slightly faster than CrossHash.Lightning, drastically
+ faster than the default CrossHash methods (not in an inner class), and has good quality on most
+ input, but has issues with certain methods (namely, <a href="../../../squidpony/squidmath/CrossHash.Falcon.html#hash-long:A-"><code>CrossHash.Falcon.hash(long[])</code></a> and
+ <a href="../../../squidpony/squidmath/CrossHash.Falcon.html#hash-double:A-"><code>CrossHash.Falcon.hash(double[])</code></a> disregard the upper 32 bits, at the least, of any items
+ in their input arrays, though the hash64 variants don't have this issue).</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath">CrossHash.Mist</a></span></code>
+<div class="block">A whole cluster of Wisp-like hash functions that sacrifice a small degree of speed, but can be built with up
+ to 128 bits of salt values that help to obscure what hashing function is actually being used.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
@@ -344,7 +421,7 @@
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span></code>
-<div class="block">Region encoding of 64x64 areas as a number of long arrays; uncompressed (fatty), but fast (greased lightning).</div>
+<div class="block">Region encoding of on/off information about areas using bitsets; uncompressed (fatty), but fast (greased lightning).</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -356,6 +433,19 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/LFSR.html" title="class in squidpony.squidmath">LFSR</a></span></code>
+<div class="block">A Linear Feedback Shift Register that may be used like a StatefulRandomness but is not truly random.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/MeadNoise.html" title="class in squidpony.squidmath">MeadNoise</a></span></code>
+<div class="block">Experiments with noise functions that use an alternate "honeycomb" or tiling pattern of cells in higher dimensions,
+ but defaults to the simplex honeycomb used by SeededNoise if this can't make an attempt to change it.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/MerlinNoise.html" title="class in squidpony.squidmath">MerlinNoise</a></span></code>
 <div class="block">Simple somewhat-continuous noise functions that use int coordinates instead of the traditional double (this approach
  works better on a grid).</div>
@@ -363,28 +453,29 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/MultiArrangement.html" title="class in squidpony.squidmath">MultiArrangement</a>&lt;K&gt;</span></code>
+<div class="block">A bi-directional mapping of non-unique objects to positions in an ordering (which this generates), and vice versa.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/MultiKey.html" title="class in squidpony.squidmath">MultiKey</a></span></code>
 <div class="block">An ordered multi-directional "map" that keeps 1 or more keysets organized so you can look up one key given a key in
  another keyset, and do the same for the indices of keys.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/NeuralParticle.html" title="class in squidpony.squidmath">NeuralParticle</a></span></code>
 <div class="block">Creates a field of particles that tend to form a neuron image type
  distribution.</div>
 </td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;</span></code>
-<div class="block">A generic linked hash map with with a fast implementation, originally from fastutil as Object2ObjectLinkedOpenHashMap but modified to support indexed access.</div>
-</td>
-</tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;K&gt;</span></code>
-<div class="block">A generic linked hash set with with a fast implementation, originally from fastutil as ObjectLinkedOpenHashSet but modified to support indexed access.</div>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath">PintRNG</a></span></code>
+<div class="block">A different kind of RandomnessSource that operates internally on ints, which may have significant advantages on GWT
+ since that toolchain has to emulate longs (slowly) for almost any math with them.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -396,8 +487,22 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/TableSet.html" title="class in squidpony.squidmath">TableSet</a>&lt;C,R&gt;</span></code>
+<div class="block">A generic linked hash set with with a fast implementation, originally from fastutil as ObjectLinkedOpenHashSet but
+ modified to support indexed access of items, reordering, and optional hash strategies for array keys (which fastutil
+ does differently).</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/ThunderRNG.html" title="class in squidpony.squidmath">ThunderRNG</a></span></code>
-<div class="block">Like LightRNG, but shares a lot in common with CrossHash's hashing mechanism.</div>
+<div class="block">Like LightRNG, but shares a lot in common with one of CrossHash's hashing algorithms.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/WhirlingNoise.html" title="class in squidpony.squidmath">WhirlingNoise</a></span></code>
+<div class="block">Another experimental noise class.</div>
 </td>
 </tr>
 </tbody>
@@ -454,6 +559,6 @@
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

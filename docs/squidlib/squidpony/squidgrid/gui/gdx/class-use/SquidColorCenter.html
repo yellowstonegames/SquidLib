@@ -120,9 +120,9 @@
            int&nbsp;cellHeight,
            <a href="../../../../../squidpony/squidgrid/gui/gdx/SquidColorCenter.html" title="class in squidpony.squidgrid.gui.gdx">SquidColorCenter</a>&nbsp;bgColorCenter,
            <a href="../../../../../squidpony/squidgrid/gui/gdx/SquidColorCenter.html" title="class in squidpony.squidgrid.gui.gdx">SquidColorCenter</a>&nbsp;fgColorCenter)</code>
-<div class="block">Create a new SquidLayers widget with a default font (it will be square if cellWidth and cellHeight are equal, or
- narrow otherwise), the given number of cells for gridWidth
- and gridHeight, and the size in pixels for each cell given by cellWidth and cellHeight.</div>
+<div class="block">Create a new SquidLayers widget with a default stretchable font (it will adapt to the cellWidth and cellHeight
+ you give it), the given number of cells for gridWidth and gridHeight, the size in pixels for each cell
+ given by cellWidth and cellHeight, and the given SquidColorCenter instances to affect colors.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -145,6 +145,20 @@
            <a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;tcf,
            <a href="../../../../../squidpony/squidgrid/gui/gdx/SquidColorCenter.html" title="class in squidpony.squidgrid.gui.gdx">SquidColorCenter</a>&nbsp;bgColorCenter,
            <a href="../../../../../squidpony/squidgrid/gui/gdx/SquidColorCenter.html" title="class in squidpony.squidgrid.gui.gdx">SquidColorCenter</a>&nbsp;fgColorCenter)</code>
+<div class="block">Create a new SquidLayers widget with the given TextCellFactory, the given number of cells for gridWidth
+ and gridHeight, the size in pixels for each cell given by cellWidth and cellHeight, and the given
+ SquidColorCenters for background and foreground.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#SquidLayers-int-int-int-int-squidpony.squidgrid.gui.gdx.TextCellFactory-squidpony.squidgrid.gui.gdx.SquidColorCenter-squidpony.squidgrid.gui.gdx.SquidColorCenter-char:A:A-">SquidLayers</a></span>(int&nbsp;gridWidth,
+           int&nbsp;gridHeight,
+           int&nbsp;cellWidth,
+           int&nbsp;cellHeight,
+           <a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;tcf,
+           <a href="../../../../../squidpony/squidgrid/gui/gdx/SquidColorCenter.html" title="class in squidpony.squidgrid.gui.gdx">SquidColorCenter</a>&nbsp;bgColorCenter,
+           <a href="../../../../../squidpony/squidgrid/gui/gdx/SquidColorCenter.html" title="class in squidpony.squidgrid.gui.gdx">SquidColorCenter</a>&nbsp;fgColorCenter,
+           char[][]&nbsp;actualMap)</code>
 <div class="block">Create a new SquidLayers widget with the given TextCellFactory, the given number of cells for gridWidth
  and gridHeight, the size in pixels for each cell given by cellWidth and cellHeight, and the given
  SquidColorCenters for background and foreground.</div>
@@ -203,6 +217,6 @@
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

@@ -159,7 +159,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;squidpony.IColorCenter.Skeleton</h3>
-<code>filter</code></li>
+<code>filter, tempValue</code></li>
 </ul>
 </li>
 </ul>
@@ -445,7 +445,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;squidpony.IColorCenter.Skeleton</h3>
-<code>clearCache, copyCache, filter, get, get, getBlack, getHSV, getHSV, getHue, getHue, getRandom, getSaturation, getSaturation, getTransparent, getValue, getValue, getWhite, greify, setFilter</code></li>
+<code>cacheSize, clearCache, copyCache, filter, get, get, getBlack, getHSV, getHSV, getHue, getHue, getRandom, getSaturation, getSaturation, getTransparent, getValue, getValue, getWhite, greify, setFilter</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -506,7 +506,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>create</h4>
-<pre>protected&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.41">create</a>(int&nbsp;red,
+<pre>protected&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.43">create</a>(int&nbsp;red,
                                                  int&nbsp;green,
                                                  int&nbsp;blue,
                                                  int&nbsp;opacity)</pre>
@@ -522,7 +522,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>filter</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.50">filter</a>(com.badlogic.gdx.graphics.Color&nbsp;c)</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.52">filter</a>(com.badlogic.gdx.graphics.Color&nbsp;c)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>filter</code>&nbsp;in interface&nbsp;<code>squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
@@ -537,7 +537,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>get</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.57">get</a>(long&nbsp;c)</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.60">get</a>(long&nbsp;c)</pre>
 </li>
 </ul>
 <a name="get-float-float-float-float-">
@@ -546,7 +546,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>get</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.61">get</a>(float&nbsp;r,
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.64">get</a>(float&nbsp;r,
                                            float&nbsp;g,
                                            float&nbsp;b,
                                            float&nbsp;a)</pre>
@@ -558,7 +558,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>lerp</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.74">lerp</a>(com.badlogic.gdx.graphics.Color&nbsp;start,
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.77">lerp</a>(com.badlogic.gdx.graphics.Color&nbsp;start,
                                             com.badlogic.gdx.graphics.Color&nbsp;end,
                                             float&nbsp;change)</pre>
 <div class="block">Gets the linear interpolation from Color start to Color end, changing by the fraction given by change.</div>
@@ -582,7 +582,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>getRed</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.86">getRed</a>(com.badlogic.gdx.graphics.Color&nbsp;c)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.89">getRed</a>(com.badlogic.gdx.graphics.Color&nbsp;c)</pre>
 </li>
 </ul>
 <a name="getGreen-com.badlogic.gdx.graphics.Color-">
@@ -591,7 +591,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>getGreen</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.91">getGreen</a>(com.badlogic.gdx.graphics.Color&nbsp;c)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.94">getGreen</a>(com.badlogic.gdx.graphics.Color&nbsp;c)</pre>
 </li>
 </ul>
 <a name="getBlue-com.badlogic.gdx.graphics.Color-">
@@ -600,7 +600,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>getBlue</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.96">getBlue</a>(com.badlogic.gdx.graphics.Color&nbsp;c)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.99">getBlue</a>(com.badlogic.gdx.graphics.Color&nbsp;c)</pre>
 </li>
 </ul>
 <a name="getAlpha-com.badlogic.gdx.graphics.Color-">
@@ -609,7 +609,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>getAlpha</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.101">getAlpha</a>(com.badlogic.gdx.graphics.Color&nbsp;c)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.104">getAlpha</a>(com.badlogic.gdx.graphics.Color&nbsp;c)</pre>
 </li>
 </ul>
 <a name="encode-com.badlogic.gdx.graphics.Color-">
@@ -618,7 +618,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>encode</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.105">encode</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.108">encode</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
 </li>
 </ul>
 <a name="lightWith-com.badlogic.gdx.graphics.Color-com.badlogic.gdx.graphics.Color-">
@@ -627,7 +627,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>lightWith</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.120">lightWith</a>(com.badlogic.gdx.graphics.Color&nbsp;color,
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.123">lightWith</a>(com.badlogic.gdx.graphics.Color&nbsp;color,
                                                  com.badlogic.gdx.graphics.Color&nbsp;light)</pre>
 <div class="block">Gets a modified copy of color as if it is lit with a colored light source.</div>
 <dl>
@@ -645,7 +645,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>light</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.131">light</a>(com.badlogic.gdx.graphics.Color&nbsp;color,
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.134">light</a>(com.badlogic.gdx.graphics.Color&nbsp;color,
                                              float&nbsp;degree)</pre>
 <div class="block">Lightens a color by degree and returns the new color (mixed with white).</div>
 <dl>
@@ -663,7 +663,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>light</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.140">light</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.143">light</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
 <div class="block">Lightens a color slightly and returns the new color (10% mix with white).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -679,7 +679,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>lighter</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.149">lighter</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.152">lighter</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
 <div class="block">Lightens a color significantly and returns the new color (30% mix with white).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -695,7 +695,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>lightest</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.158">lightest</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.161">lightest</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
 <div class="block">Lightens a color massively and returns the new color (70% mix with white).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -711,7 +711,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>dim</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.169">dim</a>(com.badlogic.gdx.graphics.Color&nbsp;color,
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.172">dim</a>(com.badlogic.gdx.graphics.Color&nbsp;color,
                                            float&nbsp;degree)</pre>
 <div class="block">Darkens a color by the specified degree and returns the new color (mixed with black).</div>
 <dl>
@@ -729,7 +729,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>dim</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.178">dim</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.181">dim</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
 <div class="block">Darkens a color slightly and returns the new color (10% mix with black).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -745,7 +745,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>dimmer</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.187">dimmer</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.190">dimmer</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
 <div class="block">Darkens a color significantly and returns the new color (30% mix with black).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -761,7 +761,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>dimmest</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.196">dimmest</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.199">dimmest</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
 <div class="block">Darkens a color massively and returns the new color (70% mix with black).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -777,7 +777,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>desaturated</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.208">desaturated</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.211">desaturated</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
 <div class="block">Gets a fully-desaturated version of the given color (keeping its brightness, but making it grayscale).</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -797,7 +797,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>desaturate</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.221">desaturate</a>(com.badlogic.gdx.graphics.Color&nbsp;color,
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.224">desaturate</a>(com.badlogic.gdx.graphics.Color&nbsp;color,
                                                   float&nbsp;degree)</pre>
 <div class="block">Brings a color closer to grayscale by the specified degree and returns the new color (desaturated somewhat).</div>
 <dl>
@@ -819,7 +819,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>saturated</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.234">saturated</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.237">saturated</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
 <div class="block">Fully saturates color (makes it a vivid color like red or green and less gray) and returns the modified copy.
  Leaves alpha unchanged.</div>
 <dl>
@@ -840,7 +840,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>saturate</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.247">saturate</a>(com.badlogic.gdx.graphics.Color&nbsp;color,
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.250">saturate</a>(com.badlogic.gdx.graphics.Color&nbsp;color,
                                                 float&nbsp;degree)</pre>
 <div class="block">Saturates color (makes it closer to a vivid color like red or green and less gray) by the specified degree and
  returns the new color (saturated somewhat). If this is called on a color that is very close to gray, this is
@@ -864,7 +864,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>random</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.255">random</a>()</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.258">random</a>()</pre>
 <div class="block">Gets a fully random color that is only required to be opaque.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -878,7 +878,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>randomize</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.266">randomize</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.269">randomize</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
 <div class="block">Blends a color with a random (opaque) color by a factor of 10% random.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -894,7 +894,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>randomizeMore</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.275">randomizeMore</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.278">randomizeMore</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
 <div class="block">Blends a color with a random (opaque) color by a factor of 30% random.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -910,7 +910,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>randomizeMost</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.284">randomizeMost</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.287">randomizeMost</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
 <div class="block">Blends a color with a random (opaque) color by a factor of 70% random.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -926,7 +926,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>randomBlend</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.295">randomBlend</a>(com.badlogic.gdx.graphics.Color&nbsp;a,
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.298">randomBlend</a>(com.badlogic.gdx.graphics.Color&nbsp;a,
                                                    com.badlogic.gdx.graphics.Color&nbsp;b)</pre>
 <div class="block">Blends the colors A and B by a random degree.</div>
 <dl>
@@ -944,10 +944,14 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>gradient</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.306">gradient</a>(com.badlogic.gdx.graphics.Color&nbsp;fromColor,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.309">gradient</a>(com.badlogic.gdx.graphics.Color&nbsp;fromColor,
                                                            com.badlogic.gdx.graphics.Color&nbsp;toColor)</pre>
 <div class="block">Finds a 16-step gradient going from fromColor to toColor, both included in the gradient.</div>
 <dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code>gradient</code>&nbsp;in interface&nbsp;<code>squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>gradient</code>&nbsp;in class&nbsp;<code>squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>fromColor</code> - the color to start with, included in the gradient</dd>
 <dd><code>toColor</code> - the color to end on, included in the gradient</dd>
@@ -962,12 +966,16 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>gradient</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.323">gradient</a>(com.badlogic.gdx.graphics.Color&nbsp;fromColor,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.326">gradient</a>(com.badlogic.gdx.graphics.Color&nbsp;fromColor,
                                                            com.badlogic.gdx.graphics.Color&nbsp;toColor,
                                                            int&nbsp;steps)</pre>
 <div class="block">Finds a gradient with the specified number of steps going from fromColor to toColor,
  both included in the gradient.</div>
 <dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code>gradient</code>&nbsp;in interface&nbsp;<code>squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>gradient</code>&nbsp;in class&nbsp;<code>squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>fromColor</code> - the color to start with, included in the gradient</dd>
 <dd><code>toColor</code> - the color to end on, included in the gradient</dd>
@@ -983,7 +991,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>loopingGradient</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.337">loopingGradient</a>(com.badlogic.gdx.graphics.Color&nbsp;fromColor,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.340">loopingGradient</a>(com.badlogic.gdx.graphics.Color&nbsp;fromColor,
                                                                   com.badlogic.gdx.graphics.Color&nbsp;midColor,
                                                                   int&nbsp;steps)</pre>
 <div class="block">Finds a gradient with the specified number of steps going from fromColor to midColor, then midColor to (possibly)
@@ -1004,7 +1012,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>gradient</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.352">gradient</a>(com.badlogic.gdx.graphics.Color&nbsp;fromColor,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.355">gradient</a>(com.badlogic.gdx.graphics.Color&nbsp;fromColor,
                                                            com.badlogic.gdx.graphics.Color&nbsp;toColor,
                                                            int&nbsp;steps,
                                                            com.badlogic.gdx.math.Interpolation&nbsp;interpolation)</pre>
@@ -1028,7 +1036,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>loopingGradient</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.376">loopingGradient</a>(com.badlogic.gdx.graphics.Color&nbsp;fromColor,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.379">loopingGradient</a>(com.badlogic.gdx.graphics.Color&nbsp;fromColor,
                                                                   com.badlogic.gdx.graphics.Color&nbsp;midColor,
                                                                   int&nbsp;steps,
                                                                   com.badlogic.gdx.math.Interpolation&nbsp;interpolation)</pre>
@@ -1054,7 +1062,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>rainbow</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.398">rainbow</a>(int&nbsp;steps)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.401">rainbow</a>(int&nbsp;steps)</pre>
 <div class="block">Generates a hue-shifted rainbow of colors, starting at red and going through orange, yellow, green, blue, and
  purple before getting close to red at the end again. If the given number of steps is less than 6 or so, you should
  expect to see only some of those colors; if steps is larger (36 may be reasonable for gradients), you are more
@@ -1074,7 +1082,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>rainbow</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.414">rainbow</a>(float&nbsp;saturation,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.417">rainbow</a>(float&nbsp;saturation,
                                                           float&nbsp;value,
                                                           int&nbsp;steps)</pre>
 <div class="block">Generates a hue-shifted rainbow of colors, starting at red and going through orange, yellow, green, blue, and
@@ -1098,7 +1106,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockList">
 <li class="blockList">
 <h4>zigzagGradient</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.440">zigzagGradient</a>(com.badlogic.gdx.graphics.Color&nbsp;fromColor,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.443">zigzagGradient</a>(com.badlogic.gdx.graphics.Color&nbsp;fromColor,
                                                                  com.badlogic.gdx.graphics.Color&nbsp;toColor,
                                                                  int&nbsp;steps)</pre>
 <div class="block">Finds a gradient with the specified number of steps going from fromColor to toColor, both included in the
@@ -1127,7 +1135,7 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <ul class="blockListLast">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.461">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidColorCenter.html#line.464">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -1202,6 +1210,6 @@ extends squidpony.IColorCenter.Skeleton&lt;com.badlogic.gdx.graphics.Color&gt;</
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../squidpony/squidmath/ShortSet.html" title="class in squidpony.squidmath"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../squidpony/squidmath/SeededNoise.html" title="class in squidpony.squidmath"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../index.html?squidpony/squidmath/RNG.CustomRandom.html" target="_top">Frames</a></li>
@@ -122,7 +122,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public static class <a href="../../src-html/squidpony/squidmath/RNG.html#line.81">RNG.CustomRandom</a>
+<pre>public static class <a href="../../src-html/squidpony/squidmath/RNG.html#line.95">RNG.CustomRandom</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Random.html?is-external=true" title="class or interface in java.util">Random</a></pre>
 <div class="block">A subclass of java.util.Random that uses a RandomnessSource supplied by the user instead of the default.</div>
 <dl>
@@ -214,7 +214,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Random.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>CustomRandom</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.CustomRandom.html#line.91">CustomRandom</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.CustomRandom.html#line.104">CustomRandom</a>()</pre>
 <div class="block">Creates a new random number generator. This constructor uses
  a LightRNG with a random seed.</div>
 </li>
@@ -225,7 +225,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Random.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>CustomRandom</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.CustomRandom.html#line.100">CustomRandom</a>(<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;randomnessSource)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.CustomRandom.html#line.114">CustomRandom</a>(<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;randomnessSource)</pre>
 <div class="block">Creates a new random number generator. This constructor uses
  the seed of the given RandomnessSource if it has been seeded.</div>
 <dl>
@@ -248,7 +248,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Random.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>next</h4>
-<pre>protected&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.CustomRandom.html#line.130">next</a>(int&nbsp;bits)</pre>
+<pre>protected&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.CustomRandom.html#line.144">next</a>(int&nbsp;bits)</pre>
 <div class="block">Generates the next pseudorandom number. Subclasses should
  override this, as this is used by all other methods.
  <p>
@@ -262,7 +262,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Random.html?
  <pre><code> (seed * 0x5DEECE66DL + 0xBL) &amp; ((1L &lt;&lt; 48) - 1)</code></pre>
  and returning
  <pre><code> (int)(seed &gt;&gt;&gt; (48 - bits))</code>.</pre>
- <p>
+
  This is a linear congruential pseudorandom number generator, as
  defined by D. H. Lehmer and described by Donald E. Knuth in
  <i>The Art of Computer Programming,</i> Volume 3:
@@ -309,7 +309,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Random.html?
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../squidpony/squidmath/ShortSet.html" title="class in squidpony.squidmath"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../squidpony/squidmath/SeededNoise.html" title="class in squidpony.squidmath"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../index.html?squidpony/squidmath/RNG.CustomRandom.html" target="_top">Frames</a></li>
@@ -349,6 +349,6 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Random.html?
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>
