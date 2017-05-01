@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * A map generation factory using perlin noise to make island chain style maps.
+ * A map generation factory using Perlin noise to make island chain style maps.
  *
  * Based largely on work done by Metsa from #rgrd
  *
@@ -176,8 +176,8 @@ public class MetsaMapFactory {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 biomeMap[x][y] = 0;
-                double distanceFromEquator = Math.abs(y - height / 2.0) / (height / 2.0);
-                distanceFromEquator += PerlinNoise.noise(x / 32, y / 32) / 8 + map[x][y] / 32;
+                double distanceFromEquator = Math.abs(y - height * 0.5) / (height * 0.5);
+                distanceFromEquator += PerlinNoise.noise(x * 0.0625, y * 0.0625) / 8 + map[x][y] / 32;
                 if (distanceFromEquator > POLAR_LIMIT) {
                     biomeMap[x][y] = 1;
                 }

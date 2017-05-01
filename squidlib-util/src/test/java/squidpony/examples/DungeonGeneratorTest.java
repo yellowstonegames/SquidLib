@@ -1,6 +1,6 @@
 package squidpony.examples;
 
-import squidpony.GwtCompatibility;
+import squidpony.ArrayTools;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.*;
 import squidpony.squidgrid.mapping.styled.TilesetType;
@@ -147,7 +147,7 @@ public class DungeonGeneratorTest {
         sdg.generate(map, env);
         //RNG rand = new RNG();
         //sdg.generate(rand.getRandomElement(TilesetType.values()));
-        sdungeon = GwtCompatibility.copy2D(sdg.getDungeon());
+        sdungeon = ArrayTools.copy(sdg.getDungeon());
         sdungeon[sdg.stairsUp.x][sdg.stairsUp.y] = '<';
         sdungeon[sdg.stairsDown.x][sdg.stairsDown.y] = '>';
 
@@ -199,7 +199,7 @@ public class DungeonGeneratorTest {
             sdungeon[c.x][c.y] = 'h';
         }
         // Just a little fun with Java that uses no alphanumerics other than keywords to express "Hello, World!"
-        //char[] __ = new char[]{'$' << (',' ^ '-'), '`' | ('-' - '('), '$' << (',' ^ '-') | '$', '$' << (',' ^ '-') | '$', '/' + '@', ',', ' ', '(' + '/', '/' + '@', '(' + '%' + '%', '$' << (',' ^ '-') | '$', '*' + ':', '!'};
+        //char[] __ = {'$' << (',' ^ '-'), '`' | ('-' - '('), '$' << (',' ^ '-') | '$', '$' << (',' ^ '-') | '$', '/' + '@', ',', ' ', '(' + '/', '/' + '@', '(' + '%' + '%', '$' << (',' ^ '-') | '$', '*' + ':', '!'};
 
         dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
                 DungeonUtility.hashesToLines(sdungeon, true)));
@@ -257,7 +257,7 @@ public class DungeonGeneratorTest {
         List<Rectangle> rectangles = rng.shuffle(rrf.findRectangles());
         int nh, nw, nx, ny;
         Coord center;
-        char[][] dungeon2 = GwtCompatibility.fill2D('#', width, height);
+        char[][] dungeon2 = GwtCompatibility.fill('#', width, height);
         for(Rectangle rect : rectangles)
         {
             if(rng.nextDouble() < 0.1) continue;
@@ -266,7 +266,7 @@ public class DungeonGeneratorTest {
             nw = (int)(rect.getWidth() * (rng.nextDouble(1.5) + 1.3));
             nx = Math.max(1, Math.min(width - 2, center.x - nw/2));
             ny = Math.max(1, Math.min(height - 2, center.y - nh/2));
-            GwtCompatibility.insert2D(DungeonUtility.wallWrap(GwtCompatibility.fill2D('.', nw, nh)),
+            GwtCompatibility.insert(DungeonUtility.wallWrap(GwtCompatibility.fill('.', nw, nh)),
                     dungeon2, nx, ny);
         }
         DungeonUtility.wallWrap(dungeon2);
@@ -433,7 +433,7 @@ public class DungeonGeneratorTest {
             tdg.generate(map, env);
             //RNG rand = new RNG();
             //tdg.generate(rand.getRandomElement(TilesetType.values()));
-            sdungeon = GwtCompatibility.copy2D(tdg.getDungeon());
+            sdungeon = GwtCompatibility.copy(tdg.getDungeon());
             sdungeon[tdg.stairsUp.x][tdg.stairsUp.y] = '<';
             sdungeon[tdg.stairsDown.x][tdg.stairsDown.y] = '>';
             //System.out.println(tdg);
@@ -458,7 +458,7 @@ public class DungeonGeneratorTest {
         sdg.generate(map, env);
         //RNG rand = new RNG();
         //tdg.generate(rand.getRandomElement(TilesetType.values()));
-        sdungeon = GwtCompatibility.copy2D(sdg.getDungeon());
+        sdungeon = GwtCompatibility.copy(sdg.getDungeon());
         sdungeon[sdg.stairsUp.x][sdg.stairsUp.y] = '<';
         sdungeon[sdg.stairsDown.x][sdg.stairsDown.y] = '>';
         //System.out.println(sdg);

@@ -1,5 +1,6 @@
 package squidpony.squidmath;
 
+import squidpony.ArrayTools;
 import squidpony.annotation.Beta;
 
 import java.util.Iterator;
@@ -25,8 +26,7 @@ public class K2<A, B>
      */
     public K2()
     {
-        keysA = new Arrangement<>();
-        keysB = new Arrangement<>();
+        this(Arrangement.DEFAULT_INITIAL_SIZE, Arrangement.DEFAULT_LOAD_FACTOR);
     }
 
     /**
@@ -36,8 +36,7 @@ public class K2<A, B>
      */
     public K2(int expected)
     {
-        keysA = new Arrangement<>(expected);
-        keysB = new Arrangement<>(expected);
+        this(expected, Arrangement.DEFAULT_LOAD_FACTOR);
     }
 
     /**
@@ -54,12 +53,33 @@ public class K2<A, B>
     }
 
     /**
+     * Constructs a K2 with the expected number of indices to hold (the number of A and number of B items are always
+     * equal, and this will be more efficient if expected is greater than that number), the load factor to use,
+     * between 0.1f and 0.8f usually (using load factors higher than 0.8f can cause problems), and two IHasher
+     * implementations, such as {@link CrossHash#generalHasher}, that will be used to hash and compare for equality with
+     * A keys and B keys, respectively. Specifying an IHasher is usually needed if your keys are arrays (there are
+     * existing implementations for 1D arrays of all primitive types, CharSequence, and Object in CrossHash), or if you
+     * want hashing by identity and reference equality (which would use {@link CrossHash#identityHasher}, and might be
+     * useful if keys are mutable). Other options are possible with custom IHashers, like hashing Strings but ignoring,
+     * or only considering, a certain character for the hash and equality checks.
+     * @param expected the amount of indices (the count of A items is the same as the count of B items) this should hold
+     * @param f the load factor, probably between 0.1f and 0.8f
+     * @param hasherA an implementation of CrossHash.IHasher meant for A keys
+     * @param hasherB an implementation of CrossHash.IHasher meant for B keys
+     */
+    public K2(int expected, float f, CrossHash.IHasher hasherA, CrossHash.IHasher hasherB)
+    {
+        keysA = new Arrangement<>(expected, f, hasherA);
+        keysB = new Arrangement<>(expected, f, hasherB);
+    }
+
+    /**
      * Constructs a K2 from a pair of Iterables that will be processed in pairs, adding a unique A from aKeys if and
      * only if it can also add a unique B from bKeys, otherwise skipping that pair.
      * @param aKeys an Iterable of A that should all be unique
      * @param bKeys an Iterable of B that should all be unique
      */
-    public K2(Iterable<A> aKeys, Iterable<B> bKeys)
+    public K2(Iterable<? extends A> aKeys, Iterable<? extends B> bKeys)
     {
         keysA = new Arrangement<>();
         keysB = new Arrangement<>();
@@ -67,7 +87,7 @@ public class K2<A, B>
             putAll(aKeys, bKeys);
     }
 
-    public K2(K2<A, B> other)
+    public K2(K2<? extends A, ? extends B> other)
     {
         if(other == null)
         {
@@ -283,11 +303,11 @@ public class K2<A, B>
      * @param bKeys an Iterable or Collection of B keys to add; should all be unique (like a Set)
      * @return true if this collection changed as a result of this call
      */
-    public boolean putAll(Iterable<A> aKeys, Iterable<B> bKeys)
+    public boolean putAll(Iterable<? extends A> aKeys, Iterable<? extends B> bKeys)
     {
         if(aKeys == null || bKeys == null) return false;
-        Iterator<A> aIt = aKeys.iterator();
-        Iterator<B> bIt = bKeys.iterator();
+        Iterator<? extends A> aIt = aKeys.iterator();
+        Iterator<? extends B> bIt = bKeys.iterator();
         boolean changed = false;
         while (aIt.hasNext() && bIt.hasNext())
         {
@@ -302,7 +322,7 @@ public class K2<A, B>
      * @param other another K2 collection with the same A and B types
      * @return true if this collection changed as a result of this call
      */
-    public boolean putAll(K2<A, B> other)
+    public boolean putAll(K2<? extends A, ? extends B> other)
     {
         if(other == null) return false;
         boolean changed = false;
@@ -370,11 +390,11 @@ public class K2<A, B>
 
     /**
      * Reorders this K2 using {@code ordering}, which have the same length as this K2's {@link #size()}
-     * and can be generated with {@link squidpony.GwtCompatibility#range(int)} (which, if applied, would produce no
+     * and can be generated with {@link ArrayTools#range(int)} (which, if applied, would produce no
      * change to the current ordering), {@link RNG#randomOrdering(int)} (which gives a random ordering, and if
      * applied immediately would be the same as calling {@link #shuffle(RNG)}), or made in some other way. If you
      * already have an ordering and want to make a different ordering that can undo the change, you can use
-     * {@link squidpony.GwtCompatibility#invertOrdering(int[])} called on the original ordering.
+     * {@link ArrayTools#invertOrdering(int[])} called on the original ordering.
      * @param ordering an int array or vararg that should contain each int from 0 to {@link #size()} (or less)
      * @return this for chaining
      */

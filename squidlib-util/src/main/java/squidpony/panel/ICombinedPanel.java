@@ -98,9 +98,9 @@ public interface ICombinedPanel<T> {
 	 */
 	void put(int x, int y, char c, T bgc, T fgc);
 
-    /**
-     * Put {@code cs} at (x,y) using {@code bgc} for the background.
-     */
+	/**
+	 * Put {@code cs} at (x,y) using {@code bgc} for the background.
+	 */
 	void put(int x, int y, T bgc, IColoredString<T> cs);
 
 	/**
@@ -280,6 +280,16 @@ public interface ICombinedPanel<T> {
 						putBG(x, y, color);
 				}
 			}
+		}
+
+		/**
+		 * Convenience method that fills the background with the given color.
+		 * Equivalent to calling {@link #fill(What, Object)} with {@link What#BG} as the first parameter.
+		 * @param color the color to fill the background with
+		 */
+		public void fillBG(T color)
+		{
+			fill(What.BG, color);
 		}
 
 		@Override

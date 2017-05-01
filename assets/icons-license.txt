@@ -1,6 +1,7 @@
 Icons provided under the Creative Commons 3.0 BY license.
 
-Each subfolders in this archive correspond to a different contributor :
+The icons in icons.png are the work of several different contributors, and if you distribute icons.png you must give
+attribution for all of them (they're all in the same image). The contributors are:
 
 - Lorc, http://lorcblog.blogspot.com
 - Delapouite, http://delapouite.com
@@ -21,8 +22,10 @@ Each subfolders in this archive correspond to a different contributor :
 
 Please, include a mention "Icons made by {author}" in your derivative work.
 
-If you use them in one of your project, don't hesitate to drop a message to delapouite@gmail.com so we can add your creation to the showcase page.
+If you use them in one of your project, don't hesitate to drop a message to delapouite@gmail.com so we can add your
+creation to the showcase page.
 
-More info and icons available at game-icons.net
+More info and icons available at http://game-icons.net
 
-These icons (the May 23, 2016 batch) have all been merged into one texture atlas, and modifications made to imitate the vector resizability with a distance field effect.
+These icons (the May 23, 2016 batch) have all been merged into one texture atlas, and modifications made to imitate the
+resizability of the vector version with a distance field effect.
